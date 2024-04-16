@@ -149,6 +149,26 @@ public extension UILabel {
             }
         }
     }
+    
+    //根據既定的大小來獲取可以顯示的行數
+    func getVisibleLine() ->Int {
+        let labelWidth = self.frame.size.width
+        let labelHeight = self.frame.size.height
+        let labelFont = self.font!
+        let labelText = self.text ?? ""
+
+        let maxSize = CGSize(width: labelWidth, height: CGFloat.infinity)
+        let textRect = (labelText as NSString).boundingRect(with: maxSize,
+                                                            options: .usesLineFragmentOrigin,
+                                                            attributes: [NSAttributedString.Key.font: labelFont],
+                                                            context: nil)
+
+        let numberOfLines = Int(ceil(textRect.height / labelFont.lineHeight))
+
+        let visibleLines = min(numberOfLines, Int(labelHeight / labelFont.lineHeight))
+        return visibleLines
+    }
+
 }
 
 public extension UILabel {

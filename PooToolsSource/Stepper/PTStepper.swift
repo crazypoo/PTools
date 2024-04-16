@@ -19,9 +19,28 @@ public enum PTStepperVahleChangeType:Int {
     case Input
 }
 
+public enum PTStepperShowType:Int {
+    case LTR
+    case RTL
+}
+
 @objcMembers
 public class PTStepper: UIView {
 
+    ///輸入框的背景顏色
+    open var inputBackgroundColor:UIColor = .clear {
+        didSet {
+            numberText.backgroundColor = inputBackgroundColor
+        }
+    }
+    ///用來展示加減號的位置
+    open var viewShowType:PTStepperShowType = .LTR {
+        didSet {
+            layoutSubviews()
+        }
+    }
+    ///輸入與按鈕的間隙
+    open var contentSpace:CGFloat = 1
     //MARK: 輸入提示回調
     ///輸入提示回調yes:大於最大值,no小於最小值
     open var alertBlock:PTStepperErrorAlert?
@@ -152,6 +171,7 @@ public class PTStepper: UIView {
         view.keyboardType = .numberPad
         view.textAlignment = .center
         view.addTarget(self, action: #selector(self.textNumberChange(textField:)), for: .editingChanged)
+        view.backgroundColor = self.inputBackgroundColor
         return view
     }()
         
@@ -167,20 +187,35 @@ public class PTStepper: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        addButton.snp.makeConstraints { make in
-            make.height.equalToSuperview()
+        addButton.snp.remakeConstraints { make in
+            make.top.bottom.equalToSuperview()
             make.width.equalTo(self.addButton.snp.height)
-            make.left.equalToSuperview()
+            switch self.viewShowType {
+            case .LTR:
+                make.left.equalToSuperview()
+            case .RTL:
+                make.right.equalToSuperview()
+            }
         }
-        
-        reduceButton.snp.makeConstraints { make in
+        reduceButton.snp.remakeConstraints { make in
             make.height.width.equalTo(self.addButton)
-            make.right.equalToSuperview()
+            switch self.viewShowType {
+            case .LTR:
+                make.right.equalToSuperview()
+            case .RTL:
+                make.left.equalToSuperview()
+            }
         }
         
-        numberText.snp.makeConstraints { make in
-            make.left.equalTo(self.addButton.snp.right).offset(CGFloat.ScaleW(w: 1))
-            make.right.equalTo(self.reduceButton.snp.left).offset(-CGFloat.ScaleW(w: 1))
+        numberText.snp.remakeConstraints { make in
+            switch self.viewShowType {
+            case .LTR:
+                make.left.equalTo(self.addButton.snp.right).offset(self.contentSpace)
+                make.right.equalTo(self.reduceButton.snp.left).offset(-self.contentSpace)
+            case .RTL:
+                make.right.equalTo(self.addButton.snp.left).offset(-self.contentSpace)
+                make.left.equalTo(self.reduceButton.snp.right).offset(self.contentSpace)
+            }
             make.top.bottom.equalToSuperview()
         }
     }

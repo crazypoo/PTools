@@ -118,7 +118,7 @@ open class PTFusionCellModel: NSObject {
 }
 
 @objcMembers
-public class PTTagLayoutModel:NSObject {
+open class PTTagLayoutModel:NSObject {
     open var name:String = ""
     open var haveImage:Bool = false
     open var imageWidth:CGFloat = 16
