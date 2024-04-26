@@ -124,4 +124,5 @@ open class PTTagLayoutModel:NSObject {
     open var imageWidth:CGFloat = 16
     open var contentSpace:CGFloat = 4
     open var contentFont:UIFont = .appfont(size: 14)
+    open var contentTextColor:UIColor = .black
 }
