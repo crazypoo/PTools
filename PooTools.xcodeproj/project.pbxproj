@@ -188,6 +188,11 @@
 		555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */; };
 		555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */; };
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
+		555EEEA92BDE116E00A60833 /* PTBadgeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555EEEA72BDE116E00A60833 /* PTBadgeProtocol.swift */; };
+		555EEEAA2BDE116E00A60833 /* UIView+BadgeEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555EEEA82BDE116E00A60833 /* UIView+BadgeEX.swift */; };
+		555EEEAC2BDE192300A60833 /* CAAnimation+BadgeEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555EEEAB2BDE192300A60833 /* CAAnimation+BadgeEX.swift */; };
+		555EEEAE2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555EEEAD2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift */; };
+		555EEEB02BDE31E700A60833 /* UITabBarItem+BadgeEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555EEEAF2BDE31E700A60833 /* UITabBarItem+BadgeEX.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		556738042B040EB80058CEBA /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556738032B040EB80058CEBA /* LocalConsole.swift */; };
 		5568AE262B048F9E00996C8F /* PTDevColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */; };
@@ -712,6 +717,11 @@
 		555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInspectorWindow.swift; sourceTree = "<group>"; };
 		555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchOverlayView.swift; sourceTree = "<group>"; };
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		555EEEA72BDE116E00A60833 /* PTBadgeProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBadgeProtocol.swift; sourceTree = "<group>"; };
+		555EEEA82BDE116E00A60833 /* UIView+BadgeEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BadgeEX.swift"; sourceTree = "<group>"; };
+		555EEEAB2BDE192300A60833 /* CAAnimation+BadgeEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAAnimation+BadgeEX.swift"; sourceTree = "<group>"; };
+		555EEEAD2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+BadgeEX.swift"; sourceTree = "<group>"; };
+		555EEEAF2BDE31E700A60833 /* UITabBarItem+BadgeEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarItem+BadgeEX.swift"; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		556738032B040EB80058CEBA /* LocalConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConsole.swift; sourceTree = "<group>"; };
 		5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevColorPickerViewController.swift; sourceTree = "<group>"; };
@@ -1120,6 +1130,7 @@
 				5571F60A2AFD219B00DB4420 /* AppDelegate */,
 				5503F9DA28F016CC00030F41 /* ApplicationFunction */,
 				55D59C4C28F17DEA00B4FF76 /* AppStore */,
+				555EEEA62BDE116200A60833 /* Badge */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				55D59C6928F537BA00B4FF76 /* Base */,
 				55D59C6128F3E87600B4FF76 /* BioID */,
@@ -1704,6 +1715,18 @@
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
 			path = LocalConsole;
+			sourceTree = "<group>";
+		};
+		555EEEA62BDE116200A60833 /* Badge */ = {
+			isa = PBXGroup;
+			children = (
+				555EEEAB2BDE192300A60833 /* CAAnimation+BadgeEX.swift */,
+				555EEEA72BDE116E00A60833 /* PTBadgeProtocol.swift */,
+				555EEEAD2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift */,
+				555EEEAF2BDE31E700A60833 /* UITabBarItem+BadgeEX.swift */,
+				555EEEA82BDE116E00A60833 /* UIView+BadgeEX.swift */,
+			);
+			path = Badge;
 			sourceTree = "<group>";
 		};
 		556B67042BB5037F0070C10E /* Circle */ = {
@@ -2842,6 +2865,7 @@
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55F162EA2B1951E500320925 /* PTVideoEditorConfig.swift in Sources */,
+				555EEEAE2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift in Sources */,
 				555818AD2AFA33570051C0AA /* PTRouteViewController.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,
@@ -2955,9 +2979,11 @@
 				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
 				5571F60E2AFD228800DB4420 /* PTAppWindowsDelegate.swift in Sources */,
+				555EEEA92BDE116E00A60833 /* PTBadgeProtocol.swift in Sources */,
 				552893192AE7E076009135F9 /* PTMediaBrowserNav.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PTSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
+				555EEEAC2BDE192300A60833 /* CAAnimation+BadgeEX.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				55BCB97D2B1732030016A4C2 /* PTMediaLibManager.swift in Sources */,
 				55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */,
@@ -2982,6 +3008,7 @@
 				55BCB9732B1732030016A4C2 /* PTAdjustSliderView.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
 				555818CE2AFA7D470051C0AA /* UITabBar+PTEX.swift in Sources */,
+				555EEEB02BDE31E700A60833 /* UITabBarItem+BadgeEX.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
 				556CA4BB2B29500600A5B189 /* Options.swift in Sources */,
 				552893212AE884A1009135F9 /* PTMediaBrowserConfig.swift in Sources */,
@@ -3089,6 +3116,7 @@
 				55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
+				555EEEAA2BDE116E00A60833 /* UIView+BadgeEX.swift in Sources */,
 				55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */,
 				555818CC2AFA7D270051C0AA /* UITabBarController+PTEX.swift in Sources */,
 				55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */,

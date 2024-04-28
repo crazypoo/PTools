@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import Kingfisher
-import WZLBadge
 
 @objc public enum PTSegmentSelectedType : Int {
     case UnderLine
@@ -460,8 +459,8 @@ public class PTSegmentView: UIView {
     public func setSegBadge(indexView:Int,
                             badgePosition:PooSegmentBadgePosition? = .TopRight,
                             badgeBGColor:UIColor? = UIColor.red,
-                            badgeShowType:WBadgeStyle? = .redDot,
-                            badgeAnimation:WBadgeAnimType? = .breathe,
+                            badgeShowType:PTBadgeStyle? = .RedDot,
+                            badgeAnimation:PTBadgeAnimType? = .Breathe,
                             badgeValue:Int? = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
             self.subViewArr.enumerated().forEach { (index,value) in
@@ -488,8 +487,8 @@ public class PTSegmentView: UIView {
                     default:break
                     }
                     subViews.badgeCenterOffset = badgePoint
-                    subViews.badgeBgColor = badgeBGColor
-                    subViews.showBadge(with: badgeShowType!, value: badgeValue!, animationType: badgeAnimation!)
+                    subViews.badgeBgColor = badgeBGColor!
+                    subViews.showBadge(style: badgeShowType!, value: badgeValue!, aniType: badgeAnimation!)
                 }
             }
         }

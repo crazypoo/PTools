@@ -806,6 +806,7 @@ class PTFuncNameViewController: PTBaseViewController {
         more.setTitleColor(.random, for: .normal)
         more.setTitle("More", for: .normal)
         more.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        more.showBadge(style: .New, value: "我愛你", aniType: .Scale)
         
         let popover = UIButton(type: .custom)
         popover.setTitleColor(.random, for: .normal)
