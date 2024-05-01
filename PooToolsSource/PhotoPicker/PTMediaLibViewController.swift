@@ -646,6 +646,25 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         }
         
         createNavSubs()
+        
+        switch PTPermission.photoLibrary.status {
+        case .authorized:
+            loadImageData()
+        case .notDetermined:
+            PTPermission.photoLibrary.request {
+                switch PTPermission.photoLibrary.status {
+                case .authorized:
+                    self.loadImageData()
+                default:
+                    break
+                }
+            }
+        default:
+            break
+        }
+    }
+    
+    func loadImageData() {
         let config = PTMediaLibConfig.share
         PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
             self.currentAlbum = model

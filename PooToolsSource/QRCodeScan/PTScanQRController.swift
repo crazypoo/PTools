@@ -41,6 +41,12 @@ public class PTScanQRConfig:NSObject {
     open var autoReturn:Bool = true
     ///是否跟随系统判断选择相册
     open var openAblumFollowSystem:Bool = true
+    ///授權確定按鈕
+    open var authorizedDoneButton:String = "PT Setting".localized()
+    ///授權取消按鈕
+    open var authorizedCancelButton:String = "PT Button cancel".localized()
+    ///加載中
+    open var loadingTitle:String = "PT Alert Doning".localized()
 }
 
 public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Void
@@ -345,7 +351,7 @@ public class PTScanQRController: PTBaseViewController {
         case .authorized:
             enterPhotos()
         default:
-            UIAlertController.base_alertVC(title:String.PhotoAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.photoLibrary),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+            UIAlertController.base_alertVC(title:String.PhotoAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.photoLibrary),okBtns: [viewConfig.authorizedDoneButton],cancelBtn: viewConfig.authorizedCancelButton.localized(),moreBtn: { index, title in
                 PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
             })
         }
@@ -369,7 +375,7 @@ public class PTScanQRController: PTBaseViewController {
                     }
                 }
             case .denied:
-                UIAlertController.base_alertVC(title:String.CameraAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.camera),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+                UIAlertController.base_alertVC(title:String.CameraAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.camera),okBtns: [viewConfig.authorizedDoneButton],cancelBtn: viewConfig.authorizedCancelButton,moreBtn: { index, title in
                     PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })
             case .notSupported:
@@ -493,7 +499,7 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 根據UIImage來查找QR code
     func findQR(inImage image:UIImage) {
-        PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(),icon: .Heart,style: .SupportVisionOS)
+        PTAlertTipControl.present(title:"",subtitle: viewConfig.loadingTitle,icon: .Heart,style: .SupportVisionOS)
         self.sessionQueue.async {
             self.removeTimer()
         }
@@ -557,7 +563,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
     func showCodeButton(bounds:CGRect,icon:Bool)->UIButton {
         let btn = UIButton(type: .custom)
         btn.frame = bounds
-        btn.backgroundColor = UIColor.colorBase(R: 54/255, G: 85/255, B: 230/255, A: 1)
+        btn.backgroundColor = .clear
         btn.addActionHandlers { sender in
             let barinfo = self.layerArr[sender.tag]
             self.processResult(result: barinfo.codeString,error: nil)

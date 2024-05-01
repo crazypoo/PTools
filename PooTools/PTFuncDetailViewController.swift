@@ -237,7 +237,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                 pickerConfig.maxVideoSelectCount = 1
                 pickerConfig.maxSelectCount = 1
                 let vc = PTMediaLibViewController()
-                vc.mediaLibShow()
+                self.dismiss(animated: true, completion: {
+                    vc.mediaLibShow()
+                })
                 vc.selectImageBlock = { result, isOriginal in
                     if #available(iOS 14.0, *) {
                         let vision = PTVision.share
