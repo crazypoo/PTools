@@ -268,7 +268,9 @@ extension UIView: PTBadgeProtocol {
     }
     
     public func clearBadge() {
-        self.badge!.isHidden = true
+        if self.badge != nil {
+            self.badge!.isHidden = true
+        }
     }
     
     public func resumeBadge() {
