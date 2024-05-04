@@ -406,7 +406,25 @@ public extension UIImage {
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
-    }    
+    }   
+    
+    //MARK: 把圖片換成圓形
+    ///把圖片換成圓形
+    @objc func circularImage() -> UIImage? {
+        let imageSize = CGSize(width: self.size.width, height: self.size.height)
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
+        let context = UIGraphicsGetCurrentContext()!
+
+        let circlePath = UIBezierPath(ovalIn: CGRect(origin: .zero, size: imageSize))
+        circlePath.addClip()
+
+        self.draw(in: CGRect(origin: .zero, size: imageSize))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
 }
 
 public extension PTPOP where Base: UIImage {
