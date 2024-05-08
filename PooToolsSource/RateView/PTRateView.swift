@@ -74,6 +74,10 @@ public class PTRateView: UIView {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
         
+        initView()
+    }
+    
+    func initView() {
         if self.viewConfig!.canTap {
             let tapGes = UITapGestureRecognizer.init { sender in
                 let ges = sender as! UITapGestureRecognizer
@@ -92,11 +96,7 @@ public class PTRateView: UIView {
         }
         
         scorePercent = self.viewConfig!.scorePercent
-        
-        initView()
-    }
-    
-    func initView() {
+
         PTGCDManager.gcdAfter(time: 0.1) {
             self.addSubviews([self.backgroundStarView,self.foregroundStarView])
 
@@ -112,7 +112,9 @@ public class PTRateView: UIView {
             
             let animationTimeInterval = self.viewConfig!.hadAnimation ? 0.2 : 0
             UIView.animate(withDuration: animationTimeInterval) {
-                self.foregroundStarView.snp.updateConstraints({ make in
+                self.foregroundStarView.snp.remakeConstraints({ make in
+                    make.top.bottom.equalToSuperview()
+                    make.left.equalToSuperview()
                     make.width.equalTo(self.frame.size.width * self.scorePercent!)
                 })
             }
