@@ -61,6 +61,7 @@ public extension String {
     static let editimage = "EditImage"
     static let sortButton = "SortButton"
     static let messageKit = "MessageKit"
+    static let BlurImageList = "BlurImageList"
 
     static let route = "路由"
     
@@ -273,7 +274,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let messageKit = self.rowBaseModel(name: .messageKit)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit]
+        let blurImageList = self.rowBaseModel(name: .BlurImageList)
+
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -566,8 +569,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     
                 }
             } else if itemRow.title == .rotation {
-                let r:Int = Int(arc4random_uniform(6))
-                PTRotationManager.share.setOrientation(orientation: .landscapeLeft/*UIDeviceOrientation.init(rawValue: r)!*/)
+                PTRotationManager.shared.toggleOrientation()
+//                let r:Int = Int(arc4random_uniform(2))
+//                PTRotationManager.shared.rotation(to: PTRotationManager.Orientation.allCases[r])
             } else if itemRow.title == .osskit {
                 let vc = PTSpeechViewController()
                 self.navigationController?.pushViewController(vc)
@@ -756,6 +760,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 self.showDetailViewController(nav, sender: nil)
             } else if itemRow.title == .messageKit {
                 let vc = PTTestChatViewController()
+                self.navigationController?.pushViewController(vc)
+            } else if itemRow.title == .BlurImageList {
+                let vc = PTImageListViewController()
                 self.navigationController?.pushViewController(vc)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)

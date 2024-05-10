@@ -60,11 +60,11 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     }
 #endif
     
-#if POOTOOLS_ROTATION
-    public func registerRotation() {
-        PTRotationManager.share.interfaceOrientationMask = .portrait
+    public func registerRotation(changeCallBack:((_ orientationMask: UIInterfaceOrientationMask) -> ())? = nil) {
+        PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange = false
+        PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange = false
+        PTRotationManager.shared.orientationMaskDidChange = changeCallBack
     }
-#endif
     
 #if POOTOOLS_ROUTER
     public func registerRouter(PrifxArray:[String]? = [".Jax"]) {
@@ -111,11 +111,7 @@ extension PTAppWindowsDelegate {
 //MARK: 旋转
 extension PTAppWindowsDelegate {
     open func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-#if POOTOOLS_ROTATION
-        PTRotationManager.share.interfaceOrientationMask
-#else
-        return .portrait
-#endif
+        return  PTRotationManager.shared.orientationMask
     }
 }
 #endif

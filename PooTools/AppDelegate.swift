@@ -86,10 +86,8 @@ class AppDelegate: PTAppWindowsDelegate {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 50
 
-#if POOTOOLS_ROTATION
         registerRotation()
-#endif
-        
+
 #if POOTOOLS_ROUTER
         registerRouter()
 #endif
