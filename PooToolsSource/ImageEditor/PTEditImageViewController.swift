@@ -1503,7 +1503,7 @@ extension PTEditImageViewController {
             }
         }
         
-        let dest = BoxxIO(element: filterImage, filters: filters)
+        let dest = HarbethIO(element: filterImage, filters: filters)
         return try? dest.output()
     }
     

@@ -413,7 +413,7 @@ public extension UIImage {
     @objc func circularImage() -> UIImage? {
         let imageSize = CGSize(width: self.size.width, height: self.size.height)
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
-        let context = UIGraphicsGetCurrentContext()!
+        let _ = UIGraphicsGetCurrentContext()!
 
         let circlePath = UIBezierPath(ovalIn: CGRect(origin: .zero, size: imageSize))
         circlePath.addClip()

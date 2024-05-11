@@ -548,7 +548,7 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
         if let data = photo.fileDataRepresentation() {
             let image = UIImage(data: data)?.c7.fixOrientation()
             
-            var dest = BoxxIO(element: image, filters: self.filters)
+            var dest = HarbethIO(element: image, filters: self.filters)
             dest.transmitOutputRealTimeCommit = true
             self.delegate?.takePhoto!(self, fliter: (try? dest.output() ?? image!)!)
         }

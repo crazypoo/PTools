@@ -20,7 +20,7 @@ extension UITabBarItem:PTBadgeProtocol {
     
     fileprivate func find(view:UIView,classs:AnyClass?) ->UIView? {
         var targetView:UIView?
-        for (index,value) in view.subviews.enumerated() {
+        for (_,value) in view.subviews.enumerated() {
             if classs != nil {
                 if value.isKind(of: classs!) {
                     targetView = value

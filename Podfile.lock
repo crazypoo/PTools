@@ -120,8 +120,6 @@ PODS:
   - PooTools/BilogyID (3.45.0):
     - PooTools/Core
     - PooTools/FaceIDPermission
-  - PooTools/BluetoothPermission (3.45.0):
-    - PooTools/Core
   - PooTools/Calendar (3.45.0):
     - PooTools/CalendarPermission
     - PooTools/Core
@@ -148,8 +146,6 @@ PODS:
     - UIImageColors
   - PooTools/ColorPicker (3.45.0):
     - ChromaColorPicker
-    - PooTools/Core
-  - PooTools/ContactsPermission (3.45.0):
     - PooTools/Core
   - PooTools/Core (3.45.0):
     - AttributedString
@@ -216,8 +212,6 @@ PODS:
   - PooTools/HarbethKit (3.45.0):
     - Harbeth
     - PooTools/CameraPermission
-    - PooTools/Core
-  - PooTools/HealthPermission (3.45.0):
     - PooTools/Core
   - PooTools/HeartRate (3.45.0):
     - lottie-ios
@@ -340,8 +334,6 @@ PODS:
     - PooTools/NetWork
     - PooTools/PageControl
     - PooTools/ProgressBar
-  - PooTools/MeidaPermission (3.45.0):
-    - PooTools/Core
   - PooTools/MessageKit (3.45.0):
     - PooTools/Core
     - PooTools/CustomerLabel
@@ -362,8 +354,6 @@ PODS:
     - PooTools/Loading
   - PooTools/NotificationBanner (3.45.0):
     - NotificationBannerSwift
-    - PooTools/Core
-  - PooTools/NotificationPermission (3.45.0):
     - PooTools/Core
   - PooTools/OSSKitSpeech (3.45.0):
     - PooTools/Core
@@ -424,8 +414,6 @@ PODS:
     - PooTools/CustomerLabel
   - PooTools/SideControl (3.45.0):
     - PooTools/Core
-  - PooTools/SiriPermission (3.45.0):
-    - PooTools/Core
   - PooTools/Slider (3.45.0):
     - PooTools/Core
     - RangeSeekSlider
@@ -451,8 +439,6 @@ PODS:
     - ESTabBarController-swift
     - PooTools/Core
   - PooTools/Telephony (3.45.0):
-    - PooTools/Core
-  - PooTools/TrackingPermission (3.45.0):
     - PooTools/Core
   - PooTools/VideoEditor (3.45.0):
     - PooTools/Core
@@ -547,22 +533,7 @@ DEPENDENCIES:
   - LifetimeTracker
   - LookinServer
   - netfox
-  - PooTools/BluetoothPermission (from `PooTools.podspec`)
-  - PooTools/CalendarPermission (from `PooTools.podspec`)
-  - PooTools/CameraPermission (from `PooTools.podspec`)
-  - PooTools/ContactsPermission (from `PooTools.podspec`)
-  - PooTools/FaceIDPermission (from `PooTools.podspec`)
-  - PooTools/HealthPermission (from `PooTools.podspec`)
-  - PooTools/InputAll (from `PooTools.podspec`)
-  - PooTools/LocationPermission (from `PooTools.podspec`)
-  - PooTools/MeidaPermission (from `PooTools.podspec`)
-  - PooTools/MicPermission (from `PooTools.podspec`)
-  - PooTools/MotionPermission (from `PooTools.podspec`)
-  - PooTools/NotificationPermission (from `PooTools.podspec`)
-  - PooTools/RemindersPermission (from `PooTools.podspec`)
-  - PooTools/SiriPermission (from `PooTools.podspec`)
-  - PooTools/SpeechRecognizerPermission (from `PooTools.podspec`)
-  - PooTools/TrackingPermission (from `PooTools.podspec`)
+  - PooTools/InputAll (from `https://github.com/crazypoo/PTools.git`)
   - SwiftLint
   - Swinject
 
@@ -642,7 +613,12 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   PooTools:
-    :path: PooTools.podspec
+    :git: https://github.com/crazypoo/PTools.git
+
+CHECKOUT OPTIONS:
+  PooTools:
+    :commit: 216d552b80084e44edbd6af9b4474fcd036393d4
+    :git: https://github.com/crazypoo/PTools.git
 
 SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
@@ -718,6 +694,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: ce28b38b75a502db982205e9f6a90cad5007f37a
+PODFILE CHECKSUM: 769c68a25d83883fb5243256969656219af61e98
 
 COCOAPODS: 1.15.0

@@ -147,7 +147,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                 exporter.export(options: [
                                     .OptimizeForNetworkUse: true,
                                 ], filtering: { buffer in
-                                    let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
+                                    let dest = HarbethIO(element: buffer, filters: self.c7Player.filters)
                                     return try? dest.output()
                                 }, complete: { res in
                                     PTGCDManager.gcdMain {

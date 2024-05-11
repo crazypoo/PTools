@@ -265,7 +265,7 @@ public class PTMediaLibView:UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadMedia(addImage:Bool? = false) {
+    func loadMedia(addImage:Bool? = false,loadFinish:((UICollectionView)->Void)? = nil) {
         PTGCDManager.gcdMain {
             var rows = [PTRows]()
             if !addImage! {
@@ -282,7 +282,7 @@ public class PTMediaLibView:UIView {
                 rows.insert(row, at: rows.count)
             }
             let section = PTSection(rows: rows)
-            self.collectionView.showCollectionDetail(collectionData: [section])
+            self.collectionView.showCollectionDetail(collectionData: [section],finishTask: loadFinish)
         }
     }
     
@@ -507,7 +507,7 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
                         }
                         self.currentAlbum = self.currentAlbum!
                         PTGCDManager.gcdAfter(time: 0.15) {
-                            self.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                            self.collectionView.contentCollectionView.scrollToBottom(animated: true)
                         }
                     }
                 } else {
@@ -516,7 +516,7 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
                         vc.currentAlbum = self.currentAlbum!
                     }
                     PTGCDManager.gcdAfter(time: 0.15) {
-                        self.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                        self.collectionView.contentCollectionView.scrollToBottom(animated: true)
                     }
                 }
             }
@@ -669,19 +669,21 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
             self.currentAlbum = model
             if self.currentAlbum.models.isEmpty {
-                PTGCDManager.gcdMain {
+                PTGCDManager.gcdGobal {
                     self.currentAlbum.refetchPhotos()
-                    self.createList()
-                    self.mediaListView.currentAlbum = self.currentAlbum
-                    PTGCDManager.gcdAfter(time: 0.15) {
-                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    PTGCDManager.gcdMain {
+                        self.createList()
+                        self.mediaListView.currentAlbum = self.currentAlbum
+                        PTGCDManager.gcdAfter(time: 0.15) {
+                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                        }
                     }
                 }
             } else {
                 self.createList()
                 self.mediaListView.currentAlbum = self.currentAlbum
                 PTGCDManager.gcdAfter(time: 0.15) {
-                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: true)
                 }
             }
         }

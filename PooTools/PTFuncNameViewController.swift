@@ -27,6 +27,7 @@ public extension String {
     static let dymanicCode = "动态验证码"
     static let osskit = "语音"
     static let vision = "看图识字"
+    static let mediaSelect = "媒體選擇"
 
     static let phoneSimpleInfo = "手机信息"
     static let phoneCall = "打电话"
@@ -166,7 +167,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
         let vision = self.rowBaseModel(name: .vision)
         
-        let mediaArrs = [imageReview,videoEditor,sign,dymanicCode,oss,vision]
+        let mediaSelect = self.rowBaseModel(name: .mediaSelect)
+        
+        let mediaArrs = [imageReview,videoEditor,sign,dymanicCode,oss,vision,mediaSelect]
         
         var mediaRows = [PTRows]()
         mediaArrs.enumerated().forEach { index,value in
@@ -764,6 +767,24 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .BlurImageList {
                 let vc = PTImageListViewController()
                 self.navigationController?.pushViewController(vc)
+            } else if itemRow.title == .mediaSelect {
+                let config = PTMediaLibConfig.share
+                config.maxSelectCount = 9
+                config.allowSelectImage = true
+                config.allowSelectVideo = true
+                config.allowMixSelect = true
+                config.maxVideoSelectCount = 1
+                config.allowEditImage = true
+                config.allowEditVideo = true
+                let vc = PTMediaLibViewController()
+                vc.mediaLibShow(panGesDelegate: self)
+                vc.selectImageBlock = { result,isOriginal in
+                    if result.count > 0 {
+                        PTNSLogConsole("\(result)")
+                    } else {
+                        PTAlertTipControl.present(title:"失败",subtitle:"",icon:.Error,style: .Normal)
+                    }
+                }
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
@@ -866,33 +887,6 @@ class PTFuncNameViewController: PTBaseViewController {
                 let zoomAnimation = PTListAnimationType.zoom(scale: 0.2)
                 UIView.animate(views: self.collectionView.contentCollectionView.visibleCells,
                                animations: [fromAnimation, zoomAnimation], delay: 0.5)
-//                let config = PTMediaLibConfig.share
-//                config.maxSelectCount = 9
-//                config.allowSelectImage = true
-//                config.allowSelectVideo = true
-//                config.allowMixSelect = true
-//                config.maxVideoSelectCount = 1
-//                config.allowEditImage = true
-//                config.allowEditVideo = true
-//                let vc = PTMediaLibViewController()
-//                vc.mediaLibShow(panGesDelegate: self)
-//                vc.selectImageBlock = { result,isOriginal in
-//                    if result.count > 0 {
-//                        let vc = PTEditImageViewController(readyEditImage: result.first!.image)
-//                        vc.editFinishBlock = { ei,eiitModel in
-//                            PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
-//                                if finish {
-//                                    PTAlertTipControl.present(title:"保存成功",subtitle:"你的图片已经保存到相册中",icon:.Done,style: .Normal)
-//                                } else {
-//                                    PTAlertTipControl.present(title:"保存失败",subtitle:"",icon:.Error,style: .Normal)
-//                                }
-//                            }
-//                        }
-//                        vc.editImageShow(vc: self)
-//                    } else {
-//                        PTAlertTipControl.present(title:"失败",subtitle:"",icon:.Error,style: .Normal)
-//                    }
-//                }
             }
         }
 

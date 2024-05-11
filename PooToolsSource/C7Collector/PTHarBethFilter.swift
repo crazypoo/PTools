@@ -43,12 +43,12 @@ public class PTHarBethFilter:NSObject {
             return nil
         }
         let filter = C7SolidColor.init(color: color)
-        let dest = BoxxIO(element: texture, filter: filter)
+        let dest = HarbethIO(element: texture, filter: filter)
         return try? dest.output()
     }
 
     public func getCurrentFilterImage(image:UIImage?) -> UIImage {
-        let dest = BoxxIO(element: image, filter: type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter!)
+        let dest = HarbethIO(element: image, filter: type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter!)
         return (try? dest.output() ?? image!)!
     }
     
