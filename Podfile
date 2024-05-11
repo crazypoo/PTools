@@ -37,8 +37,8 @@ target 'PooTools_Example' do
 ##JD包体分析
 #https://github.com/helele90/APPAnalyze
 
-  pod 'PooTools/InputAll', :git => 'https://github.com/crazypoo/PTools.git'
-#  pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'
+#  pod 'PooTools/InputAll', :git => 'https://github.com/crazypoo/PTools.git'
+  pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'
 
   
 #  pod 'MetaCodable'

@@ -41,6 +41,10 @@ public struct PTBadgeAssociatedKeys {
     static var badgeCenterOffsetKey = 996
     static var badgeMaximumBadgeNumberKey = 997
     static var badgeRadiusKey = 998
+    static var badgeCenterKey = 999
+    static var badgeCenterChangeKey = 989
+    static var badgeCanDragToDeleteKey = 988
+    static var badgeCanDragToDeleteLongPressTimeKey = 987
 }
 
 public protocol PTBadgeProtocol {

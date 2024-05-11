@@ -8,15 +8,43 @@
 
 import UIKit
 import QuartzCore
+import SwifterSwift
 
 extension UIView: PTBadgeProtocol {
     
+    fileprivate var initialSubviewCenter: CGPoint! {
+        get {
+            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterKey)
+            guard let label = obj as? CGPoint else {
+                return CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
+            }
+            return label
+        }
+        set {
+            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    fileprivate var initialChangeCenter: CGPoint? {
+        get {
+            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterChangeKey)
+            guard let label = obj as? CGPoint else {
+                return nil
+            }
+            return label
+        }
+        set {
+            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterChangeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
     fileprivate func badgeLabelInit() {
         if self.badge == nil {
+            initialSubviewCenter = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
             let redotWidth = kPTBAdgeDefaultRedDotRadius * 2
             let newLabel = UILabel(frame: CGRectMake(CGRectGetWidth(self.frame), -redotWidth, redotWidth, redotWidth))
             newLabel.textAlignment = .center
-            newLabel.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
+            newLabel.center = initialSubviewCenter
             newLabel.backgroundColor = self.badgeBgColor
             newLabel.textColor = self.badgeTextColor
             newLabel.text = ""
@@ -24,9 +52,71 @@ extension UIView: PTBadgeProtocol {
             newLabel.layer.cornerRadius = CGRectGetWidth(newLabel.frame) / 2
             newLabel.layer.masksToBounds = true
             newLabel.isHidden = false
+            newLabel.isUserInteractionEnabled = true
             self.addSubview(newLabel)
             self.bringSubviewToFront(newLabel)
             self.badge = newLabel
+                        
+            if canDragToDelete {
+                let longPress = UILongPressGestureRecognizer { sender in
+                    let press = sender as! UILongPressGestureRecognizer
+                    let location = press.location(in: self)
+                    
+                    switch press.state {
+                    case .began:
+                        // 记录起始触摸点
+                        self.initialChangeCenter = location
+                    case .changed:
+                        // 计算拖动偏移量
+                        let offsetX = location.x - self.initialChangeCenter!.x
+                        let offsetY = location.y - self.initialChangeCenter!.y
+                        // 更新视图位置
+                        self.badge!.center = CGPoint(x: self.badge!.center.x + offsetX, y: self.badge!.center.y + offsetY)
+                        // 更新起始触摸点
+                        self.initialChangeCenter = location
+                    case .ended, .cancelled:
+                        // 拖动结束，清除起始触摸点
+                        self.initialChangeCenter = nil
+                        // 检查视图位置是否超出父视图范围
+                        let badgeFrameInSelf = self.badge!.convert(self.badge!.bounds, to: self)
+                        if self.bounds.intersects(badgeFrameInSelf) {
+                            self.badge!.center = self.initialSubviewCenter
+                        } else {
+                            self.badge!.removeFromSuperview()
+                        }
+                    default:
+                        break
+                    }
+                }
+                longPress.minimumPressDuration = canDragToDeleteDuration
+                self.badge!.addGestureRecognizers([longPress])
+            }
+        }
+    }
+    
+    public var canDragToDeleteDuration:TimeInterval {
+        get {
+            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteLongPressTimeKey)
+            guard let value = obj as? TimeInterval else {
+                return 1
+            }
+            return value
+        }
+        set {
+            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteLongPressTimeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    public var canDragToDelete:Bool {
+        get {
+            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteKey)
+            guard let value = obj as? Bool else {
+                return false
+            }
+            return value
+        }
+        set {
+            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -237,7 +327,7 @@ extension UIView: PTBadgeProtocol {
             self.adjustLabelWidth(label: self.badge!)
             var frame = self.badge!.frame
             frame.size.width += 0
-            frame.size.height += 4
+            frame.size.height = self.badge!.font.pointSize + 4
             self.badge!.frame = frame
             self.badge!.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
             self.badge!.font = .appfont(size: 9)
