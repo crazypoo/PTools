@@ -24,7 +24,7 @@ import HyperionCore
 #if canImport(netfox)
 import netfox
 #endif
-//import Bugly
+import Bugly
 import TipKit
 import MediaPlayer
 import Alamofire
@@ -63,20 +63,20 @@ class AppDelegate: PTAppWindowsDelegate {
             PTTip.shared.appdelegateTipSet()
         }
         // Override point for customization after application launch.
-//        var debugDevice = false
-//        let buglyConfig = BuglyConfig()
-//        #if DEBUG
-//        debugDevice = true
-//        buglyConfig.debugMode = true
-//        #endif
-//        buglyConfig.channel = "iOS"
-//        buglyConfig.blockMonitorEnable = true
-//        buglyConfig.blockMonitorTimeout = 2
-//        buglyConfig.consolelogEnable = false
-//        buglyConfig.viewControllerTrackingEnable = false
-//        Bugly.start(withAppId: "32b6206a5d",
-//                    developmentDevice: debugDevice,
-//                    config: buglyConfig)
+        var debugDevice = false
+        let buglyConfig = BuglyConfig()
+        #if DEBUG
+        debugDevice = true
+        buglyConfig.debugMode = true
+        #endif
+        buglyConfig.channel = "iOS"
+        buglyConfig.blockMonitorEnable = true
+        buglyConfig.blockMonitorTimeout = 2
+        buglyConfig.consolelogEnable = false
+        buglyConfig.viewControllerTrackingEnable = false
+        Bugly.start(withAppId: "32b6206a5d",
+                    developmentDevice: debugDevice,
+                    config: buglyConfig)
         
         PTDarkModeOption.defaultDark()
         StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent

@@ -32,7 +32,7 @@ target 'PooTools_Example' do
   pod 'netfox', :configurations => ['Debug']
   pod 'DiDiPrism'
   pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
-#  pod 'Bugly'
+  pod 'Bugly'
 
 ##JD包体分析
 #https://github.com/helele90/APPAnalyze

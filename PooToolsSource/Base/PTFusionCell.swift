@@ -268,11 +268,7 @@ public class PTFusionCellContent:UIView {
         super.init(frame: frame)
         isUserInteractionEnabled = true
     }
-    
-    func createSubViews() {
-    }
-
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -688,7 +684,7 @@ public class PTFusionCellContent:UIView {
                         .Switch(type: .None(type: .Content)),
                         .DisclosureIndicator(type: .None(type: .Content)),
                         .More(type: .None(type: .Content)):
-                    make.right.equalTo(self.snp.centerX)
+                    make.right.lessThanOrEqualTo(self.snp.centerX)
                 case .Switch(type: .LeftImageContent(type: .Name)):
                     make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
                 default:
@@ -759,7 +755,7 @@ public class PTFusionCellContent:UIView {
                         .More(type: .BothImage(type: .Content)):
                     make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.contentLeftSpace)
                 default:
-                    make.left.equalTo(self.snp.centerX).offset(10)
+                    make.left.equalTo(self.nameTitle.snp.right).offset(10)
                 }
                 
                 switch cellType {

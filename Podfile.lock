@@ -22,6 +22,7 @@ PODS:
     - BRPickerView/Base
   - BRPickerView/StringPickerView (2.8.5):
     - BRPickerView/Base
+  - Bugly (2.6.1)
   - ChromaColorPicker (2.0.2)
   - CocoaLumberjack/Core (3.8.5)
   - CocoaLumberjack/Swift (3.8.5):
@@ -533,6 +534,7 @@ PODS:
   - ZXNavigationBar (1.4.1)
 
 DEPENDENCIES:
+  - Bugly
   - DiDiPrism
   - DiDiPrism_Ability/WithBehaviorDetect
   - DiDiPrism_Ability/WithBehaviorRecord
@@ -574,6 +576,7 @@ SPEC REPOS:
     - Aspects
     - AttributedString
     - BRPickerView
+    - Bugly
     - ChromaColorPicker
     - CocoaLumberjack
     - CollectionViewPagingLayout
@@ -651,6 +654,7 @@ SPEC CHECKSUMS:
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
   AttributedString: 7fa84b52e32feaeab9a484e8a1dc2840d6f0a6cf
   BRPickerView: ed3db5376cdfa789eb2b3e815ae347bd5eb0f420
+  Bugly: 217ac2ce5f0f2626d43dbaa4f70764c953a26a31
   ChromaColorPicker: 307585f2dc23d4d72f24cad320c1e08825cb5c09
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
@@ -718,6 +722,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 35fa9d1fb30afcc456ca5d6c290cf780216671ce
+PODFILE CHECKSUM: 1d70988f790452e4206626dd4e3b64de0772c9b5
 
 COCOAPODS: 1.15.0

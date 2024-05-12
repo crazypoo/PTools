@@ -425,6 +425,24 @@ public extension UIImage {
         
         return newImage
     }
+    
+    //MARK: 判斷一個圖片是否大於或者小於某個尺寸
+    ///判斷一個圖片是否大於或者小於某個尺寸
+    @objc func checkImage(smallerThan:Bool = false,checkSize:CGSize) -> Bool {
+        if smallerThan {
+            return self.size.width < checkSize.width && self.size.height < checkSize.height
+        } else {
+            return self.size.width > checkSize.width || self.size.height > checkSize.height
+        }
+    }
+    
+    //MARK: 判断 UIImage 的图片数据大小是否大于某个值（以字节为单位）
+    ///判断 UIImage 的图片数据大小是否大于某个值（以字节为单位）
+    @objc func ckeckImageSizeLargerThan(byteSize: Int) -> Bool {
+        // 将 UIImage 转换为 JPEG 格式的图片数据
+        // 检查图片数据的字节大小是否大于指定值
+        return self.bytesSize > byteSize // 如果转换失败，则默认为大小不超过指定值
+    }
 }
 
 public extension PTPOP where Base: UIImage {
