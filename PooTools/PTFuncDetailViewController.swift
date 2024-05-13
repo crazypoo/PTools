@@ -557,7 +557,42 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview().inset(20)
             }
-            break
+        case String.CycleBanner:
+            let banner = PTCycleScrollView()
+            banner.autoScroll = true
+            // 滚动间隔时间(默认为2秒)
+            banner.autoScrollTimeInterval = 3.0
+            // 等待数据状态显示的占位图
+            banner.placeHolderImage = PTAppBaseConfig.share.defaultPlaceholderImage
+            // 如果没有数据的时候，使用的封面图
+            banner.coverImage = PTAppBaseConfig.share.defaultPlaceholderImage
+            // 设置图片显示方式=UIImageView的ContentMode
+            banner.imageViewContentMode = .scaleAspectFill
+            banner.viewCorner(radius: 10)
+            // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
+            banner.customPageControlStyle = .pill
+            // 非.system的状态下，设置PageControl的tintColor
+            banner.customPageControlInActiveTintColor = UIColor.lightGray
+            // 设置.system系统的UIPageControl当前显示的颜色
+            banner.pageControlCurrentPageColor = UIColor.randomColor
+            // 非.system的状态下，设置PageControl的间距(默认为8.0)
+            banner.customPageControlIndicatorPadding = 5.0
+            // 设置PageControl的位置 (.left, .right 默认为.center)
+            banner.pageControlPosition = .left
+            banner.scrollDirection = .vertical
+            // 圆角
+            banner.backgroundColor = .clear
+            banner.didSelectItemAtIndexClosure = { index in
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>\(index)")
+            }
+            view.addSubviews([banner])
+            banner.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(20)
+                make.height.equalTo(190)
+            }
+            banner.titles = ["1","2","3"]
+            banner.imagePaths = ["http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg"]
         default:
             break
         }

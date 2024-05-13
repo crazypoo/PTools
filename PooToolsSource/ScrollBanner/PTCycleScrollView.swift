@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import SwifterSwift
 
 /// Style
 @objc public enum PageControlStyle:Int {
@@ -47,18 +48,16 @@ public class PTCycleScrollView: UIView {
         didSet {
             setTotalItemsMinItems(count:imagePaths.count)
             if imagePaths.count > 1 {
-                collectionView.contentCollectionView.isScrollEnabled = true
+                pageScrollerView.isScrollEnabled = true
                 if autoScroll {
                     setupTimer()
                 }
             } else {
-                collectionView.contentCollectionView.isScrollEnabled = false
+                pageScrollerView.isScrollEnabled = false
                 invalidateTimer()
             }
             
             collectionViewSetData()
-
-            setupPageControl()
         }
     }
     
@@ -188,12 +187,19 @@ public class PTCycleScrollView: UIView {
     /// 未选中颜色
     open var pageControlTintColor: UIColor = UIColor.lightGray {
         didSet {
+            // 重新添加
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
     /// 选中颜色
     open var pageControlCurrentPageColor: UIColor = UIColor.white {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -201,6 +207,9 @@ public class PTCycleScrollView: UIView {
     ///  圆角(.fill,.snake)
     open var fillPageControlIndicatorRadius: CGFloat = 4 {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -208,6 +217,9 @@ public class PTCycleScrollView: UIView {
     /// 选中颜色(.pill,.snake)
     open var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3) {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -215,6 +227,9 @@ public class PTCycleScrollView: UIView {
     /// 普通图片(.system)
     open var pageControlActiveImage: UIImage? = nil {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -222,6 +237,9 @@ public class PTCycleScrollView: UIView {
     /// 选中图片(.system)
     open var pageControlInActiveImage: UIImage? = nil {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -231,6 +249,9 @@ public class PTCycleScrollView: UIView {
     /// 自定义Pagecontrol风格(.fill,.pill,.snake)
     open var customPageControlStyle: PageControlStyle = .system {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -238,12 +259,18 @@ public class PTCycleScrollView: UIView {
     /// 自定义Pagecontrol普通颜色
     open var customPageControlTintColor: UIColor = UIColor.white {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
     /// 自定义Pagecontrol点阵边距
     open var customPageControlIndicatorPadding: CGFloat = 8 {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -251,6 +278,9 @@ public class PTCycleScrollView: UIView {
     /// pagecontrol的展示方位(左,中,右)
     open var pageControlPosition: PageControlPosition = .center {
         didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
             setupPageControl()
         }
     }
@@ -304,210 +334,13 @@ public class PTCycleScrollView: UIView {
     
     /// 计时器
     fileprivate var dtimer: DispatchSourceTimer?
-    
-    /// 容器组件 UICollectionView
-    open lazy var collectionView: PTCollectionView = {
         
-        let cConfig = PTCollectionViewConfig()
-        cConfig.viewType = .Custom
-        cConfig.collectionViewBehavior = .groupPaging
-        cConfig.showsVerticalScrollIndicator = false
-        cConfig.showsHorizontalScrollIndicator = false
-
-        let view = PTCollectionView(viewConfig: cConfig)
-        view.customerLayout = { sectionModel in
-            switch self.scrollDirection {
-            case .horizontal:
-                var bannerGroupSize : NSCollectionLayoutSize
-                var customers = [NSCollectionLayoutItem]()
-                var groupW:CGFloat = 0
-                let screenW:CGFloat = self.frame.size.width
-                var cellHeight:CGFloat = self.frame.size.height
-                sectionModel.rows.enumerated().forEach { (index,model) in
-                    let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(screenW), heightDimension: .absolute(cellHeight))
-                    let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                    customers.append(item)
-                    groupW += screenW
-                }
-                bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
-                return NSCollectionLayoutGroup.horizontal(layoutSize: bannerGroupSize, subitems: customers)
-            default:
-                var bannerGroupSize : NSCollectionLayoutSize
-                var customers = [NSCollectionLayoutGroupCustomItem]()
-                var groupH:CGFloat = 0
-                let screenW:CGFloat = self.frame.size.width
-                var cellHeight:CGFloat = self.frame.size.height
-                sectionModel.rows.enumerated().forEach { (index,model) in
-                    let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupH, width: screenW, height: cellHeight), zIndex: 1000+index)
-                    customers.append(customItem)
-                    groupH += cellHeight
-                }
-                bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-                return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                    customers
-                })
-            }
-        }
-        view.cellInCollection = { collection,sectionModel,indexPath in
-            let cell: PTCycleScrollViewCell = collection.dequeueReusableCell(withReuseIdentifier: PTCycleScrollViewCell.ID, for: indexPath) as! PTCycleScrollViewCell
-            // Setting
-            cell.titleFont = self.font
-            cell.titleLabelTextColor = self.textColor
-            cell.titleBackViewBackgroundColor = self.titleBackgroundColor
-            cell.titleLines = self.numberOfLines
-            
-            // Leading
-            cell.titleLabelLeading = self.titleLeading
-            
-            // Only Title
-            if self.isOnlyTitle && self.titles.count > 0 {
-                cell.titleLabelHeight = self.cellHeight
-                
-                let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: indexPath.item)
-                cell.title = self.titles[itemIndex]
-            } else {
-                // Mode
-                if let imageViewContentMode = self.imageViewContentMode {
-                    cell.imageView.contentMode = imageViewContentMode
-                }
-                
-                // 0==count 占位图
-                if self.imagePaths.count == 0 {
-                    cell.imageView.image = self.coverViewImage
-                } else {
-                    let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: indexPath.item)
-                    let imagePath = self.imagePaths[itemIndex]
-                    
-                    cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
-                    
-                    // 对冲数据判断
-                    if itemIndex <= self.titles.count-1 {
-                        cell.title = self.titles[itemIndex]
-                    } else {
-                        cell.title = ""
-                    }
-                }
-            }
-            
-            switch self.scrollDirection {
-            case .horizontal:
-                var pointStart = CGPointZero
-                let currentX = self.collectionView.contentCollectionView.contentOffset.x
-                let panGes = UIPanGestureRecognizer { sender in
-                    let obj = sender as! UIPanGestureRecognizer
-                    let point = obj.location(in: self)
-                    switch obj.state {
-                    case .possible:
-                        break
-                    case .began:
-                        pointStart = obj.location(in: self)
-                        if self.autoScroll {
-                            self.invalidateTimer()
-                        }
-                    case .changed:
-                        if self.autoScroll {
-                            self.invalidateTimer()
-                        }
-                        let collectionX = currentX + (pointStart.x - point.x)
-
-                        self.collectionView.contentCollectionView.contentOffset = CGPointMake(collectionX, self.collectionView.contentCollectionView.contentOffset.y)
-                    case .ended:
-                        if self.autoScroll {
-                            self.setupTimer()
-                        }
-                        
-                        if pointStart.x < point.x {
-                            var index = self.currentIndex() - 1
-                            if index <= 0 {
-                                index = 0
-                            }
-                            self.collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: index, section: 0), at: self.position, animated: true)
-                            self.setProgressIndex(index: CGFloat(index))
-                        } else {
-                            var index = self.currentIndex() + 1
-                            if index >= (self.imagePaths.count - 1) {
-                                index = (self.imagePaths.count - 1)
-                            }
-                            self.collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: index, section: 0), at: self.position, animated: true)
-                            
-                            self.setProgressIndex(index: CGFloat(self.pageControlIndexWithCurrentCellIndex(index: index)))
-                        }
-                    default:
-                        break
-                    }
-                }
-                cell.addGestureRecognizer(panGes)
-            default:
-                break
-            }
-            return cell
-        }
-        view.collectionDidSelect = { collection,sectionModel,indexPath in
-            if self.didSelectItemAtIndexClosure != nil {
-                self.didSelectItemAtIndexClosure!(self.pageControlIndexWithCurrentCellIndex(index: indexPath.item))
-            }
-        }
-        view.collectionViewDidScroll = { collection in
-            if self.imagePaths.count == 0 { return }
-            
-            let index: NSInteger = self.collectionView.contentCollectionView.indexPath(for: self.collectionView.contentCollectionView.visibleCells.first ?? UICollectionViewCell())?.row ?? 0
-
-            self.setProgressIndex(index: CGFloat(index))
-
-            if self.scrollViewDidScrollClosure != nil {
-                var offSet: CGFloat = 0
-                switch self.scrollDirection {
-                case .horizontal:
-                    offSet = self.collectionView.contentCollectionView.contentOffset.x -  self.frame.size.width * CGFloat(index)
-                case .vertical:
-                    offSet = self.collectionView.contentCollectionView.contentOffset.y - self.frame.size.height * CGFloat(index)
-                default:
-                    break
-                }
-                
-                let currentIndex = self.pageControlIndexWithCurrentCellIndex(index: NSInteger(index))
-                self.scrollViewDidScrollClosure!(currentIndex,offSet)
-            }
-            
-            if self.autoScroll {
-                self.setupTimer()
-            }
-        }
-        
-        view.collectionWillBeginDragging = { collection in
-            self.cycleScrollViewScrollToIndex()
-
-            if self.autoScroll {
-                self.invalidateTimer()
-            }
-            
-            let indexOnPageControl = self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex())
-            if self.scrollFromClosure != nil {
-                self.scrollFromClosure!(indexOnPageControl)
-            }
-        }
-        view.collectionDidEndDragging = { collection,decelerate in
-            if self.imagePaths.count == 0 { return }
-            
-            // 滚动后的回调协议
-            if !decelerate { self.cycleScrollViewScrollToIndex() }
-            
-            if self.autoScroll {
-                self.setupTimer()
-            }
-        }
-        view.collectionDidEndDecelerating = { collection in
-            self.cycleScrollViewScrollToIndex()
-        }
-        view.collectionDidEndScrollingAnimation = { collection in
-            if self.imagePaths.count == 0 { return }
-            
-            self.cycleScrollViewScrollToIndex()
-            
-            if self.dtimer == nil && self.autoScroll {
-                self.setupTimer()
-            }
-        }
+    fileprivate lazy var pageScrollerView:UIScrollView = {
+        let view = UIScrollView()
+        view.isPagingEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
+        view.delegate = self
         return view
     }()
             
@@ -515,14 +348,18 @@ public class PTCycleScrollView: UIView {
     /// - Parameter frame: CGRect
     override internal init(frame: CGRect) {
         super.init(frame: frame)
-        setupMainView()
+        PTGCDManager.gcdAfter(time: 0.2) {
+            self.setupMainView()
+        }
     }
     
     /// Init
     /// - Parameter aDecoder: NSCoder
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupMainView()
+        PTGCDManager.gcdAfter(time: 0.2) {
+            self.setupMainView()
+        }
     }
 }
 
@@ -626,7 +463,12 @@ extension PTCycleScrollView {
 extension PTCycleScrollView {
     // MARK: 添加UICollectionView
     private func setupMainView() {
-        addSubview(collectionView)
+        addSubview(pageScrollerView)
+        pageScrollerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        setupPageControl()
     }
     
     // MARK: 添加自定义箭头
@@ -678,11 +520,6 @@ extension PTCycleScrollView {
     
     // MARK: 添加PageControl
     func setupPageControl() {
-        
-        // 重新添加
-        if customPageControl != nil {
-            customPageControl?.removeFromSuperview()
-        }
         
         if imagePaths.count <= 1 {
             return
@@ -746,6 +583,7 @@ extension PTCycleScrollView {
             addSubview(customPageControl!)
             customPageControl?.isHidden = false
         }
+        bringSubviewToFront(customPageControl!)
     }
 }
 
@@ -770,21 +608,17 @@ extension PTCycleScrollView {
         super.layoutSubviews()
         // CollectionView
         
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
         PTGCDManager.gcdAfter(time: 0.1) {
 
             // Cell Height
-            self.cellHeight = self.collectionView.frame.height
+            self.cellHeight = self.frame.height
             
             // 计算最大扩展区大小
             switch self.scrollDirection {
             case .horizontal:
-                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.collectionView.frame.width
+                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.width
             default:
-                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.collectionView.frame.height
+                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
             }
             
             // Page Frame
@@ -831,25 +665,81 @@ extension PTCycleScrollView {
                 }
             }
             
-            self.collectionViewSetData { collection in
-                PTGCDManager.gcdAfter(time: 0.5, block: {
-                    let index = self.collectionView.contentCollectionView.indexPath(for: self.collectionView.contentCollectionView.visibleCells.first!)!.row
-                    if index == 0 && self.imagePaths.count > 0 {
-                        self.collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: 0, section: 0), at: self.position, animated: false)
-                    }
-                })
-            }
+            self.collectionViewSetData()
         }
     }
     
-    func collectionViewSetData(finishTask:((UICollectionView)->Void)? = nil) {
-        var rows = [PTRows]()
-        for _ in 0..<totalItemsCount {
-            let row = PTRows(cls:PTCycleScrollViewCell.self,ID: PTCycleScrollViewCell.ID)
-            rows.append(row)
+    func collectionViewSetData() {
+        pageScrollerView.removeSubviews()
+        for i in 0..<totalItemsCount {
+            let cell = PTCycleScrollViewCell()
+            cell.titleFont = self.font
+            cell.titleLabelTextColor = self.textColor
+            cell.titleBackViewBackgroundColor = self.titleBackgroundColor
+            cell.titleLines = self.numberOfLines
+            // Leading
+            cell.titleLabelLeading = self.titleLeading
+            
+            let tap = UITapGestureRecognizer { sender in
+                if self.didSelectItemAtIndexClosure != nil {
+                    self.didSelectItemAtIndexClosure!(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
+                }
+            }
+            cell.addGestureRecognizer(tap)
+            // Only Title
+            if self.isOnlyTitle && self.titles.count > 0 {
+                cell.titleLabelHeight = self.cellHeight
+                
+                let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
+                cell.title = self.titles[itemIndex]
+            } else {
+                // Mode
+                if let imageViewContentMode = self.imageViewContentMode {
+                    cell.imageView.contentMode = imageViewContentMode
+                }
+                
+                // 0==count 占位图
+                if self.imagePaths.count == 0 {
+                    cell.imageView.image = self.coverViewImage
+                } else {
+                    let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
+                    let imagePath = self.imagePaths[itemIndex]
+                    
+                    cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
+                    
+                    // 对冲数据判断
+                    if itemIndex <= self.titles.count-1 {
+                        cell.title = self.titles[itemIndex]
+                    } else {
+                        cell.title = ""
+                    }
+                }
+            }
+            pageScrollerView.addSubview(cell)
+            switch self.scrollDirection {
+            case .horizontal:
+                cell.snp.makeConstraints { make in
+                    make.left.equalTo(CGFloat(i) * self.frame.width)
+                    make.top.equalTo(0)
+                    make.width.equalTo(self.frame.width)
+                    make.height.equalTo(self.frame.height)
+                }
+            default:
+                cell.snp.makeConstraints { make in
+                    make.left.equalTo(0)
+                    make.top.equalTo(CGFloat(i) * self.frame.height)
+                    make.width.equalTo(self.frame.width)
+                    make.height.equalTo(self.frame.height)
+                }
+                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
+            }
         }
-        let section = PTSection(rows:rows)
-        collectionView.showCollectionDetail(collectionData: [section],finishTask: finishTask)
+        switch self.scrollDirection {
+        case .horizontal:
+            pageScrollerView.contentSize = CGSize(width: self.maxSwipeSize, height: self.frame.height)
+        default:
+            pageScrollerView.contentSize = CGSize(width: self.frame.width, height: self.maxSwipeSize)
+        }
     }
 }
 
@@ -898,28 +788,38 @@ extension PTCycleScrollView {
     func scollToIndex(targetIndex: Int) {
         if targetIndex >= totalItemsCount {
             if infiniteLoop {
-                collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: Int(0), section: 0), at: position, animated: true)
+                pageScrollerView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
                 setProgressIndex(index: 0)
             }
             return
         }
-        collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: targetIndex, section: 0), at: position, animated: true)
         
+        switch self.scrollDirection {
+        case .horizontal:
+            pageScrollerView.setContentOffset(CGPoint(x: CGFloat(targetIndex) * self.frame.width, y: 0), animated: true)
+        default:
+            pageScrollerView.setContentOffset(CGPoint(x: 0, y: CGFloat(targetIndex) * self.frame.height), animated: true)
+        }
+
         setProgressIndex(index: CGFloat(targetIndex))
     }
     
     func setProgressIndex(index:CGFloat) {
+        var newIndex = currentIndex()
+        if index == 1 {
+            newIndex = 0
+        }
         switch customPageControlStyle {
         case .fill:
-            (customPageControl as? PTFilledPageControl)?.progress = index
+            (customPageControl as? PTFilledPageControl)?.progress = CGFloat(newIndex)
         case .pill:
-            (customPageControl as? PTPillPageControl)?.progress = index
+            (customPageControl as? PTPillPageControl)?.progress = CGFloat(newIndex)
         case .snake:
-            (customPageControl as? PTSnakePageControl)?.progress = index
+            (customPageControl as? PTSnakePageControl)?.progress = CGFloat(newIndex)
         case .scrolling:
-            (customPageControl as? PTScrollingPageControl)?.progress = index
+            (customPageControl as? PTScrollingPageControl)?.progress = CGFloat(newIndex)
         case .none,.system,.image:
-            (customPageControl as? UIPageControl)?.currentPage = Int(index)
+            (customPageControl as? UIPageControl)?.currentPage = newIndex
         default:
             break
         }
@@ -928,10 +828,19 @@ extension PTCycleScrollView {
     /// 当前位置
     /// - Returns: 下标-Index
     func currentIndex() -> NSInteger {
-        if collectionView.pt.jx_width == 0 || collectionView.pt.jx_height == 0 {
+        if pageScrollerView.pt.jx_width == 0 || pageScrollerView.pt.jx_height == 0 {
             return 0
         }
-        let index = collectionView.contentCollectionView.indexPath(for: collectionView.contentCollectionView.visibleCells.first ?? UICollectionViewCell())?.row ?? 0
+        
+        var index:Int = 0
+        switch scrollDirection {
+        case .horizontal:
+            let less = pageScrollerView.contentSize.width - pageScrollerView.contentOffset.x
+            index = pageScrollerView.contentOffset.x == 0 ? 0 : (totalItemsCount - Int(less == 0 ? 0 : (less / self.frame.width)))
+        default:
+            let less = pageScrollerView.contentSize.height - pageScrollerView.contentOffset.y
+            index = pageScrollerView.contentOffset.y == 0 ? 0 : (totalItemsCount - Int(less == 0 ? 0 : (less / self.frame.height)))
+        }
         return index
     }
     
@@ -962,6 +871,73 @@ extension PTCycleScrollView {
         let indexOnPageControl = pageControlIndexWithCurrentCellIndex(index: currentIndex())
         if scrollToClosure != nil {
             scrollToClosure!(indexOnPageControl)
+        }
+    }
+}
+
+extension PTCycleScrollView : UIScrollViewDelegate {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.cycleScrollViewScrollToIndex()
+
+        if self.autoScroll {
+            self.invalidateTimer()
+        }
+        
+        let indexOnPageControl = self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex())
+        if self.scrollFromClosure != nil {
+            self.scrollFromClosure!(indexOnPageControl)
+        }
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if self.imagePaths.count == 0 { return }
+        
+        // 滚动后的回调协议
+        if !decelerate { self.cycleScrollViewScrollToIndex() }
+        
+        if self.autoScroll {
+            self.setupTimer()
+        }
+    }
+    
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.cycleScrollViewScrollToIndex()
+    }
+    
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        if self.imagePaths.count == 0 { return }
+        
+        self.cycleScrollViewScrollToIndex()
+        
+        if self.dtimer == nil && self.autoScroll {
+            self.setupTimer()
+        }
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.imagePaths.count == 0 { return }
+        
+        let index:Int = currentIndex()
+        self.setProgressIndex(index: 0)
+        if index == 0 { return }
+
+        if self.scrollViewDidScrollClosure != nil {
+            var offSet: CGFloat = 0
+            switch self.scrollDirection {
+            case .horizontal:
+                offSet = scrollView.contentOffset.x -  self.frame.size.width * CGFloat(index)
+            case .vertical:
+                offSet = scrollView.contentOffset.y - self.frame.size.height * CGFloat(index)
+            default:
+                break
+            }
+            
+            let currentIndex = self.pageControlIndexWithCurrentCellIndex(index: NSInteger(index))
+            self.scrollViewDidScrollClosure!(currentIndex,offSet)
+        }
+        
+        if self.autoScroll {
+            self.setupTimer()
         }
     }
 }

@@ -63,6 +63,7 @@ public extension String {
     static let sortButton = "SortButton"
     static let messageKit = "MessageKit"
     static let BlurImageList = "BlurImageList"
+    static let CycleBanner = "CycleBanner"
 
     static let route = "路由"
     
@@ -279,7 +280,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
         let blurImageList = self.rowBaseModel(name: .BlurImageList)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList]
+        let cycleBanner = self.rowBaseModel(name: .CycleBanner)
+
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -344,7 +347,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_encryption.cellFont = sectionTitleFont
         sectionModel_encryption.accessoryType = .NoneAccessoryView
 
-        let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_route)
+        let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
 
         return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
     }()

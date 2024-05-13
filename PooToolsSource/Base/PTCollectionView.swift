@@ -868,6 +868,9 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         }
     }
     
+    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+    }
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if collectionViewDidScroll != nil {
             collectionViewDidScroll!(scrollView as! UICollectionView)
