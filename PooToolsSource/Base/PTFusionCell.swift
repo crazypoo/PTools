@@ -687,6 +687,8 @@ public class PTFusionCellContent:UIView {
                     make.right.lessThanOrEqualTo(self.snp.centerX)
                 case .Switch(type: .LeftImageContent(type: .Name)):
                     make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
+                case .DisclosureIndicator(type: .None(type: .NameContent)):
+                    make.right.lessThanOrEqualTo(self.snp.centerX).offset(-5)
                 default:
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                 }
