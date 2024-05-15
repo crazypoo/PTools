@@ -622,7 +622,8 @@ public class PTFusionCellContent:UIView {
             
             addSubview(nameTitle)
             nameTitle.snp.makeConstraints { make in
-                //TODO: 这里要修复如果有Content的时候,文本过长,的问题
+                make.top.bottom.lessThanOrEqualToSuperview().inset(5)
+                make.centerY.equalToSuperview()
                 switch cellType {
                 case .Switch(type: .None(type: .Name)),
                         .Switch(type: .None(type: .NameContent)),
@@ -641,8 +642,6 @@ public class PTFusionCellContent:UIView {
                         .More(type: .RightImageContent(type: .Name)),
                         .More(type: .RightImageContent(type: .NameContent)):
                     make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
-                    make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                    make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
                 case .Switch(type: .LeftImageContent(type: .Name)),
                         .Switch(type: .LeftImageContent(type: .NameContent)),
                         .Switch(type: .BothImage(type: .Name)),
@@ -660,10 +659,8 @@ public class PTFusionCellContent:UIView {
                         .More(type: .BothImage(type: .Name)),
                         .More(type: .BothImage(type: .NameContent)):
                     make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.contentLeftSpace)
-                    make.top.bottom.equalTo(self.cellIcon)
                 default:
                     make.left.equalToSuperview().inset(self.cellModel!.leftSpace + self.cellModel!.contentLeftSpace + (self.frame.size.height - (self.cellModel!.imageTopOffset + self.cellModel!.imageBottomOffset)))
-                    make.top.bottom.equalTo(self.cellIcon)
                 }
                 
                 switch cellType {
@@ -742,7 +739,8 @@ public class PTFusionCellContent:UIView {
             
             addSubview(contentLabel)
             contentLabel.snp.makeConstraints { make in
-                make.top.bottom.equalToSuperview()
+                make.top.bottom.lessThanOrEqualToSuperview().inset(5)
+                make.centerY.equalToSuperview()
                 
                 switch cellType {
                 case .Switch(type: .None(type: .Content)),
