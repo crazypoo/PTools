@@ -11,7 +11,7 @@ import QuartzCore
 import SwifterSwift
 
 extension UIView: PTBadgeProtocol {
-    
+        
     fileprivate var initialSubviewCenter: CGPoint! {
         get {
             let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterKey)
@@ -349,13 +349,9 @@ extension UIView: PTBadgeProtocol {
         self.badge!.tag = PTBadgeStyle.Number.rawValue
         self.badge!.font = self.badgeFont
         self.badge!.text = value > self.badgeMaximumBadgeNumber ? "\(self.badgeMaximumBadgeNumber)+" : "\(value)"
-        self.adjustLabelWidth(label: self.badge!)
         var frame = self.badge!.frame
-        frame.size.width += 4
-        frame.size.height += 4
-        if CGRectGetWidth(frame) < CGRectGetHeight(frame) {
-            frame.size.width = CGRectGetHeight(frame)
-        }
+        frame.size.width = self.badge!.sizeFor(height: CGRectGetHeight(self.badge!.frame)).width + 4
+        frame.size.height = frame.size.width
         self.badge!.frame = frame
         self.badge!.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
         self.badge!.layer.cornerRadius = CGRectGetHeight(self.badge!.frame) / 2
