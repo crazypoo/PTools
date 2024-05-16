@@ -711,12 +711,16 @@ public class PTCollectionView: UIView {
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH
         if viewConfig.footerRefresh {
-            collectionView.pt_endMJRefresh()
+            PTGCDManager.gcdMain {
+                self.collectionView.pt_endMJRefresh()
+            }
         }
 #endif
         
         if viewConfig.topRefresh {
-            refreshControl.endRefreshing()
+            PTGCDManager.gcdMain {
+                self.refreshControl.endRefreshing()
+            }
         }
     }
     
