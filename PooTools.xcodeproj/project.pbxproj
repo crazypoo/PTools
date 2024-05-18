@@ -113,6 +113,7 @@
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55228F172B0909130010E76E /* PTDocumentViewController.swift */; };
+		552748512BF8BF2900BF4D18 /* PTSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552748502BF8BF2900BF4D18 /* PTSwitch.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		552893132AE65125009135F9 /* PTTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893122AE65125009135F9 /* PTTip.swift */; };
 		552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893142AE78D49009135F9 /* PTMediaBrowserController.swift */; };
@@ -642,6 +643,7 @@
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		55228F172B0909130010E76E /* PTDocumentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDocumentViewController.swift; sourceTree = "<group>"; };
+		552748502BF8BF2900BF4D18 /* PTSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwitch.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		552893122AE65125009135F9 /* PTTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTip.swift; sourceTree = "<group>"; };
 		552893142AE78D49009135F9 /* PTMediaBrowserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserController.swift; sourceTree = "<group>"; };
@@ -1228,6 +1230,7 @@
 				5589FF4B29A8527D00519383 /* Stepper */,
 				55ED0D332B12F37000391136 /* SVGA */,
 				55DE65662B14505300B436A8 /* SwipeCell */,
+				552748522BF8CD6100BF4D18 /* Switch */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
 				5585F6C72AD298C800F878B4 /* VideoEditor */,
@@ -1652,6 +1655,14 @@
 				551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */,
 			);
 			path = NetworkSpeedTest;
+			sourceTree = "<group>";
+		};
+		552748522BF8CD6100BF4D18 /* Switch */ = {
+			isa = PBXGroup;
+			children = (
+				552748502BF8BF2900BF4D18 /* PTSwitch.swift */,
+			);
+			path = Switch;
 			sourceTree = "<group>";
 		};
 		5528375A28EA8FD600D12202 /* CheckUpdate */ = {
@@ -3101,6 +3112,7 @@
 				5568AE262B048F9E00996C8F /* PTDevColorPickerViewController.swift in Sources */,
 				559C3D442B2750E200EE46BC /* PTVideoEditorToolsTrimmingControl.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
+				552748512BF8BF2900BF4D18 /* PTSwitch.swift in Sources */,
 				559C3D542B282F9E00EE46BC /* CropView.swift in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,

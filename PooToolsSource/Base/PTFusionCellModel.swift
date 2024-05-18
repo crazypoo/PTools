@@ -115,6 +115,9 @@ open class PTFusionCellModel: NSObject {
     open var topLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
     ///BottomLineColor
     open var bottomLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
+        
+    @PTClampedProperyWrapper(range:20...51) open var switchControlWidth: CGFloat = 51
+
 }
 
 @objcMembers

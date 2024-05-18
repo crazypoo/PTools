@@ -182,6 +182,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_media.name = "多媒体"
         sectionModel_media.cellFont = sectionTitleFont
         sectionModel_media.accessoryType = .Switch
+        sectionModel_media.switchControlWidth = 25
 
         let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
 
@@ -892,6 +893,17 @@ class PTFuncNameViewController: PTBaseViewController {
                                animations: [fromAnimation, zoomAnimation], delay: 0.5)
             }
         }
+        
+        let customSwitch = PTSwitch()
+        customSwitch.isOn = true
+        popoverContent.view.addSubview(customSwitch)
+        customSwitch.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.width.equalTo(30)
+            make.top.equalTo(popoverButton.snp.bottom).offset(10)
+            make.centerX.equalToSuperview()
+        }
+
 
         popover.addActionHandlers { sender in
 //            let items = PTPopoverItem()

@@ -11,7 +11,7 @@ import SnapKit
 import AttributedString
 import SwifterSwift
 
-public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UISwitch)->Void
+public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:PTSwitch)->Void
 public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:UIButton)->Void
 
 fileprivate extension UIView {
@@ -67,19 +67,17 @@ public class PTFusionCellContent:UIView {
             sectionMore.removeFromSuperview()
             
             valueSwitch.onTintColor = cellModel!.switchOnTinColor
-            valueSwitch.thumbTintColor = cellModel!.switchThumbTintColor
-            valueSwitch.tintColor = cellModel!.switchTintColor
+            valueSwitch.thumbColor = cellModel!.switchThumbTintColor
+            valueSwitch.switchTintColor = cellModel!.switchTintColor
             valueSwitch.backgroundColor = cellModel!.switchBackgroundColor
             addSubview(valueSwitch)
             valueSwitch.snp.makeConstraints { (make) in
-                make.width.equalTo(51)
+                make.width.equalTo(cellModel!.switchControlWidth)
                 make.centerY.equalToSuperview()
+                make.height.equalTo(cellModel!.switchControlWidth * (31 / 51))
                 make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
             }
             
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.valueSwitch.viewCorner(radius: self.valueSwitch.frame.height / 2)
-            }
         case .DisclosureIndicator:
             valueSwitch.removeFromSuperview()
             sectionMore.removeFromSuperview()
@@ -205,8 +203,8 @@ public class PTFusionCellContent:UIView {
         return view
     }()
     
-    public lazy var valueSwitch : UISwitch = {
-        let switchV = UISwitch.init()
+    public lazy var valueSwitch : PTSwitch = {
+        let switchV = PTSwitch()
         return switchV
     }()
     
@@ -960,9 +958,9 @@ open class PTFusionCell: PTBaseNormalCell {
     
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.valueSwitch.addSwitchAction { sender in
+        view.valueSwitch.valueChangeCallBack = { value in
             if self.switchValueChangeBlock != nil {
-                self.switchValueChangeBlock!(self.cellModel!.name,sender)
+                self.switchValueChangeBlock!(self.cellModel!.name,view.valueSwitch)
             }
         }
         view.sectionMore.addActionHandlers { sender in
@@ -1056,9 +1054,9 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
 
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.valueSwitch.addSwitchAction { sender in
+        view.valueSwitch.valueChangeCallBack = { value in
             if self.switchValueChangeBlock != nil {
-                self.switchValueChangeBlock!(self.cellModel!.name,sender)
+                self.switchValueChangeBlock!(self.cellModel!.name,view.valueSwitch)
             }
         }
         view.sectionMore.addActionHandlers { sender in

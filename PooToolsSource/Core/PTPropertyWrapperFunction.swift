@@ -10,10 +10,17 @@ import UIKit
 
 //MARK: 此方法用于设定范围,且不会小于和多于相关数值
 @propertyWrapper public struct PTClampedProperyWrapper<T: Comparable> {
-    public let wrappedValue: T
+    private var value: T
+    private let range: ClosedRange<T>
+    
+    public var wrappedValue: T {
+        get { value }
+        set { value = min(max(newValue, range.lowerBound), range.upperBound) }
+    }
 
     public init(wrappedValue: T, range: ClosedRange<T>) {
-        self.wrappedValue = min(max(wrappedValue, range.lowerBound), range.upperBound)
+        self.range = range
+        self.value = min(max(wrappedValue, range.lowerBound), range.upperBound)
     }
 }
 
