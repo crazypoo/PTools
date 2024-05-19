@@ -153,7 +153,6 @@
 		554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
-		554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
 		555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */; };
 		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
@@ -293,6 +292,7 @@
 		55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */; };
 		55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */; };
 		55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70929B10B8900DCA096 /* MethodSwizzle.m */; };
+		55AEDB282BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */; };
 		55B13D4A2B1AE83200C67EDA /* PTImageEditorSticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */; };
 		55B13D4C2B1AE8CC00C67EDA /* PTImageEditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */; };
 		55B13D4E2B1AEAF300C67EDA /* PTImageClipRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */; };
@@ -684,8 +684,6 @@
 		554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseCollectionReusableView.swift; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
-		554DE0F92AC8243100471FF3 /* PTEditMenuInteractionDummy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTEditMenuInteractionDummy.h; sourceTree = "<group>"; };
-		554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTEditMenuInteractionDummy.m; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
 		555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeaderAndFooter.swift; sourceTree = "<group>"; };
 		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
@@ -827,6 +825,7 @@
 		55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		55A5D70829B10B8900DCA096 /* MethodSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		55A5D70929B10B8900DCA096 /* MethodSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
+		55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuInteractionDummy.swift; sourceTree = "<group>"; };
 		55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorSticker.swift; sourceTree = "<group>"; };
 		55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorConfig.swift; sourceTree = "<group>"; };
 		55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageClipRatio.swift; sourceTree = "<group>"; };
@@ -2182,17 +2181,16 @@
 		55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */ = {
 			isa = PBXGroup;
 			children = (
-				231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */,
 				231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */,
-				554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */,
-				554DE0F92AC8243100471FF3 /* PTEditMenuInteractionDummy.h */,
-				554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */,
-				558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */,
-				555818B92AFA5AE40051C0AA /* PTAlertTipsIcon.swift */,
 				555818BB2AFA5D2C0051C0AA /* PTAlertTips.swift */,
 				555818BD2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift */,
-				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
+				555818B92AFA5AE40051C0AA /* PTAlertTipsIcon.swift */,
+				231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */,
 				55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */,
+				55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */,
+				554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */,
+				558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */,
+				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -2989,7 +2987,6 @@
 				55FF40742B2B002A00CD3906 /* CALayer+VideoEditorEX.swift in Sources */,
 				555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
-				554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */,
 				558B77BB2BBC52B300BD7AB0 /* PTChatFileCell.swift in Sources */,
 				55B13D5A2B1AF03F00C67EDA /* PTAdjustToolCell.swift in Sources */,
 				55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */,
@@ -3067,6 +3064,7 @@
 				55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */,
 				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
 				5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */,
+				55AEDB282BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift in Sources */,
 				558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */,
 				55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */,
 				555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */,

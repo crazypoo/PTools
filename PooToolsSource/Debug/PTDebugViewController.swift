@@ -47,11 +47,39 @@ public class PTDebugViewController: PTBaseViewController {
         cell_input.accessoryType = .DisclosureIndicator
         cell_input.disclosureIndicatorImage = disclosureImage
 
+        var socketmodeName = ""
+        switch PTSocketURLMode {
+        case .Development:
+            socketmodeName = AppCustomMode
+        case .Test:
+            socketmodeName = AppTestMode
+        case .Distribution:
+            socketmodeName = AppDisMode
+        }
+        
+        let cell_mode_socket = PTFusionCellModel()
+        cell_mode_socket.name = .socketMode
+        cell_mode_socket.content = socketmodeName
+        cell_mode_socket.accessoryType = .DisclosureIndicator
+        cell_mode_socket.disclosureIndicatorImage = disclosureImage
+        
+        let cell_input_socket = PTFusionCellModel()
+        cell_input_socket.name = .socketAddressInput
+        let url_debug_socket:String = PTCoreUserDefultsWrapper.AppSocketUrl
+        if url_debug_socket.isEmpty {
+            cell_input_socket.content = PTSocketManager.gobalUrl()
+        } else {
+            cell_input_socket.content = url_debug
+        }
+        cell_input_socket.accessoryType = .DisclosureIndicator
+        cell_input_socket.disclosureIndicatorImage = disclosureImage
+        
+        
         let cell_debug = PTFusionCellModel()
         cell_debug.name = .DebugMode
         cell_debug.accessoryType = .Switch
 
-        return [cell_mode,cell_input,cell_debug]
+        return [cell_mode,cell_input,cell_mode_socket,cell_input_socket,cell_debug]
     }()
 
     lazy var newCollectionView:PTCollectionView = {
@@ -92,9 +120,9 @@ public class PTDebugViewController: PTBaseViewController {
                         modeName = AppDisMode
                     }
 
-                    self.settingCellModels[0].content = modeName
+                    self.settingCellModels[indexPath.row].content = modeName
                     let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
-                    cell.cellModel = self.settingCellModels[0]
+                    cell.cellModel = self.settingCellModels[indexPath.row]
                 })
             } else if itemRow.title == .addressInput {
                 switch PTBaseURLMode {
@@ -111,9 +139,49 @@ public class PTDebugViewController: PTBaseViewController {
                         let newURL = result.values.first
                         PTCoreUserDefultsWrapper.AppRequestUrl = newURL!
                         
-                        self.settingCellModels[1].content = newURL!
+                        self.settingCellModels[indexPath.row].content = newURL!
                         let cell = collection.cellForItem(at: IndexPath.init(row: 1, section: 0)) as! PTFusionCell
-                        cell.cellModel = self.settingCellModels[1]
+                        cell.cellModel = self.settingCellModels[indexPath.row]
+                    }
+                default:
+                    UIViewController.gobal_drop(title: "Input with custom mode")
+                }
+            } else if itemRow.title == .socketMode {
+                UIAlertController.baseActionSheet(title: "Socket Mode", cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index,string in
+                    PTCoreUserDefultsWrapper.AppSocketServiceIdentifier = "\(index + 1)"
+
+                    var modeName = ""
+                    switch PTSocketURLMode {
+                    case .Development:
+                        modeName = AppCustomMode
+                    case .Test:
+                        modeName = AppTestMode
+                    case .Distribution:
+                        modeName = AppDisMode
+                    }
+
+                    self.settingCellModels[indexPath.row].content = modeName
+                    let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
+                    cell.cellModel = self.settingCellModels[indexPath.row]
+                })
+            } else if itemRow.title == .socketAddressInput {
+                switch PTSocketURLMode {
+                case .Development:
+                    var current = ""
+                    let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
+                    if url_debug.isEmpty {
+                        current = PTSocketManager.share.socketAddress_dev
+                    } else {
+                        current = url_debug
+                    }
+                    
+                    UIAlertController.base_textfield_alertVC(title:"Socket address input",okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["PT Debug network input placeholder".localized()], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
+                        let newURL = result.values.first
+                        PTCoreUserDefultsWrapper.AppSocketUrl = newURL!
+                        
+                        self.settingCellModels[indexPath.row].content = newURL!
+                        let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
+                        cell.cellModel = self.settingCellModels[indexPath.row]
                     }
                 default:
                     UIViewController.gobal_drop(title: "Input with custom mode")
@@ -195,4 +263,7 @@ fileprivate extension String {
     static let ipMode = "\("PT Debug network input title".localized())\("PT Debug mode select".localized())"
     static let addressInput = "PT Debug mode custom address".localized()
     static let DebugMode = "PT Debug mode".localized()
+    
+    static let socketMode = "Socket Mode"
+    static let socketAddressInput = "Socket address input"
 }

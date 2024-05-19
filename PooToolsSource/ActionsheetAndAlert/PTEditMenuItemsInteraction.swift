@@ -29,7 +29,7 @@ public class PTEditMenuItemsInteraction: NSObject {
     private lazy var menuController: UIMenuController = .shared
     
     private lazy var dummyView: PTEditMenuInteractionDummy = {
-        let view = PTEditMenuInteractionDummy { selector in
+        let view = PTEditMenuInteractionDummy.dummy { selector in
             self.selectMenuItem(selector)
         }
         return view
@@ -76,7 +76,6 @@ public class PTEditMenuItemsInteraction: NSObject {
         
         showingItems = items
         self.targetRect = targetRect
-        
         if #available(iOS 16, *) {
             guard let menuInteraction = menuInteraction else { return }
             view.addInteraction(menuInteraction)
