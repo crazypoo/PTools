@@ -896,6 +896,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let customSwitch = PTSwitch()
         customSwitch.isOn = true
+        customSwitch.thumbColor = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         popoverContent.view.addSubview(customSwitch)
         customSwitch.snp.makeConstraints { make in
             make.height.equalTo(20)

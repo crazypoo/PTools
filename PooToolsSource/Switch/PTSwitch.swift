@@ -36,14 +36,26 @@ open class PTSwitch: UIControl {
         }
     }
     
-    public var thumbColor:UIColor = .white {
-        didSet {
-            self.switchThumbView.backgroundColor = thumbColor
+    public var thumbColor:Any {
+        get {
+            return UIColor.white
+        }
+        set {
+            if newValue is UIColor {
+                switchThumbView.backgroundColor = (newValue as! UIColor)
+            } else {
+                switchThumbView.loadImage(contentData: newValue)
+            }
         }
     }
     
     private let switchBackgroundView = UIView()
-    private let switchThumbView = UIView()
+    private lazy var switchThumbView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        return view
+    }()
     private var animation:Bool = true
 
     override init(frame: CGRect) {
@@ -62,7 +74,7 @@ open class PTSwitch: UIControl {
         addSubview(switchBackgroundView)
 
         // 设置滑块视图
-        switchThumbView.backgroundColor = thumbColor
+        switchThumbView.backgroundColor = (thumbColor as! UIColor)
         addSubview(switchThumbView)
 
         // 添加点击手势
