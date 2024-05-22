@@ -46,36 +46,57 @@ open class PTViewRulerPlugin: NSObject {
     }
 }
 
-public class PTVisualInfoController:PTBaseViewController {
+fileprivate class PTVisualInfoController:UIView {
     
+    var closeBlock:((UIButton,PTVisualInfoController)->Void)?
+
     public lazy var infoLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }()
     
-    public lazy var closeBtn:UIButton = {
+    private lazy var closeBtn:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
-            NotificationCenter.default.post(name: NSNotification.Name(kPTClosePluginNotification), object: nil, userInfo: nil)
+            if self.closeBlock != nil {
+                self.closeBlock!(sender,self)
+            }
         }
         return view
     }()
 
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
         initUI()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func initUI() {
+        isUserInteractionEnabled = true
+        backgroundColor = UIColor.init(dynamicProvider: { traitCollection in
+            if traitCollection.userInterfaceStyle == .light {
+                return .white
+            } else {
+                return .black
+            }
+        })
+        
+        self.addSubviews([self.closeBtn,self.infoLabel])
+
         PTGCDManager.gcdMain {
-            self.view.addSubviews([self.closeBtn,self.infoLabel])
+            self.viewCorner(radius: CGFloat.SizeFrom750(x: 8),borderWidth: 1,borderColor: UIColor.hex("#999999",alpha:0.2))
+        }
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        PTGCDManager.gcdAfter(time: 0.1) {
             self.closeBtn.snp.makeConstraints { make in
                 make.size.equalTo(CGFloat.SizeFrom750(x: 44))
                 make.centerY.equalToSuperview()
@@ -85,55 +106,6 @@ public class PTVisualInfoController:PTBaseViewController {
                 make.left.top.bottom.equalToSuperview().inset(5)
                 make.right.equalTo(self.closeBtn.snp.left).offset(-10)
             }
-        }
-    }
-    
-    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        PTGCDManager.gcdMain {
-            self.view.window?.frame = CGRectMake(CGFloat.SizeFrom750(x: 30), CGFloat.kSCREEN_HEIGHT - self.infoLabel.frame.size.height - CGFloat.SizeFrom750(x: 30), size.height, size.width)
-        }
-    }
-}
-
-fileprivate class PTVisualInfoWindow:UIWindow {
-    
-    public lazy var visualController:PTVisualInfoController = {
-        let vc = PTVisualInfoController()
-        return vc
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func commonInit() {
-        backgroundColor = .white
-        windowLevel = .alert
-        rootViewController = visualController
-        
-        let pan = UIGestureRecognizer { sender in
-            let pans = sender as! UIPanGestureRecognizer
-            let panView = pans.view
-            if !panView!.isHidden {
-                let offsetPoint = pans.translation(in: pans.view)
-                pans.setTranslation(.zero, in: pans.view)
-                let newX = panView!.frame.origin.x + panView!.frame.size.width + offsetPoint.x
-                let newY = panView!.frame.origin.y + panView!.frame.size.height + offsetPoint.y
-                
-                let centerPoint = CGPoint(x: newX, y: newY)
-                panView?.center = centerPoint
-            }
-        }
-        addGestureRecognizer(pan)
-        
-        PTGCDManager.gcdMain {
-            self.viewCorner(radius: CGFloat.SizeFrom750(x: 8), borderWidth: 1, borderColor: UIColor.hex("#999999", alpha: 0.2))
         }
     }
 }
@@ -256,11 +228,14 @@ fileprivate class PTRulerInfoView:UIView {
         view.text = String(format: "%.1f", centerPoint)
         return view
     }()
-    
-    fileprivate lazy var infoWindow:PTVisualInfoWindow = {
+        
+    fileprivate lazy var visualController:PTVisualInfoController = {
         let infoWindowFrame:CGRect = CGRect(x: CGFloat.SizeFrom750(x: 30), y: CGFloat.kSCREEN_HEIGHT - CGFloat.SizeFrom750(x: 100) - CGFloat.SizeFrom750(x: 30), width: CGFloat.kSCREEN_WIDTH - 2 * CGFloat.SizeFrom750(x: 30), height: CGFloat.SizeFrom750(x: 100))
 
-        let view = PTVisualInfoWindow(frame: infoWindowFrame)
+        let view = PTVisualInfoController(frame: infoWindowFrame)
+        view.closeBlock = { sender , pickerInfo in
+            NotificationCenter.default.post(name: NSNotification.Name(kPTClosePluginNotification), object: nil, userInfo: nil)
+        }
         return view
     }()
     
@@ -285,8 +260,12 @@ fileprivate class PTRulerInfoView:UIView {
         self.rightLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) + (self.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width / 2)) / 2, (imageView.frame.origin.y + imageView.frame.size.height / 2) - rightLabel.frame.size.height, rightLabel.frame.size.width, rightLabel.frame.size.height)
         self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)
         
-        infoWindow.visualController.infoLabel.text = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
-        infoWindow.isHidden = false
+        
+        AppWindows?.addSubviews([visualController])
+        visualController.infoLabel.text = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        visualController.isHidden = false
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -295,7 +274,7 @@ fileprivate class PTRulerInfoView:UIView {
     
     func configInfoLabelText() {
         let stringInfo = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
-        infoWindow.visualController.infoLabel.text = stringInfo
+        visualController.infoLabel.text = stringInfo
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -305,13 +284,17 @@ fileprivate class PTRulerInfoView:UIView {
         return false
     }
     
+    @objc func closePlugin(nofiti:Notification) {
+        hide()
+    }
+
     func show() {
-        infoWindow.isHidden = false
+        visualController.isHidden = false
         isHidden = false
     }
     
     func hide() {
-        infoWindow.isHidden = true
+        visualController.isHidden = true
         isHidden = true
     }
 }
