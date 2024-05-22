@@ -260,7 +260,6 @@ extension ConsoleMenuButton {
     }
     
     public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
-        
         SwizzleTool.pauseDidAddSubviewSwizzledClosure = false
     }
 }
