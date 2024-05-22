@@ -62,7 +62,7 @@ public class PTCycleScrollView: UIView {
     }
     
     /// 标题
-    open var titles: Array<String> = [] {
+    open var titles: Array<Any> = [] {
         didSet {
             if titles.count > 0 {
                 if imagePaths.count == 0 {

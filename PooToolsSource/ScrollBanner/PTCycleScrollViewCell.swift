@@ -9,18 +9,23 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+import AttributedString
 
 class PTCycleScrollViewCell: PTBaseNormalCell {
     static let ID = "PTCycleScrollViewCell"
     
     // 标题
-    var title: String = "" {
+    var title: Any? {
         didSet {
-            titleLabel.text = "\(title)"
-            
-            if title.count > 0 {
+            if title != nil {
                 titleBackView.isHidden = false
                 titleLabel.isHidden = false
+
+                if title is String {
+                    titleLabel.text = "\(title as! String)"
+                } else if title is ASAttributedString {
+                    titleLabel.attributedText = (title as! ASAttributedString).value
+                }
             } else {
                 titleBackView.isHidden = true
                 titleLabel.isHidden = true
@@ -28,6 +33,9 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         }
     }
     
+    /*
+     如果内容是att则字体颜色,字体失效
+     */
     // 标题颜色
     var titleLabelTextColor: UIColor = UIColor.white {
         didSet {
@@ -86,6 +94,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         view.isUserInteractionEnabled = false
         return view
     }()
+    
     fileprivate lazy var titleLabel: UILabel = {
         let view = UILabel.init()
         view.isHidden = true

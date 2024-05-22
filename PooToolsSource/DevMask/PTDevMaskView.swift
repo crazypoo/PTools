@@ -41,8 +41,8 @@ public class PTDevMaskView: PTBaseMaskView {
 #if POOTOOLS_DEBUGTRACKINGEYES
     private var eyeTrackingFunction = PTFaceEye.share
     
-    private lazy var eyeTracking:UISwitch = {
-        let view = UISwitch()
+    private lazy var eyeTracking:PTSwitch = {
+        let view = PTSwitch()
         view.onTintColor = .randomColor
         view.isOn = false
         view.addSwitchAction { sender in
@@ -64,8 +64,8 @@ public class PTDevMaskView: PTBaseMaskView {
     
     private var focusBool:Bool = false
     
-    private lazy var eyeTrackingFocus:UISwitch = {
-        let view = UISwitch()
+    private lazy var eyeTrackingFocus:PTSwitch = {
+        let view = PTSwitch()
         view.onTintColor = .randomColor
         view.isOn = false
         view.addSwitchAction { sender in
@@ -117,6 +117,8 @@ public class PTDevMaskView: PTBaseMaskView {
                 self.eyeTracking.snp.makeConstraints { make in
                     make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                     make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
+                    make.width.equalTo(51)
+                    make.height.equalTo(31)
                 }
                 
                 self.eyeTrackingLabel.snp.makeConstraints { make in
@@ -127,6 +129,8 @@ public class PTDevMaskView: PTBaseMaskView {
                 self.eyeTrackingFocus.snp.makeConstraints { make in
                     make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                     make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
+                    make.width.equalTo(51)
+                    make.height.equalTo(31)
                 }
                 
                 self.eyeTrackingLabelFocus.snp.makeConstraints { make in

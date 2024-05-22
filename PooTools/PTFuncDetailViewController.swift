@@ -16,6 +16,7 @@ import Vision
 import VisionKit
 import SwifterSwift
 import CommonCrypto
+import AttributedString
 
 let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
 
@@ -570,7 +571,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             banner.imageViewContentMode = .scaleAspectFill
             banner.viewCorner(radius: 10)
             // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
-            banner.customPageControlStyle = .pill
+            banner.customPageControlStyle = .none
             // 非.system的状态下，设置PageControl的tintColor
             banner.customPageControlInActiveTintColor = UIColor.lightGray
             // 设置.system系统的UIPageControl当前显示的颜色
@@ -579,9 +580,11 @@ class PTFuncDetailViewController: PTBaseViewController {
             banner.customPageControlIndicatorPadding = 5.0
             // 设置PageControl的位置 (.left, .right 默认为.center)
             banner.pageControlPosition = .left
-            banner.scrollDirection = .vertical
+            banner.scrollDirection = .horizontal
             // 圆角
             banner.backgroundColor = .clear
+            banner.textColor = .random
+            banner.titleBackgroundColor = .white
             banner.didSelectItemAtIndexClosure = { index in
                 PTNSLogConsole(">>>>>>>>>>>>>>>>>>>\(index)")
             }
@@ -591,7 +594,14 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.top.equalToSuperview().inset(20)
                 make.height.equalTo(190)
             }
-            banner.titles = ["1","2","3"]
+            
+            let att1:ASAttributedString = """
+                    \(wrap: .embedding("""
+                    \("1112312312312312312312312312323",.foreground(.init(hexString: "de1e50")!),.font(.appfont(size: 15)),.paragraph(.alignment(.left)))
+                    \("112123123123123123",.foreground(.systemBlue),.font(.appfont(size: 15)),.paragraph(.alignment(.left)))
+                    """))
+                    """
+            banner.titles = [att1,att1,att1]
             banner.imagePaths = ["http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg"]
         default:
             break
