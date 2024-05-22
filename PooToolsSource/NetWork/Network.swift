@@ -116,7 +116,7 @@ public class PTNetWorkStatus {
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
         detectNetWork { (status, environment,statusType)  in
                         
-            PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment))
+            PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment),levelType: PTLogMode,loggerType: .Network)
 
             if handle != nil {
                 handle!(statusType)
@@ -209,7 +209,7 @@ public class Network: NSObject {
     //MARK: 服务器URL
     public class func gobalUrl() -> String {
         if UIApplication.applicationEnvironment() != .appStore {
-            PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)")
+            PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTBaseURLMode {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl

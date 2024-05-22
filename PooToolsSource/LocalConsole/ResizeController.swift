@@ -539,8 +539,21 @@ class PlatterView: UIView,UITextFieldDelegate {
                     
                     // 呈现颜色选择器
                     colorPicker.modalPresentationStyle = .formSheet
-                    PTUtils.getCurrentVC().present(colorPicker, animated: true) {
-                        AppWindows?.bringSubviewToFront(LocalConsole.shared.terminal!)
+                    let vc = PTUtils.getCurrentVC()
+                    if vc is PTSideMenuControl {
+                        let currentVC = (vc as! PTSideMenuControl).contentViewController
+                        PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: currentVC?.presentedViewController))")
+                        if let presentedVC = currentVC?.presentedViewController {
+                            presentedVC.present(colorPicker, animated: true)
+                        } else {
+                            currentVC!.present(colorPicker, animated: true)
+                        }
+                    } else {
+                        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                            presentedVC.present(colorPicker, animated: true)
+                        } else {
+                            PTUtils.getCurrentVC().present(colorPicker, animated: true)
+                        }
                     }
                 }
             } else {

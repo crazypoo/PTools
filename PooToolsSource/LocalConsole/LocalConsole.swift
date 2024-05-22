@@ -475,13 +475,13 @@ public class LocalConsole: NSObject {
                         
             // TODO: Snap to nearest position.
             
-            UserDefaults.standard.set(consoleSize.width, forKey: "LocalConsole.Width")
-            UserDefaults.standard.set(consoleSize.height, forKey: "LocalConsole.Height")
+            PTCoreUserDefultsWrapper.PTLocalConsoleWidth = consoleSize.width
+            PTCoreUserDefultsWrapper.PTLocalConsoleHeight = consoleSize.height
         }
     }
 
     func snapToCachedEndpoint() {
-        let cachedConsolePosition = CGPoint(x: UserDefaults.standard.object(forKey: "LocalConsole.X") as? CGFloat ?? possibleEndpoints.first!.x, y: UserDefaults.standard.object(forKey: "LocalConsole.Y") as? CGFloat ?? possibleEndpoints.first!.y)
+        let cachedConsolePosition = CGPoint(x: PTCoreUserDefultsWrapper.PTLocalConsoleX ?? possibleEndpoints.first!.x, y: PTCoreUserDefultsWrapper.PTLocalConsoleY ?? possibleEndpoints.first!.y)
         
         terminal!.center = cachedConsolePosition // Update console center so possibleEndpoints are calculated correctly.
         terminal!.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
@@ -515,7 +515,7 @@ public class LocalConsole: NSObject {
                 contentView = AppWindows!
             }
             
-            terminal = PTTerminal.init(view: contentView as Any, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: UserDefaults.standard.object(forKey: "LocalConsole.Width") as? CGFloat ?? consoleSize.width, height:UserDefaults.standard.object(forKey: "LocalConsole.Height") as? CGFloat ?? consoleSize.height))
+            terminal = PTTerminal.init(view: contentView as Any, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width, height:PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height))
             terminal!.tag = SystemLogViewTag
             snapToCachedEndpoint()
             terminal!.dragEnd = {
@@ -540,8 +540,8 @@ public class LocalConsole: NSObject {
                     self.terminal!.center = nearestTargetPosition
                 }
                 positionAnimator.startAnimation()
-                UserDefaults.standard.set(nearestTargetPosition.x, forKey: "LocalConsole.X")
-                UserDefaults.standard.set(nearestTargetPosition.y, forKey: "LocalConsole.Y")
+                PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
+                PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
             }
             if #available(iOS 15, *) {
                 terminal!.menuButton.showsMenuAsPrimaryAction = true
@@ -685,7 +685,6 @@ public class LocalConsole: NSObject {
                         }
                     }
                 }
-
             }
             
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -1067,8 +1066,10 @@ public class LocalConsole: NSObject {
         let nav = PTBaseNavControl(rootViewController: content)
         nav.modalPresentationStyle = .fullScreen
         
-        PTUtils.getCurrentVC().pt_present(nav) {
-            AppWindows?.bringSubviewToFront(self.terminal!)
+        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+            presentedVC.present(nav, animated: true)
+        } else {
+            PTUtils.getCurrentVC().present(nav, animated: true)
         }
     }
         
@@ -1123,7 +1124,7 @@ public class LocalConsole: NSObject {
             
         PTGCDManager.gcdMain { [self] in
 
-            if currentText != "" { print("\n") }
+            if !currentText.stringIsEmpty() { print("\n") }
             
             dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] timer in
 
@@ -1245,7 +1246,7 @@ public class LocalConsole: NSObject {
         
         PTGCDManager.gcdMain { [self] in
 
-            if currentText != "" { print("\n") }
+            if !currentText.stringIsEmpty() { print("\n") }
             
             let safeAreaInsets = PTUtils.getCurrentVC().view.safeAreaInsets
             

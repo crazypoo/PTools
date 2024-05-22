@@ -80,5 +80,12 @@ public struct PTCoreUserDefultsWrapper {
     //MARK: PTWhatsNews记录版本
     ///PTWhatsNews记录版本
     @PTUserDefault(withKey: "PTWhatNewsLatestAppVersionPresented", defaultValue: "") public static var PTWhatNewsLatestAppVersionPresented:String
-    
+    /*
+     LocalConsole
+     */
+    //MARK: LocalConsole
+    @PTUserDefault(withKey: "LocalConsole.Width", defaultValue: nil) public static var PTLocalConsoleWidth:CGFloat?
+    @PTUserDefault(withKey: "LocalConsole.Height", defaultValue: nil) public static var PTLocalConsoleHeight:CGFloat?
+    @PTUserDefault(withKey: "LocalConsole.X", defaultValue: nil) public static var PTLocalConsoleX:CGFloat?
+    @PTUserDefault(withKey: "LocalConsole.Y", defaultValue: nil) public static var PTLocalConsoleY:CGFloat?
 }
