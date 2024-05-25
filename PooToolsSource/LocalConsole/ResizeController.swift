@@ -542,7 +542,6 @@ class PlatterView: UIView,UITextFieldDelegate {
                     let vc = PTUtils.getCurrentVC()
                     if vc is PTSideMenuControl {
                         let currentVC = (vc as! PTSideMenuControl).contentViewController
-                        PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: currentVC?.presentedViewController))")
                         if let presentedVC = currentVC?.presentedViewController {
                             presentedVC.present(colorPicker, animated: true)
                         } else {

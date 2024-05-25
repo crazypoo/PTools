@@ -28,7 +28,6 @@ public class StatusBarState: NSObject {
     public override var description: String {
         "{ key=\(key) selected=\(String(describing: nextState?.key)) }"
     }
-    
 }
 
 /// 全局状态栏状态管理单例类

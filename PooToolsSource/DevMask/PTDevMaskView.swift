@@ -45,8 +45,8 @@ public class PTDevMaskView: PTBaseMaskView {
         let view = PTSwitch()
         view.onTintColor = .randomColor
         view.isOn = false
-        view.addSwitchAction { sender in
-            if sender.isOn {
+        view.valueChangeCallBack = { value in
+            if value {
                 self.eyeTrackingFunction.createEye()
             } else {
                 self.eyeTrackingFunction.dismissEye()
@@ -68,9 +68,9 @@ public class PTDevMaskView: PTBaseMaskView {
         let view = PTSwitch()
         view.onTintColor = .randomColor
         view.isOn = false
-        view.addSwitchAction { sender in
-            self.focusBool = sender.isOn
-            if sender.isOn {
+        view.valueChangeCallBack = { value in
+            self.focusBool = value
+            if value {
                 self.eyeTrackingFunction.hideCursorView()
             } else {
                 self.eyeTrackingFunction.showCursorView()
