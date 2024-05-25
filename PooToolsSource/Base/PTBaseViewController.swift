@@ -365,7 +365,6 @@ extension PTBaseViewController: PHPhotoLibraryChangeObserver {
             if let lastAsset = assets.firstObject {
                 if lastAsset.mediaSubtypes == .photoScreenshot {
                     if let image = self.getImage(for: lastAsset) {
-                        PTNSLogConsole("产生了截图")
                         // 在这里使用截图
                         if self.screenShotHandle != nil {
                             self.screenShotHandle!(image)

@@ -60,7 +60,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
         let dic = UserDefaults.standard.dictionaryRepresentation()
-        PTNSLogConsole(dic)
+        PTNSLogConsole(dic,levelType: PTLogMode,loggerType: .UserDefaults)
 
         let backBtn = UIButton(type: .custom)
         backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)

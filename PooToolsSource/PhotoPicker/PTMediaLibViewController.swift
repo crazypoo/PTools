@@ -816,11 +816,11 @@ extension PTMediaLibViewController {
                         index: i
                     )
                     results[i] = model
-                    PTNSLogConsole("PTPhotoBrowser: suc request \(i)")
+                    PTNSLogConsole("PTPhotoBrowser: suc request \(i)",levelType: PTLogMode,loggerType: .Media)
                 } else {
                     errorAssets.append(m.asset)
                     errorIndexs.append(i)
-                    PTNSLogConsole("PTPhotoBrowser: failed request \(i)")
+                    PTNSLogConsole("PTPhotoBrowser: failed request \(i)",levelType: PTLogMode,loggerType: .Media)
                 }
                 
                 guard sucCount >= totalCount else { return }

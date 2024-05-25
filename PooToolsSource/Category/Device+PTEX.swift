@@ -104,7 +104,7 @@ public extension PTPOP where Base: UIDevice {
             try FileManager.default.removeItem(atPath: path)
             return true
         } catch {
-            PTNSLogConsole(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Device)
         }
         return false
     }

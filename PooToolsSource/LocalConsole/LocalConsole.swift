@@ -711,7 +711,7 @@ public class LocalConsole: NSObject {
 
             if !hasShortened && !isCharacterLimitWarningDisabled {
                 hasShortened = true
-                PTNSLogConsole("LocalConsole的内容已超过50000个字符。为了保持性能，LocalConsole减少了打印内容的开头部分。要禁用此行为，请将LocalConsole.shared.isCharacterLimitDisabled设置为true。要禁用此警告，请设置localconsole.share.ischaracterlimitwarningdisabled = true。")
+                PTNSLogConsole("LocalConsole的内容已超过50000个字符。为了保持性能，LocalConsole减少了打印内容的开头部分。要禁用此行为，请将LocalConsole.shared.isCharacterLimitDisabled设置为true。要禁用此警告，请设置localconsole.share.ischaracterlimitwarningdisabled = true。",levelType: .Error,loggerType: .Log)
             }
 
             let shortenedString = String(_currentText.suffix(50000))

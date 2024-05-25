@@ -107,11 +107,11 @@ public class PTContract: NSObject {
                         indexModel.contractModel = contractModels
                         handle(indexModel)
                     } catch {
-                        PTNSLogConsole(error.localizedDescription)
+                        PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Contract)
                         handle(nil)
                     }
                 } else {
-                    PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts")
+                    PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts",levelType: .Error,loggerType: .Contract)
                     handle(nil)
                 }
             }

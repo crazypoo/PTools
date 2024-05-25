@@ -38,10 +38,10 @@ public class PTVision: NSObject {
         PTGCDManager.gcdGobal {
             let textDetectionRequest = VNRecognizeTextRequest { request, error in
                 if error != nil {
-                    PTNSLogConsole(error!.localizedDescription)
+                    PTNSLogConsole(error!.localizedDescription, levelType: .Error,loggerType: .Vision)
                 } else {
                     guard let observations = request.results as? [VNRecognizedTextObservation] else {
-                        PTNSLogConsole("some errors")
+                        PTNSLogConsole("some errors", levelType: .Error,loggerType: .Vision)
                         return
                     }
                     
@@ -54,7 +54,7 @@ public class PTVision: NSObject {
                                 resultText += candidate.string + "\n"
                             }
                         }
-                        PTNSLogConsole(resultText)
+                        PTNSLogConsole(resultText, levelType: PTLogMode,loggerType: .Vision)
                         if resultBlock != nil {
                             resultBlock!(resultText,observations)
                         }
@@ -71,7 +71,7 @@ public class PTVision: NSObject {
                     let handler = VNImageRequestHandler(cgImage: cgImage,options: [:])
                     
                     guard let  _ = try? handler.perform([textDetectionRequest]) else {
-                        PTNSLogConsole("Could not perform text Detection request!!!!!")
+                        PTNSLogConsole("Could not perform text Detection request!!!!!", levelType: .Error,loggerType: .Vision)
                         return
                     }
                 }

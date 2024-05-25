@@ -126,14 +126,14 @@ public class PTCheckUpdateFunction: NSObject {
                         if url != nil {
                             PTAppStoreFunction.jumpLink(url: url!)
                         } else {
-                            PTNSLogConsole("非法url")
+                            PTNSLogConsole("非法url",levelType: .Error,loggerType: .CheckUpdate)
                         }
                     }
                 case 1:
                     if url != nil {
                         PTAppStoreFunction.jumpLink(url: url!)
                     } else {
-                        PTNSLogConsole("非法url")
+                        PTNSLogConsole("非法url",levelType: .Error,loggerType: .CheckUpdate)
                     }
                 default:
                     break
@@ -193,11 +193,11 @@ public class PTCheckUpdateFunction: NSObject {
                             }
                         }
                     } catch {
-                        PTNSLogConsole(error.localizedDescription)
+                        PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CheckUpdate)
                     }
                 }
             } else {
-                PTNSLogConsole("没有检测到APPID")
+                PTNSLogConsole("没有检测到APPID",levelType: .Error,loggerType: .CheckUpdate)
             }
         }
     }

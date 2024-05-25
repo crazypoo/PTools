@@ -20,7 +20,6 @@ open class PTSwitch: UIControl {
             } else {
                 self.switchBackgroundView.backgroundColor = self.isOn ? self.onTintColor : self.switchTintColor
             }
-            valueChangeCallBack?(isOn)
         }
     }
     
@@ -100,6 +99,7 @@ open class PTSwitch: UIControl {
         isOn.toggle()
         sendActions(for: .valueChanged)
         updateSwitchState(animated: true)
+        valueChangeCallBack?(isOn)
     }
 
     private func updateSwitchState(animated: Bool) {

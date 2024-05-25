@@ -36,7 +36,7 @@ public class PTFaceEye: NSObject {
         if Gobal_device_info.isFaceIDCapable {
             manager.run()
         } else {
-            PTNSLogConsole("设备不能运行")
+            PTNSLogConsole("设备不能运行", levelType: .Error,loggerType: .Debug)
         }
     }
     

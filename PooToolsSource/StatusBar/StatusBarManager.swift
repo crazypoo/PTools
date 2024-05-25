@@ -178,7 +178,7 @@ public class StatusBarManager {
     
     /// 负责打印状态树结构
     public func printAllStates(_ method: String = #function) {
-        PTNSLogConsole("\(method): currentState = \(currentState.key)", levelType: .Error,loggerType: .Other)
+        PTNSLogConsole("\(method): currentState = \(currentState.key)", levelType: PTLogMode,loggerType: .StatusBar)
         printAllStatesInTree(rootState, deep: 0, method: method)
     }
     
@@ -262,7 +262,7 @@ public class StatusBarManager {
         
     /// 打印状态树结构的递归方法
     fileprivate func printAllStatesInTree(_ state: StatusBarState, deep: Int = 0, method: String) {
-        PTNSLogConsole("\(method): \(deep) - state=\(state)", levelType: .Error,loggerType: .Other)
+        PTNSLogConsole("\(method): \(deep) - state=\(state)", levelType: PTLogMode,loggerType: .StatusBar)
         for subState in state.subStates {
             printAllStatesInTree(subState, deep: deep + 1, method: method)
         }

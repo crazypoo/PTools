@@ -74,7 +74,7 @@ extension PTGetGPSData:CLLocationManagerDelegate {
             if placemarks?.count ?? 0 > 0 {
                 let placeMark:CLPlacemark = placemarks![0]
                 let city = placeMark.locality
-                PTNSLogConsole("city:>>>>>>>>>>>>>>>>>>>>\(city ?? "")")
+                PTNSLogConsole("city:>>>>>>>>>>>>>>>>>>>>\(city ?? "")",levelType: PTLogMode,loggerType: .Location)
 
                 if !(city ?? "").stringIsEmpty() {
                     let loc1 = CLLocation(latitude: self.lat, longitude: self.lon)
@@ -85,7 +85,7 @@ extension PTGetGPSData:CLLocationManagerDelegate {
                     distance = loc1.distance(from: loc2!)
                     
                     let getUserLocCtiy:String? = UserDefaults.standard.value(forKey: "locCity") as? String
-                    PTNSLogConsole("getUserLocCtiy:>>>>>>>>>>>>>>>>>>>>\(getUserLocCtiy ?? "")")
+                    PTNSLogConsole("getUserLocCtiy:>>>>>>>>>>>>>>>>>>>>\(getUserLocCtiy ?? "")",levelType: PTLogMode,loggerType: .Location)
                     if !(getUserLocCtiy ?? "").stringIsEmpty() {
                         if self.showChangeAlert {
                             if getUserLocCtiy != cityStr {

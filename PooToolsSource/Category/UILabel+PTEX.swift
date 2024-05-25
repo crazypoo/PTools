@@ -218,7 +218,6 @@ public extension UILabel {
             self.becomeFirstResponder()
             
             let menuItems = PTEditMenuItem(title: "copy") {
-                PTNSLogConsole("CopyFinish")
                 (self.text ?? self.attributedText?.string)?.copyToPasteboard()
             }
             

@@ -133,83 +133,24 @@ public func PTNSLog(_ msg: Any...,
         }
     default:
         if #available(iOS 14.0, *) {
-            switch loggerType {
-            case .ViewCycle:
-                switch levelType {
-                case .Debug:
-                    Logger.ViewCycle.debug("\(prefix)")
-                case .Error:
-                    Logger.ViewCycle.error("\(prefix)")
-                case .Info:
-                    Logger.ViewCycle.info("\(prefix)")
-                case .Warning:
-                    Logger.ViewCycle.warning("\(prefix)")
-                case .Trace:
-                    Logger.ViewCycle.trace("\(prefix)")
-                case .Notice:
-                    Logger.ViewCycle.notice("\(prefix)")
-                case .Critical:
-                    Logger.ViewCycle.critical("\(prefix)")
-                case .Fault:
-                    Logger.ViewCycle.fault("\(prefix)")
-                }
-            case .Network:
-                switch levelType {
-                case .Debug:
-                    Logger.Network.debug("\(prefix)")
-                case .Error:
-                    Logger.Network.error("\(prefix)")
-                case .Info:
-                    Logger.Network.info("\(prefix)")
-                case .Warning:
-                    Logger.Network.warning("\(prefix)")
-                case .Trace:
-                    Logger.Network.trace("\(prefix)")
-                case .Notice:
-                    Logger.Network.notice("\(prefix)")
-                case .Critical:
-                    Logger.Network.critical("\(prefix)")
-                case .Fault:
-                    Logger.Network.fault("\(prefix)")
-                }
-            case .Other:
-                switch levelType {
-                case .Debug:
-                    Logger.Other.debug("\(prefix)")
-                case .Error:
-                    Logger.Other.error("\(prefix)")
-                case .Info:
-                    Logger.Other.info("\(prefix)")
-                case .Warning:
-                    Logger.Other.warning("\(prefix)")
-                case .Trace:
-                    Logger.Other.trace("\(prefix)")
-                case .Notice:
-                    Logger.Other.notice("\(prefix)")
-                case .Critical:
-                    Logger.Other.critical("\(prefix)")
-                case .Fault:
-                    Logger.Other.fault("\(prefix)")
-                }
-            case .Router:
-                switch levelType {
-                case .Debug:
-                    Logger.Router.debug("\(prefix)")
-                case .Error:
-                    Logger.Router.error("\(prefix)")
-                case .Info:
-                    Logger.Router.info("\(prefix)")
-                case .Warning:
-                    Logger.Router.warning("\(prefix)")
-                case .Trace:
-                    Logger.Router.trace("\(prefix)")
-                case .Notice:
-                    Logger.Router.notice("\(prefix)")
-                case .Critical:
-                    Logger.Router.critical("\(prefix)")
-                case .Fault:
-                    Logger.Router.fault("\(prefix)")
-                }
+            
+            switch levelType {
+            case .Debug:
+                Logger.loger(categoryName: loggerType.rawValue).debug("\(prefix)")
+            case .Error:
+                Logger.loger(categoryName: loggerType.rawValue).error("\(prefix)")
+            case .Info:
+                Logger.loger(categoryName: loggerType.rawValue).info("\(prefix)")
+            case .Warning:
+                Logger.loger(categoryName: loggerType.rawValue).warning("\(prefix)")
+            case .Trace:
+                Logger.loger(categoryName: loggerType.rawValue).trace("\(prefix)")
+            case .Notice:
+                Logger.loger(categoryName: loggerType.rawValue).notice("\(prefix)")
+            case .Critical:
+                Logger.loger(categoryName: loggerType.rawValue).critical("\(prefix)")
+            case .Fault:
+                Logger.loger(categoryName: loggerType.rawValue).fault("\(prefix)")
             }
         } else {
             print(prefix)

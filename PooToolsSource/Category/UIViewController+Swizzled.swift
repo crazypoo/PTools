@@ -62,7 +62,7 @@ public extension UIViewController {
         for _ in 0...level {
             paddingItems = paddingItems.appendingFormat("--")
         }
-        PTNSLogConsole("🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳\(logTag)\(paddingItems)-> \(type(of: self))")
+        PTNSLogConsole("🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳🤳\(logTag)\(paddingItems)-> \(type(of: self))", levelType: PTLogMode,loggerType: .ViewCycle)
     }
     
     

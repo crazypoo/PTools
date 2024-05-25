@@ -180,10 +180,8 @@ extension PTDarkModePickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == leftTimePickerView {
             startTime = timeDataArray[row]
-//             PTNSLogConsole("左边时间：\(timeDataArray[row])， row = \(row) component = \(component)")
         } else {
             endTime = timeDataArray[row]
-//             PTNSLogConsole("右边时间：\(timeDataArray[row])， row = \(row) component = \(component)")
         }
     }
 }

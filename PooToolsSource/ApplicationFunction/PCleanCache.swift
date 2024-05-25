@@ -43,7 +43,7 @@ public class PCleanCache: NSObject {
                 let fileSize = fileAttributes[FileAttributeKey.size]
                 totalSize += fileSize as! Float
             } catch {
-                PTNSLogConsole(error.localizedDescription)
+                PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CleanCache)
             }
         }
 #if canImport(SDWebImage)
@@ -54,7 +54,7 @@ public class PCleanCache: NSObject {
             case .success(let success):
                 totalSize += Float(success)
             case .failure(let failure):
-                PTNSLogConsole("Kingfisher:\(failure)")
+                PTNSLogConsole("Kingfisher:\(failure)",levelType: .Error,loggerType: .CleanCache)
             }
         })
 
@@ -90,7 +90,7 @@ public class PCleanCache: NSObject {
                     if removeResult.isSuccess {
                         flag = true
                     } else {
-                        PTNSLogConsole(removeResult.error)
+                        PTNSLogConsole(removeResult.error,levelType: .Error,loggerType: .CleanCache)
                     }
                 }
             }
@@ -107,11 +107,11 @@ public class PCleanCache: NSObject {
             }
             
         } catch {
-            PTNSLogConsole(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CleanCache)
         }
         
         if !flag {
-            PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除")
+            PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除",levelType: .Info,loggerType: .CleanCache)
         }
         return flag
     }
@@ -127,7 +127,7 @@ public class PCleanCache: NSObject {
                 let fileAttributes = try FileManager.pt.fileManager.attributesOfItem(atPath: path)
                 return fileAttributes[FileAttributeKey.size] as! Float
             } catch {
-                PTNSLogConsole(error.localizedDescription)
+                PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CleanCache)
                 return 0
             }
         }
@@ -167,7 +167,7 @@ public class PCleanCache: NSObject {
         enumerator?.enumerated().forEach({ index,value in
             let removeResult = FileManager.pt.removefolder(folderPath: path.appendingPathComponent(value as! String))
             if !removeResult.isSuccess {
-                PTNSLogConsole(removeResult.error)
+                PTNSLogConsole(removeResult.error,levelType: .Error,loggerType: .CleanCache)
             }
         })
         

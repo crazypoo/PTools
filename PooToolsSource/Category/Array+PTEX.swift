@@ -111,7 +111,7 @@ public extension Array {
     ///數組轉字典
     func toJSON()-> String {
         guard JSONSerialization.isValidJSONObject(self) else {
-            PTNSLogConsole("无法解析出JSONString")
+            PTNSLogConsole("无法解析出JSONString",levelType: .Error,loggerType: .Array)
             return ""
         }
         let data : NSData = try! JSONSerialization.data(withJSONObject: self, options: []) as NSData

@@ -286,13 +286,13 @@ public class OSSSpeech: NSObject {
     public func speakText(_ text: String? = nil) {
         if !utteranceIsValid() {
             guard let speechText = text else {
-                PTNSLogConsole("PT OSS text is empty".localized())
+                PTNSLogConsole("PT OSS text is empty".localized(),levelType: PTLogMode,loggerType: .Speech)
                 delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidUtterance.error)
                 return
             }
             // Handle empty text gracefully.
             if speechText.isEmpty {
-                PTNSLogConsole("PT OSS text is empty".localized())
+                PTNSLogConsole("PT OSS text is empty".localized(),levelType: PTLogMode,loggerType: .Speech)
                 delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidUtterance.error)
                 return
             }
@@ -310,7 +310,7 @@ public class OSSSpeech: NSObject {
     public func speakAttributedText(attributedText: NSAttributedString) {
         // Handle empty text gracefully.
         if attributedText.string.isEmpty {
-            PTNSLogConsole("PT OSS text is empty".localized())
+            PTNSLogConsole("PT OSS text is empty".localized(),levelType: PTLogMode,loggerType: .Speech)
             delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidText.error)
             return
         }
@@ -355,7 +355,7 @@ public class OSSSpeech: NSObject {
 
     private func utteranceIsValid() -> Bool {
         guard utterance != nil else {
-            PTNSLogConsole("PT OSS no utterance".localized())
+            PTNSLogConsole("PT OSS no utterance".localized(),levelType: PTLogMode,loggerType: .Speech)
             return false
         }
         return true
@@ -432,7 +432,7 @@ public class OSSSpeech: NSObject {
         audioSession.requestRecordPermission {[weak self] allowed in
             guard let self = self else { return }
             if !allowed {
-                PTNSLogConsole("PT OSS messageNoMicAccess".localized())
+                PTNSLogConsole("PT OSS messageNoMicAccess".localized(),levelType: PTLogMode,loggerType: .Speech)
                 self.delegate?.authorizationToMicrophone(withAuthentication: .denied)
                 return
             }
@@ -527,7 +527,7 @@ public class OSSSpeech: NSObject {
                 self?.delegate?.didFailToCommenceSpeechRecording()
                 self?.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidAudioEngine.error)
                 if let err = error {
-                    PTNSLogConsole("\("PT OSS audio engine error".localized())\(err)")
+                    PTNSLogConsole("\("PT OSS audio engine error".localized())\(err)",levelType: PTLogMode,loggerType: .Speech)
                 }
                 return
             }

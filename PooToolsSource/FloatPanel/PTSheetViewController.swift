@@ -692,7 +692,7 @@ public class PTSheetViewController: PTBaseViewController {
     public func animateIn(size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
         guard self.options.useInlineMode else { return }
         guard self.view.superview != nil else {
-            PTNSLogConsole("It appears your sheet is not set as a subview of another view. Make sure to add this view as a subview before trying to animate it in.")
+            PTNSLogConsole("It appears your sheet is not set as a subview of another view. Make sure to add this view as a subview before trying to animate it in.",levelType: .Error,loggerType: .Alert)
             return
         }
         self.view.superview?.layoutIfNeeded()

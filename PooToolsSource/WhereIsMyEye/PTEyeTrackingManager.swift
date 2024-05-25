@@ -117,10 +117,10 @@ public class PTEyeTrackingManager: NSObject {
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
             } else {
-                PTNSLogConsole(Constants.ERR_MESSAGE)
+                PTNSLogConsole(Constants.ERR_MESSAGE, levelType: .Error,loggerType: .Debug)
             }
         } else {
-            PTNSLogConsole(Constants.ERR_MESSAGE)
+            PTNSLogConsole(Constants.ERR_MESSAGE, levelType: .Error,loggerType: .Debug)
         }
     }
     
@@ -270,7 +270,7 @@ extension PTEyeTrackingManager {
             
             delegate.didChange(lookAtPoint: transformedPoint)
         } else {
-            PTNSLogConsole("didChange(eyeLookAtState:lookAtPoint:)  \(Constants.FUNC_NOT_DECLARED)")
+            PTNSLogConsole("didChange(eyeLookAtState:lookAtPoint:)  \(Constants.FUNC_NOT_DECLARED)", levelType: .Error,loggerType: .Debug)
         }
     }
     
@@ -287,12 +287,12 @@ extension PTEyeTrackingManager {
         
         if isTrackingStopped && trackingState == .tracking {
             trackingState = .notTracked
-            PTNSLogConsole(Constants.TRACHING_STOPPED)
+            PTNSLogConsole(Constants.TRACHING_STOPPED, levelType: .Error,loggerType: .Debug)
             // 保持屏幕睡眠
             UIApplication.shared.isIdleTimerDisabled = false
         } else if !isTrackingStopped && trackingState == .notTracked {
             trackingState = .tracking
-            PTNSLogConsole(Constants.TRACHING_STARTED)
+            PTNSLogConsole(Constants.TRACHING_STARTED, levelType: .Error,loggerType: .Debug)
             // 为了不让画面变暗
             UIApplication.shared.isIdleTimerDisabled = true
         } else {
@@ -302,7 +302,7 @@ extension PTEyeTrackingManager {
         if delegate.responds(to: #selector(PTEyeTrackingDelegate.didChange(eyeTrackingState:))) {
             delegate.didChange(eyeTrackingState: trackingState)
         } else {
-            PTNSLogConsole("didChange(eyeTrackingState:)  \(Constants.FUNC_NOT_DECLARED)")
+            PTNSLogConsole("didChange(eyeTrackingState:)  \(Constants.FUNC_NOT_DECLARED)", levelType: .Error,loggerType: .Debug)
         }
     }
 }

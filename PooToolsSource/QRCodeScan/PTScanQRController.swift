@@ -127,7 +127,7 @@ public class PTScanQRController: PTBaseViewController {
             
             avDevice!.unlockForConfiguration()
         } catch {
-            PTNSLogConsole(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .QRCode)
         }
         return avDevice!
     }()
@@ -182,7 +182,7 @@ public class PTScanQRController: PTBaseViewController {
                     }
                     self.device.unlockForConfiguration()
                 } catch {
-                    PTNSLogConsole(error.localizedDescription)
+                    PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .QRCode)
                 }
             }
         }
@@ -414,7 +414,7 @@ public class PTScanQRController: PTBaseViewController {
                 }
             }
         } catch {
-            PTNSLogConsole(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .QRCode)
         }
     }
     
@@ -484,7 +484,7 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 獲取二維碼數據後處理回調
     func processResult(result:String,error:NSError?) {
-        PTNSLogConsole(result)
+        PTNSLogConsole(result,levelType: PTLogMode,loggerType: .QRCode)
         if resultBlock != nil {
             resultBlock!(result,error)
         }

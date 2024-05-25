@@ -90,7 +90,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                         }
                         self.camera.deviceInput!.device.unlockForConfiguration()
                     } catch {
-                        PTNSLogConsole(error.localizedDescription)
+                        PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Filter)
                     }
                 }
             }
@@ -563,7 +563,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             
             device.unlockForConfiguration()
         } catch {
-            PTNSLogConsole("相机聚焦设置失败 \(error.localizedDescription)")
+            PTNSLogConsole("相机聚焦设置失败 \(error.localizedDescription)",levelType: .Error,loggerType: .Filter)
         }
     }
 
@@ -689,7 +689,6 @@ extension PTFilterCameraViewController {
 //            (ges1 == gestureRecognizer && ges2 == otherGestureRecognizer) ||
 //                (ges2 == otherGestureRecognizer && ges1 == gestureRecognizer)
 //        }.filter { $0 == true }
-//        PTNSLogConsole("1231231231")
 //        return !result.isEmpty
         true
     }

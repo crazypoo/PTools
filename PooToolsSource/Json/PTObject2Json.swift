@@ -56,7 +56,7 @@ public class PTObject2Json: NSObject {
         do {
             return try JSONSerialization.data(withJSONObject: PTObject2Json.getObjectData(obj: obj) ,options: options) as NSData
         } catch {
-            PTNSLogConsole(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Json)
         }
         return NSData()
     }

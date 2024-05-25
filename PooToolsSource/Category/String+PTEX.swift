@@ -1763,7 +1763,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
                 return resultString
             }
         } catch {
-            PTNSLogConsole("Error parsing JSON: \(error)")
+            PTNSLogConsole("Error parsing JSON: \(error)",levelType: .Error,loggerType: .String)
         }
         return nil
     }

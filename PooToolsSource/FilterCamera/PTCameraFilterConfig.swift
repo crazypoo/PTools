@@ -288,7 +288,7 @@ public class PTCameraFilterConfig: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             let suc = exportSession.status == .completed
             if exportSession.status == .failed {
-                PTNSLogConsole("ZLPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")")
+                PTNSLogConsole("ZLPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")",levelType: .Error,loggerType: .Filter)
             }
             PTGCDManager.gcdMain {
                 completion(suc ? outputUrl : nil, exportSession.error)

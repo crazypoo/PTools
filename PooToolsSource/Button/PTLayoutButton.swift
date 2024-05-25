@@ -980,7 +980,7 @@ extension PTLayoutButton {
                                 }
                             }
                         case .failure(let error):
-                            PTNSLogConsole(error)
+                            PTNSLogConsole(error,levelType: .Error,loggerType: .Button)
                             switch controlState {
                             case .normal:
                                 self.normalImage = emptyImage

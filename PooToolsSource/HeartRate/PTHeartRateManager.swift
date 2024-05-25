@@ -18,7 +18,6 @@ public enum CameraType: Int {
         switch self {
         case .front:
             let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [], mediaType: AVMediaType.video, position: .front).devices
-            PTNSLogConsole("devices:\(devices)")
             for device in devices where device.position == .front {
                 return device
             }
@@ -92,11 +91,11 @@ public class PTHeartRateManager: NSObject {
     
     public func startCapture() {
 #if POOTOOLS_DEBUG
-        PTNSLogConsole(#function + "\(classForCoder)/")
+        PTNSLogConsole(#function + "\(classForCoder)/",levelType: PTLogMode,loggerType: .Health)
 #endif
         if captureSession.isRunning {
 #if POOTOOLS_DEBUG
-            PTNSLogConsole("Capture Session is already running 🏃‍♂️.")
+            PTNSLogConsole("Capture Session is already running 🏃‍♂️.",levelType: PTLogMode,loggerType: .Health)
 #endif
             return
         }
@@ -105,11 +104,11 @@ public class PTHeartRateManager: NSObject {
     
     public func stopCapture() {
 #if POOTOOLS_DEBUG
-        PTNSLogConsole("\(classForCoder)/")
+        PTNSLogConsole("\(classForCoder)/",levelType: PTLogMode,loggerType: .Health)
 #endif
         if !captureSession.isRunning {
 #if POOTOOLS_DEBUG
-            PTNSLogConsole("Capture Session has already stopped 🛑.")
+            PTNSLogConsole("Capture Session has already stopped 🛑.",levelType: PTLogMode,loggerType: .Health)
 #endif
             return
         }

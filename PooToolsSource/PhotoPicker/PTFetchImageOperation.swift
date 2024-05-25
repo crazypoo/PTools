@@ -78,7 +78,7 @@ class PTFetchImageOperation: Operation {
             fetchFinish()
             return
         }
-        PTNSLogConsole("---- start fetch")
+        PTNSLogConsole("---- start fetch",levelType: PTLogMode,loggerType: .Media)
         pri_isExecuting = true
         
         // 存在编辑的图片
@@ -111,7 +111,7 @@ class PTFetchImageOperation: Operation {
         if isOriginal {
             requestImageID = PTMediaLibManager.fetchOriginalImage(for: model.asset, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
-                    PTNSLogConsole("原图加载完成 \(String(describing: self?.isCancelled))")
+                    PTNSLogConsole("原图加载完成 \(String(describing: self?.isCancelled))",levelType: PTLogMode,loggerType: .Media)
                     self?.completion(image?.pt.fixOrientation(), nil)
                     self?.fetchFinish()
                 }
@@ -119,7 +119,7 @@ class PTFetchImageOperation: Operation {
         } else {
             requestImageID = PTMediaLibManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
-                    PTNSLogConsole("加载完成 isCancelled: \(String(describing: self?.isCancelled))")
+                    PTNSLogConsole("加载完成 isCancelled: \(String(describing: self?.isCancelled))",levelType: PTLogMode,loggerType: .Media)
                     self?.completion(self?.scaleImage(image?.pt.fixOrientation()), nil)
                     self?.fetchFinish()
                 }
@@ -129,7 +129,7 @@ class PTFetchImageOperation: Operation {
     
     override func cancel() {
         super.cancel()
-        PTNSLogConsole("cancel \(isExecuting) \(requestImageID)")
+        PTNSLogConsole("cancel \(isExecuting) \(requestImageID)",levelType: PTLogMode,loggerType: .Media)
         PHImageManager.default().cancelImageRequest(requestImageID)
         pri_isCancelled = true
         if isExecuting {

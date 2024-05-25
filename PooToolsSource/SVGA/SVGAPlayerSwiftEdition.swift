@@ -205,7 +205,7 @@ public class SVGAPlayerSwiftEdition: SVGAPlayerEdition {
         let isNullSuperview = newSuperview == nil
         
         if isNullSuperview {
-            PTNSLogConsole("没有父视图了，即将停止并清空图层")
+            PTNSLogConsole("没有父视图了，即将停止并清空图层", levelType: PTLogMode,loggerType: .Media)
             _asyncTag = nil
         }
         
@@ -220,7 +220,7 @@ public class SVGAPlayerSwiftEdition: SVGAPlayerEdition {
     }
     
     deinit {
-        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
+        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放", levelType: PTLogMode,loggerType: .ViewCycle)
     }
     
     // MARK: - 私有方法
@@ -296,7 +296,7 @@ private extension SVGAPlayerSwiftEdition {
         
         if self.svgaSource == svgaSource, entity != nil {
             _asyncTag = nil
-            PTNSLogConsole("已经有了，不用加载 \(svgaSource)")
+            PTNSLogConsole("已经有了，不用加载 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             resetLoopCount()
             _playSVGA(fromFrame: fromFrame, isAutoPlay: isAutoPlay, isNew: false)
             return
@@ -307,11 +307,11 @@ private extension SVGAPlayerSwiftEdition {
         _isWillAutoPlay = isAutoPlay
         
         guard !isLoading else {
-            PTNSLogConsole("已经在加载了，不要重复加载 \(svgaSource)")
+            PTNSLogConsole("已经在加载了，不要重复加载 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             return
         }
         
-        PTNSLogConsole("开始加载 \(svgaSource) - 先清空当前动画")
+        PTNSLogConsole("开始加载 \(svgaSource) - 先清空当前动画", levelType: PTLogMode,loggerType: .Media)
         status = .loading
         
         let newTag = UUID()
@@ -345,7 +345,7 @@ private extension SVGAPlayerSwiftEdition {
             let newTag = UUID()
             self._asyncTag = newTag
 
-            PTNSLogConsole("外部加载SVGA - 成功 \(svgaSource)")
+            PTNSLogConsole("外部加载SVGA - 成功 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             self._parseFromData(data, svgaSource, newTag, isAutoPlay)
         }
     }
@@ -357,7 +357,7 @@ private extension SVGAPlayerSwiftEdition {
             }
             self._asyncTag = nil
 
-            PTNSLogConsole("外部加载SVGA - 失败 \(svgaSource)")
+            PTNSLogConsole("外部加载SVGA - 失败 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             self._cleanAll()
             self._failedCallback(.dataLoadFailed(svgaSource, error))
         }
@@ -395,12 +395,12 @@ private extension SVGAPlayerSwiftEdition {
             self._asyncTag = nil
             
             if let entity {
-                PTNSLogConsole("内部下载远程SVGA - 成功 \(svgaSource)")
+                PTNSLogConsole("内部下载远程SVGA - 成功 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
                 self._parseDone(svgaSource, entity)
                 return
             }
             
-            PTNSLogConsole("内部下载远程SVGA - 成功，但资源为空")
+            PTNSLogConsole("内部下载远程SVGA - 成功，但资源为空", levelType: PTLogMode,loggerType: .Media)
             self._cleanAll()
             let error = NSError(domain: "SVGAParsePlayer", code: -3, userInfo: [NSLocalizedDescriptionKey: "下载的SVGA资源为空"])
             self._failedCallback(.dataLoadFailed(svgaSource, error))
@@ -409,7 +409,7 @@ private extension SVGAPlayerSwiftEdition {
             guard let self, self._asyncTag == asyncTag else { return }
             self._asyncTag = nil
             
-            PTNSLogConsole("内部下载远程SVGA - 失败 \(svgaSource)")
+            PTNSLogConsole("内部下载远程SVGA - 失败 \(svgaSource)", levelType: .Error,loggerType: .Media)
             self._cleanAll()
             let error = e ?? NSError(domain: "SVGAParsePlayer", code: -2, userInfo: [NSLocalizedDescriptionKey: "SVGA下载失败"])
             self._failedCallback(.dataLoadFailed(svgaSource, error))
@@ -427,14 +427,14 @@ private extension SVGAPlayerSwiftEdition {
             guard let self, self._asyncTag == asyncTag else { return }
             self._asyncTag = nil
             
-            PTNSLogConsole("解析远程SVGA - 成功 \(svgaSource)")
+            PTNSLogConsole("解析远程SVGA - 成功 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             self._parseDone(svgaSource, entity)
             
         } failureBlock: { [weak self] error in
             guard let self, self._asyncTag == asyncTag else { return }
             self._asyncTag = nil
             
-            PTNSLogConsole("解析远程SVGA - 失败 \(svgaSource) \(error)")
+            PTNSLogConsole("解析远程SVGA - 失败 \(svgaSource) \(error)", levelType: .Error,loggerType: .Media)
             self._cleanAll()
             self._failedCallback(.dataParseFailed(svgaSource, error))
         }
@@ -449,14 +449,14 @@ private extension SVGAPlayerSwiftEdition {
             guard let self, self._asyncTag == asyncTag else { return }
             self._asyncTag = nil
             
-            PTNSLogConsole("解析本地SVGA - 成功 \(svgaSource)")
+            PTNSLogConsole("解析本地SVGA - 成功 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             self._parseDone(svgaSource, entity)
             
         } failureBlock: { [weak self] error in
             guard let self, self._asyncTag == asyncTag else { return }
             self._asyncTag = nil
             
-            PTNSLogConsole("解析本地SVGA - 失败 \(svgaSource) \(error)")
+            PTNSLogConsole("解析本地SVGA - 失败 \(svgaSource) \(error)", levelType: .Error,loggerType: .Media)
             self._cleanAll()
             self._failedCallback(.assetParseFailed(svgaSource, error))
         }
@@ -490,10 +490,10 @@ private extension SVGAPlayerSwiftEdition {
         guard step(toFrame: fromFrame, andPlay: isAutoPlay) else { return }
         
         if isAutoPlay {
-            PTNSLogConsole("成功跳至特定帧\(fromFrame)，并且自动播放 - 播放 \(svgaSource)")
+            PTNSLogConsole("成功跳至特定帧\(fromFrame)，并且自动播放 - 播放 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             status = .playing
         } else {
-            PTNSLogConsole("成功跳至特定帧\(fromFrame)，并且不播放 - 暂停 \(svgaSource)")
+            PTNSLogConsole("成功跳至特定帧\(fromFrame)，并且不播放 - 暂停 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             status = .paused
         }
         
@@ -508,10 +508,10 @@ private extension SVGAPlayerSwiftEdition {
     
     func _afterStopSVGA() {
         if status != .idle {
-            PTNSLogConsole("停止了 - 清空图层/回到开头or结尾处")
+            PTNSLogConsole("停止了 - 清空图层/回到开头or结尾处", levelType: PTLogMode,loggerType: .Media)
             status = .stopped
         } else {
-            PTNSLogConsole("停止了？- 本来就空空如也")
+            PTNSLogConsole("停止了？- 本来就空空如也", levelType: PTLogMode,loggerType: .Media)
         }
         
         if isResetLoopCountWhenStopped {
@@ -522,7 +522,7 @@ private extension SVGAPlayerSwiftEdition {
     }
     
     func _cleanAll() {
-        PTNSLogConsole("清空一切")
+        PTNSLogConsole("清空一切", levelType: PTLogMode,loggerType: .Media)
         _asyncTag = nil
         
         stopAnimation(.clearLayers)
@@ -581,7 +581,7 @@ extension SVGAPlayerSwiftEdition: SVGAPlayerEditionDelegate {
     
     public func svgaPlayerEdition(_ player: SVGAPlayerEdition, animationDidFinishedAll loopCount: Int) {
         let svgaSource = svgaSource
-        PTNSLogConsole("全部播完了：\(svgaSource) - \(loopCount)")
+        PTNSLogConsole("全部播完了：\(svgaSource) - \(loopCount)", levelType: PTLogMode,loggerType: .Media)
         _hideIfNeeded { [weak self] in
             guard let self else { return }
             self._afterStopSVGA()
@@ -592,13 +592,13 @@ extension SVGAPlayerSwiftEdition: SVGAPlayerEditionDelegate {
     public func svgaPlayerEdition(_ player: SVGAPlayerEdition, animationPlayFailed error: SVGAPlayerPlayEditionError) {
         switch error {
         case .onlyOnePlayableFrame:
-            PTNSLogConsole("只有一帧可播放帧，无法形成动画：\(svgaSource)")
+            PTNSLogConsole("只有一帧可播放帧，无法形成动画：\(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             status = .paused
         case .nullSuperview:
-            PTNSLogConsole("父视图是空的，无法播放：\(svgaSource)")
+            PTNSLogConsole("父视图是空的，无法播放：\(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             _afterStopSVGA()
         default:
-            PTNSLogConsole("SVGA资源是空的，无法播放：\(svgaSource)")
+            PTNSLogConsole("SVGA资源是空的，无法播放：\(svgaSource)", levelType: .Error,loggerType: .Media)
             _cleanAll()
         }
         _failedCallback(.playFailed(svgaSource, error))
@@ -650,7 +650,7 @@ public extension SVGAPlayerSwiftEdition {
         guard !_checkEntityIsInvalid(entity, for: svgaSource) else { return }
         
         if self.svgaSource == svgaSource, self.entity != nil {
-            PTNSLogConsole("已经有了，不用加载 \(svgaSource)")
+            PTNSLogConsole("已经有了，不用加载 \(svgaSource)", levelType: PTLogMode,loggerType: .Media)
             resetLoopCount()
             _playSVGA(fromFrame: fromFrame, isAutoPlay: isAutoPlay, isNew: false)
             return
@@ -686,7 +686,7 @@ public extension SVGAPlayerSwiftEdition {
         case .playing: return
         case .paused:
             if startAnimation() {
-                PTNSLogConsole("继续播放")
+                PTNSLogConsole("继续播放", levelType: PTLogMode,loggerType: .Media)
                 status = .playing
             }
         default:
@@ -702,12 +702,12 @@ public extension SVGAPlayerSwiftEdition {
         guard svgaSource.count > 0 else { return }
         
         if entity == nil {
-            PTNSLogConsole("播放 - 需要加载")
+            PTNSLogConsole("播放 - 需要加载", levelType: PTLogMode,loggerType: .Media)
             _loadSVGA(svgaSource, fromFrame: fromFrame, isAutoPlay: isAutoPlay)
             return
         }
         
-        PTNSLogConsole("播放 - 无需加载 继续")
+        PTNSLogConsole("播放 - 无需加载 继续", levelType: PTLogMode,loggerType: .Media)
         _playSVGA(fromFrame: fromFrame, isAutoPlay: isAutoPlay, isNew: false)
     }
     
@@ -720,12 +720,12 @@ public extension SVGAPlayerSwiftEdition {
         resetLoopCount()
         
         if entity == nil {
-            PTNSLogConsole("重播 - 需要加载")
+            PTNSLogConsole("重播 - 需要加载", levelType: PTLogMode,loggerType: .Media)
             _loadSVGA(svgaSource, fromFrame: leadingFrame, isAutoPlay: isAutoPlay)
             return
         }
         
-        PTNSLogConsole("重播 - 无需加载")
+        PTNSLogConsole("重播 - 无需加载", levelType: PTLogMode,loggerType: .Media)
         _playSVGA(fromFrame: leadingFrame, isAutoPlay: isAutoPlay, isNew: false)
     }
     
@@ -736,7 +736,7 @@ public extension SVGAPlayerSwiftEdition {
             _isWillAutoPlay = false
             return
         }
-        PTNSLogConsole("暂停")
+        PTNSLogConsole("暂停", levelType: PTLogMode,loggerType: .Media)
         pauseAnimation()
         status = .paused
     }

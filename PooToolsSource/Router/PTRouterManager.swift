@@ -32,7 +32,7 @@ public class PTRouterManager: NSObject {
         
         PTRouter.globalOpenFailedHandler { (info) in
             guard let matchFailedKey = info[PTRouter.matchFailedKey] as? String else { return }
-            PTNSLogConsole(matchFailedKey)
+            PTNSLogConsole(matchFailedKey,levelType: PTLogMode,loggerType: .Router)
             PTRouter.shareInstance.logcat?("PTRouter: globalOpenFailedHandler", .logError, "\(matchFailedKey)")
         }
         
@@ -326,7 +326,7 @@ extension PTRouterManager {
         }
         
         let endRegisterTime = CFAbsoluteTimeGetCurrent()
-        PTNSLogConsole("服务注册耗时：\(endRegisterTime - beginRegisterTime)")
+        PTNSLogConsole("服务注册耗时：\(endRegisterTime - beginRegisterTime)",levelType: PTLogMode,loggerType: .Router)
     }
     
     // MARK: - 重定向、剔除、新增、重置路由

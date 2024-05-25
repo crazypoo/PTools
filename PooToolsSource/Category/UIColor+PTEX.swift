@@ -109,10 +109,10 @@ public extension UIColor {
                     newAlpha = CGFloat(hexValue & 0x000000FF)  / 255.0
                 }
             default:
-                PTNSLogConsole("UIColorExtension - Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8")
+                PTNSLogConsole("UIColorExtension - Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8",levelType: .Error,loggerType: .Color)
             }
         } else {
-            PTNSLogConsole("UIColorExtension - Scan hex error")
+            PTNSLogConsole("UIColorExtension - Scan hex error",levelType: .Error,loggerType: .Color)
         }
         return (red, green, blue, newAlpha)
     }

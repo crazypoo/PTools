@@ -254,7 +254,7 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
     public var currentColor:String? {
         didSet {
             pickInfoView.currentColor = currentColor
-            PTNSLogConsole(currentColor!)
+            PTNSLogConsole(currentColor!,levelType: PTLogMode,loggerType: .Color)
         }
     }
     

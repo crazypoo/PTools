@@ -42,7 +42,7 @@ public class PTSocketManager: NSObject {
     //MARK: socket服务器URL
     open class func gobalUrl() -> String {
         if UIApplication.applicationEnvironment() != .appStore {
-            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)")
+            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTSocketURLMode {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
@@ -88,7 +88,7 @@ public class PTSocketManager: NSObject {
     }
     
     public func isClosed() -> Bool {
-        PTNSLogConsole("socket连接状态---\(webSocket?.readyState.rawValue ?? 0)")
+        PTNSLogConsole("socket连接状态---\(webSocket?.readyState.rawValue ?? 0)",levelType: PTLogMode,loggerType: .Network)
         if webSocket?.readyState != .OPEN {
             return true
         }
@@ -143,7 +143,7 @@ public class PTSocketManager: NSObject {
             do {
                 try webSocket?.send(string: msg)
             } catch {
-                PTNSLogConsole("\(error.localizedDescription)")
+                PTNSLogConsole("\(error.localizedDescription)",levelType: .Error,loggerType: .Network)
             }
         }
     }
@@ -155,13 +155,13 @@ public class PTSocketManager: NSObject {
 
 extension PTSocketManager:SRWebSocketDelegate {
     public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any) {
-        PTNSLogConsole("接受到的socket信息:\(message)")
+        PTNSLogConsole("接受到的socket信息:\(message)",levelType: PTLogMode,loggerType: .Network)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidReceiveMessageNotification), object: message)
     }
     
     public func webSocketDidOpen(_ webSocket: SRWebSocket) {
         if webSocket.readyState == .OPEN {
-            PTNSLogConsole("socket连接成功")
+            PTNSLogConsole("socket连接成功",levelType: PTLogMode,loggerType: .Network)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidConnect), object: nil)
         }
         reOpenCount = 0

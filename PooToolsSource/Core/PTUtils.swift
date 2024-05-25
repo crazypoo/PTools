@@ -110,7 +110,7 @@ public func PTIVarList(_ className:String) {
         let ivar = list![i]
         let name = ivar_getName(ivar)
         let type = ivar_getTypeEncoding(ivar)
-        PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))")
+        PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .Utils)
     }
 }
 
@@ -121,7 +121,7 @@ public func PTPropertyList(_ classString: String) {
         let property = list![i]
         let name = property_getName(property)
         let type = property_getAttributes(property)
-        PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type!))")
+        PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .Utils)
     }
 }
 

@@ -254,10 +254,8 @@ open class PFloatingButton: UIButton {
         
         if isDockPointAvailable() && isLimitedDistanceAvailable() {
             let _ = checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
-//            PTNSLogConsole(bool)
         } else if !dragOutOfBoundsEnabled {
             let _ = checkIfOutOfBoundsThenFixIt(fixIt: true)
-//            PTNSLogConsole(bool)
         }
     }
     

@@ -225,7 +225,7 @@ fileprivate extension PTVideoEditorToolsSlider {
         }
 
         var index = values.firstIndex(where: { $0 > value })! - 1
-        PTNSLogConsole(index)
+        PTNSLogConsole(index, levelType: PTLogMode,loggerType: .Media)
         let min = CGFloat(values[index])
         let max = CGFloat(values[index + 1])
         if index < 0 {

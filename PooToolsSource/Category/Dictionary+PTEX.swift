@@ -161,14 +161,14 @@ public extension PTPOP where Base == Dictionary<String, Any> {
     @discardableResult
     func dictionaryToJson() -> String? {
         if (!JSONSerialization.isValidJSONObject(base)) {
-            PTNSLogConsole("无法解析出JSONString")
+            PTNSLogConsole("无法解析出JSONString",levelType: .Error,loggerType: .Dictionary)
             return nil
         }
         if let data = try? JSONSerialization.data(withJSONObject: base) {
             let JSONString = NSString(data:data,encoding: String.Encoding.utf8.rawValue)
             return JSONString! as String
         } else {
-            PTNSLogConsole("无法解析出JSONString")
+            PTNSLogConsole("无法解析出JSONString",levelType: .Error,loggerType: .Dictionary)
             return nil
         }
     }

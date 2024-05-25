@@ -112,8 +112,8 @@ public extension Data {
     func toDict()->Dictionary<String, Any>? {
         do{
             return try JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String: Any]
-        }catch{
-            PTNSLogConsole(error.localizedDescription)
+        } catch {
+            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Data)
             return nil
         }
     }
@@ -130,7 +130,7 @@ public extension Data {
         do {
             return try JSONDecoder().decode(type, from: self)
         } catch  {
-            PTNSLogConsole("data to model error")
+            PTNSLogConsole("data to model error",levelType: .Error,loggerType: .Data)
             return nil
         }
     }

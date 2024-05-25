@@ -603,11 +603,6 @@ public extension PTPOP where Base: FileManager {
     static func fileAttributes(path: String) -> [FileAttributeKey : Any]? {
         do {
             let attributes = try fileManager.attributesOfItem(atPath: path)
-            /*
-            PTNSLogConsole("创建时间：\(attributes[FileAttributeKey.creationDate]!)")
-            PTNSLogConsole("修改时间：\(attributes[FileAttributeKey.modificationDate]!)")
-            PTNSLogConsole("文件大小：\(attributes[FileAttributeKey.size]!)")
-            */
             return attributes
         } catch _ {
             return nil
@@ -802,7 +797,7 @@ public extension PTPOP where Base: FileManager {
             let img = UIImage(cgImage: cgImg)
             return img
         } else {
-            PTNSLogConsole("获取缩略图失败")
+            PTNSLogConsole("获取缩略图失败",levelType: .Error,loggerType: .FileManager)
             return nil
         }
     }

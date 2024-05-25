@@ -505,7 +505,7 @@ open class PTSideMenuControl: PTBaseViewController {
 
             #if DEBUG
             if animatorFromDelegate == nil {
-                PTNSLogConsole("[PTSideMenu] `setContentViewController` is called with animated while the delegate method return nil, fall back to the fade animation.")
+                PTNSLogConsole("[PTSideMenu] `setContentViewController` is called with animated while the delegate method return nil, fall back to the fade animation.",levelType: .Error,loggerType: .SideMenu)
             }
             #endif
 

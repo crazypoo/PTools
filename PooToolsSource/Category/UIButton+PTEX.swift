@@ -219,7 +219,7 @@ public extension UIButton {
                                     self.setImage(value.image, for: controlState)
                                 }
                             case .failure(let error):
-                                PTNSLogConsole(error)
+                                PTNSLogConsole(error,levelType: .Error,loggerType: .Button)
                                 self.setImage(emptyImage, for: controlState)
                             }
                         }

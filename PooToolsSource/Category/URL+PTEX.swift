@@ -24,7 +24,7 @@ public extension URL {
 
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let response = response as? HTTPURLResponse, error == nil else {
-                PTNSLogConsole("Error: \(error?.localizedDescription ?? "Unknown error")")
+                PTNSLogConsole("Error: \(error?.localizedDescription ?? "Unknown error")", levelType: .Error,loggerType: .URL)
                 completion(0)
                 return
             }
@@ -33,7 +33,7 @@ public extension URL {
                let fileSize = UInt64(contentLength) {
                 completion(fileSize)
             } else {
-                PTNSLogConsole("Failed to retrieve file size.")
+                PTNSLogConsole("Failed to retrieve file size.", levelType: .Error,loggerType: .URL)
                 completion(0)
             }
         }
