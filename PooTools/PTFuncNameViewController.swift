@@ -109,7 +109,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
     }
 
-    fileprivate var vcEmpty:Bool = true
+    fileprivate var vcEmpty:Bool = false
     
     fileprivate lazy var outputURL :URL = {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -366,6 +366,21 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         cConfig.indexConfig = PTCollectionIndexViewConfiguration()
         cConfig.sideIndexTitles = strings
+        
+        
+        let emptyConfig = PTEmptyDataViewConfig()
+        emptyConfig.buttonTitle = ""
+        emptyConfig.image = UIImage(named: "logo_customer")
+        emptyConfig.mainTitleAtt = """
+                \(wrap: .embedding("""
+                \("沒數據",.foreground(.black),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+                """))
+                """
+        emptyConfig.secondaryEmptyAtt = nil
+        emptyConfig.buttonTitle = "點擊"
+        emptyConfig.buttonFont = .appfont(size: 14)
+        emptyConfig.buttonTextColor = .randomColor
+        cConfig.emptyViewConfig = emptyConfig
 
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
         aaaaaaa.layoutSubviews()
@@ -797,10 +812,10 @@ class PTFuncNameViewController: PTBaseViewController {
         aaaaaaa.headerRefreshTask = { sender in
             if #available(iOS 17, *) {
                 self.collectionView.clearAllData { collectionview in
-                    sender.endRefreshing()
+                    self.collectionView.endRefresh()
                 }
             } else {
-                sender.endRefreshing()
+                self.collectionView.endRefresh()
             }
         }
         
@@ -1025,7 +1040,9 @@ class PTFuncNameViewController: PTBaseViewController {
         emptyViewLoading()
         PTGCDManager.gcdAfter(time: 2) {
             self.hideEmptyView {
-                self.showCollectionViewData()
+                self.collectionView.clearAllData { cView in
+                    self.showCollectionViewData()
+                }
             }
         }
     }

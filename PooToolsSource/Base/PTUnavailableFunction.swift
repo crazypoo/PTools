@@ -81,7 +81,7 @@ public class PTUnavailableFunction: NSObject {
     
     public func showEmptyLoadingView(showIn:UIView) {
         PTGCDManager.gcdMain {
-            self.unavailableView!.removeFromSuperview()
+            self.unavailableView?.removeFromSuperview()
             self.unavailableView = nil
             
             if self.unavailableLoadingView == nil {
