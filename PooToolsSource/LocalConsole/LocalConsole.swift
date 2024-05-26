@@ -28,9 +28,7 @@ extension String {
     static let resizeConsole = "Resize Console"
     static let clearConsole = "Clear Console"
     static let userDefaults = "UserDefaults"
-    static let fps = "FPS"
-    static let showMemoryCheck = "Show Memory check"
-    static let hideMemoryCheck = "Hide Memory check"
+    static let Performance = "Performance"
     static let hideColorCheck = "Hide Color check"
     static let showColorCheck = "Show Color check"
     static let hideRulerCheck = "Hide Ruler check"
@@ -76,20 +74,6 @@ extension UIImage {
             return UIImage(.doc.badgeGearshape).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
             return UIImage(.doc.onDoc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
-    }
-    static func fpsImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.cursorarrow.motionlines).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.desktopcomputer).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
-    }
-    static func memoryImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.memorychip).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.heart.fill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func colorImage()->UIImage {
@@ -164,6 +148,7 @@ extension UIImage {
         }
     }
     static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let performanceImage = UIImage(.eyeglasses).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {
@@ -564,13 +549,6 @@ public class LocalConsole: NSObject {
                     /*
                             Content
                      */
-                    var memoryString = ""
-                    if PTMemory.share.closed {
-                        memoryString = .showMemoryCheck
-                    } else {
-                        memoryString = .hideMemoryCheck
-                    }
-                    
                     var colorString = ""
                     if PTColorPickPlugin.share.showed {
                         colorString = .hideColorCheck
@@ -589,8 +567,7 @@ public class LocalConsole: NSObject {
                     let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
                     let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
                     let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
-                    let content_fps = PTActionSheetItem(title: .fps,image: UIImage.fpsImage(),itemAlignment: .left)
-                    let content_memory = PTActionSheetItem(title: memoryString,image: UIImage.memoryImage(),itemAlignment: .left)
+                    let content_performance = PTActionSheetItem(title: .Performance,image: UIImage.performanceImage,itemAlignment: .left)
                     let content_color = PTActionSheetItem(title: colorString,image: UIImage.colorImage(),itemAlignment: .left)
                     let content_ruler = PTActionSheetItem(title: rulerString,image: UIImage.rulerImage(),itemAlignment: .left)
                     let content_appDocument = PTActionSheetItem(title: .appDocument,image: UIImage.docImage,itemAlignment: .left)
@@ -599,7 +576,7 @@ public class LocalConsole: NSObject {
                     let content_foxnet = PTActionSheetItem(title: .foxNet,image: UIImage.dev3thPartyImage,itemAlignment: .left)
                     let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
 
-                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_fps,content_memory,content_color,content_ruler,content_appDocument,content_flex,content_hyperioniOS,content_foxnet,content_inapp]
+                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_hyperioniOS,content_foxnet,content_inapp]
 
                     var devMaskString = ""
                     var devMaskBubbleString = ""
@@ -654,10 +631,8 @@ public class LocalConsole: NSObject {
                             self.clear()
                         } else if title == .userDefaults {
                             self.userdefaultAction()
-                        } else if title == .fps {
-                            self.fpsFunction()
-                        } else if title == .showMemoryCheck || title == .hideMemoryCheck {
-                            self.memoryFunction()
+                        } else if title == .Performance {
+                            self.performanceControlOpen()
                         } else if title == .hideColorCheck || title == .showColorCheck {
                             self.colorAction()
                         } else if title == .hideRulerCheck || title == .showRulerCheck {
@@ -811,14 +786,10 @@ public class LocalConsole: NSObject {
             debugActions.append(userDefaults)
         }
 
-        let fps = UIAction(title: .fps, image: UIImage.fpsImage()) { _ in
-            self.fpsFunction()
+        let performance = UIAction(title: .Performance, image: UIImage.performanceImage) { _ in
+            self.performanceControlOpen()
         }
-
-        let memory = UIAction(title: PTMemory.share.closed ? .showMemoryCheck : .hideMemoryCheck, image: UIImage.memoryImage()) { _ in
-            self.memoryFunction()
-        }
-
+        
         let colorCheck = UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { _ in
             self.colorAction()
         }
@@ -910,7 +881,7 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [fps, memory, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, HyperioniOS, FoxNet, InApp])
+        debugActions.append(contentsOf: [performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, HyperioniOS, FoxNet, InApp])
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -955,6 +926,26 @@ public class LocalConsole: NSObject {
         currentText = ""
     }
     
+    func performanceControlOpen() {
+        let vc = PTDebugPerformanceViewController(hideBaseNavBar: true)
+        let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
+        let currentVC = PTUtils.getCurrentVC()
+        if currentVC is PTSideMenuControl {
+            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
+            if let presentedVC = currentVC?.presentedViewController {
+                presentedVC.present(sheet, animated: true)
+            } else {
+                currentVC!.present(sheet, animated: true)
+            }
+        } else {
+            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                presentedVC.present(sheet, animated: true)
+            } else {
+                PTUtils.getCurrentVC().present(sheet, animated: true)
+            }
+        }
+    }
+    
     func maskOpenFunction() {
         if maskView != nil {
             PTCoreUserDefultsWrapper.AppDebbugMark = false
@@ -981,8 +972,8 @@ public class LocalConsole: NSObject {
         debugBordersEnabled = false
         PTViewRulerPlugin.share.hide()
         PTColorPickPlugin.share.close()
-        PTMemory.share.stopMonitoring()
-        PCheckAppStatus.shared.close()
+        PTDebugPerformanceToolKit.shared.floatingShow = false
+        PTDebugPerformanceToolKit.shared.performanceClose()
         ResizeController.shared.isActive = false
         PTCoreUserDefultsWrapper.AppDebbugMark = false
         maskView?.removeFromSuperview()
@@ -1087,18 +1078,6 @@ public class LocalConsole: NSObject {
         } else {
             PTColorPickPlugin.share.show()
         }
-    }
-    
-    func memoryFunction() {
-        if PTMemory.share.closed {
-            PTMemory.share.startMonitoring()
-        } else {
-            PTMemory.share.stopMonitoring()
-        }
-    }
-    
-    func fpsFunction() {
-        PCheckAppStatus.shared.open()
     }
     
     func userdefaultAction() {
