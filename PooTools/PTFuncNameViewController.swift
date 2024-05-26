@@ -202,7 +202,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let cleanCaches = self.rowBaseModel(name: .cleanCache)
         cleanCaches.cellDescFont = .appfont(size: 12)
         cleanCaches.desc = "缓存:\(String(format: "%@", PCleanCache.getCacheSize()))"
-
+        
         let touchID = self.rowBaseModel(name: .touchID)
 
         let rotation = self.rowBaseModel(name: .rotation)

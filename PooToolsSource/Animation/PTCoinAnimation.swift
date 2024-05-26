@@ -21,7 +21,7 @@ public class PTCoinAnimation: UIView {
     public lazy var showLabel:UILabel = {
         let view = UILabel()
         view.textAlignment = .center
-        view.textColor = UIColor.colorBase(R: 254/255, G: 211/255, B: 10/255, A: 1)
+        view.textColor = UIColor(red: 254/255, green:  211/255, blue: 10/255, alpha: 1)
         view.isHidden = true
         return view
     }()

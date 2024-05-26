@@ -205,7 +205,7 @@ public class PTLoadingHud:UIView {
                     let colorBPercent = 1 - colorAPercent
                     let transparentColorA = UIColor(red: self.finalColor.rgbaValueModel().redFloat, green: self.finalColor.rgbaValueModel().greenFloat, blue: self.finalColor.rgbaValueModel().blueFloat, alpha: colorAPercent)
                     let transparentColorB = UIColor(red: self.prevColor.rgbaValueModel().redFloat, green: self.prevColor.rgbaValueModel().greenFloat, blue: self.prevColor.rgbaValueModel().blueFloat, alpha: colorBPercent)
-                    self.gradualColor = transparentColorA.mixColor(otherColor: transparentColorB)
+                    self.gradualColor = transparentColorA.mixed(withColor: transparentColorB)
                 }
                 
                 if self.waitingFrameCount == Int(maxWaitingFrame) {

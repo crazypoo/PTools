@@ -196,7 +196,7 @@ public class PTScanQRController: PTBaseViewController {
         view.font = .appfont(size: 16,bold: true)
         view.textAlignment = .center
         view.textColor = .white
-        view.backgroundColor = UIColor.colorBase(R: 54/255, G: 85/255, B: 230/255, A: 0.2)
+        view.backgroundColor = UIColor(red: 54/255, green:  85/255, blue: 230/255, alpha: 0.2)
         return view
     }()
     
@@ -520,7 +520,7 @@ public class PTScanQRController: PTBaseViewController {
 extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
     func showMaskView(showTips:Bool)->UIView {
         let maskView = UIView(frame: view.bounds)
-        maskView.backgroundColor = UIColor.colorBase(R: 0, G: 0, B: 0, A: 0.6)
+        maskView.backgroundColor = UIColor(red: 0, green:  0, blue: 0, alpha: 0.6)
         if showTips {
             let cancel = UIButton(type: .custom)
             cancel.setTitleColor(.white, for: .normal)
