@@ -21,10 +21,10 @@ extension DynamicColor {
      - Parameter r: The red component of the color object, specified as a value from 0.0 to 255.0.
      - Parameter g: The green component of the color object, specified as a value from 0.0 to 255.0.
      - Parameter b: The blue component of the color object, specified as a value from 0.0 to 255.0.
-     - Parameter a: The opacity value of the color object, specified as a value from 0.0 to 255.0. The default value is 255.
+     - Parameter a: The opacity value of the color object, specified as a value from 0.0 to 1.0. The default value is 255.
      */
-    convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 255) {
-      self.init(red: clip(r, 0, 255) / 255, green: clip(g, 0, 255) / 255, blue: clip(b, 0, 255) / 255, alpha: clip(a, 0, 255) / 255)
+    convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1) {
+      self.init(red: clip(r, 0, 255) / 255, green: clip(g, 0, 255) / 255, blue: clip(b, 0, 255) / 255, alpha: clip(a, 0, 1))
     }
     
     // MARK: color 转 RGBA

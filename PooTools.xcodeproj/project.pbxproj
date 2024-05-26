@@ -241,6 +241,9 @@
 		557E3A5E2C0322C5002466A0 /* PTDynamicGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A5D2C0322C5002466A0 /* PTDynamicGradient.swift */; };
 		557E3A602C032328002466A0 /* Color+PTMixingEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A5F2C032328002466A0 /* Color+PTMixingEX.swift */; };
 		557E3A622C032C75002466A0 /* Color+PTcmykEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A612C032C75002466A0 /* Color+PTcmykEX.swift */; };
+		557E3A652C034213002466A0 /* FontName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A642C034213002466A0 /* FontName.swift */; };
+		557E3A682C03487B002466A0 /* UIImage+PTpdfEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A672C03487B002466A0 /* UIImage+PTpdfEX.swift */; };
+		557E3A6A2C034B90002466A0 /* PTViewToPDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A692C034B90002466A0 /* PTViewToPDF.swift */; };
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
@@ -786,6 +789,9 @@
 		557E3A5D2C0322C5002466A0 /* PTDynamicGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDynamicGradient.swift; sourceTree = "<group>"; };
 		557E3A5F2C032328002466A0 /* Color+PTMixingEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PTMixingEX.swift"; sourceTree = "<group>"; };
 		557E3A612C032C75002466A0 /* Color+PTcmykEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PTcmykEX.swift"; sourceTree = "<group>"; };
+		557E3A642C034213002466A0 /* FontName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontName.swift; sourceTree = "<group>"; };
+		557E3A672C03487B002466A0 /* UIImage+PTpdfEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+PTpdfEX.swift"; sourceTree = "<group>"; };
+		557E3A692C034B90002466A0 /* PTViewToPDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTViewToPDF.swift; sourceTree = "<group>"; };
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
@@ -1157,6 +1163,8 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				557E3A662C03485D002466A0 /* PDF */,
+				557E3A632C0341FE002466A0 /* Font */,
 				557E3A462C030C4B002466A0 /* Colors */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
@@ -1849,6 +1857,23 @@
 				557E3A472C030C8C002466A0 /* UIImage+PTColorEX.swift */,
 			);
 			path = Colors;
+			sourceTree = "<group>";
+		};
+		557E3A632C0341FE002466A0 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				557E3A642C034213002466A0 /* FontName.swift */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		557E3A662C03485D002466A0 /* PDF */ = {
+			isa = PBXGroup;
+			children = (
+				557E3A672C03487B002466A0 /* UIImage+PTpdfEX.swift */,
+				557E3A692C034B90002466A0 /* PTViewToPDF.swift */,
+			);
+			path = PDF;
 			sourceTree = "<group>";
 		};
 		557FC36A2966A2BC00991C36 /* ImagePicker */ = {
@@ -3024,6 +3049,7 @@
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
+				557E3A682C03487B002466A0 /* UIImage+PTpdfEX.swift in Sources */,
 				55CFC6942B44730F00CC6CF5 /* NSImage+PTEX.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */,
 				555818BE2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift in Sources */,
@@ -3038,6 +3064,7 @@
 				552893132AE65125009135F9 /* PTTip.swift in Sources */,
 				556CA4AD2B28F66200A5B189 /* ConverterDegree.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
+				557E3A6A2C034B90002466A0 /* PTViewToPDF.swift in Sources */,
 				5507FF9E2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift in Sources */,
 				556CA4F82B295D9600A5B189 /* UIColor+VideoEditorEX.swift in Sources */,
 				556CA4BE2B29500600A5B189 /* Provider.swift in Sources */,
@@ -3152,6 +3179,7 @@
 				555818D02AFA7E400051C0AA /* UIToolbar+PTEX.swift in Sources */,
 				550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */,
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
+				557E3A652C034213002466A0 /* FontName.swift in Sources */,
 				55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */,
 				555818C02AFA63FB0051C0AA /* View+PTEX.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
