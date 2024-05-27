@@ -421,6 +421,8 @@
 		55C409842C04B816009C0FB6 /* PTNetworkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */; };
 		55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */; };
 		55C409882C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */; };
+		55C4098A2C04DE64009C0FB6 /* PTLeakListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */; };
+		55C4098C2C04DF4E009C0FB6 /* PTLeakViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */; };
 		55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */; };
 		55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
@@ -1018,6 +1020,8 @@
 		55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkViewModel.swift; sourceTree = "<group>"; };
 		55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkWatcherCell.swift; sourceTree = "<group>"; };
 		55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkWatcherDetailViewController.swift; sourceTree = "<group>"; };
+		55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLeakListViewController.swift; sourceTree = "<group>"; };
+		55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLeakViewModel.swift; sourceTree = "<group>"; };
 		55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDynamicNotificationView.swift; sourceTree = "<group>"; };
 		55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeedPanel.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
@@ -1697,6 +1701,8 @@
 				55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */,
 				55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */,
 				55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */,
+				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
+				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -3112,6 +3118,7 @@
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
+				55C4098C2C04DF4E009C0FB6 /* PTLeakViewModel.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				557E3A922C0446AB002466A0 /* PTCrashViewModel.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
@@ -3430,6 +3437,7 @@
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
 				552893172AE78F79009135F9 /* PTMediaBrowserCell.swift in Sources */,
 				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
+				55C4098A2C04DE64009C0FB6 /* PTLeakListViewController.swift in Sources */,
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,
 				5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */,
 				55B1F0A62B25821E00247ED1 /* PTPermissionSettingViewController.swift in Sources */,

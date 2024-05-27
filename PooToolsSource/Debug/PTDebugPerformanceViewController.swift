@@ -11,6 +11,7 @@ import SnapKit
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SwifterSwift
 
 enum PerformanceType: String,CaseIterable {
     case CPU = "CPU"
@@ -107,7 +108,8 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                     UIDevice.pt.impactFeedbackGenerator(style: .heavy)
                     PTDebugPerformanceToolKit.generate()
                 } else if cellModel.name == "⚠️show leaks" {
-                    PTNSLogConsole("1321231123123123")
+                    let vc = PTLeakListViewController()
+                    self.navigationController?.pushViewController(vc)
                 } else if cellModel.name == "Create Leak" {
                     let vc = PTCreateLeakViewController()
                     let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
