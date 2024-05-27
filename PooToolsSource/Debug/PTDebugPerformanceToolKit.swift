@@ -65,6 +65,10 @@ final class PTDebugPerformanceToolKit {
     var maxMemory: CGFloat = 0
     var memoryMeasurements: [CGFloat] = []
 
+    var currentLeaks: CGFloat = 0
+    var maxLeaks: CGFloat = 0
+    var leaksMeasurements: [CGFloat] = []
+
     var timeBetweenMeasurements: TimeInterval = 1
     var controllerMarked: TimeInterval = 120
 
@@ -99,7 +103,8 @@ final class PTDebugPerformanceToolKit {
         cpuMeasurements = Array(repeating: 0, count: measurementsLimit)
         memoryMeasurements = Array(repeating: 0, count: measurementsLimit)
         fpsMeasurements = Array(repeating: 0, count: measurementsLimit)
-        
+        leaksMeasurements = Array(repeating: 0, count: measurementsLimit)
+
         floatingButtonCreate()
     }
     
@@ -121,6 +126,10 @@ final class PTDebugPerformanceToolKit {
             minFPS = min(minFPS, currentFPS)
         }
         maxFPS = max(maxFPS, currentFPS)
+        
+        currentLeaks = leak()
+        maxLeaks = max(maxLeaks, currentLeaks)
+        leaksMeasurements = array(leaksMeasurements, byAddingMeasurement: leak())
 
         PTGCDManager.gcdMain {
             self.updateFloatingView()
@@ -207,9 +216,13 @@ final class PTDebugPerformanceToolKit {
         CGFloat(fpsCounter.fpsValue)
     }
     
+    func leak() -> CGFloat {
+        CGFloat(PTPerformanceLeakDetector.leaks.filter(\.isActive).count)
+    }
+    
     private func updateFloatingView() {
         if floatingView != nil {
-            fpsLabel.text = "CPU:\(String(format: "%.1lf%%", currentCPU)) Memory:\(String(format: "%.1lfMB", currentMemory)) FPS:\(String(format: "%.0lf", currentFPS))"
+            fpsLabel.text = "CPU:\(String(format: "%.1lf%%", currentCPU)) Memory:\(String(format: "%.1lfMB", currentMemory)) FPS:\(String(format: "%.0lf", currentFPS)) Leaks:\(Int(currentLeaks))"
         }
     }
     

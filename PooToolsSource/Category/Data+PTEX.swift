@@ -13,6 +13,13 @@ import CryptoKit
 extension Data: PTProtocolCompatible {}
 
 public extension Data {
+    func formattedSize() -> String {
+        let byteCountFormatter = ByteCountFormatter()
+        byteCountFormatter.allowedUnits = [.useKB, .useMB, .useGB]
+
+        return byteCountFormatter.string(fromByteCount: Int64(count))
+    }
+    
     //MARK: 根據Data來獲取圖片的格式(底層方法)
     ///根據Data來獲取圖片的格式(底層方法)
     func detectImageType() -> PTAboutImageType {

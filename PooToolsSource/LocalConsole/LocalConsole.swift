@@ -50,6 +50,8 @@ extension String {
     static let respring = "Respring"
     static let debug = "Debug"
     static let debugController = "Debug Input Controller"
+    static let crashLog = "Crash log"
+
 }
 
 extension UIImage {
@@ -149,6 +151,7 @@ extension UIImage {
     }
     static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let performanceImage = UIImage(.eyeglasses).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let crashLogImage = UIImage(.exclamationmark.triangleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {
@@ -183,11 +186,25 @@ public class LocalConsole: NSObject {
     public var flex:PTActionTask?
     public var watchViews:PTActionTask?
     public var closeAllOutsideFunction:PTActionTask?
+    public var leakCallback: ((PTPerformanceLeak) -> Void)?
+
     public var isVisiable:Bool = PTCoreUserDefultsWrapper.AppDebugMode {
         didSet {
             guard oldValue != isVisiable else { return }
             PTCoreUserDefultsWrapper.AppDebugMode = isVisiable
             if isVisiable {
+                UIView.swizzleMethods()
+                UIWindow.db_swizzleMethods()
+                URLSessionConfiguration.swizzleMethods()
+                UIViewController.lvcdSwizzleLifecycleMethods()
+                StdoutCapture.startCapturing()
+                StderrCapture.startCapturing()
+                StderrCapture.syncData()
+                PTNetworkHelper.shared.enable()
+                PTLaunchTimeTracker.measureAppStartUpTime()
+                PTCrashManager.register()
+                PTPerformanceLeakDetector.delay = 1
+                PTPerformanceLeakDetector.callback = leakCallback
                 commitTextChanges(requestMenuUpdate: true)
                 createSystemLogView()
                 terminal!.transform = .init(scaleX: 0.9, y: 0.9)
@@ -567,6 +584,7 @@ public class LocalConsole: NSObject {
                     let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
                     let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
                     let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
+                    let content_crashLog = PTActionSheetItem(title: .crashLog,image: UIImage.crashLogImage,itemAlignment: .left)
                     let content_performance = PTActionSheetItem(title: .Performance,image: UIImage.performanceImage,itemAlignment: .left)
                     let content_color = PTActionSheetItem(title: colorString,image: UIImage.colorImage(),itemAlignment: .left)
                     let content_ruler = PTActionSheetItem(title: rulerString,image: UIImage.rulerImage(),itemAlignment: .left)
@@ -576,7 +594,7 @@ public class LocalConsole: NSObject {
                     let content_foxnet = PTActionSheetItem(title: .foxNet,image: UIImage.dev3thPartyImage,itemAlignment: .left)
                     let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
 
-                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_hyperioniOS,content_foxnet,content_inapp]
+                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_hyperioniOS,content_foxnet,content_inapp]
 
                     var devMaskString = ""
                     var devMaskBubbleString = ""
@@ -657,6 +675,8 @@ public class LocalConsole: NSObject {
                             self.systemReport()
                         } else if title == .displayReport {
                             self.displayReport()
+                        } else if title == .crashLog {
+                            self.crashLogControlOpen()
                         }
                     }
                 }
@@ -786,6 +806,10 @@ public class LocalConsole: NSObject {
             debugActions.append(userDefaults)
         }
 
+        let crashLog = UIAction(title: .crashLog, image: UIImage.crashLogImage) { _ in
+            self.crashLogControlOpen()
+        }
+        
         let performance = UIAction(title: .Performance, image: UIImage.performanceImage) { _ in
             self.performanceControlOpen()
         }
@@ -881,7 +905,7 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, HyperioniOS, FoxNet, InApp])
+        debugActions.append(contentsOf: [crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, HyperioniOS, FoxNet, InApp])
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -929,6 +953,27 @@ public class LocalConsole: NSObject {
     func performanceControlOpen() {
         let vc = PTDebugPerformanceViewController(hideBaseNavBar: true)
         let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
+        let currentVC = PTUtils.getCurrentVC()
+        if currentVC is PTSideMenuControl {
+            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
+            if let presentedVC = currentVC?.presentedViewController {
+                presentedVC.present(sheet, animated: true)
+            } else {
+                currentVC!.present(sheet, animated: true)
+            }
+        } else {
+            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                presentedVC.present(sheet, animated: true)
+            } else {
+                PTUtils.getCurrentVC().present(sheet, animated: true)
+            }
+        }
+    }
+    
+    func crashLogControlOpen() {
+        let vc = PTCrashLogViewController(hideBaseNavBar: true)
+        let nav = PTBaseNavControl(rootViewController: vc)
+        let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.9)])
         let currentVC = PTUtils.getCurrentVC()
         if currentVC is PTSideMenuControl {
             let currentVC = (currentVC as! PTSideMenuControl).contentViewController

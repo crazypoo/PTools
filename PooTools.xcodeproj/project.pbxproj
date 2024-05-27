@@ -153,6 +153,7 @@
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
+		5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */; };
 		555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */; };
 		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
 		555818A92AF8DE8F0051C0AA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 555818A82AF8DE8F0051C0AA /* Settings.bundle */; };
@@ -249,6 +250,40 @@
 		557E3A722C037B94002466A0 /* PTPerformanceChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A712C037B94002466A0 /* PTPerformanceChartView.swift */; };
 		557E3A742C0386C4002466A0 /* PTPerformanceSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A732C0386C4002466A0 /* PTPerformanceSegmentCell.swift */; };
 		557E3A762C038E26002466A0 /* PTPerformanceChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A752C038E26002466A0 /* PTPerformanceChartCell.swift */; };
+		557E3A782C042938002466A0 /* PTPerformanceLeakDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A772C042938002466A0 /* PTPerformanceLeakDetector.swift */; };
+		557E3A7A2C042F7D002466A0 /* PTCreateLeakViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A792C042F7D002466A0 /* PTCreateLeakViewController.swift */; };
+		557E3A7C2C0437DC002466A0 /* PTCrashHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A7B2C0437DC002466A0 /* PTCrashHandler.swift */; };
+		557E3A7E2C043842002466A0 /* PTCrashModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A7D2C043842002466A0 /* PTCrashModel.swift */; };
+		557E3A802C04388E002466A0 /* PTCrashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A7F2C04388E002466A0 /* PTCrashManager.swift */; };
+		557E3A822C04396D002466A0 /* PTDebugUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A812C04396D002466A0 /* PTDebugUserInfo.swift */; };
+		557E3A842C043BAD002466A0 /* PTLaunchTimeTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */; };
+		557E3A862C043E7D002466A0 /* PTCrashLogOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A852C043E7D002466A0 /* PTCrashLogOutput.swift */; };
+		557E3A882C043F06002466A0 /* UIWindow+PTDebugEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */; };
+		557E3A8A2C044082002466A0 /* Thread+PTDebugEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A892C044082002466A0 /* Thread+PTDebugEx.swift */; };
+		557E3A8C2C0440FD002466A0 /* PTCallStackParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A8B2C0440FD002466A0 /* PTCallStackParser.swift */; };
+		557E3A8E2C044157002466A0 /* CwlDemangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A8D2C044157002466A0 /* CwlDemangle.swift */; };
+		557E3A902C0441D6002466A0 /* String+PTDebugEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */; };
+		557E3A922C0446AB002466A0 /* PTCrashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A912C0446AB002466A0 /* PTCrashViewModel.swift */; };
+		557E3A942C044CCE002466A0 /* PTCrashLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A932C044CCE002466A0 /* PTCrashLogViewController.swift */; };
+		557E3A962C046472002466A0 /* UIView+PTSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A952C046472002466A0 /* UIView+PTSwizzle.swift */; };
+		557E3A982C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */; };
+		557E3A9A2C046CC8002466A0 /* PTCustomHTTPProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */; };
+		557E3A9C2C046D85002466A0 /* URLCache+PTDebugEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */; };
+		557E3A9E2C046DDA002466A0 /* PTThreadOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */; };
+		557E3AA02C046E8E002466A0 /* PTNetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */; };
+		557E3AA22C046EE0002466A0 /* PTHttpDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */; };
+		557E3AA42C046F10002466A0 /* PTHttpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AA32C046F10002466A0 /* PTHttpModel.swift */; };
+		557E3AA62C046F51002466A0 /* PTErrorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AA52C046F51002466A0 /* PTErrorHelper.swift */; };
+		557E3AA82C046F85002466A0 /* PTCacheStoragePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */; };
+		557E3AAA2C046FF7002466A0 /* InputStream+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AA92C046FF7002466A0 /* InputStream+PTEX.swift */; };
+		557E3AAC2C0471BF002466A0 /* PTApplicationDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */; };
+		557E3AAE2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AAD2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift */; };
+		557E3AB02C047517002466A0 /* StdoutCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AAF2C047517002466A0 /* StdoutCapture.swift */; };
+		557E3AB22C04752F002466A0 /* StderrCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AB12C04752F002466A0 /* StderrCapture.swift */; };
+		557E3AB42C047556002466A0 /* FileHandle+PTDebugEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AB32C047556002466A0 /* FileHandle+PTDebugEx.swift */; };
+		557E3AB62C047575002466A0 /* ConsoleOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AB52C047575002466A0 /* ConsoleOutput.swift */; };
+		557E3AB82C047E64002466A0 /* PTCrashDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AB72C047E64002466A0 /* PTCrashDetailModel.swift */; };
+		557E3ABA2C047EC6002466A0 /* PTCrashDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */; };
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
@@ -705,6 +740,7 @@
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
+		5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugSnapshotViewController.swift; sourceTree = "<group>"; };
 		555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeaderAndFooter.swift; sourceTree = "<group>"; };
 		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
 		555818A82AF8DE8F0051C0AA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -801,6 +837,40 @@
 		557E3A712C037B94002466A0 /* PTPerformanceChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPerformanceChartView.swift; sourceTree = "<group>"; };
 		557E3A732C0386C4002466A0 /* PTPerformanceSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPerformanceSegmentCell.swift; sourceTree = "<group>"; };
 		557E3A752C038E26002466A0 /* PTPerformanceChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPerformanceChartCell.swift; sourceTree = "<group>"; };
+		557E3A772C042938002466A0 /* PTPerformanceLeakDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPerformanceLeakDetector.swift; sourceTree = "<group>"; };
+		557E3A792C042F7D002466A0 /* PTCreateLeakViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCreateLeakViewController.swift; sourceTree = "<group>"; };
+		557E3A7B2C0437DC002466A0 /* PTCrashHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashHandler.swift; sourceTree = "<group>"; };
+		557E3A7D2C043842002466A0 /* PTCrashModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashModel.swift; sourceTree = "<group>"; };
+		557E3A7F2C04388E002466A0 /* PTCrashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashManager.swift; sourceTree = "<group>"; };
+		557E3A812C04396D002466A0 /* PTDebugUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugUserInfo.swift; sourceTree = "<group>"; };
+		557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLaunchTimeTracker.swift; sourceTree = "<group>"; };
+		557E3A852C043E7D002466A0 /* PTCrashLogOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashLogOutput.swift; sourceTree = "<group>"; };
+		557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+PTDebugEx.swift"; sourceTree = "<group>"; };
+		557E3A892C044082002466A0 /* Thread+PTDebugEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread+PTDebugEx.swift"; sourceTree = "<group>"; };
+		557E3A8B2C0440FD002466A0 /* PTCallStackParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCallStackParser.swift; sourceTree = "<group>"; };
+		557E3A8D2C044157002466A0 /* CwlDemangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlDemangle.swift; sourceTree = "<group>"; };
+		557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PTDebugEx.swift"; sourceTree = "<group>"; };
+		557E3A912C0446AB002466A0 /* PTCrashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashViewModel.swift; sourceTree = "<group>"; };
+		557E3A932C044CCE002466A0 /* PTCrashLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashLogViewController.swift; sourceTree = "<group>"; };
+		557E3A952C046472002466A0 /* UIView+PTSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTSwizzle.swift"; sourceTree = "<group>"; };
+		557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+PTSwizzle.swift"; sourceTree = "<group>"; };
+		557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomHTTPProtocol.swift; sourceTree = "<group>"; };
+		557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLCache+PTDebugEX.swift"; sourceTree = "<group>"; };
+		557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTThreadOperator.swift; sourceTree = "<group>"; };
+		557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkHelper.swift; sourceTree = "<group>"; };
+		557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHttpDatasource.swift; sourceTree = "<group>"; };
+		557E3AA32C046F10002466A0 /* PTHttpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHttpModel.swift; sourceTree = "<group>"; };
+		557E3AA52C046F51002466A0 /* PTErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTErrorHelper.swift; sourceTree = "<group>"; };
+		557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCacheStoragePolicy.swift; sourceTree = "<group>"; };
+		557E3AA92C046FF7002466A0 /* InputStream+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+PTEX.swift"; sourceTree = "<group>"; };
+		557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTApplicationDirectories.swift; sourceTree = "<group>"; };
+		557E3AAD2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+PTEX.swift"; sourceTree = "<group>"; };
+		557E3AAF2C047517002466A0 /* StdoutCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StdoutCapture.swift; sourceTree = "<group>"; };
+		557E3AB12C04752F002466A0 /* StderrCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StderrCapture.swift; sourceTree = "<group>"; };
+		557E3AB32C047556002466A0 /* FileHandle+PTDebugEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileHandle+PTDebugEx.swift"; sourceTree = "<group>"; };
+		557E3AB52C047575002466A0 /* ConsoleOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleOutput.swift; sourceTree = "<group>"; };
+		557E3AB72C047E64002466A0 /* PTCrashDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashDetailModel.swift; sourceTree = "<group>"; };
+		557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCrashDetailViewController.swift; sourceTree = "<group>"; };
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
@@ -1562,24 +1632,59 @@
 		55024DF029F370DB00244E44 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				557E3AB52C047575002466A0 /* ConsoleOutput.swift */,
+				557E3A8D2C044157002466A0 /* CwlDemangle.swift */,
+				557E3AB32C047556002466A0 /* FileHandle+PTDebugEx.swift */,
+				557E3AAD2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift */,
+				557E3AA92C046FF7002466A0 /* InputStream+PTEX.swift */,
+				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
-				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
-				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
-				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
+				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
+				557E3A8B2C0440FD002466A0 /* PTCallStackParser.swift */,
 				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
-				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
-				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
-				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
-				55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */,
-				55E3BBC42ABE193200858348 /* PTFileBrowser.swift */,
-				5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */,
-				553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */,
-				557E3A6B2C036CCD002466A0 /* PTDebugPerformanceViewController.swift */,
+				557E3AB72C047E64002466A0 /* PTCrashDetailModel.swift */,
+				557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */,
+				557E3A7B2C0437DC002466A0 /* PTCrashHandler.swift */,
+				557E3A852C043E7D002466A0 /* PTCrashLogOutput.swift */,
+				557E3A932C044CCE002466A0 /* PTCrashLogViewController.swift */,
+				557E3A7F2C04388E002466A0 /* PTCrashManager.swift */,
+				557E3A7D2C043842002466A0 /* PTCrashModel.swift */,
+				557E3A912C0446AB002466A0 /* PTCrashViewModel.swift */,
+				557E3A792C042F7D002466A0 /* PTCreateLeakViewController.swift */,
+				557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */,
+				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
 				557E3A6D2C036D72002466A0 /* PTDebugPerformanceToolKit.swift */,
+				557E3A6B2C036CCD002466A0 /* PTDebugPerformanceViewController.swift */,
+				557E3A812C04396D002466A0 /* PTDebugUserInfo.swift */,
+				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
+				5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */,
+				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
+				557E3AA52C046F51002466A0 /* PTErrorHelper.swift */,
+				55E3BBC42ABE193200858348 /* PTFileBrowser.swift */,
+				55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */,
+				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
 				557E3A6F2C036DE3002466A0 /* PTFPSTool.swift */,
-				557E3A712C037B94002466A0 /* PTPerformanceChartView.swift */,
-				557E3A732C0386C4002466A0 /* PTPerformanceSegmentCell.swift */,
+				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
+				557E3AA32C046F10002466A0 /* PTHttpModel.swift */,
+				557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */,
+				557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */,
 				557E3A752C038E26002466A0 /* PTPerformanceChartCell.swift */,
+				557E3A712C037B94002466A0 /* PTPerformanceChartView.swift */,
+				557E3A772C042938002466A0 /* PTPerformanceLeakDetector.swift */,
+				557E3A732C0386C4002466A0 /* PTPerformanceSegmentCell.swift */,
+				557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */,
+				553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */,
+				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
+				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
+				557E3AB12C04752F002466A0 /* StderrCapture.swift */,
+				557E3AAF2C047517002466A0 /* StdoutCapture.swift */,
+				557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */,
+				557E3A892C044082002466A0 /* Thread+PTDebugEx.swift */,
+				557E3A952C046472002466A0 /* UIView+PTSwizzle.swift */,
+				557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */,
+				557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */,
+				557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */,
+				5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -2882,6 +2987,7 @@
 				55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */,
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
+				557E3AAA2C046FF7002466A0 /* InputStream+PTEX.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
@@ -2891,13 +2997,16 @@
 				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,
 				55B4FA192AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift in Sources */,
 				556CA4BA2B29500600A5B189 /* MovieFileType.swift in Sources */,
+				557E3AAC2C0471BF002466A0 /* PTApplicationDirectories.swift in Sources */,
 				559C3D552B282F9E00EE46BC /* CropResult.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
 				55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */,
+				557E3AB02C047517002466A0 /* StdoutCapture.swift in Sources */,
 				55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */,
+				557E3AA82C046F85002466A0 /* PTCacheStoragePolicy.swift in Sources */,
 				559C3D5C2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift in Sources */,
 				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
@@ -2912,6 +3021,8 @@
 				555818BC2AFA5D2C0051C0AA /* PTAlertTips.swift in Sources */,
 				557E3A562C031F69002466A0 /* Color+PThslEX.swift in Sources */,
 				558B77C32BBC52B300BD7AB0 /* PTChatView.swift in Sources */,
+				557E3A842C043BAD002466A0 /* PTLaunchTimeTracker.swift in Sources */,
+				557E3A7C2C0437DC002466A0 /* PTCrashHandler.swift in Sources */,
 				557E3A742C0386C4002466A0 /* PTPerformanceSegmentCell.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
@@ -2929,6 +3040,7 @@
 				55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				555818C82AFA7BDB0051C0AA /* UINavigationController+PTEX.swift in Sources */,
+				557E3A8C2C0440FD002466A0 /* PTCallStackParser.swift in Sources */,
 				555818D42AFA7FFB0051C0AA /* CGPoint+PTEX.swift in Sources */,
 				550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */,
 				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
@@ -2939,19 +3051,24 @@
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
 				5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */,
 				550CE4A02AF0A60D0052539D /* PTUpdateTipsViewController.swift in Sources */,
+				557E3A782C042938002466A0 /* PTPerformanceLeakDetector.swift in Sources */,
 				557E3A622C032C75002466A0 /* Color+PTcmykEX.swift in Sources */,
 				559C3D562B282F9E00EE46BC /* CropDimView.swift in Sources */,
 				55B4FA2E2AE10A16006D35F3 /* PTPermissionMic.swift in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
+				557E3ABA2C047EC6002466A0 /* PTCrashDetailViewController.swift in Sources */,
 				55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				557E3A5C2C032170002466A0 /* Color+PTDerivingEX.swift in Sources */,
+				557E3A862C043E7D002466A0 /* PTCrashLogOutput.swift in Sources */,
 				55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */,
 				555818CA2AFA7CBA0051C0AA /* UISegmentedControl+PTEX.swift in Sources */,
 				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
 				557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */,
+				557E3A902C0441D6002466A0 /* String+PTDebugEx.swift in Sources */,
+				557E3A9A2C046CC8002466A0 /* PTCustomHTTPProtocol.swift in Sources */,
 				55BCB9742B1732030016A4C2 /* PTMediaLibCell.swift in Sources */,
 				55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */,
 				552F07902B15C66D00CB47CD /* PHAsset+PTEX.swift in Sources */,
@@ -2976,11 +3093,13 @@
 				55F162EA2B1951E500320925 /* PTVideoEditorConfig.swift in Sources */,
 				555EEEAE2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift in Sources */,
 				555818AD2AFA33570051C0AA /* PTRouteViewController.swift in Sources */,
+				557E3A9E2C046DDA002466A0 /* PTThreadOperator.swift in Sources */,
 				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
+				557E3A922C0446AB002466A0 /* PTCrashViewModel.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* PTLayoutButton.swift in Sources */,
@@ -2990,6 +3109,7 @@
 				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				55BA09482BC0618D00F58126 /* CLGeocoder+PTEX.swift in Sources */,
+				557E3AA62C046F51002466A0 /* PTErrorHelper.swift in Sources */,
 				558B77BE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
@@ -3038,7 +3158,9 @@
 				55BCB9792B1732030016A4C2 /* PTMediaLibConfig.swift in Sources */,
 				55BCB9772B1732030016A4C2 /* PTFetchImageOperation.swift in Sources */,
 				55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */,
+				557E3A7A2C042F7D002466A0 /* PTCreateLeakViewController.swift in Sources */,
 				555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */,
+				557E3A962C046472002466A0 /* UIView+PTSwizzle.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
@@ -3064,6 +3186,7 @@
 				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
 				557E3A682C03487B002466A0 /* UIImage+PTpdfEX.swift in Sources */,
 				55CFC6942B44730F00CC6CF5 /* NSImage+PTEX.swift in Sources */,
+				557E3A8A2C044082002466A0 /* Thread+PTDebugEx.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */,
 				555818BE2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
@@ -3089,8 +3212,10 @@
 				55B13D5A2B1AF03F00C67EDA /* PTAdjustToolCell.swift in Sources */,
 				55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
+				557E3AB42C047556002466A0 /* FileHandle+PTDebugEx.swift in Sources */,
 				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
+				557E3AA42C046F10002466A0 /* PTHttpModel.swift in Sources */,
 				557E3A602C032328002466A0 /* Color+PTMixingEX.swift in Sources */,
 				5571F60E2AFD228800DB4420 /* PTAppWindowsDelegate.swift in Sources */,
 				555EEEA92BDE116E00A60833 /* PTBadgeProtocol.swift in Sources */,
@@ -3105,6 +3230,7 @@
 				55DD93712B938C9B00F65872 /* UIView+Container.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
+				557E3A882C043F06002466A0 /* UIWindow+PTDebugEx.swift in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
 				55CFC6902B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift in Sources */,
 				55C905182A31B40200B7E83D /* PTUserDefultsViewController.swift in Sources */,
@@ -3120,12 +3246,14 @@
 				55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */,
 				558B77B92BBC52B300BD7AB0 /* PTChatBaseCell.swift in Sources */,
 				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
+				557E3AB82C047E64002466A0 /* PTCrashDetailModel.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				55BCB9732B1732030016A4C2 /* PTAdjustSliderView.swift in Sources */,
 				555818CE2AFA7D470051C0AA /* UITabBar+PTEX.swift in Sources */,
 				555EEEB02BDE31E700A60833 /* UITabBarItem+BadgeEX.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
 				556CA4BB2B29500600A5B189 /* Options.swift in Sources */,
+				557E3AB62C047575002466A0 /* ConsoleOutput.swift in Sources */,
 				552893212AE884A1009135F9 /* PTMediaBrowserConfig.swift in Sources */,
 				559C3D422B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
@@ -3159,6 +3287,7 @@
 				559C3D592B282F9E00EE46BC /* CropPickerView.swift in Sources */,
 				55102ADB2AFFD22E00E9529D /* PTLocalize.swift in Sources */,
 				55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */,
+				557E3A9C2C046D85002466A0 /* URLCache+PTDebugEX.swift in Sources */,
 				55DD936F2B938C6800F65872 /* UIViewController+Container.swift in Sources */,
 				550CE4A62AF130010052539D /* PTActiveLabel.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
@@ -3174,6 +3303,7 @@
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
 				559C3D532B282F9E00EE46BC /* LineButton.swift in Sources */,
 				55BCB9782B1732030016A4C2 /* PTMediaLibListModel.swift in Sources */,
+				5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */,
 				5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */,
 				55B4FA3F2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
@@ -3196,7 +3326,9 @@
 				55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */,
 				555818C02AFA63FB0051C0AA /* View+PTEX.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
+				557E3AB22C04752F002466A0 /* StderrCapture.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* PTCycleScrollView.swift in Sources */,
+				557E3A982C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift in Sources */,
 				55B4FA1C2AE0FEB6006D35F3 /* PTPermissionTracking.swift in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
@@ -3205,6 +3337,7 @@
 				558B77BC2BBC52B300BD7AB0 /* PTChatMapCell.swift in Sources */,
 				553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */,
 				55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */,
+				557E3A822C04396D002466A0 /* PTDebugUserInfo.swift in Sources */,
 				55F162E42B18E36200320925 /* C7Collector.swift in Sources */,
 				551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
@@ -3236,6 +3369,7 @@
 				555818C42AFA79580051C0AA /* UIEdgeInsets+PTEX.swift in Sources */,
 				556F84C42B4A874D008675EB /* AVPlayerItem+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
+				557E3A7E2C043842002466A0 /* PTCrashModel.swift in Sources */,
 				55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
@@ -3246,6 +3380,7 @@
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
+				557E3AAE2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift in Sources */,
 				5571F6092AFC251C00DB4420 /* PTAppUserdefault.swift in Sources */,
 				5530651B2B9718A300BFB4EA /* PTSheetOptions.swift in Sources */,
 				55DD937B2B94CE4800F65872 /* PTBaseSideController.swift in Sources */,
@@ -3253,6 +3388,7 @@
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
+				557E3A8E2C044157002466A0 /* CwlDemangle.swift in Sources */,
 				55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */,
 				5589FF5029A87BA700519383 /* PTContract.swift in Sources */,
 				55BCB9832B1733620016A4C2 /* PTEditInputViewController.swift in Sources */,
@@ -3268,6 +3404,7 @@
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
 				553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */,
+				557E3A942C044CCE002466A0 /* PTCrashLogViewController.swift in Sources */,
 				55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */,
 				556CA4C22B295A5600A5B189 /* PTVideoEditorToolsModel.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
@@ -3281,6 +3418,7 @@
 				5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */,
 				55B1F0A62B25821E00247ED1 /* PTPermissionSettingViewController.swift in Sources */,
 				5571F60C2AFD21BA00DB4420 /* PTAppDelegate.swift in Sources */,
+				557E3A802C04388E002466A0 /* PTCrashManager.swift in Sources */,
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
 				55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */,
 				55ED0D242B11834E00391136 /* AVCaptureDevice+PTEX.swift in Sources */,
@@ -3290,6 +3428,7 @@
 				55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */,
 				554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */,
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
+				557E3AA02C046E8E002466A0 /* PTNetworkHelper.swift in Sources */,
 				55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				556CA4BC2B29500600A5B189 /* Error.swift in Sources */,
@@ -3353,6 +3492,7 @@
 				55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */,
 				55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */,
 				557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */,
+				557E3AA22C046EE0002466A0 /* PTHttpDatasource.swift in Sources */,
 				55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				556CA4C02B29535900A5B189 /* NSLayoutConstraint+PTEX.swift in Sources */,
@@ -3524,7 +3664,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				MODULE_NAME = ExampleApp;
+				MODULE_NAME = PooTools;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -3572,7 +3712,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				MODULE_NAME = ExampleApp;
+				MODULE_NAME = PooTools;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

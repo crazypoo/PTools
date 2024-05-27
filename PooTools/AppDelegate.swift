@@ -91,7 +91,6 @@ class AppDelegate: PTAppWindowsDelegate {
 #if POOTOOLS_ROUTER
         registerRouter()
 #endif
-        
         PTAppBaseConfig.share.defaultPlaceholderImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 44))
         
         sideMenuConfig()

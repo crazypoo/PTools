@@ -13,6 +13,7 @@ enum PerformanceType: String,CaseIterable {
     case CPU = "CPU"
     case Memory = "Memory"
     case FPS = "FPS"
+    case Leak = "Leak"
 }
 
 class PTDebugPerformanceViewController: PTBaseViewController {
@@ -99,12 +100,31 @@ class PTDebugPerformanceViewController: PTBaseViewController {
             let itemRow = model.rows[indexPath.row]
             if itemRow.ID == PTFusionCell.ID {
                 let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                if cellModel.name == "Max Memory Usage" {
+                if cellModel.name == "Set Memory warning" {
                     UIDevice.pt.impactFeedbackGenerator(style: .heavy)
                     PTDebugPerformanceToolKit.generate()
+                } else if cellModel.name == "⚠️show leaks" {
+                    PTNSLogConsole("1321231123123123")
+                } else if cellModel.name == "Create Leak" {
+                    let vc = PTCreateLeakViewController()
+                    let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
+                    let currentVC = PTUtils.getCurrentVC()
+                    if currentVC is PTSideMenuControl {
+                        let currentVC = (currentVC as! PTSideMenuControl).contentViewController
+                        if let presentedVC = currentVC?.presentedViewController {
+                            presentedVC.present(sheet, animated: true)
+                        } else {
+                            currentVC!.present(sheet, animated: true)
+                        }
+                    } else {
+                        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                            presentedVC.present(sheet, animated: true)
+                        } else {
+                            PTUtils.getCurrentVC().present(sheet, animated: true)
+                        }
+                    }
                 }
             }
-
         }
         return view
     }()
@@ -154,6 +174,10 @@ class PTDebugPerformanceViewController: PTBaseViewController {
 
                 let cellChart = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as! PTPerformanceChartCell
                 self.configureChartCell(chartCell: cellChart, value: self.toolkit.maxMemory, measurements: self.toolkit.fpsMeasurements, markedValueFormat: "%.0lf")
+            case .Leak:
+                let usageModel = self.baseCellModel(name: "All Leak", value: "\(PTPerformanceLeakDetector.leaks.count)")
+                let cell = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 2)) as! PTFusionCell
+                cell.cellModel = usageModel
             }
         }
     }
@@ -200,11 +224,34 @@ class PTDebugPerformanceViewController: PTBaseViewController {
 
             let value_section = PTSection(headerID:"PerformanceValue",rows: [cpuUsage_row,cpuUsageMax_row])
             sections.append(value_section)
+        case .Leak:
+            let usageModel = self.baseCellModel(name: "All Leak", value: "\(PTPerformanceLeakDetector.leaks.count)")
+            let cpuUsage_row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: usageModel)
+            
+            let createLeakModel = PTFusionCellModel()
+            createLeakModel.name = "Create Leak"
+            createLeakModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
+            
+            let createLeak_row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: createLeakModel)
+
+            let showLeakModel = PTFusionCellModel()
+            showLeakModel.name = "⚠️show leaks"
+            showLeakModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
+
+            let showLeak_row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: showLeakModel)
+
+            let value_section = PTSection(headerID:"PerformanceValue",rows: [cpuUsage_row,createLeak_row,showLeak_row])
+            sections.append(value_section)
         }
         
-        let chart_row = PTRows(cls: PTPerformanceChartCell.self,ID: PTPerformanceChartCell.ID)
-        let chart_section = PTSection(headerID:"Chart",rows: [chart_row])
-        sections.append(chart_section)
+        switch segmentType {
+        case .CPU,.FPS,.Memory:
+            let chart_row = PTRows(cls: PTPerformanceChartCell.self,ID: PTPerformanceChartCell.ID)
+            let chart_section = PTSection(headerID:"Chart",rows: [chart_row])
+            sections.append(chart_section)
+        case .Leak:
+            break
+        }
 
         newCollectionView.showCollectionDetail(collectionData: sections)
     }

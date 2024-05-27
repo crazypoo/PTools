@@ -10,6 +10,43 @@ import UIKit
 
 extension Dictionary: PTProtocolCompatible { }
 
+public extension [String: Any] {
+    func formattedString() -> String {
+        var formattedString = ""
+        for (key, value) in self {
+            formattedString += "\(key): \(value)\n"
+        }
+        return formattedString
+    }
+}
+
+public extension [AnyHashable: Any] {
+    func convertKeysToString() -> [String: Value] {
+        var result: [String: Value] = [:]
+
+        for (key, value) in self {
+            if let keyString = key as? String {
+                result[keyString] = value
+            }
+        }
+
+        return result
+    }
+}
+
+public extension Dictionary {
+    func asJsonStr() -> String? {
+        var jsonStr: String?
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .sortedKeys)
+            jsonStr = String(decoding: jsonData, as: UTF8.self)
+        } catch {
+            return nil
+        }
+        return jsonStr
+    }
+}
+
 public extension Dictionary {
     //MARK: 检查字典里面是否有某个 key
     ///检查字典里面是否有某个 key
