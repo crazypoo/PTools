@@ -128,7 +128,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
             return cell
         }
-        collectionView.customerLayout = { sectionModel in
+        collectionView.customerLayout = { sectionIndex,sectionModel in
             var groupWidth:CGFloat = 0
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()

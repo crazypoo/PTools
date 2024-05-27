@@ -310,7 +310,7 @@ public class PTCollectionView: UIView {
             case .Horizontal:
                 group = UICollectionView.horizontalLayout(data: sectionModel!.rows,itemOriginalX: viewConfig.itemOriginalX,itemWidth: viewConfig.itemWidth,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace)
             case .Custom:
-                group = customerLayout!(sectionModel!)
+                group = customerLayout!(section,sectionModel!)
             }
         } else {
             let bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(1), heightDimension: NSCollectionLayoutDimension.absolute(1))
@@ -487,7 +487,7 @@ public class PTCollectionView: UIView {
     
     ///自定义情况下调用该设置
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
-    open var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
+    open var customerLayout:((Int,PTSection) -> NSCollectionLayoutGroup)?
     
     ///自定义情况下调用该设置
     ///这个是用来设置Header跟Footer的

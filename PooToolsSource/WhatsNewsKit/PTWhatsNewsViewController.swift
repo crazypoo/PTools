@@ -299,7 +299,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         config.showsHorizontalScrollIndicator = false
 
         let view = PTCollectionView(viewConfig: config)
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupH:CGFloat = 0

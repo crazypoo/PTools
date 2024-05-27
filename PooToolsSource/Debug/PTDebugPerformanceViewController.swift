@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 enum PerformanceType: String,CaseIterable {
     case CPU = "CPU"
@@ -35,7 +38,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             if sectionModel.headerID == "Floating" || sectionModel.headerID == "Segment" || sectionModel.headerID == "PerformanceValue" {
                 return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)
             } else if sectionModel.headerID == "Chart" {
@@ -128,7 +131,16 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         }
         return view
     }()
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
+#else
+        navigationController?.navigationBar.isHidden = true
+#endif
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -236,6 +248,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
 
             let showLeakModel = PTFusionCellModel()
             showLeakModel.name = "⚠️show leaks"
+            showLeakModel.accessoryType = .DisclosureIndicator
             showLeakModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
 
             let showLeak_row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: showLeakModel)

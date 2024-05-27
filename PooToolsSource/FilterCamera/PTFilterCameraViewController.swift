@@ -139,7 +139,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
 
         let view = PTCollectionView(viewConfig: config)
         view.isUserInteractionEnabled = true
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace

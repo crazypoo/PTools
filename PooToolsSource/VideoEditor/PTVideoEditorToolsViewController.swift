@@ -547,7 +547,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         collectionConfig.viewType = .Custom
         
         let view = PTCollectionView(viewConfig: collectionConfig)
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             let groupH:CGFloat = 60

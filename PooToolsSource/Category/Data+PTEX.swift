@@ -20,6 +20,20 @@ public extension Data {
         return byteCountFormatter.string(fromByteCount: Int64(count))
     }
     
+    func formattedString() -> String {
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: self, options: [])
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+            if let formattedString = String(data: jsonData, encoding: .utf8) {
+                return formattedString
+            }
+        } catch {
+            PTNSLogConsole("Error formatting JSON: \(error)")
+        }
+
+        return ""
+    }
+    
     //MARK: 根據Data來獲取圖片的格式(底層方法)
     ///根據Data來獲取圖片的格式(底層方法)
     func detectImageType() -> PTAboutImageType {

@@ -41,7 +41,7 @@ public class PTChatView: UIView {
         collectionConfig.topRefresh = true
 
         let view = PTCollectionView(viewConfig: collectionConfig)
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             var groupHeight:CGFloat = 0
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()

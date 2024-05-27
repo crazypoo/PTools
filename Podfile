@@ -24,12 +24,12 @@ target 'PooTools_Example' do
   pod 'InAppViewDebugger', :configurations => ['Debug']
   pod 'LookinServer', :configurations => ['Debug']
   pod 'LifetimeTracker', :configurations => ['Debug']
-  pod "HyperioniOS/Core", :configurations => ['Debug']
-  pod 'HyperioniOS/AttributesInspector', :configurations => ['Debug'] # Optional plugin
-  pod 'HyperioniOS/Measurements', :configurations => ['Debug'] # Optional plugin
-  pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
+#  pod "HyperioniOS/Core", :configurations => ['Debug']
+#  pod 'HyperioniOS/AttributesInspector', :configurations => ['Debug'] # Optional plugin
+#  pod 'HyperioniOS/Measurements', :configurations => ['Debug'] # Optional plugin
+#  pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
 #  pod 'WoodPeckeriOS', :configurations => ['Debug']
-  pod 'netfox', :configurations => ['Debug']
+#  pod 'netfox', :configurations => ['Debug']
   pod 'DiDiPrism'
   pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
   pod 'Bugly'

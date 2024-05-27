@@ -32,7 +32,7 @@ public class PTPermissionSettingViewController: PTBaseViewController {
             return header
         }
         
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupH:CGFloat = 0

@@ -47,15 +47,12 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     }
     
 #if POOTOOLS_DEBUG
-    public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil,Hyperion:PTActionTask? = nil,FoxNet:PTActionTask? = nil) {
+    public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil) {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
-            
             let lcm = LocalConsole.shared
             lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
             lcm.flex = flex
             lcm.watchViews = inApp
-            lcm.HyperioniOS = Hyperion
-            lcm.FoxNet = FoxNet
         }
     }
 #endif

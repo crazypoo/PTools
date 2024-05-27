@@ -18,17 +18,40 @@ import FLEX
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
-#if canImport(HyperionCore)
-import HyperionCore
-#endif
-#if canImport(netfox)
-import netfox
-#endif
 import Bugly
 import TipKit
 import MediaPlayer
 import Alamofire
 import SwifterSwift
+
+enum RequestManager {
+    static func mockRequest(url: String) {
+        let url = URL(string: url)!
+
+        let session = URLSession.shared
+
+        let task = session.dataTask(with: url) { data, _, error in
+            if let error {
+                print("Error: \(error)")
+                return
+            }
+
+            guard let data else {
+                print("Error: Missing data for mocking request.")
+                return
+            }
+
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                print("JSON Response: \(json)")
+            } catch {
+                print("Error parsing JSON: \(error)")
+            }
+        }
+
+        task.resume()
+    }
+}
 
 @main
 class AppDelegate: PTAppWindowsDelegate {
@@ -126,19 +149,6 @@ class AppDelegate: PTAppWindowsDelegate {
 //            }
 //#endif
 //        }
-//        lcm.HyperioniOS = {
-//#if canImport(HyperionCore)
-//            HyperionManager.sharedInstance().attach(to: AppWindows)
-//            HyperionManager.sharedInstance().togglePluginDrawer()
-//#endif
-//        }
-//        lcm.FoxNet = {
-//#if canImport(netfox)
-//            if NFX.sharedInstance().isStarted() {
-//                NFX.sharedInstance().show()
-//            }
-//#endif
-//        }
 //        lcm.watchViews = {
 //#if canImport(InAppViewDebugger)
 //            InAppViewDebugger.present()
@@ -223,6 +233,10 @@ class AppDelegate: PTAppWindowsDelegate {
         
         PTIVarList("PTCustomAlertView")
         
+        let random: Int = .random(in: 1...5)
+        let url = "https://reqres.in/api/users?page=\(random)"
+        RequestManager.mockRequest(url: url)
+
         return true
     }
     

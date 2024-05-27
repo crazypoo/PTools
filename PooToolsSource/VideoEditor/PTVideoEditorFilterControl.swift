@@ -23,7 +23,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         config.viewType = .Custom
 
         let view = PTCollectionView(viewConfig: config)
-        view.customerLayout = { sectionModel in
+        view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace

@@ -35,8 +35,6 @@ extension String {
     static let showRulerCheck = "Show Ruler check"
     static let appDocument = "App Document"
     static let flex = "Flex"
-    static let hyperioniOS = "HyperioniOS"
-    static let foxNet = "FoxNet"
     static let inApp = "InApp"
     static let devMaskClose = "Dev Mask close"
     static let devMaskOpen = "Dev Mask open"
@@ -51,7 +49,7 @@ extension String {
     static let debug = "Debug"
     static let debugController = "Debug Input Controller"
     static let crashLog = "Crash log"
-
+    static let network = "Network"
 }
 
 extension UIImage {
@@ -152,6 +150,7 @@ extension UIImage {
     static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let performanceImage = UIImage(.eyeglasses).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let crashLogImage = UIImage(.exclamationmark.triangleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let networkImage = UIImage(.globe).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {
@@ -181,8 +180,6 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
             
-    public var FoxNet:PTActionTask?
-    public var HyperioniOS:PTActionTask?
     public var flex:PTActionTask?
     public var watchViews:PTActionTask?
     public var closeAllOutsideFunction:PTActionTask?
@@ -193,19 +190,6 @@ public class LocalConsole: NSObject {
             guard oldValue != isVisiable else { return }
             PTCoreUserDefultsWrapper.AppDebugMode = isVisiable
             if isVisiable {
-                UIView.swizzleMethods()
-                UIWindow.db_swizzleMethods()
-                URLSessionConfiguration.swizzleMethods()
-                UIViewController.lvcdSwizzleLifecycleMethods()
-                StdoutCapture.startCapturing()
-                StderrCapture.startCapturing()
-                StderrCapture.syncData()
-                PTNetworkHelper.shared.enable()
-                PTLaunchTimeTracker.measureAppStartUpTime()
-                PTCrashManager.register()
-                PTPerformanceLeakDetector.delay = 1
-                PTPerformanceLeakDetector.callback = leakCallback
-                commitTextChanges(requestMenuUpdate: true)
                 createSystemLogView()
                 terminal!.transform = .init(scaleX: 0.9, y: 0.9)
                 UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.6) { [self] in
@@ -224,7 +208,11 @@ public class LocalConsole: NSObject {
                 if PTCoreUserDefultsWrapper.AppDebbugMark {
                     maskOpenFunction()
                 }
+                
+                commitTextChanges(requestMenuUpdate: true)
+                watcherInit()
             } else {
+                PTNetworkHelper.shared.disable()
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                     terminal!.transform = .init(scaleX: 0.9, y: 0.9)
                 }.startAnimation()
@@ -322,9 +310,26 @@ public class LocalConsole: NSObject {
             if PTCoreUserDefultsWrapper.AppDebbugMark {
                 maskOpenFunction()
             }
+            
+            watcherInit()
         } else {
             cleanSystemLogView()
         }
+    }
+    
+    private func watcherInit() {
+        UIView.swizzleMethods()
+        UIWindow.db_swizzleMethods()
+        URLSessionConfiguration.swizzleMethods()
+        UIViewController.lvcdSwizzleLifecycleMethods()
+        StdoutCapture.startCapturing()
+        StderrCapture.startCapturing()
+        StderrCapture.syncData()
+        PTNetworkHelper.shared.enable()
+        PTLaunchTimeTracker.measureAppStartUpTime()
+        PTCrashManager.register()
+        PTPerformanceLeakDetector.delay = 1
+        PTPerformanceLeakDetector.callback = leakCallback
     }
     
     public func cleanSystemLogView() {
@@ -584,17 +589,16 @@ public class LocalConsole: NSObject {
                     let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
                     let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
                     let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
+                    let content_network = PTActionSheetItem(title: .network,image: UIImage.networkImage,itemAlignment: .left)
                     let content_crashLog = PTActionSheetItem(title: .crashLog,image: UIImage.crashLogImage,itemAlignment: .left)
                     let content_performance = PTActionSheetItem(title: .Performance,image: UIImage.performanceImage,itemAlignment: .left)
                     let content_color = PTActionSheetItem(title: colorString,image: UIImage.colorImage(),itemAlignment: .left)
                     let content_ruler = PTActionSheetItem(title: rulerString,image: UIImage.rulerImage(),itemAlignment: .left)
                     let content_appDocument = PTActionSheetItem(title: .appDocument,image: UIImage.docImage,itemAlignment: .left)
                     let content_flex = PTActionSheetItem(title: .flex,image: UIImage.dev3thPartyImage,itemAlignment: .left)
-                    let content_hyperioniOS = PTActionSheetItem(title: .hyperioniOS,image: UIImage.dev3thPartyImage,itemAlignment: .left)
-                    let content_foxnet = PTActionSheetItem(title: .foxNet,image: UIImage.dev3thPartyImage,itemAlignment: .left)
                     let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
 
-                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_hyperioniOS,content_foxnet,content_inapp]
+                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_network,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_inapp]
 
                     var devMaskString = ""
                     var devMaskBubbleString = ""
@@ -659,10 +663,6 @@ public class LocalConsole: NSObject {
                             self.documentAction()
                         } else if title == .flex {
                             self.flexAction()
-                        } else if title == .hyperioniOS {
-                            self.hyperioniOSAction()
-                        } else if title == .foxNet {
-                            self.foxNetAction()
                         } else if title == .inApp {
                             self.watchViewsAction()
                         } else if title == .devMaskClose || title == .devMaskOpen {
@@ -677,6 +677,8 @@ public class LocalConsole: NSObject {
                             self.displayReport()
                         } else if title == .crashLog {
                             self.crashLogControlOpen()
+                        } else if title == .network {
+                            self.networkWatcherOpen()
                         }
                     }
                 }
@@ -806,6 +808,10 @@ public class LocalConsole: NSObject {
             debugActions.append(userDefaults)
         }
 
+        let network = UIAction(title: .network, image: UIImage.networkImage) { _ in
+            self.networkWatcherOpen()
+        }
+        
         let crashLog = UIAction(title: .crashLog, image: UIImage.crashLogImage) { _ in
             self.crashLogControlOpen()
         }
@@ -828,14 +834,6 @@ public class LocalConsole: NSObject {
 
         let Flex = UIAction(title: .flex, image: UIImage.dev3thPartyImage) { _ in
             self.flexAction()
-        }
-
-        let HyperioniOS = UIAction(title: .hyperioniOS, image: UIImage.dev3thPartyImage) { _ in
-            self.hyperioniOSAction()
-        }
-
-        let FoxNet = UIAction(title: .foxNet, image: UIImage.dev3thPartyImage) { _ in
-            self.foxNetAction()
         }
 
         let InApp = UIAction(title: .inApp, image: UIImage.dev3thPartyImage) { _ in
@@ -905,7 +903,7 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, HyperioniOS, FoxNet, InApp])
+        debugActions.append(contentsOf: [network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -950,28 +948,22 @@ public class LocalConsole: NSObject {
         currentText = ""
     }
     
+    func networkWatcherOpen() {
+        let vc = PTNetworkWatcherViewController()
+        consoleSheetPresent(vc: vc)
+    }
+    
     func performanceControlOpen() {
-        let vc = PTDebugPerformanceViewController(hideBaseNavBar: true)
-        let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
-        let currentVC = PTUtils.getCurrentVC()
-        if currentVC is PTSideMenuControl {
-            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
-            if let presentedVC = currentVC?.presentedViewController {
-                presentedVC.present(sheet, animated: true)
-            } else {
-                currentVC!.present(sheet, animated: true)
-            }
-        } else {
-            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                presentedVC.present(sheet, animated: true)
-            } else {
-                PTUtils.getCurrentVC().present(sheet, animated: true)
-            }
-        }
+        let vc = PTDebugPerformanceViewController()
+        consoleSheetPresent(vc: vc)
     }
     
     func crashLogControlOpen() {
-        let vc = PTCrashLogViewController(hideBaseNavBar: true)
+        let vc = PTCrashLogViewController()
+        consoleSheetPresent(vc: vc)
+    }
+    
+    func consoleSheetPresent(vc:PTBaseViewController) {
         let nav = PTBaseNavControl(rootViewController: vc)
         let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.9)])
         let currentVC = PTUtils.getCurrentVC()
@@ -1074,19 +1066,7 @@ public class LocalConsole: NSObject {
             watchViews!()
         }
     }
-    
-    func foxNetAction() {
-        if FoxNet != nil {
-            FoxNet!()
-        }
-    }
-    
-    func hyperioniOSAction() {
-        if HyperioniOS != nil {
-            HyperioniOS!()
-        }
-    }
-
+        
     func flexAction() {
         if flex != nil {
             flex!()
