@@ -33,12 +33,7 @@ final class PTPerformanceLeakDetector {
     static var leaks = [LeakModel]()
 
     static func setup() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(toBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(toBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     @objc private static func toBackground() {
@@ -139,17 +134,11 @@ extension UIView {
                     let errorTitle = "VIEW STILL IN MEMORY"
                     var errorMessage = leakedView.debugDescription.lvcdRemoveBundleAndModuleName()
                     if let bundleName = Bundle.main.infoDictionary?["CFBundleName"] {
-                        errorMessage = errorMessage.replacingOccurrences(
-                            of: "\(bundleName).",
-                            with: ""
-                        )
+                        errorMessage = errorMessage.replacingOccurrences(of: "\(bundleName).", with: "")
                     }
 
                     PTPerformanceLeakDetector.callback?(
-                        .init(
-                            view: leakedView,
-                            message: "\(errorTitle) \(errorMessage)"
-                        )
+                        .init(view: leakedView, message: "\(errorTitle) \(errorMessage)")
                     )
                     
                     PTNSLogConsole("\(errorTitle) \(errorMessage)")
@@ -157,11 +146,7 @@ extension UIView {
                     let screenshot = leakedView.makeScreenshot()
 
                     PTPerformanceLeakDetector.leaks.append(
-                        .init(
-                            details: errorMessage,
-                            screenshot: screenshot,
-                            id: Int(bitPattern: ObjectIdentifier(leakedView))
-                        )
+                        .init(details: errorMessage, screenshot: screenshot, id: Int(bitPattern: ObjectIdentifier(leakedView)))
                     )
 
                     let deallocator = LVCDDeallocator()
@@ -172,12 +157,7 @@ extension UIView {
                     deallocator.subviews = leakedView.subviews
                     deallocator.weakView = leakedView
                     deallocator.screenshot = screenshot
-                    objc_setAssociatedObject(
-                        leakedView,
-                        &LVCDDeallocator.key,
-                        deallocator,
-                        .OBJC_ASSOCIATION_RETAIN
-                    )
+                    objc_setAssociatedObject(leakedView, &LVCDDeallocator.key, deallocator, .OBJC_ASSOCIATION_RETAIN)
                 }
             }
         }
@@ -198,70 +178,22 @@ extension UIView {
 
         // create centered checkerboard background pattern image
         let squareSize: CGFloat = 20
-        let offset = CGPoint(
-            x: frame.width.truncatingRemainder(
-                dividingBy: squareSize
-            ) * 0.5,
-            y: frame.height.truncatingRemainder(
-                dividingBy: squareSize
-            ) * 0.5
-        )
-        let checkerBoard = UIView(
-            frame: .init(
-                x: 0,
-                y: 0,
-                width: squareSize * 2,
-                height: squareSize * 2
-            )
-        )
-        checkerBoard.backgroundColor = .init(
-            white: 1 - 0.4 * 0.5,
-            alpha: 1
-        )
+        let offset = CGPoint(x: frame.width.truncatingRemainder(dividingBy: squareSize) * 0.5, y: frame.height.truncatingRemainder( dividingBy: squareSize) * 0.5)
+        let checkerBoard = UIView(frame: .init(x: 0, y: 0, width: squareSize * 2, height: squareSize * 2))
+        checkerBoard.backgroundColor = .init(white: 1 - 0.4 * 0.5,alpha: 1)
         for point in [
-            CGPoint(
-                x: 0 as CGFloat,
-                y: 0 as CGFloat
-            ),
-            CGPoint(
-                x: -squareSize,
-                y: squareSize
-            ),
-            CGPoint(
-                x: squareSize,
-                y: squareSize
-            ),
-            CGPoint(
-                x: 0 as CGFloat,
-                y: squareSize * 2
-            )
+            CGPoint(x: 0 as CGFloat, y: 0 as CGFloat),
+            CGPoint(x: -squareSize,y: squareSize),
+            CGPoint(x: squareSize, y: squareSize),
+            CGPoint(x: 0 as CGFloat, y: squareSize * 2)
         ] {
             let shapeLayer = CAShapeLayer()
-            shapeLayer.path = UIBezierPath(
-                rect: .init(
-                    x: point.x + offset.x,
-                    y: point.y - offset.y,
-                    width: squareSize,
-                    height: squareSize
-                )
-            ).cgPath
-            shapeLayer.fillColor = UIColor(
-                white: 1 - 0.6 * 0.5,
-                alpha: 1
-            ).cgColor
-            checkerBoard.layer.addSublayer(
-                shapeLayer
-            )
+            shapeLayer.path = UIBezierPath(rect: .init(x: point.x + offset.x, y: point.y - offset.y, width: squareSize, height: squareSize)).cgPath
+            shapeLayer.fillColor = UIColor(white: 1 - 0.6 * 0.5, alpha: 1).cgColor
+            checkerBoard.layer.addSublayer(shapeLayer)
         }
-        UIGraphicsBeginImageContextWithOptions(
-            checkerBoard.bounds.size,
-            false,
-            0
-        )
-        checkerBoard.drawHierarchy(
-            in: checkerBoard.bounds,
-            afterScreenUpdates: true
-        )
+        UIGraphicsBeginImageContextWithOptions(checkerBoard.bounds.size, false, 0)
+        checkerBoard.drawHierarchy(in: checkerBoard.bounds, afterScreenUpdates: true)
         let checkerBoardImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
         UIGraphicsEndImageContext()
 
@@ -286,54 +218,28 @@ extension UIView {
             return true
         }
 
-        let container = UIView(
-            frame: .init(
-                origin: .zero,
-                size: frame.size
-            )
-        )
+        let container = UIView(frame: .init(origin: .zero, size: frame.size))
         container.addSubview(self)
-        objc_setAssociatedObject(
-            container,
-            &LVCDDeallocator.key,
-            LVCDDeallocator(),
-            .OBJC_ASSOCIATION_RETAIN
-        ) // prevents triggering warnings itself
+        objc_setAssociatedObject(container, &LVCDDeallocator.key, LVCDDeallocator(), .OBJC_ASSOCIATION_RETAIN) // prevents triggering warnings itself
 
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = UIBezierPath(rect: frame).cgPath
         shapeLayer.fillColor = UIColor(patternImage: checkerBoardImage).withAlphaComponent(0.5).cgColor
-        container.layer.insertSublayer(
-            shapeLayer,
-            at: 0
-        )
+        container.layer.insertSublayer(shapeLayer, at: 0)
 
         // check for subviews sticking out its bounds, forget about the same for sublayers for now
         var unclippedFrame = frame
 
-        iterateSubviews {
-            subview,
-                _ in
+        iterateSubviews { subview, _ in
             if subview.isHidden || subview.alpha < 0.1 {
                 return false
             }
 
             var alpha: CGFloat = 0
-            subview.backgroundColor?.getRed(
-                nil,
-                green: nil,
-                blue: nil,
-                alpha: &alpha
-            )
+            subview.backgroundColor?.getRed(nil, green: nil, blue: nil, alpha: &alpha)
 
-            if subview.frame.size.height * subview.frame.size.width != 0,
-               alpha >= 0.1 {
-                unclippedFrame = unclippedFrame.union(
-                    subview.convert(
-                        subview.bounds,
-                        to: container
-                    )
-                )
+            if subview.frame.size.height * subview.frame.size.width != 0, alpha >= 0.1 {
+                unclippedFrame = unclippedFrame.union(subview.convert(subview.bounds, to: container))
             }
             return !subview.clipsToBounds && !subview.layer.masksToBounds && !(
                 subview is UIScrollView
@@ -344,32 +250,13 @@ extension UIView {
             return nil
         }
 
-        let container2 = UIView(
-            frame: .init(
-                origin: .zero,
-                size: unclippedFrame.size
-            )
-        )
-        container2.backgroundColor = UIColor.white.withAlphaComponent(
-            0.03
-        )
-        container2.addSubview(
-            container
-        )
-        container.frame = .init(
-            x: 0 - unclippedFrame.minX,
-            y: 0 - unclippedFrame.minY,
-            width: unclippedFrame.width,
-            height: unclippedFrame.height
-        )
+        let container2 = UIView(frame: .init(origin: .zero, size: unclippedFrame.size))
+        container2.backgroundColor = UIColor.white.withAlphaComponent(0.03)
+        container2.addSubview(container)
+        container.frame = .init(x: 0 - unclippedFrame.minX, y: 0 - unclippedFrame.minY, width: unclippedFrame.width, height: unclippedFrame.height)
         container2.layer.cornerRadius = cornerRadius
         container2.layer.masksToBounds = container2.layer.cornerRadius > 0
-        objc_setAssociatedObject(
-            container2,
-            &LVCDDeallocator.key,
-            LVCDDeallocator(),
-            .OBJC_ASSOCIATION_RETAIN
-        ) // prevents triggering warnings itself
+        objc_setAssociatedObject(container2, &LVCDDeallocator.key, LVCDDeallocator(), .OBJC_ASSOCIATION_RETAIN) // prevents triggering warnings itself
 
         var iosOnMac = false
         if #available(iOS 13, tvOS 13, * ) {
@@ -378,27 +265,10 @@ extension UIView {
         let maxWidth: CGFloat = 240 - (
             iosOnMac ? 12 : 0
         ) // hard coded width for now
-        let imageSize = container2.frame.width <= maxWidth ? container2.frame.size : CGSize(
-            width: maxWidth,
-            height: maxWidth * (
-                container2.frame.height / container2.frame.width
-            )
-        )
+        let imageSize = container2.frame.width <= maxWidth ? container2.frame.size : CGSize(width: maxWidth, height: maxWidth * (container2.frame.height / container2.frame.width))
 
-        UIGraphicsBeginImageContextWithOptions(
-            imageSize,
-            false,
-            0
-        )
-        container2.drawHierarchy(
-            in: CGRect(
-                x: 0,
-                y: 0,
-                width: imageSize.width,
-                height: imageSize.height
-            ),
-            afterScreenUpdates: true
-        )
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
+        container2.drawHierarchy(in: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height), afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
@@ -410,9 +280,7 @@ extension UIView {
             subview,
                 level in
             if !(subview is UINavigationBar || subview is UICollectionViewCell || subview is UITabBar || subview is UIToolbar || level > 2) {
-                subview.translatesAutoresizingMaskIntoConstraints = wasTARMICS[ObjectIdentifier(
-                    subview
-                )] ?? subview.translatesAutoresizingMaskIntoConstraints
+                subview.translatesAutoresizingMaskIntoConstraints = wasTARMICS[ObjectIdentifier(subview)] ?? subview.translatesAutoresizingMaskIntoConstraints
             }
             return true
         }
@@ -556,41 +424,18 @@ extension UIViewController {
         PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
             guard let self else { return }
             if !self.lvcdShouldIgnore() {
-                if objc_getAssociatedObject(
-                    self,
-                    &LVCDDeallocator.key
-                ) == nil {
-                    objc_setAssociatedObject(
-                        self,
-                        &LVCDDeallocator.key,
-                        LVCDDeallocator(
-                            self.view
-                        ),
-                        .OBJC_ASSOCIATION_RETAIN
-                    )
+                if objc_getAssociatedObject(self, &LVCDDeallocator.key) == nil {
+                    objc_setAssociatedObject(self, &LVCDDeallocator.key, LVCDDeallocator(self.view), .OBJC_ASSOCIATION_RETAIN)
                 }
-                self.addCheckForMemoryLeakObserver(
-                    skipIgnoreCheck: true
-                )
+                self.addCheckForMemoryLeakObserver(skipIgnoreCheck: true)
             }
         }
     }
 
     private func addCheckForMemoryLeakObserver(skipIgnoreCheck: Bool = false) {
-        NotificationCenter.lvcd.removeObserver(
-            self,
-            name: UIViewController.lvcdCheckForMemoryLeakNotification,
-            object: nil
-        )
+        NotificationCenter.lvcd.removeObserver(self, name: UIViewController.lvcdCheckForMemoryLeakNotification, object: nil)
         if skipIgnoreCheck || !lvcdShouldIgnore() {
-            NotificationCenter.lvcd.addObserver(
-                self,
-                selector: #selector(
-                    lvcdCheckForMemoryLeak
-                ),
-                name: UIViewController.lvcdCheckForMemoryLeakNotification,
-                object: nil
-            )
+            NotificationCenter.lvcd.addObserver(self, selector: #selector(lvcdCheckForMemoryLeak), name: UIViewController.lvcdCheckForMemoryLeakNotification, object: nil)
         }
     }
 
@@ -599,48 +444,28 @@ extension UIViewController {
 
         // ignore parent VCs because one of their children will trigger viewDidDisappear() too
         if (self as? UINavigationController)?.viewControllers.isEmpty ?? true,(self as? UITabBarController)?.viewControllers?.isEmpty ?? true,(self as? UIPageViewController)?.viewControllers?.isEmpty ?? true,!lvcdShouldIgnore() {
-            NotificationCenter.lvcd.post(
-                name: Self.lvcdCheckForMemoryLeakNotification,
-                object: nil
-            )
+            NotificationCenter.lvcd.post(name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
         }
     }
 
     @objc private func lvcdRemoveFromParent() {
         lvcdRemoveFromParent() // run original implementation
         if !lvcdShouldIgnore(), view?.window != nil {
-            NotificationCenter.lvcd.post(
-                name: Self.lvcdCheckForMemoryLeakNotification,
-                object: nil
-            )
+            NotificationCenter.lvcd.post(name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
         }
     }
 
     @objc private func lvcdShowDetailViewController(_ vc: UIViewController,sender: Any?) {
-        NotificationCenter.lvcd.post(
-            name: Self.lvcdCheckForSplitViewVCMemoryLeakNotification,
-            object: self
-        )
-        NotificationCenter.lvcd.post(
-            name: Self.lvcdCheckForMemoryLeakNotification,
-            object: nil
-        )
+        NotificationCenter.lvcd.post(name: Self.lvcdCheckForSplitViewVCMemoryLeakNotification, object: self)
+        NotificationCenter.lvcd.post(name: Self.lvcdCheckForMemoryLeakNotification,object: nil)
 
         if objc_getAssociatedObject(vc, &LVCDSplitViewAssociatedObject.key) == nil {
             let mldAssociatedObject = LVCDSplitViewAssociatedObject()
             mldAssociatedObject.splitViewController = self as? UISplitViewController
             mldAssociatedObject.viewController = vc
-            objc_setAssociatedObject(
-                vc,
-                &LVCDSplitViewAssociatedObject.key,
-                mldAssociatedObject,
-                .OBJC_ASSOCIATION_RETAIN
-            )
+            objc_setAssociatedObject(vc, &LVCDSplitViewAssociatedObject.key, mldAssociatedObject, .OBJC_ASSOCIATION_RETAIN)
         }
-        lvcdShowDetailViewController(
-            vc,
-            sender: sender
-        ) // run original implementation
+        lvcdShowDetailViewController(vc, sender: sender) // run original implementation
     }
 
     fileprivate static var lvcdMemoryCheckQueue = Set<ObjectIdentifier>()
@@ -660,39 +485,26 @@ extension UIViewController {
         let objectIdentifier = ObjectIdentifier(self)
 
         // in some cases lvcdCheckForMemoryLeakNotification may be called multiple times at once, this guard prevents double checking
-        guard !Self.lvcdMemoryCheckQueue.contains(
-            objectIdentifier
-        ) else {
+        guard !Self.lvcdMemoryCheckQueue.contains(objectIdentifier) else {
             return
         }
-        Self.lvcdMemoryCheckQueue.insert(
-            objectIdentifier
-        )
+        Self.lvcdMemoryCheckQueue.insert(objectIdentifier)
 
         PTGCDManager.gcdMain() { [self] in
             Self.lvcdMemoryCheckQueue.remove(objectIdentifier)
             let rootParentVC = lvcdRootParentViewController
-            guard
-                rootParentVC.presentedViewController == nil,
-                !isViewLoaded || rootParentVC.view.window == nil,
-                let deallocator = objc_getAssociatedObject(self, &LVCDDeallocator.key) as? LVCDDeallocator,
+            guard rootParentVC.presentedViewController == nil, !isViewLoaded || rootParentVC.view.window == nil, let deallocator = objc_getAssociatedObject(self, &LVCDDeallocator.key) as? LVCDDeallocator,
                 deallocator.objectIdentifier == 0
             else { return }
 
             if let svc = self as? UISplitViewController {
-                NotificationCenter.lvcd.post(
-                    name: Self.lvcdCheckForSplitViewVCMemoryLeakNotification,
-                    object: svc
-                )
+                NotificationCenter.lvcd.post(name: Self.lvcdCheckForSplitViewVCMemoryLeakNotification, object: svc)
             }
 
             let startTime = Date()
 
             let delay = PTPerformanceLeakDetector.delay
-            DispatchQueue.main.asyncAfter(
-                deadline: .now() + delay
-            ) { [weak self] in
-
+            PTGCDManager.gcdAfter(time: delay) { [weak self] in
                 // if self is nil it deinitted, so no memory leak
                 guard let self else { return }
 
@@ -708,16 +520,9 @@ extension UIViewController {
                 }
 
                 // these conditions constitute a 'limbo' ViewController, i.e. a memory leak:
-                if
-                    !self.isViewLoaded || self.view?.window == nil,
-                    self.parent == nil, self.presentedViewController == nil,
-                    self.view == nil || self.view.superview == nil || type(of: self.view.rootView).description() == "UILayoutContainerView" {
+                if !self.isViewLoaded || self.view?.window == nil, self.parent == nil, self.presentedViewController == nil, self.view == nil || self.view.superview == nil || type(of: self.view.rootView).description() == "UILayoutContainerView" {
                     // once warned don't warn again
-                    NotificationCenter.lvcd.removeObserver(
-                        self,
-                        name: Self.lvcdCheckForMemoryLeakNotification,
-                        object: nil
-                    )
+                    NotificationCenter.lvcd.removeObserver(self, name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
 
                     let errorTitle = "VIEWCONTROLLER STILL IN MEMORY"
                     var errorMessage = self.debugDescription.lvcdRemoveBundleAndModuleName()
@@ -752,17 +557,10 @@ extension UIViewController {
                             errorMessage += "\ntextfields: \(tfs);"
                         }
 
-                        errorMessage = errorMessage.replacingOccurrences(
-                            of: ",;",
-                            with: ";"
-                        )
+                        errorMessage = errorMessage.replacingOccurrences(of: ",;", with: ";")
                     }
 
-                    PTPerformanceLeakDetector.callback?(
-                        .init(
-                            controller: self,
-                            message: "\(errorTitle) \(errorMessage)"
-                        )
+                    PTPerformanceLeakDetector.callback?( .init(controller: self, message: "\(errorTitle) \(errorMessage)")
                     )
                     PTNSLogConsole("\(errorTitle) \(errorMessage)")
 
@@ -770,13 +568,7 @@ extension UIViewController {
                     let id = Int(bitPattern: ObjectIdentifier(self))
 
                     if !PTPerformanceLeakDetector.leaks.contains(where: { $0.id == id }) {
-                        PTPerformanceLeakDetector.leaks.append(
-                            .init(
-                                details: errorMessage,
-                                screenshot: screenshot,
-                                id: id
-                            )
-                        )
+                        PTPerformanceLeakDetector.leaks.append( .init(details: errorMessage, screenshot: screenshot, id: id))
                     }
 
                     deallocator.memoryLeakDetectionDate = Date().timeIntervalSince1970 - delay
@@ -797,10 +589,7 @@ extension UIViewController {
         let interval = Date().timeIntervalSince1970 - memoryLeakDetectionDate
 
         let errorTitle = "LEAKED \(objectType) DEINNITED"
-        let errorMessage = String(
-            format: "\(errorMessage)\n\nDeinnited after %.3fs.",
-            interval
-        )
+        let errorMessage = String(format: "\(errorMessage)\n\nDeinnited after %.3fs.",interval)
 
         if let index = PTPerformanceLeakDetector.leaks.firstIndex(where: { $0.id == objectIdentifier }) {
             PTPerformanceLeakDetector.leaks[index].hasDeallocated = true
@@ -818,42 +607,20 @@ extension UIViewController {
 
         weak var splitViewController: UISplitViewController?
         weak var viewController: UIViewController? { didSet {
-            NotificationCenter.lvcd.addObserver(
-                self,
-                selector: #selector(checkIfBelongsToSplitViewController(_:)),
-                name: UIViewController.lvcdCheckForSplitViewVCMemoryLeakNotification,
-                object: nil
-            )
+            NotificationCenter.lvcd.addObserver(self, selector: #selector(checkIfBelongsToSplitViewController(_:)), name: UIViewController.lvcdCheckForSplitViewVCMemoryLeakNotification, object: nil)
         }}
 
         @objc func checkIfBelongsToSplitViewController(_ notification: Notification) {
             if notification.object as? UISplitViewController == splitViewController, let viewController {
-                objc_setAssociatedObject(
-                    viewController,
-                    &LVCDSplitViewAssociatedObject.key,
-                    nil,
-                    .OBJC_ASSOCIATION_RETAIN
-                )
+                objc_setAssociatedObject(viewController, &LVCDSplitViewAssociatedObject.key, nil, .OBJC_ASSOCIATION_RETAIN)
 
                 if objc_getAssociatedObject(viewController, &LVCDDeallocator.key) == nil {
-                    objc_setAssociatedObject(
-                        viewController,
-                        &LVCDDeallocator.key,
-                        LVCDDeallocator(
-                            viewController.view
-                        ),
-                        .OBJC_ASSOCIATION_RETAIN
-                    )
+                    objc_setAssociatedObject(viewController, &LVCDDeallocator.key, LVCDDeallocator(viewController.view), .OBJC_ASSOCIATION_RETAIN)
                 }
 
                 viewController.addCheckForMemoryLeakObserver()
 
-                DispatchQueue.main.asyncAfter(
-                    deadline: .now() + PTPerformanceLeakDetector.delay
-                ) { [
-                    weak splitViewController,
-                    weak viewController
-                ] in
+                PTGCDManager.gcdAfter(time: PTPerformanceLeakDetector.delay) { [weak splitViewController, weak viewController] in
                     if splitViewController == nil {
                         viewController?.lvcdCheckForMemoryLeak()
                     }
@@ -909,13 +676,7 @@ private class LVCDDeallocator {
         }
 
         if objectIdentifier != 0 {
-            UIViewController.lvcdMemoryLeakResolved(
-                memoryLeakDetectionDate: memoryLeakDetectionDate,
-                errorMessage: errorMessage,
-                objectIdentifier: objectIdentifier,
-                objectType: objectType,
-                screenshot: screenshot
-            )
+            UIViewController.lvcdMemoryLeakResolved(memoryLeakDetectionDate: memoryLeakDetectionDate, errorMessage: errorMessage, objectIdentifier: objectIdentifier, objectType: objectType, screenshot: screenshot)
         }
     }
 }
@@ -950,10 +711,7 @@ extension UIApplication {
 
     private class func lvcdFindViewControllerWithTag(controller: UIViewController? = UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController, tag: Int ) -> UIViewController? {
         controller == nil ? nil : (
-            controller!.view.tag == tag ? controller! : lvcdFindViewControllerWithTag(
-                controller: controller!.presentedViewController,
-                tag: tag
-            )
+            controller!.view.tag == tag ? controller! : lvcdFindViewControllerWithTag(controller: controller!.presentedViewController,tag: tag)
         )
     }
 
@@ -969,28 +727,11 @@ extension UIApplication {
 }
 
 extension String {
-    private mutating func lvcdRegReplace(
-        pattern: String,
-        replaceWith: String = ""
-    ) {
+    private mutating func lvcdRegReplace(pattern: String, replaceWith: String = "") {
         do {
-            let regex = try NSRegularExpression(
-                pattern: pattern,
-                options: [
-                    .caseInsensitive,
-                    .anchorsMatchLines
-                ]
-            )
-            let range = NSRange(
-                startIndex...,
-                in: self
-            )
-            self = regex.stringByReplacingMatches(
-                in: self,
-                options: [],
-                range: range,
-                withTemplate: replaceWith
-            )
+            let regex = try NSRegularExpression(pattern: pattern, options: [.caseInsensitive, .anchorsMatchLines])
+            let range = NSRange(startIndex..., in: self)
+            self = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
         } catch {
             return
         }
@@ -1003,19 +744,10 @@ extension String {
         Self.lvcdBundleName = Self.lvcdBundleName ?? Bundle.main.infoDictionary?["CFBundleName"] as? String
         if Self.lvcdBundleName != nil, Self.lvcdModuleName == nil {
             Self.lvcdModuleName = Self.lvcdBundleName
-            Self.lvcdModuleName?.lvcdRegReplace(
-                pattern: "[^A-Za-z0-9]",
-                replaceWith: "_"
-            )
+            Self.lvcdModuleName?.lvcdRegReplace(pattern: "[^A-Za-z0-9]", replaceWith: "_")
         }
         if Self.lvcdBundleName != nil, Self.lvcdModuleName != nil {
-            return replacingOccurrences(
-                of: "\(Self.lvcdBundleName!).",
-                with: ""
-            ).replacingOccurrences(
-                of: "\(Self.lvcdModuleName!).",
-                with: ""
-            )
+            return replacingOccurrences(of: "\(Self.lvcdBundleName!).", with: "").replacingOccurrences(of: "\(Self.lvcdModuleName!).", with: "")
         }
         return self
     }

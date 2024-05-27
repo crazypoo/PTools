@@ -12,10 +12,7 @@ final class PTApplicationDirectories {
     static let shared = PTApplicationDirectories()
 
     var support: URL {
-        guard let supportDirectory = FileManager.default.urls(
-            for: .applicationSupportDirectory, in: .userDomainMask
-        ).first
-        else {
+        guard let supportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
             fatalError("Unable to retrieve application support directory.")
         }
         return supportDirectory

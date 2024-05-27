@@ -423,6 +423,7 @@
 		55C409882C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */; };
 		55C4098A2C04DE64009C0FB6 /* PTLeakListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */; };
 		55C4098C2C04DF4E009C0FB6 /* PTLeakViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */; };
+		55C4098E2C04F37C009C0FB6 /* PTLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4098D2C04F37C009C0FB6 /* PTLocationManager.swift */; };
 		55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */; };
 		55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
@@ -1022,6 +1023,7 @@
 		55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkWatcherDetailViewController.swift; sourceTree = "<group>"; };
 		55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLeakListViewController.swift; sourceTree = "<group>"; };
 		55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLeakViewModel.swift; sourceTree = "<group>"; };
+		55C4098D2C04F37C009C0FB6 /* PTLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocationManager.swift; sourceTree = "<group>"; };
 		55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDynamicNotificationView.swift; sourceTree = "<group>"; };
 		55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeedPanel.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
@@ -2768,6 +2770,7 @@
 				55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */,
 				231D14D6272CDEE9003D6F62 /* PooToolsSource */,
 				550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */,
+				55C4098D2C04F37C009C0FB6 /* PTLocationManager.swift */,
 				550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */,
 				55DD93782B94C1EE00F65872 /* PTSideController.swift */,
 				550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */,
@@ -3070,6 +3073,7 @@
 				555818D22AFA7FD40051C0AA /* CGRect+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
 				5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */,
+				55C4098E2C04F37C009C0FB6 /* PTLocationManager.swift in Sources */,
 				550CE4A02AF0A60D0052539D /* PTUpdateTipsViewController.swift in Sources */,
 				557E3A782C042938002466A0 /* PTPerformanceLeakDetector.swift in Sources */,
 				557E3A622C032C75002466A0 /* Color+PTcmykEX.swift in Sources */,

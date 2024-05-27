@@ -59,16 +59,12 @@ extension URLRequest {
                 return id
             } else {
                 let newValue = UUID().uuidString
-                objc_setAssociatedObject(
-                    self, AssociatedKeys.requestId, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC
-                )
+                objc_setAssociatedObject(self, AssociatedKeys.requestId, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
                 return newValue
             }
         }
         set {
-            objc_setAssociatedObject(
-                self, AssociatedKeys.requestId, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC
-            )
+            objc_setAssociatedObject(self, AssociatedKeys.requestId, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
 
@@ -77,9 +73,7 @@ extension URLRequest {
             objc_getAssociatedObject(self, AssociatedKeys.startTime) as? NSNumber
         }
         set {
-            objc_setAssociatedObject(
-                self, AssociatedKeys.startTime, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            objc_setAssociatedObject(self, AssociatedKeys.startTime, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }

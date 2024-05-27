@@ -16,18 +16,10 @@ final class StdoutCapture {
 
     private var inputPipe: Pipe?
     private var outputPipe: Pipe?
-    private let queue = DispatchQueue(
-        label: "com.debugswift.log.interceptor.queue",
-        qos: .default,
-        attributes: .concurrent
-    )
+    private let queue = DispatchQueue(label: "com.debugswift.log.interceptor.queue", qos: .default, attributes: .concurrent)
 
     let logUrl: URL? = {
-        if let path = NSSearchPathForDirectoriesInDomains(
-            .cachesDirectory,
-            .userDomainMask,
-            true
-        ).first {
+        if let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
             let documentsDirectory = URL(fileURLWithPath: path)
             return documentsDirectory.appendingPathComponent("\(Bundle.main.bundleIdentifier ?? "app")-output.log")
         }
@@ -78,12 +70,7 @@ final class StdoutCapture {
         dup2(inputPipe.fileHandleForWriting.fileDescriptor, STDOUT_FILENO)
 
         // listen in to the readHandle notification
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handlePipeNotification),
-            name: FileHandle.readCompletionNotification,
-            object: pipeReadHandle
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePipeNotification), name: FileHandle.readCompletionNotification, object: pipeReadHandle)
 
         // state that you want to be notified of any data coming across the pipe
         pipeReadHandle.readInBackgroundAndNotify()

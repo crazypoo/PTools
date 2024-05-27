@@ -39,38 +39,14 @@ final class PTCrashDetailModel: NSObject {
 
     var details: [PTDebugUserInfo.Info] {
         [
-            .init(
-                title: "Error",
-                detail: data.type.rawValue
-            ),
-            .init(
-                title: "Date",
-                detail: data.details.date.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
-            ),
-            .init(
-                title: "App version",
-                detail: data.details.appVersion ?? ""
-            ),
-            .init(
-                title: "Build version",
-                detail: data.details.appBuild ?? ""
-            ),
-            .init(
-                title: "iOS version",
-                detail: data.details.iosVersion
-            ),
-            .init(
-                title: "Device model",
-                detail: data.details.deviceModel
-            ),
-            .init(
-                title: "Reachability status",
-                detail: data.details.reachability
-            ),
-            .init(
-                title: "Error".localized(),
-                detail: data.details.name
-            )
+            .init(title: "Error", detail: data.type.rawValue),
+            .init(title: "Date", detail: data.details.date.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")),
+            .init(title: "App version", detail: data.details.appVersion ?? ""),
+            .init(title: "Build version", detail: data.details.appBuild ?? ""),
+            .init(title: "iOS version",detail: data.details.iosVersion),
+            .init(title: "Device model", detail: data.details.deviceModel),
+            .init(title: "Reachability status", detail: data.details.reachability),
+            .init(title: "Error".localized(), detail: data.details.name)
         ]
     }
 

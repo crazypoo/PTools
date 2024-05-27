@@ -28,7 +28,6 @@ class PTCreateLeakViewController: PTBaseViewController {
         
         let leakingObject = PTLeakClass()
         leakingObject.createLeak()
-
     }
 }
 

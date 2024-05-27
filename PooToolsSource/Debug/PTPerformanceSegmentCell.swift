@@ -18,9 +18,7 @@ class PTPerformanceSegmentCell: PTBaseNormalCell {
         let segmentedControl = UISegmentedControl()
         segmentedControl.isUserInteractionEnabled = true
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.addTarget(
-            self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged
-        )
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         segmentedControl.overrideUserInterfaceStyle = .dark
         return segmentedControl
     }()
@@ -33,7 +31,6 @@ class PTPerformanceSegmentCell: PTBaseNormalCell {
             make.left.right.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(8)
         }
-        
         
         segmentedControl.removeAllSegments()
         PerformanceType.allCases.enumerated().forEach { index,value in

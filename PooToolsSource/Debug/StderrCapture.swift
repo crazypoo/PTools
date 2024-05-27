@@ -45,12 +45,12 @@ enum StderrCapture {
         var synchronizeData: DispatchWorkItem!
         synchronizeData = DispatchWorkItem(block: {
             let auxData = inputPipe.fileHandleForReading.availableData
-            if !auxData.isEmpty,
-               let string = String(data: auxData, encoding: String.Encoding.utf8) {
+            if !auxData.isEmpty, let string = String(data: auxData, encoding: String.Encoding.utf8) {
                 StderrCapture.stderrMessage(string: string)
             }
         })
-        DispatchQueue.global().async {
+        
+        PTGCDManager.gcdGobal {
             synchronizeData.perform()
         }
         _ = synchronizeData.wait(timeout: .now() + .milliseconds(10))
@@ -72,8 +72,7 @@ enum StderrCapture {
         } else {
             ConsoleOutput.errorOutput.append(string)
 
-            if
-                string.contains("]") {
+            if string.contains("]") {
                 var split = string.split(separator: "]")
                 split.removeFirst()
                 let message = split.joined().trimmingCharacters(in: .whitespacesAndNewlines)

@@ -22,10 +22,8 @@ enum PTLaunchTimeTracker {
         var currentTime = timeval()
         gettimeofday(&currentTime, nil)
 
-        let currentTimeMilliseconds =
-            Double(currentTime.tv_sec) * 1000 + Double(currentTime.tv_usec) / 1000.0
-        let processTimeMilliseconds =
-            Double(startTime.tv_sec) * 1000 + Double(startTime.tv_usec) / 1000.0
+        let currentTimeMilliseconds = Double(currentTime.tv_sec) * 1000 + Double(currentTime.tv_usec) / 1000.0
+        let processTimeMilliseconds = Double(startTime.tv_sec) * 1000 + Double(startTime.tv_usec) / 1000.0
 
         launchStartTime = (currentTimeMilliseconds - processTimeMilliseconds) / 1000.0
     }

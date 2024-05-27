@@ -106,11 +106,7 @@ func SignalRegister(signal: Int32) {
     sigaction(signal, &action, empty)
 }
 
-func CrashSignalHandler(
-    signal: Int32,
-    info: UnsafeMutablePointer<__siginfo>?,
-    context: UnsafeMutableRawPointer?
-) {
+func CrashSignalHandler(signal: Int32, info: UnsafeMutablePointer<__siginfo>?, context: UnsafeMutableRawPointer?) {
     let exceptionInfo = """
         Signal \(SignalName(signal))
     """

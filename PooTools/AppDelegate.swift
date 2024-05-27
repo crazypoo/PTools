@@ -232,11 +232,9 @@ class AppDelegate: PTAppWindowsDelegate {
         }
         
         PTIVarList("PTCustomAlertView")
+    
+        PTLocationManager.shared.requestLocation()
         
-        let random: Int = .random(in: 1...5)
-        let url = "https://reqres.in/api/users?page=\(random)"
-        RequestManager.mockRequest(url: url)
-
         return true
     }
     

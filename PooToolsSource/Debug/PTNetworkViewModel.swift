@@ -27,12 +27,7 @@ final class PTNetworkViewModel {
         if networkSearchWord.isEmpty {
             models = cacheModels
         } else {
-            searchModels = searchModels.filter {
-                $0.url?.absoluteString.lowercased().contains(networkSearchWord.lowercased()) == true ||
-                    $0.statusCode?.lowercased().contains(networkSearchWord.lowercased()) == true ||
-                    $0.endTime?.lowercased().contains(networkSearchWord.lowercased()) == true
-            }
-
+            searchModels = searchModels.filter { $0.url?.absoluteString.lowercased().contains(networkSearchWord.lowercased()) == true || $0.statusCode?.lowercased().contains(networkSearchWord.lowercased()) == true || $0.endTime?.lowercased().contains(networkSearchWord.lowercased()) == true }
             models = searchModels
         }
     }

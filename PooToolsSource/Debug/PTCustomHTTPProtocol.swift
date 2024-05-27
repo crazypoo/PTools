@@ -188,20 +188,13 @@ final class PTCustomHTTPProtocol: URLProtocol {
         model.requestId = request.requestId
         model = PTErrorHelper.handle(error, model: model)
         if PTHttpDatasource.shared.addHttpRequest(model) {
-            NotificationCenter.default.post(
-                name: NSNotification.Name("reloadHttp_PooTools"),
-                object: model.isSuccess
-            )
+            NotificationCenter.default.post(name: NSNotification.Name("reloadHttp_PooTools"), object: model.isSuccess)
         }
     }
 }
 
 extension PTCustomHTTPProtocol: URLSessionDataDelegate {
-    func urlSession(
-        _: URLSession, task _: URLSessionTask,
-        willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest,
-        completionHandler: @escaping (URLRequest?) -> Void
-    ) {
+    func urlSession(_: URLSession, task _: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         threadOperator?.execute { [weak self] in
             guard let self else { return }
             PTNSLogConsole("willPerformHTTPRedirection")
@@ -211,12 +204,7 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
         }
     }
 
-    func urlSession(
-        _: URLSession,
-        dataTask: URLSessionDataTask,
-        didReceive response: URLResponse,
-        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void
-    ) {
+    func urlSession( _: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         threadOperator?.execute { [weak self] in
             guard let self else { return }
             if let response = response as? HTTPURLResponse, let request = dataTask.originalRequest {

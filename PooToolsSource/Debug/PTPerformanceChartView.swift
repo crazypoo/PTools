@@ -153,12 +153,7 @@ final class PTPerformanceChartView: UIView {
             path.close()
 
             let fillPath = UIBezierPath(
-                rect: CGRect(
-                    x: graphRect.minX,
-                    y: graphRect.minY,
-                    width: graphRect.width,
-                    height: graphRect.height
-                )
+                rect: CGRect(x: graphRect.minX, y: graphRect.minY, width: graphRect.width, height: graphRect.height)
             )
             fillPath.append(path)
             fillPath.usesEvenOddFillRule = true
@@ -195,9 +190,7 @@ final class PTPerformanceChartView: UIView {
                 .font: UIFont.systemFont(ofSize: 12)
             ]
             let textSize = formattedText.size(withAttributes: attributes)
-            let textRect = CGRect(
-                x: x - textSize.width / 2, y: y - 20, width: textSize.width, height: textSize.height
-            )
+            let textRect = CGRect(x: x - textSize.width / 2, y: y - 20, width: textSize.width, height: textSize.height)
             formattedText.draw(in: textRect, withAttributes: attributes)
         }
     }
