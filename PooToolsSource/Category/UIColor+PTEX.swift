@@ -7,14 +7,9 @@
 //
 
 import UIKit
-import FluentDarkModeKit
 
 public extension UIColor {
-        
-    @objc class func lightDarkColor(light:UIColor,dark:UIColor) -> UIColor {
-        UIColor(.dm, light: light, dark: dark)
-    }
-    
+            
     /**
         Convert HEX to RGB channels.
      

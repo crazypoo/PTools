@@ -12,7 +12,6 @@ import UIKit
 import Accelerate
 import AVFoundation
 import Photos
-import FluentDarkModeKit
 import MobileCoreServices
 import ImageIO
 
@@ -35,9 +34,17 @@ public extension UIImage {
         self.init(cgImage: aCgImage)
     }
     
-    @objc class func lightDarkImage(light:UIImage,dark:UIImage) -> UIImage {
-        UIImage(.dm, light: light, dark: dark)
-    }
+    static func darkModeImage(light: UIImage, dark: UIImage) -> UIImage {
+        if #available(iOS 13.0,tvOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                return dark
+            } else {
+                return light
+            }
+       } else {
+          return light
+       }
+   }
 
     static func system(_ name: String) -> UIImage {
         UIImage.init(systemName: name) ?? UIImage()
