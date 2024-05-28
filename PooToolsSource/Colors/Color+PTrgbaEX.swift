@@ -12,7 +12,7 @@
   import AppKit
 #endif
 
-extension DynamicColor {
+public extension DynamicColor {
     /**
      Initializes and returns a color object using the specified opacity and RGB component values.
 

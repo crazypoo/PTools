@@ -14,13 +14,13 @@ import Foundation
   import AppKit
 #endif
 
-extension DynamicColor {
+public extension DynamicColor {
     /**
      Used to describe the context of display of 2 colors.
 
      Based on WCAG: https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
      */
-    public enum ContrastDisplayContext {
+    enum ContrastDisplayContext {
         /**
          A standard text in a normal context.
          */

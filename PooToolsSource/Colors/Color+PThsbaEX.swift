@@ -7,14 +7,14 @@
 //
 
 #if os(iOS) || os(tvOS) || os(watchOS)
-  import UIKit
+import UIKit
 #elseif os(OSX)
-  import AppKit
+import AppKit
 #endif
 
 // MARK: HSB Color Space
 
-extension DynamicColor {
+public extension DynamicColor {
   // MARK: - Getting the HSB Components
 
   /**
@@ -22,7 +22,7 @@ extension DynamicColor {
 
    - returns: The HSB components as a tuple (h, s, b).
    */
-    public final func colorToHSBA() -> (h: CGFloat, s: CGFloat, b: CGFloat, a:CGFloat) {
+    final func colorToHSBA() -> (h: CGFloat, s: CGFloat, b: CGFloat, a:CGFloat) {
         var h: CGFloat = 0.0
         var s: CGFloat = 0.0
         var b: CGFloat = 0.0
@@ -49,21 +49,21 @@ extension DynamicColor {
     /**
      The hue component as CGFloat between 0.0 to 1.0.
      */
-    public final var hueComponent: CGFloat {
+    final var hueComponent: CGFloat {
         return colorToHSBA().h
     }
 
     /**
      The saturation component as CGFloat between 0.0 to 1.0.
      */
-    public final var saturationComponent: CGFloat {
+    final var saturationComponent: CGFloat {
         return colorToHSBA().s
     }
 
     /**
      The brightness component as CGFloat between 0.0 to 1.0.
      */
-    public final var brightnessComponent: CGFloat {
+    final var brightnessComponent: CGFloat {
         return colorToHSBA().b
     }
   #endif
