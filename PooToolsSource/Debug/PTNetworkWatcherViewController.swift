@@ -12,6 +12,7 @@ import SwifterSwift
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SafeSFSymbols
 
 class PTNetworkWatcherViewController: PTBaseViewController {
 
@@ -24,8 +25,14 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     
     lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
-        view.searchPlaceholder = "Search"
         view.delegate = self
+        view.searchBarOutViewColor = .clear
+        view.searchTextFieldBackgroundColor = .lightGray
+        view.searchBarTextFieldCornerRadius = 0
+        view.searchBarTextFieldBorderWidth = 0
+        view.searchPlaceholderColor = .gray
+        view.searchPlaceholder = "Search"
+        view.viewCorner(radius: 17)
         return view
     }()
     
@@ -67,14 +74,14 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat.kNavBarHeight * 2)
+            make.height.equalTo(CGFloat.kNavBarHeight + 53)
         }
         
         let button = UIButton(type: .custom)
-        button.backgroundColor = .randomColor
-        
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+
         let deleteButton = UIButton(type: .custom)
-        deleteButton.backgroundColor = .randomColor
+        deleteButton.setImage(UIImage(.trash), for: .normal)
 
         fakeNav.addSubviews([button,searchBar,deleteButton])
         button.snp.makeConstraints { make in
@@ -83,7 +90,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
+            self.dismissAnimated()
         }
 
         deleteButton.snp.makeConstraints { make in
@@ -98,7 +105,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         
         searchBar.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
+            make.height.equalTo(48)
             make.bottom.equalToSuperview().inset(5)
         }
         

@@ -424,6 +424,8 @@
 		55C4098A2C04DE64009C0FB6 /* PTLeakListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */; };
 		55C4098C2C04DF4E009C0FB6 /* PTLeakViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */; };
 		55C4098E2C04F37C009C0FB6 /* PTLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4098D2C04F37C009C0FB6 /* PTLocationManager.swift */; };
+		55C409922C061B8A009C0FB6 /* PTDebugShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409912C061B8A009C0FB6 /* PTDebugShareManager.swift */; };
+		55C409942C06209D009C0FB6 /* PTPDFManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409932C06209D009C0FB6 /* PTPDFManager.swift */; };
 		55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */; };
 		55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
@@ -1024,6 +1026,8 @@
 		55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLeakListViewController.swift; sourceTree = "<group>"; };
 		55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLeakViewModel.swift; sourceTree = "<group>"; };
 		55C4098D2C04F37C009C0FB6 /* PTLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocationManager.swift; sourceTree = "<group>"; };
+		55C409912C061B8A009C0FB6 /* PTDebugShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugShareManager.swift; sourceTree = "<group>"; };
+		55C409932C06209D009C0FB6 /* PTPDFManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPDFManager.swift; sourceTree = "<group>"; };
 		55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDynamicNotificationView.swift; sourceTree = "<group>"; };
 		55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeedPanel.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
@@ -1705,6 +1709,7 @@
 				55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */,
 				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
 				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
+				55C409912C061B8A009C0FB6 /* PTDebugShareManager.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -2009,6 +2014,7 @@
 			children = (
 				557E3A672C03487B002466A0 /* UIImage+PTpdfEX.swift */,
 				557E3A692C034B90002466A0 /* PTViewToPDF.swift */,
+				55C409932C06209D009C0FB6 /* PTPDFManager.swift */,
 			);
 			path = PDF;
 			sourceTree = "<group>";
@@ -3111,6 +3117,7 @@
 				556CA4B02B29114E00A5B189 /* PTVideoEditorToolsSlider.swift in Sources */,
 				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
 				55DD93752B938DE300F65872 /* PTSideMenuControl.swift in Sources */,
+				55C409942C06209D009C0FB6 /* PTPDFManager.swift in Sources */,
 				555BEA072BB2601E00E5987B /* UIView+PTListAnimationEX.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
@@ -3417,6 +3424,7 @@
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				557E3A8E2C044157002466A0 /* CwlDemangle.swift in Sources */,
 				55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */,
+				55C409922C061B8A009C0FB6 /* PTDebugShareManager.swift in Sources */,
 				5589FF5029A87BA700519383 /* PTContract.swift in Sources */,
 				55BCB9832B1733620016A4C2 /* PTEditInputViewController.swift in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,

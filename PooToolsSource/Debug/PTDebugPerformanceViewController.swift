@@ -12,6 +12,7 @@ import SnapKit
 import ZXNavigationBar
 #endif
 import SwifterSwift
+import SafeSFSymbols
 
 enum PerformanceType: String,CaseIterable {
     case CPU = "CPU"
@@ -134,6 +135,11 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         return view
     }()
     
+    lazy var fakeNav:UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
@@ -146,10 +152,28 @@ class PTDebugPerformanceViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(newCollectionView)
+        view.addSubviews([fakeNav,newCollectionView])
+        fakeNav.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().inset(20)
+            make.height.equalTo(CGFloat.kNavBarHeight)
+        }
+
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        fakeNav.addSubviews([button])
+        button.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.top.equalToSuperview().inset(5)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+        button.addActionHandlers { sender in
+            self.dismissAnimated()
+        }
+        
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
+            make.top.equalTo(self.fakeNav.snp.bottom)
         }
         listDataSet()
         

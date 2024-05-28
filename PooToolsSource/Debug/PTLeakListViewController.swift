@@ -12,6 +12,7 @@ import SwifterSwift
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SafeSFSymbols
 
 class PTLeakListViewController: PTBaseViewController {
 
@@ -24,8 +25,14 @@ class PTLeakListViewController: PTBaseViewController {
     
     lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
-        view.searchPlaceholder = "Search"
         view.delegate = self
+        view.searchBarOutViewColor = .clear
+        view.searchTextFieldBackgroundColor = .lightGray
+        view.searchBarTextFieldCornerRadius = 0
+        view.searchBarTextFieldBorderWidth = 0
+        view.searchPlaceholderColor = .gray
+        view.searchPlaceholder = "Search"
+        view.viewCorner(radius: 17)
         return view
     }()
 
@@ -66,16 +73,19 @@ class PTLeakListViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat.kNavBarHeight * 2)
+            make.height.equalTo(CGFloat.kNavBarHeight + 53)
         }
         
         let button = UIButton(type: .custom)
-        button.backgroundColor = .randomColor
-        
-        let deleteButton = UIButton(type: .custom)
-        deleteButton.backgroundColor = .randomColor
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
 
-        fakeNav.addSubviews([button,searchBar,deleteButton])
+        let deleteButton = UIButton(type: .custom)
+        deleteButton.setImage(UIImage(.trash), for: .normal)
+        
+        let shareButton = UIButton(type: .custom)
+        shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
+
+        fakeNav.addSubviews([button,searchBar,deleteButton,shareButton])
         button.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.top.equalToSuperview().inset(5)
@@ -95,9 +105,19 @@ class PTLeakListViewController: PTBaseViewController {
             self.loadListModel()
         }
         
+        shareButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.top.equalToSuperview().inset(5)
+            make.right.equalTo(deleteButton.snp.left).offset(-7.5)
+        }
+        shareButton.addActionHandlers { sender in
+            let allLeaks = PTPerformanceLeakDetector.leaks.reduce("") { $0 + "\n\n\($1.symbol)\($1.details)" }
+            PTDebugShareManager.generateFileAndShare(text: allLeaks, fileName: "leaks")
+        }
+        
         searchBar.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
+            make.height.equalTo(48)
             make.bottom.equalToSuperview().inset(5)
         }
         

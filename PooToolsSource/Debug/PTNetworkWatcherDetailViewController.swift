@@ -12,6 +12,7 @@ import SwifterSwift
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SafeSFSymbols
 
 class PTNetworkWatcherDetailViewController: PTBaseViewController {
 
@@ -31,8 +32,13 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     
     lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
+        view.searchBarOutViewColor = .clear
+        view.searchTextFieldBackgroundColor = .lightGray
+        view.searchBarTextFieldCornerRadius = 0
+        view.searchBarTextFieldBorderWidth = 0
+        view.searchPlaceholderColor = .gray
         view.searchPlaceholder = "Search"
-        view.delegate = self
+        view.viewCorner(radius: 17)
         return view
     }()
 
@@ -121,16 +127,16 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat.kNavBarHeight * 2)
+            make.height.equalTo(CGFloat.kNavBarHeight + 53)
         }
         
         let button = UIButton(type: .custom)
-        button.backgroundColor = .randomColor
-        
-        let deleteButton = UIButton(type: .custom)
-        deleteButton.backgroundColor = .randomColor
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
 
-        fakeNav.addSubviews([button,searchBar,deleteButton])
+        let shareButton = UIButton(type: .custom)
+        shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
+
+        fakeNav.addSubviews([button,searchBar,shareButton])
         button.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.top.equalToSuperview().inset(5)
@@ -140,17 +146,23 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
             self.navigationController?.popViewController()
         }
 
-        deleteButton.snp.makeConstraints { make in
+        shareButton.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.top.equalToSuperview().inset(5)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-        deleteButton.addActionHandlers { sender in
+        shareButton.addActionHandlers { sender in
+            let logText = self.formatLog(model: self.viewModel)
+
+            var fileName = self.viewModel.url?.path.replacingOccurrences(of: "/", with: "-") ?? "-log"
+            fileName.removeFirst()
+
+            PTDebugShareManager.generateFileAndShare(text: logText, fileName: fileName)
         }
         
         searchBar.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
+            make.height.equalTo(48)
             make.bottom.equalToSuperview().inset(5)
         }
         
@@ -182,6 +194,37 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         }
         
         newCollectionView.showCollectionDetail(collectionData: sections)
+    }
+    
+    private func formatLog(model: PTHttpModel) -> String {
+        let formattedLog = """
+        [\(model.method ?? "")] \(model.startTime ?? "") (\(model.statusCode ?? ""))
+
+        ------- URL -------
+        \(model.url?.absoluteString ?? "No data")
+
+        ------- REQUEST HEADER -------
+        \(model.requestHeaderFields?.formattedString() ?? "No data")
+
+        ------- REQUEST -------
+        \(model.requestData?.formattedString() ?? "No data")
+
+        ------- RESPONSE HEADER -------
+        \(model.responseHeaderFields?.formattedString() ?? "No data")
+
+        ------- RESPONSE -------
+        \(model.responseData?.formattedString() ?? "No data")
+
+        ------- RESPONSE SIZE -------
+        \(model.responseData?.formattedSize() ?? "No data")
+
+        ------- TOTAL TIME -------
+        \(model.totalDuration ?? "No data")
+
+        ------- MIME TYPE -------
+        \(model.mineType ?? "No data")
+        """
+        return formattedLog
     }
 }
 

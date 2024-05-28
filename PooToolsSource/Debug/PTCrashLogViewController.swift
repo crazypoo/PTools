@@ -12,6 +12,7 @@ import SwifterSwift
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SafeSFSymbols
 
 class PTCrashLogViewController: PTBaseViewController {
 
@@ -19,7 +20,6 @@ class PTCrashLogViewController: PTBaseViewController {
 
     lazy var fakeNav : UIView = {
         let view = UIView()
-        view.backgroundColor = .randomColor
         return view
     }()
     
@@ -66,10 +66,10 @@ class PTCrashLogViewController: PTBaseViewController {
         }
         
         let button = UIButton(type: .custom)
-        button.backgroundColor = .randomColor
-        
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+
         let crashButton = UIButton(type: .custom)
-        crashButton.backgroundColor = .randomColor
+        crashButton.setImage(UIImage(.bolt.fill), for: .normal)
 
         fakeNav.addSubviews([button,crashButton])
         button.snp.makeConstraints { make in

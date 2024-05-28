@@ -12,6 +12,7 @@ import ZXNavigationBar
 #endif
 import SnapKit
 import SwifterSwift
+import SafeSFSymbols
 
 class PTCrashDetailViewController: PTBaseViewController {
     
@@ -19,7 +20,6 @@ class PTCrashDetailViewController: PTBaseViewController {
     
     lazy var fakeNav : UIView = {
         let view = UIView()
-        view.backgroundColor = .randomColor
         return view
     }()
     
@@ -84,8 +84,12 @@ class PTCrashDetailViewController: PTBaseViewController {
         }
         
         let button = UIButton(type: .custom)
-        button.backgroundColor = .randomColor
-        fakeNav.addSubviews([button])
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        
+        let shareButton = UIButton(type: .custom)
+        shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
+
+        fakeNav.addSubviews([button,shareButton])
         button.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.centerY.equalToSuperview()
@@ -93,6 +97,27 @@ class PTCrashDetailViewController: PTBaseViewController {
         }
         button.addActionHandlers { sender in
             self.navigationController?.popViewController()
+        }
+        
+        shareButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+        shareButton.addActionHandlers { sender in
+            let image = self.viewModel.data.context.uiImage
+
+            guard let pdf = PTPDFManager.generatePDF(title: "Crash", body: self.viewModel.getAllValues(), image: image, logs: self.viewModel.data.context.consoleOutput
+            ) else {
+                PTNSLogConsole("Failure in create PDF")
+                return
+            }
+
+            guard let fileURL = PTPDFManager.savePDFData(pdf, fileName: "Crash-\(UUID().uuidString).pdf") else {
+                PTNSLogConsole("Failure to save PDF")
+                return
+            }
+            PTDebugShareManager.share(fileURL)
         }
         
         newCollectionView.snp.makeConstraints { make in

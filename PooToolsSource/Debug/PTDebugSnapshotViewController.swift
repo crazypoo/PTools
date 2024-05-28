@@ -12,6 +12,7 @@ import SwifterSwift
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SafeSFSymbols
 
 class PTDebugSnapshotViewController: PTBaseViewController {
 
@@ -19,7 +20,6 @@ class PTDebugSnapshotViewController: PTBaseViewController {
     
     lazy var fakeNav : UIView = {
         let view = UIView()
-        view.backgroundColor = .randomColor
         return view
     }()
 
@@ -60,7 +60,7 @@ class PTDebugSnapshotViewController: PTBaseViewController {
         }
         
         let button = UIButton(type: .custom)
-        button.backgroundColor = .randomColor
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
         fakeNav.addSubviews([button])
         button.snp.makeConstraints { make in
             make.size.equalTo(34)
