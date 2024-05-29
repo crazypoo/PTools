@@ -17,17 +17,8 @@ extension URLCache {
     static let cachedExtensions = ["swf", "flv", "png", "jpg", "jpeg", "mp3"]
 
     func storeIfNeeded(for task: URLSessionTask, data: Data) {
-        if let request = task.originalRequest,
-           let response = task.response as? HTTPURLResponse,
-           let ext = request.url?.pathExtension,
-           URLCache.cachedExtensions.contains(ext),
-           let expires = response.expires() {
-            let cache = CachedURLResponse(
-                response: response,
-                data: data,
-                userInfo: ["Expires": expires],
-                storagePolicy: .allowed
-            )
+        if let request = task.originalRequest, let response = task.response as? HTTPURLResponse, let ext = request.url?.pathExtension, URLCache.cachedExtensions.contains(ext), let expires = response.expires() {
+            let cache = CachedURLResponse(response: response, data: data, userInfo: ["Expires": expires], storagePolicy: .allowed)
             storeCachedResponse(cache, for: request)
         }
     }

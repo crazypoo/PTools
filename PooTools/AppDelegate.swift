@@ -195,6 +195,10 @@ class AppDelegate: PTAppWindowsDelegate {
             PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
         }
         
+        PTNetWorkStatus.shared.netWork { state in
+            PTNSLogConsole("network:>>>>>>>>>>>>>>>>>>>>\(state)")
+        }
+        
 //        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.url(forResource: "heartbeat", withExtension: "svga")
         
 //        let filePath = PTUtils.cgBaseBundle().path(forResource: "AuthKey_B9Q98BMSBQ", ofType: "p8")

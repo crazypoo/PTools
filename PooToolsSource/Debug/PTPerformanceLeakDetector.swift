@@ -704,25 +704,17 @@ extension UIApplication {
     }
 
     private class func lvcdTopViewController(controller: UIViewController? = UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController) -> UIViewController? {
-        controller?.presentedViewController != nil ? lvcdTopViewController(
-            controller: controller!.presentedViewController!
-        ) : controller
+        controller?.presentedViewController != nil ? lvcdTopViewController(controller: controller!.presentedViewController!) : controller
     }
 
     private class func lvcdFindViewControllerWithTag(controller: UIViewController? = UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController, tag: Int ) -> UIViewController? {
-        controller == nil ? nil : (
-            controller!.view.tag == tag ? controller! : lvcdFindViewControllerWithTag(controller: controller!.presentedViewController,tag: tag)
-        )
+        controller == nil ? nil : (controller!.view.tag == tag ? controller! : lvcdFindViewControllerWithTag(controller: controller!.presentedViewController,tag: tag))
     }
 
     @available(iOS 13.0, tvOS 13, *)
     private var lvcdFirstActiveWindowScene: UIWindowScene? {
-        let activeScenes = UIApplication.shared.connectedScenes.filter {
-            $0.activationState == UIScene.ActivationState.foregroundActive && $0 is UIWindowScene
-        }
-        return (activeScenes.count > 0 ? activeScenes : UIApplication.shared.connectedScenes).first(where: {
-            $0 is UIWindowScene
-        }) as? UIWindowScene
+        let activeScenes = UIApplication.shared.connectedScenes.filter { $0.activationState == UIScene.ActivationState.foregroundActive && $0 is UIWindowScene }
+        return (activeScenes.count > 0 ? activeScenes : UIApplication.shared.connectedScenes).first(where: { $0 is UIWindowScene }) as? UIWindowScene
     }
 }
 

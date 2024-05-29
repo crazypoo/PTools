@@ -43,9 +43,7 @@ extension UIView {
             objc_getAssociatedObject(self, &UIViewShowsDebugBorderKey) as? Bool ?? false
         }
         set {
-            objc_setAssociatedObject(
-                self, &UIViewShowsDebugBorderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            objc_setAssociatedObject(self, &UIViewShowsDebugBorderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
@@ -57,10 +55,7 @@ extension UIView {
         }
         set {
             if let color = newValue {
-                objc_setAssociatedObject(
-                    self, &UIViewPreviousBorderColorKey, UIColor(cgColor: color),
-                    .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-                )
+                objc_setAssociatedObject(self, &UIViewPreviousBorderColorKey, UIColor(cgColor: color), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
         }
     }
@@ -72,9 +67,7 @@ extension UIView {
             objc_getAssociatedObject(self, &UIViewPreviousBorderWidthKey) as? CGFloat ?? 0.0
         }
         set {
-            objc_setAssociatedObject(
-                self, &UIViewPreviousBorderWidthKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            objc_setAssociatedObject(self, &UIViewPreviousBorderWidthKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
@@ -86,17 +79,12 @@ extension UIView {
                 return color.cgColor
             } else {
                 let color = UIColor.randomColor
-                objc_setAssociatedObject(
-                    self, &UIViewDebugBorderColorKey, color, .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-                )
+                objc_setAssociatedObject(self, &UIViewDebugBorderColorKey, color, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
                 return color.cgColor
             }
         }
         set {
-            objc_setAssociatedObject(
-                self, &UIViewDebugBorderColorKey, UIColor(cgColor: newValue),
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            objc_setAssociatedObject(self, &UIViewDebugBorderColorKey, UIColor(cgColor: newValue), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 

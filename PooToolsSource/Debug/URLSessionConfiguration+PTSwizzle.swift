@@ -16,25 +16,13 @@ extension URLSessionConfiguration {
             return
         }
 
-        let defaultSessionConfiguration = class_getClassMethod(
-            URLSessionConfiguration.self,
-            #selector(getter: URLSessionConfiguration.default)
-        )
-        let swizzledDefaultSessionConfiguration = class_getClassMethod(
-            URLSessionConfiguration.self,
-            #selector(URLSessionConfiguration.swizzledDefaultSessionConfiguration)
-        )
+        let defaultSessionConfiguration = class_getClassMethod(URLSessionConfiguration.self, #selector(getter: URLSessionConfiguration.default))
+        let swizzledDefaultSessionConfiguration = class_getClassMethod(URLSessionConfiguration.self,#selector(URLSessionConfiguration.swizzledDefaultSessionConfiguration))
 
         method_exchangeImplementations(defaultSessionConfiguration!, swizzledDefaultSessionConfiguration!)
 
-        let ephemeralSessionConfiguration = class_getClassMethod(
-            URLSessionConfiguration.self,
-            #selector(getter: URLSessionConfiguration.ephemeral)
-        )
-        let swizzledEphemeralSessionConfiguration = class_getClassMethod(
-            URLSessionConfiguration.self,
-            #selector(URLSessionConfiguration.swizzledEphemeralSessionConfiguration)
-        )
+        let ephemeralSessionConfiguration = class_getClassMethod(URLSessionConfiguration.self,#selector(getter: URLSessionConfiguration.ephemeral))
+        let swizzledEphemeralSessionConfiguration = class_getClassMethod(URLSessionConfiguration.self, #selector(URLSessionConfiguration.swizzledEphemeralSessionConfiguration))
 
         method_exchangeImplementations(ephemeralSessionConfiguration!, swizzledEphemeralSessionConfiguration!)
     }

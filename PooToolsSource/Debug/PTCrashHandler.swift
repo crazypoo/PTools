@@ -158,21 +158,13 @@ public class PTCrashHandler {
 
         CrashUncaughtExceptionHandler.exceptionReceiveClosure = { [weak self] signal, exception, info, arr in
             self?.exceptionReceiveClosure?(signal, exception, info)
-            let trace = PTCrashModel(
-                type: .nsexception,
-                details: .builder(name: info),
-                traces: .builder(Thread.simpleCallStackSymbols(arr))
-            )
+            let trace = PTCrashModel(type: .nsexception, details: .builder(name: info), traces: .builder(Thread.simpleCallStackSymbols(arr)))
             PTCrashManager.save(crash: trace)
         }
 
         CrashSignalExceptionHandler.exceptionReceiveClosure = { [weak self] signal, exception, info in
             self?.exceptionReceiveClosure?(signal, exception, info)
-            let trace = PTCrashModel(
-                type: .signal,
-                details: .builder(name: info),
-                traces: .builder(Thread.simpleCallStackSymbols())
-            )
+            let trace = PTCrashModel(type: .signal, details: .builder(name: info), traces: .builder(Thread.simpleCallStackSymbols()))
             PTCrashManager.save(crash: trace)
         }
     }

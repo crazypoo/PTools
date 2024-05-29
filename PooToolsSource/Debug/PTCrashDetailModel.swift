@@ -20,10 +20,6 @@ final class PTCrashDetailModel: NSObject {
 
     // MARK: - ViewModel
 
-    func viewTitle() -> String {
-        "actions-crash".localized()
-    }
-
     func numberOfItems(section: Int) -> Int {
         switch PTCrashDetailViewController.Features(rawValue: section) {
         case .details:

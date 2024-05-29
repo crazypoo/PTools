@@ -16,7 +16,7 @@ final class StdoutCapture {
 
     private var inputPipe: Pipe?
     private var outputPipe: Pipe?
-    private let queue = DispatchQueue(label: "com.debugswift.log.interceptor.queue", qos: .default, attributes: .concurrent)
+    private let queue = DispatchQueue(label: "com.pootools.log.interceptor.queue", qos: .default, attributes: .concurrent)
 
     let logUrl: URL? = {
         if let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
@@ -93,32 +93,7 @@ final class StdoutCapture {
                     try str.appendLineToURL(logUrl)
                 } catch {}
             }
-
-            appendConsoleOutput(str)
         }
-    }
-
-    private func appendConsoleOutput(_ consoleOutput: String?) {
-        guard let output = consoleOutput else { return }
-
-        if !shouldIgnoreLog(output), shouldIncludeLog(output) {
-            queue.async {
-                ConsoleOutput.printAndNSLogOutput.append(output)
-            }
-        }
-    }
-
-    private func shouldIgnoreLog(_ log: String) -> Bool {
-        false//DebugSwift.Console.ignoredLogs.contains { log.contains($0) }
-    }
-
-    private func shouldIncludeLog(_ log: String) -> Bool {
-        true
-//        if DebugSwift.Console.onlyLogs.isEmpty {
-//            return true
-//        } else {
-//            return DebugSwift.Console.onlyLogs.contains { log.contains($0) }
-//        }
     }
 }
 

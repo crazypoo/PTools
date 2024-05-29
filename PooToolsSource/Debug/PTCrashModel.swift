@@ -67,11 +67,7 @@ extension PTCrashModel {
         }
 
         static func builder() -> Self {
-            .init(
-                image: UIWindow.keyWindow?._snapshotWithTouch?.pngData(),
-                consoleOutput: PTCrashLogOutput.printAndNSLogOutputFormatted(),
-                errorOutput: PTCrashLogOutput.errorOutputFormatted()
-            )
+            .init(image: UIWindow.keyWindow?._snapshotWithTouch?.pngData(), consoleOutput: "", errorOutput: "")
         }
     }
 }

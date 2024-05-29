@@ -19,9 +19,6 @@ enum StderrCapture {
 
         inputPipe.fileHandleForReading.readabilityHandler = { fileHandle in
             let data = fileHandle.availableData
-            if let string = String(data: data, encoding: String.Encoding.utf8) {
-                StderrCapture.stderrMessage(string: string)
-            }
 
             // Write input back to stderr
             outputPipe.fileHandleForWriting.write(data)
@@ -44,10 +41,7 @@ enum StderrCapture {
 
         var synchronizeData: DispatchWorkItem!
         synchronizeData = DispatchWorkItem(block: {
-            let auxData = inputPipe.fileHandleForReading.availableData
-            if !auxData.isEmpty, let string = String(data: auxData, encoding: String.Encoding.utf8) {
-                StderrCapture.stderrMessage(string: string)
-            }
+            let _ = inputPipe.fileHandleForReading.availableData
         })
         
         PTGCDManager.gcdGobal {
@@ -61,24 +55,6 @@ enum StderrCapture {
 
         isCapturing = false
         freopen("/dev/stderr", "a", stderr)
-    }
-
-    static func stderrMessage(string: String) {
-        if
-            string.contains("OSLOG"),
-            let message = string.split(separator: "\t").last {
-            let message = String(message).trimmingCharacters(in: .whitespacesAndNewlines)
-            ConsoleOutput.printAndNSLogOutput.append("\(message)")
-        } else {
-            ConsoleOutput.errorOutput.append(string)
-
-            if string.contains("]") {
-                var split = string.split(separator: "]")
-                split.removeFirst()
-                let message = split.joined().trimmingCharacters(in: .whitespacesAndNewlines)
-                print(message) // Logs into print
-            }
-        }
     }
 }
 

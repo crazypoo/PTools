@@ -36,6 +36,19 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         return view
     }()
     
+    lazy var valueSwitch:PTSwitch = {
+        let view = PTSwitch()
+        view.isOn = PTNetworkHelper.shared.isNetworkEnable
+        view.valueChangeCallBack = { sender in
+            if sender {
+                PTNetworkHelper.shared.enable()
+            } else {
+                PTNetworkHelper.shared.disable()
+            }
+        }
+        return view
+    }()
+    
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
         config.viewType = .Normal
@@ -83,7 +96,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         let deleteButton = UIButton(type: .custom)
         deleteButton.setImage(UIImage(.trash), for: .normal)
 
-        fakeNav.addSubviews([button,searchBar,deleteButton])
+        fakeNav.addSubviews([button,searchBar,deleteButton,valueSwitch])
         button.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.top.equalToSuperview().inset(5)
@@ -107,6 +120,13 @@ class PTNetworkWatcherViewController: PTBaseViewController {
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(48)
             make.bottom.equalToSuperview().inset(5)
+        }
+        
+        valueSwitch.snp.makeConstraints { make in
+            make.right.equalTo(deleteButton.snp.left).offset(-7.5)
+            make.centerY.equalTo(deleteButton)
+            make.width.equalTo(51)
+            make.height.equalTo(31)
         }
         
         newCollectionView.snp.makeConstraints { make in

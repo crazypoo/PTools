@@ -20,11 +20,6 @@ final class PTCrashViewModel: NSObject {
     }
 
     // MARK: - ViewModel
-
-    func viewTitle() -> String {
-        "Crash"
-    }
-
     func numberOfItems() -> Int {
         data.count
     }
@@ -45,9 +40,5 @@ final class PTCrashViewModel: NSObject {
     func handleDeleteItemAction(atIndex index: Int) {
         let crash = data[index]
         PTCrashManager.delete(crash: crash)
-    }
-
-    func emptyListDescriptionString() -> String {
-       "Empty data" + viewTitle()
     }
 }

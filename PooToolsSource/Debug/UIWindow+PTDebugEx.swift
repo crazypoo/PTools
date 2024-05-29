@@ -221,13 +221,7 @@ extension UIWindow {
 
             context.setLineWidth(2)
             context.setStrokeColor(UIColor.red.cgColor)
-            context.addArc(
-                center: circleCenter,
-                radius: circleRadius,
-                startAngle: 0,
-                endAngle: CGFloat.pi * 2,
-                clockwise: true
-            )
+            context.addArc(center: circleCenter,radius: circleRadius, startAngle: 0, endAngle: CGFloat.pi * 2, clockwise: true)
             context.strokePath()
         }
 

@@ -184,6 +184,7 @@ public class LocalConsole: NSObject {
     public var watchViews:PTActionTask?
     public var closeAllOutsideFunction:PTActionTask?
     public var leakCallback: ((PTPerformanceLeak) -> Void)?
+    public var networkStatus = ""
 
     public var isVisiable:Bool = PTCoreUserDefultsWrapper.AppDebugMode {
         didSet {
@@ -330,6 +331,10 @@ public class LocalConsole: NSObject {
         PTCrashManager.register()
         PTPerformanceLeakDetector.delay = 1
         PTPerformanceLeakDetector.callback = leakCallback
+        
+        PTNetWorkStatus.shared.netWork { state in
+            LocalConsole.shared.networkStatus = NetWorkStatus.valueName(type: state)
+        }
     }
     
     public func cleanSystemLogView() {

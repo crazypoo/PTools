@@ -35,10 +35,7 @@ enum PTDebugUserInfo {
             return nil
         }
 
-        return Info(
-            title: "App version",
-            detail: "\(version)"
-        )
+        return Info(title: "App version", detail: "\(version)")
     }
 
     static func getAppBuildInfo() -> Info? {
@@ -47,10 +44,7 @@ enum PTDebugUserInfo {
             return nil
         }
 
-        return Info(
-            title: "Build version",
-            detail: "Build: \(build)"
-        )
+        return Info(title: "Build version", detail: "Build: \(build)")
     }
 
     static func getBundleName() -> Info? {
@@ -58,10 +52,7 @@ enum PTDebugUserInfo {
             return nil
         }
 
-        return Info(
-            title: "Bundle name",
-            detail: "\(bundleName)"
-        )
+        return Info(title: "Bundle name", detail: "\(bundleName)")
     }
 
     static func getBundleId() -> Info? {
@@ -69,10 +60,7 @@ enum PTDebugUserInfo {
             return nil
         }
 
-        return Info(
-            title: "Bundle id",
-            detail: "\(bundleID)"
-        )
+        return Info(title: "Bundle id", detail: "\(bundleID)")
     }
 
     static func getScreenResolution() -> Info {
@@ -83,46 +71,26 @@ enum PTDebugUserInfo {
         let screenWidth = bounds.size.width * scale
         let screenHeight = bounds.size.height * scale
 
-        return .init(
-            title: "Screen resolution",
-            detail: "\(screenWidth) x \(screenHeight) points"
-        )
+        return .init(title: "Screen resolution", detail: "\(screenWidth) x \(screenHeight) points")
     }
 
     static func getDeviceModelInfo() -> Info {
         let deviceModel = Device.current.model ?? "Unknow"
-        return Info(
-            title: "Device model",
-            detail: deviceModel
-        )
+        return Info(title: "Device model", detail: deviceModel)
     }
 
     static func getIOSVersionInfo() -> Info {
         let iOSVersion = UIDevice.current.systemVersion
-        return Info(
-            title: "ios version",
-            detail: iOSVersion
-        )
+        return Info(title: "ios version", detail: iOSVersion)
     }
 
     static func getMeasureAppStartUpTime() -> Info? {
         guard let launchStartTime = PTLaunchTimeTracker.launchStartTime else { return nil }
 
-        return Info(
-            title: "Inicialization time",
-            detail: String(format: "%.4lf%", launchStartTime) + " (s)"
-        )
+        return Info(title: "Inicialization time",detail: String(format: "%.4lf%", launchStartTime) + " (s)")
     }
 
-    static func getReachability() -> Info {
-        
-        var strings = ""
-        PTNetWorkStatus.shared.netWork { state in
-            strings = NetWorkStatus.valueName(type: state)
-        }
-        return Info(
-            title: "reachability status",
-            detail: strings
-        )
+    static func getReachability() -> Info {        
+        return Info(title: "reachability status",detail: LocalConsole.shared.networkStatus)
     }
 }
