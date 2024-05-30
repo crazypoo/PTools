@@ -224,7 +224,51 @@ extension PTBaseViewController {
     //MARK: 截图反馈注册
     ///截图反馈注册
     public func registerScreenShotService() {
-        PHPhotoLibrary.shared().register(self)
+        UIScreen.pt.detectScreenShot { type in
+            switch type {
+            case .Normal:
+                PTGCDManager.gcdAfter(time: 1) {
+                    let fetchOptions = PHFetchOptions()
+                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+                    let assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+                    
+                    if let lastAsset = assets.firstObject {
+                        if lastAsset.mediaSubtypes == .photoScreenshot {
+                            if let image = self.getImage(for: lastAsset) {
+                                // 在这里使用截图
+                                if self.screenShotHandle != nil {
+                                    self.screenShotHandle!(image)
+                                } else {
+                                    if self.screenFunc == nil {
+                                        self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image,dismiss: {
+                                            self.screenFunc = nil
+                                        })
+                                        
+                                        if self.screenShotActionHandle != nil {
+                                            self.screenFunc!.actionHandle = self.screenShotActionHandle!
+                                        }
+                                    }
+                                }
+                            } else {
+                                if self.screenShotHandle != nil {
+                                    self.screenShotHandle!(nil)
+                                }
+                            }
+                        } else {
+                            if self.screenShotHandle != nil {
+                                self.screenShotHandle!(nil)
+                            }
+                        }
+                    } else {
+                        if self.screenShotHandle != nil {
+                            self.screenShotHandle!(nil)
+                        }
+                    }
+                }
+            case .Video:
+                break
+            }
+        }
     }
 }
 
@@ -318,7 +362,7 @@ extension PTBaseViewController:LXFEmptyDataSetable {
 #endif
 
 //MARK: 界面截图后,提供分享以及反馈引导操作
-extension PTBaseViewController: PHPhotoLibraryChangeObserver {
+extension PTBaseViewController {
         
     public var screenShotHandle:PTScreenShotOnlyGetImageHandle? {
         set {
@@ -355,48 +399,7 @@ extension PTBaseViewController: PHPhotoLibraryChangeObserver {
             return handle
         }
     }
-    
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        PTGCDManager.gcdAfter(time: 1) {
-            let fetchOptions = PHFetchOptions()
-            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-            
-            if let lastAsset = assets.firstObject {
-                if lastAsset.mediaSubtypes == .photoScreenshot {
-                    if let image = self.getImage(for: lastAsset) {
-                        // 在这里使用截图
-                        if self.screenShotHandle != nil {
-                            self.screenShotHandle!(image)
-                        } else {
-                            if self.screenFunc == nil {
-                                self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image,dismiss: {
-                                    self.screenFunc = nil
-                                })
-                                
-                                if self.screenShotActionHandle != nil {
-                                    self.screenFunc!.actionHandle = self.screenShotActionHandle!
-                                }
-                            }
-                        }
-                    } else {
-                        if self.screenShotHandle != nil {
-                            self.screenShotHandle!(nil)
-                        }
-                    }
-                } else {
-                    if self.screenShotHandle != nil {
-                        self.screenShotHandle!(nil)
-                    }
-                }
-            } else {
-                if self.screenShotHandle != nil {
-                    self.screenShotHandle!(nil)
-                }
-            }
-        }
-    }
-    
+        
     func getImage(for asset: PHAsset) -> UIImage? {
         let imageManager = PHImageManager.default()
         let options = PHImageRequestOptions()

@@ -258,7 +258,14 @@ public class PTMediaLibView:UIView {
         currentAlbum = currentModels
         markSelected(source: &totalModels, selected: &selectedModel)
         
-        PHPhotoLibrary.shared().register(self)
+        UIScreen.pt.detectScreenShot { type in
+            switch type {
+            case .Normal:
+                self.loadMedia()
+            case .Video:
+                break
+            }
+        }
     }
         
     required init?(coder: NSCoder) {
@@ -573,7 +580,6 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         view.hightlightTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.normalTitleFont = .appfont(size: 15)
         view.addActionHandlers { sender in
-            PHPhotoLibrary.shared().unregisterChangeObserver(self)
             
             let config = PTMediaLibConfig.share
             
@@ -731,10 +737,6 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
 #else
         showMediaLib()
 #endif
-        
-        if #available(iOS 14.0, *), PHPhotoLibrary.authorizationStatus(for: .readWrite) == .limited {
-            PHPhotoLibrary.shared().register(self)
-        }
     }
     
     private func showMediaLib() {

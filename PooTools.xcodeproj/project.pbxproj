@@ -1383,6 +1383,7 @@
 			children = (
 				5589FF42299F314900519383 /* AnyClass+PTEX.swift */,
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
+				55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */,
 				55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */,
 				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
 				556F84C32B4A874D008675EB /* AVPlayerItem+PTEX.swift */,
@@ -1394,6 +1395,7 @@
 				55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */,
 				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
 				55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */,
+				55BA09492BC0623500F58126 /* Collection+PTEX.swift */,
 				55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */,
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
 				9AE44689285862B0007DC2B5 /* Date+PTEX.swift */,
@@ -1467,8 +1469,6 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				55BA09492BC0623500F58126 /* Collection+PTEX.swift */,
-				55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";

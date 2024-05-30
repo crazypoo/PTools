@@ -115,7 +115,6 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         
         self.title = "PT Photo picker album list title".localized()
 #endif
-        PHPhotoLibrary.shared().register(self)
         
         view.addSubviews([collectionView])
         collectionView.snp.makeConstraints { make in
@@ -125,6 +124,15 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         
         if selectedAlbum.models.isEmpty {
             selectedAlbum.refetchPhotos()
+        }
+        
+        UIScreen.pt.detectScreenShot { type in
+            switch type {
+            case .Normal:
+                self.loadAlbumList()
+            case .Video:
+                break
+            }
         }
         
         loadAlbumList()

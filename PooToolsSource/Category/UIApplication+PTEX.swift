@@ -67,6 +67,14 @@ public extension PTPOP where Base: UIApplication {
             UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
         }
     }
+    
+    /// app定位区域
+    static var localizations: String? {
+        guard let weakInfoDictionary = Bundle.main.infoDictionary, let content = weakInfoDictionary[String(kCFBundleLocalizationsKey)] else {
+            return nil
+        }
+        return (content as! String)
+    }
 }
 
 @available(iOSApplicationExtension, unavailable)
