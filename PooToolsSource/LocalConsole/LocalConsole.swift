@@ -419,7 +419,7 @@ public class LocalConsole: NSObject {
                 CGPoint(x: rightEndpointX, y: bottomEndpointY),
             ]
             
-            if terminal!.frame.minX <= 0 {
+            if terminal?.frame.minX ?? 0 <= 0 {
                 
                 // Left edge endpoints.
                 endpoints = [endpoints[0], endpoints[2]]
@@ -432,7 +432,7 @@ public class LocalConsole: NSObject {
                         endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[1].y))
                     }
                 }
-            } else if terminal!.frame.maxX >= screenSize.width {
+            } else if terminal?.frame.maxX ?? 0 >= screenSize.width {
                 
                 // Right edge endpoints.
                 endpoints = [endpoints[1], endpoints[3]]
@@ -456,7 +456,7 @@ public class LocalConsole: NSObject {
                 CGPoint(x: screenSize.width / 2, y: bottomEndpointY)
             ]
             
-            if terminal!.frame.minX <= 0 {
+            if terminal?.frame.minX ?? 0 <= 0 {
                 
                 // Left edge hiding endpoints.
                 if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
@@ -464,7 +464,7 @@ public class LocalConsole: NSObject {
                 } else {
                     endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[1].y))
                 }
-            } else if terminal!.frame.maxX >= screenSize.width {
+            } else if terminal?.frame.maxX ?? 0 >= screenSize.width {
                 
                 // Right edge hiding endpoints.
                 if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {

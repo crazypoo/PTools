@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.50.6'
+    s.version     = '3.51.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -186,7 +186,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'TextFieldEffects'
         subspec.dependency 'UITextField+Shake'
-        subspec.dependency 'CRBoxInputView'
         subspec.dependency 'PhoneNumberKit'
         subspec.source_files = 'PooToolsSource/Input/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
