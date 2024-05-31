@@ -88,4 +88,7 @@ public struct PTCoreUserDefultsWrapper {
     @PTUserDefault(withKey: "LocalConsole.Height", defaultValue: nil) public static var PTLocalConsoleHeight:CGFloat?
     @PTUserDefault(withKey: "LocalConsole.X", defaultValue: nil) public static var PTLocalConsoleX:CGFloat?
     @PTUserDefault(withKey: "LocalConsole.Y", defaultValue: nil) public static var PTLocalConsoleY:CGFloat?
+    @PTUserDefault(withKey: "MockLocationLat", defaultValue: 0) public static var PTMockLocationLat:CGFloat
+    @PTUserDefault(withKey: "MockLocationLng", defaultValue: 0) public static var PTMockLocationLng:CGFloat
+    @PTUserDefault(withKey: "MockLocationOpen", defaultValue: false) public static var PTMockLocationOpen:Bool
 }

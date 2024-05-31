@@ -13,6 +13,7 @@ import AttributedString
 import SwifterSwift
 import SafeSFSymbols
 import SnapKit
+import CoreLocation
 
 public let LocalConsoleFontMin:CGFloat = 4
 public let LocalConsoleFontMax:CGFloat = 20
@@ -50,6 +51,7 @@ extension String {
     static let debugController = "Debug Input Controller"
     static let crashLog = "Crash log"
     static let network = "Network"
+    static let mockLocation = "MockLocation"
 }
 
 extension UIImage {
@@ -151,6 +153,7 @@ extension UIImage {
     static let performanceImage = UIImage(.eyeglasses).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let crashLogImage = UIImage(.exclamationmark.triangleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let networkImage = UIImage(.globe).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let mockLocationImage = UIImage(.location.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {
@@ -323,6 +326,9 @@ public class LocalConsole: NSObject {
         UIWindow.db_swizzleMethods()
         URLSessionConfiguration.swizzleMethods()
         UIViewController.lvcdSwizzleLifecycleMethods()
+        if PTCoreUserDefultsWrapper.PTMockLocationOpen {
+            CLLocationManager.swizzleMethods()
+        }
         StdoutCapture.startCapturing()
         StderrCapture.startCapturing()
         StderrCapture.syncData()
@@ -541,10 +547,7 @@ public class LocalConsole: NSObject {
                 
                 let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self.possibleEndpoints)
                 
-                let relativeInitialVelocity = CGVector(
-                    dx: relativeVelocity(forVelocity: self.terminal!.x, from: self.terminal!.center.x, to: nearestTargetPosition.x),
-                    dy: relativeVelocity(forVelocity: self.terminal!.x, from: self.terminal!.center.y, to: nearestTargetPosition.y)
-                )
+                let relativeInitialVelocity = CGVector(dx: relativeVelocity(forVelocity: self.terminal!.x, from: self.terminal!.center.x, to: nearestTargetPosition.x), dy: relativeVelocity(forVelocity: self.terminal!.x, from: self.terminal!.center.y, to: nearestTargetPosition.y))
                 
                 let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
                 let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
@@ -594,6 +597,7 @@ public class LocalConsole: NSObject {
                     let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
                     let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
                     let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
+                    let content_mocklocation = PTActionSheetItem(title: .mockLocation,image: UIImage.mockLocationImage,itemAlignment: .left)
                     let content_network = PTActionSheetItem(title: .network,image: UIImage.networkImage,itemAlignment: .left)
                     let content_crashLog = PTActionSheetItem(title: .crashLog,image: UIImage.crashLogImage,itemAlignment: .left)
                     let content_performance = PTActionSheetItem(title: .Performance,image: UIImage.performanceImage,itemAlignment: .left)
@@ -603,7 +607,7 @@ public class LocalConsole: NSObject {
                     let content_flex = PTActionSheetItem(title: .flex,image: UIImage.dev3thPartyImage,itemAlignment: .left)
                     let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
 
-                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_network,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_inapp]
+                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_mocklocation,content_network,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_inapp]
 
                     var devMaskString = ""
                     var devMaskBubbleString = ""
@@ -684,6 +688,8 @@ public class LocalConsole: NSObject {
                             self.crashLogControlOpen()
                         } else if title == .network {
                             self.networkWatcherOpen()
+                        } else if title == .mockLocation {
+                            self.mockLocationOpen()
                         }
                     }
                 }
@@ -813,6 +819,10 @@ public class LocalConsole: NSObject {
             debugActions.append(userDefaults)
         }
 
+        let mockLocation = UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { _ in
+            self.mockLocationOpen()
+        }
+        
         let network = UIAction(title: .network, image: UIImage.networkImage) { _ in
             self.networkWatcherOpen()
         }
@@ -908,7 +918,7 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
+        debugActions.append(contentsOf: [mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -951,6 +961,11 @@ public class LocalConsole: NSObject {
     /// Clear text in the console view.
     public func clear() {
         currentText = ""
+    }
+    
+    func mockLocationOpen() {
+        let vc = PTDebugLocationViewController()
+        consoleSheetPresent(vc: vc)
     }
     
     func networkWatcherOpen() {
