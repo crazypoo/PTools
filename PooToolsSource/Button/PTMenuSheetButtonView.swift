@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PTMentSheetButtomView: UIView {
+public class PTMenuSheetButtonView: UIView {
     public enum Direction {
         case up
         case down
@@ -24,7 +24,7 @@ public class PTMentSheetButtomView: UIView {
     
     // MARK: - UI properties
     
-    private var arrowButton: PTMentSheetArrowButton!
+    private var arrowButton: PTMenuSheetArrowButton!
     private var separatorView: UIView!
     private var itemsButtons: [UIButton] = []
     
@@ -78,7 +78,7 @@ public class PTMentSheetButtomView: UIView {
     
     // MARK: - Init
     
-    public init(frame: CGRect = .zero, direction: Direction = .right, items: [PTMentSheetButtomItems]) {
+    public init(frame: CGRect = .zero, direction: Direction = .right, items: [PTMenuSheetButtonItems]) {
         
         self.direction = direction
         super.init(frame: frame)
@@ -163,7 +163,7 @@ public class PTMentSheetButtomView: UIView {
         
         // arrow button
         
-        arrowButton = PTMentSheetArrowButton()
+        arrowButton = PTMenuSheetArrowButton()
         arrowButton.addActionHandlers { [weak self] sender in
             guard let state = self?.state else { return }
             
@@ -183,7 +183,7 @@ public class PTMentSheetButtomView: UIView {
         insertSubview(separatorView, belowSubview: arrowButton)
     }
     
-    private func setupButtons(with items: [PTMentSheetButtomItems]) {
+    private func setupButtons(with items: [PTMenuSheetButtonItems]) {
         
         items.forEach { item in
             

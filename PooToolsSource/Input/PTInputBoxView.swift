@@ -14,93 +14,93 @@ public enum PTInputBoxConfigurationType {
     case Alphabet
 }
 
-public struct PTInputBoxConfiguration {
+open class PTInputBoxConfiguration :NSObject {
         
     /// 输入框个数
-    var inputBoxNumber: Int = 0
+    open var inputBoxNumber: Int = 0
     
     /// 单个输入框的宽度
-    var inputBoxWidth: CGFloat = 0.0
+    open var inputBoxWidth: CGFloat = 0.0
     
     /// 单个输入框的高度
-    var inputBoxHeight: CGFloat = 0.0
+    open var inputBoxHeight: CGFloat = 0.0
     
     /// 单个输入框的边框宽度, Default is 1 pixel
-    var inputBoxBorderWidth: CGFloat = 1.0 / UIScreen.main.scale
+    open var inputBoxBorderWidth: CGFloat = 1.0 / UIScreen.main.scale
     
     /// 单个输入框的边框圆角
-    var inputBoxCornerRadius: CGFloat = 0.0
+    open var inputBoxCornerRadius: CGFloat = 0.0
     
     /// 输入框间距, Default is 5
-    var inputBoxSpacing: CGFloat = 5.0
+    open var inputBoxSpacing: CGFloat = 5.0
     
     /// 左边距
-    var leftMargin: CGFloat = 0.0
+    open var leftMargin: CGFloat = 0.0
     
     /// 单个输入框的颜色, Default is lightGrayColor
-    var inputBoxColor: UIColor? = UIColor.lightGray
+    open var inputBoxColor: UIColor? = UIColor.lightGray
     
     /// 光标颜色, Default is blueColor
-    var tintColor: UIColor? = UIColor.blue
+    open var tintColor: UIColor? = UIColor.blue
     
     /// 显示 或 隐藏
-    var secureTextEntry: Bool = false
+    open var secureTextEntry: Bool = false
     
     /// 字体, Default is UIFont.boldSystemFont(ofSize: 16.0)
-    var font: UIFont? = UIFont.boldSystemFont(ofSize: 16.0)
+    open var font: UIFont? = UIFont.boldSystemFont(ofSize: 16.0)
     
     /// 颜色, Default is blackColor
-    var textColor: UIColor? = UIColor.black
+    open var textColor: UIColor? = UIColor.black
     
     /// 输入类型：数字+字母，数字，字母. Default is '.number_alphabet'
-    var inputType: PTInputBoxConfigurationType = PTInputBoxConfigurationType.NumberAlphabet
+    open var inputType: PTInputBoxConfigurationType = PTInputBoxConfigurationType.NumberAlphabet
     
     /// 自动弹出键盘
-    var autoShowKeyboard: Bool = false
+    open var autoShowKeyboard: Bool = false
     
     /// 默认0.5
-    var autoShowKeyboardDelay: TimeInterval = 0.5
+    open var autoShowKeyboardDelay: TimeInterval = 0.5
     
     /// 光标闪烁动画, Default is YES
-    var showFlickerAnimation: Bool = true
+    open var showFlickerAnimation: Bool = true
     
     /// 显示下划线
-    var showUnderLine: Bool = false
+    open var showUnderLine: Bool = false
     
     /// 下划线尺寸
-    var underLineSize: CGSize = CGSize.zero
+    open var underLineSize: CGSize = CGSize.zero
     
     /// 下划线颜色, Default is lightGrayColor
-    var underLineColor: UIColor = UIColor.lightGray
+    open var underLineColor: UIColor = UIColor.lightGray
     
     ///自定义的输入占位字符，secureTextEntry = false，有效
-    var customInputHolder: String = ""
+    open var customInputHolder: String = ""
     
     /// 设置键盘类型
-    var keyboardType: UIKeyboardType = UIKeyboardType.default
+    open var keyboardType: UIKeyboardType = UIKeyboardType.default
     
     /// 使用系统的密码键盘
-    var useSystemPasswordKeyboard: Bool = false
+    open var useSystemPasswordKeyboard: Bool = false
     
     /// 单个输入框输入时的颜色
-    var inputBoxHighlightedColor: UIColor? = nil
+    open var inputBoxHighlightedColor: UIColor? = nil
     
     /// 下划线高亮颜色
-    var underLineHighlightedColor: UIColor? = nil
+    open var underLineHighlightedColor: UIColor? = nil
     
     /* 输入完成后，可能根据不同的状态，显示不同的颜色。  */
     
     /// 单个输入框输入完成时的颜色
-    var inputBoxFinishColors: [UIColor] = []
+    open var inputBoxFinishColors: [UIColor] = []
     
     /// 下划线高亮颜色
-    var underLineFinishColors: [UIColor] = []
+    open var underLineFinishColors: [UIColor] = []
     
     /// 输入完成时字体
-    var finishFonts: [UIFont] = []
+    open var finishFonts: [UIFont] = []
     
     /// 输入完成时颜色
-    var finishTextColors: [UIColor] = []
+    open var finishTextColors: [UIColor] = []
 }
 
 public class PTInputBoxView: UIView {

@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class PTMentSheetButtomItems {
+public class PTMenuSheetButtonItems {
     
-    public typealias ActionBlock = (PTMentSheetButtomItems) -> Void
+    public typealias ActionBlock = (PTMenuSheetButtonItems) -> Void
     
     // MARK: - Properties
     

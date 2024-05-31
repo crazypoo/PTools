@@ -1021,6 +1021,36 @@ class PTFuncNameViewController: PTBaseViewController {
                 PTNSLogConsole("123123123123")
             }
         }
+        
+        let insets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+
+        let items = [
+            PTMenuSheetButtonItems(
+                image: "▶️".emojiToImage(emojiFont: .appfont(size: 24)),
+                highlightedImage: "▶️".emojiToImage(emojiFont: .appfont(size: 24)),
+                imageEdgeInsets: insets,
+                identifier: "delete",
+                action: {_ in}
+            ),
+            PTMenuSheetButtonItems(
+                image: "😂".emojiToImage(emojiFont: .appfont(size: 24)),
+                highlightedImage: "🤣".emojiToImage(emojiFont: .appfont(size: 24)),
+                imageEdgeInsets: insets,
+                identifier: "edit",
+                action: {_ in}
+            )
+        ]
+        let buttonView = PTMenuSheetButtonView(direction: .right, items: items)
+        buttonView.backgroundColor = .randomColor
+        buttonView.arrowWidth = 2
+        buttonView.separatorWidth = 2
+        buttonView.separatorInset = 12
+        buttonView.layer.cornerRadius = 30
+        buttonView.accessibilityIdentifier = "expandableButton"
+        view.addSubview(buttonView)
+        PTGCDManager.gcdAfter(time: 0.35) {
+            buttonView.frame = CGRect(x: 24, y: 400, width: 60, height: 60)
+        }
     }
     
     func flashAd(notifi:Notification) {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PTMentSheetArrowButton: UIButton {
+public class PTMenuSheetArrowButton: UIButton {
     
     private typealias TopBottomPaths = (top: CGPath, bottom: CGPath)
     
