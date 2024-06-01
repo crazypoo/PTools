@@ -15,26 +15,16 @@ import Combine
 import TipKit
 import AttributedString
 
-#if canImport(LifetimeTracker)
-import LifetimeTracker
-#endif
-
 let shareText = "我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡我是辣鸡"
 let shareURLString = "https://www.github.com/crazypoo"
 
 class PTSwiftViewController: PTBaseViewController {
         
 //    private var videoEdit: PTVideoEdit?
-//    fileprivate var cancellables = Set<AnyCancellable>()    
-    class var lifetimeConfiguration: LifetimeConfiguration {
-        LifetimeConfiguration(maxCount: 1, groupName: "VC")
-    }
+//    fileprivate var cancellables = Set<AnyCancellable>()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-#if canImport(LifetimeTracker)
-        trackLifetime()
-#endif
     }
     
     required init?(coder: NSCoder) {

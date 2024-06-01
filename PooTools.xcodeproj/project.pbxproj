@@ -581,7 +581,6 @@
 		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
 		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
 		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
-		CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF420AC3F7C00949DF6 /* Masonry.framework */; };
 		CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
@@ -1245,7 +1244,6 @@
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
 				CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */,
 				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
-				CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */,
 				CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */,
 				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
 				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,

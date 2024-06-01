@@ -30,21 +30,6 @@ PODS:
   - CollectionViewPagingLayout (1.1.0)
   - CryptoSwift (1.8.2)
   - DeviceKit (5.3.0)
-  - DiDiPrism (0.2.8):
-    - DiDiPrism/Core (= 0.2.8)
-  - DiDiPrism/Core (0.2.8):
-    - RSSwizzle
-  - DiDiPrism_Ability/WithBehaviorDetect (0.2.8):
-    - DiDiPrism
-    - JSONModel (~> 1.0)
-  - DiDiPrism_Ability/WithBehaviorRecord (0.2.8):
-    - DiDiPrism
-  - DiDiPrism_Ability/WithBehaviorReplay (0.2.8):
-    - DiDiPrism
-    - JSONModel (~> 1.0)
-  - DiDiPrism_Ability/WithDataVisualization (0.2.8):
-    - DiDiPrism
-    - Masonry
   - DZNEmptyDataSet (1.8.1)
   - EmptyDataSet-Swift (5.0.0)
   - ESTabBarController-swift (2.8.0)
@@ -76,12 +61,10 @@ PODS:
   - Instructions (2.3.0)
   - IOSSecuritySuite (2.1.0)
   - IQKeyboardManagerSwift (7.0.3)
-  - JSONModel (1.8.0)
   - JXPagingView/Paging (2.1.3)
   - JXSegmentedView (1.3.3)
   - KakaJSON (1.1.2)
   - Kingfisher (7.11.0)
-  - LifetimeTracker (1.8.3)
   - LookinServer (1.2.8):
     - LookinServer/Core (= 1.2.8)
   - LookinServer/Core (1.2.8)
@@ -89,7 +72,6 @@ PODS:
   - LXFProtocolTool/LXFEmptyDataSetable (0.2.0):
     - DZNEmptyDataSet (~> 1.8.1)
   - MarqueeLabel (4.3.2)
-  - Masonry (1.1.0)
   - MJRefresh (3.7.9)
   - NotificationBannerSwift (3.2.1):
     - MarqueeLabel (~> 4.3.0)
@@ -441,7 +423,6 @@ PODS:
   - Popovers (1.3.0)
   - Protobuf (3.22.1)
   - RangeSeekSlider (1.8.0)
-  - RSSwizzle (0.1.0)
   - SafeSFSymbols (2.0.0)
   - SnapKit (5.6.0)
   - SnapshotKit (0.3.2)
@@ -503,14 +484,8 @@ PODS:
 
 DEPENDENCIES:
   - Bugly
-  - DiDiPrism
-  - DiDiPrism_Ability/WithBehaviorDetect
-  - DiDiPrism_Ability/WithBehaviorRecord
-  - DiDiPrism_Ability/WithBehaviorReplay
-  - DiDiPrism_Ability/WithDataVisualization
   - FLEX
   - InAppViewDebugger
-  - LifetimeTracker
   - LookinServer
   - PooTools/InputAll (from `PooTools.podspec`)
   - SwiftLint
@@ -530,8 +505,6 @@ SPEC REPOS:
     - CollectionViewPagingLayout
     - CryptoSwift
     - DeviceKit
-    - DiDiPrism
-    - DiDiPrism_Ability
     - DZNEmptyDataSet
     - EmptyDataSet-Swift
     - ESTabBarController-swift
@@ -545,17 +518,14 @@ SPEC REPOS:
     - Instructions
     - IOSSecuritySuite
     - IQKeyboardManagerSwift
-    - JSONModel
     - JXPagingView
     - JXSegmentedView
     - KakaJSON
     - Kingfisher
-    - LifetimeTracker
     - LookinServer
     - lottie-ios
     - LXFProtocolTool
     - MarqueeLabel
-    - Masonry
     - MJRefresh
     - NotificationBannerSwift
     - PhoneNumberKit
@@ -564,7 +534,6 @@ SPEC REPOS:
     - Popovers
     - Protobuf
     - RangeSeekSlider
-    - RSSwizzle
     - SafeSFSymbols
     - SnapKit
     - SnapshotKit
@@ -602,8 +571,6 @@ SPEC CHECKSUMS:
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
   CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
   DeviceKit: 14a6176f97f305611abbe71e3a30554ce82ad201
-  DiDiPrism: ac5de3597704de7dec418a63e601b7e5e022b4d6
-  DiDiPrism_Ability: f715b861b9bb009ba86fc9a849b8a0486ae3924f
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   ESTabBarController-swift: 05593a6ad64700b03c0eb60ff625916370aa4136
@@ -617,17 +584,14 @@ SPEC CHECKSUMS:
   Instructions: 3aac22d036495ba4c40e00747e0a275da40ce53d
   IOSSecuritySuite: 45e8531b05ffa72b5661cbdb5b5b5648a8de1a84
   IQKeyboardManagerSwift: f9c5dc36cba16ddd2e51fa7d51c34a2e083029b5
-  JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   JXPagingView: afdd2e9af09c90160dd232b970d603cc6e7ddd0e
   JXSegmentedView: 651b60fcf705258ba9395edd53876dbd2853fb68
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
   Kingfisher: b9c985d864d43515f404f1ef4a8ce7d802ace3ac
-  LifetimeTracker: e67647bf9130e4173e488689896f057a63de16ec
   LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
   lottie-ios: fcb5e73e17ba4c983140b7d21095c834b3087418
   LXFProtocolTool: 8d1e53c010f6941c273b9908be24bfc20d1ce2f2
   MarqueeLabel: 15e524a6762552bb279cb17438b8a94990269fb9
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: 3d9a20cfe8ee68f35c2a3ae9474093133f72a8a1
@@ -637,7 +601,6 @@ SPEC CHECKSUMS:
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
-  RSSwizzle: d561958f595028bfcef98c7d55c318b3878a61c6
   SafeSFSymbols: c57c8752149b2ddc0213d3d519a3a31a8bd76340
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SnapshotKit: 4e6c25203719cd6be29d3d53a8160c4933102369
@@ -658,6 +621,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 60cb001b65e07a0f5dd313202840c007a3fed041
+PODFILE CHECKSUM: dde51d0515fe95e962ac24e212508f4f3292de59
 
 COCOAPODS: 1.15.0
