@@ -61,4 +61,17 @@ public extension Bundle {
         }
         return []
     }
+    
+    // MARK: 读取项目本地文件数据
+    /// 读取项目本地文件数据
+    /// - Parameters:
+    ///   - fileName: 文件名字
+    ///   - type: 资源类型
+    /// - Returns: 返回对应URL
+    static func readLocalData(_ fileName: String, _ type: String) -> URL? {
+        guard let path = Bundle.main.path(forResource: fileName, ofType: type) else {
+            return nil
+        }
+        return URL(fileURLWithPath: path)
+    }
 }

@@ -293,7 +293,7 @@
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
-		5589FF5029A87BA700519383 /* PTContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4F29A87BA700519383 /* PTContract.swift */; };
+		5589FF5029A87BA700519383 /* PTContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4F29A87BA700519383 /* PTContact.swift */; };
 		558B77B62BBC52B300BD7AB0 /* PTChatListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */; };
 		558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */; };
 		558B77B92BBC52B300BD7AB0 /* PTChatBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77A92BBC52B300BD7AB0 /* PTChatBaseCell.swift */; };
@@ -896,7 +896,7 @@
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
-		5589FF4F29A87BA700519383 /* PTContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTContract.swift; sourceTree = "<group>"; };
+		5589FF4F29A87BA700519383 /* PTContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTContact.swift; sourceTree = "<group>"; };
 		558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatListModel.swift; sourceTree = "<group>"; };
 		558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatConfig.swift; sourceTree = "<group>"; };
 		558B77A92BBC52B300BD7AB0 /* PTChatBaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatBaseCell.swift; sourceTree = "<group>"; };
@@ -1273,7 +1273,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55C409972C097014009C0FB6 /* DEBUGLocation */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1301,11 +1300,12 @@
 				55D59C5E28F3E81000B4FF76 /* CodeView */,
 				557E3A462C030C4B002466A0 /* Colors */,
 				55B4FA292AE108E3006D35F3 /* ContactsPermission */,
-				5589FF4E29A87B7E00519383 /* Contract */,
+				5589FF4E29A87B7E00519383 /* Contact */,
 				55D59C5B28F3E6FB00B4FF76 /* Core */,
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				55024DF029F370DB00244E44 /* Debug */,
+				55C409972C097014009C0FB6 /* DEBUGLocation */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				55B4FA202AE1005E006D35F3 /* FaceIDPermission */,
 				55F162FF2B1977C000320925 /* FilterCamera */,
@@ -2099,12 +2099,12 @@
 			path = Stepper;
 			sourceTree = "<group>";
 		};
-		5589FF4E29A87B7E00519383 /* Contract */ = {
+		5589FF4E29A87B7E00519383 /* Contact */ = {
 			isa = PBXGroup;
 			children = (
-				5589FF4F29A87BA700519383 /* PTContract.swift */,
+				5589FF4F29A87BA700519383 /* PTContact.swift */,
 			);
-			path = Contract;
+			path = Contact;
 			sourceTree = "<group>";
 		};
 		558B77A32BBC526700BD7AB0 /* MessageKit */ = {
@@ -3458,7 +3458,7 @@
 				557E3A8E2C044157002466A0 /* CwlDemangle.swift in Sources */,
 				55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */,
 				55C409922C061B8A009C0FB6 /* PTDebugShareManager.swift in Sources */,
-				5589FF5029A87BA700519383 /* PTContract.swift in Sources */,
+				5589FF5029A87BA700519383 /* PTContact.swift in Sources */,
 				55BCB9832B1733620016A4C2 /* PTEditInputViewController.swift in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
 				55B4FA392AE10D98006D35F3 /* PTPermissionSiri.swift in Sources */,

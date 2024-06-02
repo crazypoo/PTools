@@ -9,20 +9,6 @@
 import UIKit
 
 public extension NSObject {
-    //MARK: 獲取一個Class中的Keys
-    ///獲取一個Class中的Keys
-    class func getClassName() {
-        var count:UInt32 = 0
-        let ivars = class_copyIvarList((self as AnyClass), &count)
-        
-        for i in 0..<count {
-            let ivar = ivars![Int(i)]
-            let cName = ivar_getName(ivar)!
-            let keysName = String(utf8String: cName)
-            PTNSLogConsole(keysName!,levelType: PTLogMode,loggerType: .AnyClass)
-        }
-        free(ivars)
-    }
     
     var className: String {
         String(describing: type(of: self))

@@ -98,4 +98,18 @@ public extension PTPOP where Base == CGFloat {
     var toPi: CGFloat {
         base / 180 * .pi
     }
+    
+    // MARK: 角度转弧度
+    /// 角度转弧度
+    /// - Returns: 弧度
+    func degreesToRadians() -> CGFloat {
+        return (.pi * base) / 180.0
+    }
+    
+    // MARK: 弧度转角度
+    /// 角弧度转角度
+    /// - Returns: 角度
+    func radiansToDegrees() -> CGFloat {
+        return (base * 180.0) / .pi
+    }
 }

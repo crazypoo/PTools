@@ -182,6 +182,16 @@ public extension Array {
         }
         return items.limit(fillCount)
     }
+    
+    /// 随机取出几个元素
+    subscript (randomPick n: Int) -> [Element] {
+        guard n <= self.count else { return self }
+        var copy = self
+        for i in stride(from: count - 1, to: count - n - 1, by: -1) {
+            copy.swapAt(i, Int(arc4random_uniform(UInt32(i + 1))))
+        }
+        return Array(copy.suffix(n))
+    }
 }
 
 //MARK: 遵守NSObjectProtocol协议对应数组的扩展方法
@@ -236,5 +246,28 @@ public extension Array where Self.Element == String {
     /// - Returns: 转化后的字符串
     func toStrinig(separator: String = "") -> String {
         joined(separator: separator)
+    }
+}
+
+public extension Array where Element : Equatable {
+        
+    //MARK: 获取两个数组的相同元素
+    /// 获取两个元素的相同元素
+    /// - Parameter array: 数组元素
+    /// - Returns: 返回相同的元素
+    func sameElement(array: [Element]) -> [Element] {
+        var dict1: [String: Int] = [:]
+        self.forEach({
+            dict1["\($0)"] = 1
+        })
+        var sameElements: [Element] = []
+        array.forEach({
+            if 1 == dict1["\($0)"] {
+                // 此处便可取到相同元素
+                debugPrint("相同的元素：\($0)")
+                sameElements.append($0)
+            }
+        })
+        return sameElements
     }
 }

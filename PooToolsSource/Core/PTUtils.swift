@@ -98,7 +98,8 @@ public func deviceSafeAreaInsets() -> UIEdgeInsets {
     return insets
 }
 
-public func PTIVarList(_ className:String) {
+public func PTIVarList(_ className:String) ->[String] {
+    var listName = [String]()
     var count : UInt32 = 0
     let list = class_copyIvarList(NSClassFromString(className), &count)
     for i in 0..<Int(count) {
@@ -106,18 +107,46 @@ public func PTIVarList(_ className:String) {
         let name = ivar_getName(ivar)
         let type = ivar_getTypeEncoding(ivar)
         PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .Utils)
+        listName.append(String(cString: name!))
     }
+    free(list)
+    return listName
 }
 
-public func PTPropertyList(_ classString: String) {
+public func PTPropertyList(_ classString: String) ->[String] {
+    var propertyListName = [String]()
     var count : UInt32 = 0
     let list = class_copyPropertyList(NSClassFromString(classString), &count)
     for i in 0..<Int(count) {
-        let property = list![i]
+        let property: objc_property_t = list![i]
         let name = property_getName(property)
         let type = property_getAttributes(property)
         PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .Utils)
+        guard let propertyName = NSString(utf8String: name) as String? else {
+            PTNSLogConsole("Couldn't unwrap property name for \(property)",levelType: PTLogMode,loggerType: .Utils)
+            break
+        }
+        propertyListName.append(propertyName)
     }
+    free(list)
+    return propertyListName
+}
+
+public func PTMethodsList(_ classString: String) ->[Selector] {
+    var methodNum: UInt32 = 0
+    // var list = [Method]()
+    var list = [Selector]()
+    let methods = class_copyMethodList(NSClassFromString(classString), &methodNum)
+    for index in 0..<numericCast(methodNum) {
+        if let met = methods?[index] {
+            let selector = method_getName(met)
+            PTNSLogConsole("\(classString)的方法：\(selector)",levelType: PTLogMode,loggerType: .Utils)
+            // list.append(met)
+            list.append(selector)
+        }
+    }
+    free(methods)
+    return list
 }
 
 /// 判断一个类是否是自定义类
