@@ -14,7 +14,7 @@ import OSLog
 
 //PTNSLog(_ msg: Any...,
 public func PTNSLogConsole(_ any:Any...,
-                           isWriteLog: Bool = false,
+                           isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
                            file: NSString = #file,
                            line: Int = #line,
                            column: Int = #column,
@@ -51,29 +51,7 @@ public func PTNSLogConsole(_ any:Any...,
         msgStr += "\(newString)\n"
     }
     
-    if UIApplication.shared.inferredEnvironment != .appStore {
-        PTNSLog(msgStr,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
-    } else {
-        DDLog.add(DDOSLogger.sharedInstance)
-        switch levelType {
-        case .Debug:
-            DDLogDebug(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Error:
-            DDLogError(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Info:
-            DDLogInfo(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Warning:
-            DDLogWarn(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Trace:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Notice:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Critical:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: msgStr))
-        case .Fault:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: msgStr))
-        }
-    }
+    PTNSLog(msgStr,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
 }
 
 //MARK: - 自定义打印
@@ -85,7 +63,7 @@ public func PTNSLogConsole(_ any:Any...,
 /// - Parameter column: 打印内容所在的 列
 /// - Parameter fn: 打印内容的函数名
 public func PTNSLog(_ msg: Any...,
-                    isWriteLog: Bool = false,
+                    isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
                     file: NSString = #file,
                     line: Int = #line,
                     column: Int = #column,
@@ -108,32 +86,13 @@ public func PTNSLog(_ msg: Any...,
     }
     
     let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:ss")
-    let prefix = "\n🔨\(currentAppStatus)Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)❌Conclusión❌"
+    let prefix = "\n🔨\(currentAppStatus)Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)❌Conclusión❌\n"
     
     switch UIApplication.applicationEnvironment() {
     case .appStore:
-        DDLog.add(DDOSLogger.sharedInstance)
-        switch levelType {
-        case .Debug:
-            DDLogDebug(DDLogMessageFormat(stringLiteral: prefix))
-        case .Error:
-            DDLogError(DDLogMessageFormat(stringLiteral: prefix))
-        case .Info:
-            DDLogInfo(DDLogMessageFormat(stringLiteral: prefix))
-        case .Warning:
-            DDLogWarn(DDLogMessageFormat(stringLiteral: prefix))
-        case .Trace:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-        case .Notice:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-        case .Critical:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-        case .Fault:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-        }
+        DDLogSet(levelType: levelType,prefix: prefix)
     default:
         if #available(iOS 14.0, *) {
-            
             switch levelType {
             case .Debug:
                 Logger.loger(categoryName: loggerType.rawValue).debug("\(prefix)")
@@ -153,7 +112,7 @@ public func PTNSLog(_ msg: Any...,
                 Logger.loger(categoryName: loggerType.rawValue).fault("\(prefix)")
             }
         } else {
-            print(prefix)
+            DDLogSet(levelType: levelType,prefix: prefix)
         }
         
 #if POOTOOLS_DEBUG
@@ -172,6 +131,29 @@ public func PTNSLog(_ msg: Any...,
     let cachePath = FileManager.pt.CachesDirectory()
     let logURL = cachePath + "/log.txt"
     appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: "\(currentDate)",isWriteLog: isWriteLog,file: file,line: line,column: column,fn: fn)
+}
+
+fileprivate func DDLogSet(levelType:LoggerEXLevelType = .Info,
+                          prefix:String) {
+    DDLog.add(DDOSLogger.sharedInstance)
+    switch levelType {
+    case .Debug:
+        DDLogDebug(DDLogMessageFormat(stringLiteral: prefix))
+    case .Error:
+        DDLogError(DDLogMessageFormat(stringLiteral: prefix))
+    case .Info:
+        DDLogInfo(DDLogMessageFormat(stringLiteral: prefix))
+    case .Warning:
+        DDLogWarn(DDLogMessageFormat(stringLiteral: prefix))
+    case .Trace:
+        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
+    case .Notice:
+        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
+    case .Critical:
+        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
+    case .Fault:
+        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
+    }
 }
 
 // 在文件末尾追加新内容
@@ -194,12 +176,7 @@ private func appendText(fileURL: URL,
         
     } catch let error as NSError {
         let logString = "failed to append: \(error)"
-        if UIApplication.shared.inferredEnvironment != .appStore {
-            PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: .Error,loggerType: .Other)
-        } else {
-            DDLog.add(DDOSLogger.sharedInstance)
-            DDLogError(DDLogMessageFormat(stringLiteral: logString))
-        }
+        PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: .Error,loggerType: .Other)
     }
 }
 
@@ -212,29 +189,7 @@ public func PTPrintPointer<T>(ptr: UnsafePointer<T>,
                               levelType:LoggerEXLevelType = .Info,
                               loggerType:LoggerEXType = .Other) {
     let logString = "内存地址：\(ptr)) --------------"
-    if UIApplication.shared.inferredEnvironment != .appStore {
-        PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
-    } else {
-        DDLog.add(DDOSLogger.sharedInstance)
-        switch levelType {
-        case .Debug:
-            DDLogDebug(DDLogMessageFormat(stringLiteral: logString))
-        case .Error:
-            DDLogError(DDLogMessageFormat(stringLiteral: logString))
-        case .Info:
-            DDLogInfo(DDLogMessageFormat(stringLiteral: logString))
-        case .Warning:
-            DDLogWarn(DDLogMessageFormat(stringLiteral: logString))
-        case .Trace:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Notice:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Critical:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Fault:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        }
-    }
+    PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
 }
 
 // MARK: - 以下内容是：MJ的Mems演变过来
@@ -248,29 +203,7 @@ public func PTPrint<T>(val: inout T,
                        levelType:LoggerEXLevelType = .Info,
                        loggerType:LoggerEXType = .Other) {
     let logString = "-------------- \(type(of: val)) --------------\n变量的地址:\(PTMems.ptr(ofVal: &val))\n变量的内存:\(PTMems.memStr(ofVal: &val))\n变量的大小:\(PTMems.size(ofVal: &val))\n"
-    if UIApplication.shared.inferredEnvironment != .appStore {
-        PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
-    } else {
-        DDLog.add(DDOSLogger.sharedInstance)
-        switch levelType {
-        case .Debug:
-            DDLogDebug(DDLogMessageFormat(stringLiteral: logString))
-        case .Error:
-            DDLogError(DDLogMessageFormat(stringLiteral: logString))
-        case .Info:
-            DDLogInfo(DDLogMessageFormat(stringLiteral: logString))
-        case .Warning:
-            DDLogWarn(DDLogMessageFormat(stringLiteral: logString))
-        case .Trace:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Notice:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Critical:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Fault:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        }
-    }
+    PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
 }
 
 // MARK: 对象的：地址、内存、大小 的打印
@@ -283,29 +216,7 @@ public func PTPrint<T>(ref: T,
                        levelType:LoggerEXLevelType = .Info,
                        loggerType:LoggerEXType = .Other) {
     let logString = "-------------- \(type(of: ref)) --------------\n对象的地址:\(PTMems.ptr(ofRef: ref))\n对象的内存:\(PTMems.memStr(ofRef: ref))\n对象的大小:\(PTMems.size(ofRef: ref))\n"
-    if UIApplication.shared.inferredEnvironment != .appStore {
-        PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
-    } else {
-        DDLog.add(DDOSLogger.sharedInstance)
-        switch levelType {
-        case .Debug:
-            DDLogDebug(DDLogMessageFormat(stringLiteral: logString))
-        case .Error:
-            DDLogError(DDLogMessageFormat(stringLiteral: logString))
-        case .Info:
-            DDLogInfo(DDLogMessageFormat(stringLiteral: logString))
-        case .Warning:
-            DDLogWarn(DDLogMessageFormat(stringLiteral: logString))
-        case .Trace:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Notice:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Critical:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        case .Fault:
-            DDLogVerbose(DDLogMessageFormat(stringLiteral: logString))
-        }
-    }
+    PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
 }
 
 public enum PTMemAlign : Int {

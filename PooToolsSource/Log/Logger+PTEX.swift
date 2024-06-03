@@ -8,6 +8,7 @@
 
 import Foundation
 import OSLog
+import SwifterSwift
 
 public enum LoggerEXType:String,CaseIterable {
     case ViewCycle = "ViewCycle"
@@ -75,12 +76,7 @@ public let PTLogMode:LoggerEXLevelType = {
 @available(iOS 14.0, *)
 public extension Logger {
     private static var subsystem = Bundle.main.bundleIdentifier!
-    
-    static let ViewCycle = Logger(subsystem: subsystem, category: "ViewCycle")
-    static let Network = Logger(subsystem: subsystem, category: "Nerwork")
-    static let Other = Logger(subsystem: subsystem, category: "Other")
-    static let Router = Logger(subsystem: subsystem, category: "Router")
-    
+        
     static func loger(categoryName:String) ->Logger {
         Logger(subsystem: subsystem, category: categoryName)
     }

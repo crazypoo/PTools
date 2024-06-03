@@ -52,6 +52,7 @@ extension String {
     static let crashLog = "Crash log"
     static let network = "Network"
     static let mockLocation = "MockLocation"
+    static let log = "Log"
 }
 
 extension UIImage {
@@ -154,6 +155,7 @@ extension UIImage {
     static let crashLogImage = UIImage(.exclamationmark.triangleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let networkImage = UIImage(.globe).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let mockLocationImage = UIImage(.location.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let logFile = UIImage(.textformat.abc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {
@@ -597,6 +599,7 @@ public class LocalConsole: NSObject {
                     let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
                     let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
                     let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
+                    let content_log = PTActionSheetItem(title: .log,image: UIImage.logFile,itemAlignment: .left)
                     let content_mocklocation = PTActionSheetItem(title: .mockLocation,image: UIImage.mockLocationImage,itemAlignment: .left)
                     let content_network = PTActionSheetItem(title: .network,image: UIImage.networkImage,itemAlignment: .left)
                     let content_crashLog = PTActionSheetItem(title: .crashLog,image: UIImage.crashLogImage,itemAlignment: .left)
@@ -607,7 +610,7 @@ public class LocalConsole: NSObject {
                     let content_flex = PTActionSheetItem(title: .flex,image: UIImage.dev3thPartyImage,itemAlignment: .left)
                     let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
 
-                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_mocklocation,content_network,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_inapp]
+                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_log,content_mocklocation,content_network,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_inapp]
 
                     var devMaskString = ""
                     var devMaskBubbleString = ""
@@ -690,6 +693,8 @@ public class LocalConsole: NSObject {
                             self.networkWatcherOpen()
                         } else if title == .mockLocation {
                             self.mockLocationOpen()
+                        } else if title == .log {
+                            self.logFileOpen()
                         }
                     }
                 }
@@ -818,6 +823,10 @@ public class LocalConsole: NSObject {
             }
             debugActions.append(userDefaults)
         }
+        
+        let logFile = UIAction(title: .log, image: UIImage.logFile) { _ in
+            self.logFileOpen()
+        }
 
         let mockLocation = UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { _ in
             self.mockLocationOpen()
@@ -918,7 +927,7 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
+        debugActions.append(contentsOf: [logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -961,6 +970,11 @@ public class LocalConsole: NSObject {
     /// Clear text in the console view.
     public func clear() {
         currentText = ""
+    }
+    
+    func logFileOpen() {
+        let vc = PTLogConsoleViewController()
+        consoleSheetPresent(vc: vc)
     }
     
     func mockLocationOpen() {

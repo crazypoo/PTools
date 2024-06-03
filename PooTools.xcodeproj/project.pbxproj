@@ -112,6 +112,7 @@
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55228F172B0909130010E76E /* PTDocumentViewController.swift */; };
+		5525542F2C0E0CB600C2653A /* PTLogConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */; };
 		552748512BF8BF2900BF4D18 /* PTSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552748502BF8BF2900BF4D18 /* PTSwitch.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		552893132AE65125009135F9 /* PTTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893122AE65125009135F9 /* PTTip.swift */; };
@@ -714,6 +715,7 @@
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		55228F172B0909130010E76E /* PTDocumentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDocumentViewController.swift; sourceTree = "<group>"; };
+		5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLogConsoleViewController.swift; sourceTree = "<group>"; };
 		552748502BF8BF2900BF4D18 /* PTSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwitch.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		552893122AE65125009135F9 /* PTTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTip.swift; sourceTree = "<group>"; };
@@ -1724,6 +1726,7 @@
 				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
 				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
 				55C409912C061B8A009C0FB6 /* PTDebugShareManager.swift */,
+				5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -3212,6 +3215,7 @@
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
 				55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
+				5525542F2C0E0CB600C2653A /* PTLogConsoleViewController.swift in Sources */,
 				55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */,
 				55B13D4E2B1AEAF300C67EDA /* PTImageClipRatio.swift in Sources */,
 				55ED0D322B12D9D300391136 /* SVGAVideoEntity+PTEX.m in Sources */,

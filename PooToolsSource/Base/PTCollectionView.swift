@@ -663,11 +663,8 @@ public class PTCollectionView: UIView {
                 if #available(iOS 17.0, *) {
                     self.showEmptyConfig()
                 }
-
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    if finishTask != nil {
-                        finishTask!(self.collectionView)
-                    }
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
                 }
             }
         } else {
@@ -675,11 +672,8 @@ public class PTCollectionView: UIView {
                 if #available(iOS 17.0, *) {
                     self.showEmptyConfig()
                 }
-
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    if finishTask != nil {
-                        finishTask!(self.collectionView)
-                    }
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
                 }
             }
         }
@@ -688,28 +682,22 @@ public class PTCollectionView: UIView {
     public func clearAllData(finishTask:((UICollectionView)->Void)? = nil) {
         mSections.removeAll()
         collectionView.pt_register(by: mSections)
-        PTGCDManager.gcdAfter(time: 0.1) {
-            if self.viewConfig.refreshWithoutAnimation {
-                self.collectionView.reloadDataWithOutAnimation {
-                    if #available(iOS 17.0, *) {
-                        self.showEmptyConfig()
-                    }
-                    PTGCDManager.gcdAfter(time: 0.35) {
-                        if finishTask != nil {
-                            finishTask!(self.collectionView)
-                        }
-                    }
+        if self.viewConfig.refreshWithoutAnimation {
+            self.collectionView.reloadDataWithOutAnimation {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
                 }
-            } else {
-                self.collectionView.reloadData {
-                    if #available(iOS 17.0, *) {
-                        self.showEmptyConfig()
-                    }
-                    PTGCDManager.gcdAfter(time: 0.35) {
-                        if finishTask != nil {
-                            finishTask!(self.collectionView)
-                        }
-                    }
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
+                }
+            }
+        } else {
+            self.collectionView.reloadData {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
+                }
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
                 }
             }
         }

@@ -180,22 +180,24 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         toolkit.performanceDataUpdateCallBack = { toolKit in 
             switch self.segmentType {
             case .CPU:
-                let usageModel = self.baseCellModel(name: "CPU Usage", value: "\(self.toolkit.currentCPU)%")
+                let usageModel = self.baseCellModel(name: "CPU Usage", value: String(format: "%.1lf%%", self.toolkit.currentCPU))
                 let cell = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 2)) as! PTFusionCell
                 cell.cellModel = usageModel
                 
-                let usageMaxModel = self.baseCellModel(name: "Max CPU Usage", value: "\(self.toolkit.maxCPU)%")
+                
+                let usageMaxModel = self.baseCellModel(name: "Max CPU Usage", value: String(format: "%.1lf%%", self.toolkit.maxCPU))
                 let cellMax = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 1, section: 2)) as! PTFusionCell
                 cellMax.cellModel = usageMaxModel
 
                 let cellChart = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 3)) as! PTPerformanceChartCell
                 self.configureChartCell(chartCell: cellChart, value: self.toolkit.maxCPU, measurements: self.toolkit.cpuMeasurements, markedValueFormat: "%.1lf%%")
             case .Memory:
-                let usageModel = self.baseCellModel(name: "Memory Usage", value: "\(self.toolkit.currentMemory)MB")
+                
+                let usageModel = self.baseCellModel(name: "Memory Usage", value: String(format: "%.1lfMB", self.toolkit.currentMemory))
                 let cell = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 2)) as! PTFusionCell
                 cell.cellModel = usageModel
                 
-                let usageMaxModel = self.baseCellModel(name: "Max Memory Usage", value: "\(self.toolkit.maxMemory)MB")
+                let usageMaxModel = self.baseCellModel(name: "Max Memory Usage", value: String(format: "%.1lfMB", self.toolkit.maxMemory))
                 let cellMax = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 1, section: 2)) as! PTFusionCell
                 cellMax.cellModel = usageMaxModel
 

@@ -234,11 +234,10 @@ class AppDelegate: PTAppWindowsDelegate {
         } fail: { error in
             
         }
-        
-        PTIVarList("PTCustomAlertView")
+    
     
         PTLocationManager.shared.requestLocation()
-        
+                
         return true
     }
     

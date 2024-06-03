@@ -91,4 +91,5 @@ public struct PTCoreUserDefultsWrapper {
     @PTUserDefault(withKey: "MockLocationLat", defaultValue: 0) public static var PTMockLocationLat:CGFloat
     @PTUserDefault(withKey: "MockLocationLng", defaultValue: 0) public static var PTMockLocationLng:CGFloat
     @PTUserDefault(withKey: "MockLocationOpen", defaultValue: false) public static var PTMockLocationOpen:Bool
+    @PTUserDefault(withKey: "LogWriteToTextFile", defaultValue: true) public static var PTLogWrite:Bool
 }
