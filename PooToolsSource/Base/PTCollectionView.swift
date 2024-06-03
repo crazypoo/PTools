@@ -172,6 +172,8 @@ public class PTCollectionViewConfig:NSObject {
     open var sideIndexTitles:[String]?
     ///索引设置
     open var indexConfig:PTCollectionIndexViewConfiguration?
+    
+    open var canMoveItem:Bool = false
 }
 
 public class PTTextLayer: CATextLayer {
@@ -525,6 +527,8 @@ public class PTCollectionView: UIView {
     open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
+    open var itemMoveTo:((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath)->Void)?
+    
     public var viewConfig:PTCollectionViewConfig! {
         didSet {
             if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
@@ -537,6 +541,10 @@ public class PTCollectionView: UIView {
                     make.edges.equalToSuperview()
                 }
                 setIndexViews()
+            }
+            
+            if viewConfig.canMoveItem {
+                self.contentCollectionView.allowsMoveItem()
             }
         }
     }
@@ -551,6 +559,7 @@ public class PTCollectionView: UIView {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        collectionView.allowsMoveItem()
         
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
@@ -869,6 +878,21 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
             if decorationViewReset != nil {
                 decorationViewReset!(collectionView,view,elementKind,indexPath,itemSec)
             }
+        }
+    }
+    
+    // MARK: 能否移动
+    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return viewConfig.canMoveItem
+    }
+    
+    // MARK: 移动cell结束
+    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        // Example:
+        // let temp = self.data[sourceIndexPath.section].remove(at: sourceIndexPath.item)
+        // self.data[destinationIndexPath.section].insert(temp, at: destinationIndexPath.item)
+        if itemMoveTo != nil {
+            itemMoveTo!(collectionView,sourceIndexPath,destinationIndexPath)
         }
     }
     
