@@ -8,6 +8,7 @@
 
 import Foundation
 import QuartzCore
+import UIKit
 
 extension CALayer {
     func resizeAndMove(frame: CGRect,

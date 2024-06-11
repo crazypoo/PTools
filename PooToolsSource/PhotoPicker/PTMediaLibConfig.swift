@@ -11,6 +11,7 @@ import Photos
 import AVFoundation
 import Accelerate
 import MobileCoreServices
+import UIKit
 
 let PTMaxImageWidth: CGFloat = 500
 

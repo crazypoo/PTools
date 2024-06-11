@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 import Kingfisher
+import UIKit
 
 class PTFetchImageOperation: Operation {
     private let model: PTMediaModel

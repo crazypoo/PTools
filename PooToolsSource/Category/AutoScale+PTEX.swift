@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public enum InchWidth: Double {
     case NoTouchIDModel = 320

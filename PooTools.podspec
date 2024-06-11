@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.54.4'
+    s.version     = '3.54.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -660,15 +660,15 @@ Pod::Spec.new do |s|
         }
     end
     
-    s.subspec 'SVGA' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'Protobuf', '= 3.22.1'
-        subspec.dependency 'SVGAPlayer'
-        subspec.source_files = 'PooToolsSource/SVGA/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SVGA POOTOOLS_COCOAPODS"
-        }
-    end
+#    s.subspec 'SVGA' do |subspec|
+#        subspec.dependency 'PooTools/Core'
+#        subspec.dependency 'Protobuf', '= 3.22.1'
+#        subspec.dependency 'SVGAPlayer'
+#        subspec.source_files = 'PooToolsSource/SVGA/*.{h,m,swift}'
+#        subspec.pod_target_xcconfig = {
+#            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SVGA POOTOOLS_COCOAPODS"
+#        }
+#    end
     
     s.subspec 'Share' do |subspec|
         subspec.dependency 'PooTools/CustomerLabel'

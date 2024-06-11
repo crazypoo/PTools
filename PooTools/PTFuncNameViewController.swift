@@ -738,8 +738,8 @@ class PTFuncNameViewController: PTBaseViewController {
                     self.navigationController?.pushViewController(vc)
                 }
             } else if itemRow.title == .svga {
-                let vc = PTSVGAViewController()
-                self.navigationController?.pushViewController(vc)
+//                let vc = PTSVGAViewController()
+//                self.navigationController?.pushViewController(vc)
             } else if itemRow.title == .scanQR {
                 let vc = PTScanQRController(viewConfig: PTScanQRConfig())
                 vc.resultBlock = { result,error in

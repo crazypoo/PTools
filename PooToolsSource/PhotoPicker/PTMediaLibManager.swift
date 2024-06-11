@@ -8,6 +8,7 @@
 
 import Foundation
 import Photos
+import UIKit
 
 func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) {
     guard !selected.isEmpty else {

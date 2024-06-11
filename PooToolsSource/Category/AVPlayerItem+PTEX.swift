@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import UIKit
 
 public extension AVPlayerItem {
     func generateThumbnail(startTime:Double = 0,completion: @escaping (UIImage?) -> Void) {
