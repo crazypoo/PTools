@@ -335,13 +335,21 @@ public class PTCameraFilterConfig: NSObject {
         let tfC = transform.c
         let tfD = transform.d
         
-        if (tfA == 0 && tfB == 1 && tfC == -1 && tfD == 0) ||
-            (tfA == 0 && tfB == 1 && tfC == 1 && tfD == 0) ||
-            (tfA == 0 && tfB == -1 && tfC == 1 && tfD == 0) {
-            return true
-        } else {
-            return false
+        // Define patterns for each rotation case
+        let patterns: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
+            (0, 1, -1, 0),
+            (0, 1, 1, 0),
+            (0, -1, 1, 0)
+        ]
+        
+        // Check if the transform matches any of the patterns
+        for pattern in patterns {
+            if tfA == pattern.0 && tfB == pattern.1 && tfC == pattern.2 && tfD == pattern.3 {
+                return true
+            }
         }
+        
+        return false
     }
 
 }

@@ -393,97 +393,74 @@ public class LocalConsole: NSObject {
     }
 
     var possibleEndpoints: [CGPoint] {
-        let screenSize = AppWindows!.frame.size
+        guard let appWindow = AppWindows else {
+            return []
+        }
         
-        // Must check for portrait mode manually here. UIDevice was reporting orientation incorrectly before.
-        let isPortraitNotchedPhone = UIDevice.current.hasNotch && AppWindows!.frame.size.width < AppWindows!.frame.size.height
-        
-        // Fix incorrect reported orientation on phone.
-        let isLandscapePhone = UIDevice.current.userInterfaceIdiom == .phone && AppWindows!.frame.width > AppWindows!.frame.height
-        
-        let isLandscapeLeftNotchedPhone = UIDevice.current.orientation == .landscapeLeft
-        && UIDevice.current.userInterfaceIdiom == .phone
-        && UIDevice.current.hasNotch
-        && isLandscapePhone
-        
-        let isLandscapeRightNotchedPhone = UIDevice.current.orientation == .landscapeRight
-        && UIDevice.current.userInterfaceIdiom == .phone
-        && UIDevice.current.hasNotch
-        && isLandscapePhone
-        
+        let screenSize = appWindow.frame.size
+        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+        let hasNotch = UIDevice.current.hasNotch
         let safeAreaInsets = PTUtils.getCurrentVC().view.safeAreaInsets
+        let isPortrait = screenSize.width < screenSize.height
         
-        let leftEndpointX = consoleSize.width / 2 + safeAreaInsets.left + (isLandscapePhone ? 4 : 12) + (isLandscapeRightNotchedPhone ? -16 : 0)
-        let rightEndpointX = screenSize.width - (consoleSize.width / 2 + safeAreaInsets.right) - (isLandscapePhone ? 4 : 12) + (isLandscapeLeftNotchedPhone ? 16 : 0)
-        let topEndpointY = consoleSize.height / 2 + safeAreaInsets.top + 12 + (isPortraitNotchedPhone ? -10 : 0)
-        let bottomEndpointY = screenSize.height - consoleSize.height / 2 - (keyboardHeight ?? safeAreaInsets.bottom) - 12 + (isLandscapePhone ? 10 : 0)
+        let isPortraitNotchedPhone = hasNotch && isPortrait
+        let isLandscapePhone = isPhone && !isPortrait
+        let orientation = UIDevice.current.orientation
+
+        let isLandscapeLeftNotchedPhone = isLandscapePhone && orientation == .landscapeLeft && hasNotch
+        let isLandscapeRightNotchedPhone = isLandscapePhone && orientation == .landscapeRight && hasNotch
         
+        let leftOffset: CGFloat = (isLandscapePhone ? 4 : 12) + (isLandscapeRightNotchedPhone ? -16 : 0)
+        let rightOffset: CGFloat = (isLandscapePhone ? 4 : 12) + (isLandscapeLeftNotchedPhone ? 16 : 0)
+        let topOffset: CGFloat = 12 + (isPortraitNotchedPhone ? -10 : 0)
+        let bottomOffset: CGFloat = (keyboardHeight ?? safeAreaInsets.bottom) + 12 + (isLandscapePhone ? 10 : 0)
+        
+        let leftEndpointX = consoleSize.width / 2 + safeAreaInsets.left + leftOffset
+        let rightEndpointX = screenSize.width - consoleSize.width / 2 - safeAreaInsets.right - rightOffset
+        let topEndpointY = consoleSize.height / 2 + safeAreaInsets.top + topOffset
+        let bottomEndpointY = screenSize.height - consoleSize.height / 2 - bottomOffset
+
+        var endpoints: [CGPoint] = []
+        let isLeftEdge = terminal?.frame.minX ?? 0 <= 0
+        let isRightEdge = terminal?.frame.maxX ?? 0 >= screenSize.width
+
         if consoleSize.width < screenSize.width - 112 {
-            // Four endpoints, one for each corner.
-            var endpoints = [
+            endpoints = [
                 CGPoint(x: leftEndpointX, y: topEndpointY),
                 CGPoint(x: rightEndpointX, y: topEndpointY),
                 CGPoint(x: leftEndpointX, y: bottomEndpointY),
                 CGPoint(x: rightEndpointX, y: bottomEndpointY),
             ]
             
-            if terminal?.frame.minX ?? 0 <= 0 {
-                
-                // Left edge endpoints.
+            if isLeftEdge {
                 endpoints = [endpoints[0], endpoints[2]]
-                
-                // Left edge hiding endpoints.
                 if !isLandscapeLeftNotchedPhone {
-                    if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                        endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[0].y))
-                    } else {
-                        endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[1].y))
-                    }
+                    let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: yOffset))
                 }
-            } else if terminal?.frame.maxX ?? 0 >= screenSize.width {
-                
-                // Right edge endpoints.
+            } else if isRightEdge {
                 endpoints = [endpoints[1], endpoints[3]]
-                
-                // Right edge hiding endpoints.
                 if !isLandscapeRightNotchedPhone {
-                    if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                        endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[0].y))
-                    } else {
-                        endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[1].y))
-                    }
+                    let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: yOffset))
                 }
             }
-            
-            return endpoints
-            
         } else {
-            // Two endpoints, one for the top, one for the bottom..
-            var endpoints = [
+            endpoints = [
                 CGPoint(x: screenSize.width / 2, y: topEndpointY),
                 CGPoint(x: screenSize.width / 2, y: bottomEndpointY)
             ]
             
-            if terminal?.frame.minX ?? 0 <= 0 {
-                
-                // Left edge hiding endpoints.
-                if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[0].y))
-                } else {
-                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[1].y))
-                }
-            } else if terminal?.frame.maxX ?? 0 >= screenSize.width {
-                
-                // Right edge hiding endpoints.
-                if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[0].y))
-                } else {
-                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[1].y))
-                }
+            if isLeftEdge {
+                let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: yOffset))
+            } else if isRightEdge {
+                let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: yOffset))
             }
-            
-            return endpoints
         }
+        
+        return endpoints
     }
     
     let defaultConsoleSize = CGSize(width: systemLog_base_width, height: systemLog_base_height)

@@ -92,13 +92,13 @@ public class PTGCDManager :NSObject {
     ///   - doSomeThing: 須要執行的任務(如果該任務執行完畢,須要調用dispatchSemaphore的.signal()方法,和dispatchGroup的.leave()方法,來處理後續事情)
     ///   - jobDoneBlock: 任務完成
     public class func gcdGroup(label:String,
-                               semaphoreCount:Int? = 0,
+                               semaphoreCount:Int? = nil,
                                threadCount:Int,
                                doSomeThing: @escaping (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
                                jobDoneBlock: @escaping PTActionTask) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
-        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount!)
+        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? 0)
         dispatchQueue.async {
             for i in 0..<threadCount {
                 dispatchGroup.enter()

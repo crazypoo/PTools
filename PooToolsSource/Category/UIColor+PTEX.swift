@@ -16,53 +16,53 @@ public extension UIColor {
      - parameter hex: HEX of color.
      - parameter alpha: Opacity.
      */
-    private static func parseHex(hex: String, alpha: CGFloat?) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
-        var red:   CGFloat = 0.0
-        var green: CGFloat = 0.0
-        var blue:  CGFloat = 0.0
-        var newAlpha: CGFloat = alpha ?? 1.0
-        var hex:   String = hex
+    private static func parseHex(hex: String, alpha: CGFloat? = nil) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        let hexString = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
+        let length = hexString.count
+        var hexValue: UInt64 = 0
         
-        if hex.hasPrefix("#") {
-            let index = hex.index(hex.startIndex, offsetBy: 1)
-            hex = String(hex[index...])
+        guard Scanner(string: hexString).scanHexInt64(&hexValue), [3, 4, 6, 8].contains(length) else {
+            PTNSLogConsole("UIColorExtension - Invalid RGB string or scan error", levelType: .Error, loggerType: .Color)
+            return (0, 0, 0, alpha ?? 1.0)
         }
         
-        let scanner = Scanner(string: hex)
-        var hexValue: CUnsignedLongLong = 0
-        if scanner.scanHexInt64(&hexValue) {
-            switch (hex.count) {
-            case 3:
-                red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
-                green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
-                blue  = CGFloat(hexValue & 0x00F)              / 15.0
-            case 4:
-                red   = CGFloat((hexValue & 0xF000) >> 12)     / 15.0
-                green = CGFloat((hexValue & 0x0F00) >> 8)      / 15.0
-                blue  = CGFloat((hexValue & 0x00F0) >> 4)      / 15.0
-                if alpha == nil {
-                    newAlpha = CGFloat(hexValue & 0x000F)      / 15.0
-                }
-            case 6:
-                red   = CGFloat((hexValue & 0xFF0000) >> 16)   / 255.0
-                green = CGFloat((hexValue & 0x00FF00) >> 8)    / 255.0
-                blue  = CGFloat(hexValue & 0x0000FF)           / 255.0
-            case 8:
-                red   = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
-                green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
-                blue  = CGFloat((hexValue & 0x0000FF00) >> 8)  / 255.0
-                if alpha == nil {
-                    newAlpha = CGFloat(hexValue & 0x000000FF)  / 255.0
-                }
-            default:
-                PTNSLogConsole("UIColorExtension - Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8",levelType: .Error,loggerType: .Color)
-            }
-        } else {
-            PTNSLogConsole("UIColorExtension - Scan hex error",levelType: .Error,loggerType: .Color)
+        let divisor: CGFloat = length == 3 || length == 4 ? 15.0 : 255.0
+        
+        switch length {
+        case 3: // RGB (12-bit)
+            return (
+                red:   CGFloat((hexValue & 0xF00) >> 8) / divisor,
+                green: CGFloat((hexValue & 0x0F0) >> 4) / divisor,
+                blue:  CGFloat(hexValue & 0x00F) / divisor,
+                alpha: alpha ?? 1.0
+            )
+        case 4: // RGBA (16-bit)
+            return (
+                red:   CGFloat((hexValue & 0xF000) >> 12) / divisor,
+                green: CGFloat((hexValue & 0x0F00) >> 8) / divisor,
+                blue:  CGFloat((hexValue & 0x00F0) >> 4) / divisor,
+                alpha: alpha ?? CGFloat(hexValue & 0x000F) / divisor
+            )
+        case 6: // RGB (24-bit)
+            return (
+                red:   CGFloat((hexValue & 0xFF0000) >> 16) / divisor,
+                green: CGFloat((hexValue & 0x00FF00) >> 8) / divisor,
+                blue:  CGFloat(hexValue & 0x0000FF) / divisor,
+                alpha: alpha ?? 1.0
+            )
+        case 8: // RGBA (32-bit)
+            return (
+                red:   CGFloat((hexValue & 0xFF000000) >> 24) / divisor,
+                green: CGFloat((hexValue & 0x00FF0000) >> 16) / divisor,
+                blue:  CGFloat((hexValue & 0x0000FF00) >> 8) / divisor,
+                alpha: alpha ?? CGFloat(hexValue & 0x000000FF) / divisor
+            )
+        default:
+            PTNSLogConsole("UIColorExtension - Invalid RGB string length", levelType: .Error, loggerType: .Color)
+            return (0, 0, 0, alpha ?? 1.0)
         }
-        return (red, green, blue, newAlpha)
     }
-        
+
     //MARK: hex 色值
     /// - Parameters:
     ///   - hex:string that looks like @"#FF0000" or @"FF0000"

@@ -519,7 +519,7 @@ public extension UIViewController {
 #endif
 }
 
-extension UIViewController:UIPopoverPresentationControllerDelegate {
+extension UIViewController:@retroactive UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
     }

@@ -323,10 +323,7 @@ public class PTCollectionView: UIView {
         var sectionWidth:CGFloat = 0
         switch viewConfig.decorationItemsType {
         case .Normal,.Corner:
-            sectionInsets = NSDirectionalEdgeInsets.init(top: ((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopSpace + self.viewConfig.decorationItemsEdges.top),
-                                                         leading: sectionInsets.leading,
-                                                         bottom: (sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentBottomSpace,
-                                                         trailing: sectionInsets.trailing)
+            sectionInsets = NSDirectionalEdgeInsets.init(top: ((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopSpace + self.viewConfig.decorationItemsEdges.top), leading: sectionInsets.leading, bottom: (sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentBottomSpace, trailing: sectionInsets.trailing)
             sectionWidth = (self.viewConfig.decorationItemsEdges.leading + self.viewConfig.decorationItemsEdges.trailing)
         case .Custom:
             sectionInsets = self.decorationCustomLayoutInsetReset?(section,sectionModel!) ?? NSDirectionalEdgeInsets.zero

@@ -272,10 +272,13 @@ public class PTFusionCellContent:UIView {
     }
     
     func accessoryViewType(type:PTFusionShowAccessoryType,finish: (PTFusionCellAccessoryView)->Void) {
-        if (!NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-            (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-            (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-            NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        let hasLeftImage = NSObject.checkObject(cellModel!.leftImage as? NSObject) ? false : true
+        let hasContentIcon = NSObject.checkObject(cellModel!.contentIcon as? NSObject) ? false : true
+        let hasNameOrDescOrAttr = !cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil
+        let hasContentOrAttr = !cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil
+
+        switch (hasLeftImage,hasNameOrDescOrAttr,hasContentOrAttr,hasContentIcon) {
+        case (true,true,false,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .LeftImageContent(type: .Name)))
@@ -286,10 +289,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .LeftImageContent(type: .Name)))
             }
-        } else if (!NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                   NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        case (true,true,true,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .LeftImageContent(type: .NameContent)))
@@ -300,10 +300,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .LeftImageContent(type: .NameContent)))
             }
-        } else if (!NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-                   !NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        case (true,true,false,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .BothImage(type: .Name)))
@@ -314,10 +311,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .BothImage(type: .Name)))
             }
-        } else if !NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                    !NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (true,false,true,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .BothImage(type: .Content)))
@@ -328,10 +322,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .BothImage(type: .Content)))
             }
-        } else if (!NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                   !NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        case (true,true,true,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .BothImage(type: .NameContent)))
@@ -342,10 +333,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .BothImage(type: .NameContent)))
             }
-        } else if !NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                    NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (true,false,true,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .LeftImageContent(type: .Content)))
@@ -356,10 +344,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .LeftImageContent(type: .Content)))
             }
-        } else if !NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-                    NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (true,false,false,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .OnlyLeftImage))
@@ -370,10 +355,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .OnlyLeftImage))
             }
-        } else if NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-                    !NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (false,false,false,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .OnlyRightImage))
@@ -384,10 +366,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .OnlyRightImage))
             }
-        } else if (NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-                   !NSObject.checkObject(cellModel!.contentIcon as? NSObject)){
+        case (false,true,false,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .RightImageContent(type: .Name)))
@@ -398,10 +377,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .RightImageContent(type: .Name)))
             }
-        } else if (NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                   !NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        case (false,true,true,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .RightImageContent(type: .NameContent)))
@@ -412,10 +388,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .RightImageContent(type: .NameContent)))
             }
-        } else if NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                    !NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (false,false,true,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .RightImageContent(type: .Content)))
@@ -426,10 +399,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .RightImageContent(type: .Content)))
             }
-        } else if (NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                   NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        case (false,true,true,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .None(type: .NameContent)))
@@ -440,10 +410,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .None(type: .NameContent)))
             }
-        } else if !NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-                    !NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (true,false,false,true):
             switch type {
             case .Switch:
                 finish(.Switch(type: .BothImage(type: .None)))
@@ -454,10 +421,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .BothImage(type: .None)))
             }
-        } else if (NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                   (!cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil) &&
-                   (cellModel!.content.stringIsEmpty() && cellModel!.contentAttr == nil) &&
-                   NSObject.checkObject(cellModel!.contentIcon as? NSObject)) {
+        case (false,true,false,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .None(type: .Name)))
@@ -468,10 +432,7 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .None(type: .Name)))
             }
-        } else if NSObject.checkObject(cellModel!.leftImage as? NSObject) &&
-                    (cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() && cellModel!.nameAttr == nil) &&
-                    (!cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil) &&
-                    NSObject.checkObject(cellModel!.contentIcon as? NSObject) {
+        case (false,false,true,false):
             switch type {
             case .Switch:
                 finish(.Switch(type: .None(type: .Content)))
@@ -482,9 +443,9 @@ public class PTFusionCellContent:UIView {
             case .More:
                 finish(.More(type: .None(type: .Content)))
             }
-        } else {
+        default:
             finish(.Error)
-        }
+        }        
     }
         
     //MARK: 设置左图标
