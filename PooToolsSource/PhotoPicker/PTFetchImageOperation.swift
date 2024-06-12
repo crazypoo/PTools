@@ -11,7 +11,7 @@ import Photos
 import Kingfisher
 import UIKit
 
-class PTFetchImageOperation: Operation {
+class PTFetchImageOperation: Operation,@unchecked Sendable {
     private let model: PTMediaModel
     
     private let isOriginal: Bool

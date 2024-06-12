@@ -15,8 +15,8 @@ public class PTSheetContentViewController: PTBaseViewController {
     public private(set) var childViewController: UIViewController
     
     private var options: PTSheetOptions
-    private (set) var size: CGFloat = 0
-    private (set) var preferredHeight: CGFloat
+    private(set) var size: CGFloat = 0
+    private(set) var preferredHeight: CGFloat
     
     public var contentBackgroundColor: UIColor? {
         get { self.childContainerView.backgroundColor }

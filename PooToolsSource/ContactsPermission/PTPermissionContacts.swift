@@ -27,6 +27,7 @@ public class PTPermissionContacts: PTPermission {
         case .denied: return .denied
         case .notDetermined: return .notDetermined
         case .restricted: return .denied
+        case .limited: return .authorized
         @unknown default: return .denied
         }
     }

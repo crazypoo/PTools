@@ -297,7 +297,7 @@ public enum OSSVoiceEnum: String, CaseIterable {
  - Note: If init() is called, the default quality of OSSVoice will us "default" and the language will be "OSSVoiceEnum.UnitedStatesEnglish".
 */
 @available(iOS 9.0, *)
-public class OSSVoice: AVSpeechSynthesisVoice {
+public class OSSVoice: AVSpeechSynthesisVoice,@unchecked Sendable {
 
     // MARK: - Private Properties
 

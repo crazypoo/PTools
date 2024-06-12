@@ -15,8 +15,8 @@ public class SSBlurView:NSObject {
     private var superview: UIView
     private var blur: UIVisualEffectView?
     private var editing: Bool = false
-    private (set) var blurContentView: UIView?
-    private (set) var vibrancyContentView: UIView?
+    private(set) var blurContentView: UIView?
+    private(set) var vibrancyContentView: UIView?
     
     open var animationDuration: TimeInterval = 0.1
     
