@@ -577,7 +577,8 @@ public class PTEditImageViewController: PTBaseViewController {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
+        guard let nav = navigationController else { return }
+        PTBaseNavControl.GobalNavControl(nav: nav,navColor: .black)
 #endif
         changeStatusBar(type: .Dark)
     }

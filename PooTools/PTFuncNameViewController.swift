@@ -64,6 +64,7 @@ public extension String {
     static let messageKit = "MessageKit"
     static let BlurImageList = "BlurImageList"
     static let CycleBanner = "CycleBanner"
+    static let CollectionTag = "CollectionTag"
 
     static let route = "路由"
     
@@ -282,8 +283,10 @@ class PTFuncNameViewController: PTBaseViewController {
         let blurImageList = self.rowBaseModel(name: .BlurImageList)
 
         let cycleBanner = self.rowBaseModel(name: .CycleBanner)
+        
+        let CollectionTag = self.rowBaseModel(name: .CollectionTag)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner]
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in

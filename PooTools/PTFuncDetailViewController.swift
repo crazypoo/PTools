@@ -547,8 +547,9 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.sortButton:
             
             let sortButton = PTSortButton()
-            sortButton.buttonTitle = "1111111111111"
+            sortButton.buttonTitle = "111111111111111111111111111111111111111111111111111!!!!!!!!!!!!!!!!!!"
             sortButton.buttonTitleSelectedColor = .random
+            sortButton.imageSize = CGSizeMake(10, 24)
             view.addSubviews([sortButton])
             sortButton.sortTypeHandler = { type in
                 PTNSLogConsole("\(type.rawValue)")
@@ -603,6 +604,49 @@ class PTFuncDetailViewController: PTBaseViewController {
                     """
             banner.titles = [att1,att1,att1]
             banner.imagePaths = ["http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg"]
+        case String.CollectionTag:
+            
+            let tagValue = ["1123123","1","123123123123123","22222","1233"]
+
+            var tagModels = [PTTagLayoutModel]()
+            tagValue.enumerated().forEach { index,value in
+                let tagModel = PTTagLayoutModel()
+                tagModel.name = value
+                tagModels.append(tagModel)
+            }
+            
+            let cConfig = PTCollectionViewConfig()
+            cConfig.viewType = .Tag
+            cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
+            cConfig.itemHeight = 32
+            cConfig.cellLeadingSpace = 10
+            cConfig.cellTrailingSpace = 10
+            cConfig.contentTopSpace = 10
+            cConfig.contentBottomSpace = 10
+            let aaaaaaa = PTCollectionView(viewConfig: cConfig)
+            aaaaaaa.backgroundColor = .random
+            aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
+                let itemRow = dataModel.rows[indexPath.row]
+                let cellModel = (itemRow.dataModel as! PTTagLayoutModel)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTTagCell
+                cell.cellModel = cellModel
+                return cell
+            }
+            view.addSubviews([aaaaaaa])
+            aaaaaaa.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview().inset(20)
+                make.height.equalTo(UICollectionView.tagShowLayoutHeight(data: tagModels).groupHeight)
+            }
+            
+            
+            var tagRows = [PTRows]()
+            tagModels.enumerated().forEach { index,value in
+                let row = PTRows(cls: PTTagCell.self,ID: PTTagCell.ID,dataModel: value)
+                tagRows.append(row)
+            }
+            let tagSection = [PTSection(rows: tagRows)]
+            aaaaaaa.showCollectionDetail(collectionData: tagSection)
         default:
             break
         }

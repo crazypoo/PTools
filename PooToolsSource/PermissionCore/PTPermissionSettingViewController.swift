@@ -79,7 +79,8 @@ public class PTPermissionSettingViewController: PTBaseViewController {
         self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
         self.zx_navBarBackgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
 #else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!)
+        guard let nav = navigationController else { return }
+        PTBaseNavControl.GobalNavControl(nav: nav)
 #endif
     }
     

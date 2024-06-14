@@ -14,20 +14,14 @@ public extension UICollectionView {
         Total count of rows.
      */
     func numberOfItems() -> Int {
-        var section = 0
-        var itemsCount = 0
-        while section < numberOfSections {
-            itemsCount += numberOfItems(inSection: section)
-            section += 1
-        }
-        return itemsCount
+        return (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
     }
 
     func isValidIndexPath(_ indexPath: IndexPath) -> Bool {
-        indexPath.section >= 0 &&
-                indexPath.item >= 0 &&
-                indexPath.section < numberOfSections &&
-                indexPath.item < numberOfItems(inSection: indexPath.section)
+        return indexPath.section >= 0 &&
+               indexPath.item >= 0 &&
+               indexPath.section < numberOfSections &&
+               indexPath.item < numberOfItems(inSection: indexPath.section)
     }
     
     //MARK: 重载Layout
@@ -47,9 +41,7 @@ public extension UICollectionView {
     @objc func reloadDataWithOutAnimation(completion:PTActionTask?) {
         UIView.performWithoutAnimation {
             self.reloadData {
-                if completion != nil {
-                    completion!()
-                }
+                completion?()
             }
         }
     }
@@ -253,67 +245,62 @@ public extension UICollectionView {
                                    itemContentSpace:CGFloat = 20) -> NSCollectionLayoutGroup {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
-        
-        var groupH:CGFloat = topContentSpace + itemHeight + bottomContentSpace
-        
-        UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,topContentSpace: topContentSpace,bottomContentSpace:bottomContentSpace,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemContentSpace: itemContentSpace, handle: { groupHeight,customerItems,cloumNum in
-            groupH = groupHeight
-            customers = customerItems
-        })
+                
+        let result = UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,topContentSpace: topContentSpace,bottomContentSpace:bottomContentSpace,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemContentSpace: itemContentSpace)
+
+        let groupH = result.groupHeight
+        customers = result.groupItems
         bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
             customers
         })
     }
     
-    @objc class func tagShowLayoutHeight(data:[PTTagLayoutModel],
-                                         screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
-                                         itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
-                                         itemHeight:CGFloat = 32,
-                                         topContentSpace:CGFloat = 10,
-                                         bottomContentSpace:CGFloat = 10,
-                                         itemLeadingSpace:CGFloat = 10,
-                                         itemTrailingSpace:CGFloat = 10,
-                                         itemContentSpace:CGFloat = 20,
-                                         handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem],_ cloumNum:Int)->Void) {
+    class func tagShowLayoutHeight(data: [PTTagLayoutModel],
+                                         screenWidth: CGFloat = CGFloat.kSCREEN_WIDTH,
+                                         itemOriginalX: CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                         itemHeight: CGFloat = 32,
+                                         topContentSpace: CGFloat = 10,
+                                         bottomContentSpace: CGFloat = 10,
+                                         itemLeadingSpace: CGFloat = 10,
+                                         itemTrailingSpace: CGFloat = 10,
+                                         itemContentSpace: CGFloat = 20) -> (groupHeight: CGFloat, groupItems: [NSCollectionLayoutGroupCustomItem], columnCount: Int) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
-        var groupWidth:CGFloat = itemOriginalX
-        var groupHeight:CGFloat = topContentSpace + itemHeight
-        var cloumNum:Int = 1
-        for (index,value) in data.enumerated() {
-           
-            let currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont,height: itemHeight).width + itemContentSpace + ( value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
+        var groupWidth: CGFloat = itemOriginalX
+        var groupHeight: CGFloat = topContentSpace + itemHeight
+        var columnCount: Int = 1
+        
+        for (index, value) in data.enumerated() {
+            let currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont, height: itemHeight).width + itemContentSpace + (value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
             let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
+            
             if totalWidth > (screenWidth - itemOriginalX * 2) {
                 groupWidth = itemOriginalX
                 groupHeight += (itemTrailingSpace + itemHeight)
-                cloumNum += 1
+                columnCount += 1
             }
-
-            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight), zIndex: 1000+index)
-
+            
+            let customItem = NSCollectionLayoutGroupCustomItem(
+                frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight),
+                zIndex: 1000 + index
+            )
+            
             groupWidth += (currentCellWidth + itemLeadingSpace)
             customers.append(customItem)
-            if index == (data.count - 1) {
-                if customers.last!.frame.origin.x < (screenWidth - itemOriginalX * 2) && customers.last!.frame.origin.x > itemOriginalX {
-                    groupHeight += (bottomContentSpace)
-                    handle(groupHeight,customers,cloumNum)
-                    break
-                } else if customers.last!.frame.origin.x == itemOriginalX {
-                    groupHeight += (bottomContentSpace + itemHeight + itemTrailingSpace)
-                    handle(groupHeight,customers,cloumNum)
-                    break
-                } else {
-                    groupHeight += (bottomContentSpace)
-                    handle(groupHeight,customers,cloumNum)
-                    break
-                }
-            } else {
-                continue
+        }
+        
+        // Adjust the final groupHeight
+        if let lastItemFrame = customers.last?.frame {
+            if lastItemFrame.origin.x + lastItemFrame.width + itemOriginalX > screenWidth {
+                groupHeight += (itemHeight + itemTrailingSpace)
             }
         }
+        
+        groupHeight += bottomContentSpace
+
+        return (groupHeight, customers, columnCount)
     }
-    
+
     //MARK: 設置CollectionView的Horizontallayout
     ///設置CollectionView的Horizontallayout
     /// - Parameters:

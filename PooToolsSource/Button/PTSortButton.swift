@@ -43,12 +43,18 @@ public class PTSortButton: UIView {
     public var buttonTitle:String = "" {
         didSet {
             titleLabel.text = buttonTitle
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.contentSet(self.frame)
+            }
         }
     }
     
     public var buttonTitleFont:UIFont = .appfont(size: 14) {
         didSet {
             titleLabel.font = buttonTitleFont
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.contentSet(self.frame)
+            }
         }
     }
     
@@ -126,6 +132,30 @@ public class PTSortButton: UIView {
         }
     }
     
+    public var contentImageSpace:CGFloat = 2 {
+        didSet {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.contentSet(self.frame)
+            }
+        }
+    }
+    
+    public var imageSpace:CGFloat = 4 {
+        didSet {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.contentSet(self.frame)
+            }
+        }
+    }
+    
+    public var imageSize:CGSize = CGSize(width: 6, height: 4) {
+        didSet {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.contentSet(self.frame)
+            }
+        }
+    }
+    
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
         view.font = buttonTitleFont
@@ -180,20 +210,38 @@ public class PTSortButton: UIView {
     }
     
     public override func draw(_ rect: CGRect) {
+        contentSet(rect)
+    }
+    
+    func contentSet(_ rect: CGRect) {
+        
+        var titleLeft = (rect.width - titleLabel.sizeFor(height: rect.height).width - contentImageSpace - self.imageSize.width) / 2
+        if titleLeft < 0 {
+            titleLeft = 0
+        }
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(2.5)
             make.top.bottom.equalToSuperview()
-            make.right.equalToSuperview().inset(10)
+            make.left.equalToSuperview().inset(titleLeft)
+        }
+        
+        let halfHeight = (rect.height - imageSpace) / 2
+        var realImageSize:CGSize!
+        if halfHeight < self.imageSize.height {
+            realImageSize = CGSize(width: self.imageSize.width, height: halfHeight)
+        } else {
+            realImageSize = self.imageSize
         }
         
         upImage.snp.makeConstraints { make in
-            make.left.equalTo(self.titleLabel.snp.right).offset(2)
-            make.size.equalTo(CGSize(width: 6, height: 4))
-            make.bottom.equalTo(self.titleLabel.snp.centerY).offset(-2)
+            make.left.equalTo(self.titleLabel.snp.right).offset(contentImageSpace)
+            make.size.equalTo(realImageSize)
+            make.bottom.equalTo(self.titleLabel.snp.centerY).offset(-(imageSpace / 2))
+            make.right.lessThanOrEqualToSuperview()
         }
+        
         downImage.snp.makeConstraints { make in
-            make.left.size.equalTo(self.upImage)
-            make.top.equalTo(self.upImage.snp.bottom).offset(4)
+            make.left.size.right.equalTo(self.upImage)
+            make.top.equalTo(self.upImage.snp.bottom).offset(imageSpace)
         }
     }
 }

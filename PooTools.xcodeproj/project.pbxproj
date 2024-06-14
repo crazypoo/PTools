@@ -350,6 +350,7 @@
 		55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */; };
 		55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */; };
 		55AEDB282BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */; };
+		55AF2E232C1CC2B40001D094 /* PTTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AF2E222C1CC2B40001D094 /* PTTagCell.swift */; };
 		55B13D4A2B1AE83200C67EDA /* PTImageEditorSticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */; };
 		55B13D4C2B1AE8CC00C67EDA /* PTImageEditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */; };
 		55B13D4E2B1AEAF300C67EDA /* PTImageClipRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */; };
@@ -948,6 +949,7 @@
 		55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+PTEX.swift"; sourceTree = "<group>"; };
 		55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuInteractionDummy.swift; sourceTree = "<group>"; };
+		55AF2E222C1CC2B40001D094 /* PTTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTagCell.swift; sourceTree = "<group>"; };
 		55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorSticker.swift; sourceTree = "<group>"; };
 		55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorConfig.swift; sourceTree = "<group>"; };
 		55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageClipRatio.swift; sourceTree = "<group>"; };
@@ -2775,6 +2777,7 @@
 				55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */,
 				231D14D6272CDEE9003D6F62 /* PooToolsSource */,
 				550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */,
+				55AF2E222C1CC2B40001D094 /* PTTagCell.swift */,
 				55C4098D2C04F37C009C0FB6 /* PTLocationManager.swift */,
 				550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */,
 				55DD93782B94C1EE00F65872 /* PTSideController.swift */,
@@ -3406,6 +3409,7 @@
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
 				555EEEAA2BDE116E00A60833 /* UIView+BadgeEX.swift in Sources */,
+				55AF2E232C1CC2B40001D094 /* PTTagCell.swift in Sources */,
 				55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */,
 				555818CC2AFA7D270051C0AA /* UITabBarController+PTEX.swift in Sources */,
 				55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */,
