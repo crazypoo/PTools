@@ -261,197 +261,172 @@ public class Network: NSObject {
     ///   - encoder: 编码方式，默认url编码
     ///   - jsonRequest:
     ///  - Returns: ResponseModel
-    class public func requestApi(needGobal:Bool? = true,
+    class public func requestApi(needGobal:Bool = true,
                                  urlStr:String,
                                  method: HTTPMethod = .post,
                                  header:HTTPHeaders? = nil,
                                  parameters: Parameters? = nil,
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
-                                 jsonRequest:Bool? = false) async throws -> PTBaseStructModel {
+                                 jsonRequest:Bool = false) async throws -> PTBaseStructModel {
+        let urlStr1 = (needGobal ? Network.gobalUrl() : "") + urlStr
+        guard urlStr1.isURL(), !urlStr.isEmpty else {
+            throw AFError.invalidURL(url: "https://www.qq.com")
+        }
 
-        try await withCheckedThrowingContinuation { continuation in
-            
-            let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
-            if !urlStr1.isURL() || urlStr.stringIsEmpty() {
-                continuation.resume(throwing: AFError.invalidURL(url: "https://www.qq.com"))
-                return
-            }
+        // 判断网络是否可用
+        guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+            throw AFError.createURLRequestFailed(error: NetWorkNoError)
+        }
 
-            // 判断网络是否可用
-            if let reachabilityManager = PTNetWorkStatus.shared.reachabilityManager {
-                if !reachabilityManager.isReachable {
-                    continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
-                    return
-                }
-            }
+        var apiHeader = header ?? HTTPHeaders()
+        let token = Network.share.userToken
 
-            var apiHeader = HTTPHeaders()
-            let token = Network.share.userToken
-            if !token.stringIsEmpty() && header == nil {
-                apiHeader = HTTPHeaders.init(["token": token, "device": "iOS"])
-                if jsonRequest! {
-                    apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                    apiHeader["Accept"] = "application/json"
-                }
-            } else if token.stringIsEmpty() && header != nil {
-                apiHeader = header!
-                if jsonRequest! {
-                    apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                    apiHeader["Accept"] = "application/json"
-                }
-            } else if !token.stringIsEmpty() && header != nil {
-                apiHeader = header!
-                apiHeader["token"] = token
-                if jsonRequest! {
-                    apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                    apiHeader["Accept"] = "application/json"
-                }
-            }
+        if !token.isEmpty {
+            apiHeader["token"] = token
+            apiHeader["device"] = "iOS"
+        }
 
-            var postString = ""
-            switch method {
-            case .post:
-                postString = "POST请求"
-            case .get:
-                postString = "GET请求"
-            default:
-                postString = "其他"
-            }
-            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐",levelType: PTLogMode,loggerType: .Network)
+        if jsonRequest {
+            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+            apiHeader["Accept"] = "application/json"
+        }
 
+        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(apiHeader.dictionary.jsonString() ?? "")\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
+
+        return try await withCheckedThrowingContinuation { continuation in
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
-                case .success(_):
-                    
+                case .success:
                     var requestStruct = PTBaseStructModel()
                     requestStruct.resultData = data.data
                     let jsonStr = data.data?.toDict()?.toJSON() ?? ""
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\((!jsonStr.stringIsEmpty() ? jsonStr : ((data.data ?? Data()).string(encoding: .utf8)))!)🌐",levelType: PTLogMode,loggerType: .Network)
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\((!jsonStr.isEmpty ? jsonStr : ((data.data ?? Data()).string(encoding: .utf8)))!)🌐", levelType: PTLogMode, loggerType: .Network)
                     requestStruct.originalString = jsonStr
-                    guard let modelType1 = modelType else {
-                        continuation.resume(returning: requestStruct)
-                        return
+                    if let modelType1 = modelType {
+                        requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
                     }
-                    requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
                     continuation.resume(returning: requestStruct)
+
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error, loggerType: .Network)
                     continuation.resume(throwing: error)
                 }
             }
         }
     }
         
+    /*
+     使用方式
+     Task {
+         do {
+             let progressStream = imageUpload(needGobal: true, images: images, path: "/api/project/ossImg")
+             for try await (progress, response) in progressStream {
+                 if let response = response {
+                     // 上传完成，处理响应模型
+                     print("Upload finished with response: \(response)")
+                 } else {
+                     // 处理进度更新
+                     print("Upload progress: \(progress.fractionCompleted)")
+                 }
+             }
+         } catch {
+             // 处理错误
+             print("Upload failed with error: \(error)")
+         }
+     }
+     */
     /// 图片上传接口
     /// - Parameters:
-    ///   - needGobal:是否使用全局URL
+    ///   - needGobal: 是否使用全局URL
     ///   - images: 图片集合
-    ///   - path:路徑
-    ///   - method:
-    ///   - fileKey:fileKey
-    ///   - parmas:數據
-    ///   - header:頭部
-    ///   - modelType:Model
-    ///   - jsonRequest:是否jsonRequest
-    ///   - pngData:是否Png
-    ///   - progressBlock: 进度回调
-    /// - Returns:ResponseModel
-    class public func imageUpload(needGobal:Bool? = true,
-                                  images:[UIImage]?,
-                                  path:String? = "/api/project/ossImg",
+    ///   - path: 路径
+    ///   - method: HTTP方法
+    ///   - fileKey: 文件键名
+    ///   - params: 请求参数
+    ///   - header: 请求头部
+    ///   - modelType: 模型类型
+    ///   - jsonRequest: 是否为JSON请求
+    ///   - pngData: 是否使用PNG格式
+    /// - Returns: 响应模型
+    class public func imageUpload(needGobal: Bool = true,
+                                  images: [UIImage]?,
+                                  path: String = "/api/project/ossImg",
                                   method: HTTPMethod = .post,
-                                  fileKey:[String]? = ["images"],
-                                  parmas:[String:String]? = nil,
-                                  header:HTTPHeaders? = nil,
+                                  fileKey: [String] = ["images"],
+                                  params: [String: String]? = nil,
+                                  header: HTTPHeaders? = nil,
                                   modelType: Convertible.Type? = nil,
-                                  jsonRequest:Bool? = false,
-                                  pngData:Bool? = true,
-                                  progressBlock:UploadProgress? = nil) async throws -> PTBaseStructModel {
-        
-        let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
-        if !pathUrl.isURL() || (path ?? "").stringIsEmpty() {
-            throw AFError.invalidURL(url: "https://www.qq.com")
-        }
+                                  jsonRequest: Bool = false,
+                                  pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let pathUrl = (needGobal ? Network.gobalUrl() : "") + path
+                    guard pathUrl.isURL(), !path.isEmpty else {
+                        throw AFError.invalidURL(url: "https://www.qq.com")
+                    }
 
-        // 判断网络是否可用
-        if let reachabilityManager = PTNetWorkStatus.shared.reachabilityManager {
-            if !reachabilityManager.isReachable {
-                throw AFError.createURLRequestFailed(error: NetWorkNoError)
-            }
-        }
-        
-        var apiHeader = HTTPHeaders()
-        let token = Network.share.userToken
-        if !token.stringIsEmpty() && header == nil {
-            apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
-            if jsonRequest! {
-                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                apiHeader["Accept"] = "application/json"
-            }
-        } else if token.stringIsEmpty() && header != nil {
-            apiHeader = header!
-            if jsonRequest! {
-                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                apiHeader["Accept"] = "application/json"
-            }
-        } else if !token.stringIsEmpty() && header != nil {
-            apiHeader = header!
-            apiHeader["token"] = token
-            if jsonRequest! {
-                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                apiHeader["Accept"] = "application/json"
-            }
-        }
+                    // 判断网络是否可用
+                    guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+                        throw AFError.createURLRequestFailed(error: NetWorkNoError)
+                    }
 
-        return try await withCheckedThrowingContinuation { continuation in
-            Network.manager.upload(multipartFormData: { multipartFormData in
-                images?.enumerated().forEach { index,image in
-                    if pngData! {
-                        if let imgData = image.pngData() {
-                            multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+                    var apiHeader = header ?? HTTPHeaders()
+                    let token = Network.share.userToken
+
+                    if !token.isEmpty {
+                        apiHeader["token"] = token
+                        apiHeader["device"] = "iOS"
+                    }
+
+                    if jsonRequest {
+                        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                        apiHeader["Accept"] = "application/json"
+                    }
+
+                    Network.manager.upload(multipartFormData: { multipartFormData in
+                        images?.enumerated().forEach { index, image in
+                            if let imgData = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.2) {
+                                multipartFormData.append(imgData, withName: fileKey[safe: index] ?? "image", fileName: "image_\(index).png", mimeType: pngData ? "image/png" : "image/jpeg")
+                            }
                         }
-                    } else {
-                        if let imgData = image.jpegData(compressionQuality: 0.2) {
-                            multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+
+                        params?.forEach { key, value in
+                            multipartFormData.append(Data(value.utf8), withName: key)
+                        }
+                    }, to: pathUrl, method: method, headers: apiHeader)
+                    .uploadProgress { progress in
+                        continuation.yield((progress, nil))
+                    }
+                    .response { response in
+                        switch response.result {
+                        case .success(_):
+                            var requestStruct = PTBaseStructModel()
+                            let jsonStr = response.data?.toDict()?.toJSON() ?? ""
+                            requestStruct.originalString = jsonStr
+                            requestStruct.resultData = response.data
+
+                            PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\((!jsonStr.isEmpty ? jsonStr : ((response.data ?? Data()).string(encoding: .utf8)))!)🌐", levelType: PTLogMode, loggerType: .Network)
+
+                            if let modelType = modelType {
+                                requestStruct.customerModel = jsonStr.kj.model(type: modelType)
+                            }
+                            continuation.yield((Progress(totalUnitCount: 1), requestStruct))
+                            continuation.finish()
+
+                        case .failure(let error):
+                            PTNSLogConsole("❌❤️1.请求地址 = \(pathUrl)\n💛2.error: \(error)❌", levelType: .Error, loggerType: .Network)
+                            continuation.finish(throwing: error)
                         }
                     }
-                }
-                if parmas != nil {
-                    parmas?.keys.enumerated().forEach({ index,value in
-                        multipartFormData.append(Data(parmas![value]!.utf8), withName: value)
-                    })
-                }
-            }, to: pathUrl,method: method,headers: apiHeader).uploadProgress(closure: { progress in
-                PTGCDManager.gcdMain {
-                    if progressBlock != nil {
-                        progressBlock!(progress)
-                    }
-                }
-            }).response { response in
-                switch response.result {
-                case .success(_):
-                    var requestStruct = PTBaseStructModel()
-                    let jsonStr = response.data?.toDict()?.toJSON() ?? ""
-                    requestStruct.originalString = jsonStr
-                    requestStruct.resultData = response.data
-                    
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\((!jsonStr.stringIsEmpty() ? jsonStr : ((response.data ?? Data()).string(encoding: .utf8)))!)🌐",levelType: PTLogMode,loggerType: .Network)
-
-                    guard let modelType1 = modelType else {
-                        continuation.resume(returning: requestStruct)
-                        return
-                    }
-                    requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
-                    continuation.resume(returning: requestStruct)
-                case .failure(let error):
-                    PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌", levelType: .Error,loggerType: .Network)
-                    continuation.resume(throwing:error)
+                } catch {
+                    continuation.finish(throwing: error)
                 }
             }
         }
     }
-    
+
     class open func fileDownLoad(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?) async throws -> Data {
         
         await withUnsafeContinuation { continuation in
