@@ -642,7 +642,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 })
             } else if itemRow.title == .alert {
-                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet"], otherBlock: { sheet,index,title in
+                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet"], otherBlock: { sheet,index,title in
                     switch index {
                     case 0:
                         PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
@@ -661,7 +661,7 @@ class PTFuncNameViewController: PTBaseViewController {
                             }
                         }
                     case 3:
-                        UIAlertController.baseActionSheet(title: "Title",subTitle: "SubTitle",cancelButtonName: "Cancel",destructiveButtons: ["Destructive"], titles: ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"], destructiveBlock: { sheet, index, title in
+                        UIAlertController.baseActionSheet(title: "Title",subTitle: "SubTitle",cancelButtonName: "Cancel",destructiveButtons: ["Destructive","Destructive1","Destructive2"], titles: ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"], destructiveBlock: { sheet, index, title in
                             
                         },otherBlock: { sheet,index,title in
                         })
@@ -678,6 +678,26 @@ class PTFuncNameViewController: PTBaseViewController {
 
                         let customActionSheet = PTActionSheetView(titleItem:title,cancelItem: cancelItem,destructiveItems: [deItem],contentItems: [content1,content2,content3])
                         customActionSheet.show()
+                    case 5:
+                        let newAlertController = PTCustomerAlertController(title: "",buttons: ["11111","33333"],buttonsColors: [.systemBlue],cornerSize: 15)
+                        PTAlertManager.show(newAlertController)
+                    case 6:
+                        var destructiveItems = [PTActionSheetItem]()
+                        ["Destructive","Destructive1","Destructive2"].enumerated().forEach { index,value in
+                            let item = PTActionSheetItem(title: value)
+                            item.titleColor = .systemRed
+                            destructiveItems.append(item)
+                        }
+                        
+                        var contentItems = [PTActionSheetItem]()
+                        ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"].enumerated().forEach { index,value in
+                            let item = PTActionSheetItem(title: value)
+                            contentItems.append(item)
+                        }
+                        
+                        let newAlertController = PTActionSheetController(destructiveItems: destructiveItems,contentItems: contentItems)
+                        PTAlertManager.show(newAlertController)
+
                     default:
                         break
                     }

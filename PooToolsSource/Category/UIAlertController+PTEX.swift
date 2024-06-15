@@ -291,7 +291,6 @@ public extension UIAlertController {
     //MARK: 初始化創建Alert
     ///初始化創建Alert
     /// - Parameters:
-    ///   - superView: 加載在?上
     ///   - alertTitle: 標題
     ///   - feedBackTitlePlaceholder: 反馈底字
     ///   - feedBackTitleFont: 反馈字体
@@ -301,12 +300,10 @@ public extension UIAlertController {
     ///   - feedBackContentIsSecureTextEntry: 是否密码格式输入
     ///   - cancelString: 取消
     ///   - sendString: 完成
-    ///   - canTapBackground: 是否支持點擊背景消失Alert
     ///   - titleFont: 标题字体
     ///   - done: 完成回調(标题,内容)
     ///   - dismiss: 界面離開後的回調
-    class func alertSendFeedBack(superView:UIView? = AppWindows,
-                                 alertTitle:String? = "PT Screen feedback".localized(),
+    class func alertSendFeedBack(alertTitle:String? = "PT Screen feedback".localized(),
                                  feedBackTitlePlaceholder:String? = "PT Feedback input title".localized(),
                                  feedBackTitleFont:UIFont? = .appfont(size: 16),
                                  feedBackContentPlaceholder:String? = "PT Feedback input content".localized(),
@@ -316,7 +313,6 @@ public extension UIAlertController {
                                  cancelString:String? = "PT Button cancel".localized(),
                                  sendString:String? = "PT Button comfirm".localized(),
                                  titleFont:UIFont? = .appfont(size: 18),
-                                 canTapBackground:Bool? = false,
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
         let feedBackTitle = UITextField()
@@ -335,7 +331,7 @@ public extension UIAlertController {
         feedBackContent.backgroundColor = .clear
         feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry!
         
-        PTCustomAlertView.alertFunction(superView:superView!,titleString: alertTitle!,titleFont: titleFont!,buttons: [cancelString!,sendString!], buttonColor: [],touchBackground: canTapBackground!,customAlertHeight: 250,alertLeftAndRightSpace: 60) { customerView in
+        let customerAlert = PTCustomerAlertController(title: alertTitle!,customerViewHeight:250,customerViewCallback: { customerView in
             customerView.addSubviews([feedBackTitle,feedBackContent])
             feedBackTitle.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -352,16 +348,14 @@ public extension UIAlertController {
             feedBackContent.pt_wordCountLabel?.backgroundColor = .clear
             feedBackContent.pt_wordCountLabel?.font = .appfont(size: 12)
             feedBackContent.pt_maxWordCount = feedBackContentCount!
-
-        } tapBlock: { index in
+        },buttons: [cancelString!,sendString!], buttonsColors: [],contentSpace:60)
+        customerAlert.bottomButtonTapCallback = { title,index in
             if index == 1 {
                 done(feedBackTitle.text ?? "",feedBackContent.text ?? "")
-            }
-        } alertDismissBlock: {
-            if dismiss != nil {
-                dismiss!()
+            } else {
+                dismiss?()
             }
         }
+        PTAlertManager.show(customerAlert)
     }
-
 }

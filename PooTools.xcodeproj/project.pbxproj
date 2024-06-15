@@ -23,7 +23,6 @@
 		231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */; };
 		231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BD272CDEE9003D6F62 /* String+PTEX.swift */; };
 		231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */; };
-		231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */; };
 		231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C0272CDEE9003D6F62 /* PTCodeView.swift */; };
 		231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */; };
 		231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */; };
@@ -392,6 +391,13 @@
 		55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */; };
 		55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */; };
 		55B4FA422AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */; };
+		55B6D7BE2C1D5F1D00033309 /* PTAlertConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7BD2C1D5F1D00033309 /* PTAlertConfig.swift */; };
+		55B6D7C02C1D611800033309 /* PTAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7BF2C1D611800033309 /* PTAlertController.swift */; };
+		55B6D7C22C1D63B100033309 /* PTAlertProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C12C1D63B100033309 /* PTAlertProtocol.swift */; };
+		55B6D7C42C1D640A00033309 /* PTAlertWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */; };
+		55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */; };
+		55B6D7C82C1D88D600033309 /* PTCustomerAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */; };
+		55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */; };
 		55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */; };
 		55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55BA093D2BBD0C0F00F58126 /* sound1.m4a */; };
 		55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09402BBD597C00F58126 /* PTSocketManager.swift */; };
@@ -606,7 +612,6 @@
 		231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPurchaseCarAnimationTool.swift; sourceTree = "<group>"; };
 		231D15BD272CDEE9003D6F62 /* String+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+PTEX.swift"; sourceTree = "<group>"; };
 		231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTActionSheetView.swift; sourceTree = "<group>"; };
-		231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCustomAlertView.swift; sourceTree = "<group>"; };
 		231D15C0272CDEE9003D6F62 /* PTCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCodeView.swift; sourceTree = "<group>"; };
 		231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTGuidePageHUD.swift; sourceTree = "<group>"; };
 		231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSearchBar.swift; sourceTree = "<group>"; };
@@ -995,6 +1000,13 @@
 		55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocation.swift; sourceTree = "<group>"; };
 		55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationWhenInUseHandler.swift; sourceTree = "<group>"; };
 		55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAccuracy.swift; sourceTree = "<group>"; };
+		55B6D7BD2C1D5F1D00033309 /* PTAlertConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertConfig.swift; sourceTree = "<group>"; };
+		55B6D7BF2C1D611800033309 /* PTAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertController.swift; sourceTree = "<group>"; };
+		55B6D7C12C1D63B100033309 /* PTAlertProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertProtocol.swift; sourceTree = "<group>"; };
+		55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertWindow.swift; sourceTree = "<group>"; };
+		55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertManager.swift; sourceTree = "<group>"; };
+		55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomerAlertController.swift; sourceTree = "<group>"; };
+		55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTActionSheetController.swift; sourceTree = "<group>"; };
 		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
 		55BA093D2BBD0C0F00F58126 /* sound1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound1.m4a; sourceTree = "<group>"; };
 		55BA09402BBD597C00F58126 /* PTSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSocketManager.swift; sourceTree = "<group>"; };
@@ -2420,12 +2432,18 @@
 				555818BB2AFA5D2C0051C0AA /* PTAlertTips.swift */,
 				555818BD2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift */,
 				555818B92AFA5AE40051C0AA /* PTAlertTipsIcon.swift */,
-				231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */,
 				55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */,
 				55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */,
 				554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */,
 				558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */,
 				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
+				55B6D7BD2C1D5F1D00033309 /* PTAlertConfig.swift */,
+				55B6D7BF2C1D611800033309 /* PTAlertController.swift */,
+				55B6D7C12C1D63B100033309 /* PTAlertProtocol.swift */,
+				55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */,
+				55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */,
+				55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */,
+				55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -3072,6 +3090,7 @@
 				555818C82AFA7BDB0051C0AA /* UINavigationController+PTEX.swift in Sources */,
 				557E3A8C2C0440FD002466A0 /* PTCallStackParser.swift in Sources */,
 				555818D42AFA7FFB0051C0AA /* CGPoint+PTEX.swift in Sources */,
+				55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */,
 				550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */,
 				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
 				557E3A5E2C0322C5002466A0 /* PTDynamicGradient.swift in Sources */,
@@ -3097,6 +3116,7 @@
 				55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */,
 				555818CA2AFA7CBA0051C0AA /* UISegmentedControl+PTEX.swift in Sources */,
 				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
+				55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */,
 				557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */,
 				557E3A902C0441D6002466A0 /* String+PTDebugEx.swift in Sources */,
 				557E3A9A2C046CC8002466A0 /* PTCustomHTTPProtocol.swift in Sources */,
@@ -3281,6 +3301,7 @@
 				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
 				55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */,
 				558B77B92BBC52B300BD7AB0 /* PTChatBaseCell.swift in Sources */,
+				55B6D7C02C1D611800033309 /* PTAlertController.swift in Sources */,
 				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
 				557E3AB82C047E64002466A0 /* PTCrashDetailModel.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
@@ -3396,6 +3417,7 @@
 				556CA4AE2B28F66200A5B189 /* ConverterOption.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
+				55B6D7C42C1D640A00033309 /* PTAlertWindow.swift in Sources */,
 				558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				557451282C09B12C0008FCAD /* PTMenuSheetButtonView.swift in Sources */,
@@ -3404,6 +3426,7 @@
 				555818C42AFA79580051C0AA /* UIEdgeInsets+PTEX.swift in Sources */,
 				556F84C42B4A874D008675EB /* AVPlayerItem+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
+				55B6D7BE2C1D5F1D00033309 /* PTAlertConfig.swift in Sources */,
 				557E3A7E2C043842002466A0 /* PTCrashModel.swift in Sources */,
 				55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
@@ -3413,7 +3436,6 @@
 				55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */,
 				555818CC2AFA7D270051C0AA /* UITabBarController+PTEX.swift in Sources */,
 				55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */,
-				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
 				557E3AAE2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift in Sources */,
@@ -3460,6 +3482,7 @@
 				557E3A802C04388E002466A0 /* PTCrashManager.swift in Sources */,
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
 				55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */,
+				55B6D7C82C1D88D600033309 /* PTCustomerAlertController.swift in Sources */,
 				55ED0D242B11834E00391136 /* AVCaptureDevice+PTEX.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* PTPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
@@ -3490,6 +3513,7 @@
 				55BCB9842B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift in Sources */,
 				55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */,
 				55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */,
+				55B6D7C22C1D63B100033309 /* PTAlertProtocol.swift in Sources */,
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				559C3D2F2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift in Sources */,
 				558B77BD2BBC52B300BD7AB0 /* PTChatMediaCell.swift in Sources */,

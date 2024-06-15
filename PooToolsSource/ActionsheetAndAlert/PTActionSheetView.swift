@@ -139,12 +139,12 @@ public class PTActionSheetTitleItem:NSObject {
 }
 
 public class PTActionSheetViewConfig:NSObject {
-    fileprivate var lineHeight:CGFloat = 0
-    fileprivate var rowHeight:CGFloat = 0
-    fileprivate var separatorHeight:CGFloat = 0
-    fileprivate var viewSpace:CGFloat = 0
-    fileprivate var cornerRadii:CGFloat = 0
-    fileprivate var dismissWithTapBG:Bool = true
+    var lineHeight:CGFloat = 0
+    var rowHeight:CGFloat = 0
+    var separatorHeight:CGFloat = 0
+    var viewSpace:CGFloat = 0
+    var cornerRadii:CGFloat = 0
+    var dismissWithTapBG:Bool = true
     
     public init(
     @PTClampedProperyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
