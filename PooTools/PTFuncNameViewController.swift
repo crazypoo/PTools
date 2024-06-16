@@ -676,12 +676,15 @@ class PTFuncNameViewController: PTBaseViewController {
                         let content2 = PTActionSheetItem(title: "2",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.right,itemLayout: .leftTitleRightImage)
                         let content3 = PTActionSheetItem(title: "3",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.fill,itemLayout: .leftTitleRightImage)
 
-                        let customActionSheet = PTActionSheetView(titleItem:title,cancelItem: cancelItem,destructiveItems: [deItem],contentItems: [content1,content2,content3])
-                        customActionSheet.show()
+                        let actionSheet = PTActionSheetController(titleItem:title,cancelItem:cancelItem,destructiveItems: [deItem],contentItems: [content1,content2,content3])
+                        PTAlertManager.show(actionSheet)
+
                     case 5:
                         let newAlertController = PTCustomerAlertController(title: "",buttons: ["11111","33333"],buttonsColors: [.systemBlue],cornerSize: 15)
                         PTAlertManager.show(newAlertController)
                     case 6:
+                        let titleItem = PTActionSheetTitleItem(title: "Title",subTitle: "SubTitle")
+
                         var destructiveItems = [PTActionSheetItem]()
                         ["Destructive","Destructive1","Destructive2"].enumerated().forEach { index,value in
                             let item = PTActionSheetItem(title: value)
@@ -695,7 +698,7 @@ class PTFuncNameViewController: PTBaseViewController {
                             contentItems.append(item)
                         }
                         
-                        let newAlertController = PTActionSheetController(destructiveItems: destructiveItems,contentItems: contentItems)
+                        let newAlertController = PTActionSheetController(titleItem:titleItem,destructiveItems: destructiveItems,contentItems: contentItems)
                         PTAlertManager.show(newAlertController)
 
                     default:

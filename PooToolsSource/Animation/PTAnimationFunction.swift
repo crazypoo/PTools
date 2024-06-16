@@ -14,7 +14,8 @@ public let PTAnimationDuration = 0.35
 public class PTAnimationFunction: NSObject {
     public class func animationIn(animationView:UIView,
                                   animationType:PTAlertAnimationType,
-                                  transformValue:CGFloat) {
+                                  transformValue:CGFloat,
+                                  completion:((_ anim:POPAnimation?,_ finish:Bool)->Void)? = nil) {
         var propertyNamed = ""
         var transform = CATransform3DMakeTranslation(0, 0, 0)
         
@@ -40,6 +41,9 @@ public class PTAnimationFunction: NSObject {
         animationView.layer.transform = transform
         animation?.toValue = 0
         animation?.springBounciness = 1
+        animation?.completionBlock = { anim,finish in
+            completion?(anim,finish)
+        }
         animationView.layer.pop_add(animation, forKey: "AlertAnimation")
     }
     

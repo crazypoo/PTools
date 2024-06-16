@@ -9,9 +9,162 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+import AttributedString
+import pop
 
 public typealias PTActionSheetCallback = (_ sheet:PTActionSheetController) -> Void
 public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, _ index:Int,_ title:String)->Void
+
+public class PTActionCell:UIView {
+        
+    private lazy var blur:SSBlurView = {
+        let blurs = SSBlurView.init(to: self)
+        blurs.alpha = 0.9
+        blurs.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        return blurs
+    }()
+    
+    lazy var cellButton : PTLayoutButton = {
+        let view = PTLayoutButton()
+        return view
+    }()
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                self.blur.style = previousTraitCollection.userInterfaceStyle == .dark ? .dark : .extraLight
+            }
+        }
+        addSubview(cellButton)
+
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        cellButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        blur.enable()
+    }
+    
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            // 适配代码
+            blur.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        }
+    }
+}
+
+@objc public enum PTSheetButtonStyle: Int {
+    case leftImageRightTitle
+    case leftTitleRightImage
+}
+
+@objcMembers
+public class PTActionSheetItem:NSObject {
+    public var title:String = ""
+    public var titleColor:UIColor? = .systemBlue
+    public var titleFont:UIFont? = .systemFont(ofSize: 20)
+    public var image:Any?
+    public var imageSize:CGSize = CGSizeMake(34, 34)
+    public var iCloudDocumentName:String = ""
+    public var heightlightColor:UIColor? = .lightGray
+    public var itemAlignment:UIControl.ContentHorizontalAlignment? = .center
+    public var itemLayout:PTSheetButtonStyle? = .leftImageRightTitle
+    public var contentEdgeValue:CGFloat = 20
+    public var contentImageSpace:CGFloat = 15
+
+    public init(title: String,
+                titleColor: UIColor? = .systemBlue,
+                titleFont: UIFont? = .systemFont(ofSize: 20),
+                image: Any? = nil,
+                imageSize:CGSize = CGSizeMake(34, 34),
+                iCloudDocumentName:String = "",
+                heightlightColor: UIColor? = .lightGray,
+                itemAlignment: UIControl.ContentHorizontalAlignment? = .center,
+                itemLayout:PTSheetButtonStyle? = .leftImageRightTitle,
+                contentEdgeValue:CGFloat = 20,
+                contentImageSpace:CGFloat = 15) {
+        self.title = title
+        self.titleColor = titleColor
+        self.titleFont = titleFont
+        self.image = image
+        self.imageSize = imageSize
+        self.heightlightColor = heightlightColor
+        self.itemAlignment = itemAlignment
+        self.itemLayout = itemLayout
+        self.iCloudDocumentName = iCloudDocumentName
+        self.contentEdgeValue = contentEdgeValue
+        self.contentImageSpace = contentImageSpace
+    }
+}
+
+@objcMembers
+public class PTActionSheetTitleItem:NSObject {
+    public var title:String = ""
+    public var subTitle:String = ""
+    public var titleFont:UIFont? = .systemFont(ofSize: 16)
+    public var titleColor:UIColor? = UIColor.systemGray
+    public var image:Any?
+    public var imageSize:CGSize = CGSizeMake(34, 34)
+    public var iCloudDocumentName:String = ""
+    public var itemLayout:PTSheetButtonStyle? = .leftImageRightTitle
+    public var contentImageSpace:CGFloat = 15
+
+    public init(title: String = "",
+                subTitle: String = "",
+                titleFont: UIFont? = .systemFont(ofSize: 16),
+                titleColor: UIColor? = .systemGray,
+                image: Any? = nil,
+                imageSize:CGSize = CGSizeMake(34, 34),
+                iCloudDocumentName:String = "",
+                itemLayout:PTSheetButtonStyle? = .leftImageRightTitle,
+                contentImageSpace:CGFloat = 15) {
+        self.title = title
+        self.subTitle = subTitle
+        self.titleFont = titleFont
+        self.titleColor = titleColor
+        self.image = image
+        self.imageSize = imageSize
+        self.itemLayout = itemLayout
+        self.iCloudDocumentName = iCloudDocumentName
+        self.contentImageSpace = contentImageSpace
+    }
+}
+
+public class PTActionSheetViewConfig:NSObject {
+    fileprivate var lineHeight:CGFloat = 0
+    fileprivate var rowHeight:CGFloat = 0
+    fileprivate var separatorHeight:CGFloat = 0
+    fileprivate var viewSpace:CGFloat = 0
+    fileprivate var cornerRadii:CGFloat = 0
+    fileprivate var dismissWithTapBG:Bool = true
+    
+    public init(
+    @PTClampedProperyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
+    @PTClampedProperyWrapper(range:44...74) rowHeight: CGFloat = 54,
+    @PTClampedProperyWrapper(range:1...10) separatorHeight: CGFloat = 5,
+    @PTClampedProperyWrapper(range:10...50) viewSpace: CGFloat = 10,
+    @PTClampedProperyWrapper(range:0...15) cornerRadii: CGFloat = 15,
+dismissWithTapBG: Bool = true) {
+        self.lineHeight = lineHeight
+        self.rowHeight = rowHeight
+        self.separatorHeight = separatorHeight
+        self.viewSpace = viewSpace
+        self.cornerRadii = cornerRadii
+        self.dismissWithTapBG = dismissWithTapBG
+    }
+}
 
 public class PTActionSheetController: PTAlertController {
     
@@ -75,13 +228,46 @@ public class PTActionSheetController: PTAlertController {
         return view
     }()
     
-    private func setDestructiveCount(@PTClampedProperyWrapper(range:0...5) counts:Int = 0) {
+    fileprivate func setDestructiveCount(@PTClampedProperyWrapper(range:0...5) counts:Int = 0) {
         destructiveCount = counts
     }
-    private var destructiveCount:Int = 0
-
+    fileprivate var destructiveCount:Int = 0
+    
+    fileprivate var totalHeight:CGFloat = 0
+    
     lazy var contentScrollerView:UIScrollView = {
         let view = UIScrollView()
+        return view
+    }()
+    
+    fileprivate lazy var titleLabel : PTActionCell = {
+        let view = PTActionCell()
+        view.cellButton.normalTitle = titleItem!.title
+        view.cellButton.normalSubTitle = titleItem!.subTitle
+        view.cellButton.isUserInteractionEnabled = false
+        view.cellButton.normalTitleFont = titleItem!.titleFont!
+        view.cellButton.normalTitleColor = titleItem!.titleColor!
+        view.cellButton.normalSubTitleFont = titleItem!.titleFont!
+        view.cellButton.normalSubTitleColor = titleItem!.titleColor!
+        if titleItem!.image != nil {
+            switch titleItem!.itemLayout! {
+            case .leftImageRightTitle:
+                view.cellButton.layoutStyle = .leftImageRightTitle
+            case .leftTitleRightImage:
+                view.cellButton.layoutStyle = .leftTitleRightImage
+            }
+            
+            var itemSize = CGSizeZero
+//            if titleItem!.imageSize.height >= (titleHeight() - 20) {
+//                itemSize = CGSizeMake(actionSheetTitleViewItem!.imageSize.width, (titleHeight() - 20))
+//            } else {
+                itemSize = titleItem!.imageSize
+//            }
+            view.cellButton.imageSize = itemSize
+            view.cellButton.midSpacing = titleItem!.contentImageSpace
+            view.cellButton.layoutLoadImage(contentData: titleItem!.image as Any,iCloudDocumentName: titleItem!.iCloudDocumentName)
+        }
+        view.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii,corner: [.topLeft,.topRight])
         return view
     }()
 
@@ -103,7 +289,7 @@ public class PTActionSheetController: PTAlertController {
 
         view.addSubviews([cancelBtn])
         cancelBtn.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(10)
+            make.left.right.equalToSuperview().inset(sheetConfig.viewSpace)
             make.height.equalTo(self.sheetConfig.rowHeight)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }
@@ -169,29 +355,42 @@ public class PTActionSheetController: PTAlertController {
             }
         }
         
+        let destructiveHeight = (self.sheetConfig.separatorHeight + self.sheetConfig.rowHeight) * CGFloat(destructiveCount)
         var contentItmesBottom:CGFloat = 0
         if destructiveCount > 0 {
-            contentItmesBottom = -(self.sheetConfig.separatorHeight + (self.sheetConfig.separatorHeight + self.sheetConfig.rowHeight) * CGFloat(destructiveCount)) - 10
+            contentItmesBottom = -(destructiveHeight + 10)
         } else {
-            contentItmesBottom = -self.sheetConfig.separatorHeight
+            contentItmesBottom = -10
         }
         
-        let contentItmesMaxHeight:CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + CGFloat.kTabbarSaveAreaHeight + 10 + sheetConfig.rowHeight * CGFloat(destructiveCount) + sheetConfig.separatorHeight * CGFloat(destructiveCount - 1) + 10 + CGFloat.kNavBarHeight_Total + 20 + self.sheetConfig.rowHeight)
-        var currentContentHeight:CGFloat = CGFloat(contentItems?.count ?? 0) * sheetConfig.rowHeight
+        let contentItmesMaxHeight:CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + CGFloat.kTabbarSaveAreaHeight + 10 + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.statusBarHeight() + 20 + self.sheetConfig.rowHeight)
+        let currentContentHeight:CGFloat = CGFloat(contentItems?.count ?? 0) * sheetConfig.rowHeight + CGFloat((contentItems?.count ?? 0) - 1) * sheetConfig.lineHeight
+        var realContentSize:CGFloat = currentContentHeight
         var contentItemCanScrol:Bool = false
-        if currentContentHeight > contentItmesMaxHeight {
-            currentContentHeight = contentItmesMaxHeight
+        if realContentSize > contentItmesMaxHeight {
+            realContentSize = contentItmesMaxHeight
             
             contentItemCanScrol = true
         }
         
-        contentScrollerView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH - 20, height: CGFloat(contentItems?.count ?? 0) * sheetConfig.rowHeight + CGFloat((contentItems?.count ?? 0) - 1) * sheetConfig.lineHeight)
+        totalHeight = realContentSize + destructiveHeight + (titleItem == nil ? 0 : sheetConfig.rowHeight) + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.kTabbarSaveAreaHeight + 10
+        
+        contentScrollerView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2, height: currentContentHeight)
         contentScrollerView.isScrollEnabled = contentItemCanScrol
         view.addSubviews([contentScrollerView])
         contentScrollerView.snp.makeConstraints { make in
             make.left.right.equalTo(self.cancelBtn)
             make.bottom.equalTo(self.cancelBtn.snp.top).offset(contentItmesBottom)
-            make.height.equalTo(currentContentHeight)
+            make.height.equalTo(realContentSize)
+        }
+        
+        if titleItem != nil {
+            view.addSubviews([titleLabel])
+            titleLabel.snp.makeConstraints { make in
+                make.left.right.equalTo(self.cancelBtn)
+                make.height.equalTo(self.sheetConfig.rowHeight)
+                make.bottom.equalTo(self.contentScrollerView.snp.top)
+            }
         }
         
         contentSubsSet()
@@ -276,7 +475,6 @@ public class PTActionSheetController: PTAlertController {
                         btn.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.bottomLeft,.bottomRight])
                     }
                 }
-
             })
         }
     }
@@ -284,25 +482,22 @@ public class PTActionSheetController: PTAlertController {
 
 extension PTActionSheetController {
     public override func showAnimation(completion: (() -> Void)?) {
-        UIView.animate(withDuration: 0.2) {
-            self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.40)
-//            self.contentView.alpha = 1.0
-        }
-//        contentView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-        UIView.animate(withDuration: 0.35, delay: 0.0, options: UIView.AnimationOptions(rawValue: UIView.AnimationOptions.RawValue(7 << 16)), animations: {
-//            self.contentView.transform = CGAffineTransform.identity
-        }) { _ in
-            completion?()
+        self.view.backgroundColor = UIColor.DevMaskColor
+        PTAnimationFunction.animationIn(animationView: view, animationType: .Bottom, transformValue: totalHeight + 40) { anim, finish in
+            if finish {
+                completion?()
+            }
         }
     }
     
     public override func dismissAnimation(completion: (() -> Void)?) {
-        UIView.animate(withDuration: 0.2, animations: {
+        PTAnimationFunction.animationOut(animationView: view, animationType: .Bottom) {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
-//            self.contentView.alpha = 0.0
-        }) { _ in
-            PTAlertManager.dismiss(self.key)
-            completion?()
+        } completion: { ok in
+            if ok {
+                PTAlertManager.dismiss(self.key)
+                completion?()
+            }
         }
     }
 }

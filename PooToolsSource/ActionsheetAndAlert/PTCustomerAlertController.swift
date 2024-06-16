@@ -202,7 +202,7 @@ public class PTCustomerAlertController: PTAlertController {
 extension PTCustomerAlertController {
     public override func showAnimation(completion: (() -> Void)?) {
         UIView.animate(withDuration: 0.2) {
-            self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.40)
+            self.view.backgroundColor = UIColor.DevMaskColor
             self.contentView.alpha = 1.0
         }
         contentView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)

@@ -22,7 +22,6 @@
 		231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */; };
 		231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */; };
 		231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BD272CDEE9003D6F62 /* String+PTEX.swift */; };
-		231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */; };
 		231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C0272CDEE9003D6F62 /* PTCodeView.swift */; };
 		231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */; };
 		231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */; };
@@ -611,7 +610,6 @@
 		231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableArray+PTEX.swift"; sourceTree = "<group>"; };
 		231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPurchaseCarAnimationTool.swift; sourceTree = "<group>"; };
 		231D15BD272CDEE9003D6F62 /* String+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+PTEX.swift"; sourceTree = "<group>"; };
-		231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTActionSheetView.swift; sourceTree = "<group>"; };
 		231D15C0272CDEE9003D6F62 /* PTCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCodeView.swift; sourceTree = "<group>"; };
 		231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTGuidePageHUD.swift; sourceTree = "<group>"; };
 		231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSearchBar.swift; sourceTree = "<group>"; };
@@ -2428,7 +2426,6 @@
 		55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */ = {
 			isa = PBXGroup;
 			children = (
-				231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */,
 				555818BB2AFA5D2C0051C0AA /* PTAlertTips.swift */,
 				555818BD2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift */,
 				555818B92AFA5AE40051C0AA /* PTAlertTipsIcon.swift */,
@@ -3218,7 +3215,6 @@
 				557E3A962C046472002466A0 /* UIView+PTSwizzle.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */,
-				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */,
 				55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */,
 				556CA4B82B29500600A5B189 /* CompositionInstruction.swift in Sources */,

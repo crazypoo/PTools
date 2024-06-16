@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 
-public typealias PTActionSheetHandler = (_ sheet:PTActionSheetView) -> Void
-public typealias PTActionSheetIndexHandler = (_ sheet:PTActionSheetView, _ index:Int,_ title:String)->Void
-
 public extension UIAlertController {
     //MARK: 單按鈕Alert
     ///單按鈕Alert
@@ -43,17 +40,17 @@ public extension UIAlertController {
     ///   - canTapBackground:
     @objc class func baseActionSheet(title:String,
                                      subTitle:String? = "",
-                                     cancelButtonName:String? = "PT Button cancel".localized(),
+                                     cancelButtonName:String = "PT Button cancel".localized(),
                                      destructiveButtons:[String] = [String](),
                                      titles:[String],
                                      canTapBackground:Bool = true,
-                                     destructiveBlock:PTActionSheetIndexHandler? = nil,
-                                     cancelBlock: PTActionSheetHandler? = nil,
-                                     otherBlock: @escaping PTActionSheetIndexHandler,
-                                     tapBackgroundBlock: PTActionSheetHandler? = nil) {
+                                     destructiveBlock:PTActionSheetIndexCallback? = nil,
+                                     cancelBlock: PTActionSheetCallback? = nil,
+                                     otherBlock: @escaping PTActionSheetIndexCallback,
+                                     tapBackgroundBlock: PTActionSheetCallback? = nil) {
         
         let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle!)
-        let cancelItem = PTActionSheetItem(title: cancelButtonName!)
+        let cancelItem = PTActionSheetItem(title: cancelButtonName)
 
         var destructiveItems = [PTActionSheetItem]()
         destructiveButtons.enumerated().forEach { index,value in
@@ -69,30 +66,29 @@ public extension UIAlertController {
         }
         
         let viewConfig = PTActionSheetViewConfig(dismissWithTapBG: canTapBackground)
-        
-        let actionSheet = PTActionSheetView(viewConfig: viewConfig,titleItem: titleItem,cancelItem: cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
+                
+        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock
-        actionSheet.actionSheetTapDismissBlock = tapBackgroundBlock
-        actionSheet.show()
+        PTAlertManager.show(actionSheet)
+
     }
     
     @objc class func baseCustomActionSheet(viewConfig:PTActionSheetViewConfig = PTActionSheetViewConfig(),titleItem:PTActionSheetTitleItem,
                                            cancelItem:PTActionSheetItem = PTActionSheetItem(title: "PT Button cancel".localized()),
                                            destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
                                            contentItems:[PTActionSheetItem],
-                                           destructiveBlock:PTActionSheetIndexHandler? = nil,
-                                           cancelBlock: PTActionSheetHandler? = nil,
-                                           otherBlock: @escaping PTActionSheetIndexHandler,
-                                           tapBackgroundBlock: PTActionSheetHandler? = nil) {
-                        
-        let actionSheet = PTActionSheetView(viewConfig: viewConfig,titleItem: titleItem,cancelItem: cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
+                                           destructiveBlock:PTActionSheetIndexCallback? = nil,
+                                           cancelBlock: PTActionSheetCallback? = nil,
+                                           otherBlock: @escaping PTActionSheetIndexCallback,
+                                           tapBackgroundBlock: PTActionSheetCallback? = nil) {
+                                
+        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock
-        actionSheet.actionSheetTapDismissBlock = tapBackgroundBlock
-        actionSheet.show()
+        PTAlertManager.show(actionSheet)
     }
     
     //MARK: ALERT真正基类
