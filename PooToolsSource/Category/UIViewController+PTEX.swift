@@ -517,6 +517,25 @@ public extension UIViewController {
         }
     }
 #endif
+    
+    class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
+        let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options)
+        let currentVC = PTUtils.getCurrentVC()
+        if currentVC is PTSideMenuControl {
+            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
+            if let presentedVC = currentVC?.presentedViewController {
+                presentedVC.present(sheet, animated: true)
+            } else {
+                currentVC!.present(sheet, animated: true)
+            }
+        } else {
+            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                presentedVC.present(sheet, animated: true)
+            } else {
+                PTUtils.getCurrentVC().present(sheet, animated: true)
+            }
+        }
+    }
 }
 
 extension UIViewController:@retroactive UIPopoverPresentationControllerDelegate {

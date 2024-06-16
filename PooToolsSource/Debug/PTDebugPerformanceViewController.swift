@@ -113,22 +113,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                     self.navigationController?.pushViewController(vc)
                 } else if cellModel.name == "Create Leak" {
                     let vc = PTCreateLeakViewController()
-                    let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
-                    let currentVC = PTUtils.getCurrentVC()
-                    if currentVC is PTSideMenuControl {
-                        let currentVC = (currentVC as! PTSideMenuControl).contentViewController
-                        if let presentedVC = currentVC?.presentedViewController {
-                            presentedVC.present(sheet, animated: true)
-                        } else {
-                            currentVC!.present(sheet, animated: true)
-                        }
-                    } else {
-                        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                            presentedVC.present(sheet, animated: true)
-                        } else {
-                            PTUtils.getCurrentVC().present(sheet, animated: true)
-                        }
-                    }
+                    self.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
                 }
             }
         }

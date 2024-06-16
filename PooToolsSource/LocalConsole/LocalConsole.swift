@@ -976,22 +976,7 @@ public class LocalConsole: NSObject {
     
     func consoleSheetPresent(vc:PTBaseViewController) {
         let nav = PTBaseNavControl(rootViewController: vc)
-        let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.9)])
-        let currentVC = PTUtils.getCurrentVC()
-        if currentVC is PTSideMenuControl {
-            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
-            if let presentedVC = currentVC?.presentedViewController {
-                presentedVC.present(sheet, animated: true)
-            } else {
-                currentVC!.present(sheet, animated: true)
-            }
-        } else {
-            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                presentedVC.present(sheet, animated: true)
-            } else {
-                PTUtils.getCurrentVC().present(sheet, animated: true)
-            }
-        }
+        UIViewController.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
     }
     
     func maskOpenFunction() {

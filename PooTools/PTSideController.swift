@@ -43,8 +43,7 @@ class PTSideController: PTBaseSideController {
                     }
                     
                     let nav = PTBaseNavControl(rootViewController: vc)
-                    let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.5),.fullscreen])
-                    PTUtils.getCurrentVC().present(sheet, animated: true)
+                    self.currentPresentToSheet(vc: nav,sizes: [.percent(0.5),.fullscreen])
 //                    let vc = PTFuncDetailViewController(typeString: String.sortButton)
 //                    PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: PTUtils.getCurrentVC() as! PTBaseViewController,currentViewController: PTUtils.getCurrentVC())
                 }

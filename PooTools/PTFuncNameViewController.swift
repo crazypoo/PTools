@@ -832,7 +832,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
-                PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
+                self.currentPresentToSheet(vc: vc,sizes: [.percent(0.5)])
+//                self.sideMenuController?.contentViewController?.present(vc, animated: true)
+//                PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
             }
         }
         aaaaaaa.headerRefreshTask = { sender in

@@ -429,6 +429,12 @@ extension PTBaseViewController {
     }
 }
 
+extension PTBaseViewController {
+    public func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
+        UIViewController.currentPresentToSheet(vc: vc,sizes: sizes,options: options)
+    }
+}
+
 //MARK: ScreenShot的小控件
 fileprivate class PTBaseScreenShotAlert:UIView {
                 
