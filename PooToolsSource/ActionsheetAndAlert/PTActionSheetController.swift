@@ -287,12 +287,15 @@ public class PTActionSheetController: PTAlertController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupCancelButton()
-        setupDestructiveItems()
-        setupContentScrollerView()
-        setupTitleLabel()
-        
-        contentSubsSet()
+        PTGCDManager.gcdMain {
+            self.setupCancelButton()
+            self.setupDestructiveItems()
+            self.setupContentScrollerView()
+            self.setupTitleLabel()
+            
+            self.contentSubsSet()
+
+        }
     }
 
     // 分离取消按钮的设置

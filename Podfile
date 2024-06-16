@@ -5,6 +5,18 @@ post_install do |installer|
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
         config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+#        if config.name == 'Release'
+#          # swift编译优化级别
+#          config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Osize'
+#          config.build_settings['SWIFT_COMPILATION_MODE'] = 'wholemodule'
+#          # GCC编译优化级别
+#          config.build_settings['GCC_OPTIMIZATION_LEVEL'] = 'z'
+#          config.build_settings['LLVM_LTO'] = 'YES_THIN'
+#          # 打包后裁剪不必要的符号
+#          config.build_settings['STRIP_INSTALLED_PRODUCT'] = 'YES'
+#          
+#          config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf-with-dsym'
+#          end
       end
       target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
             target.build_configurations.each do |config|
