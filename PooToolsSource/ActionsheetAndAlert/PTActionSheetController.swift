@@ -286,116 +286,122 @@ public class PTActionSheetController: PTAlertController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupCancelButton()
+        setupDestructiveItems()
+        setupContentScrollerView()
+        setupTitleLabel()
+        
+        contentSubsSet()
+    }
 
+    // 分离取消按钮的设置
+    private func setupCancelButton() {
         view.addSubviews([cancelBtn])
         cancelBtn.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(sheetConfig.viewSpace)
-            make.height.equalTo(self.sheetConfig.rowHeight)
+            make.height.equalTo(sheetConfig.rowHeight)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }
-        
+    }
+
+    // 分离毁灭性项目的设置
+    private func setupDestructiveItems() {
         setDestructiveCount(counts: destructiveItems?.count ?? 0)
         
-        if destructiveCount > 0 {
-            for i in 0..<destructiveCount {
-                let destructiveItem = destructiveItems![i]
-                let destructiveView = PTActionCell()
-                destructiveView.cellButton.normalTitle = destructiveItem.title
-                destructiveView.cellButton.normalTitleFont = destructiveItem.titleFont!
-                destructiveView.cellButton.normalTitleColor = destructiveItem.titleColor!
-                destructiveView.cellButton.hightlightTitleFont = destructiveItem.titleFont!
-                destructiveView.cellButton.hightlightTitleColor = destructiveItem.titleColor!
-                destructiveView.cellButton.configBackgroundHightlightColor = destructiveItem.heightlightColor!
-                destructiveView.cellButton.contentHorizontalAlignment = destructiveItem.itemAlignment!
-                switch destructiveItem.itemAlignment! {
-                case .center:
-                    break
-                case .left,.leading:
-                    destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: destructiveItem.contentEdgeValue, bottom: 0, trailing: 0)
-                case .right,.trailing:
-                    destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: destructiveItem.contentEdgeValue)
-                case .fill:
-                    destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: destructiveItem.contentEdgeValue, bottom: 0, trailing: destructiveItem.contentEdgeValue)
-                @unknown default:
-                    break
-                }
-                if destructiveItem.image != nil {
-                    switch destructiveItem.itemLayout! {
-                    case .leftImageRightTitle:
-                        destructiveView.cellButton.layoutStyle = .leftImageRightTitle
-                    case .leftTitleRightImage:
-                        destructiveView.cellButton.layoutStyle = .leftTitleRightImage
-                    }
-                    
-                    var itemSize = CGSizeZero
-                    if destructiveItem.imageSize.height >= (sheetConfig.rowHeight - 20) {
-                        itemSize = CGSizeMake(destructiveItem.imageSize.width, sheetConfig.rowHeight - 20)
-                    } else {
-                        itemSize = destructiveItem.imageSize
-                    }
-                    destructiveView.cellButton.imageSize = itemSize
-                    destructiveView.cellButton.midSpacing = destructiveItem.contentImageSpace
-                    destructiveView.cellButton.layoutLoadImage(contentData: destructiveItem.image as Any,iCloudDocumentName: destructiveItem.iCloudDocumentName)
-                }
-                destructiveView.cellButton.addActionHandlers { sender in
-                    self.dismissAnimation {
-                        if self.actionSheetDestructiveSelectBlock != nil {
-                            self.actionSheetDestructiveSelectBlock!(self,i,destructiveItem.title)
-                        }
-                    }
-                }
-                destructiveView.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: .allCorners)
-                view.addSubview(destructiveView)
-                let destructiveY = -(self.sheetConfig.separatorHeight + (self.sheetConfig.separatorHeight + self.sheetConfig.rowHeight) * CGFloat(i))
-                destructiveView.snp.makeConstraints { make in
-                    make.left.right.equalTo(self.cancelBtn)
-                    make.height.equalTo(self.sheetConfig.rowHeight)
-                    make.bottom.equalTo(self.cancelBtn.snp.top).offset(destructiveY)
+        guard destructiveCount > 0 else { return }
+        
+        for (index, destructiveItem) in destructiveItems!.enumerated() {
+            let destructiveView = createDestructiveView(for: destructiveItem)
+            destructiveView.cellButton.addActionHandlers { sender in
+                self.dismissAnimation {
+                    self.actionSheetDestructiveSelectBlock?(self, index, destructiveItem.title)
                 }
             }
-        }
-        
-        let destructiveHeight = (self.sheetConfig.separatorHeight + self.sheetConfig.rowHeight) * CGFloat(destructiveCount)
-        var contentItmesBottom:CGFloat = 0
-        if destructiveCount > 0 {
-            contentItmesBottom = -(destructiveHeight + 10)
-        } else {
-            contentItmesBottom = -10
-        }
-        
-        let contentItmesMaxHeight:CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + CGFloat.kTabbarSaveAreaHeight + 10 + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.statusBarHeight() + 20 + self.sheetConfig.rowHeight)
-        let currentContentHeight:CGFloat = CGFloat(contentItems?.count ?? 0) * sheetConfig.rowHeight + CGFloat((contentItems?.count ?? 0) - 1) * sheetConfig.lineHeight
-        var realContentSize:CGFloat = currentContentHeight
-        var contentItemCanScrol:Bool = false
-        if realContentSize > contentItmesMaxHeight {
-            realContentSize = contentItmesMaxHeight
             
-            contentItemCanScrol = true
+            view.addSubview(destructiveView)
+            let destructiveY = -(sheetConfig.separatorHeight + (sheetConfig.separatorHeight + sheetConfig.rowHeight) * CGFloat(index))
+            destructiveView.snp.makeConstraints { make in
+                make.left.right.equalTo(cancelBtn)
+                make.height.equalTo(sheetConfig.rowHeight)
+                make.bottom.equalTo(cancelBtn.snp.top).offset(destructiveY)
+            }
+        }
+    }
+
+    private func createDestructiveView(for item: PTActionSheetItem) -> PTActionCell {
+        let destructiveView = PTActionCell()
+        destructiveView.cellButton.normalTitle = item.title
+        destructiveView.cellButton.normalTitleFont = item.titleFont!
+        destructiveView.cellButton.normalTitleColor = item.titleColor!
+        destructiveView.cellButton.hightlightTitleFont = item.titleFont!
+        destructiveView.cellButton.hightlightTitleColor = item.titleColor!
+        destructiveView.cellButton.configBackgroundHightlightColor = item.heightlightColor!
+        destructiveView.cellButton.contentHorizontalAlignment = item.itemAlignment!
+        
+        let contentEdgeValue = item.contentEdgeValue
+        switch item.itemAlignment! {
+        case .center: break
+        case .left, .leading:
+            destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: contentEdgeValue, bottom: 0, trailing: 0)
+        case .right, .trailing:
+            destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: contentEdgeValue)
+        case .fill:
+            destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: contentEdgeValue, bottom: 0, trailing: contentEdgeValue)
+        @unknown default: break
+        }
+        
+        if let image = item.image {
+            let imageSize = item.imageSize.height >= (sheetConfig.rowHeight - 20) ? CGSize(width: item.imageSize.width, height: sheetConfig.rowHeight - 20) : item.imageSize
+            destructiveView.cellButton.imageSize = imageSize
+            destructiveView.cellButton.midSpacing = item.contentImageSpace
+            destructiveView.cellButton.layoutLoadImage(contentData: image as Any, iCloudDocumentName: item.iCloudDocumentName)
+            destructiveView.cellButton.layoutStyle = item.itemLayout == .leftImageRightTitle ? .leftImageRightTitle : .leftTitleRightImage
+        }
+        
+        destructiveView.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii, corner: .allCorners)
+        return destructiveView
+    }
+
+    // 分离内容滚动视图的设置
+    private func setupContentScrollerView() {
+        let destructiveHeight = (sheetConfig.separatorHeight + sheetConfig.rowHeight) * CGFloat(destructiveCount)
+        let contentItemsBottom: CGFloat = destructiveCount > 0 ? -(destructiveHeight + 10) : -10
+        let contentItemsMaxHeight: CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + CGFloat.kTabbarSaveAreaHeight + 10 + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.statusBarHeight() + 20 + sheetConfig.rowHeight)
+        
+        let contentItemsCount = CGFloat(contentItems?.count ?? 0)
+        let currentContentHeight: CGFloat = contentItemsCount * sheetConfig.rowHeight + (contentItemsCount - 1) * sheetConfig.lineHeight
+        var realContentSize: CGFloat = currentContentHeight
+        let contentItemCanScroll: Bool = realContentSize > contentItemsMaxHeight
+        
+        if contentItemCanScroll {
+            realContentSize = contentItemsMaxHeight
         }
         
         totalHeight = realContentSize + destructiveHeight + (titleItem == nil ? 0 : sheetConfig.rowHeight) + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.kTabbarSaveAreaHeight + 10
         
         contentScrollerView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2, height: currentContentHeight)
-        contentScrollerView.isScrollEnabled = contentItemCanScrol
+        contentScrollerView.isScrollEnabled = contentItemCanScroll
         view.addSubviews([contentScrollerView])
         contentScrollerView.snp.makeConstraints { make in
-            make.left.right.equalTo(self.cancelBtn)
-            make.bottom.equalTo(self.cancelBtn.snp.top).offset(contentItmesBottom)
+            make.left.right.equalTo(cancelBtn)
+            make.bottom.equalTo(cancelBtn.snp.top).offset(contentItemsBottom)
             make.height.equalTo(realContentSize)
         }
-        
-        if titleItem != nil {
-            view.addSubviews([titleLabel])
-            titleLabel.snp.makeConstraints { make in
-                make.left.right.equalTo(self.cancelBtn)
-                make.height.equalTo(self.sheetConfig.rowHeight)
-                make.bottom.equalTo(self.contentScrollerView.snp.top)
-            }
-        }
-        
-        contentSubsSet()
     }
-    
+
+    // 分离标题标签的设置
+    private func setupTitleLabel() {
+        guard titleItem != nil else { return }
+        
+        view.addSubviews([titleLabel])
+        titleLabel.snp.makeConstraints { make in
+            make.left.right.equalTo(cancelBtn)
+            make.height.equalTo(sheetConfig.rowHeight)
+            make.bottom.equalTo(contentScrollerView.snp.top)
+        }
+    }
+
     func contentSubsSet() {
         if contentItems?.count ?? 0 > 0 {
             contentItems?.enumerated().forEach({ index,value in
@@ -483,7 +489,7 @@ public class PTActionSheetController: PTAlertController {
 extension PTActionSheetController {
     public override func showAnimation(completion: (() -> Void)?) {
         self.view.backgroundColor = UIColor.DevMaskColor
-        PTAnimationFunction.animationIn(animationView: view, animationType: .Bottom, transformValue: totalHeight + 40) { anim, finish in
+        PTAnimationFunction.animationIn(animationView: view, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
             if finish {
                 completion?()
             }
