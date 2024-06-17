@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FloatingPanel
 import GCDWebServer
 import Alamofire
 import SnapKit

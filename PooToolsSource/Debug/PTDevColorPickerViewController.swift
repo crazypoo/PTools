@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FloatingPanel
 import ChromaColorPicker
 import SnapKit
 import SwifterSwift
@@ -31,14 +30,6 @@ class PTDevColorPickerViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if parent is FloatingPanelController {
-            view.addSubview(closeBtn)
-            closeBtn.snp.makeConstraints { make in
-                make.size.equalTo(34)
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
-            }
-        } else {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubview(closeBtn)
         closeBtn.snp.makeConstraints { make in
@@ -50,7 +41,6 @@ class PTDevColorPickerViewController: PTBaseViewController {
         closeBtn.frame = CGRectMake(0, 0, 34, 34)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeBtn)
 #endif
-        }
 
         let lrCount = 16
         
@@ -65,15 +55,11 @@ class PTDevColorPickerViewController: PTBaseViewController {
         colorPicker.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace * CGFloat(lrCount / 2))
             make.height.equalTo(colorPicker.snp.width)
-            if self.parent is FloatingPanelController {
-                make.top.equalTo(closeBtn.snp.bottom).offset(5)
-            } else {
 #if POOTOOLS_NAVBARCONTROLLER
                 make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
 #else
                 make.top.equalToSuperview()
 #endif
-            }
         }
         
         brightnessSlider.snp.makeConstraints { make in

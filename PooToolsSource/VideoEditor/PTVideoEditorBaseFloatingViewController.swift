@@ -13,7 +13,7 @@ import SwifterSwift
 import ZXNavigationBar
 #endif
 
-open class PTVideoEditorBaseFloatingViewController: PTFloatingBaseViewController {
+open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
 
     lazy var doneButton:UIButton = {
         let view = UIButton(type: .custom)

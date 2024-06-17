@@ -7,15 +7,6 @@
 //
 
 import UIKit
-import FloatingPanel
-
-//MARK: 用來調用懸浮框
-extension PTBaseViewController:FloatingPanelControllerDelegate {
-    open func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTFloatPanelLayout()
-        return layout
-    }
-}
 
 extension PTBaseViewController:UIGestureRecognizerDelegate {
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {

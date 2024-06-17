@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-import FloatingPanel
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
@@ -74,19 +73,6 @@ class PTUserDefultsViewController: PTBaseViewController {
             self.clearUserdefults()
         }
         
-        if parent is FloatingPanelController {
-            view.addSubviews([backBtn,cleanBtn])
-            backBtn.snp.makeConstraints { make in
-                make.size.equalTo(34)
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
-            }
-            
-            cleanBtn.snp.makeConstraints { make in
-                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.size.equalTo(backBtn)
-            }
-        } else {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubviews([backBtn,cleanBtn])
         backBtn.snp.makeConstraints { make in
@@ -105,20 +91,15 @@ class PTUserDefultsViewController: PTBaseViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cleanBtn)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: backBtn)
 #endif
-        }
-        
+
         view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            if self.parent is FloatingPanelController {
-                make.top.equalTo(backBtn.snp.bottom).offset(5)
-            } else {
 #if POOTOOLS_NAVBARCONTROLLER
                 make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
 #else
                 make.top.equalToSuperview()
 #endif
-            }
         }
         
         showDetail()

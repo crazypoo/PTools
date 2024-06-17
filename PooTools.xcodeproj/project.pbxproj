@@ -321,7 +321,6 @@
 		558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF42AAF586700C02042 /* URL+PTEX.swift */; };
 		558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */; };
 		558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */; };
-		558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */; };
 		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
@@ -471,8 +470,6 @@
 		55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */; };
 		55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */; };
 		55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */; };
-		55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */; };
-		55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */; };
 		55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */; };
 		55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */; };
 		55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */; };
@@ -924,7 +921,6 @@
 		558D5EF42AAF586700C02042 /* URL+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+PTEX.swift"; sourceTree = "<group>"; };
 		558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTJson+PTEX.swift"; sourceTree = "<group>"; };
 		558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTKeyedDecoding+PTEX.swift"; sourceTree = "<group>"; };
-		558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingBaseViewController.swift; sourceTree = "<group>"; };
 		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
@@ -1079,8 +1075,6 @@
 		55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugViewController.swift; sourceTree = "<group>"; };
 		55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PTList+EX.swift"; sourceTree = "<group>"; };
 		55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevFunction.swift; sourceTree = "<group>"; };
-		55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingPanelFuction.swift; sourceTree = "<group>"; };
-		55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatPanelLayout.swift; sourceTree = "<group>"; };
 		55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpringMotionView-iOS.swift"; sourceTree = "<group>"; };
 		55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionPhysics.swift; sourceTree = "<group>"; };
 		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
@@ -1644,9 +1638,6 @@
 			isa = PBXGroup;
 			children = (
 				55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */,
-				558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */,
-				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
-				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
 				553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */,
 				553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */,
 				553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */,
@@ -3052,7 +3043,6 @@
 				55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */,
 				557E3AA82C046F85002466A0 /* PTCacheStoragePolicy.swift in Sources */,
 				559C3D5C2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift in Sources */,
-				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				550CE4A22AF12EB70052539D /* PTActiveType.swift in Sources */,
 				55DD93772B942FFB00F65872 /* PTSideMenuSegue.swift in Sources */,
@@ -3516,7 +3506,6 @@
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
 				55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */,
 				55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */,
-				558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
 				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
@@ -3539,7 +3528,6 @@
 				556CA4B92B29500600A5B189 /* Compositor.swift in Sources */,
 				55F163092B1A29BE00320925 /* PTTakePictureReviewer.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
-				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
 				55E3BBC12ABE0F8E00858348 /* PTFileModel.swift in Sources */,
 				559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */,
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,

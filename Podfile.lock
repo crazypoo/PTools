@@ -36,7 +36,6 @@ PODS:
   - FaceAware (2.1.0)
   - FDFullscreenPopGesture (1.1)
   - FLEX (5.22.10)
-  - FloatingPanel (2.8.3)
   - GCDWebServer (3.5.4):
     - GCDWebServer/Core (= 3.5.4)
   - GCDWebServer/Core (3.5.4)
@@ -163,10 +162,6 @@ PODS:
     - PooTools/MicPermission
     - PooTools/NavBarController
   - PooTools/FloatingPanel (3.54.10):
-    - FloatingPanel
-    - PooTools/Core
-  - PooTools/FloatPanel (3.54.10):
-    - FloatingPanel
     - PooTools/Core
   - PooTools/FocusFaceImageView (3.54.10):
     - FaceAware
@@ -215,7 +210,7 @@ PODS:
     - PooTools/DEBUG
     - PooTools/DEBUG_TrackingEyes
     - PooTools/FilterCamera
-    - PooTools/FloatPanel
+    - PooTools/FloatingPanel
     - PooTools/FocusFaceImageView
     - PooTools/GCDWebServer
     - PooTools/Guide
@@ -511,7 +506,6 @@ SPEC REPOS:
     - FaceAware
     - FDFullscreenPopGesture
     - FLEX
-    - FloatingPanel
     - GCDWebServer
     - Harbeth
     - InAppViewDebugger
@@ -577,7 +571,6 @@ SPEC CHECKSUMS:
   FaceAware: f1266b8719a1a90da3d763b8cb428554edf0fa61
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
-  FloatingPanel: 0f9b89c6d4318842311bec6f6026fb18ca2a2c90
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   Harbeth: 73d704e1edda98db65b80d1cb35b23fff79f6c70
   InAppViewDebugger: 5f1cd0189d348679f153502da1343ba513b5cbae
@@ -596,7 +589,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: 3c6a442286c32fc5e5b2d00517058aefee17744c
+  PooTools: e7e1051172c176dc40eb2b1b34d1c370650237d4
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
