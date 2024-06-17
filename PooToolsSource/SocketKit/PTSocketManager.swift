@@ -17,8 +17,6 @@ public let nWebSocketDidConnect = "nWebSocketDidConnect"
 public class PTSocketManager: NSObject {
     public static let share = PTSocketManager()
     
-    open var socketAddress:String = ""
-    open var socketAddress_dev:String = ""
     open var MaxReConnectTime = 0
     open var ReconnectTime:TimeInterval = 5
     open var networkStatus:NetWorkStatus = .unknown
@@ -26,28 +24,6 @@ public class PTSocketManager: NSObject {
     fileprivate var reOpenCount:Int = 0
     fileprivate var request:NSMutableURLRequest!
     fileprivate var webSocket:SRWebSocket?
-
-    //MARK: socket服务器URL
-    open class func gobalUrl() -> String {
-        if UIApplication.applicationEnvironment() != .appStore {
-            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
-            switch PTSocketURLMode {
-            case .Development:
-                let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
-                if url_debug.isEmpty {
-                    return PTSocketManager.share.socketAddress_dev
-                } else {
-                    return url_debug
-                }
-            case .Test:
-                return PTSocketManager.share.socketAddress_dev
-            case .Distribution:
-                return PTSocketManager.share.socketAddress
-            }
-        } else {
-            return PTSocketManager.share.socketAddress
-        }
-    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -60,7 +36,7 @@ public class PTSocketManager: NSObject {
     }
     
     public func socketSet() {
-        let urlString = PTSocketManager.gobalUrl()
+        let urlString = Network.socketGobalUrl()
         let webSocketUrl = URL(string: urlString)
         var urlcomponents = URLComponents(url: webSocketUrl!, resolvingAgainstBaseURL: false)
         urlcomponents!.scheme = webSocketUrl?.scheme

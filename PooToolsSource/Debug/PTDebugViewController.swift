@@ -66,7 +66,7 @@ public class PTDebugViewController: PTBaseViewController {
         cell_input_socket.name = .socketAddressInput
         let url_debug_socket:String = PTCoreUserDefultsWrapper.AppSocketUrl
         if url_debug_socket.isEmpty {
-            cell_input_socket.content = PTSocketManager.gobalUrl()
+            cell_input_socket.content = Network.socketGobalUrl()
         } else {
             cell_input_socket.content = url_debug
         }
@@ -169,7 +169,7 @@ public class PTDebugViewController: PTBaseViewController {
                     var current = ""
                     let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
                     if url_debug.isEmpty {
-                        current = PTSocketManager.share.socketAddress_dev
+                        current = Network.share.socketAddress_dev
                     } else {
                         current = url_debug
                     }

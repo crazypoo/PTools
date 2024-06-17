@@ -168,6 +168,8 @@ public class Network: NSObject {
     open var netRequsetTime:TimeInterval = 20
     open var serverAddress:String = ""
     open var serverAddress_dev:String = ""
+    open var socketAddress:String = ""
+    open var socketAddress_dev:String = ""
     open var userToken:String = ""
 
     open var fileUrl:String = ""
@@ -237,6 +239,28 @@ public class Network: NSObject {
             }
         } else {
             return Network.share.serverAddress
+        }
+    }
+    
+    //MARK: socket服务器URL
+    open class func socketGobalUrl() -> String {
+        if UIApplication.applicationEnvironment() != .appStore {
+            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
+            switch PTSocketURLMode {
+            case .Development:
+                let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
+                if url_debug.isEmpty {
+                    return Network.share.socketAddress_dev
+                } else {
+                    return url_debug
+                }
+            case .Test:
+                return Network.share.socketAddress_dev
+            case .Distribution:
+                return Network.share.socketAddress
+            }
+        } else {
+            return Network.share.socketAddress
         }
     }
     
