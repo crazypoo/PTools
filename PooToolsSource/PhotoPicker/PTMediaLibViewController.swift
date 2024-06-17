@@ -13,6 +13,9 @@ import Photos
 import Combine
 import AVFoundation
 import SafeSFSymbols
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 public class PTMediaLibView:UIView {
         
@@ -531,7 +534,7 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
     }
 }
 
-public class PTMediaLibViewController: PTFloatingBaseViewController {
+public class PTMediaLibViewController: PTBaseViewController {
 
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     /// Callback for photos that failed to parse
@@ -585,9 +588,7 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
             
             if self.mediaListView.currentAlbum != nil {
                 let vc = PTMediaLibAlbumListViewController(albumList: self.mediaListView.currentAlbum!)
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true)
+                self.navigationController?.pushViewController(vc, animated: true)
                 vc.selectedModelHandler = { model in
                     self.selectLibButton.normalTitle = "\(model.title)"
                     if model.models.isEmpty {
@@ -600,9 +601,7 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
             } else {
                 PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
                     let vc = PTMediaLibAlbumListViewController(albumList: model)
-                    let nav = PTBaseNavControl(rootViewController: vc)
-                    nav.modalPresentationStyle = .fullScreen
-                    self.present(nav, animated: true)
+                    self.navigationController?.pushViewController(vc, animated: true)
                     vc.selectedModelHandler = { model in
                         self.selectLibButton.normalTitle = "\(model.title)"
                         self.mediaListView.currentAlbum = model
@@ -635,6 +634,11 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
+#else
+        navigationController?.navigationBar.isHidden = true
+#endif
     }
 
     public override func viewWillLayoutSubviews() {
@@ -723,30 +727,9 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         }
     }
         
-    public func mediaLibShow(panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = nil) {
-#if POOTOOLS_FLOATINGPANEL
-        if panGesDelegate != nil {
-            PTUtils.getCurrentVC().sheetPresent_floating(modalViewController: self, type: .large, scale: 1,panGesDelegate:panGesDelegate) {
-                
-            } dismissCompletion: {
-                
-            }
-        } else {
-            showMediaLib()
-        }
-#else
-        showMediaLib()
-#endif
-    }
-    
-    private func showMediaLib() {
-        if #available(iOS 15.0,*) {
-            PTUtils.getCurrentVC().sheetPresent(modalViewController: self, type: .large, scale: 1) {
-                
-            }
-        } else {
-            PTUtils.getCurrentVC().present(self, animated: true)
-        }
+    public func mediaLibShow() {
+        let nav = PTBaseNavControl(rootViewController: self)
+        self.currentPresentToSheet(vc: nav,sizes: [.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())])
     }
 }
 

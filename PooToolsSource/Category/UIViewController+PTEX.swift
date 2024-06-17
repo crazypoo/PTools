@@ -381,7 +381,6 @@ public extension UIViewController {
         dismiss(animated: true, completion: nil)
     }
 
-    
     #if os(iOS)
     var closeBarButtonItem: UIBarButtonItem {
         if #available(iOS 14.0, *) {
@@ -450,7 +449,7 @@ public extension UIViewController {
     }
     
     @available(iOS 15.0,*)
-    func sheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask?) {
+    func restApiSheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask?) {
         if let sheet = modalViewController.sheetPresentationController {
             // 支持的自定义显示大小
             switch type {
@@ -479,44 +478,6 @@ public extension UIViewController {
         present(modalViewController, animated: true,completion: completion)
     }
     
-#if POOTOOLS_FLOATINGPANEL
-    func sheetPresent_floating(modalViewController:PTFloatingBaseViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = PTUtils.getCurrentVC() as! PTBaseViewController,completion:PTActionTask?,dismissCompletion:PTActionTask?) {
-        switch type {
-        case .custom:
-            if #available(iOS 16.0, *) {
-                modalViewController.dismissCompletion = dismissCompletion
-                sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
-            } else {
-                switch type {
-                case .large:
-                    modalViewController.viewScale = 0.9
-                case .medium:
-                    modalViewController.viewScale = 0.5
-                case .custom:
-                    modalViewController.viewScale = scale
-                }
-                modalViewController.completion = completion
-                PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
-            }
-        default:
-            if #available(iOS 15.0, *) {
-                modalViewController.dismissCompletion = dismissCompletion
-                sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
-            } else {
-                switch type {
-                case .large:
-                    modalViewController.viewScale = 0.9
-                case .medium:
-                    modalViewController.viewScale = 0.5
-                case .custom:
-                    modalViewController.viewScale = scale
-                }
-                modalViewController.completion = completion
-                PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
-            }
-        }
-    }
-#endif
     
     class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options)

@@ -27,7 +27,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
-            self.returnFrontVC()
+//            self.presentingViewController?.dismissAnimated()
+            self.navigationController?.popViewController(animated: true)
         }
         return view
     }()
@@ -72,9 +73,23 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
             if self.selectedModelHandler != nil {
                 self.selectedModelHandler!(cellModel)
-                self.returnFrontVC()
+                self.navigationController?.popViewController(animated: true)
             }
         }
+        return view
+    }()
+
+    fileprivate lazy var fakeNav:UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    fileprivate lazy var navTitle:UILabel = {
+        let view = UILabel()
+        view.font = PTAppBaseConfig.share.navTitleFont
+        view.textColor = PTAppBaseConfig.share.navTitleTextColor
+        view.textAlignment = .center
+        view.numberOfLines = 0
         return view
     }()
 
@@ -90,36 +105,27 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: PTAppBaseConfig.share.navBackgroundColor)
+        navigationController?.navigationBar.isHidden = true
 #endif
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitle = "PT Photo picker album list title".localized()
-        self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
-        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
-        self.zx_navBar?.addSubview(dismissButton)
-        dismissButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                        
+        view.addSubviews([fakeNav,collectionView])
+        fakeNav.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(CGFloat.kNavBarHeight)
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 24)
         }
         
-#else
-        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        fakeNavSet()
         
-        self.title = "PT Photo picker album list title".localized()
-#endif
-        
-        view.addSubviews([collectionView])
         collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview()
+            make.top.equalTo(self.fakeNav.snp.bottom)
         }
         
         if selectedAlbum.models.isEmpty {
@@ -136,6 +142,22 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         }
         
         loadAlbumList()
+    }
+    
+    func fakeNavSet() {
+        fakeNav.addSubviews([dismissButton,navTitle])
+        dismissButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+        
+        navTitle.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.left.lessThanOrEqualTo(self.dismissButton.snp.right).offset(7.5)
+        }
+        navTitle.text = "PT Photo picker album list title".localized()
     }
     
     func loadAlbumList() {

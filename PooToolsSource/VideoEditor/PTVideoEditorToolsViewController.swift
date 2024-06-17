@@ -594,37 +594,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 vc.speedHandler = { value in
                     self.speed = value
                 }
-#if POOTOOLS_FLOATINGPANEL
-                self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
-                    
-                },dismissCompletion:{
-                })
-#else
-                if #available(iOS 15.0, *) {
-                    self.sheetPresent(modalViewController: vc, type: .custom, scale: 0.3) {
-                        
-                    }
-                } else {
-                    self.pt_present(vc)
-                }
-#endif
+                self.sheetPresent(vc: vc, size: 0.3)
             case .trim:
                 let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset,typeModel: cellModel)
-#if POOTOOLS_FLOATINGPANEL
-                self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
-                    
-                },dismissCompletion:{
-                    
-                })
-#else
-                if #available(iOS 15.0, *) {
-                    self.sheetPresent(modalViewController: vc, type: .custom, scale: 0.3) {
-                        
-                    }
-                } else {
-                    self.pt_present(vc)
-                }
-#endif
+                self.sheetPresent(vc: vc, size: 0.3)
                 vc.trimPosotionsHandler = { value in
                     self.trimPositions = value
                 }
@@ -677,21 +650,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.currentFilter = filter
                     self.reloadAsset()
                 }
-#if POOTOOLS_FLOATINGPANEL
-                self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
-                    
-                },dismissCompletion:{
-                    
-                })
-#else
-                if #available(iOS 15.0, *) {
-                    self.sheetPresent(modalViewController: vc, type: .custom, scale: 0.3) {
-                        
-                    }
-                } else {
-                    self.pt_present(vc)
-                }
-#endif
+                self.sheetPresent(vc: vc, size: 0.3)
             case .rewrite:
                 let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
                 cell.buttonView.isSelected.toggle()
@@ -779,16 +738,18 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-#else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!)
-#endif
+        
         if !FileManager.pt.judgeFileOrFolderExists(filePath: OutputFilePath) {
             let result = FileManager.pt.createFolder(folderPath: OutputFilePath)
             if !result.isSuccess {
                 PTNSLogConsole("創建失敗", levelType: .Error,loggerType: .Media)
             }
         }
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        guard let nav = navigationController else { return }
+        PTBaseNavControl.GobalNavControl(nav: nav)
+#endif
     }
     
     public init(asset:PHAsset,avAsset:AVAsset) {
@@ -1110,6 +1071,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 }
             }
         }
+    }
+    
+    func sheetPresent(vc:UIViewController,size:CGFloat) {
+        UIViewController.currentPresentToSheet(vc: vc,sizes: [.percent(Float(size))])
     }
 }
 

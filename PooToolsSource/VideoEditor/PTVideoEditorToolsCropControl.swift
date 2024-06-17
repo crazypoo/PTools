@@ -68,7 +68,8 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         self.zx_navTitleColor = .white
         self.zx_navBarBackgroundColor = .black
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,textColor: .white,navColor: .black)
+        guard let nav = navigationController else { return }
+        PTBaseNavControl.GobalNavControl(nav: nav,textColor: .white,navColor: .black)
 #endif
     }
 

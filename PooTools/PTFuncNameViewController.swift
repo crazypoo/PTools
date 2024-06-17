@@ -822,7 +822,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 config.allowEditImage = true
                 config.allowEditVideo = true
                 let vc = PTMediaLibViewController()
-                vc.mediaLibShow(panGesDelegate: self)
+                vc.mediaLibShow()
                 vc.selectImageBlock = { result,isOriginal in
                     if result.count > 0 {
                         PTNSLogConsole("\(result)")
@@ -833,8 +833,6 @@ class PTFuncNameViewController: PTBaseViewController {
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 self.currentPresentToSheet(vc: vc,sizes: [.percent(0.5)])
-//                self.sideMenuController?.contentViewController?.present(vc, animated: true)
-//                PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
             }
         }
         aaaaaaa.headerRefreshTask = { sender in

@@ -677,16 +677,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SHARE POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'FloatPanel' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'FloatingPanel'
-        subspec.source_files = 'PooToolsSource/FloatPanel/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLOATPANEL POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'ListEmptyData' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
@@ -951,7 +942,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ScrollRefresh'
         subspec.dependency 'PooTools/SVG'
         subspec.dependency 'PooTools/Share'
-        subspec.dependency 'PooTools/FloatPanel'
+        subspec.dependency 'PooTools/FloatingPanel'
         subspec.dependency 'PooTools/ListEmptyData'
         subspec.dependency 'PooTools/DEBUG'
         subspec.dependency 'PooTools/DEBUG_TrackingEyes'

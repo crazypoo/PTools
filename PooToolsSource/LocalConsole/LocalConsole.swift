@@ -975,7 +975,6 @@ public class LocalConsole: NSObject {
     }
     
     func consoleSheetPresent(vc:PTBaseViewController) {
-        let nav = PTBaseNavControl(rootViewController: vc)
         UIViewController.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
     }
     
