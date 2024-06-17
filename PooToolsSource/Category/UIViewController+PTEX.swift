@@ -479,21 +479,29 @@ public extension UIViewController {
     }
     
     
-    class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
+    class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil) {
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options)
         let currentVC = PTUtils.getCurrentVC()
         if currentVC is PTSideMenuControl {
             let currentVC = (currentVC as! PTSideMenuControl).contentViewController
             if let presentedVC = currentVC?.presentedViewController {
-                presentedVC.present(sheet, animated: true)
+                presentedVC.present(sheet, animated: true) {
+                    completion?()   
+                }
             } else {
-                currentVC!.present(sheet, animated: true)
+                currentVC!.present(sheet, animated: true) {
+                    completion?()
+                }
             }
         } else {
             if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                presentedVC.present(sheet, animated: true)
+                presentedVC.present(sheet, animated: true) {
+                    completion?()
+                }
             } else {
-                PTUtils.getCurrentVC().present(sheet, animated: true)
+                PTUtils.getCurrentVC().present(sheet, animated: true) {
+                    completion?()
+                }
             }
         }
     }

@@ -1081,4 +1081,24 @@ extension PTLayoutButton {
             }
         }
     }
+    
+    func getButtonTitleSize(type:UIControl.State,
+                            lineSpacing:NSNumber? = nil,
+                            height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                            width:CGFloat = CGFloat.greatestFiniteMagnitude) ->CGSize {
+        var sizeString = ""
+        var buttonFont:UIFont = .appfont(size: 10)
+        switch type {
+        case .normal:
+            sizeString = (self.normalTitle.count > (self.normalSubTitle ?? "").count ? self.normalTitle : self.normalSubTitle)!
+            buttonFont = (self.normalTitle.count > (self.normalSubTitle ?? "").count ? self.normalTitleFont : self.normalSubTitleFont)
+        case .selected:
+            sizeString = (self.selectedTitle.count > (self.selectedSubTitle).count ? self.selectedTitle : self.selectedSubTitle)!
+            buttonFont = (self.selectedTitle.count > self.selectedSubTitle.count ? self.selectedTitleFont : self.selectedSubTitleFont)
+        default:
+            sizeString = self.normalTitle
+            buttonFont = self.normalTitleFont
+        }
+        return UIView.sizeFor(string: sizeString, font: buttonFont,lineSpacing: lineSpacing,height: height, width: width)
+    }
 }
