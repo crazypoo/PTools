@@ -76,6 +76,18 @@ public var PTBaseURLMode:NetWorkEnvironment {
     return .Distribution
 }
 
+public var PTSocketURLMode:NetWorkEnvironment {
+    guard let sliderValue = PTCoreUserDefultsWrapper.AppSocketServiceIdentifier else { return .Distribution }
+    if sliderValue == "1" {
+        return .Distribution
+    } else if sliderValue == "2" {
+        return .Test
+    } else if sliderValue == "3" {
+        return .Development
+    }
+    return .Distribution
+}
+
 // MARK: - 网络运行状态监听
 @objcMembers
 public class PTNetWorkStatus {

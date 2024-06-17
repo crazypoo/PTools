@@ -13,18 +13,6 @@ public let nNetworkStatesChangeNotification = "nNetworkStatesChangeNotification"
 public let nWebSocketDidReceiveMessageNotification = "nWebSocketDidReceiveMessageNotification"
 public let nWebSocketDidConnect = "nWebSocketDidConnect"
 
-public var PTSocketURLMode:NetWorkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.AppSocketServiceIdentifier else { return .Distribution }
-    if sliderValue == "1" {
-        return .Distribution
-    } else if sliderValue == "2" {
-        return .Test
-    } else if sliderValue == "3" {
-        return .Development
-    }
-    return .Distribution
-}
-
 @objcMembers
 public class PTSocketManager: NSObject {
     public static let share = PTSocketManager()
