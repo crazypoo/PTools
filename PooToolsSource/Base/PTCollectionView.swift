@@ -387,7 +387,12 @@ public class PTCollectionView: UIView {
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
         
-        laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth, sectionInsets: sectionInsets)
+        if viewConfig.customReuseViews {
+            let items = customerReuseViews?(section,sectionModel) ?? [NSCollectionLayoutBoundarySupplementaryItem]()
+            laySection.boundarySupplementaryItems = items
+        } else {
+            laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth, sectionInsets: sectionInsets)
+        }
         
         laySection.decorationItems = generateDecorationItems(section: section, sectionModel: sectionModel)
         
