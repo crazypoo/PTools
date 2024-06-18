@@ -91,8 +91,8 @@ extension UIView: PTBadgeProtocol {
                     if self.bounds.intersects(badgeFrameInSelf) {
                         self.badge!.center = self.initialSubviewCenter
                     } else {
-                        self.badge!.removeFromSuperview()
                         self.badgeRemoveCallback?()
+                        self.badge!.removeFromSuperview()
                     }
                 default:
                     break
@@ -277,14 +277,14 @@ extension UIView: PTBadgeProtocol {
             }
         }
     }
-    
-    public var badgeRemoveCallback:PTActionTask? {
+
+    public var badgeRemoveCallback: PTActionTask? {
         get {
             let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteCallbackKey)
-            guard let radius = obj as? PTActionTask else {
+            guard let callback = obj as? PTActionTask else {
                 return nil
             }
-            return radius
+            return callback
         }
         set {
             objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteCallbackKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
