@@ -62,13 +62,14 @@ public class PTSearchBar: UISearchBar {
                     clearBtn.imageView?.contentMode = .scaleAspectFit
                     clearBtn.bounds = CGRect(x: 0, y: clearTopSpace, width: clearHeight, height: clearHeight)
                     if self.clearConfig!.clearImage != nil {
-                        PTLoadImageFunction.loadImage(contentData: self.clearConfig!.clearImage!) { images, image in
-                            if (images?.count ?? 0) > 0 {
-                                if (images?.count ?? 0) > 1 {
-                                    clearBtn.setImage(UIImage.animatedImage(with: images!, duration: 2)!, for: .normal)
+                        Task {
+                            let result = await PTLoadImageFunction.loadImage(contentData: self.clearConfig!.clearImage!)
+                            if (result.0?.count ?? 0) > 0 {
+                                if (result.0?.count ?? 0) > 1 {
+                                    clearBtn.setImage(UIImage.animatedImage(with: result.0!, duration: 2)!, for: .normal)
                                 } else {
-                                    if image != nil {
-                                        let resizeImage = image!.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
+                                    if result.1 != nil {
+                                        let resizeImage = result.1!.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
                                         clearBtn.setImage(resizeImage, for: .normal)
                                     }
                                 }

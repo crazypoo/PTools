@@ -12,95 +12,117 @@ import SwifterSwift
 
 @objcMembers
 public class PTLoadImageFunction: NSObject {
-
-    public class func loadImage(contentData:Any,
-                                iCloudDocumentName:String = "",
-                                progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
-                                taskHandle:(([UIImage]?,UIImage?)->Void)!) {
-        if contentData is UIImage {
-            let image = (contentData as! UIImage)
-            taskHandle([image],image)
-        } else if contentData is String {
-            let dataUrlString = contentData as! String
-            if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
-                let image = UIImage(contentsOfFile: dataUrlString)!
-                taskHandle([image],image)
-            } else if dataUrlString.isURL() {
-                if dataUrlString.contains("file://") {
-                    if iCloudDocumentName.stringIsEmpty() {
-                        if let image = UIImage(contentsOfFile: dataUrlString) {
-                            taskHandle([image],image)
-                        } else {
-                            taskHandle(nil,nil)
-                        }
-                    } else {
-                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
-                            let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
-                            if let imageData = try? Data(contentsOf: imageURL) {
-                                if let image = UIImage(data: imageData) {
-                                    taskHandle([image],image)
-                                } else {
-                                    taskHandle(nil,nil)
-                                }
-                            }
-                        } else {
-                            if let image = UIImage(contentsOfFile: dataUrlString) {
-                                taskHandle([image],image)
-                            } else {
-                                taskHandle(nil,nil)
-                            }
-                        }
-                    }
-                } else {
-                    if let imageURL = URL(string: dataUrlString) {
-                        ImageDownloader.default.downloadImage(with: imageURL, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
-                            if progressHandle != nil {
-                                progressHandle!(receivedSize,totalSize)
-                            }
-                        }) { result in
-                            switch result {
-                            case .success(let value):
-                                if value.originalData.detectImageType() == .GIF {
-                                    let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                    let frameCount = CGImageSourceGetCount(source!)
-                                    var frames = [UIImage]()
-                                    for i in 0...frameCount {
-                                        let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                        let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                        frames.append(imageName)
-                                    }
-                                    taskHandle(frames,value.image)
-                                } else {
-                                    taskHandle([value.image],value.image)
-                                }
-                            case .failure(_):
-                                taskHandle(nil,nil)
-                            }
-                        }
-                    } else {
-                        taskHandle(nil,nil)
-                    }
-                }
-            } else if dataUrlString.isSingleEmoji {
-                let emojiImage = dataUrlString.emojiToImage()
-                taskHandle([emojiImage],emojiImage)
-            } else {
-                if let image = UIImage(named: dataUrlString) {
-                    taskHandle([image],image)
-                } else if let systemImage = UIImage(systemName: dataUrlString) {
-                    taskHandle([systemImage],systemImage)
-                } else {
-                    taskHandle(nil,nil)
-                }
-            }
-        } else if contentData is Data {
-            if let dataImage = UIImage(data: contentData as! Data) {
-                taskHandle([dataImage],dataImage)
-            } else {
-                taskHandle(nil,nil)
-            }
+    
+    public static func loadImage(contentData: Any,
+                                 iCloudDocumentName: String = "",
+                                 progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil) async -> ([UIImage]?, UIImage?) {
+        
+        if let image = contentData as? UIImage {
+            return ([image], image)
+        } else if let dataUrlString = contentData as? String {
+            return await handleStringContent(dataUrlString, iCloudDocumentName, progressHandle)
+        } else if let data = contentData as? Data, let image = UIImage(data: data) {
+            return ([image], image)
         } else {
-            taskHandle(nil,nil)
+            return (nil, nil)
         }
     }
+    
+    public static func handleStringContent(_ dataUrlString: String,
+                                           _ iCloudDocumentName: String,
+                                           _ progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) async -> ([UIImage]?, UIImage?) {
+        
+        if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
+            if let image = UIImage(contentsOfFile: dataUrlString) {
+                return ([image], image)
+            }
+        } else if dataUrlString.isURL() {
+            return await handleURLContent(dataUrlString, iCloudDocumentName, progressHandle)
+        } else if dataUrlString.isSingleEmoji {
+            let emojiImage = dataUrlString.emojiToImage()
+            return ([emojiImage], emojiImage)
+        } else if let image = UIImage(named: dataUrlString) ?? UIImage(systemName: dataUrlString) {
+            return ([image], image)
+        } else {
+            return (nil, nil)
+        }
+        
+        return (nil, nil)
+    }
+    
+    public static func handleURLContent(_ dataUrlString: String,
+                                        _ iCloudDocumentName: String,
+                                        _ progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) async -> ([UIImage]?, UIImage?) {
+        
+        if dataUrlString.contains("file://") {
+            return handleFileURL(dataUrlString, iCloudDocumentName)
+        } else if let imageURL = URL(string: dataUrlString) {
+            return await downloadImage(from: imageURL, progressHandle)
+        } else {
+            return (nil, nil)
+        }
+    }
+    
+    public static func handleFileURL(_ dataUrlString: String,
+                                     _ iCloudDocumentName: String) -> ([UIImage]?, UIImage?) {
+        
+        if iCloudDocumentName.isEmpty {
+            if let image = UIImage(contentsOfFile: dataUrlString) {
+                return ([image], image)
+            } else {
+                return (nil, nil)
+            }
+        } else {
+            if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
+                let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
+                if let imageData = try? Data(contentsOf: imageURL), let image = UIImage(data: imageData) {
+                    return ([image], image)
+                } else {
+                    return (nil, nil)
+                }
+            } else {
+                return (nil, nil)
+            }
+        }
+    }
+    
+    public static func downloadImage(from url: URL,
+                                     _ progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) async -> ([UIImage]?, UIImage?) {
+        return await withCheckedContinuation { continuation in
+            ImageDownloader.default.downloadImage(with: url, options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
+                progressHandle?(receivedSize, totalSize)
+            }) { result in
+                switch result {
+                case .success(let value):
+                    if value.originalData.detectImageType() == .GIF {
+                        let frames = handleGIFData(value.originalData)
+                        continuation.resume(returning: (frames, frames.first))
+                    } else {
+                        continuation.resume(returning: ([value.image], value.image))
+                    }
+                case .failure(_):
+                    continuation.resume(returning: (nil, nil))
+                }
+            }
+        }
+    }
+    
+    public static func handleGIFData(_ data: Data) -> [UIImage] {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return []
+        }
+        
+        let frameCount = CGImageSourceGetCount(source)
+        var frames = [UIImage]()
+        for i in 0..<frameCount {
+            if let imageRef = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                let image = UIImage(cgImage: imageRef)
+                frames.append(image)
+            } else {
+                frames.append(UIColor.clear.createImageWithColor())
+            }
+        }
+        return frames
+    }
+
 }

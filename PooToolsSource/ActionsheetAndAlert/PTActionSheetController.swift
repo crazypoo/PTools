@@ -504,7 +504,7 @@ extension PTActionSheetController {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
         } completion: { ok in
             if ok {
-                PTAlertManager.dismiss(self.key)
+                PTAlertManager.dismissAll()
                 completion?()
             }
         }

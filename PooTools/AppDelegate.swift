@@ -12,9 +12,6 @@ import OSLog
 #if DEBUG
 import YCSymbolTracker
 #endif
-#if canImport(FLEX)
-import FLEX
-#endif
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
@@ -57,9 +54,14 @@ enum RequestManager {
 class AppDelegate: PTAppWindowsDelegate {
     
     var permissionStatic = PTPermissionStatic.share
-    
+    let networkSpeedMonitor = NetworkSpeedMonitor()
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+//        URLSession.swizzle
+//        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
+
+
         let locationAlways = PTPermissionModel()
         locationAlways.type = .location(access: .always)
         locationAlways.desc = "我们有需要长时间使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
@@ -131,11 +133,7 @@ class AppDelegate: PTAppWindowsDelegate {
         let filePath = NSTemporaryDirectory().appending("/demo.order")
         YCSymbolTracker.exportSymbols(filePath: filePath)
 #endif
-        
-#if canImport(netfox)
-        NFX.sharedInstance().start()
-#endif
-        
+                
 //#if DEBUG
         let _ = LocalConsole.shared
 //        if !lcm.terminal?.systemIsVisible
@@ -237,7 +235,10 @@ class AppDelegate: PTAppWindowsDelegate {
     
     
         PTLocationManager.shared.requestLocation()
-                
+            
+//        networkSpeedMonitor.startMonitoring()
+//        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
+
         return true
     }
     
@@ -296,6 +297,17 @@ class AppDelegate: PTAppWindowsDelegate {
 //                currentVC.present(activityViewController, animated: true, completion: nil)
             }
         }
+    }
+
+    @objc func updateSpeedLabels() {
+//        PTNSLogConsole("\(String(format: "Download Speed: %.2f KB/s", networkSpeedMonitor.downloadSpeed / 1024))")
+//        PTNSLogConsole("\(String(format: "Upload Speed: %.2f KB/s", networkSpeedMonitor.uploadSpeed / 1024))")
+        
+        let downloadSpeed = PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024
+        let uploadSpeed = PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024
+        
+        PTNSLogConsole("\(String(format: "Download Speed: %.2f KB/s", downloadSpeed))")
+        PTNSLogConsole("\(String(format: "Upload Speed: %.2f KB/s", uploadSpeed))")
     }
 
     func fetchPlaylistLink(gotID:String) {

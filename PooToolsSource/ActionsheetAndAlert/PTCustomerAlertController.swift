@@ -218,7 +218,7 @@ extension PTCustomerAlertController {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
             self.contentView.alpha = 0.0
         }) { _ in
-            PTAlertManager.dismiss(self.key)
+            PTAlertManager.dismissAll()
             completion?()
         }
     }

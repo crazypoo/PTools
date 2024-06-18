@@ -53,27 +53,28 @@ public extension UIImageView {
                    loadFinish:(([UIImage]?,UIImage?)->Void)? = nil) {
         
         self.image = emptyImage
-        PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
-            PTGCDManager.gcdMain {
-                if progressHandle != nil {
-                    progressHandle!(receivedSize,totalSize)
-                } else {
-                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+        Task {
+            let result = await PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
+                PTGCDManager.gcdMain {
+                    if progressHandle != nil {
+                        progressHandle!(receivedSize,totalSize)
+                    } else {
+                        self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+                    }
                 }
             }
-        } taskHandle: { images, image in
-            if images?.count ?? 0 > 0 {
-                if images!.count > 1 {
-                    self.image = UIImage.animatedImage(with: images!, duration: gifAnimationDuration)
+            if result.0?.count ?? 0 > 0 {
+                if result.0!.count > 1 {
+                    self.image = UIImage.animatedImage(with: result.0!, duration: gifAnimationDuration)
                 } else {
-                    self.image = image
+                    self.image = result.1
                 }
             } else {
                 self.image = emptyImage
             }
             
             if loadFinish != nil {
-                loadFinish!(images,image)
+                loadFinish!(result.0,result.1)
             }
         }
     }

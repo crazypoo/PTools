@@ -856,8 +856,7 @@ extension PTLayoutButton {
                          uniCount:Int = 0,
                          emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                          controlState:UIControl.State = .normal) {
-        if contentData is UIImage {
-            let image = (contentData as! UIImage)
+        if let image = contentData as? UIImage {
             switch controlState {
             case .normal:
                 normalImage = image
@@ -870,148 +869,14 @@ extension PTLayoutButton {
             default:
                 break
             }
-        } else if contentData is String {
-            let dataUrlString = contentData as! String
-            if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
-                let image = UIImage(contentsOfFile: dataUrlString)!
-                switch controlState {
-                case .normal:
-                    normalImage = image
-                case .selected:
-                    selectedImage = image
-                case .highlighted:
-                    hightlightImage = image
-                case .disabled:
-                    disabledImage = image
-                default:
-                    break
-                }
-            } else if dataUrlString.isURL() {
-                if dataUrlString.contains("file://") {
-                    if iCloudDocumentName.stringIsEmpty() {
-                        let image = UIImage(contentsOfFile: dataUrlString)!
-                        switch controlState {
-                        case .normal:
-                            normalImage = image
-                        case .selected:
-                            selectedImage = image
-                        case .highlighted:
-                            hightlightImage = image
-                        case .disabled:
-                            disabledImage = image
-                        default:
-                            break
-                        }
-                    } else {
-                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
-                            let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
-                            if let imageData = try? Data(contentsOf: imageURL) {
-                                let image = UIImage(data: imageData)!
-                                switch controlState {
-                                case .normal:
-                                    normalImage = image
-                                case .selected:
-                                    selectedImage = image
-                                case .highlighted:
-                                    hightlightImage = image
-                                case .disabled:
-                                    disabledImage = image
-                                default:
-                                    break
-                                }
-                            }
-                        } else {
-                            let image = UIImage(contentsOfFile: dataUrlString)!
-                            switch controlState {
-                            case .normal:
-                                normalImage = image
-                            case .selected:
-                                selectedImage = image
-                            case .highlighted:
-                                hightlightImage = image
-                            case .disabled:
-                                disabledImage = image
-                            default:
-                                break
-                            }
-                        }
-                    }
-                } else {
-                    ImageDownloader.default.downloadImage(with: URL(string: dataUrlString)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
-                        PTGCDManager.gcdMain {
-                            self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
-                        }
-                    }) { result in
-                        switch result {
-                        case .success(let value):
-                            if value.originalData.detectImageType() == .GIF {
-                                let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                let frameCount = CGImageSourceGetCount(source!)
-                                var frames = [UIImage]()
-                                for i in 0...frameCount {
-                                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                    let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                    frames.append(imageName)
-                                }
-                                switch controlState {
-                                case .normal:
-                                    self.normalImage = UIImage.animatedImage(with: frames, duration: 2)
-                                case .selected:
-                                    self.selectedImage = UIImage.animatedImage(with: frames, duration: 2)
-                                case .highlighted:
-                                    self.hightlightImage = UIImage.animatedImage(with: frames, duration: 2)
-                                case .disabled:
-                                    self.disabledImage = UIImage.animatedImage(with: frames, duration: 2)
-                                default:
-                                    break
-                                }
-                            } else {
-                                switch controlState {
-                                case .normal:
-                                    self.normalImage = value.image
-                                case .selected:
-                                    self.selectedImage = value.image
-                                case .highlighted:
-                                    self.hightlightImage = value.image
-                                case .disabled:
-                                    self.disabledImage = value.image
-                                default:
-                                    break
-                                }
-                            }
-                        case .failure(let error):
-                            PTNSLogConsole(error,levelType: .Error,loggerType: .Button)
-                            switch controlState {
-                            case .normal:
-                                self.normalImage = emptyImage
-                            case .selected:
-                                self.selectedImage = emptyImage
-                            case .highlighted:
-                                self.hightlightImage = emptyImage
-                            case .disabled:
-                                self.disabledImage = emptyImage
-                            default:
-                                break
-                            }
-                        }
+        } else if let dataUrlString = contentData as? String {
+            Task {
+                let result = await PTLoadImageFunction.handleStringContent(dataUrlString, iCloudDocumentName) { receivedSize, totalSize in
+                    PTGCDManager.gcdMain {
+                        self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                     }
                 }
-            } else if dataUrlString.isSingleEmoji {
-                let emojiImage = dataUrlString.emojiToImage()
-                switch controlState {
-                case .normal:
-                    normalImage = emojiImage
-                case .selected:
-                    selectedImage = emojiImage
-                case .highlighted:
-                    hightlightImage = emojiImage
-                case .disabled:
-                    disabledImage = emojiImage
-                default:
-                    break
-                }
-            } else {
-                if let image = UIImage(named: dataUrlString) {
+                if let image = result.1 {
                     switch controlState {
                     case .normal:
                         normalImage = image
@@ -1024,36 +889,10 @@ extension PTLayoutButton {
                     default:
                         break
                     }
-                } else if let systemImage = UIImage(systemName: dataUrlString) {
-                    switch controlState {
-                    case .normal:
-                        normalImage = systemImage
-                    case .selected:
-                        selectedImage = systemImage
-                    case .highlighted:
-                        hightlightImage = systemImage
-                    case .disabled:
-                        disabledImage = systemImage
-                    default:
-                        break
-                    }
-                } else {
-                    switch controlState {
-                    case .normal:
-                        normalImage = emptyImage
-                    case .selected:
-                        selectedImage = emptyImage
-                    case .highlighted:
-                        hightlightImage = emptyImage
-                    case .disabled:
-                        disabledImage = emptyImage
-                    default:
-                        break
-                    }
                 }
             }
-        } else if contentData is Data {
-            let dataImage = UIImage(data: contentData as! Data)!
+        } else if let contentDatas = contentData as? Data {
+            let dataImage = UIImage(data: contentDatas)
             switch controlState {
             case .normal:
                 normalImage = dataImage

@@ -99,17 +99,18 @@ public class PTFusionCellContent:UIView {
             let moreStringWidth = UIView.sizeFor(string: cellModel!.moreString, font: cellModel!.moreFont, height: height - (cellModel!.imageTopOffset + cellModel!.imageBottomOffset)).width
             if !NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
                 //两个都有
-                PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
+                Task {
+                    let result = await PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument)
                     self.sectionMore.normalTitleFont = self.cellModel!.moreFont
                     self.sectionMore.normalTitle = self.cellModel!.moreString
                     self.sectionMore.normalTitleColor = self.cellModel!.moreColor
                     self.sectionMore.midSpacing = self.cellModel!.moreDisclosureIndicatorSpace
                     self.sectionMore.imageSize = self.cellModel!.moreDisclosureIndicatorSize
                     self.sectionMore.layoutStyle = self.cellModel!.moreLayoutStyle
-                    if (images?.count ?? 0) > 1 {
-                        self.sectionMore.normalImage = UIImage.animatedImage(with: images!, duration: 2)
-                    } else if (images?.count ?? 0) == 1 {
-                        self.sectionMore.normalImage = image
+                    if (result.0?.count ?? 0) > 1 {
+                        self.sectionMore.normalImage = UIImage.animatedImage(with: result.0!, duration: 2)
+                    } else if (result.0?.count ?? 0) == 1 {
+                        self.sectionMore.normalImage = result.1
                     }
                     
                     switch self.cellModel!.moreLayoutStyle {
@@ -148,14 +149,15 @@ public class PTFusionCellContent:UIView {
                 }
             } else if NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
                 //没字
-                PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
+                Task {
+                    let result = await PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument)
                     self.sectionMore.midSpacing = 0
                     self.sectionMore.imageSize = self.cellModel!.moreDisclosureIndicatorSize
                     self.sectionMore.layoutStyle = self.cellModel!.moreLayoutStyle
-                    if (images?.count ?? 0) > 1 {
-                        self.sectionMore.normalImage = UIImage.animatedImage(with: images!, duration: 2)
-                    } else if (images?.count ?? 0) == 1 {
-                        self.sectionMore.normalImage = image
+                    if (result.0?.count ?? 0) > 1 {
+                        self.sectionMore.normalImage = UIImage.animatedImage(with: result.0!, duration: 2)
+                    } else if (result.0?.count ?? 0) == 1 {
+                        self.sectionMore.normalImage = result.1
                     }
                     moreWith = self.cellModel!.moreDisclosureIndicatorSize.width + 5
                     self.sectionMore.snp.makeConstraints { make in

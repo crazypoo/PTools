@@ -1069,24 +1069,24 @@ extension PTCollectionView:SwipeCollectionViewCellDelegate {
                 if customImage == nil {
                     actionImage = nil
                 } else {
-                    PTLoadImageFunction.loadImage(contentData: customImage as Any) { images, image in
-                        if (images?.count ?? 0 ) > 1 {
-                            actionImage = UIImage.animatedImage(with: images!, duration: 2)
-                        } else if (images?.count ?? 0 ) == 1 {
-                            actionImage = image
+                    Task {
+                        let result = await PTLoadImageFunction.loadImage(contentData: customImage as Any)
+                        if (result.0?.count ?? 0 ) > 1 {
+                            actionImage = UIImage.animatedImage(with: result.0!, duration: 2)
+                        } else if (result.0?.count ?? 0 ) == 1 {
+                            actionImage = result.1!
                         } else {
                             actionImage = PTAppBaseConfig.share.defaultEmptyImage
                         }
+                        var circularIconSize:CGSize = .zero
+                        switch buttonDisplayMode {
+                        case .imageOnly:
+                            circularIconSize = CGSize(width: cellHeight - 10, height: cellHeight - 10)
+                        default:
+                            circularIconSize = CGSize(width: cellHeight - 30, height: cellHeight - 30)
+                        }
+                        actionImage = actionImage!.transformImage(size: circularIconSize)
                     }
-                    
-                    var circularIconSize:CGSize = .zero
-                    switch buttonDisplayMode {
-                    case .imageOnly:
-                        circularIconSize = CGSize(width: cellHeight - 10, height: cellHeight - 10)
-                    default:
-                        circularIconSize = CGSize(width: cellHeight - 30, height: cellHeight - 30)
-                    }
-                    actionImage = actionImage!.transformImage(size: circularIconSize)
                 }
             default:
                 actionImage = descriptor.image(forStyle: viewConfig.swipeButtonStyle, displayMode: buttonDisplayMode!,cellHeight: cellHeight)

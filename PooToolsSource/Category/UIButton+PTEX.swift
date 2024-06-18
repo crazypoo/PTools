@@ -168,79 +168,25 @@ public extension UIButton {
                    emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    controlState:UIControl.State = .normal) {
         setImage(emptyImage, for: controlState)
-        if contentData is UIImage {
-            let image = (contentData as! UIImage)
+        if let image = contentData as? UIImage {
             setImage(image, for: controlState)
-        } else if contentData is String {
-            let dataUrlString = contentData as! String
-            if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
-                let image = UIImage(contentsOfFile: dataUrlString)!
-                setImage(image, for: controlState)
-            } else if dataUrlString.isURL() {
-                if dataUrlString.contains("file://") {
-                    if iCloudDocumentName.stringIsEmpty() {
-                        if let image = UIImage(contentsOfFile: dataUrlString) {
-                            setImage(image, for: controlState)
-                        } else {
-                            setImage(emptyImage, for: controlState)
-                        }
-                    } else {
-                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
-                            let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
-                            if let imageData = try? Data(contentsOf: imageURL) {
-                                let image = UIImage(data: imageData)!
-                                setImage(image, for: controlState)
-                            }
-                        } else {
-                            let image = UIImage(contentsOfFile: dataUrlString)!
-                            setImage(image, for: controlState)
-                        }
-                    }
-                } else {
-                    if let imageUrl = URL(string: dataUrlString) {
-                        ImageDownloader.default.downloadImage(with: imageUrl, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
-                            PTGCDManager.gcdMain {
-                                self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
-                            }
-                        }) { result in
-                            switch result {
-                            case .success(let value):
-                                if value.originalData.detectImageType() == .GIF {
-                                    let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                    let frameCount = CGImageSourceGetCount(source!)
-                                    var frames = [UIImage]()
-                                    for i in 0...frameCount {
-                                        let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                        let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                        frames.append(imageName)
-                                    }
-                                    self.setImage(UIImage.animatedImage(with: frames, duration: 2), for: controlState)
-                                } else {
-                                    self.setImage(value.image, for: controlState)
-                                }
-                            case .failure(let error):
-                                PTNSLogConsole(error,levelType: .Error,loggerType: .Button)
-                                self.setImage(emptyImage, for: controlState)
-                            }
-                        }
-                    } else {
-                        setImage(emptyImage, for: controlState)
+        } else if let dataUrlString = contentData as? String {
+            Task {
+                let result = await PTLoadImageFunction.handleStringContent(dataUrlString, iCloudDocumentName) { receivedSize, totalSize in
+                    PTGCDManager.gcdMain {
+                        self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                     }
                 }
-            } else if dataUrlString.isSingleEmoji {
-                let emojiImage = dataUrlString.emojiToImage()
-                setImage(emojiImage, for: controlState)
-            } else {
-                if let image = UIImage(named: dataUrlString) {
-                    setImage(image, for: controlState)
-                } else if let systemImage = UIImage(systemName: dataUrlString) {
-                    setImage(systemImage, for: controlState)
+                if result.0?.count ?? 0 > 1 {
+                    self.setImage(UIImage.animatedImage(with: result.0!, duration: 2), for: controlState)
+                } else if result.0?.count ?? 0 == 1 {
+                    self.setImage(result.1, for: controlState)
                 } else {
-                    setImage(emptyImage, for: controlState)
+                    self.setImage(emptyImage, for: controlState)
                 }
             }
-        } else if contentData is Data {
-            let dataImage = UIImage(data: contentData as! Data)!
+        } else if let contentDatas = contentData as? Data {
+            let dataImage = UIImage(data: contentDatas)
             setImage(dataImage, for: controlState)
         } else {
             setImage(emptyImage, for: controlState)

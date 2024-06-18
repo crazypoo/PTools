@@ -317,17 +317,19 @@ public class PTLaunchAdMonitor: NSObject {
             } else {
                 playMovie = false
                 
-                PTLoadImageFunction.loadImage(contentData: path as Any) { images, image in
+                Task {
+                    let result = await PTLoadImageFunction.loadImage(contentData: path as Any)
                     self.imgLoaded = true
-                    self.images = images
+                    self.images = result.0
                 }
             }
         } else {
             playMovie = false
             
-            PTLoadImageFunction.loadImage(contentData: path as Any) { images, image in
+            Task {
+                let result = await PTLoadImageFunction.loadImage(contentData: path as Any)
                 self.imgLoaded = true
-                self.images = images
+                self.images = result.0
             }
         }
     }

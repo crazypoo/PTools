@@ -436,6 +436,7 @@
 		55C409A32C09784B009C0FB6 /* PTDebugLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409A22C09784B009C0FB6 /* PTDebugLocationViewController.swift */; };
 		55C409A52C097869009C0FB6 /* PTDebugLocationMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409A42C097869009C0FB6 /* PTDebugLocationMapViewController.swift */; };
 		55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */; };
+		55C6AE802C21BEF8005CCBF7 /* PTTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C6AE7F2C21BEF8005CCBF7 /* PTTestVC.swift */; };
 		55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */; };
@@ -1041,6 +1042,7 @@
 		55C409A22C09784B009C0FB6 /* PTDebugLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugLocationViewController.swift; sourceTree = "<group>"; };
 		55C409A42C097869009C0FB6 /* PTDebugLocationMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugLocationMapViewController.swift; sourceTree = "<group>"; };
 		55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDynamicNotificationView.swift; sourceTree = "<group>"; };
+		55C6AE7F2C21BEF8005CCBF7 /* PTTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestVC.swift; sourceTree = "<group>"; };
 		55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeedPanel.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTRefreshAutoStateFooter.swift; sourceTree = "<group>"; };
@@ -2797,6 +2799,7 @@
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
 				55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */,
 				55228F172B0909130010E76E /* PTDocumentViewController.swift */,
+				55C6AE7F2C21BEF8005CCBF7 /* PTTestVC.swift */,
 				55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */,
 				55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */,
 				55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */,
@@ -3420,6 +3423,7 @@
 				555EEEAA2BDE116E00A60833 /* UIView+BadgeEX.swift in Sources */,
 				55AF2E232C1CC2B40001D094 /* PTTagCell.swift in Sources */,
 				55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */,
+				55C6AE802C21BEF8005CCBF7 /* PTTestVC.swift in Sources */,
 				555818CC2AFA7D270051C0AA /* UITabBarController+PTEX.swift in Sources */,
 				55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
