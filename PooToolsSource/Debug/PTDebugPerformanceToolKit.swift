@@ -24,7 +24,7 @@ final class PTDebugPerformanceToolKit {
         }
     }
     
-    private  var floatingView : PFloatingButton?
+    private var floatingView : PFloatingButton?
     private lazy var fpsLabel : UILabel = {
         let label = UILabel()
         label.textColor = .white

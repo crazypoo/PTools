@@ -54,11 +54,8 @@ enum RequestManager {
 class AppDelegate: PTAppWindowsDelegate {
     
     var permissionStatic = PTPermissionStatic.share
-    let networkSpeedMonitor = NetworkSpeedMonitor()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-//        URLSession.swizzle
 
         let locationAlways = PTPermissionModel()
         locationAlways.type = .location(access: .always)
@@ -163,7 +160,6 @@ class AppDelegate: PTAppWindowsDelegate {
 //#endif
 //        }
 //        #endif
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
 
         PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.", comNameFont: .appfont(size: 10), callBack: {
             let guideModel = PTGuidePageModel()

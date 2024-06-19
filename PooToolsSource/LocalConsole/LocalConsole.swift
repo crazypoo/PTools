@@ -975,7 +975,8 @@ public class LocalConsole: NSObject {
     }
     
     func consoleSheetPresent(vc:PTBaseViewController) {
-        UIViewController.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
+        let nav = PTBaseNavControl(rootViewController: vc)
+        UIViewController.currentPresentToSheet(vc: nav,sizes: [.percent(0.9)])
     }
     
     func maskOpenFunction() {
@@ -1004,6 +1005,8 @@ public class LocalConsole: NSObject {
         debugBordersEnabled = false
         PTViewRulerPlugin.share.hide()
         PTColorPickPlugin.share.close()
+        PTNetworkHelper.shared.disable()
+        StderrCapture.stopCapturing()
         PTDebugPerformanceToolKit.shared.floatingShow = false
         PTDebugPerformanceToolKit.shared.performanceClose()
         ResizeController.shared.isActive = false

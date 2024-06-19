@@ -38,7 +38,6 @@ final class PTCustomHTTPProtocol: URLProtocol {
         if let scheme = request.url?.scheme?.lowercased(), scheme == "http" || scheme == "https" {
             return true
         }
-
         return false
     }
 
@@ -205,23 +204,31 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
         }
     }
 
-    func urlSession( _: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+    func urlSession( _ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         threadOperator?.execute { [weak self] in
             guard let self else { return }
             if let response = response as? HTTPURLResponse, let request = dataTask.originalRequest {
                 self.cachePolicy = PTCacheStoragePolicy.cacheStoragePolicy(for: request, and: response)
             }
-
             self.delegate?.customHTTPProtocol(self, didReceive: response)
             self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: self.cachePolicy)
             self.response = response as? HTTPURLResponse
-            
-            //TODO: 這裏要添加請求速度
+            self.endTime = Date()
+                        
+            if let requestData = dataTask.currentRequest?.httpBody {
+                let elapsedTime = self.endTime!.timeIntervalSince(self.startTime)
+                let uploadSpeed = Double(requestData.count) / elapsedTime
+                PTNetworkSpeedMonitor.shared.addUploadSpeed(uploadSpeed)
+            } else if let dataString = dataTask.currentRequest?.url?.absoluteString {
+                let elapsedTime = self.endTime!.timeIntervalSince(self.startTime)
+                let uploadSpeed = Double(dataString.data(using: .utf8)!.count) / elapsedTime
+                PTNetworkSpeedMonitor.shared.addUploadSpeed(uploadSpeed)
+            }
             completionHandler(.allow)
         }
     }
 
-    func urlSession(_: URLSession, dataTask task: URLSessionDataTask, didReceive data: Data) {
+    func urlSession(_ session: URLSession, dataTask task: URLSessionDataTask, didReceive data: Data) {
         threadOperator?.execute { [weak self] in
             guard let self else { return }
 
@@ -245,11 +252,6 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
                 let elapsedTime = endTime.timeIntervalSince(self.startTime)
                 let downloadSpeed = Double(data.count) / elapsedTime
                 PTNetworkSpeedMonitor.shared.addDownloadSpeed(downloadSpeed)
-                if let requestData = task.currentRequest?.httpBody {
-                    let elapsedTime = self.endTime!.timeIntervalSince(self.startTime)
-                    let uploadSpeed = Double(requestData.count) / elapsedTime
-                    PTNetworkSpeedMonitor.shared.addUploadSpeed(uploadSpeed)
-                }
             }
         }
     }
@@ -303,11 +305,11 @@ extension PTCustomHTTPProtocol: URLSessionDataDelegate {
 
             self.delegate?.customHTTPProtocolDidFinishLoading(self)
             self.client?.urlProtocolDidFinishLoading(self)
-            PTNetworkSpeedMonitor.shared.downloadSpeeds.removeAll()
-            PTNetworkSpeedMonitor.shared.addDownloadSpeed(0)
-            PTNetworkSpeedMonitor.shared.uploadSpeeds.removeAll()
-            PTNetworkSpeedMonitor.shared.addUploadSpeed(0)
             if self.cachePolicy == .allowed {
+                PTNetworkSpeedMonitor.shared.downloadSpeeds.removeAll()
+                PTNetworkSpeedMonitor.shared.addDownloadSpeed(0)
+                PTNetworkSpeedMonitor.shared.uploadSpeeds.removeAll()
+                PTNetworkSpeedMonitor.shared.addUploadSpeed(0)
                 URLCache.customHttp.storeIfNeeded(for: task, data: self.data)
             }
         }

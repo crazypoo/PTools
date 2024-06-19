@@ -19,13 +19,6 @@ public class PTFPSTool: NSObject {
     private var displayLink : CADisplayLink?
     private var lastTime:TimeInterval? = 0
     private var count:NSInteger? = 0
-    private lazy var fpsLabel : UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.backgroundColor = .black
-        label.textAlignment = .center
-        return label
-    }()
     
     deinit {
         displayLink?.isPaused = true
