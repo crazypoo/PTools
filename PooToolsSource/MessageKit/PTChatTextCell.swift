@@ -24,7 +24,7 @@ public class PTChatTextCell: PTChatBaseCell {
 //    fileprivate var activeLabel:PTActiveLabel = {
 //        let view = PTActiveLabel()
 //        view.urlMaximumLength = 20
-//                
+//
 //        return view
 //    }()
             
@@ -52,8 +52,8 @@ public class PTChatTextCell: PTChatBaseCell {
         }
         
         let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
-        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 10
-        if contentHeight < PTChatConfig.share.contentBaseHeight {
+        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 40
+        if contentNumberOfLines <= 1 {
             contentHeight = PTChatConfig.share.contentBaseHeight
         }
         
@@ -100,7 +100,7 @@ public class PTChatTextCell: PTChatBaseCell {
 //            make.left.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.left : PTChatConfig.share.textOtherContentEdges.left)
 //            make.right.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.right : PTChatConfig.share.textOtherContentEdges.right)
 //        }
-//        
+//
 //        activeLabel.customize { label in
 //            label.textAlignment = .left
 //            label.text = msgContent
@@ -140,7 +140,7 @@ public class PTChatTextCell: PTChatBaseCell {
 ////            label.customSelectedColor[customType] = UIColor.green
 ////            label.customColor[customType2] = UIColor.magenta
 ////            label.customSelectedColor[customType2] = UIColor.green
-////            
+////
 ////            label.configureLinkAttribute = { (type, attributes, isSelected) in
 ////                var atts = attributes
 ////                switch type {
@@ -150,7 +150,7 @@ public class PTChatTextCell: PTChatBaseCell {
 ////                    atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
 ////                default: ()
 ////                }
-////                
+////
 ////                return atts
 ////            }
 //

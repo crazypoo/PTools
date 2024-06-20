@@ -65,12 +65,13 @@ public class PTChatView: UIView {
                         dataContentFont = PTChatConfig.share.textOtherMessageFont
                     }
                     
-                    var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: 2,width: PTChatConfig.ChatContentShowMaxWidth).height
+                    var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 40
                     
-                    if contentHeight < PTChatConfig.share.contentBaseHeight {
+                    let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
+                    if contentNumberOfLines <= 1 {
                         contentHeight = PTChatConfig.share.contentBaseHeight
                     }
-                                        
+                
                     var nameContentTotal = nameHeight + contentHeight + readStatusHeight
                     if nameContentTotal < PTChatConfig.share.messageUserIconSize {
                         nameContentTotal = PTChatConfig.share.messageUserIconSize
@@ -195,7 +196,7 @@ public class PTChatView: UIView {
         addSubviews([listCollection])
         listCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }     
+        }
     }
     
     public required init?(coder: NSCoder) {

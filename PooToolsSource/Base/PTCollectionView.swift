@@ -372,7 +372,7 @@ public class PTCollectionView: UIView {
             sectionInsets = NSDirectionalEdgeInsets(
                 top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top,
                 leading: sectionInsets.leading,
-                bottom: (sectionModel.footerHeight ?? .leastNormalMagnitude) + viewConfig.contentBottomSpace,
+                bottom: viewConfig.contentBottomSpace,
                 trailing: sectionInsets.trailing
             )
             sectionWidth = viewConfig.decorationItemsEdges.leading + viewConfig.decorationItemsEdges.trailing
@@ -391,7 +391,7 @@ public class PTCollectionView: UIView {
             let items = customerReuseViews?(section,sectionModel) ?? [NSCollectionLayoutBoundarySupplementaryItem]()
             laySection.boundarySupplementaryItems = items
         } else {
-            laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth, sectionInsets: sectionInsets)
+            laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth)
         }
         
         laySection.decorationItems = generateDecorationItems(section: section, sectionModel: sectionModel)
@@ -399,20 +399,20 @@ public class PTCollectionView: UIView {
         return laySection
     }
 
-    private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat, sectionInsets: NSDirectionalEdgeInsets) -> [NSCollectionLayoutBoundarySupplementaryItem] {
+    private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
         var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
         
         if !(sectionModel.headerID ?? "").stringIsEmpty() {
             let headerSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(screenWidth - viewConfig.headerWidthOffset - sectionWidth),
-                heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude + (viewConfig.decorationItemsEdges.top * 2 + sectionInsets.top))
+                heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude)
             )
             
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: headerSize,
                 elementKind: UICollectionView.elementKindSectionHeader,
                 alignment: .topTrailing,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
+                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: viewConfig.decorationItemsEdges.top + (sectionModel.headerHeight ?? .leastNormalMagnitude))
             )
             headerItem.contentInsets = .zero
             supplementaryItems.append(headerItem)
@@ -421,14 +421,14 @@ public class PTCollectionView: UIView {
         if !(sectionModel.footerID ?? "").stringIsEmpty() {
             let footerSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(screenWidth - viewConfig.footerWidthOffset - sectionWidth),
-                heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude + (viewConfig.decorationItemsEdges.top * 2 + sectionInsets.top))
+                heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude)
             )
 
             let footerItem = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: footerSize,
                 elementKind: UICollectionView.elementKindSectionFooter,
                 alignment: .bottom,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: -sectionInsets.top)
+                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
             )
             supplementaryItems.append(footerItem)
         }
