@@ -58,6 +58,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         config.emptyViewConfig = emptyConfig
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTMediaLibAlbumCell.ID:PTMediaLibAlbumCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
@@ -168,7 +169,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             
             var rows = [PTRows]()
             models.enumerated().forEach { index,value in
-                let row = PTRows(cls:PTMediaLibAlbumCell.self,ID: PTMediaLibAlbumCell.ID,dataModel: value)
+                let row = PTRows(ID: PTMediaLibAlbumCell.ID,dataModel: value)
                 rows.append(row)
             }
             

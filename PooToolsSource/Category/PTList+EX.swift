@@ -11,9 +11,7 @@ import UIKit
 open class PTSection: NSObject {
     
     public var headerTitle: String?
-    public var headerCls: AnyClass?
     public var headerID: String?
-    public var footerCls: AnyClass?
     public var footerID: String?
     public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude
     public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
@@ -22,9 +20,7 @@ open class PTSection: NSObject {
     public var footerDataModel: AnyObject?
 
     public init(headerTitle: String? = "",
-                headerCls: AnyClass? = nil,
                 headerID: String? = "",
-                footerCls:AnyClass? = nil,
                 footerID:String? = "",
                 footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
                 headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
@@ -34,9 +30,7 @@ open class PTSection: NSObject {
         super.init()
         
         self.headerTitle = headerTitle
-        self.headerCls = headerCls
         self.headerID = headerID
-        self.footerCls = footerCls
         self.footerID = footerID
         self.footerHeight = footerHeight
         self.headerHeight = headerHeight
@@ -50,14 +44,12 @@ open class PTSection: NSObject {
 open class PTRows: NSObject {
     
     open var title = ""
-    open var cls: AnyClass?
     open var ID: String = ""
     open var dataModel: AnyObject?
     open var nibName = ""
     open var badge:Int = 0
 
     public init(title: String = "",
-                cls: AnyClass? = nil,
                 nibName:String? = "",
                 ID: String? = "",
                 dataModel:AnyObject? = nil,
@@ -65,7 +57,6 @@ open class PTRows: NSObject {
         super.init()
         self.title = title
         self.ID = ID!
-        self.cls = cls
         self.dataModel = dataModel
         self.nibName = nibName!
         self.badge = badge!
@@ -73,23 +64,23 @@ open class PTRows: NSObject {
 }
 
 extension UITableView {
-    //MARK: 註冊TableView的Cell
-    ///註冊TableView的Cell
-    public func pt_register(by ptSections: [PTSection]) {
-        
-        ptSections.forEach { [weak self] (tmpSection) in
-            // 注册 hederView
-            if let cls = tmpSection.headerCls, let id = tmpSection.headerID {
-                self?.register(cls.self,
-                         forHeaderFooterViewReuseIdentifier: id)
-            }
-            // 注册 cell
-            tmpSection.rows.forEach { (tmpRow) in
-                self?.register(tmpRow.cls.self,
-                         forCellReuseIdentifier: tmpRow.ID)
-            }
-        }
-    }
+//    //MARK: 註冊TableView的Cell
+//    ///註冊TableView的Cell
+//    public func pt_register(by ptSections: [PTSection]) {
+//        
+//        ptSections.forEach { [weak self] (tmpSection) in
+//            // 注册 hederView
+//            if let cls = tmpSection.headerCls, let id = tmpSection.headerID {
+//                self?.register(cls.self,
+//                         forHeaderFooterViewReuseIdentifier: id)
+//            }
+//            // 注册 cell
+//            tmpSection.rows.forEach { (tmpRow) in
+//                self?.register(tmpRow.cls.self,
+//                         forCellReuseIdentifier: tmpRow.ID)
+//            }
+//        }
+//    }
 }
 
 extension UICollectionView {
@@ -97,44 +88,28 @@ extension UICollectionView {
     public static func sectionRows(rowsModel:[PTFusionCellModel]) -> [PTRows] {
         var rows = [PTRows]()
         rowsModel.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,cls:value.cellClass,ID: value.cellID,dataModel: value)
+            let row = PTRows(title:value.name,ID: value.cellID,dataModel: value)
             rows.append(row)
         }
         return rows
     }
     
-    //MARK: 註冊CollectionView的Cell
-    ///註冊CollectionView的Cell
-    public func pt_register(by ptSections: [PTSection],callback:PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
-            for (_,tmpSection) in ptSections.enumerated() {
-                // 注册 hederView
-                if let cls = tmpSection.headerCls {
-                    self.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: (tmpSection.headerID ?? "").isEmpty ? NSStringFromClass(cls) : tmpSection.headerID!)
-                } else {
-                    self.register(PTBaseCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self))
-                }
-                
-                if let cls = tmpSection.footerCls {
-                    self.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: (tmpSection.footerID ?? "").isEmpty ? NSStringFromClass(tmpSection.footerCls!) : tmpSection.footerID!)
-                } else {
-                    self.register(PTBaseCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self))
-                }
-
-                // 注册 cell
-                for (rowIndex,tmpRow) in tmpSection.rows.enumerated() {
-                    if tmpRow.nibName.stringIsEmpty() {
-                        self.register(tmpRow.cls.self, forCellWithReuseIdentifier:  tmpRow.ID)
-                    } else {
-                        self.register(UINib.init(nibName: tmpRow.nibName, bundle: nil), forCellWithReuseIdentifier: tmpRow.ID)
-                    }
-
-                    if rowIndex == (tmpSection.rows.count - 1) {
-                        callback?()
-                        break
-                    }
-                }
-            }
+    public func registerClassCells(classs:[String:AnyClass]) {
+        classs.allKeys().enumerated().forEach { index,value in
+            self.register(classs[value].self, forCellWithReuseIdentifier: value)
+        }
+    }
+    
+    public func registerNibCells(nib:[String:String]) {
+        nib.allKeys().enumerated().forEach { index,value in
+            self.register(UINib.init(nibName: value, bundle: nil), forCellWithReuseIdentifier: nib[value]!)
+        }
+    }
+    
+    public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
+        //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
+        classs.allKeys().enumerated().forEach { index,value in
+            self.register(classs[value].self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
         }
     }
 }

@@ -24,6 +24,7 @@ class PTImageListViewController: PTBaseViewController {
         collectionConfig.cellTrailingSpace = 8
 
         let view = PTCollectionView(viewConfig: collectionConfig)
+        view.registerClassCells(classs: [PTImageCell.ID:PTImageCell.self])
         view.cellInCollection = { collectionView,sectionModel,indexPath in
             let itemRow = sectionModel.rows[indexPath.row]
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCell
@@ -54,9 +55,10 @@ class PTImageListViewController: PTBaseViewController {
         
         var rows = [PTRows]()
         images.enumerated().forEach { index,value in
-            let row = PTRows(cls: PTImageCell.self,ID: PTImageCell.ID)
+            let row = PTRows(ID: PTImageCell.ID)
             rows.append(row)
         }
+
         section.append(PTSection(rows: rows))
         listCollection.showCollectionDetail(collectionData: section)
     }

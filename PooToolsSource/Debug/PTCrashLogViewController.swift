@@ -31,6 +31,7 @@ class PTCrashLogViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
@@ -112,7 +113,7 @@ class PTCrashLogViewController: PTBaseViewController {
             row_model.accessoryType = .DisclosureIndicator
             row_model.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
             
-            let row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID, dataModel: row_model)
+            let row = PTRows(ID: PTFusionCell.ID, dataModel: row_model)
             rows.append(row)
         })
         

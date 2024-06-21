@@ -44,6 +44,7 @@ class PTLeakListViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
@@ -139,7 +140,7 @@ class PTLeakListViewController: PTBaseViewController {
             cellModel.name = "\(value.symbol)\(value.details)"
             cellModel.accessoryType = .DisclosureIndicator
             cellModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
-            let row = PTRows(cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: cellModel)
+            let row = PTRows(ID: PTFusionCell.ID, dataModel: cellModel)
             rows.append(row)
         }
         let section = PTSection(rows: rows)

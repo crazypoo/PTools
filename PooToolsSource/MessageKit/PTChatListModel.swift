@@ -49,8 +49,6 @@ open class PTChatListModel: PTBaseModel {
     open var belongToMe:Bool = false
     
     //MARK: 这个是需要自定义cell时用
-    ///自定义CELL的class
-    open var customerCellClass:PTChatBaseCell.Type?
     ///自定义CELL的ID
     open var customerCellId:String = ""
     ///是否已讀

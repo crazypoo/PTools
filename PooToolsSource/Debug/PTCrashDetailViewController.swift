@@ -31,6 +31,8 @@ class PTCrashDetailViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
+        view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.headerInCollection = { kind,collectionView,model,index in
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
             header.sectionModel = (model.headerDataModel as! PTFusionCellModel)
@@ -139,11 +141,11 @@ class PTCrashDetailViewController: PTBaseViewController {
                 switch PTCrashDetailViewController.Features(rawValue: index) {
                 case .details,.stackTrace:
                     let cellModel = self.normalCellModel(name: cellRealModel?.title ?? "", content: cellRealModel?.detail ?? "")
-                    let row = PTRows(cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: cellModel)
+                    let row = PTRows(ID: PTFusionCell.ID,dataModel: cellModel)
                     rows.append(row)
                 case .context:
                     let cellModel = self.tapCellModel(name: cellRealModel?.title ?? "")
-                    let row = PTRows(cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: cellModel)
+                    let row = PTRows(ID: PTFusionCell.ID,dataModel: cellModel)
                     rows.append(row)
                 default:
                     break
@@ -151,7 +153,7 @@ class PTCrashDetailViewController: PTBaseViewController {
             }
             let headerModel = PTFusionCellModel()
             headerModel.name = value.title
-            let section = PTSection(headerCls:PTFusionHeader.self,headerID:PTFusionHeader.ID,headerHeight: 34,rows: rows,headerDataModel: headerModel)
+            let section = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34,rows: rows,headerDataModel: headerModel)
             sections.append(section)
         }
         

@@ -48,6 +48,9 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTNetworkWatcherCell.ID:PTNetworkWatcherCell.self,PTNetworkWatcherDetailCell.ID:PTNetworkWatcherDetailCell.self])
+        view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
+        
         view.headerInCollection = { kind,collectionView,model,index in
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
             header.sectionModel = (model.headerDataModel as! PTFusionCellModel)
@@ -177,18 +180,18 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     func loadListModel() {
         var sections = [PTSection]()
         
-        let simpleData_row = PTRows(cls: PTNetworkWatcherCell.self, ID: PTNetworkWatcherCell.ID, dataModel: viewModel)
+        let simpleData_row = PTRows(ID: PTNetworkWatcherCell.ID, dataModel: viewModel)
         let headerModel_simple = PTFusionCellModel()
         headerModel_simple.name = "Simple info"
-        let section = PTSection(headerCls:PTFusionHeader.self,headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [simpleData_row],headerDataModel: headerModel_simple)
+        let section = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [simpleData_row],headerDataModel: headerModel_simple)
         sections.append(section)
         
         if currentInfos.count > 0 {
             currentInfos.enumerated().forEach { index,value in
                 let headerModel = PTFusionCellModel()
                 headerModel.name = value.title
-                let row = PTRows(cls: PTNetworkWatcherDetailCell.self, ID: PTNetworkWatcherDetailCell.ID)
-                let section_detail = PTSection(headerCls:PTFusionHeader.self,headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [row],headerDataModel: headerModel)
+                let row = PTRows(ID: PTNetworkWatcherDetailCell.ID)
+                let section_detail = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [row],headerDataModel: headerModel)
                 sections.append(section_detail)
             }
         }

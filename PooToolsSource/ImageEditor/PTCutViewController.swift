@@ -141,6 +141,7 @@ class PTCutViewController: PTBaseViewController {
         config.viewType = .Custom
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTImageCutRatioCell.ID:PTImageCutRatioCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -437,9 +438,10 @@ class PTCutViewController: PTBaseViewController {
     func showCutRatio(handle:((UICollectionView) -> Void)? = nil) {
         var rows = [PTRows]()
         clipRatios.enumerated().forEach { index,value in
-            let row = PTRows(cls:PTImageCutRatioCell.self,ID:PTImageCutRatioCell.ID,dataModel: value)
+            let row = PTRows(ID:PTImageCutRatioCell.ID,dataModel: value)
             rows.append(row)
         }
+
         let section = PTSection(rows: rows)
         ratioCollectionView.showCollectionDetail(collectionData: [section],finishTask: handle)
     }

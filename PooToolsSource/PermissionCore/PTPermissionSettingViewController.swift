@@ -25,6 +25,8 @@ public class PTPermissionSettingViewController: PTBaseViewController {
         cConfig.sectionEdges = NSDirectionalEdgeInsets(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
         
         let view = PTCollectionView(viewConfig: cConfig)
+        view.registerClassCells(classs: [PTPermissionSettingCell.ID:PTPermissionSettingCell.self])
+        view.registerSupplementaryView(classs: [PTPermissionSettingHeader.ID:PTPermissionSettingHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.headerInCollection = { kind,collectionView,model,indexPath in
             let headerModel = (model.headerDataModel as! PTPermissionModel)
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: indexPath) as! PTPermissionSettingHeader
@@ -113,8 +115,8 @@ public class PTPermissionSettingViewController: PTBaseViewController {
 
         var sections = [PTSection]()
         permissionStatic.permissionModels.enumerated().forEach { index,value in
-            let row = PTRows(cls:PTPermissionSettingCell.self,ID: PTPermissionSettingCell.ID,dataModel: value)
-            let section = PTSection(headerCls:PTPermissionSettingHeader.self,headerID: PTPermissionSettingHeader.ID,headerHeight: PTPermissionSettingHeader.headerHeight + 10,rows: [row],headerDataModel: value)
+            let row = PTRows(ID: PTPermissionSettingCell.ID,dataModel: value)
+            let section = PTSection(headerID: PTPermissionSettingHeader.ID,headerHeight: PTPermissionSettingHeader.headerHeight + 10,rows: [row],headerDataModel: value)
             sections.append(section)
         }
 

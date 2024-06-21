@@ -76,6 +76,7 @@ class PTPopoverMenuContent: PTBaseViewController {
         cConfig.itemHeight = self.viewConfig.rowHeight
         
         let view = PTCollectionView(viewConfig: cConfig)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.backgroundColor = .clear
         view.cellInCollection = { collectionView,sectionModel,indexPath in
             let itemRow = sectionModel.rows[indexPath.row]
@@ -128,7 +129,7 @@ class PTPopoverMenuContent: PTBaseViewController {
             cellModel.nameColor = self.viewConfig.textColor
             cellModel.cellFont = self.viewConfig.textFont
 
-            let row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: cellModel)
+            let row = PTRows(ID: PTFusionCell.ID,dataModel: cellModel)
             rows.append(row)
         }
         

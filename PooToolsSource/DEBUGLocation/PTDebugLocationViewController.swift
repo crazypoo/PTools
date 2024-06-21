@@ -44,6 +44,7 @@ class PTDebugLocationViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
@@ -124,7 +125,7 @@ class PTDebugLocationViewController: PTBaseViewController {
         var sections = [PTSection]()
         
         let customRowModel = baseCellModel(name: viewModel.customDescription ?? "Custom location", isSelected: viewModel.customSelected)
-        let customRow = PTRows(cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: customRowModel)
+        let customRow = PTRows(ID: PTFusionCell.ID, dataModel: customRowModel)
         
         var rows = [PTRows]()
         
@@ -132,7 +133,7 @@ class PTDebugLocationViewController: PTBaseViewController {
         
         viewModel.locations.enumerated().forEach { index,value in
             let cellRowModel = baseCellModel(name: value.title, isSelected: (viewModel.selectedIndex == index + 1))
-            let row = PTRows(cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: cellRowModel)
+            let row = PTRows(ID: PTFusionCell.ID, dataModel: cellRowModel)
             rows.append(row)
         }
         let section = PTSection(rows: rows)

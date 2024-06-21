@@ -73,6 +73,7 @@ public class PTMediaLibView:UIView {
         config.itemHeight = itemHeight
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTMediaLibCell.ID:PTMediaLibCell.self,PTCameraCell.ID:PTCameraCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
 
@@ -283,12 +284,12 @@ public class PTMediaLibView:UIView {
                 self.totalModels.append(contentsOf: self.currentAlbum!.models)
             }
             self.totalModels.enumerated().forEach { index,value in
-                let row = PTRows(cls:PTMediaLibCell.self,ID: PTMediaLibCell.ID,dataModel: value)
+                let row = PTRows(ID: PTMediaLibCell.ID,dataModel: value)
                 rows.append(row)
             }
             
             if self.showCameraCell {
-                let row = PTRows(cls:PTCameraCell.self,ID: PTCameraCell.ID)
+                let row = PTRows(ID: PTCameraCell.ID)
                 rows.insert(row, at: rows.count)
             }
             let section = PTSection(rows: rows)

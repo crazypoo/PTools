@@ -547,6 +547,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         collectionConfig.viewType = .Custom
         
         let view = PTCollectionView(viewConfig: collectionConfig)
+        view.registerClassCells(classs: [PTVideoEditorToolsCell.ID:PTVideoEditorToolsCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -970,10 +971,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         
         var rows = [PTRows]()
         bottomControlModels.enumerated().forEach { index,value in
-            let row = PTRows(cls: PTVideoEditorToolsCell.self,ID:PTVideoEditorToolsCell.ID,dataModel: value)
+            let row = PTRows(ID:PTVideoEditorToolsCell.ID,dataModel: value)
             rows.append(row)
         }
-        
+
         let sections = [PTSection(rows: rows)]
         bottomControlCollection.showCollectionDetail(collectionData: sections) { cView in
         }

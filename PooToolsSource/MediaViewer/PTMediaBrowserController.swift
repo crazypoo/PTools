@@ -97,6 +97,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         cConfig.collectionViewBehavior = .paging
         
         let collectionView = PTCollectionView(viewConfig: cConfig)
+        collectionView.registerClassCells(classs: [PTMediaBrowserCell.ID:PTMediaBrowserCell.self])
         collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
             let itemRow = dataModel.rows[indexPath.row]
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaBrowserCell
@@ -339,7 +340,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         var rows = [PTRows]()
         viewConfig.mediaData.enumerated().forEach { index,value in
-            let row_List = PTRows.init(cls: PTMediaBrowserCell.self, ID: PTMediaBrowserCell.ID,dataModel: value)
+            let row_List = PTRows.init(ID: PTMediaBrowserCell.ID,dataModel: value)
             rows.append(row_List)
         }
         let cellSection = PTSection.init(rows: rows)

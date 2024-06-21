@@ -138,6 +138,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         config.viewType = .Custom
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.isUserInteractionEnabled = true
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
@@ -212,7 +213,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             
             var rows = [PTRows]()
             thumbnailFilterImages.enumerated().forEach { index,value in
-                let row = PTRows(cls: PTFilterImageCell.self,ID:PTFilterImageCell.ID,dataModel: value)
+                let row = PTRows(ID:PTFilterImageCell.ID,dataModel: value)
                 rows.append(row)
             }
             

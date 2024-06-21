@@ -31,6 +31,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cellModel = (itemRow.dataModel as! PTFusionCellModel)
@@ -122,7 +123,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         
         var rows = [PTRows]()
         userdefultArrs.enumerated().forEach { (index,value) in
-            let row_List = PTRows.init(cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: value)
+            let row_List = PTRows.init(ID: PTFusionCell.ID, dataModel: value)
             rows.append(row_List)
         }
         let cellSection = PTSection.init(rows: rows)

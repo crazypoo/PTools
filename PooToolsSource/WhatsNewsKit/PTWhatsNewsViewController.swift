@@ -299,6 +299,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         config.showsHorizontalScrollIndicator = false
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTWhatsNewsCell.ID:PTWhatsNewsCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -423,7 +424,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     func showNewsData() {
         var rows = [PTRows]()
         newsItems.enumerated().forEach { index,value in
-            let row = PTRows(cls: PTWhatsNewsCell.self,ID: PTWhatsNewsCell.ID,dataModel: value)
+            let row = PTRows(ID: PTWhatsNewsCell.ID,dataModel: value)
             rows.append(row)
         }
         

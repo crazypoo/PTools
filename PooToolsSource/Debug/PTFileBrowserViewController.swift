@@ -54,6 +54,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
         config.emptyViewConfig = emptyConfig
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
@@ -280,7 +281,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                     fusionModel.accessoryType = .NoneAccessoryView
                 }
 
-                let row = PTRows.init(title: value.name,cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: fusionModel)
+                let row = PTRows.init(title: value.name,ID: PTFusionCell.ID,dataModel: fusionModel)
                 rows.append(row)
             }
             

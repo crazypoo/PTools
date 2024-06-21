@@ -43,7 +43,9 @@ public class PTDarkModeControl: PTBaseViewController {
         cConfig.topRefresh = false
         cConfig.customReuseViews = true
         let view = PTCollectionView(viewConfig: cConfig)
-            
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
+        view.registerSupplementaryView(classs: [PTDarkModeHeader.ID:PTDarkModeHeader.self], kind: UICollectionView.elementKindSectionHeader)
+        view.registerSupplementaryView(classs: [PTDarkSmartFooter.ID:PTDarkSmartFooter.self,PTDarkFollowSystemFooter.ID:PTDarkFollowSystemFooter.self], kind: UICollectionView.elementKindSectionFooter)
         view.customerReuseViews = { index,sectionModel in
             var items = [NSCollectionLayoutBoundarySupplementaryItem]()
             let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
@@ -218,22 +220,22 @@ public class PTDarkModeControl: PTBaseViewController {
         darkModeControlArr.enumerated().forEach { (index,value) in
             var rows = [PTRows]()
             value.enumerated().forEach { subIndex,subValue in
-                let row = PTRows(cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: subValue)
+                let row = PTRows(ID: PTFusionCell.ID,dataModel: subValue)
                 rows.append(row)
             }
             switch index {
             case 0:
                 var sections:PTSection
                 if PTDarkModeOption.isSmartPeeling {
-                    sections = PTSection(headerCls: PTDarkModeHeader.self,headerID: PTDarkModeHeader.ID,footerCls: PTDarkSmartFooter.self,footerID: PTDarkSmartFooter.ID,footerHeight: PTDarkSmartFooter.footerTotalHeight,headerHeight: PTDarkModeHeader.contentHeight + 10, rows: rows)
+                    sections = PTSection(headerID: PTDarkModeHeader.ID,footerID: PTDarkSmartFooter.ID,footerHeight: PTDarkSmartFooter.footerTotalHeight,headerHeight: PTDarkModeHeader.contentHeight + 10, rows: rows)
                 } else {
-                    sections = PTSection(headerCls: PTDarkModeHeader.self,headerID: PTDarkModeHeader.ID,headerHeight: PTDarkModeHeader.contentHeight + 10, rows: rows)
+                    sections = PTSection(headerID: PTDarkModeHeader.ID,headerHeight: PTDarkModeHeader.contentHeight + 10, rows: rows)
                 }
                 mSections.append(sections)
             case 1:
                 var sections:PTSection
                 if PTDarkModeOption.isFollowSystem {
-                    sections = PTSection(footerCls: PTDarkFollowSystemFooter.self,footerID: PTDarkFollowSystemFooter.ID,footerHeight: PTDarkFollowSystemFooter.footerHeight, rows: rows)
+                    sections = PTSection(footerID: PTDarkFollowSystemFooter.ID,footerHeight: PTDarkFollowSystemFooter.footerHeight, rows: rows)
                 } else {
                     sections = PTSection(rows: rows)
                 }

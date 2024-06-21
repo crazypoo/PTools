@@ -706,32 +706,39 @@ public class PTCollectionView: UIView {
         }
     }
     
+    public func registerClassCells(classs:[String:AnyClass]) {
+        collectionView.registerClassCells(classs: classs)
+    }
+    
+    public func registerNibCells(nib:[String:String]) {
+        collectionView.registerNibCells(nib: nib)
+    }
+    
+    public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
+        //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
+        collectionView.registerSupplementaryView(classs: classs, kind: kind)
+    }
+    
     ///加载数据并且刷新界面
     public func showCollectionDetail(collectionData:[PTSection],finishTask:((UICollectionView)->Void)? = nil) {
         mSections.removeAll()
-        
         mSections = collectionData
-        
-        collectionView.pt_register(by: mSections) {
-            PTGCDManager.gcdMain {
-                if self.viewConfig.refreshWithoutAnimation {
-                    self.collectionView.reloadDataWithOutAnimation {
-                        if #available(iOS 17.0, *) {
-                            self.showEmptyConfig()
-                        }
-                        if finishTask != nil {
-                            finishTask!(self.collectionView)
-                        }
-                    }
-                } else {
-                    self.collectionView.reloadData {
-                        if #available(iOS 17.0, *) {
-                            self.showEmptyConfig()
-                        }
-                        if finishTask != nil {
-                            finishTask!(self.collectionView)
-                        }
-                    }
+        if self.viewConfig.refreshWithoutAnimation {
+            self.collectionView.reloadDataWithOutAnimation {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
+                }
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
+                }
+            }
+        } else {
+            self.collectionView.reloadData {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
+                }
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
                 }
             }
         }
@@ -739,7 +746,6 @@ public class PTCollectionView: UIView {
     
     public func clearAllData(finishTask:((UICollectionView)->Void)? = nil) {
         mSections.removeAll()
-        collectionView.pt_register(by: mSections)
         if self.viewConfig.refreshWithoutAnimation {
             self.collectionView.reloadDataWithOutAnimation {
                 if #available(iOS 17.0, *) {
@@ -849,12 +855,16 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
             if kind == UICollectionView.elementKindSectionHeader {
-                if (!(itemSec.headerID ?? "").stringIsEmpty() && itemSec.headerCls != nil && (itemSec.headerHeight ?? 0) > 0) {
-                    return headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                if !(itemSec.headerID ?? "").stringIsEmpty() {
+                    if let headerHeight = itemSec.headerHeight,headerHeight != CGFloat.leastNormalMagnitude {
+                        return headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                    }
                 }
             } else if kind == UICollectionView.elementKindSectionFooter {
-                if (!(itemSec.footerID ?? "").stringIsEmpty() && itemSec.footerCls != nil && (itemSec.footerHeight ?? 0) > 0) {
-                    return footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                if !(itemSec.footerID ?? "").stringIsEmpty() {
+                    if let footerHeight = itemSec.footerHeight,footerHeight != CGFloat.leastNormalMagnitude {
+                        return footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                    }
                 }
             }
         }

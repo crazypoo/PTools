@@ -89,6 +89,7 @@ public class PTDebugViewController: PTBaseViewController {
         config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
@@ -228,7 +229,7 @@ public class PTDebugViewController: PTBaseViewController {
         
         var rows = [PTRows]()
         settingCellModels.enumerated().forEach { index,value in
-            let row = PTRows.init(title: value.name,cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows.init(title: value.name,ID: PTFusionCell.ID,dataModel: value)
             rows.append(row)
         }
         let section = PTSection.init(rows: rows)

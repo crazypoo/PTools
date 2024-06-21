@@ -624,6 +624,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             cConfig.contentBottomSpace = 10
             let aaaaaaa = PTCollectionView(viewConfig: cConfig)
             aaaaaaa.backgroundColor = .random
+            aaaaaaa.registerClassCells(classs: [PTTagCell.ID:PTTagCell.self])
             aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
                 let itemRow = dataModel.rows[indexPath.row]
                 let cellModel = (itemRow.dataModel as! PTTagLayoutModel)
@@ -641,7 +642,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             
             var tagRows = [PTRows]()
             tagModels.enumerated().forEach { index,value in
-                let row = PTRows(cls: PTTagCell.self,ID: PTTagCell.ID,dataModel: value)
+                let row = PTRows(ID: PTTagCell.ID,dataModel: value)
                 tagRows.append(row)
             }
             let tagSection = [PTSection(rows: tagRows)]

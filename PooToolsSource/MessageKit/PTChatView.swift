@@ -41,6 +41,7 @@ public class PTChatView: UIView {
         collectionConfig.topRefresh = true
 
         let view = PTCollectionView(viewConfig: collectionConfig)
+        view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var groupHeight:CGFloat = 0
             var bannerGroupSize : NSCollectionLayoutSize
@@ -203,6 +204,10 @@ public class PTChatView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func chatRegisterClass(classs:[String:PTChatBaseCell.Type]) {
+        self.listCollection.contentCollectionView.registerClassCells(classs: classs)
+    }
+    
     ///刷新数据
     public func viewReloadData(loadFinish:((UICollectionView)->Void)? = nil) {
         var sections = [PTSection]()
@@ -211,29 +216,29 @@ public class PTChatView: UIView {
             chatDataArr.enumerated().forEach { index,value in
                 switch value.messageType {
                 case .SystemMessage:
-                    let row = PTRows(cls: PTChatSystemMessageCell.self,ID: PTChatSystemMessageCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatSystemMessageCell.ID,dataModel: value)
                     rows.append(row)
                 case .Text:
-                    let row = PTRows(cls: PTChatTextCell.self,ID: PTChatTextCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatTextCell.ID,dataModel: value)
                     rows.append(row)
                 case .Media:
-                    let row = PTRows(cls: PTChatMediaCell.self,ID: PTChatMediaCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatMediaCell.ID,dataModel: value)
                     rows.append(row)
                 case .Map:
-                    let row = PTRows(cls: PTChatMapCell.self,ID: PTChatMapCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatMapCell.ID,dataModel: value)
                     rows.append(row)
                 case .Voice:
-                    let row = PTRows(cls: PTChatVoiceCell.self,ID: PTChatVoiceCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatVoiceCell.ID,dataModel: value)
                     rows.append(row)
                 case .Typing:
-                    let row = PTRows(cls: PTChatTypingIndicatorCell.self,ID: PTChatTypingIndicatorCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatTypingIndicatorCell.ID,dataModel: value)
                     rows.append(row)
                 case .File:
-                    let row = PTRows(cls: PTChatFileCell.self,ID: PTChatFileCell.ID,dataModel: value)
+                    let row = PTRows(ID: PTChatFileCell.ID,dataModel: value)
                     rows.append(row)
                 case .CustomerMessage:
-                    if value.customerCellClass != nil && !value.customerCellId.stringIsEmpty() {
-                        let row = PTRows(cls: value.customerCellClass.self,ID: value.customerCellId,dataModel: value)
+                    if !value.customerCellId.stringIsEmpty() {
+                        let row = PTRows(ID: value.customerCellId,dataModel: value)
                         rows.append(row)
                     }
                 }

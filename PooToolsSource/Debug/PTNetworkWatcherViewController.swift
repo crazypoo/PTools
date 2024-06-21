@@ -61,6 +61,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTNetworkWatcherCell.ID:PTNetworkWatcherCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
             let itemRow = itemSection.rows[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
@@ -188,7 +189,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         
         var rows = [PTRows]()
         viewModel.models.enumerated().forEach { index,value in
-            let row = PTRows(cls: PTNetworkWatcherCell.self, ID: PTNetworkWatcherCell.ID, dataModel: value)
+            let row = PTRows(ID: PTNetworkWatcherCell.ID, dataModel: value)
             rows.append(row)
         }
         let section = PTSection(rows: rows)

@@ -102,6 +102,7 @@ public class PTEditImageViewController: PTBaseViewController {
         config.itemHeight = 54
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTEditToolsCell.ID:PTEditToolsCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = self.tools[indexPath.row]
@@ -138,6 +139,7 @@ public class PTEditImageViewController: PTBaseViewController {
         config.viewType = .Custom
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -185,6 +187,7 @@ public class PTEditImageViewController: PTBaseViewController {
         config.viewType = .Custom
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTAdjustToolCell.ID:PTAdjustToolCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -815,10 +818,10 @@ public class PTEditImageViewController: PTBaseViewController {
     func createToolsBar() {
         var rows = [PTRows]()
         toolsModel.enumerated().forEach { index,value in
-            let row = PTRows(cls:PTEditToolsCell.self,ID: PTEditToolsCell.ID,dataModel: value)
+            let row = PTRows(ID: PTEditToolsCell.ID,dataModel: value)
             rows.append(row)
         }
-        
+
         let section = PTSection(rows: rows)
         toolCollectionView.showCollectionDetail(collectionData: [section])
     }
@@ -1299,10 +1302,10 @@ extension PTEditImageViewController {
             
             var rows = [PTRows]()
             thumbnailFilterImages.enumerated().forEach { index,value in
-                let row = PTRows(cls: PTFilterImageCell.self,ID:PTFilterImageCell.ID,dataModel: value)
+                let row = PTRows(ID:PTFilterImageCell.ID,dataModel: value)
                 rows.append(row)
             }
-            
+
             let section = PTSection(rows: rows)
             filterCollectionView.showCollectionDetail(collectionData: [section])
         } else {
@@ -1425,9 +1428,10 @@ extension PTEditImageViewController {
                     model.name = "PT Photo picker contrast".localized()
                 }
                 
-                let row = PTRows(cls: PTAdjustToolCell.self,ID:PTAdjustToolCell.ID,dataModel: model)
+                let row = PTRows(ID:PTAdjustToolCell.ID,dataModel: model)
                 rows.append(row)
             }
+            
             
             let section = PTSection(rows: rows)
             adjustCollectionView.showCollectionDetail(collectionData: [section])

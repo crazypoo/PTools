@@ -23,6 +23,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         config.viewType = .Custom
 
         let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -89,7 +90,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         generateFilterImages {
             var rows = [PTRows]()
             self.thumbnailFilterImages.enumerated().forEach { index,value in
-                let row = PTRows(cls: PTFilterImageCell.self,ID:PTFilterImageCell.ID,dataModel: value)
+                let row = PTRows(ID:PTFilterImageCell.ID,dataModel: value)
                 rows.append(row)
             }
             

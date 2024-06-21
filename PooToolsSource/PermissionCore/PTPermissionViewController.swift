@@ -49,7 +49,8 @@ public class PTPermissionViewController: PTBaseViewController {
         cConfig.decorationItemsEdges = NSDirectionalEdgeInsets.init(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
         
         let view = PTCollectionView(viewConfig: cConfig)
-        
+        view.registerClassCells(classs: [PTPermissionCell.ID:PTPermissionCell.self])
+        view.registerSupplementaryView(classs: [PTPermissionHeader.ID:PTPermissionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.decorationViewReset = { collection,view,kind,indexPath,sectionModel in
             if Gobal_device_info.isPad {
                 if kind == PTBaseDecorationView_Corner.ID {
@@ -246,11 +247,11 @@ public class PTPermissionViewController: PTBaseViewController {
         
         var permissionRows = [PTRows]()
         permissions.enumerated().forEach { index,value in
-            let row = PTRows.init(cls: PTPermissionCell.self,ID: PTPermissionCell.ID,dataModel: value)
+            let row = PTRows.init(ID: PTPermissionCell.ID,dataModel: value)
             permissionRows.append(row)
         }
         
-        let section = PTSection.init(headerCls:PTPermissionHeader.self,headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
+        let section = PTSection.init(headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
         mSections.append(section)
         
         newCollectionView.layoutIfNeeded()

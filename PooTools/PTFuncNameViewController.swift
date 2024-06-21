@@ -152,7 +152,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_net.moreLayoutStyle = .leftTitleRightImage
         sectionModel_net.moreDisclosureIndicator = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
-        let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: UICollectionView.sectionRows(rowsModel: netArrs),headerDataModel: sectionModel_net)
+        let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: UICollectionView.sectionRows(rowsModel: netArrs),headerDataModel: sectionModel_net)
         
         /**
             图片
@@ -175,7 +175,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var mediaRows = [PTRows]()
         mediaArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
             mediaRows.append(row)
         }
         
@@ -185,7 +185,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_media.accessoryType = .Switch
         sectionModel_media.switchControlWidth = 25
 
-        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
+        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
 
         /**
             本机
@@ -220,7 +220,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var phoneRows = [PTRows]()
         phoneArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
             phoneRows.append(row)
         }
         
@@ -231,7 +231,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_phone.disclosureIndicatorImage = disclosureIndicatorImage
         sectionModel_phone.moreLayoutStyle = .leftTitleRightImage
 
-        let phoneSection = PTSection.init(headerTitle: sectionModel_phone.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: phoneRows,headerDataModel: sectionModel_phone)
+        let phoneSection = PTSection.init(headerTitle: sectionModel_phone.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: phoneRows,headerDataModel: sectionModel_phone)
         
         /**
             UIKIT
@@ -299,7 +299,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 uikitRows.append(row)
             }
 #else
-            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
             uikitRows.append(row)
 #endif
         }
@@ -311,7 +311,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_uikit.disclosureIndicatorImage = disclosureIndicatorImage
         sectionModel_uikit.moreLayoutStyle = .upTitleDownImage
 
-        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
+        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
         
         /**
             Route
@@ -322,7 +322,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var routeRows = [PTRows]()
         routeArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
             routeRows.append(row)
         }
         
@@ -331,7 +331,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_route.cellFont = sectionTitleFont
         sectionModel_route.accessoryType = .NoneAccessoryView
 
-        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
+        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
         
         /**
             Encryption
@@ -342,7 +342,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var encryptionRows = [PTRows]()
         encryptionArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
             encryptionRows.append(row)
         }
         
@@ -351,7 +351,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_encryption.cellFont = sectionTitleFont
         sectionModel_encryption.accessoryType = .NoneAccessoryView
 
-        let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
+        let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerID: PTFusionHeader.ID,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
 
         return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
     }()
@@ -386,6 +386,9 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.emptyViewConfig = emptyConfig
 
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
+        aaaaaaa.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
+        aaaaaaa.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
+        aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)
         aaaaaaa.layoutSubviews()
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
             let sectionModel = (model.headerDataModel as! PTFusionCellModel)
