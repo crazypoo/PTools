@@ -368,21 +368,24 @@ public class PTCollectionView: UIView {
         var sectionInsets = viewConfig.sectionEdges
         let sectionWidth: CGFloat
         switch viewConfig.decorationItemsType {
-        case .Normal, .Corner:
+        case .Normal,.Corner,.NoItems:
             sectionInsets = NSDirectionalEdgeInsets(
                 top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top,
                 leading: sectionInsets.leading,
                 bottom: viewConfig.contentBottomSpace,
                 trailing: sectionInsets.trailing
             )
-            sectionWidth = viewConfig.decorationItemsEdges.leading + viewConfig.decorationItemsEdges.trailing
-        case .Custom:
-            sectionInsets = decorationCustomLayoutInsetReset?(section, sectionModel) ?? .zero
-            sectionWidth = 0
         default:
-            sectionWidth = 0
+            sectionInsets = decorationCustomLayoutInsetReset?(section, sectionModel) ?? .zero
         }
         
+        switch viewConfig.decorationItemsType {
+        case .Normal,.Corner:
+            sectionWidth = viewConfig.decorationItemsEdges.leading + viewConfig.decorationItemsEdges.trailing
+        case .NoItems,.Custom:
+            sectionWidth = 0
+        }
+                
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
