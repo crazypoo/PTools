@@ -712,23 +712,26 @@ public class PTCollectionView: UIView {
         
         mSections = collectionData
         
-        collectionView.pt_register(by: mSections)
-        if viewConfig.refreshWithoutAnimation {
-            collectionView.reloadDataWithOutAnimation {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
-                }
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
-                }
-            }
-        } else {
-            collectionView.reloadData {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
-                }
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
+        collectionView.pt_register(by: mSections) {
+            PTGCDManager.gcdMain {
+                if self.viewConfig.refreshWithoutAnimation {
+                    self.collectionView.reloadDataWithOutAnimation {
+                        if #available(iOS 17.0, *) {
+                            self.showEmptyConfig()
+                        }
+                        if finishTask != nil {
+                            finishTask!(self.collectionView)
+                        }
+                    }
+                } else {
+                    self.collectionView.reloadData {
+                        if #available(iOS 17.0, *) {
+                            self.showEmptyConfig()
+                        }
+                        if finishTask != nil {
+                            finishTask!(self.collectionView)
+                        }
+                    }
                 }
             }
         }
@@ -845,20 +848,18 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if (!(itemSec.headerID ?? "").stringIsEmpty() && itemSec.headerCls != nil) || (!(itemSec.footerID ?? "").stringIsEmpty() && itemSec.footerCls != nil) {
-                if kind == UICollectionView.elementKindSectionHeader {
+            if kind == UICollectionView.elementKindSectionHeader {
+                if (!(itemSec.headerID ?? "").stringIsEmpty() && itemSec.headerCls != nil && (itemSec.headerHeight ?? 0) > 0) {
                     return headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
-                } else if kind == UICollectionView.elementKindSectionFooter {
-                    return footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
-                } else {
-                    return UICollectionReusableView()
                 }
-            } else {
-                return UICollectionReusableView()
+            } else if kind == UICollectionView.elementKindSectionFooter {
+                if (!(itemSec.footerID ?? "").stringIsEmpty() && itemSec.footerCls != nil && (itemSec.footerHeight ?? 0) > 0) {
+                    return footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                }
             }
-        } else {
-            return UICollectionReusableView()
         }
+        let reuseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath) as! PTBaseCollectionReusableView
+        return reuseView
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

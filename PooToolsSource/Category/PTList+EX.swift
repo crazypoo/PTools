@@ -105,24 +105,34 @@ extension UICollectionView {
     
     //MARK: 註冊CollectionView的Cell
     ///註冊CollectionView的Cell
-    public func pt_register(by ptSections: [PTSection]) {
-        
-        ptSections.forEach { [weak self] (tmpSection) in
-            // 注册 hederView
-            if let cls = tmpSection.headerCls, let id = tmpSection.headerID {
-                self?.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: id)
-            }
-            
-            if let cls = tmpSection.footerCls, let id = tmpSection.footerID {
-                self?.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: id)
-            }
-
-            // 注册 cell
-            tmpSection.rows.forEach { (tmpRow) in
-                if tmpRow.nibName.stringIsEmpty() {
-                    self?.register(tmpRow.cls.self, forCellWithReuseIdentifier:  tmpRow.ID)
+    public func pt_register(by ptSections: [PTSection],callback:PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            for (_,tmpSection) in ptSections.enumerated() {
+                // 注册 hederView
+                if let cls = tmpSection.headerCls {
+                    self.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: (tmpSection.headerID ?? "").isEmpty ? NSStringFromClass(cls) : tmpSection.headerID!)
                 } else {
-                    self?.register(UINib.init(nibName: tmpRow.nibName, bundle: nil), forCellWithReuseIdentifier: tmpRow.ID)
+                    self.register(PTBaseCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self))
+                }
+                
+                if let cls = tmpSection.footerCls {
+                    self.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: (tmpSection.footerID ?? "").isEmpty ? NSStringFromClass(tmpSection.footerCls!) : tmpSection.footerID!)
+                } else {
+                    self.register(PTBaseCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self))
+                }
+
+                // 注册 cell
+                for (rowIndex,tmpRow) in tmpSection.rows.enumerated() {
+                    if tmpRow.nibName.stringIsEmpty() {
+                        self.register(tmpRow.cls.self, forCellWithReuseIdentifier:  tmpRow.ID)
+                    } else {
+                        self.register(UINib.init(nibName: tmpRow.nibName, bundle: nil), forCellWithReuseIdentifier: tmpRow.ID)
+                    }
+
+                    if rowIndex == (tmpSection.rows.count - 1) {
+                        callback?()
+                        break
+                    }
                 }
             }
         }
