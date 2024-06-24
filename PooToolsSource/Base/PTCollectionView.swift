@@ -468,6 +468,8 @@ public class PTCollectionView: UIView {
         if self.viewConfig.topRefresh {
             view.refreshControl = self.refreshControl
         }
+        view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionHeader)
+        view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionFooter)
 #if POOTOOLS_SCROLLREFRESH
         if self.viewConfig.footerRefresh {
             let footerRefresh = PTRefreshAutoStateFooter(refreshingBlock: {
@@ -723,22 +725,24 @@ public class PTCollectionView: UIView {
     public func showCollectionDetail(collectionData:[PTSection],finishTask:((UICollectionView)->Void)? = nil) {
         mSections.removeAll()
         mSections = collectionData
-        if self.viewConfig.refreshWithoutAnimation {
-            self.collectionView.reloadDataWithOutAnimation {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
+        PTGCDManager.gcdMain {
+            if self.viewConfig.refreshWithoutAnimation {
+                self.collectionView.reloadDataWithOutAnimation {
+                    if #available(iOS 17.0, *) {
+                        self.showEmptyConfig()
+                    }
+                    if finishTask != nil {
+                        finishTask!(self.collectionView)
+                    }
                 }
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
-                }
-            }
-        } else {
-            self.collectionView.reloadData {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
-                }
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
+            } else {
+                self.collectionView.reloadData {
+                    if #available(iOS 17.0, *) {
+                        self.showEmptyConfig()
+                    }
+                    if finishTask != nil {
+                        finishTask!(self.collectionView)
+                    }
                 }
             }
         }
