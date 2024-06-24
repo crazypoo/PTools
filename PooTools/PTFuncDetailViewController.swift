@@ -636,7 +636,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             aaaaaaa.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview().inset(20)
-                make.height.equalTo(UICollectionView.tagShowLayoutHeight(data: tagModels).groupHeight)
+                make.height.equalTo(UICollectionView.tagShowLayoutHeight(data: tagModels,topContentSpace: cConfig.contentTopSpace, bottomContentSpace: cConfig.contentBottomSpace,itemLeadingSpace: cConfig.cellLeadingSpace,itemTrailingSpace: cConfig.cellTrailingSpace,itemContentSpace: cConfig.tagCellContentSpace).groupHeight)
             }
             
             

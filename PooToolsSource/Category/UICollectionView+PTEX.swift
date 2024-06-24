@@ -274,14 +274,14 @@ public extension UICollectionView {
             let currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont, height: itemHeight).width + itemContentSpace + (value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
             let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
             
-            if totalWidth > (screenWidth - itemOriginalX * 2) {
+            if totalWidth > (screenWidth - itemOriginalX) {
                 groupWidth = itemOriginalX
                 groupHeight += (itemTrailingSpace + itemHeight)
                 columnCount += 1
             }
             
             let customItem = NSCollectionLayoutGroupCustomItem(
-                frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight),
+                frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight - topContentSpace), width: currentCellWidth, height: itemHeight),
                 zIndex: 1000 + index
             )
             
@@ -291,7 +291,7 @@ public extension UICollectionView {
         
         // Adjust the final groupHeight
         if let lastItemFrame = customers.last?.frame {
-            if lastItemFrame.origin.x + lastItemFrame.width + itemOriginalX > screenWidth {
+            if (lastItemFrame.origin.x + lastItemFrame.width + itemOriginalX) > (screenWidth - itemOriginalX) {
                 groupHeight += (itemHeight + itemTrailingSpace)
             }
         }
