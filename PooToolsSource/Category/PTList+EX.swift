@@ -112,4 +112,11 @@ extension UICollectionView {
             self.register(classs[value].self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
         }
     }
+    
+    public func registerSupplementaryView(ids:[String],viewClass:AnyClass,kind:String) {
+        //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
+        ids.enumerated().forEach { index,value in
+            self.register(viewClass.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
+        }
+    }
 }
