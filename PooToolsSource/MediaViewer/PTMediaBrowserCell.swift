@@ -182,8 +182,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         return actualCenter
     }
     
-    func
-    setImageTypeView(loading:PTMediaBrowserLoadingView) {
+    func setImageTypeView(loading:PTMediaBrowserLoadingView) {
         gifImage = nil
         imageView.contentMode = .scaleAspectFit
         contentScrolView.addSubview(imageView)

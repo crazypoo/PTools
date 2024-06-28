@@ -66,7 +66,7 @@ public class PTChatView: UIView {
                 let timeHeight = (PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
                 let nameHeight = (PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
                 let readStatusHeight = PTChatConfig.share.showReadStatus ? (PTChatConfig.share.readStatusFont.pointSize + 10) : 0
-                let spaceHeight = PTChatBaseCell.TimeTopSpace * 2
+                let spaceHeight = PTChatBaseCell.timeTopSpace * 2
                 
                 switch cellModel.messageType {
                 case .Text:
@@ -119,7 +119,7 @@ public class PTChatView: UIView {
                             contentHeight = total
                         }
                     }
-                    cellHeight = timeHeight + contentHeight + nameHeight + PTChatBaseCell.TimeTopSpace * 3 + readStatusHeight
+                    cellHeight = timeHeight + contentHeight + nameHeight + PTChatBaseCell.timeTopSpace * 3 + readStatusHeight
                 case .SystemMessage:
                     let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().toFormat("yyyy-MM-dd HH:MM:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
                     var contentHeight:CGFloat = 0
@@ -184,7 +184,7 @@ public class PTChatView: UIView {
                     } else if itemRow.ID == PTChatFileCell.ID {
                         (cell as! PTChatFileCell).cellModel = cellModel
                     }
-                    cell!.sendMesageError = { errorModel in
+                    cell!.sendMessageError = { errorModel in
                         self.resendMessage(cellModel: errorModel, indexPath: indexPath)
                     }
                     

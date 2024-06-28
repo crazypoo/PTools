@@ -75,9 +75,9 @@ public class PTChatFileCell: PTChatBaseCell {
 
         dataContent.snp.remakeConstraints { make in
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
+                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
+                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
             make.top.equalTo(self.senderNameLabel.snp.bottom)
             make.height.equalTo(cellHeight)

@@ -8,90 +8,90 @@
 import UIKit
 import SnapKit
 
-public typealias PTChatBaseCellHandler = (_ dataModel:PTChatListModel) -> Void
+public typealias PTChatBaseCellHandler = (_ dataModel: PTChatListModel) -> Void
 
 @objcMembers
 open class PTChatBaseCell: PTBaseNormalCell {
     
-    ///Cell时间到顶部的高度
-    public static let TimeTopSpace:CGFloat = 5
-    ///等待图片大小
-    public static let WaitImageSize:CGFloat = 20
-    ///等待图片到边的距离
-    public static let WaitImageRightFixel:CGFloat = 10
-    ///等待图片到内容距离
-    public static let DataContentWaitImageFixel:CGFloat = 5
-    ///内容到头像距离
-    public static let DataContentUserIconFixel:CGFloat = 5.5
-    ///消息过期回调
-    public var sendExp:PTChatBaseCellHandler? = nil
-    ///错误点击回调
-    public var sendMesageError:PTChatBaseCellHandler? = nil
+    // Constants
+    public static let timeTopSpace: CGFloat = 5
+    public static let waitImageSize: CGFloat = 20
+    public static let waitImageRightInset: CGFloat = 10
+    public static let dataContentWaitImageInset: CGFloat = 5
+    public static let dataContentUserIconInset: CGFloat = 5.5
+    
+    // Handlers
+    public var sendExp: PTChatBaseCellHandler?
+    public var sendMessageError: PTChatBaseCellHandler?
+    
+    // Timer for message expiration
+    private var timer: Timer?
+    
+    // Data model
+    public var outputModel: PTChatListModel!
+    
+    // UI Components
+    open lazy var userIcon: UIButton = {
+        let button = UIButton(type: .custom)
+        button.clipsToBounds = true
+        button.layer.cornerRadius = PTChatConfig.share.messageUserIconSize / 2
+        return button
+    }()
+    
+    open lazy var messageTimeLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = PTChatConfig.share.chatTimeFont
+        label.textColor = PTChatConfig.share.chatTimeColor
+        label.numberOfLines = 0
+        label.isHidden = !PTChatConfig.share.showTimeLabel
+        return label
+    }()
+    
+    open lazy var senderNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = PTChatConfig.share.senderNameFont
+        label.textColor = PTChatConfig.share.senderNameColor
+        label.numberOfLines = 0
+        label.isHidden = !PTChatConfig.share.showSenderName
+        return label
+    }()
+    
+    open lazy var waitImageView: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
+        button.isUserInteractionEnabled = false
+        button.isHidden = true
+        return button
+    }()
 
-    fileprivate var timer:Timer?
-    public var outputModel:PTChatListModel!
-    
-    open lazy var userIcon:UIButton = {
-        let view = UIButton(type: .custom)
-        view.clipsToBounds = true
-        view.viewCorner(radius: PTChatConfig.share.messageUserIconSize / 2)
-        return view
+    open lazy var readStatusLabel: UIButton = {
+        let button = UIButton(type: .custom)
+        button.titleLabel?.font = PTChatConfig.share.readStatusFont
+        button.setTitleColor(PTChatConfig.share.readStatusColor, for: .normal)
+        button.setTitleColor(PTChatConfig.share.readStatusColor, for: .selected)
+        button.setTitle(PTChatConfig.share.unreadStatusName, for: .normal)
+        button.setTitle(PTChatConfig.share.readStatusName, for: .selected)
+        button.isHidden = !PTChatConfig.share.showReadStatus
+        return button
     }()
     
-    open lazy var messageTimeLabel:UILabel = {
-        let view = UILabel()
-        view.textAlignment = .center
-        view.font = PTChatConfig.share.chatTimeFont
-        view.textColor = PTChatConfig.share.chatTimeColor
-        view.numberOfLines = 0
-        view.isHidden = !PTChatConfig.share.showTimeLabel
-        return view
-    }()
-    
-    open lazy var senderNameLabel:UILabel = {
-        let view = UILabel()
-        view.font = PTChatConfig.share.senderNameFont
-        view.textColor = PTChatConfig.share.senderNameColor
-        view.numberOfLines = 0
-        view.isHidden = !PTChatConfig.share.showSenderName
-        return view
-    }()
-    
-    open lazy var waitImageView:UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
-        view.isUserInteractionEnabled = false
-        view.isHidden = true
-        return view
-    }()
-    
-    open lazy var readStatusLabel:UIButton = {
-        let view = UIButton(type: .custom)
-        view.titleLabel?.font = PTChatConfig.share.readStatusFont
-        view.setTitleColor(PTChatConfig.share.readStatusColor, for: .normal)
-        view.setTitleColor(PTChatConfig.share.readStatusColor, for: .selected)
-        view.setTitle(PTChatConfig.share.unreadStatusName, for: .normal)
-        view.setTitle(PTChatConfig.share.readStatusName, for: .selected)
-        view.isHidden = !PTChatConfig.share.showReadStatus
-        return view
-    }()
-    
-    open lazy var dataContent:UIView = {
+    open lazy var dataContent: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
         return view
     }()
     
-    open lazy var dataContentStatusView:UIButton = {
-        let view = UIButton(type: .custom)
-        view.isUserInteractionEnabled = false
-        return view
+    open lazy var dataContentStatusView: UIButton = {
+        let button = UIButton(type: .custom)
+        button.isUserInteractionEnabled = false
+        return button
     }()
-
+    
+    // Initializers
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.addSubviews([messageTimeLabel,userIcon,senderNameLabel,waitImageView,dataContent,readStatusLabel])
+        contentView.addSubviews([messageTimeLabel, userIcon, senderNameLabel, waitImageView, dataContent, readStatusLabel])
         setStatusView()
     }
     
@@ -100,25 +100,25 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
     
     deinit {
-        self.timer?.invalidate()
-        self.timer = nil
+        timer?.invalidate()
     }
     
-    func setStatusView() {
+    // Methods
+    private func setStatusView() {
         dataContent.addSubview(dataContentStatusView)
         dataContentStatusView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
     
-    ///配置初始界面,如果继承这个view需要在新的view中remakeConstraints
-    open func setBaseSubsViews(cellModel:PTChatListModel) {
+    open func setBaseSubsViews(cellModel: PTChatListModel) {
         outputModel = cellModel
         userIcon.pt_SDWebImage(imageString: cellModel.senderCover)
         messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet()
+        
         messageTimeLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(PTChatBaseCell.TimeTopSpace)
+            make.top.equalToSuperview().inset(PTChatBaseCell.timeTopSpace)
             make.height.equalTo(PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
         }
         
@@ -129,38 +129,33 @@ open class PTChatBaseCell: PTBaseNormalCell {
             } else {
                 make.left.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
             }
-            make.top.equalTo(self.messageTimeLabel.snp.bottom)
+            make.top.equalTo(messageTimeLabel.snp.bottom)
         }
         
-        if cellModel.belongToMe {
-            senderNameLabel.textAlignment = .right
-        } else {
-            senderNameLabel.textAlignment = .left
-        }
+        senderNameLabel.textAlignment = cellModel.belongToMe ? .right : .left
         senderNameLabel.text = cellModel.senderName
         senderNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.userIcon)
+            make.top.equalTo(userIcon)
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
+                make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
+                make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            
             make.height.equalTo(PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
         }
         
         waitImageView.snp.makeConstraints { make in
-            make.size.equalTo(PTChatBaseCell.WaitImageSize)
+            make.size.equalTo(PTChatBaseCell.waitImageSize)
             if cellModel.belongToMe {
-                make.left.lessThanOrEqualToSuperview().inset(PTChatBaseCell.WaitImageRightFixel)
+                make.left.lessThanOrEqualToSuperview().inset(PTChatBaseCell.waitImageRightInset)
             } else {
-                make.right.lessThanOrEqualToSuperview().inset(PTChatBaseCell.WaitImageRightFixel)
+                make.right.lessThanOrEqualToSuperview().inset(PTChatBaseCell.waitImageRightInset)
             }
-            make.bottom.equalTo(self.dataContent)
+            make.bottom.equalTo(dataContent)
         }
     }
     
-    open func resetSubsFrame(cellModel:PTChatListModel) {
+    open func resetSubsFrame(cellModel: PTChatListModel) {
         userIcon.snp.remakeConstraints { make in
             make.size.equalTo(PTChatConfig.share.messageUserIconSize)
             if cellModel.belongToMe {
@@ -168,68 +163,60 @@ open class PTChatBaseCell: PTBaseNormalCell {
             } else {
                 make.left.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
             }
-            make.top.equalTo(self.messageTimeLabel.snp.bottom).offset(PTChatBaseCell.TimeTopSpace)
+            make.top.equalTo(messageTimeLabel.snp.bottom).offset(PTChatBaseCell.timeTopSpace)
         }
         
         senderNameLabel.snp.remakeConstraints { make in
-            make.top.equalTo(self.userIcon)
+            make.top.equalTo(userIcon)
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
+                make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
+                make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            
             make.height.equalTo(PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
         }
-
+        
         if PTChatConfig.share.showReadStatus {
-            if cellModel.belongToMe {
-                readStatusLabel.titleLabel?.textAlignment = .right
-            } else {
-                readStatusLabel.titleLabel?.textAlignment = .left
-            }
-            
+            readStatusLabel.titleLabel?.textAlignment = cellModel.belongToMe ? .right : .left
             readStatusLabel.isSelected = cellModel.isRead
         }
+        
         readStatusLabel.snp.remakeConstraints { make in
-            make.top.equalTo(self.dataContent.snp.bottom)
+            make.top.equalTo(dataContent.snp.bottom)
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
+                make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
+                make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            
             make.height.equalTo(PTChatConfig.share.showReadStatus ? (PTChatConfig.share.readStatusFont.pointSize + 10) : 0)
         }
         
         waitImageView.snp.remakeConstraints { make in
-            make.size.equalTo(PTChatBaseCell.WaitImageSize)
+            make.size.equalTo(PTChatBaseCell.waitImageSize)
             if cellModel.belongToMe {
-                make.right.equalTo(self.dataContent.snp.left).offset(-PTChatBaseCell.DataContentWaitImageFixel)
+                make.right.equalTo(dataContent.snp.left).offset(-PTChatBaseCell.dataContentWaitImageInset)
             } else {
-                make.left.equalTo(self.dataContent.snp.right).offset(PTChatBaseCell.DataContentWaitImageFixel)
+                make.left.equalTo(dataContent.snp.right).offset(PTChatBaseCell.dataContentWaitImageInset)
             }
-            make.bottom.equalTo(self.dataContent)
+            make.bottom.equalTo(dataContent)
         }
-        waitImageView.addActionHandlers { sender in
-            self.sendMesageError?(cellModel)
+        
+        waitImageView.addActionHandlers { [weak self] sender in
+            self?.sendMessageError?(cellModel)
         }
+        
         checkCellSendStatus(cellModel: cellModel)
     }
     
-    ///检测Cell是否过期
-    open func checkCellSendStatus(cellModel:PTChatListModel) {
-        
+    open func checkCellSendStatus(cellModel: PTChatListModel) {
         switch cellModel.messageStatus {
         case .Sending:
             waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
             startWaitAnimation()
-            startCountDown(date: cellModel.messageTimeStamp.timeToDate())
+            startCountDown(from: cellModel.messageTimeStamp.timeToDate())
         case .Arrived:
             stopWaitAnimation()
             waitImageView.isHidden = true
-            waitImageView.isUserInteractionEnabled = false
-            waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
         case .Error:
             stopWaitAnimation()
             waitImageView.isHidden = false
@@ -238,39 +225,35 @@ open class PTChatBaseCell: PTBaseNormalCell {
         }
     }
     
-    ///等待View动画开启
     open func startWaitAnimation() {
         waitImageView.isHidden = false
         waitImageView.isUserInteractionEnabled = false
-        let layerAnimation = CABasicAnimation(keyPath: "transform.rotation")
-        layerAnimation.toValue = 2 * Double.pi
-        layerAnimation.duration = 1.5
-        layerAnimation.isRemovedOnCompletion = false
-        layerAnimation.repeatCount = Float(MAXFLOAT)
-        waitImageView.layer.add(layerAnimation, forKey: nil)
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotationAnimation.toValue = 2 * Double.pi
+        rotationAnimation.duration = 1.5
+        rotationAnimation.isRemovedOnCompletion = false
+        rotationAnimation.repeatCount = .infinity
+        waitImageView.layer.add(rotationAnimation, forKey: nil)
     }
     
-    ///等待View动画关闭
     open func stopWaitAnimation() {
         waitImageView.layer.removeAllAnimations()
         waitImageView.isHidden = true
-        waitImageView.isUserInteractionEnabled = false
         timer?.invalidate()
         timer = nil
     }
     
-    fileprivate func startCountDown(date:Date) {
-        self.updateCountDown(date: date)
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-            self.updateCountDown(date: date)
-        })
+    private func startCountDown(from date: Date) {
+        updateCountDown(to: date)
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateCountDown(to: date)
+        }
     }
     
-    fileprivate func updateCountDown(date:Date) {
+    private func updateCountDown(to date: Date) {
         if PTChatConfig.timeExp(expTime: date) {
-            self.timer?.invalidate()
-            self.timer = nil
-            self.sendExp?(self.outputModel)
+            timer?.invalidate()
+            sendExp?(outputModel)
         }
     }
 }
