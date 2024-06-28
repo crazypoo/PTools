@@ -11,6 +11,9 @@ import SnapKit
 public typealias PTChatHandler = (PTChatListModel,IndexPath) -> Void
 public typealias PTChatCellHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> PTChatBaseCell?
 public typealias PTChatCustomerCellHeightHandler = (_ dataModel:PTChatListModel,_ indexPath:Int) -> CGFloat
+public typealias PTAttCellCallBack = (String,IndexPath,PTChatListModel) -> Void
+public typealias PTCellMenuItemsHandler = (_ cellId:String) -> [String]?
+public typealias PTCellMenuItemsTapCallBack = (_ indexPath:IndexPath,_ cellModel:PTChatListModel,_ itemName:String,_ itemIndex:Int) -> Void
 
 @objcMembers
 public class PTChatView: UIView {
@@ -21,8 +24,8 @@ public class PTChatView: UIView {
     public var resendMessageHandler:PTChatHandler? = nil
     ///头部刷新回调
     public var headerLoadReadyHandler:PTActionTask? = nil
-    ///点击空地方回调
-    public var listTapHandler:PTActionTask? = nil
+//    ///点击空地方回调
+//    public var listTapHandler:PTActionTask? = nil
     ///消息点击回调
     public var tapMessageHandler:PTChatHandler? = nil
     ///头像点击回调
@@ -32,7 +35,17 @@ public class PTChatView: UIView {
     public var customerCellHandler:PTChatCellHandler? = nil
     ///自定义Cell高度设置
     public var customerCellHeightHandler:PTChatCustomerCellHeightHandler? = nil
-    
+    ///富文本Cell的内容点击
+    public var attCellUrlTapCallBack:PTAttCellCallBack? = nil
+    public var attCellChinaPhoneTapCallBack:PTAttCellCallBack? = nil
+    public var attCellHashtagTapCallBack:PTAttCellCallBack? = nil
+    public var attCellMentionTapCallBack:PTAttCellCallBack? = nil
+    public var attCellCustomTapCallBack:PTAttCellCallBack? = nil
+
+    ///Cell的Menu
+    public var cellMenuItemsHandler:PTCellMenuItemsHandler? = nil
+    public var cellMenuItemsTapCallBack:PTCellMenuItemsTapCallBack? = nil
+
     ///消息列表
     public lazy var listCollection:PTCollectionView = {
         let collectionConfig = PTCollectionViewConfig()
@@ -145,7 +158,23 @@ public class PTChatView: UIView {
                 default:
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTChatBaseCell
                     if itemRow.ID == PTChatTextCell.ID {
-                        (cell as! PTChatTextCell).cellModel = cellModel
+                        let textCell = (cell as! PTChatTextCell)
+                        textCell.cellModel = cellModel
+                        textCell.chinaPhoneCallback = { text in
+                            self.attCellChinaPhoneTapCallBack?(text,indexPath,cellModel)
+                        }
+                        textCell.mentionCallback = {  text in
+                            self.attCellMentionTapCallBack?(text,indexPath,cellModel)
+                        }
+                        textCell.urlCallback = { text in
+                            self.attCellUrlTapCallBack?(text,indexPath,cellModel)
+                        }
+                        textCell.hashtagCallback = { text in
+                            self.attCellHashtagTapCallBack?(text,indexPath,cellModel)
+                        }
+                        textCell.customCallback = { text in
+                            self.attCellCustomTapCallBack?(text,indexPath,cellModel)
+                        }
                     } else if itemRow.ID == PTChatMediaCell.ID {
                         (cell as! PTChatMediaCell).cellModel = cellModel
                     } else if itemRow.ID == PTChatMapCell.ID {
@@ -158,9 +187,19 @@ public class PTChatView: UIView {
                     cell!.sendMesageError = { errorModel in
                         self.resendMessage(cellModel: errorModel, indexPath: indexPath)
                     }
-                    cell!.dataContent.addActionHandlers { sender in
-                        self.tapMessageHandler?(cellModel,indexPath)
+                    
+                    if itemRow.ID != PTChatTextCell.ID {
+                        let longTap = self.cellLongTap(cell: cell!, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+                        let tap = UITapGestureRecognizer { sender in
+                            self.tapMessageHandler?(cellModel,indexPath)
+                        }
+                        cell!.dataContent.addGestureRecognizers([tap,longTap])
+                    } else {
+                        let longTap = self.cellLongTap(cell: cell!, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+                        cell!.contentView.isUserInteractionEnabled = true
+                        cell!.contentView.addGestureRecognizers([longTap])
                     }
+
                     cell!.sendExp = { expModel in
                         self.chatDataArr[indexPath.row].messageStatus = .Error
                         if itemRow.ID == PTChatTextCell.ID {
@@ -185,10 +224,10 @@ public class PTChatView: UIView {
         view.headerRefreshTask = { control in
             self.headerLoadReadyHandler?()
         }
-        let tap = UITapGestureRecognizer { sender in
-            self.listTapHandler?()
-        }
-        view.addGestureRecognizer(tap)
+//        let tap = UITapGestureRecognizer { sender in
+//            self.listTapHandler?()
+//        }
+//        view.addGestureRecognizer(tap)
         return view
     }()
 
@@ -206,6 +245,40 @@ public class PTChatView: UIView {
     
     public func chatRegisterClass(classs:[String:PTChatBaseCell.Type]) {
         self.listCollection.contentCollectionView.registerClassCells(classs: classs)
+    }
+    
+    func cellLongTap(cell:PTChatBaseCell,itemId:String,cellModel:PTChatListModel,indexPath:IndexPath) ->UILongPressGestureRecognizer {
+        let longTap = UILongPressGestureRecognizer { sender in
+            let longGes = sender as! UILongPressGestureRecognizer
+            switch longGes.state {
+            case .possible:break
+            case .began:
+                cell.dataContentStatusView.isHighlighted = true
+            case .changed:break
+            case .ended:
+                cell.dataContentStatusView.isHighlighted = false
+            case .cancelled:break
+            case .failed:break
+            case .recognized:break
+            @unknown default:break
+            }
+            
+            let menuTitles = self.cellMenuItemsHandler?(itemId)
+            if (menuTitles?.count ?? 0) > 0 {
+                var items = [PTEditMenuItem]()
+                menuTitles?.enumerated().forEach { index,value in
+                    let menuItems = PTEditMenuItem(title: value) {
+                        self.cellMenuItemsTapCallBack?(indexPath,cellModel,value,index)
+                    }
+                    items.append(menuItems)
+                }
+
+                let menu = PTEditMenuItemsInteraction.share
+                menu.showMenu(items, targetRect: cell.dataContentStatusView.frame, for: cell.dataContentStatusView)
+            }
+        }
+        longTap.minimumPressDuration = 0.5
+        return longTap
     }
     
     ///刷新数据

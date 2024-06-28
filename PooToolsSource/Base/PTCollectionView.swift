@@ -708,6 +708,10 @@ public class PTCollectionView: UIView {
         }
     }
     
+    public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) {
+        collectionView.registerSupplementaryView(ids: ids, viewClass: viewClass, kind: kind)
+    }
+    
     public func registerClassCells(classs:[String:AnyClass]) {
         collectionView.registerClassCells(classs: classs)
     }

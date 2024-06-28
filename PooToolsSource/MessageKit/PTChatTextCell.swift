@@ -9,9 +9,17 @@ import UIKit
 import AttributedString
 import SnapKit
 
+public typealias PTAttLabelCallBack = (String) -> Void
+
 public class PTChatTextCell: PTChatBaseCell {
     public static let ID = "PTChatTextCell"
-            
+    
+    public var hashtagCallback:PTAttLabelCallBack?
+    public var mentionCallback:PTAttLabelCallBack?
+    public var chinaPhoneCallback:PTAttLabelCallBack?
+    public var urlCallback:PTAttLabelCallBack?
+    public var customCallback:PTAttLabelCallBack?
+
     public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
@@ -21,12 +29,11 @@ public class PTChatTextCell: PTChatBaseCell {
         }
     }
     
-//    fileprivate var activeLabel:PTActiveLabel = {
-//        let view = PTActiveLabel()
-//        view.urlMaximumLength = 20
-//
-//        return view
-//    }()
+    fileprivate var activeLabel:PTActiveLabel = {
+        let view = PTActiveLabel()
+        view.urlMaximumLength = 20
+        return view
+    }()
             
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,26 +66,19 @@ public class PTChatTextCell: PTChatBaseCell {
         
         let contentWidth:CGFloat = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,height: PTChatConfig.share.contentBaseHeight).width + textEdges + 5
         
-        dataContent.titleLabel?.numberOfLines = 0
         var titleColor:UIColor!
         if cellModel.belongToMe {
             titleColor = PTChatConfig.share.textMeMessageColor
-            dataContent.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
-            dataContent.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
-            dataContent.contentEdgeInsets = PTChatConfig.share.textOwnerContentEdges
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
+            dataContentStatusView.contentEdgeInsets = PTChatConfig.share.textOwnerContentEdges
         } else {
             titleColor = PTChatConfig.share.textOtherMessageColor
-            dataContent.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
-            dataContent.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
-            dataContent.contentEdgeInsets = PTChatConfig.share.textOtherContentEdges
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
+            dataContentStatusView.contentEdgeInsets = PTChatConfig.share.textOtherContentEdges
         }
         
-        let msgContentAtt:ASAttributedString = """
-                \(wrap: .embedding("""
-                \(msgContent,.foreground(titleColor),.font(dataContentFont),.paragraph(.alignment(.left),.lineSpacing(CGFloat(truncating: PTChatConfig.share.textLineSpace))))
-                """))
-                """
-        dataContent.setAttributedTitle(msgContentAtt.value, for: .normal)
         dataContent.snp.remakeConstraints { make in
             if cellModel.belongToMe {
                 make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
@@ -94,76 +94,61 @@ public class PTChatTextCell: PTChatBaseCell {
             }
         }
         
-//        dataContent.addSubviews([activeLabel])
-//        activeLabel.snp.makeConstraints { make in
-//            make.top.bottom.equalToSuperview()
-//            make.left.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.left : PTChatConfig.share.textOtherContentEdges.left)
-//            make.right.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.right : PTChatConfig.share.textOtherContentEdges.right)
-//        }
-//
-//        activeLabel.customize { label in
-//            label.textAlignment = .left
-//            label.text = msgContent
-//            label.numberOfLines = 0
-//            label.lineSpacing = CGFloat(truncating: PTChatConfig.share.textLineSpace)
-//            label.font = dataContentFont
-//            label.textColor = titleColor
-//            label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-//            label.hashtagSelectedColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
-//            label.mentionColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
-//            label.mentionSelectedColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
-//            label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
-//            label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
-//            label.chinaCellPhoneColor = .random
-//            label.chinaCellPhoneSelectedColor = .random
-//
-//            label.handleMentionTap { text in
-////                self.alert(title:"Mention", message: text)
-//                PTNSLogConsole("123")
-//            }
-//            label.handleHashtagTap { text in
-////                self.alert(title:"Hashtag", message: text)
-//                PTNSLogConsole("2222222")
-//            }
-//            label.handleURLTap { url in
-////                self.alert(title:"URL", message: url.absoluteString)
-//                PTNSLogConsole("aaaaaaaaaa")
-//            }
-//            label.handleChinaCellPhoneTap { phone in
-//                PTNSLogConsole("11111111111")
-////                self.alert(title:"CellPhone", message: phone)
-//            }
-//
-//            //Custom types
-//
-////            label.customColor[customType] = UIColor.purple
-////            label.customSelectedColor[customType] = UIColor.green
-////            label.customColor[customType2] = UIColor.magenta
-////            label.customSelectedColor[customType2] = UIColor.green
-////
-////            label.configureLinkAttribute = { (type, attributes, isSelected) in
-////                var atts = attributes
-////                switch type {
-////                case PTActiveType.hashtag:
-////                    atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 16)
-////                case customType3:
-////                    atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
-////                default: ()
-////                }
-////
-////                return atts
-////            }
-//
-////            label.handleCustomTap(for: customType) { text in
-////                self.alert(title:"Custom type", message: text)
-////            }
-////            label.handleCustomTap(for: customType2) { text in
-////                self.alert(title:"Custom type", message: text)
-////            }
-////            label.handleCustomTap(for: customType3) { text in
-////                self.alert(title:"Custom type", message: text)
-////            }
-//        }
+        dataContent.addSubviews([activeLabel])
+        activeLabel.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.left : PTChatConfig.share.textOtherContentEdges.left)
+            make.right.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.right : PTChatConfig.share.textOtherContentEdges.right)
+        }
+
+        var customAttTypes = [PTActiveType]()
+        if PTChatConfig.share.customerTagModels.count > 0 {
+            PTChatConfig.share.customerTagModels.enumerated().forEach { index,value in
+                let type = PTActiveType.custom(pattern: value.tag)
+                customAttTypes.append(type)
+                activeLabel.enabledTypes.append(type)
+            }
+        }
+               
+        activeLabel.customize { label in
+            label.textAlignment = .left
+            label.text = msgContent
+            label.numberOfLines = 0
+            label.lineSpacing = CGFloat(truncating: PTChatConfig.share.textLineSpace)
+            label.font = dataContentFont
+            label.textColor = titleColor
+            label.hashtagColor = PTChatConfig.share.hashtagColor
+            label.hashtagSelectedColor = PTChatConfig.share.hashtagSelectedColor
+            label.mentionColor = PTChatConfig.share.mentionColor
+            label.mentionSelectedColor = PTChatConfig.share.mentionSelectedColor
+            label.URLColor = PTChatConfig.share.urlColor
+            label.URLSelectedColor = PTChatConfig.share.urlSelectedColor
+            label.chinaCellPhoneColor = PTChatConfig.share.chinaCellPhoneColor
+            label.chinaCellPhoneSelectedColor = PTChatConfig.share.chinaCellPhoneSelectedColor
+
+            label.handleMentionTap { text in
+                self.mentionCallback?(text)
+            }
+            label.handleHashtagTap { text in
+                self.hashtagCallback?(text)
+            }
+            label.handleURLTap { url in
+                self.urlCallback?(url.absoluteString)
+            }
+            label.handleChinaCellPhoneTap { phone in
+                self.chinaPhoneCallback?(phone)
+            }
+            
+            if customAttTypes.count > 0 {
+                customAttTypes.enumerated().forEach { index,value in
+                    label.customColor[value] = PTChatConfig.share.customerTagModels[index].tagColor
+                    label.customSelectedColor[value] = PTChatConfig.share.customerTagModels[index].tagSelectedColor
+                    label.handleCustomTap(for: value) { text in
+                        self.customCallback?(text)
+                    }
+                }
+            }
+        }
         
         resetSubsFrame(cellModel: cellModel)
     }

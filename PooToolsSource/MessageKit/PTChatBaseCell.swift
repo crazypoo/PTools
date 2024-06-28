@@ -76,8 +76,15 @@ open class PTChatBaseCell: PTBaseNormalCell {
         return view
     }()
     
-    open lazy var dataContent:UIButton = {
+    open lazy var dataContent:UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+    
+    open lazy var dataContentStatusView:UIButton = {
         let view = UIButton(type: .custom)
+        view.isUserInteractionEnabled = false
         return view
     }()
 
@@ -85,6 +92,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([messageTimeLabel,userIcon,senderNameLabel,waitImageView,dataContent,readStatusLabel])
+        setStatusView()
     }
     
     public required init?(coder: NSCoder) {
@@ -94,6 +102,13 @@ open class PTChatBaseCell: PTBaseNormalCell {
     deinit {
         self.timer?.invalidate()
         self.timer = nil
+    }
+    
+    func setStatusView() {
+        dataContent.addSubview(dataContentStatusView)
+        dataContentStatusView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     ///配置初始界面,如果继承这个view需要在新的view中remakeConstraints

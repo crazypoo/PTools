@@ -26,8 +26,29 @@ class PTTestChatViewController: PTBaseViewController {
         view.resendMessageHandler = { cellModel,indexPath in
             PTNSLogConsole("\(cellModel)\(indexPath)")
         }
-        view.listTapHandler = {
-            PTNSLogConsole("123123123123")
+//        view.listTapHandler = {
+//            PTNSLogConsole("123123123123")
+//        }
+        view.cellMenuItemsHandler = { id in
+            return ["1111","222222","3333333"]
+        }
+        view.cellMenuItemsTapCallBack = { indexPath,cellModel,itemName,itemIndex in
+            PTNSLogConsole("\(indexPath),\(cellModel),\(itemName),\(itemIndex)")
+        }
+        view.attCellUrlTapCallBack = { text,indexPath,cellModel in
+            PTNSLogConsole("\(text)")
+        }
+        view.attCellHashtagTapCallBack = { text,indexPath,cellModel in
+            PTNSLogConsole("\(text)")
+        }
+        view.attCellMentionTapCallBack = { text,indexPath,cellModel in
+            PTNSLogConsole("\(text)")
+        }
+        view.attCellChinaPhoneTapCallBack = { text,indexPath,cellModel in
+            PTNSLogConsole("\(text)")
+        }
+        view.attCellCustomTapCallBack = { text,indexPath,cellModel in
+            PTNSLogConsole("\(text)")
         }
         view.tapMessageHandler = { cellModel,indexPath in
             PTNSLogConsole("\(cellModel)\(indexPath)")
@@ -170,14 +191,27 @@ class PTTestChatViewController: PTBaseViewController {
         meSendAttModel.senderName = "自己"
         meSendAttModel.messageStatus = .Arrived
 
+        let customAttTag = PTChatListModel()
+        customAttTag.messageTimeStamp = 1711986852
+        customAttTag.messageType = .Text
+        customAttTag.creatorId = "46709394"
+        customAttTag.msgContent = "标签 aaaaaaaaaB 支持 克狗扑"
+        customAttTag.senderCover = "https://tinhtinhimg.zxkjcn.cn/171143117700603E0FFC28AFB45B1BD21E0BA664E7C4C_image_0.png"
+        customAttTag.senderName = "自己"
+        customAttTag.messageStatus = .Arrived
+
         let typingModel = PTChatListModel()
         typingModel.messageType = .Typing
-        return [systemModel,meSendTextModel,othetSendTextModel,othetSendTextErrorModel,meSendImageModel,otherSendImageModel,meSendMapModel,meSendAppleMapModel,meSendVoiceModel,meSendVideoModel,meSendFileModel,meSendAttModel,typingModel]
+        return [systemModel,meSendTextModel,othetSendTextModel,othetSendTextErrorModel,meSendImageModel,otherSendImageModel,meSendMapModel,meSendAppleMapModel,meSendVoiceModel,meSendVideoModel,meSendFileModel,meSendAttModel,customAttTag,typingModel]
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let customerTag = PTMessageTextCustomAttTagModel()
+        customerTag.tag = "\\标签\\b"
+        
+        PTChatConfig.share.customerTagModels = [customerTag]
         PTChatConfig.share.imOwnerId = "46709394"
         PTChatConfig.share.span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
 
@@ -193,7 +227,9 @@ class PTTestChatViewController: PTBaseViewController {
         
         chatContent.chatDataArr = testModel()
         chatContent.viewReloadData { cView in
-            cView.scrollToBottom(animated: false)
+            PTGCDManager.gcdAfter(time: 0.35) {
+                cView.scrollToBottom(animated: true)
+            }
         }
         
         PTGCDManager.gcdAfter(time: 5) {

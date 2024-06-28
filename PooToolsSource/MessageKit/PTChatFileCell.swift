@@ -48,11 +48,11 @@ public class PTChatFileCell: PTChatBaseCell {
     fileprivate func dataContentSets(cellModel:PTChatListModel) {
                 
         if cellModel.belongToMe {
-            dataContent.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
-            dataContent.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
         } else {
-            dataContent.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
-            dataContent.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
         }
         
         var url:URL?
@@ -83,7 +83,7 @@ public class PTChatFileCell: PTChatBaseCell {
             make.height.equalTo(cellHeight)
             make.width.equalTo(PTChatFileCell.FileConentWidth)
         }
-        
+
         dataContent.addSubviews([fileImageView,fileNameInfo])
         fileImageView.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTChatFileCell.FileCellConentFixbel)

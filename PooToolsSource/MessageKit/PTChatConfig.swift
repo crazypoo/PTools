@@ -18,6 +18,13 @@ public extension UIImage {
     }
 }
 
+public class PTMessageTextCustomAttTagModel:PTBaseModel {
+    ///Example: \\xxxxx\\b
+    var tag:String = ""
+    var tagColor:DynamicColor = .systemGray
+    var tagSelectedColor:DynamicColor = .systemGray
+}
+
 @objcMembers
 public class PTChatConfig: NSObject {
     public static let share = PTChatConfig()
@@ -105,7 +112,21 @@ public class PTChatConfig: NSObject {
     open var textLineSpace:NSNumber = 2
     ///設置聊天內容框最小Height
     @PTClampedProperyWrapper(range:38...88) open var contentBaseHeight: CGFloat = 38
-
+    ///#井号话题颜色
+    open var hashtagColor:DynamicColor = .systemBlue
+    open var hashtagSelectedColor:DynamicColor = .systemBlue
+    ///China phone颜色
+    open var chinaCellPhoneColor:DynamicColor = .BurntOrangeColor
+    open var chinaCellPhoneSelectedColor:DynamicColor = .BurntOrangeColor
+    ///URL颜色
+    open var urlColor:DynamicColor = .SteelBlueColor
+    open var urlSelectedColor:DynamicColor = .SteelBlueColor
+    ///@颜色
+    open var mentionColor:DynamicColor = .systemRed
+    open var mentionSelectedColor:DynamicColor = .systemRed
+    ///自定义标签文字内容
+    open var customerTagModels:[PTMessageTextCustomAttTagModel] = []
+    
     //MARK: Media message
     ///Media的Width大小
     @PTClampedProperyWrapper(range:88...200) open var imageMessageImageWidth: CGFloat = 200

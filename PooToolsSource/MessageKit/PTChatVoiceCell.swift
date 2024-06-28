@@ -66,11 +66,11 @@ public class PTChatVoiceCell: PTChatBaseCell {
     func dataContentSets(cellModel:PTChatListModel) {
                 
         if cellModel.belongToMe {
-            dataContent.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
-            dataContent.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
         } else {
-            dataContent.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
-            dataContent.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
+            dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
         }
         dataContent.snp.remakeConstraints { make in
             if cellModel.belongToMe {
@@ -82,7 +82,7 @@ public class PTChatVoiceCell: PTChatBaseCell {
             make.height.equalTo(38)
             make.width.equalTo(PTChatConfig.share.audioMessageImageWidth)
         }
-        
+                
         dataContent.addSubviews([playButton,durationLabel,progressView])
         playButton.snp.makeConstraints { make in
             make.size.equalTo(25)
