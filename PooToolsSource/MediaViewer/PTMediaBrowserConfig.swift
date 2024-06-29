@@ -60,6 +60,8 @@ public class PTMediaBrowserConfig: NSObject {
     
     public var pageControlOption:PTMediaPageControlOption = .scrolling
     
+    public var pageControlShow:Bool = false
+    
     public var imageLongTapAction:Bool = true
 
     public enum PTMediaPageControlOption:Int {

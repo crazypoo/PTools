@@ -49,11 +49,9 @@ public class PTMediaBrowserController: PTBaseViewController {
         view.titleLabel.font = self.viewConfig.viewerFont
         view.titleLabel.textColor = self.viewConfig.titleColor
         view.closeButton.setImage(self.viewConfig.closeViewerImage, for: .normal)
-        view.closeButton.addActionHandlers { sender in
-            self.returnFrontVC {
-                if self.viewDismissBlock != nil {
-                    self.viewDismissBlock!()
-                }
+        view.closeButton.addActionHandlers { [weak self] _ in
+            self?.returnFrontVC {
+                self?.viewDismissBlock?()
             }
         }
         return view
@@ -71,16 +69,19 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.moreActionButton.isUserInteractionEnabled = true
         }
         
-        switch viewConfig.pageControlOption {
-        case .system:
-            (view.pageControlView as! UIPageControl).addPageControlHandlers { sender in
-                let cellModel = self.viewConfig.mediaData[sender.currentPage]
-                self.updateBottom(models: cellModel)
-                self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
+        if viewConfig.pageControlShow {
+            switch viewConfig.pageControlOption {
+            case .system:
+                (view.pageControlView as! UIPageControl).addPageControlHandlers { sender in
+                    let cellModel = self.viewConfig.mediaData[sender.currentPage]
+                    self.updateBottom(models: cellModel)
+                    self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
+                }
+            default:
+                break
             }
-        default:
-            break
         }
+        view.pageControlView.isHidden = !viewConfig.pageControlShow
         return view
     }()
     
@@ -161,19 +162,21 @@ public class PTMediaBrowserController: PTBaseViewController {
                 break
             }
             
-            switch self.viewConfig.pageControlOption {
-            case .system:
-                (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
-            case .fill:
-                (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
-            case .pill:
-                (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
-            case .snake:
-                (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
-            case .image:
-                (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
-            case .scrolling:
-                (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
+            if self.viewConfig.pageControlShow {
+                switch self.viewConfig.pageControlOption {
+                case .system:
+                    (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
+                case .fill:
+                    (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
+                case .pill:
+                    (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
+                case .snake:
+                    (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
+                case .image:
+                    (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
+                case .scrolling:
+                    (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
+                }
             }
             
             if !self.navControl.titleLabel.isHidden {
@@ -183,19 +186,21 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         
         collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
-            switch self.viewConfig.pageControlOption {
-            case .system:
-                (self.bottomControl.pageControlView as! UIPageControl).currentPage = indexPath.row
-            case .fill:
-                (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(indexPath.row)
-            case .pill:
-                (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(indexPath.row)
-            case .snake:
-                (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(indexPath.row)
-            case .image:
-                (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = indexPath.row
-            case .scrolling:
-                (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(indexPath.row)
+            if self.viewConfig.pageControlShow {
+                switch self.viewConfig.pageControlOption {
+                case .system:
+                    (self.bottomControl.pageControlView as! UIPageControl).currentPage = indexPath.row
+                case .fill:
+                    (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(indexPath.row)
+                case .pill:
+                    (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(indexPath.row)
+                case .snake:
+                    (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(indexPath.row)
+                case .image:
+                    (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = indexPath.row
+                case .scrolling:
+                    (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(indexPath.row)
+                }
             }
 
             let itemRow = sectionModel.rows[indexPath.row]
@@ -219,19 +224,21 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         collectionView.collectionViewDidScroll = { collectionViewScrol in
             var currentPageControlValue = 0
-            switch self.viewConfig.pageControlOption {
-            case .system:
-                currentPageControlValue = (self.bottomControl.pageControlView as! UIPageControl).currentPage
-            case .fill:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTFilledPageControl).currentPage
-            case .pill:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTPillPageControl).currentPage
-            case .snake:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTSnakePageControl).currentPage
-            case .image:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTImagePageControl).currentPage
-            case .scrolling:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTScrollingPageControl).currentPage
+            if self.viewConfig.pageControlShow {
+                switch self.viewConfig.pageControlOption {
+                case .system:
+                    currentPageControlValue = (self.bottomControl.pageControlView as! UIPageControl).currentPage
+                case .fill:
+                    currentPageControlValue = (self.bottomControl.pageControlView as! PTFilledPageControl).currentPage
+                case .pill:
+                    currentPageControlValue = (self.bottomControl.pageControlView as! PTPillPageControl).currentPage
+                case .snake:
+                    currentPageControlValue = (self.bottomControl.pageControlView as! PTSnakePageControl).currentPage
+                case .image:
+                    currentPageControlValue = (self.bottomControl.pageControlView as! PTImagePageControl).currentPage
+                case .scrolling:
+                    currentPageControlValue = (self.bottomControl.pageControlView as! PTScrollingPageControl).currentPage
+                }
             }
             
             let cellModel = self.viewConfig.mediaData[currentPageControlValue]
@@ -373,26 +380,28 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         
         if viewConfig.mediaData.count > 1 {
-            bottomControl.pageControlView.isHidden = false
-            switch viewConfig.pageControlOption {
-            case .system:
-                (bottomControl.pageControlView as! UIPageControl).currentPage = 0
-                (bottomControl.pageControlView as! UIPageControl).numberOfPages = viewConfig.mediaData.count
-            case .fill:
-                (bottomControl.pageControlView as! PTFilledPageControl).progress = 0
-                (bottomControl.pageControlView as! PTFilledPageControl).pageCount = viewConfig.mediaData.count
-            case .pill:
-                (bottomControl.pageControlView as! PTPillPageControl).progress = 0
-                (bottomControl.pageControlView as! PTPillPageControl).pageCount = viewConfig.mediaData.count
-            case .snake:
-                (bottomControl.pageControlView as! PTSnakePageControl).progress = 0
-                (bottomControl.pageControlView as! PTSnakePageControl).pageCount = viewConfig.mediaData.count
-            case .image:
-                (bottomControl.pageControlView as! PTImagePageControl).currentPage = 0
-                (bottomControl.pageControlView as! PTImagePageControl).numberOfPages = viewConfig.mediaData.count
-            case .scrolling:
-                (bottomControl.pageControlView as! PTScrollingPageControl).progress = 0
-                (bottomControl.pageControlView as! PTScrollingPageControl).pageCount = viewConfig.mediaData.count
+            bottomControl.pageControlView.isHidden = !viewConfig.pageControlShow
+            if viewConfig.pageControlShow {
+                switch viewConfig.pageControlOption {
+                case .system:
+                    (bottomControl.pageControlView as! UIPageControl).currentPage = 0
+                    (bottomControl.pageControlView as! UIPageControl).numberOfPages = viewConfig.mediaData.count
+                case .fill:
+                    (bottomControl.pageControlView as! PTFilledPageControl).progress = 0
+                    (bottomControl.pageControlView as! PTFilledPageControl).pageCount = viewConfig.mediaData.count
+                case .pill:
+                    (bottomControl.pageControlView as! PTPillPageControl).progress = 0
+                    (bottomControl.pageControlView as! PTPillPageControl).pageCount = viewConfig.mediaData.count
+                case .snake:
+                    (bottomControl.pageControlView as! PTSnakePageControl).progress = 0
+                    (bottomControl.pageControlView as! PTSnakePageControl).pageCount = viewConfig.mediaData.count
+                case .image:
+                    (bottomControl.pageControlView as! PTImagePageControl).currentPage = 0
+                    (bottomControl.pageControlView as! PTImagePageControl).numberOfPages = viewConfig.mediaData.count
+                case .scrolling:
+                    (bottomControl.pageControlView as! PTScrollingPageControl).progress = 0
+                    (bottomControl.pageControlView as! PTScrollingPageControl).pageCount = viewConfig.mediaData.count
+                }
             }
         } else {
             bottomControl.pageControlView.isHidden = true

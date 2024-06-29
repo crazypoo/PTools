@@ -22,36 +22,30 @@ public func PTNSLogConsole(_ any:Any...,
                            levelType:LoggerEXLevelType = .Info,
                            loggerType:LoggerEXType = .Other) {
     
+    let msgStr = convertToJSONString(any)
+    PTNSLog(msgStr,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
+}
+
+private func convertToJSONString(_ elements: [Any]) -> String {
     var msgStr = ""
-    for element in any {
-        
-        let result = "\(element)"
-        var newString = result
-        if element is String {
-            if let jsonString = (element as! String).jsonStringToDic() {
-                let string = jsonString.convertToJsonString()
-                if !string.stringIsEmpty() {
-                    newString = string
-                }
+    for element in elements {
+        var newString = "\(element)"
+        if let stringElement = element as? String, let jsonString = stringElement.jsonStringToDic()?.convertToJsonString(), !jsonString.stringIsEmpty() {
+            newString = jsonString
+        } else if let dicElement = element as? NSDictionary {
+            let jsonString = dicElement.convertToJsonString()
+            if !jsonString.stringIsEmpty() {
+                newString = jsonString
             }
-        } else if element is NSDictionary {
-            let dic = (element as! NSDictionary)
-            let string = dic.convertToJsonString()
-            if !string.stringIsEmpty() {
-                newString = string
-            }
-        } else if element is NSArray {
-            let arr = (element as! NSArray)
-            let string = arr.convertToJsonString()
-            if !string.stringIsEmpty() {
-                newString = string
+        } else if let arrElement = element as? NSArray {
+            let jsonString = arrElement.convertToJsonString()
+            if !jsonString.stringIsEmpty() {
+                newString = jsonString
             }
         }
-        
         msgStr += "\(newString)\n"
     }
-    
-    PTNSLog(msgStr,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
+    return msgStr
 }
 
 //MARK: - 自定义打印
@@ -74,42 +68,32 @@ public func PTNSLog(_ msg: Any...,
     for element in msg {
         msgStr += "\(element)\n"
     }
-    
-    var currentAppStatus = ""
-    switch UIApplication.applicationEnvironment() {
-    case .appStore:
-        currentAppStatus = "<<<生产环境>>>"
-    case .testFlight:
-        currentAppStatus = "<<<测试环境>>>"
-    default:
-        currentAppStatus = "<<<DEBUG环境>>>"
-    }
-    
-    let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:ss")
-    let prefix = "\n🔨\(currentAppStatus)Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)❌Conclusión❌\n"
-    
+    let formatResult = formatLogMessage(file: file, line: line, column: column, fn: fn, msgStr: msgStr)
+    let prefix = formatResult.1
+    let currentDate = formatResult.0
     switch UIApplication.applicationEnvironment() {
     case .appStore:
         DDLogSet(levelType: levelType,prefix: prefix)
     default:
         if #available(iOS 14.0, *) {
+            let logger = Logger.loger(categoryName: loggerType.rawValue)
             switch levelType {
             case .Debug:
-                Logger.loger(categoryName: loggerType.rawValue).debug("\(prefix)")
+                logger.debug("\(prefix)")
             case .Error:
-                Logger.loger(categoryName: loggerType.rawValue).error("\(prefix)")
+                logger.error("\(prefix)")
             case .Info:
-                Logger.loger(categoryName: loggerType.rawValue).info("\(prefix)")
+                logger.info("\(prefix)")
             case .Warning:
-                Logger.loger(categoryName: loggerType.rawValue).warning("\(prefix)")
+                logger.warning("\(prefix)")
             case .Trace:
-                Logger.loger(categoryName: loggerType.rawValue).trace("\(prefix)")
+                logger.trace("\(prefix)")
             case .Notice:
-                Logger.loger(categoryName: loggerType.rawValue).notice("\(prefix)")
+                logger.notice("\(prefix)")
             case .Critical:
-                Logger.loger(categoryName: loggerType.rawValue).critical("\(prefix)")
+                logger.critical("\(prefix)")
             case .Fault:
-                Logger.loger(categoryName: loggerType.rawValue).fault("\(prefix)")
+                logger.fault("\(prefix)")
             }
         } else {
             DDLogSet(levelType: levelType,prefix: prefix)
@@ -130,7 +114,23 @@ public func PTNSLog(_ msg: Any...,
     // 将内容同步写到文件中去（Caches文件夹下）
     let cachePath = FileManager.pt.CachesDirectory()
     let logURL = cachePath + "/log.txt"
-    appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: "\(currentDate)",isWriteLog: isWriteLog,file: file,line: line,column: column,fn: fn)
+    appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: currentDate,isWriteLog: isWriteLog,file: file,line: line,column: column,fn: fn)
+}
+
+private func formatLogMessage(file: NSString, line: Int, column: Int, fn: String, msgStr: String) -> (String,String) {
+    let currentAppStatus: String
+    switch UIApplication.applicationEnvironment() {
+    case .appStore:
+        currentAppStatus = "<<<生產環境>>>"
+    case .testFlight:
+        currentAppStatus = "<<<測試環境>>>"
+    default:
+        currentAppStatus = "<<<DEBUG環境>>>"
+    }
+    
+    let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:mm:ss")
+    let dataString = "\n🔨\(currentAppStatus)Empezar🔨\n⏰現在⏰：\(currentDate)\n📁當前文件完整的路徑是📁：\(file)\n📄當前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函數名🧾：\(fn)\n📝打印內容如下📝：\n\(msgStr)❌結論❌\n"
+    return (currentDate,dataString)
 }
 
 fileprivate func DDLogSet(levelType:LoggerEXLevelType = .Info,
@@ -173,7 +173,6 @@ private func appendText(fileURL: URL,
         // 找到末尾位置并添加
         fileHandle.seekToEndOfFile()
         fileHandle.write(stringToWrite.data(using: String.Encoding.utf8)!)
-        
     } catch let error as NSError {
         let logString = "failed to append: \(error)"
         PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: .Error,loggerType: .Other)
@@ -259,12 +258,8 @@ public struct PTMems<T> {
     
     private static func _memBytes(_ ptr: UnsafeRawPointer,
                                   _ size: Int) -> [UInt8] {
-        var arr: [UInt8] = []
-        if ptr == _EMPTY_PTR { return arr }
-        for i in 0..<size {
-            arr.append((ptr + i).load(as: UInt8.self))
-        }
-        return arr
+        guard ptr != _EMPTY_PTR else { return [] }
+        return (0..<size).map { (ptr + $0).load(as: UInt8.self) }
     }
     
     /// 获得变量的内存数据（字节数组格式）
