@@ -186,29 +186,24 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         gifImage = nil
         imageView.contentMode = .scaleAspectFit
         contentScrolView.addSubview(imageView)
-        
+        reloadButton.removeFromSuperview()
+
         let doubleTap = UITapGestureRecognizer.init { sender in
             let touchPoint = (sender as! UITapGestureRecognizer).location(in: self)
             if self.contentScrolView.zoomScale <= 1 {
-                if self.zoomTask != nil {
-                    self.zoomTask!(true)
-                }
+                self.zoomTask?(true)
                 let scaleX = touchPoint.x + self.contentScrolView.contentOffset.x
                 let scaleY = touchPoint.y + self.contentScrolView.contentOffset.y
                 self.contentScrolView.zoom(to: CGRect.init(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
             } else {
-                if self.zoomTask != nil {
-                    self.zoomTask!(false)
-                }
+                self.zoomTask?(false)
                 self.contentScrolView.setZoomScale(1, animated: true)
             }
         }
         doubleTap.numberOfTapsRequired = 2
         
         let singleTap = UITapGestureRecognizer.init { sender in
-            if self.tapTask != nil {
-                self.tapTask!()
-            }
+            self.tapTask?()
         }
         singleTap.numberOfTapsRequired = 1
         
@@ -216,9 +211,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         if viewConfig.imageLongTapAction {
             let longTap = UILongPressGestureRecognizer.init { sender in
                 if !self.imageLongTaped {
-                    if self.longTapWakeUp != nil {
-                        self.longTapWakeUp!()
-                    }
+                    self.longTapWakeUp?()
                     self.imageLongTaped = true
                 }
             }
@@ -242,7 +235,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
                 self.adjustFrame()
                 loading.removeFromSuperview()
-                self.reloadButton.removeFromSuperview()
             } else if images?.count == 1 {
                 self.currentCellType = .Normal
                 self.gifImage = image
@@ -252,7 +244,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
                 self.adjustFrame()
                 loading.removeFromSuperview()
-                self.reloadButton.removeFromSuperview()
             } else {
                 self.currentCellType = .None
                 loading.removeFromSuperview()
@@ -271,19 +262,20 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             make.centerX.centerY.equalToSuperview()
         }
         
-        if dataModel.imageURL is String {
-            let urlString = dataModel.imageURL as! String
-            if urlString.pathExtension.lowercased() == "mp4" || urlString.pathExtension.lowercased() == "mov" {
-                videoUrlLoad(url: urlString, loading: loading)
-            } else {
-                setImageTypeView(loading: loading)
+        if dataModel.imageURL is String || dataModel.imageURL is URL {
+            var loadUrl:String = ""
+            if let urlString = dataModel.imageURL as? String {
+                loadUrl = urlString
+            } else if let urlString = dataModel.imageURL as? URL {
+                loadUrl = urlString.description
             }
-        } else if dataModel.imageURL is URL {
-            let urlString = dataModel.imageURL as! URL
-            if urlString.pathExtension.lowercased() == "mp4" || urlString.pathExtension.lowercased() == "mov" {
-                videoUrlLoad(url: urlString.description, loading: loading)
-            } else {
-                setImageTypeView(loading: loading)
+            
+            if !loadUrl.isEmpty {
+                if loadUrl.pathExtension.lowercased() == "mp4" || loadUrl.pathExtension.lowercased() == "mov" {
+                    videoUrlLoad(url: loadUrl, loading: loading)
+                } else {
+                    setImageTypeView(loading: loading)
+                }
             }
         } else if dataModel.imageURL is AVPlayerItem {
             let avItem  = dataModel.imageURL as! AVPlayerItem
@@ -298,9 +290,12 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func videoAVItem(avItem:AVPlayerItem,loading:PTMediaBrowserLoadingView) {
+        reloadButton.removeFromSuperview()
+        imageView.image = UIImage()
+        gifImage = nil
         avItem.generateThumbnail { image in
-            if image != nil {
-                PTGCDManager.gcdMain {
+            PTGCDManager.gcdMain {
+                if image != nil {
                     self.currentCellType = .Video
                     loading.removeFromSuperview()
                     self.contentScrolView.addSubviews([self.imageView,self.playBtn])
@@ -323,17 +318,16 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     if self.viewConfig.dynamicBackground {
                         self.backgroundImageView.image = image
                     }
-                    self.reloadButton.removeFromSuperview()
                     self.playBtn.addActionHandlers { sender in
                         let videoController = AVPlayerViewController()
                         videoController.player = AVPlayer(playerItem: avItem)
                         self.videoPlayHandler(videoController)
                     }
-                }
-            } else {
-                PTGCDManager.gcdMain {
+                } else {
+                    self.gifImage = nil
                     self.imageView.contentMode = .scaleAspectFit
                     self.contentScrolView.addSubview(self.imageView)
+                    self.imageView.image = UIImage()
                     self.currentCellType = .None
                     loading.removeFromSuperview()
                     self.createReloadButton()
@@ -343,11 +337,15 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func videoUrlLoad(url:String,loading:PTMediaBrowserLoadingView) {
+        imageView.image = UIImage()
+        gifImage = nil
         UIImage.pt.getVideoFirstImage(videoUrl: url, closure: { image in
             if image == nil {
                 PTGCDManager.gcdMain {
+                    self.gifImage = nil
                     self.imageView.contentMode = .scaleAspectFit
                     self.contentScrolView.addSubview(self.imageView)
+                    self.imageView.image = UIImage()
                     self.currentCellType = .None
                     loading.removeFromSuperview()
                     self.createReloadButton()
@@ -362,9 +360,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 }
                 
                 let singleTap = UITapGestureRecognizer.init { sender in
-                    if self.tapTask != nil {
-                        self.tapTask!()
-                    }
+                    self.tapTask?()
                 }
                 singleTap.numberOfTapsRequired = 1
                 self.imageView.addGestureRecognizer(singleTap)
@@ -422,9 +418,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 break
             }
 
-            if self.viewerDismissBlock != nil {
-                self.viewerDismissBlock!()
-            }
+            self.viewerDismissBlock?()
         }
     }
 
@@ -439,6 +433,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             self.tempView.removeFromSuperview()
             self.imageView.alpha = 1
             self.contentView.alpha = 1
+            if self.currentCellType == .Video {
+                self.contentScrolView.bringSubviewToFront(self.playBtn)
+            }
         }
     }
 }
@@ -453,13 +450,9 @@ extension PTMediaBrowserCell:UIScrollViewDelegate {
         scrollOffset = scrollView.contentOffset
     }
     
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        
-    }
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { }
     
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
-    }
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
         imageView.center = PTMediaBrowserCell.centerOfScrollVIewContent(scrollView: scrollView)

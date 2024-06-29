@@ -243,12 +243,12 @@ public class PTMediaBrowserController: PTBaseViewController {
                 var delt = 1 - abs(collectionViewScrol.contentOffset.y ) / currentCell.contentView.frame.size.height
                 delt = max(delt, 0)
                 let s = max(delt, 0.5)
-                let translation = CGAffineTransform(translationX: collectionViewScrol.contentOffset.x / s, y: collectionViewScrol.contentOffset.y / s)
+                let translation = CGAffineTransform(translationX: collectionViewScrol.contentOffset.x / s, y: -(collectionViewScrol.contentOffset.y / s))
                 let scale = CGAffineTransform(scaleX: s, y: s)
                 currentCell.tempView.transform = translation.concatenating(scale)
             }
             
-            if abs(collectionViewScrol.contentOffset.y) > 200 {
+            if abs(collectionViewScrol.contentOffset.y) > self.viewConfig.dismissY {
                 currentCell.hideAnimation()
             } else if collectionViewScrol.contentOffset.y == 0 {
                 currentCell.bounceToOriginal()

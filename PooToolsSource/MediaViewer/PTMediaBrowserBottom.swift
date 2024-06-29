@@ -103,9 +103,7 @@ class PTMediaBrowserBottom: UIView {
                 make.top.equalTo(self.moreActionButton)
                 make.right.equalTo(self.moreActionButton.snp.left).offset(-10)
             }
-        }
-                
-        // Ensure console view always stays above other views.
+        }                
     }
         
     required init?(coder: NSCoder) {

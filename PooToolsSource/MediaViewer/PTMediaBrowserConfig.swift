@@ -70,4 +70,6 @@ public class PTMediaBrowserConfig: NSObject {
         case image
         case scrolling
     }
+    
+    @PTClampedProperyWrapper(range: 50...200) public var dismissY:CGFloat = 200
 }

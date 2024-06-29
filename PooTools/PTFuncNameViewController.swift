@@ -512,7 +512,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 model5.imageInfo = "GIF"
 
                 let mediaConfig = PTMediaBrowserConfig()
+                mediaConfig.dismissY = 200
                 mediaConfig.actionType = .All
+                mediaConfig.pageControlOption = .snake
                 mediaConfig.mediaData = [model5,model1,model2,model3,model4,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1]
                 
                 let browser = PTMediaBrowserController()
