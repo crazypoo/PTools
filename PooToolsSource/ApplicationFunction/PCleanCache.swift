@@ -60,10 +60,10 @@ public class PCleanCache: NSObject {
 
         var totalSizeString = ""
         
-        if totalSize > (1000 * 1000) {
-            totalSizeString = String.init(format: "%.2fM", totalSize/1000/1000)
-        } else if totalSize > 1000 {
-            totalSizeString = String.init(format: "%.2fKB", totalSize/1000)
+        if totalSize > 1_000_000 {
+            totalSizeString = String.init(format: "%.2fM", totalSize / 1_000_000)
+        } else if totalSize > 1_000_000 {
+            totalSizeString = String.init(format: "%.2fKB", totalSize / 1000)
         } else {
             totalSizeString = String.init(format: "%.2fB", totalSize)
         }
@@ -121,17 +121,17 @@ public class PCleanCache: NSObject {
     /// - Parameters:
     ///   - path: 文件路徑
     /// - Returns: 文件Size大小
-    class public func fileSizeAtPath(path:String)->Float {
-        if FileManager.pt.judgeFileOrFolderExists(filePath: path) {
-            do {
-                let fileAttributes = try FileManager.pt.fileManager.attributesOfItem(atPath: path)
-                return fileAttributes[FileAttributeKey.size] as! Float
-            } catch {
-                PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CleanCache)
-                return 0
-            }
+    class public func fileSizeAtPath(path:String) -> Float {
+        guard FileManager.pt.judgeFileOrFolderExists(filePath: path) else {
+            return 0
         }
-        return 0
+        
+        if let fileSize = try? FileManager.pt.fileManager.attributesOfItem(atPath: path)[.size] as? Float {
+            return fileSize
+        } else {
+            PTNSLogConsole("Failed to get file size at path: \(path)", levelType: .Error, loggerType: .CleanCache)
+            return 0
+        }
     }
     
     //MARK: 獲取某個文件夾的大小
@@ -139,22 +139,21 @@ public class PCleanCache: NSObject {
     /// - Parameters:
     ///   - path: 文件夾路徑
     /// - Returns: 文件夾Size大小
-    class public func folderSizeAtPath(path:String)->Float {
-        if !FileManager.pt.judgeFileOrFolderExists(filePath: path) {
+    class public func folderSizeAtPath(path:String) -> Float {
+        guard FileManager.pt.judgeFileOrFolderExists(filePath: path) else {
             return 0
         }
         
-        let childFilesEnumerator = FileManager.pt.fileManager.subpaths(atPath: path)
-        var fileName = ""
-        var folderSize = 0
-        childFilesEnumerator?.enumerated().forEach({ (index,value) in
-            fileName = value
-            if !(fileName).stringIsEmpty() {
-                let fileAbsolutePath = path.appendingPathComponent(fileName)
-                folderSize += Int(PCleanCache.fileSizeAtPath(path: fileAbsolutePath))
+        var folderSize: Float = 0
+        
+        if let subpaths = FileManager.pt.fileManager.subpaths(atPath: path) {
+            for subpath in subpaths {
+                let fileAbsolutePath = path.appendingPathComponent(subpath)
+                folderSize += fileSizeAtPath(path: fileAbsolutePath)
             }
-        })
-        return Float(folderSize/(1024*1024))
+        }
+        
+        return folderSize / (1024 * 1024)
     }
     
     //MARK: 清理某個文件夾
@@ -163,18 +162,18 @@ public class PCleanCache: NSObject {
     ///   - path: 文件夾路徑
     /// - Returns: 是否完成
     class public func cleanDocumentAtPath(path:String)->Bool {
-        let enumerator = FileManager.pt.fileManager.enumerator(atPath: path)
-        enumerator?.enumerated().forEach({ index,value in
-            let removeResult = FileManager.pt.removefolder(folderPath: path.appendingPathComponent(value as! String))
-            if !removeResult.isSuccess {
-                PTNSLogConsole(removeResult.error,levelType: .Error,loggerType: .CleanCache)
-            }
-        })
-        
-        if PCleanCache.folderSizeAtPath(path: path) > 0 {
+        guard let enumerator = FileManager.pt.fileManager.enumerator(atPath: path) else {
             return false
-        } else {
-            return true
         }
+        
+        for case let filePath as String in enumerator {
+            let fullPath = path.appendingPathComponent(filePath)
+            let removeResult = FileManager.pt.removefolder(folderPath: fullPath)
+            if !removeResult.isSuccess {
+                PTNSLogConsole(removeResult.error, levelType: .Error, loggerType: .CleanCache)
+            }
+        }
+        
+        return folderSizeAtPath(path: path) == 0
     }
 }
