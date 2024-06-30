@@ -12,7 +12,7 @@ import Harbeth
 
 public final class C7CollectorVideo: C7Collector {
     
-    private var player: AVPlayer!
+    public var player: AVPlayer!
     public private(set) var videoOutput: AVPlayerItemVideoOutput!
     
     lazy var displayLink: CADisplayLink = {

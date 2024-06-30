@@ -86,4 +86,32 @@ public class C7CameraConfig: NSObject {
         }
         return true
     }
+    
+    var hud:PTHudView?
+    private func hudConfig() {
+        let hudConfig = PTHudConfig.share
+        hudConfig.hudColors = [.gray,.gray]
+        hudConfig.lineWidth = 4
+    }
+    
+    func hudShow() {
+        PTGCDManager.gcdMain {
+            self.hudConfig()
+            if self.hud == nil {
+                self.hud = PTHudView()
+                self.hud!.hudShow()
+            }
+        }
+    }
+    
+    func hudHide(completion:PTActionTask? = nil) {
+        if self.hud != nil {
+            self.hud!.hide {
+                self.hud = nil
+                if completion != nil {
+                    completion!()
+                }
+            }
+        }
+    }
 }

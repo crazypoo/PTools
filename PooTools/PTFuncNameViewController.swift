@@ -779,6 +779,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 self.navigationController?.pushViewController(vc)
             } else if itemRow.title == .filtercamera {
                 let cameraConfig = PTCameraFilterConfig.share
+                cameraConfig.allowRecordVideo = true
                 let pointFont = UIFont.appfont(size: 20)
 
                 cameraConfig.backImage = "❌".emojiToImage(emojiFont: pointFont)

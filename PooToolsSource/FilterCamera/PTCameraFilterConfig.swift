@@ -34,7 +34,7 @@ public class PTCameraFilterConfig: NSObject {
 
     public typealias Second = Int
 
-    private var pri_minRecordDuration: PTCameraFilterConfig.Second = 0
+    private var pri_minRecordDuration: PTCameraFilterConfig.Second = 1
     /// Minimum recording duration. Defaults to 0.
     public var minRecordDuration: PTCameraFilterConfig.Second {
         get {
@@ -187,6 +187,10 @@ public class PTCameraFilterConfig: NSObject {
     open var filtersImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     open var filtersImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
 
+    open var reloadCameraImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var outputVideImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var recordingLineColor:DynamicColor = .randomColor
+
     private var pri_filters: [PTHarBethFilter] = [.none,.storyboard,.comicstrip,.oilpainting,.sketch]
     /// Filters for image editor.
     public var filters: [PTHarBethFilter] {
@@ -289,7 +293,7 @@ public class PTCameraFilterConfig: NSObject {
         exportSession.exportAsynchronously(completionHandler: {
             let suc = exportSession.status == .completed
             if exportSession.status == .failed {
-                PTNSLogConsole("ZLPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")",levelType: .Error,loggerType: .Filter)
+                PTNSLogConsole("PTPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")",levelType: .Error,loggerType: .Filter)
             }
             PTGCDManager.gcdMain {
                 completion(suc ? outputUrl : nil, exportSession.error)

@@ -54,15 +54,24 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     lazy var camera: C7CollectorCamera = {
         let camera = C7CollectorCamera.init(delegate: self)
-//        camera.largeCircleView = self.largeCircleView
-//        camera.smallCircleView = self.smallCircleView
-//        camera.borderLayer = self.borderLayer
-//        camera.animateLayer = self.animateLayer
-//        camera.recordLongGes = self.recordLongGes
-//        camera.focusCursorView = self.focusCursorView
-//        camera.isAdjustingFocusPoint = self.isAdjustingFocusPoint
-//        camera.captureSession.sessionPreset = AVCaptureSession.Preset.hd1920x1080
-//        camera.filters = [PTCameraFilterConfig.share.filters.first!.type.getFilterResult(texture: PTHarBethFilter.overTexture()).filter]
+        camera.largeCircleView = self.largeCircleView
+        camera.smallCircleView = self.smallCircleView
+        camera.borderLayer = self.borderLayer
+        camera.animateLayer = self.animateLayer
+        camera.recordLongGes = self.recordLongGes
+        camera.focusCursorView = self.focusCursorView
+        camera.isAdjustingFocusPoint = self.isAdjustingFocusPoint
+        camera.captureSession.sessionPreset = AVCaptureSession.Preset.hd1920x1080
+        camera.showedImageView = self.originImageView
+        camera.haveRecordVideo = {
+            self.resetButton.isHidden = false
+            self.useButton.isHidden = false
+        }
+        camera.savedVideo = {
+            PTGCDManager.gcdMain {
+                self.resetToolBarView()
+            }
+        }
         return camera
     }()
     
@@ -192,6 +201,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 let filter = PTCameraFilterConfig.share.filters[indexPath.row].type.getFilterResult(texture: PTHarBethFilter.overTexture()).filter!
                 self.camera.filters = [filter]
                 self.currentFilter = PTCameraFilterConfig.share.filters[indexPath.row]
+                self.resetToolBarView()
             }
             collection.reloadData()
         }
@@ -212,7 +222,6 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     func showFilterView(show:Bool) {
         if show {
-//            filterCollectionView.alpha = 1
             view.addSubviews([filterCollectionView])
             filterCollectionView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -231,7 +240,6 @@ public class PTFilterCameraViewController: PTBaseViewController {
             filterCollectionView.showCollectionDetail(collectionData: [section])
 
         } else {
-//            filterCollectionView.alpha = 0
             filterCollectionView.removeFromSuperview()
         }
     }
@@ -326,11 +334,31 @@ public class PTFilterCameraViewController: PTBaseViewController {
         
         let layer = CAShapeLayer()
         layer.path = path.cgPath
-        layer.strokeColor = UIColor.randomColor.cgColor
+        layer.strokeColor = PTCameraFilterConfig.share.recordingLineColor.cgColor
         layer.fillColor = UIColor.clear.cgColor
         layer.lineWidth = PTFilterCameraViewController.animateLayerWidth
         layer.lineCap = .round
         return layer
+    }()
+    
+    public lazy var resetButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(cameraConfig.reloadCameraImage, for: .normal)
+        view.isHidden = true
+        view.addActionHandlers { sender in
+            self.resetToolBarView()
+        }
+        return view
+    }()
+    
+    public lazy var useButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(cameraConfig.outputVideImage, for: .normal)
+        view.isHidden = true
+        view.addActionHandlers { sender in
+            self.camera.saveVideoToAlbum()
+        }
+        return view
     }()
     
     //MARK: 生命週期
@@ -393,6 +421,13 @@ public class PTFilterCameraViewController: PTBaseViewController {
         }
     }
     
+    func resetToolBarView() {
+        self.camera.isTakingPicture = false
+        self.resetButton.isHidden = true
+        self.useButton.isHidden = true
+        self.camera.resetCameraView()
+    }
+    
     func setupUI() {
         view.backgroundColor = UIColor.black
         view.addSubviews([originImageView,toolBar,flashButton,switchCameraButton,focusCursorView,backBtn,filtersButton])
@@ -433,7 +468,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     }
     
     func setupToolBar() {
-        toolBar.addSubviews([largeCircleView,smallCircleView])
+        toolBar.addSubviews([largeCircleView,smallCircleView,resetButton,useButton])
         largeCircleView.snp.makeConstraints { make in
             make.size.equalTo(PTFilterCameraViewController.largeCircleRadius)
             make.centerX.equalToSuperview()
@@ -449,6 +484,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         var takePictureTap: UITapGestureRecognizer?
         if cameraConfig.allowTakePhoto {
             takePictureTap = UITapGestureRecognizer { sender in
+                self.resetToolBarView()
                 if self.onlyCamera {
                     if self.takePhotoView != nil {
                         self.takePhotoView?.dismissAlert()
@@ -464,70 +500,72 @@ public class PTFilterCameraViewController: PTBaseViewController {
             largeCircleView.addGestureRecognizer(takePictureTap!)
         }
         
-//        if cameraConfig.allowRecordVideo {
-//            let longGes = UILongPressGestureRecognizer { sender in
-//                let ges = sender as! UILongPressGestureRecognizer
-//                if ges.state == .began {
-//                    guard PTMediaLibManager.hasCameraAuthority() else {
-//                        return
-//                    }
-//                    self.camera.startRecord()
-//                } else if ges.state == .cancelled || ges.state == .ended {
-//                    self.camera.finishRecord()
-//                }
-//            }
-//            longGes.minimumPressDuration = 0.3
-//            longGes.delegate = self
-//            largeCircleView.addGestureRecognizer(longGes)
-//            takePictureTap?.require(toFail: longGes)
-//            recordLongGes = longGes
-//
-//            let panGes = UIPanGestureRecognizer { sender in
-//                let pan = sender as! UIPanGestureRecognizer
-//                let convertRect = self.toolBar.convert(self.largeCircleView.frame, to: self.view)
-//                let point = pan.location(in: self.view)
-//
-//                if pan.state == .began {
-//                    self.dragStart = true
-//                    self.camera.startRecord()
-//                } else if pan.state == .changed {
-//                    guard self.dragStart else {
-//                        return
-//                    }
-//                    let maxZoomFactor = self.getMaxZoomFactor()
-//                    var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
-//                    zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
-//                    self.camera.setVideoZoomFactor(zoomFactor)
-//                } else if pan.state == .cancelled || pan.state == .ended {
-//                    guard self.dragStart else {
-//                        return
-//                    }
-//                    self.dragStart = false
-//                    self.camera.finishRecord()
-//                }
-//
-//            }
-//            panGes.delegate = self
-//            panGes.maximumNumberOfTouches = 1
-//            largeCircleView.addGestureRecognizer(panGes)
-//            cameraFocusPanGes = panGes
-//
-//            camera.recordVideoPlayerLayer = AVPlayerLayer()
-//            camera.recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
-//            camera.recordVideoPlayerLayer?.videoGravity = .resizeAspect
-//            camera.recordVideoPlayerLayer?.isHidden = true
-//            camera.recordVideoPlayerLayer?.frame = self.view.frame
-//            view.layer.insertSublayer(camera.recordVideoPlayerLayer!, at: 0)
-//
-//            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
-//        }
+        if cameraConfig.allowRecordVideo {
+            camera.isTakingPicture = true
+            let longGes = UILongPressGestureRecognizer { sender in
+                let ges = sender as! UILongPressGestureRecognizer
+                if ges.state == .began {
+                    self.camera.startRecord()
+                } else if ges.state == .cancelled || ges.state == .ended {
+                    self.camera.finishRecord()
+                }
+            }
+            longGes.minimumPressDuration = 0.3
+            longGes.delegate = self
+            largeCircleView.addGestureRecognizer(longGes)
+            takePictureTap?.require(toFail: longGes)
+            recordLongGes = longGes
+
+            let panGes = UIPanGestureRecognizer { sender in
+                let pan = sender as! UIPanGestureRecognizer
+                let convertRect = self.toolBar.convert(self.largeCircleView.frame, to: self.view)
+                let point = pan.location(in: self.view)
+
+                if pan.state == .began {
+                    self.dragStart = true
+                    self.camera.startRecord()
+                } else if pan.state == .changed {
+                    guard self.dragStart else {
+                        return
+                    }
+                    let maxZoomFactor = self.getMaxZoomFactor()
+                    var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
+                    zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
+                    self.camera.setVideoZoomFactor(zoomFactor)
+                } else if pan.state == .cancelled || pan.state == .ended {
+                    guard self.dragStart else {
+                        return
+                    }
+                    self.dragStart = false
+                    self.camera.finishRecord()
+                }
+
+            }
+            panGes.delegate = self
+            panGes.maximumNumberOfTouches = 1
+            largeCircleView.addGestureRecognizer(panGes)
+            cameraFocusPanGes = panGes
+
+            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        }
+        
+        resetButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.centerY.equalTo(self.largeCircleView)
+            make.right.equalTo(self.largeCircleView.snp.left).offset(-10)
+        }
+        
+        useButton.snp.makeConstraints { make in
+            make.size.centerY.equalTo(self.resetButton)
+            make.left.equalTo(self.largeCircleView.snp.right).offset(10)
+        }
     }
     
     private func setFocusCusor(point: CGPoint) {
         animateFocusCursor(point: point)
         
         // UI坐标转换为摄像头坐标
-        let cameraPoint = view.center//previewLayer?.captureDevicePointConverted(fromLayerPoint: point) ?? view.center
+        let cameraPoint = view.center
         focusCamera(
             mode: cameraConfig.focusMode.avFocusMode,
             exposureMode: cameraConfig.exposureMode.avFocusMode,
@@ -591,10 +629,10 @@ public class PTFilterCameraViewController: PTBaseViewController {
         }
     }
     
-//    @objc private func recordVideoPlayFinished() {
-//        camera.recordVideoPlayerLayer?.player?.seek(to: .zero)
-//        camera.recordVideoPlayerLayer?.player?.play()
-//    }
+    @objc private func recordVideoPlayFinished() {
+        camera.avPlayer?.player.seek(to: .zero)
+        camera.avPlayer?.play()
+    }
 }
 
 extension PTFilterCameraViewController: C7CollectorImageDelegate {
@@ -690,7 +728,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
         
         camera.startRunning()
         camera.isTakingPicture = false
-        originImageView.contentMode = .scaleAspectFit
+        originImageView.contentMode = .scaleAspectFill
     }
 }
 
