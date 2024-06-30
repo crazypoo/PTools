@@ -175,6 +175,7 @@ public class PTCameraFilterConfig: NSObject {
 
     ///转换摄像头
     open var switchCameraImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var switchCameraImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
 
     ///電筒圖片
     open var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))

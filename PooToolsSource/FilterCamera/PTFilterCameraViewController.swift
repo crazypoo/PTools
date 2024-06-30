@@ -21,6 +21,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
 
     public var onlyCamera:Bool = true
     public var useThisImageHandler:((UIImage)->Void)?
+    public var mediaLibDismissCallback:PTActionTask? = nil
     
     private lazy var cameraConfig = PTCameraFilterConfig.share
     /// 是否正在调整焦距
@@ -45,7 +46,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     lazy var originImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .black
         imageView.isUserInteractionEnabled = true
         return imageView
@@ -103,20 +104,23 @@ public class PTFilterCameraViewController: PTBaseViewController {
 
         let view = UIButton(type: .custom)
         view.setImage(cameraConfig.switchCameraImage, for: .normal)
+        view.setImage(cameraConfig.switchCameraImageSelected, for: .selected)
         view.isHidden = cameraCount <= 1
         view.addActionHandlers { sender in
             self.camera.changeCamera {
-//                let rotationAngle: CGFloat = CGFloat.pi / 2
-//                self.originImageView.transform = CGAffineTransform(rotationAngle: rotationAngle)
-//
-//                PTGCDManager.gcdMain {
-//                    self.originImageView.snp.remakeConstraints { make in
-//                        make.edges.equalToSuperview()
-//                    }
-//                }
-//                PTGCDManager.gcdBackground {
-//                    self.originImageView.image = self.originImageView.image?.imageRotated(byDegrees: 90)
-//                }
+                sender.isSelected = !sender.isSelected
+                let rotationAngle: CGFloat = CGFloat.pi / 2
+                self.originImageView.transform = CGAffineTransform(rotationAngle: rotationAngle)
+
+                PTGCDManager.gcdMain {
+                    self.originImageView.snp.remakeConstraints { make in
+                        make.edges.equalToSuperview()
+                    }
+                }
+                PTGCDManager.gcdBackground {
+                    self.originImageView.contentMode = .scaleAspectFill
+                    self.originImageView.image = self.originImageView.image?.transformImage(size: CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))
+                }
             }
         }
         return view
@@ -127,7 +131,13 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.setImage(cameraConfig.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.camera.stopRunning()
-            self.returnFrontVC()
+            if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                self.navigationController?.popViewController(animated: true) {
+                    self.mediaLibDismissCallback?()
+                }
+            } else {
+                self.returnFrontVC()
+            }
         }
         return view
     }()
@@ -346,6 +356,11 @@ public class PTFilterCameraViewController: PTBaseViewController {
         navigationController?.view.backgroundColor = .clear
 #endif
     }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.mediaLibDismissCallback?()
+    }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -380,7 +395,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     func setupUI() {
         view.backgroundColor = UIColor.black
-        view.addSubviews([originImageView,toolBar,flashButton/*,switchCameraButton*/,focusCursorView,backBtn,filtersButton])
+        view.addSubviews([originImageView,toolBar,flashButton,switchCameraButton,focusCursorView,backBtn,filtersButton])
         originImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -390,18 +405,16 @@ public class PTFilterCameraViewController: PTBaseViewController {
             make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PTFilterCameraViewController.toolBarHeight)
         }
         
-//        switchCameraButton.snp.makeConstraints { make in
-//            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-//            make.size.equalTo(34)
-//            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
-//        }
-        
-        flashButton.snp.makeConstraints { make in
-//            make.size.right.equalTo(self.switchCameraButton)
-//            make.top.equalTo(self.switchCameraButton.snp.bottom).offset(10)
+        switchCameraButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(34)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
+        }
+        
+        flashButton.snp.makeConstraints { make in
+            make.size.right.equalTo(self.switchCameraButton)
+            make.top.equalTo(self.switchCameraButton.snp.bottom).offset(10)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
         filtersButton.snp.makeConstraints { make in
@@ -410,7 +423,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         }
         
         backBtn.snp.makeConstraints { make in
-            make.size.top.equalTo(self.flashButton)
+            make.size.top.equalTo(self.switchCameraButton)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
@@ -508,7 +521,6 @@ public class PTFilterCameraViewController: PTBaseViewController {
 //
 //            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
 //        }
-
     }
     
     private func setFocusCusor(point: CGPoint) {
@@ -711,7 +723,7 @@ class PTFlashImageReviewView:UIView {
     
     lazy var imageView:UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

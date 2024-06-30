@@ -21,6 +21,8 @@ public class PTMediaLibView:UIView {
         
     public var updateTitle:PTActionTask?
     
+    fileprivate var currentVc:PTMediaLibViewController!
+    
     fileprivate static func outputURL()->URL {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
@@ -190,25 +192,20 @@ public class PTMediaLibView:UIView {
                     let cameraConfig = PTCameraFilterConfig.share
                     let pointFont = UIFont.appfont(size: 20)
 
-                    cameraConfig.backImage = "❌".emojiToImage(emojiFont: pointFont)
-                    cameraConfig.flashImage = UIImage(.flashlight.offFill).withTintColor(.white)
-                    cameraConfig.flashImageSelected = UIImage(.flashlight.onFill).withTintColor(.white)
-                    
-                    if #available(iOS 15.0, *) {
-                        cameraConfig.filtersImageSelected = UIImage(.line._3HorizontalDecreaseCircleFill)
-                        cameraConfig.filtersImage = UIImage(.line._3HorizontalDecreaseCircle)
-                    } else {
-                        cameraConfig.filtersImage = UIImage(.f.cursiveCircle)
-                        cameraConfig.filtersImageSelected = UIImage(.f.cursiveCircleFill)
-                    }
-
                     let vc = PTFilterCameraViewController()
                     vc.onlyCamera = false
-                    vc.modalPresentationStyle = .fullScreen
                     vc.useThisImageHandler = { image in
                         self.save(image: image, videoUrl: nil)
                     }
-                    PTUtils.getCurrentVC().showDetailViewController(vc, sender: nil)
+                    vc.mediaLibDismissCallback = {
+                        self.currentVc.sheetViewController?.setSizes([.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())],animated: true)
+                        PTGCDManager.gcdAfter(time: 0.35) {
+                            self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                        }
+                    }
+                    self.currentVc.navigationController?.pushViewController(vc) {
+                        vc.sheetViewController?.setSizes([.fullscreen])
+                    }
                 } else {
                     if !UIImagePickerController.isSourceTypeAvailable(.camera) {
                         PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
@@ -615,6 +612,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     private lazy var mediaListView : PTMediaLibView = {
         let view = PTMediaLibView(currentModels: self.currentAlbum)
+        view.currentVc = self
         view.selectedCount = { index in
             if index > 0 {
                 self.selectLibButton.normalSubTitleFont = .appfont(size: 12)
