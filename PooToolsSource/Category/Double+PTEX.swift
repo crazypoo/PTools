@@ -127,3 +127,12 @@ public extension PTPOP where Base == Double {
         NSNumber(value: base)
     }
 }
+
+extension Double: PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = Double
+    public var adapter: Double {
+        let scale = adapterScale()
+        let value = self * scale
+        return value
+    }
+}

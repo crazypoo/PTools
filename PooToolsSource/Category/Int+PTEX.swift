@@ -72,3 +72,12 @@ public extension Int {
         }
     }
 }
+
+extension Int: PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = Int
+    public var adapter: Int {
+        let scale = adapterScale()
+        let value = Double(self) * scale
+        return Int(value)
+    }
+}

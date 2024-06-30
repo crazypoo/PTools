@@ -13,37 +13,45 @@ public extension UIFont {
     @objc class func appfont(size:CGFloat,
                              bold:Bool = false,
                              scale:Bool = false)-> UIFont {
-        var fontSzie:CGFloat = 0
-        if scale {
-            fontSzie = CGFloat.ScaleW(w: size)
-        } else {
-            fontSzie = size
-        }
+        var setFont:UIFont
         if !bold {
-            return UIFont.systemFont(ofSize: fontSzie)
+            setFont = UIFont.systemFont(ofSize: size)
         } else {
-            return UIFont.boldSystemFont(ofSize: fontSzie)
+            setFont = UIFont.boldSystemFont(ofSize: size)
         }
+        
+        if scale {
+            setFont = setFont.adapter
+        }
+        return setFont
     }
         
     @objc class func appCustomFont(size:CGFloat,
-                                   customFont:String? = nil,
+                                   customFont:String = "",
                                    scale:Bool = false)-> UIFont {
-        var fontSzie:CGFloat = 0
-        if scale {
-            fontSzie = CGFloat.ScaleW(w: size)
+        
+        if customFont.stringIsEmpty() {
+            fatalError("自定義需要有字體名字")
         } else {
-            fontSzie = size
+            if let setFont = UIFont(name: customFont, size: size) {
+                if scale {
+                    return setFont.adapter
+                }
+                return setFont
+            } else {
+                fatalError("無法讀取該字體")
+            }
         }
-        return UIFont.init(name: customFont!, size: fontSzie)!
     }
-    
+        
     @objc class func systemFont(ofSize size: CGFloat, 
                                 weight: UIFont.Weight,
-                                design: UIFontDescriptor.SystemDesign) -> UIFont {
+                                design: UIFontDescriptor.SystemDesign,
+                                scale:Bool = false) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
-        return UIFont(descriptor: descriptor!, size: size)
+        let setFont = UIFont(descriptor: descriptor!, size: size)
+        return scale ? setFont.adapter : setFont
     }
     
     fileprivate class func text(_ ofSize: CGFloat, W Weight: UIFont.Weight) -> UIFont {
@@ -184,5 +192,13 @@ public extension UIFont {
         let font = UIFont.systemFont(ofSize: descriptor.pointSize + addPoints, weight: weight)
         let metrics = UIFontMetrics(forTextStyle: style)
         return metrics.scaledFont(for: font)
+    }
+}
+
+extension UIFont:PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = UIFont
+    public var adapter: UIFont {
+        let adjustedSize = adapterScale() * self.pointSize
+        return UIFont(descriptor: self.fontDescriptor, size: adjustedSize)
     }
 }

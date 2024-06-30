@@ -113,3 +113,12 @@ public extension PTPOP where Base == CGFloat {
         return (base * 180.0) / .pi
     }
 }
+
+extension CGFloat: PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = CGFloat
+    public var adapter: CGFloat {
+        let scale = adapterScale()
+        let value = self * scale
+        return value
+    }
+}

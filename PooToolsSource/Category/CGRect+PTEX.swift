@@ -8,6 +8,7 @@
 
 #if canImport(CoreGraphics)
 import CoreGraphics
+import UIKit
 
 public extension CGRect {
     
@@ -62,6 +63,23 @@ public extension CGRect {
     
     init(side: CGFloat) {
         self.init(x: .zero, y: .zero, width: side, height: side)
+    }
+}
+
+extension CGRect: PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = CGRect
+    public var adapter: CGRect {
+        /// 不参与屏幕rect
+        if self == UIScreen.main.bounds {
+            return self
+        }
+
+        let scale = adapterScale()
+        let x = origin.x * scale
+        let y = origin.y * scale
+        let width = size.width * scale
+        let height = size.height * scale
+        return CGRect(x: x, y: y, width: width, height: height)
     }
 }
 #endif

@@ -48,5 +48,14 @@ public extension CGSize {
         let newWidth = width * scaleFactor
         return CGSize(width: newWidth, height: newHeight)
     }
+}
 
+extension CGSize: PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = CGSize
+    public var adapter: CGSize {
+        let scale = adapterScale()
+        let width = width * scale
+        let height = height * scale
+        return CGSize(width: width, height: height)
+    }
 }

@@ -78,3 +78,12 @@ public extension BinaryFloatingPoint {
         return (self * factor).rounded(rule) / factor
     }
 }
+
+extension Float: PTNumberValueAdapterable {
+    public typealias PTNumberValueAdapterType = Float
+    public var adapter: Float {
+        let scale = adapterScale()
+        let value = self * Float(scale)
+        return value
+    }
+}
