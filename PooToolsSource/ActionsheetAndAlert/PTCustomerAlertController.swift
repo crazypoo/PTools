@@ -29,7 +29,8 @@ public class PTCustomBottomButtonModel:NSObject {
 public class PTCustomerAlertController: PTAlertController {
 
     public var bottomButtonTapCallback:((_ title:String,_ index:Int)->Void)? = nil
-    
+    public var backgroundTapCallback:((PTCustomerAlertController)->Void)? = nil
+
     fileprivate lazy var contentView:UIView = {
         let view = UIView()
         view.backgroundColor = DynamicColor(hexString: "c3c3c8")
@@ -73,7 +74,8 @@ public class PTCustomerAlertController: PTAlertController {
     fileprivate var customerViewCallback:PTCustomerCustomerBlock? = nil
     fileprivate var customerViewHeight:CGFloat = 100
     fileprivate var blur:SSBlurView?
-
+    fileprivate var canTapBackground:Bool = false
+    
     public init(title:String = "",
                 titleFont:UIFont = .appfont(size: 15),
                 titleColor:UIColor = .systemBlue,
@@ -83,7 +85,8 @@ public class PTCustomerAlertController: PTAlertController {
                 buttonsColors:[UIColor],
                 buttonsFont:UIFont = .appfont(size: 15),
                 cornerSize: CGFloat = 15,
-                contentSpace:CGFloat = 25) {
+                contentSpace:CGFloat = 25,
+                canTapBackground:Bool = false) {
         self.alertTitle = title
         self.titleFont = titleFont
         self.titleColor = titleColor
@@ -94,6 +97,7 @@ public class PTCustomerAlertController: PTAlertController {
         self.contentSpace = contentSpace
         self.customerViewHeight = customerViewHeight
         self.customerViewCallback = customerViewCallback
+        self.canTapBackground = canTapBackground
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -131,6 +135,15 @@ public class PTCustomerAlertController: PTAlertController {
             make.center.equalToSuperview()
             make.width.equalTo(contentWidth)
             make.height.equalTo(haveTitle ? (titleHeight + 44 + customerViewHeight) : (44 + customerViewHeight))
+        }
+        
+        if canTapBackground {
+            let tap = UITapGestureRecognizer { ges in
+                self.dismissAnimation {
+                    self.backgroundTapCallback?(self)
+                }
+            }
+            view.addGestureRecognizer(tap)
         }
         
         blur = SSBlurView.init(to: contentView)

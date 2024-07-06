@@ -67,10 +67,11 @@ public extension UIAlertController {
         
         let viewConfig = PTActionSheetViewConfig(dismissWithTapBG: canTapBackground)
                 
-        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
+        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems,canTapBackground: canTapBackground)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock
+        actionSheet.tapBackgroundBlock = tapBackgroundBlock
         PTAlertManager.show(actionSheet)
 
     }
@@ -82,12 +83,14 @@ public extension UIAlertController {
                                            destructiveBlock:PTActionSheetIndexCallback? = nil,
                                            cancelBlock: PTActionSheetCallback? = nil,
                                            otherBlock: @escaping PTActionSheetIndexCallback,
+                                           canTapBackground:Bool = false,
                                            tapBackgroundBlock: PTActionSheetCallback? = nil) {
                                 
-        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
+        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems,canTapBackground: canTapBackground)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock
+        actionSheet.tapBackgroundBlock = tapBackgroundBlock
         PTAlertManager.show(actionSheet)
     }
     

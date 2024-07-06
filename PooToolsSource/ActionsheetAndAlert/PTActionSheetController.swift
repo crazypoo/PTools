@@ -171,6 +171,7 @@ public class PTActionSheetController: PTAlertController {
     public var actionSheetCancelSelectBlock:PTActionSheetCallback?
     public var actionSheetDestructiveSelectBlock:PTActionSheetIndexCallback?
     public var actionSheetSelectBlock:PTActionSheetIndexCallback?
+    public var tapBackgroundBlock:PTActionSheetCallback?
 
     fileprivate var cancelSheetItem:PTActionSheetItem!
     fileprivate var destructiveItems:[PTActionSheetItem]?
@@ -270,41 +271,53 @@ public class PTActionSheetController: PTAlertController {
         view.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii,corner: [.topLeft,.topRight])
         return view
     }()
+    
+    fileprivate lazy var alertContent:UIView = {
+        let view = UIView()
+        if canTapBackground {
+            let tap = UITapGestureRecognizer { ges in
+                self.dismissAnimation {
+                    self.tapBackgroundBlock?(self)
+                }
+            }
+            view.addGestureRecognizer(tap)
+        }
+        return view
+    }()
+    
+    fileprivate var canTapBackground:Bool = false
 
     public init(viewConfig:PTActionSheetViewConfig = PTActionSheetViewConfig(),
                 titleItem:PTActionSheetTitleItem? = nil,
                 cancelItem:PTActionSheetItem = PTActionSheetItem(title: "PT Button cancel".localized()),
                 destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
-                contentItems:[PTActionSheetItem]? = [PTActionSheetItem]()) {
+                contentItems:[PTActionSheetItem]? = [PTActionSheetItem](),
+                canTapBackground:Bool = false) {
         self.sheetConfig = viewConfig
         self.titleItem = titleItem
         self.cancelSheetItem = cancelItem
         self.destructiveItems = destructiveItems
         self.contentItems = contentItems
+        self.canTapBackground = canTapBackground
         super.init(nibName: nil, bundle: nil)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        PTGCDManager.gcdMain {
-            self.setupCancelButton()
-            self.setupDestructiveItems()
-            self.setupContentScrollerView()
-            self.setupTitleLabel()
-            
-            self.contentSubsSet()
-
+        view.addSubviews([alertContent])
+        alertContent.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 
     // 分离取消按钮的设置
     private func setupCancelButton() {
-        view.addSubviews([cancelBtn])
+        alertContent.addSubviews([cancelBtn])
         cancelBtn.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(sheetConfig.viewSpace)
             make.height.equalTo(sheetConfig.rowHeight)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 5)
         }
     }
 
@@ -322,7 +335,7 @@ public class PTActionSheetController: PTAlertController {
                 }
             }
             
-            view.addSubview(destructiveView)
+            alertContent.addSubview(destructiveView)
             let destructiveY = -(sheetConfig.separatorHeight + (sheetConfig.separatorHeight + sheetConfig.rowHeight) * CGFloat(index))
             destructiveView.snp.makeConstraints { make in
                 make.left.right.equalTo(cancelBtn)
@@ -385,7 +398,7 @@ public class PTActionSheetController: PTAlertController {
         
         contentScrollerView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2, height: currentContentHeight)
         contentScrollerView.isScrollEnabled = contentItemCanScroll
-        view.addSubviews([contentScrollerView])
+        alertContent.addSubviews([contentScrollerView])
         contentScrollerView.snp.makeConstraints { make in
             make.left.right.equalTo(cancelBtn)
             make.bottom.equalTo(cancelBtn.snp.top).offset(contentItemsBottom)
@@ -397,7 +410,7 @@ public class PTActionSheetController: PTAlertController {
     private func setupTitleLabel() {
         guard titleItem != nil else { return }
         
-        view.addSubviews([titleLabel])
+        alertContent.addSubviews([titleLabel])
         titleLabel.snp.makeConstraints { make in
             make.left.right.equalTo(cancelBtn)
             make.height.equalTo(sheetConfig.rowHeight)
@@ -492,7 +505,15 @@ public class PTActionSheetController: PTAlertController {
 extension PTActionSheetController {
     public override func showAnimation(completion: (() -> Void)?) {
         self.view.backgroundColor = UIColor.DevMaskColor
-        PTAnimationFunction.animationIn(animationView: view, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
+        
+        PTGCDManager.gcdMain {
+            self.setupCancelButton()
+            self.setupDestructiveItems()
+            self.setupContentScrollerView()
+            self.setupTitleLabel()
+            self.contentSubsSet()
+        }
+        PTAnimationFunction.animationIn(animationView: alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
             if finish {
                 completion?()
             }
@@ -500,7 +521,7 @@ extension PTActionSheetController {
     }
     
     public override func dismissAnimation(completion: (() -> Void)?) {
-        PTAnimationFunction.animationOut(animationView: view, animationType: .Bottom) {
+        PTAnimationFunction.animationOut(animationView: alertContent, animationType: .Bottom,duration: 0.55) {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
         } completion: { ok in
             if ok {

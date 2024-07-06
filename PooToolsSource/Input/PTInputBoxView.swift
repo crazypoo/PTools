@@ -192,15 +192,21 @@ public class PTInputBoxView: UIView {
             textField.frame = CGRect(x: x, y: y, width: width, height: height)
             
             if config.inputBoxBorderWidth > 0 {
-                textField.layer.borderWidth = config.inputBoxBorderWidth
+                PTGCDManager.gcdMain {
+                    textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                }
             }
             
             if config.inputBoxCornerRadius > 0 {
-                textField.layer.cornerRadius = config.inputBoxCornerRadius
+                PTGCDManager.gcdMain {
+                    textField.layer.cornerRadius = self.config.inputBoxCornerRadius
+                }
             }
             
             if config.inputBoxColor != nil {
-                textField.layer.borderColor = config.inputBoxColor?.cgColor
+                PTGCDManager.gcdMain {
+                    textField.layer.borderColor = self.config.inputBoxColor?.cgColor
+                }
             }
             
             if config.tintColor != nil {
