@@ -48,17 +48,18 @@ public extension UITextView {
                 label.isUserInteractionEnabled = false
                 label.translatesAutoresizingMaskIntoConstraints = false
                 addSubview(label)
-                // 添加约束。要约束宽，否则可能导致label不换行。
-                addConstraint(NSLayoutConstraint(item: label, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 7))
-                addConstraint(NSLayoutConstraint(item: label, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1.0, constant: 4))
-                addConstraint(NSLayoutConstraint(item: label, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self, attribute: .width, multiplier: 1.0, constant: -8))
-                addConstraint(NSLayoutConstraint(item: label, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self, attribute: .height, multiplier: 1.0, constant: -7))
+                // 添加约束。要约束宽，否则可能导致label不换行。如果需要設置便宜,則需要先設置本體文字的便宜,再加載Placeholder
+                label.snp.makeConstraints { make in
+                    make.left.equalToSuperview().inset(self.textContainerInset.left)
+                    make.top.equalToSuperview().inset(self.textContainerInset.top)
+                    make.bottom.equalToSuperview().inset(self.textContainerInset.bottom)
+                    make.right.equalToSuperview().inset(self.textContainerInset.right)
+                }
                 // 设置pt_placeholderLabel，自动调用set方法
                 
                 addObserver(self, forKeyPath: "text", options: NSKeyValueObservingOptions.new, context: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidChangeNotification, object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidBeginEditingNotification, object: nil)
-//                pt_textDidChange()
                 
                 self.pt_placeholderLabel = label
                 return label

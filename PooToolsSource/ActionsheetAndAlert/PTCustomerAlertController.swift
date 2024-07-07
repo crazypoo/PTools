@@ -155,7 +155,7 @@ public class PTCustomerAlertController: PTAlertController {
         
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+                self.blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .extraLight : .dark
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
@@ -207,7 +207,7 @@ public class PTCustomerAlertController: PTAlertController {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             // 适配代码
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .extraLight : .dark
         }
     }
 }

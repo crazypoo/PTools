@@ -34,11 +34,15 @@ public class PTActionCell:UIView {
         
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.blur.style = previousTraitCollection.userInterfaceStyle == .dark ? .dark : .extraLight
+                self.blur.style = previousTraitCollection.userInterfaceStyle == .dark ? .extraLight : .dark
             }
         }
         addSubview(cellButton)
-
+        cellButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        blur.enable()
     }
     
     required init?(coder: NSCoder) {
@@ -47,12 +51,6 @@ public class PTActionCell:UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        
-        cellButton.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        blur.enable()
     }
     
     @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
@@ -60,7 +58,8 @@ public class PTActionCell:UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             // 适配代码
-            blur.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+            PTNSLogConsole("\(UITraitCollection.current.userInterfaceStyle)")
+            blur.style = UITraitCollection.current.userInterfaceStyle == .dark ? .extraLight : .dark
         }
     }
 }

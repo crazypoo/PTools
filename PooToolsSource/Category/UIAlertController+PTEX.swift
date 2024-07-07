@@ -312,23 +312,27 @@ public extension UIAlertController {
                                  cancelString:String? = "PT Button cancel".localized(),
                                  sendString:String? = "PT Button comfirm".localized(),
                                  titleFont:UIFont? = .appfont(size: 18),
+                                 textInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0),
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
-        let feedBackTitle = UITextField()
+        let feedBackTitle = PTTextField()
         feedBackTitle.placeholder = feedBackTitlePlaceholder!
         feedBackTitle.setPlaceHolderTextColor(.lightGray)
         feedBackTitle.clearButtonMode = .whileEditing
         feedBackTitle.font = feedBackTitleFont!
         feedBackTitle.addPaddingLeft(5)
         feedBackTitle.backgroundColor = .clear
+        feedBackTitle.leftSpace = textInset.left
         
         let feedBackContent = UITextView()
+        feedBackContent.textContainerInset = textInset
         feedBackContent.pt_placeholder = feedBackContentPlaceholder!
         feedBackContent.pt_placeholderLabel?.textColor = .lightGray
         feedBackContent.pt_placeholderLabel?.font = feedBackContentFont!
         feedBackContent.font = feedBackContentFont!
         feedBackContent.backgroundColor = .clear
         feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry!
+        feedBackContent.tintColor = .red
         
         let customerAlert = PTCustomerAlertController(title: alertTitle!,customerViewHeight:250,customerViewCallback: { customerView in
             customerView.addSubviews([feedBackTitle,feedBackContent])
