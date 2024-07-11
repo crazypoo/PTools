@@ -45,6 +45,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
         label.textColor = PTChatConfig.share.chatTimeColor
         label.numberOfLines = 0
         label.isHidden = !PTChatConfig.share.showTimeLabel
+        label.backgroundColor = PTChatConfig.share.chatTimeBackgroundColor
         return label
     }()
     
@@ -115,11 +116,16 @@ open class PTChatBaseCell: PTBaseNormalCell {
         outputModel = cellModel
         userIcon.pt_SDWebImage(imageString: cellModel.senderCover)
         messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet()
-        
+        let timeLabelHeight = PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0
         messageTimeLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.width.equalTo((self.messageTimeLabel.sizeFor(height: timeLabelHeight).width + PTChatConfig.share.chatTimeContentFixel * 2))
             make.top.equalToSuperview().inset(PTChatBaseCell.timeTopSpace)
-            make.height.equalTo(PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
+            make.height.equalTo(timeLabelHeight)
+        }
+        
+        PTGCDManager.gcdMain {
+            self.messageTimeLabel.viewCorner(radius: timeLabelHeight / 2)
         }
         
         userIcon.snp.makeConstraints { make in

@@ -52,6 +52,10 @@ public class PTChatConfig: NSObject {
     open var chatTimeFont:UIFont = .appfont(size: 13)
     ///系統時間字體顏色
     open var chatTimeColor:UIColor = UIColor(hexString: "919191")!
+    ///系統时间的左右间距
+    @PTClampedProperyWrapper(range:5...20) open var chatTimeContentFixel:CGFloat = 5
+    ///系統時間背景颜色
+    open var chatTimeBackgroundColor:UIColor = UIColor(hexString: "cacaca")!
     ///系統內容字體大小
     open var chatSystemMessageFont:UIFont = .appfont(size: 13)
     ///系統內容字體顏色
@@ -60,6 +64,7 @@ public class PTChatConfig: NSObject {
     open var chatSystemTimeLineSpace:NSNumber = 2
     ///系統內容文字間隔
     open var chatSystemContentLineSpace:NSNumber = 2
+
 
     //MARK: Message base
     ///消息頭像大小
