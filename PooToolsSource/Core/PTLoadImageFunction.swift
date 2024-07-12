@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import SwifterSwift
+import Photos
 
 @objcMembers
 public class PTLoadImageFunction: NSObject {
@@ -23,8 +24,27 @@ public class PTLoadImageFunction: NSObject {
             return await handleStringContent(dataUrlString, iCloudDocumentName, progressHandle)
         } else if let data = contentData as? Data, let image = UIImage(data: data) {
             return ([image], image)
+        } else if let asset = contentData as? PHAsset {
+            return await handleAssetContent(asset: asset)
         } else {
             return (nil, nil)
+        }
+    }
+    
+    public static func handleAssetContent(asset:PHAsset) async -> ([UIImage]?, UIImage?) {
+        return await withCheckedContinuation { continuation in
+            let imageManager = PHImageManager.default()
+            let options = PHImageRequestOptions()
+            options.isSynchronous = false
+            options.deliveryMode = .highQualityFormat
+            options.resizeMode = .exact
+            imageManager.requestImage(for: asset, targetSize: CGSizeMake(1024, 1024), contentMode: .aspectFill, options: options) { image, info in
+                if image != nil {
+                    continuation.resume(returning: ([image!], image!))
+                } else {
+                    continuation.resume(returning: (nil,nil))
+                }
+            }
         }
     }
     

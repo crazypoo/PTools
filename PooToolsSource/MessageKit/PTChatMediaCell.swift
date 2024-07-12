@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import SnapKit
+import Photos
 
 public class PTChatMediaCell: PTChatBaseCell {
     public static let ID = "PTChatMediaCell"
@@ -104,6 +105,10 @@ public class PTChatMediaCell: PTChatBaseCell {
             let avAsset  = msgContent as! AVAsset
             let avPlayerItem = AVPlayerItem(asset: avAsset)
             videoAVItem(avItem: avPlayerItem)
+        } else if msgContent is PHAsset {
+            self.mediaPlayImageView.isHidden = true
+            let asset = msgContent as! PHAsset
+            self.contentImageView.loadImage(contentData: asset)
         }
     }
 
