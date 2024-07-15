@@ -56,7 +56,7 @@ public class PTChatView: UIView {
         let view = PTCollectionView(viewConfig: collectionConfig)
         view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
-            var groupHeight:CGFloat = 0
+            var groupHeight:CGFloat = 0 + PTChatConfig.share.chatTopFixel
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             sectionModel.rows.enumerated().forEach { (index,model) in
@@ -135,6 +135,9 @@ public class PTChatView: UIView {
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupHeight, width: CGFloat.kSCREEN_WIDTH, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupHeight += (cellHeight)
+                if (sectionModel.rows.count - 1) == index {
+                    groupHeight += PTChatConfig.share.chatBottomFixel
+                }
             }
             bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(groupHeight))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in

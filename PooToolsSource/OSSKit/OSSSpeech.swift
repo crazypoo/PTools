@@ -425,6 +425,10 @@ public class OSSSpeech: NSObject {
         cancelRecording()
     }
 
+    public func clearSpokenText() {
+        spokenText = ""
+    }
+    
     // MARK: - Private Voice Recording
 
     private func requestMicPermission() {

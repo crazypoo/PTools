@@ -114,7 +114,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     
     open func setBaseSubsViews(cellModel: PTChatListModel) {
         outputModel = cellModel
-        userIcon.pt_SDWebImage(imageString: cellModel.senderCover)
+        userIcon.loadImage(contentData: cellModel.senderCover)
         messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet()
         let timeLabelHeight = PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0
         messageTimeLabel.snp.makeConstraints { make in

@@ -47,6 +47,10 @@ public class PTChatConfig: NSObject {
         }
     }
     
+    /// 顶部偏移
+    open var chatTopFixel:CGFloat = 0
+    /// 底部偏移
+    open var chatBottomFixel:CGFloat = 0
     //MARK: System message
     ///系統時間字體大小
     open var chatTimeFont:UIFont = .appfont(size: 13)
