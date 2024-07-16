@@ -216,7 +216,7 @@ public class PTCollectionView: UIView {
                     
     fileprivate var textLayerArray = [PTTextLayer]()
     fileprivate lazy var indicator: UIView = {
-        let indicatorRadius = viewConfig.indexConfig!.indicatorRadius
+        let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
         let indicator = UIView()
         indicator.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 3, height: indicatorRadius * 2)
         indicator.backgroundColor = viewConfig.indexConfig!.indicatorBackgroundColor
@@ -1283,12 +1283,15 @@ extension PTCollectionView {
         let view = super.hitTest(point, with: event)
 
         if view == self {
-            let rect = CGRect(x: self.frame.size.width - viewConfig.indexConfig!.itemSize.width, y: layerTopSpacing, width: viewConfig.indexConfig!.itemSize.width, height: self.frame.size.height - layerTopSpacing * 2)
-            if rect.contains(point) {
-                return self
-            } else {
-                return nil
+            if let indexConfig = viewConfig.indexConfig {
+                let rect = CGRect(x: self.frame.size.width - indexConfig.itemSize.width, y: layerTopSpacing, width: indexConfig.itemSize.width, height: self.frame.size.height - layerTopSpacing * 2)
+                if rect.contains(point) {
+                    return self
+                } else {
+                    return nil
+                }
             }
+            return view
         } else {
             return view
         }
