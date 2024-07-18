@@ -216,10 +216,10 @@ public class PTGuidePageHUD: UIView {
                 (imagePageControl as! PTImagePageControl).currentPageIndicatorTintColor = UIColor.clear
                 
                 if let activeImage = viewModel.pageControlActiveImage {
-                    (imagePageControl as! PTImagePageControl).dotActiveImage = activeImage
+                    (imagePageControl as! PTImagePageControl).pageImage = activeImage
                 }
                 if let inActiveImage = viewModel.pageControlInActiveImage {
-                    (imagePageControl as! PTImagePageControl).dotInActiveImage = inActiveImage
+                    (imagePageControl as! PTImagePageControl).currentPageImage = inActiveImage
                 }
                 (imagePageControl as! PTImagePageControl).currentPage = 0
                 (imagePageControl as! PTImagePageControl).numberOfPages = viewModel.imageArrays.count

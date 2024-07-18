@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 open class PTSnakePageControl: UIView {
     
-    // MARK: - PageControl
+    // 页码和进度
     open var pageCount: Int = 0 {
         didSet {
             updateNumberOfPages(pageCount)
@@ -26,8 +26,7 @@ open class PTSnakePageControl: UIView {
         Int(round(progress))
     }
     
-    // MARK: - Appearance
-    
+    // 外观属性
     open var activeTint: UIColor = UIColor.white {
         didSet {
             activeLayer.backgroundColor = activeTint.cgColor
@@ -63,30 +62,31 @@ open class PTSnakePageControl: UIView {
             "frame": NSNull(),
             "position": NSNull()]
         return layer
-        }()
+    }()
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        pageCount = 0
-        progress = 0
-        indicatorPadding = 8
-        indicatorRadius = 4
+        commonInit()
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        commonInit()
     }
     
-    // MARK: - State Update
+    private func commonInit() {
+        layer.addSublayer(activeLayer)
+    }
     
+    // 更新页码
     fileprivate func updateNumberOfPages(_ count: Int) {
         // no need to update
         guard count != inactiveLayers.count else { return }
         // reset current layout
         inactiveLayers.forEach { $0.removeFromSuperlayer() }
-        inactiveLayers = [CALayer]()
+        inactiveLayers.removeAll()
         // add layers for new page count
-        inactiveLayers = stride(from: 0, to:count, by:1).map { _ in
+        inactiveLayers = (0..<count).map { _ in
             let layer = CALayer()
             layer.backgroundColor = inactiveTint.cgColor
             self.layer.addSublayer(layer)
@@ -99,8 +99,7 @@ open class PTSnakePageControl: UIView {
         invalidateIntrinsicContentSize()
     }
     
-    // MARK: - Layout
-    
+    // 布局活动页指示器
     fileprivate func layoutActivePageIndicator(_ progress: CGFloat) {
         // ignore if progress is outside of page indicators' bounds
         guard progress >= 0 && progress <= CGFloat(pageCount - 1) else { return }
@@ -113,6 +112,7 @@ open class PTSnakePageControl: UIView {
         activeLayer.frame = newFrame
     }
     
+    // 布局非活动页指示器
     fileprivate func layoutInactivePageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
         var layerFrame = CGRect(x: 0, y: 0, width: layerDiameter, height: layerDiameter)
@@ -129,5 +129,11 @@ open class PTSnakePageControl: UIView {
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
         CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding, height: indicatorDiameter)
+    }
+    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        layoutInactivePageIndicators(inactiveLayers)
+        layoutActivePageIndicator(progress)
     }
 }

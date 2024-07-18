@@ -571,7 +571,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             banner.imageViewContentMode = .scaleAspectFill
             banner.viewCorner(radius: 10)
             // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
-            banner.customPageControlStyle = .none
+            banner.customPageControlStyle = .snake
             // 非.system的状态下，设置PageControl的tintColor
             banner.customPageControlInActiveTintColor = UIColor.lightGray
             // 设置.system系统的UIPageControl当前显示的颜色
@@ -579,12 +579,14 @@ class PTFuncDetailViewController: PTBaseViewController {
             // 非.system的状态下，设置PageControl的间距(默认为8.0)
             banner.customPageControlIndicatorPadding = 5.0
             // 设置PageControl的位置 (.left, .right 默认为.center)
-            banner.pageControlPosition = .left
+            banner.pageControlPosition = .center
             banner.scrollDirection = .horizontal
             // 圆角
             banner.backgroundColor = .clear
             banner.textColor = .random
-            banner.titleBackgroundColor = .white
+            banner.titleBackgroundColor = .brown
+            banner.pageControlActiveImage = DynamicColor.gray.createImageWithColor().transformImage(size: CGSize(width: 4, height: 4)).pt.isRoundCorner(radius: 2,imageSize: CGSize(width: 4, height: 4))
+            banner.pageControlInActiveImage = DynamicColor.white.createImageWithColor().transformImage(size: CGSize(width: 8, height: 4)).pt.isRoundCorner(radius: 2,imageSize: CGSize(width: 8, height: 4))
             banner.didSelectItemAtIndexClosure = { index in
                 PTNSLogConsole(">>>>>>>>>>>>>>>>>>>\(index)")
             }

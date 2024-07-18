@@ -24,7 +24,8 @@ public class PTChatVoiceCell: PTChatBaseCell {
     
     fileprivate var audioPlayer: AVAudioPlayer?
     fileprivate var progressTimer:Timer?
-
+    fileprivate var isPause:Bool = false
+    
     lazy var playButton:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTChatConfig.share.playButtonImage, for: .normal)
@@ -103,14 +104,58 @@ public class PTChatVoiceCell: PTChatBaseCell {
             playButton.addActionHandlers { sender in
                 sender.isSelected = !sender.isSelected
                 if sender.isSelected {
-                    self.audioPlayer = try? AVAudioPlayer(contentsOf: url)
-                    self.audioPlayer?.prepareToPlay()
-                    self.audioPlayer?.delegate = self
-                    self.audioPlayer?.play()
-                    self.startTimerProgres()
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: url.absoluteString.replace("file://", with: "")) {
+                        if self.isPause {
+                            self.audioPlayer?.play()
+                            self.isPause = false
+                        } else {
+                            self.audioPlayer = try? AVAudioPlayer(contentsOf: url)
+                            self.audioPlayer?.prepareToPlay()
+                            self.audioPlayer?.delegate = self
+                            self.audioPlayer?.play()
+                            self.startTimerProgres()
+                            self.isPause = false
+                        }
+                    } else {
+                        let localPath = FileManager.pt.CachesDirectory().appendingPathComponent(url.lastPathComponent)
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: localPath) {
+                            if self.isPause {
+                                self.audioPlayer?.play()
+                                self.isPause = false
+                            } else {
+                                self.audioPlayer = try? AVAudioPlayer(contentsOf: URL(fileURLWithPath: localPath))
+                                self.audioPlayer?.prepareToPlay()
+                                self.audioPlayer?.delegate = self
+                                self.audioPlayer?.play()
+                                self.startTimerProgres()
+                            }
+                        } else {
+                            self.waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
+                            self.startWaitAnimation()
+                            self.waitImageView.isHidden = false
+                            Network.share.createDownload(fileUrl: url.absoluteString, saveFilePath: localPath) { bytesRead, totalBytesRead, progress in
+                                
+                            } success: { reponse in
+                                self.audioPlayer = try? AVAudioPlayer(data: reponse.value!)
+                                self.audioPlayer?.prepareToPlay()
+                                self.audioPlayer?.delegate = self
+                                self.audioPlayer?.play()
+                                self.startTimerProgres()
+                                self.stopWaitAnimation()
+                                self.waitImageView.isHidden = true
+                                self.waitImageView.isUserInteractionEnabled = false
+                                self.isPause = false
+                            } fail: { error in
+                                self.stopWaitAnimation()
+                                self.waitImageView.isHidden = true
+                                self.waitImageView.isUserInteractionEnabled = false
+                            }
+                        }
+                    }
                 } else {
                     if self.audioPlayer != nil {
                         self.audioPlayer?.pause()
+                        self.isPause = true
                     }
                 }
             }

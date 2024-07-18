@@ -244,6 +244,15 @@ public class PTCycleScrollView: UIView {
         }
     }
     
+    open var dotSpacing:CGFloat = 8 {
+        didSet {
+            if customPageControl != nil {
+                customPageControl?.removeFromSuperview()
+            }
+            setupPageControl()
+        }
+    }
+    
     // MARK: CustomPageControl
         
     /// 自定义Pagecontrol风格(.fill,.pill,.snake)
@@ -282,6 +291,7 @@ public class PTCycleScrollView: UIView {
                 customPageControl?.removeFromSuperview()
             }
             setupPageControl()
+            layoutSubviews()
         }
     }
     
@@ -566,14 +576,13 @@ extension PTCycleScrollView {
             customPageControl = PTImagePageControl()
             (customPageControl as! PTImagePageControl).pageIndicatorTintColor = UIColor.clear
             (customPageControl as! PTImagePageControl).currentPageIndicatorTintColor = UIColor.clear
-            
             if let activeImage = pageControlActiveImage {
-                (customPageControl as! PTImagePageControl).dotActiveImage = activeImage
+                (customPageControl as! PTImagePageControl).pageImage = activeImage
             }
             if let inActiveImage = pageControlInActiveImage {
-                (customPageControl as! PTImagePageControl).dotInActiveImage = inActiveImage
+                (customPageControl as! PTImagePageControl).currentPageImage = inActiveImage
             }
-            
+            (customPageControl as! PTImagePageControl).dotSpacing = dotSpacing
             (customPageControl as! PTImagePageControl).numberOfPages = imagePaths.count
             addSubview(customPageControl!)
             customPageControl?.isHidden = false
