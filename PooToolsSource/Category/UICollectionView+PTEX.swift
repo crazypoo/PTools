@@ -172,6 +172,7 @@ public extension UICollectionView {
                                      topContentSpace:CGFloat = 0,
                                      bottomContentSpace:CGFloat = 0,
                                      itemSpace:CGFloat,
+                                     itemTrailingSpace:CGFloat = 0,
                                      itemHeight:(Int,AnyObject)->CGFloat) -> NSCollectionLayoutGroup {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -197,9 +198,9 @@ public extension UICollectionView {
                 x += cellWidth + itemRightSapce
                 if index > 0 && (index % rowCount == 0) {
                     x = originalX
-                    y = (customers[index - rowCount].frame.height + 10 + customers[index - rowCount].frame.origin.y)
+                    y = (customers[index - rowCount].frame.height + itemTrailingSpace + customers[index - rowCount].frame.origin.y)
                 } else {
-                    y = (customers[index - rowCount].frame.height + 10 + customers[index - rowCount].frame.origin.y)
+                    y = (customers[index - rowCount].frame.height + itemTrailingSpace + customers[index - rowCount].frame.origin.y)
                 }
 
                 if index == (data.count - 1) {
@@ -281,7 +282,7 @@ public extension UICollectionView {
             }
             
             let customItem = NSCollectionLayoutGroupCustomItem(
-                frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight - topContentSpace), width: currentCellWidth, height: itemHeight),
+                frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight),
                 zIndex: 1000 + index
             )
             
@@ -359,5 +360,5 @@ public extension UICollectionView {
             }
         }
         self.addGestureRecognizer(longPressGesture)
-    }    
+    }
 }
