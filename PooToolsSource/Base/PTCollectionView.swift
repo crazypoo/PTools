@@ -223,7 +223,7 @@ public class PTCollectionView: UIView {
         let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
         let indicator = UIView()
         indicator.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 3, height: indicatorRadius * 2)
-        indicator.backgroundColor = viewConfig.indexConfig!.indicatorBackgroundColor
+        indicator.backgroundColor = viewConfig.indexConfig?.indicatorBackgroundColor ?? .clear
         indicator.alpha = 0
         indicator.addSubview(bigTextLabel)
         

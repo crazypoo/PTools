@@ -372,14 +372,17 @@ class PTFuncNameViewController: PTBaseViewController {
         
         
         let emptyConfig = PTEmptyDataViewConfig()
-        emptyConfig.buttonTitle = ""
-        emptyConfig.image = UIImage(named: "logo_customer")
+        emptyConfig.image = UIImage(named: "DemoImage")
         emptyConfig.mainTitleAtt = """
                 \(wrap: .embedding("""
-                \("沒數據",.foreground(.black),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+                \("沒數據",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
                 """))
                 """
-        emptyConfig.secondaryEmptyAtt = nil
+        emptyConfig.secondaryEmptyAtt = """
+                \(wrap: .embedding("""
+                \("111111111111",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+                """))
+                """
         emptyConfig.buttonTitle = "點擊"
         emptyConfig.buttonFont = .appfont(size: 14)
         emptyConfig.buttonTextColor = .randomColor
@@ -980,6 +983,8 @@ class PTFuncNameViewController: PTBaseViewController {
         more.addActionHandlers { sender in
             self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
         }
+        
+        collectionView.backgroundColor = .random
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
 #if POOTOOLS_NAVBARCONTROLLER
@@ -987,7 +992,8 @@ class PTFuncNameViewController: PTBaseViewController {
 #else
             make.top.equalToSuperview()
 #endif
-            make.left.right.bottom.equalToSuperview()
+            make.right.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(115)
         }
         
         if #unavailable(iOS 17.0) {

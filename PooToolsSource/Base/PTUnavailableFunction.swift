@@ -9,6 +9,7 @@
 import UIKit
 import AttributedString
 import SafeSFSymbols
+import SnapKit
 
 @objcMembers
 open class PTEmptyDataViewConfig : NSObject {
@@ -75,8 +76,10 @@ public class PTUnavailableFunction: NSObject {
         emptyConfig.background = configBackground
 
         unavailableView = UIContentUnavailableView(configuration: emptyConfig)
-        unavailableView?.frame = showIn.frame
         showIn.addSubview(unavailableView!)
+        unavailableView!.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     public func showEmptyLoadingView(showIn:UIView) {
@@ -87,8 +90,10 @@ public class PTUnavailableFunction: NSObject {
             if self.unavailableLoadingView == nil {
                 let loadingConfig = UIContentUnavailableConfiguration.loading()
                 self.unavailableLoadingView = UIContentUnavailableView(configuration: loadingConfig)
-                self.unavailableLoadingView?.frame = showIn.frame
                 showIn.addSubview(self.unavailableLoadingView!)
+                self.unavailableLoadingView!.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
             }
         }
     }
