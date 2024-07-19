@@ -952,7 +952,19 @@ class PTFuncNameViewController: PTBaseViewController {
             make.centerX.equalToSuperview()
         }
 
-
+        let testButton = UIButton(type: .custom)
+        testButton.setBackgroundColor(color: .random, forState: .normal)
+        popoverContent.view.addSubview(testButton)
+        testButton.snp.makeConstraints { make in
+            make.size.equalTo(50)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(customSwitch.snp.bottom).offset(10)
+        }
+        testButton.addActionHandlers { sender in
+            let vc = PTTestVC()
+            self.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
+        }
+        
         popover.addActionHandlers { sender in
 //            let items = PTPopoverItem()
 //            items.name = "123123123123"

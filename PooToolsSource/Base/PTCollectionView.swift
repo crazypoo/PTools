@@ -32,6 +32,7 @@ private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionVi
     case WaterFall
     case Custom
     case Horizontal
+    case HorizontalLayoutSystem
     case Tag
 }
 
@@ -177,6 +178,10 @@ public class PTCollectionViewConfig:NSObject {
     open var indexConfig:PTCollectionIndexViewConfiguration?
     
     open var canMoveItem:Bool = false
+    
+    ///限制滑动方向
+    open var alwaysBounceHorizontal:Bool = false
+    open var alwaysBounceVertical:Bool = true
 }
 
 public class PTTextLayer: CATextLayer {
@@ -353,6 +358,16 @@ public class PTCollectionView: UIView {
                 bottomContentSpace: viewConfig.contentBottomSpace,
                 itemLeadingSpace: viewConfig.cellLeadingSpace
             )
+        case .HorizontalLayoutSystem:
+            group = UICollectionView.horizontalLayoutSystem(
+                data: sectionModel.rows,
+                itemOriginalX: viewConfig.itemOriginalX,
+                itemWidth: viewConfig.itemWidth,
+                itemHeight: viewConfig.itemHeight,
+                topContentSpace: viewConfig.contentTopSpace,
+                bottomContentSpace: viewConfig.contentBottomSpace,
+                itemLeadingSpace: viewConfig.cellLeadingSpace
+            )
         case .Tag:
             let tagDatas = sectionModel.rows.map( { $0.dataModel })
             if tagDatas is [PTTagLayoutModel] {
@@ -463,6 +478,17 @@ public class PTCollectionView: UIView {
         view.dataSource = self
         view.delegate = self
         view.isUserInteractionEnabled = true
+        switch self.viewConfig.viewType {
+        case .Normal,.Gird,.WaterFall,.Tag:
+            view.alwaysBounceHorizontal = false
+            view.alwaysBounceVertical = true
+        case .Custom:
+            view.alwaysBounceHorizontal = self.viewConfig.alwaysBounceHorizontal
+            view.alwaysBounceVertical = self.viewConfig.alwaysBounceVertical
+        case .HorizontalLayoutSystem,.Horizontal:
+            view.alwaysBounceHorizontal = true
+            view.alwaysBounceVertical = false
+        }
         view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
         view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
         if self.viewConfig.topRefresh {
@@ -648,23 +674,21 @@ public class PTCollectionView: UIView {
             }
         }
 #endif
-        
-        if #available(iOS 17.0, *) {
-            if self.viewConfig.showEmptyAlert {
-                PTUnavailableFunction.share.emptyTap = {
-                    PTGCDManager.gcdMain {
-                        self.showEmptyLoading()
-                    }
+            if #available(iOS 17.0, *) {
+                if self.viewConfig.showEmptyAlert {
+                    PTUnavailableFunction.share.emptyTap = {
+                        PTGCDManager.gcdMain {
+                            self.showEmptyLoading()
+                        }
 
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        if self.emptyTap != nil {
-                            self.emptyTap!(nil)
+                        PTGCDManager.gcdAfter(time: 0.1) {
+                            if self.emptyTap != nil {
+                                self.emptyTap!(nil)
+                            }
                         }
                     }
                 }
             }
-        }
-
         }
     }
     
@@ -1308,7 +1332,6 @@ extension PTCollectionView {
     }
     
     open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-
         isTouched = true
         showChanges(forTouches: touches)
     }

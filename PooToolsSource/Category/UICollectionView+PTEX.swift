@@ -333,6 +333,27 @@ public extension UICollectionView {
         })
     }
     
+    @objc class func horizontalLayoutSystem(data:[AnyObject],
+                                      itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                      itemWidth:CGFloat = 100,
+                                      itemHeight:CGFloat = 44,
+                                      topContentSpace:CGFloat = 10,
+                                      bottomContentSpace:CGFloat = 10,
+                                      itemLeadingSpace:CGFloat = 10) -> NSCollectionLayoutGroup {
+        var groupWidth:CGFloat = itemOriginalX
+        var bannerGroupSize : NSCollectionLayoutSize
+        var customers = [NSCollectionLayoutItem]()
+        data.enumerated().forEach { (index,model) in
+            let customItem = NSCollectionLayoutItem.init(layoutSize: NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(itemWidth), heightDimension: NSCollectionLayoutDimension.absolute(itemHeight)))
+            
+            customItem.edgeSpacing = NSCollectionLayoutEdgeSpacing.init(leading: NSCollectionLayoutSpacing.fixed(index == 0 ? itemOriginalX : itemLeadingSpace), top: NSCollectionLayoutSpacing.fixed(topContentSpace), trailing: NSCollectionLayoutSpacing.fixed(0), bottom: NSCollectionLayoutSpacing.fixed(bottomContentSpace))
+            customers.append(customItem)
+            groupWidth += (itemWidth + itemLeadingSpace)
+        }
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute((itemHeight + topContentSpace + bottomContentSpace)))
+        return NSCollectionLayoutGroup.horizontal(layoutSize: bannerGroupSize, subitems: customers)
+    }
+    
     // MARK: 移动 item
     /// 允许手势移动Item，默认不允许
     func allowsMoveItem() {
