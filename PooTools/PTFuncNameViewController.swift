@@ -859,6 +859,8 @@ class PTFuncNameViewController: PTBaseViewController {
                         self.showCollectionViewData()
                     })
                 })
+            } else {
+                self.showCollectionViewData()
             }
         }
         return aaaaaaa
@@ -989,7 +991,9 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         
         if #unavailable(iOS 17.0) {
-            showCollectionViewData()
+            PTGCDManager.gcdAfter(time: 10) {
+                self.showCollectionViewData()
+            }
         } else {
             if vcEmpty {
                 let emptyConfig = PTEmptyDataViewConfig()

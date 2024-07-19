@@ -16,6 +16,7 @@ import AttributedString
 import Photos
 import SnapKit
 import SafeSFSymbols
+
 #if POOTOOLS_LISTEMPTYDATA
 import LXFProtocolTool
 #endif
@@ -318,7 +319,7 @@ extension PTBaseViewController {
 #if POOTOOLS_LISTEMPTYDATA
 //MARK: 添加emptydataset
 @available(iOS, introduced: 13.1, deprecated: 17.0,renamed: "showEmptyView(task:)")
-extension PTBaseViewController:LXFEmptyDataSetable {
+extension PTBaseViewController:EmptyDataSetable {
     //MARK: 添加emptydataset
     ///添加emptydataset,设置无数据空页面
     open func showEmptyDataSet(currentScroller:UIScrollView) {
@@ -336,26 +337,11 @@ extension PTBaseViewController:LXFEmptyDataSetable {
                     textColor = attColor
                 }
             })
-
-            self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
-                [
-                    .tipStr: self.emptyDataViewConfig!.mainTitleAtt!.value.string as Any,
-                    .tipColor: textColor,
-                    .tipFont:font,
-                    .verticalOffset: 0,
-                    .tipImage: self.emptyDataViewConfig!.image as Any
-                ]
-            }
+            
+            let config = EmptyDataSetConfigure(tipFont: font, tipColor: textColor, tipImage: self.emptyDataViewConfig!.image, description: self.emptyDataViewConfig!.mainTitleAtt!.value)
+            self.lxf.updateEmptyDataSet(currentScroller,config:config)
         } else {
             assertionFailure("如果使用该功能,则须要设置emptyDataViewConfig")
-        }
-    }
-    
-    open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        if emptyDataViewConfig != nil {
-            return emptyDataViewConfig!.secondaryEmptyAtt!.value
-        } else {
-            return NSAttributedString()
         }
     }
 }

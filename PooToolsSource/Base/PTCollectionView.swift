@@ -13,12 +13,11 @@ import AttributedString
 import MJRefresh
 #endif
 
-#if POOTOOLS_LISTEMPTYDATA
-import LXFProtocolTool
-#endif
-
 #if POOTOOLS_SWIPECELL
 import SwipeCellKit
+#endif
+#if POOTOOLS_LISTEMPTYDATA
+import LXFProtocolTool
 #endif
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
@@ -647,9 +646,9 @@ public class PTCollectionView: UIView {
             if #unavailable(iOS 17.0) {
                 if self.viewConfig.emptyViewConfig != nil {
                     self.showEmptyDataSet(currentScroller: self.collectionView)
-                    self.lxf_tapEmptyView(self.collectionView) { sender in
+                    self.lxf.tapEmptyView(self.collectionView) { view in
                         if self.emptyTap != nil {
-                            self.emptyTap!(sender)
+                            self.emptyTap!(view)
                         }
                     }
                 }
@@ -1027,7 +1026,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
 
 //MARK: LXFEmptyDataSetable
 #if POOTOOLS_LISTEMPTYDATA
-extension PTCollectionView:LXFEmptyDataSetable {
+extension PTCollectionView:EmptyDataSetable {
     
     public func showEmptyDataSet(currentScroller: UIScrollView) {
         
@@ -1045,38 +1044,41 @@ extension PTCollectionView:LXFEmptyDataSetable {
             }
         })
         
-        let firstString = self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.string ?? ""
-        let secondary = self.viewConfig.emptyViewConfig?.secondaryEmptyAtt?.value.string ?? ""
+        let firstString = self.viewConfig.emptyViewConfig?.mainTitleAtt
+        let secondary = self.viewConfig.emptyViewConfig?.secondaryEmptyAtt
         
-        var total = ""
-        if !firstString.stringIsEmpty() && secondary.stringIsEmpty() {
-            total = firstString
-        } else if !firstString.stringIsEmpty() && !secondary.stringIsEmpty() {
-            total = firstString + "\n" + secondary
-        } else if firstString.stringIsEmpty() && secondary.stringIsEmpty() {
-            total = ""
-        } else if firstString.stringIsEmpty() && !secondary.stringIsEmpty() {
-            total = secondary
+        var total:ASAttributedString = """
+"""
+        if firstString != nil && secondary == nil {
+            total = firstString!
+        } else if firstString != nil && secondary != nil {
+            
+            let change:ASAttributedString = """
+            \(wrap: .embedding("""
+            \("\n",.foreground(.black),.font(.appfont(size: 14)),.paragraph(.alignment(.left)))
+            """))
+"""
+            total = firstString! + change + secondary!
+        } else if firstString == nil && secondary == nil {
+            
+        } else if firstString == nil && secondary != nil {
+            total = secondary!
         }
         
-        self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
-            [
-                .tipStr: total,
-                .tipColor: textColor,
-                .tipFont:font,
-                .verticalOffset: 0,
-                .tipImage: self.viewConfig.emptyViewConfig?.image as Any
-            ]
-        }
-    }
-    
-    open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
         let buttonAtt:ASAttributedString = """
                     \(wrap: .embedding("""
                     \(self.viewConfig.emptyViewConfig?.buttonTitle ?? "",.font(self.viewConfig.emptyViewConfig?.buttonFont ?? .appfont(size: 14)),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(self.viewConfig.emptyViewConfig?.buttonTextColor ?? PTAppBaseConfig.share.viewDefaultTextColor))
                     """))
                     """
-        return buttonAtt.value
+        let config = EmptyDataSetConfigure(
+                verticalOffset: 0,
+                tipFont: font,
+                tipColor: textColor,
+                tipImage: self.viewConfig.emptyViewConfig?.image,
+                description: total.value,
+                buttonTitle: buttonAtt.value
+            )
+        self.lxf.updateEmptyDataSet(currentScroller,config:config)
     }
 }
 #endif

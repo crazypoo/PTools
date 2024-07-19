@@ -420,6 +420,7 @@
 		55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */; };
 		55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7F29C620150023458A /* PTBaseMaskView.swift */; };
 		55BD5B8329C620C80023458A /* PTActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B8229C620C80023458A /* PTActivityViewController.swift */; };
+		55BF36F42C4A504100AB36EB /* PTAssociatedObjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BF36F32C4A504100AB36EB /* PTAssociatedObjectStore.swift */; };
 		55C409822C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */; };
 		55C409842C04B816009C0FB6 /* PTNetworkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */; };
 		55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */; };
@@ -1026,6 +1027,7 @@
 		55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+PTEX.swift"; sourceTree = "<group>"; };
 		55BD5B7F29C620150023458A /* PTBaseMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBaseMaskView.swift; sourceTree = "<group>"; };
 		55BD5B8229C620C80023458A /* PTActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTActivityViewController.swift; sourceTree = "<group>"; };
+		55BF36F32C4A504100AB36EB /* PTAssociatedObjectStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAssociatedObjectStore.swift; sourceTree = "<group>"; };
 		55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkWatcherViewController.swift; sourceTree = "<group>"; };
 		55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkViewModel.swift; sourceTree = "<group>"; };
 		55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkWatcherCell.swift; sourceTree = "<group>"; };
@@ -2477,6 +2479,7 @@
 				5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */,
 				55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */,
 				55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */,
+				55BF36F32C4A504100AB36EB /* PTAssociatedObjectStore.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -3405,6 +3408,7 @@
 				556CA4AB2B28F66200A5B189 /* VideoConverter.swift in Sources */,
 				556CA4AE2B28F66200A5B189 /* ConverterOption.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
+				55BF36F42C4A504100AB36EB /* PTAssociatedObjectStore.swift in Sources */,
 				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
 				55B6D7C42C1D640A00033309 /* PTAlertWindow.swift in Sources */,
 				558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */,

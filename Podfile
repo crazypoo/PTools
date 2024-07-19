@@ -46,7 +46,6 @@ target 'PooTools_Example' do
 #  pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
   pod 'Bugly'
   pod 'Reveal-SDK', :configurations => ['Debug']
-
 ##JD包体分析
 #https://github.com/helele90/APPAnalyze
 
