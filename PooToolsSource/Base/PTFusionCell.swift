@@ -85,7 +85,7 @@ public class PTFusionCellContent:UIView {
             accessV.loadImage(contentData: cellModel!.disclosureIndicatorImage as Any,iCloudDocumentName: cellModel!.iCloudDocument)
             addSubview(accessV)
             accessV.snp.makeConstraints { make in
-                make.width.height.equalTo(14)
+                make.size.equalTo(self.cellModel!.moreDisclosureIndicatorSize)
                 make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                 make.centerY.equalToSuperview()
             }

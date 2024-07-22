@@ -245,21 +245,21 @@ public class PTCollectionView: UIView {
     
     /// CATextLayer的内容默认是上对齐的，不如用label方便
     fileprivate lazy var bigTextLabel: UILabel = {
-        let indicatorRadius = viewConfig.indexConfig!.indicatorRadius
+        let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
         let label = UILabel()
         label.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 2, height: indicatorRadius * 2)
-        label.backgroundColor = viewConfig.indexConfig!.indicatorBackgroundColor
-        label.font = UIFont.appCustomFont(size: ceil(indicatorRadius * 1.414),customFont: viewConfig.indexConfig!.indexViewHudFont.fontName)
+        label.backgroundColor = viewConfig.indexConfig?.indicatorBackgroundColor ?? .clear
+        label.font = UIFont.appCustomFont(size: ceil(indicatorRadius * 1.414),customFont: viewConfig.indexConfig?.indexViewHudFont.fontName ?? UIFont.appfont(size: 18).fontName)
         label.textAlignment = .center
         label.layer.cornerRadius = indicatorRadius
         label.layer.masksToBounds = true
-        label.textColor = viewConfig.indexConfig!.indicatorTextColor
+        label.textColor = viewConfig.indexConfig?.indicatorTextColor ?? .clear
         return label
     }()
     
     fileprivate var layerTopSpacing: CGFloat {
-        let count = CGFloat(viewConfig.sideIndexTitles!.count)
-        return floor(self.bounds.height - count * viewConfig.indexConfig!.itemSize.height - viewConfig.indexConfig!.itemSpacing * (count - 1)) / 2
+        let count = CGFloat(viewConfig.sideIndexTitles?.count ?? 0)
+        return floor(self.bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)) / 2
     }
     
     fileprivate var isTouched: Bool = false
