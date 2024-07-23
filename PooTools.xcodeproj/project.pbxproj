@@ -325,6 +325,16 @@
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
+		5599C43B2C4F642100394835 /* AkiraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4312C4F642100394835 /* AkiraTextField.swift */; };
+		5599C43C2C4F642100394835 /* IsaoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4332C4F642100394835 /* IsaoTextField.swift */; };
+		5599C43D2C4F642100394835 /* YoshikoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C43A2C4F642100394835 /* YoshikoTextField.swift */; };
+		5599C43E2C4F642100394835 /* KaedeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4352C4F642100394835 /* KaedeTextField.swift */; };
+		5599C43F2C4F642100394835 /* TextFieldEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4382C4F642100394835 /* TextFieldEffects.swift */; };
+		5599C4402C4F642100394835 /* YokoTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4392C4F642100394835 /* YokoTextField.swift */; };
+		5599C4412C4F642100394835 /* JiroTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4342C4F642100394835 /* JiroTextField.swift */; };
+		5599C4422C4F642100394835 /* HoshiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4322C4F642100394835 /* HoshiTextField.swift */; };
+		5599C4432C4F642100394835 /* MadokaTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4362C4F642100394835 /* MadokaTextField.swift */; };
+		5599C4442C4F642100394835 /* MinoruTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4372C4F642100394835 /* MinoruTextField.swift */; };
 		559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */; };
 		559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C94293CB789002874BA /* PTRotationManager.swift */; };
 		559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C96293F7ED8002874BA /* NSData+PTEX.swift */; };
@@ -927,6 +937,16 @@
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
+		5599C4312C4F642100394835 /* AkiraTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AkiraTextField.swift; sourceTree = "<group>"; };
+		5599C4322C4F642100394835 /* HoshiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoshiTextField.swift; sourceTree = "<group>"; };
+		5599C4332C4F642100394835 /* IsaoTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsaoTextField.swift; sourceTree = "<group>"; };
+		5599C4342C4F642100394835 /* JiroTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JiroTextField.swift; sourceTree = "<group>"; };
+		5599C4352C4F642100394835 /* KaedeTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaedeTextField.swift; sourceTree = "<group>"; };
+		5599C4362C4F642100394835 /* MadokaTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MadokaTextField.swift; sourceTree = "<group>"; };
+		5599C4372C4F642100394835 /* MinoruTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinoruTextField.swift; sourceTree = "<group>"; };
+		5599C4382C4F642100394835 /* TextFieldEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldEffects.swift; sourceTree = "<group>"; };
+		5599C4392C4F642100394835 /* YokoTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YokoTextField.swift; sourceTree = "<group>"; };
+		5599C43A2C4F642100394835 /* YoshikoTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoshikoTextField.swift; sourceTree = "<group>"; };
 		559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSURLResponse+PTEX.swift"; sourceTree = "<group>"; };
 		559C1C94293CB789002874BA /* PTRotationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRotationManager.swift; sourceTree = "<group>"; };
 		559C1C96293F7ED8002874BA /* NSData+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+PTEX.swift"; sourceTree = "<group>"; };
@@ -1489,6 +1509,16 @@
 		231D1537272CDEE9003D6F62 /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				5599C4312C4F642100394835 /* AkiraTextField.swift */,
+				5599C4322C4F642100394835 /* HoshiTextField.swift */,
+				5599C4332C4F642100394835 /* IsaoTextField.swift */,
+				5599C4342C4F642100394835 /* JiroTextField.swift */,
+				5599C4352C4F642100394835 /* KaedeTextField.swift */,
+				5599C4362C4F642100394835 /* MadokaTextField.swift */,
+				5599C4372C4F642100394835 /* MinoruTextField.swift */,
+				5599C4382C4F642100394835 /* TextFieldEffects.swift */,
+				5599C4392C4F642100394835 /* YokoTextField.swift */,
+				5599C43A2C4F642100394835 /* YoshikoTextField.swift */,
 				5507026E28F7A02300C48239 /* PTGrowingText.swift */,
 				55F7A73A29D5C80900CF6272 /* PTTextField.swift */,
 				55C409952C08AB0B009C0FB6 /* PTInputBoxView.swift */,
@@ -3487,6 +3517,16 @@
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				556CA4BC2B29500600A5B189 /* Error.swift in Sources */,
 				555818B82AFA4E750051C0AA /* PTProgressBar.swift in Sources */,
+				5599C43B2C4F642100394835 /* AkiraTextField.swift in Sources */,
+				5599C43C2C4F642100394835 /* IsaoTextField.swift in Sources */,
+				5599C43D2C4F642100394835 /* YoshikoTextField.swift in Sources */,
+				5599C43E2C4F642100394835 /* KaedeTextField.swift in Sources */,
+				5599C43F2C4F642100394835 /* TextFieldEffects.swift in Sources */,
+				5599C4402C4F642100394835 /* YokoTextField.swift in Sources */,
+				5599C4412C4F642100394835 /* JiroTextField.swift in Sources */,
+				5599C4422C4F642100394835 /* HoshiTextField.swift in Sources */,
+				5599C4432C4F642100394835 /* MadokaTextField.swift in Sources */,
+				5599C4442C4F642100394835 /* MinoruTextField.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				557E3A4C2C03168C002466A0 /* PTColorUtils.swift in Sources */,
 				555818BA2AFA5AE40051C0AA /* PTAlertTipsIcon.swift in Sources */,
