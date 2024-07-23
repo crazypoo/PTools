@@ -345,6 +345,7 @@ public class PTCollectionView: UIView {
                 topContentSpace: viewConfig.contentTopSpace,
                 bottomContentSpace: viewConfig.contentBottomSpace,
                 itemSpace: viewConfig.cellLeadingSpace,
+                itemTrailingSpace: viewConfig.cellTrailingSpace,
                 itemHeight: waterFallLayout!
             )
         case .Horizontal:

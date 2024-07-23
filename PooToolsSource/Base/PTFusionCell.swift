@@ -447,7 +447,7 @@ public class PTFusionCellContent:UIView {
             }
         default:
             finish(.Error)
-        }        
+        }
     }
         
     //MARK: 设置左图标
@@ -717,6 +717,8 @@ public class PTFusionCellContent:UIView {
                         .DisclosureIndicator(type: .BothImage(type: .Content)),
                         .More(type: .BothImage(type: .Content)):
                     make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.contentLeftSpace)
+                case .NoneAccessoryView(type: .None(type: .Content)):
+                    make.left.equalToSuperview().inset(self.cellModel!.contentLeftSpace)
                 default:
                     make.left.equalTo(self.nameTitle.snp.right).offset(10)
                 }
@@ -934,7 +936,7 @@ open class PTFusionCell: PTBaseNormalCell {
         return view
     }()
     
-    override init(frame:CGRect) {
+    public override init(frame:CGRect) {
         super.init(frame: frame)
         
         contentView.addSubview(dataContent)
@@ -1030,7 +1032,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         return view
     }()
     
-    override init(frame:CGRect) {
+    public override init(frame:CGRect) {
         super.init(frame: frame)
         
         contentView.addSubview(dataContent)
