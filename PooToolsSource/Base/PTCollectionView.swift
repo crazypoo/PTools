@@ -17,7 +17,7 @@ import MJRefresh
 import SwipeCellKit
 #endif
 #if POOTOOLS_LISTEMPTYDATA
-import LXFProtocolTool
+import EmptyDataSet_Swift
 #endif
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
@@ -577,7 +577,8 @@ public class PTCollectionView: UIView {
 
     ///当空数据View展示的时候,点击回调
     open var emptyTap:((UIView?)->Void)?
-    
+    open var emptyButtonTap:((UIView?)->Void)?
+
     ///CollectionView的DecorationItem囘調(自定義模式下使用)
     open var decorationInCollectionView:PTDecorationInCollectionHandler!
     
@@ -636,55 +637,48 @@ public class PTCollectionView: UIView {
         self.viewConfig = viewConfig
         self.collectionView.addObserver(self, forKeyPath: kPTCollectionIndexViewContentOffsetKeyPath, options: .new, context: &kPTCollectionIndexViewContent)
         addSubview(collectionView)
-        PTGCDManager.gcdAfter(time: 0.1) {
-            self.collectionView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            self.collectionView.allowsMoveItem()
-            
+        self.collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        self.collectionView.allowsMoveItem()
+
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
             if #unavailable(iOS 17.0) {
-                if self.viewConfig.emptyViewConfig != nil {
-                    self.showEmptyDataSet(currentScroller: self.collectionView)
-                    self.lxf.tapEmptyView(self.collectionView) { view in
-                        if self.emptyTap != nil {
-                            self.emptyTap!(view)
-                        }
-                    }
-                }
+                self.below17EmptyDataSet()
             } else {
                 PTGCDManager.gcdAfter(time: 0.1) {
-                    if self.viewConfig.emptyViewConfig != nil {
+                    if let emptyConfig = self.viewConfig.emptyViewConfig {
                         let share = PTUnavailableFunction.share
-                        share.emptyViewConfig = self.viewConfig.emptyViewConfig!
+                        share.emptyViewConfig = emptyConfig
                         self.showEmptyConfig()
                     }
                 }
             }
         }
 #else
-        PTGCDManager.gcdAfter(time: 0.1) {
-            if #available(iOS 17.0, *) {
-                if self.viewConfig.emptyViewConfig != nil {
-                    let share = PTUnavailableFunction.share
-                    share.emptyViewConfig = self.viewConfig.emptyViewConfig!
-                    self.showEmptyConfig()
+        if self.viewConfig.showEmptyAlert {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                if #available(iOS 17.0, *) {
+                    if let emptyConfig = self.viewConfig.emptyViewConfig {
+                        let share = PTUnavailableFunction.share
+                        share.emptyViewConfig = emptyConfig
+                        self.showEmptyConfig()
+                    }
                 }
             }
         }
 #endif
-            if #available(iOS 17.0, *) {
-                if self.viewConfig.showEmptyAlert {
-                    PTUnavailableFunction.share.emptyTap = {
-                        PTGCDManager.gcdMain {
-                            self.showEmptyLoading()
-                        }
+        if #available(iOS 17.0, *) {
+            if self.viewConfig.showEmptyAlert {
+                PTUnavailableFunction.share.emptyTap = {
+                    PTGCDManager.gcdMain {
+                        self.showEmptyLoading()
+                    }
 
-                        PTGCDManager.gcdAfter(time: 0.1) {
-                            if self.emptyTap != nil {
-                                self.emptyTap!(nil)
-                            }
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        if self.emptyTap != nil {
+                            self.emptyTap!(nil)
                         }
                     }
                 }
@@ -849,6 +843,7 @@ public class PTCollectionView: UIView {
         collectionView.selectItem(at: indexPath, animated: animated, scrollPosition: scrollPosition)
     }
         
+    //MARK: 空白頁
     @available(iOS 17, *)
     private func showEmptyConfig() {
         if viewConfig.showEmptyAlert && (mSections.first?.rows.count ?? 0) == 0 {
@@ -870,6 +865,43 @@ public class PTCollectionView: UIView {
     public func showEmptyLoading() {
         PTUnavailableFunction.share.showEmptyLoadingView(showIn: self)
     }
+    
+#if POOTOOLS_LISTEMPTYDATA
+    private func below17EmptyDataSet() {
+        if self.viewConfig.showEmptyAlert {
+            if let empty = self.viewConfig.emptyViewConfig {
+                if let emptyCuston = empty.customerView {
+                    collectionView.emptyDataSetView { view in
+                        view.customView(emptyCuston)
+                            .verticalOffset(empty.verticalOffSet)
+                    }
+                } else {
+                    let buttonAtt:ASAttributedString = """
+                                \(wrap: .embedding("""
+                                \(empty.buttonTitle,.font(empty.buttonFont),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(empty.buttonTextColor))
+                                """))
+                                """
+                    
+                    collectionView.emptyDataSetView { view in
+                        view.backgroundColor = empty.backgroundColor
+                        view.titleLabelString(empty.mainTitleAtt?.value)
+                            .detailLabelString(empty.secondaryEmptyAtt?.value)
+                            .image(empty.image)
+                            .buttonTitle(buttonAtt.value, for: .normal)
+                            .verticalOffset(empty.verticalOffSet)
+                            .verticalSpace(empty.imageToTextPadding)
+                            .didTapContentView {
+                                self.emptyTap?(view)
+                            }
+                            .didTapDataButton {
+                                self.emptyButtonTap?(view)
+                            }
+                    }
+                }
+            }
+        }
+    }
+#endif
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
@@ -1024,65 +1056,6 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         }
     }
 }
-
-//MARK: LXFEmptyDataSetable
-#if POOTOOLS_LISTEMPTYDATA
-extension PTCollectionView:EmptyDataSetable {
-    
-    public func showEmptyDataSet(currentScroller: UIScrollView) {
-        
-        var font:UIFont = .appfont(size: 15)
-        var textColor:UIColor = .black
-
-        let range = NSRange(location:0,length:self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.length ?? 0)
-        self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.enumerateAttributes(in: range, options: [], using: { att,range,_ in
-            if let attFont = att[NSAttributedString.Key.font] as? UIFont {
-                font = attFont
-            }
-            
-            if let attColor = att[NSAttributedString.Key.foregroundColor] as? UIColor {
-                textColor = attColor
-            }
-        })
-        
-        let firstString = self.viewConfig.emptyViewConfig?.mainTitleAtt
-        let secondary = self.viewConfig.emptyViewConfig?.secondaryEmptyAtt
-        
-        var total:ASAttributedString = """
-"""
-        if firstString != nil && secondary == nil {
-            total = firstString!
-        } else if firstString != nil && secondary != nil {
-            
-            let change:ASAttributedString = """
-            \(wrap: .embedding("""
-            \("\n",.foreground(.black),.font(.appfont(size: 14)),.paragraph(.alignment(.left)))
-            """))
-"""
-            total = firstString! + change + secondary!
-        } else if firstString == nil && secondary == nil {
-            
-        } else if firstString == nil && secondary != nil {
-            total = secondary!
-        }
-        
-        let buttonAtt:ASAttributedString = """
-                    \(wrap: .embedding("""
-                    \(self.viewConfig.emptyViewConfig?.buttonTitle ?? "",.font(self.viewConfig.emptyViewConfig?.buttonFont ?? .appfont(size: 14)),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(self.viewConfig.emptyViewConfig?.buttonTextColor ?? PTAppBaseConfig.share.viewDefaultTextColor))
-                    """))
-                    """
-        let config = EmptyDataSetConfigure(
-                verticalOffset: 0,
-                tipFont: font,
-                tipColor: textColor,
-                tipImage: self.viewConfig.emptyViewConfig?.image,
-                description: total.value,
-                buttonTitle: buttonAtt.value
-            )
-        self.lxf.updateEmptyDataSet(currentScroller,config:config)
-    }
-}
-#endif
 
 //MARK: 滑动Cell设置
 #if POOTOOLS_SWIPECELL

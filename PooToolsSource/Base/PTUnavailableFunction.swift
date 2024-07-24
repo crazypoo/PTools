@@ -23,6 +23,8 @@ open class PTEmptyDataViewConfig : NSObject {
     public var imageToTextPadding:CGFloat = 10
     public var textToSecondaryTextPadding:CGFloat = 5
     public var buttonToSecondaryButtonPadding:CGFloat = 15
+    public var verticalOffSet:CGFloat = 0
+    public var customerView:UIView? = nil
 }
 
 @available(iOS 17.0 , *)
@@ -49,26 +51,29 @@ public class PTUnavailableFunction: NSObject {
     
     public func showEmptyView(showIn:UIView) {
         emptyConfig = UIContentUnavailableConfiguration.empty()
-        emptyConfig.imageToTextPadding = emptyViewConfig.imageToTextPadding
-        emptyConfig.textToButtonPadding = emptyViewConfig.textToSecondaryTextPadding
-        emptyConfig.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
-        if emptyViewConfig.mainTitleAtt != nil {
-            emptyConfig.attributedText = emptyViewConfig.mainTitleAtt!.value
-        }
-        
-        if emptyViewConfig.secondaryEmptyAtt != nil {
-            emptyConfig.secondaryAttributedText = emptyViewConfig.secondaryEmptyAtt!.value
-        }
-        
-        if emptyViewConfig.image != nil {
-            emptyConfig.image = emptyViewConfig.image!
-        }
-        if !emptyViewConfig.buttonTitle.stringIsEmpty() {
-            emptyConfig.button = self.emptyButtonConfig
-        }
-        emptyConfig.buttonProperties.primaryAction = UIAction { sender in
-            if self.emptyTap != nil {
-                self.emptyTap!()
+        if let _ = emptyViewConfig.customerView {
+        } else {
+            emptyConfig.imageToTextPadding = emptyViewConfig.imageToTextPadding
+            emptyConfig.textToButtonPadding = emptyViewConfig.textToSecondaryTextPadding
+            emptyConfig.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
+            if emptyViewConfig.mainTitleAtt != nil {
+                emptyConfig.attributedText = emptyViewConfig.mainTitleAtt!.value
+            }
+            
+            if emptyViewConfig.secondaryEmptyAtt != nil {
+                emptyConfig.secondaryAttributedText = emptyViewConfig.secondaryEmptyAtt!.value
+            }
+            
+            if emptyViewConfig.image != nil {
+                emptyConfig.image = emptyViewConfig.image!
+            }
+            if !emptyViewConfig.buttonTitle.stringIsEmpty() {
+                emptyConfig.button = self.emptyButtonConfig
+            }
+            emptyConfig.buttonProperties.primaryAction = UIAction { sender in
+                if self.emptyTap != nil {
+                    self.emptyTap!()
+                }
             }
         }
         var configBackground = UIBackgroundConfiguration.clear()
@@ -79,6 +84,15 @@ public class PTUnavailableFunction: NSObject {
         showIn.addSubview(unavailableView!)
         unavailableView!.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        if let emptyViews = emptyViewConfig.customerView {
+            unavailableView?.addSubview(emptyViews)
+            emptyViews.snp.makeConstraints { make in
+                make.size.equalTo(emptyViews.size)
+                make.centerX.equalToSuperview()
+                make.centerY.equalToSuperview().offset(emptyViewConfig.verticalOffSet)
+            }
         }
     }
     

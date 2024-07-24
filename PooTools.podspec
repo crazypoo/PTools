@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.56.2'
+    s.version     = '3.57.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -678,7 +678,7 @@ Pod::Spec.new do |s|
         
     s.subspec 'ListEmptyData' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'LXFProtocolTool/EmptyDataSetable'#Table/Collection空白时提示框架
+        subspec.dependency 'EmptyDataSet-Swift'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LISTEMPTYDATA POOTOOLS_COCOAPODS"
         }

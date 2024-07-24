@@ -372,20 +372,25 @@ class PTFuncNameViewController: PTBaseViewController {
         
         
         let emptyConfig = PTEmptyDataViewConfig()
-        emptyConfig.image = UIImage(named: "DemoImage")
-        emptyConfig.mainTitleAtt = """
-                \(wrap: .embedding("""
-                \("沒數據",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
-                """))
-                """
-        emptyConfig.secondaryEmptyAtt = """
-                \(wrap: .embedding("""
-                \("111111111111",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
-                """))
-                """
-        emptyConfig.buttonTitle = "點擊"
-        emptyConfig.buttonFont = .appfont(size: 14)
-        emptyConfig.buttonTextColor = .randomColor
+        let emptyView = UIView(frame: CGRectMake(0, 0, 100, 100))
+        emptyView.backgroundColor = .random
+        emptyConfig.customerView = emptyView
+        emptyConfig.verticalOffSet = -120
+//        emptyConfig.image = UIImage(named: "DemoImage")
+//        emptyConfig.backgroundColor = .systemRed
+//        emptyConfig.mainTitleAtt = """
+//                \(wrap: .embedding("""
+//                \("沒數據",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+//                """))
+//                """
+//        emptyConfig.secondaryEmptyAtt = """
+//                \(wrap: .embedding("""
+//                \("111111111111",.foreground(.random),.font(.appfont(size: 14)),.paragraph(.alignment(.center)))
+//                """))
+//                """
+//        emptyConfig.buttonTitle = "點擊"
+//        emptyConfig.buttonFont = .appfont(size: 14)
+//        emptyConfig.buttonTextColor = .randomColor
         cConfig.emptyViewConfig = emptyConfig
 
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
@@ -866,6 +871,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 self.showCollectionViewData()
             }
         }
+        aaaaaaa.emptyButtonTap = { sender in
+            PTNSLogConsole("12312312312312312")
+        }
         return aaaaaaa
     }()
     
@@ -993,13 +1001,13 @@ class PTFuncNameViewController: PTBaseViewController {
             make.top.equalToSuperview()
 #endif
             make.right.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(115)
+            make.left.equalToSuperview()
         }
         
         if #unavailable(iOS 17.0) {
-            PTGCDManager.gcdAfter(time: 10) {
-                self.showCollectionViewData()
-            }
+//            PTGCDManager.gcdAfter(time: 10) {
+//                self.showCollectionViewData()
+//            }    
         } else {
             if vcEmpty {
                 let emptyConfig = PTEmptyDataViewConfig()
