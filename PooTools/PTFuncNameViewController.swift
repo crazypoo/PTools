@@ -356,6 +356,8 @@ class PTFuncNameViewController: PTBaseViewController {
         return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
     }()
     
+    var aaaaaaa:PTCollectionView!
+    
     lazy var collectionView : PTCollectionView = {
                 
         let cConfig = PTCollectionViewConfig()
@@ -372,8 +374,28 @@ class PTFuncNameViewController: PTBaseViewController {
         
         
         let emptyConfig = PTEmptyDataViewConfig()
+        
         let emptyView = UIView(frame: CGRectMake(0, 0, 100, 100))
-        emptyView.backgroundColor = .random
+        emptyView.backgroundColor = .randomColor
+        emptyView.isUserInteractionEnabled = true
+        emptyView.clipsToBounds = true
+        
+        
+        
+        let aaaaaaaaaaaa = UIButton(type: .custom)
+        aaaaaaaaaaaa.addActionHandlers { sender in
+//            self.aaaaaaa.viewConfig = cConfig
+//            self.aaaaaaa.clearAllData { cView in
+//                self.aaaaaaa.reloadEmptyConfig()
+//            }
+            emptyView.backgroundColor = .randomColor
+            PTNSLogConsole("123123123123123123")
+        }
+        emptyView.addSubviews([aaaaaaaaaaaa])
+        aaaaaaaaaaaa.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         emptyConfig.customerView = emptyView
         emptyConfig.verticalOffSet = -120
 //        emptyConfig.image = UIImage(named: "DemoImage")
@@ -393,7 +415,7 @@ class PTFuncNameViewController: PTBaseViewController {
 //        emptyConfig.buttonTextColor = .randomColor
         cConfig.emptyViewConfig = emptyConfig
 
-        let aaaaaaa = PTCollectionView(viewConfig: cConfig)
+        aaaaaaa = PTCollectionView(viewConfig: cConfig)
         aaaaaaa.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         aaaaaaa.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)

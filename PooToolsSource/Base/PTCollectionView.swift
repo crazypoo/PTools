@@ -872,8 +872,10 @@ public class PTCollectionView: UIView {
             if let empty = self.viewConfig.emptyViewConfig {
                 if let emptyCuston = empty.customerView {
                     collectionView.emptyDataSetView { view in
+                        view.backgroundColor = empty.backgroundColor
                         view.customView(emptyCuston)
                             .verticalOffset(empty.verticalOffSet)
+                            .isTouchAllowed(true)
                     }
                 } else {
                     let buttonAtt:ASAttributedString = """
@@ -899,6 +901,13 @@ public class PTCollectionView: UIView {
                     }
                 }
             }
+        }
+    }
+    
+    public func reloadEmptyConfig() {
+        if self.viewConfig.showEmptyAlert {
+            below17EmptyDataSet()
+            collectionView.reloadEmptyDataSet()
         }
     }
 #endif
