@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import SafeSFSymbols
 
 extension NSError {
     convenience init(message: String) {
@@ -169,23 +170,24 @@ public class PTCameraFilterConfig: NSObject {
         exposureMode = mode
         return self
     }
+    
+    open var onlyCamera:Bool = false
 
     ///转换摄像头
     open var focusImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
 
     ///转换摄像头
-    open var switchCameraImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    open var switchCameraImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var switchCameraImage:UIImage = UIImage(.camera)
+    open var switchCameraImageSelected:UIImage = UIImage(.camera.fill)
 
     ///電筒圖片
-    open var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    open var flashImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var flashImage:UIImage = UIImage(.flashlight.offFill)
+    open var flashImageSelected:UIImage = UIImage(.flashlight.onFill)
 
-    open var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-
+    open var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
     ///Filters
-    open var filtersImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    open var filtersImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var filtersImage:UIImage = UIImage(.square.andArrowUp)
+    open var filtersImageSelected:UIImage = UIImage(.square.andArrowUpFill)
 
     open var reloadCameraImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     open var outputVideImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))

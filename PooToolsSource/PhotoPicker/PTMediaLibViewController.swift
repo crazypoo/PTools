@@ -193,7 +193,7 @@ public class PTMediaLibView:UIView {
                     let pointFont = UIFont.appfont(size: 20)
 
                     let vc = PTFilterCameraViewController()
-                    vc.onlyCamera = false
+                    vc.onlyCamera = cameraConfig.onlyCamera
                     vc.useThisImageHandler = { image in
                         self.save(image: image, videoUrl: nil)
                     }

@@ -648,87 +648,89 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
     }
     
     public func takePhoto(_ collector: C7Collector, fliter image: C7Image) {
-        if onlyCamera {
-            takePhotoView = PTTakePictureReviewer(screenShotImage: image)
-            takePhotoView?.actionHandle = { type,image in
-                let vc = PTEditImageViewController(readyEditImage: image)
-                vc.editFinishBlock = { ei ,editImageModel in
-                    PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
-                        if !finish {
-                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
+        PTGCDManager.gcdMain {
+            if self.onlyCamera {
+                self.takePhotoView = PTTakePictureReviewer(screenShotImage: image)
+                self.takePhotoView?.actionHandle = { type,image in
+                    let vc = PTEditImageViewController(readyEditImage: image)
+                    vc.editFinishBlock = { ei ,editImageModel in
+                        PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
+                            if !finish {
+                                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
+                            }
                         }
                     }
+                    let nav = PTBaseNavControl(rootViewController: vc)
+                    nav.view.backgroundColor = .black
+                    nav.modalPresentationStyle = .fullScreen
+                    PTUtils.getCurrentVC().present(nav, animated: true)
                 }
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.view.backgroundColor = .black
-                nav.modalPresentationStyle = .fullScreen
-                PTUtils.getCurrentVC().present(nav, animated: true)
-            }
-            takePhotoView?.reviewHandle = {
-                let browserModel = PTMediaBrowserModel()
-                browserModel.imageURL = image
-                
-                let browserConfig = PTMediaBrowserConfig()
-                browserConfig.mediaData = [browserModel]
-                
-                let review = PTMediaBrowserController()
-                review.viewConfig = browserConfig
-                review.modalPresentationStyle = .fullScreen
-                self.pt_present(review)
-            }
-            takePhotoView?.dismissTask = {
-                self.takePhotoView = nil
-            }
-            PTMediaEditManager.saveImageToAlbum(image: image) { finish, asset in
-                if !finish {
-                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
+                self.takePhotoView?.reviewHandle = {
+                    let browserModel = PTMediaBrowserModel()
+                    browserModel.imageURL = image
+                    
+                    let browserConfig = PTMediaBrowserConfig()
+                    browserConfig.mediaData = [browserModel]
+                    
+                    let review = PTMediaBrowserController()
+                    review.viewConfig = browserConfig
+                    review.modalPresentationStyle = .fullScreen
+                    self.pt_present(review)
                 }
-            }
-            
-            PTGCDManager.gcdAfter(time: 3) {
-                self.takePhotoView?.dismissAlert()
-            }
-        } else {
-            //TODO: 这里根据相册须要处理
-            camera.stopRunning()
-            
-            let reviewView = PTFlashImageReviewView(image: image)
-            AppWindows?.addSubview(reviewView)
-            reviewView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-            reviewView.backButton.addActionHandlers { sender in
-                reviewView.removeFromSuperview()
-                self.camera.startRunning()
-            }
-            reviewView.editButton.addActionHandlers { sender in
-                reviewView.removeFromSuperview()
-                let vc = PTEditImageViewController(readyEditImage: image)
-                vc.editFinishBlock = { ei ,editImageModel in
+                self.takePhotoView?.dismissTask = {
+                    self.takePhotoView = nil
+                }
+                PTMediaEditManager.saveImageToAlbum(image: image) { finish, asset in
+                    if !finish {
+                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
+                    }
+                }
+                
+                PTGCDManager.gcdAfter(time: 3) {
+                    self.takePhotoView?.dismissAlert()
+                }
+            } else {
+                //TODO: 这里根据相册须要处理
+                self.camera.stopRunning()
+                
+                let reviewView = PTFlashImageReviewView(image: image)
+                AppWindows?.addSubview(reviewView)
+                reviewView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+                reviewView.backButton.addActionHandlers { sender in
+                    reviewView.removeFromSuperview()
+                    self.camera.startRunning()
+                }
+                reviewView.editButton.addActionHandlers { sender in
+                    reviewView.removeFromSuperview()
+                    let vc = PTEditImageViewController(readyEditImage: image)
+                    vc.editFinishBlock = { ei ,editImageModel in
+                        self.dismiss(animated: true) {
+                            if self.useThisImageHandler != nil {
+                                self.useThisImageHandler!(ei)
+                            }
+                        }
+                    }
+                    let nav = PTBaseNavControl(rootViewController: vc)
+                    nav.view.backgroundColor = .black
+                    nav.modalPresentationStyle = .fullScreen
+                    self.present(nav, animated: true)
+                }
+                reviewView.justThisButton.addActionHandlers { sender in
+                    reviewView.removeFromSuperview()
                     self.dismiss(animated: true) {
                         if self.useThisImageHandler != nil {
-                            self.useThisImageHandler!(ei)
+                            self.useThisImageHandler!(image)
                         }
                     }
                 }
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.view.backgroundColor = .black
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true)
             }
-            reviewView.justThisButton.addActionHandlers { sender in
-                reviewView.removeFromSuperview()
-                self.dismiss(animated: true) {
-                    if self.useThisImageHandler != nil {
-                        self.useThisImageHandler!(image)
-                    }
-                }
-            }
+            
+//            self.camera.startRunning()
+            self.camera.isTakingPicture = false
+            self.originImageView.contentMode = .scaleAspectFill
         }
-        
-        camera.startRunning()
-        camera.isTakingPicture = false
-        originImageView.contentMode = .scaleAspectFill
     }
 }
 

@@ -1027,9 +1027,9 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         
         if #unavailable(iOS 17.0) {
-//            PTGCDManager.gcdAfter(time: 10) {
-//                self.showCollectionViewData()
-//            }    
+            PTGCDManager.gcdAfter(time: 10) {
+                self.showCollectionViewData()
+            }    
         } else {
             if vcEmpty {
                 let emptyConfig = PTEmptyDataViewConfig()
