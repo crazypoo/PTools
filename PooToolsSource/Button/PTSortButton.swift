@@ -16,6 +16,12 @@ import SnapKit
     case Decrease
 }
 
+//界面元素屬性
+@objc public enum PTSortButtonShowType:Int {
+    case Tres
+    case Dos
+}
+
 @objcMembers
 public class PTSortButton: UIView {
     
@@ -178,10 +184,28 @@ public class PTSortButton: UIView {
         return view
     }()
     
+    fileprivate var showType:PTSortButtonShowType = .Tres
+    
+    init(showType:PTSortButtonShowType = .Tres) {
+        self.showType = showType
+        super.init(frame: .zero)
+        setUpViews()
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        addSubviews([titleLabel,upImage,downImage])
+        setUpViews()
+    }
+    
+    func setUpViews() {
+        var subViews = [UIView]()
+        switch showType {
+        case .Tres:
+            subViews = [titleLabel,upImage,downImage]
+        default:
+            subViews = [titleLabel,upImage]
+        }
+        addSubviews(subViews)
         
         let tap = UITapGestureRecognizer { sender in
             switch self.sortType {
@@ -235,13 +259,22 @@ public class PTSortButton: UIView {
         upImage.snp.makeConstraints { make in
             make.left.equalTo(self.titleLabel.snp.right).offset(contentImageSpace)
             make.size.equalTo(realImageSize)
-            make.bottom.equalTo(self.titleLabel.snp.centerY).offset(-(imageSpace / 2))
+            switch showType {
+            case .Tres:
+                make.bottom.equalTo(self.titleLabel.snp.centerY).offset(-(imageSpace / 2))
+            case .Dos:
+                make.centerY.equalToSuperview()
+            }
             make.right.lessThanOrEqualToSuperview()
         }
         
-        downImage.snp.makeConstraints { make in
-            make.left.size.right.equalTo(self.upImage)
-            make.top.equalTo(self.upImage.snp.bottom).offset(imageSpace)
+        switch showType {
+        case .Tres:
+            downImage.snp.makeConstraints { make in
+                make.left.size.right.equalTo(self.upImage)
+                make.top.equalTo(self.upImage.snp.bottom).offset(imageSpace)
+            }
+        default:break
         }
     }
 }

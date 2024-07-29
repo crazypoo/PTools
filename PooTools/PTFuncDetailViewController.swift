@@ -545,7 +545,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
         case String.sortButton:
             
-            let sortButton = PTSortButton()
+            let sortButton = PTSortButton(showType: .Dos)
             sortButton.buttonTitle = "111111111111111111111111111111111111111111111111111!!!!!!!!!!!!!!!!!!"
             sortButton.buttonTitleSelectedColor = .random
             sortButton.imageSize = CGSizeMake(10, 24)
