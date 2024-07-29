@@ -29,20 +29,36 @@ public class PTSortButton: UIView {
     
     public var sortType:PTSortButtonType = .Normal {
         didSet {
-            switch sortType {
-            case .Normal:
-                upImage.loadImage(contentData: upNormalImage)
-                downImage.loadImage(contentData: dowmNormalImage)
-                titleLabel.textColor = buttonTitleNormalColor
-            case .Increase:
-                upImage.loadImage(contentData: upSelectedImage)
-                downImage.loadImage(contentData: dowmNormalImage)
-                titleLabel.textColor = buttonTitleSelectedColor
-            case .Decrease:
-                upImage.loadImage(contentData: upNormalImage)
-                downImage.loadImage(contentData: downSelectedImage)
-                titleLabel.textColor = buttonTitleSelectedColor
+            switch showType {
+            case .Tres:
+                switch sortType {
+                case .Normal:
+                    upImage.loadImage(contentData: upNormalImage)
+                    downImage.loadImage(contentData: dowmNormalImage)
+                    titleLabel.textColor = buttonTitleNormalColor
+                case .Increase:
+                    upImage.loadImage(contentData: upSelectedImage)
+                    downImage.loadImage(contentData: dowmNormalImage)
+                    titleLabel.textColor = buttonTitleSelectedColor
+                case .Decrease:
+                    upImage.loadImage(contentData: upNormalImage)
+                    downImage.loadImage(contentData: downSelectedImage)
+                    titleLabel.textColor = buttonTitleSelectedColor
+                }
+            case .Dos:
+                switch sortType {
+                case .Normal:
+                    upImage.loadImage(contentData: upNormalImage)
+                    titleLabel.textColor = buttonTitleNormalColor
+                case .Decrease:
+                    upImage.loadImage(contentData: dosDecreaseImage)
+                    titleLabel.textColor = buttonTitleSelectedColor
+                case .Increase:
+                    upImage.loadImage(contentData: upSelectedImage)
+                    titleLabel.textColor = buttonTitleSelectedColor
+                }
             }
+
         }
     }
     
@@ -88,24 +104,61 @@ public class PTSortButton: UIView {
     
     public var upNormalImage:Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
         didSet {
-            switch sortType {
-            case .Normal:
-                upImage.loadImage(contentData: upNormalImage)
-            case .Decrease:
-                upImage.loadImage(contentData: upNormalImage)
-            case .Increase:
-                upImage.loadImage(contentData: upSelectedImage)
+            switch showType {
+            case .Tres:
+                switch sortType {
+                case .Normal:
+                    upImage.loadImage(contentData: upNormalImage)
+                case .Decrease:
+                    upImage.loadImage(contentData: upNormalImage)
+                case .Increase:
+                    upImage.loadImage(contentData: upSelectedImage)
+                }
+            case .Dos:
+                switch sortType {
+                case .Normal:
+                    upImage.loadImage(contentData: upNormalImage)
+                case .Decrease:
+                    upImage.loadImage(contentData: dosDecreaseImage)
+                case .Increase:
+                    upImage.loadImage(contentData: upSelectedImage)
+                }
             }
         }
     }
     
     public var upSelectedImage:Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
         didSet {
+            switch showType {
+            case .Tres:
+                switch sortType {
+                case .Normal:
+                    upImage.loadImage(contentData: upNormalImage)
+                case .Decrease:
+                    upImage.loadImage(contentData: upNormalImage)
+                case .Increase:
+                    upImage.loadImage(contentData: upSelectedImage)
+                }
+            case .Dos:
+                switch sortType {
+                case .Normal:
+                    upImage.loadImage(contentData: upNormalImage)
+                case .Decrease:
+                    upImage.loadImage(contentData: dosDecreaseImage)
+                case .Increase:
+                    upImage.loadImage(contentData: upSelectedImage)
+                }
+            }
+        }
+    }
+    
+    public var dosDecreaseImage:Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+        didSet {
             switch sortType {
             case .Normal:
                 upImage.loadImage(contentData: upNormalImage)
             case .Decrease:
-                upImage.loadImage(contentData: upNormalImage)
+                upImage.loadImage(contentData: dosDecreaseImage)
             case .Increase:
                 upImage.loadImage(contentData: upSelectedImage)
             }
@@ -186,7 +239,7 @@ public class PTSortButton: UIView {
     
     fileprivate var showType:PTSortButtonShowType = .Tres
     
-    init(showType:PTSortButtonShowType = .Tres) {
+    public init(showType:PTSortButtonShowType = .Tres) {
         self.showType = showType
         super.init(frame: .zero)
         setUpViews()
