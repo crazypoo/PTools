@@ -20,9 +20,9 @@ public extension UIImage {
 
 public class PTMessageTextCustomAttTagModel:PTBaseModel {
     ///Example: \\xxxxx\\b
-    var tag:String = ""
-    var tagColor:DynamicColor = .systemGray
-    var tagSelectedColor:DynamicColor = .systemGray
+    open var tag:String = ""
+    open var tagColor:DynamicColor = .systemGray
+    open var tagSelectedColor:DynamicColor = .systemGray
 }
 
 @objcMembers

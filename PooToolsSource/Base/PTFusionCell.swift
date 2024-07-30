@@ -472,7 +472,11 @@ public class PTFusionCellContent:UIView {
                 make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
                 make.width.equalTo(self.cellIcon.snp.height)
             }
-            
+            if cellModel!.iconRound {
+                PTGCDManager.gcdMain {
+                    self.cellIcon.viewCorner(radius: (self.frame.size.height - self.cellModel!.imageTopOffset - self.cellModel!.imageBottomOffset) / 2)
+                }
+            }
             cellIcon.loadImage(contentData: cellModel!.leftImage as Any,iCloudDocumentName: cellModel!.iCloudDocument)
         default:
             cellIcon.removeFromSuperview()

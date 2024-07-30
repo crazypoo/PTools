@@ -30,6 +30,8 @@ open class PTFusionCellModel: NSObject {
     open var imageTopOffset:CGFloat = 5
     open var imageBottomOffset:CGFloat = 5
     open var labelLineSpace:CGFloat = 2
+    ///icon是否圆形
+    open var iconRound:Bool = false
     ///名
     open var name:String = ""
     ///名字颜色
