@@ -12,8 +12,8 @@ import Photos
 import SwifterSwift
 
 public class PTScanBarInfo:NSObject {
-    var codeView:UIView = UIView()
-    var codeString:String = ""
+    open var codeView:UIView = UIView()
+    open var codeString:String = ""
 }
 
 @objcMembers
