@@ -84,4 +84,59 @@ public class PTHealthKit: NSObject {
         }
         healthStore.execute(query)
     }
+    
+    @available(iOS 18.0,watchOS 11.0,*)
+    public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping (Bool) -> Swift.Void) {
+        PTNSLogConsole("updateWorkoutEfforcore samle from: %@", sample.sourceRevision.source.bundleIdentifier)
+        let healthStore = HKHealthStore()
+        let sampleType = HKQuantityType.quantityType(forIdentifier: .workoutEffortScore)!
+        healthStore.delete(sample) { (success,error2) in
+            if let error2 = error2 {
+                PTNSLogConsole("cannot delete this sample: %@",error2.localizedDescription)
+                completion(false)
+                return
+            }
+            
+            let newSample = HKQuantitySample(type: sampleType, quantity: HKQuantity(unit: HKUnit.appleEffortScore(), doubleValue: newScore), start: sample.startDate, end: sample.endDate)
+            
+            healthStore.save(newSample) { success, error in
+                if let error = error {
+                    PTNSLogConsole(">> health store save failed %@",error.localizedDescription)
+                }
+                
+                if success {
+                    HKHealthStore().relateWorkoutEffortSample(newSample, with: workout, activity: nil) { reSuccess, reError in
+                        if let reError = reError {
+                            PTNSLogConsole("relateWorkoutEffortSample failed: %@",reError.localizedDescription)
+                        } else {
+                            PTNSLogConsole("relateWorkoutEffortSample success")
+                        }
+                    }
+                }
+                completion(success)
+            }
+        }
+    }
+    
+    @available(iOS 18.0,watchOS 11.0,*)
+    public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping (Bool) -> Swift.Void) {
+        let healthStore = HKHealthStore()
+        let sampleType = HKQuantityType.quantityType(forIdentifier: .workoutEffortScore)!
+        let newSample = HKQuantitySample(type: sampleType, quantity: HKQuantity(unit: HKUnit.appleEffortScore(), doubleValue: score), start: workout.startDate, end: workout.endDate)
+        healthStore.save(newSample) { success, error in
+            if let error = error {
+                PTNSLogConsole(">> healthstore save failed %@",error.localizedDescription)
+            }
+            if success {
+                HKHealthStore().relateWorkoutEffortSample(newSample, with: workout, activity: nil) { reSuccess, reError in
+                    if let reError = reError {
+                        PTNSLogConsole("relateWorkoutEffortSample failed: %@",reError.localizedDescription)
+                    } else {
+                        PTNSLogConsole("relateWorkoutEffortSample success")
+                    }
+                }
+            }
+            completion(success)
+        }
+    }
 }
