@@ -80,7 +80,7 @@ import AttributedString
     private let placeholderInsets = CGPoint(x: 0, y: 6)
     private let textFieldInsets = CGPoint(x: 0, y: 12)
     private let inactiveBorderLayer = CALayer()
-    private let activeBorderLayer = CALayer()    
+    private let activeBorderLayer = CALayer()
     private var activePlaceholderPoint: CGPoint = CGPoint.zero
     
     // MARK: - TextFieldEffects
@@ -112,9 +112,9 @@ import AttributedString
         layoutPlaceholderInTextRect()
         placeholderLabel.frame.origin = activePlaceholderPoint
 
-		UIView.animate(withDuration: 0.4, animations: {
-			self.placeholderLabel.alpha = 1.0
-		})
+        UIView.animate(withDuration: 0.4, animations: {
+            self.placeholderLabel.alpha = 1.0
+        })
 
         activeBorderLayer.frame = rectForBorder(borderThickness.active, isFilled: true)
     }
@@ -172,7 +172,7 @@ import AttributedString
         }
     }
     
-    private func layoutPlaceholderInTextRect() {        
+    private func layoutPlaceholderInTextRect() {
         let textRect = self.textRect(forBounds: bounds)
         var originX = textRect.origin.x
         switch self.textAlignment {
@@ -239,6 +239,8 @@ open class PTHoshiTextField:UITextField {
         }
     }
     
+    open var textEditingEdges:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    
     private lazy var leftSpaceView:UIView = {
         let view = UIView()
         view.frame = CGRectMake(0, 0, self.leftSpace!, self.frame.size.height)
@@ -262,7 +264,7 @@ open class PTHoshiTextField:UITextField {
         floatingLabel.textColor = self.placeholderColor
         floatingLabel.font = self.placeholderFont
         floatingLabel.alpha = 0
-        let labelHeight = floatingLabel.font.pointSize
+        let labelHeight = floatingLabel.font.pointSize + 5
         addSubview(floatingLabel)
         floatingLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -288,7 +290,7 @@ open class PTHoshiTextField:UITextField {
         let shouldFloat = !isTextEmpty || isFirstResponder
 
         let animations = {
-            let labelHeight = self.floatingLabel.font.pointSize
+            let labelHeight = self.floatingLabel.font.pointSize + 5
             self.floatingLabel.alpha = shouldFloat ? 1 : 0
             self.floatingLabel.snp.updateConstraints { make in
                 make.top.equalToSuperview().inset(shouldFloat ? self.setTextAndPlaceHolderTop() : (self.bounds.height - labelHeight) / 2)
@@ -300,6 +302,10 @@ open class PTHoshiTextField:UITextField {
         } else {
             animations()
         }
+        
+        let _ = self.textRect(forBounds: self.bounds)
+        let _ = self.editingRect(forBounds: self.bounds)
+        let _ = self.placeholderRect(forBounds: self.bounds)
     }
 
     open override func layoutSubviews() {
@@ -310,7 +316,7 @@ open class PTHoshiTextField:UITextField {
             leftViewMode = .always
         }
         
-        let labelHeight = self.floatingLabel.font.pointSize
+        let labelHeight = self.floatingLabel.font.pointSize + 5
 
         let isTextEmpty = text?.isEmpty ?? true
         if !isTextEmpty || isFirstResponder {
@@ -347,9 +353,9 @@ open class PTHoshiTextField:UITextField {
         var lessSapce:CGFloat = 0
 
         if let placeholderAtt = placeholderAtt {
-            lessSapce = fontToTopHeight - placeholderAtt.value.largestFontSize()
+            lessSapce = fontToTopHeight - (placeholderAtt.value.largestFontSize() + 5)
         } else {
-            lessSapce = fontToTopHeight - self.floatingLabel.font.pointSize
+            lessSapce = fontToTopHeight - (self.floatingLabel.font.pointSize + 5)
         }
         if lessSapce < 0 {
             lessSapce = 0
@@ -361,6 +367,45 @@ open class PTHoshiTextField:UITextField {
             }
         }
         return lessSapce
+    }
+    
+    open override func textRect(forBounds bounds: CGRect) -> CGRect {
+        let isTextEmpty = text?.isEmpty ?? true
+        if !isTextEmpty || isFirstResponder {
+            if !isTextEmpty {
+                return bounds.inset(by: textEditingEdges)
+            } else {
+                return bounds.inset(by: .zero)
+            }
+        } else {
+            return bounds.inset(by: .zero)
+        }
+    }
+
+    open override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        let isTextEmpty = text?.isEmpty ?? true
+        if !isTextEmpty || isFirstResponder {
+            if !isTextEmpty {
+                return bounds.inset(by: textEditingEdges)
+            } else {
+                return bounds.inset(by: .zero)
+            }
+        } else {
+            return bounds.inset(by: .zero)
+        }
+    }
+
+    open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        let isTextEmpty = text?.isEmpty ?? true
+        if !isTextEmpty || isFirstResponder {
+            if !isTextEmpty {
+                return bounds.inset(by: textEditingEdges)
+            } else {
+                return bounds.inset(by: .zero)
+            }
+        } else {
+            return bounds.inset(by: .zero)
+        }
     }
 }
 
