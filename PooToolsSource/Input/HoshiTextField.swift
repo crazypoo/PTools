@@ -340,6 +340,7 @@ open class PTHoshiTextField:UITextField {
     private func updatePlaceholder() {
         if let placeholderAtt = placeholderAtt {
             floatingLabel.attributed.text = placeholderAtt
+            attributedPlaceholder = placeholderAtt.value
         } else {
             floatingLabel.text = placeholder
             floatingLabel.font = placeholderFont
