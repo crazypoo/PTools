@@ -198,5 +198,169 @@ import AttributedString
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
     }
-    
 }
+
+open class PTHoshiTextField:UITextField {
+    private let floatingLabel: UILabel = UILabel()
+    
+    override open var placeholder: String? {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+    
+    dynamic open var placeholderAtt: ASAttributedString? {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+    
+    dynamic open var placeholderColor: UIColor = .black {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+    
+    dynamic open var placeholderFont: UIFont = .appfont(size: 12) {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+    
+    open var textAndPlceholderSpace:CGFloat = 0 {
+        didSet {
+            layoutSubviews()
+        }
+    }
+    
+    open var leftSpace:CGFloat? {
+        didSet {
+            layoutSubviews()
+        }
+    }
+    
+    private lazy var leftSpaceView:UIView = {
+        let view = UIView()
+        view.frame = CGRectMake(0, 0, self.leftSpace!, self.frame.size.height)
+        return view
+    }()
+    
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    private func setup() {
+        addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        addTarget(self, action: #selector(textFieldDidBeginEditing), for: .editingDidBegin)
+        addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingDidEnd)
+        floatingLabel.textColor = self.placeholderColor
+        floatingLabel.font = self.placeholderFont
+        floatingLabel.alpha = 0
+        let labelHeight = floatingLabel.font.pointSize
+        addSubview(floatingLabel)
+        floatingLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().inset((self.bounds.height - labelHeight) / 2)
+            make.height.equalTo(labelHeight)
+        }
+    }
+
+    @objc private func textFieldDidChange() {
+        updateFloatingLabel(animated: true)
+    }
+
+    @objc private func textFieldDidBeginEditing() {
+        updateFloatingLabel(animated: true)
+    }
+
+    @objc private func textFieldDidEndEditing() {
+        updateFloatingLabel(animated: true)
+    }
+
+    private func updateFloatingLabel(animated: Bool) {
+        let isTextEmpty = text?.isEmpty ?? true
+        let shouldFloat = !isTextEmpty || isFirstResponder
+
+        let animations = {
+            let labelHeight = self.floatingLabel.font.pointSize
+            self.floatingLabel.alpha = shouldFloat ? 1 : 0
+            self.floatingLabel.snp.updateConstraints { make in
+                make.top.equalToSuperview().inset(shouldFloat ? self.setTextAndPlaceHolderTop() : (self.bounds.height - labelHeight) / 2)
+            }
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.3, animations: animations)
+        } else {
+            animations()
+        }
+    }
+
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if (leftSpace ?? 0) > 0 {
+            leftView = leftSpaceView
+            leftViewMode = .always
+        }
+        
+        let labelHeight = self.floatingLabel.font.pointSize
+
+        let isTextEmpty = text?.isEmpty ?? true
+        if !isTextEmpty || isFirstResponder {
+            
+            floatingLabel.snp.updateConstraints { make in
+                make.top.equalToSuperview().inset(self.setTextAndPlaceHolderTop())
+            }
+            if !isTextEmpty {
+                floatingLabel.alpha = 1
+            } else {
+                floatingLabel.alpha = 0
+            }
+        } else {
+            floatingLabel.snp.updateConstraints { make in
+                make.top.equalToSuperview().inset((self.bounds.height - labelHeight) / 2)
+            }
+            floatingLabel.alpha = 0
+        }
+    }
+    
+    private func updatePlaceholder() {
+        if let placeholderAtt = placeholderAtt {
+            floatingLabel.attributed.text = placeholderAtt
+        } else {
+            floatingLabel.text = placeholder
+            floatingLabel.font = placeholderFont
+            floatingLabel.textColor = placeholderColor
+        }
+        floatingLabel.sizeToFit()
+    }
+    
+    private func setTextAndPlaceHolderTop()->CGFloat {
+        let fontToTopHeight = (self.bounds.height - (self.font ?? UIFont.systemFont(ofSize: 14)).pointSize) / 2
+        var lessSapce:CGFloat = 0
+
+        if let placeholderAtt = placeholderAtt {
+            lessSapce = fontToTopHeight - placeholderAtt.value.largestFontSize()
+        } else {
+            lessSapce = fontToTopHeight - self.floatingLabel.font.pointSize
+        }
+        if lessSapce < 0 {
+            lessSapce = 0
+        } else {
+            if (lessSapce - textAndPlceholderSpace) < 0 {
+                lessSapce = 0
+            } else {
+                lessSapce -= textAndPlceholderSpace
+            }
+        }
+        return lessSapce
+    }
+}
+

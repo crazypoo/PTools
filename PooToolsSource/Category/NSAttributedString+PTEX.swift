@@ -15,4 +15,18 @@ public extension NSAttributedString {
         let attributedStringSize = boundingRect(with: CGSizeMake(width, height), options: options, context: nil)
         return attributedStringSize.size
     }
+    
+    func largestFontSize() -> CGFloat {
+        var largestFontSize: CGFloat = 0
+
+        self.enumerateAttribute(.font, in: NSRange(location: 0, length: self.length), options: []) { value, range, stop in
+            if let font = value as? UIFont {
+                if font.pointSize > largestFontSize {
+                    largestFontSize = font.pointSize
+                }
+            }
+        }
+
+        return largestFontSize
+    }
 }
