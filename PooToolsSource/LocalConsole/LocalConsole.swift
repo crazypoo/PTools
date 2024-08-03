@@ -435,13 +435,13 @@ public class LocalConsole: NSObject {
             if isLeftEdge {
                 endpoints = [endpoints[0], endpoints[2]]
                 if !isLandscapeLeftNotchedPhone {
-                    let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                    let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
                     endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: yOffset))
                 }
             } else if isRightEdge {
                 endpoints = [endpoints[1], endpoints[3]]
                 if !isLandscapeRightNotchedPhone {
-                    let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                    let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
                     endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: yOffset))
                 }
             }
@@ -452,10 +452,10 @@ public class LocalConsole: NSObject {
             ]
             
             if isLeftEdge {
-                let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
                 endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: yOffset))
             } else if isRightEdge {
-                let yOffset = terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
                 endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: yOffset))
             }
         }

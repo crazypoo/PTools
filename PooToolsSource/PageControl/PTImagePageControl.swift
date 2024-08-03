@@ -29,7 +29,7 @@ open class PTImagePageControl: UIPageControl {
         }
     }
     
-    var dotSpacing: CGFloat = 8.0 {
+    open var dotSpacing: CGFloat = 8.0 {
         didSet {
             setupDots()
         }

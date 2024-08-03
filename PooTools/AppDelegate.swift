@@ -21,6 +21,7 @@ import MediaPlayer
 import Alamofire
 import SwifterSwift
 
+//find . -type f | grep -e ".a" -e ".framework" | xargs grep -s UIWebView
 enum RequestManager {
     static func mockRequest(url: String) {
         let url = URL(string: url)!

@@ -574,6 +574,23 @@ public class PTUtils: NSObject {
             return URL(fileURLWithPath: outputURL)
         }
     }
+    
+    class public func containsHTMLTags(_ string: String) -> Bool {
+        // 定义一个匹配 HTML 标签的正则表达式
+        let htmlTagPattern = "<[^>]+>"
+        
+        do {
+            // 创建正则表达式对象
+            let regex = try NSRegularExpression(pattern: htmlTagPattern, options: [])
+            // 在字符串中搜索匹配项
+            let matches = regex.matches(in: string, options: [], range: NSRange(location: 0, length: string.utf16.count))
+            // 如果有匹配项，说明包含 HTML 标签
+            return !matches.isEmpty
+        } catch {
+            PTNSLogConsole("正则表达式创建失败: \(error.localizedDescription)")
+            return false
+        }
+    }
 }
 
 //MARK: OC-FUNCTION
