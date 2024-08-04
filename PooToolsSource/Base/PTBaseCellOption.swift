@@ -16,6 +16,9 @@ open class PTBaseNormalCell: UICollectionViewCell {
     override public init(frame:CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = true
+        contentView.isOpaque = true
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -44,6 +47,9 @@ open class PTBaseNormalCell: UICollectionViewCell {
 open class PTBaseSwipeCell: SwipeCollectionViewCell {
     override public init(frame:CGRect) {
         super.init(frame: frame)
+        contentView.isOpaque = true
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
     }
     
     required public init?(coder aDecoder: NSCoder) {
