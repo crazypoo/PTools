@@ -605,6 +605,12 @@ public class PTCollectionView: UIView {
         }
     }
     
+    public var collectionSectionDatas:[PTSection] {
+        get {
+            mSections
+        }
+    }
+    
     //MARK: Swipe handler(Cell须要引用SwipeCellKit)
 #if POOTOOLS_SWIPECELL
     ///设置IndexPath是否开启向左swipe
@@ -680,19 +686,15 @@ public class PTCollectionView: UIView {
             }
         }
 #endif
-        if #available(iOS 17.0, *) {
-            if self.viewConfig.showEmptyAlert {
-                PTUnavailableFunction.share.emptyTap = {
-                    PTGCDManager.gcdMain {
-                        self.showEmptyLoading()
-                    }
-
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        if self.emptyTap != nil {
-                            self.emptyTap!(nil)
-                        }
-                    }
-                }
+        
+        if self.viewConfig.showEmptyAlert {
+            switch viewConfig.emptyShowType {
+            case .Auto:
+                self.iOS17EmptyTapCallback()
+            case .ThirtyParty:
+                break
+            case .System:
+                self.iOS17EmptyTapCallback()
             }
         }
     }
@@ -712,6 +714,24 @@ public class PTCollectionView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+    }
+    
+    func iOS17EmptyTapCallback() {
+        if #available(iOS 17.0, *) {
+            if self.viewConfig.showEmptyAlert {
+                PTUnavailableFunction.share.emptyTap = {
+                    PTGCDManager.gcdMain {
+                        self.showEmptyLoading()
+                    }
+
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        if self.emptyTap != nil {
+                            self.emptyTap!(nil)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func iOS17EmptyDataSet() {
@@ -773,18 +793,14 @@ public class PTCollectionView: UIView {
         PTGCDManager.gcdMain {
             if self.viewConfig.refreshWithoutAnimation {
                 self.collectionView.reloadDataWithOutAnimation {
-                    if #available(iOS 17.0, *) {
-                        self.showEmptyConfig()
-                    }
+                    self.setiOS17EmptyDataView()
                     if finishTask != nil {
                         finishTask!(self.collectionView)
                     }
                 }
             } else {
                 self.collectionView.reloadData {
-                    if #available(iOS 17.0, *) {
-                        self.showEmptyConfig()
-                    }
+                    self.setiOS17EmptyDataView()
                     if finishTask != nil {
                         finishTask!(self.collectionView)
                     }
@@ -797,21 +813,32 @@ public class PTCollectionView: UIView {
         mSections.removeAll()
         if self.viewConfig.refreshWithoutAnimation {
             self.collectionView.reloadDataWithOutAnimation {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
-                }
+                self.setiOS17EmptyDataView()
                 if finishTask != nil {
                     finishTask!(self.collectionView)
                 }
             }
         } else {
             self.collectionView.reloadData {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
-                }
+                self.setiOS17EmptyDataView()
                 if finishTask != nil {
                     finishTask!(self.collectionView)
                 }
+            }
+        }
+    }
+    
+    fileprivate func setiOS17EmptyDataView() {
+        switch self.viewConfig.emptyShowType {
+        case .Auto:
+            if #available(iOS 17.0, *) {
+                self.showEmptyConfig()
+            }
+        case .ThirtyParty:
+            break
+        case .System:
+            if #available(iOS 17.0, *) {
+                self.showEmptyConfig()
             }
         }
     }
@@ -825,6 +852,21 @@ public class PTCollectionView: UIView {
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertItems(at: indexPaths)
+                } completion: { _ in
+                    completion?()
+                }
+            }
+        }
+    }
+    
+    public func insertSection(_ sections:[PTSection],completion:PTActionTask? = nil) {
+        PTGCDManager.gcdGobal {
+            PTGCDManager.gcdMain {
+                let startIndex = self.mSections.count
+                self.mSections.append(contentsOf: sections)
+                let indexPaths = IndexSet(startIndex..<startIndex + sections.count)
+                self.collectionView.performBatchUpdates {
+                    self.collectionView.insertSections(indexPaths)
                 } completion: { _ in
                     completion?()
                 }
