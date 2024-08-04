@@ -50,6 +50,15 @@ private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionVi
     open var decorationID:String!
 }
 
+@objc public enum PTCollectionEmptyViewSet:Int {
+    ///17之前用第三方17之後包括17用系統
+    case Auto
+    ///用第三方
+    case ThirtyParty
+    ///17之後包括17用系統
+    case System
+}
+
 ///ReusableView回调
 /// - Parameters:
 ///   - kind: header的头部kind
@@ -155,6 +164,8 @@ public class PTCollectionViewConfig:NSObject {
     open var showEmptyAlert:Bool = false
     ///空数据展示参数设置
     open var emptyViewConfig:PTEmptyDataViewConfig?
+    ///空數據展示類型
+    open var emptyShowType:PTCollectionEmptyViewSet = .Auto
     ///Collection展示的Section底部样式类型
     open var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
     ///Collection展示的Section底部样式偏移
@@ -644,28 +655,28 @@ public class PTCollectionView: UIView {
 
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
-            if #unavailable(iOS 17.0) {
-                self.below17EmptyDataSet()
-            } else {
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    if let emptyConfig = self.viewConfig.emptyViewConfig {
-                        let share = PTUnavailableFunction.share
-                        share.emptyViewConfig = emptyConfig
-                        self.showEmptyConfig()
-                    }
+            switch viewConfig.emptyShowType {
+            case .Auto:
+                if #unavailable(iOS 17.0) {
+                    self.below17EmptyDataSet()
+                } else {
+                    self.iOS17EmptyDataSet()
                 }
+            case .ThirtyParty:
+                self.below17EmptyDataSet()
+            case .System:
+                self.iOS17EmptyDataSet()
             }
         }
 #else
         if self.viewConfig.showEmptyAlert {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                if #available(iOS 17.0, *) {
-                    if let emptyConfig = self.viewConfig.emptyViewConfig {
-                        let share = PTUnavailableFunction.share
-                        share.emptyViewConfig = emptyConfig
-                        self.showEmptyConfig()
-                    }
-                }
+            switch viewConfig.emptyShowType {
+            case .Auto:
+                self.iOS17EmptyDataSet()
+            case .ThirtyParty:
+                break
+            case .System:
+                self.iOS17EmptyDataSet()
             }
         }
 #endif
@@ -701,6 +712,18 @@ public class PTCollectionView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+    }
+    
+    func iOS17EmptyDataSet() {
+        if #available(iOS 17.0, *) {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                if let emptyConfig = self.viewConfig.emptyViewConfig {
+                    let share = PTUnavailableFunction.share
+                    share.emptyViewConfig = emptyConfig
+                    self.showEmptyConfig()
+                }
+            }
+        }
     }
     
     func clearTextLayers() {
@@ -788,6 +811,22 @@ public class PTCollectionView: UIView {
                 }
                 if finishTask != nil {
                     finishTask!(self.collectionView)
+                }
+            }
+        }
+    }
+    
+    public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
+        PTGCDManager.gcdGobal {
+            PTGCDManager.gcdMain {
+                let startIndex = self.mSections[section].rows.count
+                self.mSections[section].rows.append(contentsOf: rows)
+                let endIndex = self.mSections[section].rows.count - 1
+                let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
+                self.collectionView.performBatchUpdates {
+                    self.collectionView.insertItems(at: indexPaths)
+                } completion: { _ in
+                    completion?()
                 }
             }
         }
