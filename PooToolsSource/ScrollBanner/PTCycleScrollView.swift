@@ -43,8 +43,17 @@ public typealias PTScrollViewDidScrollClosure = (_ index:NSInteger,_ offSet:CGFl
 public class PTCycleScrollView: UIView {
     // MARK: DataSource
     
+    fileprivate var clearSubs:Bool = false
+    
     /// 图片地址
     open var imagePaths: Array<Any> = [] {
+        willSet {
+            if !imagePaths.elementsEqual(newValue, by: { ($0 as AnyObject).isEqual($1) }) {
+                clearSubs = true
+            } else {
+                clearSubs = false
+            }
+        }
         didSet {
             setTotalItemsMinItems(count:imagePaths.count)
             if imagePaths.count > 1 {
@@ -57,7 +66,13 @@ public class PTCycleScrollView: UIView {
                 invalidateTimer()
             }
             
-            collectionViewSetData()
+            if clearSubs {
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    self.collectionViewSetData()
+                }
+            } else {
+                setCellData()
+            }
         }
     }
     
@@ -358,18 +373,14 @@ public class PTCycleScrollView: UIView {
     /// - Parameter frame: CGRect
     override internal init(frame: CGRect) {
         super.init(frame: frame)
-        PTGCDManager.gcdAfter(time: 0.2) {
-            self.setupMainView()
-        }
+        self.setupMainView()
     }
     
     /// Init
     /// - Parameter aDecoder: NSCoder
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        PTGCDManager.gcdAfter(time: 0.2) {
-            self.setupMainView()
-        }
+        self.setupMainView()
     }
 }
 
@@ -478,7 +489,9 @@ extension PTCycleScrollView {
             make.edges.equalToSuperview()
         }
         
-        setupPageControl()
+        PTGCDManager.gcdAfter(time: 0.1) {
+            self.setupPageControl()
+        }
     }
     
     // MARK: 添加自定义箭头
@@ -616,85 +629,65 @@ extension PTCycleScrollView {
     override open func layoutSubviews() {
         super.layoutSubviews()
         // CollectionView
+        // Cell Height
+        self.cellHeight = self.frame.height
         
-        PTGCDManager.gcdAfter(time: 0.1) {
-
-            // Cell Height
-            self.cellHeight = self.frame.height
-            
-            // 计算最大扩展区大小
-            switch self.scrollDirection {
-            case .horizontal:
-                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.width
-            default:
-                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
-            }
-            
-            // Page Frame
-            switch self.customPageControlStyle {
-            case .none,.system,.image:
-                let pointSize = (self.customPageControl as? UIPageControl)?.size(forNumberOfPages: self.imagePaths.count)
-                (self.customPageControl as? UIPageControl)?.snp.makeConstraints { make in
-                    make.height.equalTo(10)
-                    make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                    switch self.pageControlPosition {
-                    case .center:
-                        make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                    case .left:
-                        make.width.equalTo(pointSize?.width ?? 0)
-                        make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                    case .right:
-                        make.width.equalTo(pointSize?.width ?? 0)
-                        make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                    default:
-                        break
-                    }
-                }
-            default:
-                var heights:CGFloat = 10
-                // pill
-                switch self.customPageControlStyle {
-                case .scrolling:
-                    heights = 20
+        // 计算最大扩展区大小
+        switch self.scrollDirection {
+        case .horizontal:
+            self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.width
+        default:
+            self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
+        }
+        
+        // Page Frame
+        switch self.customPageControlStyle {
+        case .none,.system,.image:
+            let pointSize = (self.customPageControl as? UIPageControl)?.size(forNumberOfPages: self.imagePaths.count)
+            (self.customPageControl as? UIPageControl)?.snp.makeConstraints { make in
+                make.height.equalTo(10)
+                make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                switch self.pageControlPosition {
+                case .center:
+                    make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                case .left:
+                    make.width.equalTo(pointSize?.width ?? 0)
+                    make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                case .right:
+                    make.width.equalTo(pointSize?.width ?? 0)
+                    make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
                 default:
-                    heights = 10
-                }
-                
-                self.customPageControl?.snp.makeConstraints { make in
-                    make.height.equalTo(heights)
-                    make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                    switch self.pageControlPosition {
-                    case .left:
-                        make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                    case.right:
-                        make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                    default:
-                        make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                    }
+                    break
                 }
             }
+        default:
+            var heights:CGFloat = 10
+            // pill
+            switch self.customPageControlStyle {
+            case .scrolling:
+                heights = 20
+            default:
+                heights = 10
+            }
             
-            self.collectionViewSetData()
+            self.customPageControl?.snp.makeConstraints { make in
+                make.height.equalTo(heights)
+                make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                switch self.pageControlPosition {
+                case .left:
+                    make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                case.right:
+                    make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                default:
+                    make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                }
+            }
         }
     }
     
-    func collectionViewSetData() {
-        pageScrollerView.removeSubviews()
+    func setCellData() {
         for i in 0..<totalItemsCount {
-            let cell = PTCycleScrollViewCell()
-            cell.titleFont = self.font
-            cell.titleLabelTextColor = self.textColor
-            cell.titleBackViewBackgroundColor = self.titleBackgroundColor
-            cell.titleLines = self.numberOfLines
-            // Leading
-            cell.titleLabelLeading = self.titleLeading
-            
-            let tap = UITapGestureRecognizer { sender in
-                if self.didSelectItemAtIndexClosure != nil {
-                    self.didSelectItemAtIndexClosure!(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
-                }
-            }
-            cell.addGestureRecognizer(tap)
+            let cell = viewWithTag(100 + i) as! PTCycleScrollViewCell
             // Only Title
             if self.isOnlyTitle && self.titles.count > 0 {
                 cell.titleLabelHeight = self.cellHeight
@@ -714,7 +707,11 @@ extension PTCycleScrollView {
                     let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
                     let imagePath = self.imagePaths[itemIndex]
                     
-                    cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
+                    PTGCDManager.gcdGobal {
+                        PTGCDManager.gcdMain {
+                            cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
+                        }
+                    }
                     
                     // 对冲数据判断
                     if itemIndex <= self.titles.count-1 {
@@ -724,6 +721,27 @@ extension PTCycleScrollView {
                     }
                 }
             }
+        }
+    }
+    
+    func collectionViewSetData() {
+        pageScrollerView.removeSubviews()
+        for i in 0..<totalItemsCount {
+            let cell = PTCycleScrollViewCell()
+            cell.titleFont = self.font
+            cell.titleLabelTextColor = self.textColor
+            cell.titleBackViewBackgroundColor = self.titleBackgroundColor
+            cell.titleLines = self.numberOfLines
+            // Leading
+            cell.titleLabelLeading = self.titleLeading
+            cell.tag = 100 + i
+            let tap = UITapGestureRecognizer { sender in
+                if self.didSelectItemAtIndexClosure != nil {
+                    self.didSelectItemAtIndexClosure!(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
+                }
+            }
+            cell.addGestureRecognizer(tap)
+            // Only Title
             pageScrollerView.addSubview(cell)
             switch self.scrollDirection {
             case .horizontal:
@@ -743,6 +761,7 @@ extension PTCycleScrollView {
                 self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
             }
         }
+        setCellData()
         switch self.scrollDirection {
         case .horizontal:
             pageScrollerView.contentSize = CGSize(width: self.maxSwipeSize, height: self.frame.height)
