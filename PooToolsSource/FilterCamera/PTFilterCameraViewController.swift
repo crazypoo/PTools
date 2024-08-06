@@ -155,25 +155,14 @@ public class PTFilterCameraViewController: PTBaseViewController {
     private lazy var filterCollectionView : PTCollectionView = {
         let config = PTCollectionViewConfig()
         config.viewType = .Custom
+        config.alwaysBounceVertical = false
+        config.alwaysBounceHorizontal = true
 
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.isUserInteractionEnabled = true
         view.customerLayout = { sectionIndex,sectionModel in
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
-            let screenW:CGFloat = 88
-            let cellHeight:CGFloat = PTFilterCameraViewController.filterCollectionHeight
-            sectionModel.rows.enumerated().forEach { (index,model) in
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 5, width: screenW, height: cellHeight-10), zIndex: 1000+index)
-                customers.append(customItem)
-                groupW += (cellHeight + 10)
-            }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
+            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 78,itemHeight: PTFilterCameraViewController.filterCollectionHeight,topContentSpace: 5,itemLeadingSpace: 10)
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
