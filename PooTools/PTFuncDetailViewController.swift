@@ -230,30 +230,30 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.centerX.centerY.equalToSuperview()
             }
             view.addActionHandlers { sender in
-                let pickerConfig = PTMediaLibConfig.share
-                pickerConfig.allowSelectImage = true
-                pickerConfig.allowSelectVideo = false
-                pickerConfig.allowSelectGif = false
-                pickerConfig.maxVideoSelectCount = 1
-                pickerConfig.maxSelectCount = 1
-                let vc = PTMediaLibViewController()
                 self.dismiss(animated: true, completion: {
+                    let pickerConfig = PTMediaLibConfig.share
+                    pickerConfig.allowSelectImage = true
+                    pickerConfig.allowSelectVideo = false
+                    pickerConfig.allowSelectGif = false
+                    pickerConfig.maxVideoSelectCount = 1
+                    pickerConfig.maxSelectCount = 1
+                    let vc = PTMediaLibViewController()
                     vc.mediaLibShow()
-                })
-                vc.selectImageBlock = { result, isOriginal in
-                    if #available(iOS 14.0, *) {
-                        let vision = PTVision.share
-                        
-                        var visionVersion:Int = VNRecognizeTextRequestRevision2
-                        if #available(iOS 16.0, *) {
-                            visionVersion = VNRecognizeTextRequestRevision3
-                        }
-                        
-                        vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
-                            UIViewController.gobal_drop(title: resultText)
+                    vc.selectImageBlock = { result, isOriginal in
+                        if #available(iOS 14.0, *) {
+                            let vision = PTVision.share
+                            
+                            var visionVersion:Int = VNRecognizeTextRequestRevision2
+                            if #available(iOS 16.0, *) {
+                                visionVersion = VNRecognizeTextRequestRevision3
+                            }
+                            
+                            vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
+                                UIViewController.gobal_drop(title: resultText)
+                            }
                         }
                     }
-                }
+                })
             }
         case String.twitterLabel:
             let customType = PTActiveType.custom(pattern: "\\s克狗扑\\b") //Looks for "克狗扑"

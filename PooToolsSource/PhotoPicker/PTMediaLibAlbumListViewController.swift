@@ -25,9 +25,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTMediaLibConfig.share.ablumListBackImage, for: .normal)
         view.addActionHandlers { sender in
-//            self.presentingViewController?.dismissAnimated()
             self.navigationController?.popViewController(animated: true)
         }
         return view
@@ -56,6 +55,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         config.itemHeight = 88
         config.showEmptyAlert = true
         config.emptyViewConfig = emptyConfig
+        config.contentBottomSpace = CGFloat.kTabbarSaveAreaHeight
 
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTMediaLibAlbumCell.ID:PTMediaLibAlbumCell.self])
@@ -158,7 +158,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             make.centerX.equalToSuperview()
             make.left.lessThanOrEqualTo(self.dismissButton.snp.right).offset(7.5)
         }
-        navTitle.text = "PT Photo picker album list title".localized()
+        navTitle.text = PTMediaLibConfig.share.albumListNavName
     }
     
     func loadAlbumList() {

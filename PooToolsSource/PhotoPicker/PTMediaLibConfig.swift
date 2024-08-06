@@ -156,6 +156,15 @@ public class PTMediaLibConfig:NSObject {
         }
     }
     public var cropVideoAfterSelectThumbnail = true
+    
+    //MARK: NAV
+    public var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var submitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+    public var arrowDownImage:UIImage = "🔽".emojiToImage(emojiFont: .appfont(size: 10))
+    public var ablumListBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var albumSelectedImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 15))
+    public var cameraImage:UIImage = "📸".emojiToImage(emojiFont: .appfont(size: 24))
+    public var albumListNavName:String = "PT Photo picker album list title".localized()
 }
 
 public class PTMediaLibUIConfig:NSObject {

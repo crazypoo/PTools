@@ -555,7 +555,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTMediaLibConfig.share.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -564,7 +564,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     private lazy var submitButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTMediaLibConfig.share.submitImage, for: .normal)
         view.addActionHandlers { sender in
             self.requestSelectPhoto(viewController: self)
         }
@@ -575,7 +575,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         let view = PTLayoutButton()
         view.layoutStyle = .leftTitleRightImage
         view.imageSize = CGSize(width: 10, height: 10)
-        view.normalImage = "🔽".emojiToImage(emojiFont: .appfont(size: 10))
+        view.normalImage = PTMediaLibConfig.share.arrowDownImage
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.normalSubTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.hightlightTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
@@ -670,7 +670,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             }
         default:
             break
-        }
+        }        
     }
     
     func loadImageData() {

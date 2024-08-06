@@ -14,6 +14,7 @@ public class PTPurchaseCarAnimationTool: NSObject {
     public static let shared = PTPurchaseCarAnimationTool.init()
     open var block:AnimationFinishBlock?
     open var layer:CALayer?
+    open var duration:CFTimeInterval = 1.2
     
     public func startAnimationand(view:UIView,
                                   rect:CGRect,
@@ -23,8 +24,8 @@ public class PTPurchaseCarAnimationTool: NSObject {
         layer = CALayer()
         layer?.contents = view.layer.contents
         layer?.contentsGravity = .resizeAspectFill
-        newRect.size.width = 60
-        newRect.size.height = 60
+        newRect.size.width = view.bounds.width
+        newRect.size.height = view.bounds.height
         layer?.bounds = newRect
         layer?.cornerRadius = newRect.size.width/2
         layer?.masksToBounds = true
@@ -61,7 +62,7 @@ public class PTPurchaseCarAnimationTool: NSObject {
         
         let groups = CAAnimationGroup()
         groups.animations = [pathAnimation,rotateAnimation]
-        groups.duration = 1.2
+        groups.duration = PTPurchaseCarAnimationTool.shared.duration
         groups.isRemovedOnCompletion = false
         groups.fillMode = .forwards
         groups.delegate = self
@@ -70,7 +71,7 @@ public class PTPurchaseCarAnimationTool: NSObject {
 }
 
 extension PTPurchaseCarAnimationTool:CAAnimationDelegate {
-    public func animationDidStop(_ anim: CAAnimation, 
+    public func animationDidStop(_ anim: CAAnimation,
                                  finished flag: Bool) {
         if anim == layer?.animation(forKey: "group") {
             layer!.removeFromSuperlayer()

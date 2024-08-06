@@ -389,7 +389,8 @@ class PTFuncNameViewController: PTBaseViewController {
 //                self.aaaaaaa.reloadEmptyConfig()
 //            }
             emptyView.backgroundColor = .randomColor
-            PTNSLogConsole("123123123123123123")
+//            PTNSLogConsole("123123123123123123")
+            self.showCollectionViewData()
         }
         emptyView.addSubviews([aaaaaaaaaaaa])
         aaaaaaaaaaaa.snp.makeConstraints { make in

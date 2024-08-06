@@ -314,7 +314,7 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
     
     lazy var selectedButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 15)), for: .selected)
+        view.setImage(PTMediaLibConfig.share.albumSelectedImage, for: .selected)
         view.setImage(nil, for: .normal)
         return view
     }()
@@ -355,7 +355,7 @@ class PTCameraCell: PTBaseNormalCell {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
-        view.image = "📸".emojiToImage(emojiFont: .appfont(size: 24))
+        view.image = PTMediaLibConfig.share.cameraImage
         return view
     }()
     

@@ -253,11 +253,10 @@ public class PTMediaLibManager:NSObject {
                 option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
             }
             
-            let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+            let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
             smartAlbums.enumerateObjects { collection, _, stop in
                 if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                     stop.pointee = true
-                    
                     let result = PHAsset.fetchAssets(in: collection, options: option)
                     let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
                     PTGCDManager.gcdMain {
@@ -278,7 +277,7 @@ public class PTMediaLibManager:NSObject {
             option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
         }
         
-        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil) as! PHFetchResult<PHCollection>
+        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil) as! PHFetchResult<PHCollection>
         let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as! PHFetchResult<PHCollection>
         let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as! PHFetchResult<PHCollection>
         let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as! PHFetchResult<PHCollection>

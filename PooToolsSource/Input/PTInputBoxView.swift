@@ -266,7 +266,6 @@ public class PTInputBoxView: UIView {
         
         NotificationCenter.default.addObserver(self, selector: #selector(textChange), name: UITextField.textDidChangeNotification, object: textField)
         
-        
         if config.autoShowKeyboard {
             let time: TimeInterval = config.autoShowKeyboardDelay
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
@@ -328,9 +327,23 @@ public class PTInputBoxView: UIView {
             
             let textField = subviews[i] as! UITextField
             textField.text = ""
+                        
+            if config.inputBoxBorderWidth > 0 {
+                PTGCDManager.gcdAfter(time: 0.01) {
+                    textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                }
+            }
+            
+            if config.inputBoxCornerRadius > 0 {
+                PTGCDManager.gcdAfter(time: 0.01) {
+                    textField.layer.cornerRadius = self.config.inputBoxCornerRadius
+                }
+            }
             
             if config.inputBoxColor != nil {
-                textField.layer.borderColor = config.inputBoxColor?.cgColor
+                PTGCDManager.gcdAfter(time: 0.01) {
+                    textField.layer.borderColor = self.config.inputBoxColor?.cgColor
+                }
             }
             
             if config.showFlickerAnimation && layerArray.count > i {
@@ -409,7 +422,9 @@ public class PTInputBoxView: UIView {
             textField.textColor = color
             
             if inputBoxColor != nil {
-                textField.layer.borderColor = inputBoxColor!.cgColor
+                PTGCDManager.gcdAfter(time: 0.02) {
+                    textField.layer.borderColor = inputBoxColor!.cgColor
+                }
             }
             
             if config.showUnderLine && underLineColor != nil {
@@ -424,7 +439,7 @@ public class PTInputBoxView: UIView {
             finishBlock!(self, textField.text!)
         }
         
-        PTGCDManager.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.02) {
             self.textField.resignFirstResponder()
         }
     }
