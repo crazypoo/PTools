@@ -656,21 +656,23 @@ public class PTMediaLibViewController: PTBaseViewController {
         
         createNavSubs()
         
-        switch PTPermission.photoLibrary.status {
-        case .authorized:
-            loadImageData()
-        case .notDetermined:
-            PTPermission.photoLibrary.request {
-                switch PTPermission.photoLibrary.status {
-                case .authorized:
-                    self.loadImageData()
-                default:
-                    break
+        PTGCDManager.gcdMain {
+            switch PTPermission.photoLibrary.status {
+            case .authorized:
+                self.loadImageData()
+            case .notDetermined:
+                PTPermission.photoLibrary.request {
+                    switch PTPermission.photoLibrary.status {
+                    case .authorized:
+                        self.loadImageData()
+                    default:
+                        break
+                    }
                 }
+            default:
+                break
             }
-        default:
-            break
-        }        
+        }
     }
     
     func loadImageData() {
