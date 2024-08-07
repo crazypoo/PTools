@@ -937,7 +937,7 @@ class PTEditInputViewController: PTBaseViewController {
         }
         
         endInput?(textView.text, currentColor, font, image, textStyle)
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController()
     }
     
     @objc private func keyboardWillShow(_ notify: Notification) {

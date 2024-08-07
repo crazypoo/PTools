@@ -606,7 +606,7 @@ class PTCutViewController: PTBaseViewController {
         dismissAnimateFromRect = clipBoxFrame
         dismissAnimateImage = image.clipImage
         clipDoneBlock?(angle, image.editRect, selectedRatio)
-        dismiss(animated: animate, completion: nil)
+        navigationController?.popViewController()
     }
     
     @objc private func rotateBtnClick() {
