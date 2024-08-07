@@ -184,7 +184,9 @@ public class PTSheetViewController: PTBaseViewController {
         set { self.contentViewController.contentBackgroundColor = newValue }
     }
     
-    public init(controller: UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
+    private var dismissPanGes:Bool = true
+    
+    public init(controller: UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,dismissPanGes:Bool = true) {
         let options = options ?? PTSheetOptions.default
         self.contentViewController = PTSheetContentViewController(childViewController: controller, options: options)
         if #available(iOS 13.0, *) {
@@ -201,6 +203,7 @@ public class PTSheetViewController: PTBaseViewController {
         self.gripSize = PTSheetViewController.gripSize
         self.pullBarBackgroundColor = PTSheetViewController.pullBarBackgroundColor
         self.cornerRadius = PTSheetViewController.cornerRadius
+        self.dismissPanGes = dismissPanGes
         self.updateOrderedSizes()
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
@@ -233,7 +236,9 @@ public class PTSheetViewController: PTBaseViewController {
         self.compatibleAdditionalSafeAreaInsets = UIEdgeInsets(top: -self.options.pullBarHeight, left: 0, bottom: 0, right: 0)
         
         self.view.backgroundColor = UIColor.clear
-        self.addPanGestureRecognizer()
+        if self.dismissPanGes {
+            self.addPanGestureRecognizer()
+        }
         self.addOverlay()
         self.addBlurBackground()
         self.addContentView()

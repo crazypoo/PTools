@@ -479,8 +479,8 @@ public extension UIViewController {
     }
     
     
-    class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil) {
-        let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options)
+    class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
+        let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
         let currentVC = PTUtils.getCurrentVC()
         if currentVC is PTSideMenuControl {
             let currentVC = (currentVC as! PTSideMenuControl).contentViewController

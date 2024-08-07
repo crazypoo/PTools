@@ -159,7 +159,7 @@ public class PTMediaLibView:UIView {
                                         }
                                     }
                                     let nav = PTBaseNavControl(rootViewController: vc)
-                                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
+                                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
                                 }
                             }
                         }
