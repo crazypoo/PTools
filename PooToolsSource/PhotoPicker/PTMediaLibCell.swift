@@ -131,7 +131,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     
     lazy var editButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(UIImage(.pencil), for: .normal)
+        view.setImage(PTMediaLibConfig.share.editImage, for: .normal)
         return view
     }()
 

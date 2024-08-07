@@ -12,6 +12,7 @@ import AVFoundation
 import Accelerate
 import MobileCoreServices
 import UIKit
+import SafeSFSymbols
 
 let PTMaxImageWidth: CGFloat = 500
 
@@ -165,6 +166,7 @@ public class PTMediaLibConfig:NSObject {
     public var albumSelectedImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 15))
     public var cameraImage:UIImage = "📸".emojiToImage(emojiFont: .appfont(size: 24))
     public var albumListNavName:String = "PT Photo picker album list title".localized()
+    public var editImage:UIImage = UIImage(.pencil)
 }
 
 public class PTMediaLibUIConfig:NSObject {
