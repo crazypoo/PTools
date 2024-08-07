@@ -236,7 +236,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         })
     }
     
-    private func fetchBigImage() {
+    public func fetchBigImage() {
         cancelFetchBigImage()
         bigImageReqeustID = PTMediaLibManager.fetchOriginalImageData(for: cellModel.asset, progress: { [weak self] progress, _, _, _ in
             if self?.cellModel.isSelected == true {
@@ -256,7 +256,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         })
     }
 
-    private func cancelFetchBigImage() {
+    public func cancelFetchBigImage() {
         if bigImageReqeustID > PHInvalidImageRequestID {
             PHImageManager.default().cancelImageRequest(bigImageReqeustID)
         }
