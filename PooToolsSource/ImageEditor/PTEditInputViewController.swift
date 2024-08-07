@@ -739,16 +739,7 @@ class PTEditInputViewController: PTBaseViewController {
                     colorPickerBack.addActionHandlers { sender in
                         colorPicker.navigationController?.popViewController(animated: true)
                     }
-#if POOTOOLS_NAVBARCONTROLLER
-                    colorPicker.sheetViewController?.zx_navBar?.addSubviews([colorPickerBack])
-                    colorPickerBack.snp.makeConstraints { make in
-                        make.size.equalTo(34)
-                        make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                        make.bottom.equalToSuperview().inset(5)
-                    }
-#else
                     colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
-#endif
                 })
             } else {
                 let vc = PTMediaColorSelectViewController(currentColor: self.currentColor)
@@ -785,8 +776,6 @@ class PTEditInputViewController: PTBaseViewController {
 #else
         PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
 #endif
-
-        textView.becomeFirstResponder()
     }
 
     init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal) {
@@ -813,6 +802,7 @@ class PTEditInputViewController: PTBaseViewController {
         super.viewDidLoad()
 
 #if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navLeftBtn?.isHidden = true
         self.zx_navBarBackgroundColor = .clear
         self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
         cancelBtn.snp.makeConstraints { make in
@@ -836,6 +826,10 @@ class PTEditInputViewController: PTBaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIApplication.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIApplication.keyboardWillHideNotification, object: nil)
+        
+        PTGCDManager.gcdAfter(time: 0.35) {
+            self.textView.becomeFirstResponder()
+        }
     }
         
     override func viewDidLayoutSubviews() {
@@ -918,7 +912,7 @@ class PTEditInputViewController: PTBaseViewController {
     }
     
     @objc private func cancelBtnClick() {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc private func doneBtnClick() {

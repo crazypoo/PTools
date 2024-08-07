@@ -291,6 +291,7 @@ class PTCutViewController: PTBaseViewController {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navLineViewBackgroundColor = .clear
         self.zx_navBarBackgroundColor = .clear
+        self.zx_navLeftBtn?.isHidden = true
         self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
         cancelBtn.snp.makeConstraints { make in
             make.size.equalTo(34)

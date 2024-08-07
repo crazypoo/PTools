@@ -423,16 +423,7 @@ public class PTEditImageViewController: PTBaseViewController {
                     colorPickerBack.addActionHandlers { sender in
                         colorPicker.navigationController?.popViewController(animated: true)
                     }
-#if POOTOOLS_NAVBARCONTROLLER
-                    colorPicker.sheetViewController?.zx_navBar?.addSubviews([colorPickerBack])
-                    colorPickerBack.snp.makeConstraints { make in
-                        make.size.equalTo(34)
-                        make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                        make.bottom.equalToSuperview().inset(5)
-                    }
-#else
                     colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
-#endif
                 })
             } else {
                 let vc = PTMediaColorSelectViewController(currentColor: self.drawColor)
