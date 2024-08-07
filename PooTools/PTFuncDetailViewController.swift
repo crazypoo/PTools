@@ -236,7 +236,8 @@ class PTFuncDetailViewController: PTBaseViewController {
                     pickerConfig.allowSelectVideo = false
                     pickerConfig.allowSelectGif = false
                     pickerConfig.maxVideoSelectCount = 1
-                    pickerConfig.maxSelectCount = 1
+                    pickerConfig.maxSelectCount = 2
+                    pickerConfig.allowEditImage = true
                     let vc = PTMediaLibViewController()
                     vc.mediaLibShow()
                     vc.selectImageBlock = { result, isOriginal in

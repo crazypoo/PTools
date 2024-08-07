@@ -15,7 +15,7 @@ import UIKit
 }
 
 public class PTImageEditorConfig: NSObject {
-    static let share = PTImageEditorConfig()
+    public static let share = PTImageEditorConfig()
     
     /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
     public var maxFrameCountForGIF = 50
@@ -139,4 +139,31 @@ public class PTImageEditorConfig: NSObject {
             pri_adjust_tools = newValue
         }
     }
+    
+    //MARK: NAV
+    /*
+     Base
+     */
+    public var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var submitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+    public var undoNormal:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20))
+    public var undoDisable:UIImage = "⇠".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray)
+    public var redoNormal:UIImage = "↪️".emojiToImage(emojiFont: .appfont(size: 20))
+    public var redoDisable:UIImage = "⇢".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray)
+    /*
+     Cut
+     */
+    public var cutBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var cutSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+    public var cutUndoImage:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20))
+    public var cutRotateImage:UIImage = "🔄".emojiToImage(emojiFont: .appfont(size: 20))
+    /*
+     Text
+     */
+    public var textBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var textSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+    /*
+     ColorPicker
+     */
+    public var colorPickerBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
 }

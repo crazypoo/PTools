@@ -159,9 +159,7 @@ public class PTMediaLibView:UIView {
                                         }
                                     }
                                     let nav = PTBaseNavControl(rootViewController: vc)
-                                    nav.view.backgroundColor = .black
-                                    nav.modalPresentationStyle = .fullScreen
-                                    PTUtils.getCurrentVC().present(nav, animated: true)
+                                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
                                 }
                             }
                         }

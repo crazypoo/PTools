@@ -671,14 +671,14 @@ class PTEditInputViewController: PTBaseViewController {
     
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        btn.setImage(PTImageEditorConfig.share.textBackImage, for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         return btn
     }()
     
     private lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        btn.setImage(PTImageEditorConfig.share.textSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         btn.layer.masksToBounds = true
         return btn
@@ -732,19 +732,32 @@ class PTEditInputViewController: PTBaseViewController {
                 colorPicker.supportsAlpha = true
                 
                 // 呈现颜色选择器
-                colorPicker.modalPresentationStyle = .fullScreen
-                self.present(colorPicker, animated: true) {
-                }
+                self.navigationController?.pushViewController(colorPicker, completion: {
+                    let colorPickerBack = UIButton(type: .custom)
+                    colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
+                    colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+                    colorPickerBack.addActionHandlers { sender in
+                        colorPicker.navigationController?.popViewController(animated: true)
+                    }
+#if POOTOOLS_NAVBARCONTROLLER
+                    colorPicker.sheetViewController?.zx_navBar?.addSubviews([colorPickerBack])
+                    colorPickerBack.snp.makeConstraints { make in
+                        make.size.equalTo(34)
+                        make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                        make.bottom.equalToSuperview().inset(5)
+                    }
+#else
+                    colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
+#endif
+                })
             } else {
                 let vc = PTMediaColorSelectViewController(currentColor: self.currentColor)
                 vc.colorSelectedTask = { color in
                     self.currentColor = color
                 }
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true) {
-                }
+                self.navigationController?.pushViewController(vc, animated: true)
             }
+
         }
         return view
     }()
@@ -770,7 +783,7 @@ class PTEditInputViewController: PTBaseViewController {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
 #endif
 
         textView.becomeFirstResponder()
@@ -1128,12 +1141,23 @@ extension PTEditInputViewController: NSLayoutManagerDelegate {
 @available(iOS 14.0, *)
 extension PTEditInputViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        viewController.dismiss(animated: true) {
-            self.currentColor = viewController.selectedColor
+        if viewController.checkVCIsPresenting() {
+            viewController.dismiss(animated: true) {
+                PTGCDManager.gcdMain {
+                    self.currentColor = viewController.selectedColor
+                }
+            }
+        } else {
+            viewController.navigationController?.popViewController(animated: true) {
+                PTGCDManager.gcdMain {
+                    self.currentColor = viewController.selectedColor
+                }
+            }
         }
     }
     
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
+        self.currentColor = viewController.selectedColor
     }
 }
 

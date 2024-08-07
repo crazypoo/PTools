@@ -242,7 +242,7 @@ public class PTEditImageViewController: PTBaseViewController {
 
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTImageEditorConfig.share.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -251,8 +251,8 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var undoButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("↩️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-        view.setImage("⇠".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray), for: .disabled)
+        view.setImage(PTImageEditorConfig.share.undoNormal, for: .normal)
+        view.setImage(PTImageEditorConfig.share.undoDisable, for: .disabled)
         view.addActionHandlers { sender in
             self.editorManager.undoAction()
         }
@@ -261,8 +261,8 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var redoButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("↪️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-        view.setImage("⇢".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray), for: .disabled)
+        view.setImage(PTImageEditorConfig.share.redoNormal, for: .normal)
+        view.setImage(PTImageEditorConfig.share.redoDisable.withTintColor(.lightGray), for: .disabled)
         view.addActionHandlers { sender in
             self.editorManager.redoAction()
         }
@@ -271,7 +271,7 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var doneButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTImageEditorConfig.share.submitImage, for: .normal)
         view.addActionHandlers { sender in
             var stickerStates: [PTBaseStickertState] = []
             for view in self.stickersContainer.subviews {
@@ -416,17 +416,30 @@ public class PTEditImageViewController: PTBaseViewController {
                 
                 // 呈现颜色选择器
                 colorPicker.modalPresentationStyle = .fullScreen
-                self.present(colorPicker, animated: true) {
-                }
+                self.navigationController?.pushViewController(colorPicker, completion: {
+                    let colorPickerBack = UIButton(type: .custom)
+                    colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
+                    colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+                    colorPickerBack.addActionHandlers { sender in
+                        colorPicker.navigationController?.popViewController(animated: true)
+                    }
+#if POOTOOLS_NAVBARCONTROLLER
+                    colorPicker.sheetViewController?.zx_navBar?.addSubviews([colorPickerBack])
+                    colorPickerBack.snp.makeConstraints { make in
+                        make.size.equalTo(34)
+                        make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                        make.bottom.equalToSuperview().inset(5)
+                    }
+#else
+                    colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
+#endif
+                })
             } else {
                 let vc = PTMediaColorSelectViewController(currentColor: self.drawColor)
                 vc.colorSelectedTask = { color in
                     self.drawColor = color
                 }
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true) {
-                }
+                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
         return view
@@ -581,7 +594,7 @@ public class PTEditImageViewController: PTBaseViewController {
 #if POOTOOLS_NAVBARCONTROLLER
 #else
         guard let nav = navigationController else { return }
-        PTBaseNavControl.GobalNavControl(nav: nav,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
 #endif
         changeStatusBar(type: .Dark)
     }
@@ -604,7 +617,7 @@ public class PTEditImageViewController: PTBaseViewController {
         
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
 #endif
     }
     
@@ -1146,11 +1159,9 @@ extension PTEditImageViewController {
             self?.resetContainerViewFrame()
         }
         
-        let nav = PTBaseNavControl(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: false) {
+        self.navigationController?.pushViewController(vc,completion: {
             self.mainScrollView.alpha = 0
-        }
+        })
         
         selectedTool = nil
         showHandDrawBar(show: false)
@@ -1214,9 +1225,7 @@ extension PTEditImageViewController {
             completion(text, textColor, font, image, style)
         }
         
-        let nav = PTBaseNavControl(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true)
+        self.navigationController?.pushViewController(vc)
     }
 
     /// Add text sticker
@@ -1583,14 +1592,23 @@ extension PTEditImageViewController:UIScrollViewDelegate {
 @available(iOS 14.0, *)
 extension PTEditImageViewController: UIColorPickerViewControllerDelegate {
     public func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        viewController.dismiss(animated: true) {
-            PTGCDManager.gcdMain {
-                self.drawColor = viewController.selectedColor
+        if viewController.checkVCIsPresenting() {
+            viewController.dismiss(animated: true) {
+                PTGCDManager.gcdMain {
+                    self.drawColor = viewController.selectedColor
+                }
+            }
+        } else {
+            viewController.navigationController?.popViewController(animated: true) {
+                PTGCDManager.gcdMain {
+                    self.drawColor = viewController.selectedColor
+                }
             }
         }
     }
     
     public func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
+        self.drawColor = viewController.selectedColor
     }
 }
 

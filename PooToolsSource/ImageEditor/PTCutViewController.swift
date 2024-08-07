@@ -106,7 +106,7 @@ class PTCutViewController: PTBaseViewController {
     
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        btn.setImage(PTImageEditorConfig.share.cutBackImage, for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         return btn
@@ -115,14 +115,14 @@ class PTCutViewController: PTBaseViewController {
     private lazy var revertBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setTitleColor(.white, for: .normal)
-        btn.setImage("🔄".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        btn.setImage(PTImageEditorConfig.share.cutUndoImage, for: .normal)
         btn.addTarget(self, action: #selector(revertBtnClick), for: .touchUpInside)
         return btn
     }()
     
     lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        btn.setImage(PTImageEditorConfig.share.cutSubmitImage, for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         return btn
@@ -130,7 +130,7 @@ class PTCutViewController: PTBaseViewController {
     
     private lazy var rotateBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage("↩️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        btn.setImage(PTImageEditorConfig.share.cutRotateImage, for: .normal)
         btn.adjustsImageWhenHighlighted = false
         btn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         return btn
@@ -246,7 +246,7 @@ class PTCutViewController: PTBaseViewController {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
 #endif
     }
 
@@ -582,7 +582,11 @@ class PTCutViewController: PTBaseViewController {
         dismissAnimateFromRect = cancelClipAnimateFrame
         dismissAnimateImage = presentAnimateImage
         cancelClipBlock?()
-        dismiss(animated: animate, completion: nil)
+        if self.checkVCIsPresenting() {
+            dismiss(animated: animate, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: animate)
+        }
     }
     
     @objc private func revertBtnClick() {

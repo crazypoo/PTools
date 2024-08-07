@@ -23,7 +23,7 @@ class PTMediaColorSelectViewController: PTBaseViewController {
     
     lazy var closeBtn :UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -45,13 +45,13 @@ class PTMediaColorSelectViewController: PTBaseViewController {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubview(closeBtn)
         closeBtn.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(34)
             make.bottom.equalToSuperview().inset(5)
         }
 #else
         closeBtn.frame = CGRectMake(0, 0, 34, 34)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeBtn)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeBtn)
 #endif
 
         let lrCount = 16
