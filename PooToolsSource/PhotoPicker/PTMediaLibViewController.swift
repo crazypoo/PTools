@@ -235,45 +235,36 @@ public class PTMediaLibView:UIView {
                 }
             } else {
                 let config = PTMediaLibConfig.share
-                if config.maxSelectCount == 1 {
-                    let cellModel = (itemRow.dataModel as! PTMediaModel)
-                    self.selectedModel.append(cellModel)
-                    config.didSelectAsset?(cellModel.asset)
-                    if let vc = self.parentViewController as? PTMediaLibViewController {
-                        vc.requestSelectPhoto(viewController:vc)
+                let cellModel = (itemRow.dataModel as! PTMediaModel)
+                let currentCell = collection.cellForItem(at: indexPath) as! PTMediaLibCell
+                                    
+                if !cellModel.isSelected {
+                    guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
+                    
+                    PTGCDManager.gcdMain {
+                        downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                            cellModel.isSelected = true
+                            self.selectedModel.append(cellModel)
+                            PTGCDManager.gcdMain {
+                                currentCell.selectButton.isSelected = true
+                                currentCell.layer.removeAllAnimations()
+                                currentCell.fetchBigImage()
+                            }
+                            config.didSelectAsset?(cellModel.asset)
+                            self.refreshCellIndex()
+                        }
                     }
                 } else {
-                    let cellModel = (itemRow.dataModel as! PTMediaModel)
-                    let currentCell = collection.cellForItem(at: indexPath) as! PTMediaLibCell
-                                        
-                    if !cellModel.isSelected {
-                        guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
-                        
-                        PTGCDManager.gcdMain {
-                            downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                                cellModel.isSelected = true
-                                self.selectedModel.append(cellModel)
-                                PTGCDManager.gcdMain {
-                                    currentCell.selectButton.isSelected = true
-                                    currentCell.layer.removeAllAnimations()
-                                    currentCell.fetchBigImage()
-                                }
-                                config.didSelectAsset?(cellModel.asset)
-                                self.refreshCellIndex()
-                            }
-                        }
-                    } else {
-                        cellModel.isSelected = false
-                        self.selectedModel.removeAll(where: { $0 == cellModel })
-                        PTGCDManager.gcdMain {
-                            currentCell.selectButton.isSelected = false
-                            currentCell.layer.removeAllAnimations()
-                            currentCell.cancelFetchBigImage()
-                        }
-
-                        config.didDeselectAsset?(cellModel.asset)
-                        self.refreshCellIndex()
+                    cellModel.isSelected = false
+                    self.selectedModel.removeAll(where: { $0 == cellModel })
+                    PTGCDManager.gcdMain {
+                        currentCell.selectButton.isSelected = false
+                        currentCell.layer.removeAllAnimations()
+                        currentCell.cancelFetchBigImage()
                     }
+
+                    config.didDeselectAsset?(cellModel.asset)
+                    self.refreshCellIndex()
                 }
             }
         }
