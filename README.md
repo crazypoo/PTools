@@ -193,6 +193,8 @@ pod 'PooTools/ImageEditor', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/Circle', :git => 'https://github.com/crazypoo/PTools.git'
 ### MessageKit
 pod 'PooTools/MessageKit', :git => 'https://github.com/crazypoo/PTools.git'
+### IAPManager
+pod 'PooTools/IAP', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 
