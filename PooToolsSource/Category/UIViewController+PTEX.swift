@@ -62,7 +62,7 @@ public extension UIViewController {
     
     //MARK: 设置该控制器的状态栏状态
     /// 设置该控制器的状态栏状态
-    func setStatusBar(isHidden: Bool? = nil, 
+    func setStatusBar(isHidden: Bool? = nil,
                       style: UIStatusBarStyle? = nil,
                       animation: UIStatusBarAnimation? = nil) {
         StatusBarManager.shared.setState(for: statusBarKey, isHidden: isHidden, style: style, animation: animation)
@@ -479,14 +479,15 @@ public extension UIViewController {
     }
     
     
-    class func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
+    class func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
+        sheet.overlayColor = overlayColor
         let currentVC = PTUtils.getCurrentVC()
         if currentVC is PTSideMenuControl {
             let currentVC = (currentVC as! PTSideMenuControl).contentViewController
             if let presentedVC = currentVC?.presentedViewController {
                 presentedVC.present(sheet, animated: true) {
-                    completion?()   
+                    completion?()
                 }
             } else {
                 currentVC!.present(sheet, animated: true) {

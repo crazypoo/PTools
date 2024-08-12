@@ -381,8 +381,8 @@ extension PTBaseViewController {
 }
 
 extension PTBaseViewController {
-    public func currentPresentToSheet(vc:UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
-        UIViewController.currentPresentToSheet(vc: vc,sizes: sizes,options: options)
+    public func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil) {
+        UIViewController.currentPresentToSheet(vc: vc,overlayColor: overlayColor,sizes: sizes,options: options)
     }
 }
 

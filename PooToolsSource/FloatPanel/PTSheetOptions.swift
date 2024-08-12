@@ -20,7 +20,7 @@ public struct PTSheetOptions {
     }
     
     public var pullBarHeight: CGFloat = 24
-    
+    /// 展示界面的圓角
     public var presentingViewCornerRadius: CGFloat = 12
     public var shouldExtendBackground = true
     public var setIntrinsicHeightOnNavigationControllers = true
@@ -37,6 +37,7 @@ public struct PTSheetOptions {
     
     /// Allow the sheet to become full screen if pulled all the way to the top and not larger than the maximum size specified in sizes. Defaults to false.
     public var useFullScreenMode = true
+    /// 被彈出界面是否用抽屜式顯示,默認開啟
     public var shrinkPresentingViewController = true
     /// Set true to be able to use the sheet view controller as a subview instead of a modal. Defaults to false.
     public var useInlineMode = false
