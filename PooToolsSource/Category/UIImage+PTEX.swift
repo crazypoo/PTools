@@ -450,6 +450,47 @@ public extension UIImage {
         // 检查图片数据的字节大小是否大于指定值
         return self.bytesSize > byteSize // 如果转换失败，则默认为大小不超过指定值
     }
+    
+    //MARK: 保存圖片為JPEG,並且返回鏈接
+    ///保存圖片為JPEG,並且返回鏈接
+    func saveImageAsJPEG(completion: @escaping (URL?) -> Void) {
+        if let data = self.jpegData(compressionQuality: 1.0) {
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let fileName = UUID().uuidString + ".jpg"
+            let fileURL = tempDirectory.appendingPathComponent(fileName)
+
+            do {
+                try data.write(to: fileURL)
+                completion(fileURL)
+            } catch {
+                PTNSLogConsole("Error saving image: \(error)")
+                completion(nil)
+            }
+        } else {
+            completion(nil)
+        }
+    }
+
+    //MARK: 保存圖片為PNG,並且返回鏈接
+    ///保存圖片為PNG,並且返回鏈接
+    func saveImageAsPNG(completion: @escaping (URL?) -> Void) {
+
+        if let data = self.pngData() {
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let fileName = UUID().uuidString + ".png"
+            let fileURL = tempDirectory.appendingPathComponent(fileName)
+
+            do {
+                try data.write(to: fileURL)
+                completion(fileURL)
+            } catch {
+                PTNSLogConsole("Error saving image: \(error)")
+                completion(nil)
+            }
+        } else {
+            completion(nil)
+        }
+    }
 }
 
 public extension PTPOP where Base: UIImage {

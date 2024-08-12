@@ -8,6 +8,7 @@
 
 import Photos
 import MobileCoreServices
+import UIKit
 
 extension PHAsset: PTProtocolCompatible {}
 public extension PTPOP where Base: PHAsset {
@@ -50,6 +51,28 @@ public extension PTPOP where Base: PHAsset {
 
         PHImageManager.default().requestAVAsset(forVideo: base, options: options) { avAsset, _, _ in
             completion(avAsset)
+        }
+    }
+    
+    //MARK: 判斷是否為LivePhoto
+    ///判斷是否為LivePhoto
+    func isLivePhoto() -> Bool {
+        return base.mediaSubtypes.contains(.photoLive)
+    }
+    
+    //MARK: 根據如果是LivePhoto,可以獲取圖片真身
+    ///根據如果是LivePhoto,可以獲取圖片真身
+    func convertLivePhotoToImage(completion: @escaping (UIImage?) -> Void) {
+        let imageManager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.isSynchronous = true
+
+        imageManager.requestImage(for: base,
+                                  targetSize: CGSize(width: base.pixelWidth, height: base.pixelHeight),
+                                  contentMode: .aspectFit,
+                                  options: options) { (image, info) in
+            completion(image)
         }
     }
 }
