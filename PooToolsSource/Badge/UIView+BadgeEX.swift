@@ -121,7 +121,7 @@ extension UIView: PTBadgeProtocol {
         get {
             let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteKey)
             guard let value = obj as? Bool else {
-                return false
+                return true
             }
             return value
         }

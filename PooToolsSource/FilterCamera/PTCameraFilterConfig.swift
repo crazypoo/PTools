@@ -192,6 +192,10 @@ public class PTCameraFilterConfig: NSObject {
     open var reloadCameraImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     open var outputVideImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     open var recordingLineColor:DynamicColor = .randomColor
+    
+    open var reviewImageBack:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    open var reviewImageUse:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+    open var reviewImageEdit:UIImage = UIImage(.pencil)
 
     private var pri_filters: [PTHarBethFilter] = [.none,.storyboard,.comicstrip,.oilpainting,.sketch]
     /// Filters for image editor.

@@ -103,6 +103,8 @@ public class PTChatConfig: NSObject {
     open var readStatusColor:UIColor = UIColor(hexString: "919191")!
     open var readStatusName:String = "Read"
     open var unreadStatusName:String = "unread"
+    ///时间到顶的距离,默认5最大100
+    @PTClampedProperyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5
 
     //MARK: Text message
     ///自己文本顏色

@@ -14,7 +14,7 @@ public typealias PTChatBaseCellHandler = (_ dataModel: PTChatListModel) -> Void
 open class PTChatBaseCell: PTBaseNormalCell {
     
     // Constants
-    public static let timeTopSpace: CGFloat = 5
+    public static let timeTopSpace: CGFloat = PTChatConfig.share.timeTopSpace
     public static let waitImageSize: CGFloat = 20
     public static let waitImageRightInset: CGFloat = 10
     public static let dataContentWaitImageInset: CGFloat = 5

@@ -695,22 +695,26 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
                     reviewView.removeFromSuperview()
                     let vc = PTEditImageViewController(readyEditImage: image)
                     vc.editFinishBlock = { ei ,editImageModel in
-                        self.dismiss(animated: true) {
-                            if self.useThisImageHandler != nil {
-                                self.useThisImageHandler!(ei)
-                            }
+                        if self.useThisImageHandler != nil {
+                            self.useThisImageHandler!(ei)
                         }
                     }
                     let nav = PTBaseNavControl(rootViewController: vc)
-                    nav.view.backgroundColor = .black
-                    nav.modalPresentationStyle = .fullScreen
-                    self.present(nav, animated: true)
+                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
                 }
                 reviewView.justThisButton.addActionHandlers { sender in
                     reviewView.removeFromSuperview()
-                    self.dismiss(animated: true) {
-                        if self.useThisImageHandler != nil {
-                            self.useThisImageHandler!(image)
+                    if self.checkVCIsPresenting() {
+                        self.dismiss(animated: true) {
+                            if self.useThisImageHandler != nil {
+                                self.useThisImageHandler!(image)
+                            }
+                        }
+                    } else {
+                        self.navigationController?.popViewController(animated: true) {
+                            if self.useThisImageHandler != nil {
+                                self.useThisImageHandler!(image)
+                            }
                         }
                     }
                 }
@@ -758,19 +762,19 @@ class PTFlashImageReviewView:UIView {
     
     lazy var backButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTCameraFilterConfig.share.reviewImageBack, for: .normal)
         return view
     }()
     
     lazy var editButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(UIImage(.pencil), for: .normal)
+        view.setImage(PTCameraFilterConfig.share.reviewImageEdit, for: .normal)
         return view
     }()
     
     lazy var justThisButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTCameraFilterConfig.share.reviewImageUse, for: .normal)
         return view
     }()
     
