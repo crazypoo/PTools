@@ -369,11 +369,11 @@ public class LocalConsole: NSObject {
         didSet {
             temporaryKeyboardHeightValueTracker = oldValue
             
-            if possibleEndpoints.count > 2, terminal!.center != possibleEndpoints[0] && terminal!.center != possibleEndpoints[1] {
-                let nearestTargetPosition = nearestTargetTo(terminal!.center, possibleTargets: possibleEndpoints.suffix(2))
+            if possibleEndpoints.count > 2, terminal?.center != possibleEndpoints[0] && terminal?.center != possibleEndpoints[1] {
+                let nearestTargetPosition = nearestTargetTo(terminal?.center ?? .zero, possibleTargets: possibleEndpoints.suffix(2))
                 
                 UIViewPropertyAnimator(duration: 0.55, dampingRatio: 1) {
-                    self.terminal!.center = nearestTargetPosition
+                    self.terminal?.center = nearestTargetPosition
                 }.startAnimation()
             }
             
