@@ -27,6 +27,9 @@ public enum NetWorkStatus: Int {
     case wwan
     case wifi
     case requiresConnection
+    case wiredEthernet
+    case loopback
+    case other
     
     public static func valueName(type:NetWorkStatus) -> String {
         switch type {
@@ -40,6 +43,12 @@ public enum NetWorkStatus: Int {
             "WIFI"
         case .requiresConnection:
             "RequiresConnection"
+        case .wiredEthernet:
+            "WiredEthernet"
+        case .loopback:
+            "loopback"
+        case .other:
+            "Other"
         }
     }
 }
@@ -146,8 +155,14 @@ public class PTNetWorkStatus {
                     handle(.wifi)
                 } else if path.usesInterfaceType(.cellular) {
                     handle(.wwan)
+                } else if path.usesInterfaceType(.wiredEthernet) {
+                    handle(.wiredEthernet)
+                } else if path.usesInterfaceType(.loopback) {
+                    handle(.loopback)
+                } else if path.usesInterfaceType(.other) {
+                    handle(.other)
                 } else {
-                    handle(.notReachable)
+                    handle(.unknown)
                 }
             } else if path.status == .unsatisfied {
                 handle(.notReachable)
