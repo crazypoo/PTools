@@ -137,23 +137,21 @@ public class PTNetWorkStatus {
     }
     
     public func netWork(handle: @escaping (_ status:NetWorkStatus)->Void) {
-        PTGCDManager.gcdMain {
-            self.monitor.pathUpdateHandler = { path in
-                if path.status == .satisfied {
-                    if path.usesInterfaceType(.wifi) {
-                        handle(.wifi)
-                    } else if path.usesInterfaceType(.cellular) {
-                        handle(.wwan)
-                    } else {
-                        handle(.notReachable)
-                    }
+        self.monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                if path.usesInterfaceType(.wifi) {
+                    handle(.wifi)
+                } else if path.usesInterfaceType(.cellular) {
+                    handle(.wwan)
                 } else {
                     handle(.notReachable)
                 }
+            } else {
+                handle(.notReachable)
             }
-            let queue = DispatchQueue(label: "Network")
-            self.monitor.start(queue: queue)
         }
+        let queue = DispatchQueue.global(qos:.background)
+        self.monitor.start(queue: queue)
     }
     
     public func checkNetworkStatusCancel() {
