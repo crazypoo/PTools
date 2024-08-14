@@ -139,10 +139,14 @@ public class PTNetWorkStatus {
     public func netWork(handle: @escaping (_ status:NetWorkStatus)->Void) {
         PTGCDManager.gcdMain {
             self.monitor.pathUpdateHandler = { path in
-                if path.usesInterfaceType(.wifi) {
-                    handle(.wifi)
-                } else if path.usesInterfaceType(.cellular) {
-                    handle(.wwan)
+                if path.status == .satisfied {
+                    if path.usesInterfaceType(.wifi) {
+                        handle(.wifi)
+                    } else if path.usesInterfaceType(.cellular) {
+                        handle(.wwan)
+                    } else {
+                        handle(.notReachable)
+                    }
                 } else {
                     handle(.notReachable)
                 }
@@ -161,6 +165,41 @@ public class PTNetWorkStatus {
     }
 }
 
+extension Error {
+    var isNetworkError: Bool {
+        if let afError = self as? AFError {
+            switch afError {
+            case .sessionTaskFailed(let underlyingError as NSError):
+                return underlyingError.domain == NSURLErrorDomain
+            default:
+                return false
+            }
+        }
+        return (self as NSError).domain == NSURLErrorDomain
+    }
+}
+
+/// 自定義重連邏輯
+fileprivate class RetryHandler: RequestInterceptor {
+    ///默認重連次數3
+    let retryLimit = Network.share.retryTimes
+    ///默認重連延遲1.5秒
+    let retryDelay: TimeInterval = Network.share.retryDelay
+    /*
+     當服務器502時,或者DomainError時間,就觸發重連
+     Network.share.retryAPIStatusCode == 502
+     */
+    
+    public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+        let response = request.task?.response as? HTTPURLResponse
+        if request.retryCount < retryLimit && (response?.statusCode == Network.share.retryAPIStatusCode || error.isNetworkError) {
+            completion(.retryWithDelay(retryDelay))  // 延遲重連
+        } else {
+            completion(.doNotRetry)
+        }
+    }
+}
+
 @objcMembers
 public class Network: NSObject {
     
@@ -173,6 +212,9 @@ public class Network: NSObject {
     open var socketAddress:String = ""
     open var socketAddress_dev:String = ""
     open var userToken:String = ""
+    open var retryTimes:Int = 3
+    open var retryDelay:TimeInterval = 1.5
+    open var retryAPIStatusCode:Int = 502
 
     open var fileUrl:String = ""
     open var saveFilePath:String = "" // 文件下载保存的路径
@@ -190,7 +232,7 @@ public class Network: NSObject {
     private static var manager: Session = {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = Network.share.netRequsetTime
-        return Session(configuration: configuration)
+        return Session(configuration: configuration,interceptor: RetryHandler())
     }()
     
     open var hud:PTHudView?
