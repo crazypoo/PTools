@@ -328,6 +328,10 @@ public class Network: NSObject {
         return models.customerModel as! PTIPInfoModel
     }
     
+    public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: PTActionTask? = nil) {
+        Network.manager.cancelAllRequests(completingOnQueue: queue, completion: completion)
+    }
+    
     //JSONEncoding  JSON参数
     //URLEncoding    URL参数
     /// 项目总接口
