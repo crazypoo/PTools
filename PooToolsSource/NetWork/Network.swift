@@ -26,6 +26,7 @@ public enum NetWorkStatus: Int {
     case notReachable
     case wwan
     case wifi
+    case requiresConnection
     
     public static func valueName(type:NetWorkStatus) -> String {
         switch type {
@@ -37,6 +38,8 @@ public enum NetWorkStatus: Int {
             "2,3,4G,5G"
         case .wifi:
             "WIFI"
+        case .requiresConnection:
+            "RequiresConnection"
         }
     }
 }
@@ -146,13 +149,18 @@ public class PTNetWorkStatus {
                 } else {
                     handle(.notReachable)
                 }
-            } else {
+            } else if path.status == .unsatisfied {
                 handle(.notReachable)
+            } else if path.status == .requiresConnection {
+                handle(.requiresConnection)
+            } else {
+                handle(.unknown)
             }
         }
         let queue = DispatchQueue.global(qos:.background)
         self.monitor.start(queue: queue)
     }
+
     
     public func checkNetworkStatusCancel() {
         monitor.cancel()
