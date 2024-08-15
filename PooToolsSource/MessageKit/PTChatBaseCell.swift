@@ -154,6 +154,8 @@ open class PTChatBaseCell: PTBaseNormalCell {
     private func setupSenderNameConstraints(cellModel: PTChatListModel) {
         senderNameLabel.textAlignment = cellModel.belongToMe ? .right : .left
         senderNameLabel.text = cellModel.senderName
+        senderNameLabel.textColor = cellModel.belongToMe ? PTChatConfig.share.senderNameColor : PTChatConfig.share.receiverNameColor
+        senderNameLabel.backgroundColor = cellModel.belongToMe ? PTChatConfig.share.senderNameBackgroundColor : PTChatConfig.share.receiverNameBackgroundColor
         senderNameLabel.snp.remakeConstraints { make in
             make.top.equalTo(userIcon)
             make.rightOrLeftEqualToSuperView(belongToMe: cellModel.belongToMe,equalView: userIcon, inset: PTChatBaseCell.dataContentUserIconInset)
