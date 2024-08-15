@@ -21,19 +21,28 @@ public extension URL {
     func getFileSizeOnline(completion: @escaping (UInt64) -> Void) {
         var request = URLRequest(url: self)
         request.httpMethod = "HEAD"
-
+        request.timeoutInterval = 15  // 设置请求超时
+        
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let response = response as? HTTPURLResponse, error == nil else {
-                PTNSLogConsole("Error: \(error?.localizedDescription ?? "Unknown error")", levelType: .Error,loggerType: .URL)
+            // 错误处理
+            if let error = error {
+                PTNSLogConsole("Error: \(error.localizedDescription)", levelType: .Error, loggerType: .URL)
                 completion(0)
                 return
             }
-            
-            if let contentLength = response.allHeaderFields["Content-Length"] as? String,
-               let fileSize = UInt64(contentLength) {
-                completion(fileSize)
+
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                PTNSLogConsole("Failed: Invalid response or status code.", levelType: .Error, loggerType: .URL)
+                completion(0)
+                return
+            }
+
+            // 安全解包 Content-Length
+            if let contentLengthString = response.allHeaderFields["Content-Length"] as? String,
+               let contentLength = UInt64(contentLengthString) {
+                completion(contentLength)
             } else {
-                PTNSLogConsole("Failed to retrieve file size.", levelType: .Error,loggerType: .URL)
+                PTNSLogConsole("Failed to retrieve file size.", levelType: .Error, loggerType: .URL)
                 completion(0)
             }
         }

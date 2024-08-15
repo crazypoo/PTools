@@ -24,9 +24,9 @@ public class PTVision: NSObject {
     public static func findText(withImage image:UIImage,
                                 revision:Int = VNRecognizeTextRequestRevision2,
                                 recognitionLanguages:[String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> (String,[VNRecognizedTextObservation]) {
-        await withUnsafeContinuation { continuation in
-            PTVision.share.findText(withImage: image,revision: revision) { resultText, textObservations in
-                continuation.resume(returning: (resultText,textObservations))
+        try await withCheckedThrowingContinuation { continuation in
+            PTVision.share.findText(withImage: image, revision: revision, recognitionLanguages: recognitionLanguages) { resultText, textObservations in
+                continuation.resume(returning: (resultText, textObservations))
             }
         }
     }
@@ -37,43 +37,43 @@ public class PTVision: NSObject {
                          resultBlock:((_ resultText:String,_ textObservations:[VNRecognizedTextObservation])->Void)?) {
         PTGCDManager.gcdGobal {
             let textDetectionRequest = VNRecognizeTextRequest { request, error in
-                if error != nil {
-                    PTNSLogConsole(error!.localizedDescription, levelType: .Error,loggerType: .Vision)
+                if let error = error {
+                    PTNSLogConsole(error.localizedDescription, levelType: .Error, loggerType: .Vision)
                 } else {
                     guard let observations = request.results as? [VNRecognizedTextObservation] else {
-                        PTNSLogConsole("some errors", levelType: .Error,loggerType: .Vision)
+                        PTNSLogConsole("No results found", levelType: .Error, loggerType: .Vision)
                         return
                     }
-                    
+
+                    var resultText = ""
+                    let maximumCandidates = 1
+                    for observation in observations {
+                        let candidates = observation.topCandidates(maximumCandidates)
+                        resultText += candidates.map { $0.string }.joined(separator: "\n")
+                    }
+
                     PTGCDManager.gcdMain {
-                        let maximumCandidates = 1
-                        var resultText = ""
-                        for observation in observations {
-                            let candidates = observation.topCandidates(maximumCandidates)
-                            for candidate in candidates {
-                                resultText += candidate.string + "\n"
-                            }
-                        }
-                        PTNSLogConsole(resultText, levelType: PTLogMode,loggerType: .Vision)
-                        if resultBlock != nil {
-                            resultBlock!(resultText,observations)
-                        }
+                        PTNSLogConsole(resultText, levelType: PTLogMode, loggerType: .Vision)
+                        resultBlock?(resultText, observations)
                     }
                 }
             }
-            
+
             textDetectionRequest.recognitionLanguages = recognitionLanguages
             textDetectionRequest.recognitionLevel = .accurate
             textDetectionRequest.revision = revision
-            
+
             PTGCDManager.gcdMain {
-                if let cgImage = image.cgImage {
-                    let handler = VNImageRequestHandler(cgImage: cgImage,options: [:])
-                    
-                    guard let  _ = try? handler.perform([textDetectionRequest]) else {
-                        PTNSLogConsole("Could not perform text Detection request!!!!!", levelType: .Error,loggerType: .Vision)
-                        return
-                    }
+                guard let cgImage = image.cgImage else {
+                    PTNSLogConsole("Invalid image for OCR detection", levelType: .Error, loggerType: .Vision)
+                    return
+                }
+
+                let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+                do {
+                    try handler.perform([textDetectionRequest])
+                } catch {
+                    PTNSLogConsole("Failed to perform text detection request: \(error)", levelType: .Error, loggerType: .Vision)
                 }
             }
         }
@@ -89,8 +89,8 @@ public class PTVision: NSObject {
     public static func findText(withImageView image:UIImageView,
                                 revision:Int = VNRecognizeTextRequestRevision2,
                                 recognitionLanguages:[String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> String {
-        await withUnsafeContinuation { continuation in
-            PTVision.share.findText(withImageView: image,revision: revision) { resultText in
+        try await withCheckedThrowingContinuation { continuation in
+            PTVision.share.findText(withImageView: image, revision: revision) { resultText in
                 continuation.resume(returning: resultText)
             }
         }
@@ -99,38 +99,37 @@ public class PTVision: NSObject {
     public func findText(withImageView imageView:UIImageView,
                          revision:Int = VNRecognizeTextRequestRevision2,
                          resultBlock:((_ resultText:String)->Void)?) {
-        var textLayers = [CAShapeLayer]()
-        imageView.layer.sublayers?.forEach({ layer in
-            layer.removeFromSuperlayer()
-        })
-        
-        self.findText(withImage:imageView.image!,revision: revision) { resultText, textObservations in
-            if resultBlock != nil {
-                resultBlock!(resultText)
-            }
+        imageView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 
-            textLayers = self.addShapeToText(observations: textObservations, textImageView: imageView)
-            
-            for layer in textLayers {
-                imageView.layer.addSublayer(layer)
-            }
+        guard let image = imageView.image else {
+            PTNSLogConsole("ImageView does not contain an image", levelType: .Error, loggerType: .Vision)
+            return
+        }
+
+        findText(withImage: image, revision: revision) { resultText, textObservations in
+            resultBlock?(resultText)
+
+            let textLayers = self.addShapeToText(observations: textObservations, textImageView: imageView)
+            textLayers.forEach { imageView.layer.addSublayer($0) }
         }
     }
     
     private func addShapeToText(observations:[VNRecognizedTextObservation],textImageView:UIImageView) -> [CAShapeLayer] {
-        let layers:[CAShapeLayer] = observations.map { observation in
-            let w = observation.boundingBox.size.width * textImageView.bounds.width
-            let h = observation.boundingBox.size.height * textImageView.bounds.height
-            let x = observation.boundingBox.origin.x * textImageView.bounds.width
-            let y = abs((observation.boundingBox.origin.y * (textImageView.bounds.height)) - textImageView.bounds.height) - h
+        return observations.map { observation in
+            let bounds = observation.boundingBox
+            let layerFrame = CGRect(
+                x: bounds.origin.x * textImageView.bounds.width,
+                y: (1 - bounds.origin.y) * textImageView.bounds.height - bounds.height * textImageView.bounds.height,
+                width: bounds.width * textImageView.bounds.width,
+                height: bounds.height * textImageView.bounds.height
+            )
 
             let layer = CAShapeLayer()
-            layer.frame = CGRect(x: x, y: y, width: w, height: h)
+            layer.frame = layerFrame
             layer.borderColor = UIColor.random.cgColor
             layer.borderWidth = 1
             layer.cornerRadius = 2
             return layer
         }
-        return layers
     }
 }

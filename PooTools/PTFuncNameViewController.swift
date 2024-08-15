@@ -73,6 +73,8 @@ public extension String {
 
 class PTFuncNameViewController: PTBaseViewController {
 
+    var cacheSize = ""
+    
     lazy var currentSelectedLanguage : String = {
         let string = LanguageKey(rawValue: PTLanguage.share.language)!.desc
         return string
@@ -130,7 +132,7 @@ class PTFuncNameViewController: PTBaseViewController {
         return models
     }
     
-    lazy var cSections : [PTSection] = {
+    func cSections() -> [PTSection] {
         let disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
         let sectionTitleFont:UIFont = .appfont(size: 18,bold: true)
         /**
@@ -202,7 +204,7 @@ class PTFuncNameViewController: PTBaseViewController {
 
         let cleanCaches = self.rowBaseModel(name: .cleanCache)
         cleanCaches.cellDescFont = .appfont(size: 12)
-        cleanCaches.desc = "缓存:\(String(format: "%@", PCleanCache.getCacheSize()))"
+        cleanCaches.desc = "缓存:\(String(format: "%@", cacheSize))"
         
         let touchID = self.rowBaseModel(name: .touchID)
 
@@ -354,7 +356,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerID: PTFusionHeader.ID,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
 
         return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
-    }()
+    }
     
     var aaaaaaa:PTCollectionView!
     
@@ -366,7 +368,7 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.topRefresh = true
         cConfig.showEmptyAlert = !vcEmpty
         var strings = [String]()
-        cSections.enumerated().forEach { index,value in
+        cSections().enumerated().forEach { index,value in
             strings.append("\(index)")
         }
         cConfig.indexConfig = PTCollectionIndexViewConfiguration()
@@ -558,11 +560,16 @@ class PTFuncNameViewController: PTBaseViewController {
                     
                 })
             } else if itemRow.title == .cleanCache {
-                if PCleanCache.clearCaches() {
-                    UIAlertController.gobal_drop(title: "清理成功")
-                    self.showCollectionViewData()
-                } else {
-                    UIAlertController.gobal_drop(title: "暂时没有缓存了")
+                PTGCDManager.gcdGobal(qosCls: .background) {
+                    let result = PCleanCache.clearCaches()
+                    PTGCDManager.gcdMain {
+                        if result {
+                            UIAlertController.gobal_drop(title: "清理成功")
+                            self.showCollectionViewData()
+                        } else {
+                            UIAlertController.gobal_drop(title: "暂时没有缓存了")
+                        }
+                    }
                 }
             } else if itemRow.title == .touchID {
                 let touchID = PTBiologyID.shared
@@ -1163,7 +1170,12 @@ class PTFuncNameViewController: PTBaseViewController {
     }
     
     func showCollectionViewData() {
-        collectionView.showCollectionDetail(collectionData: cSections)
+        PTGCDManager.gcdGobal {
+            self.cacheSize = PCleanCache.getCacheSize()
+            PTGCDManager.gcdMain {
+                self.collectionView.showCollectionDetail(collectionData: self.cSections())
+            }
+        }
     }
     
     func inputValueSample(@PTClampedProperyWrapper(range:1...10) value:Int = 1) {

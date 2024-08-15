@@ -16,16 +16,17 @@ public class PTChatVoiceCell: PTChatBaseCell {
     public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
-                self.setBaseSubsViews(cellModel: self.cellModel)
+                self.setBaseSubviews(cellModel: self.cellModel)
                 self.dataContentSets(cellModel: self.cellModel)
+                self.configureContent(cellModel: self.cellModel)
             }
         }
     }
     
     fileprivate var audioPlayer: AVAudioPlayer?
-    fileprivate var progressTimer:Timer?
-    fileprivate var isPause:Bool = false
-    
+    fileprivate var displayLink: CADisplayLink?
+    fileprivate var isPaused: Bool = false
+
     lazy var playButton:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTChatConfig.share.playButtonImage, for: .normal)
@@ -60,12 +61,11 @@ public class PTChatVoiceCell: PTChatBaseCell {
     }
     
     deinit {
-        progressTimer?.invalidate()
-        progressTimer = nil
+        displayLink?.invalidate()
+        displayLink = nil
     }
     
     func dataContentSets(cellModel:PTChatListModel) {
-                
         if cellModel.belongToMe {
             dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
             dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
@@ -73,6 +73,7 @@ public class PTChatVoiceCell: PTChatBaseCell {
             dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
             dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
         }
+        
         dataContent.snp.remakeConstraints { make in
             if cellModel.belongToMe {
                 make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
@@ -83,82 +84,13 @@ public class PTChatVoiceCell: PTChatBaseCell {
             make.height.equalTo(38)
             make.width.equalTo(PTChatConfig.share.audioMessageImageWidth)
         }
-                
-        dataContent.addSubviews([playButton,durationLabel,progressView])
+
+        // 添加子视图
+        dataContent.addSubviews([playButton, durationLabel, progressView])
         playButton.snp.makeConstraints { make in
             make.size.equalTo(25)
             make.left.equalToSuperview().inset(7.5)
             make.centerY.equalToSuperview()
-        }
-        
-        var audionURL:URL?
-        if cellModel.msgContent is String {
-            audionURL = URL(string: cellModel.msgContent as! String)
-        } else if cellModel.msgContent is URL {
-            audionURL = (cellModel.msgContent as! URL)
-        }
-        
-        if let url = audionURL {
-            self.durationLabel.text = url.audioLinkGetDurationTime().floatToPlayTimeString()
-            
-            playButton.addActionHandlers { sender in
-                sender.isSelected = !sender.isSelected
-                if sender.isSelected {
-                    if FileManager.pt.judgeFileOrFolderExists(filePath: url.absoluteString.replace("file://", with: "")) {
-                        if self.isPause {
-                            self.audioPlayer?.play()
-                            self.isPause = false
-                        } else {
-                            self.audioPlayer = try? AVAudioPlayer(contentsOf: url)
-                            self.audioPlayer?.prepareToPlay()
-                            self.audioPlayer?.delegate = self
-                            self.audioPlayer?.play()
-                            self.startTimerProgres()
-                            self.isPause = false
-                        }
-                    } else {
-                        let localPath = FileManager.pt.CachesDirectory().appendingPathComponent(url.lastPathComponent)
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: localPath) {
-                            if self.isPause {
-                                self.audioPlayer?.play()
-                                self.isPause = false
-                            } else {
-                                self.audioPlayer = try? AVAudioPlayer(contentsOf: URL(fileURLWithPath: localPath))
-                                self.audioPlayer?.prepareToPlay()
-                                self.audioPlayer?.delegate = self
-                                self.audioPlayer?.play()
-                                self.startTimerProgres()
-                            }
-                        } else {
-                            self.waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
-                            self.startWaitAnimation()
-                            self.waitImageView.isHidden = false
-                            Network.share.createDownload(fileUrl: url.absoluteString, saveFilePath: localPath) { bytesRead, totalBytesRead, progress in
-                                
-                            } success: { reponse in
-                                self.audioPlayer = try? AVAudioPlayer(data: reponse.value!)
-                                self.audioPlayer?.prepareToPlay()
-                                self.audioPlayer?.delegate = self
-                                self.audioPlayer?.play()
-                                self.startTimerProgres()
-                                self.stopWaitAnimation()
-                                self.waitImageView.isHidden = true
-                                self.waitImageView.isUserInteractionEnabled = false
-                                self.isPause = false
-                            } fail: { error in
-                                self.stopWaitAnimation()
-                                self.waitImageView.isHidden = true
-                                self.waitImageView.isUserInteractionEnabled = false
-                            }
-                        }
-                    }
-                } else {
-                    if self.audioPlayer != nil {
-                        self.audioPlayer?.pause()
-                        self.isPause = true
-                    }
-                }
-            }
         }
         
         durationLabel.snp.makeConstraints { make in
@@ -172,36 +104,109 @@ public class PTChatVoiceCell: PTChatBaseCell {
             make.right.equalTo(self.durationLabel.snp.left).offset(-5)
         }
         
-        resetSubsFrame(cellModel: cellModel)
+        resetSubviewsFrame(cellModel: cellModel)
+    }
+    
+    // 配置音频内容
+    func configureContent(cellModel: PTChatListModel) {
+        var audioURL: URL?
+        if let content = cellModel.msgContent as? String {
+            audioURL = URL(string: content)
+        } else if let url = cellModel.msgContent as? URL {
+            audioURL = url
+        }
+        
+        if let url = audioURL {
+            self.durationLabel.text = url.audioLinkGetDurationTime().floatToPlayTimeString()
+            
+            // 播放按钮点击事件
+            playButton.addActionHandlers { sender in
+                sender.isSelected.toggle()
+                
+                if sender.isSelected {
+                    self.startAudioPlayback(from: url)
+                } else {
+                    self.pauseAudioPlayback()
+                }
+            }
+        }
+    }
+    
+    // 播放音频
+    func startAudioPlayback(from url: URL) {
+        if self.isPaused {
+            self.audioPlayer?.play()
+            self.isPaused = false
+        } else {
+            if FileManager.pt.judgeFileOrFolderExists(filePath: url.absoluteString.replace("file://", with: "")) {
+                playAudio(at: url)
+                startTimerProgres()
+            } else {
+                let localPath = FileManager.pt.CachesDirectory().appendingPathComponent(url.lastPathComponent)
+                if FileManager.pt.judgeFileOrFolderExists(filePath: localPath) {
+                    playAudio(at:  URL(fileURLWithPath: localPath))
+                    startTimerProgres()
+                } else {
+                    downloadAudio(from: url, localPath: localPath)
+                }
+            }
+        }
+    }
+
+    // 暂停音频
+    func pauseAudioPlayback() {
+        audioPlayer?.pause()
+        isPaused = true
+    }
+
+    // 播放音频文件
+    private func playAudio(at url: URL) {
+        audioPlayer = try? AVAudioPlayer(contentsOf: url)
+        audioPlayer?.delegate = self
+        audioPlayer?.play()
+    }
+
+    // 下载音频并播放
+    private func downloadAudio(from url: URL, localPath: String) {
+        waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
+        startWaitAnimation()
+        waitImageView.isHidden = false
+        Network.share.createDownload(fileUrl: url.absoluteString, saveFilePath: localPath) { _, _, _ in
+            // Progress handling
+        } success: { response in
+            self.playAudio(at: URL(fileURLWithPath: localPath))
+            self.startTimerProgres()
+            self.stopWaitAnimation()
+            self.waitImageView.isHidden = true
+            self.waitImageView.isUserInteractionEnabled = false
+        } fail: { error in
+            PTNSLogConsole("Failed to download audio: \(error!.localizedDescription)", levelType: .Error)
+            self.stopWaitAnimation()
+            self.waitImageView.isHidden = true
+            self.waitImageView.isUserInteractionEnabled = false
+        }
     }
     
     func startTimerProgres() {
-        progressTimer?.invalidate()
-        progressTimer = nil
-        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, repeats: true, block: { timer in
-            self.progressView.progress = (self.audioPlayer?.duration == 0) ? 0 : Float(self.audioPlayer!.currentTime / self.audioPlayer!.duration)
-            self.durationLabel.text = self.audioPlayer!.currentTime.float.floatToPlayTimeString()
-        })
+        displayLink = CADisplayLink(target: self, selector: #selector(updateProgress))
+        displayLink?.add(to: .main, forMode: .common)
     }
     
+    // 更新进度条
+    @objc func updateProgress() {
+        guard let player = audioPlayer else { return }
+        progressView.progress = Float(player.currentTime / player.duration)
+        durationLabel.text = player.currentTime.float.floatToPlayTimeString()
+    }
+
     func stopPlaying() {
-        progressTimer?.invalidate()
-        progressTimer = nil
-        progressView .progress = 0
+        displayLink?.invalidate()
+        displayLink = nil
+        progressView.progress = 0
         playButton.isSelected = false
         audioPlayer = nil
-        var audionURL:URL?
-        if outputModel.msgContent is String {
-            audionURL = URL(string: cellModel.msgContent as! String)
-        } else if cellModel.msgContent is URL {
-            audionURL = (cellModel.msgContent as! URL)
-        }
-        
-        if let url = audionURL {
-            self.durationLabel.text = url.audioLinkGetDurationTime().floatToPlayTimeString()
-        } else {
-            durationLabel.text = "0:00"
-        }
+        durationLabel.text = "0:00"
+        isPaused = false
     }
 }
 
