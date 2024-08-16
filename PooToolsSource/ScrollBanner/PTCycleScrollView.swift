@@ -67,12 +67,13 @@ public class PTCycleScrollView: UIView {
             }
             
             if clearSubs {
-                PTGCDManager.gcdAfter(time: 0.1) {
+                PTGCDManager.gcdAfter(time: 0.01) {
                     self.collectionViewSetData()
                 }
-            } else {
-                setCellData()
-            }
+            } 
+//            else {
+//                setCellData()
+//            }
         }
     }
     
