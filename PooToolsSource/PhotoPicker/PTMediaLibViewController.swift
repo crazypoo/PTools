@@ -99,6 +99,10 @@ public class PTMediaLibView:UIView {
                             }
                         }
                     } else {
+                        if cellModel.asset.exportSession?.status == .exporting {
+                            cellModel.asset.calcelExport()
+                            cell.editButton.clearProgressLayer()
+                        }
                         cellModel.isSelected = false
                         self.selectedModel.removeAll(where: { $0 == cellModel })
                         isSelected(false)
@@ -110,34 +114,43 @@ public class PTMediaLibView:UIView {
                 cell.editButton.addActionHandlers { sender in
                     switch cellModel.type {
                     case .video:
-                        cellModel.asset.pt.convertPHAssetToAVAsset { avAsset in
-                            if avAsset != nil {
-                                PTGCDManager.gcdMain {
-                                    let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
-                                    controller.onlyOutput = true
-                                    controller.onEditCompleteHandler = { url in
-                                        let alPlayerItem = AVPlayerItem(url: url)
-                                        for (index, selM) in self.selectedModel.enumerated() {
-                                            if cellModel == selM {
-                                                self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
-                                                    if finish {
-                                                        PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
-                                                            let m = PTMediaModel(asset: asset!)
-                                                            m.isSelected = true
-                                                            self.selectedModel[index] = m
-                                                            config.didSelectAsset?(asset!)
+                        switch cellModel.asset.exportSession?.status {
+                        case .exporting:
+                            cellModel.asset.calcelExport()
+                            sender.clearProgressLayer()
+                        default:
+                            cellModel.asset.convertPHAssetToAVAsset { progress in
+                                sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
+                            } completion: { avAsset in
+                                if avAsset != nil {
+                                    PTGCDManager.gcdMain {
+                                        let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
+                                        controller.onlyOutput = true
+                                        controller.onEditCompleteHandler = { url in
+                                            let alPlayerItem = AVPlayerItem(url: url)
+                                            for (index, selM) in self.selectedModel.enumerated() {
+                                                if cellModel == selM {
+                                                    self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
+                                                        if finish {
+                                                            PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
+                                                                let m = PTMediaModel(asset: asset!)
+                                                                m.isSelected = true
+                                                                self.selectedModel[index] = m
+                                                                config.didSelectAsset?(asset!)
+                                                            }
                                                         }
                                                     }
+                                                    break
                                                 }
-                                                break
                                             }
                                         }
+                                        let nav = PTBaseNavControl(rootViewController: controller)
+                                        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
                                     }
-                                    controller.videoEditorShow(vc: PTUtils.getCurrentVC())
-                                }
-                            } else {
-                                PTGCDManager.gcdMain {
-                                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                } else {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                    }
                                 }
                             }
                         }

@@ -774,7 +774,9 @@ class PTEditInputViewController: PTBaseViewController {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
+        if let nav = navigationController {
+            PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
+        }
 #endif
     }
 

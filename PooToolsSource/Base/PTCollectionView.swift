@@ -719,7 +719,7 @@ public class PTCollectionView: UIView {
     func iOS17EmptyTapCallback() {
         if #available(iOS 17.0, *) {
             if self.viewConfig.showEmptyAlert {
-                PTUnavailableFunction.share.emptyTap = {
+                PTUnavailableFunction.shared.emptyTap = {
                     PTGCDManager.gcdMain {
                         self.showEmptyLoading()
                     }
@@ -738,7 +738,7 @@ public class PTCollectionView: UIView {
         if #available(iOS 17.0, *) {
             PTGCDManager.gcdAfter(time: 0.1) {
                 if let emptyConfig = self.viewConfig.emptyViewConfig {
-                    let share = PTUnavailableFunction.share
+                    let share = PTUnavailableFunction.shared
                     share.emptyViewConfig = emptyConfig
                     self.showEmptyConfig()
                 }
@@ -928,23 +928,23 @@ public class PTCollectionView: UIView {
     @available(iOS 17, *)
     private func showEmptyConfig() {
         if viewConfig.showEmptyAlert && (mSections.first?.rows.count ?? 0) == 0 {
-            PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
-                PTUnavailableFunction.share.showEmptyView(showIn: self)
+            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
+                PTUnavailableFunction.shared.showEmptyView(showIn: self)
             }
         } else {
-            PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
+            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
             }
         }
     }
     
     @available(iOS 17, *)
     public func hideEmptyLoading(task: PTActionTask?) {
-        PTUnavailableFunction.share.hideUnavailableView(showIn: self,task: task)
+        PTUnavailableFunction.shared.hideUnavailableView(showIn: self,task: task)
     }
     
     @available(iOS 17, *)
     public func showEmptyLoading() {
-        PTUnavailableFunction.share.showEmptyLoadingView(showIn: self)
+        PTUnavailableFunction.shared.showEmptyLoadingView(showIn: self)
     }
     
 #if POOTOOLS_LISTEMPTYDATA

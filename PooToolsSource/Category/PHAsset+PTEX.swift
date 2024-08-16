@@ -11,6 +11,135 @@ import MobileCoreServices
 import UIKit
 
 extension PHAsset: PTProtocolCompatible {}
+
+public extension PHAsset {
+    // 使用 objc_Association 来存储 requestID
+    private struct AssociatedKeys {
+        static var requestID = 1
+        static var exportSession = 2
+        static var timer = 3
+
+    }
+    
+    var requestID: PHImageRequestID? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.requestID) as? PHImageRequestID
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.requestID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    var exportSession: AVAssetExportSession? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.exportSession) as? AVAssetExportSession
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.exportSession, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    var exportTimer: Timer? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.timer) as? Timer
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.timer, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    func convertPHAssetToAVAsset(progressHandler: @escaping (Float) -> Void) async throws -> AVAsset? {
+        await withUnsafeContinuation { continuation in
+            self.convertPHAssetToAVAsset(progress: { progress in
+                progressHandler(progress)
+            }, completion: { avAsset in
+                if avAsset != nil {
+                    continuation.resume(returning: avAsset!)
+                }
+            })
+        }
+    }
+    
+    func convertPHAssetToAVAsset(progress:@escaping (Float)->Void,completion: @escaping (AVAsset?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.version = .original
+        options.isNetworkAccessAllowed = true
+        
+        // 请求 AVAssetExportSession
+        PHImageManager.default().requestExportSession(forVideo: self, options: options, exportPreset: AVAssetExportPresetHighestQuality) { exportSession, info in
+            guard let exportSession = exportSession else {
+                PTNSLogConsole("导出会话创建失败")
+                completion(nil)
+                return
+            }
+            
+            self.exportSession = exportSession
+            var gotAvasset:AVAsset?
+            self.createAVAssetFromExportSession() { asset in
+                gotAvasset = asset
+            }
+            // 启动下载进度监控
+            self.monitorExportProgress(exportSession: self.exportSession!,progressHandler: progress,handler: { finish in
+                if finish {
+                    PTGCDManager.gcdAfter(time: 1.5) {
+                        completion(gotAvasset)
+                    }
+                }
+            })
+        }
+    }
+    
+    func monitorExportProgress(exportSession: AVAssetExportSession,progressHandler:@escaping (Float)->Void,handler:@escaping ((Bool)->Void)) {
+        // 启动一个定时器来监控进度
+        self.exportTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            let progress = exportSession.progress
+            PTNSLogConsole("当前下载进度：\(progress * 100)%")
+            progressHandler(progress)
+            // 当下载完成后，停止定时器
+            if progress >= 1.0 {
+                timer.invalidate()
+                PTNSLogConsole("下载完成")
+                handler(true)
+            }
+        }
+    }
+    
+    func createAVAssetFromExportSession(completion: @escaping (AVAsset?) -> Void) {
+        // 首先导出视频到指定的文件路径
+        let outputURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(Date().timeIntervalSince1970).mov")
+        exportSession!.outputURL = outputURL
+        exportSession!.outputFileType = .mov // 指定导出格式
+
+        exportSession!.exportAsynchronously {
+            switch self.exportSession!.status {
+            case .completed:
+                PTNSLogConsole("导出完成，路径: \(outputURL)")
+                
+                // 使用导出的 URL 创建 AVAsset
+                let exportedAsset = AVAsset(url: outputURL)
+                completion(exportedAsset)
+                
+            case .failed:
+                PTNSLogConsole("导出失败: \(String(describing: self.exportSession!.error))")
+                completion(nil)
+                
+            case .cancelled:
+                PTNSLogConsole("导出被取消")
+                completion(nil)
+            default:
+                break
+            }
+        }
+    }
+    
+    func calcelExport() {
+        if let exportSession = self.exportSession {
+            exportSession.cancelExport()
+            self.exportTimer?.invalidate()
+        }
+    }
+}
+
 public extension PTPOP where Base: PHAsset {
     var isInCloud: Bool {
         guard let resource = resource else {
@@ -33,25 +162,6 @@ public extension PTPOP where Base: PHAsset {
     
     var resource: PHAssetResource? {
         PHAssetResource.assetResources(for: base).first
-    }
-    
-    func convertPHAssetToAVAsset() async throws -> AVAsset? {
-        await withUnsafeContinuation { continuation in
-            self.convertPHAssetToAVAsset { avAsset in
-                if avAsset != nil {
-                    continuation.resume(returning: avAsset!)
-                }
-            }
-        }
-    }
-    
-    func convertPHAssetToAVAsset(completion: @escaping (AVAsset?) -> Void) {
-        let options = PHVideoRequestOptions()
-        options.version = .original
-
-        PHImageManager.default().requestAVAsset(forVideo: base, options: options) { avAsset, _, _ in
-            completion(avAsset)
-        }
     }
     
     //MARK: 判斷是否為LivePhoto

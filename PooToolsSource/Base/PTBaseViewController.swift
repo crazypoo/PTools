@@ -289,7 +289,7 @@ extension PTBaseViewController {
         
     public func showEmptyView(task: PTActionTask? = nil) {
         if emptyDataViewConfig != nil {
-            let share = PTUnavailableFunction.share
+            let share = PTUnavailableFunction.shared
             share.emptyViewConfig = emptyDataViewConfig!
             share.emptyTap = task
             share.showEmptyView(viewController: self)
@@ -299,7 +299,7 @@ extension PTBaseViewController {
     }
     
     public func hideEmptyView(task:PTActionTask? = nil) {
-        let share = PTUnavailableFunction.share
+        let share = PTUnavailableFunction.shared
         share.hideUnavailableView(viewController: self, task: task)
         if task != nil {
             task!()
@@ -307,7 +307,7 @@ extension PTBaseViewController {
     }
     
     public func emptyViewLoading() {
-        let share = PTUnavailableFunction.share
+        let share = PTUnavailableFunction.shared
         share.showEmptyLoadingView(viewController: self)
     }
 }

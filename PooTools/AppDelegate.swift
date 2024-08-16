@@ -131,7 +131,9 @@ class AppDelegate: PTAppWindowsDelegate {
 #endif
                 
 //#if DEBUG
+//        PTCoreUserDefultsWrapper.AppDebugMode = true
         let _ = LocalConsole.shared
+//        lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
 //        if !lcm.terminal?.systemIsVisible
 //        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
 //        lcm.flex = {

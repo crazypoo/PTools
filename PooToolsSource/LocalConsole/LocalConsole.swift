@@ -485,7 +485,7 @@ public class LocalConsole: NSObject {
     }
     
     fileprivate lazy var consoleWindow:PTBaseViewController = {
-        let control = PTBaseViewController()
+        let control = PTBaseViewController(hideBaseNavBar: true)
         control.view.backgroundColor = .clear
         return control
     }()

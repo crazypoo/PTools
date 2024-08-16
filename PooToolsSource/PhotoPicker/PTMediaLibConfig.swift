@@ -30,6 +30,8 @@ public class PTMediaLibConfig:NSObject {
         
     public typealias KBUnit = CGFloat
     
+    @PTClampedProperyWrapper(range: 1...5) public var videoDownloadBorderWidth:CGFloat = 1.5
+    
     /// The theme color of framework.
     /// 框架主题色
     public var themeColor: UIColor = .purple

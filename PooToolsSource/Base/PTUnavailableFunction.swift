@@ -30,117 +30,113 @@ open class PTEmptyDataViewConfig : NSObject {
 @available(iOS 17.0 , *)
 @objcMembers
 public class PTUnavailableFunction: NSObject {
-    public static let share = PTUnavailableFunction()
-    open var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
-    open var emptyTap:PTActionTask?
-        
-    lazy var emptyButtonConfig:UIButton.Configuration = {
+    public static let shared = PTUnavailableFunction()
+    open var emptyViewConfig: PTEmptyDataViewConfig = PTEmptyDataViewConfig()
+    open var emptyTap: PTActionTask?
+
+    lazy var emptyButtonConfig: UIButton.Configuration = {
         var plainConfig = UIButton.Configuration.plain()
         plainConfig.title = emptyViewConfig.buttonTitle
         plainConfig.titleTextAttributesTransformer = .init({ container in
-            container.merging(AttributeContainer.font(self.emptyViewConfig.buttonFont).foregroundColor(self.emptyViewConfig.buttonTextColor))
+            container.merging(
+                AttributeContainer.font(self.emptyViewConfig.buttonFont)
+                    .foregroundColor(self.emptyViewConfig.buttonTextColor)
+            )
         })
         return plainConfig
     }()
     
-    var emptyConfig:UIContentUnavailableConfiguration!
-    
-    var unavailableView:UIContentUnavailableView?
-    
-    var unavailableLoadingView:UIContentUnavailableView?
-    
-    public func showEmptyView(showIn:UIView) {
-        emptyConfig = UIContentUnavailableConfiguration.empty()
-        if let _ = emptyViewConfig.customerView {
-        } else {
-            emptyConfig.imageToTextPadding = emptyViewConfig.imageToTextPadding
-            emptyConfig.textToButtonPadding = emptyViewConfig.textToSecondaryTextPadding
-            emptyConfig.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
-            if emptyViewConfig.mainTitleAtt != nil {
-                emptyConfig.attributedText = emptyViewConfig.mainTitleAtt!.value
-            }
-            
-            if emptyViewConfig.secondaryEmptyAtt != nil {
-                emptyConfig.secondaryAttributedText = emptyViewConfig.secondaryEmptyAtt!.value
-            }
-            
-            if emptyViewConfig.image != nil {
-                emptyConfig.image = emptyViewConfig.image!
-            }
-            if !emptyViewConfig.buttonTitle.stringIsEmpty() {
-                emptyConfig.button = self.emptyButtonConfig
-            }
-            emptyConfig.buttonProperties.primaryAction = UIAction { sender in
-                if self.emptyTap != nil {
-                    self.emptyTap!()
-                }
-            }
-        }
-        var configBackground = UIBackgroundConfiguration.clear()
-        configBackground.backgroundColor = emptyViewConfig.backgroundColor
-        emptyConfig.background = configBackground
+    var emptyConfig: UIContentUnavailableConfiguration!
+    var unavailableView: UIContentUnavailableView?
+    var unavailableLoadingView: UIContentUnavailableView?
 
+    public func showEmptyView(showIn view: UIView) {
+        emptyConfig = createEmptyConfig()
+        
         unavailableView = UIContentUnavailableView(configuration: emptyConfig)
-        showIn.addSubview(unavailableView!)
-        unavailableView!.snp.makeConstraints { make in
+        view.addSubview(unavailableView!)
+        unavailableView?.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        if let emptyViews = emptyViewConfig.customerView {
-            unavailableView?.addSubview(emptyViews)
-            emptyViews.snp.makeConstraints { make in
-                make.size.equalTo(emptyViews.size)
+
+        if let customerView = emptyViewConfig.customerView {
+            unavailableView?.addSubview(customerView)
+            customerView.snp.makeConstraints { make in
+                make.size.equalTo(customerView.size)
                 make.centerX.equalToSuperview()
                 make.centerY.equalToSuperview().offset(emptyViewConfig.verticalOffSet)
             }
         }
     }
-    
-    public func showEmptyLoadingView(showIn:UIView) {
+
+    public func showEmptyLoadingView(showIn view: UIView) {
         PTGCDManager.gcdMain {
-            self.unavailableView?.removeFromSuperview()
-            self.unavailableView = nil
+            self.removeUnavailableViews()
             
             if self.unavailableLoadingView == nil {
                 let loadingConfig = UIContentUnavailableConfiguration.loading()
                 self.unavailableLoadingView = UIContentUnavailableView(configuration: loadingConfig)
-                showIn.addSubview(self.unavailableLoadingView!)
-                self.unavailableLoadingView!.snp.makeConstraints { make in
+                view.addSubview(self.unavailableLoadingView!)
+                self.unavailableLoadingView?.snp.makeConstraints { make in
                     make.edges.equalToSuperview()
                 }
             }
         }
     }
-    
-    public func hideUnavailableView(showIn:UIView,task:PTActionTask?) {
-        if unavailableView != nil {
-            unavailableView!.removeFromSuperview()
-            unavailableView = nil
-        }
-        
-        if self.unavailableLoadingView != nil {
-            self.unavailableLoadingView!.removeFromSuperview()
-            self.unavailableLoadingView = nil
-        }
-        if task != nil {
-            task!()
-        }
+
+    public func hideUnavailableView(showIn view: UIView, task: PTActionTask?) {
+        removeUnavailableViews()
+        task?()
     }
-    
-    public func showEmptyView(viewController:PTBaseViewController) {
+
+    public func showEmptyView(viewController: PTBaseViewController) {
         viewController.contentUnavailableConfiguration = emptyConfig
     }
-    
-    public func showEmptyLoadingView(viewController:PTBaseViewController) {
+
+    public func showEmptyLoadingView(viewController: PTBaseViewController) {
         let loadingConfig = UIContentUnavailableConfiguration.loading()
         viewController.contentUnavailableConfiguration = loadingConfig
     }
-    
-    public func hideUnavailableView(viewController:PTBaseViewController,task:PTActionTask?) {
-        viewController.contentUnavailableConfiguration = nil
 
-        if task != nil {
-            task!()
+    public func hideUnavailableView(viewController: PTBaseViewController, task: PTActionTask?) {
+        viewController.contentUnavailableConfiguration = nil
+        task?()
+    }
+
+    // MARK: - Helper Methods
+    
+    private func createEmptyConfig() -> UIContentUnavailableConfiguration {
+        var config = UIContentUnavailableConfiguration.empty()
+
+        if let mainTitle = emptyViewConfig.mainTitleAtt {
+            config.attributedText = mainTitle.value
         }
+        if let secondaryText = emptyViewConfig.secondaryEmptyAtt {
+            config.secondaryAttributedText = secondaryText.value
+        }
+        config.image = emptyViewConfig.image
+        config.imageToTextPadding = emptyViewConfig.imageToTextPadding
+        config.textToButtonPadding = emptyViewConfig.textToSecondaryTextPadding
+        config.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
+        
+        if !emptyViewConfig.buttonTitle.isEmpty {
+            config.button = self.emptyButtonConfig
+            config.buttonProperties.primaryAction = UIAction { [weak self] _ in
+                self?.emptyTap?()
+            }
+        }
+        
+        var backgroundConfig = UIBackgroundConfiguration.clear()
+        backgroundConfig.backgroundColor = emptyViewConfig.backgroundColor
+        config.background = backgroundConfig
+        
+        return config
+    }
+
+    private func removeUnavailableViews() {
+        unavailableView?.removeFromSuperview()
+        unavailableView = nil
+        unavailableLoadingView?.removeFromSuperview()
+        unavailableLoadingView = nil
     }
 }

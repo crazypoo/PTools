@@ -594,7 +594,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 vc.selectImageBlock = { result, isOriginal in
                     PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
                     if result.count > 0 {
-                        result.first!.asset.pt.convertPHAssetToAVAsset { avAsset in
+                        result.first!.asset.convertPHAssetToAVAsset { progress in
+                            
+                        } completion: { avAsset in
                             if avAsset != nil {
                                 PTGCDManager.gcdMain {
                                     let controller = PTVideoEditorToolsViewController(asset: result.first!.asset,avAsset: avAsset!)
