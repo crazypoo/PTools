@@ -775,7 +775,7 @@ extension PTCycleScrollView {
 // MARK: 定时器模块
 extension PTCycleScrollView {
     /// 添加DTimer
-    func setupTimer() {
+    public func setupTimer() {
         // 仅一张图不进行滚动操纵
         if imagePaths.count <= 1 { return }
         
@@ -797,7 +797,7 @@ extension PTCycleScrollView {
     }
     
     /// 关闭倒计时
-    func invalidateTimer() {
+    public func invalidateTimer() {
         dtimer?.cancel()
         dtimer = nil
     }
