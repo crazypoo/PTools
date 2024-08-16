@@ -359,7 +359,7 @@ public class LocalConsole: NSObject {
         terminal!.systemText?.text = currentText
         terminal!.setAttributedText(currentText)
         PTGCDManager.gcdAfter(time: 0.2) {
-            self.terminal!.systemText!.contentOffset.y = self.terminal!.systemText!.contentSize.height
+            self.terminal?.systemText?.contentOffset.y = self.terminal?.systemText?.contentSize.height ?? 0
         }
     }
         
