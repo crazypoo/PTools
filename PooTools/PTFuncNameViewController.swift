@@ -71,6 +71,21 @@ public extension String {
     static let encryption = "Encryption"
 }
 
+class YDSWhiteDecorationView: UICollectionReusableView {
+    public static let ID = "YDSWhiteDecorationView"
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .random
+        PTGCDManager.gcdMain {
+            self.viewCornerRectCorner(cornerRadii: 8,corner: [.allCorners])
+        }
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class PTFuncNameViewController: PTBaseViewController {
 
     var cacheSize = ""
@@ -360,8 +375,8 @@ class PTFuncNameViewController: PTBaseViewController {
     
     var aaaaaaa:PTCollectionView!
     
-    lazy var collectionView : PTCollectionView = {
-                
+    func collectionViewConfig() -> PTCollectionViewConfig {
+
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Normal
         cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
@@ -373,8 +388,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         cConfig.indexConfig = PTCollectionIndexViewConfiguration()
         cConfig.sideIndexTitles = strings
-        
-        
+
         let emptyConfig = PTEmptyDataViewConfig()
         
         let emptyView = UIView(frame: CGRectMake(0, 0, 100, 100))
@@ -417,12 +431,27 @@ class PTFuncNameViewController: PTBaseViewController {
 //        emptyConfig.buttonFont = .appfont(size: 14)
 //        emptyConfig.buttonTextColor = .randomColor
         cConfig.emptyViewConfig = emptyConfig
-
-        aaaaaaa = PTCollectionView(viewConfig: cConfig)
+        
+        return cConfig
+    }
+    
+    lazy var collectionView : PTCollectionView = {
+        aaaaaaa = PTCollectionView(viewConfig: self.collectionViewConfig())
         aaaaaaa.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         aaaaaaa.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)
         aaaaaaa.layoutSubviews()
+        aaaaaaa.decorationInCollectionView = { index,sectionModel in
+            let backItemId = YDSWhiteDecorationView.ID
+            let topSpace:CGFloat = 10
+            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: backItemId)
+            backItem.contentInsets = NSDirectionalEdgeInsets.init(top: topSpace, leading: 12, bottom: 0, trailing: 12)
+            return [backItem]
+        }
+        aaaaaaa.decorationCustomLayoutInsetReset = { index,sectionModel in
+            let topSpace:CGFloat = 10
+            return NSDirectionalEdgeInsets.init(top: (sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude) + topSpace, leading: 12, bottom: 0, trailing: 12)
+        }
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
             let sectionModel = (model.headerDataModel as! PTFusionCellModel)
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
@@ -591,6 +620,13 @@ class PTFuncNameViewController: PTBaseViewController {
                 
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow()
+                vc.selectedHudStatusBlock = { result in
+                    if result {
+                        PTAlertTipControl.present(icon:.Heart,style: .Normal)
+                    } else {
+                        PTAlertTipControl.present(icon:.Done,style: .Normal)
+                    }
+                }
                 vc.selectImageBlock = { result, isOriginal in
                     PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
                     if result.count > 0 {
@@ -1068,8 +1104,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         
         inputValueSample(value: 15)
-        
-        
+                
         @PTLockAtomic
         var json:[String:String]?
         json = ["A":"1"]

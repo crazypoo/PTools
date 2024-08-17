@@ -145,16 +145,7 @@ public class PTCycleScrollView: UIView {
     
     /// 背景颜色
     open var collectionViewBackgroundColor: UIColor! = UIColor.clear
-    
-    /// 加载图片时的Placeholder
-    open var placeHolderImage: UIImage? = nil {
-        didSet {
-            if placeHolderImage != nil {
-                placeHolderViewImage = placeHolderImage
-            }
-        }
-    }
-    
+        
     // MARK: ImageView
 
     /// 没图片时的图片
@@ -351,10 +342,7 @@ public class PTCycleScrollView: UIView {
     
     /// Collection滚动方向
     fileprivate var position: UICollectionView.ScrollPosition! = .centeredHorizontally
-    
-    /// 加载状态图
-    fileprivate var placeHolderViewImage: UIImage! = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "llplaceholder")
-    
+        
     /// 空数据占位图
     fileprivate var coverViewImage: UIImage! = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "llplaceholder")
     

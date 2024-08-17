@@ -117,18 +117,17 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.isHidden = cameraCount <= 1
         view.addActionHandlers { sender in
             self.camera.changeCamera {
-                sender.isSelected = !sender.isSelected
-                let rotationAngle: CGFloat = CGFloat.pi / 2
-                self.originImageView.transform = CGAffineTransform(rotationAngle: rotationAngle)
-
                 PTGCDManager.gcdMain {
+                    sender.isSelected = !sender.isSelected
+                    let rotationAngle: CGFloat = CGFloat.pi / 2
+                    self.originImageView.transform = CGAffineTransform(rotationAngle: rotationAngle)
+
+                    self.originImageView.contentMode = .scaleAspectFill
+                    self.originImageView.image = self.originImageView.image?.transformImage(size: CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))
+
                     self.originImageView.snp.remakeConstraints { make in
                         make.edges.equalToSuperview()
                     }
-                }
-                PTGCDManager.gcdBackground {
-                    self.originImageView.contentMode = .scaleAspectFill
-                    self.originImageView.image = self.originImageView.image?.transformImage(size: CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))
                 }
             }
         }
@@ -695,9 +694,18 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
                     reviewView.removeFromSuperview()
                     let vc = PTEditImageViewController(readyEditImage: image)
                     vc.editFinishBlock = { ei ,editImageModel in
-                        if self.useThisImageHandler != nil {
-                            self.useThisImageHandler!(ei)
+                        if self.checkVCIsPresenting() {
+                            self.dismiss(animated: true) {
+                                self.useThisImageHandler?(ei)
+                            }
+                        } else {
+                            self.navigationController?.popViewController(animated: true) {
+                                self.useThisImageHandler?(ei)
+                            }
                         }
+                    }
+                    vc.backHandler = {
+                        self.camera.startRunning()
                     }
                     let nav = PTBaseNavControl(rootViewController: vc)
                     UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
@@ -706,21 +714,16 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
                     reviewView.removeFromSuperview()
                     if self.checkVCIsPresenting() {
                         self.dismiss(animated: true) {
-                            if self.useThisImageHandler != nil {
-                                self.useThisImageHandler!(image)
-                            }
+                            self.useThisImageHandler?(image)
                         }
                     } else {
                         self.navigationController?.popViewController(animated: true) {
-                            if self.useThisImageHandler != nil {
-                                self.useThisImageHandler!(image)
-                            }
+                            self.useThisImageHandler?(image)
                         }
                     }
                 }
             }
             
-//            self.camera.startRunning()
             self.camera.isTakingPicture = false
             self.originImageView.contentMode = .scaleAspectFill
         }

@@ -564,8 +564,6 @@ class PTFuncDetailViewController: PTBaseViewController {
             banner.autoScroll = true
             // 滚动间隔时间(默认为2秒)
             banner.autoScrollTimeInterval = 3.0
-            // 等待数据状态显示的占位图
-            banner.placeHolderImage = PTAppBaseConfig.share.defaultPlaceholderImage
             // 如果没有数据的时候，使用的封面图
             banner.coverImage = PTAppBaseConfig.share.defaultPlaceholderImage
             // 设置图片显示方式=UIImageView的ContentMode

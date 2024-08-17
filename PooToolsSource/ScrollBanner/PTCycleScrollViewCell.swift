@@ -121,17 +121,17 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        imageView.snp.makeConstraints { make in
+        imageView.snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        titleBackView.snp.makeConstraints { make in
+        titleBackView.snp.remakeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalTo(self.titleLabelHeight)
         }
         
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
             make.height.equalTo(self.titleLabelHeight)
             make.left.right.equalToSuperview().inset(self.titleLabelLeading)
             make.top.equalToSuperview()

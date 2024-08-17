@@ -37,9 +37,6 @@ public class PTMediaLibView:UIView {
         }
         return false
     }
-
-//    private var videoEdit: PTVideoEdit?
-//    fileprivate var cancellables = Set<AnyCancellable>()
     
     var selectedCount:((Int)->Void)?
     
@@ -200,11 +197,11 @@ public class PTMediaLibView:UIView {
                 let config = PTMediaLibConfig.share
                 if config.useCustomCamera {
                     
-                    let cameraConfig = PTCameraFilterConfig.share
-                    let pointFont = UIFont.appfont(size: 20)
+                    PTCameraFilterConfig.share.allowTakePhoto = PTMediaLibConfig.share.allowSelectImage
+                    PTCameraFilterConfig.share.allowRecordVideo = PTMediaLibConfig.share.allowSelectVideo
 
                     let vc = PTFilterCameraViewController()
-                    vc.onlyCamera = cameraConfig.onlyCamera
+                    vc.onlyCamera = PTCameraFilterConfig.share.onlyCamera
                     vc.useThisImageHandler = { image in
                         self.save(image: image, videoUrl: nil)
                     }
@@ -568,6 +565,9 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
 
 public class PTMediaLibViewController: PTBaseViewController {
 
+    ///用於點擊導航欄的確定後,顯示等待HUD的囘調
+    public var selectedHudStatusBlock: ((Bool) -> Void)?
+    ///選擇沒以後的囘調
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     /// Callback for photos that failed to parse
     /// block params
@@ -795,6 +795,7 @@ extension PTMediaLibViewController {
         let callback = { [weak self] (sucModels: [PTResultModel], errorAssets: [PHAsset], errorIndexs: [Int]) in
             
             func call() {
+                self?.selectedHudStatusBlock?(false)
                 self?.selectImageBlock?(sucModels, isOriginal)
                 if !errorAssets.isEmpty {
                     self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
@@ -820,6 +821,7 @@ extension PTMediaLibViewController {
         var sucCount = 0
         let totalCount = selectedModel.count
         
+        selectedHudStatusBlock?(true)
         for (i, m) in selectedModel.enumerated() {
             let operation = PTFetchImageOperation(model: m, isOriginal: isOriginal) { image, asset in
                 

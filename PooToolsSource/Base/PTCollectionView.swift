@@ -788,21 +788,19 @@ public class PTCollectionView: UIView {
     
     ///加载数据并且刷新界面
     public func showCollectionDetail(collectionData:[PTSection],finishTask:((UICollectionView)->Void)? = nil) {
-        mSections.removeAll()
-        mSections = collectionData
-        PTGCDManager.gcdMain {
-            if self.viewConfig.refreshWithoutAnimation {
-                self.collectionView.reloadDataWithOutAnimation {
-                    self.setiOS17EmptyDataView()
-                    if finishTask != nil {
-                        finishTask!(self.collectionView)
+        PTGCDManager.gcdGobal {
+            self.mSections.removeAll()
+            self.mSections = collectionData
+            PTGCDManager.gcdMain {
+                if self.viewConfig.refreshWithoutAnimation {
+                    self.collectionView.reloadDataWithOutAnimation {
+                        self.setiOS17EmptyDataView()
+                        finishTask?(self.collectionView)
                     }
-                }
-            } else {
-                self.collectionView.reloadData {
-                    self.setiOS17EmptyDataView()
-                    if finishTask != nil {
-                        finishTask!(self.collectionView)
+                } else {
+                    self.collectionView.reloadData {
+                        self.setiOS17EmptyDataView()
+                        finishTask?(self.collectionView)
                     }
                 }
             }
@@ -810,19 +808,19 @@ public class PTCollectionView: UIView {
     }
     
     public func clearAllData(finishTask:((UICollectionView)->Void)? = nil) {
-        mSections.removeAll()
-        if self.viewConfig.refreshWithoutAnimation {
-            self.collectionView.reloadDataWithOutAnimation {
-                self.setiOS17EmptyDataView()
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
-                }
-            }
-        } else {
-            self.collectionView.reloadData {
-                self.setiOS17EmptyDataView()
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
+        PTGCDManager.gcdGobal {
+            self.mSections.removeAll()
+            PTGCDManager.gcdMain {
+                if self.viewConfig.refreshWithoutAnimation {
+                    self.collectionView.reloadDataWithOutAnimation {
+                        self.setiOS17EmptyDataView()
+                        finishTask?(self.collectionView)
+                    }
+                } else {
+                    self.collectionView.reloadData {
+                        self.setiOS17EmptyDataView()
+                        finishTask?(self.collectionView)
+                    }
                 }
             }
         }
@@ -845,11 +843,11 @@ public class PTCollectionView: UIView {
     
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
+            let startIndex = self.mSections[section].rows.count
+            self.mSections[section].rows.append(contentsOf: rows)
+            let endIndex = self.mSections[section].rows.count - 1
+            let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
             PTGCDManager.gcdMain {
-                let startIndex = self.mSections[section].rows.count
-                self.mSections[section].rows.append(contentsOf: rows)
-                let endIndex = self.mSections[section].rows.count - 1
-                let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertItems(at: indexPaths)
                 } completion: { _ in
@@ -861,10 +859,10 @@ public class PTCollectionView: UIView {
     
     public func insertSection(_ sections:[PTSection],completion:PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
+            let startIndex = self.mSections.count
+            self.mSections.append(contentsOf: sections)
+            let indexPaths = IndexSet(startIndex..<startIndex + sections.count)
             PTGCDManager.gcdMain {
-                let startIndex = self.mSections.count
-                self.mSections.append(contentsOf: sections)
-                let indexPaths = IndexSet(startIndex..<startIndex + sections.count)
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertSections(indexPaths)
                 } completion: { _ in
@@ -996,7 +994,7 @@ public class PTCollectionView: UIView {
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
 extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate {
-    
+        
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         mSections.count
     }
@@ -1103,47 +1101,35 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
             itemMoveTo!(collectionView,sourceIndexPath,destinationIndexPath)
         }
     }
-    
+        
     public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if collectionViewDidScroll != nil {
-            collectionViewDidScroll!(scrollView as! UICollectionView)
-        }
+        collectionViewDidScroll?(scrollView as! UICollectionView)
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if collectionWillBeginDragging != nil {
-            collectionViewDidScroll!(scrollView as! UICollectionView)
-        }
+        collectionViewDidScroll?(scrollView as! UICollectionView)
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if collectionDidEndDragging != nil {
-            collectionDidEndDragging!(scrollView as! UICollectionView,decelerate)
-        }
+        collectionDidEndDragging?(scrollView as! UICollectionView,decelerate)
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if collectionDidEndDecelerating != nil {
-            collectionDidEndDecelerating!(scrollView as! UICollectionView)
-        }
+        collectionDidEndDecelerating?(scrollView as! UICollectionView)
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        if collectionDidEndScrollingAnimation != nil {
-            collectionDidEndScrollingAnimation!(scrollView as! UICollectionView)
-        }
+        collectionDidEndScrollingAnimation?(scrollView as! UICollectionView)
     }
     
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        if collectionDidScrolltoTop != nil {
-            collectionDidScrolltoTop!(scrollView as! UICollectionView)
-        }
+        collectionDidScrolltoTop?(scrollView as! UICollectionView)
     }
 }
 

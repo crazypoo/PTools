@@ -21,7 +21,8 @@ public class PTEditImageViewController: PTBaseViewController {
     public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)?
     public var mosaicLineWidth: CGFloat = 25
     public var drawLineWidth: CGFloat = 6
-
+    public var backHandler:PTActionTask?
+    
     let adjustCollectionViewHeight : CGFloat = 74
     private var animate = false
     private var thumbnailFilterImages: [UIImage] = []
@@ -245,6 +246,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.setImage(PTImageEditorConfig.share.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
+            self.backHandler?()
         }
         return view
     }()
