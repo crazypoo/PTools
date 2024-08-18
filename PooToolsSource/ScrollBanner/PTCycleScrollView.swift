@@ -70,10 +70,7 @@ public class PTCycleScrollView: UIView {
                 PTGCDManager.gcdAfter(time: 0.01) {
                     self.collectionViewSetData()
                 }
-            } 
-//            else {
-//                setCellData()
-//            }
+            }
         }
     }
     
@@ -147,16 +144,6 @@ public class PTCycleScrollView: UIView {
     open var collectionViewBackgroundColor: UIColor! = UIColor.clear
         
     // MARK: ImageView
-
-    /// 没图片时的图片
-    open var coverImage: UIImage? = nil {
-        didSet {
-            if coverImage != nil {
-                coverViewImage = coverImage
-            }
-        }
-    }
-    
     /// 图片的展示模式
     open var imageViewContentMode: UIView.ContentMode? {
         didSet {
@@ -342,10 +329,7 @@ public class PTCycleScrollView: UIView {
     
     /// Collection滚动方向
     fileprivate var position: UICollectionView.ScrollPosition! = .centeredHorizontally
-        
-    /// 空数据占位图
-    fileprivate var coverViewImage: UIImage! = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "llplaceholder")
-    
+            
     /// 计时器
     fileprivate var dtimer: DispatchSourceTimer?
         
@@ -409,12 +393,6 @@ extension PTCycleScrollView {
         let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
         // Nil
         cycleScrollView.titles = []
-        
-        if let backImage = backImage {
-            // 异步加载数据时候，第一个页面会出现placeholder image，可以用backImage来设置纯色图片等其他方式
-            cycleScrollView.coverImage = backImage
-        }
-        
         // Set isOnlyTitle
         cycleScrollView.isOnlyTitle = true
         
@@ -516,7 +494,7 @@ extension PTCycleScrollView {
             leftImageView.contentMode = .left
             leftImageView.tag = 0
             leftImageView.isUserInteractionEnabled = true
-            leftImageView.loadImage(contentData: ali.first!,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
+            leftImageView.loadImage(contentData: ali.first!,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
             leftImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.scrollByDirection(_:))))
             self.addSubview(leftImageView)
             
@@ -524,7 +502,7 @@ extension PTCycleScrollView {
             rightImageView.contentMode = .right
             rightImageView.tag = 1
             rightImageView.isUserInteractionEnabled = true
-            rightImageView.loadImage(contentData: ali.last!,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
+            rightImageView.loadImage(contentData: ali.last!,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
             rightImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.scrollByDirection(_:))))
             self.addSubview(rightImageView)
         }
@@ -691,23 +669,22 @@ extension PTCycleScrollView {
                 
                 // 0==count 占位图
                 if self.imagePaths.count == 0 {
-                    cell.imageView.image = self.coverViewImage
+                    cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
                 } else {
-                    let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
-                    let imagePath = self.imagePaths[itemIndex]
-                    
                     PTGCDManager.gcdGobal {
+                        let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
+                        let imagePath = self.imagePaths[itemIndex]
                         PTGCDManager.gcdMain {
-                            cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
+                            cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
+                            // 对冲数据判断
+                            if itemIndex <= self.titles.count-1 {
+                                cell.title = self.titles[itemIndex]
+                            } else {
+                                cell.title = ""
+                            }
                         }
                     }
                     
-                    // 对冲数据判断
-                    if itemIndex <= self.titles.count-1 {
-                        cell.title = self.titles[itemIndex]
-                    } else {
-                        cell.title = ""
-                    }
                 }
             }
         }

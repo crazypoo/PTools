@@ -257,12 +257,7 @@ public class PTActionSheetController: PTAlertController {
                 view.cellButton.layoutStyle = .leftTitleRightImage
             }
             
-            var itemSize = CGSizeZero
-//            if titleItem!.imageSize.height >= (titleHeight() - 20) {
-//                itemSize = CGSizeMake(actionSheetTitleViewItem!.imageSize.width, (titleHeight() - 20))
-//            } else {
-                itemSize = titleItem!.imageSize
-//            }
+            let itemSize = titleItem!.imageSize
             view.cellButton.imageSize = itemSize
             view.cellButton.midSpacing = titleItem!.contentImageSpace
             view.cellButton.layoutLoadImage(contentData: titleItem!.image as Any,iCloudDocumentName: titleItem!.iCloudDocumentName)
@@ -378,26 +373,41 @@ public class PTActionSheetController: PTAlertController {
         return destructiveView
     }
 
-    // 分离内容滚动视图的设置
+    /// 分离内容滚动视图的设置
     private func setupContentScrollerView() {
         let destructiveHeight = (sheetConfig.separatorHeight + sheetConfig.rowHeight) * CGFloat(destructiveCount)
-        let contentItemsBottom: CGFloat = destructiveCount > 0 ? -(destructiveHeight + 10) : -10
-        let contentItemsMaxHeight: CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + CGFloat.kTabbarSaveAreaHeight + 10 + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.statusBarHeight() + 20 + sheetConfig.rowHeight)
-        
+        let destructiveSpacing: CGFloat = 10
+        let destructivePadding = destructiveHeight + destructiveSpacing
+        let tabbarPadding = CGFloat.kTabbarSaveAreaHeight + destructiveSpacing
+
+        // 提取變量
+        let titleHeight: CGFloat = titleItem == nil ? 0 : sheetConfig.rowHeight
+        let statusBarHeight = CGFloat.statusBarHeight()
+
+        // 計算 destructive 高度和 contentItems 底部偏移
+        let contentItemsBottom = destructiveCount > 0 ? -destructivePadding : -destructiveSpacing
+
+        // 最大可用內容高度
+        let contentItemsMaxHeight: CGFloat = CGFloat.kSCREEN_HEIGHT - (sheetConfig.rowHeight + tabbarPadding + (destructiveHeight < 1 ? destructiveSpacing : destructivePadding) + statusBarHeight + 20 + sheetConfig.rowHeight)
+
+        // 內容項高度計算
         let contentItemsCount = CGFloat(contentItems?.count ?? 0)
-        let currentContentHeight: CGFloat = contentItemsCount * sheetConfig.rowHeight + (contentItemsCount - 1) * sheetConfig.lineHeight
-        var realContentSize: CGFloat = currentContentHeight
-        let contentItemCanScroll: Bool = realContentSize > contentItemsMaxHeight
-        
-        if contentItemCanScroll {
-            realContentSize = contentItemsMaxHeight
-        }
-        
-        totalHeight = realContentSize + destructiveHeight + (titleItem == nil ? 0 : sheetConfig.rowHeight) + (destructiveHeight < 1 ? 10 : (destructiveHeight + 10)) + CGFloat.kTabbarSaveAreaHeight + 10
-        
+        let currentContentHeight = contentItemsCount * sheetConfig.rowHeight + (contentItemsCount - 1) * sheetConfig.lineHeight
+
+        // 計算是否可以滾動
+        var realContentSize = min(currentContentHeight, contentItemsMaxHeight)
+        let contentItemCanScroll = currentContentHeight > contentItemsMaxHeight
+
+        // 計算總高度
+        totalHeight = realContentSize + destructiveHeight + titleHeight + (destructiveHeight < 1 ? destructiveSpacing : destructivePadding) + tabbarPadding
+
+        // 設置 ScrollerView
         contentScrollerView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2, height: currentContentHeight)
         contentScrollerView.isScrollEnabled = contentItemCanScroll
+
+        // 添加子視圖和佈局約束
         alertContent.addSubviews([contentScrollerView])
+
         contentScrollerView.snp.makeConstraints { make in
             make.left.right.equalTo(cancelBtn)
             make.bottom.equalTo(cancelBtn.snp.top).offset(contentItemsBottom)
@@ -511,10 +521,10 @@ extension PTActionSheetController {
             self.setupContentScrollerView()
             self.setupTitleLabel()
             self.contentSubsSet()
-        }
-        PTAnimationFunction.animationIn(animationView: alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
-            if finish {
-                completion?()
+            PTAnimationFunction.animationIn(animationView: self.alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
+                if finish {
+                    completion?()
+                }
             }
         }
     }

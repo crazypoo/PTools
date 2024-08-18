@@ -144,5 +144,4 @@ public class PTLoadImageFunction: NSObject {
         }
         return frames
     }
-
 }
