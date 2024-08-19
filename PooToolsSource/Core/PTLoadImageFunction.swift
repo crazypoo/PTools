@@ -11,12 +11,14 @@ import Kingfisher
 import SwifterSwift
 import Photos
 
+public typealias PTLoadImageProgressBlock = ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)
+
 @objcMembers
 public class PTLoadImageFunction: NSObject {
     
     public static func loadImage(contentData: Any,
                                  iCloudDocumentName: String = "",
-                                 progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil) async -> ([UIImage]?, UIImage?) {
+                                 progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
         
         if let image = contentData as? UIImage {
             return ([image], image)
@@ -50,7 +52,7 @@ public class PTLoadImageFunction: NSObject {
     
     public static func handleStringContent(_ dataUrlString: String,
                                            _ iCloudDocumentName: String,
-                                           _ progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) async -> ([UIImage]?, UIImage?) {
+                                           _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
         
         if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
             if let image = UIImage(contentsOfFile: dataUrlString) {
@@ -72,7 +74,7 @@ public class PTLoadImageFunction: NSObject {
     
     public static func handleURLContent(_ dataUrlString: String,
                                         _ iCloudDocumentName: String,
-                                        _ progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) async -> ([UIImage]?, UIImage?) {
+                                        _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
         
         if dataUrlString.contains("file://") {
             return handleFileURL(dataUrlString, iCloudDocumentName)
@@ -107,10 +109,12 @@ public class PTLoadImageFunction: NSObject {
     }
     
     public static func downloadImage(from url: URL,
-                                     _ progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)?) async -> ([UIImage]?, UIImage?) {
+                                     _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
         return await withCheckedContinuation { continuation in
             ImageDownloader.default.downloadImage(with: url, options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
-                progressHandle?(receivedSize, totalSize)
+                PTGCDManager.gcdGobal {
+                    progressHandle?(receivedSize, totalSize)
+                }
             }) { result in
                 switch result {
                 case .success(let value):

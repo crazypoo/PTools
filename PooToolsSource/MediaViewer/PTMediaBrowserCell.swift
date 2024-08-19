@@ -282,7 +282,8 @@ extension PTMediaBrowserCell {
     private func loadImageData(loading: PTMediaBrowserLoadingView) {
         imageView.loadImage(contentData: dataModel.imageURL as Any, iCloudDocumentName: viewConfig.iCloudDocumentName, emptyImage: UIImage()) { receivedSize, totalSize in
             PTGCDManager.gcdMain {
-                loading.progress = CGFloat(receivedSize / totalSize)
+                let progress = CGFloat(receivedSize / totalSize)
+                loading.progress = progress
             }
         } loadFinish: { images, image in
             PTGCDManager.gcdMain {

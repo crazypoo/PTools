@@ -101,7 +101,7 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                baseTraitCollectionDidChange()
+                self.baseTraitCollectionDidChange()
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
@@ -150,6 +150,8 @@ open class PTBaseNavControl: UINavigationController {
             }
         }
     }
+    
+    open func baseTraitCollectionDidChange() { }
 }
 
 extension PTBaseNavControl:UIGestureRecognizerDelegate {
