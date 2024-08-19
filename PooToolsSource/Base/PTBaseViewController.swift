@@ -145,6 +145,7 @@ extension PTBaseViewController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                baseTraitCollectionDidChange()
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
@@ -190,9 +191,12 @@ extension PTBaseViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+            baseTraitCollectionDidChange()
             setNeedsStatusBarAppearanceUpdate()
         }
     }
+    
+    open func baseTraitCollectionDidChange() { }
     
     public func returnFrontVC(completion:PTActionTask? = nil) {
         if presentingViewController != nil {

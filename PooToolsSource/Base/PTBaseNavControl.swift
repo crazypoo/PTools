@@ -101,10 +101,13 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                baseTraitCollectionDidChange()
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
     }
+    
+    open func baseTraitCollectionDidChange() { }
 }
 
 // MARK: - 左滑手势返回
@@ -142,6 +145,7 @@ open class PTBaseNavControl: UINavigationController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                baseTraitCollectionDidChange()
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
