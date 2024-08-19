@@ -145,7 +145,7 @@ extension PTBaseViewController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                baseTraitCollectionDidChange()
+                self.baseTraitCollectionDidChange()
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }

@@ -145,7 +145,7 @@ open class PTBaseNavControl: UINavigationController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                baseTraitCollectionDidChange()
+                self.baseTraitCollectionDidChange()
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
@@ -178,6 +178,7 @@ extension PTBaseNavControl {
         if #available(iOS 13.0, *) {
             if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
                 StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                baseTraitCollectionDidChange()
                 setNeedsStatusBarAppearanceUpdate()
             }
         }
