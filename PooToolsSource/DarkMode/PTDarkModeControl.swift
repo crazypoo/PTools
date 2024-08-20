@@ -166,7 +166,8 @@ public class PTDarkModeControl: PTBaseViewController {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navTitle = "PT Theme title".localized()
         zx_navLeftBtn?.isHidden = true
-
+        zx_navLineView?.isHidden = true
+        
         zx_navBar?.addSubviews([backButton])
         backButton.snp.makeConstraints { make in
             make.size.equalTo(34)
@@ -175,11 +176,8 @@ public class PTDarkModeControl: PTBaseViewController {
         }
 #else
         title = "PT Theme title".localized()
-        
-        if checkVCIsPresenting() {
-            backButton.frame = CGRectMake(0, 0, 34, 34)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-        }
+        backButton.frame = CGRectMake(0, 0, 34, 34)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
 #endif
         // Do any additional setup after loading the view.
         view.addSubviews([newCollectionView])
@@ -234,6 +232,7 @@ extension PTDarkModeControl: PTThemeable {
         PTGCDManager.gcdMain {
             let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
             self.changeStatusBar(type: type)
+            self.backButton.setImage(PTDarkModeOption.backImage, for: .normal)
             self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
             self.showDetail()
 #if POOTOOLS_NAVBARCONTROLLER
