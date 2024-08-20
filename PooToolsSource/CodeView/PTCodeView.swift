@@ -104,8 +104,8 @@ public class PTCodeView: UIView {
             tempString.append(dataSource[Int(index)])
         }
         changeString = String(format: "%@", tempString)
-        if codeBlock != nil {
-            codeBlock!(self,changeString)
+        PTGCDManager.gcdAfter(time: 0.1) {
+            self.codeBlock?(self,self.changeString)
         }
         self.setNeedsDisplay()
     }
