@@ -9,13 +9,6 @@
 import UIKit
 import SnapKit
 
-extension UIImage {
-    /// 选中
-    private(set) static var tradeValidperiodSelected = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_cycle_selected@3x")
-    /// 没有选中
-    private(set) static var tradeValidperiod = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_cycle_unselected@3x")
-}
-
 /// 暗黑模式
 enum DarkMode {
     case light
@@ -76,8 +69,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
         view.imageSize = CGSizeMake(14, 14)
         view.layoutStyle = .leftImageRightTitle
         view.midSpacing = 7.5
-        view.normalImage = .tradeValidperiod
-        view.selectedImage = .tradeValidperiodSelected
+        view.normalImage = PTDarkModeOption.tradeValidperiod
+        view.selectedImage = PTDarkModeOption.tradeValidperiodSelected
         view.normalTitleFont = .appfont(size: 13)
         view.normalTitle = "PT Theme white".localized()
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
@@ -102,8 +95,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
         view.imageSize = CGSizeMake(14, 14)
         view.layoutStyle = .leftImageRightTitle
         view.midSpacing = 7.5
-        view.normalImage = .tradeValidperiod
-        view.selectedImage = .tradeValidperiodSelected
+        view.normalImage = PTDarkModeOption.tradeValidperiod
+        view.selectedImage = PTDarkModeOption.tradeValidperiodSelected
         view.normalTitleFont = .appfont(size: 13)
         view.normalTitle = "PT Theme black".localized()
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor

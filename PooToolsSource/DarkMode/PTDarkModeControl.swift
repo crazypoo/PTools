@@ -24,11 +24,17 @@ public class PTDarkModeControl: PTBaseViewController {
         let smart = PTFusionCellModel()
         smart.name = "PT Theme smart".localized()
         smart.nameColor = PTAppBaseConfig.share.viewDefaultTextColor
+        smart.switchTintColor = PTDarkModeOption.switchTintColor
+        smart.switchThumbTintColor = PTDarkModeOption.switchThumbTintColor
+        smart.switchOnTinColor = PTDarkModeOption.switchOnTinColor
         smart.accessoryType = .Switch
         
         let followSystem = PTFusionCellModel()
         followSystem.name = "PT Theme follow system".localized()
         followSystem.nameColor = PTAppBaseConfig.share.viewDefaultTextColor
+        followSystem.switchTintColor = PTDarkModeOption.switchTintColor
+        followSystem.switchThumbTintColor = PTDarkModeOption.switchThumbTintColor
+        followSystem.switchOnTinColor = PTDarkModeOption.switchOnTinColor
         followSystem.accessoryType = .Switch
 
         return [[smart],[followSystem]]
@@ -39,35 +45,11 @@ public class PTDarkModeControl: PTBaseViewController {
     lazy var newCollectionView : PTCollectionView = {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
-        cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
         cConfig.topRefresh = false
-        cConfig.customReuseViews = true
         let view = PTCollectionView(viewConfig: cConfig)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.registerSupplementaryView(classs: [PTDarkModeHeader.ID:PTDarkModeHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.registerSupplementaryView(classs: [PTDarkSmartFooter.ID:PTDarkSmartFooter.self,PTDarkFollowSystemFooter.ID:PTDarkFollowSystemFooter.self], kind: UICollectionView.elementKindSectionFooter)
-        view.customerReuseViews = { index,sectionModel in
-            var items = [NSCollectionLayoutBoundarySupplementaryItem]()
-            let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
-            if sectionModel.headerID == PTDarkModeHeader.ID {
-                let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude))
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
-                
-                let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.footerHeight ?? CGFloat.leastNormalMagnitude))
-                let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing)
-
-                if PTDarkModeOption.isSmartPeeling {
-                    items = [headerItem,footerItem]
-                } else {
-                    items = [headerItem]
-                }
-            } else if sectionModel.footerID == PTDarkFollowSystemFooter.ID {
-                let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.footerHeight ?? CGFloat.leastNormalMagnitude))
-                let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing)
-                items = [footerItem]
-            }
-            return items
-        }
         view.customerLayout = { sectionIndex,sectionModel in
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -77,7 +59,7 @@ public class PTDarkModeControl: PTBaseViewController {
             if Gobal_device_info.isPad {
                 cellHeight = 64
             } else {
-                cellHeight = CGFloat.ScaleW(w: 44)
+                cellHeight = 44.adapter
             }
             sectionModel.rows.enumerated().forEach { (index,model) in
                 let cellHeight:CGFloat = cellHeight
@@ -112,7 +94,6 @@ public class PTDarkModeControl: PTBaseViewController {
                 footer.themeTimeButton.addActionHandlers { sender in
                     let timeIntervalValue = PTDarkModeOption.smartPeelingTimeIntervalValue.separatedByString(with: "~")
                     let darkModePickerView = PTDarkModePickerView(startTime: timeIntervalValue[0], endTime: timeIntervalValue[1]) { (startTime, endTime) in
-                        
                         if startTime == endTime {
                             PTBaseViewController.gobal_drop(title: "PT Theme time set error".localized())
                         } else {
@@ -172,7 +153,7 @@ public class PTDarkModeControl: PTBaseViewController {
     
     lazy var backButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTDarkModeOption.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -184,14 +165,13 @@ public class PTDarkModeControl: PTBaseViewController {
 
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navTitle = "PT Theme title".localized()
-        
-        if checkVCIsPresenting() {
-            zx_navBar?.addSubviews([backButton])
-            backButton.snp.makeConstraints { make in
-                make.size.equalTo(34)
-                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.bottom.equalToSuperview().inset(5)
-            }
+        zx_navLeftBtn?.isHidden = true
+
+        zx_navBar?.addSubviews([backButton])
+        backButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview().inset(5)
         }
 #else
         title = "PT Theme title".localized()
@@ -258,7 +238,7 @@ extension PTDarkModeControl: PTThemeable {
             self.showDetail()
 #if POOTOOLS_NAVBARCONTROLLER
             self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
-            self.zx_navBarBackgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+            self.zx_navBarBackgroundColor = PTAppBaseConfig.share.navBackgroundColor
 #else
             PTBaseNavControl.GobalNavControl(nav: self.navigationController!)
 #endif

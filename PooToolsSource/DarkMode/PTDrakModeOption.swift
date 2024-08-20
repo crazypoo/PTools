@@ -64,6 +64,18 @@ public class PTDarkModeOption {
         }
         return true
     }
+    
+    public static var smartDescAccessory:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
+    public static var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public static var switchTintColor:DynamicColor = .white
+    public static var switchThumbTintColor:DynamicColor = .white
+    public static var switchOnTinColor:DynamicColor = .lightGray
+    
+    ///选中
+    public static var tradeValidperiodSelected = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_cycle_selected@3x")
+    /// 没有选中
+    public static var tradeValidperiod = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_cycle_unselected@3x")
+
 }
 
 public extension PTDarkModeOption {
@@ -145,7 +157,7 @@ public extension PTDarkModeOption {
 
 // MARK: - 动态颜色的使用
 public extension PTDarkModeOption {
-    static func colorLightDark(lightColor: UIColor, 
+    static func colorLightDark(lightColor: UIColor,
                                darkColor: UIColor) -> UIColor {
         UIColor { (traitCollection) -> UIColor in
             if PTDarkModeOption.isFollowSystem {
@@ -165,7 +177,7 @@ public extension PTDarkModeOption {
     // MARK: 是否为智能换肤的时间：黑色
     /// 是否为智能换肤的时间：黑色
     /// - Returns: 结果
-    static func isSmartPeelingTime(startTime: String? = nil, 
+    static func isSmartPeelingTime(startTime: String? = nil,
                                    endTime: String? = nil) -> Bool {
         // 获取暗黑模式时间的区间，转为两个时间戳，取出当前的时间戳，看是否在区间内，在的话：黑色，否则白色
         var timeIntervalValue: [String] = []
