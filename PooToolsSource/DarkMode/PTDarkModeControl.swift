@@ -135,14 +135,11 @@ public class PTDarkModeControl: PTBaseViewController {
                 cell.switchValueChangeBlock = { title,sender in
                     if cellModel.name == "PT Theme smart".localized() {
                         PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: sender.isOn)
-                        self.showDetail()
                     } else if cellModel.name == "PT Theme follow system".localized() {
                         PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: sender.isOn)
-                        self.showDetail()
                     }
-                    if self.themeSetBlock != nil {
-                        self.themeSetBlock!()
-                    }
+                    self.showDetail()
+                    self.themeSetBlock?()
                 }
                 return cell
             }

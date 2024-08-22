@@ -67,7 +67,7 @@ open class PTImagePageControl: UIPageControl {
     
     private func updateDots() {
         for (index, dot) in dots.enumerated() {
-            dot.loadImage(contentData: (index == currentPage) ? currentPageImage : pageImage)
+            dot.loadImage(contentData: (index == currentPage) ? currentPageImage : pageImage,emptyImage: UIColor.clear.createImageWithColor())
         }
     }
 
