@@ -851,6 +851,7 @@ public class PTCollectionView: UIView {
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertItems(at: indexPaths)
                 } completion: { _ in
+                    self.collectionView.collectionViewLayout.invalidateLayout()
                     completion?()
                 }
             }
@@ -866,6 +867,50 @@ public class PTCollectionView: UIView {
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertSections(indexPaths)
                 } completion: { _ in
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    completion?()
+                }
+            }
+        }
+    }
+    
+    public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
+        PTGCDManager.gcdGobal {
+            // 找到需要删除的行的索引
+            let startIndex = self.mSections[section].rows.firstIndex(of: rows.first!)
+            let endIndex = startIndex! + rows.count - 1
+            let indexPaths = (startIndex!...endIndex).map { IndexPath(item: $0, section: section) }
+
+            // 从数据源中移除这些行
+            self.mSections[section].rows.removeSubrange(startIndex!...endIndex)
+
+            PTGCDManager.gcdMain {
+                self.collectionView.performBatchUpdates {
+                    // 在 UICollectionView 中删除这些行
+                    self.collectionView.deleteItems(at: indexPaths)
+                } completion: { _ in
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    completion?()
+                }
+            }
+        }
+    }
+    
+    public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
+        PTGCDManager.gcdGobal {
+            let startIndex = self.mSections.firstIndex(of: sections.first!)
+            let endIndex = startIndex! + sections.count - 1
+            let indexSet = IndexSet(startIndex!...endIndex)
+
+            // 从数据源中移除这些 section
+            self.mSections.removeSubrange(startIndex!...endIndex)
+
+            PTGCDManager.gcdMain {
+                self.collectionView.performBatchUpdates {
+                    // 在 UICollectionView 中删除这些 section
+                    self.collectionView.deleteSections(indexSet)
+                } completion: { _ in
+                    self.collectionView.collectionViewLayout.invalidateLayout()
                     completion?()
                 }
             }
