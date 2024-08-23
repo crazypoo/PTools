@@ -8,7 +8,7 @@
 import UIKit
 
 public class PTChatTypingIndicatorCell: PTBaseNormalCell {
-    static let ID = "PTChatTypingIndicatorCell"
+    public static let ID = "PTChatTypingIndicatorCell"
     
     public var insets = UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
 

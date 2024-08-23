@@ -53,4 +53,6 @@ open class PTChatListModel: PTBaseModel {
     open var customerCellId:String = ""
     ///是否已讀
     open var isRead:Bool = false
+    ///额外扩展字段
+    open var msgExten:Any?
 }
