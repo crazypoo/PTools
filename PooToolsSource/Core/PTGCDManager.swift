@@ -98,7 +98,7 @@ public class PTGCDManager :NSObject {
                                jobDoneBlock: @escaping PTActionTask) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
-        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? threadCount)
+        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? 1)
         dispatchQueue.async {
             for i in 0..<threadCount {
                 dispatchGroup.enter()
