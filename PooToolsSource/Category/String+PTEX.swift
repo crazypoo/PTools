@@ -1509,27 +1509,25 @@ public extension String {
      所以如何系统 UIImage(systemName:) 的方法返回为空则调用 Core Text来绘制图片
     */
     func emojiToImage(emojiFont:UIFont? = .appfont(size: 24)) -> UIImage {
-        if isSingleEmoji {
-            if let image = UIImage(systemName: self) {
-                return image
-            } else {
-                let nsText = nsString
-                let fontAttributes = [NSAttributedString.Key.font: emojiFont]
-                let imageSize = nsText.size(withAttributes: fontAttributes as [NSAttributedString.Key : Any])
-                
-                UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
-                defer { UIGraphicsEndImageContext() }
-                
-                let _ = UIGraphicsGetCurrentContext()
-                
-                nsText.draw(at: CGPoint.zero, withAttributes: fontAttributes as [NSAttributedString.Key : Any])
-                
-                guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
-                return image
-            }
-        } else {
-            return UIImage()
+        guard isSingleEmoji else { return UIImage() }
+        
+        // Check if it's a system image first
+        if let image = UIImage(systemName: self) {
+            return image
         }
+        
+        // Draw the emoji as an image
+        let nsText = nsString
+        let font = emojiFont ?? .systemFont(ofSize: 24)
+        let fontAttributes: [NSAttributedString.Key: Any] = [.font: font]
+        let imageSize = nsText.size(withAttributes: fontAttributes)
+        
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
+        defer { UIGraphicsEndImageContext() }
+        
+        nsText.draw(at: .zero, withAttributes: fontAttributes)
+        
+        return UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
     }
     
     //MARK: 获取视频的一个图片

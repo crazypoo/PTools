@@ -508,19 +508,19 @@ public extension UIViewController {
     }
 }
 
-#if swift(>=5.9)
-extension UIViewController:@retroactive UIPopoverPresentationControllerDelegate {
-    public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        .none
-    }
-}
-#else
+//#if swift(>=5.9)
+//extension UIViewController:@retroactive UIPopoverPresentationControllerDelegate {
+//    public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+//        .none
+//    }
+//}
+//#else
 extension UIViewController: UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
     }
 }
-#endif
+//#endif
 
 extension UIViewController {
     public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
