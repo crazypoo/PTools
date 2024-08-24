@@ -353,6 +353,32 @@ public class Network: NSObject {
         Network.manager.cancelAllRequests(completingOnQueue: queue, completion: completion)
     }
     
+    // 封装请求开始日志
+    private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
+        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(headers.dictionary.jsonString() ?? "")\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
+    }
+
+    // 封装请求成功日志
+    private static func logRequestSuccess(url: String, jsonStr: String) {
+        PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .Network)
+    }
+
+    // 封装请求失败日志
+    private static func logRequestFailure(url: String, error: AFError) {
+        PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error, loggerType: .Network)
+    }
+
+    // 封装 token 添加逻辑
+    private static func addToken(to headers: HTTPHeaders) -> HTTPHeaders {
+        var headers = headers
+        let token = Network.share.userToken
+        if !token.isEmpty {
+            headers["token"] = token
+            headers["device"] = "iOS"
+        }
+        return headers
+    }
+    
     //JSONEncoding  JSON参数
     //URLEncoding    URL参数
     /// 项目总接口
@@ -367,37 +393,31 @@ public class Network: NSObject {
     ///   - jsonRequest:
     ///  - Returns: ResponseModel
     class public func requestApi(needGobal:Bool = true,
-                                 urlStr:String,
+                                 urlStr:URLConvertible,
                                  method: HTTPMethod = .post,
                                  header:HTTPHeaders? = nil,
                                  parameters: Parameters? = nil,
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
-        let urlStr1 = (needGobal ? Network.gobalUrl() : "") + urlStr
-        guard urlStr1.isURL(), !urlStr.isEmpty else {
+        let urlStr1 = (needGobal ? Network.gobalUrl() : "") + (try urlStr.asURL().absoluteString)
+        guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
             throw AFError.invalidURL(url: "https://www.qq.com")
         }
 
         // 判断网络是否可用
         guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+            Network.cancelAllNetworkRequest()
             throw AFError.createURLRequestFailed(error: NetWorkNoError)
         }
 
-        var apiHeader = header ?? HTTPHeaders()
-        let token = Network.share.userToken
-
-        if !token.isEmpty {
-            apiHeader["token"] = token
-            apiHeader["device"] = "iOS"
-        }
-
+        var apiHeader = addToken(to: header ?? HTTPHeaders())
         if jsonRequest {
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
         }
 
-        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(apiHeader.dictionary.jsonString() ?? "")\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
+        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
 
         return try await withCheckedThrowingContinuation { continuation in
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
@@ -406,7 +426,7 @@ public class Network: NSObject {
                     var requestStruct = PTBaseStructModel()
                     requestStruct.resultData = data.data
                     let jsonStr = data.data?.toDict()?.toJSON() ?? ""
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\((!jsonStr.isEmpty ? jsonStr : ((data.data ?? Data()).string(encoding: .utf8)))!)🌐", levelType: PTLogMode, loggerType: .Network)
+                    logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
                     requestStruct.originalString = jsonStr
                     if let modelType1 = modelType {
                         requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
@@ -414,7 +434,7 @@ public class Network: NSObject {
                     continuation.resume(returning: requestStruct)
 
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error, loggerType: .Network)
+                    logRequestFailure(url: urlStr1, error: error)
                     continuation.resume(throwing: error)
                 }
             }
@@ -456,7 +476,7 @@ public class Network: NSObject {
     /// - Returns: 响应模型
     class public func imageUpload(needGobal: Bool = true,
                                   images: [UIImage]?,
-                                  path: String = "/api/project/ossImg",
+                                  path: URLConvertible,
                                   method: HTTPMethod = .post,
                                   fileKey: [String] = ["images"],
                                   params: [String: String]? = nil,
@@ -467,24 +487,18 @@ public class Network: NSObject {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let pathUrl = (needGobal ? Network.gobalUrl() : "") + path
-                    guard pathUrl.isURL(), !path.isEmpty else {
+                    let pathUrl = (needGobal ? Network.gobalUrl() : "") + (try path.asURL().absoluteString)
+                    guard pathUrl.isURL(), ((try? pathUrl.asURL().absoluteString) != nil) else {
                         throw AFError.invalidURL(url: "https://www.qq.com")
                     }
 
                     // 判断网络是否可用
                     guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+                        Network.cancelAllNetworkRequest()
                         throw AFError.createURLRequestFailed(error: NetWorkNoError)
                     }
 
-                    var apiHeader = header ?? HTTPHeaders()
-                    let token = Network.share.userToken
-
-                    if !token.isEmpty {
-                        apiHeader["token"] = token
-                        apiHeader["device"] = "iOS"
-                    }
-
+                    var apiHeader = addToken(to: header ?? HTTPHeaders())
                     if jsonRequest {
                         apiHeader["Content-Type"] = "application/json;charset=UTF-8"
                         apiHeader["Accept"] = "application/json"
@@ -512,7 +526,8 @@ public class Network: NSObject {
                             requestStruct.originalString = jsonStr
                             requestStruct.resultData = response.data
 
-                            PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\((!jsonStr.isEmpty ? jsonStr : ((response.data ?? Data()).string(encoding: .utf8)))!)🌐", levelType: PTLogMode, loggerType: .Network)
+                            logRequestSuccess(url: pathUrl, jsonStr: jsonStr)
+//                            PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\((!jsonStr.isEmpty ? jsonStr : ((response.data ?? Data()).string(encoding: .utf8)))!)🌐", levelType: PTLogMode, loggerType: .Network)
 
                             if let modelType = modelType {
                                 requestStruct.customerModel = jsonStr.kj.model(type: modelType)
@@ -521,7 +536,7 @@ public class Network: NSObject {
                             continuation.finish()
 
                         case .failure(let error):
-                            PTNSLogConsole("❌❤️1.请求地址 = \(pathUrl)\n💛2.error: \(error)❌", levelType: .Error, loggerType: .Network)
+                            logRequestFailure(url: pathUrl, error: error)
                             continuation.finish(throwing: error)
                         }
                     }
