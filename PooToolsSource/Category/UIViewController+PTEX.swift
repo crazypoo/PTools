@@ -529,3 +529,35 @@ extension UIViewController {
         }
     }
 }
+
+@available(iOS 18.0, *)
+extension UIViewController {
+    public class func newPresentStyleWithoutZoom(current:UIViewController,target:UIViewController,type:UIViewController.Transition = .partialCurl,animated:Bool = true,completion:PTActionTask? = nil) {
+        switch type {
+        case .partialCurl:
+            target.modalPresentationStyle = .fullScreen
+            target.preferredTransition = type
+        case .crossDissolve:
+            target.preferredTransition = type
+        case .flipHorizontal:
+            target.preferredTransition = type
+        case .coverVertical:
+            target.preferredTransition = type
+        default:
+            break
+        }
+        current.present(target, animated: animated, completion: completion)
+    }
+    
+    public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil) {
+        
+        target.preferredTransition = .zoom(sourceViewProvider: { context in
+            guard let targetClass = NSClassFromString(target.className),
+                  context.zoomedViewController.isKind(of: targetClass) else {
+                fatalError("Unable to access the current view controller.")
+            }
+            return source
+        })
+        current.present(target, animated: animated, completion: completion)
+    }
+}
