@@ -43,11 +43,11 @@ class PTEditMenuInteractionDummy: UIView {
     
     // MARK: - Check if selector is supported
     private func isSelectorSupported(_ selector: Selector) -> Bool {
-        return actions.contains(NSStringFromSelector(selector))
+        let selectorString = NSStringFromSelector(selector)
+        return actions.contains(selectorString)
     }
     
-    @objc static func fake() {
-    }
+    @objc static func fake() { }
     
     // MARK: - Override methods
     override var canBecomeFirstResponder: Bool {
@@ -71,5 +71,5 @@ class PTEditMenuInteractionDummy: UIView {
             return true
         }
         return super.responds(to: aSelector)
-    }
+    }    
 }

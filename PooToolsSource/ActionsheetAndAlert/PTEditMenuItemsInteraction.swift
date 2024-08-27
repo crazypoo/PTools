@@ -73,7 +73,7 @@ public class PTEditMenuItemsInteraction: NSObject {
     ///   - view: 须要展示在x View上
     public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
         guard !items.isEmpty else { return }
-        
+                
         showingItems = items
         self.targetRect = targetRect
         if #available(iOS 16, *) {
@@ -85,6 +85,8 @@ public class PTEditMenuItemsInteraction: NSObject {
             menuController.menuItems = nil
             menuController.hideMenu()
             
+            dummyView.removeFromSuperview()
+
             dummyView.updateActions(actionsForDummyView(items))
             view.addSubview(dummyView)
             dummyView.frame = view.bounds
@@ -147,10 +149,22 @@ public class PTEditMenuItemsInteraction: NSObject {
     }
     
     private func selector(from _: PTEditMenuItem, index: Int) -> Selector {
-        // selector产生规则
-        Selector("clickMenuItem\(seperator)\(index)")
+        let selectorString = "selectMenuItem\(seperator)\(index)"
+        let selector = Selector(selectorString)
+        
+        // 动态添加方法到当前类
+        if !responds(to: selector) {
+            let implementation: @convention(block) (Any) -> Void = { [weak self] _ in
+                PTNSLogConsole("123123123123123123")
+                self?.selectMenuItem(selector)
+            }
+            let imp = imp_implementationWithBlock(implementation)
+            class_addMethod(PTEditMenuInteractionDummy.self, selector, imp, "v@:@")
+        }
+        
+        return selector
     }
-    
+        
     private func actionsForDummyView(_ items: [PTEditMenuItem]) -> Set<String> {
         var set = Set<String>()
         items.enumerated().forEach {
@@ -186,3 +200,4 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
         }
     }
 }
+
