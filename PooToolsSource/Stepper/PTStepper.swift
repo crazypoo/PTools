@@ -241,15 +241,20 @@ public class PTStepper: UIView {
     }
     
     func textNumberChange(textField:UITextField) {
-        if textField.text!.int! < minNum {
+        if (textField.text ?? "").stringIsEmpty() {
             alertAction(max: false)
             textField.text = ""
-        }
-        
-        if textField.text!.int! > maxNum {
-            alertAction(max: true)
-            textField.text = ""
-            return
+        } else {
+            if textField.text!.int! < minNum {
+                alertAction(max: false)
+                textField.text = ""
+            }
+            
+            if textField.text!.int! > maxNum {
+                alertAction(max: true)
+                textField.text = ""
+                return
+            }
         }
     }
     
