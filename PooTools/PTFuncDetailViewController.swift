@@ -689,6 +689,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             stepper.numberTextColor = .black
             stepper.numberTextFont = .appfont(size: 12)
             stepper.valueBlock = { value,type in
+                PTNSLogConsole("\(type),\(value)")
             }
             view.addSubviews([stepper])
             stepper.snp.makeConstraints { make in
