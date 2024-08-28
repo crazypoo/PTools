@@ -65,6 +65,8 @@ public extension String {
     static let BlurImageList = "BlurImageList"
     static let CycleBanner = "CycleBanner"
     static let CollectionTag = "CollectionTag"
+    static let InputBox = "InputBox"
+    static let Stepper = "Stepper"
 
     static let route = "路由"
     
@@ -303,7 +305,11 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let CollectionTag = self.rowBaseModel(name: .CollectionTag)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag]
+        let InputBox = self.rowBaseModel(name: .InputBox)
+        
+        let Stepper = self.rowBaseModel(name: .Stepper)
+
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in

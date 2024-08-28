@@ -646,6 +646,56 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
             let tagSection = [PTSection(rows: tagRows)]
             aaaaaaa.showCollectionDetail(collectionData: tagSection)
+        case String.InputBox:
+            let GobalPaymentSmallBoxWidth:CGFloat = (CGFloat.kSCREEN_WIDTH - 48 - 8 * 5) / 6
+
+            let inputConfig = PTInputBoxConfiguration()
+            inputConfig.inputBoxNumber = 6
+            inputConfig.inputBoxWidth = GobalPaymentSmallBoxWidth
+            inputConfig.inputBoxHeight = GobalPaymentSmallBoxWidth
+            inputConfig.inputBoxSpacing = 8
+            inputConfig.inputBoxBorderWidth = 1
+            inputConfig.inputBoxCornerRadius = 4
+            inputConfig.inputBoxColor = DynamicColor(hexString: "cacaca")
+            inputConfig.inputType = .Number
+            inputConfig.autoShowKeyboard = true
+            inputConfig.inputBoxFinishColors = [UIColor.systemRed]
+            inputConfig.inputBoxHighlightedColor = UIColor.systemRed
+            inputConfig.finishTextColors = [UIColor.black]
+            inputConfig.secureTextEntry = true
+            inputConfig.keyboardType = .numberPad
+            inputConfig.textColor = UIColor.black
+            
+            let codeInputView = PTInputBoxView.init(frame: CGRectMake(PTAppBaseConfig.share.defaultViewSpace, CGFloat.kNavBarHeight_Total + 110, CGFloat.kSCREEN_WIDTH - 48, GobalPaymentSmallBoxWidth + 2), config: inputConfig)
+            codeInputView.finishBlock = { (view: PTInputBoxView, code: String) -> () in
+            }
+            
+            view.addSubviews([codeInputView])
+            codeInputView.snp.makeConstraints { make in
+                make.centerX.centerY.equalToSuperview()
+                make.width.equalTo(CGFloat.kSCREEN_WIDTH - 48)
+                make.height.equalTo(GobalPaymentSmallBoxWidth + 2)
+            }
+        case String.Stepper:
+            let stepper = PTStepper()
+            stepper.viewShowType = .RTL
+            stepper.contentSpace = 6
+            stepper.baseNum = "10"
+            stepper.minNum = 1
+            stepper.maxNum = 99
+            stepper.inputBackgroundColor = .clear
+            stepper.addImage = UIImage(named: "image_day_normal_1")!.transformImage(size: CGSizeMake(24, 24))
+            stepper.reduceImage = UIImage(named: "image_day_normal_1")!.transformImage(size: CGSizeMake(24, 24))
+            stepper.numberTextColor = .black
+            stepper.numberTextFont = .appfont(size: 12)
+            stepper.valueBlock = { value,type in
+            }
+            view.addSubviews([stepper])
+            stepper.snp.makeConstraints { make in
+                make.centerX.centerY.equalToSuperview()
+                make.width.equalTo(100)
+                make.height.equalTo(24)
+            }
         default:
             break
         }

@@ -111,13 +111,8 @@ public class PTInputBoxView: UIView {
     private var textField: UITextField = UITextField()
     private var inputFinish: Bool = false
     private var inputFinishIndex: Int = 0
-    /// 存放光标 --- 2024-05-11 15:14:14
     private var layerArray = [CAShapeLayer]()
         
-    override init(frame: CGRect) {
-        fatalError("Use init(frame:config:) instead")
-    }
-    
     public init(frame: CGRect, config: PTInputBoxConfiguration) {
         self.config = config
         super.init(frame: frame)
@@ -132,129 +127,86 @@ public class PTInputBoxView: UIView {
         NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: --- view layout
-    func setupView(_ frame: CGRect){
-        if frame.size.width <= 0 || frame.size.height <= 0 || config.inputBoxNumber == 0 || config.inputBoxWidth > frame.size.width {
+    private func setupView(_ frame: CGRect) {
+        guard frame.width > 0, frame.height > 0, config.inputBoxNumber > 0, config.inputBoxWidth <= frame.width else {
             return
         }
         
-        let spacing = config.inputBoxSpacing
-        var width: CGFloat = 0.0
+        config.leftMargin = max(0, (frame.width - config.inputBoxWidth * CGFloat(config.inputBoxNumber) - config.inputBoxSpacing * CGFloat(config.inputBoxNumber - 1)) / 2)
+        config.inputBoxWidth = max(0, (frame.width - config.inputBoxSpacing * CGFloat(config.inputBoxNumber - 1) - config.leftMargin * 2) / CGFloat(config.inputBoxNumber))
+        config.inputBoxHeight = min(config.inputBoxHeight, frame.height)
+
+        for i in 0..<config.inputBoxNumber {
+            let x = config.leftMargin + (config.inputBoxWidth + config.inputBoxSpacing) * CGFloat(i)
+            let y = (frame.height - config.inputBoxHeight) / 2
+            let textField = createTextField(tag: i, frame: CGRect(x: x, y: y, width: config.inputBoxWidth, height: config.inputBoxHeight))
+            addSubview(textField)
+        }
+
+        setupMainTextField(frame)
+        NotificationCenter.default.addObserver(self, selector: #selector(textChange), name: UITextField.textDidChangeNotification, object: textField)
+
+        if config.autoShowKeyboard {
+            DispatchQueue.main.asyncAfter(deadline: .now() + config.autoShowKeyboardDelay) {
+                self.textField.becomeFirstResponder()
+            }
+        }
+    }
+    
+    private func createTextField(tag: Int, frame: CGRect) -> UITextField {
+        let textField = UITextField(frame: frame)
+        textField.tag = tag
+        textField.textAlignment = .center
+        textField.isUserInteractionEnabled = false
+        textField.isSecureTextEntry = config.secureTextEntry
         
-        if config.inputBoxWidth > 0 {
-            width = config.inputBoxWidth
+        PTGCDManager.gcdMain {
+            textField.layer.borderWidth = self.config.inputBoxBorderWidth
+            textField.layer.cornerRadius = self.config.inputBoxCornerRadius
+            textField.layer.borderColor = self.config.inputBoxColor?.cgColor
         }
         
-        if width > 0 {
-            config.leftMargin = (frame.width - width * CGFloat(config.inputBoxNumber) - spacing * CGFloat(config.inputBoxNumber - 1)) * 0.5
-        } else {
-            let totalSpacing = spacing * CGFloat(config.inputBoxNumber - 1)
-            config.inputBoxWidth = (frame.width - totalSpacing - config.leftMargin * 2.0) / CGFloat(config.inputBoxNumber);
-            
-            width = config.inputBoxWidth
-        }
-        
-        if config.leftMargin < 0 {
-            config.leftMargin = 0
-            
-            let totalSpacing = spacing * CGFloat(config.inputBoxNumber - 1)
-            config.inputBoxWidth = (frame.width - totalSpacing - config.leftMargin * 2.0) / CGFloat(config.inputBoxNumber);
-            
-            width = config.inputBoxWidth
-        }
-        
-        var height: CGFloat = 0.0
-        if config.inputBoxHeight > frame.height {
-            config.inputBoxHeight = frame.height
-        }
-        height = config.inputBoxHeight
+        textField.font = config.font
+        textField.textColor = config.textColor
         
         if config.showUnderLine {
-            if config.underLineSize.width <= 0 {
-                config.underLineSize.width = width
-            }
-            
-            if config.underLineSize.height <= 0 {
-                config.underLineSize.height = 1
-            }
+            addUnderline(to: textField)
         }
-        
-        for i in 0..<config.inputBoxNumber {
-            
-            let x = config.leftMargin + (width + spacing) * CGFloat(i)
-            let y = (frame.height - height) * 0.5
-            
-            let textField = UITextField()
-            textField.tag = i
-            textField.textAlignment = .center
-            textField.isUserInteractionEnabled = false
-            textField.isSecureTextEntry = config.secureTextEntry
-            textField.frame = CGRect(x: x, y: y, width: width, height: height)
-            
-            if config.inputBoxBorderWidth > 0 {
-                PTGCDManager.gcdMain {
-                    textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                }
-            }
-            
-            if config.inputBoxCornerRadius > 0 {
-                PTGCDManager.gcdMain {
-                    textField.layer.cornerRadius = self.config.inputBoxCornerRadius
-                }
-            }
-            
-            if config.inputBoxColor != nil {
-                PTGCDManager.gcdMain {
-                    textField.layer.borderColor = self.config.inputBoxColor?.cgColor
-                }
-            }
-            
-            if config.tintColor != nil {
-                if width > 2 && height > 8 {
-                    let w: CGFloat = 2
-                    let y: CGFloat = 4
-                    let x: CGFloat = (width - w) * 0.5
-                    let h: CGFloat = height - 2 * y
-                    
-                    let path: UIBezierPath = UIBezierPath(rect: CGRect(x: x, y: y, width: w, height: h))
-                    let layer: CAShapeLayer = CAShapeLayer()
-                    layer.path = path.cgPath
-                    layer.fillColor = config.tintColor?.cgColor
-                    layer.add(alphaAnimation(), forKey: "kFlickerAnimation")
-                    if i != 0 {
-                        layer.isHidden = true
-                    }
-                    
-                    layerArray.append(layer)
-                    textField.layer.addSublayer(layer)
-                }
-            }
-            
-            if config.font != nil {
-                textField.font = config.font
-            }
-            
-            if config.textColor != nil {
-                textField.textColor = config.textColor
-            }
-            
-            if config.showUnderLine {
-                let x: CGFloat = (width - config.underLineSize.width) * 0.5
-                let y: CGFloat = (height - config.underLineSize.height)
-                let frame: CGRect = CGRect(x: x, y: y, width: config.underLineSize.width, height: config.underLineSize.height)
-                
-                let underLine: UIView = UIView()
-                underLine.tag = 100
-                underLine.frame = frame
-                underLine.backgroundColor = config.underLineColor
-                textField.addSubview(underLine)
-            }
-            
-            self.addSubview(textField)
+
+        if config.tintColor != nil {
+            addFlickerLayer(to: textField)
         }
-        
-        self.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(tapActioin)))
-        
+
+        return textField
+    }
+
+    private func addUnderline(to textField: UITextField) {
+        let underlineFrame = CGRect(x: (textField.frame.width - config.underLineSize.width) / 2,
+                                    y: textField.frame.height - config.underLineSize.height,
+                                    width: config.underLineSize.width,
+                                    height: config.underLineSize.height)
+        let underline = UIView(frame: underlineFrame)
+        underline.tag = 100
+        underline.backgroundColor = config.underLineColor
+        textField.addSubview(underline)
+    }
+
+    private func addFlickerLayer(to textField: UITextField) {
+        let flickerLayerFrame = CGRect(x: (textField.frame.width - 2) / 2,
+                                       y: 4,
+                                       width: 2,
+                                       height: textField.frame.height - 8)
+        let flickerLayer = CAShapeLayer()
+        flickerLayer.path = UIBezierPath(rect: flickerLayerFrame).cgPath
+        flickerLayer.fillColor = config.tintColor?.cgColor
+        flickerLayer.add(alphaAnimation(), forKey: "kFlickerAnimation")
+        flickerLayer.isHidden = textField.tag != 0
+
+        layerArray.append(flickerLayer)
+        textField.layer.addSublayer(flickerLayer)
+    }
+
+    private func setupMainTextField(_ frame: CGRect) {
         textField.isHidden = true
         textField.keyboardType = config.keyboardType
         textField.isSecureTextEntry = config.useSystemPasswordKeyboard
@@ -262,199 +214,151 @@ public class PTInputBoxView: UIView {
         if #available(iOS 12.0, *) {
             textField.textContentType = .oneTimeCode
         }
-        self.addSubview(textField)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(textChange), name: UITextField.textDidChangeNotification, object: textField)
-        
-        if config.autoShowKeyboard {
-            let time: TimeInterval = config.autoShowKeyboardDelay
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
-                self.textField.becomeFirstResponder()
-            }
-        }
+        addSubview(textField)
     }
     
-    // MARK: --- event
-    @objc func tapActioin() {
+    @objc private func tapActioin() {
         textField.becomeFirstResponder()
     }
     
-    @objc func textChange() {
+    @objc private func textChange() {
         setDefault()
         
-        let text: NSString = (textField.text?.trimmingCharacters(in: CharacterSet(charactersIn: " ")) ?? "") as NSString
+        let text = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        let filteredText = filterText(text)
+
+        textField.text = filteredText
+        inputBlock?(filteredText)
         
-        var filterText: NSString = ""
-        for i in 0 ..< text.length {
-            let c: unichar = text.character(at: i)
-            if config.inputType == PTInputBoxConfigurationType.NumberAlphabet {
-                if (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) {
-                    filterText = filterText.appendingFormat("%c", c)
-                }
-            } else if config.inputType == PTInputBoxConfigurationType.Number {
-                if (c >= 48 && c <= 57) {
-                    filterText = filterText.appendingFormat("%c", c)
-                }
-            } else if config.inputType == PTInputBoxConfigurationType.Alphabet {
-                if (c >= 65 && c <= 90) || (c >= 97 && c <= 122) {
-                    filterText = filterText.appendingFormat("%c", c)
-                }
-            }
-        }
-        
-        let count: Int = config.inputBoxNumber
-        if filterText.length > count {
-            filterText = filterText.substring(to: count) as NSString
-        }
-        
-        textField.text = filterText as String
-        if inputBlock != nil {
-            inputBlock!(filterText as String)
-        }
-        
-        setValue(filterText)
-        
-        flickerAnimation(filterText)
-        
+        setValue(filteredText as NSString)
+        flickerAnimation(filteredText as NSString)
+
         if inputFinish {
             finish()
         }
     }
-    
-    func setDefault() {
+
+    private func filterText(_ text: String) -> String {
+        var filteredText = ""
+        for character in text {
+            switch config.inputType {
+            case .NumberAlphabet where character.isNumber || character.isLetter,
+                 .Number where character.isNumber,
+                 .Alphabet where character.isLetter:
+                filteredText.append(character)
+            default:
+                break
+            }
+        }
+        return String(filteredText.prefix(config.inputBoxNumber))
+    }
+
+    private func setDefault() {
         for i in 0..<config.inputBoxNumber {
-            let subviews: NSArray = self.subviews as NSArray
-            
             let textField = subviews[i] as! UITextField
             textField.text = ""
-                        
-            if config.inputBoxBorderWidth > 0 {
-                PTGCDManager.gcdAfter(time: 0.01) {
-                    textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                }
+            PTGCDManager.gcdMain {
+                textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                textField.layer.cornerRadius = self.config.inputBoxCornerRadius
+                textField.layer.borderColor = self.config.inputBoxColor?.cgColor
             }
             
-            if config.inputBoxCornerRadius > 0 {
-                PTGCDManager.gcdAfter(time: 0.01) {
-                    textField.layer.cornerRadius = self.config.inputBoxCornerRadius
-                }
-            }
-            
-            if config.inputBoxColor != nil {
-                PTGCDManager.gcdAfter(time: 0.01) {
-                    textField.layer.borderColor = self.config.inputBoxColor?.cgColor
-                }
-            }
-            
-            if config.showFlickerAnimation && layerArray.count > i {
+            if config.showFlickerAnimation, layerArray.count > i {
                 let layer = layerArray[i]
                 layer.isHidden = true
                 layer.removeAnimation(forKey: "kFlickerAnimation")
             }
             
             if config.showUnderLine {
-                let underLine: UIView = textField.viewWithTag(100)!
-                underLine.backgroundColor = config.underLineColor
+                let underline = textField.viewWithTag(100)!
+                underline.backgroundColor = config.underLineColor
             }
         }
     }
     
-    func flickerAnimation(_ text: NSString) {
-        if config.showFlickerAnimation && text.length < layerArray.count {
+    private func flickerAnimation(_ text: NSString) {
+        if config.showFlickerAnimation, text.length < layerArray.count {
             let layer = layerArray[text.length]
             layer.isHidden = false
             layer.add(alphaAnimation(), forKey: "kFlickerAnimation")
         }
     }
     
-    func alphaAnimation() -> CABasicAnimation {
+    private func alphaAnimation() -> CABasicAnimation {
         let alpha = CABasicAnimation(keyPath: "opacity")
-        alpha.fromValue = NSNumber(1.0)
-        alpha.toValue = NSNumber(0.0)
-        alpha.duration = Double(1.0)
-        alpha.repeatCount = MAXFLOAT
+        alpha.fromValue = 1.0
+        alpha.toValue = 0.0
+        alpha.duration = 1.0
+        alpha.repeatCount = .greatestFiniteMagnitude
         alpha.isRemovedOnCompletion = false
-        alpha.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        alpha.timingFunction = CAMediaTimingFunction(name: .easeOut)
         return alpha
     }
     
-    func setValue(_ text: NSString) {
+    private func setValue(_ text: NSString) {
         inputFinish = text.length == config.inputBoxNumber
         
         for i in 0..<text.length {
-            let c: unichar = text.character(at: i)
-            let subviews: NSArray = self.subviews as NSArray
-            let textField = subviews[i] as! UITextField
-            
-            textField.text = String.init(format: "%c", c)
-            
-            if textField.isSecureTextEntry == false && config.customInputHolder.count > 0 {
-                textField.text = config.customInputHolder
-            }
-            
-            // Input Status
-            var font: UIFont = config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
-            var color: UIColor = config.textColor ?? UIColor.black
-            var inputBoxColor: UIColor? = config.inputBoxHighlightedColor
-            var underLineColor: UIColor? = config.underLineHighlightedColor
-            
-            // Finish Status
-            if inputFinish {
-                if inputFinishIndex < config.finishFonts.count {
-                    let fonts: NSArray = config.finishFonts as NSArray
-                    font = fonts[inputFinishIndex] as! UIFont
+            PTGCDManager.gcdGobal {
+                let char = text.character(at: i)
+                
+                var font = self.config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
+                var color = self.config.textColor ?? .black
+                var inputBoxColor = self.config.inputBoxHighlightedColor
+                var underlineColor = self.config.underLineHighlightedColor
+                
+                if self.inputFinish {
+                    font = self.config.finishFonts[safe: self.inputFinishIndex] ?? font
+                    color = self.config.finishTextColors[safe: self.inputFinishIndex] ?? color
+                    inputBoxColor = self.config.inputBoxFinishColors[safe: self.inputFinishIndex] ?? inputBoxColor
+                    underlineColor = self.config.underLineFinishColors[safe: self.inputFinishIndex] ?? underlineColor
                 }
-                if inputFinishIndex < config.finishTextColors.count {
-                    let colors: NSArray = config.finishTextColors as NSArray
-                    color = colors[inputFinishIndex] as! UIColor
+                PTGCDManager.gcdMain {
+                    let textField = self.subviews[i] as! UITextField
+                    
+                    textField.text = self.config.customInputHolder.isEmpty ? String(format: "%c", char) : self.config.customInputHolder
+
+                    textField.font = font
+                    textField.textColor = color
+
+                    textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                    textField.layer.borderColor = inputBoxColor?.cgColor
+                    if self.config.showUnderLine, let underline = textField.viewWithTag(100) {
+                        underline.backgroundColor = underlineColor
+                    }
                 }
-                if inputFinishIndex < config.inputBoxFinishColors.count {
-                    let colors: NSArray = config.inputBoxFinishColors as NSArray
-                    inputBoxColor = colors[inputFinishIndex] as? UIColor
-                }
-                if inputFinishIndex < config.underLineFinishColors.count {
-                    let colors: NSArray = config.underLineFinishColors as NSArray
-                    underLineColor = colors[inputFinishIndex] as? UIColor
-                }
-            }
-            
-            textField.font = font
-            textField.textColor = color
-            
-            if inputBoxColor != nil {
-                PTGCDManager.gcdAfter(time: 0.02) {
-                    textField.layer.borderColor = inputBoxColor!.cgColor
-                }
-            }
-            
-            if config.showUnderLine && underLineColor != nil {
-                let underLine: UIView? = textField.viewWithTag(100) ?? nil
-                underLine?.backgroundColor = underLineColor
             }
         }
     }
     
-    func finish() {
-        if finishBlock != nil {
-            finishBlock!(self, textField.text!)
-        }
-        
-        PTGCDManager.gcdAfter(time: 0.02) {
-            self.textField.resignFirstResponder()
-        }
+    private func finish() {
+        finishBlock?(self, textField.text!)
+        textField.resignFirstResponder()
     }
     
     public func clear() {
-        textField.text = "";
-        
+        textField.text = ""
         setDefault()
         flickerAnimation("")
     }
+
+    public func showInput() {
+        textField.becomeFirstResponder()
+    }
     
-    public func showInputFinishColorWithIndex(_ index: Int) {
-        inputFinishIndex = index
-        
-        guard let text = textField.text else { return }
-        setValue(text as NSString)
+    public func hideInput() {
+        textField.resignFirstResponder()
+    }
+    
+    public func setCode(_ code: String) {
+        let trimmedCode = String(code.prefix(config.inputBoxNumber))
+        textField.text = trimmedCode
+        setValue(trimmedCode as NSString)
+        flickerAnimation(trimmedCode as NSString)
+    }
+    
+    public func getCode() -> String? {
+        return textField.text
     }
 }
+
