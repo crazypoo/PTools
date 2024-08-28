@@ -141,6 +141,10 @@ public class PTInputBoxView: UIView {
             let y = (frame.height - config.inputBoxHeight) / 2
             let textField = createTextField(tag: i, frame: CGRect(x: x, y: y, width: config.inputBoxWidth, height: config.inputBoxHeight))
             addSubview(textField)
+            let tap = UITapGestureRecognizer { sender in
+                self.tapActioin()
+            }
+            addGestureRecognizer(tap)
         }
 
         setupMainTextField(frame)
@@ -257,12 +261,11 @@ public class PTInputBoxView: UIView {
         for i in 0..<config.inputBoxNumber {
             let textField = subviews[i] as! UITextField
             textField.text = ""
-            PTGCDManager.gcdMain {
-                textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                textField.layer.cornerRadius = self.config.inputBoxCornerRadius
-                textField.layer.borderColor = self.config.inputBoxColor?.cgColor
-            }
-            
+            textField.layer.borderWidth = self.config.inputBoxBorderWidth
+            textField.layer.cornerRadius = self.config.inputBoxCornerRadius
+            textField.layer.borderColor = self.config.inputBoxColor?.cgColor
+            textField.layoutIfNeeded()
+
             if config.showFlickerAnimation, layerArray.count > i {
                 let layer = layerArray[i]
                 layer.isHidden = true
@@ -315,25 +318,59 @@ public class PTInputBoxView: UIView {
                 }
                 PTGCDManager.gcdMain {
                     let textField = self.subviews[i] as! UITextField
-                    
                     textField.text = self.config.customInputHolder.isEmpty ? String(format: "%c", char) : self.config.customInputHolder
-
                     textField.font = font
                     textField.textColor = color
-
-                    textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                    textField.layer.borderColor = inputBoxColor?.cgColor
-                    if self.config.showUnderLine, let underline = textField.viewWithTag(100) {
-                        underline.backgroundColor = underlineColor
+                    PTGCDManager.gcdAfter(time: 0.01) {
+                        textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                        textField.layer.borderColor = inputBoxColor?.cgColor
+                        if self.config.showUnderLine, let underline = textField.viewWithTag(100) {
+                            underline.backgroundColor = underlineColor
+                        }
+                        textField.layoutIfNeeded()
                     }
                 }
             }
         }
+        
+        let lessCount = self.config.inputBoxNumber - text.length
+        if lessCount > 0 {
+            for i in 0..<lessCount {
+                let textField = self.subviews[text.length + i] as! UITextField
+                let font = self.config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
+                let color = self.config.textColor ?? .black
+                let inputBoxColor = self.config.inputBoxColor
+                
+                textField.font = font
+                textField.textColor = color
+                textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                textField.layer.borderColor = inputBoxColor?.cgColor
+                textField.layoutIfNeeded()
+            }
+        }
+
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
     
     private func finish() {
         finishBlock?(self, textField.text!)
         textField.resignFirstResponder()
+        
+        for i in 0..<config.inputBoxNumber {
+            PTGCDManager.gcdMain {
+                let textField = self.subviews[i] as! UITextField
+                let font = self.config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
+                let color = self.config.textColor ?? .black
+                let inputBoxColor = self.config.inputBoxHighlightedColor
+                
+                textField.font = font
+                textField.textColor = color
+                textField.layer.borderWidth = self.config.inputBoxBorderWidth
+                textField.layer.borderColor = inputBoxColor?.cgColor
+                textField.layoutIfNeeded()
+            }
+        }
     }
     
     public func clear() {
@@ -361,4 +398,3 @@ public class PTInputBoxView: UIView {
         return textField.text
     }
 }
-
