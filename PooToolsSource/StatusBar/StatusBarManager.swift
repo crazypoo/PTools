@@ -12,19 +12,19 @@ import UIKit
 /// 状态栏单一状态节点
 public class StatusBarState: NSObject {
     
-    public static let defaultKey: String = "StatusBarState.default.root.key"
+    public static let defaultKey = "StatusBarState.default.root.key"
     
-    open var isHidden: Bool = false
+    open var isHidden = false
     open var style: UIStatusBarStyle = .default
     open var animation: UIStatusBarAnimation = .fade
-    open var key: String = defaultKey
+    open var key = defaultKey
     
-    open var subStates: [StatusBarState] = []
+    open var subStates = [StatusBarState]()
     open weak var superState: StatusBarState?
     open weak var nextState: StatusBarState?
     
     public override var description: String {
-        "{ key=\(key) selected=\(String(describing: nextState?.key)) }"
+        "{ key=\(key) selected=\(nextState?.key ?? "nil") }"
     }
 }
 
@@ -33,16 +33,18 @@ public class StatusBarManager {
     
     public static let shared = StatusBarManager()
     
-    fileprivate lazy var rootState: StatusBarState = {
-        let state = StatusBarState()
-        stateKeys.insert(state.key)
-        return state
-    }()
-    
-    fileprivate lazy var currentState: StatusBarState = rootState
-    
-    fileprivate var stateKeys: Set<String> = []
+    fileprivate var rootState: StatusBarState
+    fileprivate var currentState: StatusBarState
+    fileprivate var stateKeys = [String: StatusBarState]()
     fileprivate var duration: TimeInterval = 0.1
+    
+    private init() {
+        // 初始化 rootState 和 currentState
+        let initialState = StatusBarState()
+        rootState = initialState
+        currentState = initialState
+        stateKeys[initialState.key] = initialState
+    }
     
     open var isHidden: Bool {
         get { currentState.isHidden }
@@ -61,7 +63,7 @@ public class StatusBarManager {
     
     @discardableResult
     public func addSubState(with key: String, root: String? = nil) -> StatusBarState? {
-        guard !stateKeys.contains(key) else { return nil }
+        guard stateKeys[key] == nil else { return nil }
         
         let superState = findState(root) ?? rootState
         let newState = StatusBarState()
@@ -81,12 +83,12 @@ public class StatusBarManager {
             updateStatusBar()
         }
         
-        stateKeys.insert(key)
+        stateKeys[key] = newState
         return newState
     }
     
     public func removeState(with key: String) {
-        guard let state = findState(key), state != rootState else { return }
+        guard let state = stateKeys[key], state != rootState else { return }
         
         let isCurrentStateContained = findStateInTree(state, key: currentState.key) != nil
         removeSubStatesInTree(state)
@@ -94,7 +96,7 @@ public class StatusBarManager {
         state.superState?.subStates.removeAll { $0.key == key }
         state.superState?.nextState = state.superState?.subStates.first
         
-        stateKeys.remove(key)
+        stateKeys.removeValue(forKey: key)
         
         if isCurrentStateContained {
             currentState = state.superState?.nextState ?? state.superState ?? rootState
@@ -106,16 +108,14 @@ public class StatusBarManager {
         guard let rootState = findState(root), let targetState = findStateInTree(rootState, key: key) else { return }
         
         rootState.nextState = targetState
-        let newCurrentState = findCurrentStateInTree(rootState)
-        
-        if newCurrentState != currentState {
-            currentState = newCurrentState ?? rootState
+        if let newCurrentState = findCurrentStateInTree(rootState), newCurrentState != currentState {
+            currentState = newCurrentState
             updateStatusBar()
         }
     }
     
     public func clearSubStates(with key: String, isUpdate: Bool = true) {
-        guard let state = findState(key) else { return }
+        guard let state = stateKeys[key] else { return }
         
         let shouldUpdate = findStateInTree(state, key: currentState.key) != nil
         removeSubStatesInTree(state)
@@ -163,31 +163,27 @@ public class StatusBarManager {
     }
     
     fileprivate func findState(_ key: String? = nil) -> StatusBarState? {
-        return findStateInTree(rootState, key: key ?? rootState.key)
+        return key.flatMap { stateKeys[$0] } ?? rootState
     }
     
     fileprivate func findStateInTree(_ state: StatusBarState, key: String) -> StatusBarState? {
         if state.key == key {
             return state
         }
-        for subState in state.subStates {
-            if let foundState = findStateInTree(subState, key: key) {
-                return foundState
-            }
-        }
-        return nil
+        return state.subStates.lazy.compactMap { self.findStateInTree($0, key: key) }.first
     }
     
     fileprivate func removeSubStatesInTree(_ state: StatusBarState) {
-        for subState in state.subStates {
-            stateKeys.remove(subState.key)
-            removeSubStatesInTree(subState)
-        }
+        state.subStates.forEach { removeSubStatesInTree($0) }
         state.subStates.removeAll()
     }
     
     fileprivate func findCurrentStateInTree(_ state: StatusBarState) -> StatusBarState? {
-        return state.nextState.flatMap(findCurrentStateInTree) ?? state
+        var currentState = state
+        while let nextState = currentState.nextState {
+            currentState = nextState
+        }
+        return currentState
     }
     
     fileprivate func printAllStatesInTree(_ state: StatusBarState, deep: Int = 0, method: String) {
