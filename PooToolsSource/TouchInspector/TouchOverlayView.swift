@@ -167,5 +167,4 @@ class TouchOverlayView: UIView {
         
         hitTestingOverlay.frame = CGRect(x: x, y: y, width: labelIntrinsicContentSize.width, height: labelIntrinsicContentSize.height)
     }
-    
 }

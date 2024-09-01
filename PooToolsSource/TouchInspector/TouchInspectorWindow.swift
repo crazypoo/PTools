@@ -15,27 +15,21 @@ import UIKit
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
 
-    /**
-     Whether to show the circular touch indicator.
-     */
     public var showTouches: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShow {
         didSet {
             PTCoreUserDefultsWrapper.AppTouchInspectShowHits = showTouches
-            hideOverlaysIfNeeded()
+            hideOrUpdateOverlays()
         }
     }
     
-    /**
-     Whether to show the hit-test debugging overlay. If enabled, touch indicators will also be shown.
-     */
     public var showHitTesting: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShowHits {
         didSet {
             PTCoreUserDefultsWrapper.AppTouchInspectShowHits = showHitTesting
-            hideOverlaysIfNeeded()
+            hideOrUpdateOverlays()
         }
     }
     
-    private var touchOverlays: [UITouch : TouchOverlayView] = [:]
+    private var touchOverlays: [NSValue : TouchOverlayView] = [:]
     
     public override init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
@@ -49,102 +43,74 @@ public class TouchInspectorWindow: UIWindow {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Event Handling
-    
     public override func sendEvent(_ event: UIEvent) {
-        handleTouchesEvent(event)
+        if event.type == .touches, showTouches || showHitTesting {
+            handleTouchesEvent(event)
+        }
         super.sendEvent(event)
     }
     
-    // MARK: - Private
-    
-    private func handleTouchesEvent(_ touchesEvent: UIEvent) {
-        guard showTouches || showHitTesting else {
-            return
-        }
-        
-        guard touchesEvent.type == .touches else {
-            return
-        }
-        
-        for touch in touchesEvent.allTouches ?? [] {
+    private func handleTouchesEvent(_ event: UIEvent) {
+        for touch in event.allTouches ?? [] {
+            let touchValue = NSValue(nonretainedObject: touch)
             let touchLocationInWindow = touch.location(in: self)
             let touchPhase = touch.phase
             
             if touchPhase == .began {
-                createTouchOverlay(for: touch)
+                createTouchOverlay(for: touchValue)
             }
             
-            updateTouchOverlay(
-                for: touch,
-                location: touchLocationInWindow,
-                hitTestedView: hitTest(touchLocationInWindow, with: touchesEvent)
-            )
+            updateTouchOverlay(for: touchValue, location: touchLocationInWindow, hitTestedView: hitTest(touchLocationInWindow, with: event))
             
             if touchPhase == .ended || touchPhase == .cancelled {
-                removeTouchOverlay(for: touch)
+                removeTouchOverlay(for: touchValue)
             }
         }
     }
     
-    private func createTouchOverlay(for touch: UITouch) {
+    private func createTouchOverlay(for touchValue: NSValue) {
         let overlay = TouchOverlayView()
-        touchOverlays[touch] = overlay
-        
+        touchOverlays[touchValue] = overlay
         addSubview(overlay)
         overlay.present()
     }
 
-    private func updateTouchOverlay(for touch: UITouch, location: CGPoint, hitTestedView: UIView?) {
-        guard let overlay = touchOverlays[touch] else {
-            return
-        }
+    private func updateTouchOverlay(for touchValue: NSValue, location: CGPoint, hitTestedView: UIView?) {
+        guard let overlay = touchOverlays[touchValue] else { return }
         
         overlay.hitTestingOverlay.text = hitTestOverlayDescription(for: location, hitTestedView: hitTestedView)
         overlay.hitTestingOverlay.isHidden = !showHitTesting
-        
         overlay.frame.origin = location
-        overlay.setNeedsLayout()
-        
         bringSubviewToFront(overlay)
     }
     
-    private func removeTouchOverlay(for touch: UITouch) {
-        guard let overlay = touchOverlays[touch] else {
-            return
-        }
+    private func removeTouchOverlay(for touchValue: NSValue) {
+        guard let overlay = touchOverlays[touchValue] else { return }
         
-        overlay.hide(completion: {
+        overlay.hide {
             overlay.removeFromSuperview()
-            self.touchOverlays.removeValue(forKey: touch)
-        })
+            self.touchOverlays.removeValue(forKey: touchValue)
+        }
     }
     
     private func hitTestOverlayDescription(for locationInWindow: CGPoint, hitTestedView: UIView?) -> String {
         let locationInWindowDescription = locationInWindow.shortDescription
-        
         let locationInHitTestedView = self.convert(locationInWindow, to: hitTestedView)
         let locationInHitTestedViewDescription = locationInHitTestedView.shortDescription
         
         return """
         Touch:   \(locationInWindowDescription)
         In View: \(locationInHitTestedViewDescription)
-
         Hit-Test: \(hitTestedView?.description ?? "nil")
         """
     }
     
-    private func hideOverlaysIfNeeded() {
+    private func hideOrUpdateOverlays() {
         if !showTouches && !showHitTesting {
-            touchOverlays.values.forEach { overlay in
-                overlay.removeFromSuperview()
-            }
-            touchOverlays = [:]
-        } else if showTouches {
-            touchOverlays.values.forEach { overlay in
-                overlay.hitTestingOverlay.isHidden = !showHitTesting
-            }
+            touchOverlays.values.forEach { $0.removeFromSuperview() }
+            touchOverlays.removeAll()
+        } else {
+            touchOverlays.values.forEach { $0.hitTestingOverlay.isHidden = !showHitTesting }
         }
-        
     }
 }

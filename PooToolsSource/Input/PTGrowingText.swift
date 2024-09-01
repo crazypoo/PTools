@@ -27,12 +27,12 @@ open class PTGrowingTextView: UITextView {
     
     private var newHeight: CGFloat = 0
     
-    @IBInspectable open var maxLength: Int = 0
+    @IBInspectable open var maxLength: Int = 100
     @IBInspectable open var trimWhiteSpaceWhenEndEditing: Bool = true
-    @IBInspectable open var minHeight: CGFloat = 0 {
+    @IBInspectable open var minHeight: CGFloat = 44 {
         didSet { adjustHeightIfNeeded() }
     }
-    @IBInspectable open var maxHeight: CGFloat = 0 {
+    @IBInspectable open var maxHeight: CGFloat = 400 {
         didSet { adjustHeightIfNeeded() }
     }
     @IBInspectable open var placeholder: String? {
@@ -156,6 +156,7 @@ open class PTGrowingTextView: UITextView {
             text = String(text.prefix(maxLength))
             undoManager?.removeAllActions()
         }
+        invalidateIntrinsicContentSize()
         setNeedsLayout()
     }
 }
