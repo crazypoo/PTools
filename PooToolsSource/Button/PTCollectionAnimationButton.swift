@@ -390,5 +390,4 @@ open class PTCollectionAnimationButton: UIButton {
         lines[3].removeAllAnimations()
         lines[4].removeAllAnimations()
     }
-
 }

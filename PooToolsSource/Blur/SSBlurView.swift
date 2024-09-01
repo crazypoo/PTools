@@ -10,9 +10,9 @@ import SnapKit
 
 /// 高斯模糊
 @objcMembers
-public class SSBlurView:NSObject {
-    
-    private var superview: UIView
+public class SSBlurView: NSObject {
+
+    private weak var superview: UIView?
     private var blur: UIVisualEffectView?
     private var editing: Bool = false
     private(set) var blurContentView: UIView?
@@ -20,79 +20,67 @@ public class SSBlurView:NSObject {
     
     open var animationDuration: TimeInterval = 0.1
     
-    /**
-     * Blur style. After it is changed all subviews on
-     * blurContentView & vibrancyContentView will be deleted.
-     */
     open var style: UIBlurEffect.Style = .light {
         didSet {
-            guard oldValue != style,
-                  !editing else { return }
+            guard oldValue != style, !editing else { return }
             applyBlurEffect()
         }
     }
-    /**
-     * Alpha component of view. It can be changed freely.
-     */
+
     open var alpha: CGFloat = 0 {
         didSet {
             guard !editing else { return }
             if blur == nil {
                 applyBlurEffect()
             }
-            let alpha = alpha
             UIView.animate(withDuration: animationDuration) {
-                self.blur?.alpha = alpha
+                self.blur?.alpha = self.alpha
             }
         }
     }
     
     public init(to view: UIView) {
         superview = view
+        super.init()
     }
-    
     
     public func enable(isHidden: Bool = false) {
         if blur == nil {
             applyBlurEffect()
         }
-        
         blur?.isHidden = isHidden
     }
     
     private func applyBlurEffect() {
         blur?.removeFromSuperview()
-        
-        applyBlurEffect(
-            style: style,
-            blurAlpha: alpha
-        )
+        createBlurEffectView(style: style, blurAlpha: alpha)
     }
     
-    private func applyBlurEffect(style: UIBlurEffect.Style,
-                                 blurAlpha: CGFloat) {
-        superview.backgroundColor = UIColor.clear
+    private func createBlurEffectView(style: UIBlurEffect.Style, blurAlpha: CGFloat) {
+        guard let superview = superview else { return }
         
+        superview.backgroundColor = .clear
+        
+        let blurEffectView = createBlurEffectView(style: style)
+        blurEffectView.alpha = blurAlpha
+        superview.insertSubview(blurEffectView, at: 0)
+        blurEffectView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        
+        blur = blurEffectView
+        blurContentView = blurEffectView.contentView
+    }
+    
+    private func createBlurEffectView(style: UIBlurEffect.Style) -> UIVisualEffectView {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         
         let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
         let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
         blurEffectView.contentView.addSubview(vibrancyView)
+        vibrancyView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
-        blurEffectView.alpha = blurAlpha
-        
-        superview.insertSubview(blurEffectView, at: 0)
-        blurEffectView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
-        }
-        vibrancyView.snp.makeConstraints { maker in
-            maker.edges.equalToSuperview()
-        }
-        
-        blur = blurEffectView
-        blurContentView = blurEffectView.contentView
         vibrancyContentView = vibrancyView.contentView
+        
+        return blurEffectView
     }
 }
-
