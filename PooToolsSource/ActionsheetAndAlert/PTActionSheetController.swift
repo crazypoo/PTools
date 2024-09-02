@@ -395,7 +395,7 @@ public class PTActionSheetController: PTAlertController {
         let currentContentHeight = contentItemsCount * sheetConfig.rowHeight + (contentItemsCount - 1) * sheetConfig.lineHeight
 
         // 計算是否可以滾動
-        var realContentSize = min(currentContentHeight, contentItemsMaxHeight)
+        let realContentSize = min(currentContentHeight, contentItemsMaxHeight)
         let contentItemCanScroll = currentContentHeight > contentItemsMaxHeight
 
         // 計算總高度

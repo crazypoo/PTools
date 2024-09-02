@@ -273,260 +273,151 @@ public class PTFusionCellContent:UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func accessoryViewType(type:PTFusionShowAccessoryType,finish: (PTFusionCellAccessoryView)->Void) {
-        let hasLeftImage = NSObject.checkObject(cellModel!.leftImage as? NSObject) ? false : true
-        let hasContentIcon = NSObject.checkObject(cellModel!.contentIcon as? NSObject) ? false : true
-        let hasNameOrDescOrAttr = !cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() || cellModel!.nameAttr != nil
-        let hasContentOrAttr = !cellModel!.content.stringIsEmpty() || cellModel!.contentAttr != nil
+    func accessoryViewType(type: PTFusionShowAccessoryType, finish: (PTFusionCellAccessoryView) -> Void) {
+        let hasLeftImage = cellModel?.leftImage != nil
+        let hasContentIcon = cellModel?.contentIcon != nil
+        let hasNameOrDescOrAttr = !(cellModel?.name.stringIsEmpty() ?? true) || !(cellModel?.desc.stringIsEmpty() ?? true) || cellModel?.nameAttr != nil
+        let hasContentOrAttr = !(cellModel?.content.stringIsEmpty() ?? true) || cellModel?.contentAttr != nil
 
-        switch (hasLeftImage,hasNameOrDescOrAttr,hasContentOrAttr,hasContentIcon) {
-        case (true,true,false,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .LeftImageContent(type: .Name)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .LeftImageContent(type: .Name)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .LeftImageContent(type: .Name)))
-            case .More:
-                finish(.More(type: .LeftImageContent(type: .Name)))
-            }
-        case (true,true,true,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .LeftImageContent(type: .NameContent)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .LeftImageContent(type: .NameContent)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .LeftImageContent(type: .NameContent)))
-            case .More:
-                finish(.More(type: .LeftImageContent(type: .NameContent)))
-            }
-        case (true,true,false,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .BothImage(type: .Name)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .BothImage(type: .Name)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .BothImage(type: .Name)))
-            case .More:
-                finish(.More(type: .BothImage(type: .Name)))
-            }
-        case (true,false,true,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .BothImage(type: .Content)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .BothImage(type: .Content)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .BothImage(type: .Content)))
-            case .More:
-                finish(.More(type: .BothImage(type: .Content)))
-            }
-        case (true,true,true,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .BothImage(type: .NameContent)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .BothImage(type: .NameContent)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .BothImage(type: .NameContent)))
-            case .More:
-                finish(.More(type: .BothImage(type: .NameContent)))
-            }
-        case (true,false,true,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .LeftImageContent(type: .Content)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .LeftImageContent(type: .Content)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .LeftImageContent(type: .Content)))
-            case .More:
-                finish(.More(type: .LeftImageContent(type: .Content)))
-            }
-        case (true,false,false,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .OnlyLeftImage))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .OnlyLeftImage))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .OnlyLeftImage))
-            case .More:
-                finish(.More(type: .OnlyLeftImage))
-            }
-        case (false,false,false,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .OnlyRightImage))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .OnlyRightImage))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .OnlyRightImage))
-            case .More:
-                finish(.More(type: .OnlyRightImage))
-            }
-        case (false,true,false,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .RightImageContent(type: .Name)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .RightImageContent(type: .Name)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .RightImageContent(type: .Name)))
-            case .More:
-                finish(.More(type: .RightImageContent(type: .Name)))
-            }
-        case (false,true,true,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .RightImageContent(type: .NameContent)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .RightImageContent(type: .NameContent)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .RightImageContent(type: .NameContent)))
-            case .More:
-                finish(.More(type: .RightImageContent(type: .NameContent)))
-            }
-        case (false,false,true,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .RightImageContent(type: .Content)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .RightImageContent(type: .Content)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .RightImageContent(type: .Content)))
-            case .More:
-                finish(.More(type: .RightImageContent(type: .Content)))
-            }
-        case (false,true,true,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .None(type: .NameContent)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .None(type: .NameContent)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .None(type: .NameContent)))
-            case .More:
-                finish(.More(type: .None(type: .NameContent)))
-            }
-        case (true,false,false,true):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .BothImage(type: .None)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .BothImage(type: .None)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .BothImage(type: .None)))
-            case .More:
-                finish(.More(type: .BothImage(type: .None)))
-            }
-        case (false,true,false,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .None(type: .Name)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .None(type: .Name)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .None(type: .Name)))
-            case .More:
-                finish(.More(type: .None(type: .Name)))
-            }
-        case (false,false,true,false):
-            switch type {
-            case .Switch:
-                finish(.Switch(type: .None(type: .Content)))
-            case .DisclosureIndicator:
-                finish(.DisclosureIndicator(type: .None(type: .Content)))
-            case .NoneAccessoryView:
-                finish(.NoneAccessoryView(type: .None(type: .Content)))
-            case .More:
-                finish(.More(type: .None(type: .Content)))
-            }
+        let viewType: PTFusionCellImageType
+
+        switch (hasLeftImage, hasNameOrDescOrAttr, hasContentOrAttr, hasContentIcon) {
+        case (true, true, false, false):
+            viewType = .LeftImageContent(type: .Name)
+        case (true, true, true, false):
+            viewType = .LeftImageContent(type: .NameContent)
+        case (true, true, false, true):
+            viewType = .BothImage(type: .Name)
+        case (true, false, true, true):
+            viewType = .BothImage(type: .Content)
+        case (true, true, true, true):
+            viewType = .BothImage(type: .NameContent)
+        case (true, false, true, false):
+            viewType = .LeftImageContent(type: .Content)
+        case (true, false, false, false):
+            viewType = .OnlyLeftImage
+        case (false, false, false, true):
+            viewType = .OnlyRightImage
+        case (false, true, false, true):
+            viewType = .RightImageContent(type: .Name)
+        case (false, true, true, true):
+            viewType = .RightImageContent(type: .NameContent)
+        case (false, false, true, true):
+            viewType = .RightImageContent(type: .Content)
+        case (false, true, true, false):
+            viewType = .None(type: .NameContent)
+        case (true, false, false, true):
+            viewType = .BothImage(type: .None)
+        case (false, true, false, false):
+            viewType = .None(type: .Name)
+        case (false, false, true, false):
+            viewType = .None(type: .Content)
         default:
             finish(.Error)
+            return
         }
+
+        let accessoryView: PTFusionCellAccessoryView
+
+        switch type {
+        case .Switch:
+            accessoryView = .Switch(type: viewType)
+        case .DisclosureIndicator:
+            accessoryView = .DisclosureIndicator(type: viewType)
+        case .NoneAccessoryView:
+            accessoryView = .NoneAccessoryView(type: viewType)
+        case .More:
+            accessoryView = .More(type: viewType)
+        }
+
+        finish(accessoryView)
     }
-        
+    
     //MARK: 设置左图标
-    func setLeftIconView(cellType:PTFusionCellAccessoryView) {
+    func setLeftIconView(cellType: PTFusionCellAccessoryView) {
+        let isLeftIconNeeded: Bool
+
         switch cellType {
-        case .Switch(type: .OnlyLeftImage),
-                .Switch(type: .BothImage),
-                .Switch(type: .LeftImageContent),
-                .DisclosureIndicator(type: .OnlyLeftImage),
-                .DisclosureIndicator(type: .BothImage),
-                .DisclosureIndicator(type: .LeftImageContent),
-                .NoneAccessoryView(type: .OnlyLeftImage),
-                .NoneAccessoryView(type: .BothImage),
-                .NoneAccessoryView(type: .LeftImageContent),
-                .More(type: .OnlyLeftImage),
-                .More(type: .BothImage),
-                .More(type: .LeftImageContent):
+        case .Switch(let type), .DisclosureIndicator(let type), .NoneAccessoryView(let type), .More(let type):
+            switch type {
+            case .OnlyLeftImage, .BothImage, .LeftImageContent:
+                isLeftIconNeeded = true
+            default:
+                isLeftIconNeeded = false
+            }
+        default:
+            isLeftIconNeeded = false
+        }
+
+        if isLeftIconNeeded {
             addSubview(cellIcon)
             cellIcon.snp.makeConstraints { make in
-                make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
-                make.width.equalTo(self.cellIcon.snp.height)
+                make.top.equalToSuperview().inset(cellModel!.imageTopOffset)
+                make.bottom.equalToSuperview().inset(cellModel!.imageBottomOffset)
+                make.left.equalToSuperview().inset(cellModel!.leftSpace)
+                make.width.equalTo(cellIcon.snp.height)
             }
+
             if cellModel!.iconRound {
                 PTGCDManager.gcdMain {
                     self.cellIcon.viewCorner(radius: (self.frame.size.height - self.cellModel!.imageTopOffset - self.cellModel!.imageBottomOffset) / 2)
                 }
             }
-            cellIcon.loadImage(contentData: cellModel!.leftImage as Any,iCloudDocumentName: cellModel!.iCloudDocument)
-        default:
+            cellIcon.loadImage(contentData: cellModel!.leftImage as Any, iCloudDocumentName: cellModel!.iCloudDocument)
+        } else {
             cellIcon.removeFromSuperview()
         }
     }
     
     //MARK: 设置右图标
-    func setRightIconView(cellType:PTFusionCellAccessoryView) {
+    func setRightIconView(cellType: PTFusionCellAccessoryView) {
+        let shouldShowIcon: Bool
+        let rightConstraintView: UIView?
+
         switch cellType {
         case .Switch(type: .OnlyRightImage),
-                .Switch(type: .BothImage),
-                .Switch(type: .RightImageContent),
-                .DisclosureIndicator(type: .OnlyRightImage),
-                .DisclosureIndicator(type: .BothImage),
-                .DisclosureIndicator(type: .RightImageContent),
-                .NoneAccessoryView(type: .OnlyRightImage),
-                .NoneAccessoryView(type: .BothImage),
-                .NoneAccessoryView(type: .RightImageContent),
-                .More(type: .OnlyRightImage),
-                .More(type: .BothImage),
-                .More(type: .RightImageContent):
+             .Switch(type: .BothImage),
+             .Switch(type: .RightImageContent):
+            shouldShowIcon = true
+            rightConstraintView = valueSwitch
             
-            cellContentIcon.loadImage(contentData: cellModel!.contentIcon as Any,iCloudDocumentName: cellModel!.iCloudDocument)
+        case .DisclosureIndicator(type: .OnlyRightImage),
+             .DisclosureIndicator(type: .BothImage),
+             .DisclosureIndicator(type: .RightImageContent):
+            shouldShowIcon = true
+            rightConstraintView = accessV
+
+        case .NoneAccessoryView(type: .OnlyRightImage),
+             .NoneAccessoryView(type: .BothImage),
+             .NoneAccessoryView(type: .RightImageContent):
+            shouldShowIcon = true
+            rightConstraintView = nil
+            
+        case .More(type: .OnlyRightImage),
+             .More(type: .BothImage),
+             .More(type: .RightImageContent):
+            shouldShowIcon = true
+            rightConstraintView = sectionMore
+            
+        default:
+            shouldShowIcon = false
+            rightConstraintView = nil
+        }
+
+        if shouldShowIcon {
+            cellContentIcon.loadImage(contentData: cellModel!.contentIcon as Any, iCloudDocumentName: cellModel!.iCloudDocument)
             addSubview(cellContentIcon)
             cellContentIcon.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
                 make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                switch cellType {
-                case .Switch(type: .OnlyRightImage),
-                        .Switch(type: .BothImage),
-                        .Switch(type: .RightImageContent):
-                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
-                case .DisclosureIndicator(type: .OnlyRightImage),
-                        .DisclosureIndicator(type: .BothImage),
-                        .DisclosureIndicator(type: .RightImageContent):
-                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.contentRightSpace)
-                case .NoneAccessoryView(type: .OnlyRightImage),
-                        .NoneAccessoryView(type: .BothImage),
-                        .NoneAccessoryView(type: .RightImageContent):
-                    make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
-                case .More(type: .OnlyRightImage),
-                        .More(type: .BothImage),
-                        .More(type: .RightImageContent):
-                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.contentRightSpace)
-                default:
+                if let rightView = rightConstraintView {
+                    make.right.equalTo(rightView.snp.left).offset(-self.cellModel!.contentRightSpace)
+                } else {
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                 }
                 make.width.equalTo(self.cellContentIcon.snp.height)
             }
-        default:
+        } else {
             cellContentIcon.removeFromSuperview()
         }
     }

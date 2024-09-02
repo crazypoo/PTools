@@ -59,7 +59,7 @@ public class PTDataEncryption {
     
     private static func performDESCrypt(operation: CCOperation, key: String, dataString: String) throws -> String {
         guard let keyData = key.data(using: .utf8),
-              var cryptData = operation == kCCEncrypt ? dataString.data(using: .utf8) : Data(base64Encoded: dataString)
+              let cryptData = operation == kCCEncrypt ? dataString.data(using: .utf8) : Data(base64Encoded: dataString)
         else {
             throw createError("Invalid key or data")
         }

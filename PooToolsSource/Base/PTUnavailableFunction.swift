@@ -13,18 +13,18 @@ import SnapKit
 
 @objcMembers
 open class PTEmptyDataViewConfig : NSObject {
-    public var mainTitleAtt:ASAttributedString?
-    public var secondaryEmptyAtt:ASAttributedString?
-    public var buttonTitle:String = ""
-    public var buttonFont:UIFont = .appfont(size: 18)
-    public var buttonTextColor:UIColor = .systemBlue
-    public var image:UIImage? = UIImage(.exclamationmark.triangle)
-    public var backgroundColor:UIColor = .clear
-    public var imageToTextPadding:CGFloat = 10
-    public var textToSecondaryTextPadding:CGFloat = 5
-    public var buttonToSecondaryButtonPadding:CGFloat = 15
-    public var verticalOffSet:CGFloat = 0
-    public var customerView:UIView? = nil
+    public var mainTitleAtt: ASAttributedString?
+    public var secondaryEmptyAtt: ASAttributedString?
+    public var buttonTitle: String = ""
+    public var buttonFont: UIFont = .appfont(size: 18)
+    public var buttonTextColor: UIColor = .systemBlue
+    public var image: UIImage? = UIImage(.exclamationmark.triangle)
+    public var backgroundColor: UIColor = .clear
+    public var imageToTextPadding: CGFloat = 10
+    public var textToSecondaryTextPadding: CGFloat = 5
+    public var buttonToSecondaryButtonPadding: CGFloat = 15
+    public var verticalOffSet: CGFloat = 0
+    public var customerView: UIView? = nil
 }
 
 @available(iOS 17.0 , *)

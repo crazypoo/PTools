@@ -33,9 +33,9 @@ class PTEyeTrackingTestUtility {
     internal func showStatusView(parent: UIView) {
         if statusLabel == nil {
             let label = UILabel(frame: CGRect(x: 50,
-                                                    y: kSCREEN_BOUNDS.height / 2 - 15,
-                                                    width: kSCREEN_BOUNDS.width - 50,
-                                                    height: 30))
+                                              y: kSCREEN_BOUNDS.height / 2 - 15,
+                                              width: kSCREEN_BOUNDS.width - 50,
+                                              height: 30))
             
             label.textAlignment = NSTextAlignment.left
             label.text = ""
