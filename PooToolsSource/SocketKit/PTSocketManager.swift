@@ -37,12 +37,13 @@ public class PTSocketManager: NSObject {
     
     public func socketSet() {
         let urlString = Network.socketGobalUrl()
-        let webSocketUrl = URL(string: urlString)
-        var urlcomponents = URLComponents(url: webSocketUrl!, resolvingAgainstBaseURL: false)
-        urlcomponents!.scheme = webSocketUrl?.scheme
+        guard let webSocketUrl = URL(string: urlString),var urlcomponents = URLComponents(url: webSocketUrl, resolvingAgainstBaseURL: false) else {
+            return
+        }
         
-        let url = urlcomponents!.url
-        self.request = NSMutableURLRequest(url: url!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
+        urlcomponents.scheme = webSocketUrl.scheme
+        guard let url = urlcomponents.url else { return }
+        self.request = NSMutableURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
     }
 
     @objc func onNetworkStatusChange(notifi:Notification) {
@@ -53,10 +54,7 @@ public class PTSocketManager: NSObject {
     
     public func isClosed() -> Bool {
         PTNSLogConsole("socket连接状态---\(webSocket?.readyState.rawValue ?? 0)",levelType: PTLogMode,loggerType: .Network)
-        if webSocket?.readyState != .OPEN {
-            return true
-        }
-        return false
+        return webSocket?.readyState != .OPEN
     }
     
     public func reConnect() {
@@ -103,17 +101,17 @@ public class PTSocketManager: NSObject {
     }
     
     public func sendMessage(msg:String) {
-        if webSocket?.readyState == .OPEN {
-            do {
-                try webSocket?.send(string: msg)
-            } catch {
-                PTNSLogConsole("\(error.localizedDescription)",levelType: .Error,loggerType: .Network)
-            }
+        guard webSocket?.readyState == .OPEN else { return }
+
+        do {
+            try webSocket?.send(string: msg)
+        } catch {
+            PTNSLogConsole("\(error.localizedDescription)",levelType: .Error,loggerType: .Network)
         }
     }
     
     func networkIsNotReachable() ->Bool {
-        return PTSocketManager.share.networkStatus == .notReachable
+        return networkStatus == .notReachable
     }
 }
 
