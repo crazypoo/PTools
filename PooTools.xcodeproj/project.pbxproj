@@ -150,6 +150,9 @@
 		554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EC28F9089D00C82ABF /* PTPermissionCell.swift */; };
 		554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */; };
 		554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */; };
+		554A67362C8559F800FE1B10 /* UIImageAsset+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67352C8559F800FE1B10 /* UIImageAsset+PTEX.swift */; };
+		554A67382C855BB900FE1B10 /* UITraitCollection+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */; };
+		554A673A2C855C1300FE1B10 /* UIWindow+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
@@ -762,6 +765,9 @@
 		554929EC28F9089D00C82ABF /* PTPermissionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionCell.swift; sourceTree = "<group>"; };
 		554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseDecorationFunction.swift; sourceTree = "<group>"; };
 		554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseCollectionReusableView.swift; sourceTree = "<group>"; };
+		554A67352C8559F800FE1B10 /* UIImageAsset+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageAsset+PTEX.swift"; sourceTree = "<group>"; };
+		554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITraitCollection+PTEX.swift"; sourceTree = "<group>"; };
+		554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+PTEX.swift"; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
@@ -1503,6 +1509,9 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				554A67352C8559F800FE1B10 /* UIImageAsset+PTEX.swift */,
+				554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */,
+				554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -3187,6 +3196,7 @@
 				55C4098C2C04DF4E009C0FB6 /* PTLeakViewModel.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				557E3A922C0446AB002466A0 /* PTCrashViewModel.swift in Sources */,
+				554A673A2C855C1300FE1B10 /* UIWindow+PTEX.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* PTLayoutButton.swift in Sources */,
@@ -3284,6 +3294,7 @@
 				55BA094E2BC2303400F58126 /* PTPhoneFeedBackControl.swift in Sources */,
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				557E3A482C030C8C002466A0 /* UIImage+PTColorEX.swift in Sources */,
+				554A67382C855BB900FE1B10 /* UITraitCollection+PTEX.swift in Sources */,
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
 				55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */,
 				55B4FA222AE10094006D35F3 /* PTPermissionFaceID.swift in Sources */,
@@ -3574,6 +3585,7 @@
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
 				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
+				554A67362C8559F800FE1B10 /* UIImageAsset+PTEX.swift in Sources */,
 				557E3A702C036DE3002466A0 /* PTFPSTool.swift in Sources */,
 				558B77BA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,

@@ -9,6 +9,18 @@
 import UIKit
 
 extension UserDefaults: PTProtocolCompatible {}
+
+public extension UserDefaults {
+    var overrideUserInterfaceStyle: UIUserInterfaceStyle {
+        get {
+            UIUserInterfaceStyle(rawValue: integer(forKey: #function)) ?? .unspecified
+        }
+        set {
+            set(newValue.rawValue, forKey: #function)
+        }
+    }
+}
+
 public extension PTPOP where Base: UserDefaults {
   
     //MARK: 存值
