@@ -127,9 +127,7 @@ extension PTCoinAnimation:CAAnimationDelegate {
                                  finished flag: Bool) {
         if anim == showLabel.layer.animation(forKey: "babyCoin_scale") {
             babyCoinFadeAway()
-            if animationBlock != nil {
-                animationBlock!(true)
-            }
+            animationBlock?(true)
         }
         
         if anim == showLabel.layer.animation(forKey: "aniMove_aniScale_groupAnimation") {

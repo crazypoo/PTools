@@ -77,9 +77,7 @@ extension PTPurchaseCarAnimationTool:CAAnimationDelegate {
             layer!.removeFromSuperlayer()
             layer = nil
             
-            if block != nil {
-                block!(true)
-            }
+            block?(true)
         }
     }
 }

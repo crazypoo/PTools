@@ -164,7 +164,7 @@ class AppDelegate: PTAppWindowsDelegate {
 //        }
 //        #endif
 
-        PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.", comNameFont: .appfont(size: 10), callBack: {
+        PTLaunchAdMonitor.share.showAd(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"],skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10)) {
             let guideModel = PTGuidePageModel()
             guideModel.mainView = self.window!
             guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
@@ -181,8 +181,8 @@ class AppDelegate: PTAppWindowsDelegate {
                 
             }
             guideHud.guideShow()
-        })
-        
+        }
+                
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
                 
         PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
