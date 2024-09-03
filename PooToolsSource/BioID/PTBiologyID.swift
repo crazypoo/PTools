@@ -10,134 +10,115 @@ import UIKit
 import LocalAuthentication
 import Security
 
-@objc public enum PTBiologyStatus:Int {
-    case None
-    case TouchID
-    case FaceID
+@objc public enum PTBiologyStatus: Int {
+    case none
+    case touchID
+    case faceID
+    case opticID
 }
 
-@objc public enum PTBiologyVerifyStatus:Int {
-    case Success
-    case DuplicateItem
-    case ItemNotFound
-    case KeyboardIDNotFound
-    case TouchIDNotFound
-    case AlertCancel
-    case PasswordKilled
-    case UnKnow
-    case KeyboardCancel
-    case KeyboardTouchID
-    case TouchIDNotOpen
-    case Failed
-    case SystemCancel
+@objc public enum PTBiologyVerifyStatus: Int {
+    case success
+    case duplicateItem
+    case itemNotFound
+    case keyboardIDNotFound
+    case touchIDNotFound
+    case alertCancel
+    case passwordKilled
+    case unknown
+    case keyboardCancel
+    case keyboardTouchID
+    case touchIDNotOpen
+    case failed
+    case systemCancel
 }
 
 @objcMembers
 public class PTBiologyID: NSObject {
     public static let shared = PTBiologyID()
     
-    private var security = LAContext()
-    
-    open var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
-    open var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
+    open var biologyStatusBlock: ((_ status: PTBiologyStatus) -> Void)?
+    open var biologyVerifyStatusBlock: ((_ status: PTBiologyVerifyStatus) -> Void)?
     
     private override init() {
         super.init()
-        PTGCDManager.gcdMain {
-            self.verifyBiologyIDAction()
+        PTGCDManager.gcdMain { [weak self] in
+            self?.verifyBiologyIDAction()
         }
     }
     
     private func verifyBiologyIDAction() {
-        var error : NSError? = nil
-        let isCanEvaluatePolicy : Bool = security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-        if error != nil {
-            if biologyStatusBlock != nil {
-                biologyStatusBlock!(.None)
-            }
-        } else {
-            if isCanEvaluatePolicy {
-                switch security.biometryType {
-                case .none:
-                    if biologyStatusBlock != nil {
-                        biologyStatusBlock!(.None)
-                    }
-                case .faceID:
-                    if biologyStatusBlock != nil {
-                        biologyStatusBlock!(.FaceID)
-                    }
-                case .touchID:
-                    if biologyStatusBlock != nil {
-                        biologyStatusBlock!(.TouchID)
-                    }
-                default:
-                    if biologyStatusBlock != nil {
-                        biologyStatusBlock!(.None)
-                    }
-                }
-            } else {
-                if biologyStatusBlock != nil {
-                    biologyStatusBlock!(.None)
-                }
-            }
+        let security = LAContext()  // 每次创建一个新的 LAContext 实例
+        var error: NSError?
+        guard security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+            biologyStatusBlock?(.none)
+            return
+        }
+        
+        switch security.biometryType {
+        case .none:
+            biologyStatusBlock?(.none)
+        case .faceID:
+            biologyStatusBlock?(.faceID)
+        case .touchID:
+            biologyStatusBlock?(.touchID)
+        case .opticID:
+            biologyStatusBlock?(.opticID)
+        @unknown default:
+            biologyStatusBlock?(.none)
         }
     }
     
-    public func biologyStart(alertTitle:String? = "生物技术验证") {
-        var evaluatePolicyType : LAPolicy?
-        evaluatePolicyType = .deviceOwnerAuthentication
-        
-        security.evaluatePolicy(evaluatePolicyType!, localizedReason: alertTitle!) { success, error in
+    public func biologyStart(alertTitle: String = "生物技术验证") {
+        let security = LAContext()  // 每次创建一个新的 LAContext 实例
+        security.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: alertTitle) { success, error in
             if success {
-                if self.biologyVerifyStatusBlock != nil {
-                    self.biologyVerifyStatusBlock!(.Success)
-                }
+                self.biologyVerifyStatusBlock?(.success)
             } else {
+                let status: PTBiologyVerifyStatus
                 if let newError = error as NSError? {
-                    var type : PTBiologyVerifyStatus = .UnKnow
                     switch newError.code {
                     case LAError.systemCancel.rawValue:
-                        type = .SystemCancel
+                        status = .systemCancel
                     case LAError.userCancel.rawValue:
-                        type = .AlertCancel
+                        status = .alertCancel
                     case LAError.authenticationFailed.rawValue:
-                        type = .Failed
+                        status = .failed
                     case LAError.passcodeNotSet.rawValue:
-                        type = .KeyboardIDNotFound
+                        status = .keyboardIDNotFound
                     case LAError.biometryNotAvailable.rawValue:
-                        type = .TouchIDNotOpen
+                        status = .touchIDNotOpen
                     case LAError.biometryNotEnrolled.rawValue:
-                        type = .TouchIDNotFound
+                        status = .touchIDNotFound
                     case LAError.userFallback.rawValue:
-                        type = .KeyboardTouchID
+                        status = .keyboardTouchID
                     default:
-                        type = .UnKnow
+                        status = .unknown
                     }
-                    if self.biologyVerifyStatusBlock != nil {
-                        self.biologyVerifyStatusBlock!(type)
-                    }
+                } else {
+                    status = .unknown
                 }
+                self.biologyVerifyStatusBlock?(status)
             }
         }
     }
     
     func deleteBiologyID() {
-        let query = [kSecClass:kSecClassGenericPassword,kSecAttrService:"PTouchIDService"] as [CFString : Any]
-        let status : OSStatus = SecItemDelete(query as CFDictionary)
-        var type : PTBiologyVerifyStatus = .UnKnow
+        let query = [kSecClass: kSecClassGenericPassword, kSecAttrService: "PTouchIDService"] as [CFString: Any]
+        let status: OSStatus = SecItemDelete(query as CFDictionary)
+        
+        let verifyStatus: PTBiologyVerifyStatus
         switch status {
-        case 0:
-            type = .PasswordKilled
-        case -25299:
-            type = .DuplicateItem
-        case -25300:
-            type = .ItemNotFound
-        case -26276:
-            type = .AlertCancel
-        default:break
+        case errSecSuccess:
+            verifyStatus = .passwordKilled
+        case errSecDuplicateItem:
+            verifyStatus = .duplicateItem
+        case errSecItemNotFound:
+            verifyStatus = .itemNotFound
+        default:
+            verifyStatus = .unknown
         }
-        if biologyVerifyStatusBlock != nil {
-            biologyVerifyStatusBlock!(type)
-        }
+        
+        biologyVerifyStatusBlock?(verifyStatus)
     }
 }
