@@ -303,6 +303,12 @@ public class PTActionSheetController: PTAlertController {
         alertContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        self.setupCancelButton()
+        self.setupDestructiveItems()
+        self.setupContentScrollerView()
+        self.setupTitleLabel()
+        self.contentSubsSet()
     }
 
     // 分离取消按钮的设置
@@ -516,11 +522,6 @@ extension PTActionSheetController {
         self.view.backgroundColor = UIColor.DevMaskColor
         
         PTGCDManager.gcdMain {
-            self.setupCancelButton()
-            self.setupDestructiveItems()
-            self.setupContentScrollerView()
-            self.setupTitleLabel()
-            self.contentSubsSet()
             PTAnimationFunction.animationIn(animationView: self.alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
                 if finish {
                     completion?()
