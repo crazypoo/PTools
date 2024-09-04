@@ -628,8 +628,8 @@ public class PTCollectionView: UIView {
     
     open var itemMoveTo:((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath)->Void)?
     
-    open var forceController:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->UIViewController)?
-    open var forceActions:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->[UIAction])?
+    open var forceController:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->UIViewController?)?
+    open var forceActions:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->[UIAction]?)?
 
     public var viewConfig:PTCollectionViewConfig! {
         didSet {
