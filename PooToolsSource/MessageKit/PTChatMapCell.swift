@@ -64,7 +64,7 @@ public class PTChatMapCell: PTChatBaseCell {
     }
     
     private func configureMapContent(cellModel: PTChatListModel) {
-        guard let msgContent = cellModel.msgContent else { return }
+        guard let _ = cellModel.msgContent else { return }
 
         var dic:NSDictionary?
         if cellModel.msgContent is NSDictionary {

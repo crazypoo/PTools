@@ -948,6 +948,9 @@ class PTFuncNameViewController: PTBaseViewController {
         aaaaaaa.emptyButtonTap = { sender in
             PTNSLogConsole("12312312312312312")
         }
+        aaaaaaa.forceController = { cView,index,model in
+            return PTBaseViewController()
+        }
         return aaaaaaa
     }()
     
@@ -1185,7 +1188,7 @@ class PTFuncNameViewController: PTBaseViewController {
         view.addSubview(buttonView)
         PTGCDManager.gcdAfter(time: 0.35) {
             buttonView.frame = CGRect(x: 24, y: 400, width: 60, height: 60)
-        }        
+        }
     }
     
     func flashAd(notifi:Notification) {

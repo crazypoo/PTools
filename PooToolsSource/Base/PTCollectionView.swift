@@ -562,13 +562,14 @@ public class PTCollectionView: UIView {
     
     //MARK: UIScrollView call back
     ///UICollectionView的Scroll事件
+    open var collectionWillBeginDecelerating:PTCollectionViewScrollHandler?
     open var collectionViewDidScroll:PTCollectionViewScrollHandler?
     open var collectionWillBeginDragging:PTCollectionViewScrollHandler?
     open var collectionDidEndDragging:((UICollectionView,Bool)->Void)?
     open var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
     open var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
     open var collectionDidScrolltoTop:PTCollectionViewScrollHandler?
-
+    open var collectionWillEndDraging:((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>)->Void)?
     ///头部刷新事件
     open var headerRefreshTask:((UIRefreshControl)->Void)?
     ///底部刷新事件
@@ -627,6 +628,9 @@ public class PTCollectionView: UIView {
     
     open var itemMoveTo:((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath)->Void)?
     
+    open var forceController:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->UIViewController)?
+    open var forceActions:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->[UIAction])?
+
     public var viewConfig:PTCollectionViewConfig! {
         didSet {
             if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
@@ -1037,7 +1041,7 @@ public class PTCollectionView: UIView {
             collectionView.reloadEmptyDataSet()
         }
     }
-#endif
+#endif    
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
@@ -1149,8 +1153,25 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
             itemMoveTo!(collectionView,sourceIndexPath,destinationIndexPath)
         }
     }
-        
+    
+    public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let itemSec = self.mSections[indexPath.section]
+        // 配置上下文菜单
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
+            let preview = self.forceController?(collectionView,indexPath,itemSec)
+            // 返回你想展示的预览视图控制器
+            return preview
+        }, actionProvider: { suggestedActions in
+            // 配置菜单项
+            if let actions = self.forceActions?(collectionView,indexPath,itemSec) {
+                return UIMenu(title: "", children: actions)
+            }
+            return nil
+        })
+    }
+            
     public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        collectionWillBeginDecelerating?(scrollView as! UICollectionView)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -1166,6 +1187,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        collectionWillEndDraging?(scrollView as! UICollectionView,velocity,targetContentOffset)
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
