@@ -8,6 +8,7 @@
 
 import UIKit
 import PDFKit
+import CoreGraphics
 
 enum PTPDFManager {
 
@@ -154,5 +155,98 @@ extension PDFPage {
         let page = PDFPage()
 
         return page
+    }
+}
+
+public class PDFWithImage : NSObject {
+    public class func createPDF(withImages dataSource: [UIImage], pdfSize: CGSize, pdfPWD: String?, filePath: String) {
+        // 将OC字符串转成C字符串
+        var pwdStrRef: CFString? = nil
+        if let pwd = pdfPWD, !pwd.isEmpty {
+            pwdStrRef = pwd as CFString
+        }
+        
+        let filePathStrRef: CFString = filePath as CFString
+        
+        // 获取PDF单页尺寸
+        var pdfSize = pdfSize
+        if pdfSize == .zero {
+            pdfSize = CGSize(width: 595, height: 842)
+        }
+        var pdfRect = CGRect(origin: .zero, size: pdfSize)
+        
+        // 创建本地存储PDF路径url
+        guard let urlRef = CFURLCreateWithFileSystemPath(nil, filePathStrRef, .cfurlposixPathStyle, false) else {
+            PTNSLogConsole("create file path url fail.")
+            return
+        }
+        
+        // 创建pdf信息字典
+        var pdfInfo: [CFString: Any] = [
+            kCGPDFContextTitle: "图片转PDF" as CFString,
+            kCGPDFContextAuthor: "Emo," as CFString,
+            kCGPDFContextAllowsPrinting: kCFBooleanTrue!
+        ]
+        
+        if let pwdStrRef = pwdStrRef {
+            pdfInfo.setValue(keys: [kCGPDFContextOwnerPassword as String], newValue: pwdStrRef)
+            pdfInfo.setValue(keys: [kCGPDFContextUserPassword as String], newValue: pwdStrRef)
+        }
+        
+        // 转换rect为data
+        let rectDataRef = CFDataCreate(nil, &pdfRect, MemoryLayout.size(ofValue: pdfRect))!
+        
+        // 创建单页信息
+        let pageInfo: [CFString: Any] = [
+            kCGPDFContextMediaBox: rectDataRef
+        ]
+        
+        guard let context = CGContext(urlRef, mediaBox: &pdfRect, pdfInfo as CFDictionary) else {
+            PTNSLogConsole("create pdf context fail.")
+            return
+        }
+        
+        // 循环创建PDF页面
+        for image in dataSource {
+            // 等比计算图片尺寸
+            let imgW = image.size.width
+            let imgH = image.size.height
+            let pdfW = pdfRect.size.width
+            let pdfH = pdfRect.size.height
+            let pageRect = calculatePDFPageRect(imgW: imgW, imgH: imgH, pdfW: pdfW, pdfH: pdfH)
+            
+            // 将UIImage转成NSData
+            guard let imageData = image.jpegData(compressionQuality: 0.1) else { continue }
+            let imgDataRef = imageData as CFData
+            
+            // 开始绘制PDF单页
+            context.beginPDFPage(pageInfo as CFDictionary)
+            
+            // 绘制PDF单页
+            guard let providerRef = CGDataProvider(data: imgDataRef),
+                  let imageRef = CGImage(jpegDataProviderSource: providerRef, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { continue }
+            
+            context.draw(imageRef, in: pageRect)
+            
+            // 结束绘制PDF单页
+            context.endPDFPage()
+        }
+        
+        // 释放资源
+        context.closePDF()
+    }
+
+    class func calculatePDFPageRect(imgW: CGFloat, imgH: CGFloat, pdfW: CGFloat, pdfH: CGFloat) -> CGRect {
+        // 根据你的逻辑计算PDF中的图片位置
+        let aspectRatio = imgW / imgH
+        var pageRect = CGRect.zero
+        if aspectRatio > pdfW / pdfH {
+            let newHeight = pdfW / aspectRatio
+            pageRect = CGRect(x: 0, y: (pdfH - newHeight) / 2, width: pdfW, height: newHeight)
+        } else {
+            let newWidth = pdfH * aspectRatio
+            pageRect = CGRect(x: (pdfW - newWidth) / 2, y: 0, width: newWidth, height: pdfH)
+        }
+        return pageRect
     }
 }
