@@ -67,6 +67,7 @@ public extension String {
     static let CollectionTag = "CollectionTag"
     static let InputBox = "InputBox"
     static let Stepper = "Stepper"
+    static let LoginDesc = "LoginDesc"
 
     static let route = "路由"
     
@@ -309,7 +310,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let Stepper = self.rowBaseModel(name: .Stepper)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper]
+        let LoginDesc = self.rowBaseModel(name: .LoginDesc)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper,LoginDesc]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in

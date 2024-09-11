@@ -380,6 +380,7 @@
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
+		55B374552C91F91700CB4ED1 /* PTLoginDescButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B374542C91F91700CB4ED1 /* PTLoginDescButton.swift */; };
 		55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */; };
 		55B3F49E2B6AD3CB00A7CC66 /* PTPinyin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B3F49D2B6AD3CB00A7CC66 /* PTPinyin.swift */; };
 		55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */; };
@@ -685,6 +686,7 @@
 		550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTVoiceActionView.swift; sourceTree = "<group>"; };
 		550CE4C22AF295B10052539D /* PTSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeechViewController.swift; sourceTree = "<group>"; };
 		550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSoundRecorder.swift; sourceTree = "<group>"; };
+		550D59A82C8EE40D000F928B /* PooTools_ExampleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_ExampleDebug.entitlements; sourceTree = "<group>"; };
 		55102A882AFF575900E9529D /* PTUnavailableFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUnavailableFunction.swift; sourceTree = "<group>"; };
 		55102A9D2AFFAB5700E9529D /* icon_permission_media.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_permission_media.png; sourceTree = "<group>"; };
 		55102A9E2AFFAB5700E9529D /* icon_permission_faceid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_permission_faceid.png; sourceTree = "<group>"; };
@@ -1000,6 +1002,7 @@
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
+		55B374542C91F91700CB4ED1 /* PTLoginDescButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoginDescButton.swift; sourceTree = "<group>"; };
 		55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTColorPickPlugin.swift; sourceTree = "<group>"; };
 		55B3F49D2B6AD3CB00A7CC66 /* PTPinyin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPinyin.swift; sourceTree = "<group>"; };
 		55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionText.swift; sourceTree = "<group>"; };
@@ -2436,6 +2439,7 @@
 				557451232C09B0A60008FCAD /* PTMenuSheetArrowButton.swift */,
 				557451252C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift */,
 				557451272C09B12C0008FCAD /* PTMenuSheetButtonView.swift */,
+				55B374542C91F91700CB4ED1 /* PTLoginDescButton.swift */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -2755,6 +2759,7 @@
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
+				550D59A82C8EE40D000F928B /* PooTools_ExampleDebug.entitlements */,
 				2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */,
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for PooTools */,
@@ -3362,6 +3367,7 @@
 				5571F6122AFD23B000DB4420 /* PTWindowSceneDelegate.swift in Sources */,
 				553038362B1CD85E0019A8E0 /* JWT.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
+				55B374552C91F91700CB4ED1 /* PTLoginDescButton.swift in Sources */,
 				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
 				55FF40702B2AFFCE00CD3906 /* PTVideoEditorVideoTimeLineGenerator.swift in Sources */,
@@ -3769,7 +3775,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PooTools_ExampleDebug.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;

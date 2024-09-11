@@ -697,6 +697,17 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.width.equalTo(100)
                 make.height.equalTo(24)
             }
+        case String.LoginDesc:
+            let aaaaa = PTLoginDescButton(config: PTLoginDescConfig())
+            view.addSubviews([aaaaa])
+            aaaaa.snp.makeConstraints { make in
+                make.centerX.centerY.equalToSuperview()
+//                make.width.equalTo(100)
+                make.height.equalTo(24)
+            }
+            aaaaa.descHandler = { type in
+                PTNSLogConsole("123123123123123123123\(type)")
+            }
         default:
             break
         }

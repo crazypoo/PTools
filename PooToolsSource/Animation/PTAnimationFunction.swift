@@ -102,6 +102,5 @@ public class PTAnimationFunction: NSObject {
             }
         }
         animationView.layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
-
     }
 }

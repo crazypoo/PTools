@@ -20,6 +20,7 @@ import TipKit
 import MediaPlayer
 import Alamofire
 import SwifterSwift
+import FamilyControls
 
 //find . -type f | grep -e ".a" -e ".framework" | xargs grep -s UIWebView
 enum RequestManager {
@@ -236,7 +237,16 @@ class AppDelegate: PTAppWindowsDelegate {
             
 //        networkSpeedMonitor.startMonitoring()
 //        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
-
+        if #available(iOS 16.0, *) {
+            Task {
+                do {
+                    try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
+                } catch {
+                    PTNSLogConsole("123123123123123123123123123123123")
+                }
+            }
+        }
+        
         return true
     }
     
