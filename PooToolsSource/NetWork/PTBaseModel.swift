@@ -17,4 +17,8 @@ open class PTBaseModel: Convertible {
     open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
         property.name
     }
+    
+    open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any? {
+        return jsonValue
+    }
 }
