@@ -132,7 +132,7 @@ public extension String {
     }
         
     /**
-        Removed whitespaces and new lines.
+        裁剪掉/n換行
      */
     var trimString: String {
         trimmingCharacters(in: .whitespacesAndNewlines)

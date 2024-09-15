@@ -1041,7 +1041,7 @@ public class PTCollectionView: UIView {
             collectionView.reloadEmptyDataSet()
         }
     }
-#endif    
+#endif
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
@@ -1179,7 +1179,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        collectionViewDidScroll?(scrollView as! UICollectionView)
+        collectionWillBeginDragging?(scrollView as! UICollectionView)
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
