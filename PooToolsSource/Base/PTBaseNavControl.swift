@@ -87,6 +87,15 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         self.zx_disableFullScreenGesture = false
     }
     
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
     // MARK: Lifecycle
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,13 +110,13 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                self.baseTraitCollectionDidChange()
+                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
     }
     
-    open func baseTraitCollectionDidChange() { }
+    open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
 }
 
 // MARK: - 左滑手势返回
@@ -136,6 +145,15 @@ open class PTBaseNavControl: UINavigationController {
         PTBaseNavControl.GobalNavControl(nav: self)
     }
     
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -145,13 +163,13 @@ open class PTBaseNavControl: UINavigationController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                self.baseTraitCollectionDidChange()
+                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
     }
     
-    open func baseTraitCollectionDidChange() { }
+    open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
 }
 
 extension PTBaseNavControl:UIGestureRecognizerDelegate {
@@ -180,7 +198,7 @@ extension PTBaseNavControl {
         if #available(iOS 13.0, *) {
             if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
                 StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                baseTraitCollectionDidChange()
+                baseTraitCollectionDidChange(style:UITraitCollection.current.userInterfaceStyle)
                 setNeedsStatusBarAppearanceUpdate()
             }
         }

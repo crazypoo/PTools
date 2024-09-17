@@ -519,6 +519,7 @@
 		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
 		55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */; };
 		55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */; };
+		55ECD8452C99D8B300B45EDE /* PTBaseTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -1142,6 +1143,7 @@
 		55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_placeholder.png; sourceTree = "<group>"; };
 		55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScrollingPageControl.swift; sourceTree = "<group>"; };
 		55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestNewModel.swift; sourceTree = "<group>"; };
+		55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseTabBarViewController.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -2646,6 +2648,7 @@
 				55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */,
 				55F299902BEE1D5B00CC970A /* PTImageCell.swift */,
 				5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */,
+				55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3573,6 +3576,7 @@
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */,
 				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
+				55ECD8452C99D8B300B45EDE /* PTBaseTabBarViewController.swift in Sources */,
 				55BCB9842B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift in Sources */,
 				55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */,
 				55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */,

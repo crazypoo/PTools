@@ -34,7 +34,7 @@ public class PTActionCell:UIView {
         
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.blur.style = previousTraitCollection.userInterfaceStyle == .dark ? .extraLight : .dark
+                self.blurChange(style: previousTraitCollection.userInterfaceStyle)
             }
         }
         addSubview(cellButton)
@@ -51,6 +51,10 @@ public class PTActionCell:UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            blurChange(style: traitCollection.userInterfaceStyle)
+        }
     }
     
     @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
@@ -58,9 +62,12 @@ public class PTActionCell:UIView {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             // 适配代码
-            PTNSLogConsole("\(UITraitCollection.current.userInterfaceStyle)")
-            blur.style = UITraitCollection.current.userInterfaceStyle == .dark ? .extraLight : .dark
+            blurChange(style: UITraitCollection.current.userInterfaceStyle)
         }
+    }
+    
+    func blurChange(style:UIUserInterfaceStyle) {
+        blur.style = style == .dark ? .extraLight : .dark
     }
 }
 

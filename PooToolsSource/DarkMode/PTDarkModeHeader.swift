@@ -160,15 +160,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
         
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                if PTDarkModeOption.isFollowSystem {
-                    if previousTraitCollection.userInterfaceStyle == .light {
-                        self.whiteButton.isSelected = true
-                        self.blackButton.isSelected = false
-                    } else {
-                        self.whiteButton.isSelected = false
-                        self.blackButton.isSelected = true
-                    }
-                }
+                self.optionChange(style: previousTraitCollection.userInterfaceStyle)
             }
         }
     }
@@ -179,8 +171,22 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
     
     @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            optionChange(style:UITraitCollection.current.userInterfaceStyle)
+        }
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            optionChange(style: traitCollection.userInterfaceStyle)
+        }
+    }
+    
+    func optionChange(style:UIUserInterfaceStyle) {
         if PTDarkModeOption.isFollowSystem {
-            if UITraitCollection.current.userInterfaceStyle == .light {
+            if style == .light {
                 whiteButton.isSelected = true
                 blackButton.isSelected = false
             } else {

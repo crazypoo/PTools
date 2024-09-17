@@ -101,6 +101,14 @@ public class PTCustomerAlertController: PTAlertController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            baseTraitCollectionDidChange(style: traitCollection.userInterfaceStyle)
+        }
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -155,8 +163,7 @@ public class PTCustomerAlertController: PTAlertController {
         
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                self.blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .extraLight : .dark
-                self.setNeedsStatusBarAppearanceUpdate()
+                self.baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
             }
         }
     }
@@ -207,8 +214,14 @@ public class PTCustomerAlertController: PTAlertController {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             // 适配代码
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .extraLight : .dark
+            baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
         }
+    }
+        
+    public override func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) {
+        super.baseTraitCollectionDidChange(style: style)
+        blur!.style = style == .dark ? .extraLight : .dark
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 }
 

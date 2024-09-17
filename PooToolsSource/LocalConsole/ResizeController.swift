@@ -567,6 +567,18 @@ class PlatterView: UIView,UITextFieldDelegate {
         return view
     }()
 
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            if traitCollection.userInterfaceStyle == .dark {
+                self.layer.borderColor = UIColor.randomColor.cgColor
+            } else {
+                self.layer.borderColor = UIColor.randomColor.cgColor
+            }
+        }
+    }
+    
     func configureFrame() {
         self.frame.size = PTUtils.getCurrentVC().view.frame.size
         // Make sure bottom doesn't show on upwards pan.

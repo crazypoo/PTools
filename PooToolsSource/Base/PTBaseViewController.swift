@@ -114,6 +114,21 @@ extension PTBaseViewController {
         super.viewDidDisappear(animated)
     }
     
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            /*
+            该方式在以下方法中自动生效。
+
+            UIView：draw()、layoutSubviews()、updateConstraints()。
+            UIViewController：viewWillLayoutSubviews()、viewDidLayoutSubviews()、updateViewConstraints()、updateContentUnavailableConfiguration()。
+             */
+            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
     //MARK: 是否隱藏NavBar
     ///是否隱藏NavBar
     public convenience init(hideBaseNavBar: Bool) {
@@ -145,7 +160,7 @@ extension PTBaseViewController {
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                self.baseTraitCollectionDidChange()
+                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
@@ -191,12 +206,12 @@ extension PTBaseViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
-            baseTraitCollectionDidChange()
+            baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
             setNeedsStatusBarAppearanceUpdate()
         }
     }
     
-    open func baseTraitCollectionDidChange() { }
+    open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
     
     public func returnFrontVC(completion:PTActionTask? = nil) {
         if presentingViewController != nil {
