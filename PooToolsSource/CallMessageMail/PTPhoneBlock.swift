@@ -12,7 +12,7 @@ public typealias CallBlock = (_ timeInterval:TimeInterval)->Void
 public typealias CanCall = (_ ok:Bool)->Void
 
 @objcMembers
-class PTPhoneBlock: NSObject {
+public class PTPhoneBlock: NSObject {
     public static let shared = PTPhoneBlock()
     
     private var callStartTime:Date?
