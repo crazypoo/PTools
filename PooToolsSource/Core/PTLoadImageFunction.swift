@@ -148,4 +148,71 @@ public class PTLoadImageFunction: NSObject {
         }
         return frames
     }
+    
+    /*
+     let livePhotoView = PHLivePhotoView(frame: CGRect(x: 0,
+                                                               y: 200,
+                                                               width: UIScreen.main.bounds.width,
+                                                               height: 300))
+             livePhotoView.contentMode = .scaleAspectFit
+             // 播放时是否静音
+             livePhotoView.isMuted = false
+             livePhotoView.delegate = self
+     livePhotoView.startPlayback(with: .full)
+     */
+    public static func downloadLivePhoto(photoURL: URL, videoURL: URL,contentMode:PHImageContentMode = .aspectFit, completion: @escaping (PHLivePhoto?) -> Void) {
+        let dispatchGroup = DispatchGroup()
+        var downloadedPhotoURL: URL?
+        var downloadedVideoURL: URL?
+        
+        // 下载图片文件
+        dispatchGroup.enter()
+        downloadFile(from: photoURL) { localURL in
+            downloadedPhotoURL = localURL
+            dispatchGroup.leave()
+        }
+        
+        // 下载视频文件
+        dispatchGroup.enter()
+        downloadFile(from: videoURL) { localURL in
+            downloadedVideoURL = localURL
+            dispatchGroup.leave()
+        }
+        
+        // 所有文件下载完成后创建 PHLivePhoto
+        dispatchGroup.notify(queue: .main) {
+            guard let photo = downloadedPhotoURL, let video = downloadedVideoURL else {
+                completion(nil)
+                return
+            }
+            
+            let placeholderImage = UIImage(contentsOfFile: photo.path)
+            // 创建 PHLivePhoto
+            PHLivePhoto.request(withResourceFileURLs: [photo, video], placeholderImage: placeholderImage, targetSize: placeholderImage?.size ?? .zero, contentMode: contentMode) { livePhoto, info in
+                completion(livePhoto)
+            }
+        }
+    }
+
+    fileprivate static func downloadFile(from url: URL, completion: @escaping (URL?) -> Void) {
+        let task = URLSession.shared.downloadTask(with: url) { localURL, response, error in
+            guard let localURL = localURL else {
+                completion(nil)
+                return
+            }
+            
+            // 将文件移动到临时目录
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let fileName = url.lastPathComponent
+            let destinationURL = tempDirectory.appendingPathComponent(fileName)
+            
+            do {
+                try FileManager.default.moveItem(at: localURL, to: destinationURL)
+                completion(destinationURL)
+            } catch {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
 }
