@@ -21,14 +21,17 @@ public class PCleanCache: NSObject {
     class public func getCacheSize() -> String {
         var totalSize: Float = 0
         let dispatchGroup = DispatchGroup()
-        
+        let queue = DispatchQueue(label: "com.pt.totalsize.sync")
+
         // 计算本地文件缓存大小
         totalSize += calculateLocalCacheSize()
         
         // 计算 SDWebImage 缓存大小
         #if canImport(SDWebImage)
         dispatchGroup.enter()
-        totalSize += Float(SDImageCache.shared.totalDiskSize())
+        queue.sync {
+            totalSize += Float(SDImageCache.shared.totalDiskSize())
+        }
         dispatchGroup.leave()
         #endif
         
@@ -37,7 +40,9 @@ public class PCleanCache: NSObject {
         ImageCache.default.calculateDiskStorageSize { result in
             switch result {
             case .success(let size):
-                totalSize += Float(size)
+                queue.sync {
+                    totalSize += Float(size)
+                }
             case .failure(let error):
                 PTNSLogConsole("Kingfisher: \(error)", levelType: .Error, loggerType: .CleanCache)
             }
@@ -56,7 +61,8 @@ public class PCleanCache: NSObject {
     class public func clearCaches() -> Bool {
         var flag = false
         let dispatchGroup = DispatchGroup()
-        
+        let queue = DispatchQueue(label: "com.pt.flag.sync")
+
         // 清理本地文件缓存
         flag = clearLocalCaches()
         
@@ -72,7 +78,9 @@ public class PCleanCache: NSObject {
         // 清理 Kingfisher 缓存
         dispatchGroup.enter()
         ImageCache.default.clearDiskCache {
-            flag = true
+            queue.sync {
+                flag = true
+            }
             dispatchGroup.leave()
         }
         
