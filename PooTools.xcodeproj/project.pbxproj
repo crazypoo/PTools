@@ -488,6 +488,7 @@
 		55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */; };
 		55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */; };
 		55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */; };
+		55D6FC602C9EA8BF006683F4 /* PTBaseWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D6FC5F2C9EA8BF006683F4 /* PTBaseWebViewController.swift */; };
 		55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */; };
 		55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */; };
 		55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */; };
@@ -1111,6 +1112,7 @@
 		55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugViewController.swift; sourceTree = "<group>"; };
 		55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PTList+EX.swift"; sourceTree = "<group>"; };
 		55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevFunction.swift; sourceTree = "<group>"; };
+		55D6FC5F2C9EA8BF006683F4 /* PTBaseWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseWebViewController.swift; sourceTree = "<group>"; };
 		55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpringMotionView-iOS.swift"; sourceTree = "<group>"; };
 		55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionPhysics.swift; sourceTree = "<group>"; };
 		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
@@ -2649,6 +2651,7 @@
 				55F299902BEE1D5B00CC970A /* PTImageCell.swift */,
 				5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */,
 				55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */,
+				55D6FC5F2C9EA8BF006683F4 /* PTBaseWebViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3380,6 +3383,7 @@
 				552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */,
 				55F162E62B18E3C200320925 /* C7CollectorVideo.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
+				55D6FC602C9EA8BF006683F4 /* PTBaseWebViewController.swift in Sources */,
 				550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */,
