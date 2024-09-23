@@ -708,6 +708,42 @@ class PTFuncDetailViewController: PTBaseViewController {
             aaaaa.descHandler = { type in
                 PTNSLogConsole("123123123123123123123\(type)")
             }
+            
+        case String.StepperList:
+            
+            let stepperModel1 = PTStepperListModel()
+            stepperModel1.title = "1111111111"
+            stepperModel1.desc = "12312312312312313123123123"
+            stepperModel1.stopFinish = true
+            
+            let stepperModel2 = PTStepperListModel()
+            stepperModel2.title = "22222222"
+            stepperModel2.stopFinish = true
+
+            let stepperModel3 = PTStepperListModel()
+            stepperModel3.title = "33333333333"
+            stepperModel3.stopFinish = false
+
+            let stepperModel4 = PTStepperListModel()
+            stepperModel4.title = "444444444"
+            stepperModel4.stopFinish = false
+
+            let stepperModel5 = PTStepperListModel()
+            stepperModel5.title = "5555555"
+            stepperModel5.stopFinish = false
+
+            let config = PTStepperListConfig()
+            config.type = .Vertical(type: .Normal)
+            config.stepperModels = [stepperModel1,stepperModel2,stepperModel3,stepperModel4,stepperModel5]
+            config.itemOriginalX = 16
+            
+            let stepper = PTStepperView(viewConfig: config)
+            view.addSubviews([stepper])
+            stepper.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+                make.bottom.equalToSuperview()
+            }
         default:
             break
         }

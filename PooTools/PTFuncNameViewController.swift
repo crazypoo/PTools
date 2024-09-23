@@ -68,6 +68,7 @@ public extension String {
     static let InputBox = "InputBox"
     static let Stepper = "Stepper"
     static let LoginDesc = "LoginDesc"
+    static let StepperList = "StepperList"
 
     static let route = "路由"
     
@@ -312,7 +313,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
         let LoginDesc = self.rowBaseModel(name: .LoginDesc)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper,LoginDesc]
+        let StepperList = self.rowBaseModel(name: .StepperList)
+
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper,LoginDesc,StepperList]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -922,8 +925,14 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 }
             } else {
+                var sheetSize = [PTSheetSize]()
+                if itemRow.title == .StepperList {
+                    sheetSize = [.percent(0.9)]
+                } else {
+                    sheetSize = [.percent(0.5)]
+                }
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
-                self.currentPresentToSheet(vc: vc,sizes: [.percent(0.5)])
+                self.currentPresentToSheet(vc: vc,sizes: sheetSize)
             }
         }
         aaaaaaa.headerRefreshTask = { sender in

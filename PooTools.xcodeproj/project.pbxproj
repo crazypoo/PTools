@@ -327,6 +327,8 @@
 		558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */; };
 		558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */; };
 		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
+		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
+		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
@@ -946,6 +948,8 @@
 		558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTJson+PTEX.swift"; sourceTree = "<group>"; };
 		558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTKeyedDecoding+PTEX.swift"; sourceTree = "<group>"; };
 		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
+		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
+		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
@@ -2142,6 +2146,8 @@
 			isa = PBXGroup;
 			children = (
 				5589FF4C29A8529E00519383 /* PTStepper.swift */,
+				5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */,
+				5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */,
 			);
 			path = Stepper;
 			sourceTree = "<group>";
@@ -3142,6 +3148,7 @@
 				55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				555818C82AFA7BDB0051C0AA /* UINavigationController+PTEX.swift in Sources */,
+				5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */,
 				557E3A8C2C0440FD002466A0 /* PTCallStackParser.swift in Sources */,
 				555818D42AFA7FFB0051C0AA /* CGPoint+PTEX.swift in Sources */,
 				55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */,
@@ -3219,6 +3226,7 @@
 				55BA09482BC0618D00F58126 /* CLGeocoder+PTEX.swift in Sources */,
 				557E3AA62C046F51002466A0 /* PTErrorHelper.swift in Sources */,
 				558B77BE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift in Sources */,
+				5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
 				557451242C09B0A60008FCAD /* PTMenuSheetArrowButton.swift in Sources */,
