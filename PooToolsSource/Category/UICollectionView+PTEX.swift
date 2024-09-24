@@ -382,4 +382,79 @@ public extension UICollectionView {
         }
         self.addGestureRecognizer(longPressGesture)
     }
+    
+    @objc class func horizontalPagingLayout(data:[AnyObject],
+                                            monitorWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
+                                            itemOriginalX:CGFloat = 0,
+                                            itemHeight:CGFloat = 76,
+                                            topContentSpace:CGFloat = 0,
+                                            bottomContentSpace:CGFloat = 0,
+                                            columnCount:Int = 5,
+                                            rowCount:Int = 2,
+                                            itemLeadingSpace:CGFloat = 15,
+                                            itemTrailingSpace:CGFloat = 10) -> NSCollectionLayoutGroup {
+        var continerW:CGFloat = 0
+        let pageItemsCount:Int = columnCount * rowCount
+        var groupH:CGFloat = 0
+        let itemW = (monitorWidth - itemOriginalX * 2 - CGFloat(columnCount - 1) * itemLeadingSpace) / CGFloat(columnCount)
+        var x:CGFloat = itemOriginalX,y:CGFloat = 0 + topContentSpace
+
+        var customers = [NSCollectionLayoutGroupCustomItem]()
+                    
+        var pageCount:Int = 0
+        if data.count % pageItemsCount == 0 {
+            pageCount = data.count / pageItemsCount
+        } else {
+            let current = CGFloat(data.count / pageItemsCount)
+            if current < 1 {
+                pageCount = 1
+            } else {
+                pageCount = Int(ceil(CGFloat(data.count) / CGFloat(pageItemsCount)))
+            }
+        }
+        continerW = monitorWidth * CGFloat(pageCount)
+        
+        data.enumerated().forEach { index,value in
+            
+            let page = floor(Double(index / pageItemsCount))
+            if index < columnCount {
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemHeight), zIndex: 1000 + index)
+                customers.append(customItem)
+                x += itemW + itemLeadingSpace
+                if index == (data.count - 1) {
+                    groupH = y + itemHeight + bottomContentSpace
+                }
+            } else {
+                if index % pageItemsCount == 0 {
+                    x = CGFloat(page) * monitorWidth
+                    y = 0
+                } else {
+                    x += itemW + itemLeadingSpace
+                    if index > 0 && (index % columnCount == 0) {
+                        if data.count > pageItemsCount {
+                            x = CGFloat(page) * monitorWidth
+                        } else {
+                            x = itemOriginalX
+                        }
+                        y += (itemHeight + itemTrailingSpace)
+                    }
+                }
+
+                if index > columnCount {
+                    groupH = y + itemHeight + bottomContentSpace
+                }
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemHeight), zIndex: 1000+index)
+                customers.append(customItem)
+            }
+        }
+        
+        let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(groupH))
+        let bannerItem = NSCollectionLayoutItem.init(layoutSize: bannerItemSize)
+        var bannerGroupSize : NSCollectionLayoutSize
+        
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(continerW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+       return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+    }
 }
