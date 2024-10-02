@@ -195,6 +195,8 @@ pod 'PooTools/Circle', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/MessageKit', :git => 'https://github.com/crazypoo/PTools.git'
 ### IAPManager
 pod 'PooTools/IAP', :git => 'https://github.com/crazypoo/PTools.git'
+### LivePhoto
+pod 'PooTools/LivePhoto', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

@@ -242,17 +242,32 @@ public class PTMediaLibManager:NSObject {
         return models
     }
     
-    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool,handler: @escaping (PTMediaLibListModel)->Void) {
+    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool,handler: @escaping (PTMediaLibListModel)->Void) {
         PTGCDManager.gcdGobal {
             let option = PHFetchOptions()
-            if !allowSelectImage {
-                option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
+            var predicates : [NSPredicate] = []
+            
+            if allowSelectLivePhotoOnly {
+                // 如果只允许选择 Live Photo
+                predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) != 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
+            } else if allowSelectRegularImageOnly {
+                // 如果只允许选择普通图片，不包括 Live Photo
+                predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) == 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
+            } else if allowSelectImage {
+                // 如果允许选择图片，不排除 Live Photo
+                predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
             }
             
-            if !allowSelectVideo {
-                option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+            // 如果允许选择视频
+            if allowSelectVideo {
+                predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
             }
-            
+
+            // 组合多个条件（如果有）
+            if !predicates.isEmpty {
+                option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+            }
+
             let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
             smartAlbums.enumerateObjects { collection, _, stop in
                 if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
@@ -268,13 +283,29 @@ public class PTMediaLibManager:NSObject {
     }
     
     /// Fetch all album list.
-    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, completion: ([PTMediaLibListModel]) -> Void) {
+    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool, completion: ([PTMediaLibListModel]) -> Void) {
         let option = PHFetchOptions()
-        if !allowSelectImage {
-            option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue)
+        var predicates: [NSPredicate] = []
+        
+        if allowSelectLivePhotoOnly {
+            // 如果只允许选择 Live Photo
+            predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) != 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
+        } else if allowSelectRegularImageOnly {
+            // 如果只允许选择普通图片，不包括 Live Photo
+            predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) == 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
+        } else if allowSelectImage {
+            // 如果允许选择图片，不排除 Live Photo
+            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
         }
-        if !allowSelectVideo {
-            option.predicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+        
+        // 如果允许选择视频
+        if allowSelectVideo {
+            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
+        }
+
+        // 组合多个条件（如果有）
+        if !predicates.isEmpty {
+            option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         }
         
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil) as! PHFetchResult<PHCollection>
@@ -347,7 +378,6 @@ public class PTMediaLibManager:NSObject {
             }
         }
     }
-
     
     public class func fetchVideo(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
         let option = PHVideoRequestOptions()
@@ -381,7 +411,6 @@ public class PTMediaLibManager:NSObject {
             }
         }
     }
-
     
     private class func getCollectionTitle(_ collection: PHAssetCollection) -> String {
         if collection.assetCollectionType == .album {

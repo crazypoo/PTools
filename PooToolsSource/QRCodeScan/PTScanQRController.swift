@@ -258,7 +258,6 @@ public class PTScanQRController: PTBaseViewController {
             }
         }
         
-        
         view.addSubviews(views)
         backBtn.snp.makeConstraints { make in
             make.width.height.equalTo(44)

@@ -102,6 +102,8 @@
 		55102AC62AFFB8A100E9529D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 55102AC82AFFB8A100E9529D /* Localizable.strings */; };
 		55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55102AD82AFFD04300E9529D /* IBDesignable+PTEX.swift */; };
 		55102ADB2AFFD22E00E9529D /* PTLocalize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55102ADA2AFFD22E00E9529D /* PTLocalize.swift */; };
+		5512F43E2CACD63F006B3A69 /* PTLivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5512F43D2CACD63F006B3A69 /* PTLivePhoto.swift */; };
+		5512F4402CAD2CC0006B3A69 /* AVAsset+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5512F43F2CAD2CC0006B3A69 /* AVAsset+PTEX.swift */; };
 		5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */; };
 		5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */; };
 		5517CAC629F5532600E33ACE /* PTVision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517CAC529F5532600E33ACE /* PTVision.swift */; };
@@ -722,6 +724,8 @@
 		55102ADD2AFFD39700E9529D /* lldotActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lldotActive.png; sourceTree = "<group>"; };
 		55102ADE2AFFD39700E9529D /* lldotInActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lldotInActive.png; sourceTree = "<group>"; };
 		55102ADF2AFFD3C100E9529D /* llplaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = llplaceholder.png; sourceTree = "<group>"; };
+		5512F43D2CACD63F006B3A69 /* PTLivePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLivePhoto.swift; sourceTree = "<group>"; };
+		5512F43F2CAD2CC0006B3A69 /* AVAsset+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+PTEX.swift"; sourceTree = "<group>"; };
 		5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Kingfisher+SVG.swift"; sourceTree = "<group>"; };
 		5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+PTEX.swift"; sourceTree = "<group>"; };
 		5517CAC529F5532600E33ACE /* PTVision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVision.swift; sourceTree = "<group>"; };
@@ -1305,6 +1309,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				5512F43C2CACD624006B3A69 /* LivePhoto */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1523,6 +1528,7 @@
 				554A67352C8559F800FE1B10 /* UIImageAsset+PTEX.swift */,
 				554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */,
 				554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */,
+				5512F43F2CAD2CC0006B3A69 /* AVAsset+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1865,6 +1871,14 @@
 				55102AC12AFFB74500E9529D /* minganci.txt */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		5512F43C2CACD624006B3A69 /* LivePhoto */ = {
+			isa = PBXGroup;
+			children = (
+				5512F43D2CACD63F006B3A69 /* PTLivePhoto.swift */,
+			);
+			path = LivePhoto;
 			sourceTree = "<group>";
 		};
 		5516CCBF29E8557200614980 /* KingfisherSVG */ = {
@@ -3367,6 +3381,7 @@
 				558B77B92BBC52B300BD7AB0 /* PTChatBaseCell.swift in Sources */,
 				55B6D7C02C1D611800033309 /* PTAlertController.swift in Sources */,
 				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
+				5512F4402CAD2CC0006B3A69 /* AVAsset+PTEX.swift in Sources */,
 				557E3AB82C047E64002466A0 /* PTCrashDetailModel.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				55BCB9732B1732030016A4C2 /* PTAdjustSliderView.swift in Sources */,
@@ -3580,6 +3595,7 @@
 				55C409A12C097760009C0FB6 /* PTDebugLocationModel.swift in Sources */,
 				55B13D542B1AEDE800C67EDA /* PTEditModel.swift in Sources */,
 				558B77B62BBC52B300BD7AB0 /* PTChatListModel.swift in Sources */,
+				5512F43E2CACD63F006B3A69 /* PTLivePhoto.swift in Sources */,
 				55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,

@@ -20,11 +20,7 @@ public class PTRateConfig: NSObject {
     ///默认得分范围0~1默认1
     open var scorePercent : CGFloat = 1 {
         didSet {
-            if scorePercent > 1 {
-                scorePercent = 1
-            } else if scorePercent < 0 {
-                scorePercent = 0
-            }
+            scorePercent = min(max(scorePercent,0),1)
         }
     }
     ///展示的数量,默认5个
@@ -47,7 +43,8 @@ public class PTRateView: UIView {
     
     open var viewConfig:PTRateConfig? {
         didSet {
-            scorePercent = viewConfig!.scorePercent
+            guard let config = viewConfig else { return }
+            scorePercent = config.scorePercent
             removeSubviews()
             loaded = false
             initView()
@@ -58,13 +55,12 @@ public class PTRateView: UIView {
 
     fileprivate var scorePercent:CGFloat? = 0 {
         didSet {
+            guard let scorePercent = scorePercent else { return }
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.layoutSubviews()
             }
             
-            if rateBlock != nil {
-                rateBlock!(scorePercent!)
-            }
+            rateBlock?(scorePercent)
         }
     }
     
@@ -73,29 +69,23 @@ public class PTRateView: UIView {
     public init(viewConfig:PTRateConfig) {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
-        
         initView()
     }
     
     func initView() {
-        if self.viewConfig!.canTap {
-            let tapGes = UITapGestureRecognizer.init { sender in
+        guard let config = viewConfig else { return }
+        if config.canTap {
+            let tapGes = UITapGestureRecognizer { [weak self] sender in
+                guard let self = self else { return }
                 let ges = sender as! UITapGestureRecognizer
                 let tapPoint = ges.location(in: self)
-                let offSet = tapPoint.x
-                let realStartScore = offSet / (self.frame.size.width / CGFloat(self.viewConfig!.numberOfStar))
-                let starScore = self.viewConfig!.allowIncompleteStar ? Float(realStartScore) : ceilf(Float(realStartScore))
-                self.scorePercent = CGFloat(starScore) / CGFloat(self.viewConfig!.numberOfStar)
-                let foregroundWidth = self.frame.size.width * self.scorePercent!
-                self.foregroundStarView.snp.updateConstraints({ make in
-                    make.width.equalTo(foregroundWidth)
-                })
+                self.handleTapGesture(tapPoint)
             }
             tapGes.numberOfTapsRequired = 1
-            addGestureRecognizer(tapGes)
+            addGestureRecognizers([tapGes])
         }
         
-        scorePercent = self.viewConfig!.scorePercent
+        scorePercent = config.scorePercent
 
         PTGCDManager.gcdAfter(time: 0.1) {
             self.addSubviews([self.backgroundStarView,self.foregroundStarView])
@@ -110,15 +100,7 @@ public class PTRateView: UIView {
                 make.width.equalTo(0)
             })
             
-            let animationTimeInterval = self.viewConfig!.hadAnimation ? 0.2 : 0
-            UIView.animate(withDuration: animationTimeInterval) {
-                self.foregroundStarView.snp.remakeConstraints({ make in
-                    make.top.bottom.equalToSuperview()
-                    make.left.equalToSuperview()
-                    make.width.equalTo(self.frame.size.width * self.scorePercent!)
-                })
-            }
-            
+            self.updateForegroundStarViewWidth(animated: config.hadAnimation)
             self.loaded = true
         }
     }
@@ -127,21 +109,42 @@ public class PTRateView: UIView {
         super.layoutSubviews()
     }
     
-    fileprivate func createStartView(image:UIImage,tag:Int) ->UIView {
+    fileprivate func handleTapGesture(_ tapPoint: CGPoint) {
+        guard let config = viewConfig else { return }
+        let offSet = tapPoint.x
+        let realStarScore = offSet / (self.frame.size.width / CGFloat(config.numberOfStar))
+        let starScore = config.allowIncompleteStar ? Float(realStarScore) : ceilf(Float(realStarScore))
+        self.scorePercent = CGFloat(starScore) / CGFloat(config.numberOfStar)
+        self.updateForegroundStarViewWidth(animated: config.hadAnimation)
+    }
+        
+    fileprivate func updateForegroundStarViewWidth(animated: Bool = false) {
+        guard let scorePercent = scorePercent else { return }
+        let foregroundWidth = self.frame.size.width * scorePercent
+        let animationTimeInterval = animated ? 0.2 : 0
+        UIView.animate(withDuration: animationTimeInterval) {
+            self.foregroundStarView.snp.updateConstraints { make in
+                make.width.equalTo(foregroundWidth)
+            }
+        }
+    }
+
+    fileprivate func createStartView(image: UIImage, tag: Int) -> UIView {
+        guard let config = viewConfig else { return UIView() }
         let contentV = UIView()
         contentV.clipsToBounds = true
         contentV.backgroundColor = .clear
         contentV.isUserInteractionEnabled = tag == PTRateForegroundViewTags ? true : false
 
-        for i in 0..<viewConfig!.numberOfStar {
+        for i in 0..<config.numberOfStar {
             let imageV = UIImageView(image: image)
             imageV.contentMode = .scaleAspectFit
             imageV.tag = tag + i
             contentV.addSubview(imageV)
             imageV.snp.makeConstraints { make in
-                make.left.equalToSuperview().inset(CGFloat(i) * self.frame.size.width / CGFloat(self.viewConfig!.numberOfStar))
+                make.left.equalToSuperview().inset(CGFloat(i) * self.frame.size.width / CGFloat(config.numberOfStar))
                 make.top.bottom.equalToSuperview()
-                make.width.equalTo(self.frame.size.width / CGFloat(self.viewConfig!.numberOfStar))
+                make.width.equalTo(self.frame.size.width / CGFloat(config.numberOfStar))
             }
         }
         return contentV

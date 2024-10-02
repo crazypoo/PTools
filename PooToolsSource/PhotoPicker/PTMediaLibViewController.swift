@@ -536,7 +536,7 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
         PTGCDManager.gcdMain {
             let config = PTMediaLibConfig.share
-            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
+            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage) { model in
                 self.currentAlbum = model
                 if self.currentAlbum!.models.isEmpty {
                     PTGCDManager.gcdMain {
@@ -629,14 +629,20 @@ public class PTMediaLibViewController: PTBaseViewController {
                     } else {
                         self.mediaListView.currentAlbum = model
                     }
+                    PTGCDManager.gcdAfter(time: 0.05) {
+                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    }
                 }
             } else {
-                PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
+                PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage) { model in
                     let vc = PTMediaLibAlbumListViewController(albumList: model)
                     self.navigationController?.pushViewController(vc, animated: true)
                     vc.selectedModelHandler = { model in
                         self.selectLibButton.normalTitle = "\(model.title)"
                         self.mediaListView.currentAlbum = model
+                        PTGCDManager.gcdAfter(time: 0.05) {
+                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                        }
                     }
                 }
             }
@@ -711,7 +717,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     func loadImageData() {
         let config = PTMediaLibConfig.share
-        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
+        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage) { model in
             self.currentAlbum = model
             if self.currentAlbum.models.isEmpty {
                 PTGCDManager.gcdGobal {
@@ -719,16 +725,16 @@ public class PTMediaLibViewController: PTBaseViewController {
                     PTGCDManager.gcdMain {
                         self.createList()
                         self.mediaListView.currentAlbum = self.currentAlbum
-                        PTGCDManager.gcdAfter(time: 0.15) {
-                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                        PTGCDManager.gcdAfter(time: 0.05) {
+                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
                         }
                     }
                 }
             } else {
                 self.createList()
                 self.mediaListView.currentAlbum = self.currentAlbum
-                PTGCDManager.gcdAfter(time: 0.15) {
-                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                PTGCDManager.gcdAfter(time: 0.05) {
+                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
                 }
             }
         }

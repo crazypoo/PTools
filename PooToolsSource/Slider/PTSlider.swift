@@ -152,6 +152,5 @@ public class PTSlider: UISlider {
     
     public override func layoutIfNeeded() {
         super.layoutIfNeeded()
-        
     }
 }

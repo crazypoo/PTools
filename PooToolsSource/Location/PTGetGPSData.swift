@@ -30,13 +30,11 @@ public class PTGetGPSData: NSObject {
     }
     
     public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String)->Void)?) {
-        let lon:String = UserDefaults.standard.value(forKey: "lon") as! String
-        let lat:String = UserDefaults.standard.value(forKey: "lat") as! String
-        let city:String = UserDefaults.standard.value(forKey: "locCity") as! String
+        let lon:String = (UserDefaults.standard.value(forKey: "lon") as? String) ?? "0.0"
+        let lat:String = (UserDefaults.standard.value(forKey: "lat") as? String) ?? "0.0"
+        let city:String = (UserDefaults.standard.value(forKey: "locCity") as? String) ?? "Unnkow city"
 
-        if block != nil {
-            block!(lat,lon,city)
-        }
+        block?(lat,lon,city)
     }
     
     func setObjectFunction(city:String) {
@@ -51,88 +49,47 @@ public class PTGetGPSData: NSObject {
 extension PTGetGPSData:CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         
-        UIAlertController.base_alertVC(title:String.LocationAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.location(access: .always)),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+        UIAlertController.base_alertVC(title:String.LocationAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.location(access: .always)),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { _, _ in
             PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
         })
-
         
-        if errorBlock != nil {
-            errorBlock!()
-        }
+        errorBlock?()
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let currentLocation = locations.last else { return }
         locationManager.stopUpdatingLocation()
         
-        let currentLocation = locations.last
         let geoCoder = CLGeocoder()
-        let userDefaultLanguages = UserDefaults.standard.value(forKey: "AppleLanguages")
-        UserDefaults.standard.set(["zh-hans"], forKey: "AppleLanguages")
-        geoCoder.reverseGeocodeLocation(currentLocation!) { placemarks, error in
+        geoCoder.reverseGeocodeLocation(currentLocation) { placemarks, error in
+            guard let placeMark = placemarks?.first, let placeLocation = placeMark.location else {
+                return
+            }
             var distance:CLLocationDistance = 0
             var cityStr = "PT Location fail".localized()
-            if placemarks?.count ?? 0 > 0 {
-                let placeMark:CLPlacemark = placemarks![0]
-                let city = placeMark.locality
-                PTNSLogConsole("city:>>>>>>>>>>>>>>>>>>>>\(city ?? "")",levelType: PTLogMode,loggerType: .Location)
-
-                if !(city ?? "").stringIsEmpty() {
-                    let loc1 = CLLocation(latitude: self.lat, longitude: self.lon)
-                    let loc2 = placeMark.location
-                    self.lat = placeMark.location?.coordinate.latitude ?? 0
-                    self.lon = placeMark.location?.coordinate.longitude ?? 0
-                    cityStr = placeMark.locality ?? ""
-                    distance = loc1.distance(from: loc2!)
-                    
-                    let getUserLocCtiy:String? = UserDefaults.standard.value(forKey: "locCity") as? String
-                    PTNSLogConsole("getUserLocCtiy:>>>>>>>>>>>>>>>>>>>>\(getUserLocCtiy ?? "")",levelType: PTLogMode,loggerType: .Location)
-                    if !(getUserLocCtiy ?? "").stringIsEmpty() {
-                        if self.showChangeAlert {
-                            if getUserLocCtiy != cityStr {
-                                self.isShow += 1
-                                if self.isShow < 2 {
-                                    let cancelStr = "\("PT Location continue select".localized())\(getUserLocCtiy!)"
-                                    let doneStr = "\("PT Location change to".localized())\(cityStr)"
-                                    UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "PT Location change".localized(),okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
-                                        
-                                        if self.selectCurrentBlock != nil {
-                                            self.selectCurrentBlock!()
-                                        }
-                                        self.isShow = 0
-                                    } moreBtn: { index, title in
-                                        self.setObjectFunction(city: cityStr)
-                                        if self.selectNewBlock != nil {
-                                            self.selectNewBlock!()
-                                        }
-                                        self.isShow = 0
-                                    }
-                                }
-                            } else {
-                                self.setObjectFunction(city: cityStr)
-                                if self.selectNewBlock != nil {
-                                    self.selectNewBlock!()
-                                }
-                            }
-                        } else {
-                            self.setObjectFunction(city: cityStr)
-                            if self.selectNewBlock != nil {
-                                self.selectNewBlock!()
-                            }
-                        }
+            if let city = placeMark.locality, !city.isEmpty {
+                self.lat = placeLocation.coordinate.latitude
+                self.lon = placeLocation.coordinate.longitude
+                cityStr = city
+                let loc1 = CLLocation(latitude: self.lat, longitude: self.lon)
+                distance = loc1.distance(from: placeLocation)
+                
+                if self.showChangeAlert {
+                    let savedCity = UserDefaults.standard.string(forKey: "locCity") ?? ""
+                    if savedCity != cityStr {
+                        self.showChangeCityAlert(newCity: cityStr, oldCity: savedCity)
                     } else {
                         self.setObjectFunction(city: cityStr)
-                        if self.selectNewBlock != nil {
-                            self.selectNewBlock!()
-                        }
+                        self.selectNewBlock?()
                     }
+                } else {
+                    self.setObjectFunction(city: cityStr)
+                    self.selectNewBlock?()
                 }
             }
             
-            UserDefaults.standard.set(userDefaultLanguages, forKey: "AppleLanguages")
             if distance > 1000 {
-                if self.selectNewBlock != nil {
-                    self.selectNewBlock!()
-                }
+                self.selectNewBlock?()
             }
         }
     }
@@ -145,8 +102,24 @@ extension PTGetGPSData:CLLocationManagerDelegate {
                 self.locationManager.requestAlwaysAuthorization()
             }
         } else {
-            if errorBlock != nil {
-                errorBlock!()
+            errorBlock?()
+        }
+    }
+    
+    private func showChangeCityAlert(newCity: String, oldCity: String) {
+        if isShow < 2 {
+            isShow += 1
+            let cancelStr = "\("PT Location continue select".localized())\(oldCity)"
+            let doneStr = "\("PT Location change to".localized())\(newCity)"
+            
+            UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "PT Location change".localized(),okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
+                
+                self.selectCurrentBlock?()
+                self.isShow = 0
+            } moreBtn: { _, _ in
+                self.setObjectFunction(city: newCity)
+                self.selectNewBlock?()
+                self.isShow = 0
             }
         }
     }

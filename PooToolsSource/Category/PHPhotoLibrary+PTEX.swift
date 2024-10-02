@@ -22,5 +22,17 @@ public extension PTPOP where Base: PHPhotoLibrary {
                 result(false,NSError(domain: "Video save error：\(error?.localizedDescription ?? "")", code: 0))
             }
         }
-    }    
+    }
+    
+    static func saveImageUrlToAlbum(fileUrl:URL,result: @escaping (_ finish:Bool, _ error:NSError?)->Void) {
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileUrl)
+        }) { success, error in
+            if success {
+                result(true,nil)
+            } else {
+                result(false,NSError(domain: "Image url save error：\(error?.localizedDescription ?? "")", code: 0))
+            }
+        }
+    }
 }

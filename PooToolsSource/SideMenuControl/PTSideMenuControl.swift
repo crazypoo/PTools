@@ -638,7 +638,6 @@ open class PTSideMenuControl: PTBaseViewController {
                 })
             })
         }
-
         super.viewWillTransition(to: size, with: coordinator)
     }
 }
@@ -701,7 +700,6 @@ extension PTSideMenuControl {
                 return navigationController.viewControllers.count > 0
             }
         }
-
         return false
     }
 

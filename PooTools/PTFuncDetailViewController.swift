@@ -16,11 +16,20 @@ import VisionKit
 import SwifterSwift
 import CommonCrypto
 import AttributedString
+import PhotosUI
 
 let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
 
 class PTFuncDetailViewController: PTBaseViewController {
 
+    private let pickedVideoName = "pickedExportedVideo.mov"
+    
+    enum PTLivePhotoMediaSelectedType {
+        case Image
+        case Video
+        case LivePhoto
+    }
+    
     fileprivate var typeString:String!
     
     var webServer:GCDWebUploader?
@@ -744,8 +753,279 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
                 make.bottom.equalToSuperview()
             }
+        case String.LivePhoto,String.LivePhotoDisassemble:
+            
+            var pickedPhoto: UIImage?
+            var pickedVideoURL: URL?
+            var disassembleImageURL: URL?
+
+            let livePhotoView = PHLivePhotoView()
+            livePhotoView.contentMode = .scaleAspectFit
+            livePhotoView.delegate = self
+            livePhotoView.backgroundColor = .randomColor
+            
+            let showImageView = UIImageView()
+            showImageView.isUserInteractionEnabled = true
+            showImageView.contentMode = .scaleAspectFill
+            showImageView.clipsToBounds = true
+            showImageView.backgroundColor = .randomColor
+            
+            let videoImageView = UIImageView()
+            videoImageView.isUserInteractionEnabled = true
+            videoImageView.contentMode = .scaleAspectFill
+            videoImageView.clipsToBounds = true
+            videoImageView.backgroundColor = .randomColor
+            
+            switch typeString {
+            case String.LivePhoto:
+                let tap_image = UITapGestureRecognizer { sender in
+                    self.livePhotoMediaSelect(type: .Image) { result in
+                        pickedPhoto = result.image
+                        showImageView.image = result.image
+                    }
+                }
+                showImageView.addGestureRecognizer(tap_image)
+
+                let tap_video = UITapGestureRecognizer { sender in
+                    self.livePhotoMediaSelect(type: .Video) { result in
+                        result.asset.converPHAssetToAVURLAsset { avAsset in
+                            if let avURLAsset = avAsset {
+                                let _ = avURLAsset.exportToDocuments(filename: self.pickedVideoName) { outputURL in
+                                    UIImage.pt.getVideoFirstImage(videoUrl: URL(fileURLWithPath: outputURL.absoluteString).absoluteString) { image in
+                                        pickedVideoURL = URL(fileURLWithPath: outputURL.absoluteString)
+                                        videoImageView.image = image
+                                    }
+                                }
+                            } else {
+                                PTNSLogConsole("没有这个文件")
+                            }
+                        }
+                    }
+                }
+                videoImageView.addGestureRecognizer(tap_video)
+            case String.LivePhotoDisassemble:
+                let tap_image = UITapGestureRecognizer { sender in
+                    if let imagePath = disassembleImageURL?.path {
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: imagePath) {
+                            let imageURL = URL(fileURLWithPath: imagePath)
+                            PHPhotoLibrary.pt.saveImageUrlToAlbum(fileUrl: imageURL) { finish, error in
+                                if finish {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"Photo Saved.The photo was successfully saved to Photos.",icon:.Done,style: .Normal)
+                                    }
+                                } else {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"Photo Not Saved",icon:.Error,style: .Normal)
+                                    }
+                                }
+                            }
+                        } else {
+                            PTGCDManager.gcdMain {
+                                PTAlertTipControl.present(title:"Photo cannot be Saved",icon:.Error,style: .Normal)
+                            }
+                        }
+                    } else {
+                        PTGCDManager.gcdMain {
+                            PTAlertTipControl.present(title:"Photo url error",icon:.Error,style: .Normal)
+                        }
+                    }
+                }
+                showImageView.addGestureRecognizer(tap_image)
+
+                let tap_video = UITapGestureRecognizer { sender in
+                    if let videoPath = pickedVideoURL?.path {
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: videoPath) {
+                            let videoURL = URL(fileURLWithPath: videoPath)
+                            PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: videoURL) { finish, error in
+                                if finish {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"Video Saved.The Video was successfully saved to Video.",icon:.Done,style: .Normal)
+                                    }
+                                } else {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"Video Not Saved",icon:.Error,style: .Normal)
+                                    }
+                                }
+                            }
+                        } else {
+                            PTGCDManager.gcdMain {
+                                PTAlertTipControl.present(title:"Video cannot be Saved",icon:.Error,style: .Normal)
+                            }
+                        }
+                    } else {
+                        PTGCDManager.gcdMain {
+                            PTAlertTipControl.present(title:"Video url error",icon:.Error,style: .Normal)
+                        }
+                    }
+                }
+                videoImageView.addGestureRecognizer(tap_video)
+            default: break
+            }
+
+            let progressView = UIProgressView()
+            progressView.trackTintColor = .random
+            
+            let createButton = UIButton(type: .custom)
+            createButton.setTitleColor(.random, for: .normal)
+            switch self.typeString {
+            case String.LivePhoto:
+                createButton.setTitle("Create LivePhoto Button", for: .normal)
+            case String.LivePhotoDisassemble:
+                createButton.setTitle("Select LivePhoto Button", for: .normal)
+            default:break
+            }
+            createButton.addActionHandlers { sender in
+                switch self.typeString {
+                case String.LivePhoto:
+                    guard let sourceVideoPath = pickedVideoURL else {
+                        PTGCDManager.gcdMain {
+                            PTAlertTipControl.present(title:"It seems a video was not selected.Try again.",icon:.Error,style: .Normal)
+                        }
+                        return
+                    }
+                    var photoURL: URL?
+                    if let sourceKeyPhoto = pickedPhoto {
+                        guard let data = sourceKeyPhoto.jpegData(compressionQuality: 1.0) else { return }
+                        photoURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory().appendingPathComponent("photo.jpg"))
+                        if let photoURL = photoURL {
+                            try? data.write(to: photoURL)
+                        }
+                    }
+                    PTLivePhoto.generate(from: photoURL, videoURL: sourceVideoPath, progress: { (percent) in
+                        PTGCDManager.gcdMain {
+                            progressView.progress = Float(percent)
+                        }
+                    }) { (livePhoto, resources) in
+                        livePhotoView.livePhoto = livePhoto
+                        livePhotoView.startPlayback(with: .hint)
+
+                        if let resources = resources {
+                            PTLivePhoto.saveToLibrary(resources, completion: { (success) in
+                                if success {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"Live Photo Saved.The live photo was successfully saved to Photos.",icon:.Done,style: .Normal)
+                                    }
+                                } else {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"Live Photo Not Saved.The live photo was not saved to Photos.",icon:.Error,style: .Normal)
+                                    }
+                                }
+                            })
+                        } else {
+                            PTGCDManager.gcdMain {
+                                PTAlertTipControl.present(title:"Live Photo Error........",icon:.Error,style: .Normal)
+                            }
+                        }
+                    }
+                case String.LivePhotoDisassemble:
+                    self.livePhotoMediaSelect(type: .LivePhoto) { result in
+                        if result.asset.pt.isLivePhoto() {
+                            result.asset.pt.convertPHAssetToPHLivePhoto { livePhoto in
+                                if let lPhoto = livePhoto {
+                                    livePhotoView.livePhoto = lPhoto
+                                    livePhotoView.startPlayback(with: .hint)
+                                    
+                                    PTLivePhoto.extractResources(from: lPhoto, completion: { resources in
+                                        disassembleImageURL = resources?.pairedImage
+                                        pickedVideoURL = resources?.pairedVideo
+                                        if let keyPhotoPath = disassembleImageURL {
+                                            if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
+                                                guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
+                                                    return
+                                                }
+                                                showImageView.image = keyPhotoImage
+                                            }
+                                        }
+                                        if let pairedVideoPath = pickedVideoURL?.path  {
+                                            if FileManager.pt.judgeFileOrFolderExists(filePath: pairedVideoPath) {
+                                                let fileURL = URL(fileURLWithPath: pairedVideoPath)
+                                                UIImage.pt.getVideoFirstImage(videoUrl: fileURL.absoluteString) { image in
+                                                    videoImageView.image = image
+                                                }
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    }
+                default: break
+                }
+            }
+            
+            view.addSubviews([livePhotoView,showImageView,videoImageView,progressView,createButton])
+            livePhotoView.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+                make.height.equalTo(150)
+            }
+            
+            showImageView.snp.makeConstraints { make in
+                make.left.equalTo(livePhotoView)
+                make.top.equalTo(livePhotoView.snp.bottom).offset(10)
+                make.right.equalTo(self.view.snp.centerX).offset(-5)
+                make.height.equalTo(livePhotoView)
+            }
+            
+            videoImageView.snp.makeConstraints { make in
+                make.left.equalTo(self.view.snp.centerX).offset(5)
+                make.top.bottom.equalTo(showImageView)
+                make.right.equalTo(livePhotoView)
+            }
+            
+            progressView.snp.makeConstraints { make in
+                make.top.equalTo(showImageView.snp.bottom).offset(10)
+                make.left.right.equalTo(livePhotoView)
+                make.height.equalTo(20)
+            }
+            
+            createButton.snp.makeConstraints { make in
+                make.left.right.equalTo(livePhotoView)
+                make.height.equalTo(34)
+                make.top.equalTo(progressView.snp.bottom).offset(10)
+            }
         default:
             break
+        }
+    }
+    
+    func livePhotoMediaSelect(type:PTLivePhotoMediaSelectedType,mediaSelectedCallback:@escaping ((PTResultModel)->Void)) {
+        let pickerConfig = PTMediaLibConfig.share
+        switch type {
+        case .Image:
+            pickerConfig.allowSelectImage = true
+            pickerConfig.allowSelectVideo = false
+        case .Video:
+            pickerConfig.allowSelectImage = false
+            pickerConfig.allowSelectVideo = true
+        case .LivePhoto:
+            pickerConfig.allowOnlySelectLivePhoto = true
+            pickerConfig.allowSelectImage = false
+            pickerConfig.allowSelectVideo = false
+        }
+        pickerConfig.allowSelectGif = false
+        pickerConfig.allowEditVideo = false
+        pickerConfig.maxSelectCount = 1
+        pickerConfig.maxVideoSelectCount = 1
+
+        let vc = PTMediaLibViewController()
+        vc.mediaLibShow()
+        vc.selectedHudStatusBlock = { result in
+            if result {
+                PTAlertTipControl.present(icon:.Heart,style: .Normal)
+            } else {
+                PTAlertTipControl.present(icon:.Done,style: .Normal)
+            }
+        }
+        vc.selectImageBlock = { result, isOriginal in
+            if result.count > 0 {
+                PTNSLogConsole("选择了视频\(result)")
+                mediaSelectedCallback(result.first!)
+            } else {
+                PTGCDManager.gcdMain {
+                    PTAlertTipControl.present(title:"沒有選擇媒体",icon:.Error,style: .Normal)
+                }
+            }
         }
     }
 }
@@ -772,4 +1052,8 @@ extension PTFuncDetailViewController:GCDWebUploaderDelegate {
     func webUploader(_ uploader: GCDWebUploader, didCreateDirectoryAtPath path: String) {
         PTNSLogConsole("[CREATE] \(path)")
     }
+}
+
+extension PTFuncDetailViewController : PHLivePhotoViewDelegate {
+    
 }

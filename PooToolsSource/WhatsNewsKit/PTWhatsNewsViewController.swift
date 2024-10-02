@@ -384,7 +384,6 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         if !iKnowItems.privacy.stringIsEmpty() {
             view.addSubviews([titleLabel,iKnowButton,privacyButton,collectionView])
         } else {

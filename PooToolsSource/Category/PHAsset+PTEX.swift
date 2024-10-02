@@ -9,6 +9,7 @@
 import Photos
 import MobileCoreServices
 import UIKit
+import PhotosUI
 
 extension PHAsset: PTProtocolCompatible {}
 
@@ -86,6 +87,19 @@ public extension PHAsset {
                     }
                 }
             })
+        }
+    }
+    
+    func converPHAssetToAVURLAsset(completion:@escaping (AVURLAsset?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        PHImageManager.default().requestAVAsset(forVideo: self, options: options) { avAsset, avAudioMix, info in
+            if let urlAsset = avAsset as? AVURLAsset {
+                completion(urlAsset)
+            } else {
+                completion(nil)
+            }
         }
     }
     
@@ -183,6 +197,26 @@ public extension PTPOP where Base: PHAsset {
                                   contentMode: .aspectFit,
                                   options: options) { (image, info) in
             completion(image)
+        }
+    }
+    
+    func convertPHAssetToPHLivePhoto(completion: @escaping (PHLivePhoto?) -> Void) {
+        // 检查该 PHAsset 是否为 Live Photo 类型
+        guard base.pt.isLivePhoto() else {
+            completion(nil)
+            return
+        }
+
+        let options = PHLivePhotoRequestOptions()
+        options.isNetworkAccessAllowed = true
+
+        // 请求 Live Photo
+        PHImageManager.default().requestLivePhoto(for: base, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: options) { livePhoto, info in
+            if let isDegraded = info?[PHImageResultIsDegradedKey] as? Bool, !isDegraded {
+                completion(livePhoto)
+            } else {
+                completion(nil)
+            }
         }
     }
 }

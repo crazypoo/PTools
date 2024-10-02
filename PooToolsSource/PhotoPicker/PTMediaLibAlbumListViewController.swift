@@ -18,7 +18,7 @@ import SafeSFSymbols
 
 class PTMediaLibAlbumListViewController: PTBaseViewController {
 
-    var albumList =  [PTMediaLibListModel]()
+    var albumList = [PTMediaLibListModel]()
     var selectedAlbum:PTMediaLibListModel!
 
     var selectedModelHandler:((PTMediaLibListModel)->Void)?
@@ -163,7 +163,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     func loadAlbumList() {
         
-        PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo) { models in
+        PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo,allowSelectLivePhotoOnly: PTMediaLibConfig.share.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: PTMediaLibConfig.share.allowOnlySelectRegularImage) { models in
             albumList.removeAll()
             albumList.append(contentsOf: models)
             

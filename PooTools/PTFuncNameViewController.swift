@@ -69,6 +69,8 @@ public extension String {
     static let Stepper = "Stepper"
     static let LoginDesc = "LoginDesc"
     static let StepperList = "StepperList"
+    static let LivePhoto = "LivePhoto"
+    static let LivePhotoDisassemble = "LivePhotoDisassemble"
 
     static let route = "路由"
     
@@ -315,7 +317,11 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let StepperList = self.rowBaseModel(name: .StepperList)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper,LoginDesc,StepperList]
+        let LivePhoto = self.rowBaseModel(name: .LivePhoto)
+
+        let LivePhotoDisassemble = self.rowBaseModel(name: .LivePhotoDisassemble)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit,blurImageList,cycleBanner,CollectionTag,InputBox,Stepper,LoginDesc,StepperList,LivePhoto,LivePhotoDisassemble]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -926,7 +932,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
             } else {
                 var sheetSize = [PTSheetSize]()
-                if itemRow.title == .StepperList {
+                if itemRow.title == .StepperList || itemRow.title == .LivePhoto  || itemRow.title == .LivePhotoDisassemble {
                     sheetSize = [.percent(0.9)]
                 } else {
                     sheetSize = [.percent(0.5)]
@@ -944,7 +950,6 @@ class PTFuncNameViewController: PTBaseViewController {
                 self.collectionView.endRefresh()
             }
         }
-        
         aaaaaaa.emptyTap = { sender in
             if #available(iOS 17, *) {
                 self.collectionView.showEmptyLoading()
