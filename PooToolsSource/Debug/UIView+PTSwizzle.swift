@@ -72,7 +72,6 @@ extension UIView {
     }
 
     // MARK: - DebugBorderColor property
-
     private var debugBorderColor: CGColor {
         get {
             if let color = objc_getAssociatedObject(self, &UIViewDebugBorderColorKey) as? UIColor {
@@ -89,7 +88,6 @@ extension UIView {
     }
 
     // MARK: - Method swizzling
-
     static func swizzleMethods() {
         DispatchQueue.once(token: UUID().uuidString) {
             Swizzle(UIView.self) {
@@ -101,14 +99,12 @@ extension UIView {
 
     @objc private func swizzledInitWithCoder(_ aDecoder: NSCoder) -> UIView {
         let view = swizzledInitWithCoder(aDecoder)
-//        view.db_refreshDebugBorders()
         view.db_registerForNotifications()
         return view
     }
 
     @objc private func swizzledInitWithFrame(_ frame: CGRect) -> UIView {
         let view = swizzledInitWithFrame(frame)
-//        view.db_refreshDebugBorders()
         view.db_registerForNotifications()
         return view
     }
@@ -120,31 +116,11 @@ extension UIView {
 
     // MARK: - Colorized debug borders notifications
 
-    private func db_registerForNotifications() {
-//        NotificationCenter.default.addObserver(
-//            self,
-//            selector: #selector(changedNotification(_:)),
-//            name: UserInterfaceToolkit.notification,
-//            object: nil
-//        )
-    }
+    private func db_registerForNotifications() { }
 
-    @objc private func changedNotification(
-        _: Notification
-    ) {
-//        db_refreshDebugBorders()
-    }
+    @objc private func changedNotification( _: Notification) { }
 
     // MARK: - Handling debug borders
-
-//    private func db_refreshDebugBorders() {
-//        if UserInterfaceToolkit.colorizedViewBordersEnabled {
-//            db_showDebugBorders()
-//        } else {
-//            db_hideDebugBorders()
-//        }
-//    }
-
     private func db_showDebugBorders() {
         guard !showsDebugBorder else { return }
 

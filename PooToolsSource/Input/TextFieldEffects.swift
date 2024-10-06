@@ -10,22 +10,22 @@ import UIKit
 
 extension String {
     /**
-    true if self contains characters.
-    */
-	var isNotEmpty: Bool {
+     Returns true if the string contains characters, false if it's empty.
+     */
+    var isNotEmpty: Bool {
         return !isEmpty
     }
 }
 
 /**
-A TextFieldEffects object is a control that displays editable text and contains the boilerplates to setup unique animations for text entry and display. You typically use this class the same way you use UITextField.
-*/
-open class TextFieldEffects : UITextField {
+ A custom UITextField that handles unique text entry and display animations.
+ */
+open class TextFieldEffects: UITextField {
     /**
-     The type of animation a TextFieldEffect can perform.
+     The type of animation that can be performed by the text field.
      
-     - TextEntry: animation that takes effect when the textfield has focus.
-     - TextDisplay: animation that takes effect when the textfield loses focus.
+     - textEntry: Animation triggered when the text field is focused.
+     - textDisplay: Animation triggered when the text field loses focus.
      */
     public enum AnimationType: Int {
         case textEntry
@@ -33,39 +33,37 @@ open class TextFieldEffects : UITextField {
     }
     
     /**
-    Closure executed when an animation has been completed.
+     A closure executed when an animation has been completed.
      */
-    public typealias AnimationCompletionHandler = (_ type: AnimationType)->()
+    public typealias AnimationCompletionHandler = (_ type: AnimationType) -> Void
     
-    /**
-    UILabel that holds all the placeholder information
-    */
+    /// A UILabel to display the placeholder text
     public let placeholderLabel = UILabel()
     
     /**
-    Creates all the animations that are used to leave the textfield in the "entering text" state.
-    */
+     Creates animations to display when text entry begins.
+     This method should be overridden in subclasses.
+     */
     open func animateViewsForTextEntry() {
         fatalError("\(#function) must be overridden")
     }
     
     /**
-    Creates all the animations that are used to leave the textfield in the "display input text" state.
-    */
+     Creates animations to display when text entry ends.
+     This method should be overridden in subclasses.
+     */
     open func animateViewsForTextDisplay() {
         fatalError("\(#function) must be overridden")
     }
     
-    /**
-     The animation completion handler is the best place to be notified when the text field animation has ended.
-     */
+    /// A completion handler that is triggered when animations finish.
     open var animationCompletionHandler: AnimationCompletionHandler?
     
     /**
-    Draws the receiver’s image within the passed-in rectangle.
-    
-    - parameter rect:	The portion of the view’s bounds that needs to be updated.
-    */
+     Custom drawing of the text field's components.
+     
+     - parameter rect: The area within the view to be redrawn.
+     */
     open func drawViewsForRect(_ rect: CGRect) {
         fatalError("\(#function) must be overridden")
     }
@@ -77,26 +75,20 @@ open class TextFieldEffects : UITextField {
     // MARK: - Overrides
     
     override open func draw(_ rect: CGRect) {
-		// FIXME: Short-circuit if the view is currently selected. iOS 11 introduced
-		// a setNeedsDisplay when you focus on a textfield, calling this method again
-		// and messing up some of the effects due to the logic contained inside these
-		// methods.
-		// This is just a "quick fix", something better needs to come along.
-		guard isFirstResponder == false else { return }
-		drawViewsForRect(rect)
+        // Avoid redundant redrawing if the text field is already selected
+        guard !isFirstResponder else { return }
+        drawViewsForRect(rect)
     }
     
     override open func drawPlaceholder(in rect: CGRect) {
-        // Don't draw any placeholders
+        // Override to prevent the system from drawing placeholders
     }
     
     override open var text: String? {
         didSet {
-            if let text = text, text.isNotEmpty || isFirstResponder {
-                animateViewsForTextEntry()
-            } else {
-                animateViewsForTextDisplay()
-            }
+            // Trigger appropriate animation based on text presence and responder state
+            let shouldAnimateEntry = (text?.isNotEmpty ?? false) || isFirstResponder
+            shouldAnimateEntry ? animateViewsForTextEntry() : animateViewsForTextDisplay()
         }
     }
     
@@ -104,24 +96,23 @@ open class TextFieldEffects : UITextField {
     
     override open func willMove(toSuperview newSuperview: UIView!) {
         if newSuperview != nil {
-            NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidEndEditing), name: UITextField.textDidEndEditingNotification, object: self)
-            
             NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidBeginEditing), name: UITextField.textDidBeginEditingNotification, object: self)
+            NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidEndEditing), name: UITextField.textDidEndEditingNotification, object: self)
         } else {
             NotificationCenter.default.removeObserver(self)
         }
     }
     
     /**
-    The textfield has started an editing session.
-    */
+     Triggered when text field starts editing.
+     */
     @objc open func textFieldDidBeginEditing() {
         animateViewsForTextEntry()
     }
     
     /**
-    The textfield has ended an editing session.
-    */
+     Triggered when text field ends editing.
+     */
     @objc open func textFieldDidEndEditing() {
         animateViewsForTextDisplay()
     }

@@ -163,7 +163,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     func loadAlbumList() {
         
-        PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo,allowSelectLivePhotoOnly: PTMediaLibConfig.share.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: PTMediaLibConfig.share.allowOnlySelectRegularImage) { models in
+        PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo,allowSelectLivePhotoOnly: PTMediaLibConfig.share.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: PTMediaLibConfig.share.allowOnlySelectRegularImage*/) { models in
             albumList.removeAll()
             albumList.append(contentsOf: models)
             

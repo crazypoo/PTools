@@ -242,26 +242,37 @@ public class PTMediaLibManager:NSObject {
         return models
     }
     
-    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool,handler: @escaping (PTMediaLibListModel)->Void) {
-        PTGCDManager.gcdGobal {
-            let option = PHFetchOptions()
-            var predicates : [NSPredicate] = []
-            
+    class func predicatesGet(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/) -> [NSPredicate] {
+        var predicates : [NSPredicate] = []
+        // 如果允许选择视频
+        if allowSelectVideo {
+            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
+        }
+        
+        if allowSelectImage {
+            // 如果允许选择图片，不排除 Live Photo
+            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
+        } else {
             if allowSelectLivePhotoOnly {
                 // 如果只允许选择 Live Photo
                 predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) != 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
-            } else if allowSelectRegularImageOnly {
-                // 如果只允许选择普通图片，不包括 Live Photo
-                predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) == 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
-            } else if allowSelectImage {
-                // 如果允许选择图片，不排除 Live Photo
-                predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
             }
             
-            // 如果允许选择视频
-            if allowSelectVideo {
-                predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
-            }
+//            if allowSelectRegularImageOnly {
+//                // 如果只允许选择普通图片，不包括 Live Photo
+//                let imagePredicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+//                let nonLivePhotoPredicate = NSPredicate(format: "(mediaSubtypes & %ld) == 0", PHAssetMediaSubtype.photoLive.rawValue)
+//                let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, nonLivePhotoPredicate])
+//                predicates.append(compoundPredicate)
+//            }
+        }
+        return predicates
+    }
+    
+    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/,handler: @escaping (PTMediaLibListModel)->Void) {
+        PTGCDManager.gcdGobal {
+            let option = PHFetchOptions()
+            let predicates : [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly/*, allowSelectRegularImageOnly: allowSelectRegularImageOnly*/)
 
             // 组合多个条件（如果有）
             if !predicates.isEmpty {
@@ -283,25 +294,9 @@ public class PTMediaLibManager:NSObject {
     }
     
     /// Fetch all album list.
-    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool, completion: ([PTMediaLibListModel]) -> Void) {
+    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/, completion: ([PTMediaLibListModel]) -> Void) {
         let option = PHFetchOptions()
-        var predicates: [NSPredicate] = []
-        
-        if allowSelectLivePhotoOnly {
-            // 如果只允许选择 Live Photo
-            predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) != 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
-        } else if allowSelectRegularImageOnly {
-            // 如果只允许选择普通图片，不包括 Live Photo
-            predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) == 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
-        } else if allowSelectImage {
-            // 如果允许选择图片，不排除 Live Photo
-            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue))
-        }
-        
-        // 如果允许选择视频
-        if allowSelectVideo {
-            predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
-        }
+        let predicates : [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly/*, allowSelectRegularImageOnly: allowSelectRegularImageOnly*/)
 
         // 组合多个条件（如果有）
         if !predicates.isEmpty {

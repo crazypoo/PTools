@@ -536,7 +536,7 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
         PTGCDManager.gcdMain {
             let config = PTMediaLibConfig.share
-            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage) { model in
+            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage*/) { model in
                 self.currentAlbum = model
                 if self.currentAlbum!.models.isEmpty {
                     PTGCDManager.gcdMain {
@@ -634,7 +634,7 @@ public class PTMediaLibViewController: PTBaseViewController {
                     }
                 }
             } else {
-                PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage) { model in
+                PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage*/) { model in
                     let vc = PTMediaLibAlbumListViewController(albumList: model)
                     self.navigationController?.pushViewController(vc, animated: true)
                     vc.selectedModelHandler = { model in
@@ -717,7 +717,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     func loadImageData() {
         let config = PTMediaLibConfig.share
-        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage) { model in
+        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage*/) { model in
             self.currentAlbum = model
             if self.currentAlbum.models.isEmpty {
                 PTGCDManager.gcdGobal {

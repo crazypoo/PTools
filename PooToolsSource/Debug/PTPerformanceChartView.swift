@@ -152,8 +152,7 @@ final class PTPerformanceChartView: UIView {
             path.addLine(to: CGPoint(x: graphRect.minX, y: graphRect.maxY))
             path.close()
 
-            let fillPath = UIBezierPath(
-                rect: CGRect(x: graphRect.minX, y: graphRect.minY, width: graphRect.width, height: graphRect.height)
+            let fillPath = UIBezierPath( rect: CGRect(x: graphRect.minX, y: graphRect.minY, width: graphRect.width, height: graphRect.height)
             )
             fillPath.append(path)
             fillPath.usesEvenOddFillRule = true

@@ -78,7 +78,7 @@ public class PTMediaLibConfig:NSObject {
     ///只允许选择LivePhoto
     open var allowOnlySelectLivePhoto = false
     ///只允许选择Photo
-    open var allowOnlySelectRegularImage = false
+//    open var allowOnlySelectRegularImage = false
 
     /// Whether to use custom camera. Defaults to true.
     public var useCustomCamera = true

@@ -115,5 +115,4 @@ class PTCallStackParser {
         }
         return nil
     }
-
 }

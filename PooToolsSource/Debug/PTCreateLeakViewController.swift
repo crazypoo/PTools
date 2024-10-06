@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafeSFSymbols
 
 class PTCreateLeakViewController: PTBaseViewController {
 
@@ -18,8 +19,13 @@ class PTCreateLeakViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemOrange
-
-        let imageView = UIImageView(image: UIImage(systemName: "drop.triangle"))
+        let triangleIMage:UIImage
+        if #available(iOS 14.0, *) {
+            triangleIMage = UIImage(.drop.triangle)
+        } else {
+            triangleIMage = UIImage(systemName: "drop.triangle")!
+        }
+        let imageView = UIImageView(image: triangleIMage)
         imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         imageView.center = view.center

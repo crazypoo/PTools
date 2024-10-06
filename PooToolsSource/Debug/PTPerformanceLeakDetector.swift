@@ -733,7 +733,7 @@ extension String {
     private static var lvcdModuleName: String?
 
     fileprivate func lvcdRemoveBundleAndModuleName() -> String {
-        Self.lvcdBundleName = Self.lvcdBundleName ?? Bundle.main.infoDictionary?["CFBundleName"] as? String
+        Self.lvcdBundleName = Self.lvcdBundleName ?? kAppName
         if Self.lvcdBundleName != nil, Self.lvcdModuleName == nil {
             Self.lvcdModuleName = Self.lvcdBundleName
             Self.lvcdModuleName?.lvcdRegReplace(pattern: "[^A-Za-z0-9]", replaceWith: "_")

@@ -994,6 +994,7 @@ class PTFuncDetailViewController: PTBaseViewController {
         switch type {
         case .Image:
             pickerConfig.allowSelectImage = true
+//            pickerConfig.allowOnlySelectRegularImage = true
             pickerConfig.allowSelectVideo = false
         case .Video:
             pickerConfig.allowSelectImage = false
@@ -1007,6 +1008,7 @@ class PTFuncDetailViewController: PTBaseViewController {
         pickerConfig.allowEditVideo = false
         pickerConfig.maxSelectCount = 1
         pickerConfig.maxVideoSelectCount = 1
+        pickerConfig.allowTakePhotoInLibrary = false
 
         let vc = PTMediaLibViewController()
         vc.mediaLibShow()

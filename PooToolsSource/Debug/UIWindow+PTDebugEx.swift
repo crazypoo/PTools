@@ -11,7 +11,6 @@ import UIKit
 
 extension UIWindow {
     // MARK: - Constants
-
     private enum Constants {
         static let touchIndicatorViewMinAlpha: CGFloat = 0.6
         static var associatedTouchIndicators: UInt8 = 0
@@ -20,64 +19,23 @@ extension UIWindow {
 
     static var lastTouch: CGPoint?
 
-    // MARK: - TouchIndicators property
-
-//    private var touchIndicators: NSMapTable<UITouch, TouchIndicatorView> {
-//        get {
-//            if let touchIndicators = objc_getAssociatedObject(self, &Constants.associatedTouchIndicators)
-//                as? NSMapTable<UITouch, TouchIndicatorView> {
-//                return touchIndicators
-//            } else {
-//                let touchIndicators = NSMapTable<UITouch, TouchIndicatorView>(
-//                    keyOptions: .weakMemory, valueOptions: .weakMemory
-//                )
-//                objc_setAssociatedObject(
-//                    self, &Constants.associatedTouchIndicators, touchIndicators,
-//                    .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-//                )
-//                return touchIndicators
-//            }
-//        }
-//        set {
-//            objc_setAssociatedObject(
-//                self, &Constants.associatedTouchIndicators, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-//            )
-//        }
-//    }
-
     // MARK: - ReusableTouchIndicators property
-
     private var reusableTouchIndicators: NSMutableSet {
         get {
-            if
-                let reusableTouchIndicators = objc_getAssociatedObject(
-                    self,
-                    &Constants.associatedReusableTouchIndicators
-                ) as? NSMutableSet {
+            if let reusableTouchIndicators = objc_getAssociatedObject( self, &Constants.associatedReusableTouchIndicators ) as? NSMutableSet {
                 return reusableTouchIndicators
             } else {
                 let reusableTouchIndicators = NSMutableSet()
-                objc_setAssociatedObject(
-                    self,
-                    &Constants.associatedReusableTouchIndicators,
-                    reusableTouchIndicators,
-                    .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-                )
+                objc_setAssociatedObject( self, &Constants.associatedReusableTouchIndicators, reusableTouchIndicators, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
                 return reusableTouchIndicators
             }
         }
         set {
-            objc_setAssociatedObject(
-                self,
-                &Constants.associatedReusableTouchIndicators,
-                newValue,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            objc_setAssociatedObject( self, &Constants.associatedReusableTouchIndicators, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
     // MARK: - Method swizzling
-
     @objc class func db_swizzleMethods() {
         DispatchQueue.once(token: "pootools.uiwindow.db_swizzleMethods") {
             let originalSelector = #selector(UIWindow.sendEvent(_:))
@@ -90,93 +48,8 @@ extension UIWindow {
             method_exchangeImplementations(originalMethod, swizzledMethod)
         }
     }
-
-    // MARK: - Handling showing touches
-
-//    func setShowingTouchesEnabled(_ enabled: Bool) {
-//        if let enumerator = touchIndicators.objectEnumerator() {
-//            while let (_, touchIndicatorView) = enumerator.nextObject() as? (Any, TouchIndicatorView) {
-//                touchIndicatorView.isHidden = !enabled
-//            }
-//        }
-//
-//        for case let touchIndicatorView as UIView in reusableTouchIndicators {
-//            touchIndicatorView.isHidden = !enabled
-//        }
-//    }
-
-//    func db_handleTouches(_ touches: Set<UITouch>) {
-//        for touch in touches {
-//            db_handleTouch(touch)
-//        }
-//    }
-
-//    func db_handleTouch(_ touch: UITouch) {
-//        if touch.phase == .ended {
-//            Self.lastTouch = touch.location(in: nil)
-//        }
-//
-//        guard UserInterfaceToolkit.shared.showingTouchesEnabled else { return }
-//        switch touch.phase {
-//        case .began:
-//            db_addTouchIndicator(with: touch)
-//        case .moved:
-//            db_moveTouchIndicator(with: touch)
-//        case .ended, .cancelled:
-//            db_removeTouchIndicator(with: touch)
-//        default:
-//            break
-//        }
-//    }
-//
-//    func db_addTouchIndicator(with touch: UITouch) {
-//        guard let indicatorView = db_availableTouchIndicatorView() else { return }
-//        indicatorView.isHidden = !UserInterfaceToolkit.shared.showingTouchesEnabled
-//        touchIndicators.setObject(indicatorView, forKey: touch)
-//        addSubview(indicatorView)
-//        indicatorView.center = touch.location(in: self)
-//        db_handleTouchForce(touch)
-//    }
-//
-//    func db_availableTouchIndicatorView() -> TouchIndicatorView? {
-//        if let indicatorView = reusableTouchIndicators.anyObject() as? TouchIndicatorView {
-//            reusableTouchIndicators.remove(indicatorView)
-//            return indicatorView
-//        } else {
-//            return TouchIndicatorView.indicatorView()
-//        }
-//    }
-//
-//    func db_moveTouchIndicator(with touch: UITouch) {
-//        if let indicatorView = touchIndicators.object(forKey: touch) {
-//            indicatorView.center = touch.location(in: self)
-//            db_handleTouchForce(touch)
-//        }
-//    }
-//
-//    func db_removeTouchIndicator(with touch: UITouch) {
-//        if let indicatorView = touchIndicators.object(forKey: touch) {
-//            indicatorView.removeFromSuperview()
-//            touchIndicators.removeObject(forKey: touch)
-//            reusableTouchIndicators.add(indicatorView)
-//        }
-//    }
-//
-//    func db_handleTouchForce(_ touch: UITouch) {
-//        if let indicatorView = touchIndicators.object(forKey: touch) {
-//            var indicatorViewAlpha: CGFloat = 1.0
-//
-//            if traitCollection.forceTouchCapability == UIForceTouchCapability.available {
-//                indicatorViewAlpha =
-//                    Constants.touchIndicatorViewMinAlpha + (1.0 - Constants.touchIndicatorViewMinAlpha)
-//                        * touch.force / touch.maximumPossibleForce
-//            }
-//            indicatorView.alpha = indicatorViewAlpha
-//        }
-//    }
-
+    
     // MARK: - UIDebuggingInformationOverlay
-
     @objc func db_debuggingInformationOverlayInit() -> UIWindow {
         type(of: self).init()
     }
@@ -189,7 +62,6 @@ extension UIWindow {
 
     @objc func db_sendEvent(_ event: UIEvent) {
         if event.type == .touches {
-//            db_handleTouches(event.allTouches!)
         }
         db_sendEvent(event)
     }
@@ -234,7 +106,6 @@ extension UIWindow {
 }
 
 // MARK: - DispatchQueue extension for once
-
 extension DispatchQueue {
     private static var _onceTracker = [String]()
 
@@ -245,7 +116,6 @@ extension DispatchQueue {
         if _onceTracker.contains(token) {
             return
         }
-
         _onceTracker.append(token)
         block()
     }
