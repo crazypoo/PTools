@@ -36,7 +36,6 @@ struct IPv4Header {
 			byte3 = dataPointer.pointee; dataPointer = dataPointer.advanced(by: 1)
 			byte4 = dataPointer.pointee; dataPointer = dataPointer.advanced(by: 1)
 		}
-		
 	}
 	
 	let versionAndHeaderLength: UInt8
@@ -108,5 +107,4 @@ struct IPv4Header {
 		sourceAddress = sourceAddressI
 		destinationAddress = destinationAddressI
 	}
-	
 }

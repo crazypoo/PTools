@@ -449,7 +449,6 @@ public extension UICollectionView {
         }
         
         let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(groupH))
-        let bannerItem = NSCollectionLayoutItem.init(layoutSize: bannerItemSize)
         var bannerGroupSize : NSCollectionLayoutSize
         
         bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(continerW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))

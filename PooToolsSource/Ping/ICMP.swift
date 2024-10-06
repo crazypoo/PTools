@@ -9,25 +9,18 @@
 import Foundation
 
 public enum ICMPv4TypeEcho : UInt8 {
-	
 	/** The ICMP `type` for a ping request; in this case `code` is always 0. */
 	case request = 8
 	/** The ICMP `type` for a ping response; in this case `code` is always 0. */
 	case reply   = 0
-	
 }
 
-
 public enum ICMPv6TypeEcho : UInt8 {
-	
 	/** The ICMP `type` for a ping request; in this case `code` is always 0. */
 	case request = 128
 	/** The ICMP `type` for a ping response; in this case `code` is always 0. */
 	case reply   = 129
-	
 }
-
-
 
 /* If we could force C-based struct layout, this would be the struct definition
  * we would have for an ICMP header. With the current state of Swift, this is
@@ -52,6 +45,7 @@ public struct ICMPHeader {
             }
         }
     }
+    
     public var identifier: UInt16 {
         didSet {
             headerBytes[4...].withUnsafeMutableBytes { (rawBufferPointer) in
@@ -60,6 +54,7 @@ public struct ICMPHeader {
             }
         }
     }
+    
     public var sequenceNumber: UInt16 {
         didSet {
             headerBytes[6...].withUnsafeMutableBytes { (rawBufferPointer) in
@@ -133,7 +128,6 @@ public struct ICMPHeader {
 		
 		headerBytes = Data(data[..<ICMPHeader.size])
 	}
-	
 }
 
 //__Check_Compile_Time(sizeof(ICMPHeader) == 8);

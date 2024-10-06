@@ -527,7 +527,6 @@ public class Network: NSObject {
                             requestStruct.resultData = response.data
 
                             logRequestSuccess(url: pathUrl, jsonStr: jsonStr)
-//                            PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\((!jsonStr.isEmpty ? jsonStr : ((response.data ?? Data()).string(encoding: .utf8)))!)🌐", levelType: PTLogMode, loggerType: .Network)
 
                             if let modelType = modelType {
                                 requestStruct.customerModel = jsonStr.kj.model(type: modelType)
@@ -567,7 +566,6 @@ public class Network: NSObject {
         self.success = success
         self.progress = progress
         self.fail = fail
-        
         
         if !fileUrl.isURL() || fileUrl.stringIsEmpty() {
             if self.fail != nil {

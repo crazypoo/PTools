@@ -469,14 +469,11 @@ public class PTMediaLibView:UIView {
         newModel.isSelected = true
         let uiConfig = PTMediaLibUIConfig.share
         let config = PTMediaLibConfig.share
-//        var insertIndex = 0
         
         if uiConfig.sortAscending {
-//            insertIndex = totalModels.count
             totalModels.append(newModel)
         } else {
             // 保存拍照的照片或者视频，说明肯定有camera cell
-//            insertIndex = 1
             totalModels.insert(newModel, at: 0)
         }
         
@@ -497,9 +494,8 @@ public class PTMediaLibView:UIView {
         }
 
         PTGCDManager.gcdAfter(time: 0.15) {
-//            //TODO: 这里刷新应该没问题,但是等网络号的时候再看
+            //FIXME: 这里刷新应该没问题,但是等网络号的时候再看
             self.loadMedia(addImage: true)
-//            self.collectionView.contentCollectionView.reload
         }
     }
 }
