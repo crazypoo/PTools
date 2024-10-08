@@ -33,6 +33,15 @@ public extension NSData {
                 return .WEBP
             }
             return .UNKNOW
+        case 0x00:
+            if self.count >= 12 {
+                let heicHeader = subdata(with: NSMakeRange(4, 8))
+                let heicString = NSString(data: heicHeader, encoding: NSASCIIStringEncoding)
+                if heicString == "ftypheic" || heicString == "ftypheix" || heicString == "ftypmif1" || heicString == "ftypmsf1" {
+                    return .HEIC
+                }
+            }
+            return .UNKNOW
         default:
             break
         }

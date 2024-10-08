@@ -308,9 +308,7 @@ public class PTMenuSheetButtonView: UIView {
         arrowButton.isArrowsHidden = openImage != nil
         
         if openImage == nil {
-            
             if closeImage == nil {
-                
                 switch direction {
                 case .up:       arrowButton.showDownArrow()
                 case .down:     arrowButton.showUpArrow()
@@ -327,7 +325,6 @@ public class PTMenuSheetButtonView: UIView {
         arrowButton.isArrowsHidden = closeImage != nil
         
         if closeImage == nil {
-            
             switch direction {
             case .up:       arrowButton.showUpArrow()
             case .down:     arrowButton.showDownArrow()
@@ -404,5 +401,4 @@ public class PTMenuSheetButtonView: UIView {
             super.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: width, height: frame.size.height)
         }
     }
-
 }

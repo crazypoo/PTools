@@ -11,7 +11,7 @@ import Foundation
 //MARK: 自定義運算符號
 infix operator <->
 
-public struct SwizzlePair{
+public struct SwizzlePair {
     let original:Selector
     let swizzled:Selector
 }

@@ -45,7 +45,6 @@ import SwifterSwift
  pod 'HyperioniOS/AttributesInspector', :configurations => ['Debug'] # Optional plugin
  pod 'HyperioniOS/Measurements', :configurations => ['Debug'] # Optional plugin
  pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
-
  */
 
 @inline(__always) private func isIPhoneXSeries() -> Bool {
@@ -79,6 +78,7 @@ import SwifterSwift
     case BMP
     case ICO
     case ICNS
+    case HEIC
     case UNKNOW
 }
 

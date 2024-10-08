@@ -86,7 +86,6 @@ open class PTGifManager {
     public var mode: RunLoopMode = RunLoopMode.commonModes
 #endif
     
-    
     /// Initialize a manager
     ///
     /// - Parameter memoryLimit: The number of Mb max for this manager

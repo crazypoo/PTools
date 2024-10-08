@@ -47,6 +47,14 @@ public extension Data {
         case 0x4D, 0x49:
             return .TIFF
         case 0x00:
+            if self.count >= 12 {
+                let heicHeader = self.subdata(in: Range(NSMakeRange(4, 8))!)
+                if let heicString = String(data: heicHeader, encoding: .ascii) {
+                    if heicString == "ftypheic" || heicString == "ftypheix" || heicString == "ftypmif1" || heicString == "ftypmsf1" {
+                        return .HEIC
+                    }
+                }
+            }
             return .ICO
         case 0x69:
             return .ICNS
@@ -102,14 +110,14 @@ public extension Data {
     //MARK: 根據圖片名字先獲取圖片然後轉換成Data來獲取圖片的格式
     ///根據圖片名字先獲取圖片然後轉換成Data來獲取圖片的格式
     static func detectImageType(with imageName: String,
-                                bundle: Bundle = Bundle.main) -> PTAboutImageType? {
+                                bundle: Bundle = Bundle.main) -> PTAboutImageType {
         
-        guard let path = bundle.path(forResource: imageName, ofType: "") else { return nil }
+        guard let path = bundle.path(forResource: imageName, ofType: "") else { return .UNKNOW }
         let pathUrl = URL(fileURLWithPath: path)
         if let data = try? Data(contentsOf: pathUrl) {
             return data.detectImageType()
         } else {
-            return nil
+            return .UNKNOW
         }
     }
 }

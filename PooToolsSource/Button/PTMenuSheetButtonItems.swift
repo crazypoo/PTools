@@ -70,5 +70,4 @@ public class PTMenuSheetButtonItems {
         self.identifier = identifier
         self.action = action
     }
-
 }

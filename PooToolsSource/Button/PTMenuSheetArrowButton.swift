@@ -56,19 +56,9 @@ public class PTMenuSheetArrowButton: UIButton {
 
         let keyPath = "path"
         
-        let topLineAnimation = aimation(
-            keyPath: keyPath,
-            duration: animationDuration,
-            fromValue: topLineLayer.path,
-            toValue: paths.top
-        )
+        let topLineAnimation = aimation(keyPath: keyPath, duration: animationDuration, fromValue: topLineLayer.path, toValue: paths.top)
         
-        let bottomLineAnimation = aimation(
-            keyPath: keyPath,
-            duration: animationDuration,
-            fromValue: bottomLineLayer.path,
-            toValue: paths.bottom
-        )
+        let bottomLineAnimation = aimation(keyPath: keyPath, duration: animationDuration, fromValue: bottomLineLayer.path, toValue: paths.bottom)
         topLineLayer.path = paths.top
         topLineLayer.add(topLineAnimation, forKey: keyPath)
         
@@ -91,18 +81,9 @@ public class PTMenuSheetArrowButton: UIButton {
         let verticalInset = bounds.size.height / 3
         let horizontalInset = bounds.size.width / 2.5
 
-        let firstPoint = CGPoint(
-            x: center.x - horizontalInset + arrowInsets.left,
-            y: center.y + verticalInset - arrowInsets.bottom
-        )
-        let secondPoint = CGPoint(
-            x: center.x + horizontalInset - arrowInsets.right,
-            y: center.y + verticalInset - arrowInsets.bottom
-        )
-        let centerPoint = CGPoint(
-            x: center.x,
-            y: center.y - verticalInset + arrowInsets.top
-        )
+        let firstPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y + verticalInset - arrowInsets.bottom)
+        let secondPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y + verticalInset - arrowInsets.bottom)
+        let centerPoint = CGPoint(x: center.x, y: center.y - verticalInset + arrowInsets.top)
 
         return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
     }
@@ -112,18 +93,9 @@ public class PTMenuSheetArrowButton: UIButton {
         let verticalInset = bounds.size.height / 3
         let horizontalInset = bounds.size.width / 2.5
         
-        let firstPoint = CGPoint(
-            x: center.x - horizontalInset + arrowInsets.left,
-            y: center.y - verticalInset + arrowInsets.top
-        )
-        let secondPoint = CGPoint(
-            x: center.x + horizontalInset - arrowInsets.right,
-            y: center.y - verticalInset + arrowInsets.top
-        )
-        let centerPoint = CGPoint(
-            x: center.x,
-            y: center.y + verticalInset - arrowInsets.bottom
-        )
+        let firstPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y - verticalInset + arrowInsets.top)
+        let secondPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y - verticalInset + arrowInsets.top)
+        let centerPoint = CGPoint(x: center.x, y: center.y + verticalInset - arrowInsets.bottom)
         
         return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
     }
@@ -133,18 +105,9 @@ public class PTMenuSheetArrowButton: UIButton {
         let verticalInset = bounds.size.height / 2.5
         let horizontalInset = bounds.size.width / 3
         
-        let firstPoint = CGPoint(
-            x: center.x + horizontalInset - arrowInsets.right,
-            y: center.y - verticalInset + arrowInsets.top
-        )
-        let secondPoint = CGPoint(
-            x: center.x + horizontalInset - arrowInsets.right,
-            y: center.y + verticalInset - arrowInsets.bottom
-        )
-        let centerPoint = CGPoint(
-            x: center.x - horizontalInset + arrowInsets.left,
-            y: center.y
-        )
+        let firstPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y - verticalInset + arrowInsets.top)
+        let secondPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y + verticalInset - arrowInsets.bottom)
+        let centerPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y)
         
         return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
     }
@@ -154,26 +117,16 @@ public class PTMenuSheetArrowButton: UIButton {
         let verticalInset = bounds.size.height / 2.5
         let horizontalInset = bounds.size.width / 3
         
-        let firstPoint = CGPoint(
-            x: center.x - horizontalInset + arrowInsets.left,
-            y: center.y - verticalInset + arrowInsets.top
-        )
-        let secondPoint = CGPoint(
-            x: center.x - horizontalInset + arrowInsets.left,
-            y: center.y + verticalInset - arrowInsets.bottom
-        )
-        let centerPoint = CGPoint(
-            x: center.x + horizontalInset - arrowInsets.right,
-            y: center.y
-        )
+        let firstPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y - verticalInset + arrowInsets.top)
+        let secondPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y + verticalInset - arrowInsets.bottom)
+        let centerPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y)
         
         return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
     }
     
     private func arrowPaths(firstPoint top: CGPoint, secondPoint: CGPoint, centerPoint: CGPoint) -> TopBottomPaths {
         
-        let gravityCenter = CGPoint(x: (top.x + secondPoint.x + centerPoint.x) / 3,
-                                    y: (top.y + secondPoint.y + centerPoint.y) / 3)
+        let gravityCenter = CGPoint(x: (top.x + secondPoint.x + centerPoint.x) / 3, y: (top.y + secondPoint.y + centerPoint.y) / 3)
         let offsetFromCenter = CGPoint(x: center.x - gravityCenter.x, y: center.y - gravityCenter.y)
         
         let topLinePath = line(from: top, to: centerPoint, offset: offsetFromCenter)

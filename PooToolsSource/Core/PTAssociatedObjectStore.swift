@@ -29,7 +29,6 @@ extension PTAssociatedObjectStore {
     }
 }
 
-
 class PTWeakWrapper: NSObject {
     weak var obj: NSObject?
 }
