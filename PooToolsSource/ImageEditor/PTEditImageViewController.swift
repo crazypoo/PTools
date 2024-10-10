@@ -81,13 +81,8 @@ public class PTEditImageViewController: PTBaseViewController {
                 cellModels.append(filtersModel)
             case .adjust:
                 let lightModel = PTFusionCellModel()
-                if #available(iOS 14.0, *) {
-                    lightModel.contentIcon = UIImage(.ellipsis.rectangle)
-                    lightModel.disclosureIndicatorImage = UIImage(.ellipsis.rectangleFill)
-                } else {
-                    lightModel.contentIcon = UIImage(.square.andArrowUp)
-                    lightModel.disclosureIndicatorImage = UIImage(.square.andArrowUpFill)
-                }
+                lightModel.contentIcon = UIImage(.ellipsis.rectangle)
+                lightModel.disclosureIndicatorImage = UIImage(.ellipsis.rectangleFill)
                 cellModels.append(lightModel)
             }
         }
@@ -400,40 +395,28 @@ public class PTEditImageViewController: PTBaseViewController {
     private var defaultDrawPathWidth: CGFloat = 0
     private lazy var drawColorButton:UIButton = {
         let view = UIButton(type: .custom)
-        if #available(iOS 14.0, *) {
-            view.setImage(UIImage(.paintpalette), for: .normal)
-        } else {
-            view.setImage(UIImage(.paintbrush.fill), for: .normal)
-        }
+        view.setImage(UIImage(.paintpalette), for: .normal)
         view.addActionHandlers { sender in
-            if #available(iOS 14.0, *) {
-                let colorPicker = UIColorPickerViewController()
-                colorPicker.delegate = self
-                
-                // 设置预选颜色
-                colorPicker.selectedColor = self.drawColor
-                
-                // 显示 alpha 通道
-                colorPicker.supportsAlpha = true
-                
-                // 呈现颜色选择器
-                colorPicker.modalPresentationStyle = .fullScreen
-                self.navigationController?.pushViewController(colorPicker, completion: {
-                    let colorPickerBack = UIButton(type: .custom)
-                    colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
-                    colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
-                    colorPickerBack.addActionHandlers { sender in
-                        colorPicker.navigationController?.popViewController(animated: true)
-                    }
-                    colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
-                })
-            } else {
-                let vc = PTMediaColorSelectViewController(currentColor: self.drawColor)
-                vc.colorSelectedTask = { color in
-                    self.drawColor = color
+            let colorPicker = UIColorPickerViewController()
+            colorPicker.delegate = self
+            
+            // 设置预选颜色
+            colorPicker.selectedColor = self.drawColor
+            
+            // 显示 alpha 通道
+            colorPicker.supportsAlpha = true
+            
+            // 呈现颜色选择器
+            colorPicker.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(colorPicker, completion: {
+                let colorPickerBack = UIButton(type: .custom)
+                colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
+                colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+                colorPickerBack.addActionHandlers { sender in
+                    colorPicker.navigationController?.popViewController(animated: true)
                 }
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+                colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
+            })
         }
         return view
     }()
@@ -1416,13 +1399,8 @@ extension PTEditImageViewController {
                     model.disclosureIndicatorImage = UIImage(.light.max)
                     model.name = "PT Photo picker brightness".localized()
                 case .saturation:
-                    if #available(iOS 14, *) {
-                        model.contentIcon = UIImage(.drop)
-                        model.disclosureIndicatorImage = UIImage(.drop.fill)
-                    } else {
-                        model.contentIcon = UIImage(systemName: "drop.triangle")
-                        model.disclosureIndicatorImage = UIImage(systemName: "drop.triangle.fill")
-                    }
+                    model.contentIcon = UIImage(.drop)
+                    model.disclosureIndicatorImage = UIImage(.drop.fill)
                     model.name = "PT Photo picker saturation".localized()
                 default:
                     model.contentIcon = UIImage(.circle)
@@ -1582,7 +1560,6 @@ extension PTEditImageViewController:UIScrollViewDelegate {
 }
 
 //MARK: UIColorPickerViewControllerDelegate
-@available(iOS 14.0, *)
 extension PTEditImageViewController: UIColorPickerViewControllerDelegate {
     public func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         if viewController.checkVCIsPresenting() {

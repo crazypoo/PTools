@@ -122,10 +122,8 @@ public class PTSheetViewController: PTBaseViewController {
         set { self.contentViewController.cornerRadius = newValue }
     }
 
-    @available(iOS 13.0, *)
     public static var cornerCurve: CALayerCornerCurve = .circular
 
-    @available(iOS 13.0, *)
     public var cornerCurve: CALayerCornerCurve {
         get { return self.contentViewController.cornerCurve }
         set { self.contentViewController.cornerCurve = newValue }
@@ -189,11 +187,7 @@ public class PTSheetViewController: PTBaseViewController {
     public init(controller: UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,dismissPanGes:Bool = true) {
         let options = options ?? PTSheetOptions.default
         self.contentViewController = PTSheetContentViewController(childViewController: controller, options: options)
-        if #available(iOS 13.0, *) {
-            self.contentViewController.contentBackgroundColor = UIColor.systemBackground
-        } else {
-            self.contentViewController.contentBackgroundColor = UIColor.white
-        }
+        self.contentViewController.contentBackgroundColor = UIColor.systemBackground
         self.sizes = sizes.count > 0 ? sizes : [.intrinsic]
         self.options = options
         self.transition = PTSheetTransition(options: options)

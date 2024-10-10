@@ -715,40 +715,27 @@ class PTEditInputViewController: PTBaseViewController {
     
     private lazy var drawColorButton:UIButton = {
         let view = UIButton(type: .custom)
-        if #available(iOS 14.0, *) {
-            view.setImage(UIImage(.paintpalette), for: .normal)
-        } else {
-            view.setImage(UIImage(.paintbrush.fill), for: .normal)
-        }
+        view.setImage(UIImage(.paintpalette), for: .normal)
         view.addActionHandlers { sender in
-            if #available(iOS 14.0, *) {
-                let colorPicker = UIColorPickerViewController()
-                colorPicker.delegate = self
-                
-                // 设置预选颜色
-                colorPicker.selectedColor = self.currentColor
-                
-                // 显示 alpha 通道
-                colorPicker.supportsAlpha = true
-                
-                // 呈现颜色选择器
-                self.navigationController?.pushViewController(colorPicker, completion: {
-                    let colorPickerBack = UIButton(type: .custom)
-                    colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
-                    colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
-                    colorPickerBack.addActionHandlers { sender in
-                        colorPicker.navigationController?.popViewController(animated: true)
-                    }
-                    colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
-                })
-            } else {
-                let vc = PTMediaColorSelectViewController(currentColor: self.currentColor)
-                vc.colorSelectedTask = { color in
-                    self.currentColor = color
+            let colorPicker = UIColorPickerViewController()
+            colorPicker.delegate = self
+            
+            // 设置预选颜色
+            colorPicker.selectedColor = self.currentColor
+            
+            // 显示 alpha 通道
+            colorPicker.supportsAlpha = true
+            
+            // 呈现颜色选择器
+            self.navigationController?.pushViewController(colorPicker, completion: {
+                let colorPickerBack = UIButton(type: .custom)
+                colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
+                colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+                colorPickerBack.addActionHandlers { sender in
+                    colorPicker.navigationController?.popViewController(animated: true)
                 }
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-
+                colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
+            })
         }
         return view
     }()
@@ -1135,7 +1122,6 @@ extension PTEditInputViewController: NSLayoutManagerDelegate {
 }
 
 //MARK: UIColorPickerViewControllerDelegate
-@available(iOS 14.0, *)
 extension PTEditInputViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
         if viewController.checkVCIsPresenting() {

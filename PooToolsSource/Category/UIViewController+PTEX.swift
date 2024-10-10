@@ -383,16 +383,11 @@ public extension UIViewController {
 
     #if os(iOS)
     var closeBarButtonItem: UIBarButtonItem {
-        if #available(iOS 14.0, *) {
-            return UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
-                self?.dismissAnimated()
-            }), menu: nil)
-        } else {
-            return UIBarButtonItem.init(barButtonSystemItem: .close, target: self, action: #selector(self.dismissAnimated))
-        }
+        return UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
+            self?.dismissAnimated()
+        }), menu: nil)
     }
     
-    @available(iOS 14, *)
     @available(iOSApplicationExtension, unavailable)
     func closeBarButtonItem(sceneName: String? = nil) -> UIBarButtonItem {
         UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in

@@ -20,11 +20,7 @@ class PTCreateLeakViewController: PTBaseViewController {
 
         view.backgroundColor = .systemOrange
         let triangleIMage:UIImage
-        if #available(iOS 14.0, *) {
-            triangleIMage = UIImage(.drop.triangle)
-        } else {
-            triangleIMage = UIImage(systemName: "drop.triangle")!
-        }
+        triangleIMage = UIImage(.drop.triangle)
         let imageView = UIImageView(image: triangleIMage)
         imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)

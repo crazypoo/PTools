@@ -38,9 +38,6 @@ public extension UIImageAsset {
 
     /// 返回最符合当前特征集合的图像。在早期 SDK 中会返回浅色模式的图像。
     func image() -> UIImage {
-        if #available(iOS 13.0, tvOS 13.0, *) {
-            return image(with: .current)
-        }
-        return image(with: .light)
+        return image(with: .current)
     }
 }

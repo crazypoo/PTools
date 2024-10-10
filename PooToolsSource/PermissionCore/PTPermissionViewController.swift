@@ -83,9 +83,7 @@ public class PTPermissionViewController: PTBaseViewController {
                 switch cellModel.type {
                 case .tracking:
 #if POOTOOLS_PERMISSION_TRACKING
-                    if #available(iOS 14.0, *) {
-                        PTPermission.tracking.openSettingPage()
-                    }
+                    PTPermission.tracking.openSettingPage()
 #endif
                 case .camera:
 #if POOTOOLS_PERMISSION_CAMERA
@@ -222,15 +220,11 @@ public class PTPermissionViewController: PTBaseViewController {
         }
         
         if haveTracking! {
-            if #available(iOS 14.0, *) {
 #if POOTOOLS_PERMISSION_TRACKING
                 PTPermission.tracking.request {
                     self.trackingRequest = true
                 }
 #endif
-            } else {
-                showRequestFunction()
-            }
         } else {
             showRequestFunction()
         }
@@ -263,10 +257,8 @@ public class PTPermissionViewController: PTBaseViewController {
         case .tracking:
 #if POOTOOLS_PERMISSION_TRACKING
             if !showTracking! {
-                if #available(iOS 14.0, *) {
-                    PTPermission.tracking.request {
-                        self.showDetail()
-                    }
+                PTPermission.tracking.request {
+                    self.showDetail()
                 }
             }
 #endif

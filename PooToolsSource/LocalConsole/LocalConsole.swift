@@ -57,11 +57,7 @@ extension String {
 
 extension UIImage {
     static func resizeImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.arrow.upBackwardAndArrowDownForward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.arrow).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.arrow.upBackwardAndArrowDownForward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let shareImage = UIImage(.square.andArrowUp).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let copyImage = UIImage(.doc.onDocFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -73,25 +69,13 @@ extension UIImage {
         }
     }
     static func userDefaultsImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.doc.badgeGearshape).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.doc.onDoc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.doc.badgeGearshape).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static func colorImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.paintpalette).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.paintbrush).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.paintpalette).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static func rulerImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.ruler).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.f.cursive).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.ruler).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let docImage = UIImage(.doc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let dev3thPartyImage = UIImage(.plus.magnifyingglass).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -111,11 +95,7 @@ extension UIImage {
         }
     }
     static func cpuImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.cpu).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.heart.circle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.cpu).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static func displayImage()->UIImage {
         let result: String
@@ -144,11 +124,7 @@ extension UIImage {
     static let debugControllerImage = UIImage(.pencil).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let terminateAppImage = UIImage(.xmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func respringImage()->UIImage {
-        if #available(iOS 14.0, *) {
-            return UIImage(.arrowtriangle.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.arrowtriangle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.arrowtriangle.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let performanceImage = UIImage(.eyeglasses).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -713,13 +689,10 @@ public class LocalConsole: NSObject {
     
     public var menu: UIMenuElement? = nil {
         didSet {
-            if #available(iOS 14.0, *) {
-                terminal!.menuButton.menu = makeMenu()
-            }
+            terminal!.menuButton.menu = makeMenu()
         }
     }
     
-    @available(iOS 14.0, *)
     func makeMenu() -> UIMenu {
         let result: UIAction
         // Something here causes a crash < iOS 15. Fall back to copy text for iOS 15 and below.
@@ -1370,7 +1343,6 @@ extension UIDevice {
     }
 }
 
-@available(iOS 14.0, *)
 extension LocalConsole : UIContextMenuInteractionDelegate {
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in

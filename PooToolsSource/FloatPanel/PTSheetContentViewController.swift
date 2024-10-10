@@ -24,7 +24,7 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
 
     private var _cornerCurve: Any? = nil
-    @available(iOS 13.0, *)
+    
     public var cornerCurve: CALayerCornerCurve {
         get {
             return _cornerCurve as? CALayerCornerCurve ?? CALayerCornerCurve.circular }
@@ -106,9 +106,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.setupPullBarView()
         self.setupChildViewController()
         self.updatePreferredHeight()
-        if #available(iOS 13.0, *) {
-            self.updateCornerCurve()
-        }
+        self.updateCornerCurve()
         self.updateCornerRadius()
         self.setupOverflowView()
 
@@ -142,7 +140,6 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.updateChildViewControllerBottomConstraint(adjustment: -height)
     }
 
-    @available(iOS 13.0, *)
     private func updateCornerCurve() {
         self.contentWrapperView.layer.cornerCurve = self.cornerCurve
         self.childContainerView.layer.cornerCurve = self.cornerCurve

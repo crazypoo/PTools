@@ -46,13 +46,12 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
     open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
         
         // iOS13 默认 UIModalPresentationAutomatic 模式，所以要判断处理一下
-        if #available(iOS 13.0, *) {
-            // 当 modalPresentationStyle == .automatic , 才需要处理.
-            // 如果不加这个判断,可能会导致 present 出来是一个黑色背景的界面. 比如, 做背景半透明的弹窗的时候.
-            if viewControllerToPresent.modalPresentationStyle == .automatic {
-                viewControllerToPresent.modalPresentationStyle = .fullScreen
-            }
+        // 当 modalPresentationStyle == .automatic , 才需要处理.
+        // 如果不加这个判断,可能会导致 present 出来是一个黑色背景的界面. 比如, 做背景半透明的弹窗的时候.
+        if viewControllerToPresent.modalPresentationStyle == .automatic {
+            viewControllerToPresent.modalPresentationStyle = .fullScreen
         }
+        
         super.present(viewControllerToPresent, animated: flag, completion: completion)
 #if POOTOOLS_DEBUG
         SwizzleTool().swizzleDidAddSubview {
@@ -195,12 +194,10 @@ extension PTBaseNavControl {
     @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 13.0, *) {
-            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                baseTraitCollectionDidChange(style:UITraitCollection.current.userInterfaceStyle)
-                setNeedsStatusBarAppearanceUpdate()
-            }
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+            baseTraitCollectionDidChange(style:UITraitCollection.current.userInterfaceStyle)
+            setNeedsStatusBarAppearanceUpdate()
         }
     }
     

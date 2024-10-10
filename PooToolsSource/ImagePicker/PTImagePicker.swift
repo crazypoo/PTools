@@ -9,7 +9,6 @@
 import UIKit
 import UniformTypeIdentifiers
 
-@available(iOS 14.0, *)
 public enum PTImagePicker {
     
     public enum PickerType {
@@ -67,7 +66,6 @@ public enum PTImagePicker {
 }
 
 //MARK: 控制器
-@available(iOS 14.0, *)
 extension PTImagePicker {
     public class Controller<T:PTImagePickerObject>:UIImagePickerController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
         //MARK: Block
@@ -99,7 +97,6 @@ extension PTImagePicker {
 }
 
 // MARK: - 控制器囘調
-@available(iOS 14.0, *)
 private extension PTImagePicker.Controller {
     func pickObject(completion: @escaping PTImagePicker.Completion<T>) {
         self.completion = completion
@@ -115,7 +112,6 @@ private extension PTImagePicker.Controller {
 }
 
 // MARK: - 打開相冊
-@available(iOS 14.0, *)
 private extension PTImagePicker.Controller {
     static func showAlbumPicker<U>(mediaType: PTImagePicker.PickerType) throws -> PTImagePicker.Controller<U> {
         guard let parentVC = UIApplication.shared.delegate?.window??.rootViewController else {
@@ -144,7 +140,6 @@ private extension PTImagePicker.Controller {
 }
 
 //MARK: 打開相冊
-@available(iOS 14.0, *)
 extension PTImagePicker.Controller {
     public static func openAlbum<U:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> U {
         let picker:PTImagePicker.Controller<U> = try showAlbumPicker(mediaType: mediaType)
@@ -164,7 +159,6 @@ extension PTImagePicker.Controller {
 }
 
 // MARK: 圖片
-@available(iOS 14.0, *)
 extension PTImagePicker.Controller {
     public static func photograph() async throws -> UIImage {
         let picker = try showPhotographPicker()
@@ -184,7 +178,6 @@ extension PTImagePicker.Controller {
 }
 
 //MARK: 打開方式
-@available(iOS 14.0, *)
 extension PTImagePicker{
     /// Open album -> 圖片
     public static func openAlbum() async throws -> UIImage {
@@ -218,7 +211,6 @@ extension PTImagePicker{
 }
 
 // MARK: 閉包方式
-@available(iOS 14.0, *)
 extension PTImagePicker {
     /// Open album -> 圖片
     public static func openAlbumForImage(completion: @escaping PTImagePicker.Completion<UIImage>) {

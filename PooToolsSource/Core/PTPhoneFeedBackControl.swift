@@ -29,7 +29,6 @@ public class PTPhoneFeedbackControl:NSObject {
        generator.impactOccurred()
     }
    
-    @available(iOS 13.0, *)
     public class func addNewImpact(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .rigid) {
        let generator = UIImpactFeedbackGenerator(style: style)
        generator.prepare()

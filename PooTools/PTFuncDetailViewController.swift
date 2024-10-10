@@ -250,17 +250,15 @@ class PTFuncDetailViewController: PTBaseViewController {
                     let vc = PTMediaLibViewController()
                     vc.mediaLibShow()
                     vc.selectImageBlock = { result, isOriginal in
-                        if #available(iOS 14.0, *) {
-                            let vision = PTVision.share
-                            
-                            var visionVersion:Int = VNRecognizeTextRequestRevision2
-                            if #available(iOS 16.0, *) {
-                                visionVersion = VNRecognizeTextRequestRevision3
-                            }
-                            
-                            vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
-                                UIViewController.gobal_drop(title: resultText)
-                            }
+                        let vision = PTVision.share
+                        
+                        var visionVersion:Int = VNRecognizeTextRequestRevision2
+                        if #available(iOS 16.0, *) {
+                            visionVersion = VNRecognizeTextRequestRevision3
+                        }
+                        
+                        vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
+                            UIViewController.gobal_drop(title: resultText)
                         }
                     }
                 })

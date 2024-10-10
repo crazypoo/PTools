@@ -315,7 +315,6 @@ public extension PTRotationManager {
     }
 }
 
-@available(iOS 13.0, *)
 public class PTRotationManagerState: ObservableObject {
     @Published public var orientation: PTRotationManager.Orientation = PTRotationManager.shared.orientation {
         didSet { PTRotationManager.shared.rotation(to: orientation) }

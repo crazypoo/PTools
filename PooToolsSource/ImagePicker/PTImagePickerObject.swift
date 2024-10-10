@@ -14,7 +14,6 @@ public protocol PTImagePickerObject {
 }
 
 //MARK:媒體的URL
-@available(iOS 14.0, *)
 extension URL:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         guard let url = info[.mediaURL] as? Self else {
@@ -25,7 +24,6 @@ extension URL:PTImagePickerObject {
 }
 
 //MARK:媒體的Data
-@available(iOS 14.0, *)
 extension Data:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         guard let url = info[.imageURL] as? URL else {
@@ -40,7 +38,6 @@ extension Data:PTImagePickerObject {
 }
 
 //MARK:媒體的Image
-@available(iOS 14.0, *)
 extension UIImage:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         do {
@@ -73,7 +70,6 @@ public struct PTPhotoObject {
     public let url:URL?
 }
 
-@available(iOS 14.0, *)
 extension PTAlbumObject:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         var imageData:Data?
@@ -88,7 +84,6 @@ extension PTAlbumObject:PTImagePickerObject {
     }
 }
 
-@available(iOS 14.0, *)
 extension PTPhotoObject:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         let data = try Data.fetchFromPicker(info)

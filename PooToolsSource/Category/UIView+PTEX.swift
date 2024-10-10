@@ -543,10 +543,7 @@ public extension UIView {
     func roundCorners(_ corners: CACornerMask = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner], curve: CornerCurve = .continuous, radius: CGFloat) {
         layer.cornerRadius = radius
         layer.maskedCorners = corners
-        
-        if #available(iOS 13.0, tvOS 13.0, *) {
-            layer.cornerCurve = curve.layerCornerCurve
-        }
+        layer.cornerCurve = curve.layerCornerCurve
     }
     
     /**
@@ -616,7 +613,6 @@ public extension UIView {
         case circle
         case continuous
         
-        @available(iOS 13.0, tvOS 13.0, *)
         var layerCornerCurve: CALayerCornerCurve {
             switch self {
             case .circle: return .circular

@@ -91,7 +91,6 @@ public extension UINavigationBar {
     /**
         Set appearance for navigation bar.
      */
-    @available(iOS 13.0, tvOS 13.0, *)
     func setAppearance(_ value: NavigationBarAppearance) {
         standardAppearance = value.standardAppearance
         scrollEdgeAppearance = value.scrollEdgeAppearance
@@ -100,7 +99,6 @@ public extension UINavigationBar {
     /**
         Appearance cases.
      */
-    @available(iOS 13.0, tvOS 13.0, *)
     enum NavigationBarAppearance {
         
         case transparentAlways

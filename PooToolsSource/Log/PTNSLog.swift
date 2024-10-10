@@ -75,30 +75,25 @@ public func PTNSLog(_ msg: Any...,
     case .appStore:
         DDLogSet(levelType: levelType,prefix: prefix)
     default:
-        if #available(iOS 14.0, *) {
-            let logger = Logger.loger(categoryName: loggerType.rawValue)
-            switch levelType {
-            case .Debug:
-                logger.debug("\(prefix)")
-            case .Error:
-                logger.error("\(prefix)")
-            case .Info:
-                logger.info("\(prefix)")
-            case .Warning:
-                logger.warning("\(prefix)")
-            case .Trace:
-                logger.trace("\(prefix)")
-            case .Notice:
-                logger.notice("\(prefix)")
-            case .Critical:
-                logger.critical("\(prefix)")
-            case .Fault:
-                logger.fault("\(prefix)")
-            }
-        } else {
-            DDLogSet(levelType: levelType,prefix: prefix)
+        let logger = Logger.loger(categoryName: loggerType.rawValue)
+        switch levelType {
+        case .Debug:
+            logger.debug("\(prefix)")
+        case .Error:
+            logger.error("\(prefix)")
+        case .Info:
+            logger.info("\(prefix)")
+        case .Warning:
+            logger.warning("\(prefix)")
+        case .Trace:
+            logger.trace("\(prefix)")
+        case .Notice:
+            logger.notice("\(prefix)")
+        case .Critical:
+            logger.critical("\(prefix)")
+        case .Fault:
+            logger.fault("\(prefix)")
         }
-        
 #if POOTOOLS_DEBUG
         PTGCDManager.gcdMain {
             if LocalConsole.shared.isVisiable {

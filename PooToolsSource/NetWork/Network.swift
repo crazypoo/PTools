@@ -711,14 +711,12 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
 
         PTNSLogConsole("----------网络数据监控方面（iOS13+有效）-----")
 
-        if #available(iOS 13.0, *) {
-            PTNSLogConsole("iOS13+发送前编码之前请求体数据的大小(countOfRequestBodyBytesBeforeEncoding):\(metric.countOfRequestBodyBytesBeforeEncoding)")
-            PTNSLogConsole("iOS13+发送的请求头字节数(countOfRequestHeaderBytesSent):\(metric.countOfRequestHeaderBytesSent)")
-            PTNSLogConsole("iOS13+发送前编码之前请求体数据的大小(countOfResponseBodyBytesAfterDecoding):\(metric.countOfResponseBodyBytesAfterDecoding)")
-            PTNSLogConsole("iOS13+传递给代理或完成处理程序的数据的大小(countOfResponseBodyBytesAfterDecoding):\(metric.countOfResponseBodyBytesAfterDecoding)")
-            PTNSLogConsole("iOS13+接收的响应体字节数(countOfResponseBodyBytesReceived):\(metric.countOfResponseBodyBytesReceived)")
-            PTNSLogConsole("iOS13+接收的响应头字节数(countOfResponseHeaderBytesReceived):\(metric.countOfResponseHeaderBytesReceived)")
-        }
+        PTNSLogConsole("iOS13+发送前编码之前请求体数据的大小(countOfRequestBodyBytesBeforeEncoding):\(metric.countOfRequestBodyBytesBeforeEncoding)")
+        PTNSLogConsole("iOS13+发送的请求头字节数(countOfRequestHeaderBytesSent):\(metric.countOfRequestHeaderBytesSent)")
+        PTNSLogConsole("iOS13+发送前编码之前请求体数据的大小(countOfResponseBodyBytesAfterDecoding):\(metric.countOfResponseBodyBytesAfterDecoding)")
+        PTNSLogConsole("iOS13+传递给代理或完成处理程序的数据的大小(countOfResponseBodyBytesAfterDecoding):\(metric.countOfResponseBodyBytesAfterDecoding)")
+        PTNSLogConsole("iOS13+接收的响应体字节数(countOfResponseBodyBytesReceived):\(metric.countOfResponseBodyBytesReceived)")
+        PTNSLogConsole("iOS13+接收的响应头字节数(countOfResponseHeaderBytesReceived):\(metric.countOfResponseHeaderBytesReceived)")
 
         PTNSLogConsole("----------网络协议基础属性方面-----")
 
@@ -740,37 +738,33 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
         PTNSLogConsole("任务是否使用了重用连接来获取资源(isReusedConnection): \(metric.isReusedConnection)")
         PTNSLogConsole("连接是否成功协商了多路径协议(isMultipath): \(metric.isMultipath)")
         PTNSLogConsole("标识资源的加载方式(resourceFetchType): \(metric.resourceFetchType.rawValue)")
-
-
-        if #available(iOS 14, *) {
-            
-            //        case udp = 1 /* Resolution used DNS over UDP. */
-            //
-            //        case tcp = 2 /* Resolution used DNS over TCP. */
-            //
-            //        case tls = 3 /* Resolution used DNS over TLS. */
-            //
-            //        case https = 4 /* Resolution used DNS over HTTPS. */
-            switch(metric.domainResolutionProtocol) {
-            case.unknown:
-                PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): unknown")
-                break
-            case.udp:
-                PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): 表示使用了udp 协议进行域名解析")
-                break
-            case.tcp:
-                PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): 表示使用了tcp 协议进行域名解析")
-                break
-            case.tls:
-                PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol):  表示使用了tls协议进行域名解析")
-                break
-            case.https:
-                PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): 表示使用了https 协议进行域名解析")
-                break
-            @unknown default:
-                PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): unknown")
-                break
-            }
+        
+        //        case udp = 1 /* Resolution used DNS over UDP. */
+        //
+        //        case tcp = 2 /* Resolution used DNS over TCP. */
+        //
+        //        case tls = 3 /* Resolution used DNS over TLS. */
+        //
+        //        case https = 4 /* Resolution used DNS over HTTPS. */
+        switch(metric.domainResolutionProtocol) {
+        case.unknown:
+            PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): unknown")
+            break
+        case.udp:
+            PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): 表示使用了udp 协议进行域名解析")
+            break
+        case.tcp:
+            PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): 表示使用了tcp 协议进行域名解析")
+            break
+        case.tls:
+            PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol):  表示使用了tls协议进行域名解析")
+            break
+        case.https:
+            PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): 表示使用了https 协议进行域名解析")
+            break
+        @unknown default:
+            PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): unknown")
+            break
         }
 
         PTNSLogConsole("request url:\(String(describing: metric.request.url))")

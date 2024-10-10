@@ -27,9 +27,7 @@ class PTPermissionCell: PTBaseNormalCell {
                 switch self.cellModel!.type {
                 case .tracking:
     #if POOTOOLS_PERMISSION_TRACKING
-                    if #available(iOS 14.0, *) {
-                        self.cellStatus = PTPermission.tracking.status
-                    }
+                    self.cellStatus = PTPermission.tracking.status
     #else
                     self.cellStatus = .notSupported
     #endif

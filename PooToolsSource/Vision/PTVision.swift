@@ -10,7 +10,6 @@ import UIKit
 import Vision
 import VisionKit
 
-@available(iOS 14.0,*)
 public class PTVision: NSObject {
     public static let share = PTVision()
 

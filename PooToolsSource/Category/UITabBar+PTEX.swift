@@ -14,7 +14,6 @@ public extension UITabBar {
     /**
         Set appearance for tab bar.
      */
-    @available(iOS 13.0, tvOS 13.0, *)
     func setAppearance(_ value: TabBarAppearance) {
         self.standardAppearance = value.standardAppearance
         if #available(iOS 15.0, tvOS 15.0, *) {
@@ -25,7 +24,6 @@ public extension UITabBar {
     /**
         Appearance cases.
      */
-    @available(iOS 13.0, tvOS 13.0, *)
     enum TabBarAppearance {
         
         case transparentAlways

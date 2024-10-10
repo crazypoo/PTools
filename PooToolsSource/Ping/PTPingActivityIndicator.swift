@@ -48,16 +48,12 @@ class PTPingActivityIndicator {
 
 private extension PTPingActivityIndicator {
     func createUI() {
-        if #available(iOS 13.0, *) {
-            if let windowScene = UIApplication.shared.windows.first?.windowScene, let statusBarManager = windowScene.statusBarManager {
-                mIndicatorWindow.windowScene = windowScene
-                mIndicatorWindow.frame = statusBarManager.statusBarFrame
-                statusBarStyle = statusBarManager.statusBarStyle
-            }
-        } else {
-            mIndicatorWindow.frame = UIApplication.shared.statusBarFrame
-            statusBarStyle = UIApplication.shared.statusBarStyle
+        if let windowScene = UIApplication.shared.windows.first?.windowScene, let statusBarManager = windowScene.statusBarManager {
+            mIndicatorWindow.windowScene = windowScene
+            mIndicatorWindow.frame = statusBarManager.statusBarFrame
+            statusBarStyle = statusBarManager.statusBarStyle
         }
+        
         if statusBarStyle == .lightContent {
             mLabel.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         } else {

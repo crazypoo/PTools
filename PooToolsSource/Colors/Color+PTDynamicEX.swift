@@ -248,7 +248,6 @@ public extension DynamicColor {
       New color to system stack.
      Its color for empty areas and it usually downed of main background color.
      */
-    @available(iOS 13.0, *)
     static var systemDownedBackground: DynamicColor {
         let lightColor = UIColor.secondarySystemBackground.mixed(withColor: .darkGray,weight: 0.09).mixed(withColor: .systemBlue, weight: 0.01)
         let darkColor = UIColor.secondarySystemBackground
@@ -265,49 +264,36 @@ public extension DynamicColor {
 #if !os(watchOS)
     static func darkModeColor(lightColor: DynamicColor,
                               darkColor: DynamicColor) -> DynamicColor {
-        if #available(iOS 13.0,tvOS 13.0, *) {
-          return DynamicColor { (traitCollection) -> DynamicColor in
-               if traitCollection.userInterfaceStyle == .dark {
-                   return darkColor
-               } else {
-                   return lightColor
-               }
-           }
-       } else {
-          return lightColor
-       }
+        return DynamicColor { (traitCollection) -> DynamicColor in
+             if traitCollection.userInterfaceStyle == .dark {
+                 return darkColor
+             } else {
+                 return lightColor
+             }
+         }
    }
 #endif
 
 #if !os(watchOS) && !os(tvOS)
     convenience init(baseInterfaceLevel: DynamicColor, elevatedInterfaceLevel: DynamicColor ) {
-        if #available(iOS 13.0, tvOS 13.0, *) {
-            self.init { traitCollection in
-                switch traitCollection.userInterfaceLevel {
-                case .base:
-                    return baseInterfaceLevel
-                case .elevated:
-                    return elevatedInterfaceLevel
-                case .unspecified:
-                    return baseInterfaceLevel
-                @unknown default:
-                    return baseInterfaceLevel
-                }
+        self.init { traitCollection in
+            switch traitCollection.userInterfaceLevel {
+            case .base:
+                return baseInterfaceLevel
+            case .elevated:
+                return elevatedInterfaceLevel
+            case .unspecified:
+                return baseInterfaceLevel
+            @unknown default:
+                return baseInterfaceLevel
             }
-        }
-        else {
-            self.init(cgColor: baseInterfaceLevel.cgColor)
         }
     }
 #endif
 
 #if !os(watchOS)
     static var systemColorfulColors: [DynamicColor] {
-        if #available(iOS 13.0, tvOS 13.0, *) {
-            return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemIndigo, .systemPink, .systemPurple]
-        } else {
-            return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemPink, .systemPurple]
-        }
+        return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemIndigo, .systemPink, .systemPurple]
     }
 #endif
 

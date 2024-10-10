@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 13.0,*)
 public extension View {
     func alert(isPresent:Binding<Bool>,view:PTAlertTipsProtocol,completion:PTActionTask? = nil) -> some View {
         if isPresent.wrappedValue {

@@ -198,7 +198,6 @@ public extension UIButton {
 public class ConsoleMenuButton: UIButton {
 }
 
-@available(iOS 14.0, *)
 extension ConsoleMenuButton {
     public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willDisplayMenuFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
         super.contextMenuInteraction(interaction, willDisplayMenuFor: configuration, animator: animator)

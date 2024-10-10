@@ -20,8 +20,6 @@ public extension UITraitCollection {
     ///   - traitCollection: A trait collection that you want to compare to the current trait collection.
     ///   - closure: The closure for updating component appearance.
     func performForDifferentColorAppearance(comparedTo traitCollection: UITraitCollection?, closure: (() -> Void)) {
-        if #available(iOS 13.0, tvOS 13.0, *), hasDifferentColorAppearance(comparedTo: traitCollection) {
-            closure()
-        }
+        closure()
     }
 }

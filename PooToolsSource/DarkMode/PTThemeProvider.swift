@@ -43,10 +43,7 @@ public class LegacyThemeProvider: PTThemeProvider {
     /// 注册监听
     /// - Parameter observer: 监听对象
     public func register<Observer: PTThemeable>(observer: Observer) {
-        if #available(iOS 13.0, *) {
-            return
-        }
-        observers.add(observer)
+        return
     }
     
     // MARK: 通知监听对象更新theme

@@ -320,15 +320,9 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         
         //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
-        if #available(iOS 14.0, *) {
-            bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
-            bottomControl.moreActionButton.menu = makeMenu()
-        } else {
-            bottomControl.moreActionButton.addActionHandlers { sender in
-                self.actionSheet()
-            }
-        }
-        
+        bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
+        bottomControl.moreActionButton.menu = makeMenu()
+
         PTGCDManager.gcdAfter(time: 0.35) {
             var loadSome = 0
             if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
@@ -452,7 +446,6 @@ public class PTMediaBrowserController: PTBaseViewController {
         bottomControl.backgroundColor = navControl.isHidden ? .clear : MediaBrowserToolBarColor
     }
     
-    @available(iOS 14.0, *)
     func makeMenu() -> UIMenu {
         
         bottomControl.moreActionButton.isSelected = false

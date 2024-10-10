@@ -297,21 +297,17 @@ public class PTScanQRController: PTBaseViewController {
     func enterPhotos() {
         PTGCDManager.gcdAfter(time: 0.1) {
             if self.viewConfig.openAblumFollowSystem {
-                if #available(iOS 14.0, *) {
-                    Task {
-                        do {
-                            let object:UIImage = try await PTImagePicker.openAlbum()
-                            await MainActor.run {
-                                PTGCDManager.gcdMain {
-                                    self.findQR(inImage: object)
-                                }
+                Task {
+                    do {
+                        let object:UIImage = try await PTImagePicker.openAlbum()
+                        await MainActor.run {
+                            PTGCDManager.gcdMain {
+                                self.findQR(inImage: object)
                             }
-                        } catch let pickerError as PTImagePicker.PickerError {
-                            pickerError.outPutLog()
                         }
+                    } catch let pickerError as PTImagePicker.PickerError {
+                        pickerError.outPutLog()
                     }
-                } else {
-                    self.ptAblum()
                 }
             } else {
                 self.ptAblum()

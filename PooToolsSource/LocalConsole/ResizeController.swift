@@ -525,42 +525,33 @@ class PlatterView: UIView,UITextFieldDelegate {
         let view = UIButton(type: .custom)
         view.setImage("🎨".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
         view.addActionHandlers() { sender in
-            if #available(iOS 14.0, *) {
-                ResizeController.shared.isActive = false
-                self.dismiss() {
-                    let colorPicker = UIColorPickerViewController()
-                    colorPicker.delegate = self
-                    
-                    // 设置预选颜色
-                    colorPicker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
-                    
-                    // 显示 alpha 通道
-                    colorPicker.supportsAlpha = true
-                    
-                    // 呈现颜色选择器
-                    colorPicker.modalPresentationStyle = .formSheet
-                    let vc = PTUtils.getCurrentVC()
-                    if vc is PTSideMenuControl {
-                        let currentVC = (vc as! PTSideMenuControl).contentViewController
-                        if let presentedVC = currentVC?.presentedViewController {
-                            presentedVC.present(colorPicker, animated: true)
-                        } else {
-                            currentVC!.present(colorPicker, animated: true)
-                        }
+            ResizeController.shared.isActive = false
+            self.dismiss() {
+                let colorPicker = UIColorPickerViewController()
+                colorPicker.delegate = self
+                
+                // 设置预选颜色
+                colorPicker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
+                
+                // 显示 alpha 通道
+                colorPicker.supportsAlpha = true
+                
+                // 呈现颜色选择器
+                colorPicker.modalPresentationStyle = .formSheet
+                let vc = PTUtils.getCurrentVC()
+                if vc is PTSideMenuControl {
+                    let currentVC = (vc as! PTSideMenuControl).contentViewController
+                    if let presentedVC = currentVC?.presentedViewController {
+                        presentedVC.present(colorPicker, animated: true)
                     } else {
-                        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                            presentedVC.present(colorPicker, animated: true)
-                        } else {
-                            PTUtils.getCurrentVC().present(colorPicker, animated: true)
-                        }
+                        currentVC!.present(colorPicker, animated: true)
                     }
-                }
-            } else {
-                ResizeController.shared.isActive = false
-                self.dismiss() {
-                    let colorPicker = PTDevColorPickerViewController()
-                    LocalConsole.shared.present(content: colorPicker)
-                    colorPicker.colorSelectedTask = self.FontSColorBlock
+                } else {
+                    if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                        presentedVC.present(colorPicker, animated: true)
+                    } else {
+                        PTUtils.getCurrentVC().present(colorPicker, animated: true)
+                    }
                 }
             }
         }
@@ -736,10 +727,9 @@ class PlatterView: UIView,UITextFieldDelegate {
     }
 }
 
-@available(iOS 14.0, *)
 extension PlatterView: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-//        // 用户完成选择后执行的操作
+        // 用户完成选择后执行的操作
         PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = viewController.selectedColor.hexString
         viewController.dismiss(animated: true) {
             if self.FontSColorBlock != nil {
@@ -749,6 +739,6 @@ extension PlatterView: UIColorPickerViewControllerDelegate {
     }
     
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-//        // 当用户选择颜色时执行的操作
+       // 当用户选择颜色时执行的操作
     }
 }

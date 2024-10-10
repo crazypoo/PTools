@@ -35,15 +35,11 @@ public extension UIImage {
     }
     
     static func darkModeImage(light: UIImage, dark: UIImage) -> UIImage {
-        if #available(iOS 13.0,tvOS 13.0, *) {
-            if UITraitCollection.current.userInterfaceStyle == .dark {
-                return dark
-            } else {
-                return light
-            }
-       } else {
-          return light
-       }
+        if UITraitCollection.current.userInterfaceStyle == .dark {
+            return dark
+        } else {
+            return light
+        }
    }
 
     static func system(_ name: String) -> UIImage {
@@ -893,11 +889,7 @@ public extension PTPOP where Base: UIImage {
         
         var sourceBuffer = vImage_Buffer()
         defer {
-            if #available(iOS 13.0, *) {
-                sourceBuffer.free()
-            } else {
-                sourceBuffer.data.deallocate()
-            }
+            sourceBuffer.free()
         }
         
         var error = vImageBuffer_InitWithCGImage(&sourceBuffer, &format, nil, cgImage, numericCast(kvImageNoFlags))

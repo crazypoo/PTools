@@ -73,7 +73,6 @@ public let PTLogMode:LoggerEXLevelType = {
     }
 }()
 
-@available(iOS 14.0, *)
 public extension Logger {
     private static var subsystem = Bundle.main.bundleIdentifier!
         

@@ -22,14 +22,11 @@ open class PTAlertController: PTBaseViewController {
     
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        let keyWindow = if #available(iOS 13.0, *) {
-            UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap(\.windows)
-                .first { $0.isKeyWindow }
-        } else {
-            UIApplication.shared.keyWindow
-        }
+        let keyWindow = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow }
+
         if let prefersStatusBarHidden = keyWindow?.rootViewController?.prefersStatusBarHidden {
             StatusBarManager.shared.isHidden = prefersStatusBarHidden
         }
@@ -48,7 +45,6 @@ open class PTAlertController: PTBaseViewController {
 }
 
 extension PTAlertController {
-    @available(iOS 13.0, *)
     override open var overrideUserInterfaceStyle: UIUserInterfaceStyle {
         set {
             super.overrideUserInterfaceStyle = newValue
