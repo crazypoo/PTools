@@ -79,7 +79,6 @@ public protocol PTAlertTipsProtocol {
     func dismiss(completion: PTActionTask?)
 }
 
-@available(iOS 13, *)
 public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
     open var dismissByTap: Bool = true
     open var dismissInTime: Bool = true
@@ -260,10 +259,7 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
             iconView.center.x = bounds.midX
         }
         if let titleLabel = titleLabel {
-            titleLabel.layoutDynamicHeight(
-                x: layoutMargins.left,
-                y: iconView == nil ? layoutMargins.top : (iconView?.frame.maxY ?? 0) + layout.spaceBetweenIconAndTitle,
-                width: frame.width - layoutMargins.left - layoutMargins.right)
+            titleLabel.layoutDynamicHeight(x: layoutMargins.left, y: iconView == nil ? layoutMargins.top : (iconView?.frame.maxY ?? 0) + layout.spaceBetweenIconAndTitle, width: frame.width - layoutMargins.left - layoutMargins.right)
         }
         if let subtitleLabel = subtitleLabel {
             let result: CGFloat
@@ -310,75 +306,15 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
         convenience init(for preset: PTAlertTipsIcon) {
             switch preset {
             case .Done:
-                self.init(
-                    iconSize: .init(
-                        width: 112,
-                        height: 112
-                    ),
-                    margins: .init(
-                        top: 63,
-                        left: Self.defaultHorizontalInset,
-                        bottom: 29,
-                        right: Self.defaultHorizontalInset
-                    ),
-                    spaceBetweenIconAndTitle: 35
-                )
+                self.init(iconSize: .init(width: 112, height: 112), margins: .init(top: 63, left: Self.defaultHorizontalInset, bottom: 29, right: Self.defaultHorizontalInset), spaceBetweenIconAndTitle: 35)
             case .Heart:
-                self.init(
-                    iconSize: .init(
-                        width: 112,
-                        height: 77
-                    ),
-                    margins: .init(
-                        top: 49,
-                        left: Self.defaultHorizontalInset,
-                        bottom: 25,
-                        right: Self.defaultHorizontalInset
-                    ),
-                    spaceBetweenIconAndTitle: 35
-                )
+                self.init(iconSize: .init(width: 112, height: 77), margins: .init(top: 49, left: Self.defaultHorizontalInset, bottom: 25, right: Self.defaultHorizontalInset), spaceBetweenIconAndTitle: 35)
             case .Error:
-                self.init(
-                    iconSize: .init(
-                        width: 86,
-                        height: 86
-                    ),
-                    margins: .init(
-                        top: 63,
-                        left: Self.defaultHorizontalInset,
-                        bottom: 29,
-                        right: Self.defaultHorizontalInset
-                    ),
-                    spaceBetweenIconAndTitle: 39
-                )
+                self.init(iconSize: .init(width: 86, height: 86), margins: .init(top: 63, left: Self.defaultHorizontalInset, bottom: 29, right: Self.defaultHorizontalInset), spaceBetweenIconAndTitle: 39)
             case .SpinnerLarge, .SpinnerSmall:
-                self.init(
-                    iconSize: .init(
-                        width: 16,
-                        height: 16
-                    ),
-                    margins: .init(
-                        top: 58,
-                        left: Self.defaultHorizontalInset,
-                        bottom: 27,
-                        right: Self.defaultHorizontalInset
-                    ),
-                    spaceBetweenIconAndTitle: 39
-                )
+                self.init(iconSize: .init(width: 16, height: 16), margins: .init(top: 58, left: Self.defaultHorizontalInset, bottom: 27, right: Self.defaultHorizontalInset), spaceBetweenIconAndTitle: 39)
             case .Custom(_):
-                self.init(
-                    iconSize: .init(
-                        width: 100,
-                        height: 100
-                    ),
-                    margins: .init(
-                        top: 43,
-                        left: Self.defaultHorizontalInset,
-                        bottom: 25,
-                        right: Self.defaultHorizontalInset
-                    ),
-                    spaceBetweenIconAndTitle: 35
-                )
+                self.init(iconSize: .init(width: 100, height: 100), margins: .init(top: 43, left: Self.defaultHorizontalInset, bottom: 25, right: Self.defaultHorizontalInset), spaceBetweenIconAndTitle: 35)
             }
         }
         
@@ -603,19 +539,9 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
             let xPosition = iconView.frame.maxX + spaceBetweenLabelAndIcon
             if let maxWidth = maxWidth {
                 let labelWidth = maxWidth - xPosition - layoutMargins.right
-                titleLabel?.frame = .init(
-                    x: xPosition,
-                    y: layoutMargins.top,
-                    width: labelWidth,
-                    height: titleLabel?.frame.height ?? .zero
-                )
+                titleLabel?.frame = .init(x: xPosition, y: layoutMargins.top, width: labelWidth, height: titleLabel?.frame.height ?? .zero)
                 titleLabel?.sizeToFit()
-                subtitleLabel?.frame = .init(
-                    x: xPosition,
-                    y: (titleLabel?.frame.maxY ?? layoutMargins.top) + spaceBetweenTitleAndSubtitle,
-                    width: labelWidth,
-                    height: subtitleLabel?.frame.height ?? .zero
-                )
+                subtitleLabel?.frame = .init(x: xPosition, y: (titleLabel?.frame.maxY ?? layoutMargins.top) + spaceBetweenTitleAndSubtitle, width: labelWidth, height: subtitleLabel?.frame.height ?? .zero)
                 subtitleLabel?.sizeToFit()
             } else {
                 titleLabel?.sizeToFit()
@@ -628,19 +554,9 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
         } else {
             if let maxWidth = maxWidth {
                 let labelWidth = maxWidth - layoutMargins.left - layoutMargins.right
-                titleLabel?.frame = .init(
-                    x: layoutMargins.left,
-                    y: layoutMargins.top,
-                    width: labelWidth,
-                    height: titleLabel?.frame.height ?? .zero
-                )
+                titleLabel?.frame = .init(x: layoutMargins.left, y: layoutMargins.top, width: labelWidth, height: titleLabel?.frame.height ?? .zero)
                 titleLabel?.sizeToFit()
-                subtitleLabel?.frame = .init(
-                    x: layoutMargins.left,
-                    y: (titleLabel?.frame.maxY ?? layoutMargins.top) + spaceBetweenTitleAndSubtitle,
-                    width: labelWidth,
-                    height: subtitleLabel?.frame.height ?? .zero
-                )
+                subtitleLabel?.frame = .init(x: layoutMargins.left, y: (titleLabel?.frame.maxY ?? layoutMargins.top) + spaceBetweenTitleAndSubtitle, width: labelWidth, height: subtitleLabel?.frame.height ?? .zero)
                 subtitleLabel?.sizeToFit()
             } else {
                 titleLabel?.sizeToFit()
@@ -651,7 +567,6 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
                 subtitleLabel?.frame.origin.y = (titleLabel?.frame.maxY ?? layoutMargins.top) + spaceBetweenTitleAndSubtitle
             }
         }
-        
         iconView?.center.y = frame.height / 2
     }
     

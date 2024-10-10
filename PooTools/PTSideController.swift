@@ -49,11 +49,20 @@ class PTSideController: PTBaseSideController {
         }
         return view
     }()
+    
+    lazy var checkBox:PTCheckBox = {
+        let view = PTCheckBox()
+        view.checkmarkStyle = .Circle
+        view.borderStyle = .Circle
+        view.boxBorderWidth = 5
+        view.checkmarkSize = 0.5
+        return view
+    }()
         
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviews([sideInfoLabel,sideButton])
+        view.addSubviews([sideInfoLabel,sideButton,checkBox])
         sideInfoLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.centerY.equalToSuperview()
@@ -63,6 +72,12 @@ class PTSideController: PTBaseSideController {
             make.size.equalTo(100)
             make.top.equalTo(self.sideInfoLabel.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
+        }
+        
+        checkBox.snp.makeConstraints { make in
+            make.top.equalTo(self.sideButton.snp.bottom).offset(10)
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(34)
         }
     }
 }

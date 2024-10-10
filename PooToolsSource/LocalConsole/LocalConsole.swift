@@ -469,7 +469,7 @@ public class LocalConsole: NSObject {
     public func createSystemLogView() {
         if terminal == nil {
             var contentView:Any!
-            if #available(iOS 15, *) {
+//            if #available(iOS 15, *) {
                 AppWindows!.addSubviews([consoleWindow.view])
                 AppWindows?.rootViewController?.addChild(consoleWindow)
                 
@@ -483,10 +483,10 @@ public class LocalConsole: NSObject {
                 }
 
                 contentView = consoleWindow.view as Any
-
-            } else {
-                contentView = AppWindows!
-            }
+//
+//            } else {
+//                contentView = AppWindows!
+//            }
             
             terminal = PTTerminal.init(view: contentView as Any, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width, height:PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height))
             terminal!.tag = SystemLogViewTag
@@ -495,10 +495,7 @@ public class LocalConsole: NSObject {
                 // After the PiP is thrown, determine the best corner and re-target it there.
                 let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
                 
-                let projectedPosition = CGPoint(
-                    x: self.terminal!.center.x + project(initialVelocity: self.terminal!.x, decelerationRate: decelerationRate),
-                    y: self.terminal!.center.y + project(initialVelocity: self.terminal!.y, decelerationRate: decelerationRate)
-                )
+                let projectedPosition = CGPoint(x: self.terminal!.center.x + project(initialVelocity: self.terminal!.x, decelerationRate: decelerationRate), y: self.terminal!.center.y + project(initialVelocity: self.terminal!.y, decelerationRate: decelerationRate))
                 
                 let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self.possibleEndpoints)
                 
@@ -513,145 +510,8 @@ public class LocalConsole: NSObject {
                 PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
                 PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
             }
-            if #available(iOS 15, *) {
-                terminal!.menuButton.showsMenuAsPrimaryAction = true
-                terminal!.menuButton.menu = makeMenu()
-            } else {
-                terminal!.menuButton.addActionHandlers { sender in
-                    self.feedbackGenerator.impactOccurred(intensity: 1)
-                    /*
-                            Title
-                     */
-                    let actionTitle = PTActionSheetTitleItem(title: .debug,image: UIImage.debugImage)
-                            
-                    /*
-                            Destructives
-                     */
-                    let destructives_debugController = PTActionSheetItem(title: .debugController,titleColor: .systemRed,image: UIImage.debugControllerImage,itemAlignment: .left)
-                    let destructives_terminateApp = PTActionSheetItem(title: .terminateApp,titleColor: .systemRed,image: UIImage.terminateAppImage,itemAlignment: .left)
-                    let destructives_respring = PTActionSheetItem(title: .respring,titleColor: .systemRed,image: UIImage.respringImage(),itemAlignment: .left)
-                    
-                    /*
-                            Content
-                     */
-                    var colorString = ""
-                    if PTColorPickPlugin.share.showed {
-                        colorString = .hideColorCheck
-                    } else {
-                        colorString = .showColorCheck
-                    }
-                    
-                    var rulerString = ""
-                    if PTViewRulerPlugin.share.showed {
-                        rulerString = .hideRulerCheck
-                    } else {
-                        rulerString = .showRulerCheck
-                    }
-                    let content_resize = PTActionSheetItem(title: .resizeConsole,image: UIImage.resizeImage(),itemAlignment: .left)
-                    let content_share = PTActionSheetItem(title: .shareText,image: UIImage.shareImage,itemAlignment: .left)
-                    let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
-                    let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
-                    let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
-                    let content_log = PTActionSheetItem(title: .log,image: UIImage.logFile,itemAlignment: .left)
-                    let content_mocklocation = PTActionSheetItem(title: .mockLocation,image: UIImage.mockLocationImage,itemAlignment: .left)
-                    let content_network = PTActionSheetItem(title: .network,image: UIImage.networkImage,itemAlignment: .left)
-                    let content_crashLog = PTActionSheetItem(title: .crashLog,image: UIImage.crashLogImage,itemAlignment: .left)
-                    let content_performance = PTActionSheetItem(title: .Performance,image: UIImage.performanceImage,itemAlignment: .left)
-                    let content_color = PTActionSheetItem(title: colorString,image: UIImage.colorImage(),itemAlignment: .left)
-                    let content_ruler = PTActionSheetItem(title: rulerString,image: UIImage.rulerImage(),itemAlignment: .left)
-                    let content_appDocument = PTActionSheetItem(title: .appDocument,image: UIImage.docImage,itemAlignment: .left)
-                    let content_flex = PTActionSheetItem(title: .flex,image: UIImage.dev3thPartyImage,itemAlignment: .left)
-                    let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
-
-                    var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_log,content_mocklocation,content_network,content_crashLog,content_performance,content_color,content_ruler,content_appDocument,content_flex,content_inapp]
-
-                    var devMaskString = ""
-                    var devMaskBubbleString = ""
-                    if self.maskView != nil {
-                        devMaskString = .devMaskClose
-                        
-                        if PTCoreUserDefultsWrapper.AppDebbugTouchBubble {
-                            devMaskBubbleString = .devMaskBubbleClose
-                        } else {
-                            devMaskBubbleString = .devMaskBubbleOpen
-                        }
-                        let content_devMaskString = PTActionSheetItem(title: devMaskString,image: UIImage.maskImage(),itemAlignment: .left)
-                        let content_devMaskBubbleString = PTActionSheetItem(title: devMaskBubbleString,image:  UIImage.maskBubbleImage,itemAlignment: .left)
-
-                        contentItems.append(content_devMaskString)
-                        contentItems.append(content_devMaskBubbleString)
-                    } else {
-                        devMaskString = .devMaskOpen
-                        let content_devMaskString = PTActionSheetItem(title: devMaskString,image: UIImage.maskImage(),itemAlignment: .left)
-                        contentItems.append(content_devMaskString)
-                    }
-                    
-                    var viewFrameString = ""
-                    if self.debugBordersEnabled {
-                        viewFrameString = .showViewFrames
-                    } else {
-                        viewFrameString = .hideViewFrames
-                    }
-                    let content_viewFrameString = PTActionSheetItem(title: viewFrameString,image: UIImage.viewFrameImage(),itemAlignment: .left)
-                    contentItems.append(content_viewFrameString)
-                    let content_systemReport = PTActionSheetItem(title: .systemReport,image: UIImage.cpuImage(),itemAlignment: .left)
-                    contentItems.append(content_systemReport)
-                    let content_displayReport = PTActionSheetItem(title: .displayReport,image: UIImage.displayImage(),itemAlignment: .left)
-                    contentItems.append(content_displayReport)
-
-                    UIAlertController.baseCustomActionSheet(titleItem: actionTitle,destructiveItems: [destructives_debugController,destructives_terminateApp,destructives_respring], contentItems: contentItems) { sheet, index, title in
-                        if title == .terminateApp {
-                            self.terminateApplicationAction()
-                        } else if title == .respring {
-                            self.respringAction()
-                        } else if title == .debugController {
-                            self.debugControllerAction()
-                        }
-                    } otherBlock: { sheet, index, title in
-                        if title == .shareText {
-                            self.shareAction()
-                        } else if title == .copyText {
-                            self.copyTextAction()
-                        } else if title == .resizeConsole {
-                            self.resizeAction()
-                        } else if title == .clearConsole {
-                            self.clear()
-                        } else if title == .userDefaults {
-                            self.userdefaultAction()
-                        } else if title == .Performance {
-                            self.performanceControlOpen()
-                        } else if title == .hideColorCheck || title == .showColorCheck {
-                            self.colorAction()
-                        } else if title == .hideRulerCheck || title == .showRulerCheck {
-                            self.rulerAction()
-                        } else if title == .appDocument {
-                            self.documentAction()
-                        } else if title == .flex {
-                            self.flexAction()
-                        } else if title == .inApp {
-                            self.watchViewsAction()
-                        } else if title == .devMaskClose || title == .devMaskOpen {
-                            self.maskOpenFunction()
-                        } else if title == .devMaskBubbleClose || title == .devMaskBubbleOpen {
-                            self.maskOpenBubbleFunction()
-                        } else if title == .hideViewFrames || title == .showViewFrames {
-                            self.viewFramesAction()
-                        } else if title == .systemReport {
-                            self.systemReport()
-                        } else if title == .displayReport {
-                            self.displayReport()
-                        } else if title == .crashLog {
-                            self.crashLogControlOpen()
-                        } else if title == .network {
-                            self.networkWatcherOpen()
-                        } else if title == .mockLocation {
-                            self.mockLocationOpen()
-                        } else if title == .log {
-                            self.logFileOpen()
-                        }
-                    }
-                }
-            }
+            terminal!.menuButton.showsMenuAsPrimaryAction = true
+            terminal!.menuButton.menu = makeMenu()
             
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)

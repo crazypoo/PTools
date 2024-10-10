@@ -44,15 +44,13 @@ public extension PTPOP where Base: UIScreen {
             action(UIScreenShotType.Normal)
         }
         //监听录屏通知,iOS 11后才有录屏
-        if #available(iOS 11.0, *) {
-            //如果正在捕获此屏幕（例如，录制、空中播放、镜像等），则为真
-            if UIScreen.main.isCaptured {
-                action(UIScreenShotType.Video)
-            }
-            //捕获的屏幕状态发生变化时,会发送UIScreenCapturedDidChange通知,监听该通知
-            NotificationCenter.default.addObserver(forName: UIScreen.capturedDidChangeNotification, object: nil, queue: mainQueue) { _ in
-                action(UIScreenShotType.Video)
-            }
+        //如果正在捕获此屏幕（例如，录制、空中播放、镜像等），则为真
+        if UIScreen.main.isCaptured {
+            action(UIScreenShotType.Video)
+        }
+        //捕获的屏幕状态发生变化时,会发送UIScreenCapturedDidChange通知,监听该通知
+        NotificationCenter.default.addObserver(forName: UIScreen.capturedDidChangeNotification, object: nil, queue: mainQueue) { _ in
+            action(UIScreenShotType.Video)
         }
     }
 }

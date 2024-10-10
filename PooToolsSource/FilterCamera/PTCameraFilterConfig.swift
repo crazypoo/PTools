@@ -100,7 +100,6 @@ public class PTCameraFilterConfig: NSObject {
         return self
     }
         
-    @available(iOS 11.0, *)
     @discardableResult
     func videoCodecType(_ type: AVVideoCodecType) -> PTCameraFilterConfig {
         videoCodecType = type
@@ -114,7 +113,6 @@ public class PTCameraFilterConfig: NSObject {
     
     private var pri_videoCodecType: Any?
     /// The codecs for video capture. Defaults to .h264
-    @available(iOS 11.0, *)
     public var videoCodecType: AVVideoCodecType {
         get {
             (pri_videoCodecType as? AVVideoCodecType) ?? .h264

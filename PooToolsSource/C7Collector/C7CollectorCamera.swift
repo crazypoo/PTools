@@ -415,8 +415,7 @@ public final class C7CollectorCamera: C7Collector {
         }
         
         // 解决不同系统版本,因为录制视频编码导致安卓端无法播放的问题
-        if #available(iOS 11.0, *),
-           movieFileOutput.availableVideoCodecTypes.contains(PTCameraFilterConfig.share.videoCodecType),
+        if movieFileOutput.availableVideoCodecTypes.contains(PTCameraFilterConfig.share.videoCodecType),
            let connection = connection {
             let outputSettings = [AVVideoCodecKey: PTCameraFilterConfig.share.videoCodecType]
             movieFileOutput.setOutputSettings(outputSettings, for: connection)

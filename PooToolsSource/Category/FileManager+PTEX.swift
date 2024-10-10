@@ -628,7 +628,6 @@ public extension PTPOP where Base: FileManager {
         public static let ownerAccountID:
         public static let groupOwnerAccountID:
         public static let busy:
-        @available(iOS 4.0, *)
         public static let protectionKey:
         public static let systemSize:
         public static let systemFreeSize:

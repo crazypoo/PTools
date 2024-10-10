@@ -722,10 +722,8 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
 
         PTNSLogConsole("使用的网络协议名称(networkProtocolName): \(metric.networkProtocolName ?? "Unknown")")
 
-        if #available(iOS 13, *) {
-            PTNSLogConsole("iOS13+远程接口的IP地址(remoteAddress): \(String(describing: metric.remoteAddress))")
-            PTNSLogConsole("iOS13 +本地接口的 IP 地址(localAddress): \(String(describing: metric.localAddress))")
-        }
+        PTNSLogConsole("iOS13+远程接口的IP地址(remoteAddress): \(String(describing: metric.remoteAddress))")
+        PTNSLogConsole("iOS13 +本地接口的 IP 地址(localAddress): \(String(describing: metric.localAddress))")
 
         PTNSLogConsole("远程接口的端口号(remotePort): \(String(describing: metric.remotePort))")
         PTNSLogConsole("本地接口的端口号(localPort): \(String(describing: metric.localPort))")

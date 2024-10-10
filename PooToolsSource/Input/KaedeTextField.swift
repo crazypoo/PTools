@@ -90,11 +90,7 @@ import UIKit
     override open func animateViewsForTextEntry() {
 		let directionOverride: CGFloat
 
-		if #available(iOS 9.0, *) {
-			directionOverride = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft ? -1.0 : 1.0
-		} else {
-			directionOverride = 1.0
-		}
+        directionOverride = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft ? -1.0 : 1.0
 
         UIView.animate(withDuration: 0.35, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 2.0, options: .beginFromCurrentState, animations: ({
             self.placeholderLabel.frame.origin = CGPoint(x: self.frame.size.width * (self.placeholderSplit + 0.05) * directionOverride, y: self.placeholderInsets.y)
@@ -142,11 +138,9 @@ import UIKit
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         var frame = CGRect(origin: bounds.origin, size: CGSize(width: bounds.size.width * placeholderSplit, height: bounds.size.height))
 
-		if #available(iOS 9.0, *) {
-			if UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft {
-				frame.origin = CGPoint(x: bounds.size.width - frame.size.width, y: frame.origin.y)
-			}
-		}
+        if UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft {
+            frame.origin = CGPoint(x: bounds.size.width - frame.size.width, y: frame.origin.y)
+        }
 
         return frame.insetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
     }

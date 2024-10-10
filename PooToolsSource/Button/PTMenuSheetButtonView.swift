@@ -23,13 +23,11 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     // MARK: - UI properties
-    
     private var arrowButton: PTMenuSheetArrowButton!
     private var separatorView: UIView!
     private var itemsButtons: [UIButton] = []
     
     // MARK: - Public properties
-    
     public private(set) var direction: Direction
     
     public private(set) var state: State = .closed
@@ -42,7 +40,6 @@ public class PTMenuSheetButtonView: UIView {
     public var isHapticFeedback = true
     
     // arrow
-    
     public var arrowInsets: UIEdgeInsets {
         get { return arrowButton.arrowInsets }
         set { arrowButton.arrowInsets = newValue }
@@ -66,18 +63,15 @@ public class PTMenuSheetButtonView: UIView {
     public var openImage: UIImage?
     
     // separator
-    
     public var isSeparatorHidden: Bool = false      { didSet { separatorView.isHidden = isSeparatorHidden } }
     public var separatorColor: UIColor = .black     { didSet { separatorView.backgroundColor = separatorColor } }
     public var separatorInset: CGFloat = 8          { didSet { reloadSeparatorFrame() } }
     public var separatorWidth: CGFloat = 1          { didSet { reloadSeparatorFrame() } }
     
     // MARK: - Private properties
-    
     private var firstLayout = true
     
     // MARK: - Init
-    
     public init(frame: CGRect = .zero, direction: Direction = .right, items: [PTMenuSheetButtonItems]) {
         
         self.direction = direction
@@ -89,7 +83,6 @@ public class PTMenuSheetButtonView: UIView {
     required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     // MARK: - Overrides
-
     public override var frame: CGRect { didSet { setupFrames() } }
     public override var backgroundColor: UIColor? { didSet { arrowButton.backgroundColor = backgroundColor } }
     
@@ -98,10 +91,8 @@ public class PTMenuSheetButtonView: UIView {
         super.layoutSubviews()
         
         if firstLayout {
-            
             setupFrames()
             showCloseArrow()
-            
             firstLayout = false
         }
     }
@@ -152,17 +143,14 @@ public class PTMenuSheetButtonView: UIView {
                 self.impactHapticFeedback()
             }
         }
-        
     }
     
     // MARK: - Private
-    
     private func setupUI() {
         
         clipsToBounds = true
         
         // arrow button
-        
         arrowButton = PTMenuSheetArrowButton()
         arrowButton.addActionHandlers { [weak self] sender in
             guard let state = self?.state else { return }
@@ -177,7 +165,6 @@ public class PTMenuSheetButtonView: UIView {
         addSubview(arrowButton)
         
         // separator
-        
         separatorView = UIView()
         separatorView.backgroundColor = separatorColor
         insertSubview(separatorView, belowSubview: arrowButton)
@@ -214,26 +201,20 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     // MARK: - Layout
-    
     private func setupFrames() {
-        
         guard arrowButton != nil, separatorView != nil else { return }
         
         // arrow button
-        
         arrowButton.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         
         // separator
-        
         reloadSeparatorFrame()
         
         // items buttons
-        
         setupItemButtonsFrames()
         itemsButtons.forEach { $0.isHidden = true }
         
         // self
-        
         switch state {
         case .closed:
             showCloseArrow()
@@ -245,7 +226,6 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     private func reloadSeparatorFrame() {
-        
         switch direction {
         case .up:
             let y = itemsButtons.reduce(0, { $0 + $1.frame.height })
@@ -265,11 +245,9 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     private func setupItemButtonsFrames() {
-        
         var previousButton: UIButton?
         
         itemsButtons.forEach {
-            
             let width = $0.frame.width == 0 ? arrowButton.frame.width : $0.frame.width
             let height = $0.frame.height == 0 ? arrowButton.frame.height : $0.frame.height
             
@@ -295,15 +273,12 @@ public class PTMenuSheetButtonView: UIView {
                     arrowButton.frame.origin.x + arrowButton.frame.width
             }
             $0.frame = CGRect(x: x, y: y, width: width, height: height)
-            
             previousButton = $0
         }
     }
     
     // MARK: - Arrows
-    
     private func showOpenArrow() {
-        
         arrowButton.setImage(openImage, for: .normal)
         arrowButton.isArrowsHidden = openImage != nil
         
@@ -320,7 +295,6 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     private func showCloseArrow() {
-        
         arrowButton.setImage(closeImage, for: .normal)
         arrowButton.isArrowsHidden = closeImage != nil
         
@@ -337,9 +311,7 @@ public class PTMenuSheetButtonView: UIView {
     // MARK: - Haptic Feedback
     
     private func impactHapticFeedback() {
-        
-        if #available(iOS 10.0, *), isHapticFeedback {
-            
+        if isHapticFeedback {
             let generator = UISelectionFeedbackGenerator()
             generator.selectionChanged()
         }
@@ -348,7 +320,6 @@ public class PTMenuSheetButtonView: UIView {
     // MARK: - Open close
     
     private func open(with direction: Direction) {
-        
         switch direction {
         case .up:
             let itemsHeight = itemsButtons.reduce(0, { $0 + $1.frame.height })
@@ -377,14 +348,12 @@ public class PTMenuSheetButtonView: UIView {
     }
     
     private func close(with direction: Direction) {
-        
         switch direction {
         case .up:
             let itemsHeight = itemsButtons.reduce(0, { $0 + $1.frame.height })
             let y = frame.origin.y + itemsHeight
             let height = frame.size.height - itemsHeight
             super.frame = CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: height)
-            
             arrowButton.frame = CGRect(x: 0, y: 0, width: arrowButton.frame.width, height: arrowButton.frame.height)
         case .down:
             let height = frame.size.height - itemsButtons.reduce(0, { $0 + $1.frame.height })
@@ -394,7 +363,6 @@ public class PTMenuSheetButtonView: UIView {
             let x = frame.origin.x + itemsWidth
             let width = frame.size.width - itemsWidth
             super.frame = CGRect(x: x, y: frame.origin.y, width: width, height: frame.size.height)
-            
             arrowButton.frame = CGRect(x: 0, y: 0, width: arrowButton.frame.width, height: arrowButton.frame.height)
         case .right:
             let width = frame.size.width - itemsButtons.reduce(0, { $0 + $1.frame.width })

@@ -9,14 +9,12 @@
 import ARKit
 
 //MARK: PTEyeTrackingSessionManagerDelegate
-@available(iOS 12.0, *)
 protocol PTEyeTrackingSessionManagerDelegate {
     func update(withFaceAnchor: ARFaceAnchor)
 }
 
 
 //MARK: PTEyeTrackingSessionManager
-@available(iOS 12.0, *)
 internal class PTEyeTrackingSessionManager: NSObject {
     
     private struct Constants {
@@ -47,7 +45,6 @@ internal class PTEyeTrackingSessionManager: NSObject {
 
 
 //MARK: ARSessionDelegate
-@available(iOS 12.0, *)
 extension PTEyeTrackingSessionManager: ARSessionDelegate {
 
     internal func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {

@@ -30,25 +30,36 @@ public enum PTCheckBoxBorderStyle: Int {
 
 @objcMembers
 public class PTCheckBox: UIControl {
-
+    ///回调
     open var valueChanged: PTCheckboxValueChangedBlock?
-    
+    ///外风格
     open var checkmarkStyle: PTCheckBoxStyle = .Square
+    ///内风格
     open var borderStyle: PTCheckBoxBorderStyle = .Square
+    ///外部线宽度
     open var boxBorderWidth: CGFloat = 2
+    ///内部占比/线宽度
     open var checkmarkSize: CGFloat = 0.5
+    ///底部颜色
     open var checkboxBackgroundColor: UIColor = .clear
+    ///触摸范围
     open var increasedTouchRadius: CGFloat = 5
+    ///是否已经点击
     open var isChecked: Bool = true {
         didSet {
             self.updateUI()
         }
     }
+    ///点击震动
     open var useHapticFeedback: Bool = true
+    ///边框未选颜色
     open lazy var uncheckedBorderColor: UIColor = tintColor
+    ///边框选颜色
     open lazy var checkedBorderColor: UIColor = tintColor
+    ///内部颜色
     open lazy var checkmarkColor: UIColor = tintColor
-    open lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
+    
+    fileprivate lazy var feedbackGenerator: UIImpactFeedbackGenerator = {
         let generator = UIImpactFeedbackGenerator(style: .light)
         if self.useHapticFeedback {
             generator.prepare()

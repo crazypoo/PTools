@@ -53,7 +53,6 @@ class PTEyeTrackingDataManager {
         scene.rootNode.addChildNode(virtualPhoneNode)
     }
     
-    @available(iOS 12.0 , *)
     func calculateEyeLookAtPoint(anchor: ARFaceAnchor) -> CGPoint {
         faceNode.simdTransform = anchor.transform
         eyeLNode.simdTransform = anchor.leftEyeTransform

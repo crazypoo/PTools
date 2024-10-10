@@ -1450,13 +1450,11 @@ public extension UIImage {
         // frame numbers per second
         var displayRefreshRates = displayRefreshFactors.map { maxFramePerSecond / $0 }
 
-        if #available(iOS 10.3, *) {
-            // Will be 120 on devices with ProMotion display, 60 otherwise.
-            let maximumFramesPerSecond = UIScreen.main.maximumFramesPerSecond
-            if maximumFramesPerSecond == 120 {
-                displayRefreshRates.append(maximumFramesPerSecond)
-                displayRefreshFactors.insert(maximumFramesPerSecond, at: 0)
-            }
+        // Will be 120 on devices with ProMotion display, 60 otherwise.
+        let maximumFramesPerSecond = UIScreen.main.maximumFramesPerSecond
+        if maximumFramesPerSecond == 120 {
+            displayRefreshRates.append(maximumFramesPerSecond)
+            displayRefreshFactors.insert(maximumFramesPerSecond, at: 0)
         }
 
         // time interval per frame

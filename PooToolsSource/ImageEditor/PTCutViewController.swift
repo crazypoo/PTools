@@ -54,9 +54,7 @@ class PTCutViewController: PTBaseViewController {
         view.alwaysBounceHorizontal = true
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
-        if #available(iOS 11.0, *) {
-            view.contentInsetAdjustmentBehavior = .never
-        }
+        view.contentInsetAdjustmentBehavior = .never
         view.delegate = self
         return view
     }()

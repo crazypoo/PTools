@@ -62,11 +62,7 @@ public class PTEyeTrackingManager: NSObject {
      */
     @objc public class var isSupported: Bool {
         get {
-            if #available(iOS 12.0, *) {
-                return ARFaceTrackingConfiguration.isSupported
-            } else {
-                return false
-            }
+            return ARFaceTrackingConfiguration.isSupported
         }
     }
     
@@ -107,18 +103,14 @@ public class PTEyeTrackingManager: NSObject {
      */
     @objc public override init() {
         super.init()
-        if #available(iOS 12.0, *) {
-            if PTEyeTrackingManager.isSupported {
-                dataManager = PTEyeTrackingDataManager()
-                sessionManager = PTEyeTrackingSessionManager()
-                if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
-                    sessionManager.delegate = self
-                }
-                
-                NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
-            } else {
-                PTNSLogConsole(Constants.ERR_MESSAGE, levelType: .Error,loggerType: .Debug)
+        if PTEyeTrackingManager.isSupported {
+            dataManager = PTEyeTrackingDataManager()
+            sessionManager = PTEyeTrackingSessionManager()
+            if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
+                sessionManager.delegate = self
             }
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
         } else {
             PTNSLogConsole(Constants.ERR_MESSAGE, levelType: .Error,loggerType: .Debug)
         }
@@ -138,11 +130,9 @@ extension PTEyeTrackingManager {
      建议使用EyeTracking功能的ViewController的viewWillAppear()调用。
      */
     @objc public func run() {
-        if #available(iOS 12.0, *) {
-            if PTEyeTrackingManager.isSupported {
-                if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
-                    sessionManager.run()
-                }
+        if PTEyeTrackingManager.isSupported {
+            if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
+                sessionManager.run()
             }
         }
     }
@@ -153,11 +143,9 @@ extension PTEyeTrackingManager {
      建议在ViewController의 viewWillDisappear()的方法中调用
      */
     @objc public func pause() {
-        if #available(iOS 12.0, *) {
-            if PTEyeTrackingManager.isSupported {
-                if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
-                    sessionManager.pause()
-                }
+        if PTEyeTrackingManager.isSupported {
+            if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
+                sessionManager.pause()
             }
         }
     }
@@ -209,7 +197,6 @@ extension PTEyeTrackingManager {
 }
 
 //MARK: PTEyeTrackingSessionManagerDelegate的时间处理
-@available(iOS 12.0, *)
 extension PTEyeTrackingManager: PTEyeTrackingSessionManagerDelegate {
     
     func update(withFaceAnchor anchor: ARFaceAnchor) {
@@ -248,7 +235,6 @@ extension PTEyeTrackingManager {
 }
 
 //MARK: 事件感知的代码
-@available(iOS 12.0, *)
 extension PTEyeTrackingManager {
     
     /// 发生您正在看的部分的事件。

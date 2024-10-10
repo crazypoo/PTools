@@ -254,13 +254,6 @@ public extension PTPOP where Base: UIDevice {
 }
 
 public extension PTPOP where Base: UIDevice {
-    //MARK: 获取手机当前运营商
-    ///获取手机当前运营商
-    @available(iOS, introduced: 7.0, deprecated: 12.0,message: "12後不再支持了")
-    static func currentRadioAccessTechnology()->String {
-        let current = CTTelephonyNetworkInfo()
-        return current.currentRadioAccessTechnology ?? ""
-    }
     
     //MARK: 获取手机当前运营商其他信息
     ///获取手机当前运营商其他信息

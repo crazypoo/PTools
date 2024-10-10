@@ -610,11 +610,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         guard let device = camera.deviceInput?.device else {
             return 1
         }
-        if #available(iOS 11.0, *) {
-            return min(15, device.maxAvailableVideoZoomFactor)
-        } else {
-            return min(15, device.activeFormat.videoMaxZoomFactor)
-        }
+        return min(15, device.maxAvailableVideoZoomFactor)
     }
     
     @objc private func recordVideoPlayFinished() {

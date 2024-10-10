@@ -11,27 +11,17 @@ import UIKit
 
 extension UIView {
     public var compatibleSafeAreaInsets: UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return self.safeAreaInsets
-        } else {
-            return .zero
-        }
+        return self.safeAreaInsets
     }
 }
 
 extension CALayer {
     public var compatibleMaskedCorners: CACornerMask {
         get {
-            if #available(iOS 11.0, *) {
-                return self.maskedCorners
-            } else {
-                return []
-            }
+            return self.maskedCorners
         }
         set {
-            if #available(iOS 11.0, *) {
-                self.maskedCorners = newValue
-            }
+            self.maskedCorners = newValue
         }
     }
 }
@@ -39,16 +29,10 @@ extension CALayer {
 extension UIViewController {
     public var compatibleAdditionalSafeAreaInsets: UIEdgeInsets {
         get {
-            if #available(iOS 11.0, *) {
-                return self.additionalSafeAreaInsets
-            } else {
-                return .zero
-            }
+            return self.additionalSafeAreaInsets
         }
         set {
-            if #available(iOS 11.0, *) {
-                self.additionalSafeAreaInsets = newValue
-            }
+            self.additionalSafeAreaInsets = newValue
         }
     }
 }

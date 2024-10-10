@@ -90,11 +90,7 @@ import SwifterSwift
 
 public func deviceSafeAreaInsets() -> UIEdgeInsets {
     var insets: UIEdgeInsets = .zero
-    
-    if #available(iOS 11, *) {
-        insets = AppWindows?.safeAreaInsets ?? .zero
-    }
-    
+    insets = AppWindows?.safeAreaInsets ?? .zero
     return insets
 }
 
@@ -166,14 +162,7 @@ public class PTUtils: NSObject {
         
     public static let share = PTUtils()
     open var timer:DispatchSourceTimer?
-    
-    @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這個方法在iOS13之後不能使用了")
-    public class func showNetworkActivityIndicator(_ show:Bool) {
-        PTGCDManager.gcdMain {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = show
-        }
-    }
-                
+                    
     public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController {
         var currentVC : UIViewController?
         

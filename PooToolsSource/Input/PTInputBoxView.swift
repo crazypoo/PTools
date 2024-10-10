@@ -215,9 +215,7 @@ public class PTInputBoxView: UIView {
         textField.keyboardType = config.keyboardType
         textField.isSecureTextEntry = config.useSystemPasswordKeyboard
         textField.frame = CGRect(x: 0, y: frame.height, width: 0, height: 0)
-        if #available(iOS 12.0, *) {
-            textField.textContentType = .oneTimeCode
-        }
+        textField.textContentType = .oneTimeCode
         addSubview(textField)
     }
     

@@ -147,10 +147,8 @@ public enum OSSVoiceEnum: String, CaseIterable {
     public func getDetails() -> OSSVoiceInfo {
         var voiceInfo: OSSVoiceInfo = OSSVoiceInfo()
         if let voice = AVSpeechSynthesisVoice(language: rawValue) {
-            if #available(iOS 9.0, *) {
-                voiceInfo.name = voice.name
-                voiceInfo.identifier = voice.identifier
-            }
+            voiceInfo.name = voice.name
+            voiceInfo.identifier = voice.identifier
             voiceInfo.languageCode = rawValue
             voiceInfo.language = "\(self)"
         }
@@ -296,7 +294,6 @@ public enum OSSVoiceEnum: String, CaseIterable {
  
  - Note: If init() is called, the default quality of OSSVoice will us "default" and the language will be "OSSVoiceEnum.UnitedStatesEnglish".
 */
-@available(iOS 9.0, *)
 public class OSSVoice: AVSpeechSynthesisVoice,@unchecked Sendable {
 
     // MARK: - Private Properties

@@ -8,7 +8,6 @@
 
 import UIKit
 
-@available(iOS 12.0,*)
 @objcMembers
 public class PTFaceEye: NSObject {
     ///初始化单例
@@ -58,7 +57,6 @@ public class PTFaceEye: NSObject {
     }
 }
 
-@available(iOS 12.0,*)
 extension PTFaceEye:PTEyeTrackingDelegate {
     public func didChange(eyeTrackingState: PTEyeTrackingState) {
         if trackingEyeState != nil {

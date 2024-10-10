@@ -317,7 +317,7 @@ public class PTMediaLibManager:NSObject {
                 if collection.assetCollectionSubtype == .smartAlbumAllHidden {
                     return
                 }
-                if #available(iOS 11.0, *), collection.assetCollectionSubtype.rawValue > PHAssetCollectionSubtype.smartAlbumLongExposures.rawValue {
+                if collection.assetCollectionSubtype.rawValue > PHAssetCollectionSubtype.smartAlbumLongExposures.rawValue {
                     return
                 }
                 let result = PHAsset.fetchAssets(in: collection, options: option)
