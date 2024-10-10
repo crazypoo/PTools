@@ -315,6 +315,8 @@ public extension UIAlertController {
                                  textInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0),
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
+        let feedBackTitleText:UITextField
+        #if POOTOOLS_INPUT
         let feedBackTitle = PTTextField()
         feedBackTitle.placeholder = feedBackTitlePlaceholder!
         feedBackTitle.setPlaceHolderTextColor(.lightGray)
@@ -323,6 +325,19 @@ public extension UIAlertController {
         feedBackTitle.addPaddingLeft(5)
         feedBackTitle.backgroundColor = .clear
         feedBackTitle.leftSpace = textInset.left
+        
+        feedBackTitleText = feedBackTitle
+        #else
+        feedBackTitleText = UITextField()
+        feedBackTitleText.placeholder = feedBackTitlePlaceholder!
+        feedBackTitleText.setPlaceHolderTextColor(.lightGray)
+        feedBackTitleText.clearButtonMode = .whileEditing
+        feedBackTitleText.font = feedBackTitleFont!
+        feedBackTitleText.addPaddingLeft(5)
+        feedBackTitleText.backgroundColor = .clear
+        let lView = UIView(frame: CGRectMake(0, 0, textInset.left, 44))
+        feedBackTitleText.leftView = lView
+        #endif
         
         let feedBackContent = UITextView()
         feedBackContent.textContainerInset = textInset
@@ -335,8 +350,8 @@ public extension UIAlertController {
         feedBackContent.tintColor = .red
         
         let customerAlert = PTCustomerAlertController(title: alertTitle!,customerViewHeight:250,customerViewCallback: { customerView in
-            customerView.addSubviews([feedBackTitle,feedBackContent])
-            feedBackTitle.snp.makeConstraints { make in
+            customerView.addSubviews([feedBackTitleText,feedBackContent])
+            feedBackTitleText.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview()
                 make.height.equalTo(44)
@@ -345,7 +360,7 @@ public extension UIAlertController {
             feedBackContent.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview()
-                make.top.equalTo(feedBackTitle.snp.bottom)
+                make.top.equalTo(feedBackTitleText.snp.bottom)
             }
             
             feedBackContent.pt_wordCountLabel?.backgroundColor = .clear
@@ -354,7 +369,7 @@ public extension UIAlertController {
         },buttons: [cancelString!,sendString!], buttonsColors: [],contentSpace:60)
         customerAlert.bottomButtonTapCallback = { title,index in
             if index == 1 {
-                done(feedBackTitle.text ?? "",feedBackContent.text ?? "")
+                done(feedBackTitleText.text ?? "",feedBackContent.text ?? "")
             } else {
                 dismiss?()
             }
