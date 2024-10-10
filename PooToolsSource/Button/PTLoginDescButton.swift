@@ -11,7 +11,7 @@ import SnapKit
 import SwifterSwift
 
 open class PTLoginDescConfig:PTBaseModel {
-    open var textColor:DynamicColor = DynamicColor(hexString: "7f7f7f")
+    open var textColor:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
     open var textFont:UIFont = .appfont(size: 12)
     open var leftDesc:String = "A"
     open var rightDesc:String = "B"

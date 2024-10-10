@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
             'PooToolsResource' => ['PooToolsSource/Resource/**/*','PooToolsSource/Resource/PrivacyInfo.xcprivacy','PooToolsSource/Resources/*.lproj']
         }
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos','AudioToolbox'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/PermissionCore/*.{h,m,swift}','PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}','PooToolsSource/AppDelegate/*.{h,m,swift}','PooToolsSource/Foundation/*.{h,m,swift}','PooToolsSource/Language/*.{h,m,swift}','PooToolsSource/DarkMode/*.{h,m,swift}','PooToolsSource/Line/*.{h,m,swift}','PooToolsSource/Badge/*.{h,m,swift}','PooToolsSource/Rotation/*.{h,m,swift}','PooToolsSource/Switch/*.{h,m,swift}','PooToolsSource/Colors/*.{h,m,swift}','PooToolsSource/Font/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/PermissionCore/*.{h,m,swift}','PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}','PooToolsSource/AppDelegate/*.{h,m,swift}','PooToolsSource/Foundation/*.{h,m,swift}','PooToolsSource/Language/*.{h,m,swift}','PooToolsSource/DarkMode/*.{h,m,swift}','PooToolsSource/Line/*.{h,m,swift}','PooToolsSource/Badge/*.{h,m,swift}','PooToolsSource/Rotation/*.{h,m,swift}','PooToolsSource/Switch/*.{h,m,swift}','PooToolsSource/Colors/*.{h,m,swift}','PooToolsSource/Font/*.{h,m,swift}','PooToolsSource/FloatPanel/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
@@ -400,15 +400,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PAGINGCONTROL POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'FloatingPanel' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/FloatPanel/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLOATINGPANEL POOTOOLS_COCOAPODS"
-        }
-    end
-        
+            
     s.subspec 'ScanQRCode' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/PhotoPicker'
@@ -475,7 +467,6 @@ Pod::Spec.new do |s|
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/NetWork'
-        subspec.dependency 'PooTools/FloatingPanel'
         subspec.dependency 'PooTools/ColorPicker'
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/SideControl'
@@ -712,7 +703,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/ProgressBar'
-        subspec.dependency 'PooTools/FloatingPanel'
         subspec.dependency 'PooTools/Loading'
         subspec.source_files = 'PooToolsSource/VideoEditor/*.{h,m,swift}'
         subspec.resource_bundles = {
@@ -799,7 +789,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/NavBarController'
         subspec.dependency 'PooTools/VideoEditor'
-        subspec.dependency 'PooTools/FloatingPanel'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'ChromaColorPicker'
         subspec.dependency 'PooTools/FilterCamera'
@@ -957,7 +946,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ScrollRefresh'
         subspec.dependency 'PooTools/SVG'
         subspec.dependency 'PooTools/Share'
-        subspec.dependency 'PooTools/FloatingPanel'
         subspec.dependency 'PooTools/ListEmptyData'
         subspec.dependency 'PooTools/DEBUG'
         subspec.dependency 'PooTools/DEBUG_TrackingEyes'

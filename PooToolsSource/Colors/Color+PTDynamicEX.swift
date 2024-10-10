@@ -58,7 +58,7 @@ public extension DynamicColor {
 
      - parameter hexString: A hexa-decimal color string representation.
      */
-    convenience init(hexString: String) {
+    convenience init?(hexString: String) {
         let hexString                 = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
         let scanner                   = Scanner(string: hexString)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
