@@ -589,7 +589,7 @@ public class PTSheetViewController: PTBaseViewController {
                 contentHeight = self.contentViewController.preferredHeight + self.keyboardHeight
             case .percent(let percent):
                 if (percent > 1) {
-                    debugPrint("Size percent should be less than or equal to 1.0, but was set to \(percent))")
+                    PTNSLogConsole("Size percent should be less than or equal to 1.0, but was set to \(percent))")
                 }
                 contentHeight = (self.view.bounds.height) * CGFloat(percent) + self.keyboardHeight
             case .marginFromTop(let margin):

@@ -19,7 +19,7 @@ class PTDocumentViewController: PTBaseViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let documentViewController = CustomDocumentViewController(document: UIDocument(fileURL: rootDirectoryPath))
         documentViewController.openDocument { _ in
-            print("打开文档")
+            PTNSLogConsole("打开文档")
         }
         navigationController?.pushViewController(documentViewController, animated: true)
     }
@@ -28,7 +28,7 @@ class PTDocumentViewController: PTBaseViewController {
 @available(iOS 17.0, *)
 class CustomDocumentViewController: UIDocumentViewController {
     override func documentDidOpen() {
-        print(#function)
+        PTNSLogConsole(#function)
     }
 
     override func navigationItemDidUpdate() {

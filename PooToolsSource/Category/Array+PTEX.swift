@@ -264,7 +264,7 @@ public extension Array where Element : Equatable {
         array.forEach({
             if 1 == dict1["\($0)"] {
                 // 此处便可取到相同元素
-                debugPrint("相同的元素：\($0)")
+                PTNSLogConsole("相同的元素：\($0)")
                 sameElements.append($0)
             }
         })

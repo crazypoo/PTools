@@ -84,15 +84,15 @@ extension PTRouterManager {
         let patternArray = Set(paths)
         let apiPathArray = Set(apiArray)
         let diffArray = patternArray.symmetricDifference(apiPathArray)
-        debugPrint("URL差集：\(diffArray)")
-        debugPrint("registerRouterList：\(registerRouterList)")
+        PTNSLogConsole("URL差集：\(diffArray)")
+        PTNSLogConsole("registerRouterList：\(registerRouterList)")
         assert(diffArray.count == 0, "URL 拼写错误，请确认差集中的url是否匹配")
         
         let classNames = registerRouterList.compactMap { $0[PTRouterClassName] }
         let patternValueArray = Set(classNames)
         let classPathArray = Set(classMapArray)
         let diffClassesArray = patternValueArray.symmetricDifference(classPathArray)
-        debugPrint("classes差集：\(diffClassesArray)")
+        PTNSLogConsole("classes差集：\(diffClassesArray)")
         assert(diffClassesArray.count == 0, "classes 拼写错误，请确认差集中的class是否匹配")
     }
     
