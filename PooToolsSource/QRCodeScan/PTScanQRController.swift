@@ -55,7 +55,6 @@ public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Voi
 public class PTScanQRController: PTBaseViewController {
 
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
-
     //MARK: 掃描回調
     ///掃描回調
     public var resultBlock:PTQRCodeResultBlock?
@@ -134,12 +133,7 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 按鈕
     lazy var backBtn : PTLayoutButton = {
-        let view = PTLayoutButton()
-        view.imageSize = CGSize(width: 24, height: 24)
-        view.midSpacing = 0
-        view.normalTitle = ""
-        view.normalImage = self.viewConfig.backImage
-        view.addActionHandlers { sender in
+        let view = createButton(normalImage: self.viewConfig.backImage) { sender in
             self.sessionQueue.async {
                 self.removeTimer()
             }
@@ -149,37 +143,20 @@ public class PTScanQRController: PTBaseViewController {
     }()
     
     lazy var photosButton : PTLayoutButton = {
-        let view = PTLayoutButton()
-        view.imageSize = CGSize(width: 24, height: 24)
-        view.midSpacing = 0
-        view.normalTitle = ""
-        view.normalImage = self.viewConfig.photoImage
-        view.addActionHandlers { sender in
+        let view = createButton(normalImage: self.viewConfig.photoImage) { sender in
             self.photosAction()
         }
         return view
     }()
     
     lazy var flashButton : PTLayoutButton = {
-        let view = PTLayoutButton()
-        view.imageSize = CGSize(width: 24, height: 24)
-        view.midSpacing = 0
-        view.normalTitle = ""
-        view.normalImage = self.viewConfig.flashImage
-        view.selectedImage = self.viewConfig.flashImageSelected
-        view.addActionHandlers { sender in
-            self.torchOn = !self.torchOn
+        let view = createButton(normalImage: self.viewConfig.flashImage, selectedImage: self.viewConfig.flashImageSelected) { sender in
+            self.torchOn.toggle()
             if self.device.hasTorch {
                 do {
                     try self.device.lockForConfiguration()
-                    
-                    if self.torchOn {
-                        self.device.torchMode = .on
-                        sender.isSelected = true
-                    } else {
-                        self.device.torchMode = .off
-                        sender.isSelected = false
-                    }
+                    self.device.torchMode = self.torchOn ? .on : .off
+                    sender.isSelected = self.torchOn
                     self.device.unlockForConfiguration()
                 } catch {
                     PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .QRCode)
@@ -210,20 +187,18 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 生命週期
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController?.view.backgroundColor = .clear
+        configureNavigationBar(hidden: true)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         changeStatusBar(type: .Dark)
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        navigationController?.view.backgroundColor = .clear
+        configureNavigationBar(hidden: true)
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        configureNavigationBar(hidden: false)
         sessionQueue.async {
             self.removeTimer()
         }
@@ -232,18 +207,23 @@ public class PTScanQRController: PTBaseViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         changeStatusBar(type: .Auto)
-        navigationController?.setNavigationBarHidden(false, animated: false)
-    }
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
+        configureNavigationBar(hidden: false)
     }
     
     //MARK: 初始化
     ///初始化
     public init(viewConfig:PTScanQRConfig) {
-        super.init(nibName: nil, bundle: nil)
         self.viewConfig = viewConfig
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
         qrCode = self.viewConfig.canScanQR
         view.backgroundColor = .black
         
@@ -288,9 +268,22 @@ public class PTScanQRController: PTBaseViewController {
             }
         }
     }
+        
+    func configureNavigationBar(hidden:Bool) {
+        navigationController?.setNavigationBarHidden(hidden, animated: false)
+    }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func createButton(normalImage:UIImage,selectedImage:UIImage? = nil,action:@escaping TouchedBlock) -> PTLayoutButton {
+        let view = PTLayoutButton()
+        view.imageSize = CGSize(width: 24, height: 24)
+        view.midSpacing = 0
+        view.normalTitle = ""
+        view.normalImage = normalImage
+        if selectedImage != nil {
+            view.selectedImage = selectedImage
+        }
+        view.addActionHandlers(handler: action)
+        return view
     }
     
     //MARK: 進入相冊

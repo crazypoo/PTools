@@ -269,9 +269,7 @@ public class PTSegmentView: UIView {
         subViewArr.removeAll()
         scrolView.removeSubviews()
         setUI(datas: viewDatas)
-        if block != nil {
-            block!(selectedIndex ?? 0)
-        }
+        block?(selectedIndex ?? 0)
     }
     
     private func getContentWidth(datas:[PTSegmentModel],
@@ -388,17 +386,13 @@ public class PTSegmentView: UIView {
                         subView.imageBtn.tag = index
                         subView.imageBtn.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
-                            if self.segTapBlock != nil {
-                                self.segTapBlock!(sender.tag)
-                            }
+                            self.segTapBlock?(sender.tag)
                         }
                     default:
                         subView.imageBtn.tag = index
                         subView.imageBtn.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
-                            if self.segTapBlock != nil {
-                                self.segTapBlock!(sender.tag)
-                            }
+                            self.segTapBlock?(sender.tag)
                         }
                     }
                     self.scrolView.addSubview(subView)

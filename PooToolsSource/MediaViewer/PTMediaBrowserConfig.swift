@@ -18,6 +18,7 @@ public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Vo
     case Video
     case FullView
     case ThreeD
+    case LivePhoto
     case None
 }
 

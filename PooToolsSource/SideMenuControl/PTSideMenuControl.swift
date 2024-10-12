@@ -786,7 +786,6 @@ extension PTSideMenuControl {
     }
 }
 
-
 extension PTSideMenuControl {
     /// 选项
     public struct PTSideMenuPreferences {
@@ -894,5 +893,4 @@ extension PTSideMenuControl {
         /// 动画配置
         public var animation = PTSideMenuAnimation()
     }
-
 }

@@ -68,7 +68,6 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                 return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                     customers
                 })
-
             }
         }
         view.cellInCollection = { collection,itemSection,indexPath in

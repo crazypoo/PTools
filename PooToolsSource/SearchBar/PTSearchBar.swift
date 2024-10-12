@@ -53,33 +53,35 @@ public class PTSearchBar: UISearchBar {
 
     open var clearConfig:PTSearchBarTextFieldClearButtonConfig? {
         didSet {
-            if clearConfig != nil {
-                let searchField: UITextField = self.value(forKey: "searchField") as! UITextField
-                let clearBtn: UIButton = searchField.value(forKey: "_clearButton") as! UIButton
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    @PTClampedProperyWrapper(range:0...(self.frame.size.height - 15)) var clearTopSpace:CGFloat = self.clearConfig!.clearTopSpace
-                    let clearHeight = self.frame.size.height - clearTopSpace * 2
+            guard let clearConfig = clearConfig else { return }
+            
+            if let searchField = self.value(forKey: "searchField") as? UITextField,
+               let clearBtn = searchField.value(forKey: "_clearButton") as? UIButton {
+                
+                Task {
+                    try await Task.sleep(nanoseconds: 100_000_000)
+                    
+                    let clearTopSpace = min(max(clearConfig.clearTopSpace, 0), self.frame.height - 15)
+                    let clearHeight = self.frame.height - clearTopSpace * 2
+                    
                     clearBtn.imageView?.contentMode = .scaleAspectFit
                     clearBtn.bounds = CGRect(x: 0, y: clearTopSpace, width: clearHeight, height: clearHeight)
-                    if self.clearConfig!.clearImage != nil {
-                        Task {
-                            let result = await PTLoadImageFunction.loadImage(contentData: self.clearConfig!.clearImage!)
-                            if (result.0?.count ?? 0) > 0 {
-                                if (result.0?.count ?? 0) > 1 {
-                                    clearBtn.setImage(UIImage.animatedImage(with: result.0!, duration: 2)!, for: .normal)
-                                } else {
-                                    if result.1 != nil {
-                                        let resizeImage = result.1!.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
-                                        clearBtn.setImage(resizeImage, for: .normal)
-                                    }
-                                }
+                    
+                    if let clearImage = clearConfig.clearImage {
+                        let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
+                        
+                        if let images = result.0, !images.isEmpty {
+                            if images.count > 1 {
+                                clearBtn.setImage(UIImage.animatedImage(with: images, duration: 2), for: .normal)
+                            } else if let image = result.1 {
+                                let resizedImage = image.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
+                                clearBtn.setImage(resizedImage, for: .normal)
                             }
                         }
                     }
-                    clearBtn.addActionHandlers { sender in
-                        if self.clearConfig!.clearAction != nil {
-                            self.clearConfig!.clearAction!()
-                        }
+                    
+                    clearBtn.addActionHandlers { _ in
+                        clearConfig.clearAction?()
                     }
                 }
             }
@@ -89,13 +91,21 @@ public class PTSearchBar: UISearchBar {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        searchTextField.backgroundColor = searchTextFieldBackgroundColor!
-        searchTextField.tintColor = cursorColor!
-        searchTextField.textColor = searchTextColor!
-        searchTextField.font = searchPlaceholderFont!
-        searchTextField.attributedPlaceholder = NSAttributedString(string: searchPlaceholder!, attributes: [NSAttributedString.Key.font:searchPlaceholderFont!,NSAttributedString.Key.foregroundColor:searchPlaceholderColor!])
-        backgroundImage = searchBarOutViewColor!.createImageWithColor()
-        setImage(searchBarImage!, for: .search, state: .normal)
-        searchTextField.viewCorner(radius: (searchBarTextFieldCornerRadius as! CGFloat), borderWidth: (searchBarTextFieldBorderWidth as! CGFloat), borderColor: searchBarTextFieldBorderColor!)
+        if let searchTextField = self.value(forKey: "searchField") as? UITextField {
+            searchTextField.backgroundColor = searchTextFieldBackgroundColor
+            searchTextField.tintColor = cursorColor
+            searchTextField.textColor = searchTextColor
+            searchTextField.font = searchPlaceholderFont
+            searchTextField.attributedPlaceholder = NSAttributedString(
+                string: searchPlaceholder ?? "",
+                attributes: [
+                    .font: searchPlaceholderFont!,
+                    .foregroundColor: searchPlaceholderColor!
+                ]
+            )
+            backgroundImage = searchBarOutViewColor?.createImageWithColor()
+            setImage(searchBarImage, for: .search, state: .normal)
+            searchTextField.viewCorner(radius: searchBarTextFieldCornerRadius as! CGFloat, borderWidth: searchBarTextFieldBorderWidth as! CGFloat, borderColor: searchBarTextFieldBorderColor!)
+        }
     }
 }

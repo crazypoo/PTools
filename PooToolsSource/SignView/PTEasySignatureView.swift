@@ -137,9 +137,7 @@ class PTEasySignatureView: UIView {
             self.previousPoint = currentPoint
             self.setNeedsDisplay()
             self.isHaveDraw = true
-            if self.onSignatureWriteAction != nil {
-                self.onSignatureWriteAction!(true)
-            }
+            self.onSignatureWriteAction?(true)
         }
         pan.minimumNumberOfTouches = 1
         pan.maximumNumberOfTouches = 1
@@ -192,9 +190,7 @@ class PTEasySignatureView: UIView {
         isHaveDraw = false
         path = createPath()
         self.setNeedsDisplay()
-        if onSignatureWriteAction != nil {
-            onSignatureWriteAction!(false)
-        }
+        onSignatureWriteAction?(false)
     }
     
     func saveSign() {

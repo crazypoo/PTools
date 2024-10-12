@@ -75,8 +75,6 @@ class PTDevColorPickerViewController: PTBaseViewController {
 
 extension PTDevColorPickerViewController:ChromaColorPickerDelegate {
     func colorPickerHandleDidChange(_ colorPicker: ChromaColorPicker, handle: ChromaColorHandle, to color: UIColor) {
-        if colorSelectedTask != nil {
-            colorSelectedTask!(color)
-        }
+        colorSelectedTask?(color)
     }
 }

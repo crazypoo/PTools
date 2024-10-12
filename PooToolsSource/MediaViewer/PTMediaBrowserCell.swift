@@ -12,6 +12,8 @@ import SwifterSwift
 import AVFoundation
 import AVKit
 import Kingfisher
+import Photos
+import PhotosUI
 
 class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
@@ -127,6 +129,14 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         return view
     }()
     
+    fileprivate lazy var livePhoto:PHLivePhotoView = {
+        let view = PHLivePhotoView()
+        view.contentMode = .scaleAspectFit
+        view.delegate = self
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
                 
@@ -140,7 +150,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func adjustFrame() {
+    func adjustFrame(normal:Bool = true,fixed:PTActionTask? = nil) {
         if gifImage != nil {
             let imageSize = gifImage!.size
             let imageFrame = CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
@@ -148,7 +158,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             contentScrolView.contentSize = imageFrame.size
             
             let iamgeHeight = CGFloat.kSCREEN_WIDTH / imageSize.width * imageSize.height
-            imageView.frame = CGRectMake(0, (CGFloat.kSCREEN_HEIGHT - iamgeHeight) / 2, CGFloat.kSCREEN_WIDTH, iamgeHeight)
+            if normal {
+                imageView.frame = CGRectMake(0, (CGFloat.kSCREEN_HEIGHT - iamgeHeight) / 2, CGFloat.kSCREEN_WIDTH, iamgeHeight)
+            } else {
+                livePhoto.frame = CGRectMake(0, (CGFloat.kSCREEN_HEIGHT - iamgeHeight) / 2, CGFloat.kSCREEN_WIDTH, iamgeHeight)
+            }
             
             var maxScale = frame.size.height / imageFrame.size.height
             maxScale = frame.size.width / imageFrame.width > maxScale ? frame.width / imageFrame.width : maxScale
@@ -158,11 +172,21 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             contentScrolView.zoomScale = 1
         } else {
             frame.origin = .zero
-            imageView.frame = frame
-            contentScrolView.contentSize = imageView.frame.size
+            if normal {
+                imageView.frame = frame
+                contentScrolView.contentSize = imageView.frame.size
+            } else {
+                livePhoto.frame = frame
+                contentScrolView.contentSize = livePhoto.frame.size
+            }
         }
         contentScrolView.contentOffset = .zero
-        zoomImageSize = imageView.frame.size
+        if normal {
+            zoomImageSize = imageView.frame.size
+        } else {
+            zoomImageSize = livePhoto.frame.size
+        }
+        fixed?()
     }
             
     func createReloadButton() {
@@ -214,9 +238,27 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             }
         } else if let avItem = dataModel.imageURL as? AVPlayerItem {
             videoAVItem(avItem: avItem, loading: loading)
-        }  else if let avAsset = dataModel.imageURL as? AVAsset {
+        } else if let avAsset = dataModel.imageURL as? AVAsset {
             let avPlayerItem = AVPlayerItem(asset: avAsset)
             videoAVItem(avItem: avPlayerItem, loading: loading)
+        } else if let livePhotoTarget = dataModel.imageURL as? PHLivePhoto {
+            currentCellType = .LivePhoto
+            PTLivePhoto.extractResources(from: livePhotoTarget) { resources in
+                if let keyPhotoPath = resources?.pairedImage {
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
+                        guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
+                            return
+                        }
+                        self.gifImage = keyPhotoImage
+                    }
+                }
+                self.contentScrolView.addSubviews([self.livePhoto])
+                self.livePhoto.livePhoto = livePhotoTarget
+                self.adjustFrame(normal: false) {
+                    self.livePhoto.startPlayback(with: .hint)
+                }
+                self.setupGestureRecognizers(normal: false)
+            }
         } else {
             setImageTypeView(loading: loading)
         }
@@ -248,7 +290,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             default:
                 break
             }
-
             self.viewerDismissBlock?()
         }
     }
@@ -454,38 +495,48 @@ extension PTMediaBrowserCell:UIScrollViewDelegate {
 
 //MARK: Image Ges
 extension PTMediaBrowserCell {
-    private func setupGestureRecognizers() {
-        let doubleTap = UITapGestureRecognizer.init { sender in
-            let touchPoint = (sender as! UITapGestureRecognizer).location(in: self)
-            if self.contentScrolView.zoomScale <= 1 {
-                self.zoomTask?(true)
-                let scaleX = touchPoint.x + self.contentScrolView.contentOffset.x
-                let scaleY = touchPoint.y + self.contentScrolView.contentOffset.y
-                self.contentScrolView.zoom(to: CGRect.init(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
-            } else {
-                self.zoomTask?(false)
-                self.contentScrolView.setZoomScale(1, animated: true)
-            }
-        }
-        doubleTap.numberOfTapsRequired = 2
-        
-        let singleTap = UITapGestureRecognizer.init { sender in
-            self.tapTask?()
-        }
-        singleTap.numberOfTapsRequired = 1
-        
-        var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
-        if viewConfig.imageLongTapAction {
-            let longTap = UILongPressGestureRecognizer.init { sender in
-                if !self.imageLongTaped {
-                    self.longTapWakeUp?()
-                    self.imageLongTaped = true
+    private func setupGestureRecognizers(normal:Bool = true) {
+        if normal {
+            let doubleTap = UITapGestureRecognizer.init { sender in
+                let touchPoint = (sender as! UITapGestureRecognizer).location(in: self)
+                if self.contentScrolView.zoomScale <= 1 {
+                    self.zoomTask?(true)
+                    let scaleX = touchPoint.x + self.contentScrolView.contentOffset.x
+                    let scaleY = touchPoint.y + self.contentScrolView.contentOffset.y
+                    self.contentScrolView.zoom(to: CGRect.init(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
+                } else {
+                    self.zoomTask?(false)
+                    self.contentScrolView.setZoomScale(1, animated: true)
                 }
             }
-            longTap.minimumPressDuration = 1.5
-            imageActions = [singleTap,doubleTap,longTap]
-        }
+            doubleTap.numberOfTapsRequired = 2
+            
+            let singleTap = UITapGestureRecognizer.init { sender in
+                self.tapTask?()
+            }
+            singleTap.numberOfTapsRequired = 1
+            
+            var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
+            if viewConfig.imageLongTapAction {
+                let longTap = UILongPressGestureRecognizer.init { sender in
+                    if !self.imageLongTaped {
+                        self.longTapWakeUp?()
+                        self.imageLongTaped = true
+                    }
+                }
+                longTap.minimumPressDuration = 1.5
+                imageActions = [singleTap,doubleTap,longTap]
+            }
 
-        imageView.addGestureRecognizers(imageActions)
+            imageView.addGestureRecognizers(imageActions)
+        } else {
+            let longpress = UILongPressGestureRecognizer { sender in
+                self.livePhoto.startPlayback(with: .hint)
+            }
+            longpress.minimumPressDuration = 1
+            livePhoto.addGestureRecognizers([longpress])
+        }
     }
 }
+
+extension PTMediaBrowserCell : PHLivePhotoViewDelegate { }

@@ -44,9 +44,7 @@ public class PTSignView: UIView {
         view.setTitle(self.viewConfig.saveName, for: .normal)
         view.addActionHandlers { sender in
             self.signView.saveSign()
-            if self.doneBlock != nil {
-                self.doneBlock!(self.signView.SignatureImg)
-            }
+            self.doneBlock?(self.signView.SignatureImg)
             self.viewDismiss()
         }
         return view
@@ -144,8 +142,6 @@ public class PTSignView: UIView {
     
     public func viewDismiss() {
         removeFromSuperview()
-        if dismissBlock != nil {
-            dismissBlock!()
-        }
+        dismissBlock?()
     }
 }
