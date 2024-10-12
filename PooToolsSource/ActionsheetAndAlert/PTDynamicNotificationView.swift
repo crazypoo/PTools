@@ -95,9 +95,7 @@ public class PTDynamicNotificationView: UIView {
             self.alpha = 0
         } completion: { finish in
             self.removeFromSuperview()
-            if self.hideHandler != nil {
-                self.hideHandler!()
-            }
+            self.hideHandler?()
         }
     }
 }

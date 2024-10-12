@@ -208,6 +208,19 @@ public extension NSString {
     @objc class func currentDate(dateFormatter:NSString)->NSString {
         String.currentDate(dateFormatterString: dateFormatter as String).nsString
     }
+    
+    //MARK: 查找某字符在字符串的位置
+    func rangeOfSubString(subStr:NSString)->[String] {
+        var rangeArray = [String]()
+        for i in 0..<self.length {
+            let temp:NSString = self.substring(with: NSMakeRange(i, subStr.length)) as NSString
+            if temp.isEqual(to: subStr as String) {
+                let range = NSRange(location: i, length: subStr.length)
+                rangeArray.append(NSStringFromRange(range))
+            }
+        }
+        return rangeArray
+    }
 }
 
 /*

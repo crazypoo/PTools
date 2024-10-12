@@ -93,5 +93,4 @@ public class PTAlertConfig: NSObject {
     public var userInterfaceStyleOverride = PTUserInterfaceStyle.light
     /// 弹窗的唯一标识符，用于去重
     public var identifier: String?
-
 }

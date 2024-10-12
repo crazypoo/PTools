@@ -10,7 +10,7 @@ import ObjectiveC
 
 public protocol PTAssociatedObjectStore { }
 
-extension PTAssociatedObjectStore {
+public extension PTAssociatedObjectStore {
     func associatedObject<T>(forKey key: UnsafeRawPointer) -> T? {
         return objc_getAssociatedObject(self, key) as AnyObject as? T
     }

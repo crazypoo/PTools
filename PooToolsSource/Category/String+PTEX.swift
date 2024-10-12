@@ -870,6 +870,24 @@ public extension String {
         }
         return nil
     }
+    
+    //MARK: 判断字符是否包含HTML的标签
+    func containsHTMLTags() -> Bool {
+        // 定义一个匹配 HTML 标签的正则表达式
+        let htmlTagPattern = "<[^>]+>"
+        
+        do {
+            // 创建正则表达式对象
+            let regex = try NSRegularExpression(pattern: htmlTagPattern, options: [])
+            // 在字符串中搜索匹配项
+            let matches = regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
+            // 如果有匹配项，说明包含 HTML 标签
+            return !matches.isEmpty
+        } catch {
+            PTNSLogConsole("正则表达式创建失败: \(error.localizedDescription)")
+            return false
+        }
+    }    
 }
 
 fileprivate extension PTUtils {

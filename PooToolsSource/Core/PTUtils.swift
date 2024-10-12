@@ -184,14 +184,11 @@ public class PTUtils: NSObject {
     //MARK: 获取导航栏
     private class func getFirstNavigationControllerContainer(responder: UIResponder?) -> UIViewController? {
         var returnResponder: UIResponder? = responder
-        while returnResponder != nil {
-            if returnResponder!.isKind(of: UIViewController.self) {
-                
-                if (returnResponder! as? UIViewController)!.navigationController != nil {
-                    return returnResponder! as? UIViewController
-                }
+        while let nextResponder = returnResponder?.next {
+            if let viewController = nextResponder as? UIViewController, let navigationController = viewController.navigationController {
+                return navigationController
             }
-            returnResponder = returnResponder!.next
+            returnResponder = nextResponder
         }
         return nil
     }
@@ -227,23 +224,7 @@ public class PTUtils: NSObject {
     
     //MARK: 获取根控制器
     public class func getRootViewController() -> UIViewController? {
-        
-        var vc: UIViewController?
-        
-        let windows: [UIWindow] = UIApplication.shared.windows
-        var activeWindow: UIWindow?
-        
-        for window in windows {
-            if window.windowLevel == UIWindow.Level.normal {
-                activeWindow = window
-                break
-            }
-        }
-        
-        if activeWindow?.rootViewController != nil {
-            vc = activeWindow!.rootViewController
-        }
-        return vc
+        return UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController
     }
 
     public class func push(_ vc: UIViewController) {
@@ -370,38 +351,26 @@ public class PTUtils: NSObject {
     //MARK: - 获取活跃VC
     public class func getActivityViewController() -> UIViewController? {
         
-        var viewController: UIViewController?
-        let windows: [UIWindow] = UIApplication.shared.windows
-        var activeWindow: UIWindow?
+        guard let activeWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }),
+                  let rootVC = activeWindow.rootViewController else {
+                return nil
+        }
+            
+        var viewController: UIViewController? = rootVC
         
-        for window in windows {
-            if window.windowLevel == UIWindow.Level.normal {
-                activeWindow = window
-                break
-            }
+        // 递归找到当前展示的 viewController
+        while let presentedVC = viewController?.presentedViewController {
+            viewController = presentedVC
         }
         
-        if activeWindow != nil && activeWindow!.subviews.count > 0 {
-            let frontView: UIView = activeWindow!.subviews.last!
+        // 如果从最顶层的视图控制器开始，尝试找到响应链中的控制器
+        if let frontView = activeWindow.subviews.last {
             var nextResponder: UIResponder? = frontView.next
-            
-            while nextResponder!.isKind(of: UIWindow.self) == false {
-                if nextResponder!.isKind(of: UIViewController.self) {
-                    viewController = nextResponder as! UIViewController?
-                    break
-                } else {
-                    nextResponder = nextResponder!.next
+            while let responder = nextResponder {
+                if let viewController = responder as? UIViewController {
+                    return viewController
                 }
-            }
-            
-            if nextResponder!.isKind(of: UIViewController.self) {
-                viewController = nextResponder as! UIViewController?
-            } else {
-                viewController = activeWindow!.rootViewController
-            }
-            
-            while  viewController!.presentedViewController != nil {
-                viewController =  viewController!.presentedViewController
+                nextResponder = responder.next
             }
         }
         
@@ -411,8 +380,7 @@ public class PTUtils: NSObject {
     //MARK: 获取当前正在显示的UIViewController，而不是NavigationController
     public class func visibleVC() -> UIViewController? {
         let viewController = getActivityViewController()
-        if viewController?.isKind(of: UINavigationController.self) == true {
-            let nav: UINavigationController = viewController as! UINavigationController
+        if viewController is UINavigationController, let nav = viewController as? UINavigationController {
             return nav.visibleViewController
         }
         return viewController
@@ -510,21 +478,7 @@ public class PTUtils: NSObject {
         let str = NSString(format: "%@%@", text,replacementString)
         return (str as String).isMoneyString()
     }
-    
-    //MARK: 查找某字符在字符串的位置
-    class open func rangeOfSubString(fullStr:NSString,
-                                     subStr:NSString)->[String] {
-        var rangeArray = [String]()
-        for i in 0..<fullStr.length {
-            let temp:NSString = fullStr.substring(with: NSMakeRange(i, subStr.length)) as NSString
-            if temp.isEqual(to: subStr as String) {
-                let range = NSRange(location: i, length: subStr.length)
-                rangeArray.append(NSStringFromRange(range))
-            }
-        }
-        return rangeArray
-    }
-    
+        
     class open func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
 #if POOTOOLS_DEBUG
         let share = LocalConsole.shared
@@ -561,23 +515,6 @@ public class PTUtils: NSObject {
             return URL(filePath: outputURL)
         } else {
             return URL(fileURLWithPath: outputURL)
-        }
-    }
-    
-    class public func containsHTMLTags(_ string: String) -> Bool {
-        // 定义一个匹配 HTML 标签的正则表达式
-        let htmlTagPattern = "<[^>]+>"
-        
-        do {
-            // 创建正则表达式对象
-            let regex = try NSRegularExpression(pattern: htmlTagPattern, options: [])
-            // 在字符串中搜索匹配项
-            let matches = regex.matches(in: string, options: [], range: NSRange(location: 0, length: string.utf16.count))
-            // 如果有匹配项，说明包含 HTML 标签
-            return !matches.isEmpty
-        } catch {
-            PTNSLogConsole("正则表达式创建失败: \(error.localizedDescription)")
-            return false
         }
     }
 }
@@ -619,7 +556,7 @@ public class SwizzleTool: NSObject {
     public func swizzleDidAddSubview(_ closure: @escaping () -> Void) {
         guard let originalMethod = class_getInstanceMethod(UIWindow.self, #selector(UIWindow.didAddSubview(_:))),
               let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_did_add_subview(_:)))
-        else { Swift.print("Swizzle Error Occurred"); return }
+        else { PTNSLogConsole("Swizzle Error Occurred"); return }
         
         method_exchangeImplementations(originalMethod, swizzledMethod)
         

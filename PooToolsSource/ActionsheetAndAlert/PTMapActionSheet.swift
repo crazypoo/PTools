@@ -62,9 +62,7 @@ open class PTMapActionSheet: NSObject {
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
             
         } cancelBlock: { sheet in
-            if dismissTask != nil {
-                dismissTask!()
-            }
+            dismissTask?()
         } otherBlock: { sheet, index,title in
             var urlString :NSString = ""
             if navAppName[index] == .BaiduMap {
@@ -78,9 +76,7 @@ open class PTMapActionSheet: NSObject {
             }
             PTAppStoreFunction.jumpLink(url: URL.init(string: urlString as String)!)
         } tapBackgroundBlock: { sheet in
-            if dismissTask != nil {
-                dismissTask!()
-            }
+            dismissTask?()
         }
     }
 }

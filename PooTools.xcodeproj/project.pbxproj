@@ -469,7 +469,6 @@
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
-		55CFC6902B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */; };
 		55CFC6922B446A3A00CC6CF5 /* PTGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */; };
 		55CFC6942B44730F00CC6CF5 /* NSImage+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */; };
 		55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */; };
@@ -1097,7 +1096,6 @@
 		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
 		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
-		55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTObjcAssociatedWeakObject.swift; sourceTree = "<group>"; };
 		55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGifManager.swift; sourceTree = "<group>"; };
 		55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+PTEX.swift"; sourceTree = "<group>"; };
 		55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+PTEX.swift"; sourceTree = "<group>"; };
@@ -2667,7 +2665,6 @@
 				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 				555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */,
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
-				55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */,
 				55F299902BEE1D5B00CC970A /* PTImageCell.swift */,
 				5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */,
 				55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */,
@@ -3366,7 +3363,6 @@
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				557E3A882C043F06002466A0 /* UIWindow+PTDebugEx.swift in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
-				55CFC6902B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift in Sources */,
 				55C905182A31B40200B7E83D /* PTUserDefultsViewController.swift in Sources */,
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				557E3A5A2C032125002466A0 /* Color+PTlabEX.swift in Sources */,
