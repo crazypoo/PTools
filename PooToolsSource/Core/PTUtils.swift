@@ -130,7 +130,6 @@ public func PTPropertyList(_ classString: String) ->[String] {
 
 public func PTMethodsList(_ classString: String) ->[Selector] {
     var methodNum: UInt32 = 0
-    // var list = [Method]()
     var list = [Selector]()
     let methods = class_copyMethodList(NSClassFromString(classString), &methodNum)
     for index in 0..<numericCast(methodNum) {
@@ -162,8 +161,48 @@ public class PTUtils: NSObject {
         
     public static let share = PTUtils()
     open var timer:DispatchSourceTimer?
-                    
-    public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController {
+                        
+    public class func cgBaseBundle()->Bundle {
+        let bundle = Bundle.init(for: self)
+        return bundle
+    }
+                
+    //MARK: 获取一个输入内最大的一个值
+    ///获取一个输入内最大的一个值
+    class open func maxOne<T:Comparable>( _ seq:[T]) -> T {
+
+        assert(seq.count>0)
+        return seq.reduce(seq[0]){
+            max($0, $1)
+        }
+    }
+                        
+    //MARK: 这个方法可以用于UITextField中,检测金额输入
+    class open func textInputAmoutRegex(text:NSString,
+                                        range:NSRange,
+                                        replacementString:NSString)->Bool {
+        let len = (range.length > 0) ? (text.length - range.length) : (text.length + replacementString.length)
+        if len > 20 {
+            return false
+        }
+        let str = NSString(format: "%@%@", text,replacementString)
+        return (str as String).isMoneyString()
+    }
+            
+    class public func outputURL()->URL {
+        let documentsDirectory = FileManager.pt.CachesDirectory()
+        let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
+        if #available(iOS 16.0, *) {
+            return URL(filePath: outputURL)
+        } else {
+            return URL(fileURLWithPath: outputURL)
+        }
+    }
+}
+
+//MARK: 寻找界面
+public extension PTUtils {
+    class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController {
         var currentVC : UIViewController?
         
         if rootVC is UITabBarController {
@@ -176,13 +215,13 @@ public class PTUtils: NSObject {
         return currentVC!
     }
     
-    public class func getCurrentVC(anyClass:UIViewController = UIViewController())->UIViewController {
+    class func getCurrentVC(anyClass:UIViewController = UIViewController())->UIViewController {
         let currentVC = PTUtils.getCurrentVCFrom(rootVC: (AppWindows?.rootViewController ?? anyClass))
         return currentVC
     }
     
     //MARK: 获取导航栏
-    private class func getFirstNavigationControllerContainer(responder: UIResponder?) -> UIViewController? {
+    fileprivate class func getFirstNavigationControllerContainer(responder: UIResponder?) -> UIViewController? {
         var returnResponder: UIResponder? = responder
         while let nextResponder = returnResponder?.next {
             if let viewController = nextResponder as? UIViewController, let navigationController = viewController.navigationController {
@@ -193,7 +232,7 @@ public class PTUtils: NSObject {
         return nil
     }
 
-    public class func getTopViewController(_ currentVC: UIViewController?) -> UIViewController? {
+    class func getTopViewController(_ currentVC: UIViewController?) -> UIViewController? {
         
         guard let rootVC = AppWindows?.rootViewController else {
             return nil
@@ -223,75 +262,12 @@ public class PTUtils: NSObject {
     }
     
     //MARK: 获取根控制器
-    public class func getRootViewController() -> UIViewController? {
+    class func getRootViewController() -> UIViewController? {
         return UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController
-    }
-
-    public class func push(_ vc: UIViewController) {
-        
-        guard let currentVC = getActivityViewController() else {
-            return
-        }
-        if currentVC is UITabBarController {
-            vc.hidesBottomBarWhenPushed = true
-            getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
-        } else {
-            PTGCDManager.gcdMain {
-                var navVC: UINavigationController?
-                if  currentVC.isKind(of: UINavigationController.self) == true {
-                    navVC = currentVC as? UINavigationController
-                } else {
-                    navVC = getFirstNavigationControllerContainer(responder: currentVC) as? UINavigationController
-                }
-                vc.hidesBottomBarWhenPushed = true
-                navVC?.pushViewController(vc, animated: true)
-            }
-        }
-    }
-    
-    public class func modal(_ vc: UIViewController) {
-        
-        guard let currentVC = getActivityViewController() else {
-            return
-        }
-        
-        PTGCDManager.gcdMain {
-            vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-            vc.modalPresentationStyle = .fullScreen
-            // 防止单例的视图控制器
-            guard vc.presentedViewController == nil else {return}
-            guard vc.isBeingPresented == false else {return}
-            
-            // 不同视图控制器，先隐藏旧的，再展示新的
-            if (currentVC.presentationController) != nil {
-                currentVC.presentedViewController?.dismiss(animated: false, completion: nil)
-            }
-            
-            currentVC.pt_present(vc, animated: true, completion: nil)
-        }
-    }
-    
-    public class func popToTargetVC(vcClass: UIViewController.Type) {
-        
-        let navVC: UINavigationController? = getTopViewController(nil)?.navigationController
-        
-        guard let targetVC = navVC?.viewControllers.filter({ $0.isKind(of: vcClass) }).last else {
-            navVC?.popViewController(animated: true)
-            return
-        }
-        
-        PTGCDManager.gcdMain {
-            navVC?.popToViewController(targetVC, animated: true)
-        }
-    }
-    
-    //MARK: - 跳转到首页
-    public class func popToRootVC() {
-        getTopViewController(nil)?.navigationController?.popToRootViewController(animated: true)
     }
     
     //MARK: - 需要注册的时候传入一个导航包含的控制器
-    public class func windowRoot(nav: UIViewController) {
+    class func windowRoot(nav: UIViewController) {
         if  nav.isKind(of: UINavigationController.self) == true {
             AppWindows?.rootViewController = nav
         } else {
@@ -302,7 +278,7 @@ public class PTUtils: NSObject {
     }
     
     // Configure console window.
-    public class func fetchWindow() -> UIWindow? {
+    class func fetchWindow() -> UIWindow? {
         if #available(iOS 15.0, *) {
             let windowScene = UIApplication.shared
                 .connectedScenes
@@ -317,31 +293,9 @@ public class PTUtils: NSObject {
             return UIApplication.shared.windows.first
         }
     }
-    
-    public class func modalDismissBeforePush(_ vc: UIViewController) {
-        if let visiableVC = PTUtils.getTopViewController(nil), visiableVC.presentingViewController != nil {
-            visiableVC.dismiss(animated: false) {
-                push(vc)
-            }
-        } else {
-            push(vc)
-        }
-    }
-    
-    public class func pusbWindowNavRoot(_ vc: UIViewController) {
-        if let app = UIApplication.shared.delegate, let window = app.window {
-            if let rootVC = window?.rootViewController {
-                if let nav: UINavigationController = rootVC as? UINavigationController {
-                    nav.pushViewController(vc, animated: true)
-                } else {
-                    getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
-                }
-            }
-        }
-    }
-    
+        
     //MARK: - 判断某视图是否已经在window 上
-    public class func ifAddToWindow(view: AnyClass) -> Bool {
+    class func ifAddToWindow(view: AnyClass) -> Bool {
         let res = AppWindows!.subviews.filter { (subView: UIView) -> Bool in
             subView.isKind(of: view.self)
         }
@@ -349,8 +303,7 @@ public class PTUtils: NSObject {
     }
     
     //MARK: - 获取活跃VC
-    public class func getActivityViewController() -> UIViewController? {
-        
+    class func getActivityViewController() -> UIViewController? {
         guard let activeWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }),
                   let rootVC = activeWindow.rootViewController else {
                 return nil
@@ -378,24 +331,15 @@ public class PTUtils: NSObject {
     }
     
     //MARK: 获取当前正在显示的UIViewController，而不是NavigationController
-    public class func visibleVC() -> UIViewController? {
+    class func visibleVC() -> UIViewController? {
         let viewController = getActivityViewController()
         if viewController is UINavigationController, let nav = viewController as? UINavigationController {
             return nav.visibleViewController
         }
         return viewController
     }
-        
-    public class func returnFrontVC() {
-        let vc = PTUtils.getCurrentVC()
-        if vc.presentingViewController != nil {
-            vc.dismiss(animated: true, completion: nil)
-        } else {
-            vc.navigationController?.popViewController(animated: true, nil)
-        }
-    }
-    
-    open class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
+            
+    class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
         // presented view controller
         if let presentedViewController = viewController?.presentedViewController {
             return topMost(of: presentedViewController)
@@ -420,25 +364,10 @@ public class PTUtils: NSObject {
         }
         return viewController
     }
-    
-    public class func cgBaseBundle()->Bundle {
-        let bundle = Bundle.init(for: self)
-        return bundle
-    }
-                
-    //MARK: 获取一个输入内最大的一个值
-    ///获取一个输入内最大的一个值
-    class open func maxOne<T:Comparable>( _ seq:[T]) -> T {
 
-        assert(seq.count>0)
-        return seq.reduce(seq[0]){
-            max($0, $1)
-        }
-    }
-                
     //MARK: 找出某view的superview
     ///找出某view的superview
-    class open func findSuperViews(view:UIView)->[UIView] {
+    class func findSuperViews(view:UIView)->[UIView] {
         var temp = view.superview
         let result = NSMutableArray()
         while temp != nil {
@@ -450,7 +379,7 @@ public class PTUtils: NSObject {
     
     //MARK: 找出某views的superview
     ///找出某views的superview
-    class open func findCommonSuperView(firstView:UIView,
+    class func findCommonSuperView(firstView:UIView,
                                         other:UIView)->[UIView] {
         let result = NSMutableArray()
         let sOne = findSuperViews(view: firstView)
@@ -466,20 +395,21 @@ public class PTUtils: NSObject {
         }
         return result as! [UIView]
     }
-        
-    //MARK: 这个方法可以用于UITextField中,检测金额输入
-    class open func textInputAmoutRegex(text:NSString,
-                                        range:NSRange,
-                                        replacementString:NSString)->Bool {
-        let len = (range.length > 0) ? (text.length - range.length) : (text.length + replacementString.length)
-        if len > 20 {
-            return false
+}
+
+//MARK: Translation
+public extension PTUtils {
+    
+    class func returnFrontVC() {
+        let vc = PTUtils.getCurrentVC()
+        if vc.presentingViewController != nil {
+            vc.dismiss(animated: true, completion: nil)
+        } else {
+            vc.navigationController?.popViewController(animated: true, nil)
         }
-        let str = NSString(format: "%@%@", text,replacementString)
-        return (str as String).isMoneyString()
     }
-        
-    class open func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
+
+    class func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
 #if POOTOOLS_DEBUG
         let share = LocalConsole.shared
         if share.isVisiable {
@@ -508,14 +438,82 @@ public class PTUtils: NSObject {
 #endif
     }
     
-    class public func outputURL()->URL {
-        let documentsDirectory = FileManager.pt.CachesDirectory()
-        let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
-        if #available(iOS 16.0, *) {
-            return URL(filePath: outputURL)
+    class func modalDismissBeforePush(_ vc: UIViewController) {
+        if let visiableVC = PTUtils.getTopViewController(nil), visiableVC.presentingViewController != nil {
+            visiableVC.dismiss(animated: false) {
+                push(vc)
+            }
         } else {
-            return URL(fileURLWithPath: outputURL)
+            push(vc)
         }
+    }
+    
+    class func pusbWindowNavRoot(_ vc: UIViewController) {
+        if let app = UIApplication.shared.delegate, let window = app.window {
+            if let rootVC = window?.rootViewController {
+                if let nav: UINavigationController = rootVC as? UINavigationController {
+                    nav.pushViewController(vc, animated: true)
+                } else {
+                    getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        }
+    }
+    
+    class func push(_ vc: UIViewController) {
+        guard let currentVC = getActivityViewController() else { return }
+        if currentVC is UITabBarController {
+            vc.hidesBottomBarWhenPushed = true
+            getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            PTGCDManager.gcdMain {
+                var navVC: UINavigationController?
+                if  currentVC.isKind(of: UINavigationController.self) == true {
+                    navVC = currentVC as? UINavigationController
+                } else {
+                    navVC = getFirstNavigationControllerContainer(responder: currentVC) as? UINavigationController
+                }
+                vc.hidesBottomBarWhenPushed = true
+                navVC?.pushViewController(vc, animated: true)
+            }
+        }
+    }
+    
+    class func modal(_ vc: UIViewController) {
+        guard let currentVC = getActivityViewController() else { return }
+        PTGCDManager.gcdMain {
+            vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            vc.modalPresentationStyle = .fullScreen
+            // 防止单例的视图控制器
+            guard vc.presentedViewController == nil else {return}
+            guard vc.isBeingPresented == false else {return}
+            
+            // 不同视图控制器，先隐藏旧的，再展示新的
+            if (currentVC.presentationController) != nil {
+                currentVC.presentedViewController?.dismiss(animated: false, completion: nil)
+            }
+            
+            currentVC.pt_present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    class func popToTargetVC(vcClass: UIViewController.Type) {
+        
+        let navVC: UINavigationController? = getTopViewController(nil)?.navigationController
+        
+        guard let targetVC = navVC?.viewControllers.filter({ $0.isKind(of: vcClass) }).last else {
+            navVC?.popViewController(animated: true)
+            return
+        }
+        
+        PTGCDManager.gcdMain {
+            navVC?.popToViewController(targetVC, animated: true)
+        }
+    }
+    
+    //MARK: - 跳转到首页
+    class func popToRootVC() {
+        getTopViewController(nil)?.navigationController?.popToRootViewController(animated: true)
     }
 }
 
