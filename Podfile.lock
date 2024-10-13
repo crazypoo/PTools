@@ -44,6 +44,7 @@ PODS:
   - CollectionViewPagingLayout (1.1.0)
   - CryptoSwift (1.8.3)
   - DeviceKit (5.5.0)
+  - Down (0.11.0)
   - EmptyDataSet-Swift (5.0.0)
   - ESTabBarController-swift (2.8.0)
   - FaceAware (2.1.0)
@@ -486,6 +487,7 @@ PODS:
 
 DEPENDENCIES:
   - Bugly
+  - Down
   - FLEX
   - InAppViewDebugger
   - LookinServer
@@ -507,6 +509,7 @@ SPEC REPOS:
     - CollectionViewPagingLayout
     - CryptoSwift
     - DeviceKit
+    - Down
     - EmptyDataSet-Swift
     - ESTabBarController-swift
     - FaceAware
@@ -570,6 +573,7 @@ SPEC CHECKSUMS:
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
   CryptoSwift: 967f37cea5a3294d9cce358f78861652155be483
   DeviceKit: d83e38ca196a4ebf0cc5f37d6f0316a24b794d5b
+  Down: b6ba1bc985c9d2f4e15e3b293d2207766fa12612
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   ESTabBarController-swift: 05593a6ad64700b03c0eb60ff625916370aa4136
   FaceAware: f1266b8719a1a90da3d763b8cb428554edf0fa61
@@ -617,6 +621,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 752b616c5d2ad288fa8108f22ce5c7e2acda53f8
+PODFILE CHECKSUM: d86b18be1bc39fd8a0e0deba69b3e76c3831df30
 
 COCOAPODS: 1.15.2

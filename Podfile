@@ -57,6 +57,7 @@ target 'PooTools_Example' do
 
   pod 'SwiftLint'
   pod 'Swinject'
+  pod 'Down'
 #  pod 'Protobuf'
 #  pod 'SVGAPlayer'
 end

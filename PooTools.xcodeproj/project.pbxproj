@@ -416,6 +416,47 @@
 		55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */; };
 		55B6D7C82C1D88D600033309 /* PTCustomerAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */; };
 		55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */; };
+		55B8FB2B2CBB5578006D82AD /* CALayer+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB2A2CBB5578006D82AD /* CALayer+InspectorEX.swift */; };
+		55B8FB2D2CBB55C8006D82AD /* NSAttributeString+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB2C2CBB55C8006D82AD /* NSAttributeString+InspectorEX.swift */; };
+		55B8FB2F2CBB5644006D82AD /* NSDirectionalEdgeInsets+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB2E2CBB5644006D82AD /* NSDirectionalEdgeInsets+InspectorEX.swift */; };
+		55B8FB312CBB5672006D82AD /* NumberFormatter+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB302CBB5672006D82AD /* NumberFormatter+InspectorEX.swift */; };
+		55B8FB332CBB56B5006D82AD /* UIColorPickerViewController+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB322CBB56B5006D82AD /* UIColorPickerViewController+InspectorEX.swift */; };
+		55B8FB352CBB56FC006D82AD /* UIDocumentPickerViewController+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB342CBB56FC006D82AD /* UIDocumentPickerViewController+InspectorEX.swift */; };
+		55B8FB372CBB578C006D82AD /* UIEdgeInsets+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB362CBB578C006D82AD /* UIEdgeInsets+InspectorEX.swift */; };
+		55B8FB392CBB57B0006D82AD /* UIFont+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB382CBB57B0006D82AD /* UIFont+InspectorEX.swift */; };
+		55B8FB3B2CBB57D7006D82AD /* UIImage+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB3A2CBB57D7006D82AD /* UIImage+InspectorEX.swift */; };
+		55B8FB3D2CBB5817006D82AD /* UIImageView+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB3C2CBB5817006D82AD /* UIImageView+InspectorEX.swift */; };
+		55B8FB3F2CBB5851006D82AD /* UIKeyCommand+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB3E2CBB5851006D82AD /* UIKeyCommand+InspectorEX.swift */; };
+		55B8FB412CBB58BB006D82AD /* UILabel+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB402CBB58BB006D82AD /* UILabel+InspectorEX.swift */; };
+		55B8FB432CBB58F0006D82AD /* UINavigationController+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB422CBB58F0006D82AD /* UINavigationController+InspectorEX.swift */; };
+		55B8FB452CBB591C006D82AD /* UIPopoverPresentationController+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB442CBB591C006D82AD /* UIPopoverPresentationController+InspectorEX.swift */; };
+		55B8FB472CBB593C006D82AD /* UIScrollView+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB462CBB593C006D82AD /* UIScrollView+InspectorEX.swift */; };
+		55B8FB492CBB596D006D82AD /* UIStackView+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB482CBB596D006D82AD /* UIStackView+InspectorEX.swift */; };
+		55B8FB4B2CBB59B8006D82AD /* UIStepper+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB4A2CBB59B8006D82AD /* UIStepper+InspectorEX.swift */; };
+		55B8FB4D2CBB59EC006D82AD /* UITableView+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB4C2CBB59EC006D82AD /* UITableView+InspectorEX.swift */; };
+		55B8FB4F2CBB5A1F006D82AD /* UITextField+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB4E2CBB5A1F006D82AD /* UITextField+InspectorEX.swift */; };
+		55B8FB512CBB5A47006D82AD /* UITextView+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB502CBB5A47006D82AD /* UITextView+InspectorEX.swift */; };
+		55B8FB532CBB5A77006D82AD /* UIView+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB522CBB5A77006D82AD /* UIView+InspectorEX.swift */; };
+		55B8FB552CBB5AAD006D82AD /* UIViewController+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB542CBB5AAD006D82AD /* UIViewController+InspectorEX.swift */; };
+		55B8FB572CBB5AE7006D82AD /* UTTTypeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB562CBB5AE7006D82AD /* UTTTypeOption.swift */; };
+		55B8FB592CBB5CF4006D82AD /* IndexPath+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB582CBB5CF4006D82AD /* IndexPath+InspectorEX.swift */; };
+		55B8FB5B2CBB5D27006D82AD /* NSObject+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB5A2CBB5D27006D82AD /* NSObject+InspectorEX.swift */; };
+		55B8FB5D2CBB5D5D006D82AD /* UIKeyCommandTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB5C2CBB5D5D006D82AD /* UIKeyCommandTableView.swift */; };
+		55B8FB5F2CBB5DEB006D82AD /* KeyboardNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB5E2CBB5DEB006D82AD /* KeyboardNotificationName.swift */; };
+		55B8FB612CBB5E1E006D82AD /* AnyHashable+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB602CBB5E1E006D82AD /* AnyHashable+InspectorEX.swift */; };
+		55B8FB632CBB5E43006D82AD /* Notification.Name+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB622CBB5E43006D82AD /* Notification.Name+InspectorEX.swift */; };
+		55B8FB652CBB5E71006D82AD /* Notification+InspectorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB642CBB5E71006D82AD /* Notification+InspectorEX.swift */; };
+		55B8FB672CBB5EB7006D82AD /* KeyboardAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB662CBB5EB7006D82AD /* KeyboardAnimation.swift */; };
+		55B8FB692CBB5ED8006D82AD /* KeyboardAnimatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB682CBB5ED8006D82AD /* KeyboardAnimatable.swift */; };
+		55B8FB6B2CBB5F93006D82AD /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB6A2CBB5F93006D82AD /* CoordinatorProtocol.swift */; };
+		55B8FB6D2CBB5FB9006D82AD /* Dismissable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB6C2CBB5FB9006D82AD /* Dismissable.swift */; };
+		55B8FB6F2CBB5FD4006D82AD /* RootViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB6E2CBB5FD4006D82AD /* RootViewControllerProtocol.swift */; };
+		55B8FB712CBB601F006D82AD /* Startable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB702CBB601F006D82AD /* Startable.swift */; };
+		55B8FB732CBB6113006D82AD /* DismissableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB722CBB6113006D82AD /* DismissableViewController.swift */; };
+		55B8FB752CBB6137006D82AD /* DismissableNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB742CBB6137006D82AD /* DismissableNavigationController.swift */; };
+		55B8FB772CBB6175006D82AD /* AdaptivePresentationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB762CBB6175006D82AD /* AdaptivePresentationControllerDelegate.swift */; };
+		55B8FB792CBB61B6006D82AD /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB782CBB61B6006D82AD /* Coordinator.swift */; };
+		55B8FB7B2CBB6224006D82AD /* WeekObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FB7A2CBB6224006D82AD /* WeekObject.swift */; };
 		55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */; };
 		55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55BA093D2BBD0C0F00F58126 /* sound1.m4a */; };
 		55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09402BBD597C00F58126 /* PTSocketManager.swift */; };
@@ -1043,6 +1084,47 @@
 		55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertManager.swift; sourceTree = "<group>"; };
 		55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCustomerAlertController.swift; sourceTree = "<group>"; };
 		55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTActionSheetController.swift; sourceTree = "<group>"; };
+		55B8FB2A2CBB5578006D82AD /* CALayer+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB2C2CBB55C8006D82AD /* NSAttributeString+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributeString+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB2E2CBB5644006D82AD /* NSDirectionalEdgeInsets+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDirectionalEdgeInsets+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB302CBB5672006D82AD /* NumberFormatter+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NumberFormatter+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB322CBB56B5006D82AD /* UIColorPickerViewController+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColorPickerViewController+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB342CBB56FC006D82AD /* UIDocumentPickerViewController+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDocumentPickerViewController+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB362CBB578C006D82AD /* UIEdgeInsets+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB382CBB57B0006D82AD /* UIFont+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB3A2CBB57D7006D82AD /* UIImage+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB3C2CBB5817006D82AD /* UIImageView+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB3E2CBB5851006D82AD /* UIKeyCommand+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKeyCommand+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB402CBB58BB006D82AD /* UILabel+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB422CBB58F0006D82AD /* UINavigationController+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB442CBB591C006D82AD /* UIPopoverPresentationController+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPopoverPresentationController+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB462CBB593C006D82AD /* UIScrollView+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB482CBB596D006D82AD /* UIStackView+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB4A2CBB59B8006D82AD /* UIStepper+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStepper+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB4C2CBB59EC006D82AD /* UITableView+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB4E2CBB5A1F006D82AD /* UITextField+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB502CBB5A47006D82AD /* UITextView+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB522CBB5A77006D82AD /* UIView+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB542CBB5AAD006D82AD /* UIViewController+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB562CBB5AE7006D82AD /* UTTTypeOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTTTypeOption.swift; sourceTree = "<group>"; };
+		55B8FB582CBB5CF4006D82AD /* IndexPath+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexPath+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB5A2CBB5D27006D82AD /* NSObject+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB5C2CBB5D5D006D82AD /* UIKeyCommandTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKeyCommandTableView.swift; sourceTree = "<group>"; };
+		55B8FB5E2CBB5DEB006D82AD /* KeyboardNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotificationName.swift; sourceTree = "<group>"; };
+		55B8FB602CBB5E1E006D82AD /* AnyHashable+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyHashable+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB622CBB5E43006D82AD /* Notification.Name+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB642CBB5E71006D82AD /* Notification+InspectorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+InspectorEX.swift"; sourceTree = "<group>"; };
+		55B8FB662CBB5EB7006D82AD /* KeyboardAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAnimation.swift; sourceTree = "<group>"; };
+		55B8FB682CBB5ED8006D82AD /* KeyboardAnimatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAnimatable.swift; sourceTree = "<group>"; };
+		55B8FB6A2CBB5F93006D82AD /* CoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorProtocol.swift; sourceTree = "<group>"; };
+		55B8FB6C2CBB5FB9006D82AD /* Dismissable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dismissable.swift; sourceTree = "<group>"; };
+		55B8FB6E2CBB5FD4006D82AD /* RootViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerProtocol.swift; sourceTree = "<group>"; };
+		55B8FB702CBB601F006D82AD /* Startable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Startable.swift; sourceTree = "<group>"; };
+		55B8FB722CBB6113006D82AD /* DismissableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableViewController.swift; sourceTree = "<group>"; };
+		55B8FB742CBB6137006D82AD /* DismissableNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableNavigationController.swift; sourceTree = "<group>"; };
+		55B8FB762CBB6175006D82AD /* AdaptivePresentationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptivePresentationControllerDelegate.swift; sourceTree = "<group>"; };
+		55B8FB782CBB61B6006D82AD /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		55B8FB7A2CBB6224006D82AD /* WeekObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekObject.swift; sourceTree = "<group>"; };
 		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
 		55BA093D2BBD0C0F00F58126 /* sound1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound1.m4a; sourceTree = "<group>"; };
 		55BA09402BBD597C00F58126 /* PTSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSocketManager.swift; sourceTree = "<group>"; };
@@ -1307,6 +1389,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55B8FB272CBB5542006D82AD /* Inspector */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2390,6 +2473,54 @@
 			path = LocationPermission;
 			sourceTree = "<group>";
 		};
+		55B8FB272CBB5542006D82AD /* Inspector */ = {
+			isa = PBXGroup;
+			children = (
+				55B8FB762CBB6175006D82AD /* AdaptivePresentationControllerDelegate.swift */,
+				55B8FB602CBB5E1E006D82AD /* AnyHashable+InspectorEX.swift */,
+				55B8FB2A2CBB5578006D82AD /* CALayer+InspectorEX.swift */,
+				55B8FB782CBB61B6006D82AD /* Coordinator.swift */,
+				55B8FB6A2CBB5F93006D82AD /* CoordinatorProtocol.swift */,
+				55B8FB6C2CBB5FB9006D82AD /* Dismissable.swift */,
+				55B8FB742CBB6137006D82AD /* DismissableNavigationController.swift */,
+				55B8FB722CBB6113006D82AD /* DismissableViewController.swift */,
+				55B8FB582CBB5CF4006D82AD /* IndexPath+InspectorEX.swift */,
+				55B8FB682CBB5ED8006D82AD /* KeyboardAnimatable.swift */,
+				55B8FB662CBB5EB7006D82AD /* KeyboardAnimation.swift */,
+				55B8FB5E2CBB5DEB006D82AD /* KeyboardNotificationName.swift */,
+				55B8FB622CBB5E43006D82AD /* Notification.Name+InspectorEX.swift */,
+				55B8FB642CBB5E71006D82AD /* Notification+InspectorEX.swift */,
+				55B8FB2C2CBB55C8006D82AD /* NSAttributeString+InspectorEX.swift */,
+				55B8FB2E2CBB5644006D82AD /* NSDirectionalEdgeInsets+InspectorEX.swift */,
+				55B8FB5A2CBB5D27006D82AD /* NSObject+InspectorEX.swift */,
+				55B8FB302CBB5672006D82AD /* NumberFormatter+InspectorEX.swift */,
+				55B8FB6E2CBB5FD4006D82AD /* RootViewControllerProtocol.swift */,
+				55B8FB702CBB601F006D82AD /* Startable.swift */,
+				55B8FB322CBB56B5006D82AD /* UIColorPickerViewController+InspectorEX.swift */,
+				55B8FB342CBB56FC006D82AD /* UIDocumentPickerViewController+InspectorEX.swift */,
+				55B8FB362CBB578C006D82AD /* UIEdgeInsets+InspectorEX.swift */,
+				55B8FB382CBB57B0006D82AD /* UIFont+InspectorEX.swift */,
+				55B8FB3A2CBB57D7006D82AD /* UIImage+InspectorEX.swift */,
+				55B8FB3C2CBB5817006D82AD /* UIImageView+InspectorEX.swift */,
+				55B8FB3E2CBB5851006D82AD /* UIKeyCommand+InspectorEX.swift */,
+				55B8FB5C2CBB5D5D006D82AD /* UIKeyCommandTableView.swift */,
+				55B8FB402CBB58BB006D82AD /* UILabel+InspectorEX.swift */,
+				55B8FB422CBB58F0006D82AD /* UINavigationController+InspectorEX.swift */,
+				55B8FB442CBB591C006D82AD /* UIPopoverPresentationController+InspectorEX.swift */,
+				55B8FB462CBB593C006D82AD /* UIScrollView+InspectorEX.swift */,
+				55B8FB482CBB596D006D82AD /* UIStackView+InspectorEX.swift */,
+				55B8FB4A2CBB59B8006D82AD /* UIStepper+InspectorEX.swift */,
+				55B8FB4C2CBB59EC006D82AD /* UITableView+InspectorEX.swift */,
+				55B8FB4E2CBB5A1F006D82AD /* UITextField+InspectorEX.swift */,
+				55B8FB502CBB5A47006D82AD /* UITextView+InspectorEX.swift */,
+				55B8FB522CBB5A77006D82AD /* UIView+InspectorEX.swift */,
+				55B8FB542CBB5AAD006D82AD /* UIViewController+InspectorEX.swift */,
+				55B8FB562CBB5AE7006D82AD /* UTTTypeOption.swift */,
+				55B8FB7A2CBB6224006D82AD /* WeekObject.swift */,
+			);
+			path = Inspector;
+			sourceTree = "<group>";
+		};
 		55BA093F2BBD589300F58126 /* SocketKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -2969,6 +3100,8 @@
 				"zh-HK",
 			);
 			mainGroup = 6003F581195388D10070C39A;
+			packageReferences = (
+			);
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -3103,8 +3236,11 @@
 				552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */,
 				55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */,
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,
+				55B8FB612CBB5E1E006D82AD /* AnyHashable+InspectorEX.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
+				55B8FB512CBB5A47006D82AD /* UITextView+InspectorEX.swift in Sources */,
 				557E3AAA2C046FF7002466A0 /* InputStream+PTEX.swift in Sources */,
+				55B8FB572CBB5AE7006D82AD /* UTTTypeOption.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
 				55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */,
@@ -3114,11 +3250,14 @@
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,
 				55B4FA192AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift in Sources */,
+				55B8FB732CBB6113006D82AD /* DismissableViewController.swift in Sources */,
+				55B8FB352CBB56FC006D82AD /* UIDocumentPickerViewController+InspectorEX.swift in Sources */,
 				556CA4BA2B29500600A5B189 /* MovieFileType.swift in Sources */,
 				557E3AAC2C0471BF002466A0 /* PTApplicationDirectories.swift in Sources */,
 				559C3D552B282F9E00EE46BC /* CropResult.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
+				55B8FB3D2CBB5817006D82AD /* UIImageView+InspectorEX.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
 				55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */,
@@ -3127,6 +3266,7 @@
 				557E3AA82C046F85002466A0 /* PTCacheStoragePolicy.swift in Sources */,
 				559C3D5C2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
+				55B8FB6F2CBB5FD4006D82AD /* RootViewControllerProtocol.swift in Sources */,
 				550CE4A22AF12EB70052539D /* PTActiveType.swift in Sources */,
 				55DD93772B942FFB00F65872 /* PTSideMenuSegue.swift in Sources */,
 				55F162FE2B1977B500320925 /* PTFilterCameraViewController.swift in Sources */,
@@ -3165,6 +3305,7 @@
 				55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */,
 				550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */,
 				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
+				55B8FB632CBB5E43006D82AD /* Notification.Name+InspectorEX.swift in Sources */,
 				557E3A5E2C0322C5002466A0 /* PTDynamicGradient.swift in Sources */,
 				55C409882C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift in Sources */,
 				558D5EE72AAF52E300C02042 /* PTRouterPattern.swift in Sources */,
@@ -3176,9 +3317,11 @@
 				550CE4A02AF0A60D0052539D /* PTUpdateTipsViewController.swift in Sources */,
 				557E3A782C042938002466A0 /* PTPerformanceLeakDetector.swift in Sources */,
 				557E3A622C032C75002466A0 /* Color+PTcmykEX.swift in Sources */,
+				55B8FB532CBB5A77006D82AD /* UIView+InspectorEX.swift in Sources */,
 				559C3D562B282F9E00EE46BC /* CropDimView.swift in Sources */,
 				55B4FA2E2AE10A16006D35F3 /* PTPermissionMic.swift in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
+				55B8FB3B2CBB57D7006D82AD /* UIImage+InspectorEX.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				557E3ABA2C047EC6002466A0 /* PTCrashDetailViewController.swift in Sources */,
@@ -3213,11 +3356,13 @@
 				55C409942C06209D009C0FB6 /* PTPDFManager.swift in Sources */,
 				555BEA072BB2601E00E5987B /* UIView+PTListAnimationEX.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
+				55B8FB312CBB5672006D82AD /* NumberFormatter+InspectorEX.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55F162EA2B1951E500320925 /* PTVideoEditorConfig.swift in Sources */,
 				555EEEAE2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift in Sources */,
 				555818AD2AFA33570051C0AA /* PTRouteViewController.swift in Sources */,
 				557E3A9E2C046DDA002466A0 /* PTThreadOperator.swift in Sources */,
+				55B8FB4B2CBB59B8006D82AD /* UIStepper+InspectorEX.swift in Sources */,
 				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */,
@@ -3227,6 +3372,7 @@
 				557E3A922C0446AB002466A0 /* PTCrashViewModel.swift in Sources */,
 				554A673A2C855C1300FE1B10 /* UIWindow+PTEX.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
+				55B8FB4F2CBB5A1F006D82AD /* UITextField+InspectorEX.swift in Sources */,
 				55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* PTLayoutButton.swift in Sources */,
 				550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */,
@@ -3251,7 +3397,9 @@
 				5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */,
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
+				55B8FB6B2CBB5F93006D82AD /* CoordinatorProtocol.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */,
+				55B8FB672CBB5EB7006D82AD /* KeyboardAnimation.swift in Sources */,
 				557451262C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift in Sources */,
 				555BE9FB2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift in Sources */,
 				55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */,
@@ -3275,6 +3423,7 @@
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */,
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
+				55B8FB2F2CBB5644006D82AD /* NSDirectionalEdgeInsets+InspectorEX.swift in Sources */,
 				55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
 				5525542F2C0E0CB600C2653A /* PTLogConsoleViewController.swift in Sources */,
@@ -3312,6 +3461,7 @@
 				55C409842C04B816009C0FB6 /* PTNetworkViewModel.swift in Sources */,
 				55A5D70029B09A1E00DCA096 /* Dictionary+PTEX.swift in Sources */,
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
+				55B8FB552CBB5AAD006D82AD /* UIViewController+InspectorEX.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
 				557E3A682C03487B002466A0 /* UIImage+PTpdfEX.swift in Sources */,
@@ -3319,10 +3469,12 @@
 				557E3A8A2C044082002466A0 /* Thread+PTDebugEx.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */,
 				555818BE2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift in Sources */,
+				55B8FB652CBB5E71006D82AD /* Notification+InspectorEX.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				55B13D582B1AEF3F00C67EDA /* PTEditToolsCell.swift in Sources */,
 				55BA094E2BC2303400F58126 /* PTPhoneFeedBackControl.swift in Sources */,
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
+				55B8FB392CBB57B0006D82AD /* UIFont+InspectorEX.swift in Sources */,
 				557E3A482C030C8C002466A0 /* UIImage+PTColorEX.swift in Sources */,
 				554A67382C855BB900FE1B10 /* UITraitCollection+PTEX.swift in Sources */,
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
@@ -3358,6 +3510,8 @@
 				55BCB97D2B1732030016A4C2 /* PTMediaLibManager.swift in Sources */,
 				55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
+				55B8FB752CBB6137006D82AD /* DismissableNavigationController.swift in Sources */,
+				55B8FB412CBB58BB006D82AD /* UILabel+InspectorEX.swift in Sources */,
 				55DD93712B938C9B00F65872 /* UIView+Container.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
@@ -3402,6 +3556,8 @@
 				552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */,
 				55F162E62B18E3C200320925 /* C7CollectorVideo.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
+				55B8FB692CBB5ED8006D82AD /* KeyboardAnimatable.swift in Sources */,
+				55B8FB772CBB6175006D82AD /* AdaptivePresentationControllerDelegate.swift in Sources */,
 				55D6FC602C9EA8BF006683F4 /* PTBaseWebViewController.swift in Sources */,
 				550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
@@ -3417,6 +3573,7 @@
 				558B77C02BBC52B300BD7AB0 /* PTChatTypingBubble.swift in Sources */,
 				555818C62AFA79A50051C0AA /* UIFeedbackGenerator+PTEX.swift in Sources */,
 				55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */,
+				55B8FB4D2CBB59EC006D82AD /* UITableView+InspectorEX.swift in Sources */,
 				559C3D592B282F9E00EE46BC /* CropPickerView.swift in Sources */,
 				55102ADB2AFFD22E00E9529D /* PTLocalize.swift in Sources */,
 				55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */,
@@ -3456,6 +3613,7 @@
 				557E3A652C034213002466A0 /* FontName.swift in Sources */,
 				55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */,
 				555818C02AFA63FB0051C0AA /* View+PTEX.swift in Sources */,
+				55B8FB592CBB5CF4006D82AD /* IndexPath+InspectorEX.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				557E3AB22C04752F002466A0 /* StderrCapture.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* PTCycleScrollView.swift in Sources */,
@@ -3469,11 +3627,13 @@
 				553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */,
 				55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */,
 				557E3A822C04396D002466A0 /* PTDebugUserInfo.swift in Sources */,
+				55B8FB5D2CBB5D5D006D82AD /* UIKeyCommandTableView.swift in Sources */,
 				55F162E42B18E36200320925 /* C7Collector.swift in Sources */,
 				551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
+				55B8FB712CBB601F006D82AD /* Startable.swift in Sources */,
 				5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */,
 				557E3A542C031EB8002466A0 /* Color+PTxyzEX.swift in Sources */,
 				5568AE262B048F9E00996C8F /* PTDevColorPickerViewController.swift in Sources */,
@@ -3483,10 +3643,12 @@
 				559C3D542B282F9E00EE46BC /* CropView.swift in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
+				55B8FB472CBB593C006D82AD /* UIScrollView+InspectorEX.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
 				55C409962C08AB0B009C0FB6 /* PTInputBoxView.swift in Sources */,
 				553038352B1CD85E0019A8E0 /* P8.swift in Sources */,
 				55F163032B197C2600320925 /* PTCameraFilterConfig.swift in Sources */,
+				55B8FB2D2CBB55C8006D82AD /* NSAttributeString+InspectorEX.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */,
 				5571F6152AFD304800DB4420 /* PTLocale.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
@@ -3498,6 +3660,8 @@
 				55B6D7C42C1D640A00033309 /* PTAlertWindow.swift in Sources */,
 				558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
+				55B8FB332CBB56B5006D82AD /* UIColorPickerViewController+InspectorEX.swift in Sources */,
+				55B8FB2B2CBB5578006D82AD /* CALayer+InspectorEX.swift in Sources */,
 				557451282C09B12C0008FCAD /* PTMenuSheetButtonView.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
@@ -3570,19 +3734,24 @@
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				557E3AA02C046E8E002466A0 /* PTNetworkHelper.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
+				55B8FB432CBB58F0006D82AD /* UINavigationController+InspectorEX.swift in Sources */,
 				556CA4BC2B29500600A5B189 /* Error.swift in Sources */,
 				555818B82AFA4E750051C0AA /* PTProgressBar.swift in Sources */,
 				5599C43B2C4F642100394835 /* AkiraTextField.swift in Sources */,
 				5599C43C2C4F642100394835 /* IsaoTextField.swift in Sources */,
 				5599C43D2C4F642100394835 /* YoshikoTextField.swift in Sources */,
+				55B8FB492CBB596D006D82AD /* UIStackView+InspectorEX.swift in Sources */,
 				5599C43E2C4F642100394835 /* KaedeTextField.swift in Sources */,
 				5599C43F2C4F642100394835 /* TextFieldEffects.swift in Sources */,
 				5599C4402C4F642100394835 /* YokoTextField.swift in Sources */,
 				5599C4412C4F642100394835 /* JiroTextField.swift in Sources */,
 				5599C4422C4F642100394835 /* HoshiTextField.swift in Sources */,
 				5599C4432C4F642100394835 /* MadokaTextField.swift in Sources */,
+				55B8FB372CBB578C006D82AD /* UIEdgeInsets+InspectorEX.swift in Sources */,
 				5599C4442C4F642100394835 /* MinoruTextField.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
+				55B8FB5F2CBB5DEB006D82AD /* KeyboardNotificationName.swift in Sources */,
+				55B8FB6D2CBB5FB9006D82AD /* Dismissable.swift in Sources */,
 				557E3A4C2C03168C002466A0 /* PTColorUtils.swift in Sources */,
 				555818BA2AFA5AE40051C0AA /* PTAlertTipsIcon.swift in Sources */,
 				55DD93792B94C1EE00F65872 /* PTSideController.swift in Sources */,
@@ -3590,6 +3759,7 @@
 				558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */,
 				55C409A12C097760009C0FB6 /* PTDebugLocationModel.swift in Sources */,
 				55B13D542B1AEDE800C67EDA /* PTEditModel.swift in Sources */,
+				55B8FB7B2CBB6224006D82AD /* WeekObject.swift in Sources */,
 				558B77B62BBC52B300BD7AB0 /* PTChatListModel.swift in Sources */,
 				5512F43E2CACD63F006B3A69 /* PTLivePhoto.swift in Sources */,
 				55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */,
@@ -3618,11 +3788,13 @@
 				553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */,
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
 				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
+				55B8FB5B2CBB5D27006D82AD /* NSObject+InspectorEX.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
 				554A67362C8559F800FE1B10 /* UIImageAsset+PTEX.swift in Sources */,
 				557E3A702C036DE3002466A0 /* PTFPSTool.swift in Sources */,
 				558B77BA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
+				55B8FB792CBB61B6006D82AD /* Coordinator.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				553038342B1CD85E0019A8E0 /* Data+Extension.swift in Sources */,
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,
@@ -3630,10 +3802,12 @@
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */,
+				55B8FB3F2CBB5851006D82AD /* UIKeyCommand+InspectorEX.swift in Sources */,
 				556B67062BB503960070C10E /* PTHalfCircleView.swift in Sources */,
 				556CA4B92B29500600A5B189 /* Compositor.swift in Sources */,
 				55F163092B1A29BE00320925 /* PTTakePictureReviewer.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
+				55B8FB452CBB591C006D82AD /* UIPopoverPresentationController+InspectorEX.swift in Sources */,
 				55E3BBC12ABE0F8E00858348 /* PTFileModel.swift in Sources */,
 				559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */,
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
