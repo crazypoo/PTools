@@ -304,30 +304,40 @@ public extension PTUtils {
     
     //MARK: - 获取活跃VC
     class func getActivityViewController() -> UIViewController? {
-        guard let activeWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }),
+        // 保证所有UI相关操作在主线程中执行
+        if Thread.isMainThread {
+            guard let activeWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }),
                   let rootVC = activeWindow.rootViewController else {
                 return nil
-        }
-            
-        var viewController: UIViewController? = rootVC
-        
-        // 递归找到当前展示的 viewController
-        while let presentedVC = viewController?.presentedViewController {
-            viewController = presentedVC
-        }
-        
-        // 如果从最顶层的视图控制器开始，尝试找到响应链中的控制器
-        if let frontView = activeWindow.subviews.last {
-            var nextResponder: UIResponder? = frontView.next
-            while let responder = nextResponder {
-                if let viewController = responder as? UIViewController {
-                    return viewController
-                }
-                nextResponder = responder.next
             }
+
+            var viewController: UIViewController? = rootVC
+
+            // 递归找到当前展示的 viewController
+            while let presentedVC = viewController?.presentedViewController {
+                viewController = presentedVC
+            }
+
+            // 如果从最顶层的视图控制器开始，尝试找到响应链中的控制器
+            if let frontView = activeWindow.subviews.last {
+                var nextResponder: UIResponder? = frontView.next
+                while let responder = nextResponder {
+                    if let viewController = responder as? UIViewController {
+                        return viewController
+                    }
+                    nextResponder = responder.next
+                }
+            }
+
+            return viewController
+        } else {
+            // 如果当前不是主线程, 同步回到主线程
+            var viewController: UIViewController?
+            PTGCDManager.gcdMain {
+                viewController = getActivityViewController()
+            }
+            return viewController
         }
-        
-        return viewController
     }
     
     //MARK: 获取当前正在显示的UIViewController，而不是NavigationController
