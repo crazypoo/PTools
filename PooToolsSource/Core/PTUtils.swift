@@ -161,7 +161,7 @@ public class PTUtils: NSObject {
         
     public static let share = PTUtils()
     open var timer:DispatchSourceTimer?
-                        
+    
     public class func cgBaseBundle()->Bundle {
         let bundle = Bundle.init(for: self)
         return bundle
@@ -176,7 +176,7 @@ public class PTUtils: NSObject {
             max($0, $1)
         }
     }
-                        
+        
     //MARK: 这个方法可以用于UITextField中,检测金额输入
     class open func textInputAmoutRegex(text:NSString,
                                         range:NSRange,
@@ -188,7 +188,7 @@ public class PTUtils: NSObject {
         let str = NSString(format: "%@%@", text,replacementString)
         return (str as String).isMoneyString()
     }
-            
+        
     class public func outputURL()->URL {
         let documentsDirectory = FileManager.pt.CachesDirectory()
         let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
@@ -200,8 +200,9 @@ public class PTUtils: NSObject {
     }
 }
 
-//MARK: 寻找界面
+//MARK: Window && ViewController
 public extension PTUtils {
+    
     class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController {
         var currentVC : UIViewController?
         
@@ -221,13 +222,16 @@ public extension PTUtils {
     }
     
     //MARK: 获取导航栏
-    fileprivate class func getFirstNavigationControllerContainer(responder: UIResponder?) -> UIViewController? {
+    private class func getFirstNavigationControllerContainer(responder: UIResponder?) -> UIViewController? {
         var returnResponder: UIResponder? = responder
-        while let nextResponder = returnResponder?.next {
-            if let viewController = nextResponder as? UIViewController, let navigationController = viewController.navigationController {
-                return navigationController
+        while returnResponder != nil {
+            if returnResponder!.isKind(of: UIViewController.self) {
+                
+                if (returnResponder! as? UIViewController)!.navigationController != nil {
+                    return returnResponder! as? UIViewController
+                }
             }
-            returnResponder = nextResponder
+            returnResponder = returnResponder!.next
         }
         return nil
     }
@@ -263,215 +267,30 @@ public extension PTUtils {
     
     //MARK: 获取根控制器
     class func getRootViewController() -> UIViewController? {
-        return UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController
-    }
-    
-    //MARK: - 需要注册的时候传入一个导航包含的控制器
-    class func windowRoot(nav: UIViewController) {
-        if  nav.isKind(of: UINavigationController.self) == true {
-            AppWindows?.rootViewController = nav
-        } else {
-#if DEBUG
-            assertionFailure("传入对象必须是导航控制器")
-#endif
-        }
-    }
-    
-    // Configure console window.
-    class func fetchWindow() -> UIWindow? {
-        if #available(iOS 15.0, *) {
-            let windowScene = UIApplication.shared
-                .connectedScenes
-                .filter { $0.activationState == .foregroundActive }
-                .first
-            
-            if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
-                return keyWindow
-            }
-            return nil
-        } else {
-            return UIApplication.shared.windows.first
-        }
-    }
         
-    //MARK: - 判断某视图是否已经在window 上
-    class func ifAddToWindow(view: AnyClass) -> Bool {
-        let res = AppWindows!.subviews.filter { (subView: UIView) -> Bool in
-            subView.isKind(of: view.self)
-        }
-        return res.count > 0
-    }
-    
-    //MARK: - 获取活跃VC
-    class func getActivityViewController() -> UIViewController? {
-        // 保证所有UI相关操作在主线程中执行
-        if Thread.isMainThread {
-            guard let activeWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }),
-                  let rootVC = activeWindow.rootViewController else {
-                return nil
-            }
-
-            var viewController: UIViewController? = rootVC
-
-            // 递归找到当前展示的 viewController
-            while let presentedVC = viewController?.presentedViewController {
-                viewController = presentedVC
-            }
-
-            // 如果从最顶层的视图控制器开始，尝试找到响应链中的控制器
-            if let frontView = activeWindow.subviews.last {
-                var nextResponder: UIResponder? = frontView.next
-                while let responder = nextResponder {
-                    if let viewController = responder as? UIViewController {
-                        return viewController
-                    }
-                    nextResponder = responder.next
-                }
-            }
-
-            return viewController
-        } else {
-            // 如果当前不是主线程, 同步回到主线程
-            var viewController: UIViewController?
-            PTGCDManager.gcdMain {
-                viewController = getActivityViewController()
-            }
-            return viewController
-        }
-    }
-    
-    //MARK: 获取当前正在显示的UIViewController，而不是NavigationController
-    class func visibleVC() -> UIViewController? {
-        let viewController = getActivityViewController()
-        if viewController is UINavigationController, let nav = viewController as? UINavigationController {
-            return nav.visibleViewController
-        }
-        return viewController
-    }
-            
-    class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
-        // presented view controller
-        if let presentedViewController = viewController?.presentedViewController {
-            return topMost(of: presentedViewController)
-        }
-
-        // UITabBarController
-        if let tabBarController = viewController as? UITabBarController,
-            let selectedViewController = tabBarController.selectedViewController {
-            return topMost(of: selectedViewController)
-        }
+        var vc: UIViewController?
         
-        // UINavigationController
-        if let navigationController = viewController as? UINavigationController,
-            let visibleViewController = navigationController.visibleViewController {
-            return topMost(of: visibleViewController)
-        }
+        let windows: [UIWindow] = UIApplication.shared.windows
+        var activeWindow: UIWindow?
         
-        // UIPageController
-        if let pageViewController = viewController as? UIPageViewController,
-           pageViewController.viewControllers?.count == 1 {
-            return topMost(of: pageViewController.viewControllers?.first)
-        }
-        return viewController
-    }
-
-    //MARK: 找出某view的superview
-    ///找出某view的superview
-    class func findSuperViews(view:UIView)->[UIView] {
-        var temp = view.superview
-        let result = NSMutableArray()
-        while temp != nil {
-            result.add(temp!)
-            temp = temp!.superview
-        }
-        return result as! [UIView]
-    }
-    
-    //MARK: 找出某views的superview
-    ///找出某views的superview
-    class func findCommonSuperView(firstView:UIView,
-                                        other:UIView)->[UIView] {
-        let result = NSMutableArray()
-        let sOne = findSuperViews(view: firstView)
-        let sOther = findSuperViews(view: other)
-        var i = 0
-        while i < min(sOne.count, sOther.count) {
-            if sOne == sOther {
-                result.add(sOne)
-                i += 1
-            } else {
+        for window in windows {
+            if window.windowLevel == UIWindow.Level.normal {
+                activeWindow = window
                 break
             }
         }
-        return result as! [UIView]
-    }
-}
-
-//MARK: Translation
-public extension PTUtils {
-    
-    class func returnFrontVC() {
-        let vc = PTUtils.getCurrentVC()
-        if vc.presentingViewController != nil {
-            vc.dismiss(animated: true, completion: nil)
-        } else {
-            vc.navigationController?.popViewController(animated: true, nil)
+        
+        if activeWindow?.rootViewController != nil {
+            vc = activeWindow!.rootViewController
         }
+        return vc
     }
 
-    class func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
-#if POOTOOLS_DEBUG
-        let share = LocalConsole.shared
-        if share.isVisiable {
-            let nav = PTBaseNavControl(rootViewController: vc)
-            nav.modalPresentationStyle = .formSheet
-            PTUtils.getCurrentVC().present(nav, animated: true, completion: {
-                if completion != nil {
-                    completion!()
-                }
-                SwizzleTool().swizzleDidAddSubview {
-                    // Configure console window.
-                    if share.maskView != nil {
-                        PTUtils.fetchWindow()!.bringSubviewToFront(share.maskView!)
-                    }
-                    if share.terminal != nil {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
-                    }
-                }
-            })
-
-        } else {
-            PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
-        }
-#else
-        PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
-#endif
-    }
-    
-    class func modalDismissBeforePush(_ vc: UIViewController) {
-        if let visiableVC = PTUtils.getTopViewController(nil), visiableVC.presentingViewController != nil {
-            visiableVC.dismiss(animated: false) {
-                push(vc)
-            }
-        } else {
-            push(vc)
-        }
-    }
-    
-    class func pusbWindowNavRoot(_ vc: UIViewController) {
-        if let app = UIApplication.shared.delegate, let window = app.window {
-            if let rootVC = window?.rootViewController {
-                if let nav: UINavigationController = rootVC as? UINavigationController {
-                    nav.pushViewController(vc, animated: true)
-                } else {
-                    getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
-                }
-            }
-        }
-    }
-    
     class func push(_ vc: UIViewController) {
-        guard let currentVC = getActivityViewController() else { return }
+        
+        guard let currentVC = getActivityViewController() else {
+            return
+        }
         if currentVC is UITabBarController {
             vc.hidesBottomBarWhenPushed = true
             getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
@@ -490,7 +309,11 @@ public extension PTUtils {
     }
     
     class func modal(_ vc: UIViewController) {
-        guard let currentVC = getActivityViewController() else { return }
+        
+        guard let currentVC = getActivityViewController() else {
+            return
+        }
+        
         PTGCDManager.gcdMain {
             vc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
             vc.modalPresentationStyle = .fullScreen
@@ -525,13 +348,221 @@ public extension PTUtils {
     class func popToRootVC() {
         getTopViewController(nil)?.navigationController?.popToRootViewController(animated: true)
     }
+    
+    //MARK: - 需要注册的时候传入一个导航包含的控制器
+    class func windowRoot(nav: UIViewController) {
+        if  nav.isKind(of: UINavigationController.self) == true {
+            AppWindows?.rootViewController = nav
+        } else {
+#if DEBUG
+            assertionFailure("传入对象必须是导航控制器")
+#endif
+        }
+    }
+    
+    // Configure console window.
+    class func fetchWindow() -> UIWindow? {
+        if #available(iOS 15.0, *) {
+            let windowScene = UIApplication.shared
+                .connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first
+            
+            if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
+                return keyWindow
+            }
+            return nil
+        } else {
+            return UIApplication.shared.windows.first
+        }
+    }
+    
+    class func modalDismissBeforePush(_ vc: UIViewController) {
+        if let visiableVC = PTUtils.getTopViewController(nil), visiableVC.presentingViewController != nil {
+            visiableVC.dismiss(animated: false) {
+                push(vc)
+            }
+        } else {
+            push(vc)
+        }
+    }
+    
+    class func pusbWindowNavRoot(_ vc: UIViewController) {
+        if let app = UIApplication.shared.delegate, let window = app.window {
+            if let rootVC = window?.rootViewController {
+                if let nav: UINavigationController = rootVC as? UINavigationController {
+                    nav.pushViewController(vc, animated: true)
+                } else {
+                    getTopViewController(nil)?.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        }
+    }
+    
+    //MARK: - 判断某视图是否已经在window 上
+    class func ifAddToWindow(view: AnyClass) -> Bool {
+        let res = AppWindows!.subviews.filter { (subView: UIView) -> Bool in
+            subView.isKind(of: view.self)
+        }
+        return res.count > 0
+    }
+    
+    //MARK: - 获取活跃VC
+    class func getActivityViewController() -> UIViewController? {
+        
+        var viewController: UIViewController?
+        let windows: [UIWindow] = UIApplication.shared.windows
+        var activeWindow: UIWindow?
+        
+        for window in windows {
+            if window.windowLevel == UIWindow.Level.normal {
+                activeWindow = window
+                break
+            }
+        }
+        
+        if activeWindow != nil && activeWindow!.subviews.count > 0 {
+            let frontView: UIView = activeWindow!.subviews.last!
+            var nextResponder: UIResponder? = frontView.next
+            
+            while nextResponder!.isKind(of: UIWindow.self) == false {
+                if nextResponder!.isKind(of: UIViewController.self) {
+                    viewController = nextResponder as! UIViewController?
+                    break
+                } else {
+                    nextResponder = nextResponder!.next
+                }
+            }
+            
+            if nextResponder!.isKind(of: UIViewController.self) {
+                viewController = nextResponder as! UIViewController?
+            } else {
+                viewController = activeWindow!.rootViewController
+            }
+            
+            while  viewController!.presentedViewController != nil {
+                viewController =  viewController!.presentedViewController
+            }
+        }
+        
+        return viewController
+    }
+    
+    //MARK: 获取当前正在显示的UIViewController，而不是NavigationController
+    class func visibleVC() -> UIViewController? {
+        let viewController = getActivityViewController()
+        if viewController?.isKind(of: UINavigationController.self) == true {
+            let nav: UINavigationController = viewController as! UINavigationController
+            return nav.visibleViewController
+        }
+        return viewController
+    }
+        
+    class func returnFrontVC() {
+        let vc = PTUtils.getCurrentVC()
+        if vc.presentingViewController != nil {
+            vc.dismiss(animated: true, completion: nil)
+        } else {
+            vc.navigationController?.popViewController(animated: true, nil)
+        }
+    }
+    
+    class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
+        // presented view controller
+        if let presentedViewController = viewController?.presentedViewController {
+            return topMost(of: presentedViewController)
+        }
+
+        // UITabBarController
+        if let tabBarController = viewController as? UITabBarController,
+            let selectedViewController = tabBarController.selectedViewController {
+            return topMost(of: selectedViewController)
+        }
+        
+        // UINavigationController
+        if let navigationController = viewController as? UINavigationController,
+            let visibleViewController = navigationController.visibleViewController {
+            return topMost(of: visibleViewController)
+        }
+        
+        // UIPageController
+        if let pageViewController = viewController as? UIPageViewController,
+           pageViewController.viewControllers?.count == 1 {
+            return topMost(of: pageViewController.viewControllers?.first)
+        }
+        return viewController
+    }
+    
+
+    
+    //MARK: 找出某view的superview
+    ///找出某view的superview
+    class func findSuperViews(view:UIView)->[UIView] {
+        var temp = view.superview
+        let result = NSMutableArray()
+        while temp != nil {
+            result.add(temp!)
+            temp = temp!.superview
+        }
+        return result as! [UIView]
+    }
+
+    //MARK: 找出某views的superview
+    ///找出某views的superview
+    class func findCommonSuperView(firstView:UIView,
+                                other:UIView)->[UIView] {
+        let result = NSMutableArray()
+        let sOne = findSuperViews(view: firstView)
+        let sOther = findSuperViews(view: other)
+        var i = 0
+        while i < min(sOne.count, sOther.count) {
+            if sOne == sOther {
+                result.add(sOne)
+                i += 1
+            } else {
+                break
+            }
+            }
+        return result as! [UIView]
+    }
+
+    
+    class func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
+#if POOTOOLS_DEBUG
+        let share = LocalConsole.shared
+        if share.isVisiable {
+            let nav = PTBaseNavControl(rootViewController: vc)
+            nav.modalPresentationStyle = .formSheet
+            PTUtils.getCurrentVC().present(nav, animated: true, completion: {
+                if completion != nil {
+                    completion!()
+                }
+                SwizzleTool().swizzleDidAddSubview {
+                    // Configure console window.
+                    if share.maskView != nil {
+                        PTUtils.fetchWindow()!.bringSubviewToFront(share.maskView!)
+                    }
+                    if share.terminal != nil {
+                        PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
+                    }
+                }
+            })
+
+        } else {
+            PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
+        }
+#else
+        PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
+#endif
+    }
+
 }
 
 //MARK: OC-FUNCTION
 public extension PTUtils {
     class func oc_isiPhoneSeries()->Bool {
         isIPhoneXSeries()
-    }    
+    }
 }
 
 public class SwizzleTool: NSObject {
