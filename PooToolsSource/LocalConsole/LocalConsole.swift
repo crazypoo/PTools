@@ -132,6 +132,7 @@ extension UIImage {
     static let networkImage = UIImage(.globe).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let mockLocationImage = UIImage(.location.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let logFile = UIImage(.textformat.abc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let InspectorImage = UIImage(.stethoscope).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {
@@ -194,6 +195,7 @@ public class LocalConsole: NSObject {
                 commitTextChanges(requestMenuUpdate: true)
                 watcherInit()
             } else {
+                Inspector.sharedInstance.stop()
                 PTNetworkHelper.shared.disable()
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                     terminal!.transform = .init(scaleX: 0.9, y: 0.9)
@@ -300,6 +302,7 @@ public class LocalConsole: NSObject {
     }
     
     private func watcherInit() {
+        Inspector.sharedInstance.start()
         UIView.swizzleMethods()
         UIWindow.db_swizzleMethods()
         URLSessionConfiguration.swizzleMethods()
@@ -634,6 +637,10 @@ public class LocalConsole: NSObject {
             debugActions.append(userDefaults)
         }
         
+        let inspect = UIAction(title: "Inspectors",image: UIImage.InspectorImage) { _ in
+            Inspector.sharedInstance.present(animated: true)
+        }
+        
         let logFile = UIAction(title: .log, image: UIImage.logFile) { _ in
             self.logFileOpen()
         }
@@ -737,7 +744,7 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
+        debugActions.append(contentsOf: [inspect,logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(

@@ -87,7 +87,7 @@ public extension NSImage {
     }
 
     private func giflog(_ msg: String) {
-        print("SwiftyGIF: \(msg)")
+        PTNSLogConsole("SwiftyGIF: \(msg)")
     }
     
     /// Set backing data for this gif. Overwrites any existing data.

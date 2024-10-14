@@ -540,7 +540,6 @@
 		55B8FC1F2CBC1C8C006D82AD /* InspectorAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC1A2CBC1C8C006D82AD /* InspectorAppearance.swift */; };
 		55B8FC202CBC1C8C006D82AD /* InspectorColorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC1B2CBC1C8C006D82AD /* InspectorColorStyle.swift */; };
 		55B8FC212CBC1C8C006D82AD /* InspectorConfiguration+KeyCommandSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC1D2CBC1C8C006D82AD /* InspectorConfiguration+KeyCommandSettings.swift */; };
-		55B8FC232CBC1C95006D82AD /* ConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC222CBC1C95006D82AD /* ConsoleLogger.swift */; };
 		55B8FC262CBC1C9F006D82AD /* ElementInspectorAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC242CBC1C9F006D82AD /* ElementInspectorAppearance.swift */; };
 		55B8FC272CBC1C9F006D82AD /* ElementInspectorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC252CBC1C9F006D82AD /* ElementInspectorConfiguration.swift */; };
 		55B8FC2D2CBC1CAC006D82AD /* ElementInspectorCoordinator+ElementInspectorNavigationControllerDismissDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FC2A2CBC1CAC006D82AD /* ElementInspectorCoordinator+ElementInspectorNavigationControllerDismissDelegate.swift */; };
@@ -1476,7 +1475,6 @@
 		55B8FC1B2CBC1C8C006D82AD /* InspectorColorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorColorStyle.swift; sourceTree = "<group>"; };
 		55B8FC1C2CBC1C8C006D82AD /* InspectorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorConfiguration.swift; sourceTree = "<group>"; };
 		55B8FC1D2CBC1C8C006D82AD /* InspectorConfiguration+KeyCommandSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InspectorConfiguration+KeyCommandSettings.swift"; sourceTree = "<group>"; };
-		55B8FC222CBC1C95006D82AD /* ConsoleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleLogger.swift; sourceTree = "<group>"; };
 		55B8FC242CBC1C9F006D82AD /* ElementInspectorAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementInspectorAppearance.swift; sourceTree = "<group>"; };
 		55B8FC252CBC1C9F006D82AD /* ElementInspectorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementInspectorConfiguration.swift; sourceTree = "<group>"; };
 		55B8FC282CBC1CAC006D82AD /* ElementInspectorCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementInspectorCoordinator.swift; sourceTree = "<group>"; };
@@ -2451,6 +2449,8 @@
 		55102A9C2AFFAB1700E9529D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				55B8FD922CBC9163006D82AD /* ElementLibrary.xcassets */,
+				55B8FD932CBC9163006D82AD /* Symbols.xcassets */,
 				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 				555818A82AF8DE8F0051C0AA /* Settings.bundle */,
 				55102ADC2AFFD34900E9529D /* icon_clear.png */,
@@ -3043,7 +3043,6 @@
 				55B8FCF12CBC1DD6006D82AD /* Command.swift */,
 				55B8FCD22CBC1DB9006D82AD /* CommandGroupsViewModel.swift */,
 				55B8FCF22CBC1DD6006D82AD /* CommandsGroup.swift */,
-				55B8FC222CBC1C95006D82AD /* ConsoleLogger.swift */,
 				55B8FCAF2CBC1D88006D82AD /* ContentLayoutPrioritySizeSectionDataSource.swift */,
 				55B8FD2A2CBC1DE1006D82AD /* ContextMenuPresenter.swift */,
 				55B8FC722CBC1D7A006D82AD /* ControlAttributesSectionDataSource.swift */,
@@ -3097,7 +3096,6 @@
 				55B8FC632CBC1D6E006D82AD /* ElementInspectorViewCode+Content.swift */,
 				55B8FC5C2CBC1D61006D82AD /* ElementInspectorViewController.swift */,
 				55B8FC602CBC1D67006D82AD /* ElementInspectorViewModel.swift */,
-				55B8FD922CBC9163006D82AD /* ElementLibrary.xcassets */,
 				55B8FD842CBC1E18006D82AD /* ElementNameView.swift */,
 				55B8FCF42CBC1DD6006D82AD /* ElementPanelType.swift */,
 				55B8FD3C2CBC1DEB006D82AD /* ExpirableProtocol.swift */,
@@ -3222,7 +3220,6 @@
 				55B8FBE72CBC1C49006D82AD /* StepperPairControl.swift */,
 				55B8FB942CBC1400006D82AD /* String+InspectorEX.swift */,
 				55B8FC812CBC1D7A006D82AD /* SwitchAttributesSectionDataSource.swift */,
-				55B8FD932CBC9163006D82AD /* Symbols.xcassets */,
 				55B8FC822CBC1D7A006D82AD /* TabBarAttributesSectionDataSource.swift */,
 				55B8FC832CBC1D7A006D82AD /* TabBarItemAttributesSectionDataSource.swift */,
 				55B8FC842CBC1D7A006D82AD /* TableViewAttributesSectionDataSource.swift */,
@@ -4774,7 +4771,6 @@
 				556CA4BC2B29500600A5B189 /* Error.swift in Sources */,
 				555818B82AFA4E750051C0AA /* PTProgressBar.swift in Sources */,
 				5599C43B2C4F642100394835 /* AkiraTextField.swift in Sources */,
-				55B8FC232CBC1C95006D82AD /* ConsoleLogger.swift in Sources */,
 				5599C43C2C4F642100394835 /* IsaoTextField.swift in Sources */,
 				5599C43D2C4F642100394835 /* YoshikoTextField.swift in Sources */,
 				55B8FB492CBB596D006D82AD /* UIStackView+InspectorEX.swift in Sources */,

@@ -530,7 +530,7 @@ public class SwizzleTool: NSObject {
     public func swizzleContextMenuReverseOrder() {
         guard let originalMethod = class_getInstanceMethod(NSClassFromString("_" + "UI" + "Context" + "Menu" + "List" + "View").self, NSSelectorFromString("reverses" + "Action" + "Order")),
               let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_reverses_Action_Order))
-        else { Swift.print("Swizzle Error Occurred"); return }
+        else { PTNSLogConsole("Swizzle Error Occurred"); return }
         
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }

@@ -53,7 +53,7 @@ final class ViewHierarchyRoot {
             return try JSONDecoder().decode(BundleInfo.self, from: data)
         }
         catch {
-            print(error)
+            PTNSLogConsole(error)
             return nil
         }
     }()
