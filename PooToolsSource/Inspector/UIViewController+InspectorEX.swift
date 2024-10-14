@@ -181,3 +181,124 @@ public extension UIViewController {
         }
     }
 }
+
+extension UIViewController {
+    var allPresentedViewControllers: [UIViewController] {
+        var allPresentedViewControllers = [UIViewController]()
+
+        var viewController: UIViewController? = self
+
+        while viewController != nil {
+            guard
+                let presented = viewController?.presentedViewController,
+                !(presented is InspectorViewController)
+            else {
+                return allPresentedViewControllers
+            }
+            allPresentedViewControllers.append(presented)
+            viewController = presented
+        }
+
+        return allPresentedViewControllers
+    }
+
+    var allChildren: [UIViewController] {
+        children.flatMap { [$0] + $0.allChildren }
+    }
+
+    var allActiveChildren: [UIViewController] {
+        activeChildren.flatMap { [$0] + $0.allActiveChildren }
+    }
+
+    var activeChildren: [UIViewController] {
+        switch self {
+        case let tabBarController as UITabBarController:
+            guard let selectedViewController = tabBarController.selectedViewController else {
+                return []
+            }
+            return [selectedViewController]
+
+        case let navigationController as UINavigationController:
+            guard let topViewController = navigationController.topViewController else {
+                return []
+            }
+            return [topViewController]
+
+        default:
+            return children
+                .filter(\.isViewLoaded)
+                .filter { $0.view.window != nil }
+        }
+    }
+}
+
+extension UIViewController {
+    func setPopoverModalPresentationStyle(delegate: Any, transitionDelegate: UIViewControllerTransitioningDelegate?, from sourceView: UIView) {
+        if let transitionDelegate = transitionDelegate {
+            modalPresentationStyle = .custom
+            transitioningDelegate = transitionDelegate
+            return
+        }
+
+        #if swift(>=5.5)
+        if #available(iOS 15.0, *) {
+            modalPresentationStyle = .popover
+
+            guard let popoverPresentationController = popoverPresentationController else { return }
+
+            popoverPresentationController.sourceView = sourceView
+            popoverPresentationController.delegate = delegate as? UIPopoverPresentationControllerDelegate
+
+            let sheet = popoverPresentationController.adaptiveSheetPresentationController
+            sheet.delegate = delegate as? UISheetPresentationControllerDelegate
+            sheet.detents = [.medium(), .large()]
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.preferredCornerRadius = Inspector.sharedInstance.appearance.elementInspector.horizontalMargins
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.sourceView = sourceView
+        }
+        #else
+        if sourceView?.traitCollection.userInterfaceIdiom == .phone {
+            modalPresentationStyle = .pageSheet
+            presentationController?.delegate = delegate as? UIAdaptivePresentationControllerDelegate
+        }
+        else {
+            modalPresentationStyle = .popover
+            popoverPresentationController?.sourceView = sourceView
+            popoverPresentationController?.delegate = delegate as? UIPopoverPresentationControllerDelegate
+        }
+        #endif
+    }
+}
+
+@objc public extension UIViewController {
+    func inspectorKeyCommandHandler(_ sender: Any) {
+        guard
+            let commandGroups = Inspector.sharedInstance.manager?.commandGroups,
+            let keyCommand = sender as? UIKeyCommand
+        else {
+            return
+        }
+
+        let flattenedCommands = commandGroups.flatMap(\.commands)
+
+        for action in flattenedCommands where action.title == keyCommand.discoverabilityTitle ?? keyCommand.title {
+            action.closure?()
+            return
+        }
+    }
+
+    func presentationKeyCommandHandler(_ sender: Any) {
+        Inspector.present()
+    }
+
+    internal func dismissModalKeyCommand(action: Selector) -> UIKeyCommand {
+        UIKeyCommand(
+            .discoverabilityTitle(
+                title: Texts.dismissView,
+                key: .escape
+            ),
+            action: action
+        )
+    }
+}

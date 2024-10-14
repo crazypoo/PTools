@@ -37,7 +37,7 @@ public class CropPickerView: UIView {
             self.cropLineHidden(image)
             self.scrollView.layoutIfNeeded()
             self.dimLayerMask(animated: false)
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 self.imageMinAdjustment(animated: false)
             }
         }
@@ -369,7 +369,7 @@ public class CropPickerView: UIView {
         self.cropLineHidden(image)
         self.scrollView.layoutIfNeeded()
         self.dimLayerMask(animated: false)
-        DispatchQueue.main.async {
+        PTGCDManager.gcdMain {
             var point: CGPoint = .zero
             if isMin {
                 let imageSize = self.imageView.frameForImageInImageViewAspectFit
@@ -416,7 +416,7 @@ public class CropPickerView: UIView {
             return
         }
         
-        DispatchQueue.main.async {
+        PTGCDManager.gcdMain {
             let imageSize = self.imageView.frameForImageInImageViewAspectFit
             let widthRate =  self.bounds.width / imageSize.width
             let heightRate = self.bounds.height / imageSize.height
@@ -536,12 +536,12 @@ extension CropPickerView {
     @objc private func imageDoubleTap(_ sender: UITapGestureRecognizer) {
         if self.scrollView.zoomScale == 1 {
             self.imageRealSize(true)
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 self.imageMaxAdjustment(animated: true)
             }
         } else {
             self.scrollView.setZoomScale(1, animated: true)
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 self.imageMinAdjustment(animated: true)
             }
         }

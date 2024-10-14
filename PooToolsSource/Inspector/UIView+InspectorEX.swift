@@ -314,3 +314,634 @@ public extension UIView {
         animator.startAnimation()
     }
 }
+
+extension UIView.AutoresizingMask: CaseIterable {
+    public typealias AllCases = [UIView.AutoresizingMask]
+
+    public static let allCases: [UIView.AutoresizingMask] = [
+        .flexibleLeftMargin,
+        .flexibleWidth,
+        .flexibleRightMargin,
+        .flexibleTopMargin,
+        .flexibleHeight,
+        .flexibleBottomMargin
+    ]
+}
+
+extension UIView.AutoresizingMask: CustomStringConvertible {
+    var name: String {
+        switch self {
+        case .flexibleWidth:
+            return "Width"
+        case .flexibleLeftMargin:
+            return "Left Margin"
+        case .flexibleWidth:
+            return "Width"
+        case .flexibleRightMargin:
+            return "Right Margin"
+        case .flexibleTopMargin:
+            return "Top Margin"
+        case .flexibleHeight:
+            return "Height"
+        case .flexibleBottomMargin:
+            return "Bottom Margin"
+        default:
+            return String(describing: rawValue)
+        }
+    }
+
+    var description: String {
+        var strings = [String]()
+
+        for mask in Self.allCases where contains(mask) {
+            strings.append(mask.name)
+        }
+
+        return "Flexible \(strings.joined(separator: ", "))"
+    }
+}
+
+extension UIView.ContentMode: CaseIterable {
+    public typealias AllCases = [UIView.ContentMode]
+
+    public static let allCases: [UIView.ContentMode] = [
+        .scaleToFill,
+        .scaleAspectFit,
+        .scaleAspectFill,
+        .redraw,
+        .center,
+        .top,
+        .bottom,
+        .left,
+        .right,
+        .topLeft,
+        .topRight,
+        .bottomLeft,
+        .bottomRight
+    ]
+}
+
+extension UIView.ContentMode: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .scaleToFill:
+            return "Scale To Fill"
+
+        case .scaleAspectFit:
+            return "Scale Aspect Fit"
+
+        case .scaleAspectFill:
+            return "Scale Aspect Fill"
+
+        case .redraw:
+            return "Redraw"
+
+        case .center:
+            return "Center"
+
+        case .top:
+            return "Top"
+
+        case .bottom:
+            return "Bottom"
+
+        case .left:
+            return "Left"
+
+        case .right:
+            return "Right"
+
+        case .topLeft:
+            return "Top Left"
+
+        case .topRight:
+            return "Top Right"
+
+        case .bottomLeft:
+            return "Bottom Left"
+
+        case .bottomRight:
+            return "Bottom Right"
+
+        @unknown default:
+            return "\(self) (unsupported)"
+        }
+    }
+}
+
+enum ViewInstallationPosition {
+    case inFront, behind
+}
+
+enum ViewBinding {
+    case centerX
+
+    case centerXY
+
+    case centerY
+
+    case spacing(
+        top: CGFloat? = nil,
+        leading: CGFloat? = nil,
+        bottom: CGFloat? = nil,
+        trailing: CGFloat? = nil
+    )
+
+    case autoResizingMask(UIView.AutoresizingMask)
+
+    static let autoResizingMask = ViewBinding.autoResizingMask([.flexibleWidth, .flexibleHeight])
+
+    static func spacing(all: CGFloat) -> ViewBinding {
+        .spacing(top: all, leading: all, bottom: all, trailing: all)
+    }
+
+    static func spacing(horizontal: CGFloat, vertical: CGFloat) -> ViewBinding {
+        .spacing(top: vertical, leading: horizontal, bottom: vertical, trailing: horizontal)
+    }
+
+    static func spacing(_ edgeInsets: UIEdgeInsets) -> ViewBinding {
+        .spacing(top: edgeInsets.top, leading: edgeInsets.left, bottom: edgeInsets.bottom, trailing: edgeInsets.right)
+    }
+
+    static func spacing(_ directionalEdgeInsets: NSDirectionalEdgeInsets) -> ViewBinding {
+        .spacing(top: directionalEdgeInsets.top, leading: directionalEdgeInsets.leading, bottom: directionalEdgeInsets.bottom, trailing: directionalEdgeInsets.trailing)
+    }
+}
+
+extension UIView {
+    func wrappedInside<View: UIView>(_ type: View.Type) -> View {
+        let view = type.init(frame: .zero)
+        view.installView(self, priority: .required)
+
+        return view
+    }
+
+    var allSubviews: [UIView] {
+        subviews.reversed().flatMap { [$0] + $0.allSubviews }
+    }
+
+    var inspectableSubviews: [UIView] {
+        subviews.filter { $0 is NonInspectableView == false }
+    }
+
+    var allInspectableSubviews: [UIView] {
+        inspectableSubviews.reversed().flatMap { [$0] + $0.allInspectableSubviews }
+    }
+
+    func installView(
+        _ view: UIView,
+        _ viewBinding: ViewBinding = .spacing(all: .zero),
+        position: ViewInstallationPosition = .inFront,
+        priority: UILayoutPriority = .defaultHigh
+    ) {
+        switch position {
+        case .inFront:
+            addSubview(view)
+
+        case .behind:
+            insertSubview(view, at: .zero)
+        }
+
+        switch viewBinding {
+        case let .autoResizingMask(mask):
+            view.autoresizingMask = mask
+
+        case .centerX,
+             .centerY,
+             .centerXY,
+             .spacing:
+            let constraints = viewBinding.constraints(for: view, inside: self)
+
+            view.translatesAutoresizingMaskIntoConstraints = false
+
+            constraints.forEach {
+                $0.priority = priority
+                $0.isActive = true
+            }
+        }
+    }
+
+    /**
+     A Boolean value that determines whether the view is hidden and works around a [UIStackView bug](http://www.openradar.me/25087688) affecting iOS 9.2+.
+     */
+    var isSafelyHidden: Bool {
+        get {
+            isHidden
+        }
+        set {
+            isHidden = false
+            isHidden = newValue
+        }
+    }
+}
+
+private extension ViewBinding {
+    func constraints(for view: UIView, inside superview: UIView) -> [NSLayoutConstraint] {
+        switch self {
+        case .centerX:
+            return [
+                view.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
+            ]
+
+        case .centerY:
+            return [
+                view.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
+            ]
+
+        case .centerXY:
+            return [
+                view.centerXAnchor.constraint(equalTo: superview.centerXAnchor),
+                view.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
+            ]
+
+        case .autoResizingMask:
+            return []
+
+        case let .spacing(top, leading, bottom, trailing):
+            var constraints = [NSLayoutConstraint]()
+
+            if let top = top {
+                constraints.append(view.topAnchor.constraint(equalTo: superview.topAnchor, constant: top))
+            }
+            if let leading = leading {
+                constraints.append(view.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leading))
+            }
+            if let bottom = bottom {
+                constraints.append(view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -bottom))
+            }
+            if let trailing = trailing {
+                constraints.append(view.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -trailing))
+            }
+
+            return constraints
+        }
+    }
+}
+
+extension UIView {
+    var _highlightView: InspectorHighlightView? {
+        subviews.compactMap { $0 as? InspectorHighlightView }.first
+    }
+
+    var _layerView: LayerView? {
+        subviews.compactMap { $0 as? LayerView }.first
+    }
+}
+
+extension UIView {
+    func maskFromTop(margin: CGFloat) {
+        layer.mask = visibilityMaskWithLocation(location: margin / frame.size.height)
+        layer.masksToBounds = true
+    }
+
+    func visibilityMaskWithLocation(location: CGFloat) -> CAGradientLayer {
+        let mask = CAGradientLayer()
+        mask.frame = bounds
+        mask.locations = [
+            NSNumber(value: Float(location)),
+            NSNumber(value: Float(location))
+        ]
+        mask.colors = [
+            UIColor(white: 1, alpha: 0).cgColor,
+            UIColor(white: 1, alpha: 1).cgColor
+        ]
+
+        return mask
+    }
+}
+
+extension UIView {
+    func enableRasterization(maxScale: CGFloat = 2) {
+        layer.rasterizationScale = max(maxScale, UIScreen.main.scale)
+        layer.shouldRasterize = true
+    }
+
+    func snapshot(afterScreenUpdates: Bool, with size: CGSize? = nil) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+
+        let image = renderer.image { _ in
+            drawHierarchy(in: bounds, afterScreenUpdates: afterScreenUpdates)
+        }
+
+        return image.resized(size ?? bounds.size)
+    }
+}
+
+extension UIView {
+    // MARK: - Did Move To didMoveToWindow
+
+    private static let performSwizzling: Void = sizzle(#selector(didMoveToWindow), with: #selector(swizzled_didMoveToWindow))
+
+    @objc func swizzled_didMoveToWindow() {
+        swizzled_didMoveToWindow()
+
+        if window == nil {
+            Inspector.sharedInstance.contextMenuPresenter?.removeInteraction(from: self)
+        }
+        else {
+            Inspector.sharedInstance.contextMenuPresenter?.addInteraction(to: self)
+        }
+    }
+
+    private static func sizzle(_ aSelector: Selector, with otherSelector: Selector) {
+        let instance = UIView()
+
+        let aClass: AnyClass! = object_getClass(instance)
+
+        let originalMethod = class_getInstanceMethod(aClass, aSelector)
+        let swizzledMethod = class_getInstanceMethod(aClass, otherSelector)
+
+        guard
+            let originalMethod = originalMethod,
+            let swizzledMethod = swizzledMethod
+        else {
+            return
+        }
+
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+
+    static func startSwizzling() {
+        _ = performSwizzling
+    }
+}
+
+extension UIView: ViewHierarchyElementRepresentable {
+    var depth: Int {
+        allParents.count
+    }
+
+    var parent: UIView? {
+        superview
+    }
+
+    var isContainer: Bool { !children.isEmpty }
+
+    var allParents: [UIView] {
+        allSuperviews
+            .filter { $0 is InternalViewProtocol == false }
+    }
+
+    var allSuperviews: [UIView] {
+        var superviews = [UIView]()
+        if let superview = superview {
+            superviews.append(superview)
+            superviews.append(contentsOf: superview.allSuperviews)
+        }
+        return superviews
+    }
+
+    var children: [UIView] {
+        subviews.filter { $0 is InternalViewProtocol == false }
+    }
+
+    var allChildren: [UIView] {
+        children.reversed().flatMap { [$0] + $0.allChildren }
+    }
+
+    var overrideViewHierarchyInterfaceStyle: ViewHierarchyInterfaceStyle {
+        .init(rawValue: overrideUserInterfaceStyle) ?? .unspecified
+    }
+
+    var isInternalView: Bool {
+        _isInternalView
+    }
+
+    var isSystemContainer: Bool {
+        _isSystemContainer
+    }
+
+//    #if !targetEnvironment(macCatalyst)
+//    public var className: String {
+//        _className
+//    }
+//    #endif
+
+    var classNameWithoutQualifiers: String {
+        _classNameWithoutQualifiers
+    }
+
+    var objectIdentifier: ObjectIdentifier {
+        ObjectIdentifier(self)
+    }
+
+    var isAssociatedToWindow: Bool {
+        window != nil || self is UIWindow
+    }
+
+    var issues: [ViewHierarchyIssue] { ViewHierarchyIssue.issues(for: self) }
+
+    var constraintElements: [LayoutConstraintElement] {
+        constraints
+            .compactMap { LayoutConstraintElement(with: $0, in: self) }
+            .uniqueValues()
+    }
+
+    var canPresentOnTop: Bool {
+        switch self {
+        case is UITextView:
+            return true
+
+        case is UIScrollView:
+            return false
+
+        default:
+            return true
+        }
+    }
+
+    var canHostContextMenuInteraction: Bool {
+        canHostInspectorView &&
+            self is UIWindow == false &&
+            className != "UITransitionView" &&
+            className != "UIDropShadowView" &&
+            className != "_UIModernBarButton"
+    }
+
+    var canHostInspectorView: Bool {
+        let className = _className
+        let superViewClassName = superview?._className ?? ""
+
+        guard
+            className != "UIRemoteKeyboardWindow",
+            className != "UITextEffectsWindow",
+            className != "UIEditingOverlayGestureView",
+            className != "UIInputSetContainerView",
+
+            // Avoid breaking UINavigationController large title.
+            superViewClassName != "UIViewControllerWrapperView",
+
+            // Adding subviews directly to a UIVisualEffectView throws runtime exception.
+            self is UIVisualEffectView == false,
+
+            // Adding subviews to UIPageViewController containers throws runtime exception.
+            className != "_UIPageViewControllerContentView",
+            subviews.map(\._className).contains("_UIPageViewControllerContentView") == false,
+            className != "_UIQueuingScrollView",
+            superViewClassName != "_UIQueuingScrollView",
+
+            // Avoid breaking UIButton layout.
+            superview is UIButton == false,
+
+            // Avoid breaking UITableView self sizing cells.
+            className != "UITableViewCellContentView",
+
+            // Skip non inspectable views
+            self is NonInspectableView == false,
+            superview is NonInspectableView == false,
+
+            // Skip custom classes
+            Inspector.sharedInstance.configuration.nonInspectableClassNames.contains(className) == false,
+            Inspector.sharedInstance.configuration.nonInspectableClassNames.contains(superViewClassName) == false
+        else {
+            return false
+        }
+        return true
+    }
+
+    var elementName: String {
+        accessibilityIdentifier?.trimmed ?? _classNameWithoutQualifiers
+    }
+
+    var displayName: String {
+        let prettyName = accessibilityIdentifier?.trimmed ?? _prettyClassNameWithoutQualifiers
+
+        guard
+            let textElement = self as? TextElement,
+            let textContent = textElement.content?.replacingOccurrences(of: "\n", with: "\\n")
+        else {
+            return prettyName
+        }
+
+        let limit = 20
+
+        let formattedText: String = {
+            guard textContent.count > limit else { return textContent }
+            return textContent
+                .prefix(limit)
+                .appending("…")
+        }()
+
+        return "\(prettyName) - \"\(formattedText)\""
+    }
+
+    var shortElementDescription: String { [
+        _className,
+        subviewsDescription,
+        frameDescription
+    ]
+    .compactMap { $0 }
+    .joined(separator: .newLine)
+    }
+
+    var elementDescription: String {
+        let fullDescription = [
+            accessibilityIdentifier?.string(prepending: "Accessibility ID: \"", appending: "\""),
+            shortElementDescription,
+            constraintsDescription,
+            issuesDescription?.string(prepending: .newLine)
+        ]
+        .compactMap { $0 }
+        .joined(separator: .newLine)
+
+        guard let accessibilityDescription = accessibilityLabel?.trimmed else {
+            return fullDescription
+        }
+        return "\"\(accessibilityDescription)\"\n\n\(fullDescription)"
+    }
+}
+
+private extension UIView {
+    var subviewsDescription: String? {
+        let childrenCount = children.count
+        let allChildrenCount = allChildren.count
+
+        let description = childrenCount == 1 ? children.first?._className.string(prepending: "Subview:") : "Subviews: \(childrenCount)"
+
+        guard let description = description else { return .none }
+
+        guard allChildrenCount > childrenCount else {
+            return description
+        }
+
+        return "\(description) (\(allChildrenCount) Total)"
+    }
+
+    private static let frameFormatter = NumberFormatter().then {
+        $0.numberStyle = .decimal
+        $0.maximumFractionDigits = 1
+    }
+
+    var frameDescription: String? {
+        ["Origin: (\(Self.frameFormatter.string(from: frame.origin.x)!), \(Self.frameFormatter.string(from: frame.origin.y)!))",
+         "Size: \(Self.frameFormatter.string(from: frame.size.width)!) x \(Self.frameFormatter.string(from: frame.size.height)!)"]
+            .joined(separator: "  –  ")
+    }
+
+    var issuesDescription: String? {
+        guard !issues.isEmpty else { return nil }
+
+        if issues.count == 1, let issue = issues.first {
+            return "⚠️ \(issue.description)"
+        }
+
+        return issues.reduce(into: "") { multipleIssuesDescription, issue in
+            if multipleIssuesDescription?.isEmpty == true {
+                multipleIssuesDescription = "⚠️ \(issues.count) Issues"
+            }
+            else {
+                multipleIssuesDescription?.append(.newLine)
+                multipleIssuesDescription?.append("• \(issue.description)")
+            }
+        }
+    }
+
+    var constraintsDescription: String? {
+        guard constraintElements.count > .zero else { return .none }
+        return "Constraints: \(constraintElements.count)"
+    }
+}
+
+extension NSObject {
+    var _isInternalView: Bool {
+        _className.starts(with: "_")
+    }
+
+    var _isSystemContainer: Bool {
+        let className = _classNameWithoutQualifiers
+
+        for systemContainer in Inspector.sharedInstance.configuration.knownSystemContainers {
+            if className == systemContainer || className.starts(with: "_UI") {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    var _className: String {
+        String(describing: classForCoder)
+    }
+
+    var _prettyClassNameWithoutQualifiers: String {
+        _classNameWithoutQualifiers
+            .replacingOccurrences(of: "_", with: "")
+            .camelCaseToWords()
+            .replacingOccurrences(of: " Kit ", with: "Kit ")
+            .removingRegexMatches(pattern: "[A-Z]{2} ", options: .anchored)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var _superclassName: String? {
+        guard let superclass = superclass else { return nil }
+        return String(describing: superclass)
+    }
+
+    var _classNameWithoutQualifiers: String {
+        guard let nameWithoutQualifiers = _className.split(separator: "<").first else {
+            return _className
+        }
+
+        return String(nameWithoutQualifiers)
+    }
+}

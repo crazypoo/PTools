@@ -172,3 +172,34 @@ public extension UITextView {
         }
     }
 }
+
+extension UITextView {
+    convenience init(
+        _ fontStyle: UIFont.TextStyle,
+        _ text: String? = nil,
+        textAlignment: NSTextAlignment = .natural,
+        textColor: UIColor? = nil,
+        isScrollEnabled: Bool = false,
+        isSelectable: Bool = true,
+        isEditable: Bool = false
+    ) {
+        self.init()
+
+        self.text = text
+        font = .preferredFont(forTextStyle: fontStyle)
+        self.textAlignment = textAlignment
+        self.isScrollEnabled = isScrollEnabled
+        self.isSelectable = isSelectable
+        self.isEditable = isEditable
+        backgroundColor = nil
+
+        if let textColor = textColor {
+            self.textColor = textColor
+        }
+
+        textContainerInset = UIEdgeInsets(
+            left: -textContainer.lineFragmentPadding,
+            right: -textContainer.lineFragmentPadding
+        )
+    }
+}

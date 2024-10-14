@@ -8,6 +8,8 @@
 
 import UIKit
 import AVFoundation
+import QuartzCore
+import SafeSFSymbols
 
 extension UIImage {
     func withOptions(_ imageOptions: UIImage.Option...) -> UIImage {
@@ -73,4 +75,113 @@ public extension UIImage {
         
     }
     
+}
+
+extension UIImage {
+    var assetName: String? {
+        guard
+            let regex = try? NSRegularExpression(pattern: "(?<=named\\().+(?=\\))|(?<=symbol\\()\\w+:\\s\\w+(?=\\))", options: .caseInsensitive),
+            let firstMatch = regex.firstMatch(in: description)
+        else {
+            return nil
+        }
+
+        let assetName = description.substring(with: firstMatch.range)
+
+        return assetName
+    }
+
+    var sizeDesription: String {
+        guard
+            let width = formatter.string(from: size.width * scale / screenScale),
+            let height = formatter.string(from: size.height * scale / screenScale)
+        else {
+            return "None"
+        }
+
+        let sizeDesription = "w: \(width), h: \(height) @\(Int(screenScale))x"
+
+        return sizeDesription
+    }
+}
+
+private extension UIImage {
+    static var sharedFormatter = NumberFormatter().then {
+        $0.maximumFractionDigits = 1
+    }
+
+    var formatter: NumberFormatter {
+        Self.sharedFormatter
+    }
+
+    var screenScale: CGFloat {
+        UIScreen.main.scale
+    }
+}
+
+extension UIImage {
+    func maskImage(with mask: UIImage) -> UIImage? {
+        guard let cgImage = cgImage else { return .none }
+        let bounds = CGRect(origin: .zero, size: size)
+
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        guard let context = UIGraphicsGetCurrentContext() else { return .none }
+        context.translateBy(x: 0.0, y: size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+
+        guard let mask = mask.cgImage else { return .none }
+        context.clip(to: bounds, mask: mask)
+        context.draw(cgImage, in: bounds)
+
+        let maskedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return maskedImage
+    }
+}
+
+extension UIImage {
+    static func icon(_ name: String) -> UIImage? {
+        UIImage(named: name, in: Bundle.main, compatibleWith: nil)
+    }
+}
+
+extension UIImage {
+    @available(iOS 13, tvOS 13, *)
+    public convenience init(_ symbol: SafeSFSymbol, weight: UIImage.SymbolWeight) {
+        let configuration = UIImage.SymbolConfiguration(weight: weight)
+        self.init(systemName: symbol.name, withConfiguration: configuration)!
+    }
+}
+
+// MARK: - Element Inspector Panels
+
+extension UIImage {
+    static let elementAttributesPanel: UIImage = IconKit.imageOfSliderHorizontal().withRenderingMode(.alwaysTemplate)
+    static let elementChildrenPanel: UIImage = IconKit.imageOfRelationshipDiagram().withRenderingMode(.alwaysTemplate)
+    static let elementIdentityPanel: UIImage = .icon("identityPanel")!
+    static let elementSizePanel: UIImage = IconKit.imageOfSetSquareFill().withRenderingMode(.alwaysTemplate)
+}
+
+extension UIImage {
+    static let applicationIcon: UIImage = UIImage(.app.badgeFill)
+    static let collapseMirroredSymbol: UIImage = .icon("collapse-mirrored")!
+    static let collapseSymbol: UIImage = .icon("collapse")!
+    static let expandSymbol: UIImage = .icon("expand")!
+    static let hiddenViewSymbol: UIImage = .icon("Hidden-32_Normal")!
+    static let infoOutlineSymbol: UIImage = .icon("info.circle")!
+    static let infoSymbol: UIImage = IconKit.imageOfInfoCircleFill().withRenderingMode(.alwaysTemplate)
+    static let missingSymbol: UIImage = .icon("missing-view-32_Normal")!
+    static let warningSymbol: UIImage = .icon("exclamationmark.triangle")!
+}
+
+extension UIImage {
+    static let chevronDownSymbol: UIImage = UIImage(.chevron.downCircle,weight: .regular)
+    static let chevronRightSymbol: UIImage = UIImage(.chevron.rightCircle,weight: .regular)
+    static let closeSymbol: UIImage =  UIImage(.xmark.circle,weight: .regular)
+    static let copySymbol: UIImage = UIImage(.doc.onDoc,weight: .regular)
+    static let emptyLayerAction: UIImage = UIImage(.questionmark.diamond,weight: .regular)
+    static let layerAction: UIImage = UIImage(.square.stack_3dDownRightFill,weight: .regular)
+    static let layerActionHideAll: UIImage = UIImage(.xmark.circleFill,weight: .regular)
+    static let layerActionShowAll: UIImage = UIImage(.checkmark.circleFill,weight: .regular)
+    static let wireframeAction: UIImage = UIImage(.square.stack_3dDownRight,weight: .regular)
 }

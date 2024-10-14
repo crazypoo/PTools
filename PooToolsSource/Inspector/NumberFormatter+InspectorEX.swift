@@ -17,6 +17,18 @@ public extension NumberFormatter {
         self.init()
         apply(numberFormatterOptions: options)
     }
+    
+    func string(from cgFloat: CGFloat) -> String? {
+        string(from: NSNumber(floatLiteral: Double(cgFloat)))
+    }
+
+    func string(from double: Double) -> String? {
+        string(from: NSNumber(floatLiteral: double))
+    }
+
+    func string(from integer: Int) -> String? {
+        string(from: NSNumber(integerLiteral: integer))
+    }
 }
 
 public extension NumberFormatter {

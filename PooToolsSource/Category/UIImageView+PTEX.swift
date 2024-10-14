@@ -235,7 +235,7 @@ public extension UIImageView {
         let loader: UIView? = showLoader ? createLoader(from: customLoader) : nil
         
         let task = session.dataTask(with: url) { [weak self] data, _, error in
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 loader?.removeFromSuperview()
                 self?.parseDownloadedGif(url: url,
                                         data: data,

@@ -134,6 +134,10 @@ class AppDelegate: PTAppWindowsDelegate {
 //#if DEBUG
 //        PTCoreUserDefultsWrapper.AppDebugMode = true
         let _ = LocalConsole.shared
+        Inspector.sharedInstance.start()
+        PTGCDManager.gcdAfter(time: 3, block: {
+            Inspector.sharedInstance.present(animated: true)
+        })
 //        lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
 //        if !lcm.terminal?.systemIsVisible
 //        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode

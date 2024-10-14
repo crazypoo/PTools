@@ -33,7 +33,7 @@ public class UIKeyCommandTableView: UITableView {
         let hasBecomeFirstResponder = super.becomeFirstResponder()
         
         if hasBecomeFirstResponder {
-            DispatchQueue.main.async { [weak self] in
+            PTGCDManager.gcdMain { [weak self] in
                 guard let self = self else {
                     return
                 }
@@ -50,7 +50,7 @@ public class UIKeyCommandTableView: UITableView {
         let hasResignedFirstResponder = super.resignFirstResponder()
         
         if hasResignedFirstResponder {
-            DispatchQueue.main.async { [weak self] in
+            PTGCDManager.gcdMain { [weak self] in
                 guard let self = self else {
                     return
                 }

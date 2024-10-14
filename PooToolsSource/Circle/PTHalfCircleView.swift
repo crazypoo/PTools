@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc public enum LXHalfCircleViewType:Int,CaseIterable {
+@objc public enum PTHalfCircleViewType:Int,CaseIterable {
     case Left
     case Right
     case Up
@@ -17,7 +17,7 @@ import UIKit
 
 @objcMembers
 public class PTHalfCircleView: UIView {
-    public var circleType:LXHalfCircleViewType = .Right
+    public var circleType:PTHalfCircleViewType = .Right
     public var diameter:CGFloat = 19
     public var circleColor:UIColor = .systemRed
     

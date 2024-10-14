@@ -285,3 +285,88 @@ public extension UIStackView {
     }
 }
 
+extension UIStackView.Alignment: CaseIterable {
+    public typealias AllCases = [UIStackView.Alignment]
+
+    public static let allCases: [UIStackView.Alignment] = [
+        .fill,
+        .leading,
+        .firstBaseline,
+        .center,
+        .trailing,
+        .lastBaseline
+    ]
+}
+
+extension UIStackView.Alignment: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .fill:
+            return "Fill"
+
+        case .leading:
+            return "Leading"
+
+        case .firstBaseline:
+            return "First Baseline"
+
+        case .center:
+            return "Center"
+
+        case .trailing:
+            return "Trailing"
+
+        case .lastBaseline:
+            return "Last Baseline"
+
+        @unknown default:
+            return "\(self) (unsupported)"
+        }
+    }
+}
+
+extension UIStackView.Distribution: CaseIterable {
+    public typealias AllCases = [UIStackView.Distribution]
+
+    public static let allCases: [UIStackView.Distribution] = [
+        .fill,
+        .fillEqually,
+        .fillProportionally,
+        .equalSpacing,
+        .equalCentering
+    ]
+}
+
+extension UIStackView.Distribution: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .fill:
+            return "Fill"
+
+        case .fillEqually:
+            return "Fill Equally"
+
+        case .fillProportionally:
+            return "Fill Proportionally"
+
+        case .equalSpacing:
+            return "Equal Spacing"
+
+        case .equalCentering:
+            return "Equal Centering"
+
+        @unknown default:
+            return "\(self) (unsupported)"
+        }
+    }
+}
+
+extension UIStackView {
+    static func vertical(_ options: Option...) -> UIStackView {
+        UIStackView(options + [.axis(.vertical)])
+    }
+
+    static func horizontal(_ options: Option...) -> UIStackView {
+        UIStackView(options + [.axis(.horizontal)])
+    }
+}

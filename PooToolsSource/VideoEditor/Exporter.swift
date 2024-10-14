@@ -36,7 +36,7 @@ public struct Exporter {
             export.videoComposition = videoComposition
             export.exportAsynchronously { [weak export] in
                 guard let export = export else { return }
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     switch export.status {
                     case .failed:
                         if let error = export.error {

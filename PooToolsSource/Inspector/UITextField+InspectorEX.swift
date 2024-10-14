@@ -225,3 +225,66 @@ public extension UITextField {
     }
 }
 
+extension UITextField.BorderStyle: CaseIterable {
+    public typealias AllCases = [UITextField.BorderStyle]
+
+    public static let allCases: [UITextField.BorderStyle] = [
+        .none,
+        .line,
+        .bezel,
+        .roundedRect
+    ]
+}
+
+extension UITextField.BorderStyle: CustomImageConvertible {
+    var image: UIImage? {
+        switch self {
+        case .none:
+            return IconKit.imageOfBorderStyleNone()
+
+        case .line:
+            return IconKit.imageOfBorderStyleLine()
+
+        case .bezel:
+            return IconKit.imageOfBorderStyleBezel()
+
+        case .roundedRect:
+            return IconKit.imageOfBorderStyleRoundedRect()
+
+        @unknown default:
+            return nil
+        }
+    }
+}
+
+extension UITextField.ViewMode: CaseIterable {
+    public typealias AllCases = [UITextField.ViewMode]
+
+    public static let allCases: [UITextField.ViewMode] = [
+        .never,
+        .whileEditing,
+        .unlessEditing,
+        .always
+    ]
+}
+
+extension UITextField.ViewMode: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .never:
+            return "Never"
+
+        case .whileEditing:
+            return "While Editing"
+
+        case .unlessEditing:
+            return "Unless Editing"
+
+        case .always:
+            return "Always"
+
+        @unknown default:
+            return "Unknown"
+        }
+    }
+}

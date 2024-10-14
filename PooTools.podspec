@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.64.4'
+    s.version     = '3.64.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -231,6 +231,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ProgressBar'
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/PageControl'
+        subspec.dependency 'PooTools/LivePhoto'
         subspec.frameworks = 'Photos'
         subspec.source_files = 'PooToolsSource/MediaViewer/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

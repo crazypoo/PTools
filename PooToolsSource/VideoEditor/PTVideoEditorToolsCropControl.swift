@@ -117,7 +117,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }
 
-        DispatchQueue.main.async {
+        PTGCDManager.gcdMain {
             self.cropView.image(self.image, isMin: true)
         }
     }

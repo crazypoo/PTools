@@ -209,3 +209,95 @@ public extension UIScrollView {
         }
     }
 }
+
+extension UIScrollView.ContentInsetAdjustmentBehavior: CaseIterable {
+    public typealias AllCases = [UIScrollView.ContentInsetAdjustmentBehavior]
+
+    public static let allCases: [UIScrollView.ContentInsetAdjustmentBehavior] = [
+        .automatic,
+        .scrollableAxes,
+        .never,
+        .always
+    ]
+}
+
+extension UIScrollView.ContentInsetAdjustmentBehavior: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .automatic:
+            return "Automatic"
+        case .scrollableAxes:
+            return "Scrollable Axes"
+        case .never:
+            return "Never"
+        case .always:
+            return "Always"
+        @unknown default:
+            return "Unknown"
+        }
+    }
+}
+
+extension UIScrollView.IndicatorStyle: CaseIterable {
+    public typealias AllCases = [UIScrollView.IndicatorStyle]
+
+    public static let allCases: [UIScrollView.IndicatorStyle] = [
+        .default,
+        .black,
+        .white
+    ]
+}
+
+extension UIScrollView.IndicatorStyle: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .default:
+            return "Default Style"
+
+        case .black:
+            return "Black"
+
+        case .white:
+            return "White"
+
+        @unknown default:
+            return "\(self) (unsupported)"
+        }
+    }
+}
+
+extension UIScrollView.KeyboardDismissMode: CaseIterable {
+    public typealias AllCases = [UIScrollView.KeyboardDismissMode]
+
+    public static let allCases: [UIScrollView.KeyboardDismissMode] = [
+        .none,
+        .onDrag,
+        .interactive
+    ]
+}
+
+extension UIScrollView.KeyboardDismissMode: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .none:
+            return "Do Not Dismiss"
+
+        case .onDrag:
+            return "Dismiss On Drag"
+
+        case .interactive:
+            return "Dismiss Interactively"
+
+        #if swift(>=6)
+        case .onDragWithAccessory:
+            return "Dismiss On Drag With Accessory"
+
+        case .interactiveWithAccessory:
+            return "Dismiss Interactively With Accessory"
+        #endif
+
+        @unknown default:
+            return "Unknown"
+        }
+    }
+}

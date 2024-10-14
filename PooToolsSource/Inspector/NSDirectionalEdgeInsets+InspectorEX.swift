@@ -103,4 +103,49 @@ public extension NSDirectionalEdgeInsets {
             right: leading
         )
     }
+    
+    mutating func update(
+        top: CGFloat? = nil,
+        leading: CGFloat? = nil,
+        bottom: CGFloat? = nil,
+        trailing: CGFloat? = nil
+    ) {
+        if let top = top {
+            self.top = top
+        }
+        if let leading = leading {
+            self.leading = leading
+        }
+        if let bottom = bottom {
+            self.bottom = bottom
+        }
+        if let trailing = trailing {
+            self.trailing = trailing
+        }
+    }
+
+    func with(
+        top: CGFloat? = nil,
+        leading: CGFloat? = nil,
+        bottom: CGFloat? = nil,
+        trailing: CGFloat? = nil
+    ) -> NSDirectionalEdgeInsets {
+        var copy = self
+
+        if let top = top {
+            copy.top = top
+        }
+        if let leading = leading {
+            copy.leading = leading
+        }
+        if let bottom = bottom {
+            copy.bottom = bottom
+        }
+        if let trailing = trailing {
+            copy.trailing = trailing
+        }
+
+        return copy
+    }
+
 }
