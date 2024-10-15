@@ -212,5 +212,4 @@ import UIKit
     open override func prepareForInterfaceBuilder() {
         placeholderLabel.alpha = 1
     }
-    
 }

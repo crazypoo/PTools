@@ -269,7 +269,6 @@ class PTPermissionSettingCell: PTBaseNormalCell {
             make.top.bottom.equalToSuperview()
             make.right.equalTo(self.settingImage.snp.left).offset(-10)
         }
-        
     }
     
     required public init?(coder: NSCoder) {

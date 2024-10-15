@@ -58,7 +58,6 @@ public enum PTImagePicker {
                 PTNSLogConsole("用戶取消了",levelType: .Error,loggerType: .Media)
             }
         }
-        
     }
     
     //MARK: PickerCompletion

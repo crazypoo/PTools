@@ -40,13 +40,9 @@ public class PTKeyChain: NSObject {
         ]
         let status = SecItemAdd(queryDic as CFDictionary, nil)
         if status == errSecSuccess {
-            if handle != nil {
-                handle!(true)
-            }
+            handle?(true)
         } else {
-            if handle != nil {
-                handle!(false)
-            }
+            handle?(false)
         }
     }
     
@@ -122,13 +118,9 @@ public class PTKeyChain: NSObject {
             ]
             let status = SecItemDelete(query as CFDictionary)
             if status == errSecSuccess {
-                if handle != nil {
-                    handle!(true)
-                }
+                handle?(true)
             } else {
-                if handle != nil {
-                    handle!(false)
-                }
+                handle?(false)
             }
         } else {
             query = [
@@ -151,13 +143,9 @@ public class PTKeyChain: NSObject {
                     let _ = SecItemDelete(query as CFDictionary)
                 }
                 if PTKeyChain.getAccountInfo(service: service).count == 0 {
-                    if handle != nil {
-                        handle!(true)
-                    }
+                    handle?(true)
                 } else {
-                    if handle != nil {
-                        handle!(false)
-                    }
+                    handle?(false)
                 }
             }
         }

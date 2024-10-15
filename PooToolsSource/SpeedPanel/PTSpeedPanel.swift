@@ -175,8 +175,6 @@ public class PTSpeedPanel: UIView {
     public func updateSpeed(speed: CGFloat) {
         currentSpeed = speed
         updatePanel()
-        if callBack != nil {
-            callBack!(currentSpeed)
-        }
+        callBack?(currentSpeed)
     }
 }

@@ -133,7 +133,6 @@ public class PTSheetContentViewController: PTBaseViewController {
     
     func updateAfterLayout() {
         self.size = self.childViewController.view.bounds.height
-        //self.updatePreferredHeight()
     }
     
     func adjustForKeyboard(height: CGFloat) {

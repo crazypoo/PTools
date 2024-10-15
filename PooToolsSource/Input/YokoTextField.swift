@@ -216,5 +216,4 @@ import UIKit
         
         return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
     }
-    
 }

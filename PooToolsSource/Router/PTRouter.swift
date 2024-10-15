@@ -208,7 +208,6 @@ public class PTRouter: PTRouterParser {
         return (currentPattern, queries)
     }
     
-    
     private func matchPattern(_ request: PTRouterRequest, pattern: PTRouterPattern) -> MatchResult {
         
         var requestPaths = request.paths

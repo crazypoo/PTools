@@ -462,7 +462,6 @@ public class PTGuidePageHUD: UIView {
             forwardButton.isHidden = true
             forwardButton.isUserInteractionEnabled = false
         }
-
     }
 }
 

@@ -148,5 +148,4 @@ import UIKit
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
 		return editingRect(forBounds: bounds)
     }
-
 }

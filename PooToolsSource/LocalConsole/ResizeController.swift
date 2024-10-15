@@ -597,9 +597,7 @@ class PlatterView: UIView,UITextFieldDelegate {
         }
         animator.addCompletion { _ in
             self.isHidden = true
-            if completion != nil {
-                completion!()
-            }
+            completion?()
         }
         animator.startAnimation()
         

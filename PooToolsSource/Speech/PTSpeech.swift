@@ -90,9 +90,7 @@ public class PTSpeech: NSObject {
                 self.request.append(buffer)
             }
         } else {
-            if errorBlock != nil {
-                errorBlock!(createError(errorType: .UnsupportedLocale))
-            }
+            errorBlock?(createError(errorType: .UnsupportedLocale))
         }
     }
     
@@ -107,26 +105,19 @@ public class PTSpeech: NSObject {
             try audioEndine.start()
             currentTask = recognizer?.recognitionTask(with: request, delegate: self)
         } catch {
-            if errorBlock != nil
-            {
-                errorBlock!(error as NSError)
-            }
+            errorBlock?(error as NSError)
         }
     }
     
     public func startRecognize(handleBlock:((_ success:Bool)->Void)?) {
         let isRunning = isTaskInProgress()
         if isRunning {
-            if errorBlock != nil {
-                errorBlock!(createError(errorType: .IsBusy))
-            }
+            errorBlock?(createError(errorType: .IsBusy))
         } else {
             performRecognition()
         }
         
-        if handleBlock != nil {
-            handleBlock!(isRunning)
-        }
+        handleBlock?(isRunning)
     }
     
     public func stopRecognize() {
@@ -144,13 +135,9 @@ extension PTSpeech:SFSpeechRecognitionTaskDelegate {
     
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) {
         if !successfully {
-            if errorBlock != nil {
-                errorBlock!(task.error! as NSError)
-            }
+            errorBlock?(task.error! as NSError)
         } else {
-            if finishBlock != nil {
-                finishBlock!(buffer)
-            }
+            finishBlock?(buffer)
         }
     }
 }

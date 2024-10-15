@@ -179,5 +179,4 @@ import UIKit
         let newBounds = rectForBorder(bounds)
         return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
     }
-    
 }
