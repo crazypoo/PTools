@@ -154,9 +154,7 @@ public extension AttributesDictionary {
                 
             #if swift(>=5.3)
             case let .tracking(tracking):
-                if #available(iOS 14.0, *) {
-                    dict[.tracking] = tracking
-                }
+                dict[.tracking] = tracking
             #endif
             
             case let .strikethroughStyle(strikethroughStyle):

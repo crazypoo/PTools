@@ -24,8 +24,7 @@ public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptiveP
     public init(onDismiss dismissHandler: ((AdaptivePresentationControllerDelegate) -> Void)? = .none,
                 adaptivePresentationStyle adaptivePresentationStyleProvider: ModalPresentationStyleProvider? = .none,
                 shouldDismiss shouldDismissProvider: DismissDecisionProvider? = .none,
-                onDismissAttempt dismissAttemptHandler: (() -> Void)? = .none)
-    {
+                onDismissAttempt dismissAttemptHandler: (() -> Void)? = .none) {
         self.dismissHandler = dismissHandler
         self.adaptivePresentationStyleProvider = adaptivePresentationStyleProvider
         self.shouldDismissProvider = shouldDismissProvider
@@ -37,8 +36,7 @@ public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptiveP
     }
 
     public func adaptivePresentationStyle(for controller: UIPresentationController,
-                                          traitCollection: UITraitCollection) -> UIModalPresentationStyle
-    {
+                                          traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return adaptivePresentationStyleProvider?(controller, traitCollection) ?? .automatic
     }
 

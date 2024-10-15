@@ -79,12 +79,7 @@ extension ViewHierarchyElementController {
             isModalInPresentation = viewController.isModalInPresentation
             performsActionsWhilePresentingModally = viewController.performsActionsWhilePresentingModally
 
-            if #available(iOS 14.0, *) {
-                self.prefersPointerLocked = viewController.prefersPointerLocked
-            }
-            else {
-                prefersPointerLocked = false
-            }
+            self.prefersPointerLocked = viewController.prefersPointerLocked
 
             if let restorationClass = viewController.restorationClass {
                 restorationClassName = String(describing: restorationClass)
@@ -481,11 +476,7 @@ extension ViewHierarchyElementController: ViewHierarchyControllerProtocol {
     }
 
     var isModalInPresentation: Bool {
-        guard
-            #available(iOS 13.0, *),
-            store.latest.isExpired,
-            let viewController = underlyingViewController
-        else {
+        guard store.latest.isExpired, let viewController = underlyingViewController else {
             return store.latest.isModalInPresentation
         }
 
@@ -581,11 +572,7 @@ extension ViewHierarchyElementController: ViewHierarchyControllerProtocol {
     }
 
     var performsActionsWhilePresentingModally: Bool {
-        guard
-            #available(iOS 13.0, *),
-            store.latest.isExpired,
-            let viewController = underlyingViewController
-        else {
+        guard store.latest.isExpired, let viewController = underlyingViewController else {
             return store.latest.performsActionsWhilePresentingModally
         }
 
@@ -657,11 +644,7 @@ extension ViewHierarchyElementController: ViewHierarchyControllerProtocol {
     }
 
     var prefersPointerLocked: Bool {
-        guard
-            #available(iOS 14.0, *),
-            store.latest.isExpired,
-            let viewController = underlyingViewController
-        else {
+        guard store.latest.isExpired, let viewController = underlyingViewController else {
             return store.latest.prefersPointerLocked
         }
 

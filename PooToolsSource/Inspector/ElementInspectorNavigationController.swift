@@ -77,9 +77,3 @@ class ElementInspectorNavigationController: UINavigationController, InternalView
         dismissDelegate?.elementInspectorNavigationControllerDidFinish(self)
     }
 }
-
-//// MARK: - UIPopoverPresentationControllerDelegate
-//
-//extension ElementInspectorNavigationController: UIPopoverPresentationControllerDelegate {
-//    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle { .none }
-//}

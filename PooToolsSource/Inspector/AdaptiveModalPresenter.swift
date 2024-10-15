@@ -15,11 +15,7 @@ final class AdaptiveModalPresenter: NSObject {
     private let onChangeSelectedDetentHandler: (Detent?) -> Void
     private let onDismissHandler: (UIPresentationController) -> Void
 
-    init(
-        presentationStyle: @escaping (UIPresentationController, UITraitCollection) -> UIModalPresentationStyle,
-        onChangeSelectedDetent: @escaping (Detent?) -> Void,
-        onDismiss: @escaping ((UIPresentationController) -> Void)
-    ) {
+    init(presentationStyle: @escaping (UIPresentationController, UITraitCollection) -> UIModalPresentationStyle, onChangeSelectedDetent: @escaping (Detent?) -> Void, onDismiss: @escaping ((UIPresentationController) -> Void)) {
         onChangeSelectedDetentHandler = onChangeSelectedDetent
         presentationStyleProvider = presentationStyle
         onDismissHandler = onDismiss

@@ -136,7 +136,6 @@ public extension UIViewController {
         public enum UserInterfaceStyle {
             case unspecified, light, dark
             
-            @available(iOS 12.0, *)
             var rawValue: UIUserInterfaceStyle {
                 switch self {
                 case .unspecified:

@@ -22,10 +22,6 @@ class Features :PTBaseModel {
 
 }
 
-class Advisories :PTBaseModel {
-
-}
-
 class Results :PTBaseModel {
     var primaryGenreName: String = ""
     var artworkUrl100: String = ""
@@ -69,7 +65,7 @@ class Results :PTBaseModel {
     var isVppDeviceBasedLicensingEnabled: Bool = false
     var sellerName: String = ""
     var averageUserRating: Int = 0
-    var advisories: [Advisories]!
+    var advisories: [String]!
 }
 
 class PTCheckUpdateModel:PTBaseModel {
@@ -159,38 +155,37 @@ public class PTCheckUpdateFunction: NSObject {
                             version:String,
                             note:String?,
                             alertType:PTUpdateAlertType = .System) {
-        let currentVersion = self.renewVersion(newVersion: version).0
-        let appStoreVersion = self.renewVersion(newVersion: version).1
-
-        if self.compareVesionWithServerVersion(version: version) {
-            if appStoreVersion.float()! > currentVersion.float()! {
-                var okBtns = [String]()
-                if force {
-                    okBtns = ["PT Upgrade".localized()]
-                } else {
-                    okBtns = ["PT Upgrade later".localized(),"PT Upgrade".localized()]
-                }
-                switch alertType {
-                case .System:
-                    UIAlertController.base_alertVC(title:"\("PT Found new version".localized())\(version)\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "PT Upgrade question mark".localized(),okBtns: okBtns,moreBtn: { index,title in
-                        switch index {
-                        case 0:
-                            if force {
-                                PTAppStoreFunction.jumpToAppStore(appid: appid)
-                            }
-                        case 1:
+        let versionResult = self.renewVersion(newVersion: version)
+        let currentVersion = versionResult.0
+        let appStoreVersion = versionResult.1
+        if appStoreVersion.float()! > currentVersion.float()! {
+            var okBtns = [String]()
+            if force {
+                okBtns = ["PT Upgrade".localized()]
+            } else {
+                okBtns = ["PT Upgrade later".localized(),"PT Upgrade".localized()]
+            }
+            switch alertType {
+            case .System:
+                UIAlertController.base_alertVC(title:"\("PT Found new version".localized())\(version)\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "PT Upgrade question mark".localized(),okBtns: okBtns,moreBtn: { index,title in
+                    switch index {
+                    case 0:
+                        if force {
                             PTAppStoreFunction.jumpToAppStore(appid: appid)
-                        default:
-                            break
                         }
-                    })
-                case .User:
-                    PTGCDManager.gcdMain {
-                        self.alert_updateTips(oldVersion: kAppVersion!, newVersion: version, description: (note ?? ""), downloadUrl: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
+                    case 1:
+                        PTAppStoreFunction.jumpToAppStore(appid: appid)
+                    default:
+                        break
                     }
+                })
+            case .User:
+                PTGCDManager.gcdMain {
+                    self.alert_updateTips(oldVersion: kAppVersion!, newVersion: version, description: (note ?? ""), downloadUrl: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
                 }
             }
         }
+
     }
     
     public func checkUpdateAlert(appid:String,
@@ -226,7 +221,7 @@ public class PTCheckUpdateFunction: NSObject {
                             let versionModel = responseModel.results.first!
                             let versionStr = versionModel.version
                             
-                            self.updateAlert(force: force, appid: appid, version: versionStr, note: note, alertType: alertType)
+                            self.updateAlert(force: force, appid: appid, version: versionStr, note: versionModel.releaseNotes, alertType: alertType)
                         }
                     } catch {
                         PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CheckUpdate)

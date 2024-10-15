@@ -34,8 +34,6 @@ extension DefaultElementAttributesLibrary {
             return Property.allCases.compactMap { property in
                 switch property {
                 case .title:
-                    guard #available(iOS 14.0, *) else { return nil }
-
                     return .textField(
                         title: property.rawValue,
                         placeholder: switchControl.title.isNilOrEmpty ? property.rawValue : switchControl.title,
@@ -44,8 +42,6 @@ extension DefaultElementAttributesLibrary {
                         switchControl.title = title
                     }
                 case .preferredStyle:
-                    guard #available(iOS 14.0, *) else { return nil }
-
                     return .textButtonGroup(
                         title: property.rawValue,
                         texts: UISwitch.Style.allCases.map(\.description),

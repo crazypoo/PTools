@@ -329,7 +329,6 @@ extension InspectorViewController {
 }
 
 // MARK: - HierarchyInspectorViewDelegate
-
 extension InspectorViewController: HierarchyInspectorViewCodeDelegate {
     func hierarchyInspectorViewCodeDidTapOutside(_ view: HierarchyInspectorViewCode) {
         finish()
@@ -337,13 +336,8 @@ extension InspectorViewController: HierarchyInspectorViewCodeDelegate {
 }
 
 // MARK: - UITextFieldDelegate
-
 extension InspectorViewController: UITextFieldDelegate {
-    func textField(
-        _ textField: UITextField,
-        shouldChangeCharactersIn range: NSRange,
-        replacementString string: String
-    ) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string == UIKeyCommand.inputTab {
             PTGCDManager.gcdMain {
                 self.setFirstResponderAndSelectFirstRow()

@@ -7,7 +7,6 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
-@available(iOS 14.0, *)
 public extension View {
     func inspect(
         isPresented: Binding<Bool>,
@@ -30,7 +29,6 @@ public extension View {
     }
 }
 
-@available(iOS 14.0, *)
 struct InspectorModifier: ViewModifier {
     @Binding var isPresented: Bool
 

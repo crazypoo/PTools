@@ -153,9 +153,7 @@ public extension UIView {
             
             #if swift(>=5.3)
             case let .focusGroupIdentifier(focusGroupIdentifier):
-                if #available(iOS 14.0, *) {
-                    self.focusGroupIdentifier = focusGroupIdentifier
-                }
+                self.focusGroupIdentifier = focusGroupIdentifier
             #endif
             
             }

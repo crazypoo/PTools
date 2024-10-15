@@ -39,10 +39,6 @@ public final class Inspector {
 
     let appearance = InspectorAppearance()
 
-    private(set) lazy var console = ConsoleLogger { [weak self] in
-        self?.manager?.snapshot
-    }
-
     private(set) var contextMenuPresenter: ContextMenuPresenter?
 
     private(set) var swiftUIHost: InspectorSwiftUIHost?

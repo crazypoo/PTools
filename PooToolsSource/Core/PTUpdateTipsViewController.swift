@@ -16,10 +16,14 @@ class PTUpdateTipsContentView : UIView {
         super.init(frame: .zero)
         let nameArr = ["PT Current version".localized(), "PT New version".localized(), "PT Version info".localized()]
         let valueArr = [oV, nV, descriptionString]
+        let tempHeight:CGFloat = 35
+        let baseContentSize = CGSize(width: 200, height: 65)
+        let descFont:UIFont = .appfont(size: 14)
+        
         for index in 0...nameArr.count - 2 {
             let nameLabel = UILabel()
             nameLabel.text = nameArr[index]
-            nameLabel.font = .appfont(size: 14)
+            nameLabel.font = descFont
             nameLabel.textColor = .black
             nameLabel.textAlignment = .right
             nameLabel.numberOfLines = 0
@@ -27,19 +31,18 @@ class PTUpdateTipsContentView : UIView {
             
             let valueLabel = UILabel()
             valueLabel.text = valueArr[index]
-            valueLabel.font = .appfont(size: 14)
+            valueLabel.font = descFont
             valueLabel.textColor = .black
             valueLabel.textAlignment = .left
             valueLabel.numberOfLines = 0
             valueLabel.backgroundColor = .clear
-            let tempHeight = 35
-            let height = CGFloat(tempHeight) * CGFloat(index) + CGFloat(index) * 10
+            let height = tempHeight * CGFloat(index) + CGFloat(index) * 10
             
             addSubview(valueLabel)
             valueLabel.snp.makeConstraints { (make) in
                 make.right.equalTo(self.snp.right)
                 make.top.equalTo(self.snp.top).offset(height)
-                make.size.equalTo(CGSize(width: 200, height:tempHeight))
+                make.size.equalTo(CGSize(width: baseContentSize.width, height:tempHeight))
             }
             
             addSubview(nameLabel)
@@ -51,8 +54,6 @@ class PTUpdateTipsContentView : UIView {
             }
         }
         
-        let baseContentSize = CGSize(width: 200, height: 65)
-        
         let scrollView = UIScrollView()
         scrollView.contentSize = baseContentSize
         addSubview(scrollView)
@@ -63,8 +64,10 @@ class PTUpdateTipsContentView : UIView {
             make.bottom.equalToSuperview()
         }
                                 
-        let tmpHight = UIView.sizeFor(string: descriptionString, font: .appfont(size: 14),lineSpacing: 2, width: baseContentSize.width).height
-        
+        var tmpHight = UIView.sizeFor(string: descriptionString, font: descFont,lineSpacing: 2, width: baseContentSize.width).height
+        if tmpHight < tempHeight {
+            tmpHight = tempHeight
+        }
         let valueLabel = UILabel()
         valueLabel.numberOfLines = 0
         scrollView.addSubview(valueLabel)
@@ -76,20 +79,20 @@ class PTUpdateTipsContentView : UIView {
         
         let att:ASAttributedString = """
         \(wrap: .embedding("""
-        \(descriptionString,.foreground(.black),.font(.appfont(size: 14)),.paragraph(.alignment(.left)),.baselineOffset(2))
+        \(descriptionString,.foreground(.black),.font(descFont),.paragraph(.alignment(.left)),.baselineOffset(2))
         """))
         """
         valueLabel.attributed.text = att
         
         scrollView.contentSize = CGSize(width: baseContentSize.width, height: tmpHight + 10)
                 
-        let contentLine = descriptionString.numberOfLines(font: .appfont(size: 14), labelShowWidth: baseContentSize.width, lineSpacing: 2)
+        let contentLine = descriptionString.numberOfLines(font: descFont, labelShowWidth: baseContentSize.width, lineSpacing: 2)
         scrollView.isScrollEnabled = contentLine > 4
         scrollView.contentOffset = CGPoint(x: 0, y: (contentLine > 1 ? -15 : 0))
 
         let nameLabel = UILabel()
         nameLabel.text = nameArr.last
-        nameLabel.font = .appfont(size: 14)
+        nameLabel.font = descFont
         nameLabel.textColor = .black
         nameLabel.textAlignment = .right
         nameLabel.backgroundColor = .clear
@@ -99,7 +102,7 @@ class PTUpdateTipsContentView : UIView {
             make.right.equalTo(scrollView.snp.left).offset(-15)
             make.left.equalTo(self.snp.left)
             make.top.equalTo(scrollView.snp.top)
-            make.height.equalTo(35)
+            make.height.equalTo(tempHeight)
         }
     }
     

@@ -718,7 +718,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 vc.presentActionSheet(self, from: collectionViews.cellForItem(at: indexPath)!)
 
             } else if itemRow.title == .checkUpdate {
-                PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6446323709", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
+                PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6596749489", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
             } else if itemRow.title == .route {
                 UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"], otherBlock: { sheet,index,title in
                     switch index {

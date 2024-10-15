@@ -694,7 +694,6 @@
 		55B8FD622CBC1DEB006D82AD /* DraggableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD3A2CBC1DEB006D82AD /* DraggableViewProtocol.swift */; };
 		55B8FD632CBC1DEB006D82AD /* ViewHierarchyLayerManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD4F2CBC1DEB006D82AD /* ViewHierarchyLayerManagerProtocol.swift */; };
 		55B8FD642CBC1DEB006D82AD /* TextElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD482CBC1DEB006D82AD /* TextElement.swift */; };
-		55B8FD652CBC1DEB006D82AD /* CaseIterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD342CBC1DEB006D82AD /* CaseIterable.swift */; };
 		55B8FD662CBC1DEB006D82AD /* ExpirableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD3C2CBC1DEB006D82AD /* ExpirableProtocol.swift */; };
 		55B8FD672CBC1DEB006D82AD /* InspectorAppearanceProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD3D2CBC1DEB006D82AD /* InspectorAppearanceProviding.swift */; };
 		55B8FD682CBC1DEB006D82AD /* ViewHierarchyRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B8FD502CBC1DEB006D82AD /* ViewHierarchyRepresentable.swift */; };
@@ -1611,7 +1610,6 @@
 		55B8FD2C2CBC1DE1006D82AD /* UIViewControllerTransitionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerTransitionPresenter.swift; sourceTree = "<group>"; };
 		55B8FD322CBC1DEB006D82AD /* Actionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actionable.swift; sourceTree = "<group>"; };
 		55B8FD332CBC1DEB006D82AD /* AsyncOperationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperationProtocol.swift; sourceTree = "<group>"; };
-		55B8FD342CBC1DEB006D82AD /* CaseIterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseIterable.swift; sourceTree = "<group>"; };
 		55B8FD352CBC1DEB006D82AD /* Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
 		55B8FD362CBC1DEB006D82AD /* CustomImageConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageConvertible.swift; sourceTree = "<group>"; };
 		55B8FD372CBC1DEB006D82AD /* CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStringConvertible.swift; sourceTree = "<group>"; };
@@ -1923,7 +1921,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55B8FB272CBB5542006D82AD /* Inspector */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1971,6 +1968,7 @@
 				55B13D482B1AE72600C67EDA /* ImageEditor */,
 				557FC36A2966A2BC00991C36 /* ImagePicker */,
 				231D1537272CDEE9003D6F62 /* Input */,
+				55B8FB272CBB5542006D82AD /* Inspector */,
 				55E96E2F2B08896E00AB8ADE /* iOS17Tips */,
 				231D15A1272CDEE9003D6F62 /* Json */,
 				55D59C5428F2980000B4FF76 /* Keyboard */,
@@ -3033,7 +3031,6 @@
 				55B8FCAE2CBC1D88006D82AD /* ButtonSizeSectionDataSource.swift */,
 				55B8FB802CBC10F3006D82AD /* CACornerMask+InspectorEX.swift */,
 				55B8FB2A2CBB5578006D82AD /* CALayer+InspectorEX.swift */,
-				55B8FD342CBC1DEB006D82AD /* CaseIterable.swift */,
 				55B8FC4A2CBC1D36006D82AD /* CellViewModel.swift */,
 				55B8FB822CBC1116006D82AD /* CGRect+InspectorEX.swift */,
 				55B8FB842CBC113D006D82AD /* CGSize+InspectorEX.swift */,
@@ -4102,7 +4099,6 @@
 				55B8FD622CBC1DEB006D82AD /* DraggableViewProtocol.swift in Sources */,
 				55B8FD632CBC1DEB006D82AD /* ViewHierarchyLayerManagerProtocol.swift in Sources */,
 				55B8FD642CBC1DEB006D82AD /* TextElement.swift in Sources */,
-				55B8FD652CBC1DEB006D82AD /* CaseIterable.swift in Sources */,
 				55B8FD662CBC1DEB006D82AD /* ExpirableProtocol.swift in Sources */,
 				55B8FD672CBC1DEB006D82AD /* InspectorAppearanceProviding.swift in Sources */,
 				55B8FD682CBC1DEB006D82AD /* ViewHierarchyRepresentable.swift in Sources */,

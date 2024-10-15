@@ -65,7 +65,6 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         }
     )
 
-    @available(iOS 14.0, *)
     private(set) lazy var colorPicker = ColorPickerPresenter(
         onColorSelected: { [weak self] selectedColor in
             guard let self = self else { return }

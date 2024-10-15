@@ -34,38 +34,22 @@ extension DefaultElementAttributesLibrary {
             return Property.allCases.compactMap { property in
                 switch property {
                 case .style:
-                    return .optionsList(
-                        title: property.rawValue,
-                        options: UIActivityIndicatorView.Style.allCases.map(\.description),
-                        selectedIndex: { UIActivityIndicatorView.Style.allCases.firstIndex(of: activityIndicatorView.style) }
-                    ) {
+                    return .optionsList(title: property.rawValue, options: UIActivityIndicatorView.Style.allCases.map(\.description), selectedIndex: { UIActivityIndicatorView.Style.allCases.firstIndex(of: activityIndicatorView.style) }) {
                         guard let newIndex = $0 else { return }
-
                         let style = UIActivityIndicatorView.Style.allCases[newIndex]
-
                         activityIndicatorView.style = style
                     }
                 case .color:
-                    return .colorPicker(
-                        title: property.rawValue,
-                        color: { activityIndicatorView.color }
-                    ) {
+                    return .colorPicker(title: property.rawValue, color: { activityIndicatorView.color }) {
                         guard let color = $0 else {
                             return
                         }
-
                         activityIndicatorView.color = color
                     }
-
                 case .groupBehavior:
                     return .group(title: property.rawValue)
-
                 case .isAnimating:
-                    return .switch(
-                        title: property.rawValue,
-                        isOn: { activityIndicatorView.isAnimating }
-                    ) { isAnimating in
-
+                    return .switch(title: property.rawValue, isOn: { activityIndicatorView.isAnimating }) { isAnimating in
                         switch isAnimating {
                         case true:
                             activityIndicatorView.startAnimating()
@@ -74,12 +58,8 @@ extension DefaultElementAttributesLibrary {
                             activityIndicatorView.stopAnimating()
                         }
                     }
-
                 case .hidesWhenStopped:
-                    return .switch(
-                        title: property.rawValue,
-                        isOn: { activityIndicatorView.hidesWhenStopped }
-                    ) { hidesWhenStopped in
+                    return .switch(title: property.rawValue, isOn: { activityIndicatorView.hidesWhenStopped }) { hidesWhenStopped in
                         activityIndicatorView.hidesWhenStopped = hidesWhenStopped
                     }
                 }

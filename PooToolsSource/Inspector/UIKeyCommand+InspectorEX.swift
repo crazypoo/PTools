@@ -55,26 +55,16 @@ public extension UIKeyCommand {
             return
         }
         
-        if #available(iOS 13.0, *) {
-            self.init(
-                title: discoverabilityTitle,
-                image: options.image,
-                action: action,
-                input: options.input,
-                modifierFlags: options.modifierFlags,
-                discoverabilityTitle: discoverabilityTitle,
-                attributes: options.menuAttributes,
-                state: options.menuState
-            )
-        }
-        else {
-            self.init(
-                input: options.input,
-                modifierFlags: options.modifierFlags,
-                action: action,
-                discoverabilityTitle: discoverabilityTitle
-            )
-        }
+        self.init(
+            title: discoverabilityTitle,
+            image: options.image,
+            action: action,
+            input: options.input,
+            modifierFlags: options.modifierFlags,
+            discoverabilityTitle: discoverabilityTitle,
+            attributes: options.menuAttributes,
+            state: options.menuState
+        )
     }
 }
 

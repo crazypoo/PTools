@@ -86,8 +86,7 @@ class ElementInspectorPanelViewController: UIViewController, ElementInspectorApp
                 withHorizontalFittingPriority: .defaultHigh,
                 verticalFittingPriority: .fittingSizeLevel
             )
-        }
-        else {
+        } else {
             return .zero
         }
     }
