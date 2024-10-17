@@ -26,21 +26,21 @@ public enum PTAlertTipControl {
         view.present(on: window, completion: completion)
     }
     
-    public static func present(title: String? = nil, subtitle: String? = nil, icon: PTAlertTipsIcon? = nil, style: PTAlertTipsStyle, haptic: PTAlertTipsHaptic? = nil) {
+    public static func present(title: String? = nil, subtitle: String? = nil, icon: PTAlertTipsIcon? = nil, style: PTAlertTipsStyle, haptic: PTAlertTipsHaptic? = nil,dismiss:PTActionTask? = nil) {
         switch style {
         #if os(iOS)
         case .Normal:
             guard let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first else { return }
             let view = PTAlertTipsLow(title: title, subtitle: subtitle, icon: icon)
             view.haptic = haptic
-            view.present(on: window)
+            view.present(on: window,completion: dismiss)
         #endif
         #if os(iOS) || os(visionOS)
         case .SupportVisionOS:
             guard let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first else { return }
             let view = PTAlertTipsHight(title: title, subtitle: subtitle, icon: icon)
             view.haptic = haptic
-            view.present(on: window)
+            view.present(on: window,completion: dismiss)
         #endif
         }
     }
