@@ -141,7 +141,7 @@ extension UIImage {
 
 extension UIImage {
     static func icon(_ name: String) -> UIImage? {
-        UIImage(named: name, in: Bundle.main, compatibleWith: nil)
+        Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: name)
     }
 }
 
