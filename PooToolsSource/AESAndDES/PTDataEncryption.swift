@@ -84,4 +84,72 @@ public class PTDataEncryption {
     private static func createError(_ message: String) -> NSError {
         return NSError(domain: message, code: 1, userInfo: nil)
     }
+    
+    //MARK: RSA加密
+    static func stripPEMHeaders(pemString: String) -> String {
+        return pemString
+            .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "\n", with: "")
+            .replacingOccurrences(of: "\r", with: "")
+    }
+    
+    static func publicKeyFromString(_ publicKeyString: String) -> SecKey? {
+        // 去掉 PEM 公钥头尾标识
+        let keyString = stripPEMHeaders(pemString: publicKeyString)
+        
+        // 将 Base64 字符串解码为 Data
+        guard let keyData = Data(base64Encoded: keyString) else {
+            PTNSLogConsole("Failed to decode Base64 public key string")
+            return nil
+        }
+        
+        // RSA 公钥标头 (如果需要的话，可以尝试添加)
+        let keySize = 2048
+        let keyDict: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPublic,
+            kSecAttrKeySizeInBits as String: keySize,
+            kSecReturnPersistentRef as String: true
+        ]
+        
+        // 使用 Security 框架将 Data 转换为 SecKey
+        guard let publicKey = SecKeyCreateWithData(keyData as CFData, keyDict as CFDictionary, nil) else {
+            PTNSLogConsole("Failed to create public key from data")
+            return nil
+        }
+        
+        return publicKey
+    }
+    
+    static func encryptWithRSA(plainText: String, publicKey: SecKey) -> Data? {
+        let buffer = [UInt8](plainText.utf8)
+        let keySize = SecKeyGetBlockSize(publicKey)
+        var cipherText = [UInt8](repeating: 0, count: keySize)
+        var cipherTextLen = keySize
+        
+        let status = SecKeyEncrypt(publicKey, SecPadding.PKCS1, buffer, buffer.count, &cipherText, &cipherTextLen)
+        
+        if status == errSecSuccess {
+            return Data(cipherText)
+        } else {
+            PTNSLogConsole("Error encrypting: \(status)")
+            return nil
+        }
+    }
+    
+    static func decryptWithRSA(encryptedData: Data, privateKey: SecKey) -> String? {
+        let keySize = SecKeyGetBlockSize(privateKey)
+        var plainText = [UInt8](repeating: 0, count: keySize)
+        var plainTextLen = keySize
+        
+        let status = SecKeyDecrypt(privateKey, SecPadding.PKCS1, [UInt8](encryptedData), encryptedData.count, &plainText, &plainTextLen)
+        
+        if status == errSecSuccess {
+            return String(bytes: plainText, encoding: .utf8)
+        } else {
+            PTNSLogConsole("Error decrypting: \(status)")
+            return nil
+        }
+    }
 }

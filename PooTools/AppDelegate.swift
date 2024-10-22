@@ -31,20 +31,20 @@ enum RequestManager {
 
         let task = session.dataTask(with: url) { data, _, error in
             if let error {
-                print("Error: \(error)")
+                PTNSLogConsole("Error: \(error)")
                 return
             }
 
             guard let data else {
-                print("Error: Missing data for mocking request.")
+                PTNSLogConsole("Error: Missing data for mocking request.")
                 return
             }
 
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: [])
-                print("JSON Response: \(json)")
+                PTNSLogConsole("JSON Response: \(json)")
             } catch {
-                print("Error parsing JSON: \(error)")
+                PTNSLogConsole("Error parsing JSON: \(error)")
             }
         }
 
@@ -236,16 +236,46 @@ class AppDelegate: PTAppWindowsDelegate {
             
 //        networkSpeedMonitor.startMonitoring()
 //        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
-        if #available(iOS 16.0, *) {
-            Task {
-                do {
-                    try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
-                } catch {
-                    PTNSLogConsole("123123123123123123123123123123123")
-                }
-            }
-        }
+//        if #available(iOS 16.0, *) {
+//            Task {
+//                do {
+//                    try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
+//                } catch {
+//                    PTNSLogConsole("123123123123123123123123123123123")
+//                }
+//            }
+//        }
         
+//        let publicKeyString = """
+//        -----BEGIN PUBLIC KEY-----
+//        -----END PUBLIC KEY-----
+//        """
+//        
+//        let mc_id = ""
+//        let postDic = ["mc_id":mc_id,"tran_id":"ACO97461025","refund_amount":"0.01"].toJSON()?.jsonToTrueJsonString() ?? ""
+//        
+//        let reaKey = PTDataEncryption.publicKeyFromString(publicKeyString)
+//        PTNSLogConsole("reaKey>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: reaKey))")
+//        let rsa = PTDataEncryption.encryptWithRSA(plainText: postDic, publicKey: reaKey!)
+//        let merchant_auth = rsa?.base64EncodedString() ?? ""
+//        
+//        let requestTime = Date(timeIntervalSince1970: Date()!.timeIntervalSince1970).getTimeStr(dateFormat: "yyyyMMddHHmmss")
+//        PTNSLogConsole("Time>>>>>>>>>>>>>>>>>>>>>>>\(requestTime)")
+//
+//        let sha512 = (requestTime + mc_id + merchant_auth).pt.shaCrypt(cryptType: .SHA512, key: "", lower: false)
+//        
+//        let abaPostDic = ["request_time":requestTime,"merchant_id":mc_id,"merchant_auth":merchant_auth,"hash":sha512]
+//        
+//        PTNSLogConsole("RSA>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: merchant_auth))")
+//        Task.init {
+//            do {
+//                let model = try await Network.requestApi(needGobal: false, urlStr: "https://checkout.payway.com.kh/api/merchant-portal/merchant-access/online-transaction/refund",method: .post,parameters:abaPostDic)
+//                PTNSLogConsole("成功\(model)")
+//            } catch {
+//                PTNSLogConsole("請求報錯\(error.localizedDescription)")
+//            }
+//        }
+
         return true
     }
     

@@ -24,13 +24,14 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
     public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
 #if POOTOOLS_DEBUG
-        if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
+        switch UIApplication.applicationEnvironment() {
+        case .appStore,.testFlight:
+            window = UIWindow.init(frame: UIScreen.main.bounds)
+        default:
             window = TouchInspectorWindow(frame: UIScreen.main.bounds)
             (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.AppTouchInspectShow
             (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.AppTouchInspectShowHits
             window?.tintColor = tint
-        } else {
-            window = UIWindow.init(frame: UIScreen.main.bounds)
         }
 #else
         window = UIWindow.init(frame: UIScreen.main.bounds)
@@ -48,7 +49,10 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     
 #if POOTOOLS_DEBUG
     public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil) {
-        if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
+        switch UIApplication.applicationEnvironment() {
+        case .appStore,.testFlight:
+            break
+        default:
             let lcm = LocalConsole.shared
             lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
             lcm.flex = flex
@@ -78,7 +82,10 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
 
     public func createSettingBundle() {
-        if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
+        switch UIApplication.applicationEnvironment() {
+        case .appStore,.testFlight:
+            break
+        default:
 #if POOTOOLS_DEBUG
             PTDebugFunction.registerDefaultsFromSettingsBundle()
 #endif

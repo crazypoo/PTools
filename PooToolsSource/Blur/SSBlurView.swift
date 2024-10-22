@@ -14,33 +14,22 @@ public class SSBlurView: NSObject {
 
     private weak var superview: UIView?
     private var blur: UIVisualEffectView?
-    private var editing: Bool = false
     private(set) var blurContentView: UIView?
     private(set) var vibrancyContentView: UIView?
     
-    open var animationDuration: TimeInterval = 0.1
+    private var animator: UIViewPropertyAnimator?
     
+    open var animationDuration: TimeInterval = 0.1
     open var style: UIBlurEffect.Style = .light {
-        didSet {
-            guard oldValue != style, !editing else { return }
-            applyBlurEffect()
-        }
+        didSet { updateBlurEffect() }
     }
-
+    
     open var alpha: CGFloat = 0 {
-        didSet {
-            guard !editing else { return }
-            if blur == nil {
-                applyBlurEffect()
-            }
-            // 使用 UIViewPropertyAnimator 來處理動畫
-            animateBlurEffectChange()
-        }
+        didSet { updateBlurEffect() }
     }
     
     public init(to view: UIView) {
         superview = view
-        super.init()
         guard let _ = superview else {
             assertionFailure("Superview cannot be nil when initializing SSBlurView")
             return
@@ -54,36 +43,27 @@ public class SSBlurView: NSObject {
         blur?.isHidden = isHidden
     }
     
+    private func updateBlurEffect() {
+        guard blur != nil else {
+            applyBlurEffect()
+            return
+        }
+        blur?.effect = UIBlurEffect(style: style)
+        animateBlurEffectChange()
+    }
+    
     private func animateBlurEffectChange() {
-        let animator = UIViewPropertyAnimator(duration: animationDuration, curve: .easeInOut) {
+        animator?.stopAnimation(true)
+        animator = UIViewPropertyAnimator(duration: animationDuration, curve: .easeInOut) {
             self.blur?.alpha = self.alpha
         }
-        animator.startAnimation()
+        animator?.startAnimation()
     }
     
     private func applyBlurEffect() {
-        if blur != nil {
-            // 如果已經有模糊視圖，更新其效果和透明度
-            blur?.effect = UIBlurEffect(style: style)
-            blur?.alpha = alpha
-            return
-        }
-        createBlurEffectView(style: style, blurAlpha: alpha)
-    }
-    
-    private func createBlurEffectView(style: UIBlurEffect.Style, blurAlpha: CGFloat) {
-        guard let superview = superview else { return }
-        
-        if blur != nil {
-            // 如果模糊視圖已經存在，僅更新效果和透明度
-            blur?.effect = UIBlurEffect(style: style)
-            blur?.alpha = blurAlpha
-            return
-        }
-        
-        // 創建新的模糊視圖
+        guard blur == nil, let superview = superview else { return }
         let blurEffectView = createBlurEffectView(style: style)
-        blurEffectView.alpha = blurAlpha
+        blurEffectView.alpha = alpha
         superview.insertSubview(blurEffectView, at: 0)
         blurEffectView.snp.makeConstraints { $0.edges.equalToSuperview() }
         

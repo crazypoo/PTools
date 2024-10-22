@@ -296,6 +296,7 @@
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
 		5585F5842C500D620033E1D1 /* PTGradientBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */; };
 		5585F71D2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */; };
+		55868D4B2CC761D800A2DD25 /* PTFrostedGlassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */; };
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
@@ -1225,6 +1226,7 @@
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
 		5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGradientBorderView.swift; sourceTree = "<group>"; };
 		5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PTVideoEditorAssets.xcassets; sourceTree = "<group>"; };
+		55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFrostedGlassView.swift; sourceTree = "<group>"; };
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
@@ -3400,6 +3402,7 @@
 			children = (
 				231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */,
 				231D15D6272CDEE9003D6F62 /* SSBlurView.swift */,
+				55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */,
 			);
 			path = Blur;
 			sourceTree = "<group>";
@@ -4347,6 +4350,7 @@
 				55BCB9772B1732030016A4C2 /* PTFetchImageOperation.swift in Sources */,
 				55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */,
 				557E3A7A2C042F7D002466A0 /* PTCreateLeakViewController.swift in Sources */,
+				55868D4B2CC761D800A2DD25 /* PTFrostedGlassView.swift in Sources */,
 				555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */,
 				557E3A962C046472002466A0 /* UIView+PTSwizzle.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,

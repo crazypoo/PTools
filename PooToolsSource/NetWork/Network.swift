@@ -522,18 +522,23 @@ public class Network: NSObject {
                         switch response.result {
                         case .success(_):
                             var requestStruct = PTBaseStructModel()
-                            let jsonStr = response.data?.toDict()?.toJSON() ?? ""
-                            requestStruct.originalString = jsonStr
-                            requestStruct.resultData = response.data
+                            if let htmlString = response.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
+                                let error = AFError.createUploadableFailed(error: NSError(domain: htmlString, code: 99999999994))
+                                logRequestFailure(url: pathUrl, error: error)
+                                continuation.finish(throwing: error)
+                            } else {
+                                let jsonStr = response.data?.toDict()?.toJSON() ?? ""
+                                requestStruct.originalString = jsonStr
+                                requestStruct.resultData = response.data
 
-                            logRequestSuccess(url: pathUrl, jsonStr: jsonStr)
+                                logRequestSuccess(url: pathUrl, jsonStr: jsonStr)
 
-                            if let modelType = modelType {
-                                requestStruct.customerModel = jsonStr.kj.model(type: modelType)
+                                if let modelType = modelType {
+                                    requestStruct.customerModel = jsonStr.kj.model(type: modelType)
+                                }
+                                continuation.yield((Progress(totalUnitCount: 1), requestStruct))
+                                continuation.finish()
                             }
-                            continuation.yield((Progress(totalUnitCount: 1), requestStruct))
-                            continuation.finish()
-
                         case .failure(let error):
                             logRequestFailure(url: pathUrl, error: error)
                             continuation.finish(throwing: error)
