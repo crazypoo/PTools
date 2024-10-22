@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIModalTransitionStyle: CaseIterable {
+extension UIModalTransitionStyle: @retroactive CaseIterable {
     public typealias AllCases = [UIModalTransitionStyle]
 
     public static let allCases: [UIModalTransitionStyle] = [

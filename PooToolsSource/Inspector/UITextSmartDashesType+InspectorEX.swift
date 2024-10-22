@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextSmartDashesType: CaseIterable {
+extension UITextSmartDashesType: @retroactive CaseIterable {
     public typealias AllCases = [UITextSmartDashesType]
 
     public static let allCases: [UITextSmartDashesType] = [

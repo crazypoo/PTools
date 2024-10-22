@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension NSTextAlignment: CaseIterable {
+extension NSTextAlignment: @retroactive CaseIterable {
     public typealias AllCases = [NSTextAlignment]
 
     public static let allCases: [NSTextAlignment] = [

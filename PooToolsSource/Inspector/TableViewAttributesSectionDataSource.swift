@@ -140,7 +140,7 @@ extension DefaultElementAttributesLibrary {
     }
 }
 
-extension UITableViewCell.SeparatorStyle: CaseIterable {
+extension UITableViewCell.SeparatorStyle: @retroactive CaseIterable {
     public typealias AllCases = [UITableViewCell.SeparatorStyle]
 
     public static var allCases: [UITableViewCell.SeparatorStyle] {
@@ -163,7 +163,7 @@ extension UITableViewCell.SeparatorStyle: CustomStringConvertible {
     }
 }
 
-extension UITableView.Style: CaseIterable {
+extension UITableView.Style: @retroactive CaseIterable {
     public typealias AllCases = [UITableView.Style]
 
     public static let allCases: [UITableView.Style] = [.plain, .grouped, .insetGrouped]

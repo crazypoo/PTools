@@ -98,7 +98,7 @@ extension NSLayoutConstraint.Attribute {
     }
 }
 
-extension NSLayoutConstraint.Axis: CaseIterable {
+extension NSLayoutConstraint.Axis: @retroactive CaseIterable {
     public typealias AllCases = [NSLayoutConstraint.Axis]
 
     public static let allCases: [NSLayoutConstraint.Axis] = [
@@ -122,7 +122,7 @@ extension NSLayoutConstraint.Axis: CustomStringConvertible {
     }
 }
 
-extension NSLayoutConstraint.Relation: CaseIterable {
+extension NSLayoutConstraint.Relation: @retroactive CaseIterable {
     public typealias AllCases = [NSLayoutConstraint.Relation]
     public static let allCases: [NSLayoutConstraint.Relation] = [.lessThanOrEqual, .equal, .greaterThanOrEqual]
 }

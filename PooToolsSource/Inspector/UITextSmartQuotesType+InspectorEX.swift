@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextSmartQuotesType: CaseIterable {
+extension UITextSmartQuotesType: @retroactive CaseIterable {
     public typealias AllCases = [UITextSmartQuotesType]
 
     public static let allCases: [UITextSmartQuotesType] = [

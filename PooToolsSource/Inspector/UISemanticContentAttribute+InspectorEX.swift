@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UISemanticContentAttribute: CaseIterable {
+extension UISemanticContentAttribute: @retroactive CaseIterable {
     public typealias AllCases = [UISemanticContentAttribute]
 
     public static let allCases: [UISemanticContentAttribute] = [

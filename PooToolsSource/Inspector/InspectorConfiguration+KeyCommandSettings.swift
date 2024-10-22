@@ -39,7 +39,7 @@ public extension InspectorConfiguration {
     }
 }
 
-extension UIKeyModifierFlags: Hashable {
+extension UIKeyModifierFlags: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(rawValue)
     }

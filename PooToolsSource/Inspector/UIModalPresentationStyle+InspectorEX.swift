@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIModalPresentationStyle: CaseIterable {
+extension UIModalPresentationStyle: @retroactive CaseIterable {
     public typealias AllCases = [UIModalPresentationStyle]
 
     public static let allCases: [UIModalPresentationStyle] = [

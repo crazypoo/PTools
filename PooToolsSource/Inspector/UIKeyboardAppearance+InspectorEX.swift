@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIKeyboardAppearance: CaseIterable {
+extension UIKeyboardAppearance: @retroactive CaseIterable {
     public typealias AllCases = [UIKeyboardAppearance]
 
     public static let allCases: [UIKeyboardAppearance] = [

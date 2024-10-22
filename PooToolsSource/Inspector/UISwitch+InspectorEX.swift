@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UISwitch.Style: CaseIterable {
+extension UISwitch.Style: @retroactive CaseIterable {
     public typealias AllCases = [UISwitch.Style]
 
     public static let allCases: [UISwitch.Style] = [

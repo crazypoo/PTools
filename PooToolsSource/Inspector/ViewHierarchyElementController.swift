@@ -7,25 +7,25 @@
 import UIKit
 import UniformTypeIdentifiers
 
-extension UIEdgeInsets: Hashable {
+extension UIEdgeInsets: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(String(describing: self))
     }
 }
 
-extension UIRectEdge: Hashable {
+extension UIRectEdge: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(String(describing: self))
     }
 }
 
-extension CGSize: Hashable {
+extension CGSize: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(String(describing: self))
     }
 }
 
-extension NSDirectionalEdgeInsets: Hashable {
+extension NSDirectionalEdgeInsets: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(String(describing: self))
     }

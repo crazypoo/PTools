@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIDatePickerStyle: CaseIterable {
+extension UIDatePickerStyle: @retroactive CaseIterable {
     public typealias AllCases = [UIDatePickerStyle]
 
     public static var allCases: [UIDatePickerStyle] {

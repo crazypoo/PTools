@@ -23,7 +23,7 @@ extension UIButton.ButtonType: CustomStringConvertible {
     }
 }
 
-extension UIButton.ButtonType: CaseIterable {
+extension UIButton.ButtonType: @retroactive CaseIterable {
     public typealias AllCases = [UIButton.ButtonType]
 
     public static let allCases: [UIButton.ButtonType] = [

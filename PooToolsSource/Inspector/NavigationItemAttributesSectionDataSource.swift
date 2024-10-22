@@ -84,7 +84,7 @@ extension DefaultElementAttributesLibrary {
     }
 }
 
-extension UINavigationItem.LargeTitleDisplayMode: CaseIterable {
+extension UINavigationItem.LargeTitleDisplayMode: @retroactive CaseIterable {
     public typealias AllCases = [UINavigationItem.LargeTitleDisplayMode]
 
     public static let allCases: [UINavigationItem.LargeTitleDisplayMode] = [
@@ -103,6 +103,8 @@ extension UINavigationItem.LargeTitleDisplayMode: CustomStringConvertible {
             return "Always"
         case .never:
             return "Never"
+        case .inline:
+            return "Inline"
         @unknown default:
             return "Unknown"
         }

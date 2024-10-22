@@ -313,7 +313,7 @@ public extension UIView {
     }
 }
 
-extension UIView.AutoresizingMask: CaseIterable {
+extension UIView.AutoresizingMask: @retroactive CaseIterable {
     public typealias AllCases = [UIView.AutoresizingMask]
 
     public static let allCases: [UIView.AutoresizingMask] = [
@@ -359,7 +359,7 @@ extension UIView.AutoresizingMask: CustomStringConvertible {
     }
 }
 
-extension UIView.ContentMode: CaseIterable {
+extension UIView.ContentMode: @retroactive CaseIterable {
     public typealias AllCases = [UIView.ContentMode]
 
     public static let allCases: [UIView.ContentMode] = [

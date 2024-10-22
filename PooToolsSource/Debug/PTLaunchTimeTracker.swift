@@ -15,7 +15,7 @@ enum PTLaunchTimeTracker {
         // 设置kinfo结构体并获取当前进程信息
         var kinfo = kinfo_proc()
         var size = MemoryLayout<kinfo_proc>.stride
-        var mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()]
+        let mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()]
 
         // 创建mib的局部拷贝，避免内存访问冲突
         var localMib = mib

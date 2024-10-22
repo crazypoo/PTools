@@ -37,7 +37,7 @@ class PTPermissionLocationAlwaysHandler: NSObject, CLLocationManagerDelegate {
         self.completionHandler = completionHandler
         
         let status = CLLocationManager.authorizationStatus()
-        
+
         switch status {
         case .notDetermined:
             locationManager.delegate = self

@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIActivityIndicatorView.Style: CaseIterable {
+extension UIActivityIndicatorView.Style: @retroactive CaseIterable {
     public typealias AllCases = [UIActivityIndicatorView.Style]
 
     public static let allCases: [UIActivityIndicatorView.Style] = [

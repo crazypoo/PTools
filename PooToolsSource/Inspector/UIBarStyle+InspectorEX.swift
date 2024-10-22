@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIBarStyle: CaseIterable {
+extension UIBarStyle: @retroactive CaseIterable {
     public typealias AllCases = [UIBarStyle]
 
     public static let allCases: [UIBarStyle] = [

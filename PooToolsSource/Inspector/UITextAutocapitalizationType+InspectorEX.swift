@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextAutocapitalizationType: CaseIterable {
+extension UITextAutocapitalizationType: @retroactive CaseIterable {
     public typealias AllCases = [UITextAutocapitalizationType]
 
     public static let allCases: [UITextAutocapitalizationType] = [

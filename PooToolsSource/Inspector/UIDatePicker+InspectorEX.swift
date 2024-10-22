@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIDatePicker.Mode: CaseIterable {
+extension UIDatePicker.Mode: @retroactive CaseIterable {
     public typealias AllCases = [UIDatePicker.Mode]
 
     public static let allCases: [UIDatePicker.Mode] = [
@@ -34,6 +34,8 @@ extension UIDatePicker.Mode: CustomStringConvertible {
         case .countDownTimer:
             return "Count Down Timer"
 
+        case .yearAndMonth:
+            return "Year And Month"
         @unknown default:
             return "Unknown"
         }

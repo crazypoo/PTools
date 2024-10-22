@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextContentType: CaseIterable {
+extension UITextContentType: @retroactive CaseIterable {
     public typealias AllCases = [UITextContentType]
 
     public static let allCases: [UITextContentType] = {

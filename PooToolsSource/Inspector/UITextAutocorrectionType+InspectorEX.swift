@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextAutocorrectionType: CaseIterable {
+extension UITextAutocorrectionType: @retroactive CaseIterable {
     public typealias AllCases = [UITextAutocorrectionType]
 
     public static let allCases: [UITextAutocorrectionType] = [

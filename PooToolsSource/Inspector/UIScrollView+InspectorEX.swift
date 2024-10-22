@@ -210,7 +210,7 @@ public extension UIScrollView {
     }
 }
 
-extension UIScrollView.ContentInsetAdjustmentBehavior: CaseIterable {
+extension UIScrollView.ContentInsetAdjustmentBehavior: @retroactive CaseIterable {
     public typealias AllCases = [UIScrollView.ContentInsetAdjustmentBehavior]
 
     public static let allCases: [UIScrollView.ContentInsetAdjustmentBehavior] = [
@@ -238,7 +238,7 @@ extension UIScrollView.ContentInsetAdjustmentBehavior: CustomStringConvertible {
     }
 }
 
-extension UIScrollView.IndicatorStyle: CaseIterable {
+extension UIScrollView.IndicatorStyle: @retroactive CaseIterable {
     public typealias AllCases = [UIScrollView.IndicatorStyle]
 
     public static let allCases: [UIScrollView.IndicatorStyle] = [
@@ -266,7 +266,7 @@ extension UIScrollView.IndicatorStyle: CustomStringConvertible {
     }
 }
 
-extension UIScrollView.KeyboardDismissMode: CaseIterable {
+extension UIScrollView.KeyboardDismissMode: @retroactive CaseIterable {
     public typealias AllCases = [UIScrollView.KeyboardDismissMode]
 
     public static let allCases: [UIScrollView.KeyboardDismissMode] = [
@@ -288,14 +288,11 @@ extension UIScrollView.KeyboardDismissMode: CustomStringConvertible {
         case .interactive:
             return "Dismiss Interactively"
 
-        #if swift(>=6)
         case .onDragWithAccessory:
             return "Dismiss On Drag With Accessory"
 
         case .interactiveWithAccessory:
             return "Dismiss Interactively With Accessory"
-        #endif
-
         @unknown default:
             return "Unknown"
         }

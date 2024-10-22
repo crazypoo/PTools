@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UILayoutPriority: CaseIterable {
+extension UILayoutPriority: @retroactive CaseIterable {
     public typealias AllCases = [UILayoutPriority]
 
     public static let allCases: [UILayoutPriority] = [

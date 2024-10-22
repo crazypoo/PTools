@@ -225,7 +225,7 @@ public extension UITextField {
     }
 }
 
-extension UITextField.BorderStyle: CaseIterable {
+extension UITextField.BorderStyle: @retroactive CaseIterable {
     public typealias AllCases = [UITextField.BorderStyle]
 
     public static let allCases: [UITextField.BorderStyle] = [
@@ -257,7 +257,7 @@ extension UITextField.BorderStyle: CustomImageConvertible {
     }
 }
 
-extension UITextField.ViewMode: CaseIterable {
+extension UITextField.ViewMode: @retroactive CaseIterable {
     public typealias AllCases = [UITextField.ViewMode]
 
     public static let allCases: [UITextField.ViewMode] = [

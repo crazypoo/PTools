@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 import MessageUI
 
 public typealias MessageResultBlock = (_ sendResult: MessageComposeResult)->Void

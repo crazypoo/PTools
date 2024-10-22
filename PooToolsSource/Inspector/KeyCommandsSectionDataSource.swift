@@ -104,7 +104,7 @@ extension UIKeyCommand {
     }
 }
 
-extension UIKeyModifierFlags: CaseIterable {
+extension UIKeyModifierFlags: @retroactive CaseIterable {
     public typealias AllCases = [UIKeyModifierFlags]
 
     public static let allCases: [UIKeyModifierFlags] = [

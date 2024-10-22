@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIControl.ContentHorizontalAlignment: CaseIterable {
+extension UIControl.ContentHorizontalAlignment: @retroactive CaseIterable {
     public typealias AllCases = [UIControl.ContentHorizontalAlignment]
 
     public static let allCases: [UIControl.ContentHorizontalAlignment] = [
@@ -48,7 +48,7 @@ extension UIControl.ContentHorizontalAlignment: CustomImageConvertible {
     }
 }
 
-extension UIControl.ContentVerticalAlignment: CaseIterable {
+extension UIControl.ContentVerticalAlignment: @retroactive CaseIterable {
     public typealias AllCases = [UIControl.ContentVerticalAlignment]
 
     public static let allCases: [UIControl.ContentVerticalAlignment] = [

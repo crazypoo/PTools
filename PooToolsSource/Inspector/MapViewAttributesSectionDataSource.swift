@@ -140,7 +140,7 @@ extension DefaultElementAttributesLibrary {
     }
 }
 
-extension MKPointOfInterestFilter: CaseIterable {
+extension MKPointOfInterestFilter: @retroactive CaseIterable {
     public static let allCases: [MKPointOfInterestFilter] = [
         .includingAll,
         .excludingAll
@@ -160,7 +160,7 @@ extension MKPointOfInterestFilter: CaseIterable {
     }
 }
 
-extension MKPointOfInterestCategory: CaseIterable, CustomStringConvertible {
+extension MKPointOfInterestCategory: @retroactive CaseIterable, CustomStringConvertible {
     public static let allCases: [MKPointOfInterestCategory] = [
         .airport,
         .amusementPark,

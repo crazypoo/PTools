@@ -57,7 +57,7 @@ extension UIBlurEffect.Style: CustomStringConvertible {
     }
 }
 
-extension UIBlurEffect.Style: CaseIterable {
+extension UIBlurEffect.Style: @retroactive CaseIterable {
     public typealias AllCases = [UIBlurEffect.Style]
 
     public static let allCases: [UIBlurEffect.Style] = [

@@ -285,7 +285,7 @@ public extension UIStackView {
     }
 }
 
-extension UIStackView.Alignment: CaseIterable {
+extension UIStackView.Alignment: @retroactive CaseIterable {
     public typealias AllCases = [UIStackView.Alignment]
 
     public static let allCases: [UIStackView.Alignment] = [
@@ -325,7 +325,7 @@ extension UIStackView.Alignment: CustomStringConvertible {
     }
 }
 
-extension UIStackView.Distribution: CaseIterable {
+extension UIStackView.Distribution: @retroactive CaseIterable {
     public typealias AllCases = [UIStackView.Distribution]
 
     public static let allCases: [UIStackView.Distribution] = [

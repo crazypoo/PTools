@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITextSpellCheckingType: CaseIterable {
+extension UITextSpellCheckingType: @retroactive CaseIterable {
     public typealias AllCases = [UITextSpellCheckingType]
 
     public static let allCases: [UITextSpellCheckingType] = [

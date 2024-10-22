@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIReturnKeyType: CaseIterable {
+extension UIReturnKeyType: @retroactive CaseIterable {
     public typealias AllCases = [UIReturnKeyType]
 
     public static let allCases: [UIReturnKeyType] = [
