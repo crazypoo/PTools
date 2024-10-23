@@ -142,9 +142,7 @@ public class PTNetWorkStatus {
                         
             PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment),levelType: PTLogMode,loggerType: .Network)
 
-            if handle != nil {
-                handle!(statusType)
-            }
+            handle?(statusType)
         }
     }
     
@@ -278,9 +276,7 @@ public class Network: NSObject {
         if self.hud != nil {
             self.hud!.hide {
                 self.hud = nil
-                if completion != nil {
-                    completion!()
-                }
+                completion?()
             }
         }
     }
@@ -339,14 +335,17 @@ public class Network: NSObject {
         return ipAddress
     }
     
-    class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel {
+    class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel? {
         
         let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
         var apiHeader = HTTPHeaders.init([:])
         apiHeader["Content-Type"] = "application/json;charset=UTF-8"
         apiHeader["Accept"] = "application/json"
         let models = try await Network.requestApi(needGobal: false, urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTIPInfoModel.self)
-        return models.customerModel as! PTIPInfoModel
+        if let returnModel = models.customerModel as? PTIPInfoModel {
+            return returnModel
+        }
+        return nil
     }
     
     public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: PTActionTask? = nil) {
@@ -423,16 +422,22 @@ public class Network: NSObject {
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success:
-                    var requestStruct = PTBaseStructModel()
-                    requestStruct.resultData = data.data
-                    let jsonStr = data.data?.toDict()?.toJSON() ?? ""
-                    logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
-                    requestStruct.originalString = jsonStr
-                    if let modelType1 = modelType {
-                        requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
+                    
+                    if let htmlString = data.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
+                        let error = AFError.createURLRequestFailed(error: NSError(domain: htmlString, code: 99999999993))
+                        logRequestFailure(url: urlStr1, error: error)
+                        continuation.resume(throwing: error)
+                    } else {
+                        var requestStruct = PTBaseStructModel()
+                        requestStruct.resultData = data.data
+                        let jsonStr = data.data?.toDict()?.toJSON() ?? ""
+                        logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
+                        requestStruct.originalString = jsonStr
+                        if let modelType1 = modelType {
+                            requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
+                        }
+                        continuation.resume(returning: requestStruct)
                     }
-                    continuation.resume(returning: requestStruct)
-
                 case .failure(let error):
                     logRequestFailure(url: urlStr1, error: error)
                     continuation.resume(throwing: error)
@@ -558,7 +563,7 @@ public class Network: NSObject {
             download.createDownload(fileUrl: fileUrl, saveFilePath: saveFilePath,queue: queue, progress: progress) { reponse in
                 continuation.resume(returning: reponse.value!)
             } fail: { error in
-                continuation.resume(throwing: error as! Never/*NSError(domain: error.debugDescription, code: 999) as! Never*/)
+                continuation.resume(throwing: error as! Never)
             }
         }
     }
@@ -635,7 +640,7 @@ public class Network: NSObject {
         switch response.result {
         case .success:
             if let data = response.value, data.count > 1000 {
-                if success != nil{
+                if success != nil {
                     PTGCDManager.gcdMain {
                         self.success?(response)
                     }

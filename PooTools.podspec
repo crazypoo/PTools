@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.65.0'
+    s.version     = '3.65.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -375,14 +375,6 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
         }
     end
-
-    s.subspec 'ColorPicker' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'ChromaColorPicker'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COLORPICKER POOTOOLS_COCOAPODS"
-        }
-    end
         
     s.subspec 'FocusFaceImageView' do |subspec|
         subspec.dependency 'PooTools/Core'
@@ -468,7 +460,6 @@ Pod::Spec.new do |s|
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/NetWork'
-        subspec.dependency 'PooTools/ColorPicker'
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/SearchBar'
         subspec.dependency 'PooTools/PDF'
@@ -790,7 +781,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/NavBarController'
         subspec.dependency 'PooTools/VideoEditor'
         subspec.dependency 'PooTools/HarbethKit'
-        subspec.dependency 'ChromaColorPicker'
         subspec.dependency 'PooTools/FilterCamera'
         subspec.dependency 'PooTools/ImageEditor'
         subspec.dependency 'PooTools/Loading'
@@ -923,7 +913,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/SmartScreenshot'
         subspec.dependency 'PooTools/ZipArchive'
         subspec.dependency 'PooTools/GCDWebServer'
-        subspec.dependency 'PooTools/ColorPicker'
         subspec.dependency 'PooTools/FocusFaceImageView'
         subspec.dependency 'PooTools/PagingControl'
         subspec.dependency 'PooTools/Picker'

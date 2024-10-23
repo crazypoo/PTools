@@ -100,8 +100,6 @@ pod 'PooTools/SmartScreenshot', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/ZipArchive', :git => 'https://github.com/crazypoo/PTools.git'
 ### GCDWebServer
 pod 'PooTools/GCDWebServer', :git => 'https://github.com/crazypoo/PTools.git'
-### 颜色选择
-pod 'PooTools/ColorPicker', :git => 'https://github.com/crazypoo/PTools.git'
 ### 图片颜色
 pod 'PooTools/ImageColors', :git => 'https://github.com/crazypoo/PTools.git'
 ### 头像头部居中
