@@ -2176,8 +2176,6 @@
 			isa = PBXGroup;
 			children = (
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
-				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
-				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -3467,19 +3465,21 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
+				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
+				5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */,
+				55BF36F32C4A504100AB36EB /* PTAssociatedObjectStore.swift */,
+				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
 				55B316A92999D41D00D8C39B /* PTGCDManager.swift */,
+				55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */,
 				5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
+				55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */,
+				555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */,
 				550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
-				555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */,
-				5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */,
-				55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */,
-				55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */,
-				55BF36F32C4A504100AB36EB /* PTAssociatedObjectStore.swift */,
+				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";

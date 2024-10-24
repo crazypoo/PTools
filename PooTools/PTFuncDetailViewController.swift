@@ -1054,6 +1054,4 @@ extension PTFuncDetailViewController:GCDWebUploaderDelegate {
     }
 }
 
-extension PTFuncDetailViewController : PHLivePhotoViewDelegate {
-    
-}
+extension PTFuncDetailViewController : PHLivePhotoViewDelegate { }

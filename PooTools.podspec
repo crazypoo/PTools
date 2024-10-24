@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.65.2'
+    s.version     = '3.65.3'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -26,6 +26,9 @@ Pod::Spec.new do |s|
         subspec.dependency 'pop'
         subspec.dependency 'Kingfisher'
         subspec.dependency 'SafeSFSymbols'
+        subspec.dependency 'KakaJSON'
+        #        subspec.dependency 'MetaCodable'
+        #        subspec.dependency 'MetaCodable/HelperCoders'
         subspec.resource_bundles = {
             'PooToolsResource' => ['PooToolsSource/Resource/**/*','PooToolsSource/Resource/PrivacyInfo.xcprivacy','PooToolsSource/Resources/*.lproj']
         }
@@ -40,9 +43,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/Loading'
         subspec.dependency 'Alamofire'
-        subspec.dependency 'KakaJSON'
-#        subspec.dependency 'MetaCodable'
-#        subspec.dependency 'MetaCodable/HelperCoders'
         subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
