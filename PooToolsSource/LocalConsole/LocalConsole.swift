@@ -861,7 +861,13 @@ public class LocalConsole: NSObject {
 
     func debugControllerAction() {
         let vc = PTDebugViewController()
-        present(content: vc)
+        let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
+        
+        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+            presentedVC.present(sheet, animated: true)
+        } else {
+            PTUtils.getCurrentVC().present(sheet, animated: true)
+        }
     }
     
     func copyTextAction() {

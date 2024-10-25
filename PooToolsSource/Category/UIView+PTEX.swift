@@ -314,41 +314,57 @@ public extension UIView {
                             borderColor:UIColor? = UIColor.clear,
                             corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
-            let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: radius!, height: radius!))
+            // 检查并移除已经存在的渐变背景层，防止重复添加
+            if let existingGradientView = self.viewWithTag(999) {
+                existingGradientView.removeFromSuperview()
+            }
+
+            // 创建背景视图
+            let gradientBackgroundView = UIView(frame: self.bounds)
+            gradientBackgroundView.tag = 999 // 用 tag 标记，便于后续移除
+            gradientBackgroundView.backgroundColor = .clear
+            gradientBackgroundView.isUserInteractionEnabled = false // 确保不干扰用户操作
+
+            let maskPath = UIBezierPath(roundedRect: gradientBackgroundView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius!, height: radius!))
             let shapeLayer = CAShapeLayer()
             shapeLayer.path = maskPath.cgPath
 
-            self.backgroundColor = .clear
             let maskLayer = CAGradientLayer()
-            
-            var cgColorsss = [CGColor]()
-            colors.enumerated().forEach { (index,value) in
-                cgColorsss.append(value.cgColor)
+            var cgColors = [CGColor]()
+            colors.forEach { value in
+                cgColors.append(value.cgColor)
             }
-            
-            maskLayer.colors = cgColorsss
+
+            maskLayer.colors = cgColors
             switch type {
             case .LeftToRight:
-                maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
-                maskLayer.endPoint = CGPoint.init(x: 1, y: 0)
+                maskLayer.startPoint = CGPoint(x: 0, y: 0)
+                maskLayer.endPoint = CGPoint(x: 1, y: 0)
             case .TopToBottom:
-                maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
-                maskLayer.endPoint = CGPoint.init(x: 0, y: 1)
+                maskLayer.startPoint = CGPoint(x: 0, y: 0)
+                maskLayer.endPoint = CGPoint(x: 0, y: 1)
             case .RightToLeft:
-                maskLayer.startPoint = CGPoint.init(x: 1, y: 0)
-                maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
+                maskLayer.startPoint = CGPoint(x: 1, y: 0)
+                maskLayer.endPoint = CGPoint(x: 0, y: 0)
             case .BottomToTop:
-                maskLayer.startPoint = CGPoint.init(x: 0, y: 1)
-                maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
+                maskLayer.startPoint = CGPoint(x: 0, y: 1)
+                maskLayer.endPoint = CGPoint(x: 0, y: 0)
             }
-            maskLayer.frame = self.bounds
+            maskLayer.frame = gradientBackgroundView.bounds
             maskLayer.mask = shapeLayer
             maskLayer.masksToBounds = true
             maskLayer.borderWidth = borderWidth!
             maskLayer.borderColor = borderColor!.cgColor
-            self.layer.addSublayer(maskLayer)
-            self.layer.insertSublayer(maskLayer, at: 0)
-            self.setNeedsDisplay()
+
+            gradientBackgroundView.layer.insertSublayer(maskLayer, at: 0)
+            gradientBackgroundView.layer.masksToBounds = true
+
+            // 将 gradientBackgroundView 添加到 UILabel 背后
+            self.insertSubview(gradientBackgroundView, at: 0)
+
+            self.backgroundColor = .clear // 确保 UILabel 背景透明
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
         }
     }
     
