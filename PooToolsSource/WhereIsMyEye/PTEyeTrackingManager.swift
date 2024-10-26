@@ -206,7 +206,6 @@ extension PTEyeTrackingManager: PTEyeTrackingSessionManagerDelegate {
         
         let lookAtPoint = dataManager.calculateEyeLookAtPoint(anchor: anchor)
         
-        //TODO: 重要的是顺序
         findLookAt(with : lookAtPoint)
         checkTrackingState(withFaceAnchor: anchor)
         testUtility.updateTestViews(with: lookAtPoint)

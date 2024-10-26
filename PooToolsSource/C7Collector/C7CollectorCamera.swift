@@ -127,7 +127,6 @@ public final class C7CollectorCamera: C7Collector {
 //                break
 //            }
         default:
-            //TODO: 没授权
             return
         }
         
@@ -399,7 +398,6 @@ public final class C7CollectorCamera: C7Collector {
         }
         
         guard captureSession.outputs.contains(movieFileOutput) else {
-            //TODO:
             return
         }
         //        dismissBtn.isHidden = true

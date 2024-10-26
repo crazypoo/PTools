@@ -28,13 +28,13 @@ public extension AVAsset {
                 
                 isExporting = true
                 
-                exportSession.exportAsynchronously(completionHandler: {
+                exportSession.exportAsynchronously {
                     if exportSession.status == .completed && exportSession.error == nil {
                         completion(outputURL)
                     } else {
                         PTNSLogConsole("导出视频失败")
                     }
-                })
+                }
                 return isExporting
             } else {
                 PTNSLogConsole("没有这个文件夹")

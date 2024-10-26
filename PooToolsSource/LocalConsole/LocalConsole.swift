@@ -448,9 +448,7 @@ public class LocalConsole: NSObject {
     lazy var consoleSize = defaultConsoleSize {
         didSet {
             terminal!.frame.size = consoleSize
-                        
-            // TODO: Snap to nearest position.
-            
+                                    
             PTCoreUserDefultsWrapper.PTLocalConsoleWidth = consoleSize.width
             PTCoreUserDefultsWrapper.PTLocalConsoleHeight = consoleSize.height
         }

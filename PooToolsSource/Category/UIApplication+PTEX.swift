@@ -13,17 +13,16 @@ extension UIApplication: PTProtocolCompatible { }
 
 public extension UIApplication {
     @objc func clearLaunchScreenCache() {
-        do {
-            try FileManager.default.removeItem(atPath: NSHomeDirectory()+"/Library/SplashBoard")
-        } catch {
-            PTNSLogConsole("Failed to delete launch screen cache: \(error)",levelType: .Error,loggerType: .UIApplication)
+        let result = FileManager.pt.removefolder(folderPath: FileManager.pt.homeDirectory() + "/Library/SplashBoard")
+        if !result.isSuccess {
+            PTNSLogConsole("Failed to delete launch screen cache: \(result.error)",levelType: .Error,loggerType: .UIApplication)
         }
     }
     
     //MARK: 獲取軟件的開髮狀態
     ///獲取軟件的開髮狀態
     class func applicationEnvironment() -> Environment {
-        var environment: Environment!
+        var environment: Environment = .debug
         PTGCDManager.gcdMain {
             environment = UIApplication.shared.inferredEnvironment
         }

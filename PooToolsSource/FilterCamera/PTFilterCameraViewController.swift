@@ -674,7 +674,6 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
                     self.takePhotoView?.dismissAlert()
                 }
             } else {
-                //TODO: 这里根据相册须要处理
                 self.camera.stopRunning()
                 
                 let reviewView = PTFlashImageReviewView(image: image)

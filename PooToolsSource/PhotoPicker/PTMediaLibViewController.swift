@@ -494,7 +494,6 @@ public class PTMediaLibView:UIView {
         }
 
         PTGCDManager.gcdAfter(time: 0.15) {
-            //FIXME: 这里刷新应该没问题,但是等网络号的时候再看
             self.loadMedia(addImage: true)
         }
     }
