@@ -834,7 +834,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         
         timeLineContentSet()
          
-        Task.init {
+        Task {
             do {
                 
 //                UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
@@ -1053,7 +1053,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.currentPlayTime = 0
             }
 
-            Task.init {
+            Task {
                 do {
                     let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
                     let cgImages = try await self.videoTimeline(for: self.avPlayer.currentItem!.asset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))

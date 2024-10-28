@@ -11,7 +11,7 @@ import DeviceKit
 
 public let CorePodBundleName = "PooToolsResource"
 
-public typealias PTActionTask = () -> Void
+public typealias PTActionTask = @Sendable () -> Void
 
 public let AppWindows = UIApplication.shared.delegate?.window!
 

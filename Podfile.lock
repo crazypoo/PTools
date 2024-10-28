@@ -441,39 +441,37 @@ PODS:
   - SVGAPlayer/ProtoFiles (2.5.7):
     - Protobuf (~> 3.4)
   - SwiftDate (7.0.0)
-  - SwifterSwift (6.2.0):
-    - SwifterSwift/AppKit (= 6.2.0)
-    - SwifterSwift/Combine (= 6.2.0)
-    - SwifterSwift/CoreAnimation (= 6.2.0)
-    - SwifterSwift/CoreGraphics (= 6.2.0)
-    - SwifterSwift/CoreLocation (= 6.2.0)
-    - SwifterSwift/CryptoKit (= 6.2.0)
-    - SwifterSwift/Dispatch (= 6.2.0)
-    - SwifterSwift/Foundation (= 6.2.0)
-    - SwifterSwift/HealthKit (= 6.2.0)
-    - SwifterSwift/MapKit (= 6.2.0)
-    - SwifterSwift/SceneKit (= 6.2.0)
-    - SwifterSwift/SpriteKit (= 6.2.0)
-    - SwifterSwift/StoreKit (= 6.2.0)
-    - SwifterSwift/SwiftStdlib (= 6.2.0)
-    - SwifterSwift/UIKit (= 6.2.0)
-    - SwifterSwift/WebKit (= 6.2.0)
-  - SwifterSwift/AppKit (6.2.0)
-  - SwifterSwift/Combine (6.2.0)
-  - SwifterSwift/CoreAnimation (6.2.0)
-  - SwifterSwift/CoreGraphics (6.2.0)
-  - SwifterSwift/CoreLocation (6.2.0)
-  - SwifterSwift/CryptoKit (6.2.0)
-  - SwifterSwift/Dispatch (6.2.0)
-  - SwifterSwift/Foundation (6.2.0)
-  - SwifterSwift/HealthKit (6.2.0)
-  - SwifterSwift/MapKit (6.2.0)
-  - SwifterSwift/SceneKit (6.2.0)
-  - SwifterSwift/SpriteKit (6.2.0)
-  - SwifterSwift/StoreKit (6.2.0)
-  - SwifterSwift/SwiftStdlib (6.2.0)
-  - SwifterSwift/UIKit (6.2.0)
-  - SwifterSwift/WebKit (6.2.0)
+  - SwifterSwift (7.0.0):
+    - SwifterSwift/AppKit (= 7.0.0)
+    - SwifterSwift/CoreAnimation (= 7.0.0)
+    - SwifterSwift/CoreGraphics (= 7.0.0)
+    - SwifterSwift/CoreLocation (= 7.0.0)
+    - SwifterSwift/CryptoKit (= 7.0.0)
+    - SwifterSwift/Dispatch (= 7.0.0)
+    - SwifterSwift/Foundation (= 7.0.0)
+    - SwifterSwift/HealthKit (= 7.0.0)
+    - SwifterSwift/MapKit (= 7.0.0)
+    - SwifterSwift/SceneKit (= 7.0.0)
+    - SwifterSwift/SpriteKit (= 7.0.0)
+    - SwifterSwift/StoreKit (= 7.0.0)
+    - SwifterSwift/SwiftStdlib (= 7.0.0)
+    - SwifterSwift/UIKit (= 7.0.0)
+    - SwifterSwift/WebKit (= 7.0.0)
+  - SwifterSwift/AppKit (7.0.0)
+  - SwifterSwift/CoreAnimation (7.0.0)
+  - SwifterSwift/CoreGraphics (7.0.0)
+  - SwifterSwift/CoreLocation (7.0.0)
+  - SwifterSwift/CryptoKit (7.0.0)
+  - SwifterSwift/Dispatch (7.0.0)
+  - SwifterSwift/Foundation (7.0.0)
+  - SwifterSwift/HealthKit (7.0.0)
+  - SwifterSwift/MapKit (7.0.0)
+  - SwifterSwift/SceneKit (7.0.0)
+  - SwifterSwift/SpriteKit (7.0.0)
+  - SwifterSwift/StoreKit (7.0.0)
+  - SwifterSwift/SwiftStdlib (7.0.0)
+  - SwifterSwift/UIKit (7.0.0)
+  - SwifterSwift/WebKit (7.0.0)
   - SwiftLint (0.57.0)
   - Swinject (2.9.1)
   - SwipeCellKit (2.7.1)
@@ -491,7 +489,6 @@ DEPENDENCIES:
   - InAppViewDebugger
   - LookinServer
   - PooTools/InputAll (from `PooTools.podspec`)
-  - SwifterSwift (= 6.2.0)
   - SwiftLint
   - Swinject
 
@@ -611,7 +608,7 @@ SPEC CHECKSUMS:
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   SVGAPlayer: 318b85a78b61292d6ae9dfcd651f3f0d1cdadd86
   SwiftDate: bbc26e26fc8c0c33fbee8c140c5e8a68293a148a
-  SwifterSwift: dd00873fb09cde19da88bdb2878f9fe70fe27b0f
+  SwifterSwift: e9caf990fc72e835432280755d1f4c43f2a483d5
   SwiftLint: eb47480d47c982481592c195c221d11013a679cc
   Swinject: a827d508c6270da03ec74e558e728917a888fa9b
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
@@ -623,6 +620,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 38ec4020289b4ac393113b4ae91fc9d00815d7ec
+PODFILE CHECKSUM: 752b616c5d2ad288fa8108f22ce5c7e2acda53f8
 
 COCOAPODS: 1.15.2

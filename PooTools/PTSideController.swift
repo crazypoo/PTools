@@ -67,11 +67,22 @@ class PTSideController: PTBaseSideController {
         }
         return view
     }()
+    
+    lazy var lcButton:UIButton = {
+        let view = UIButton(type:.custom)
+        view.backgroundColor = .random
+        view.addActionHandlers { sender in
+            PTCoreUserDefultsWrapper.AppDebugMode.toggle()
+            let lc = LocalConsole.shared
+            lc.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
+        }
+        return view
+    }()
         
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviews([sideInfoLabel,sideButton,checkBox,inspectorButton])
+        view.addSubviews([sideInfoLabel,sideButton,checkBox,inspectorButton,lcButton])
         sideInfoLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.centerY.equalToSuperview()
@@ -93,6 +104,11 @@ class PTSideController: PTBaseSideController {
             make.left.right.equalTo(self.sideButton)
             make.top.equalTo(self.checkBox.snp.bottom).offset(10)
             make.height.equalTo(34)
+        }
+        
+        lcButton.snp.makeConstraints { make in
+            make.size.centerX.equalTo(self.inspectorButton)
+            make.top.equalTo(self.inspectorButton.snp.bottom).offset(10)
         }
     }
 }

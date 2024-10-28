@@ -147,31 +147,33 @@ public class PTNetWorkStatus {
     }
     
     public func netWork(handle: @escaping (_ status:NetWorkStatus)->Void) {
-        self.monitor.pathUpdateHandler = { path in
-            if path.status == .satisfied {
-                if path.usesInterfaceType(.wifi) {
-                    handle(.wifi)
-                } else if path.usesInterfaceType(.cellular) {
-                    handle(.wwan)
-                } else if path.usesInterfaceType(.wiredEthernet) {
-                    handle(.wiredEthernet)
-                } else if path.usesInterfaceType(.loopback) {
-                    handle(.loopback)
-                } else if path.usesInterfaceType(.other) {
-                    handle(.other)
+        PTGCDManager.gcdMain {
+            self.monitor.pathUpdateHandler = { path in
+                if path.status == .satisfied {
+                    if path.usesInterfaceType(.wifi) {
+                        handle(.wifi)
+                    } else if path.usesInterfaceType(.cellular) {
+                        handle(.wwan)
+                    } else if path.usesInterfaceType(.wiredEthernet) {
+                        handle(.wiredEthernet)
+                    } else if path.usesInterfaceType(.loopback) {
+                        handle(.loopback)
+                    } else if path.usesInterfaceType(.other) {
+                        handle(.other)
+                    } else {
+                        handle(.unknown)
+                    }
+                } else if path.status == .unsatisfied {
+                    handle(.notReachable)
+                } else if path.status == .requiresConnection {
+                    handle(.requiresConnection)
                 } else {
                     handle(.unknown)
                 }
-            } else if path.status == .unsatisfied {
-                handle(.notReachable)
-            } else if path.status == .requiresConnection {
-                handle(.requiresConnection)
-            } else {
-                handle(.unknown)
             }
+            let queue = DispatchQueue.global(qos:.background)
+            self.monitor.start(queue: queue)
         }
-        let queue = DispatchQueue.global(qos:.background)
-        self.monitor.start(queue: queue)
     }
 
     

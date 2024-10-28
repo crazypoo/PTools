@@ -66,32 +66,38 @@ public extension UIButton {
          * 如果只有title，那它上下左右都是相对于button的，image也是一样；
          * 如果同时有image和label，那这时候image的上左下是相对于button，右边是相对于label的；title的上右下是相对于button，左边是相对于image的。
          */
-
-        let imageWith = imageView?.frame.size.width
-        let imageHeight = imageView?.frame.size.height
+        guard let imageView = self.imageView,
+              let titleLabel = self.titleLabel else {
+            return
+        }
         
-        let labelWidth:CGFloat = (titleLabel?.frame.size.width)!
-        let labelHeight:CGFloat = (titleLabel?.frame.size.height)!
+        let imageWidth = imageView.frame.size.width
+        let imageHeight = imageView.frame.size.height
+        let labelWidth = titleLabel.frame.size.width
+        let labelHeight = titleLabel.frame.size.height
         
         var imageEdgeInsets = UIEdgeInsets.zero
         var labelEdgeInsets = UIEdgeInsets.zero
         
         switch style {
         case .Top:
-            imageEdgeInsets = UIEdgeInsets(top: -labelHeight-imageTitleSpace / 2, left: 0, bottom: 0, right: -labelWidth)
-            labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWith!, bottom: -imageHeight!-imageTitleSpace/2, right: 0)
+            imageEdgeInsets = UIEdgeInsets(top: -labelHeight - imageTitleSpace / 2, left: 0, bottom: 0, right: -labelWidth)
+            labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWidth, bottom: -imageHeight - imageTitleSpace / 2, right: 0)
+            
         case .Left:
-            imageEdgeInsets = UIEdgeInsets(top: 0, left: -imageTitleSpace/2, bottom: 0, right: imageTitleSpace/2.0)
-            labelEdgeInsets = UIEdgeInsets(top: 0, left: imageTitleSpace/2, bottom: 0, right: -imageTitleSpace/2.0)
+            imageEdgeInsets = UIEdgeInsets(top: 0, left: -imageTitleSpace / 2, bottom: 0, right: imageTitleSpace / 2)
+            labelEdgeInsets = UIEdgeInsets(top: 0, left: imageTitleSpace / 2, bottom: 0, right: -imageTitleSpace / 2)
+            
         case .Bottom:
-            imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -labelHeight-imageTitleSpace/2, right: -labelWidth)
-            labelEdgeInsets = UIEdgeInsets(top: -imageHeight!-imageTitleSpace/2, left: -imageWith!, bottom: 0, right: 0)
+            imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -labelHeight - imageTitleSpace / 2, right: -labelWidth)
+            labelEdgeInsets = UIEdgeInsets(top: -imageHeight - imageTitleSpace / 2, left: -imageWidth, bottom: 0, right: 0)
+            
         case .Right:
-            imageEdgeInsets = UIEdgeInsets(top: 0, left: labelWidth+imageTitleSpace/2, bottom: 0, right: -labelWidth-imageTitleSpace/2)
-            labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWith!-imageTitleSpace/2, bottom: 0, right: imageWith!+imageTitleSpace/2)
+            imageEdgeInsets = UIEdgeInsets(top: 0, left: labelWidth + imageTitleSpace / 2, bottom: 0, right: -labelWidth - imageTitleSpace / 2)
+            labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWidth - imageTitleSpace / 2, bottom: 0, right: imageWidth + imageTitleSpace / 2)
         }
         
-        titleEdgeInsets = labelEdgeInsets
+        self.titleEdgeInsets = labelEdgeInsets
         self.imageEdgeInsets = imageEdgeInsets
     }
     
