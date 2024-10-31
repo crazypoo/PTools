@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIViewController {
+public extension UIViewController {
 
     var sideMenuController: PTSideMenuControl? {
         return findSideMenuController(from: self)

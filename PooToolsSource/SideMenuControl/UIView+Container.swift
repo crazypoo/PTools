@@ -9,7 +9,7 @@
 import UIKit
 import SwifterSwift
 
-extension UIView {
+public extension UIView {
 
     var parentNavigationController: UINavigationController? {
         let currentViewController = parentViewController
