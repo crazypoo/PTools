@@ -16,7 +16,7 @@ import Kakapos
 /// The camera data collector returns pictures in the main thread.
 public final class C7CollectorCamera: C7Collector {
     
-    
+    var shotImageCallback: ((UIImage) -> Void)!
     private var videoUrl: URL?
     
     private lazy var cameraConfig = C7CameraConfig.share
@@ -37,7 +37,6 @@ public final class C7CollectorCamera: C7Collector {
     private var recordDurations: [Double] = []
 
     private var microPhontIsAvailable = true
-//    public var recordVideoPlayerLayer: AVPlayerLayer?
     private var restartRecordAfterSwitchCamera = false
     
     var animateLayer: CAShapeLayer!
@@ -48,12 +47,25 @@ public final class C7CollectorCamera: C7Collector {
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
     private let bufferQueue  = DispatchQueue(label: "camera.collector.buffer.metal")
     
-    public var deviceInput: AVCaptureDeviceInput?
-    
+    public var deviceInput: AVCaptureDeviceInput? {
+        didSet {
+            if let oldValue = oldValue {
+                self.captureSession.removeInput(oldValue)
+            }
+            if let input = self.deviceInput {
+                self.captureSession.addInput(input)
+            }
+        }
+    }
+
     public var movieFileOutput: AVCaptureMovieFileOutput?
     
     public lazy var captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
+        let preset = AVCaptureSession.Preset.hd1280x720
+        if session.canSetSessionPreset(preset) {
+            session.sessionPreset = preset
+        }
         return session
     }()
     
@@ -88,48 +100,7 @@ public final class C7CollectorCamera: C7Collector {
     
     public override func setupInit() {
         super.setupInit()
-        
-        switch PTPermission.camera.status {
-        case .notDetermined:
-            PTPermission.camera.request {
-                switch PTPermission.camera.status {
-                case .authorized:break
-//                    guard self.cameraConfig.allowRecordVideo else {
-//                        self.addNotification()
-//                        return
-//                    }
-                default:
-                    return
-                }
-            }
-        case .authorized:break
-//            guard self.cameraConfig.allowRecordVideo else {
-//                self.addNotification()
-//                return
-//            }
-            
-//            switch PTPermission.microphone.status {
-//            case .notDetermined:
-//                PTPermission.microphone.request {
-//                    self.addNotification()
-//                    switch PTPermission.microphone.status {
-//                    case .authorized:break
-//                    default:
-//                        //                self.showNoMicrophoneAuthorityAlert()
-//                        return
-//                    }
-//                }
-//            case .authorized:
-//                self.addNotification()
-//            default:
-//                self.addNotification()
-//                //                self.showNoMicrophoneAuthorityAlert()
-//                break
-//            }
-        default:
-            return
-        }
-        
+                
         if PTCameraFilterConfig.share.allowRecordVideo {
             do {
                 try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .duckOthers)
@@ -148,11 +119,8 @@ public final class C7CollectorCamera: C7Collector {
     
     private func setupCaptureSession() {
         guard let camera = getCamera(position: cameraConfig.devicePosition.avDevicePosition) else { return }
-        guard let input = try? AVCaptureDeviceInput(device: camera) else { return }
+        self.deviceInput = try? AVCaptureDeviceInput(device: camera)
         captureSession.beginConfiguration()
-        
-        deviceInput = input
-        
         refreshSessionPreset(device: camera)
         
         let movieFileOutput = AVCaptureMovieFileOutput()
@@ -168,7 +136,6 @@ public final class C7CollectorCamera: C7Collector {
         // 添加音频输入
         self.addAudioInput()
         
-        
         // 照片输出流
         let imageOutput = AVCapturePhotoOutput()
         self.imageOutput = imageOutput
@@ -182,8 +149,6 @@ public final class C7CollectorCamera: C7Collector {
         
         let _ = videoOutput
         captureSession.commitConfiguration()
-        
-        startRunning()
     }
     
     private func getMicrophone() -> AVCaptureDevice? {
@@ -258,8 +223,12 @@ public final class C7CollectorCamera: C7Collector {
             setting.flashMode = .off
         }
         imageOutput.capturePhoto(with: setting, delegate: self)
+        
+        if let image = self.showedImageView.image {
+            shotImageCallback(image)
+        }
     }
-    
+        
     public func changeCamera(handle:PTActionTask?) {
         
         guard deviceInput != nil else {
@@ -348,46 +317,7 @@ public final class C7CollectorCamera: C7Collector {
             setSessionPreset(.photo)
         }
     }
-    
-//    private func addNotification() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-//        
-//        if cameraConfig.allowRecordVideo {
-//            NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-//            NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionInterruption), name: AVAudioSession.interruptionNotification, object: nil)
-//        }
-//    }
-    
-//    @objc private func appWillResignActive() {
-//        if captureSession.isRunning {
-//            PTUtils.returnFrontVC()
-//        }
-//        if videoUrl != nil, let player = recordVideoPlayerLayer?.player {
-//            player.pause()
-//        }
-//    }
-//    
-//    @objc private func appDidBecomeActive() {
-//        if videoUrl != nil, let player = recordVideoPlayerLayer?.player {
-//            player.play()
-//        }
-//    }
-//    
-//    @objc private func handleAudioSessionInterruption(_ notify: Notification) {
-//        guard recordVideoPlayerLayer?.isHidden == false, let player = recordVideoPlayerLayer?.player else {
-//            return
-//        }
-//        guard player.rate == 0 else {
-//            return
-//        }
-//        
-//        let type = notify.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
-//        let option = notify.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
-//        if type == AVAudioSession.InterruptionType.ended.rawValue, option == AVAudioSession.InterruptionOptions.shouldResume.rawValue {
-//            player.play()
-//        }
-//    }
-    
+        
     public func startRecord() {
         guard let movieFileOutput = movieFileOutput else {
             return
@@ -400,8 +330,6 @@ public final class C7CollectorCamera: C7Collector {
         guard captureSession.outputs.contains(movieFileOutput) else {
             return
         }
-        //        dismissBtn.isHidden = true
-        //        flashBtn.isHidden = true
         
         let connection = movieFileOutput.connection(with: .video)
         connection?.videoScaleAndCropFactor = 1
@@ -512,35 +440,6 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
     }
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-            
-        PTGCDManager.gcdMain {
-            defer {
-//                self.isTakingPicture = false
-            }
-            
-            if photoSampleBuffer == nil || error != nil {
-                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"\("PT Filter cam take photo failed".localized()) \(error?.localizedDescription ?? "")",icon:.Error,style: .Normal)
-                return
-            }
-
-            // 初始化 AVCapturePhotoOutput 实例
-            let photoOutput = AVCapturePhotoOutput()
-
-            // 设置 capturePhoto 方法的参数和代理
-            let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
-            photoOutput.capturePhoto(with: photoSettings, delegate: self)
-
-//            if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
-//                self.stopRunning()
-//                let image = UIImage(data: data)?.c7.fixOrientation()
-//                
-//                var dest = BoxxIO(element: image, filters: self.filters)
-//                dest.transmitOutputRealTimeCommit = true
-//                self.delegate?.takePhoto!(self, fliter: (try? dest.output() ?? image!)!)
-//            } else {
-//                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"拍照失败，data为空",icon:.Error,style: .Normal)
-//            }
-        }
     }
     
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -550,7 +449,7 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
             
             var dest = HarbethIO(element: image, filters: self.filters)
             dest.transmitOutputRealTimeCommit = true
-            self.delegate?.takePhoto!(self, fliter: (try? dest.output() ?? image!)!)
+            self.delegate?.preview(self, fliter: (try? dest.output() ?? image!)!)
         }
     }
 }
@@ -802,7 +701,6 @@ extension C7CollectorCamera: C7CollectorImageDelegate {
         self.showedImageView.image = image.rotated(by: 90)
     }
 }
-
 
 extension UIImage {
     func rotated(by degrees: CGFloat) -> UIImage? {

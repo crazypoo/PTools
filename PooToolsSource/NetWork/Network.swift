@@ -425,14 +425,20 @@ public class Network: NSObject {
                 switch data.result {
                 case .success:
                     
-                    if let htmlString = data.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
-                        let error = AFError.createURLRequestFailed(error: NSError(domain: htmlString, code: 99999999993))
-                        logRequestFailure(url: urlStr1, error: error)
-                        continuation.resume(throwing: error)
+                    var requestStruct = PTBaseStructModel()
+                    requestStruct.resultData = data.data
+                    let jsonStr = data.data?.toDict()?.toJSON() ?? ""
+                    if jsonStr.stringIsEmpty() {
+                        if let htmlString = data.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
+                            let error = AFError.createURLRequestFailed(error: NSError(domain: htmlString, code: 99999999993))
+                            logRequestFailure(url: urlStr1, error: error)
+                            continuation.resume(throwing: error)
+                        } else {
+                            let error = AFError.createURLRequestFailed(error: NSError(domain: "Data error", code: 99999999992))
+                            logRequestFailure(url: urlStr1, error: error)
+                            continuation.resume(throwing: error)
+                        }
                     } else {
-                        var requestStruct = PTBaseStructModel()
-                        requestStruct.resultData = data.data
-                        let jsonStr = data.data?.toDict()?.toJSON() ?? ""
                         logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
                         requestStruct.originalString = jsonStr
                         if let modelType1 = modelType {

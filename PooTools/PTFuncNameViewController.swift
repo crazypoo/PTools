@@ -889,6 +889,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
 
                 let vc = PTFilterCameraViewController()
+                vc.onlyCamera = false
                 vc.modalPresentationStyle = .fullScreen
                 self.showDetailViewController(vc, sender: nil)
             } else if itemRow.title == .editimage {

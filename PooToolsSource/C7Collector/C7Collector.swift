@@ -19,31 +19,17 @@ import Harbeth
     ///   - image: fliter image
     func preview(_ collector: C7Collector, fliter image: C7Image)
     
-    @objc optional func takePhoto(_ collector: C7Collector, fliter image: C7Image)
-
     /// Capture other relevant information. The child thread returns the result.
     /// - Parameters:
     ///   - collector: Collector
     ///   - pixelBuffer: A CVPixelBuffer object containing the video frame data and additional information about the frame, such as its format and presentation time.
     @objc optional func captureOutput(_ collector: C7Collector, pixelBuffer: CVPixelBuffer)
     
-    /// Capture other relevant information. The child thread returns the result.
-    /// - Parameters:
-    ///   - collector: Collector
-    ///   - pixelBuffer: A CVPixelBuffer object containing the video frame data and additional information about the frame, such as its format and presentation time.
-    @objc optional func capturePhotoOutput(_ collector: C7Collector, pixelBuffer: CVPixelBuffer)
-
     /// Capture CVPixelBuffer converted to MTLTexture.
     /// - Parameters:
     ///   - collector: Collector
     ///   - texture: CVPixelBuffer => MTLTexture
     @objc optional func captureOutput(_ collector: C7Collector, texture: MTLTexture)
-    
-    /// Capture CVPixelBuffer converted to MTLTexture.
-    /// - Parameters:
-    ///   - collector: Collector
-    ///   - texture: CVPixelBuffer => MTLTexture
-    @objc optional func capturePhotoOutput(_ collector: C7Collector, texture: MTLTexture)
 }
 
 public class C7Collector: NSObject, Cacheable {
@@ -108,41 +94,11 @@ extension C7Collector {
             guard var image = desTexture.c7.toImage() else {
                 return
             }
-            PTGCDManager.gcdMain {
-                if self.autoCorrectDirection {
-                    image = image.pt.fixOrientation()
-                }
-                self.delegate?.preview(self, fliter: image)
-            }
-        })
-    }
-    
-    func processingPhoto(with pixelBuffer: CVPixelBuffer?) {
-        guard let pixelBuffer = pixelBuffer else {
-            return
-        }
-        delegate?.capturePhotoOutput?(self, pixelBuffer: pixelBuffer)
-
-        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: textureCache) else {
-            return
-        }
-
-        var dest = HarbethIO(element: texture, filters: filters)
-        dest.transmitOutputRealTimeCommit = true
-        dest.transmitOutput(success: { [weak self] desTexture in
-            guard let `self` = self else {
-                return
-            }
-            self.delegate?.capturePhotoOutput?(self, texture: desTexture)
-            guard var image = desTexture.c7.toImage() else {
-                return
-            }
-
             if self.autoCorrectDirection {
                 image = image.c7.fixOrientation()
             }
             PTGCDManager.gcdMain {
-                self.delegate?.takePhoto!(self, fliter: image)
+                self.delegate?.preview(self, fliter: image)
             }
         })
     }
