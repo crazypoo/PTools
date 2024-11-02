@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import AttributedString
+import AVKit
+import AVFoundation
 
 class PTCycleScrollViewCell: PTBaseNormalCell {
     static let ID = "PTCycleScrollViewCell"
@@ -105,12 +107,48 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         view.isUserInteractionEnabled = false
         return view
     }()
-        
+    
+    lazy var playerViewController : AVPlayerViewController = {
+        let view = AVPlayerViewController()
+        return view
+    }()
+
+    var player: AVPlayer?
+    var videoLink:String = "" {
+        didSet {
+            // 添加通知监听器，监听视频播放完成事件
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(videoDidEnd),
+                name: .AVPlayerItemDidPlayToEndTime,
+                object: player?.currentItem
+            )
+        }
+    }
+    
+    lazy var playButton:UIButton = {
+        let view = UIButton(type:.custom)
+        view.setImage(PTCycleScrollView.playButtonImage, for: .normal)
+        view.addActionHandlers { sender in
+            if !self.videoLink.stringIsEmpty() {
+                self.setPlayer(videoQ: URL(string: self.videoLink)!)
+            }
+        }
+        return view
+    }()
+    
+    deinit {
+        // 移除通知监听器
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubviews([imageView,titleBackView])
+        contentView.addSubviews([imageView,playerViewController.view,playButton,titleBackView])
         titleBackView.addSubview(titleLabel)
+        playerViewController.view.isHidden = true
+        playButton.isHidden = true
     }
         
     required init?(coder aDecoder: NSCoder) {
@@ -125,6 +163,15 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
             make.edges.equalToSuperview()
         }
         
+        playerViewController.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        playButton.snp.makeConstraints { make in
+            make.size.equalTo(44)
+            make.centerX.centerY.equalToSuperview()
+        }
+        
         titleBackView.snp.remakeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -136,5 +183,31 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
             make.left.right.equalToSuperview().inset(self.titleLabelLeading)
             make.top.equalToSuperview()
         }
+    }
+    
+    func setPlayer(videoQ:URL) {
+        imageView.isHidden = true
+        playButton.isHidden = true
+        playerViewController.view.isHidden = false
+        if player == nil {
+            player = AVPlayer(url: videoQ)
+            playerViewController.player = player
+        }
+        player?.play()
+        player?.isMuted = true
+    }
+    
+    func resetPlayerView() {
+        playButton.isHidden = false
+        imageView.isHidden = false
+        playerViewController.view.isHidden = true
+        player?.pause()
+        player?.seek(to: CMTime.zero)
+    }
+    
+    // 视频播放完成后的处理
+    @objc func videoDidEnd(notification: Notification) {
+        // 在这里可以进行进一步的处理，比如重播、显示提示等
+        resetPlayerView()
     }
 }

@@ -568,7 +568,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
         case String.CycleBanner:
             let banner = PTCycleScrollView()
-            banner.autoScroll = true
+            banner.autoScroll = false
             // 滚动间隔时间(默认为2秒)
             banner.autoScrollTimeInterval = 3.0
             // 设置图片显示方式=UIImageView的ContentMode
@@ -594,6 +594,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             banner.didSelectItemAtIndexClosure = { index in
                 PTNSLogConsole(">>>>>>>>>>>>>>>>>>>\(index)")
             }
+            banner.autoScroll = false
             view.addSubviews([banner])
             banner.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -608,7 +609,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     """))
                     """
             banner.titles = [att1,att1,att1]
-            banner.imagePaths = ["http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg"]
+            banner.imagePaths = ["https://cloud.video.taobao.com/play/u/2218025106300/p/1/e/6/t/1/475055174931.mp4","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg"]
         case String.CollectionTag:
             
             let tagValue = ["1123123","1","123123123123123","22222","1233"]

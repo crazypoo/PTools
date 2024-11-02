@@ -45,6 +45,8 @@ public class PTCycleScrollView: UIView {
     
     fileprivate var clearSubs:Bool = false
     
+    public static var playButtonImage:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 44))
+    
     /// 图片地址
     open var imagePaths: Array<Any> = [] {
         willSet {
@@ -671,21 +673,59 @@ extension PTCycleScrollView {
                 if self.imagePaths.count == 0 {
                     cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
                 } else {
-                    PTGCDManager.gcdGobal {
-                        let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
-                        let imagePath = self.imagePaths[itemIndex]
-                        PTGCDManager.gcdMain {
-                            cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
-                            // 对冲数据判断
-                            if itemIndex <= self.titles.count-1 {
-                                cell.title = self.titles[itemIndex]
-                            } else {
-                                cell.title = ""
+                    let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
+                    let imagePath = self.imagePaths[itemIndex]
+                    if let videoQ = imagePath as? String {
+                        if videoQ.pathExtension.lowercased() == "mp4" || videoQ.pathExtension.lowercased() == "mov" {
+                            UIImage.pt.getVideoFirstImage(videoUrl: videoQ) { image in
+                                PTGCDManager.gcdMain {
+                                    if let image = image {
+                                        cell.imageView.image = image
+                                        cell.videoLink = videoQ
+                                        if itemIndex == 0 {
+                                            PTGCDManager.gcdAfter(time: 0.1) {
+                                                cell.setPlayer(videoQ: URL(string: videoQ)!)
+                                            }
+                                        }
+                                    } else {
+                                        cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+                                    }
+                                }
                             }
+                        } else {
+                            self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
                         }
+                    } else {
+                        self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
                     }
-                    
                 }
+            }
+        }
+    }
+    
+    func loadImageWithAny(imagePath:Any,cell:PTCycleScrollViewCell,itemIndex:Int) {
+        var currentImage: UIImage?
+        Task {
+            let imageResult = await PTLoadImageFunction.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument)
+            if let images = imageResult.0 {
+                if images.count > 1 {
+                    currentImage = UIImage.animatedImage(with: images, duration: 2)
+                } else {
+                    if let singleImage = imageResult.1 {
+                        currentImage = singleImage
+                    } else {
+                        currentImage = PTAppBaseConfig.share.defaultPlaceholderImage
+                    }
+                }
+            } else {
+                currentImage = PTAppBaseConfig.share.defaultPlaceholderImage
+            }
+            cell.imageView.image = currentImage
+            // 对冲数据判断
+            if itemIndex <= (self.titles.count - 1) {
+                cell.title = self.titles[itemIndex]
+            } else {
+                cell.title = ""
             }
         }
     }
@@ -873,6 +913,12 @@ extension PTCycleScrollView : UIScrollViewDelegate {
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.cycleScrollViewScrollToIndex()
 
+        if let cell = viewWithTag(100 + currentIndex()) as? PTCycleScrollViewCell {
+            if let player = cell.player {
+                player.pause()
+            }
+        }
+        
         if self.autoScroll {
             self.invalidateTimer()
         }
@@ -913,6 +959,7 @@ extension PTCycleScrollView : UIScrollViewDelegate {
         
         let index:Int = currentIndex()
         self.setProgressIndex(index: 0)
+        
         if index == 0 { return }
 
         if self.scrollViewDidScrollClosure != nil {
