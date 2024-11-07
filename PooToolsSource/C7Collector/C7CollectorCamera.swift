@@ -47,16 +47,7 @@ public final class C7CollectorCamera: C7Collector {
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
     private let bufferQueue  = DispatchQueue(label: "camera.collector.buffer.metal")
     
-    public var deviceInput: AVCaptureDeviceInput? {
-        didSet {
-            if let oldValue = oldValue {
-                self.captureSession.removeInput(oldValue)
-            }
-            if let input = self.deviceInput {
-                self.captureSession.addInput(input)
-            }
-        }
-    }
+    public var deviceInput: AVCaptureDeviceInput?
 
     public var movieFileOutput: AVCaptureMovieFileOutput?
     
@@ -225,34 +216,32 @@ public final class C7CollectorCamera: C7Collector {
         imageOutput.capturePhoto(with: setting, delegate: self)
         
         if let image = self.showedImageView.image {
-            shotImageCallback(image)
+            if deviceInput?.device.position == .front {
+                shotImageCallback(image.c7.rotate(degrees: 90))
+            } else {
+                shotImageCallback(image)
+            }
         }
     }
         
     public func changeCamera(handle:PTActionTask?) {
-        
-        guard deviceInput != nil else {
-            return
-        }
-        guard !restartRecordAfterSwitchCamera else {
-            return
-        }
-        
-        guard let currInput = deviceInput,
-              let movieFileOutput = movieFileOutput else {
-            return
-        }
-        
+        guard deviceInput != nil else { return }
+        guard !restartRecordAfterSwitchCamera else { return }
+        guard let currInput = deviceInput, let movieFileOutput = movieFileOutput else { return }
+
         if movieFileOutput.isRecording {
             let pauseTime = animateLayer.convertTime(CACurrentMediaTime(), from: nil)
             animateLayer.speed = 0
             animateLayer.timeOffset = pauseTime
             restartRecordAfterSwitchCamera = true
         }
-        
+
         sessionQueue.async {
+            // Ensure the session is stopped completely before reconfiguring
             self.captureSession.stopRunning()
+
             do {
+                // Determine the new camera input
                 var newVideoInput: AVCaptureDeviceInput?
                 if currInput.device.position == .back, let front = self.getCamera(position: .front) {
                     newVideoInput = try AVCaptureDeviceInput(device: front)
@@ -261,32 +250,36 @@ public final class C7CollectorCamera: C7Collector {
                 } else {
                     return
                 }
-                
-                if let newVideoInput = newVideoInput {
-                    self.captureSession.beginConfiguration()
-                    
+
+                // Start configuring the session
+                self.captureSession.beginConfiguration()
+
+                // Remove the current input and clear the reference
+                self.captureSession.removeInput(currInput)
+                                
+                // Attempt to add the new input
+                if let newVideoInput = newVideoInput, self.captureSession.canAddInput(newVideoInput) {
+                    // Update session preset based on the new device
                     self.refreshSessionPreset(device: newVideoInput.device)
-                    
-                    self.captureSession.removeInput(currInput)
-                    
-                    if self.captureSession.canAddInput(newVideoInput) {
-                        self.captureSession.addInput(newVideoInput)
-                        self.deviceInput = newVideoInput
-                    } else {
-                        self.refreshSessionPreset(device: currInput.device)
-                        self.captureSession.addInput(currInput)
-                    }
-                                        
-                    self.captureSession.commitConfiguration()
-                    
-                    self.startRunning()
-                    
-                    if handle != nil {
-                        handle!()
-                    }
+                    self.captureSession.addInput(newVideoInput)
+                    self.deviceInput = newVideoInput  // Set the new device input
+                } else {
+                    // If unable to add, restore the original input
+                    self.refreshSessionPreset(device: currInput.device)
+                    self.captureSession.addInput(currInput)
+                    self.deviceInput = currInput
                 }
+
+                // Restart the session after configuration
+                self.startRunning()
+                self.captureSession.commitConfiguration()
+                handle?()
+                
             } catch {
-                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"\("PT Filter cam change failed".localized())\(error.localizedDescription)",icon:.Error,style: .Normal)
+                PTAlertTipControl.present(title: "PT Alert Opps".localized(),
+                                          subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)",
+                                          icon: .Error,
+                                          style: .Normal)
             }
         }
     }
