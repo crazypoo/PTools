@@ -12,6 +12,7 @@ import SocketRocket
 public let nNetworkStatesChangeNotification = "nNetworkStatesChangeNotification"
 public let nWebSocketDidReceiveMessageNotification = "nWebSocketDidReceiveMessageNotification"
 public let nWebSocketDidConnect = "nWebSocketDidConnect"
+public let nWebSocketDidDisconnect = "nWebSocketDidDisconnect"
 
 @objcMembers
 public class PTSocketManager: NSObject {
@@ -134,7 +135,7 @@ extension PTSocketManager:SRWebSocketDelegate {
     }
     
     public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool) {
-        startReconnect()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect), object: nil)
     }
 }
 
