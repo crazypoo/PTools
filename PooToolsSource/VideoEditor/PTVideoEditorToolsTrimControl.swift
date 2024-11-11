@@ -45,15 +45,15 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
         PTGCDManager.gcdAfter(time: 0.1) {
             Task.init {
                 do {
-                    let track = self.asset.tracks(withMediaType: AVMediaType.video).first
+                    let track = await self.asset.tracks(withMediaType: AVMediaType.video).first
                     let assetSize = track!.naturalSize.applying(track!.preferredTransform)
                     let ratio = abs(assetSize.width) / abs(assetSize.height)
-                    let bounds = self.trimmingControlView.bounds
+                    let bounds = await self.trimmingControlView.bounds
                     let frameWidth = bounds.height * ratio
                     let count = Int(bounds.width / frameWidth) + 1
                     
                     let cgImages = try await self.videoTimeline(for: self.asset, in: bounds, numberOfFrames: count)
-                    self.updateVideoTimeline(with: cgImages, assetAspectRatio: ratio)
+                    await self.updateVideoTimeline(with: cgImages, assetAspectRatio: ratio)
                 } catch {
                     PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription,icon: .Error,style: .Normal)
                 }

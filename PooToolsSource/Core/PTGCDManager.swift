@@ -27,7 +27,7 @@ public class PTGCDManager :NSObject {
                                 timeInterval: Double,
                                 queue: DispatchQueue,
                                 repeats: Bool,
-                                action: @escaping PTActionTask) {
+                                action: @escaping @Sendable PTActionTask) {
         
         if name == nil {
             return
@@ -94,8 +94,8 @@ public class PTGCDManager :NSObject {
     public class func gcdGroup(label:String,
                                semaphoreCount:Int? = nil,
                                threadCount:Int,
-                               doSomeThing: @escaping (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
-                               jobDoneBlock: @escaping PTActionTask) {
+                               doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
+                               jobDoneBlock: @escaping @Sendable PTActionTask) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
         let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? 0)
@@ -115,38 +115,38 @@ public class PTGCDManager :NSObject {
     ///GCD延時執行
     public class func gcdAfter(qosCls:DispatchQoS.QoSClass,
                                time:TimeInterval,
-                               block: @escaping PTActionTask) {
+                               block: @escaping @Sendable PTActionTask) {
         DispatchQueue.global(qos: qosCls).asyncAfter(deadline: .now() + time, execute: block)
     }
     
     public class func gcdAfter(time:TimeInterval,
-                             block: @escaping PTActionTask) {
+                             block: @escaping @Sendable PTActionTask) {
         DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: block)
     }
     
     //MARK: gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
     ///gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
-    public class func gcdMain(block: @escaping PTActionTask) {
+    public class func gcdMain(block: @escaping @Sendable PTActionTask) {
         DispatchQueue.main.async(execute: block)
     }
     
     public class func gcdGobal(qosCls:DispatchQoS.QoSClass,
-                               block: @escaping PTActionTask) {
+                               block: @escaping @Sendable PTActionTask) {
         DispatchQueue.global(qos: qosCls).async(execute: block)
     }
     
     //MARK: gcdGobal是用於在主執行緒上執行非同步任務的，通常用於更新UI或進行其他與用戶交互有關的操作。
     ///gcdGobal是用於在主執行緒上執行非同步任務的，通常用於更新UI或進行其他與用戶交互有關的操作。
-    public class func gcdGobal(block: @escaping PTActionTask) {
+    public class func gcdGobal(block: @escaping @Sendable PTActionTask) {
         DispatchQueue.global(qos: .userInitiated).async(execute: block)
     }
     
-    public class func gcdGobalNormal(block: @escaping PTActionTask) {
+    public class func gcdGobalNormal(block: @escaping @Sendable PTActionTask) {
         DispatchQueue.global().async(execute: block)
     }
     //MARK: gcdBackground
     //gcdBackground
-    public class func gcdBackground(block: @escaping PTActionTask) {
+    public class func gcdBackground(block: @escaping @Sendable PTActionTask) {
         DispatchQueue.global(qos: .background).async(execute: block)
     }
     
@@ -156,14 +156,14 @@ public class PTGCDManager :NSObject {
     ///   - timeInterval: 時間
     ///   - finishBlock: 回調
     public class func timeRunWithTime_base(timeInterval:TimeInterval,
-                                           finishBlock: @escaping (_ finish:Bool, _ time:Int)->Void) {
+                                           finishBlock: @escaping @Sendable (_ finish:Bool, _ time:Int)->Void) {
         let semaphore = DispatchSemaphore(value: 1)
         var newCount = Int(timeInterval) + 1
         let timer = DispatchSource.makeTimerSource(flags: [], queue: .main)
         timer.schedule(deadline: .now(), repeating: .seconds(1))
         timer.setEventHandler {
             semaphore.wait()
-            PTGCDManager.gcdMain {
+            PTGCDManager.gcdGobal {
                 newCount -= 1
                 finishBlock(false,newCount)
                 semaphore.signal()

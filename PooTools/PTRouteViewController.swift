@@ -30,9 +30,7 @@ class PTRouteViewController: PTBaseViewController {
         }
         
         PTGCDManager.gcdAfter(time: 2) {
-            if self.handle != nil {
-                self.handle!("OKOK")
-            }
+            self.handle?("OKOK")
         }
     }
 }

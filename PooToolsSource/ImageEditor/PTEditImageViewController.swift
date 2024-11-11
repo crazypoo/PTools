@@ -289,7 +289,7 @@ public class PTEditImageViewController: PTBaseViewController {
             var resImage = self.originalImage
             var editModel: PTEditModel?
             
-            func callback() {
+            @Sendable func callback() {
                 self.dismiss(animated: self.animate) {
                     self.editFinishBlock?(resImage!, editModel)
                 }

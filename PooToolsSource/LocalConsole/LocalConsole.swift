@@ -859,7 +859,8 @@ public class LocalConsole: NSObject {
 
     func debugControllerAction() {
         let vc = PTDebugViewController()
-        let sheet = PTSheetViewController(controller: vc,sizes: [.percent(0.9)])
+        let nav = PTBaseNavControl(rootViewController: vc)
+        let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.9)])
         
         if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
             presentedVC.present(sheet, animated: true)

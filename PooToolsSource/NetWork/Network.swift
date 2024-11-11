@@ -201,7 +201,7 @@ extension Error {
 }
 
 /// 自定義重連邏輯
-fileprivate class RetryHandler: RequestInterceptor {
+fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
     ///默認重連次數3
     let retryLimit = Network.share.retryTimes
     ///默認重連延遲1.5秒
@@ -264,7 +264,7 @@ public class Network: NSObject {
         return hudConfig
     }
     
-    func hudShow() {
+    func hudShow()  {
         PTGCDManager.gcdMain {
             let _ = Network.share.hudConfig
             if self.hud == nil {
@@ -597,7 +597,7 @@ public class Network: NSObject {
         }
         
         // 配置下载存储路径
-        destination = {_,response in
+        destination = { _ , response in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories] )
         }
