@@ -16,7 +16,7 @@ import Kakapos
 /// The camera data collector returns pictures in the main thread.
 public final class C7CollectorCamera: C7Collector {
     
-    var shotImageCallback: ((UIImage) -> Void)!
+    public var shotImageCallback: ((UIImage) -> Void)!
     private var videoUrl: URL?
     
     private lazy var cameraConfig = C7CameraConfig.share
