@@ -56,92 +56,94 @@ public class PTFileBrowserViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            
-            let cellRealModel = self.dataList[indexPath.row]
-            
-            var actionSheetDatas = [String]()
-            if cellRealModel.fileType == .folder {
-                self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
-                actionSheetDatas = ["PT Screen share".localized(),"PT File copy".localized(),"PT File move".localized(),"PT Button delete".localized()]
-            } else {
-                self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
-                actionSheetDatas = ["PT Screen share".localized(),"PT File copy".localized(),"PT File move".localized(),"PT Button delete".localized(),"PT File hash".localized()]
-            }
-            
-            let longTap = UILongPressGestureRecognizer { sender in
-                self.showAction = !self.showAction
-                if self.showAction {
-                    UIAlertController.baseActionSheet(title: "PT Media option".localized(), titles: actionSheetDatas, cancelBlock: { sheet in
-                        self.showAction = false
-                    },otherBlock: { sheet,index,title in
-                        self.showAction = false
-                        switch index {
-                        case 0:
-                            guard let filePath = self.operateFilePath else { return }
-                            let activityVC = PTActivityViewController(activityItems: [filePath])
-                            if Gobal_device_info.isPad {
-                                activityVC.modalPresentationStyle = UIModalPresentationStyle.popover
-                                activityVC.popoverPresentationController?.sourceView = self.view
-                                activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)
-                            }
-                            self.present(activityVC, animated: true, completion: nil)
-                        case 1:
-                            guard let filePath = self.operateFilePath else { return }
-                            
-                            let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
-
-                            let result = FileManager.pt.copyFile(type: .file, fromeFilePath: filePath.description, toFilePath: currentPath.description)
-                            if result.isSuccess {
-                                self.loadData()
-                            } else {
-                                PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
-                            }
-                        case 2:
-                            guard let filePath = self.operateFilePath else { return }
-                            let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
-                            let result = FileManager.pt.moveFile(type: .file, fromeFilePath: filePath.description, toFilePath: currentPath.description)
-                            if result.isSuccess {
-                                self.loadData()
-                            } else {
-                                PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
-                            }
-                        case 3:
-                            guard let filePath = self.operateFilePath else { return }
-                            let result = FileManager.pt.removefile(filePath: filePath.description)
-                            if result.isSuccess {
-                                self.loadData()
-                            } else {
-                                PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
-                            }
-                        default:
-                            guard let filePath = self.operateFilePath else { return }
-                            var hashValue = ""
-                            do {
-                                let data = try Data(contentsOf: filePath)
-
-                                hashValue = "MD5: \n" + data.pt.hashString(hashType: .md5) + "\n\n" + "SHA1: \n" + data.pt.hashString(hashType: .sha1) + "\n\n" + "SHA256: \n" + data.pt.hashString(hashType: .sha256) + "\n\n" + "SHA384: \n" + data.pt.hashString(hashType: .sha384) + "\n\n" + "SHA512: \n" + data.pt.hashString(hashType: .sha512)
-                            } catch  {
-                                PTNSLogConsole(error,levelType: .Error,loggerType: .File)
-                                hashValue = error.localizedDescription
-                            }
-                            
-                            UIAlertController.base_alertVC(title: "PT File hash".localized(),msg: hashValue,okBtns: ["PT File copy".localized()],cancelBtn: "PT Button cancel".localized()) {
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                
+                let cellRealModel = self.dataList[indexPath.row]
+                
+                var actionSheetDatas = [String]()
+                if cellRealModel.fileType == .folder {
+                    self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
+                    actionSheetDatas = ["PT Screen share".localized(),"PT File copy".localized(),"PT File move".localized(),"PT Button delete".localized()]
+                } else {
+                    self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
+                    actionSheetDatas = ["PT Screen share".localized(),"PT File copy".localized(),"PT File move".localized(),"PT Button delete".localized(),"PT File hash".localized()]
+                }
+                
+                let longTap = UILongPressGestureRecognizer { sender in
+                    self.showAction = !self.showAction
+                    if self.showAction {
+                        UIAlertController.baseActionSheet(title: "PT Media option".localized(), titles: actionSheetDatas, cancelBlock: { sheet in
+                            self.showAction = false
+                        },otherBlock: { sheet,index,title in
+                            self.showAction = false
+                            switch index {
+                            case 0:
+                                guard let filePath = self.operateFilePath else { return }
+                                let activityVC = PTActivityViewController(activityItems: [filePath])
+                                if Gobal_device_info.isPad {
+                                    activityVC.modalPresentationStyle = UIModalPresentationStyle.popover
+                                    activityVC.popoverPresentationController?.sourceView = self.view
+                                    activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)
+                                }
+                                self.present(activityVC, animated: true, completion: nil)
+                            case 1:
+                                guard let filePath = self.operateFilePath else { return }
                                 
-                            } moreBtn: { index, title in
-                                hashValue.copyToPasteboard()
+                                let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
+
+                                let result = FileManager.pt.copyFile(type: .file, fromeFilePath: filePath.description, toFilePath: currentPath.description)
+                                if result.isSuccess {
+                                    self.loadData()
+                                } else {
+                                    PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
+                                }
+                            case 2:
+                                guard let filePath = self.operateFilePath else { return }
+                                let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
+                                let result = FileManager.pt.moveFile(type: .file, fromeFilePath: filePath.description, toFilePath: currentPath.description)
+                                if result.isSuccess {
+                                    self.loadData()
+                                } else {
+                                    PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
+                                }
+                            case 3:
+                                guard let filePath = self.operateFilePath else { return }
+                                let result = FileManager.pt.removefile(filePath: filePath.description)
+                                if result.isSuccess {
+                                    self.loadData()
+                                } else {
+                                    PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
+                                }
+                            default:
+                                guard let filePath = self.operateFilePath else { return }
+                                var hashValue = ""
+                                do {
+                                    let data = try Data(contentsOf: filePath)
+
+                                    hashValue = "MD5: \n" + data.pt.hashString(hashType: .md5) + "\n\n" + "SHA1: \n" + data.pt.hashString(hashType: .sha1) + "\n\n" + "SHA256: \n" + data.pt.hashString(hashType: .sha256) + "\n\n" + "SHA384: \n" + data.pt.hashString(hashType: .sha384) + "\n\n" + "SHA512: \n" + data.pt.hashString(hashType: .sha512)
+                                } catch  {
+                                    PTNSLogConsole(error,levelType: .Error,loggerType: .File)
+                                    hashValue = error.localizedDescription
+                                }
+                                
+                                UIAlertController.base_alertVC(title: "PT File hash".localized(),msg: hashValue,okBtns: ["PT File copy".localized()],cancelBtn: "PT Button cancel".localized()) {
+                                    
+                                } moreBtn: { index, title in
+                                    hashValue.copyToPasteboard()
+                                }
                             }
+                        }) { sheet in
+                            self.showAction = false
                         }
-                    }) { sheet in
-                        self.showAction = false
                     }
                 }
+                longTap.minimumPressDuration = 1
+                cell.addGestureRecognizer(longTap)
+                return cell
             }
-            longTap.minimumPressDuration = 1
-            cell.addGestureRecognizer(longTap)
-            return cell
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
             let cellModel = self.dataList[indexPath.row]

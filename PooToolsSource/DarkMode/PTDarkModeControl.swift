@@ -61,7 +61,7 @@ public class PTDarkModeControl: PTBaseViewController {
             } else {
                 cellHeight = 44.adapter
             }
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let cellHeight:CGFloat = cellHeight
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
@@ -112,36 +112,37 @@ public class PTDarkModeControl: PTBaseViewController {
             return nil
         }
         view.cellInCollection = { collectionView ,dataModel,indexPath in
-            let itemRow = dataModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            if itemRow.ID == PTFusionCell.ID {
+            if let itemRow = dataModel.rows?[indexPath.row] {
                 let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = cellModel
-                cell.hideBottomLine = indexPath.row == (dataModel.rows.count - 1) ? true : false
-                cell.hideTopLine = true
-                cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
-                if cellModel.name == "PT Theme smart".localized() {
-                    cell.switchValue = PTDarkModeOption.isSmartPeeling
-                    PTGCDManager.gcdMain {
-                        cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
-                    }
-                } else if cellModel.name == "PT Theme follow system".localized() {
-                    cell.switchValue = PTDarkModeOption.isFollowSystem
-                    PTGCDManager.gcdMain {
-                        cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.bottomLeft,.bottomRight])
-                    }
-                }
-                cell.switchValueChangeBlock = { title,sender in
+                if itemRow.ID == PTFusionCell.ID {
+                    let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                    cell.cellModel = cellModel
+                    cell.hideBottomLine = indexPath.row == (dataModel.rows!.count - 1) ? true : false
+                    cell.hideTopLine = true
+                    cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
                     if cellModel.name == "PT Theme smart".localized() {
-                        PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: sender.isOn)
+                        cell.switchValue = PTDarkModeOption.isSmartPeeling
+                        PTGCDManager.gcdMain {
+                            cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
+                        }
                     } else if cellModel.name == "PT Theme follow system".localized() {
-                        PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: sender.isOn)
+                        cell.switchValue = PTDarkModeOption.isFollowSystem
+                        PTGCDManager.gcdMain {
+                            cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.bottomLeft,.bottomRight])
+                        }
                     }
-                    self.showDetail()
-                    self.themeSetBlock?()
+                    cell.switchValueChangeBlock = { title,sender in
+                        if cellModel.name == "PT Theme smart".localized() {
+                            PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: sender.isOn)
+                        } else if cellModel.name == "PT Theme follow system".localized() {
+                            PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: sender.isOn)
+                        }
+                        self.showDetail()
+                        self.themeSetBlock?()
+                    }
+                    return cell
                 }
-                return cell
             }
             return nil
         }

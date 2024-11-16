@@ -39,10 +39,12 @@ class PTCrashDetailViewController: PTBaseViewController {
             return header
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            return cell
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
             if PTCrashDetailViewController.Features(rawValue: indexPath.section)?.title == "Context" {

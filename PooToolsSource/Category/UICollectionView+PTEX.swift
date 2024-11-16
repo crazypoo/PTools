@@ -272,24 +272,28 @@ public extension UICollectionView {
         var columnCount: Int = 1
         
         for (index, value) in data.enumerated() {
-            let currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont, height: itemHeight).width + itemContentSpace + (value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
-            let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
-            
-            if totalWidth > (screenWidth - itemOriginalX) {
-                groupWidth = itemOriginalX
-                groupHeight += (itemTrailingSpace + itemHeight)
-                columnCount += 1
+            var currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont, height: itemHeight).width + itemContentSpace + (value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
+            if currentCellWidth >= (screenWidth - itemOriginalX * 2) {
+                currentCellWidth = (screenWidth - itemOriginalX * 2)
             }
             
+            let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
+                        
             let customItem = NSCollectionLayoutGroupCustomItem(
                 frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight),
                 zIndex: 1000 + index
             )
             
-            groupWidth += (currentCellWidth + itemLeadingSpace)
+            if totalWidth >= (screenWidth - itemOriginalX * 2) {
+                groupWidth = itemOriginalX
+                groupHeight += (itemTrailingSpace + itemHeight)
+                columnCount += 1
+            } else {
+                groupWidth += (currentCellWidth + itemLeadingSpace)
+            }
+
             customers.append(customItem)
         }
-        
         // Adjust the final groupHeight
         if let lastItemFrame = customers.last?.frame {
             if (lastItemFrame.origin.x + lastItemFrame.width + itemOriginalX) > (screenWidth - itemOriginalX) {

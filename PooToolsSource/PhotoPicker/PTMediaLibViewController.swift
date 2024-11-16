@@ -76,13 +76,180 @@ public class PTMediaLibView:UIView {
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
 
-            let itemRow = sectionModel.rows[indexPath.row]
-            if itemRow.ID == PTMediaLibCell.ID {
-                let cellModel = (itemRow.dataModel as! PTMediaModel)
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibCell
-                cell.selectedBlock = { [weak self] isSelected in
-                    guard let `self` = self else { return }
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                if itemRow.ID == PTMediaLibCell.ID {
+                    let cellModel = (itemRow.dataModel as! PTMediaModel)
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibCell
+                    cell.selectedBlock = { [weak self] isSelected in
+                        guard let `self` = self else { return }
 
+                        if !cellModel.isSelected {
+                            guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
+                            
+                            PTGCDManager.gcdMain {
+                                downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                                    cellModel.isSelected = true
+                                    self.selectedModel.append(cellModel)
+                                    isSelected(true)
+                                    config.didSelectAsset?(cellModel.asset)
+                                    self.refreshCellIndex()
+                                }
+                            }
+                        } else {
+                            if cellModel.asset.exportSession?.status == .exporting {
+                                cellModel.asset.calcelExport()
+                                cell.editButton.clearProgressLayer()
+                            }
+                            cellModel.isSelected = false
+                            self.selectedModel.removeAll(where: { $0 == cellModel })
+                            isSelected(false)
+                            config.didDeselectAsset?(cellModel.asset)
+                            self.refreshCellIndex()
+                        }
+                    }
+                    
+                    cell.editButton.addActionHandlers { sender in
+                        switch cellModel.type {
+                        case .video:
+                            switch cellModel.asset.exportSession?.status {
+                            case .exporting:
+                                cellModel.asset.calcelExport()
+                                sender.clearProgressLayer()
+                            default:
+                                cellModel.asset.convertPHAssetToAVAsset { progress in
+                                    sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
+                                } completion: { avAsset in
+                                    if avAsset != nil {
+                                        PTGCDManager.gcdMain {
+                                            let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
+                                            controller.onlyOutput = true
+                                            controller.onEditCompleteHandler = { url in
+                                                let alPlayerItem = AVPlayerItem(url: url)
+                                                for (index, selM) in self.selectedModel.enumerated() {
+                                                    if cellModel == selM {
+                                                        self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
+                                                            if finish {
+                                                                PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
+                                                                    let m = PTMediaModel(asset: asset!)
+                                                                    m.isSelected = true
+                                                                    self.selectedModel[index] = m
+                                                                    config.didSelectAsset?(asset!)
+                                                                }
+                                                            }
+                                                        }
+                                                        break
+                                                    }
+                                                }
+                                            }
+                                            let nav = PTBaseNavControl(rootViewController: controller)
+                                            UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
+                                        }
+                                    } else {
+                                        PTGCDManager.gcdMain {
+                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                        }
+                                    }
+                                }
+                            }
+                        default:
+                            PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
+                                if !isDegraded {
+                                    if let image = image {
+                                        let vc = PTEditImageViewController(readyEditImage: image)
+                                        vc.editFinishBlock = { ei ,editImageModel in
+                                            for (index, selM) in self.selectedModel.enumerated() {
+                                                if cellModel == selM {
+                                                    cellModel.isSelected = true
+                                                    cellModel.editImage = ei
+                                                    cellModel.editImageModel = editImageModel
+                                                    self.selectedModel[index] = cellModel
+                                                    PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
+                                                    break
+                                                }
+                                            }
+                                        }
+                                        let nav = PTBaseNavControl(rootViewController: vc)
+                                        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
+                        self.setCellIndex(cell, index: index + 1)
+                        cellModel.isSelected = true
+                    } else {
+                        cellModel.isSelected = false
+                        cell.selectButton.normalTitle = ""
+                    }
+                    self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
+                    cell.cellModel = cellModel
+                    return cell
+                } else {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTCameraCell
+                    return cell
+                }
+            }
+            return nil
+        }
+        view.collectionDidSelect = { collection,sectionModel,indexPath in
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                if itemRow.ID == PTCameraCell.ID {
+                    let config = PTMediaLibConfig.share
+                    if config.useCustomCamera {
+                        
+                        PTCameraFilterConfig.share.allowTakePhoto = PTMediaLibConfig.share.allowSelectImage
+                        PTCameraFilterConfig.share.allowRecordVideo = PTMediaLibConfig.share.allowSelectVideo
+
+                        let vc = PTFilterCameraViewController()
+                        vc.onlyCamera = PTCameraFilterConfig.share.onlyCamera
+                        vc.useThisImageHandler = { image in
+                            self.save(image: image, videoUrl: nil)
+                        }
+                        vc.mediaLibDismissCallback = {
+                            self.currentVc.sheetViewController?.setSizes([.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())],animated: true)
+                            PTGCDManager.gcdAfter(time: 0.35) {
+                                self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                            }
+                        }
+                        self.currentVc.navigationController?.pushViewController(vc) {
+                            vc.sheetViewController?.setSizes([.fullscreen])
+                        }
+                    } else {
+                        if !UIImagePickerController.isSourceTypeAvailable(.camera) {
+                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
+                        } else if C7CameraConfig.hasCameraAuthority() {
+                            let picker = UIImagePickerController()
+                            picker.delegate = self
+                            picker.allowsEditing = false
+                            picker.videoQuality = .typeHigh
+                            picker.sourceType = .camera
+                            picker.cameraDevice = C7CameraConfig.share.devicePosition.cameraDevice
+                            if config.cameraConfiguration.showFlashSwitch {
+                                picker.cameraFlashMode = .auto
+                            } else {
+                                picker.cameraFlashMode = .off
+                            }
+                            var mediaTypes:[String] = []
+                            if config.cameraConfiguration.allowTakePhoto {
+                                mediaTypes.append("public.image")
+                            }
+                            if config.cameraConfiguration.allowRecordVideo {
+                                mediaTypes.append("public.movie")
+                            }
+                            picker.mediaTypes = mediaTypes
+                            picker.videoMaximumDuration = TimeInterval(PTCameraFilterConfig.share.maxRecordDuration)
+                            PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
+                        } else {
+                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
+                        }
+                    }
+                } else {
+                    let config = PTMediaLibConfig.share
+                    let cellModel = (itemRow.dataModel as! PTMediaModel)
+                    let currentCell = collection.cellForItem(at: indexPath) as! PTMediaLibCell
+                                        
                     if !cellModel.isSelected {
                         guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
                         
@@ -90,191 +257,27 @@ public class PTMediaLibView:UIView {
                             downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
                                 cellModel.isSelected = true
                                 self.selectedModel.append(cellModel)
-                                isSelected(true)
+                                PTGCDManager.gcdMain {
+                                    currentCell.selectButton.isSelected = true
+                                    currentCell.layer.removeAllAnimations()
+                                    currentCell.fetchBigImage()
+                                }
                                 config.didSelectAsset?(cellModel.asset)
                                 self.refreshCellIndex()
                             }
                         }
                     } else {
-                        if cellModel.asset.exportSession?.status == .exporting {
-                            cellModel.asset.calcelExport()
-                            cell.editButton.clearProgressLayer()
-                        }
                         cellModel.isSelected = false
                         self.selectedModel.removeAll(where: { $0 == cellModel })
-                        isSelected(false)
+                        PTGCDManager.gcdMain {
+                            currentCell.selectButton.isSelected = false
+                            currentCell.layer.removeAllAnimations()
+                            currentCell.cancelFetchBigImage()
+                        }
+
                         config.didDeselectAsset?(cellModel.asset)
                         self.refreshCellIndex()
                     }
-                }
-                
-                cell.editButton.addActionHandlers { sender in
-                    switch cellModel.type {
-                    case .video:
-                        switch cellModel.asset.exportSession?.status {
-                        case .exporting:
-                            cellModel.asset.calcelExport()
-                            sender.clearProgressLayer()
-                        default:
-                            cellModel.asset.convertPHAssetToAVAsset { progress in
-                                sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
-                            } completion: { avAsset in
-                                if avAsset != nil {
-                                    PTGCDManager.gcdMain {
-                                        let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
-                                        controller.onlyOutput = true
-                                        controller.onEditCompleteHandler = { url in
-                                            let alPlayerItem = AVPlayerItem(url: url)
-                                            for (index, selM) in self.selectedModel.enumerated() {
-                                                if cellModel == selM {
-                                                    self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
-                                                        if finish {
-                                                            PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
-                                                                let m = PTMediaModel(asset: asset!)
-                                                                m.isSelected = true
-                                                                self.selectedModel[index] = m
-                                                                config.didSelectAsset?(asset!)
-                                                            }
-                                                        }
-                                                    }
-                                                    break
-                                                }
-                                            }
-                                        }
-                                        let nav = PTBaseNavControl(rootViewController: controller)
-                                        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
-                                    }
-                                } else {
-                                    PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
-                                    }
-                                }
-                            }
-                        }
-                    default:
-                        PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
-                            if !isDegraded {
-                                if let image = image {
-                                    let vc = PTEditImageViewController(readyEditImage: image)
-                                    vc.editFinishBlock = { ei ,editImageModel in
-                                        for (index, selM) in self.selectedModel.enumerated() {
-                                            if cellModel == selM {
-                                                cellModel.isSelected = true
-                                                cellModel.editImage = ei
-                                                cellModel.editImageModel = editImageModel
-                                                self.selectedModel[index] = cellModel
-                                                PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
-                                                break
-                                            }
-                                        }
-                                    }
-                                    let nav = PTBaseNavControl(rootViewController: vc)
-                                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
-                    self.setCellIndex(cell, index: index + 1)
-                    cellModel.isSelected = true
-                } else {
-                    cellModel.isSelected = false
-                    cell.selectButton.normalTitle = ""
-                }
-                self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
-                cell.cellModel = cellModel
-                return cell
-            } else {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTCameraCell
-                return cell
-            }
-        }
-        view.collectionDidSelect = { collection,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            if itemRow.ID == PTCameraCell.ID {
-                let config = PTMediaLibConfig.share
-                if config.useCustomCamera {
-                    
-                    PTCameraFilterConfig.share.allowTakePhoto = PTMediaLibConfig.share.allowSelectImage
-                    PTCameraFilterConfig.share.allowRecordVideo = PTMediaLibConfig.share.allowSelectVideo
-
-                    let vc = PTFilterCameraViewController()
-                    vc.onlyCamera = PTCameraFilterConfig.share.onlyCamera
-                    vc.useThisImageHandler = { image in
-                        self.save(image: image, videoUrl: nil)
-                    }
-                    vc.mediaLibDismissCallback = {
-                        self.currentVc.sheetViewController?.setSizes([.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())],animated: true)
-                        PTGCDManager.gcdAfter(time: 0.35) {
-                            self.collectionView.contentCollectionView.scrollToBottom(animated: true)
-                        }
-                    }
-                    self.currentVc.navigationController?.pushViewController(vc) {
-                        vc.sheetViewController?.setSizes([.fullscreen])
-                    }
-                } else {
-                    if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
-                    } else if C7CameraConfig.hasCameraAuthority() {
-                        let picker = UIImagePickerController()
-                        picker.delegate = self
-                        picker.allowsEditing = false
-                        picker.videoQuality = .typeHigh
-                        picker.sourceType = .camera
-                        picker.cameraDevice = C7CameraConfig.share.devicePosition.cameraDevice
-                        if config.cameraConfiguration.showFlashSwitch {
-                            picker.cameraFlashMode = .auto
-                        } else {
-                            picker.cameraFlashMode = .off
-                        }
-                        var mediaTypes:[String] = []
-                        if config.cameraConfiguration.allowTakePhoto {
-                            mediaTypes.append("public.image")
-                        }
-                        if config.cameraConfiguration.allowRecordVideo {
-                            mediaTypes.append("public.movie")
-                        }
-                        picker.mediaTypes = mediaTypes
-                        picker.videoMaximumDuration = TimeInterval(PTCameraFilterConfig.share.maxRecordDuration)
-                        PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
-                    } else {
-                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
-                    }
-                }
-            } else {
-                let config = PTMediaLibConfig.share
-                let cellModel = (itemRow.dataModel as! PTMediaModel)
-                let currentCell = collection.cellForItem(at: indexPath) as! PTMediaLibCell
-                                    
-                if !cellModel.isSelected {
-                    guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
-                    
-                    PTGCDManager.gcdMain {
-                        downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                            cellModel.isSelected = true
-                            self.selectedModel.append(cellModel)
-                            PTGCDManager.gcdMain {
-                                currentCell.selectButton.isSelected = true
-                                currentCell.layer.removeAllAnimations()
-                                currentCell.fetchBigImage()
-                            }
-                            config.didSelectAsset?(cellModel.asset)
-                            self.refreshCellIndex()
-                        }
-                    }
-                } else {
-                    cellModel.isSelected = false
-                    self.selectedModel.removeAll(where: { $0 == cellModel })
-                    PTGCDManager.gcdMain {
-                        currentCell.selectButton.isSelected = false
-                        currentCell.layer.removeAllAnimations()
-                        currentCell.cancelFetchBigImage()
-                    }
-
-                    config.didDeselectAsset?(cellModel.asset)
-                    self.refreshCellIndex()
                 }
             }
         }

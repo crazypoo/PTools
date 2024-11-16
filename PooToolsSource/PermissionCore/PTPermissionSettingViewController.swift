@@ -40,7 +40,7 @@ public class PTPermissionSettingViewController: PTBaseViewController {
             var groupH:CGFloat = 0
             let screenW:CGFloat = self.view.frame.size.width
             let cellWidth = screenW - PTAppBaseConfig.share.defaultViewSpace * 2
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 var descHeight = UIView.sizeFor(string: (model.dataModel as! PTPermissionModel).desc, font: PTPermissionStatic.share.permissionSettingFont,lineSpacing: 2,width: cellWidth).height
                 if descHeight <= PTPermissionSettingCell.CellHeight {
                     descHeight = PTPermissionSettingCell.CellHeight
@@ -57,10 +57,12 @@ public class PTPermissionSettingViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collectionView ,dataModel,indexPath in
-            let itemRow = dataModel.rows[indexPath.row]
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPermissionSettingCell
-            cell.cellModel  = (itemRow.dataModel as! PTPermissionModel)
-            return cell
+            if let itemRow = dataModel.rows?[indexPath.row] {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPermissionSettingCell
+                cell.cellModel  = (itemRow.dataModel as! PTPermissionModel)
+                return cell
+            }
+            return nil
         }
         return view
     }()

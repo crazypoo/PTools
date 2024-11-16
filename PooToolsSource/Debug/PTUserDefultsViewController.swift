@@ -33,20 +33,23 @@ class PTUserDefultsViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.contentView.backgroundColor = .white
-            cell.cellModel = cellModel
-            return cell
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.contentView.backgroundColor = .white
+                cell.cellModel = cellModel
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            let itemRow = model.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            UIAlertController.base_textfield_alertVC(title:"Edit\n" + cellModel.name,okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [cellModel.name], textFieldTexts: [cellModel.desc], keyboardType: [.default], textFieldDelegate: self) { result in
-                let newValue = result.values.first
-                UserDefaults.standard.setValue(newValue, forKey: cellModel.name)
-                self.showDetail()
+            if let itemRow = model.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                UIAlertController.base_textfield_alertVC(title:"Edit\n" + cellModel.name,okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [cellModel.name], textFieldTexts: [cellModel.desc], keyboardType: [.default], textFieldDelegate: self) { result in
+                    let newValue = result.values.first
+                    UserDefaults.standard.setValue(newValue, forKey: cellModel.name)
+                    self.showDetail()
+                }
             }
         }
         return view

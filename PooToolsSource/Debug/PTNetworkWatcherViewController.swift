@@ -63,15 +63,18 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTNetworkWatcherCell.ID:PTNetworkWatcherCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
-            cell.cellModel = (itemRow.dataModel as! PTHttpModel)
-            return cell
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
+                cell.cellModel = (itemRow.dataModel as! PTHttpModel)
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            let itemRow = model.rows[indexPath.row]
-            let vc = PTNetworkWatcherDetailViewController(viewModel: (itemRow.dataModel as! PTHttpModel))
-            self.navigationController?.pushViewController(vc)
+            if let itemRow = model.rows?[indexPath.row] {
+                let vc = PTNetworkWatcherDetailViewController(viewModel: (itemRow.dataModel as! PTHttpModel))
+                self.navigationController?.pushViewController(vc)
+            }
         }
         return view
     }()

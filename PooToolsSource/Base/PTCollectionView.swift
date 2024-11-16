@@ -326,7 +326,7 @@ public class PTCollectionView: UIView {
         switch viewConfig.viewType {
         case .Gird:
             group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows,
+                data: sectionModel.rows!,
                 groupWidth: screenWidth,
                 itemHeight: viewConfig.itemHeight,
                 cellRowCount: viewConfig.rowCount,
@@ -338,7 +338,7 @@ public class PTCollectionView: UIView {
             )
         case .Normal:
             group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows,
+                data: sectionModel.rows!,
                 groupWidth: screenWidth,
                 itemHeight: viewConfig.itemHeight,
                 cellRowCount: 1,
@@ -349,7 +349,7 @@ public class PTCollectionView: UIView {
             )
         case .WaterFall:
             group = UICollectionView.waterFallLayout(
-                data: sectionModel.rows,
+                data: sectionModel.rows!,
                 screenWidth: screenWidth,
                 rowCount: viewConfig.rowCount,
                 itemOriginalX: viewConfig.itemOriginalX,
@@ -361,7 +361,7 @@ public class PTCollectionView: UIView {
             )
         case .Horizontal:
             group = UICollectionView.horizontalLayout(
-                data: sectionModel.rows,
+                data: sectionModel.rows!,
                 itemOriginalX: viewConfig.itemOriginalX,
                 itemWidth: viewConfig.itemWidth,
                 itemHeight: viewConfig.itemHeight,
@@ -371,7 +371,7 @@ public class PTCollectionView: UIView {
             )
         case .HorizontalLayoutSystem:
             group = UICollectionView.horizontalLayoutSystem(
-                data: sectionModel.rows,
+                data: sectionModel.rows!,
                 itemOriginalX: viewConfig.itemOriginalX,
                 itemWidth: viewConfig.itemWidth,
                 itemHeight: viewConfig.itemHeight,
@@ -380,7 +380,7 @@ public class PTCollectionView: UIView {
                 itemLeadingSpace: viewConfig.cellLeadingSpace
             )
         case .Tag:
-            let tagDatas = sectionModel.rows.map( { $0.dataModel })
+            let tagDatas = sectionModel.rows!.map( { $0.dataModel })
             if tagDatas is [PTTagLayoutModel] {
                 group = UICollectionView.tagShowLayout(data: tagDatas as! [PTTagLayoutModel],screenWidth: self.frame.width,itemOriginalX: viewConfig.itemOriginalX,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace,itemTrailingSpace: viewConfig.cellTrailingSpace,itemContentSpace: viewConfig.tagCellContentSpace)
             } else {
@@ -847,9 +847,9 @@ public class PTCollectionView: UIView {
     
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
-            let startIndex = self.mSections[section].rows.count
-            self.mSections[section].rows.append(contentsOf: rows)
-            let endIndex = self.mSections[section].rows.count - 1
+            let startIndex = self.mSections[section].rows?.count ?? 0
+            self.mSections[section].rows?.append(contentsOf: rows)
+            let endIndex = (self.mSections[section].rows?.count ?? 0) - 1
             let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
             PTGCDManager.gcdMain {
                 self.collectionView.performBatchUpdates {
@@ -881,12 +881,12 @@ public class PTCollectionView: UIView {
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
             // 找到需要删除的行的索引
-            if let startIndex = self.mSections[section].rows.firstIndex(of: rows.first!) {
+            if let startIndex = self.mSections[section].rows?.firstIndex(of: rows.first!) {
                 let endIndex = startIndex + rows.count - 1
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
 
                 // 从数据源中移除这些行
-                self.mSections[section].rows.removeSubrange(startIndex...endIndex)
+                self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
 
                 PTGCDManager.gcdMain {
                     self.collectionView.performBatchUpdates {
@@ -977,7 +977,7 @@ public class PTCollectionView: UIView {
     //MARK: 空白頁
     @available(iOS 17, *)
     private func showEmptyConfig() {
-        if viewConfig.showEmptyAlert && (mSections.first?.rows.count ?? 0) == 0 {
+        if viewConfig.showEmptyAlert && (mSections.first?.rows?.count ?? 0) == 0 {
             PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
                 PTUnavailableFunction.shared.showEmptyView(showIn: self)
             }
@@ -1052,7 +1052,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mSections.count == 0 ? 0 : mSections[section].rows.count
+        mSections.count == 0 ? 0 : (mSections[section].rows?.count ?? 0)
     }
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

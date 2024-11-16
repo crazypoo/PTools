@@ -44,9 +44,9 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionHeader)
         view.customerLayout = { sectionIndex,sectionModel in
             if sectionModel.headerID == "Floating" || sectionModel.headerID == "Segment" || sectionModel.headerID == "PerformanceValue" {
-                return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)
+                return UICollectionView.girdCollectionLayout(data: sectionModel.rows!, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)
             } else if sectionModel.headerID == "Chart" {
-                return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 250,cellRowCount: 1,originalX: 0)
+                return UICollectionView.girdCollectionLayout(data: sectionModel.rows!, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 250,cellRowCount: 1,originalX: 0)
             } else {
                 var bannerGroupSize : NSCollectionLayoutSize
                 var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -58,7 +58,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                 } else {
                     cellHeight = CGFloat.ScaleW(w: 44)
                 }
-                sectionModel.rows.enumerated().forEach { (index,model) in
+                sectionModel.rows?.enumerated().forEach { (index,model) in
                     let cellHeight:CGFloat = cellHeight
                     let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
                     customers.append(customItem)
@@ -71,50 +71,53 @@ class PTDebugPerformanceViewController: PTBaseViewController {
             }
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            if itemRow.ID == PTFusionCell.ID {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                if itemSection.headerID == "Floating" {
-                    cell.switchValue = PTDebugPerformanceToolKit.shared.floatingShow
-                    cell.switchValueChangeBlock = { title,sender in
-                        PTDebugPerformanceToolKit.shared.floatingShow = !PTDebugPerformanceToolKit.shared.floatingShow
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                if itemRow.ID == PTFusionCell.ID {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                    cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                    if itemSection.headerID == "Floating" {
+                        cell.switchValue = PTDebugPerformanceToolKit.shared.floatingShow
+                        cell.switchValueChangeBlock = { title,sender in
+                            PTDebugPerformanceToolKit.shared.floatingShow = !PTDebugPerformanceToolKit.shared.floatingShow
+                        }
                     }
-                }
-                return cell
-            } else if itemRow.ID == PTPerformanceSegmentCell.ID {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPerformanceSegmentCell
-                cell.segmentedControl.selectedSegmentIndex = PerformanceType.allCases.firstIndex(of: self.segmentType)!
-                cell.segmentTapCallBack = { index in
-                    self.segmentType = PerformanceType.allCases[index]
-                    self.toolkit.performanceClose()
-                    self.newCollectionView.clearAllData { cView in
-                        self.listDataSet()
-                        self.toolkit.performanceRestart()
+                    return cell
+                } else if itemRow.ID == PTPerformanceSegmentCell.ID {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPerformanceSegmentCell
+                    cell.segmentedControl.selectedSegmentIndex = PerformanceType.allCases.firstIndex(of: self.segmentType)!
+                    cell.segmentTapCallBack = { index in
+                        self.segmentType = PerformanceType.allCases[index]
+                        self.toolkit.performanceClose()
+                        self.newCollectionView.clearAllData { cView in
+                            self.listDataSet()
+                            self.toolkit.performanceRestart()
+                        }
                     }
+                    return cell
+                } else if itemRow.ID == PTPerformanceChartCell.ID {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPerformanceChartCell
+                    return cell
+                } else {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+                    return cell
                 }
-                return cell
-            } else if itemRow.ID == PTPerformanceChartCell.ID {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPerformanceChartCell
-                return cell
-            } else {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-                return cell
             }
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            let itemRow = model.rows[indexPath.row]
-            if itemRow.ID == PTFusionCell.ID {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                if cellModel.name == "Set Memory warning" {
-                    UIDevice.pt.impactFeedbackGenerator(style: .heavy)
-                    PTDebugPerformanceToolKit.generate()
-                } else if cellModel.name == "⚠️show leaks" {
-                    let vc = PTLeakListViewController()
-                    self.navigationController?.pushViewController(vc)
-                } else if cellModel.name == "Create Leak" {
-                    let vc = PTCreateLeakViewController()
-                    self.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
+            if let itemRow = model.rows?[indexPath.row] {
+                if itemRow.ID == PTFusionCell.ID {
+                    let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                    if cellModel.name == "Set Memory warning" {
+                        UIDevice.pt.impactFeedbackGenerator(style: .heavy)
+                        PTDebugPerformanceToolKit.generate()
+                    } else if cellModel.name == "⚠️show leaks" {
+                        let vc = PTLeakListViewController()
+                        self.navigationController?.pushViewController(vc)
+                    } else if cellModel.name == "Create Leak" {
+                        let vc = PTCreateLeakViewController()
+                        self.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
+                    }
                 }
             }
         }

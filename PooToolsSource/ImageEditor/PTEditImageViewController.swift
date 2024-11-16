@@ -100,13 +100,15 @@ public class PTEditImageViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTEditToolsCell.ID:PTEditToolsCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellTools = self.tools[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTEditToolsCell
-            cell.toolModel = cellModel
-            cell.imageView.isSelected = self.selectedTool == cellTools
-            return cell
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellTools = self.tools[indexPath.row]
+                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTEditToolsCell
+                cell.toolModel = cellModel
+                cell.imageView.isSelected = self.selectedTool == cellTools
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             let cellTools = self.tools[indexPath.row]
@@ -142,7 +144,7 @@ public class PTEditImageViewController: PTBaseViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 88
             let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += (cellHeight + 10)
@@ -154,19 +156,21 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellTools = itemRow.dataModel as! UIImage
-            let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
-            cell.imageView.image = cellTools
-            cell.nameLabel.text = cellFilter.name
-            
-            if self.currentFilter == cellFilter {
-                cell.nameLabel.textColor = config.themeColor
-            } else {
-                cell.nameLabel.textColor = .lightGray
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellTools = itemRow.dataModel as! UIImage
+                let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
+                cell.imageView.image = cellTools
+                cell.nameLabel.text = cellFilter.name
+                
+                if self.currentFilter == cellFilter {
+                    cell.nameLabel.textColor = config.themeColor
+                } else {
+                    cell.nameLabel.textColor = .lightGray
+                }
+                return cell
             }
-            return cell
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             
@@ -190,7 +194,7 @@ public class PTEditImageViewController: PTBaseViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 54
             let cellHeight:CGFloat = self.adjustCollectionViewHeight
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 5, width: screenW, height: cellHeight - 10), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += (cellHeight + 10)
@@ -202,23 +206,25 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellTools = itemRow.dataModel as! PTFusionCellModel
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTAdjustToolCell
-            cell.nameLabel.text = cellTools.name
-            
-            let tool = self.adjustTools[indexPath.row]
-            let isSelected = tool == self.selectedAdjustTool
-            if isSelected {
-                cell.nameLabel.textColor = config.themeColor
-                cell.imageView.loadImage(contentData: cellTools.disclosureIndicatorImage as Any)
-            } else {
-                cell.nameLabel.textColor = .lightGray
-                cell.imageView.loadImage(contentData: cellTools.contentIcon as Any)
-            }
-            cell.imageView.contentMode = .scaleAspectFit
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellTools = itemRow.dataModel as! PTFusionCellModel
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTAdjustToolCell
+                cell.nameLabel.text = cellTools.name
+                
+                let tool = self.adjustTools[indexPath.row]
+                let isSelected = tool == self.selectedAdjustTool
+                if isSelected {
+                    cell.nameLabel.textColor = config.themeColor
+                    cell.imageView.loadImage(contentData: cellTools.disclosureIndicatorImage as Any)
+                } else {
+                    cell.nameLabel.textColor = .lightGray
+                    cell.imageView.loadImage(contentData: cellTools.contentIcon as Any)
+                }
+                cell.imageView.contentMode = .scaleAspectFit
 
-            return cell
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             let adjustTool = self.adjustTools[indexPath.row]

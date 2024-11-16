@@ -146,7 +146,7 @@ class PTCutViewController: PTBaseViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 88
             let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += (cellHeight + 10)
@@ -158,19 +158,21 @@ class PTCutViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTImageClipRatio)
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCutRatioCell
-            
-            cell.configureCell(image: self.thumbnailImage ?? self.editImage, ratio: cellModel)
-            
-            if cellModel == self.selectedRatio {
-                cell.titleLabel.textColor = config.themeColor
-            } else {
-                cell.titleLabel.textColor = .lightGray
-            }
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTImageClipRatio)
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCutRatioCell
+                
+                cell.configureCell(image: self.thumbnailImage ?? self.editImage, ratio: cellModel)
+                
+                if cellModel == self.selectedRatio {
+                    cell.titleLabel.textColor = config.themeColor
+                } else {
+                    cell.titleLabel.textColor = .lightGray
+                }
 
-            return cell
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             let ratio = self.clipRatios[indexPath.row]

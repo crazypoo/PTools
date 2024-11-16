@@ -46,10 +46,12 @@ class PTDebugLocationViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            return cell
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
             switch indexPath.row {

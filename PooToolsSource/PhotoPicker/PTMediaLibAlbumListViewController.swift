@@ -61,20 +61,23 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         view.registerClassCells(classs: [PTMediaLibAlbumCell.ID:PTMediaLibAlbumCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibAlbumCell
-            cell.albumModel = cellModel
-            cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum.title)
-            return cell
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibAlbumCell
+                cell.albumModel = cellModel
+                cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum.title)
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
 
-            if self.selectedModelHandler != nil {
-                self.selectedModelHandler!(cellModel)
-                self.navigationController?.popViewController(animated: true)
+                if self.selectedModelHandler != nil {
+                    self.selectedModelHandler!(cellModel)
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }
         return view

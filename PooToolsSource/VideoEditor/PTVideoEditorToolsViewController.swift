@@ -562,7 +562,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 itemOriginalX = (screenW - CGFloat(self.bottomControlModels.count) * cellWidth) / 2
             }
             var groupW:CGFloat = itemOriginalX
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let cellHeight:CGFloat = cellHeight
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupW, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
@@ -577,85 +577,88 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collectionViews,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
-            let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTVideoEditorToolsCell
-            cell.configure(with: cellModel)
-            return cell
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
+                let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTVideoEditorToolsCell
+                cell.configure(with: cellModel)
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collectionViews,sectionModel,indexPath in
             self.c7Player.pause()
             self.playerButton.isSelected = false
             
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
-            switch cellModel.videoControl {
-            case .speed:
-                let vc = PTVideoEditorToolsSpeedControl(speed: self.speed,typeModel: cellModel)
-                vc.speedHandler = { value in
-                    self.speed = value
-                }
-                self.sheetPresent(vc: vc, size: 0.3)
-            case .trim:
-                let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset,typeModel: cellModel)
-                self.sheetPresent(vc: vc, size: 0.3)
-                vc.trimPosotionsHandler = { value in
-                    self.trimPositions = value
-                }
-            case .crop:
-                guard let image = self.originImageView.image!.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
-                
-                let vc = PTVideoEditorToolsCropControl(image: image)
-                vc.cropImageHandler = { imageSize,cropFrame in
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        let videoRect = self.videoRect
-                        let frameX = cropFrame.origin.x * videoRect.size.width / imageSize.width
-                        let frameY = cropFrame.origin.y * videoRect.size.height / imageSize.height
-                        let frameWidth = cropFrame.size.width * videoRect.size.width / imageSize.width
-                        let frameHeight = cropFrame.size.height * videoRect.size.height / imageSize.height
-                        let dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
-                        self.dimFrame = dimFrame
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
+                switch cellModel.videoControl {
+                case .speed:
+                    let vc = PTVideoEditorToolsSpeedControl(speed: self.speed,typeModel: cellModel)
+                    vc.speedHandler = { value in
+                        self.speed = value
                     }
-                }
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: false)
+                    self.sheetPresent(vc: vc, size: 0.3)
+                case .trim:
+                    let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset,typeModel: cellModel)
+                    self.sheetPresent(vc: vc, size: 0.3)
+                    vc.trimPosotionsHandler = { value in
+                        self.trimPositions = value
+                    }
+                case .crop:
+                    guard let image = self.originImageView.image!.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
+                    
+                    let vc = PTVideoEditorToolsCropControl(image: image)
+                    vc.cropImageHandler = { imageSize,cropFrame in
+                        PTGCDManager.gcdAfter(time: 0.1) {
+                            let videoRect = self.videoRect
+                            let frameX = cropFrame.origin.x * videoRect.size.width / imageSize.width
+                            let frameY = cropFrame.origin.y * videoRect.size.height / imageSize.height
+                            let frameWidth = cropFrame.size.width * videoRect.size.width / imageSize.width
+                            let frameHeight = cropFrame.size.height * videoRect.size.height / imageSize.height
+                            let dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
+                            self.dimFrame = dimFrame
+                        }
+                    }
+                    let nav = PTBaseNavControl(rootViewController: vc)
+                    nav.modalPresentationStyle = .fullScreen
+                    self.present(nav, animated: false)
 
-            case .rotate:
-                var transform = CGAffineTransform.identity
-                self.rotate += 1
-                if self.rotate == 4 {
-                    self.rotate = 0
-                    self.degree = 0
-                } else {
-                    let rotate = CGFloat(.pi / 2 * self.rotate)
-                    transform = transform.rotated(by: rotate)
-                    self.degree = rotate * 180 / CGFloat.pi
+                case .rotate:
+                    var transform = CGAffineTransform.identity
+                    self.rotate += 1
+                    if self.rotate == 4 {
+                        self.rotate = 0
+                        self.degree = 0
+                    } else {
+                        let rotate = CGFloat(.pi / 2 * self.rotate)
+                        transform = transform.rotated(by: rotate)
+                        self.degree = rotate * 180 / CGFloat.pi
+                    }
+                    self.dimFrame = nil
+                    self.originImageView.transform = transform
+                    self.dimView.transform = transform
+                case .mute:
+                    let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
+                    cell.buttonView.isSelected.toggle()
+                    self.isMute.toggle()
+                case .presets:
+                    let presets = AVAssetExportSession.exportPresets(compatibleWith: self.avPlayer.currentItem!.asset)
+                    
+                    UIAlertController.baseActionSheet(title: "PT Video editor function export preset select".localized(),subTitle: String(format: "PT Video editor function export preset select current".localized(), self.presets), titles: presets) { sheet, index, title in
+                        self.presets = title
+                    }
+                case .filter:
+                    let vc = PTVideoEditorFilterControl(currentImage: self.originFilterImageView, currentFilter: self.currentFilter, viewControl: cellModel)
+                    vc.filterHandler = { filter in
+                        self.currentFilter = filter
+                        self.reloadAsset()
+                    }
+                    self.sheetPresent(vc: vc, size: 0.3)
+                case .rewrite:
+                    let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
+                    cell.buttonView.isSelected.toggle()
+                    self.rewrite.toggle()
                 }
-                self.dimFrame = nil
-                self.originImageView.transform = transform
-                self.dimView.transform = transform
-            case .mute:
-                let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
-                cell.buttonView.isSelected.toggle()
-                self.isMute.toggle()
-            case .presets:
-                let presets = AVAssetExportSession.exportPresets(compatibleWith: self.avPlayer.currentItem!.asset)
-                
-                UIAlertController.baseActionSheet(title: "PT Video editor function export preset select".localized(),subTitle: String(format: "PT Video editor function export preset select current".localized(), self.presets), titles: presets) { sheet, index, title in
-                    self.presets = title
-                }
-            case .filter:
-                let vc = PTVideoEditorFilterControl(currentImage: self.originFilterImageView, currentFilter: self.currentFilter, viewControl: cellModel)
-                vc.filterHandler = { filter in
-                    self.currentFilter = filter
-                    self.reloadAsset()
-                }
-                self.sheetPresent(vc: vc, size: 0.3)
-            case .rewrite:
-                let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
-                cell.buttonView.isSelected.toggle()
-                self.rewrite.toggle()
             }
         }
         return view

@@ -30,7 +30,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 88
             let cellHeight:CGFloat = 108
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += (screenW + 10)
@@ -42,19 +42,21 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTVideoEditorConfig.share
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellTools = itemRow.dataModel as! UIImage
-            let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
-            cell.imageView.image = cellTools
-            cell.nameLabel.text = cellFilter.name
-            
-            if self.currentFilter == cellFilter {
-                cell.nameLabel.textColor = config.themeColor
-            } else {
-                cell.nameLabel.textColor = .lightGray
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellTools = itemRow.dataModel as! UIImage
+                let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
+                cell.imageView.image = cellTools
+                cell.nameLabel.text = cellFilter.name
+                
+                if self.currentFilter == cellFilter {
+                    cell.nameLabel.textColor = config.themeColor
+                } else {
+                    cell.nameLabel.textColor = .lightGray
+                }
+                return cell
             }
-            return cell
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]

@@ -59,7 +59,7 @@ public class PTChatView: UIView {
             var groupHeight:CGFloat = 0 + PTChatConfig.share.chatTopFixel
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let cellModel = model.dataModel as! PTChatListModel
                 var cellHeight:CGFloat = 0
                 
@@ -135,7 +135,7 @@ public class PTChatView: UIView {
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupHeight, width: CGFloat.kSCREEN_WIDTH, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupHeight += (cellHeight)
-                if (sectionModel.rows.count - 1) == index {
+                if ((sectionModel.rows?.count ?? 0) - 1) == index {
                     groupHeight += PTChatConfig.share.chatBottomFixel
                 }
             }
@@ -145,84 +145,86 @@ public class PTChatView: UIView {
             })
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = itemRow.dataModel as! PTChatListModel
-            if itemRow.ID == PTChatSystemMessageCell.ID {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTChatSystemMessageCell
-                cell.cellModel = cellModel
-                return cell
-            } else if itemRow.ID == PTChatTypingIndicatorCell.ID {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTChatTypingIndicatorCell
-                return cell
-            } else {
-                switch cellModel.messageType {
-                case .CustomerMessage:
-                    return self.customerCellHandler?(collectionView,sectionModel,indexPath)
-                default:
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTChatBaseCell
-                    if itemRow.ID == PTChatTextCell.ID {
-                        let textCell = (cell as! PTChatTextCell)
-                        textCell.cellModel = cellModel
-                        textCell.chinaPhoneCallback = { text in
-                            self.attCellChinaPhoneTapCallBack?(text,indexPath,cellModel)
-                        }
-                        textCell.mentionCallback = {  text in
-                            self.attCellMentionTapCallBack?(text,indexPath,cellModel)
-                        }
-                        textCell.urlCallback = { text in
-                            self.attCellUrlTapCallBack?(text,indexPath,cellModel)
-                        }
-                        textCell.hashtagCallback = { text in
-                            self.attCellHashtagTapCallBack?(text,indexPath,cellModel)
-                        }
-                        textCell.customCallback = { text in
-                            self.attCellCustomTapCallBack?(text,indexPath,cellModel)
-                        }
-                    } else if itemRow.ID == PTChatMediaCell.ID {
-                        (cell as! PTChatMediaCell).cellModel = cellModel
-                    } else if itemRow.ID == PTChatMapCell.ID {
-                        (cell as! PTChatMapCell).cellModel = cellModel
-                    } else if itemRow.ID == PTChatVoiceCell.ID {
-                        (cell as! PTChatVoiceCell).cellModel = cellModel
-                    } else if itemRow.ID == PTChatFileCell.ID {
-                        (cell as! PTChatFileCell).cellModel = cellModel
-                    }
-                    cell!.sendMessageError = { errorModel in
-                        self.resendMessage(cellModel: errorModel, indexPath: indexPath)
-                    }
-                    
-                    if itemRow.ID != PTChatTextCell.ID {
-                        let longTap = self.cellLongTap(cell: cell!, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
-                        let tap = UITapGestureRecognizer { sender in
-                            self.tapMessageHandler?(cellModel,indexPath)
-                        }
-                        cell!.dataContent.addGestureRecognizers([tap,longTap])
-                    } else {
-                        let longTap = self.cellLongTap(cell: cell!, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
-                        cell!.contentView.isUserInteractionEnabled = true
-                        cell!.contentView.addGestureRecognizers([longTap])
-                    }
-
-                    cell!.sendExp = { expModel in
-                        self.chatDataArr[indexPath.row].messageStatus = .Error
-                        if itemRow.ID == PTChatTextCell.ID {
-                            (cell as! PTChatTextCell).cellModel = self.chatDataArr[indexPath.row]
-                        } else if itemRow.ID == PTChatMediaCell.ID {
-                            (cell as! PTChatMediaCell).cellModel = self.chatDataArr[indexPath.row]
-                        } else if itemRow.ID == PTChatMapCell.ID {
-                            (cell as! PTChatMapCell).cellModel = self.chatDataArr[indexPath.row]
-                        } else if itemRow.ID == PTChatVoiceCell.ID {
-                            (cell as! PTChatVoiceCell).cellModel = self.chatDataArr[indexPath.row]
-                        } else if itemRow.ID == PTChatFileCell.ID {
-                            (cell as! PTChatFileCell).cellModel = self.chatDataArr[indexPath.row]
-                        }
-                    }
-                    cell!.userIcon.addActionHandlers { sender in
-                        self.userIconTapHandler?(cellModel,indexPath)
-                    }
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = itemRow.dataModel as! PTChatListModel
+                if itemRow.ID == PTChatSystemMessageCell.ID {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTChatSystemMessageCell
+                    cell.cellModel = cellModel
                     return cell
+                } else if itemRow.ID == PTChatTypingIndicatorCell.ID {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTChatTypingIndicatorCell
+                    return cell
+                } else {
+                    switch cellModel.messageType {
+                    case .CustomerMessage:
+                        return self.customerCellHandler?(collectionView,sectionModel,indexPath)
+                    default:
+                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTChatBaseCell
+                        if itemRow.ID == PTChatTextCell.ID {
+                            let textCell = (cell as! PTChatTextCell)
+                            textCell.cellModel = cellModel
+                            textCell.chinaPhoneCallback = { text in
+                                self.attCellChinaPhoneTapCallBack?(text,indexPath,cellModel)
+                            }
+                            textCell.mentionCallback = {  text in
+                                self.attCellMentionTapCallBack?(text,indexPath,cellModel)
+                            }
+                            textCell.urlCallback = { text in
+                                self.attCellUrlTapCallBack?(text,indexPath,cellModel)
+                            }
+                            textCell.hashtagCallback = { text in
+                                self.attCellHashtagTapCallBack?(text,indexPath,cellModel)
+                            }
+                            textCell.customCallback = { text in
+                                self.attCellCustomTapCallBack?(text,indexPath,cellModel)
+                            }
+                        } else if itemRow.ID == PTChatMediaCell.ID {
+                            (cell as! PTChatMediaCell).cellModel = cellModel
+                        } else if itemRow.ID == PTChatMapCell.ID {
+                            (cell as! PTChatMapCell).cellModel = cellModel
+                        } else if itemRow.ID == PTChatVoiceCell.ID {
+                            (cell as! PTChatVoiceCell).cellModel = cellModel
+                        } else if itemRow.ID == PTChatFileCell.ID {
+                            (cell as! PTChatFileCell).cellModel = cellModel
+                        }
+                        cell!.sendMessageError = { errorModel in
+                            self.resendMessage(cellModel: errorModel, indexPath: indexPath)
+                        }
+                        
+                        if itemRow.ID != PTChatTextCell.ID {
+                            let longTap = self.cellLongTap(cell: cell!, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+                            let tap = UITapGestureRecognizer { sender in
+                                self.tapMessageHandler?(cellModel,indexPath)
+                            }
+                            cell!.dataContent.addGestureRecognizers([tap,longTap])
+                        } else {
+                            let longTap = self.cellLongTap(cell: cell!, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+                            cell!.contentView.isUserInteractionEnabled = true
+                            cell!.contentView.addGestureRecognizers([longTap])
+                        }
+
+                        cell!.sendExp = { expModel in
+                            self.chatDataArr[indexPath.row].messageStatus = .Error
+                            if itemRow.ID == PTChatTextCell.ID {
+                                (cell as! PTChatTextCell).cellModel = self.chatDataArr[indexPath.row]
+                            } else if itemRow.ID == PTChatMediaCell.ID {
+                                (cell as! PTChatMediaCell).cellModel = self.chatDataArr[indexPath.row]
+                            } else if itemRow.ID == PTChatMapCell.ID {
+                                (cell as! PTChatMapCell).cellModel = self.chatDataArr[indexPath.row]
+                            } else if itemRow.ID == PTChatVoiceCell.ID {
+                                (cell as! PTChatVoiceCell).cellModel = self.chatDataArr[indexPath.row]
+                            } else if itemRow.ID == PTChatFileCell.ID {
+                                (cell as! PTChatFileCell).cellModel = self.chatDataArr[indexPath.row]
+                            }
+                        }
+                        cell!.userIcon.addActionHandlers { sender in
+                            self.userIconTapHandler?(cellModel,indexPath)
+                        }
+                        return cell
+                    }
                 }
             }
+            return nil
         }
         view.headerRefreshTask = { control in
             self.headerLoadReadyHandler?()

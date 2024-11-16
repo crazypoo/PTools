@@ -26,11 +26,13 @@ class PTImageListViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: collectionConfig)
         view.registerClassCells(classs: [PTImageCell.ID:PTImageCell.self])
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCell
-            cell.showAnimator = true
-            cell.imageData = self.images[indexPath.row]
-            return cell
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCell
+                cell.showAnimator = true
+                cell.imageData = self.images[indexPath.row]
+                return cell
+            }
+            return nil
         }
         return view
     }()

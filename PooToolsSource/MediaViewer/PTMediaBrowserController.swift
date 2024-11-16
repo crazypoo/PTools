@@ -100,41 +100,43 @@ public class PTMediaBrowserController: PTBaseViewController {
         let collectionView = PTCollectionView(viewConfig: cConfig)
         collectionView.registerClassCells(classs: [PTMediaBrowserCell.ID:PTMediaBrowserCell.self])
         collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
-            let itemRow = dataModel.rows[indexPath.row]
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaBrowserCell
-            cell.viewConfig = self.viewConfig
-            cell.dataModel = (itemRow.dataModel as! PTMediaBrowserModel)
-            cell.viewerDismissBlock = {
-                self.returnFrontVC {
-                    if self.viewDismissBlock != nil {
-                        self.viewDismissBlock!()
+            if let itemRow = dataModel.rows?[indexPath.row] {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaBrowserCell
+                cell.viewConfig = self.viewConfig
+                cell.dataModel = (itemRow.dataModel as! PTMediaBrowserModel)
+                cell.viewerDismissBlock = {
+                    self.returnFrontVC {
+                        if self.viewDismissBlock != nil {
+                            self.viewDismissBlock!()
+                        }
                     }
                 }
-            }
-            cell.zoomTask = { boolValue in
-                self.toolBarControl(boolValue: boolValue)
-            }
-            cell.tapTask = {
-                self.toolBarControl(boolValue: !self.navControl.isHidden)
-            }
-            cell.longTapWakeUp = {
-                self.actionSheet()
-                PTGCDManager.gcdAfter(time: 0.5) {
-                    cell.imageLongTaped = false
+                cell.zoomTask = { boolValue in
+                    self.toolBarControl(boolValue: boolValue)
                 }
-            }
-            cell.videoPlayHandler = { videoController in
-                self.present(videoController, animated: true) {
-                    videoController.player?.play()
+                cell.tapTask = {
+                    self.toolBarControl(boolValue: !self.navControl.isHidden)
                 }
+                cell.longTapWakeUp = {
+                    self.actionSheet()
+                    PTGCDManager.gcdAfter(time: 0.5) {
+                        cell.imageLongTaped = false
+                    }
+                }
+                cell.videoPlayHandler = { videoController in
+                    self.present(videoController, animated: true) {
+                        videoController.player?.play()
+                    }
+                }
+                return cell
             }
-            return cell
+            return nil
         }
         collectionView.customerLayout = { sectionIndex,sectionModel in
             var groupWidth:CGFloat = 0
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
-            sectionModel.rows.enumerated().forEach { (index,model) in
+            sectionModel.rows?.enumerated().forEach { (index,model) in
                 let cellHeight:CGFloat = cellHeight
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: CGFloat(index) * cellWidth, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
@@ -151,38 +153,38 @@ public class PTMediaBrowserController: PTBaseViewController {
             let currentCell = collectionView.visibleCells.first as! PTMediaBrowserCell
             let currentIndex = collectionView.indexPath(for: currentCell)!
             
-            
-            let itemRow = sectionModel.rows[currentIndex.row]
-            let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
-            let endCell = cell as! PTMediaBrowserCell
-            switch endCell.currentCellType {
-            case .GIF:
-                endCell.imageView.stopAnimating()
-            default:
-                break
-            }
-            
-            if self.viewConfig.pageControlShow {
-                switch self.viewConfig.pageControlOption {
-                case .system:
-                    (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
-                case .fill:
-                    (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
-                case .pill:
-                    (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
-                case .snake:
-                    (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
-                case .image:
-                    (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
-                case .scrolling:
-                    (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
+            if let itemRow = sectionModel.rows?[currentIndex.row] {
+                let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
+                let endCell = cell as! PTMediaBrowserCell
+                switch endCell.currentCellType {
+                case .GIF:
+                    endCell.imageView.stopAnimating()
+                default:
+                    break
                 }
+                
+                if self.viewConfig.pageControlShow {
+                    switch self.viewConfig.pageControlOption {
+                    case .system:
+                        (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
+                    case .fill:
+                        (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
+                    case .pill:
+                        (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
+                    case .snake:
+                        (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
+                    case .image:
+                        (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
+                    case .scrolling:
+                        (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
+                    }
+                }
+                
+                if !self.navControl.titleLabel.isHidden {
+                    self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
+                }
+                self.updateBottom(models: cellModel)
             }
-            
-            if !self.navControl.titleLabel.isHidden {
-                self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
-            }
-            self.updateBottom(models: cellModel)
         }
         
         collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
@@ -203,22 +205,23 @@ public class PTMediaBrowserController: PTBaseViewController {
                 }
             }
 
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
-            let endCell = cell as! PTMediaBrowserCell
-            switch endCell.currentCellType {
-            case .GIF:
-                endCell.imageView.startAnimating()
-            default:
-                break
-            }
-            if !self.navControl.titleLabel.isHidden {
-                self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.viewConfig.mediaData.count)"
-            }
-            self.updateBottom(models: cellModel)
-            
-            if self.browserCurrentDataBlock != nil {
-                self.browserCurrentDataBlock!(indexPath.row)
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
+                let endCell = cell as! PTMediaBrowserCell
+                switch endCell.currentCellType {
+                case .GIF:
+                    endCell.imageView.startAnimating()
+                default:
+                    break
+                }
+                if !self.navControl.titleLabel.isHidden {
+                    self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.viewConfig.mediaData.count)"
+                }
+                self.updateBottom(models: cellModel)
+                
+                if self.browserCurrentDataBlock != nil {
+                    self.browserCurrentDataBlock!(indexPath.row)
+                }
             }
         }
         

@@ -60,7 +60,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
             let headerModel = sectionModel.headerDataModel as! PTFusionCellModel
             
             if headerModel.name == "Simple info" {
-                return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64,cellRowCount: 1,originalX: 0)
+                return UICollectionView.girdCollectionLayout(data: sectionModel.rows!, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64,cellRowCount: 1,originalX: 0)
             } else {
                 var bannerGroupSize : NSCollectionLayoutSize
                 var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -83,23 +83,26 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
             }
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            let itemRow = itemSection.rows[indexPath.row]
-            let headerModel = itemSection.headerDataModel as! PTFusionCellModel
-            if headerModel.name == "Simple info" {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
-                cell.cellModel = (itemRow.dataModel as! PTHttpModel)
-                return cell
-            } else {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherDetailCell
-                let cellModel = self.currentInfos[indexPath.section - 1]
-                cell.setup(cellModel.description, self.searchBar.text)
-                return cell
+            if let itemRow = itemSection.rows?[indexPath.row] {
+                let headerModel = itemSection.headerDataModel as! PTFusionCellModel
+                if headerModel.name == "Simple info" {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
+                    cell.cellModel = (itemRow.dataModel as! PTHttpModel)
+                    return cell
+                } else {
+                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherDetailCell
+                    let cellModel = self.currentInfos[indexPath.section - 1]
+                    cell.setup(cellModel.description, self.searchBar.text)
+                    return cell
+                }
             }
+            return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            let itemRow = model.rows[indexPath.row]
-            let vc = PTNetworkWatcherDetailViewController(viewModel: (itemRow.dataModel as! PTHttpModel))
-            self.navigationController?.pushViewController(vc)
+            if let itemRow = model.rows?[indexPath.row] {
+                let vc = PTNetworkWatcherDetailViewController(viewModel: (itemRow.dataModel as! PTHttpModel))
+                self.navigationController?.pushViewController(vc)
+            }
         }
         return view
     }()

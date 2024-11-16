@@ -304,7 +304,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupH:CGFloat = 0
-            sectionModel.rows.enumerated().forEach { index,model in
+            sectionModel.rows?.enumerated().forEach { index,model in
                 let cellModel =  model.dataModel as! PTWhatsNewsItem
                 
                 if cellModel.newsImage != nil {
@@ -328,11 +328,13 @@ public class PTWhatsNewsViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTWhatsNewsItem)
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTWhatsNewsCell
-            cell.cellModel = cellModel
-            return cell
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTWhatsNewsItem)
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTWhatsNewsCell
+                cell.cellModel = cellModel
+                return cell
+            }
+            return nil
         }
         return view
     }()

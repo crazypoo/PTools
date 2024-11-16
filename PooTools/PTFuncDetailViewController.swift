@@ -633,11 +633,13 @@ class PTFuncDetailViewController: PTBaseViewController {
             aaaaaaa.backgroundColor = .random
             aaaaaaa.registerClassCells(classs: [PTTagCell.ID:PTTagCell.self])
             aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
-                let itemRow = dataModel.rows[indexPath.row]
-                let cellModel = (itemRow.dataModel as! PTTagLayoutModel)
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTTagCell
-                cell.cellModel = cellModel
-                return cell
+                if let itemRow = dataModel.rows?[indexPath.row] {
+                    let cellModel = (itemRow.dataModel as! PTTagLayoutModel)
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTTagCell
+                    cell.cellModel = cellModel
+                    return cell
+                }
+                return nil
             }
             view.addSubviews([aaaaaaa])
             aaaaaaa.snp.makeConstraints { make in

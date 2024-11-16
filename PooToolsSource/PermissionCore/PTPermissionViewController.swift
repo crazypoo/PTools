@@ -66,101 +66,104 @@ public class PTPermissionViewController: PTBaseViewController {
             return header
         }
         view.cellInCollection = { collectionView ,dataModel,indexPath in
-            let itemRow = dataModel.rows[indexPath.row]
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPermissionCell
-            cell.cellModel  = (itemRow.dataModel as! PTPermissionModel)
-            return cell
+            if let itemRow = dataModel.rows?[indexPath.row] {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPermissionCell
+                cell.cellModel  = (itemRow.dataModel as! PTPermissionModel)
+                return cell
+            }
+            return nil
         }
         
         view.collectionDidSelect = { collectionView, sectionModel, indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTPermissionModel)
-            let cell = collectionView.cellForItem(at: indexPath) as! PTPermissionCell
-            switch cell.cellStatus {
-            case .authorized:
-                break
-            case .denied:
-                switch cellModel.type {
-                case .tracking:
-#if POOTOOLS_PERMISSION_TRACKING
-                    PTPermission.tracking.openSettingPage()
-#endif
-                case .camera:
-#if POOTOOLS_PERMISSION_CAMERA
-                    PTPermission.camera.openSettingPage()
-#endif
-                case .photoLibrary:
-#if POOTOOLS_PERMISSION_PHOTO
-                    PTPermission.photoLibrary.openSettingPage()
-#endif
-                case .calendar(access: .full):
-#if POOTOOLS_PERMISSION_CALENDAR
-                    PTPermission.calendar(access: .full).openSettingPage()
-#endif
-                case .calendar(access: .write):
-#if POOTOOLS_PERMISSION_CALENDAR
-                    PTPermission.calendar(access: .write).openSettingPage()
-#endif
-                case .reminders:
-#if POOTOOLS_PERMISSION_REMINDERS
-                    PTPermission.reminders.openSettingPage()
-#endif
-                case .notification:
-#if POOTOOLS_PERMISSION_NOTIFICATION
-                    PTPermission.notification.openSettingPage()
-#endif
-                case .location(access: .whenInUse):
-#if POOTOOLS_PERMISSION_LOCATION
-                    PTPermission.location(access: .whenInUse).openSettingPage()
-#endif
-                case .location(access: .always):
-#if POOTOOLS_PERMISSION_LOCATION
-                    PTPermission.location(access: .always).openSettingPage()
-#endif
-                case .motion:
-#if POOTOOLS_PERMISSION_MOTION
-                    PTPermission.motion.openSettingPage()
-#endif
-                case .faceID:
-#if POOTOOLS_PERMISSION_FACEIDPERMISSION
-                    PTPermission.faceID.openSettingPage()
-#endif
-                case .health:
-#if POOTOOLS_PERMISSION_HEALTH
-                    PTPermission.health.openSettingPage()
-#endif
-                case .speech:
-#if POOTOOLS_PERMISSION_SPEECH
-                    PTPermission.speech.openSettingPage()
-#endif
-                case .contacts:
-#if POOTOOLS_PERMISSION_CONTACTS
-                    PTPermission.contacts.openSettingPage()
-#endif
-                case .microphone:
-#if POOTOOLS_PERMISSION_MIC
-                    PTPermission.microphone.openSettingPage()
-#endif
-                case .mediaLibrary:
-#if POOTOOLS_PERMISSION_MEDIA
-                    PTPermission.mediaLibrary.openSettingPage()
-#endif
-                case .bluetooth:
-#if POOTOOLS_PERMISSION_BLUETOOTH
-                    PTPermission.bluetooth.openSettingPage()
-#endif
-                case .siri:
-#if POOTOOLS_PERMISSION_SIRI
-                    PTPermission.siri.openSettingPage()
-#endif
-                default:break
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTPermissionModel)
+                let cell = collectionView.cellForItem(at: indexPath) as! PTPermissionCell
+                switch cell.cellStatus {
+                case .authorized:
+                    break
+                case .denied:
+                    switch cellModel.type {
+                    case .tracking:
+    #if POOTOOLS_PERMISSION_TRACKING
+                        PTPermission.tracking.openSettingPage()
+    #endif
+                    case .camera:
+    #if POOTOOLS_PERMISSION_CAMERA
+                        PTPermission.camera.openSettingPage()
+    #endif
+                    case .photoLibrary:
+    #if POOTOOLS_PERMISSION_PHOTO
+                        PTPermission.photoLibrary.openSettingPage()
+    #endif
+                    case .calendar(access: .full):
+    #if POOTOOLS_PERMISSION_CALENDAR
+                        PTPermission.calendar(access: .full).openSettingPage()
+    #endif
+                    case .calendar(access: .write):
+    #if POOTOOLS_PERMISSION_CALENDAR
+                        PTPermission.calendar(access: .write).openSettingPage()
+    #endif
+                    case .reminders:
+    #if POOTOOLS_PERMISSION_REMINDERS
+                        PTPermission.reminders.openSettingPage()
+    #endif
+                    case .notification:
+    #if POOTOOLS_PERMISSION_NOTIFICATION
+                        PTPermission.notification.openSettingPage()
+    #endif
+                    case .location(access: .whenInUse):
+    #if POOTOOLS_PERMISSION_LOCATION
+                        PTPermission.location(access: .whenInUse).openSettingPage()
+    #endif
+                    case .location(access: .always):
+    #if POOTOOLS_PERMISSION_LOCATION
+                        PTPermission.location(access: .always).openSettingPage()
+    #endif
+                    case .motion:
+    #if POOTOOLS_PERMISSION_MOTION
+                        PTPermission.motion.openSettingPage()
+    #endif
+                    case .faceID:
+    #if POOTOOLS_PERMISSION_FACEIDPERMISSION
+                        PTPermission.faceID.openSettingPage()
+    #endif
+                    case .health:
+    #if POOTOOLS_PERMISSION_HEALTH
+                        PTPermission.health.openSettingPage()
+    #endif
+                    case .speech:
+    #if POOTOOLS_PERMISSION_SPEECH
+                        PTPermission.speech.openSettingPage()
+    #endif
+                    case .contacts:
+    #if POOTOOLS_PERMISSION_CONTACTS
+                        PTPermission.contacts.openSettingPage()
+    #endif
+                    case .microphone:
+    #if POOTOOLS_PERMISSION_MIC
+                        PTPermission.microphone.openSettingPage()
+    #endif
+                    case .mediaLibrary:
+    #if POOTOOLS_PERMISSION_MEDIA
+                        PTPermission.mediaLibrary.openSettingPage()
+    #endif
+                    case .bluetooth:
+    #if POOTOOLS_PERMISSION_BLUETOOTH
+                        PTPermission.bluetooth.openSettingPage()
+    #endif
+                    case .siri:
+    #if POOTOOLS_PERMISSION_SIRI
+                        PTPermission.siri.openSettingPage()
+    #endif
+                    default:break
+                    }
+                case .notDetermined:
+                    self.permissionRequest(type: cellModel.type)
+                case .notSupported:
+                    break
+                default:
+                    break
                 }
-            case .notDetermined:
-                self.permissionRequest(type: cellModel.type)
-            case .notSupported:
-                break
-            default:
-                break
             }
         }
         return view

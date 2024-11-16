@@ -250,23 +250,25 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.isUserInteractionEnabled = true
         view.customerLayout = { sectionIndex,sectionModel in
-            return UICollectionView.horizontalLayout(data: sectionModel.rows,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 78,itemHeight: PTFilterCameraViewController.filterCollectionHeight,topContentSpace: 5,itemLeadingSpace: 10)
+            return UICollectionView.horizontalLayout(data: sectionModel.rows!,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 78,itemHeight: PTFilterCameraViewController.filterCollectionHeight,topContentSpace: 5,itemLeadingSpace: 10)
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellTools = itemRow.dataModel as! UIImage
-            let cellFilter = PTCameraFilterConfig.share.filters[indexPath.row]
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
-            cell.imageView.image = cellTools
-            cell.nameLabel.text = cellFilter.name
-            
-            if self.currentFilter == cellFilter {
-                cell.nameLabel.textColor = config.themeColor
-            } else {
-                cell.nameLabel.textColor = .lightGray
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellTools = itemRow.dataModel as! UIImage
+                let cellFilter = PTCameraFilterConfig.share.filters[indexPath.row]
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
+                cell.imageView.image = cellTools
+                cell.nameLabel.text = cellFilter.name
+                
+                if self.currentFilter == cellFilter {
+                    cell.nameLabel.textColor = config.themeColor
+                } else {
+                    cell.nameLabel.textColor = .lightGray
+                }
+                return cell
             }
-            return cell
+            return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             let filters = PTCameraFilterConfig.share.filters[indexPath.row]

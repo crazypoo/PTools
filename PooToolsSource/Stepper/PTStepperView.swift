@@ -118,107 +118,108 @@ open class PTStepperView: UIView {
                 } else {
                     itemW = self.viewConfig.itemWidth
                 }
-                return UICollectionView.horizontalLayout(data: section.rows,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
+                return UICollectionView.horizontalLayout(data: section.rows!,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
             case .Vertical(_):
-                return UICollectionView.girdCollectionLayout(data: section.rows, itemHeight: self.viewConfig.itemHeight,cellRowCount: 1,originalX: self.viewConfig.itemOriginalX,topContentSpace: 0)
+                return UICollectionView.girdCollectionLayout(data: section.rows!, itemHeight: self.viewConfig.itemHeight,cellRowCount: 1,originalX: self.viewConfig.itemOriginalX,topContentSpace: 0)
             }
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = itemRow.dataModel as! PTStepperListModel
-            if itemRow.ID == PTStepperHorizontalCell.ID {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperHorizontalCell
-                cell.cellModel = cellModel
-                
-                if let forwardCell = collectionView.cellForItem(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? PTStepperHorizontalCell {
-                    if forwardCell.cellModel.stopFinish {
-                        cell.leftLine.backgroundColor = cellModel.stopSelectedColor
-                    } else {
-                        cell.leftLine.backgroundColor = cellModel.stopNormalColor
-                    }
-                } else {
-                    if cellModel.stopFinish {
-                        cell.leftLine.backgroundColor = cellModel.stopSelectedColor
-                    } else {
-                        cell.leftLine.backgroundColor = cellModel.stopNormalColor
-                    }
-                }
-
-                cell.leftLine.isHidden = indexPath.row == 0 ? true : false
-                cell.rightLine.isHidden = indexPath.row == (sectionModel.rows.count - 1) ? true : false
-                switch cellModel.stopType {
-                case .Step:
-                    cell.stopLabel.isHidden = false
-                    cell.stopImage.isHidden = true
-                    cell.stopLabel.text = "\(indexPath.row + 1)"
-                case .Image:
-                    cell.stopLabel.isHidden = true
-                    cell.stopImage.isHidden = false
-                    if let image = cellModel.stopInfo {
-                        cell.stopImage.loadImage(contentData: image)
-                    } else {
-                        cell.stopImage.image = PTAppBaseConfig.share.defaultEmptyImage
-                    }
-                case .Custom:
-                    cell.stopLabel.isHidden = false
-                    cell.stopImage.isHidden = true
-                    if let customLabel = cellModel.stopInfo as? String {
-                        cell.stopLabel.text = customLabel
-                    }
-                }
-                return cell
-            } else if itemRow.ID == PTStepperVerticalCell.ID {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperVerticalCell
-                cell.cellModel = cellModel
-                cell.verticalLine.isHidden = indexPath.row == (sectionModel.rows.count - 1) ? true : false
-                cell.verticalLine.backgroundColor = cellModel.stopFinish ? cellModel.stopSelectedColor : cellModel.stopNormalColor
-                
-                switch self.viewConfig.type {
-                case .Vertical(let type):
-                    switch type {
-                    case .Normal:
-                        if !cellModel.desc.stringIsEmpty() {
-                            cell.descLabel.text = cellModel.desc
-                            cell.descLabel.font = cellModel.descFont
-                            cell.descLabel.textColor = cellModel.descColor
-                            cell.descLabel.textAlignment = .left
-                        } else if let att = cellModel.descAtt {
-                            cell.descLabel.attributed.text = att
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = itemRow.dataModel as! PTStepperListModel
+                if itemRow.ID == PTStepperHorizontalCell.ID {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperHorizontalCell
+                    cell.cellModel = cellModel
+                    
+                    if let forwardCell = collectionView.cellForItem(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? PTStepperHorizontalCell {
+                        if forwardCell.cellModel.stopFinish {
+                            cell.leftLine.backgroundColor = cellModel.stopSelectedColor
+                        } else {
+                            cell.leftLine.backgroundColor = cellModel.stopNormalColor
                         }
-//                    case .Card:
-//                        break
-                    }
-                default:
-                    break
-                }
-                
-                switch cellModel.stopType {
-                case .Step:
-                    cell.stopLabel.isHidden = false
-                    cell.stopImage.isHidden = true
-                    cell.stopLabel.text = "\(indexPath.row + 1)"
-                case .Image:
-                    cell.stopLabel.isHidden = true
-                    cell.stopImage.isHidden = false
-                    if let image = cellModel.stopInfo {
-                        cell.stopImage.loadImage(contentData: image)
                     } else {
-                        cell.stopImage.image = PTAppBaseConfig.share.defaultEmptyImage
+                        if cellModel.stopFinish {
+                            cell.leftLine.backgroundColor = cellModel.stopSelectedColor
+                        } else {
+                            cell.leftLine.backgroundColor = cellModel.stopNormalColor
+                        }
                     }
-                case .Custom:
-                    cell.stopLabel.isHidden = false
-                    cell.stopImage.isHidden = true
-                    if let customLabel = cellModel.stopInfo as? String {
-                        cell.stopLabel.text = customLabel
-                    }
-                }
 
-                return cell
+                    cell.leftLine.isHidden = indexPath.row == 0 ? true : false
+                    cell.rightLine.isHidden = indexPath.row == (sectionModel.rows!.count - 1) ? true : false
+                    switch cellModel.stopType {
+                    case .Step:
+                        cell.stopLabel.isHidden = false
+                        cell.stopImage.isHidden = true
+                        cell.stopLabel.text = "\(indexPath.row + 1)"
+                    case .Image:
+                        cell.stopLabel.isHidden = true
+                        cell.stopImage.isHidden = false
+                        if let image = cellModel.stopInfo {
+                            cell.stopImage.loadImage(contentData: image)
+                        } else {
+                            cell.stopImage.image = PTAppBaseConfig.share.defaultEmptyImage
+                        }
+                    case .Custom:
+                        cell.stopLabel.isHidden = false
+                        cell.stopImage.isHidden = true
+                        if let customLabel = cellModel.stopInfo as? String {
+                            cell.stopLabel.text = customLabel
+                        }
+                    }
+                    return cell
+                } else if itemRow.ID == PTStepperVerticalCell.ID {
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperVerticalCell
+                    cell.cellModel = cellModel
+                    cell.verticalLine.isHidden = indexPath.row == (sectionModel.rows!.count - 1) ? true : false
+                    cell.verticalLine.backgroundColor = cellModel.stopFinish ? cellModel.stopSelectedColor : cellModel.stopNormalColor
+                    
+                    switch self.viewConfig.type {
+                    case .Vertical(let type):
+                        switch type {
+                        case .Normal:
+                            if !cellModel.desc.stringIsEmpty() {
+                                cell.descLabel.text = cellModel.desc
+                                cell.descLabel.font = cellModel.descFont
+                                cell.descLabel.textColor = cellModel.descColor
+                                cell.descLabel.textAlignment = .left
+                            } else if let att = cellModel.descAtt {
+                                cell.descLabel.attributed.text = att
+                            }
+    //                    case .Card:
+    //                        break
+                        }
+                    default:
+                        break
+                    }
+                    
+                    switch cellModel.stopType {
+                    case .Step:
+                        cell.stopLabel.isHidden = false
+                        cell.stopImage.isHidden = true
+                        cell.stopLabel.text = "\(indexPath.row + 1)"
+                    case .Image:
+                        cell.stopLabel.isHidden = true
+                        cell.stopImage.isHidden = false
+                        if let image = cellModel.stopInfo {
+                            cell.stopImage.loadImage(contentData: image)
+                        } else {
+                            cell.stopImage.image = PTAppBaseConfig.share.defaultEmptyImage
+                        }
+                    case .Custom:
+                        cell.stopLabel.isHidden = false
+                        cell.stopImage.isHidden = true
+                        if let customLabel = cellModel.stopInfo as? String {
+                            cell.stopLabel.text = customLabel
+                        }
+                    }
+
+                    return cell
+                }
             }
             return nil
         }
         view.collectionDidSelect = { collectionView,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
+            let itemRow = sectionModel.rows?[indexPath.row]
         }
         return view
     }()

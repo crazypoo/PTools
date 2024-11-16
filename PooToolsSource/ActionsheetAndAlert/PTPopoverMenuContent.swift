@@ -79,17 +79,20 @@ class PTPopoverMenuContent: PTBaseViewController {
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.backgroundColor = .clear
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.cellModel = cellModel
-            return cell
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.cellModel = cellModel
+                return cell
+            }
+            return nil
         }
         view.collectionDidSelect = { collectionView,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            self.dismiss(animated: true) {
-                self.didSelectedHandler(cellModel.name,indexPath.row)
+            if let itemRow = sectionModel.rows?[indexPath.row] {
+                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                self.dismiss(animated: true) {
+                    self.didSelectedHandler(cellModel.name,indexPath.row)
+                }
             }
         }
         return view
