@@ -41,7 +41,7 @@ extension PTCrashModel {
         let deviceModel: String
         let reachability: String
 
-        static func builder(name: String) -> Self {
+        @MainActor static func builder(name: String) -> Self {
             .init(
                 name: name,
                 date: .init(),

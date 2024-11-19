@@ -160,7 +160,7 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 
 @objcMembers
 public class LocalConsole: NSObject {
-    public static let shared = LocalConsole()
+    @MainActor public static let shared = LocalConsole()
             
     public var flex:PTActionTask?
     public var watchViews:PTActionTask?
@@ -202,8 +202,10 @@ public class LocalConsole: NSObject {
                 }.startAnimation()
                 
                 UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1) { [self] in
-                    terminal!.alpha = 0
-                    cleanSystemLogView()
+                    Task { @MainActor in
+                        terminal!.alpha = 0
+                        cleanSystemLogView()
+                    }
                 }.startAnimation()
             }
         }
@@ -286,7 +288,7 @@ public class LocalConsole: NSObject {
         }
     }
 
-    private override init() {
+    @MainActor private override init() {
         super.init()
         
         if isVisiable {
@@ -320,11 +322,13 @@ public class LocalConsole: NSObject {
         PTPerformanceLeakDetector.callback = leakCallback
         
         PTNetWorkStatus.shared.netWork { state in
-            LocalConsole.shared.networkStatus = NetWorkStatus.valueName(type: state)
+            Task { @MainActor in
+                LocalConsole.shared.networkStatus = NetWorkStatus.valueName(type: state)
+            }
         }
     }
     
-    public func cleanSystemLogView() {
+    @MainActor public func cleanSystemLogView() {
         terminal?.removeFromSuperview()
         terminal = nil
         closeAllFunction()
@@ -672,11 +676,15 @@ public class LocalConsole: NSObject {
         }
 
         let Flex = UIAction(title: .flex, image: UIImage.dev3thPartyImage) { _ in
-            self.flexAction()
+            Task { @MainActor in
+                self.flexAction()
+            }
         }
 
         let InApp = UIAction(title: .inApp, image: UIImage.dev3thPartyImage) { _ in
-            self.watchViewsAction()
+            Task { @MainActor in
+                self.watchViewsAction()
+            }
         }
 
         if #available(iOS 15.0, *) {
@@ -839,7 +847,7 @@ public class LocalConsole: NSObject {
         }
     }
 
-    func closeAllFunction() {
+    @MainActor func closeAllFunction() {
         debugBordersEnabled = false
         PTViewRulerPlugin.share.hide()
         PTColorPickPlugin.share.close()
@@ -852,9 +860,7 @@ public class LocalConsole: NSObject {
         maskView?.removeFromSuperview()
         maskView = nil
         
-        if closeAllOutsideFunction != nil {
-            closeAllOutsideFunction!()
-        }
+        closeAllOutsideFunction?()
     }
 
     func debugControllerAction() {
@@ -904,16 +910,12 @@ public class LocalConsole: NSObject {
         debugBordersEnabled.toggle()
     }
     
-    func watchViewsAction() {
-        if watchViews != nil {
-            watchViews!()
-        }
+    @MainActor func watchViewsAction() {
+        watchViews?()
     }
         
-    func flexAction() {
-        if flex != nil {
-            flex!()
-        }
+    @MainActor func flexAction() {
+        flex?()
     }
     
     func documentAction() {

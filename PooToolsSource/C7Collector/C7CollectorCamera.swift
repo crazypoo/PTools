@@ -420,9 +420,8 @@ extension C7CollectorCamera {
     }
 }
 
-extension C7CollectorCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
-    
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+extension C7CollectorCamera: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
+    @MainActor public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         processing(with: pixelBuffer)
     }
@@ -567,7 +566,7 @@ extension C7CollectorCamera: AVCaptureFileOutputRecordingDelegate {
         }
     }
     
-    private func playRecordVideo(fileUrl: URL) {
+    @MainActor private func playRecordVideo(fileUrl: URL) {
         haveRecordVideo?()
         stopRunning()
         let asset = AVURLAsset.init(url: fileUrl)
@@ -579,7 +578,7 @@ extension C7CollectorCamera: AVCaptureFileOutputRecordingDelegate {
         avPlayer?.play()
     }
     
-    public func saveVideoToAlbum() {
+    @MainActor public func saveVideoToAlbum() {
         if let fileUrl = self.videoUrl {
             C7CameraConfig.share.hudShow()
             let provider = VideoX.Provider(with: fileUrl)

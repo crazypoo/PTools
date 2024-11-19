@@ -16,7 +16,7 @@ enum PTDebugUserInfo {
         let detail: String
     }
 
-    static var infos: [Info] {
+    @MainActor static var infos: [Info] {
         [
             getAppVersionInfo(),
             getAppBuildInfo(),
@@ -90,7 +90,7 @@ enum PTDebugUserInfo {
         return Info(title: "Inicialization time",detail: String(format: "%.4lf%", launchStartTime) + " (s)")
     }
 
-    static func getReachability() -> Info {        
+    @MainActor static func getReachability() -> Info {        
         return Info(title: "reachability status",detail: LocalConsole.shared.networkStatus)
     }
 }

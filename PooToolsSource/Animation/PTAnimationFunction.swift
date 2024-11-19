@@ -47,7 +47,7 @@ public class PTAnimationFunction: NSObject {
         animationView.layer.pop_add(animation, forKey: "AlertAnimation")
     }
     
-    public class func animationOut(animationView:UIView,
+    @MainActor public class func animationOut(animationView:UIView,
                                    animationType:PTAlertAnimationType,
                                    toValue:CGFloat? = 0,
                                    duration:CGFloat? = PTAnimationDuration,

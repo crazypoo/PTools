@@ -111,15 +111,13 @@ public class PTTip: NSObject {
         ])
     }
     
-    public func showTip(tips: any Tip,
+    @MainActor public func showTip(tips: any Tip,
                  sender:UIView,
                  content:PTBaseViewController,
                  customHandler:PTActionTask? = nil,
                  actionHandler:((Tip.Action)->Void)? = nil,
                         tipDismissHandler:PTActionTask? = nil) {
-        if customHandler != nil {
-            customHandler!()
-        }
+        customHandler?()
         // 显隐TipUIPopoverViewController
         Task { @MainActor in
             for await shouldDisplay in tips.shouldDisplayUpdates {
@@ -137,7 +135,7 @@ public class PTTip: NSObject {
         }
     }
     
-    public func showTipsInView(tips: any Tip,
+    @MainActor public func showTipsInView(tips: any Tip,
                         arrowEdge: Edge? = nil,
                         tipUISet:((TipUIView)->Void)? = nil,
                         content:PTBaseViewController,
@@ -160,10 +158,8 @@ public class PTTip: NSObject {
             tipUIView.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        if customHandler != nil {
-            customHandler!()
-        }
-        
+        customHandler?()
+
         Task { @MainActor in
             for await shouldDisplay in tips.shouldDisplayUpdates {
                 if shouldDisplay {

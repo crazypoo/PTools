@@ -128,7 +128,7 @@ public extension UIButton {
     ///   - timeInterval: 時間
     ///   - finishBlock:回調
     func buttonTimeRun_Base(timeInterval:TimeInterval,
-                            finishBlock: @escaping (_ finish:Bool, _ time:Int)->Void) {
+                            finishBlock: @Sendable @escaping (_ finish:Bool, _ time:Int)->Void) {
         PTGCDManager.timeRunWithTime_base(timeInterval: timeInterval, finishBlock: finishBlock)
     }
     
@@ -151,9 +151,7 @@ public extension UIButton {
             if finish {
                 self.setTitle(originalTitle, for: self.state)
                 self.isUserInteractionEnabled = countdownFinishCanTap
-                if timeFinish != nil {
-                    timeFinish!()
-                }
+                timeFinish?()
             } else {
                 let strTime = String.init(format: "%.2d", time)
                 let buttonTime = String.init(format: "%@", strTime)

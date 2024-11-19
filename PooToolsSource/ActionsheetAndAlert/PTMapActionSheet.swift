@@ -30,7 +30,7 @@ open class PTMapActionSheet: NSObject {
     ///   - formLocation:
     ///   - location: 跳转坐标
     ///   - dismissTask: 关闭回调
-    open class func mapNavAlert(currentAppScheme:String,
+    @MainActor open class func mapNavAlert(currentAppScheme:String,
                                 currentAppName:String? = kAppDisplayName!,
                                 qqKey:String? = "",
                                 formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),

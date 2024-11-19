@@ -28,7 +28,7 @@ public class PTEditMenuItemsInteraction: NSObject {
     // iOS 16之前使用官方的UIMenuController
     private lazy var menuController: UIMenuController = .shared
     
-    private lazy var dummyView: PTEditMenuInteractionDummy = {
+    @MainActor private lazy var dummyView: PTEditMenuInteractionDummy = {
         let view = PTEditMenuInteractionDummy.dummy { selector in
             self.selectMenuItem(selector)
         }
@@ -55,7 +55,9 @@ public class PTEditMenuItemsInteraction: NSObject {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        clear()
+        Task { @MainActor in
+            self.clear()
+        }
     }
     
     // MARK: public function
@@ -71,7 +73,7 @@ public class PTEditMenuItemsInteraction: NSObject {
     ///   - rect: 相对于interactionView的一个rect，一般为希望显示menu的selection的最小包围矩形
     ///   - targetRect:
     ///   - view: 须要展示在x View上
-    public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
+    @MainActor public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
         guard !items.isEmpty else { return }
                 
         showingItems = items
@@ -99,7 +101,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         }
     }
     
-    public func dismissMenu() {
+    @MainActor public func dismissMenu() {
         if #available(iOS 16, *) {
             menuInteraction?.dismissMenu()
         } else {
@@ -109,19 +111,19 @@ public class PTEditMenuItemsInteraction: NSObject {
     }
     
     /// 选中某个menuitem时执行。该方法仅在iOS 16之前会执行
-    func selectMenuItem(_ selector: Selector) {
+    @MainActor func selectMenuItem(_ selector: Selector) {
         guard let item = menuItem(from: selector) else { return }
         item.callback?()
     }
     
     // MARK: private function
     
-    @objc private func willMenuControllerHide(_: Notification) {
+    @MainActor @objc private func willMenuControllerHide(_: Notification) {
         guard let _ = showingItems else { return }
         clear()
     }
     
-    private func clear() {
+    @MainActor private func clear() {
         if #available(iOS 16, *) {
         } else {
             if let _ = showingItems {
@@ -133,7 +135,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         targetRect = nil
     }
     
-    private func menuItems(from items: [PTEditMenuItem]) -> [UIMenuItem] {
+    @MainActor private func menuItems(from items: [PTEditMenuItem]) -> [UIMenuItem] {
         items.enumerated().compactMap {
             let item = $0.element
             return UIMenuItem(title: item.title, action: selector(from: item, index: $0.offset))
@@ -148,7 +150,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         return items[index]
     }
     
-    private func selector(from _: PTEditMenuItem, index: Int) -> Selector {
+    @MainActor private func selector(from _: PTEditMenuItem, index: Int) -> Selector {
         let selectorString = "selectMenuItem\(seperator)\(index)"
         let selector = Selector(selectorString)
         
@@ -164,7 +166,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         return selector
     }
         
-    private func actionsForDummyView(_ items: [PTEditMenuItem]) -> Set<String> {
+    @MainActor private func actionsForDummyView(_ items: [PTEditMenuItem]) -> Set<String> {
         var set = Set<String>()
         items.enumerated().forEach {
             set.insert(NSStringFromSelector(selector(from: $0.element, index: $0.offset)))
@@ -174,7 +176,7 @@ public class PTEditMenuItemsInteraction: NSObject {
 }
 
 // MARK: UIEditMenuInteractionDelegate
-extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
+extension PTEditMenuItemsInteraction: @preconcurrency UIEditMenuInteractionDelegate {
     @available(iOS 16.0, *)
     public func editMenuInteraction(_: UIEditMenuInteraction, targetRectFor _: UIEditMenuConfiguration) -> CGRect {
         guard let rect = targetRect else {
@@ -184,7 +186,7 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     }
     
     @available(iOS 16.0, *)
-    public func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
+    @MainActor public func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
         // items -> UIMenu
         guard let items = showingItems else { return nil }
         let actions = items.map {
@@ -193,7 +195,7 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
         return UIMenu(children: actions)
     }
     
-    func action(from item: PTEditMenuItem) -> UIAction {
+    @MainActor func action(from item: PTEditMenuItem) -> UIAction {
         UIAction(title: item.title) { _ in
             item.callback?()
         }

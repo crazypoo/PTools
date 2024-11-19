@@ -23,7 +23,7 @@ public class PTGCDManager :NSObject {
     ///   - queue: 队列
     ///   - repeats: 是否重复
     ///   - action: 执行任务的闭包
-    public func scheduledDispatchTimer(WithTimerName name: String?,
+    @MainActor public func scheduledDispatchTimer(WithTimerName name: String?,
                                 timeInterval: Double,
                                 queue: DispatchQueue,
                                 repeats: Bool,
@@ -91,11 +91,11 @@ public class PTGCDManager :NSObject {
     ///   - threadCount: 執行任務的數量
     ///   - doSomeThing: 須要執行的任務(如果該任務執行完畢,須要調用dispatchSemaphore的.signal()方法,和dispatchGroup的.leave()方法,來處理後續事情)
     ///   - jobDoneBlock: 任務完成
-    public class func gcdGroup(label:String,
+    @MainActor public class func gcdGroup(label:String,
                                semaphoreCount:Int? = nil,
                                threadCount:Int,
                                doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
-                               jobDoneBlock: @escaping @Sendable PTActionTask) {
+                               jobDoneBlock: @escaping PTActionTask) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
         let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? 0)
@@ -115,39 +115,59 @@ public class PTGCDManager :NSObject {
     ///GCD延時執行
     public class func gcdAfter(qosCls:DispatchQoS.QoSClass,
                                time:TimeInterval,
-                               block: @escaping @Sendable PTActionTask) {
-        DispatchQueue.global(qos: qosCls).asyncAfter(deadline: .now() + time, execute: block)
+                               block: @escaping PTActionTask) {
+        DispatchQueue.global(qos: qosCls).asyncAfter(deadline: .now() + time) {
+            Task { @MainActor in
+                block()
+            }
+        }
     }
     
     public class func gcdAfter(time:TimeInterval,
-                             block: @escaping @Sendable PTActionTask) {
+                             block: @escaping PTActionTask) {
         DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: block)
     }
     
     //MARK: gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
     ///gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
-    public class func gcdMain(block: @escaping @Sendable PTActionTask) {
+    public class func gcdMain(block: @escaping PTActionTask) {
         DispatchQueue.main.async(execute: block)
     }
     
     public class func gcdGobal(qosCls:DispatchQoS.QoSClass,
-                               block: @escaping @Sendable PTActionTask) {
-        DispatchQueue.global(qos: qosCls).async(execute: block)
+                               block: @escaping PTActionTask) {
+        DispatchQueue.global(qos: qosCls).async {
+            Task { @MainActor in
+                block()
+            }
+        }
     }
     
     //MARK: gcdGobal是用於在主執行緒上執行非同步任務的，通常用於更新UI或進行其他與用戶交互有關的操作。
     ///gcdGobal是用於在主執行緒上執行非同步任務的，通常用於更新UI或進行其他與用戶交互有關的操作。
-    public class func gcdGobal(block: @escaping @Sendable PTActionTask) {
-        DispatchQueue.global(qos: .userInitiated).async(execute: block)
+    public class func gcdGobal(block: @escaping PTActionTask) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            Task { @MainActor in
+                block()
+            }
+        }
     }
     
-    public class func gcdGobalNormal(block: @escaping @Sendable PTActionTask) {
-        DispatchQueue.global().async(execute: block)
+    public class func gcdGobalNormal(block: @escaping PTActionTask) {
+        DispatchQueue.global().async {
+            Task { @MainActor in
+                block()
+            }
+        }
     }
     //MARK: gcdBackground
     //gcdBackground
-    public class func gcdBackground(block: @escaping @Sendable PTActionTask) {
-        DispatchQueue.global(qos: .background).async(execute: block)
+    public class func gcdBackground(block: @escaping PTActionTask) {
+        DispatchQueue.global(qos: .background).async {
+            Task { @MainActor in
+                block()
+            }
+        }
     }
     
     //MARK: GCD倒計時基礎方法

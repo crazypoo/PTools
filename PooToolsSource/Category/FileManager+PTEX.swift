@@ -740,7 +740,7 @@ public extension PTPOP where Base: FileManager {
                                      videoImages: @escaping ([UIImage?]) -> Void,
                                      preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        DispatchQueue.global().async {
+        PTGCDManager.gcdGobal {
             //  获取截图
             var allImageArray: [UIImage?] = []
             for path in videoPaths {

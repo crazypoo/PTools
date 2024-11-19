@@ -76,7 +76,7 @@ extension C7Collector {
         return texture.c7.toImage()
     }
     
-    func processing(with pixelBuffer: CVPixelBuffer?) {
+    @MainActor func processing(with pixelBuffer: CVPixelBuffer?) {
         guard let pixelBuffer = pixelBuffer else {
             return
         }

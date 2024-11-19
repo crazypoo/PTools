@@ -50,7 +50,7 @@ public class PTUnavailableFunction: NSObject {
     var unavailableView: UIContentUnavailableView?
     var unavailableLoadingView: UIContentUnavailableView?
 
-    public func showEmptyView(showIn view: UIView) {
+    @MainActor public func showEmptyView(showIn view: UIView) {
         emptyConfig = createEmptyConfig()
         
         unavailableView = UIContentUnavailableView(configuration: emptyConfig)
@@ -84,7 +84,7 @@ public class PTUnavailableFunction: NSObject {
         }
     }
 
-    public func hideUnavailableView(showIn view: UIView, task: PTActionTask?) {
+    @MainActor public func hideUnavailableView(showIn view: UIView, task: PTActionTask?) {
         removeUnavailableViews()
         task?()
     }
@@ -98,14 +98,14 @@ public class PTUnavailableFunction: NSObject {
         viewController.contentUnavailableConfiguration = loadingConfig
     }
 
-    public func hideUnavailableView(viewController: PTBaseViewController, task: PTActionTask?) {
+    @MainActor public func hideUnavailableView(viewController: PTBaseViewController, task: PTActionTask?) {
         viewController.contentUnavailableConfiguration = nil
         task?()
     }
 
     // MARK: - Helper Methods
     
-    private func createEmptyConfig() -> UIContentUnavailableConfiguration {
+    @MainActor private func createEmptyConfig() -> UIContentUnavailableConfiguration {
         var config = UIContentUnavailableConfiguration.empty()
 
         if let mainTitle = emptyViewConfig.mainTitleAtt {

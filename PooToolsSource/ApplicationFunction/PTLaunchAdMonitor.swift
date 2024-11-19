@@ -44,7 +44,7 @@ public class PTLaunchAdMonitor: NSObject {
     ///   - ltdString: 公司年份
     ///   - comNameFont: 公司字體
     ///   - callBack: 回調
-    public func showAd(path:Any,
+    @MainActor public func showAd(path:Any,
                        onView:Any,
                        @PTClampedProperyWrapper(range:3...15) timeInterval:TimeInterval = 5,
                        param:[AnyHashable : Any]?,
@@ -86,7 +86,7 @@ public class PTLaunchAdMonitor: NSObject {
         
         let comLabel: Bool = ltdString.stringIsEmpty() ? false : true
         let device = UIDevice.current
-        var bottomViewHeight:CGFloat? = 0
+        var bottomViewHeight:CGFloat = 0
         if !comLabel {
             bottomViewHeight = 0
         } else {
@@ -111,10 +111,10 @@ public class PTLaunchAdMonitor: NSObject {
             v.addSubview(label)
             label.snp.makeConstraints { make in
                 make.left.right.bottom.equalToSuperview()
-                make.height.equalTo(bottomViewHeight!)
+                make.height.equalTo(bottomViewHeight)
             }
         }
-        
+
         let mediaHaveData: Bool = param != nil
         loadImageAtPath(path: path) { type, media in
             PTGCDManager.gcdMain {
@@ -129,7 +129,7 @@ public class PTLaunchAdMonitor: NSObject {
                             v.insertSubview(imageView, at: 0)
                             imageView.snp.makeConstraints { make in
                                 make.left.top.right.equalToSuperview()
-                                make.height.equalTo(bottomViewHeight!)
+                                make.height.equalTo(bottomViewHeight)
                             }
                             
                             let tag = UITapGestureRecognizer { sender in
@@ -146,7 +146,7 @@ public class PTLaunchAdMonitor: NSObject {
                             v.insertSubview(imageBtn, at: 0)
                             imageBtn.snp.makeConstraints { make in
                                 make.left.top.right.equalToSuperview()
-                                make.bottom.equalToSuperview().inset(bottomViewHeight!)
+                                make.bottom.equalToSuperview().inset(bottomViewHeight)
                             }
                             imageBtn.imageView?.clipsToBounds = true
                             imageBtn.imageView?.contentMode = PTLaunchAdMonitor.share.imageContentMode
@@ -161,8 +161,10 @@ public class PTLaunchAdMonitor: NSObject {
                         make.size.equalTo(buttonWidth)
                     }
                     self.skipButton.viewCorner(radius: buttonWidth / 2)
-                    self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "") {
-                        self.hideView(sender: self.skipButton)
+                    PTGCDManager.gcdMain {
+                        self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "") {
+                            self.hideView(sender: self.skipButton)
+                        }
                     }
                 case .Video:
                     if let videoUrl = media as? URL {
@@ -173,7 +175,7 @@ public class PTLaunchAdMonitor: NSObject {
                         v.insertSubview((self.player?.view)!, at: 0)
                         self.player?.view.snp.makeConstraints({ make in
                             make.left.top.right.equalToSuperview()
-                            make.bottom.equalToSuperview().inset(bottomViewHeight!)
+                            make.bottom.equalToSuperview().inset(bottomViewHeight)
                         })
                         self.player?.player?.play()
                     }
@@ -186,7 +188,7 @@ public class PTLaunchAdMonitor: NSObject {
                     v.addSubview(imageBtn)
                     imageBtn.snp.makeConstraints { make in
                         make.left.top.right.equalToSuperview()
-                        make.bottom.equalToSuperview().inset(bottomViewHeight!)
+                        make.bottom.equalToSuperview().inset(bottomViewHeight)
                     }
                     
                     self.skipButton.setTitle("PT Button skip".localized(), for: .normal)
@@ -226,7 +228,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
 
-    fileprivate func hideView(sender:UIButton) {
+    @MainActor fileprivate func hideView(sender:UIButton) {
         let sup = sender.superview
         sup?.isUserInteractionEnabled = false
         

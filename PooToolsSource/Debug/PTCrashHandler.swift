@@ -147,12 +147,12 @@ func ClearSignalRigister() {
 public class PTCrashHandler {
     public var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)?
 
-    static let shared = PTCrashHandler()
+    @MainActor static let shared = PTCrashHandler()
 
     let uncaughtExceptionHandler: CrashUncaughtExceptionHandler
     let signalExceptionHandler: CrashSignalExceptionHandler
 
-    public init() {
+    @MainActor public init() {
         self.uncaughtExceptionHandler = CrashUncaughtExceptionHandler()
         self.signalExceptionHandler = CrashSignalExceptionHandler()
 

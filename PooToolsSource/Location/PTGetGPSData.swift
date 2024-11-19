@@ -46,8 +46,8 @@ public class PTGetGPSData: NSObject {
     }
 }
 
-extension PTGetGPSData:CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
+    @MainActor public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         
         UIAlertController.base_alertVC(title:String.LocationAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.location(access: .always)),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { _, _ in
             PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
@@ -94,7 +94,7 @@ extension PTGetGPSData:CLLocationManagerDelegate {
         }
     }
     
-    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    @MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
             PTGCDManager.gcdMain {
                 // 在主线程上更新UI或执行其他操作

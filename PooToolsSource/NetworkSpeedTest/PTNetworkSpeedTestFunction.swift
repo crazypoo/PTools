@@ -113,7 +113,7 @@ public class PTNetworkSpeedTestFunction: NSObject {
 
 // MARK: URLSessionTaskDelegate && URLSessionTaskDelegate methods
 extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDelegate {
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+    @MainActor public func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
         if task == downloadTask {
             let latency = (downloadStartTime! - tapStartTime!) * 1000
             latencyValue = latency

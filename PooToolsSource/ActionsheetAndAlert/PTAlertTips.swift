@@ -45,7 +45,7 @@ public enum PTAlertTipControl {
         }
     }
     
-    public static func dismissAllAlerts(completion: PTActionTask? = nil) {
+    @MainActor public static func dismissAllAlerts(completion: PTActionTask? = nil) {
         
         var alertViews: [PTAlertTipsProtocol] = []
         
