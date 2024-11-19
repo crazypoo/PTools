@@ -277,19 +277,29 @@ public extension UICollectionView {
                 currentCellWidth = (screenWidth - itemOriginalX * 2)
             }
             
-            let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
-                        
             let customItem = NSCollectionLayoutGroupCustomItem(
                 frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight),
                 zIndex: 1000 + index
             )
             
-            if totalWidth >= (screenWidth - itemOriginalX * 2) {
-                groupWidth = itemOriginalX
-                groupHeight += (itemTrailingSpace + itemHeight)
-                columnCount += 1
-            } else {
-                groupWidth += (currentCellWidth + itemLeadingSpace)
+            groupWidth += currentCellWidth + itemLeadingSpace
+            
+            let next = (index + 1)
+            if next <= (data.count - 1) {
+                var nextCellWidth = UIView.sizeFor(string: data[next].name, font: data[next].contentFont, height: itemHeight).width + itemContentSpace + (data[next].haveImage ? (data[next].imageWidth + data[next].contentSpace) : 0)
+                if nextCellWidth >= (screenWidth - itemOriginalX * 2) {
+                    nextCellWidth = (screenWidth - itemOriginalX * 2)
+                }
+
+                let totalWidth = groupWidth + nextCellWidth + itemLeadingSpace
+                
+                if totalWidth >= (screenWidth - itemOriginalX * 2) {
+                    groupWidth = itemOriginalX
+                    groupHeight += (itemTrailingSpace + itemHeight)
+                    columnCount += 1
+                } else {
+                    groupWidth += (currentCellWidth + itemLeadingSpace)
+                }
             }
 
             customers.append(customItem)
