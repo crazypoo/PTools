@@ -326,7 +326,7 @@ public class PTCollectionView: UIView {
         switch viewConfig.viewType {
         case .Gird:
             group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows!,
+                data: sectionModel.rows,
                 groupWidth: screenWidth,
                 itemHeight: viewConfig.itemHeight,
                 cellRowCount: viewConfig.rowCount,
@@ -338,7 +338,7 @@ public class PTCollectionView: UIView {
             )
         case .Normal:
             group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows!,
+                data: sectionModel.rows,
                 groupWidth: screenWidth,
                 itemHeight: viewConfig.itemHeight,
                 cellRowCount: 1,
@@ -349,7 +349,7 @@ public class PTCollectionView: UIView {
             )
         case .WaterFall:
             group = UICollectionView.waterFallLayout(
-                data: sectionModel.rows!,
+                data: sectionModel.rows,
                 screenWidth: screenWidth,
                 rowCount: viewConfig.rowCount,
                 itemOriginalX: viewConfig.itemOriginalX,
@@ -361,7 +361,7 @@ public class PTCollectionView: UIView {
             )
         case .Horizontal:
             group = UICollectionView.horizontalLayout(
-                data: sectionModel.rows!,
+                data: sectionModel.rows,
                 itemOriginalX: viewConfig.itemOriginalX,
                 itemWidth: viewConfig.itemWidth,
                 itemHeight: viewConfig.itemHeight,
@@ -371,7 +371,7 @@ public class PTCollectionView: UIView {
             )
         case .HorizontalLayoutSystem:
             group = UICollectionView.horizontalLayoutSystem(
-                data: sectionModel.rows!,
+                data: sectionModel.rows,
                 itemOriginalX: viewConfig.itemOriginalX,
                 itemWidth: viewConfig.itemWidth,
                 itemHeight: viewConfig.itemHeight,
@@ -382,7 +382,7 @@ public class PTCollectionView: UIView {
         case .Tag:
             let tagDatas = sectionModel.rows!.map( { $0.dataModel })
             if tagDatas is [PTTagLayoutModel] {
-                group = UICollectionView.tagShowLayout(data: tagDatas as! [PTTagLayoutModel],screenWidth: self.frame.width,itemOriginalX: viewConfig.itemOriginalX,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace,itemTrailingSpace: viewConfig.cellTrailingSpace,itemContentSpace: viewConfig.tagCellContentSpace)
+                group = UICollectionView.tagShowLayout(data: tagDatas as? [PTTagLayoutModel],screenWidth: self.frame.width,itemOriginalX: viewConfig.itemOriginalX,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace,itemTrailingSpace: viewConfig.cellTrailingSpace,itemContentSpace: viewConfig.tagCellContentSpace)
             } else {
                 group = NSCollectionLayoutGroup.init(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1)))
                 fatalError("如果是Tag,則datamodel必須是PTTagLayoutModel")
