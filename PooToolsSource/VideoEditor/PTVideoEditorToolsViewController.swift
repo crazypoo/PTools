@@ -19,6 +19,36 @@ import ZXNavigationBar
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
 
+actor ImageStore {
+    private var images: [CGImage] = []
+    
+    func append(_ image: CGImage) {
+        images.append(image)
+    }
+    
+    func getImages() -> [CGImage] {
+        return images
+    }
+    
+    var count: Int {
+        return images.count
+    }
+}
+
+actor ErrorStore {
+    private var error: Error?
+    
+    func set(_ newError: Error) {
+        if error == nil {
+            error = newError
+        }
+    }
+    
+    func get() -> Error? {
+        return error
+    }
+}
+
 extension UIImage {
     func rotate(radians: Float) -> UIImage? {
         var newSize = CGRect(origin: .zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
@@ -1113,36 +1143,52 @@ fileprivate extension PTVideoEditorToolsViewController {
                     numberOfFrames: Int) -> [NSValue] {
         let timeIncrement = (asset.duration.seconds * 1000) / Double(numberOfFrames)
         var timesForThumbnails = [CMTime]()
-
+        
         for index in 0..<numberOfFrames {
             let cmTime = CMTime(value: Int64(timeIncrement * Float64(index)), timescale: 1000)
             timesForThumbnails.append(cmTime)
         }
-
+        
         return timesForThumbnails.map(NSValue.init)
     }
-    
+        
     func videoTimeline(for asset: AVAsset,
                        in bounds: CGRect,
                        numberOfFrames: Int) async throws -> [CGImage] {
-        try! await withUnsafeThrowingContinuation { continuation in
+        try await withUnsafeThrowingContinuation { continuation in
             let generator = AVAssetImageGenerator(asset: asset)
-            var images = [CGImage]()
             let times = self.frameTimes(for: asset, numberOfFrames: numberOfFrames)
-
+            
             generator.appliesPreferredTrackTransform = true
-            generator.maximumSize = .zero // TODO
-
-            generator.generateCGImagesAsynchronously(forTimes: times) { _, cgImage, _, result, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                } else if let cgImage = cgImage {
-                    images.append(cgImage)
-                    if images.count == numberOfFrames {
-                        continuation.resume(returning: images)
+            generator.maximumSize = .zero
+            
+            let imageStore = ImageStore()
+            let errorStore = ErrorStore()
+            let group = DispatchGroup()
+            
+            for time in times {
+                group.enter()
+                generator.generateCGImagesAsynchronously(forTimes: [time]) { _, cgImage, _, _, error in
+                    Task {
+                        if let error = error {
+                            await errorStore.set(error)
+                        } else if let cgImage = cgImage {
+                            await imageStore.append(cgImage)
+                        }
+                        group.leave()
                     }
-                } else {
-                    continuation.resume(throwing: NSError(domain: "Error while generating CGImages", code: 0))
+                }
+            }
+            
+            group.notify(queue: .main) {
+                Task {
+                    if let error = await errorStore.get() {
+                        continuation.resume(throwing: error)
+                    } else if await imageStore.count == numberOfFrames {
+                        continuation.resume(returning: await imageStore.getImages())
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "Error while generating CGImages", code: 0))
+                    }
                 }
             }
         }

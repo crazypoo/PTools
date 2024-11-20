@@ -238,19 +238,12 @@ public class PTCheckUpdateFunction: NSObject {
                           cancelBlock: PTActionTask? = nil,
                           doneTitle:String,
                           doneBlock: PTActionTask? = nil,
-                          tipContentView:((_ contentView:UIView)->Void)?) {
+                          tipContentView:((_ contentView:UIView)->Void)? = nil) {
         let tipsControl = PTUpdateTipsViewController(titleString: tipsTitle,cancelTitle: cancelTitle, doneTitle: doneTitle)
         tipsControl.modalPresentationStyle = .formSheet
-        if cancelBlock != nil {
-            tipsControl.cancelTask = cancelBlock!
-        }
-        if doneBlock != nil {
-            tipsControl.doneTask = doneBlock!
-        }
-
-        if tipContentView != nil {
-            tipContentView!(tipsControl.contentView)
-        }
+        tipsControl.cancelTask = cancelBlock
+        tipsControl.doneTask = doneBlock
+        tipContentView?(tipsControl.contentView)
         PTUtils.getCurrentVC().pt_present(tipsControl, animated: true, completion: nil)
     }
     

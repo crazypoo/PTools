@@ -113,8 +113,8 @@ class PTUpdateTipsContentView : UIView {
 
 class PTUpdateTipsViewController: PTBaseViewController {
 
-    var doneTask:PTActionTask!
-    var cancelTask:PTActionTask!
+    var doneTask:PTActionTask?
+    var cancelTask:PTActionTask?
 
     lazy var whiteView : UIView = {
         let view = UIView()
@@ -149,7 +149,7 @@ class PTUpdateTipsViewController: PTBaseViewController {
         view.viewCorner(radius: 5,borderWidth: 1,borderColor: .black)
         view.addActionHandlers { sender in
             self.dismiss(animated: true) {
-                self.cancelTask()
+                self.cancelTask?()
             }
         }
         return view
@@ -164,7 +164,7 @@ class PTUpdateTipsViewController: PTBaseViewController {
         view.viewCorner(radius: 5)
         view.addActionHandlers { sender in
             self.dismiss(animated: true) {
-                self.doneTask()
+                self.doneTask?()
             }
         }
         return view

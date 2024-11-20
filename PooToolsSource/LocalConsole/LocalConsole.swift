@@ -977,7 +977,9 @@ public class LocalConsole: NSObject {
             
             dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] timer in
 
-                guard terminal?.systemText?.panGestureRecognizer.numberOfTouches == 0 else {
+                guard DispatchQueue.main.sync(execute: {
+                    terminal?.systemText?.panGestureRecognizer.numberOfTouches ?? 0
+                }) == 0 else {
                     return
                 }
 

@@ -63,12 +63,10 @@ public extension PTPOP where Base: AVAssetExportSession {
         exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
         // 异步导出
         exportSession.exportAsynchronously {
-            PTGCDManager.gcdMain {
-                if exportSession.status == .completed {
-                    handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
-                } else {
-                    handler(exportSession, duration, "", "")
-                }
+            if exportSession.status == .completed {
+                handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
+            } else {
+                handler(exportSession, duration, "", "")
             }
         }
     }

@@ -36,20 +36,18 @@ public struct Exporter {
             export.videoComposition = videoComposition
             export.exportAsynchronously { [weak export] in
                 guard let export = export else { return }
-                PTGCDManager.gcdMain {
-                    switch export.status {
-                    case .failed:
-                        if let error = export.error {
-                            complete(.failure(Exporter.Error.error(error)))
-                        } else {
-                            complete(.failure(Exporter.Error.unknown))
-                        }
-                    case .completed:
-                        complete(.success(provider.outputURL))
-                    default:
-                        complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
-                        break
+                switch export.status {
+                case .failed:
+                    if let error = export.error {
+                        complete(.failure(Exporter.Error.error(error)))
+                    } else {
+                        complete(.failure(Exporter.Error.unknown))
                     }
+                case .completed:
+                    complete(.success(provider.outputURL))
+                default:
+                    complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
+                    break
                 }
             }
         } catch {

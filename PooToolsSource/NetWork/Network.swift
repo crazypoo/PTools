@@ -350,7 +350,7 @@ public class Network: NSObject {
         return nil
     }
     
-    public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: PTActionTask? = nil) {
+    public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {
         Network.manager.cancelAllRequests(completingOnQueue: queue, completion: completion)
     }
     
