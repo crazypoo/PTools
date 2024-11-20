@@ -18,39 +18,25 @@ public class PCleanCache: NSObject {
     // MARK: 获取缓存容量
     /// 获取缓存容量
     /// - Returns: 容量字符串
-    class public func getCacheSize() -> String {
+    @MainActor
+    public class func getCacheSize() async -> String {
         var totalSize: Float = 0
-        let dispatchGroup = DispatchGroup()
-        let queue = DispatchQueue(label: "com.pt.totalsize.sync")
 
         // 计算本地文件缓存大小
         totalSize += calculateLocalCacheSize()
         
         // 计算 SDWebImage 缓存大小
         #if canImport(SDWebImage)
-        dispatchGroup.enter()
-        queue.sync {
-            totalSize += Float(SDImageCache.shared.totalDiskSize())
-        }
-        dispatchGroup.leave()
+        totalSize += Float(SDImageCache.shared.totalDiskSize())
         #endif
         
         // 计算 Kingfisher 缓存大小
-        dispatchGroup.enter()
-        ImageCache.default.calculateDiskStorageSize { result in
-            switch result {
-            case .success(let size):
-                queue.sync {
-                    totalSize += Float(size)
-                }
-            case .failure(let error):
-                PTNSLogConsole("Kingfisher: \(error)", levelType: .Error, loggerType: .CleanCache)
-            }
-            dispatchGroup.leave()
+        do {
+            let size = try await ImageCache.default.diskStorageSize
+            totalSize += Float(size)
+        } catch {
+            PTNSLogConsole("Kingfisher: \(error)", levelType: .Error, loggerType: .CleanCache)
         }
-        
-        // 等待所有异步任务完成
-        dispatchGroup.wait()
         
         return formatSize(totalSize)
     }
@@ -58,34 +44,30 @@ public class PCleanCache: NSObject {
     // MARK: 清理缓存
     /// 清理缓存
     /// - Returns: 是否清理完成
-    class public func clearCaches() -> Bool {
+    @MainActor
+    public class func clearCaches() async -> Bool {
         var flag = false
-        let dispatchGroup = DispatchGroup()
-        let queue = DispatchQueue(label: "com.pt.flag.sync")
 
         // 清理本地文件缓存
         flag = clearLocalCaches()
         
         // 清理 SDWebImage 缓存
         #if canImport(SDWebImage)
-        dispatchGroup.enter()
-        SDImageCache.shared.clearDisk {
-            flag = true
-            dispatchGroup.leave()
+        await withCheckedContinuation { continuation in
+            SDImageCache.shared.clearDisk {
+                flag = true
+                continuation.resume()
+            }
         }
         #endif
         
         // 清理 Kingfisher 缓存
-        dispatchGroup.enter()
-        ImageCache.default.clearDiskCache {
-            queue.sync {
-                flag = true
-            }
-            dispatchGroup.leave()
+        do {
+            try await ImageCache.default.clearDiskCache()
+            flag = true
+        } catch {
+            PTNSLogConsole("Kingfisher: \(error)", levelType: .Error, loggerType: .CleanCache)
         }
-        
-        // 等待所有清理任务完成
-        dispatchGroup.wait()
         
         if !flag {
             PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除", levelType: .Info, loggerType: .CleanCache)

@@ -145,13 +145,11 @@ public class PTMediaLibManager:NSObject {
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
         }) { suc, _ in
-            PTGCDManager.gcdMain {
-                if suc {
-                    let asset = PTMediaEditManager.getAsset(from: placeholderAsset?.localIdentifier)
-                    completion?(suc, asset)
-                } else {
-                    completion?(false, nil)
-                }
+            if suc {
+                let asset = PTMediaEditManager.getAsset(from: placeholderAsset?.localIdentifier)
+                completion?(suc, asset)
+            } else {
+                completion?(false, nil)
             }
         }
     }
@@ -167,9 +165,7 @@ public class PTMediaLibManager:NSObject {
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
         option.progressHandler = { pro, error, stop, info in
-            PTGCDManager.gcdMain {
-                progress?(CGFloat(pro), error, stop, info)
-            }
+            progress?(CGFloat(pro), error, stop, info)
         }
         
         return PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { image, info in
@@ -202,9 +198,7 @@ public class PTMediaLibManager:NSObject {
         option.resizeMode = .fast
         option.deliveryMode = .highQualityFormat
         option.progressHandler = { pro, error, stop, info in
-            PTGCDManager.gcdGobal {
-                progress?(CGFloat(pro), error, stop, info)
-            }
+            progress?(CGFloat(pro), error, stop, info)
         }
                 
         return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: option) { data, _, _, info in
@@ -357,19 +351,15 @@ public class PTMediaLibManager:NSObject {
         if asset.pt.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: options, exportPreset: AVAssetExportPresetHighestQuality) { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
-                PTGCDManager.gcdMain {
-                    if let avAsset = session?.asset {
-                        completion(avAsset, info)
-                    } else {
-                        completion(nil, info)
-                    }
+                if let avAsset = session?.asset {
+                    completion(avAsset, info)
+                } else {
+                    completion(nil, info)
                 }
             }
         } else {
             return PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, info in
-                PTGCDManager.gcdMain {
-                    completion(avAsset, info)
-                }
+                completion(avAsset, info)
             }
         }
     }
@@ -378,31 +368,25 @@ public class PTMediaLibManager:NSObject {
         let option = PHVideoRequestOptions()
         option.isNetworkAccessAllowed = true
         option.progressHandler = { pro, error, stop, info in
-            PTGCDManager.gcdMain {
-                progress?(CGFloat(pro), error, stop, info)
-            }
+            progress?(CGFloat(pro), error, stop, info)
         }
         
         if asset.pt.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { session, info in
                 // iOS11 and earlier, callback is not on the main thread.
-                PTGCDManager.gcdMain {
-                    let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                    if let avAsset = session?.asset {
-                        let item = AVPlayerItem(asset: avAsset)
-                        completion(item, info, isDegraded)
-                    } else {
-                        completion(nil, nil, true)
-                    }
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                if let avAsset = session?.asset {
+                    let item = AVPlayerItem(asset: avAsset)
+                    completion(item, info, isDegraded)
+                } else {
+                    completion(nil, nil, true)
                 }
             })
         } else {
             return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { item, info in
                 // iOS11 and earlier, callback is not on the main thread.
-                PTGCDManager.gcdMain {
-                    let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                    completion(item, info, isDegraded)
-                }
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                completion(item, info, isDegraded)
             }
         }
     }

@@ -105,7 +105,7 @@ public class PTUnavailableFunction: NSObject {
 
     // MARK: - Helper Methods
     
-    @MainActor private func createEmptyConfig() -> UIContentUnavailableConfiguration {
+    private func createEmptyConfig() -> UIContentUnavailableConfiguration {
         var config = UIContentUnavailableConfiguration.empty()
 
         if let mainTitle = emptyViewConfig.mainTitleAtt {
@@ -122,7 +122,9 @@ public class PTUnavailableFunction: NSObject {
         if !emptyViewConfig.buttonTitle.isEmpty {
             config.button = self.emptyButtonConfig
             config.buttonProperties.primaryAction = UIAction { [weak self] _ in
-                self?.emptyTap?()
+                Task { @MainActor in
+                    self?.emptyTap?()
+                }
             }
         }
         

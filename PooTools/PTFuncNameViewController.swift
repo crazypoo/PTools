@@ -610,9 +610,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     })
                 } else if itemRow.title == .cleanCache {
                     PTGCDManager.gcdGobal(qosCls: .background) {
-                        let result = PCleanCache.clearCaches()
-                        PTGCDManager.gcdMain {
-                            if result {
+                        Task {
+                            let isCleared = await PCleanCache.clearCaches()
+                            if isCleared {
                                 UIAlertController.gobal_drop(title: "清理成功")
                                 self.showCollectionViewData()
                             } else {
@@ -1240,8 +1240,12 @@ class PTFuncNameViewController: PTBaseViewController {
     }
     
     func showCollectionViewData() {
-        PTGCDManager.gcdGobal {
-            self.cacheSize = PCleanCache.getCacheSize()
+        Task {
+            // 獲取緩存大小
+            let cacheSize = await PCleanCache.getCacheSize()
+            self.cacheSize = cacheSize
+            
+            // 切換到主線程更新 UI
             PTGCDManager.gcdMain {
                 self.collectionView.showCollectionDetail(collectionData: self.cSections())
             }

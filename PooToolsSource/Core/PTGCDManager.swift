@@ -183,17 +183,13 @@ public class PTGCDManager :NSObject {
         timer.schedule(deadline: .now(), repeating: .seconds(1))
         timer.setEventHandler {
             semaphore.wait()
-            PTGCDManager.gcdGobal {
-                newCount -= 1
-                finishBlock(false,newCount)
+            newCount -= 1
+            finishBlock(false,newCount)
+            semaphore.signal()
+            if newCount < 1 {
+                timer.cancel()
+                finishBlock(true,0)
                 semaphore.signal()
-                if newCount < 1 {
-                    PTGCDManager.gcdMain {
-                        finishBlock(true,0)
-                    }
-                    timer.cancel()
-                    semaphore.signal()
-                }
             }
         }
         timer.resume()

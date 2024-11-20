@@ -1058,17 +1058,17 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
             Task {
                 do {
-                    let timeLineViewRect = await CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
+                    let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
                     let cgImages = try await self.videoTimeline(for: self.avPlayer.currentItem!.asset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
-                    await self.timeLineScroll.contentSize = await CGSize(width: self.view.bounds.width, height: 64.0)
-                    await self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
-                    await self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                    self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
+                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
                     
                     let width: CGFloat = 2.0
                     let height: CGFloat = 160.0
-                    let x = await self.timeLineContent.bounds.midX - width / 2
-                    let y = await (self.timeLineContent.bounds.height - height) / 2
-                    await self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+                    let x = self.timeLineContent.bounds.midX - width / 2
+                    let y = (self.timeLineContent.bounds.height - height) / 2
+                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
 
                 } catch {
                     PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)

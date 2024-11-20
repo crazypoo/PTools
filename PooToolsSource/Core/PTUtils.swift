@@ -409,7 +409,7 @@ public extension PTUtils {
         }
     }
 
-    class func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
+    @MainActor class func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
 #if POOTOOLS_DEBUG
         let share = LocalConsole.shared
         if share.isVisiable {

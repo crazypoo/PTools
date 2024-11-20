@@ -10,7 +10,7 @@ import UIKit
 
 enum PTCrashManager {
 
-    static func register() {
+    @MainActor static func register() {
         PTCrashHandler.shared.prepare()
     }
 

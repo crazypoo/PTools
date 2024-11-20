@@ -168,7 +168,7 @@ public class LocalConsole: NSObject {
     public var leakCallback: ((PTPerformanceLeak) -> Void)?
     public var networkStatus = ""
 
-    public var isVisiable:Bool = PTCoreUserDefultsWrapper.AppDebugMode {
+    @MainActor public var isVisiable:Bool = PTCoreUserDefultsWrapper.AppDebugMode {
         didSet {
             guard oldValue != isVisiable else { return }
             PTCoreUserDefultsWrapper.AppDebugMode = isVisiable
@@ -303,7 +303,7 @@ public class LocalConsole: NSObject {
         }
     }
     
-    private func watcherInit() {
+    @MainActor private func watcherInit() {
         Inspector.sharedInstance.start()
         UIView.swizzleMethods()
         UIWindow.db_swizzleMethods()
@@ -977,7 +977,7 @@ public class LocalConsole: NSObject {
             
             dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] timer in
 
-                guard terminal!.systemText!.panGestureRecognizer.numberOfTouches == 0 else {
+                guard terminal?.systemText?.panGestureRecognizer.numberOfTouches == 0 else {
                     return
                 }
 

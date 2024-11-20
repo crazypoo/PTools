@@ -227,28 +227,26 @@ public class PTHeartRateViewController: PTBaseViewController {
     }
 
     private func startMeasurement() {
-        PTGCDManager.gcdMain {
-            self.toggleTorch(status: true)
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] (timer) in
-                guard let self = self else { return }
-                let average = self.pulseDetector.getAverage()
-                let pulse = 60.0/average
-                if pulse == -60 {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.pulseRate.alpha = 0
-                    }) { (finished) in
-                        self.pulseRate.isHidden = finished
-                    }
-                } else {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.pulseRate.alpha = 1.0
-                    }) { (_) in
-                        self.pulseRate.isHidden = false
-                        self.pulseRate.text = "\(lroundf(pulse)) BPM"
-                    }
+        self.toggleTorch(status: true)
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] (timer) in
+            guard let self = self else { return }
+            let average = self.pulseDetector.getAverage()
+            let pulse = 60.0/average
+            if pulse == -60 {
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.pulseRate.alpha = 0
+                }) { (finished) in
+                    self.pulseRate.isHidden = finished
                 }
-            })
-        }
+            } else {
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.pulseRate.alpha = 1.0
+                }) { (_) in
+                    self.pulseRate.isHidden = false
+                    self.pulseRate.text = "\(lroundf(pulse)) BPM"
+                }
+            }
+        })
     }    
 }
 

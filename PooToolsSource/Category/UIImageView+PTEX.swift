@@ -235,15 +235,13 @@ public extension UIImageView {
         let loader: UIView? = showLoader ? createLoader(from: customLoader) : nil
         
         let task = session.dataTask(with: url) { [weak self] data, _, error in
-            PTGCDManager.gcdMain {
-                loader?.removeFromSuperview()
-                self?.parseDownloadedGif(url: url,
-                                        data: data,
-                                        error: error,
-                                        manager: manager,
-                                        loopCount: loopCount,
-                                        levelOfIntegrity: levelOfIntegrity)
-            }
+            loader?.removeFromSuperview()
+            self?.parseDownloadedGif(url: url,
+                                    data: data,
+                                    error: error,
+                                    manager: manager,
+                                    loopCount: loopCount,
+                                    levelOfIntegrity: levelOfIntegrity)
         }
         
         task.resume()

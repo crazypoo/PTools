@@ -77,13 +77,11 @@ public class PTMediaEditManager:NSObject {
         }
         var placeholderAsset: PHObjectPlaceholder?
         let completionHandler: (Bool, Error?) -> Void = { suc, _ in
-            PTGCDManager.gcdMain {
-                if suc {
-                    let asset = getAsset(from: placeholderAsset?.localIdentifier)
-                    completion?(suc, asset)
-                } else {
-                    completion?(false, nil)
-                }
+            if suc {
+                let asset = getAsset(from: placeholderAsset?.localIdentifier)
+                completion?(suc, asset)
+            } else {
+                completion?(false, nil)
             }
         }
 

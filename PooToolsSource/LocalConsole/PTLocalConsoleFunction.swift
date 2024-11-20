@@ -11,7 +11,7 @@ import UIKit
 public class PTLocalConsoleFunction: NSObject {
     static public let share = PTLocalConsoleFunction()
     
-    public var localconsole : LocalConsole = {
+    @MainActor public var localconsole : LocalConsole = {
         let local = LocalConsole.shared
         return local
     }()

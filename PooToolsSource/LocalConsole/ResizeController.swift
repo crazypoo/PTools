@@ -22,7 +22,7 @@ class ResizeController {
                                           y: (UIScreen.main.nativeBounds.height / 2).rounded() / UIScreen.main.scale
                                             + (UIScreen.hasRoundedCorners ? 0 : 24))
         
-    lazy var consoleOutlineView: UIView = {
+    @MainActor lazy var consoleOutlineView: UIView = {
         
         let consoleViewReference = LocalConsole.shared.terminal!
         
@@ -48,7 +48,7 @@ class ResizeController {
     
     lazy var bottomGrabberPillView = UIView()
     
-    lazy var bottomGrabber: UIView = {
+    @MainActor lazy var bottomGrabber: UIView = {
         let view = UIView()
         AppWindows!.addSubview(view)
         
@@ -78,7 +78,7 @@ class ResizeController {
     
     lazy var rightGrabberPillView = UIView()
     
-    lazy var rightGrabber: UIView = {
+    @MainActor lazy var rightGrabber: UIView = {
         let view = UIView()
         AppWindows!.addSubview(view)
         
@@ -106,7 +106,7 @@ class ResizeController {
         return view
     }()
         
-    var isActive: Bool = false {
+    @MainActor var isActive: Bool = false {
         didSet {
             guard isActive != oldValue else { return }
             
@@ -200,7 +200,7 @@ class ResizeController {
     static let kMinConsoleHeight: CGFloat = systemLog_base_height
     static let kMaxConsoleHeight: CGFloat = 346
     
-    @objc func verticalPanner(recognizer: UIPanGestureRecognizer) {
+    @MainActor @objc func verticalPanner(recognizer: UIPanGestureRecognizer) {
         
         let translation = recognizer.translation(in: bottomGrabber.superview)
         
@@ -267,7 +267,7 @@ class ResizeController {
     static let kMinConsoleWidth: CGFloat = systemLog_base_width
     static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
     
-    @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
+    @MainActor @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
         
         let translation = recognizer.translation(in: bottomGrabber.superview)
         
