@@ -298,8 +298,6 @@ public extension UICollectionView {
                         groupWidth = itemOriginalX
                         groupHeight += (itemTrailingSpace + itemHeight)
                         columnCount += 1
-                    } else {
-                        groupWidth += (currentCellWidth + itemLeadingSpace)
                     }
                 }
 

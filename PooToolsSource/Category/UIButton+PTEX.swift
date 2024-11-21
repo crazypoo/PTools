@@ -151,7 +151,9 @@ public extension UIButton {
             if finish {
                 self.setTitle(originalTitle, for: self.state)
                 self.isUserInteractionEnabled = countdownFinishCanTap
-                timeFinish?()
+                PTGCDManager.gcdMain {
+                    timeFinish?()
+                }
             } else {
                 let strTime = String.init(format: "%.2d", time)
                 let buttonTime = String.init(format: "%@", strTime)

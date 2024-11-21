@@ -73,7 +73,6 @@ public extension UIAlertController {
         actionSheet.actionSheetSelectBlock = otherBlock
         actionSheet.tapBackgroundBlock = tapBackgroundBlock
         PTAlertManager.show(actionSheet)
-
     }
     
     @objc class func baseCustomActionSheet(viewConfig:PTActionSheetViewConfig = PTActionSheetViewConfig(),titleItem:PTActionSheetTitleItem,
@@ -132,9 +131,7 @@ public extension UIAlertController {
         
         if !(cancelBtn!).stringIsEmpty() {
             let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-                if cancel != nil {
-                    cancel!()
-                }
+                cancel?()
             }
             cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
             alert.addAction(cancelAction)
@@ -165,9 +162,7 @@ public extension UIAlertController {
             }
             okBtns?.enumerated().forEach({ (index,value) in
                 let callAction = UIAlertAction(title: value, style: .default) { (action) in
-                    if moreBtn != nil {
-                        moreBtn!(index,value)
-                    }
+                    moreBtn?(index,value)
                 }
                 callAction.setValue(dontArrColor[index], forKey: "titleTextColor")
                 alert.addAction(callAction)
@@ -194,7 +189,7 @@ public extension UIAlertController {
         if alertBGColor != .white {
             alertContentView.backgroundColor = alertBGColor
         }
-                                alertContentView.layer.cornerRadius = alertCornerRadius
+        alertContentView.layer.cornerRadius = alertCornerRadius
         
         showIn!.present(alert, animated: true, completion: nil)
     }
@@ -237,9 +232,7 @@ public extension UIAlertController {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-            if cancel != nil {
-                cancel!()
-            }
+            cancel?()
         }
         cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
         alert.addAction(cancelAction)
@@ -263,9 +256,7 @@ public extension UIAlertController {
             alert.textFields?.enumerated().forEach({ (index,value) in
                 resultDic[value.placeholder!] = value.text
             })
-            if doneBtn != nil {
-                doneBtn!(resultDic)
-            }
+            doneBtn?(resultDic)
         }
         doneAction.setValue(doneBtnColor, forKey: "titleTextColor")
         alert.addAction(doneAction)

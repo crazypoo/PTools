@@ -275,7 +275,6 @@ public class PTCheckUpdateFunction: NSObject {
             let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL.init(string: "https://" + url.description)! : url
             PTAppStoreFunction.jumpLink(url: realURL)
         } tipContentView: { contentView in
-            
             let tipsContent = PTUpdateTipsContentView(oV: oV, nV: nV, descriptionString: descriptionString)
             contentView.addSubview(tipsContent)
             tipsContent.snp.makeConstraints { make in

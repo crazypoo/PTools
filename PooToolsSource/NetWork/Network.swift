@@ -597,7 +597,7 @@ public class Network: NSObject {
         }
         
         // 配置下载存储路径
-        destination = { _ , response in
+        destination = { url , response in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories] )
         }

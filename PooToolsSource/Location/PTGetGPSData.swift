@@ -80,16 +80,22 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
                         self.showChangeCityAlert(newCity: cityStr, oldCity: savedCity)
                     } else {
                         self.setObjectFunction(city: cityStr)
-                        self.selectNewBlock?()
+                        PTGCDManager.gcdMain {
+                            self.selectNewBlock?()
+                        }
                     }
                 } else {
                     self.setObjectFunction(city: cityStr)
-                    self.selectNewBlock?()
+                    PTGCDManager.gcdMain {
+                        self.selectNewBlock?()
+                    }
                 }
             }
             
             if distance > 1000 {
-                self.selectNewBlock?()
+                PTGCDManager.gcdMain {
+                    self.selectNewBlock?()
+                }
             }
         }
     }
@@ -118,8 +124,10 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
                 self.isShow = 0
             } moreBtn: { _, _ in
                 self.setObjectFunction(city: newCity)
-                self.selectNewBlock?()
                 self.isShow = 0
+                PTGCDManager.gcdMain {
+                    self.selectNewBlock?()
+                }
             }
         }
     }
