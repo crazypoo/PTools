@@ -44,9 +44,7 @@ enum StderrCapture {
             let _ = inputPipe.fileHandleForReading.availableData
         })
         
-        PTGCDManager.gcdGobal {
-            synchronizeData.perform()
-        }
+        synchronizeData.perform()
         _ = synchronizeData.wait(timeout: .now() + .milliseconds(10))
     }
 

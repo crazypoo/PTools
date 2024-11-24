@@ -34,20 +34,22 @@ public struct Exporter {
             let (composition, videoComposition) = try setupComposition(options: options, filtering: filtering)
             let export = try setupExportSession(composition: composition, options: options)
             export.videoComposition = videoComposition
-            export.exportAsynchronously { [weak export] in
-                guard let export = export else { return }
-                switch export.status {
-                case .failed:
-                    if let error = export.error {
-                        complete(.failure(Exporter.Error.error(error)))
-                    } else {
-                        complete(.failure(Exporter.Error.unknown))
+            Task {
+                do {
+                    await export.export()
+                    switch export.status {
+                    case .failed:
+                        if let error = export.error {
+                            complete(.failure(Exporter.Error.error(error)))
+                        } else {
+                            complete(.failure(Exporter.Error.unknown))
+                        }
+                    case .completed:
+                        complete(.success(provider.outputURL))
+                    default:
+                        complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
+                        break
                     }
-                case .completed:
-                    complete(.success(provider.outputURL))
-                default:
-                    complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
-                    break
                 }
             }
         } catch {

@@ -82,9 +82,7 @@ public extension PHAsset {
             // 启动下载进度监控
             self.monitorExportProgress(exportSession: self.exportSession!,progressHandler: progress,handler: { finish in
                 if finish {
-                    PTGCDManager.gcdAfter(time: 1.5) {
-                        completion(gotAvasset)
-                    }
+                    completion(gotAvasset)
                 }
             })
         }
@@ -105,15 +103,17 @@ public extension PHAsset {
     
     func monitorExportProgress(exportSession: AVAssetExportSession,progressHandler:@escaping (Float)->Void,handler:@escaping ((Bool)->Void)) {
         // 启动一个定时器来监控进度
+        let progress = exportSession.progress
         self.exportTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-            let progress = exportSession.progress
-            PTNSLogConsole("当前下载进度：\(progress * 100)%")
-            progressHandler(progress)
-            // 当下载完成后，停止定时器
-            if progress >= 1.0 {
-                timer.invalidate()
-                PTNSLogConsole("下载完成")
-                handler(true)
+            Task { @MainActor in
+                PTNSLogConsole("当前下载进度：\(progress * 100)%")
+                progressHandler(progress)
+                // 当下载完成后，停止定时器
+                if progress >= 1.0 {
+                    timer.invalidate()
+                    PTNSLogConsole("下载完成")
+                    handler(true)
+                }
             }
         }
     }

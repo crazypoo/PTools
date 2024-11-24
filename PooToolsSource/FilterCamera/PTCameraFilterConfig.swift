@@ -294,15 +294,16 @@ public class PTCameraFilterConfig: NSObject {
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.outputFileType = PTCameraFilterConfig.share.videoExportType.avFileType
         exportSession.videoComposition = videoComposition
-        exportSession.exportAsynchronously(completionHandler: {
-            let suc = exportSession.status == .completed
-            if exportSession.status == .failed {
-                PTNSLogConsole("PTPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")",levelType: .Error,loggerType: .Filter)
-            }
-            PTGCDManager.gcdMain {
+        Task {
+            do {
+                await exportSession.export()
+                let suc = exportSession.status == .completed
+                if exportSession.status == .failed {
+                    PTNSLogConsole("PTPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")",levelType: .Error,loggerType: .Filter)
+                }
                 completion(suc ? outputUrl : nil, exportSession.error)
             }
-        })
+        }
     }
     
     private static func getNaturalSize(videoTrack: AVAssetTrack) -> CGSize {

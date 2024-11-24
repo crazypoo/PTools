@@ -11,7 +11,7 @@ import SwiftUI
 public extension View {
     func alert(isPresent:Binding<Bool>,view:PTAlertTipsProtocol,completion:PTActionTask? = nil) -> some View {
         if isPresent.wrappedValue {
-            let wrapperCompletion = {
+            let wrapperCompletion:PTActionTask = {
                 isPresent.wrappedValue = false
                 completion?()
             }

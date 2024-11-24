@@ -237,49 +237,50 @@ public final class C7CollectorCamera: C7Collector {
         }
 
         sessionQueue.async {
-            // Ensure the session is stopped completely before reconfiguring
-            self.captureSession.stopRunning()
+            Task {
+                // Ensure the session is stopped completely before reconfiguring
+                self.captureSession.stopRunning()
 
-            do {
-                // Determine the new camera input
-                var newVideoInput: AVCaptureDeviceInput?
-                if currInput.device.position == .back, let front = self.getCamera(position: .front) {
-                    newVideoInput = try AVCaptureDeviceInput(device: front)
-                } else if currInput.device.position == .front, let back = self.getCamera(position: .back) {
-                    newVideoInput = try AVCaptureDeviceInput(device: back)
-                } else {
-                    return
+                do {
+                    // Determine the new camera input
+                    var newVideoInput: AVCaptureDeviceInput?
+                    if currInput.device.position == .back, let front = self.getCamera(position: .front) {
+                        newVideoInput = try AVCaptureDeviceInput(device: front)
+                    } else if currInput.device.position == .front, let back = self.getCamera(position: .back) {
+                        newVideoInput = try AVCaptureDeviceInput(device: back)
+                    } else {
+                        return
+                    }
+
+                    // Start configuring the session
+                    self.captureSession.beginConfiguration()
+
+                    // Remove the current input and clear the reference
+                    self.captureSession.removeInput(currInput)
+                                    
+                    // Attempt to add the new input
+                    if let newVideoInput = newVideoInput, self.captureSession.canAddInput(newVideoInput) {
+                        // Update session preset based on the new device
+                        self.refreshSessionPreset(device: newVideoInput.device)
+                        self.captureSession.addInput(newVideoInput)
+                        self.deviceInput = newVideoInput  // Set the new device input
+                    } else {
+                        // If unable to add, restore the original input
+                        self.refreshSessionPreset(device: currInput.device)
+                        self.captureSession.addInput(currInput)
+                        self.deviceInput = currInput
+                    }
+
+                    // Restart the session after configuration
+                    self.startRunning()
+                    self.captureSession.commitConfiguration()
+                    await handle?()
+                } catch {
+                    PTAlertTipControl.present(title: "PT Alert Opps".localized(),
+                                              subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)",
+                                              icon: .Error,
+                                              style: .Normal)
                 }
-
-                // Start configuring the session
-                self.captureSession.beginConfiguration()
-
-                // Remove the current input and clear the reference
-                self.captureSession.removeInput(currInput)
-                                
-                // Attempt to add the new input
-                if let newVideoInput = newVideoInput, self.captureSession.canAddInput(newVideoInput) {
-                    // Update session preset based on the new device
-                    self.refreshSessionPreset(device: newVideoInput.device)
-                    self.captureSession.addInput(newVideoInput)
-                    self.deviceInput = newVideoInput  // Set the new device input
-                } else {
-                    // If unable to add, restore the original input
-                    self.refreshSessionPreset(device: currInput.device)
-                    self.captureSession.addInput(currInput)
-                    self.deviceInput = currInput
-                }
-
-                // Restart the session after configuration
-                self.startRunning()
-                self.captureSession.commitConfiguration()
-                handle?()
-                
-            } catch {
-                PTAlertTipControl.present(title: "PT Alert Opps".localized(),
-                                          subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)",
-                                          icon: .Error,
-                                          style: .Normal)
             }
         }
     }
@@ -657,18 +658,20 @@ extension C7CollectorCamera: AVCaptureFileOutputRecordingDelegate {
         exportSession.videoComposition = videoComposition
         exportSession.outputFileType = .mp4
         exportSession.outputURL = outputURL
-        
-        exportSession.exportAsynchronously {
-            if let error = exportSession.error {
-                completion(error)
-            } else {
-                PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
-                    if finish {
-                        try? FileManager.default.removeItem(at: outputURL)
-                        try? FileManager.default.removeItem(at: inputURL)
-                        completion(nil)
-                    } else {
-                        completion(error)
+        Task {
+            do {
+                await exportSession.export()
+                if let error = exportSession.error {
+                    completion(error)
+                } else {
+                    PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
+                        if finish {
+                            try? FileManager.default.removeItem(at: outputURL)
+                            try? FileManager.default.removeItem(at: inputURL)
+                            completion(nil)
+                        } else {
+                            completion(error)
+                        }
                     }
                 }
             }

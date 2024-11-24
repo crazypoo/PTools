@@ -184,15 +184,16 @@ class AppDelegate: PTAppWindowsDelegate {
         }
                 
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
-        let networkShare = PTNetWorkStatus.shared
-        PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
-        networkShare.reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
-        networkShare.obtainDataFromLocalWhenNetworkUnconnected { state in
-            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
-        }
-        
-        networkShare.netWork { state in
-            PTNSLogConsole("network:>>>>>>>>>>>>>>>>>>>>\(state)")
+        PTGCDManager.gcdMain {
+            let networkShare = PTNetWorkStatus.shared
+            PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
+            networkShare.reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
+            networkShare.obtainDataFromLocalWhenNetworkUnconnected { state in
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
+            }
+            networkShare.netWork { state in
+                PTNSLogConsole("network:>>>>>>>>>>>>>>>>>>>>\(state)")
+            }
         }
         
 //        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.url(forResource: "heartbeat", withExtension: "svga")

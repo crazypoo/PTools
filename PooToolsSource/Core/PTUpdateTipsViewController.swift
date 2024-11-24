@@ -113,8 +113,8 @@ class PTUpdateTipsContentView : UIView {
 
 class PTUpdateTipsViewController: PTBaseViewController {
 
-    var doneTask:PTActionTask?
-    var cancelTask:PTActionTask?
+    var doneTask:PTActionTask? = nil
+    var cancelTask:PTActionTask? = nil
 
     lazy var whiteView : UIView = {
         let view = UIView()

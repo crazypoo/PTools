@@ -63,15 +63,13 @@ public class PCleanCache: NSObject {
         
         // 清理 Kingfisher 缓存
         do {
-            try await ImageCache.default.clearDiskCache()
+            await ImageCache.default.clearDiskCache()
             flag = true
-        } catch {
-            PTNSLogConsole("Kingfisher: \(error)", levelType: .Error, loggerType: .CleanCache)
         }
         
-        if !flag {
-            PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除", levelType: .Info, loggerType: .CleanCache)
-        }
+//        if !flag {
+//            PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除", levelType: .Info, loggerType: .CleanCache)
+//        }
         
         return flag
     }

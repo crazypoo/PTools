@@ -62,11 +62,14 @@ public extension PTPOP where Base: AVAssetExportSession {
         // 优化网络
         exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
         // 异步导出
-        exportSession.exportAsynchronously {
-            if exportSession.status == .completed {
-                handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
-            } else {
-                handler(exportSession, duration, "", "")
+        Task {
+            do {
+                await exportSession.export()
+                if exportSession.status == .completed {
+                    handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
+                } else {
+                    handler(exportSession, duration, "", "")
+                }
             }
         }
     }
@@ -83,8 +86,9 @@ public extension PTPOP where Base: AVAssetExportSession {
 
         exportSession.outputURL = fileURL
         
-        exportSession.exportAsynchronously {
-            PTGCDManager.gcdMain {
+        Task {
+            do {
+                await exportSession.export()
                 switch exportSession.status {
                 case .completed:
                     result(.completed,nil,fileURL,nil)

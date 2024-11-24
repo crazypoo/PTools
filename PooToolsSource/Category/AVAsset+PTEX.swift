@@ -28,11 +28,15 @@ public extension AVAsset {
                 
                 isExporting = true
                 
-                exportSession.exportAsynchronously {
-                    if exportSession.status == .completed && exportSession.error == nil {
-                        completion(outputURL)
-                    } else {
-                        PTNSLogConsole("导出视频失败")
+                Task {
+                    do {
+                        await exportSession.export()
+                        if exportSession.status == .completed && exportSession.error == nil {
+                            completion(outputURL)
+                        } else {
+                            PTNSLogConsole("导出视频失败")
+                        }
+                        return isExporting
                     }
                 }
                 return isExporting
