@@ -303,7 +303,7 @@ public extension UIAlertController {
                                  cancelString:String? = "PT Button cancel".localized(),
                                  sendString:String? = "PT Button comfirm".localized(),
                                  titleFont:UIFont? = .appfont(size: 18),
-                                 textInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0),
+                                 textInset:UIEdgeInsets? = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0),
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
         let feedBackTitleText:UITextField
@@ -315,7 +315,9 @@ public extension UIAlertController {
         feedBackTitle.font = feedBackTitleFont!
         feedBackTitle.addPaddingLeft(5)
         feedBackTitle.backgroundColor = .clear
-        feedBackTitle.leftSpace = textInset.left
+        if let textInsets = textInset {
+            feedBackTitle.leftSpace = textInsets.left
+        }
         
         feedBackTitleText = feedBackTitle
         #else
@@ -326,12 +328,16 @@ public extension UIAlertController {
         feedBackTitleText.font = feedBackTitleFont!
         feedBackTitleText.addPaddingLeft(5)
         feedBackTitleText.backgroundColor = .clear
-        let lView = UIView(frame: CGRectMake(0, 0, textInset.left, 44))
-        feedBackTitleText.leftView = lView
+        if let textInsets = textInset {
+            let lView = UIView(frame: CGRectMake(0, 0, textInsets.left, 44))
+            feedBackTitleText.leftView = lView
+        }
         #endif
         
         let feedBackContent = UITextView()
-        feedBackContent.textContainerInset = textInset
+        if let textInsets = textInset {
+            feedBackContent.textContainerInset = textInsets
+        }
         feedBackContent.pt_placeholder = feedBackContentPlaceholder!
         feedBackContent.pt_placeholderLabel?.textColor = .lightGray
         feedBackContent.pt_placeholderLabel?.font = feedBackContentFont!

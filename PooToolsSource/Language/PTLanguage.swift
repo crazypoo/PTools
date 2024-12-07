@@ -54,6 +54,7 @@ public class PTLanguage: NSObject {
     }
 }
 
+public typealias ChangedBlock = () -> ()
 // MARK: - 扩展UIViewController
 /**
  1、增加方法快速监听语言切换
@@ -65,7 +66,6 @@ public extension UIViewController {
         static var UIViewControllerBlockKey = 998
     }
     
-    typealias ChangedBlock = () -> ()
     // 动态添加block属性
     private var block: ChangedBlock? {
         get {
@@ -77,13 +77,43 @@ public extension UIViewController {
     }
     
     @objc private func notiLanguageChange(_ noti: Notification) {
-        if block != nil {
-            block!()
-        }
+        block?()
     }
     
     /// 监听切换语言
     func pt_observerLanguage(didChanged block: ChangedBlock?) {
+        NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
+        self.block = block
+    }
+    
+    /// 移除监听
+    func pt_removeObserverLanguage() {
+        NotificationCenter.default.removeObserver(self, name: LanguageDidChangedKey, object: self)
+    }
+}
+
+public extension UIView {
+        
+    private struct AssociatedKeys {
+        static var UIViewBlockKey = 998
+    }
+    
+    // 动态添加block属性
+    private var block: ChangedBlock? {
+        get {
+            (objc_getAssociatedObject(self, &AssociatedKeys.UIViewBlockKey) as! ChangedBlock)
+        }
+        set {
+            return objc_setAssociatedObject(self, &AssociatedKeys.UIViewBlockKey, newValue, .OBJC_ASSOCIATION_COPY)
+        }
+    }
+    
+    @objc private func notiLanguageChange(_ noti: Notification) {
+        block?()
+    }
+    
+    /// 监听切换语言
+    func pt_viewobserverLanguage(didChanged block: ChangedBlock?) {
         NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
         self.block = block
     }
