@@ -344,6 +344,8 @@ public class PTCycleScrollView: UIView {
         return view
     }()
             
+    fileprivate var videoFrameCache = NSCache<NSString, UIImage>()
+
     /// Init
     /// - Parameter frame: CGRect
     override internal init(frame: CGRect) {
@@ -654,46 +656,53 @@ extension PTCycleScrollView {
         }
     }
     
+    func getVideoFrame(for url: String, completion: @escaping (UIImage?) -> Void) {
+        if let cachedImage = videoFrameCache.object(forKey: url as NSString) {
+            completion(cachedImage)
+            return
+        }
+        
+        PTGCDManager.gcdMain {
+            UIImage.pt.getVideoFirstImage(videoUrl: url) { image in
+                if let image = image {
+                    self.videoFrameCache.setObject(image, forKey: url as NSString)
+                    completion(image)
+                } else {
+                    completion(PTAppBaseConfig.share.defaultEmptyImage)
+                }
+            }
+        }
+    }
+    
     func setCellData() {
         for i in 0..<totalItemsCount {
-            let cell = viewWithTag(100 + i) as! PTCycleScrollViewCell
-            // Only Title
-            if self.isOnlyTitle && self.titles.count > 0 {
+            guard let cell = viewWithTag(100 + i) as? PTCycleScrollViewCell else { continue }
+            
+            if self.isOnlyTitle && !self.titles.isEmpty {
                 cell.titleLabelHeight = self.cellHeight
-                
                 let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
                 cell.title = self.titles[itemIndex]
             } else {
-                // Mode
+                // 配置图片模式
                 if let imageViewContentMode = self.imageViewContentMode {
                     cell.imageView.contentMode = imageViewContentMode
                 }
                 
-                // 0==count 占位图
-                if self.imagePaths.count == 0 {
+                if self.imagePaths.isEmpty {
                     cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
                 } else {
                     let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
                     let imagePath = self.imagePaths[itemIndex]
-                    if let videoQ = imagePath as? String {
-                        if videoQ.pathExtension.lowercased() == "mp4" || videoQ.pathExtension.lowercased() == "mov" {
-                            UIImage.pt.getVideoFirstImage(videoUrl: videoQ) { image in
-                                PTGCDManager.gcdMain {
-                                    if let image = image {
-                                        cell.imageView.image = image
-                                        cell.videoLink = videoQ
-                                        if itemIndex == 0 {
-                                            PTGCDManager.gcdAfter(time: 0.1) {
-                                                cell.setPlayer(videoQ: URL(string: videoQ)!)
-                                            }
-                                        }
-                                    } else {
-                                        cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
-                                    }
+                    
+                    if let videoPath = imagePath as? String, videoPath.pathExtension.lowercased() == "mp4" || videoPath.pathExtension.lowercased() == "mov" {
+                        self.getVideoFrame(for: videoPath) { image in
+                            cell.imageView.image = image ?? PTAppBaseConfig.share.defaultPlaceholderImage
+                            cell.videoLink = videoPath
+                            if itemIndex == 0, let url = URL(string: videoPath) {
+                                PTGCDManager.gcdAfter(time: 0.1) {
+                                    cell.setPlayer(videoQ: url)
                                 }
                             }
-                        } else {
-                            self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
                         }
                     } else {
                         self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)

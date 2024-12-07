@@ -33,6 +33,7 @@ import UIKit
 
 // Noti Key: 语言已切换
 public let LanguageDidChangedKey = PTLanguage.didChangedKey
+public typealias ChangedBlock = () -> ()
 
 // MARK: - BKLanguage 语言切换管理类
 public class PTLanguage: NSObject {
@@ -54,7 +55,6 @@ public class PTLanguage: NSObject {
     }
 }
 
-public typealias ChangedBlock = () -> ()
 // MARK: - 扩展UIViewController
 /**
  1、增加方法快速监听语言切换
@@ -113,7 +113,7 @@ public extension UIView {
     }
     
     /// 监听切换语言
-    func pt_viewobserverLanguage(didChanged block: ChangedBlock?) {
+    func pt_viewObserverLanguage(didChanged block: ChangedBlock?) {
         NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
         self.block = block
     }
