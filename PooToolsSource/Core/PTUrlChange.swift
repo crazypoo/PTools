@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 public class PTUrlChange: NSObject {
     public class func unicodeURLChange_chinese(url:String)->String {
-        url.addingPercentEncoding(withAllowedCharacters: Foundation.CharacterSet.lowercaseLetters)!
+        url.urlToUnicodeURLString(characters: Foundation.CharacterSet.lowercaseLetters)!
     }
     
     public class func getRange(text: String, findText: String) -> [Int] {

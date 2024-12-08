@@ -212,7 +212,7 @@ public class PTLaunchAdMonitor: NSObject {
     private func loadImageAtPath(path: Any, completion: @escaping (PTLaunchAdMediaType,Any?) -> Void) {
         if let imagePath = path as? String {
             if imagePath.contentTypeForUrl() == PTUrlStringVideoType.MP4 {
-                let videoUrl = (imagePath as NSString).range(of: "/var").length > 0 ? URL(fileURLWithPath: imagePath) : URL(string: imagePath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+                let videoUrl = (imagePath as NSString).range(of: "/var").length > 0 ? URL(fileURLWithPath: imagePath) : URL(string: imagePath.urlToUnicodeURLString() ?? "")
                 completion(.Video,videoUrl)
             } else {
                 Task {

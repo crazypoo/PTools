@@ -887,7 +887,11 @@ public extension String {
             PTNSLogConsole("正则表达式创建失败: \(error.localizedDescription)")
             return false
         }
-    }    
+    }
+    
+    func urlToUnicodeURLString(characters:CharacterSet = .urlQueryAllowed) -> String? {
+        return self.addingPercentEncoding(withAllowedCharacters: characters)
+    }
 }
 
 fileprivate extension PTUtils {
@@ -1759,8 +1763,8 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
             if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 var queryString: [String] = []
                 for (key, value) in jsonObject {
-                    if let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-                       let encodedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                    if let encodedKey = key.urlToUnicodeURLString(),
+                       let encodedValue = "\(value)".urlToUnicodeURLString() {
                         queryString.append("\(encodedKey)=\(encodedValue)")
                     }
                 }

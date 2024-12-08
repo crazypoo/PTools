@@ -586,9 +586,7 @@ public class Network: NSObject {
         self.fail = fail
         
         if !fileUrl.isURL() || fileUrl.stringIsEmpty() {
-            if self.fail != nil {
-                self.fail?(AFError.invalidURL(url: "https://www.qq.com"))
-            }
+            self.fail?(AFError.invalidURL(url: "https://www.qq.com"))
             return
         }
 

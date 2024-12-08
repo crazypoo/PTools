@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.66.7'
+    s.version     = '3.66.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'DeviceKit'
         subspec.dependency 'UIColor_Hex_Swift'
         subspec.dependency 'AttributedString'
-        subspec.dependency 'YYText'
         subspec.dependency 'UIViewController+Swizzled'
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'FDFullscreenPopGesture'
@@ -210,7 +209,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'CustomerLabel' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'YYText'
         subspec.frameworks = 'QuartzCore'
         subspec.source_files = 'PooToolsSource/Label/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

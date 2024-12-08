@@ -130,7 +130,7 @@ extension PTRouterParser {
     /// 检查URL
     public static func canOpenURLString(_ urlString: String) -> URL? {
         
-        let urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let urlString = urlString.urlToUnicodeURLString()
         guard let encodeString = urlString, encodeString.count > 0 else {
             return nil
         }

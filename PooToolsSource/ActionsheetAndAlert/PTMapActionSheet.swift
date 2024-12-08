@@ -64,17 +64,17 @@ open class PTMapActionSheet: NSObject {
         } cancelBlock: { sheet in
             dismissTask?()
         } otherBlock: { sheet, index,title in
-            var urlString :NSString = ""
+            var urlString :String = ""
             if navAppName[index] == .BaiduMap {
-                urlString = NSString.init(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", locations.latitude,locations.longitude).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
+                urlString = String(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
             } else if navAppName[index] == .AMap {
-                urlString = NSString.init(format: "iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2", appName,appScheme,locations.latitude,locations.longitude).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
+                urlString = String(format: "iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
             } else if navAppName[index] == .GoogleMap {
-                urlString = NSString.init(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName,appScheme,locations.latitude,locations.longitude).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
+                urlString = String(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
             } else if navAppName[index] == .QQMap {
-                urlString = NSString.init(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey!).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
+                urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey!).urlToUnicodeURLString() ?? ""
             }
-            PTAppStoreFunction.jumpLink(url: URL.init(string: urlString as String)!)
+            PTAppStoreFunction.jumpLink(url: URL(string: urlString)!)
         } tapBackgroundBlock: { sheet in
             dismissTask?()
         }
