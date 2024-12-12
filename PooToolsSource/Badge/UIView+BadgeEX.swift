@@ -55,13 +55,13 @@ extension UIView: PTBadgeProtocol {
         newLabel.textColor = self.badgeTextColor
         newLabel.text = ""
         newLabel.tag = PTBadgeStyle.RedDot.rawValue
-//        newLabel.layer.cornerRadius = CGRectGetHeight(newLabel.frame) / 2
-//        newLabel.layer.masksToBounds = true
         newLabel.isHidden = false
         newLabel.isUserInteractionEnabled = true
-        newLabel.viewCorner(radius: CGRectGetHeight(newLabel.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
         self.addSubview(newLabel)
         self.bringSubviewToFront(newLabel)
+        PTGCDManager.gcdMain {
+            newLabel.viewCorner(radius: CGRectGetHeight(newLabel.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
+        }
         return newLabel
     }
     
@@ -307,7 +307,9 @@ extension UIView: PTBadgeProtocol {
             if self.badge == nil {
                 self.badgeLabelInit()
             } else {
-                self.badge!.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: badgeBorderLine, borderColor: badgeBorderColor)
+                PTGCDManager.gcdMain {
+                    self.badge!.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine, borderColor: self.badgeBorderColor)
+                }
             }
         }
     }
@@ -325,7 +327,9 @@ extension UIView: PTBadgeProtocol {
             if self.badge == nil {
                 self.badgeLabelInit()
             } else {
-                self.badge!.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: badgeBorderLine, borderColor: badgeBorderColor)
+                PTGCDManager.gcdMain {
+                    self.badge!.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine, borderColor: self.badgeBorderColor)
+                }
             }
         }
     }
@@ -371,7 +375,9 @@ extension UIView: PTBadgeProtocol {
             self.badge?.text = ""
             self.badge?.tag = PTBadgeStyle.RedDot.rawValue
             self.resetBadgeForRedDot()
-            self.badge?.layer.cornerRadius = CGRectGetHeight(self.badge?.frame ?? .zero) / 2
+            PTGCDManager.gcdMain {
+                self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
+            }
         }
         self.badge?.isHidden = false
     }
@@ -393,7 +399,9 @@ extension UIView: PTBadgeProtocol {
             self.badge?.frame = frame
             self.badge?.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
             self.badge?.font = .appfont(size: 9)
-            self.badge?.layer.cornerRadius = CGRectGetHeight(self.badge!.frame) / 3
+            PTGCDManager.gcdMain {
+                self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 3,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
+            }
         }
         self.badge?.isHidden = false
     }
@@ -412,7 +420,9 @@ extension UIView: PTBadgeProtocol {
         frame.size.height = frame.size.width
         self.badge?.frame = frame
         self.badge?.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
-        self.badge?.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
+        PTGCDManager.gcdMain {
+            self.badge?.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
+        }
     }
     
     public func clearBadge() {
