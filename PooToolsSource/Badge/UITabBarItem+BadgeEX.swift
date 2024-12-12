@@ -112,6 +112,25 @@ extension UITabBarItem:PTBadgeProtocol {
         }
     }
     
+    public var badgeBorderColor: UIColor {
+        get {
+            self.getActualBadgeSuperView()?.badgeBorderColor ?? .clear
+        }
+        set {
+            self.getActualBadgeSuperView()?.badgeBorderColor = newValue
+        }
+    }
+    
+    public var badgeBorderLine: CGFloat {
+        get {
+            self.getActualBadgeSuperView()?.badgeBorderLine ?? 0
+
+        }
+        set {
+            self.getActualBadgeSuperView()?.badgeBorderLine = newValue
+        }
+    }
+
     public func showBadge() {
         self.getActualBadgeSuperView()?.showBadge()
     }

@@ -47,6 +47,9 @@ public struct PTBadgeAssociatedKeys {
     static var badgeCanDragToDeleteKey = 988
     static var badgeCanDragToDeleteLongPressTimeKey = 987
     static var badgeCanDragToDeleteCallbackKey = 986
+    static var badgeBorderLineKey = 985
+    static var badgeBorderLineColorKey = 984
+
 }
 
 public protocol PTBadgeProtocol {
@@ -59,6 +62,8 @@ public protocol PTBadgeProtocol {
     var aniType:PTBadgeAnimType { get set }
     var badgeMaximumBadgeNumber:Int { get set }
     var badgeRadius:CGFloat { get set }
+    var badgeBorderColor:UIColor { get set }
+    var badgeBorderLine:CGFloat { get set }
 
     func showBadge()
     func showBadge(style:PTBadgeStyle,value: Any,aniType:PTBadgeAnimType)

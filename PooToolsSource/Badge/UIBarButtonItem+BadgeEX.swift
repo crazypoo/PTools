@@ -95,6 +95,25 @@ extension UIBarButtonItem:PTBadgeProtocol {
         }
     }
     
+    public var badgeBorderColor: UIColor {
+        get {
+            self.getActualBadgeSuperView().badgeBorderColor
+        }
+        set {
+            self.getActualBadgeSuperView().badgeBorderColor = newValue
+        }
+    }
+    
+    public var badgeBorderLine: CGFloat {
+        get {
+            self.getActualBadgeSuperView().badgeBorderLine
+
+        }
+        set {
+            self.getActualBadgeSuperView().badgeBorderLine = newValue
+        }
+    }
+
     public func showBadge() {
         self.getActualBadgeSuperView().showBadge()
     }
