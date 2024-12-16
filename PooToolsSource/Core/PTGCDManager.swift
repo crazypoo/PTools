@@ -84,7 +84,8 @@ public class PTGCDManager :NSObject {
      因此，value参数表示DispatchSemaphore对象的初始计数器值。如果将其设置为0，则表示在初始状态下，不允许同时执行任何线程或操作。
      */
     //MARK: GCD線程組
-    ///GCD線程組
+    
+    ///GCD線程組(串行)
     /// - Parameters:
     ///   - label: 隊列名稱
     ///   - semaphoreCount: 量值(默認0)
@@ -108,6 +109,33 @@ public class PTGCDManager :NSObject {
         }
         dispatchGroup.notify(queue: dispatchQueue) {
             jobDoneBlock()
+        }
+    }
+    
+    @MainActor
+    public class func gcdGroupUtility(label: String,
+                                      semaphoreCount: Int = 3, // 最大并发数
+                                      threadCount:Int,
+                                      doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
+                                      allRequestsFinished: @escaping () -> Void) {
+        
+        let dispatchGroup = DispatchGroup()
+        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount)
+        let concurrentQueue = DispatchQueue.global(qos: .utility) // 使用全局并发队列
+
+        for i in 0..<threadCount {
+            concurrentQueue.async(group: dispatchGroup) {
+                dispatchSemaphore.wait() // 等待信号量，限制最大并发数
+                
+                dispatchGroup.enter() // 任务开始
+                
+                doSomeThing(dispatchSemaphore,dispatchGroup,i)
+            }
+        }
+        
+        // 所有请求完成后的回调
+        dispatchGroup.notify(queue: .main) {
+            allRequestsFinished()
         }
     }
     

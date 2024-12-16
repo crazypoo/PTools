@@ -59,9 +59,7 @@ extension UIView: PTBadgeProtocol {
         newLabel.isUserInteractionEnabled = true
         self.addSubview(newLabel)
         self.bringSubviewToFront(newLabel)
-        PTGCDManager.gcdMain {
-            newLabel.viewCorner(radius: CGRectGetHeight(newLabel.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
-        }
+        newLabel.viewCorner(radius: CGRectGetHeight(newLabel.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
         return newLabel
     }
     
