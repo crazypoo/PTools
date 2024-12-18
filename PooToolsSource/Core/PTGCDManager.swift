@@ -15,6 +15,14 @@ public class PTGCDManager :NSObject {
     
     lazy var timerContainer = [String: DispatchSourceTimer]()
     
+    // 用于控制任务是否应该继续执行的标志
+    private var cancelFlag: Bool = false
+    private var dispatchSemaphore: DispatchSemaphore?
+    private var dispatchGroup: DispatchGroup?
+    
+    // 任务取消完成后的回调
+    private var cancelCompletionHandler: PTActionTask?
+
     //MARK: GCD定时器
     /// GCD定时器
     /// - Parameters:
@@ -93,10 +101,10 @@ public class PTGCDManager :NSObject {
     ///   - doSomeThing: 須要執行的任務(如果該任務執行完畢,須要調用dispatchSemaphore的.signal()方法,和dispatchGroup的.leave()方法,來處理後續事情)
     ///   - jobDoneBlock: 任務完成
     @MainActor public class func gcdGroup(label:String,
-                               semaphoreCount:Int? = nil,
-                               threadCount:Int,
-                               doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
-                               jobDoneBlock: @escaping PTActionTask) {
+                                          semaphoreCount:Int? = nil,
+                                          threadCount:Int,
+                                          doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
+                                          jobDoneBlock: @escaping PTActionTask) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
         let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? 0)
@@ -139,6 +147,65 @@ public class PTGCDManager :NSObject {
         }
     }
     
+    // 取消所有任务的方法，并传递一个取消完成的回调
+    public func cancelPendingTasks(cancelCompletion: @escaping PTActionTask) {
+        cancelFlag = true
+        self.cancelCompletionHandler = cancelCompletion
+        
+        // 发信号让所有任务可以退出
+        dispatchSemaphore?.signal()  // 释放信号
+        PTNSLogConsole("Tasks have been cancelled!")
+    }
+
+    // 执行并发任务的方法
+    @MainActor public func gcdGroupUtility(label: String,
+                                semaphoreCount: Int = 3, // 最大并发数
+                                threadCount: Int,
+                                doSomeThing: @escaping @Sendable (_ dispatchSemaphore: DispatchSemaphore, _ dispatchGroup: DispatchGroup, _ currentIndex: Int) -> Void,
+                                allRequestsFinished: @escaping PTActionTask,
+                                cancelCompletion: @escaping PTActionTask) {
+
+        dispatchGroup = DispatchGroup()
+        dispatchSemaphore = DispatchSemaphore(value: semaphoreCount)
+        let concurrentQueue = DispatchQueue.global(qos: .utility) // 使用全局并发队列
+
+        // 使用一个标志来跟踪是否所有任务都已取消
+        var tasksCompleted = 0
+
+        for i in 0..<threadCount {
+            concurrentQueue.async(group: dispatchGroup!) {
+                // 等待信号量，限制最大并发数
+                self.dispatchSemaphore?.wait()
+
+                // 如果标志是取消状态，则直接退出
+                if self.cancelFlag {
+                    self.dispatchGroup?.leave() // 任务直接退出
+                    tasksCompleted += 1
+                    return
+                }
+
+                self.dispatchGroup?.enter() // 任务开始
+
+                // 执行任务
+                doSomeThing(self.dispatchSemaphore!, self.dispatchGroup!, i)
+
+                // 当任务完成时，增加计数
+                tasksCompleted += 1
+            }
+        }
+
+        // 所有请求完成后的回调
+        dispatchGroup?.notify(queue: .main) {
+            // 如果所有任务都已完成，则调用完成回调
+            allRequestsFinished()
+
+            // 如果所有任务完成且取消，触发取消完成的回调
+            if self.cancelFlag && tasksCompleted == threadCount {
+                cancelCompletion() // 触发取消完成的回调
+            }
+        }
+    }
+
     //MARK: GCD延時執行
     ///GCD延時執行
     public class func gcdAfter(qosCls:DispatchQoS.QoSClass,
