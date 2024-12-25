@@ -37,4 +37,7 @@ public class PTAppStoreFunction: NSObject {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 
+    static public func checkUpdateURL(bundleId:String) ->String {
+        return "https://itunes.apple.com/br/lookup?bundleId=\(bundleId)"
+    }
 }
