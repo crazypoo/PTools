@@ -81,6 +81,7 @@
 		550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */; };
 		550CE4C32AF295B10052539D /* PTSpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4C22AF295B10052539D /* PTSpeechViewController.swift */; };
 		550CE4C52AF296CE0052539D /* PTSoundRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */; };
+		550F78F92D21AF680066D281 /* PTActionLayoutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550F78F82D21AF680066D281 /* PTActionLayoutButton.swift */; };
 		55102A892AFF575900E9529D /* PTUnavailableFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55102A882AFF575900E9529D /* PTUnavailableFunction.swift */; };
 		55102AAD2AFFAB5900E9529D /* icon_permission_media.png in Resources */ = {isa = PBXBuildFile; fileRef = 55102A9D2AFFAB5700E9529D /* icon_permission_media.png */; };
 		55102AAE2AFFAB5900E9529D /* icon_permission_faceid.png in Resources */ = {isa = PBXBuildFile; fileRef = 55102A9E2AFFAB5700E9529D /* icon_permission_faceid.png */; };
@@ -998,6 +999,7 @@
 		550CE4C22AF295B10052539D /* PTSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeechViewController.swift; sourceTree = "<group>"; };
 		550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSoundRecorder.swift; sourceTree = "<group>"; };
 		550D59A82C8EE40D000F928B /* PooTools_ExampleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_ExampleDebug.entitlements; sourceTree = "<group>"; };
+		550F78F82D21AF680066D281 /* PTActionLayoutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTActionLayoutButton.swift; sourceTree = "<group>"; };
 		55102A882AFF575900E9529D /* PTUnavailableFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUnavailableFunction.swift; sourceTree = "<group>"; };
 		55102A9D2AFFAB5700E9529D /* icon_permission_media.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_permission_media.png; sourceTree = "<group>"; };
 		55102A9E2AFFAB5700E9529D /* icon_permission_faceid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_permission_faceid.png; sourceTree = "<group>"; };
@@ -3377,6 +3379,7 @@
 		55D59C5028F279C200B4FF76 /* Button */ = {
 			isa = PBXGroup;
 			children = (
+				550F78F82D21AF680066D281 /* PTActionLayoutButton.swift */,
 				231D15C5272CDEE9003D6F62 /* PTLayoutButton.swift */,
 				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
 				55DD93572B9169A000F65872 /* PTSortButton.swift */,
@@ -4129,6 +4132,7 @@
 				55B8FBAD2CBC16A3006D82AD /* UIKeyboardAppearance+InspectorEX.swift in Sources */,
 				557E3A7C2C0437DC002466A0 /* PTCrashHandler.swift in Sources */,
 				55C409A32C09784B009C0FB6 /* PTDebugLocationViewController.swift in Sources */,
+				550F78F92D21AF680066D281 /* PTActionLayoutButton.swift in Sources */,
 				557E3A742C0386C4002466A0 /* PTPerformanceSegmentCell.swift in Sources */,
 				553FF08F2C670A5600E9EE10 /* PTIAPManager.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,

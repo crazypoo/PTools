@@ -149,6 +149,15 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    open var configBackgroundDisableColor: UIColor = .clear {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                backgroundColor = configBackgroundDisableColor
+            }
+        }
+    }
     open var buttonSizeStyle: PTLayoutButtonSizeStyle = .none {
         didSet {
             if #available(iOS 15.0, *) {
@@ -789,7 +798,7 @@ public class PTLayoutButton: UIButton {
                 if self.imageSize != .zero && self.disabledImage != nil {
                     btnconfig.image = self.disabledImage!.transformImage(size: self.imageSize)
                 }
-
+                btnconfig.baseBackgroundColor = self.configBackgroundDisableColor
                 sender.configuration = btnconfig
 
             default:

@@ -49,8 +49,8 @@ target 'PooTools_Example' do
 ##JD包体分析
 #https://github.com/helele90/APPAnalyze
 
-  pod 'PooTools', :subspecs => ['InputAll'], :path => 'PooTools.podspec'
-#  pod 'PooTools/InputAll', :git => 'https://github.com/crazypoo/PTools.git'
+#  pod 'PooTools', :subspecs => ['InputAll'], :path => 'PooTools.podspec'
+  pod 'PooTools/InputAll', :git => 'https://github.com/crazypoo/PTools.git'
 
 #  pod 'MetaCodable'
 #  pod 'MetaCodable/HelperCoders'
