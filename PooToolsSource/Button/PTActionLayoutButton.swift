@@ -28,13 +28,7 @@ public class PTActionLayoutButton: UIControl {
             updateAppearance()
         }
     }
-    
-    public var labelFont:UIFont = .appfont(size: 14) {
-        didSet {
-            updateAppearance()
-        }
-    }
-    
+        
     public var labelLineSpace:NSNumber = 2 {
         didSet {
             updateAppearance()
@@ -203,20 +197,26 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var highlightedString = ""
     fileprivate var disabledString = ""
     fileprivate var selectedString = ""
-    fileprivate var currentString = ""
+    public var currentString = ""
     
     fileprivate var normalImage:UIImage?
     fileprivate var highlightedImage:UIImage?
     fileprivate var disabledImage:UIImage?
     fileprivate var selectedImage:UIImage?
-    fileprivate var currentImage:UIImage? = nil
+    public var currentImage:UIImage? = nil
 
     fileprivate var normalTitleColor:UIColor = .black
     fileprivate var highlightedTitleColor:UIColor = .black
     fileprivate var disabledTitleColor:UIColor = .black
     fileprivate var selectedTitleColor:UIColor = .black
-    fileprivate var currentTitleColor:UIColor = .black
+    public var currentTitleColor:UIColor = .black
 
+    fileprivate var normalFont:UIFont = .appfont(size: 14)
+    fileprivate var highlightedFont:UIFont?
+    fileprivate var disabledFont:UIFont?
+    fileprivate var selectedFont:UIFont?
+    public var currentFont:UIFont = .appfont(size: 14)
+    
     // 更新状态时的外观
     private func updateAppearance() {
         switch state {
@@ -224,25 +224,29 @@ public class PTActionLayoutButton: UIControl {
             currentString = normalString
             currentImage = normalImage ?? currentImage
             currentTitleColor = normalTitleColor
+            currentFont = normalFont
         case .highlighted:
             currentString = highlightedString.stringIsEmpty() ? normalString : highlightedString
             currentImage = highlightedImage ?? normalImage
             currentTitleColor = highlightedTitleColor
+            currentFont = highlightedFont ?? normalFont
         case .disabled:
             currentString = disabledString.stringIsEmpty() ? normalString : disabledString
             currentImage = disabledImage ?? normalImage
             currentTitleColor = disabledTitleColor
+            currentFont = disabledFont ?? normalFont
         case .selected:
             currentString = selectedString.stringIsEmpty() ? normalString : selectedString
             currentImage = selectedImage ?? normalImage
             currentTitleColor = selectedTitleColor
+            currentFont = selectedFont ?? normalFont
         default:
             break
         }
         titleLabel.textColor = currentTitleColor
         titleLabel.numberOfLines = numbersOfLine
         titleLabel.textAlignment = textAlignment
-        titleLabel.font = labelFont
+        titleLabel.font = currentFont
         titleLabel.text = currentString
         imageView.image = currentImage
         setNeedsLayout()
@@ -283,6 +287,22 @@ public extension PTActionLayoutButton {
         updateAppearance()
     }
     
+    func setTitleFont(_ font:UIFont,state:UIControl.State) {
+        switch state {
+        case .normal:
+            normalFont = font
+        case .highlighted:
+            highlightedFont = font
+        case .disabled:
+            disabledFont = font
+        case .selected:
+            selectedFont = font
+        default:
+            break
+        }
+        updateAppearance()
+    }
+
     func setImage(_ image:UIImage!,state:UIControl.State) {
         switch state {
         case .normal:
