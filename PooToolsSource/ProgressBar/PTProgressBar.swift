@@ -26,7 +26,12 @@ public class PTProgressBar: UIView {
             progressView.backgroundColor = barColor
         }
     }
-        
+    
+    public var animationed:Bool {
+        animationEnd
+    }
+    
+    fileprivate var animationEnd:Bool = false
     fileprivate var isAnimating: Bool = false
     fileprivate var animator: UIViewPropertyAnimator!
     fileprivate var showType:PTProgressBarShowType!
@@ -111,7 +116,7 @@ public class PTProgressBar: UIView {
                 }
             }
         }, completion: { finish in
-            
+            self.animationEnd = true
         })
         isAnimating = true
         animator.startAnimation()

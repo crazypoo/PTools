@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PooTools
 
 public class PTActionLayoutButton: UIControl {
 

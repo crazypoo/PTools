@@ -84,15 +84,6 @@ public extension UIDocumentPickerViewController {
     
 }
 
-extension UIDocumentPickerViewController.Option {
-    private var documentTypeOptions: UTTTypeOptions? {
-        guard case let .documentTypes(typeOptions) = self else {
-            return nil
-        }
-        return typeOptions
-    }
-}
-
 private extension Collection where Element == UIDocumentPickerViewController.Option {
     var asCopy: Bool {
         for option in self {
@@ -224,6 +215,15 @@ public extension UIDocumentPickerViewController {
         public static func documentTypes(_ options: UTTTypeOption...) -> Self {
             .documentTypes(options)
         }
-        
     }
 }
+
+extension UIDocumentPickerViewController.Option {
+    private var documentTypeOptions: UTTTypeOptions? {
+        guard case let .documentTypes(typeOptions) = self else {
+            return nil
+        }
+        return typeOptions
+    }
+}
+

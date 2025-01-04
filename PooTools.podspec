@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.68.0'
+    s.version     = '3.68.1'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -461,7 +461,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/SearchBar'
         subspec.dependency 'PooTools/PDF'
-        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/DEBUGLocation/*.{h,m,swift}'##,'PooToolsSource/Inspector/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/DEBUGLocation/*.{h,m,swift}','PooToolsSource/Inspector/*.{h,m,swift}'
     subspec.pod_target_xcconfig = {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
     }
