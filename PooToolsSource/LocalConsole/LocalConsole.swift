@@ -195,7 +195,7 @@ public class LocalConsole: NSObject {
                 commitTextChanges(requestMenuUpdate: true)
                 watcherInit()
             } else {
-                Inspector.sharedInstance.stop()
+//                Inspector.sharedInstance.stop()
                 PTNetworkHelper.shared.disable()
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                     terminal!.transform = .init(scaleX: 0.9, y: 0.9)
@@ -304,7 +304,7 @@ public class LocalConsole: NSObject {
     }
     
     @MainActor private func watcherInit() {
-        Inspector.sharedInstance.start()
+//        Inspector.sharedInstance.start()
         UIView.swizzleMethods()
         UIWindow.db_swizzleMethods()
         URLSessionConfiguration.swizzleMethods()
@@ -640,7 +640,7 @@ public class LocalConsole: NSObject {
         }
         
         let inspect = UIAction(title: "Inspectors",image: UIImage.InspectorImage) { _ in
-            Inspector.sharedInstance.present(animated: true)
+//            Inspector.sharedInstance.present(animated: true)
         }
         
         let logFile = UIAction(title: .log, image: UIImage.logFile) { _ in
