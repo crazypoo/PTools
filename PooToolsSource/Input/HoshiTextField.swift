@@ -267,7 +267,8 @@ open class PTHoshiTextField:UITextField {
         let labelHeight = floatingLabel.font.pointSize + 5
         addSubview(floatingLabel)
         floatingLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.right.equalToSuperview()
+            make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             make.top.equalToSuperview().inset((self.bounds.height - labelHeight) / 2)
             make.height.equalTo(labelHeight)
         }
@@ -294,6 +295,7 @@ open class PTHoshiTextField:UITextField {
             self.floatingLabel.alpha = shouldFloat ? 1 : 0
             self.floatingLabel.snp.updateConstraints { make in
                 make.top.equalToSuperview().inset(shouldFloat ? self.setTextAndPlaceHolderTop() : (self.bounds.height - labelHeight) / 2)
+                make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             }
         }
 
@@ -323,6 +325,7 @@ open class PTHoshiTextField:UITextField {
             
             floatingLabel.snp.updateConstraints { make in
                 make.top.equalToSuperview().inset(self.setTextAndPlaceHolderTop())
+                make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             }
             if !isTextEmpty {
                 floatingLabel.alpha = 1
@@ -376,10 +379,10 @@ open class PTHoshiTextField:UITextField {
             if !isTextEmpty {
                 return bounds.inset(by: textEditingEdges)
             } else {
-                return bounds.inset(by: .zero)
+                return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
             }
         } else {
-            return bounds.inset(by: .zero)
+            return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
         }
     }
 
@@ -389,10 +392,10 @@ open class PTHoshiTextField:UITextField {
             if !isTextEmpty {
                 return bounds.inset(by: textEditingEdges)
             } else {
-                return bounds.inset(by: .zero)
+                return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
             }
         } else {
-            return bounds.inset(by: .zero)
+            return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
         }
     }
 
@@ -402,10 +405,10 @@ open class PTHoshiTextField:UITextField {
             if !isTextEmpty {
                 return bounds.inset(by: textEditingEdges)
             } else {
-                return bounds.inset(by: .zero)
+                return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
             }
         } else {
-            return bounds.inset(by: .zero)
+            return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
         }
     }
 }
