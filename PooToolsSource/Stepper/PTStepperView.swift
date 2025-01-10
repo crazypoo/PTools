@@ -38,6 +38,10 @@ open class PTStepperListConfig:NSObject {
     open var itemHeight:CGFloat =   100
     ///用于竖向滑动的起始点
     open var itemOriginalX:CGFloat = 0
+    ///空白頁
+    open var emptyConfig:PTEmptyDataViewConfig?
+    ///当前线是否填充颜色
+    open var currentStopLineColorShow:Bool = true
 }
 
 public enum PTStepperModelStopType {
@@ -52,6 +56,8 @@ public enum PTStepperModelStopType {
 open class PTStepperListModel:PTBaseModel {
     ///标题
     open var title:String = ""
+    
+    open var titleAtt:ASAttributedString?
     ///标题颜色
     open var titleColor:UIColor = DynamicColor(light: .black, dark: .white)
     ///标题字体
@@ -67,7 +73,7 @@ open class PTStepperListModel:PTBaseModel {
     ///圈圈是否填充颜色
     open var circleFillColor:Bool = true
     ///圈圈大小min15max64
-    @PTClampedProperyWrapper(range:15...64) open var stopCircleWidth: CGFloat = 44
+    @PTClampedProperyWrapper(range:10...64) open var stopCircleWidth: CGFloat = 44
     ///圈圈线宽度min1max8
     @PTClampedProperyWrapper(range:1...8) open var borderWidth: CGFloat = 1
     ///普通颜色
@@ -88,13 +94,17 @@ open class PTStepperListModel:PTBaseModel {
 
 open class PTStepperView: UIView {
     
-    fileprivate var viewConfig:PTStepperListConfig = PTStepperListConfig()
+    open var viewConfig:PTStepperListConfig = PTStepperListConfig()
     fileprivate var normalHorizontalItemWidth:CGFloat = 0
     fileprivate var itemOriginalX:CGFloat = 10
     
-    fileprivate lazy var listCollection:PTCollectionView = {
+    public lazy var listCollection:PTCollectionView = {
         let collectionConfig = PTCollectionViewConfig()
         collectionConfig.viewType = .Custom
+        if let emptyConfig = viewConfig.emptyConfig {
+            collectionConfig.showEmptyAlert = true
+            collectionConfig.emptyViewConfig = emptyConfig
+        }
         switch self.viewConfig.type {
         case .Horizontal(let type):
             if type == .Normal {
@@ -120,7 +130,30 @@ open class PTStepperView: UIView {
                 }
                 return UICollectionView.horizontalLayout(data: section.rows!,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
             case .Vertical(_):
-                return UICollectionView.girdCollectionLayout(data: section.rows!, itemHeight: self.viewConfig.itemHeight,cellRowCount: 1,originalX: self.viewConfig.itemOriginalX,topContentSpace: 0)
+                return UICollectionView.waterFallLayout(data: section.rows!,rowCount: 1,itemOriginalX: self.viewConfig.itemOriginalX, itemSpace: 0) { index, rowModels in
+                    var realHeight:CGFloat = self.viewConfig.itemHeight
+                    if let rowModel = rowModels as? PTRows,let cellModel = rowModel.dataModel as? PTStepperListModel {
+                        let contentWidth = CGFloat.kSCREEN_WIDTH - self.viewConfig.itemOriginalX * 2 - cellModel.stopCircleWidth - PTStepperVerticalCell.circleRight - PTAppBaseConfig.share.defaultViewSpace
+                        var descHeight:CGFloat = 0
+                        if let descAtt = cellModel.descAtt {
+                            descHeight = UIView.sizeFor(string: descAtt.value.description, font: .appfont(size: descAtt.value.largestFontSize()),width: contentWidth).height + 5
+                        } else {
+                            descHeight = UIView.sizeFor(string: cellModel.desc, font: cellModel.descFont,width: contentWidth).height + 5
+                        }
+                        
+                        var titleHeight:CGFloat = 0
+                        if let titleAtt = cellModel.titleAtt {
+                            titleHeight = UIView.sizeFor(string: titleAtt.value.description, font: .appfont(size: titleAtt.value.largestFontSize()),width: contentWidth).height + 5
+                        } else {
+                            titleHeight = UIView.sizeFor(string: cellModel.title, font: cellModel.titleFont,width: contentWidth).height + 5
+                        }
+                        let totalHeight = descHeight + titleHeight
+                        if totalHeight > realHeight {
+                            realHeight = totalHeight
+                        }
+                    }
+                    return realHeight
+                }
             }
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
@@ -171,7 +204,11 @@ open class PTStepperView: UIView {
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperVerticalCell
                     cell.cellModel = cellModel
                     cell.verticalLine.isHidden = indexPath.row == (sectionModel.rows!.count - 1) ? true : false
-                    cell.verticalLine.backgroundColor = cellModel.stopFinish ? cellModel.stopSelectedColor : cellModel.stopNormalColor
+                    if self.viewConfig.currentStopLineColorShow {
+                        cell.verticalLine.backgroundColor = cellModel.stopFinish ? cellModel.stopSelectedColor : cellModel.stopNormalColor
+                    } else {
+                        cell.verticalLine.backgroundColor = cellModel.stopNormalColor
+                    }
                     
                     switch self.viewConfig.type {
                     case .Vertical(let type):
@@ -184,6 +221,15 @@ open class PTStepperView: UIView {
                                 cell.descLabel.textAlignment = .left
                             } else if let att = cellModel.descAtt {
                                 cell.descLabel.attributed.text = att
+                            }
+                            
+                            if !cellModel.title.stringIsEmpty() {                                
+                                cell.infoLabel.textColor = cellModel.titleColor
+                                cell.infoLabel.font = cellModel.titleFont
+                                cell.infoLabel.text = cellModel.title
+                                cell.infoLabel.textAlignment = .left
+                            } else if let att = cellModel.titleAtt {
+                                cell.infoLabel.attributed.text = att
                             }
     //                    case .Card:
     //                        break

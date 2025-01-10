@@ -135,7 +135,8 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
 //MARK: VerticalCell
 public class PTStepperVerticalCell: PTBaseNormalCell {
     public static let ID = "PTStepperVerticalCell"
-    
+    static let circleRight:CGFloat = 20
+
     public var cellModel: PTStepperListModel! {
         didSet {
             PTGCDManager.gcdMain {
@@ -160,10 +161,6 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
                 make.width.equalTo(self.cellModel.stopLineHeight)
             }
 
-            infoLabel.textColor = cellModel.titleColor
-            infoLabel.font = cellModel.titleFont
-            infoLabel.text = cellModel.title
-
             stopLabel.font = cellModel.stopFont
         }
     }
@@ -173,7 +170,7 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
         return view
     }()
 
-    fileprivate var infoLabel:UILabel = {
+    var infoLabel:UILabel = {
         let view = UILabel()
         view.textAlignment = .left
         view.numberOfLines = 0
@@ -224,8 +221,8 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
         }
         
         infoLabel.snp.makeConstraints { make in
-            make.left.equalTo(self.circleView.snp.right).offset(20)
-            make.right.equalToSuperview().inset(10)
+            make.left.equalTo(self.circleView.snp.right).offset(PTStepperVerticalCell.circleRight)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalTo(self.circleView)
         }
         

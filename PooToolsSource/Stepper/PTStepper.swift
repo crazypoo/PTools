@@ -27,6 +27,8 @@ public enum PTStepperShowType:Int {
 @objcMembers
 public class PTStepper: UIView {
 
+    public var inputingCallback:((String)->Void)?
+    
     /// 輸入框的背景顏色
     open var inputBackgroundColor:UIColor = .clear {
         didSet {
@@ -296,6 +298,7 @@ extension PTStepper: UITextFieldDelegate {
      
      public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
          // 限制輸入框只允許數字
+         self.inputingCallback?(textField.text ?? "")
          return string.rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) == nil
      }
  }
