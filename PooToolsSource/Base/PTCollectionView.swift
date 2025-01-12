@@ -192,6 +192,7 @@ public class PTCollectionViewConfig:NSObject {
     ///限制滑动方向
     open var alwaysBounceHorizontal:Bool = false
     open var alwaysBounceVertical:Bool = true
+    open var contentOffSetZero:Bool = false
 }
 
 public class PTTextLayer: CATextLayer {
@@ -223,6 +224,20 @@ public class PTCollectionIndexViewConfiguration: NSObject {
     open var indexViewFont:UIFont = .appfont(size: 12)
     ///放大索引字体,这个属性只会使用字体名字
     open var indexViewHudFont:UIFont = .appfont(size: 18)
+}
+
+open class PTBaseCollectionView:UICollectionView {
+    
+    public var contentOffSetZero:Bool = false
+    
+    open override var contentOffset: CGPoint {
+        didSet {
+            // 始终锁定垂直方向
+            if contentOffSetZero {
+                self.setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
+            }
+        }
+    }
 }
 
 //MARK: 界面展示
@@ -483,12 +498,13 @@ public class PTCollectionView: UIView {
         }
     }
 
-    fileprivate lazy var collectionView : UICollectionView = {
-        let view = UICollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
+    fileprivate lazy var collectionView : PTBaseCollectionView = {
+        let view = PTBaseCollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
         view.dataSource = self
         view.delegate = self
         view.isUserInteractionEnabled = true
+        view.contentOffSetZero = self.viewConfig.contentOffSetZero
         switch self.viewConfig.viewType {
         case .Normal,.Gird,.WaterFall,.Tag:
             view.alwaysBounceHorizontal = false

@@ -242,6 +242,8 @@ public class PTStepper: UIView {
             self.numberText.text = "\(currentValue + self.multipleNum)"
         } else {
             self.shakeAnimation()
+            alertAction(max: true)
+            return
         }
         self.callBack(value: self.numberText.text ?? "", type: .Add)
     }
@@ -252,6 +254,8 @@ public class PTStepper: UIView {
             self.numberText.text = "\(currentValue - self.multipleNum)"
         } else {
             self.shakeAnimation()
+            alertAction(max: false)
+            return
         }
         self.callBack(value: self.numberText.text ?? "", type: .Reduce)
     }

@@ -143,7 +143,7 @@ open class PTStepperView: UIView {
                         
                         var titleHeight:CGFloat = 0
                         if let titleAtt = cellModel.titleAtt {
-                            titleHeight = UIView.sizeFor(string: titleAtt.value.description, font: .appfont(size: titleAtt.value.largestFontSize()),width: contentWidth).height + 5
+                            titleHeight = UIView.sizeFor(string: titleAtt.value.string, font: .appfont(size: titleAtt.value.largestFontSize()),width: contentWidth).height + 5
                         } else {
                             titleHeight = UIView.sizeFor(string: cellModel.title, font: cellModel.titleFont,width: contentWidth).height + 5
                         }
