@@ -146,7 +146,8 @@ public extension UIButton {
                        originalTitle:String,
                        countdowningCanTap:Bool = true,
                        countdownFinishCanTap:Bool = true,
-                       timeFinish:PTActionTask?) {
+                       timeFinish:PTActionTask? = nil,
+                       timingCallPack:PTActionTask? = nil) {
         buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
             if finish {
                 self.setTitle(originalTitle, for: self.state)
@@ -159,6 +160,9 @@ public extension UIButton {
                 let buttonTime = String.init(format: "%@", strTime)
                 self.setTitle(buttonTime, for: self.state)
                 self.isUserInteractionEnabled = countdowningCanTap
+                PTGCDManager.gcdMain {
+                    timingCallPack?()
+                }
             }
         }
     }
