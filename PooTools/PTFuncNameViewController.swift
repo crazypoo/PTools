@@ -1000,11 +1000,15 @@ class PTFuncNameViewController: PTBaseViewController {
         more.badge?.badgeBorderColor = .random
         more.showBadge(style: .New, value: "我愛你", aniType: .None)
         
-        let popover = UIButton(type: .custom)
-        popover.setTitleColor(.random, for: .normal)
-        popover.setTitle("Popover", for: .normal)
-        popover.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
-        
+        let popover = PTActionLayoutButton()
+        popover.imageSize = CGSize(width: 15, height: 15)
+        popover.layoutStyle = .upImageDownTitle
+        popover.midSpace = 0
+        popover.setTitleFont(.appfont(size: 12), state: .normal)
+        popover.setTitleColor(.random, state: .normal)
+        popover.setTitle("Popover", state: .normal)
+        popover.bounds = CGRect(x: 0, y: 0, width: 68, height: 34)
+        popover.setImage("http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", state: .normal)
         
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
         searchBarConfig.clearTopSpace = 20

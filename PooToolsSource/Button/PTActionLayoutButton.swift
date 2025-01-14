@@ -83,6 +83,11 @@ public class PTActionLayoutButton: UIControl {
     fileprivate lazy var imageView:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        let tap = UITapGestureRecognizer { sender in
+            self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
+        }
+        view.addGestureRecognizer(tap)
         return view
     }()
     
@@ -198,11 +203,11 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var selectedString = ""
     public var currentString = ""
     
-    fileprivate var normalImage:UIImage?
-    fileprivate var highlightedImage:UIImage?
-    fileprivate var disabledImage:UIImage?
-    fileprivate var selectedImage:UIImage?
-    public var currentImage:UIImage? = nil
+    fileprivate var normalImage:Any?
+    fileprivate var highlightedImage:Any?
+    fileprivate var disabledImage:Any?
+    fileprivate var selectedImage:Any?
+    public var currentImage:Any? = nil
 
     fileprivate var normalTitleColor:UIColor = .black
     fileprivate var highlightedTitleColor:UIColor = .black
@@ -247,7 +252,9 @@ public class PTActionLayoutButton: UIControl {
         titleLabel.textAlignment = textAlignment
         titleLabel.font = currentFont
         titleLabel.text = currentString
-        imageView.image = currentImage
+        if let currentImage = currentImage {
+            imageView.loadImage(contentData: currentImage)
+        }
         setNeedsLayout()
     }
 }
@@ -302,7 +309,7 @@ public extension PTActionLayoutButton {
         updateAppearance()
     }
 
-    func setImage(_ image:UIImage!,state:UIControl.State) {
+    func setImage(_ image:Any!,state:UIControl.State) {
         switch state {
         case .normal:
             normalImage = image
