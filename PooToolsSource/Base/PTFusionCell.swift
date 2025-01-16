@@ -177,17 +177,19 @@ public class PTFusionCellContent:UIView {
         }
         
         accessoryViewType(type: cellModel!.accessoryType) { cellType in
-            setLeftIconView(cellType: cellType)
-            setRightIconView(cellType: cellType)
-            setTitleLabel(cellType: cellType)
-            setRightContent(cellType: cellType)
-            setLine(cellType: cellType)
-            
-            PTGCDManager.gcdMain {
-                if self.cellModel!.conrner != [] {
-                    self.viewCornerRectCorner(cornerRadii: self.cellModel!.cellCorner, corner: self.cellModel!.conrner)
-                } else {
-                    self.viewCornerRectCorner(cornerRadii: 0, corner: [.allCorners])
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.setLeftIconView(cellType: cellType)
+                self.setRightIconView(cellType: cellType)
+                self.setTitleLabel(cellType: cellType)
+                self.setRightContent(cellType: cellType)
+                self.setLine(cellType: cellType)
+                
+                PTGCDManager.gcdMain {
+                    if self.cellModel!.conrner != [] {
+                        self.viewCornerRectCorner(cornerRadii: self.cellModel!.cellCorner, corner: self.cellModel!.conrner)
+                    } else {
+                        self.viewCornerRectCorner(cornerRadii: 0, corner: [.allCorners])
+                    }
                 }
             }
         }
@@ -458,10 +460,10 @@ public class PTFusionCellContent:UIView {
                 .More(type: .BothImage(type: .Name)),
                 .More(type: .BothImage(type: .NameContent)):
             
-            if  cellModel!.nameAttr != nil {
-                nameTitle.attributed.text = cellModel!.nameAttr
+            var atts:ASAttributedString = ASAttributedString(string: "")
+            if let cellAtt = cellModel!.nameAttr {
+                atts = cellAtt
             } else {
-                var atts:ASAttributedString = ASAttributedString(string: "")
                 if !cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() {
                     let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left),.lineSpacing(cellModel!.labelLineSpace)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
                     atts = nameAtts
@@ -473,11 +475,11 @@ public class PTFusionCellContent:UIView {
                     let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(cellModel!.labelLineSpace)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
                     atts = nameAtts + descAtts
                 }
-                nameTitle.attributed.text = atts
             }
+            nameTitle.attributed.text = atts
             
             addSubview(nameTitle)
-            nameTitle.snp.makeConstraints { make in
+            self.nameTitle.snp.makeConstraints { make in
                 make.top.bottom.lessThanOrEqualToSuperview().inset(5)
                 make.centerY.equalToSuperview()
                 switch cellType {
@@ -537,17 +539,32 @@ public class PTFusionCellContent:UIView {
                         .Switch(type: .None(type: .Content)),
                         .DisclosureIndicator(type: .None(type: .Content)),
                         .More(type: .None(type: .Content)):
-                    make.right.lessThanOrEqualTo(self.snp.centerX)
+                    var titleWidth = UIView.sizeFor(string: atts.value.string, font: .appfont(size: atts.value.largestFontSize()),height: self.height).width + 5
+                    let maxWidth = (self.width - 10  - self.cellModel!.leftSpace - self.cellModel!.contentLeftSpace - self.cellModel!.contentRightSpace - self.cellModel!.rightSpace) / 2
+                    if titleWidth > maxWidth {
+                        titleWidth = maxWidth
+                    } else if titleWidth < 1 {
+                        titleWidth = maxWidth
+                    }
+                    make.width.equalTo(titleWidth)
                 case .Switch(type: .LeftImageContent(type: .Name)):
                     make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .DisclosureIndicator(type: .None(type: .NameContent)),
                         .NoneAccessoryView(type: .None(type: .NameContent)),
                         .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)):
-                    make.right.lessThanOrEqualTo(self.snp.centerX).offset(-5)
+                    var titleWidth = UIView.sizeFor(string: atts.value.string, font: .appfont(size: atts.value.largestFontSize()),height: self.height).width + 5
+                    let maxWidth = (self.width - 10  - self.cellModel!.leftSpace - self.cellModel!.contentLeftSpace - self.cellModel!.contentRightSpace - self.cellModel!.rightSpace) / 2
+                    if titleWidth > maxWidth {
+                        titleWidth = maxWidth
+                    } else if titleWidth < 1 {
+                        titleWidth = maxWidth
+                    }
+                    make.width.equalTo(titleWidth)
                 default:
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                 }
             }
+
         default:
             nameTitle.removeFromSuperview()
         }
@@ -570,8 +587,7 @@ public class PTFusionCellContent:UIView {
                     
                     addSubview(contentLabel)
                     contentLabel.snp.makeConstraints { make in
-                        make.top.bottom.lessThanOrEqualToSuperview().inset(5)
-                        make.centerY.equalToSuperview()
+                        make.top.bottom.equalToSuperview()
                                             
                         switch cellType {
                         case .Switch(type: .None(type: .Content)),

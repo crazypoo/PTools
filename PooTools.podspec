@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.68.7'
+    s.version     = '3.69.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -318,6 +318,7 @@ Pod::Spec.new do |s|
     s.subspec 'CheckUpdate' do |subspec|
         subspec.dependency 'PooTools/NetWork'
         subspec.source_files = 'PooToolsSource/CheckUpdate/*.{h,m,swift}'
+        subspec.dependency 'SwiftJWT'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
         }

@@ -129,13 +129,6 @@
 		552F07A02B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */; };
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
 		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
-		553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382A2B1CD85C0019A8E0 /* CupertinoJWTError.swift */; };
-		553038322B1CD85E0019A8E0 /* ASN1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382B2B1CD85D0019A8E0 /* ASN1.swift */; };
-		553038332B1CD85E0019A8E0 /* ECKeyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382C2B1CD85D0019A8E0 /* ECKeyData.swift */; };
-		553038342B1CD85E0019A8E0 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382D2B1CD85D0019A8E0 /* Data+Extension.swift */; };
-		553038352B1CD85E0019A8E0 /* P8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382E2B1CD85E0019A8E0 /* P8.swift */; };
-		553038362B1CD85E0019A8E0 /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382F2B1CD85E0019A8E0 /* JWT.swift */; };
-		553038372B1CD85E0019A8E0 /* ECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */; };
 		5530651B2B9718A300BFB4EA /* PTSheetOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530651A2B9718A300BFB4EA /* PTSheetOptions.swift */; };
 		5530651D2B97193400BFB4EA /* PTSheetTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530651C2B97193400BFB4EA /* PTSheetTransition.swift */; };
 		5530651F2B9719FD00BFB4EA /* PTSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530651E2B9719FD00BFB4EA /* PTSheetView.swift */; };
@@ -1057,13 +1050,6 @@
 		552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGraphicsImageRenderer+PTEX.swift"; sourceTree = "<group>"; };
 		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
 		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
-		5530382A2B1CD85C0019A8E0 /* CupertinoJWTError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CupertinoJWTError.swift; sourceTree = "<group>"; };
-		5530382B2B1CD85D0019A8E0 /* ASN1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1.swift; sourceTree = "<group>"; };
-		5530382C2B1CD85D0019A8E0 /* ECKeyData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECKeyData.swift; sourceTree = "<group>"; };
-		5530382D2B1CD85D0019A8E0 /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
-		5530382E2B1CD85E0019A8E0 /* P8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P8.swift; sourceTree = "<group>"; };
-		5530382F2B1CD85E0019A8E0 /* JWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWT.swift; sourceTree = "<group>"; };
-		553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPrivateKey.swift; sourceTree = "<group>"; };
 		5530651A2B9718A300BFB4EA /* PTSheetOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetOptions.swift; sourceTree = "<group>"; };
 		5530651C2B97193400BFB4EA /* PTSheetTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetTransition.swift; sourceTree = "<group>"; };
 		5530651E2B9719FD00BFB4EA /* PTSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetView.swift; sourceTree = "<group>"; };
@@ -2649,20 +2635,6 @@
 			path = Location;
 			sourceTree = "<group>";
 		};
-		557A29FC2B1CCD4800BBCDF7 /* JWT */ = {
-			isa = PBXGroup;
-			children = (
-				5530382B2B1CD85D0019A8E0 /* ASN1.swift */,
-				5530382A2B1CD85C0019A8E0 /* CupertinoJWTError.swift */,
-				5530382D2B1CD85D0019A8E0 /* Data+Extension.swift */,
-				5530382C2B1CD85D0019A8E0 /* ECKeyData.swift */,
-				553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */,
-				5530382F2B1CD85E0019A8E0 /* JWT.swift */,
-				5530382E2B1CD85E0019A8E0 /* P8.swift */,
-			);
-			path = JWT;
-			sourceTree = "<group>";
-		};
 		557D8BFF2B100F3A00F0D9DD /* WhatsNewsKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -3781,7 +3753,6 @@
 			isa = PBXGroup;
 			children = (
 				55BA093D2BBD0C0F00F58126 /* sound1.m4a */,
-				557A29FC2B1CCD4800BBCDF7 /* JWT */,
 				55B1596F2B0CEED200A64741 /* heartbeat.svga */,
 				55B1596E2B0CEED200A64741 /* Goddess.svga */,
 				55B1596D2B0CEED100A64741 /* Rocket.svga */,
@@ -4629,7 +4600,6 @@
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				5571F6122AFD23B000DB4420 /* PTWindowSceneDelegate.swift in Sources */,
-				553038362B1CD85E0019A8E0 /* JWT.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				55B374552C91F91700CB4ED1 /* PTLoginDescButton.swift in Sources */,
 				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
@@ -4647,7 +4617,6 @@
 				557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */,
 				55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */,
 				556CA4BD2B29500600A5B189 /* Exporter.swift in Sources */,
-				553038372B1CD85E0019A8E0 /* ECPrivateKey.swift in Sources */,
 				550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */,
 				55FF40722B2B000C00CD3906 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
@@ -4723,7 +4692,6 @@
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
 				55C409962C08AB0B009C0FB6 /* PTInputBoxView.swift in Sources */,
-				553038352B1CD85E0019A8E0 /* P8.swift in Sources */,
 				55F163032B197C2600320925 /* PTCameraFilterConfig.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */,
 				5571F6152AFD304800DB4420 /* PTLocale.swift in Sources */,
@@ -4777,7 +4745,6 @@
 				5530651D2B97193400BFB4EA /* PTSheetTransition.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				556738042B040EB80058CEBA /* LocalConsole.swift in Sources */,
-				553038332B1CD85E0019A8E0 /* ECKeyData.swift in Sources */,
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
 				553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */,
@@ -4853,7 +4820,6 @@
 				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
-				553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */,
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
 				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
@@ -4862,9 +4828,7 @@
 				558B77BA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
-				553038342B1CD85E0019A8E0 /* Data+Extension.swift in Sources */,
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,
-				553038322B1CD85E0019A8E0 /* ASN1.swift in Sources */,
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */,
