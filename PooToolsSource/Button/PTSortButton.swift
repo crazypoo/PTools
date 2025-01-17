@@ -292,21 +292,27 @@ public class PTSortButton: UIView {
     
     func contentSet(_ rect: CGRect) {
         
-        var titleLeft = (rect.width - titleLabel.sizeFor(height: rect.height).width - contentImageSpace - self.imageSize.width) / 2
-        if titleLeft < 0 {
-            titleLeft = 0
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(titleLeft)
-        }
-        
         let halfHeight = (rect.height - imageSpace) / 2
         var realImageSize:CGSize!
         if halfHeight < self.imageSize.height {
             realImageSize = CGSize(width: self.imageSize.width, height: halfHeight)
         } else {
             realImageSize = self.imageSize
+        }
+        
+        let contentMax = rect.width - contentImageSpace - self.imageSize.width
+        var titleWidth = titleLabel.sizeFor(height: rect.height).width + 5
+        if titleWidth > contentMax {
+            titleWidth = contentMax
+        }
+        var titleLeft = (rect.width - titleWidth - contentImageSpace - self.imageSize.width) / 2
+        if titleLeft < 0 {
+            titleLeft = 0
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(titleLeft)
+            make.width.equalTo(titleWidth)
         }
         
         upImage.snp.makeConstraints { make in
