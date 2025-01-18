@@ -315,7 +315,7 @@ class AppDelegate: PTAppWindowsDelegate {
             if let playlist = playlists.first as? MPMediaPlaylist {
                 // 获取播放列表的 persistentID
                 let persistentID = playlist.persistentID
-                self.fetchPlaylistLink(gotID: "\(persistentID)")
+//                self.fetchPlaylistLink(gotID: "\(persistentID)")
                 // 创建分享链接
 //                let playlistLink = "https://music.apple.com/playlist/\(persistentID)"
 //                
@@ -348,73 +348,73 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole("\(String(format: "Upload Speed: %.2f KB/s", uploadSpeed))")
     }
 
-    func fetchPlaylistLink(gotID:String) {
-        let persistentID = gotID
-
-        // Get content of the .p8 file
-        let p8 = """
-"""
-
-        // Assign developer information and token expiration setting
-        let jwt = JWT(keyID: "", teamID: "", issueDate: Date(), expireDuration: 60 * 60)
-
-        do {
-            let token = try jwt.sign(with: p8)
-            // Use the token in the authorization header in your requests connecting to Apple’s API server.
-            // e.g. urlRequest.addValue(_ value: "bearer \(token)", forHTTPHeaderField field: "authorization")
-            PTNSLogConsole("Generated JWT: \(token)")
-            PTNSLogConsole("準備請求")
-
-//            // 设置 Apple Music API 的请求URL
-//            let baseURL = "https://api.music.apple.com/v1/me/library/playlists/"
-//            let urlString = baseURL + persistentID
+//    func fetchPlaylistLink(gotID:String) {
+//        let persistentID = gotID
 //
-//            // 设置API请求的头部信息
-//            var request = URLRequest(url: URL(string: urlString)!)
-//            request.httpMethod = "GET"
-//            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-//            PTNSLogConsole("請求中")
-//            // 发起API请求
-//            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//                if let data = data {
-//                    do {
-//                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-//                        if let urlString = json?["url"] as? String {
-//                            // 这个urlString就是可以直接访问播放列表的链接
-//                            PTNSLogConsole("Playlist Link: \(urlString)")
-//                        }
-//                    } catch {
-//                        PTNSLogConsole("Error parsing JSON: \(error.localizedDescription)")
-//                    }
-//                } else if let error = error {
-//                    PTNSLogConsole("Error fetching playlist link: \(error.localizedDescription)")
-//                } else {
-//                    PTNSLogConsole("哦?")
+//        // Get content of the .p8 file
+//        let p8 = """
+//"""
+//
+//        // Assign developer information and token expiration setting
+//        let jwt = JWT(keyID: "", teamID: "", issueDate: Date(), expireDuration: 60 * 60)
+//
+//        do {
+//            let token = try jwt.sign(with: p8)
+//            // Use the token in the authorization header in your requests connecting to Apple’s API server.
+//            // e.g. urlRequest.addValue(_ value: "bearer \(token)", forHTTPHeaderField field: "authorization")
+//            PTNSLogConsole("Generated JWT: \(token)")
+//            PTNSLogConsole("準備請求")
+//
+////            // 设置 Apple Music API 的请求URL
+////            let baseURL = "https://api.music.apple.com/v1/me/library/playlists/"
+////            let urlString = baseURL + persistentID
+////
+////            // 设置API请求的头部信息
+////            var request = URLRequest(url: URL(string: urlString)!)
+////            request.httpMethod = "GET"
+////            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+////            PTNSLogConsole("請求中")
+////            // 发起API请求
+////            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+////                if let data = data {
+////                    do {
+////                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+////                        if let urlString = json?["url"] as? String {
+////                            // 这个urlString就是可以直接访问播放列表的链接
+////                            PTNSLogConsole("Playlist Link: \(urlString)")
+////                        }
+////                    } catch {
+////                        PTNSLogConsole("Error parsing JSON: \(error.localizedDescription)")
+////                    }
+////                } else if let error = error {
+////                    PTNSLogConsole("Error fetching playlist link: \(error.localizedDescription)")
+////                } else {
+////                    PTNSLogConsole("哦?")
+////                }
+////            }
+////            task.resume()
+//            let baseURL = "https://api.music.apple.com/v1/me/library/playlists/"
+//
+//            let headers: HTTPHeaders = [
+//                "Authorization": "Bearer \(token)",
+//                "Accept": "application/json"
+//            ]
+//
+//            let urlString = baseURL + persistentID
+//            
+//            Task.init {
+//                do {
+//                    let model = try await Network.requestApi(needGobal: false, urlStr: urlString,method: .get,header: headers)
+//                    PTNSLogConsole("成功\(model)")
+//                } catch {
+//                    PTNSLogConsole("請求報錯\(error.localizedDescription)")
 //                }
 //            }
-//            task.resume()
-            let baseURL = "https://api.music.apple.com/v1/me/library/playlists/"
-
-            let headers: HTTPHeaders = [
-                "Authorization": "Bearer \(token)",
-                "Accept": "application/json"
-            ]
-
-            let urlString = baseURL + persistentID
-            
-            Task.init {
-                do {
-                    let model = try await Network.requestApi(needGobal: false, urlStr: urlString,method: .get,header: headers)
-                    PTNSLogConsole("成功\(model)")
-                } catch {
-                    PTNSLogConsole("請求報錯\(error.localizedDescription)")
-                }
-            }
-        } catch {
-            // Handle error
-            PTNSLogConsole(error.localizedDescription)
-        }
-    }
+//        } catch {
+//            // Handle error
+//            PTNSLogConsole(error.localizedDescription)
+//        }
+//    }
 }
 
 extension AppDelegate {

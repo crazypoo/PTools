@@ -67,36 +67,23 @@ public class PTProgressBar: UIView {
     }
     
     public func animationProgress(duration:CGFloat,@PTClampedProperyWrapper(range:0...1) value:CGFloat) {
-        setProgressFrame()
-        let timing:UICubicTimingParameters = UICubicTimingParameters(animationCurve: .easeInOut)
-        animator = UIViewPropertyAnimator(duration: TimeInterval(duration), timingParameters: timing)
-        animator.addAnimations {
-            switch self.showType {
-            case .Vertical:
-                self.progressView.frame.size.height -= (self.frame.size.height * value)
-            case .Horizontal:
-                self.progressView.frame.size.width += (self.frame.size.width * value)
-            default:
-                break
-            }
-        }
-        animator.startAnimation()
+        startAnimation(type: .Normal, duration: duration, value: value)
     }
     
-    public func startAnimation(type:PTProgressBarAnimationType,duration:CGFloat) {
+    public func startAnimation(type:PTProgressBarAnimationType,duration:CGFloat,@PTClampedProperyWrapper(range:0...1) value:CGFloat) {
         if isAnimating {
             return
         }
         
         switch type {
         case .Normal:
-            animationGo(reverse: false, duration: duration)
+            animationGo(reverse: false, duration: duration,value: value)
         case .Reverse:
-            animationGo(reverse: true, duration: duration)
+            animationGo(reverse: true, duration: duration,value: value)
         }
     }
     
-    public func animationGo(reverse:Bool,duration:CGFloat) {
+    public func animationGo(reverse:Bool,duration:CGFloat,@PTClampedProperyWrapper(range:0...1) value:CGFloat) {
         setProgressFrame()
         var options:UIView.AnimationOptions = []
         if reverse {
@@ -108,9 +95,9 @@ public class PTProgressBar: UIView {
             UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: options) {
                 switch self.showType {
                 case .Vertical:
-                    self.progressView.frame.size.height -= (self.frame.size.height)
+                    self.progressView.frame.size.height -= (self.frame.size.height * value)
                 case .Horizontal:
-                    self.progressView.frame.size.width += self.frame.size.width
+                    self.progressView.frame.size.width += (self.frame.size.width * value)
                 default:
                     break
                 }
@@ -127,6 +114,7 @@ public class PTProgressBar: UIView {
             return
         }
         isAnimating = false
+        animationEnd = false
         animator.stopAnimation(true)
     }
     
