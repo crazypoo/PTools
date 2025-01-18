@@ -13,20 +13,12 @@ import SwifterSwift
 
 /// Style
 @objc public enum PageControlStyle:Int {
-    case none
-    case system
-    case fill
-    case pill
-    case snake
-    case image
-    case scrolling
+    case none, system, fill, pill, snake, image, scrolling
 }
 
 /// Position
 @objc public enum PageControlPosition:Int {
-    case center
-    case left
-    case right
+    case center, left, right
 }
 
 /// 点击回调
@@ -50,27 +42,15 @@ public class PTCycleScrollView: UIView {
     /// 图片地址
     open var imagePaths: Array<Any> = [] {
         willSet {
-            if !imagePaths.elementsEqual(newValue, by: { ($0 as AnyObject).isEqual($1) }) {
-                clearSubs = true
-            } else {
-                clearSubs = false
-            }
+            clearSubs = !imagePaths.elementsEqual(newValue, by: { ($0 as AnyObject).isEqual($1) })
         }
         didSet {
-            setTotalItemsMinItems(count:imagePaths.count)
-            if imagePaths.count > 1 {
-                pageScrollerView.isScrollEnabled = true
-                if autoScroll {
-                    setupTimer()
-                }
-            } else {
-                pageScrollerView.isScrollEnabled = false
-                invalidateTimer()
-            }
-            
+            setTotalItemsMinItems(count: imagePaths.count)
+            pageScrollerView.isScrollEnabled = imagePaths.count > 1
+            imagePaths.count > 1 ? setupTimer() : invalidateTimer()
             if clearSubs {
-                PTGCDManager.gcdAfter(time: 0.01) {
-                    self.collectionViewSetData()
+                PTGCDManager.gcdAfter(time: 0.01) { [weak self] in
+                    self?.collectionViewSetData()
                 }
             }
         }
@@ -333,8 +313,8 @@ public class PTCycleScrollView: UIView {
     fileprivate var position: UICollectionView.ScrollPosition! = .centeredHorizontally
             
     /// 计时器
-    fileprivate var dtimer: DispatchSourceTimer?
-        
+    fileprivate weak var timer: Timer?
+
     fileprivate lazy var pageScrollerView:UIScrollView = {
         let view = UIScrollView()
         view.isPagingEnabled = true
@@ -346,6 +326,10 @@ public class PTCycleScrollView: UIView {
             
     fileprivate var videoFrameCache = NSCache<NSString, UIImage>()
 
+    deinit {
+        invalidateTimer()
+    }
+    
     /// Init
     /// - Parameter frame: CGRect
     override internal init(frame: CGRect) {
@@ -358,6 +342,12 @@ public class PTCycleScrollView: UIView {
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setupMainView()
+    }
+    
+    public override func willMove(toSuperview newSuperview: UIView?) {
+        if newSuperview == nil {
+            invalidateTimer()
+        }
     }
 }
 
@@ -795,25 +785,34 @@ extension PTCycleScrollView {
         
         invalidateTimer()
         
-        let p_dtimer = DispatchSource.makeTimerSource()
-        p_dtimer.schedule(deadline: .now()+autoScrollTimeInterval, repeating: autoScrollTimeInterval)
-        p_dtimer.setEventHandler {
+        timer = Timer.scheduledTimer(withTimeInterval: autoScrollTimeInterval, repeats: true, block: { newTimer in
             PTGCDManager.gcdGobal(qosCls: .background) {
                 PTGCDManager.gcdMain {
                     self.automaticScroll()
                 }
             }
-        }
-        // 继续
-        p_dtimer.resume()
-        
-        dtimer = p_dtimer
+        })
+//        let p_dtimer = DispatchSource.makeTimerSource()
+//        p_dtimer.schedule(deadline: .now()+autoScrollTimeInterval, repeating: autoScrollTimeInterval)
+//        p_dtimer.setEventHandler {
+//            PTGCDManager.gcdGobal(qosCls: .background) {
+//                PTGCDManager.gcdMain {
+//                    self.automaticScroll()
+//                }
+//            }
+//        }
+//        // 继续
+//        p_dtimer.resume()
+//        
+//        dtimer = p_dtimer
     }
     
     /// 关闭倒计时
     public func invalidateTimer() {
-        dtimer?.cancel()
-        dtimer = nil
+        timer?.invalidate()
+        timer = nil
+//        dtimer?.cancel()
+//        dtimer = nil
     }
 }
 
@@ -958,7 +957,7 @@ extension PTCycleScrollView : UIScrollViewDelegate {
         
         self.cycleScrollViewScrollToIndex()
         
-        if self.dtimer == nil && self.autoScroll {
+        if self.timer == nil && self.autoScroll {
             self.setupTimer()
         }
     }
