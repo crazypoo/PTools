@@ -526,9 +526,7 @@ public class PTCollectionView: UIView {
 #if POOTOOLS_SCROLLREFRESH
         if self.viewConfig.footerRefresh {
             let footerRefresh = PTRefreshAutoStateFooter(refreshingBlock: {
-                if self.footRefreshTask != nil {
-                    self.footRefreshTask!()
-                }
+                self.footRefreshTask?()
             })
             footerRefresh.setTitle(self.viewConfig.footerRefreshIdle, for: .idle)
             footerRefresh.setTitle(self.viewConfig.footerRefreshPulling, for: .pulling)
@@ -553,9 +551,7 @@ public class PTCollectionView: UIView {
     private(set) lazy var refreshControl:UIRefreshControl = {
         let control = UIRefreshControl()
         control.addRefreshHandlers { sender in
-            if self.headerRefreshTask != nil {
-                self.headerRefreshTask!(sender)
-            }
+            self.headerRefreshTask?(sender)
         }
         return control
     }()
@@ -745,9 +741,7 @@ public class PTCollectionView: UIView {
                     }
 
                     PTGCDManager.gcdAfter(time: 0.1) {
-                        if self.emptyTap != nil {
-                            self.emptyTap!(nil)
-                        }
+                        self.emptyTap?(nil)
                     }
                 }
             }
@@ -1123,35 +1117,27 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
-        if collectionDidSelect != nil {
-            collectionDidSelect!(collectionView,itemSec,indexPath)
-        }
+        collectionDidSelect?(collectionView,itemSec,indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if collectionDidEndDisplay != nil {
-                collectionDidEndDisplay!(collectionView,cell,itemSec,indexPath)
-            }
+            collectionDidEndDisplay?(collectionView,cell,itemSec,indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if collectionWillDisplay != nil {
-                collectionWillDisplay!(collectionView,cell,itemSec,indexPath)
-            }
+            collectionWillDisplay?(collectionView,cell,itemSec,indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if decorationViewReset != nil {
-                decorationViewReset!(collectionView,view,elementKind,indexPath,itemSec)
-            }
+            decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
         }
     }
     
@@ -1165,9 +1151,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         // Example:
         // let temp = self.data[sourceIndexPath.section].remove(at: sourceIndexPath.item)
         // self.data[destinationIndexPath.section].insert(temp, at: destinationIndexPath.item)
-        if itemMoveTo != nil {
-            itemMoveTo!(collectionView,sourceIndexPath,destinationIndexPath)
-        }
+        itemMoveTo?(collectionView,sourceIndexPath,destinationIndexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
