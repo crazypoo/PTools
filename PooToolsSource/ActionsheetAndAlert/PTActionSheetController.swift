@@ -72,8 +72,7 @@ public class PTActionCell:UIView {
 }
 
 @objc public enum PTSheetButtonStyle: Int {
-    case leftImageRightTitle
-    case leftTitleRightImage
+    case leftImageRightTitle,leftTitleRightImage
 }
 
 @objcMembers
@@ -84,9 +83,9 @@ public class PTActionSheetItem:NSObject {
     public var image:Any?
     public var imageSize:CGSize = CGSizeMake(34, 34)
     public var iCloudDocumentName:String = ""
-    public var heightlightColor:UIColor? = .lightGray
-    public var itemAlignment:UIControl.ContentHorizontalAlignment? = .center
-    public var itemLayout:PTSheetButtonStyle? = .leftImageRightTitle
+    public var heightlightColor:UIColor = .lightGray
+    public var itemAlignment:UIControl.ContentHorizontalAlignment = .center
+    public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle
     public var contentEdgeValue:CGFloat = 20
     public var contentImageSpace:CGFloat = 15
 
@@ -96,9 +95,9 @@ public class PTActionSheetItem:NSObject {
                 image: Any? = nil,
                 imageSize:CGSize = CGSizeMake(34, 34),
                 iCloudDocumentName:String = "",
-                heightlightColor: UIColor? = .lightGray,
-                itemAlignment: UIControl.ContentHorizontalAlignment? = .center,
-                itemLayout:PTSheetButtonStyle? = .leftImageRightTitle,
+                heightlightColor: UIColor = .lightGray,
+                itemAlignment: UIControl.ContentHorizontalAlignment = .center,
+                itemLayout:PTSheetButtonStyle = .leftImageRightTitle,
                 contentEdgeValue:CGFloat = 20,
                 contentImageSpace:CGFloat = 15) {
         self.title = title
@@ -119,22 +118,22 @@ public class PTActionSheetItem:NSObject {
 public class PTActionSheetTitleItem:NSObject {
     public var title:String = ""
     public var subTitle:String = ""
-    public var titleFont:UIFont? = .systemFont(ofSize: 16)
-    public var titleColor:UIColor? = UIColor.systemGray
+    public var titleFont:UIFont = .systemFont(ofSize: 16)
+    public var titleColor:UIColor = UIColor.systemGray
     public var image:Any?
     public var imageSize:CGSize = CGSizeMake(34, 34)
     public var iCloudDocumentName:String = ""
-    public var itemLayout:PTSheetButtonStyle? = .leftImageRightTitle
+    public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle
     public var contentImageSpace:CGFloat = 15
 
     public init(title: String = "",
                 subTitle: String = "",
-                titleFont: UIFont? = .systemFont(ofSize: 16),
-                titleColor: UIColor? = .systemGray,
+                titleFont: UIFont = .systemFont(ofSize: 16),
+                titleColor: UIColor = .systemGray,
                 image: Any? = nil,
                 imageSize:CGSize = CGSizeMake(34, 34),
                 iCloudDocumentName:String = "",
-                itemLayout:PTSheetButtonStyle? = .leftImageRightTitle,
+                itemLayout:PTSheetButtonStyle = .leftImageRightTitle,
                 contentImageSpace:CGFloat = 15) {
         self.title = title
         self.subTitle = subTitle
@@ -186,52 +185,12 @@ public class PTActionSheetController: PTAlertController {
     fileprivate var titleItem:PTActionSheetTitleItem?
 
     private lazy var cancelBtn : PTActionCell = {
-        let view = PTActionCell()
+        let view = createDestructiveView(for: cancelSheetItem,corner: true)
         view.cellButton.addActionHandlers(handler: { (sender) in
             self.dismissAnimation {
-                if self.actionSheetCancelSelectBlock != nil {
-                    self.actionSheetCancelSelectBlock!(self)
-                }
+                self.actionSheetCancelSelectBlock?(self)
             }
         })
-        view.cellButton.normalTitle = cancelSheetItem.title
-        view.cellButton.normalTitleFont = cancelSheetItem.titleFont!
-        view.cellButton.normalTitleColor = cancelSheetItem.titleColor!
-        view.cellButton.hightlightTitleFont = cancelSheetItem.titleFont!
-        view.cellButton.hightlightTitleColor = cancelSheetItem.titleColor!
-        view.cellButton.configBackgroundHightlightColor = cancelSheetItem.heightlightColor!
-        view.cellButton.contentHorizontalAlignment = cancelSheetItem.itemAlignment!
-        switch cancelSheetItem.itemAlignment! {
-        case .center:
-            break
-        case .left,.leading:
-            view.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: cancelSheetItem.contentEdgeValue, bottom: 0, trailing: 0)
-        case .right,.trailing:
-            view.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: cancelSheetItem.contentEdgeValue)
-        case .fill:
-            view.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: cancelSheetItem.contentEdgeValue, bottom: 0, trailing: cancelSheetItem.contentEdgeValue)
-        @unknown default:
-            break
-        }
-        if cancelSheetItem.image != nil {
-            switch cancelSheetItem.itemLayout! {
-            case .leftImageRightTitle:
-                view.cellButton.layoutStyle = .leftImageRightTitle
-            case .leftTitleRightImage:
-                view.cellButton.layoutStyle = .leftTitleRightImage
-            }
-            
-            var itemSize = CGSizeZero
-            if cancelSheetItem.imageSize.height >= (self.sheetConfig.rowHeight - 20) {
-                itemSize = CGSizeMake(cancelSheetItem.imageSize.width, self.sheetConfig.rowHeight - 20)
-            } else {
-                itemSize = cancelSheetItem.imageSize
-            }
-            view.cellButton.imageSize = itemSize
-            view.cellButton.midSpacing = cancelSheetItem.contentImageSpace
-            view.cellButton.layoutLoadImage(contentData: cancelSheetItem.image as Any,iCloudDocumentName: cancelSheetItem.iCloudDocumentName)
-        }
-        view.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: .allCorners)
         return view
     }()
     
@@ -252,12 +211,12 @@ public class PTActionSheetController: PTAlertController {
         view.cellButton.normalTitle = titleItem!.title
         view.cellButton.normalSubTitle = titleItem!.subTitle
         view.cellButton.isUserInteractionEnabled = false
-        view.cellButton.normalTitleFont = titleItem!.titleFont!
-        view.cellButton.normalTitleColor = titleItem!.titleColor!
-        view.cellButton.normalSubTitleFont = titleItem!.titleFont!
-        view.cellButton.normalSubTitleColor = titleItem!.titleColor!
+        view.cellButton.normalTitleFont = titleItem!.titleFont
+        view.cellButton.normalTitleColor = titleItem!.titleColor
+        view.cellButton.normalSubTitleFont = titleItem!.titleFont
+        view.cellButton.normalSubTitleColor = titleItem!.titleColor
         if titleItem!.image != nil {
-            switch titleItem!.itemLayout! {
+            switch titleItem!.itemLayout {
             case .leftImageRightTitle:
                 view.cellButton.layoutStyle = .leftImageRightTitle
             case .leftTitleRightImage:
@@ -310,12 +269,13 @@ public class PTActionSheetController: PTAlertController {
         alertContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        self.setupCancelButton()
-        self.setupDestructiveItems()
-        self.setupContentScrollerView()
-        self.setupTitleLabel()
-        self.contentSubsSet()
+        PTGCDManager.gcdAfter(time: 0.1) {
+            self.setupCancelButton()
+            self.setupDestructiveItems()
+            self.setupContentScrollerView()
+            self.setupTitleLabel()
+            self.contentSubsSet()
+        }
     }
 
     // 分离取消按钮的设置
@@ -335,7 +295,7 @@ public class PTActionSheetController: PTAlertController {
         guard destructiveCount > 0 else { return }
         
         for (index, destructiveItem) in destructiveItems!.enumerated() {
-            let destructiveView = createDestructiveView(for: destructiveItem)
+            let destructiveView = createDestructiveView(for: destructiveItem,corner: true)
             destructiveView.cellButton.addActionHandlers { sender in
                 self.dismissAnimation {
                     self.actionSheetDestructiveSelectBlock?(self, index, destructiveItem.title)
@@ -352,18 +312,18 @@ public class PTActionSheetController: PTAlertController {
         }
     }
 
-    private func createDestructiveView(for item: PTActionSheetItem) -> PTActionCell {
+    private func createDestructiveView(for item: PTActionSheetItem,corner:Bool) -> PTActionCell {
         let destructiveView = PTActionCell()
         destructiveView.cellButton.normalTitle = item.title
         destructiveView.cellButton.normalTitleFont = item.titleFont!
         destructiveView.cellButton.normalTitleColor = item.titleColor!
         destructiveView.cellButton.hightlightTitleFont = item.titleFont!
         destructiveView.cellButton.hightlightTitleColor = item.titleColor!
-        destructiveView.cellButton.configBackgroundHightlightColor = item.heightlightColor!
-        destructiveView.cellButton.contentHorizontalAlignment = item.itemAlignment!
+        destructiveView.cellButton.configBackgroundHightlightColor = item.heightlightColor
+        destructiveView.cellButton.contentHorizontalAlignment = item.itemAlignment
         
         let contentEdgeValue = item.contentEdgeValue
-        switch item.itemAlignment! {
+        switch item.itemAlignment {
         case .center: break
         case .left, .leading:
             destructiveView.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: contentEdgeValue, bottom: 0, trailing: 0)
@@ -382,7 +342,9 @@ public class PTActionSheetController: PTAlertController {
             destructiveView.cellButton.layoutStyle = item.itemLayout == .leftImageRightTitle ? .leftImageRightTitle : .leftTitleRightImage
         }
         
-        destructiveView.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii, corner: .allCorners)
+        if corner {
+            destructiveView.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii, corner: .allCorners)
+        }
         return destructiveView
     }
 
@@ -454,44 +416,7 @@ public class PTActionSheetController: PTAlertController {
                     make.top.equalTo(lineY)
                 }
                 
-                let btn = PTActionCell()
-                btn.cellButton.normalTitle = value.title
-                btn.cellButton.normalTitleFont = value.titleFont!
-                btn.cellButton.normalTitleColor = value.titleColor!
-                btn.cellButton.hightlightTitleFont = value.titleFont!
-                btn.cellButton.hightlightTitleColor = value.titleColor!
-                btn.cellButton.configBackgroundHightlightColor = value.heightlightColor!
-                btn.cellButton.contentHorizontalAlignment = value.itemAlignment!
-                switch value.itemAlignment! {
-                case .center:
-                    break
-                case .left,.leading:
-                    btn.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: value.contentEdgeValue, bottom: 0, trailing: 0)
-                case .right,.trailing:
-                    btn.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: value.contentEdgeValue)
-                case .fill:
-                    btn.cellButton.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: value.contentEdgeValue, bottom: 0, trailing: value.contentEdgeValue)
-                @unknown default:
-                    break
-                }
-                if value.image != nil {
-                    switch value.itemLayout! {
-                    case .leftImageRightTitle:
-                        btn.cellButton.layoutStyle = .leftImageRightTitle
-                    case .leftTitleRightImage:
-                        btn.cellButton.layoutStyle = .leftTitleRightImage
-                    }
-                    
-                    var itemSize = CGSizeZero
-                    if value.imageSize.height >= (sheetConfig.rowHeight - 20) {
-                        itemSize = CGSizeMake(value.imageSize.width, sheetConfig.rowHeight - 20)
-                    } else {
-                        itemSize = value.imageSize
-                    }
-                    btn.cellButton.imageSize = itemSize
-                    btn.cellButton.midSpacing = value.contentImageSpace
-                    btn.cellButton.layoutLoadImage(contentData: value.image as Any,iCloudDocumentName: value.iCloudDocumentName)
-                }
+                let btn = createDestructiveView(for: value,corner: false)
                 btn.cellButton.addActionHandlers { sender in
                     self.dismissAnimation {
                         self.actionSheetSelectBlock?(self,index,value.title)
@@ -527,7 +452,6 @@ public class PTActionSheetController: PTAlertController {
 extension PTActionSheetController {
     public override func showAnimation(completion: (() -> Void)?) {
         self.view.backgroundColor = UIColor.DevMaskColor
-        
         PTGCDManager.gcdMain {
             PTAnimationFunction.animationIn(animationView: self.alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
                 if finish {

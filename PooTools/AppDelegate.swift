@@ -57,6 +57,8 @@ class AppDelegate: PTAppWindowsDelegate {
     
     var permissionStatic = PTPermissionStatic.share
 
+    var guideHud:PTGuidePageHUD?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let locationAlways = PTPermissionModel()
@@ -175,12 +177,14 @@ class AppDelegate: PTAppWindowsDelegate {
             guideModel.pageControl = .pageControl(type: .system)
             guideModel.skipShow = true
             
-            let guideHud = PTGuidePageHUD(viewModel: guideModel)
-            guideHud.animationTime = 1.5
-            guideHud.adHadRemove = {
-                
+            if self.guideHud == nil {
+                self.guideHud = PTGuidePageHUD(viewModel: guideModel)
+                self.guideHud!.animationTime = 1.5
+                self.guideHud!.adHadRemove = {
+                    
+                }
+                self.guideHud!.guideShow()
             }
-            guideHud.guideShow()
         }
                 
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
