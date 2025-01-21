@@ -80,24 +80,28 @@ public class PTPermissionLocation: PTPermission {
         #endif
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         switch _kind {
         case .location(let access):
             switch access {
             case .whenInUse:
                 PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
-                PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
-                    PTGCDManager.gcdMain {
-                        completion()
-                        PTPermissionLocationWhenInUseHandler.shared = nil
+                PTGCDManager.gcdMain {
+                    PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
+                        PTGCDManager.gcdMain {
+                            completion()
+                            PTPermissionLocationWhenInUseHandler.shared = nil
+                        }
                     }
                 }
             case .always:
                 PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
-                PTPermissionLocationAlwaysHandler.shared?.requestPermission {
-                    PTGCDManager.gcdMain {
-                        completion()
-                        PTPermissionLocationAlwaysHandler.shared = nil
+                PTGCDManager.gcdMain {
+                    PTPermissionLocationAlwaysHandler.shared?.requestPermission {
+                        PTGCDManager.gcdMain {
+                            completion()
+                            PTPermissionLocationAlwaysHandler.shared = nil
+                        }
                     }
                 }
             }

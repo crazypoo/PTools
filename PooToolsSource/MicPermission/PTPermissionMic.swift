@@ -30,7 +30,7 @@ public class PTPermissionMic: PTPermission {
         }
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         AVAudioSession.sharedInstance().requestRecordPermission {
             granted in
             PTGCDManager.gcdMain {

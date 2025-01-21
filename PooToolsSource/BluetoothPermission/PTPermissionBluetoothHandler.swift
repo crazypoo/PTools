@@ -9,9 +9,9 @@
 import Foundation
 import CoreBluetooth
 
-class PTPermissionBluetoothHandler: NSObject, CBCentralManagerDelegate {
+class PTPermissionBluetoothHandler: NSObject, @preconcurrency CBCentralManagerDelegate {
     
-    var completion: ()->Void = {}
+    var completion: PTActionTask = {}
     
     // MARK: - Init
     
@@ -25,7 +25,7 @@ class PTPermissionBluetoothHandler: NSObject, CBCentralManagerDelegate {
     
     var manager: CBCentralManager?
     
-    func reqeustUpdate() {
+    @MainActor func reqeustUpdate() {
         if manager == nil {
             manager = CBCentralManager(delegate: self, queue: nil, options: [:])
         } else {
@@ -33,7 +33,7 @@ class PTPermissionBluetoothHandler: NSObject, CBCentralManagerDelegate {
         }
     }
     
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    @MainActor func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .unauthorized,.unsupported,.unknown:
             // 用户未授权使用蓝牙

@@ -32,8 +32,10 @@ public class PTPermissionBluetooth: PTPermission {
         }
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         PTPermissionBluetoothHandler.shared.completion = completion
-        PTPermissionBluetoothHandler.shared.reqeustUpdate()
+        PTGCDManager.gcdMain {
+            PTPermissionBluetoothHandler.shared.reqeustUpdate()
+        }
     }
 }

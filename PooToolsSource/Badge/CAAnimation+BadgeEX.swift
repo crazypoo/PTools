@@ -9,9 +9,7 @@
 import UIKit
 
 public enum PTAxisType:Int {
-    case AxisX
-    case AxisY
-    case AxisZ
+    case AxisX,AxisY,AxisZ
 }
 
 extension CAAnimation {

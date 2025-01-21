@@ -162,7 +162,7 @@ public class PTGCDManager :NSObject {
                                 semaphoreCount: Int = 3, // 最大并发数
                                 threadCount: Int,
                                 doSomeThing: @escaping @Sendable (_ dispatchSemaphore: DispatchSemaphore, _ dispatchGroup: DispatchGroup, _ currentIndex: Int) -> Void,
-                                allRequestsFinished: @escaping PTActionTask,
+                                           allRequestsFinished: @escaping PTActionTask,
                                 cancelCompletion: @escaping PTActionTask) {
 
         dispatchGroup = DispatchGroup()
@@ -175,16 +175,16 @@ public class PTGCDManager :NSObject {
         for i in 0..<threadCount {
             concurrentQueue.async(group: dispatchGroup!) {
                 // 等待信号量，限制最大并发数
-                self.dispatchSemaphore?.wait()
+                self.dispatchSemaphore!.wait()
 
                 // 如果标志是取消状态，则直接退出
                 if self.cancelFlag {
-                    self.dispatchGroup?.leave() // 任务直接退出
+                    self.dispatchGroup!.leave() // 任务直接退出
                     tasksCompleted += 1
                     return
                 }
 
-                self.dispatchGroup?.enter() // 任务开始
+                self.dispatchGroup!.enter() // 任务开始
 
                 // 执行任务
                 doSomeThing(self.dispatchSemaphore!, self.dispatchGroup!, i)

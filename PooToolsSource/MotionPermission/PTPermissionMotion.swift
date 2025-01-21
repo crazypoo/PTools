@@ -31,7 +31,7 @@ public class PTPermissionMotion: PTPermission {
         }
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         let manager = CMMotionActivityManager()
         let today = Date()
         

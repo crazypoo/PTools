@@ -6,7 +6,7 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
-import UserNotifications
+@preconcurrency import UserNotifications
 
 public extension PTPermission {
     
@@ -44,7 +44,7 @@ public class PTPermissionNotification: PTPermission {
         return notificationSettings?.authorizationStatus
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
             PTGCDManager.gcdMain {

@@ -34,7 +34,7 @@ public class PTPermissionReminders: PTPermission {
         }
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         
         let eventStore = EKEventStore()
         

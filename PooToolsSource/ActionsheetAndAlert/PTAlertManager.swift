@@ -51,7 +51,7 @@ public extension PTAlertManager {
 
 public extension PTAlertManager {
     /// 显示自定义弹窗
-    static func show(_ controller: PTAlertProtocol, completion: (() -> Void)? = nil) {
+    static func show(_ controller: PTAlertProtocol, completion: PTActionTask? = nil) {
         mainSync {
             let shouldShow = !shared.windows.values.contains { $0.rootPopoverController?.config.popoverMode == .unique } &&
                 !shared.windows.values.contains { $0.rootPopoverController?.config.identifier == controller.config.identifier && controller.config.identifier != nil } &&
@@ -87,7 +87,7 @@ public extension PTAlertManager {
     }
 
     /// 隐藏指定弹窗
-    static func dismiss(_ key: String?, completion: (() -> Void)? = nil) {
+    static func dismiss(_ key: String?, completion: PTActionTask? = nil) {
         guard let key else { return }
         func remove() {}
         mainSync {

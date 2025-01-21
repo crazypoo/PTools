@@ -32,7 +32,7 @@ public class PTPermissionTracking: PTPermission {
         }
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         ATTrackingManager.requestTrackingAuthorization { _ in
             PTGCDManager.gcdMain {
                 completion()

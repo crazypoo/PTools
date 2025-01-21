@@ -9,20 +9,20 @@
 import Foundation
 import MapKit
 
-class PTPermissionLocationAlwaysHandler: NSObject, CLLocationManagerDelegate {
+class PTPermissionLocationAlwaysHandler: NSObject, @preconcurrency CLLocationManagerDelegate {
     
     // MARK: - Location Manager
     
     lazy var locationManager = CLLocationManager()
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    @MainActor func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .notDetermined {
             return
         }
         completionHandler()
     }
   
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    @MainActor func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if manager.authorizationStatus == .notDetermined {
             return
         }
@@ -31,9 +31,9 @@ class PTPermissionLocationAlwaysHandler: NSObject, CLLocationManagerDelegate {
     
     // MARK: - Process
     
-    var completionHandler: () -> Void = {}
+    var completionHandler: PTActionTask = {}
     
-    func requestPermission(_ completionHandler: @escaping () -> Void) {
+    @MainActor func requestPermission(_ completionHandler: @escaping PTActionTask) {
         self.completionHandler = completionHandler
         
         let status = CLLocationManager.authorizationStatus()

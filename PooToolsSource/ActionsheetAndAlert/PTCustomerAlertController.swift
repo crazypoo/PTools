@@ -226,7 +226,7 @@ public class PTCustomerAlertController: PTAlertController {
 }
 
 extension PTCustomerAlertController {
-    public override func showAnimation(completion: (() -> Void)?) {
+    public override func showAnimation(completion: PTActionTask?) {
         UIView.animate(withDuration: 0.2) {
             self.view.backgroundColor = UIColor.DevMaskColor
             self.contentView.alpha = 1.0
@@ -239,7 +239,7 @@ extension PTCustomerAlertController {
         }
     }
     
-    public override func dismissAnimation(completion: (() -> Void)?) {
+    public override func dismissAnimation(completion: PTActionTask?) {
         UIView.animate(withDuration: 0.2, animations: {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
             self.contentView.alpha = 0.0

@@ -9,14 +9,14 @@
 import Foundation
 import MapKit
 
-class PTPermissionLocationWhenInUseHandler: NSObject, CLLocationManagerDelegate {
+class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocationManagerDelegate {
     
     // MARK: - Location Manager
     
     lazy var locationManager = CLLocationManager()
     
 #if !os(visionOS)
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    @MainActor func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .notDetermined {
             return
         }
@@ -24,7 +24,7 @@ class PTPermissionLocationWhenInUseHandler: NSObject, CLLocationManagerDelegate 
     }
 #endif
 
-    @available(iOS 14.0, macOS 11.0, watchOS 7.0, tvOS 14.0, visionOS 1.0, *)
+    @MainActor @available(iOS 14.0, macOS 11.0, watchOS 7.0, tvOS 14.0, visionOS 1.0, *)
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if manager.authorizationStatus == .notDetermined {
             return
@@ -34,9 +34,9 @@ class PTPermissionLocationWhenInUseHandler: NSObject, CLLocationManagerDelegate 
     
     // MARK: - Process
     
-    var completionHandler: () -> Void = {}
+    var completionHandler: PTActionTask = {}
     
-    func requestPermission(_ completionHandler: @escaping () -> Void) {
+    @MainActor func requestPermission(_ completionHandler: @escaping PTActionTask) {
         self.completionHandler = completionHandler
         
         let status: CLAuthorizationStatus = {

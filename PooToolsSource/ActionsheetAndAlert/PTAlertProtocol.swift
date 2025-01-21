@@ -10,7 +10,7 @@ import UIKit
 
 public protocol PTAlertProtocol where Self: PTAlertController {
     /// 显示
-    func showAnimation(completion: (() -> Void)?)
+    func showAnimation(completion: PTActionTask?)
     /// 隐藏
-    func dismissAnimation(completion: (() -> Void)?)
+    func dismissAnimation(completion: PTActionTask?)
 }

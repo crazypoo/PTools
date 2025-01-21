@@ -353,7 +353,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
         
-    func alert_Tips(tipsTitle:String? = "",
+    @MainActor func alert_Tips(tipsTitle:String? = "",
                           cancelTitle:String = "",
                           cancelBlock: PTActionTask? = nil,
                           doneTitle:String,
@@ -377,7 +377,7 @@ public class PTCheckUpdateFunction: NSObject {
     ///   - test: 是否測試
     ///   - isShowError: 是否顯示錯誤
     ///   - isForcedUpgrade: 是否強制升級
-    func alert_updateTips(oldVersion oV: String,
+    @MainActor func alert_updateTips(oldVersion oV: String,
                                 newVersion nV: String,
                                 description descriptionString: String,
                                 downloadUrl url: URL,

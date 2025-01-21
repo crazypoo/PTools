@@ -52,7 +52,7 @@ open class PTPermission {
         preconditionFailure("This method must be overridden.")
     }
     
-    open func request(completion: @escaping ()->Void) {
+    open func request(completion: @escaping PTActionTask) {
         preconditionFailure("This method must be overridden.")
     }
     

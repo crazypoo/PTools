@@ -450,7 +450,7 @@ public class PTActionSheetController: PTAlertController {
 }
 
 extension PTActionSheetController {
-    public override func showAnimation(completion: (() -> Void)?) {
+    public override func showAnimation(completion: PTActionTask?) {
         self.view.backgroundColor = UIColor.DevMaskColor
         PTGCDManager.gcdMain {
             PTAnimationFunction.animationIn(animationView: self.alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
@@ -461,7 +461,7 @@ extension PTActionSheetController {
         }
     }
     
-    public override func dismissAnimation(completion: (() -> Void)?) {
+    public override func dismissAnimation(completion: PTActionTask?) {
         PTAnimationFunction.animationOut(animationView: alertContent, animationType: .Bottom,duration: 0.55) {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
         } completion: { ok in

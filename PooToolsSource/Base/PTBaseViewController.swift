@@ -21,15 +21,11 @@ public typealias PTScreenShotImageHandle = (PTScreenShotActionType,UIImage) -> V
 public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void
 
 public enum PTScreenShotActionType {
-    case Share
-    case Feedback
-    case Edit
+    case Share,Feedback,Edit
 }
 
 @objc public enum VCStatusBarChangeStatusType : Int {
-    case Dark
-    case Light
-    case Auto
+    case Dark,Light,Auto
 }
 
 #if POOTOOLS_NAVBARCONTROLLER
@@ -266,19 +262,13 @@ extension PTBaseViewController {
                                     }
                                 }
                             } else {
-                                if self.screenShotHandle != nil {
-                                    self.screenShotHandle!(nil)
-                                }
+                                self.screenShotHandle?(nil)
                             }
                         } else {
-                            if self.screenShotHandle != nil {
-                                self.screenShotHandle!(nil)
-                            }
+                            self.screenShotHandle?(nil)
                         }
                     } else {
-                        if self.screenShotHandle != nil {
-                            self.screenShotHandle!(nil)
-                        }
+                        self.screenShotHandle?(nil)
                     }
                 }
             case .Video:

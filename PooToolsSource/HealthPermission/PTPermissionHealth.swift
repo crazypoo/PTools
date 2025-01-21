@@ -32,7 +32,7 @@ public class PTPermissionHealth: PTPermission {
         }
     }
     
-    public static func request(forReading readingTypes: Set<HKObjectType>, writing writingTypes: Set<HKSampleType>, completion: @escaping () -> Void) {
+    public static func request(forReading readingTypes: Set<HKObjectType>, writing writingTypes: Set<HKSampleType>, completion: @escaping PTActionTask) {
         HKHealthStore().requestAuthorization(toShare: writingTypes, read: readingTypes) { _, _ in
             PTGCDManager.gcdMain {
                 completion()
@@ -57,5 +57,5 @@ public class PTPermissionHealth: PTPermission {
     public override var status: PTPermission.Status { fatalError() }
     
     @available(*, unavailable)
-    open override func request(completion: @escaping ()->Void) { fatalError() }
+    open override func request(completion: @escaping PTActionTask) { fatalError() }
 }

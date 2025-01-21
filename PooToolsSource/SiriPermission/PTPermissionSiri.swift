@@ -31,7 +31,7 @@ public class PTPermissionSiri: PTPermission {
         }
     }
     
-    public override func request(completion: @escaping () -> Void) {
+    public override func request(completion: @escaping PTActionTask) {
         INPreferences.requestSiriAuthorization { _ in
             PTGCDManager.gcdMain {
                 completion()

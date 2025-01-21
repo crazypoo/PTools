@@ -162,9 +162,9 @@ public class PTLaunchAdMonitor: NSObject {
                     }
                     self.skipButton.viewCorner(radius: buttonWidth / 2)
                     PTGCDManager.gcdMain {
-                        self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "") {
+                        self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "",timeFinish: {
                             self.hideView(sender: self.skipButton)
-                        }
+                        })
                     }
                 case .Video:
                     if let videoUrl = media as? URL {
