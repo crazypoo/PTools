@@ -44,7 +44,6 @@ enum ViewHierarchyIssue: CustomStringConvertible, Hashable {
             array.append(.controlDisabled)
         }
 
-        #if swift(>=5.5)
         guard #available(iOS 15.0, *) else { return array }
 
         let defaultAppearance = UINavigationBarAppearance()
@@ -58,7 +57,6 @@ enum ViewHierarchyIssue: CustomStringConvertible, Hashable {
         {
             array.append(.iOS15_emptyNavigationBarScrollEdgeAppearance)
         }
-        #endif
 
         return array
     }

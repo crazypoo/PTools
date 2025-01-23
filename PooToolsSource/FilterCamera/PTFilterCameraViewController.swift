@@ -476,27 +476,29 @@ public class PTFilterCameraViewController: PTBaseViewController {
             return
         }
                 
-        if !Gobal_device_info.isSimulator {
-            switch PTPermission.camera.status {
-            case .notDetermined:
-                PTPermission.camera.request {
-                    switch PTPermission.camera.status {
-                    case .authorized:
-                        self.camera.startRunning()
-                    default:
-                        return
+        PTGCDManager.gcdAfter(time: 0.1) {
+            if !Gobal_device_info.isSimulator {
+                switch PTPermission.camera.status {
+                case .notDetermined:
+                    PTPermission.camera.request {
+                        switch PTPermission.camera.status {
+                        case .authorized:
+                            self.camera.startRunning()
+                        default:
+                            return
+                        }
                     }
+                case .authorized:
+                    self.camera.startRunning()
+                default:
+                    return
                 }
-            case .authorized:
-                camera.startRunning()
-            default:
-                return
+                PTGCDManager.gcdAfter(time: 1, block: {
+                    if self.camera.captureSession.isRunning,self.originImageView.image != nil {
+                        self.generateFilterImages()
+                    }
+                })
             }
-            PTGCDManager.gcdAfter(time: 1, block: {
-                if self.camera.captureSession.isRunning,self.originImageView.image != nil {
-                    self.generateFilterImages()
-                }
-            })
         }
     }
     

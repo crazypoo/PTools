@@ -82,14 +82,10 @@ public extension UIViewController {
                 view.apply(viewOptions: viewOptions)
             
             case let .overrideUserInterfaceStyle(overrideUserInterfaceStyle):
-                #if swift(>=5.0)
                 self.overrideUserInterfaceStyle = overrideUserInterfaceStyle.rawValue
-                #endif
                 
             case let .isModalInPresentation(isModalInPresentation):
-                #if swift(>=5.0)
                 self.isModalInPresentation = isModalInPresentation
-                #endif
                 
             case let .hidesBottomBarWhenPushed(hidesBottomBarWhenPushed):
                 self.hidesBottomBarWhenPushed = hidesBottomBarWhenPushed
@@ -239,7 +235,6 @@ extension UIViewController {
             return
         }
 
-        #if swift(>=5.5)
         if #available(iOS 15.0, *) {
             modalPresentationStyle = .popover
 
@@ -256,17 +251,6 @@ extension UIViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.sourceView = sourceView
         }
-        #else
-        if sourceView?.traitCollection.userInterfaceIdiom == .phone {
-            modalPresentationStyle = .pageSheet
-            presentationController?.delegate = delegate as? UIAdaptivePresentationControllerDelegate
-        }
-        else {
-            modalPresentationStyle = .popover
-            popoverPresentationController?.sourceView = sourceView
-            popoverPresentationController?.delegate = delegate as? UIPopoverPresentationControllerDelegate
-        }
-        #endif
     }
 }
 

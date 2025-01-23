@@ -76,7 +76,6 @@ extension DefaultElementAttributesLibrary {
                         handler: nil
                     )
                 case .canBecomeKey:
-                    #if swift(>=5.5)
                     guard #available(iOS 15.0, *) else { return nil }
 
                     return .switch(
@@ -84,9 +83,6 @@ extension DefaultElementAttributesLibrary {
                         isOn: { window.canBecomeKey },
                         handler: nil
                     )
-                    #else
-                    return nil
-                    #endif
                 }
             }
         }

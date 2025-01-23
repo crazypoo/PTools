@@ -24,10 +24,8 @@ extension UIImage {
             case let .renderingMode(renderingMode):
                 newImage = newImage.withRenderingMode(renderingMode)
                 
-            #if swift(>=5.0)
             case let .tintColor(tintColor, renderingMode):
                 newImage = newImage.withTintColor(tintColor, renderingMode: renderingMode)
-            #endif
                 
             case let .size(size):
                 newImage = newImage.resized(size)
@@ -43,9 +41,7 @@ extension UIImage {
         /// The rendering mode controls how UIKit uses color information to display an image.
         case renderingMode(RenderingMode)
         
-        #if swift(>=5.0)
         case tintColor(_ tintColor: UIColor, renderingMode: RenderingMode = .automatic)
-        #endif
 
         case size(CGSize)
         

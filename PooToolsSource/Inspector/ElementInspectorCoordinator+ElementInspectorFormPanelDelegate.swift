@@ -30,7 +30,6 @@ extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
                 $0.selectedColor = selectedColor
             }
 
-            #if swift(>=5.5)
             if #available(iOS 15.0, *), let sheet = $0.sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
                 sheet.selectedDetentIdentifier = .medium
@@ -38,7 +37,6 @@ extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
                 sheet.sourceView = colorPreviewControl
                 sheet.preferredCornerRadius = Inspector.sharedInstance.appearance.elementInspector.horizontalMargins
             }
-            #endif
         }
 
         formPanelViewController.present(colorPickerViewController, animated: true)

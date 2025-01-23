@@ -117,10 +117,9 @@ public extension UITableView {
             case let .remembersLastFocusedIndexPath(remembersLastFocusedIndexPath):
                 self.remembersLastFocusedIndexPath = remembersLastFocusedIndexPath
                 
-            #if swift(>=5.3)
             case let .selectionFollowsFocus(selectionFollowsFocus):
                 self.selectionFollowsFocus = selectionFollowsFocus
-            #endif
+
             case let .dragInteractionEnabled(dragInteractionEnabled):
                 self.dragInteractionEnabled = dragInteractionEnabled
                 
@@ -235,9 +234,7 @@ public extension UITableView {
         case remembersLastFocusedIndexPath(Bool)
         
         /// A Boolean value that triggers an automatic selection when focus moves to a cell.
-        #if swift(>=5.3)
         case selectionFollowsFocus(Bool)
-        #endif
         
         /// A Boolean value indicating whether the table view supports drags and drops between apps.
         case dragInteractionEnabled(Bool)

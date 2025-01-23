@@ -8,9 +8,7 @@
 
 import UIKit
 import MobileCoreServices
-#if swift(>=5.3)
 import UniformTypeIdentifiers
-#endif
 
 public extension UIDocumentPickerViewController {
     
@@ -21,9 +19,7 @@ public extension UIDocumentPickerViewController {
         }
         
         let viewController: UIDocumentPickerViewController = {
-#if swift(>=5.3)
             return UIDocumentPickerViewController(forOpeningContentTypes: documentTypeOptions.uttypes, asCopy: options.asCopy)
-#endif
         }()
         
         viewController.apply(documentPickerOptions: options)
@@ -38,9 +34,7 @@ public extension UIDocumentPickerViewController {
         }
         
         let viewController: UIDocumentPickerViewController = {
-#if swift(>=5.3)
             return UIDocumentPickerViewController(forOpeningContentTypes: documentTypeOptions.uttypes, asCopy: options.asCopy)
-#endif
         }()
         
         viewController.apply(documentPickerOptions: options)
@@ -55,9 +49,7 @@ public extension UIDocumentPickerViewController {
         }
         
         let viewController: UIDocumentPickerViewController = {
-#if swift(>=5.3)
             return UIDocumentPickerViewController(forExporting: urls, asCopy: options.asCopy)
-#endif
         }()
         
         viewController.apply(documentPickerOptions: options)
@@ -72,9 +64,7 @@ public extension UIDocumentPickerViewController {
         }
         
         let viewController: UIDocumentPickerViewController = {
-#if swift(>=5.3)
             return UIDocumentPickerViewController(forExporting: urls, asCopy: false)
-#endif
         }()
         
         viewController.apply(documentPickerOptions: options)
@@ -148,14 +138,10 @@ public extension UIDocumentPickerViewController {
                 apply(viewControllerOptions: viewControllerOptions)
                 
             case let .shouldShowFileExtensions(shouldShowFileExtensions):
-                #if swift(>=5.0)
                 self.shouldShowFileExtensions = shouldShowFileExtensions
-                #endif
                 
             case let .directoryURL(directoryURL):
-                #if swift(>=5.0)
                 self.directoryURL = directoryURL
-                #endif
             
             // cases used on init only
             case .asCopy,

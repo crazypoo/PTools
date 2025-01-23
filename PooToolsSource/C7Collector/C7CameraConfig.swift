@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 public class C7CameraConfig: NSObject {
-    static let share = C7CameraConfig()
+    public static let share = C7CameraConfig()
     /// The default camera position after entering the camera. Defaults to back.
     public var devicePosition: C7CameraConfig.DevicePosition = .back
     @objc public enum DevicePosition: Int {

@@ -2967,10 +2967,10 @@
 		55B4FA3A2AE149C5006D35F3 /* LocationPermission */ = {
 			isa = PBXGroup;
 			children = (
-				55B4FA3B2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
 				55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */,
-				55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
 				55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */,
+				55B4FA3B2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
+				55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
 			);
 			path = LocationPermission;
 			sourceTree = "<group>";

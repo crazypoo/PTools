@@ -238,7 +238,9 @@ public class LocalConsole: NSObject {
                 self.setLog()
                 if self.isVisiable {
                     UIView.performWithoutAnimation {
-                        self.commitTextChanges(requestMenuUpdate: oldValue == "" || (oldValue != "" && self.currentText == ""))
+                        PTGCDManager.gcdMain {
+                            self.commitTextChanges(requestMenuUpdate: oldValue == "" || (oldValue != "" && self.currentText == ""))
+                        }
                     }
                 }
             }

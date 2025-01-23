@@ -56,10 +56,8 @@ public extension NSAttributedString {
         /// The kerning of the text.
         case kern(Double)
         
-        #if swift(>=5.3)
         /// The amount to modify default tracking. 0 means tracking is disabled.
         case tracking(Float)
-        #endif
         
         /// The strikethrough style of the text.
         case strikethroughStyle(NSUnderlineStyle)
@@ -152,10 +150,8 @@ public extension AttributesDictionary {
             case let .kern(kern):
                 dict[.kern] = NSNumber(floatLiteral: kern)
                 
-            #if swift(>=5.3)
             case let .tracking(tracking):
                 dict[.tracking] = tracking
-            #endif
             
             case let .strikethroughStyle(strikethroughStyle):
                 dict[.strikethroughStyle] = NSNumber(integerLiteral: strikethroughStyle.rawValue)

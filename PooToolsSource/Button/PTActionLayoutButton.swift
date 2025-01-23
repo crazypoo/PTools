@@ -22,7 +22,7 @@ public class PTActionLayoutButton: UIControl {
         }
     }
     
-    public var midSpace:CGFloat = 0 {
+    public var midSpacing:CGFloat = 0 {
         didSet {
             updateAppearance()
         }
@@ -79,7 +79,7 @@ public class PTActionLayoutButton: UIControl {
             updateAppearance()
         }
     }
-
+    
     fileprivate lazy var imageView:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -110,12 +110,12 @@ public class PTActionLayoutButton: UIControl {
         if currentImage != nil && !currentString.stringIsEmpty() {
             switch layoutStyle {
             case .leftImageRightTitle:
-                let maxWidth = frame.width - imageSize.width - midSpace
+                let maxWidth = frame.width - imageSize.width - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
                     titleWidth = maxWidth
                 }
-                let labelX = (frame.width - titleWidth) / 2 + imageSize.width / 2 + midSpace
+                let labelX = (frame.width - titleWidth) / 2 + imageSize.width / 2 + midSpacing
                 titleLabel.snp.makeConstraints { make in
                     make.width.equalTo(titleWidth)
                     make.top.bottom.equalToSuperview()
@@ -123,34 +123,34 @@ public class PTActionLayoutButton: UIControl {
                 }
                 
                 imageView.snp.makeConstraints { make in
-                    make.right.equalTo(self.titleLabel.snp.left).offset(-midSpace)
+                    make.right.equalTo(self.titleLabel.snp.left).offset(-midSpacing)
                     make.size.equalTo(self.imageSize)
                     make.centerY.equalToSuperview()
                 }
             case .leftTitleRightImage:
-                let maxWidth = frame.width - imageSize.width - midSpace
+                let maxWidth = frame.width - imageSize.width - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
                     titleWidth = maxWidth
                 }
-                let labelX = (frame.width - (imageSize.width + midSpace + titleWidth)) / 2
+                let labelX = (frame.width - (imageSize.width + midSpacing + titleWidth)) / 2
                 titleLabel.snp.makeConstraints { make in
                     make.width.equalTo(titleWidth)
                     make.top.bottom.equalToSuperview()
                     make.left.equalToSuperview().inset(labelX)
                 }
                 imageView.snp.makeConstraints { make in
-                    make.left.equalTo(self.titleLabel.snp.right).offset(midSpace)
+                    make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
                     make.size.equalTo(self.imageSize)
                     make.centerY.equalToSuperview()
                 }
             case .upImageDownTitle:
-                let maxHeight = frame.height - imageSize.height - midSpace
+                let maxHeight = frame.height - imageSize.height - midSpacing
                 var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 if titleHeight > maxHeight {
                     titleHeight = maxHeight
                 }
-                let labelY = (frame.height - titleHeight) / 2 + imageSize.height / 2 + midSpace
+                let labelY = (frame.height - titleHeight) / 2 + imageSize.height / 2 + midSpacing
 
                 titleLabel.snp.makeConstraints { make in
                     make.left.right.equalToSuperview()
@@ -161,15 +161,15 @@ public class PTActionLayoutButton: UIControl {
                 imageView.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
-                    make.bottom.equalTo(self.titleLabel.snp.top).offset(-self.midSpace)
+                    make.bottom.equalTo(self.titleLabel.snp.top).offset(-self.midSpacing)
                 }
             case .upTitleDownImage:
-                let maxHeight = frame.height - imageSize.height - midSpace
+                let maxHeight = frame.height - imageSize.height - midSpacing
                 var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 if titleHeight > maxHeight {
                     titleHeight = maxHeight
                 }
-                let labelY = (frame.height - (imageSize.height + midSpace + titleHeight)) / 2
+                let labelY = (frame.height - (imageSize.height + midSpacing + titleHeight)) / 2
 
                 titleLabel.snp.makeConstraints { make in
                     make.left.right.equalToSuperview()
@@ -180,7 +180,7 @@ public class PTActionLayoutButton: UIControl {
                 imageView.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
-                    make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpace)
+                    make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
                 }
             default:
                 break
@@ -256,6 +256,25 @@ public class PTActionLayoutButton: UIControl {
             imageView.loadImage(contentData: currentImage)
         }
         setNeedsLayout()
+    }
+    
+    public func getKitTitleSize(lineSpacing:NSNumber? = nil,
+                            height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                            width:CGFloat = CGFloat.greatestFiniteMagnitude) ->CGSize {
+        return UIView.sizeFor(string: currentString, font: currentFont,lineSpacing: lineSpacing,height: height,width: width)
+    }
+    
+    public func getKitCurrentDimension(lineSpacing:NSNumber? = nil,
+                            height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                            width:CGFloat = CGFloat.greatestFiniteMagnitude) ->CGFloat {
+        var total:CGFloat = 0
+        switch layoutStyle {
+        case .leftImageRightTitle,.leftTitleRightImage:
+            total = self.getKitTitleSize(lineSpacing: lineSpacing,height: height,width: width).width + 5 + imageSize.width + midSpacing
+        default:
+            total = self.getKitTitleSize(lineSpacing: lineSpacing,height: height,width: width).height + 5 + imageSize.height + midSpacing
+        }
+        return total
     }
 }
 

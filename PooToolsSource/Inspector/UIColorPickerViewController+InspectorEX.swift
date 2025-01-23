@@ -8,7 +8,6 @@
 
 import UIKit
 
-#if swift(>=5.3)
 public extension UIColorPickerViewController {
     convenience init(_ options: Option...) {
         self.init(options)
@@ -73,5 +72,3 @@ public extension UIColorPickerViewController {
         }
     }
 }
-
-#endif

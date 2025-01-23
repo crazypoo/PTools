@@ -80,11 +80,7 @@ open class PTGifManager {
     fileprivate var memoryLimit: Int
     open var haveCache: Bool
     open var remoteCache : [URL : Data] = [:]
-#if swift(>=4.2)
     public var mode: RunLoop.Mode = .common
-#else
-    public var mode: RunLoopMode = RunLoopMode.commonModes
-#endif
     
     /// Initialize a manager
     ///

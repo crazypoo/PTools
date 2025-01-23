@@ -42,10 +42,10 @@ public extension NSDirectionalEdgeInsets {
     
     init<T: BinaryFloatingPoint>(horizontal: T? = nil, vertical: T? = nil) {
         self.init(
-            top: vertical ?? .zero,
-            leading: horizontal ?? .zero,
-            bottom: vertical ?? .zero,
-            trailing: horizontal ?? .zero
+            top: T(vertical ?? .zero),
+            leading: T(horizontal ?? .zero),
+            bottom: T(vertical ?? .zero),
+            trailing: T(horizontal ?? .zero)
         )
     }
     
@@ -62,10 +62,10 @@ public extension NSDirectionalEdgeInsets {
 
     init<T: BinaryFloatingPoint>(top: T? = nil, leading: T? = nil, bottom: T? = nil, trailing: T? = nil) {
         self.init(
-            top: CGFloat(top ?? .zero),
-            leading: CGFloat(leading ?? .zero),
-            bottom: CGFloat(bottom ?? .zero),
-            trailing: CGFloat(trailing ?? .zero)
+            top: CGFloat(T(top ?? .zero)),
+            leading: CGFloat(T(leading ?? .zero)),
+            bottom: CGFloat(T(bottom ?? .zero)),
+            trailing: CGFloat(T(trailing ?? .zero))
         )
     }
     

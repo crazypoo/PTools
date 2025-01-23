@@ -1003,7 +1003,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let popover = PTActionLayoutButton()
         popover.imageSize = CGSize(width: 15, height: 15)
         popover.layoutStyle = .upImageDownTitle
-        popover.midSpace = 0
+        popover.midSpacing = 0
         popover.setTitleFont(.appfont(size: 12), state: .normal)
         popover.setTitleColor(.random, state: .normal)
         popover.setTitle("Popover", state: .normal)

@@ -79,10 +79,8 @@ public extension UIScrollView {
             case let .contentInsetAdjustmentBehavior(contentInsetAdjustmentBehavior):
                 self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
                 
-            #if swift(>=5.0)
             case let .automaticallyAdjustsScrollIndicatorInsets(automaticallyAdjustsScrollIndicatorInsets):
                 self.automaticallyAdjustsScrollIndicatorInsets = automaticallyAdjustsScrollIndicatorInsets
-            #endif
                 
             case let .delegate(delegate):
                 self.delegate = delegate
@@ -129,10 +127,8 @@ public extension UIScrollView {
         /// The behavior for determining the adjusted content offsets.
         case contentInsetAdjustmentBehavior(UIScrollView.ContentInsetAdjustmentBehavior)
         
-        #if swift(>=5.0)
         /// Configures whether the scroll indicator insets are automatically adjusted by the system.
         case automaticallyAdjustsScrollIndicatorInsets(Bool)
-        #endif
         
         /// The delegate of the scroll-view object.
         case delegate(UIScrollViewDelegate?)

@@ -76,7 +76,6 @@ public enum UTTTypeOption: Equatable, Hashable {
         String(cfString)
     }
     
-    #if swift(>=5.3)
     var uttType: UTType {
         switch self {
         case .image:
@@ -197,7 +196,6 @@ public enum UTTTypeOption: Equatable, Hashable {
             return .log
         }
     }
-    #endif
     
     private var cfString: CFString {
         switch self {
@@ -326,10 +324,8 @@ extension Collection where Element == UTTTypeOption {
         map { $0.rawValue }
     }
     
-    #if swift(>=5.3)
     var uttypes: [UTType] {
         map { $0.uttType }
     }
-    #endif
 }
 

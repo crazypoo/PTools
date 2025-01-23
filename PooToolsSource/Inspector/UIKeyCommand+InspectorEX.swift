@@ -126,25 +126,19 @@ public extension UIKeyCommand {
         
         // MARK: Menu
         
-        #if swift(>=5.0)
         public enum MenuElementAttributes {
             case disabled, destructive, hidden
         }
         case menuAttributes(MenuElementAttributes, key: Options)
-        #endif
 
-        #if swift(>=5.0)
         public enum MenuElementState {
             case off, on, mixed
         }
         case menuState(MenuElementState, key: Options)
-        #endif
 
         // MARK: Image
         
-        #if swift(>=5.0)
         case image(UIImage, key: Options)
-        #endif
 
     }
 }
@@ -198,12 +192,10 @@ public extension UIKeyCommand.Options {
              let .discoverabilityTitle(_, key):
             return key.input
             
-        #if swift(>=5.0)
         case let .menuAttributes(_, key),
              let .menuState(_, key),
              let .image(_, key):
             return key.input
-        #endif
         }
     }
     
@@ -231,12 +223,10 @@ public extension UIKeyCommand.Options {
         case let .discoverabilityTitle(_, key):
             return key.modifierFlags
             
-        #if swift(>=5.0)
         case let .menuAttributes(_, key),
              let .menuState(_, key),
              let .image(_, key):
             return key.modifierFlags
-        #endif
         
         case .key,
              .return,
@@ -267,12 +257,10 @@ public extension UIKeyCommand.Options {
              let .numericPad(key):
             return key.discoverabilityTitle
         
-        #if swift(>=5.0)
         case let .menuAttributes(_, key),
              let .menuState(_, key),
              let .image(_, key):
             return key.discoverabilityTitle
-        #endif
         
         case .key,
              .return,

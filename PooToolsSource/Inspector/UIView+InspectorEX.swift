@@ -151,11 +151,8 @@ public extension UIView {
             case let .accessibilityIdentifier(accessibilityIdentifier):
                 self.accessibilityIdentifier = accessibilityIdentifier
             
-            #if swift(>=5.3)
             case let .focusGroupIdentifier(focusGroupIdentifier):
-                self.focusGroupIdentifier = focusGroupIdentifier
-            #endif
-            
+                self.focusGroupIdentifier = focusGroupIdentifier            
             }
         }
     }
@@ -224,10 +221,8 @@ public extension UIView {
         /// A semantic description of the view’s contents, used to determine whether the view should be flipped when switching between left-to-right and right-to-left layouts.
         case semanticContentAttribute(UISemanticContentAttribute)
         
-        #if swift(>=5.3)
         /// The identifier of the focus group that this view belongs to. If this is nil, subviews inherit their superview's focus group.
         case focusGroupIdentifier(String?)
-        #endif
         
         /// A Boolean value that determines whether user events are ignored and removed from the event queue.
         case isUserInteractionEnabled(Bool)
