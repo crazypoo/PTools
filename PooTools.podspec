@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.69.6'
+    s.version     = '3.69.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -886,6 +886,14 @@ Pod::Spec.new do |s|
         subspec.dependency 'FlagKit'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLAG POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'WebKit' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/WebKit/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_WEBKIT POOTOOLS_COCOAPODS"
         }
     end
     

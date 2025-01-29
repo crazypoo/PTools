@@ -409,7 +409,7 @@ public extension UIImage {
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
-    }   
+    }
     
     //MARK: 把圖片換成圓形
     ///把圖片換成圓形
@@ -554,20 +554,20 @@ public extension PTPOP where Base: UIImage {
             var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
             do {
                 try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
+                guard let image = cgImage else {
+                    PTGCDManager.gcdMain {
+                        closure(nil)
+                    }
+                    return
+                }
+                PTGCDManager.gcdMain {
+                    closure(UIImage(cgImage: image))
+                }
             } catch {
                 PTGCDManager.gcdMain {
                     closure(nil)
                 }
                 return
-            }
-            guard let image = cgImage else {
-                PTGCDManager.gcdMain {
-                    closure(nil)
-                }
-                return
-            }
-            PTGCDManager.gcdMain {
-                closure(UIImage(cgImage: image))
             }
         }
     }
@@ -591,20 +591,20 @@ public extension PTPOP where Base: UIImage {
             var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
             do {
                 try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
+                guard let image = cgImage else {
+                    PTGCDManager.gcdMain {
+                        closure(nil)
+                    }
+                    return
+                }
+                PTGCDManager.gcdMain {
+                    closure(UIImage(cgImage: image))
+                }
             } catch {
                 PTGCDManager.gcdMain {
                     closure(nil)
                 }
                 return
-            }
-            guard let image = cgImage else {
-                PTGCDManager.gcdMain {
-                    closure(nil)
-                }
-                return
-            }
-            PTGCDManager.gcdMain {
-                closure(UIImage(cgImage: image))
             }
         }
     }
@@ -1127,7 +1127,7 @@ public enum CompressionMode {
 }
 
 //MARK: UIImage 压缩相关
-public extension PTPOP where Base: UIImage {        
+public extension PTPOP where Base: UIImage {
     //MARK: 压缩图片
     ///压缩图片
     /// - Parameters:

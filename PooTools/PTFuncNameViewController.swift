@@ -1105,7 +1105,21 @@ class PTFuncNameViewController: PTBaseViewController {
             make.top.equalToSuperview()
 #endif
             make.right.bottom.equalToSuperview()
-            make.left.equalToSuperview()
+            make.left.right.equalToSuperview()
+        }
+        
+        PTRotationManager.shared.orientationMaskDidChange = { orientationMask in
+            PTNSLogConsole("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\(orientationMask)")
+            self.collectionView.snp.remakeConstraints { make in
+    #if POOTOOLS_NAVBARCONTROLLER
+                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+    #else
+                make.top.equalToSuperview()
+    #endif
+                make.right.bottom.equalToSuperview()
+                make.left.right.equalToSuperview()
+            }
+            self.showCollectionViewData()
         }
         
         if #unavailable(iOS 17.0) {

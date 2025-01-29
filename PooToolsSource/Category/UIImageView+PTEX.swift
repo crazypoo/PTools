@@ -32,9 +32,7 @@ public extension UIImageView {
                     loadedHandler!(nil,result.originalSource.url,result.image)
                 }
             case .failure(let error):
-                if loadedHandler != nil {
-                    loadedHandler!(error,nil,nil)
-                }
+                loadedHandler?(error,nil,nil)
             }
         }
     }
@@ -72,10 +70,7 @@ public extension UIImageView {
             } else {
                 self.image = emptyImage
             }
-            
-            if loadFinish != nil {
-                loadFinish!(result.0,result.1)
-            }
+            loadFinish?(result.0,result.1)
         }
     }
     
@@ -302,9 +297,7 @@ public extension UIImageView {
     }
     
     private func report(url: URL, error: Error?) {
-        if gifURLDidFail != nil {
-            gifURLDidFail!(self,url,error)
-        }
+        gifURLDidFail?(self,url,error)
     }
 }
 

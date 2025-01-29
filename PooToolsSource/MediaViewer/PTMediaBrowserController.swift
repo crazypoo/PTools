@@ -186,7 +186,6 @@ public class PTMediaBrowserController: PTBaseViewController {
                 self.updateBottom(models: cellModel)
             }
         }
-        
         collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
             if self.viewConfig.pageControlShow {
                 switch self.viewConfig.pageControlOption {
@@ -204,7 +203,6 @@ public class PTMediaBrowserController: PTBaseViewController {
                     (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(indexPath.row)
                 }
             }
-
             if let itemRow = sectionModel.rows?[indexPath.row] {
                 let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
                 let endCell = cell as! PTMediaBrowserCell
@@ -219,9 +217,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 }
                 self.updateBottom(models: cellModel)
                 
-                if self.browserCurrentDataBlock != nil {
-                    self.browserCurrentDataBlock!(indexPath.row)
-                }
+                self.browserCurrentDataBlock?(indexPath.row)
             }
         }
         
@@ -362,9 +358,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                     collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: true)
                 } else {
-                    if loadedTask != nil {
-                        loadedTask!(collectionView)
-                    }
+                    loadedTask?(collectionView)
                 }
             }
         }
@@ -546,9 +540,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     self.viewMoreActionDismiss()
                 }
             case .DIY:
-                if self.viewMoreActionBlock != nil {
-                    self.viewMoreActionBlock!(index,currentView.gifImage)
-                }
+                self.viewMoreActionBlock?(index,currentView.gifImage)
                 self.viewMoreActionDismiss()
             default:
                 break
@@ -622,9 +614,7 @@ fileprivate extension PTMediaBrowserController {
         if compatible {
             UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
         } else {
-            if viewSaveImageBlock != nil {
-                viewSaveImageBlock!(compatible)
-            }
+            viewSaveImageBlock?(compatible)
         }
     }
     
@@ -641,16 +631,12 @@ fileprivate extension PTMediaBrowserController {
             saveImageBool = true
         }
         
-        if viewSaveImageBlock != nil {
-            viewSaveImageBlock!(saveImageBool!)
-        }
+        viewSaveImageBlock?(saveImageBool!)
     }
     
     func deleteImage() {
         if viewConfig.mediaData.count == 1 {
-            if viewDeleteImageBlock != nil {
-                viewDeleteImageBlock!(0)
-            }
+            viewDeleteImageBlock?(0)
             viewMoreActionDismiss()
         } else {
             var currentPageControlValue = 0
@@ -728,9 +714,7 @@ fileprivate extension PTMediaBrowserController {
                     }
                 }
 
-                if self.viewDeleteImageBlock != nil {
-                    self.viewDeleteImageBlock!(currentPageControlValue)
-                }
+                self.viewDeleteImageBlock?(currentPageControlValue)
             }
         }
     }

@@ -340,22 +340,18 @@ extension PTMediaBrowserCell {
             if viewConfig.dynamicBackground {
                 backgroundImageView.image = UIImage.animatedImage(with: images, duration: 2)
             }
-            adjustFrame()
-            loading.removeFromSuperview()
         } else if let images = images, images.count == 1 {
             currentCellType = .Normal
             gifImage = image
             if viewConfig.dynamicBackground {
                 backgroundImageView.image = images.first
             }
-            adjustFrame()
-            loading.removeFromSuperview()
         } else {
             currentCellType = .None
-            loading.removeFromSuperview()
             createReloadButton()
-            adjustFrame()
         }
+        adjustFrame()
+        loading.removeFromSuperview()
     }
 }
 
