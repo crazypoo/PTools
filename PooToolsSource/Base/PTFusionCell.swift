@@ -792,14 +792,10 @@ open class PTFusionCell: PTBaseNormalCell {
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.valueSwitch.valueChangeCallBack = { value in
-            if self.switchValueChangeBlock != nil {
-                self.switchValueChangeBlock!(self.cellModel!.name,view.valueSwitch)
-            }
+            self.switchValueChangeBlock?(self.cellModel!.name,view.valueSwitch)
         }
         view.sectionMore.addActionHandlers { sender in
-            if self.moreActionBlock != nil {
-                self.moreActionBlock!(self.cellModel!.name,sender)
-            }
+            self.moreActionBlock?(self.cellModel!.name,sender)
         }
         return view
     }()
@@ -888,14 +884,10 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.valueSwitch.valueChangeCallBack = { value in
-            if self.switchValueChangeBlock != nil {
-                self.switchValueChangeBlock!(self.cellModel!.name,view.valueSwitch)
-            }
+            self.switchValueChangeBlock?(self.cellModel!.name,view.valueSwitch)
         }
         view.sectionMore.addActionHandlers { sender in
-            if self.moreActionBlock != nil {
-                self.moreActionBlock!(self.cellModel!.name,sender)
-            }
+            self.moreActionBlock?(self.cellModel!.name,sender)
         }
         return view
     }()

@@ -31,14 +31,10 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.valueSwitch.valueChangeCallBack = { value in
-            if self.switchValueChangeBlock != nil {
-                self.switchValueChangeBlock!(self.sectionModel!.name,view.valueSwitch)
-            }
+            self.switchValueChangeBlock?(self.sectionModel!.name,view.valueSwitch)
         }
         view.sectionMore.addActionHandlers { sender in
-            if self.moreActionBlock != nil {
-                self.moreActionBlock!(self.sectionModel!.name,sender)
-            }
+            self.moreActionBlock?(self.sectionModel!.name,sender)
         }
         return view
     }()
