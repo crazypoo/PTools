@@ -825,8 +825,7 @@ public class PTLayoutButton: UIButton {
                              subTitle: String,
                              subTitleFont: UIFont,
                              subTitleColor: UIColor,
-                             state: UIControl.State)
-    {
+                             state: UIControl.State) {
         if title.stringIsEmpty() {
             titleLabel?.font = subTitleFont
             setTitle(subTitle, for: state)

@@ -10,16 +10,11 @@ import UIKit
 
 public class PTMenuSheetButtonView: UIView {
     public enum Direction {
-        case up
-        case down
-        case left
-        case right
+        case up,down,left,right
     }
     
     public enum State {
-        case opened
-        case closed
-        case animating
+        case opened,closed,animating
     }
     
     // MARK: - UI properties

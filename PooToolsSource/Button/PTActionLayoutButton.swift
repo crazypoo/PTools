@@ -84,6 +84,7 @@ public class PTActionLayoutButton: UIControl {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer { sender in
             self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
         }
@@ -93,6 +94,10 @@ public class PTActionLayoutButton: UIControl {
     
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer { sender in
+            self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
+        }
         return view
     }()
     
@@ -345,20 +350,20 @@ public extension PTActionLayoutButton {
     }
 }
 
-public typealias LayoutTouchedBlock = (_ sender:PTActionLayoutButton) -> Void
+public typealias PTControlTouchedBlock = (_ sender:PTActionLayoutButton) -> Void
 
 public extension PTActionLayoutButton {
     private struct AssociatedKeys {
         static var UIButtonBlockKey = 998
     }
     
-    @objc func addActionHandlers(handler:@escaping LayoutTouchedBlock) {
+    @objc func addActionHandlers(handler:@escaping PTControlTouchedBlock) {
         objc_setAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         addTarget(self, action: #selector(actionTouched(sender:)), for: .touchUpInside)
     }
     
     @objc func actionTouched(sender:PTActionLayoutButton) {
-        let block:LayoutTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as! LayoutTouchedBlock
+        let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as! PTControlTouchedBlock
         block(sender)
     }
     

@@ -3362,15 +3362,15 @@
 		55D59C5028F279C200B4FF76 /* Button */ = {
 			isa = PBXGroup;
 			children = (
-				550F78F82D21AF680066D281 /* PTActionLayoutButton.swift */,
-				231D15C5272CDEE9003D6F62 /* PTLayoutButton.swift */,
 				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
-				55DD93572B9169A000F65872 /* PTSortButton.swift */,
+				550F78F82D21AF680066D281 /* PTActionLayoutButton.swift */,
 				5574511F2C09ABA70008FCAD /* PTCollectionAnimationButton.swift */,
+				231D15C5272CDEE9003D6F62 /* PTLayoutButton.swift */,
+				55B374542C91F91700CB4ED1 /* PTLoginDescButton.swift */,
 				557451232C09B0A60008FCAD /* PTMenuSheetArrowButton.swift */,
 				557451252C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift */,
 				557451272C09B12C0008FCAD /* PTMenuSheetButtonView.swift */,
-				55B374542C91F91700CB4ED1 /* PTLoginDescButton.swift */,
+				55DD93572B9169A000F65872 /* PTSortButton.swift */,
 			);
 			path = Button;
 			sourceTree = "<group>";

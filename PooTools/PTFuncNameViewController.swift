@@ -1002,12 +1002,12 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let popover = PTActionLayoutButton()
         popover.imageSize = CGSize(width: 15, height: 15)
-        popover.layoutStyle = .upImageDownTitle
+        popover.layoutStyle = .leftImageRightTitle
         popover.midSpacing = 0
         popover.setTitleFont(.appfont(size: 12), state: .normal)
         popover.setTitleColor(.random, state: .normal)
         popover.setTitle("Popover", state: .normal)
-        popover.bounds = CGRect(x: 0, y: 0, width: 68, height: 34)
+        popover.bounds = CGRect(x: 0, y: 0, width: 100, height: 40)
         popover.setImage("http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", state: .normal)
         
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
@@ -1017,16 +1017,16 @@ class PTFuncNameViewController: PTBaseViewController {
             PTNSLogConsole("1231231231")
         }
         
-        let searchBar = PTSearchBar()
-        searchBar.clearConfig = searchBarConfig
-        searchBar.bounds = CGRect(x: 0, y: 0, width: 150, height: 34)
+//        let searchBar = PTSearchBar()
+//        searchBar.clearConfig = searchBarConfig
+//        searchBar.bounds = CGRect(x: 0, y: 0, width: 150, height: 34)
         
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubviews([more,popover])
         more.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             more.size.equalTo(more.bounds.size)
-            make.bottom.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview().inset(2)
         }
         
         popover.snp.makeConstraints { make in
@@ -1037,7 +1037,7 @@ class PTFuncNameViewController: PTBaseViewController {
 #else
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: popover)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
-        navigationItem.titleView = searchBar
+//        navigationItem.titleView = searchBar
 #endif
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
@@ -1090,6 +1090,7 @@ class PTFuncNameViewController: PTBaseViewController {
 //            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 300, sender: sender, arrowDirections: .any) { itemName, index in
 //                PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
 //            }
+            print("123123123123123123123123123123123123123123")
             self.sideMenuController?.revealMenu()
         }
         more.addActionHandlers { sender in

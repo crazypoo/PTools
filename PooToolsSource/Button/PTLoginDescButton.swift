@@ -21,8 +21,7 @@ open class PTLoginDescConfig:PTBaseModel {
 }
 
 public enum PTLoginDescButtonType {
-    case Left
-    case Right
+    case Left,Right
 }
 
 open class PTLoginDescButton: UIView {

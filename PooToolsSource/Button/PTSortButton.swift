@@ -11,15 +11,12 @@ import SwifterSwift
 import SnapKit
 
 @objc public enum PTSortButtonType:Int {
-    case Normal
-    case Increase
-    case Decrease
+    case Normal,Increase,Decrease
 }
 
 //界面元素屬性
 @objc public enum PTSortButtonShowType:Int {
-    case Tres
-    case Dos
+    case Tres,Dos
 }
 
 @objcMembers
