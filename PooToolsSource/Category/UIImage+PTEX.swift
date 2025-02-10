@@ -663,6 +663,81 @@ public extension PTPOP where Base: UIImage {
         }
     }
     
+    func saveImageToAlbum(completion: @escaping (String?) -> Void) {
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized else {
+                PTNSLogConsole("無法存取相簿權限")
+                completion(nil)
+                return
+            }
+
+            var assetIdentifier: String?
+
+            // 在相簿執行寫入操作
+            PHPhotoLibrary.shared().performChanges {
+                let request = PHAssetChangeRequest.creationRequestForAsset(from: base)
+                assetIdentifier = request.placeholderForCreatedAsset?.localIdentifier
+            } completionHandler: { success, error in
+                DispatchQueue.main.async {
+                    if success, let identifier = assetIdentifier {
+                        PTNSLogConsole("保存成功，PHAsset localIdentifier: \(identifier)")
+                        completion(identifier)
+                    } else {
+                        PTNSLogConsole("保存失敗: \(error?.localizedDescription ?? "未知錯誤")")
+                        completion(nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    static func getAssetURL(from localIdentifier: String, completion: @escaping (URL?) -> Void) {
+        let result = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil)
+        guard let asset = result.firstObject else {
+            completion(nil)
+            return
+        }
+
+        let options = PHContentEditingInputRequestOptions()
+        options.isNetworkAccessAllowed = true // 允許從 iCloud 下載
+
+        asset.requestContentEditingInput(with: options) { input, _ in
+            completion(input?.fullSizeImageURL)
+        }
+    }
+    
+    /// 保存圖片到相簿，並回傳 `PHAsset`
+    func saveImageToAlbum(completion: @escaping (PHAsset?) -> Void) {
+        // 檢查並請求相簿存取權限
+        PHPhotoLibrary.requestAuthorization { status in
+            guard status == .authorized else {
+                PTNSLogConsole("無法存取相簿權限")
+                completion(nil)
+                return
+            }
+
+            var assetIdentifier: String?
+
+            // 執行寫入操作
+            PHPhotoLibrary.shared().performChanges {
+                let request = PHAssetChangeRequest.creationRequestForAsset(from: base)
+                assetIdentifier = request.placeholderForCreatedAsset?.localIdentifier
+            } completionHandler: { success, error in
+                DispatchQueue.main.async {
+                    if success, let identifier = assetIdentifier {
+                        PTNSLogConsole("保存成功，PHAsset localIdentifier: \(identifier)")
+                        let assets = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
+                        completion(assets.firstObject)
+                    } else {
+                        PTNSLogConsole("保存失敗: \(error?.localizedDescription ?? "未知錯誤")")
+                        completion(nil)
+                    }
+                }
+            }
+        }
+    }
+
+    
     /// 加马赛克
     func mosaicImage() -> UIImage? {
         guard let cgImage = base.cgImage else {
