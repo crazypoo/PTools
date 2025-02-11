@@ -10,6 +10,8 @@ import UIKit
 
 public class PTActionLayoutButton: UIControl {
 
+    public var actionMargin:CGFloat = 10
+    
     public var layoutStyle:PTLayoutButtonStyle = .leftImageRightTitle {
         didSet {
             updateAppearance()
@@ -79,25 +81,19 @@ public class PTActionLayoutButton: UIControl {
             updateAppearance()
         }
     }
-    
+        
     fileprivate lazy var imageView:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer { sender in
-            self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
-        }
-        view.addGestureRecognizer(tap)
+        view.isUserInteractionEnabled = false
         return view
     }()
     
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
-        view.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer { sender in
-            self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
-        }
+        view.isUserInteractionEnabled = false
+        view.clipsToBounds = true
         return view
     }()
     
@@ -280,6 +276,12 @@ public class PTActionLayoutButton: UIControl {
             total = self.getKitTitleSize(lineSpacing: lineSpacing,height: height,width: width).height + 5 + imageSize.height + midSpacing
         }
         return total
+    }
+    
+    public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let margin: CGFloat = actionMargin  // 增加10pt点击区域
+        let largerBounds = bounds.insetBy(dx: -margin, dy: -margin)
+        return largerBounds.contains(point)
     }
 }
 
