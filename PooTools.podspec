@@ -684,7 +684,7 @@ Pod::Spec.new do |s|
     s.subspec 'Router' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/Router/*.{h,m,swift}'
-        subspec.public_header_files = 'PooToolsSource/Router/**/*.h'
+        subspec.public_header_files = 'PooToolsSource/Router/*.h'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ROUTER POOTOOLS_COCOAPODS"
         }

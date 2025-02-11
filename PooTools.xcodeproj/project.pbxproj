@@ -327,6 +327,8 @@
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
+		559978352D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 559978342D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.m */; };
+		559978362D5BB07C00484FB1 /* PTRouterBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559978322D5BB07C00484FB1 /* PTRouterBridge.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
 		5599C43B2C4F642100394835 /* AkiraTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599C4312C4F642100394835 /* AkiraTextField.swift */; };
@@ -1251,6 +1253,10 @@
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
+		559978312D5BB07C00484FB1 /* PTRouterableProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTRouterableProxy.h; sourceTree = "<group>"; };
+		559978322D5BB07C00484FB1 /* PTRouterBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterBridge.swift; sourceTree = "<group>"; };
+		559978332D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTRouterDynamicParamsMapping.h; sourceTree = "<group>"; };
+		559978342D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTRouterDynamicParamsMapping.m; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
 		5599C4312C4F642100394835 /* AkiraTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AkiraTextField.swift; sourceTree = "<group>"; };
@@ -2804,6 +2810,10 @@
 		558D5EDF2AAF4D8300C02042 /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				559978312D5BB07C00484FB1 /* PTRouterableProxy.h */,
+				559978322D5BB07C00484FB1 /* PTRouterBridge.swift */,
+				559978332D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.h */,
+				559978342D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.m */,
 				558D5EF22AAF552F00C02042 /* PTRouter.swift */,
 				558D5EF02AAF54EA00C02042 /* PTRouterable.swift */,
 				558D5EEE2AAF54B600C02042 /* PTRouterBuilder.swift */,
@@ -4026,6 +4036,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				559978352D5BB07C00484FB1 /* PTRouterDynamicParamsMapping.m in Sources */,
+				559978362D5BB07C00484FB1 /* PTRouterBridge.swift in Sources */,
 				552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */,
 				55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */,
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,

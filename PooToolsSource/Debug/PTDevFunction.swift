@@ -16,15 +16,15 @@ public class PTDevFunction: NSObject {
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public class func gobalWebImageLoadOption()->KingfisherOptionsInfo {
-        #if DEBUG
-        let devServer:Bool = PTCoreUserDefultsWrapper.WebImageOption
-        if devServer {
-            return [KingfisherOptionsInfoItem.cacheOriginalImage]
-        } else {
-            return [.lowDataModeSource,.memoryCacheExpiration(.seconds(60)).diskCacheExpiration(.seconds(20))]
-        }
-        #else
+//        #if DEBUG
+//        let devServer:Bool = PTCoreUserDefultsWrapper.WebImageOption
+//        if devServer {
+//            return [KingfisherOptionsInfoItem.cacheOriginalImage]
+//        } else {
+//            return [.lowDataModeSource,.memoryCacheExpiration(.seconds(60)).diskCacheExpiration(.seconds(20))]
+//        }
+//        #else
         return [KingfisherOptionsInfoItem.cacheOriginalImage]
-        #endif
+//        #endif
     }
 }

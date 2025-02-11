@@ -26,7 +26,7 @@ public final class PTRouterServiceManager {
 //MARK: - Service Register & Unregister
 public extension PTRouterServiceManager {
     class func serviceName<T>(of value: T) -> String {
-        String(describing: value)
+        return String(describing: value)
     }
     
     // MARK: - Register With Service Name
@@ -88,10 +88,10 @@ public extension PTRouterServiceManager {
     /// 通过服务名称取消注册服务
     /// - Parameter named: 服务名称
     @discardableResult
-    func unregisterService(named: String) -> Any {
-        serviceQueue.sync {
-            creatorsMap.removeValue(forKey: named)
-            return servicesCache.removeValue(forKey: named) as Any
+    func unregisterService(named: String) -> Any? {
+        return serviceQueue.sync {
+            self.creatorsMap.removeValue(forKey: named)
+            return self.servicesCache.removeValue(forKey: named)
         }
     }
     
@@ -99,7 +99,7 @@ public extension PTRouterServiceManager {
     /// - Parameter service: 服务接口
     @discardableResult
     func unregisterService<Service>(_ service: Service) -> Service? {
-        unregisterService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        return unregisterService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 

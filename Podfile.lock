@@ -119,7 +119,7 @@ PODS:
   - JXSegmentedView (1.4.1)
   - KakaJSON (1.1.2)
   - Kakapos (1.0.9)
-  - Kingfisher (8.1.3)
+  - Kingfisher (8.2.0)
   - KituraContracts (1.2.1):
     - LoggerAPI (~> 1.7)
   - LoggerAPI (1.9.200):
@@ -657,7 +657,7 @@ SPEC CHECKSUMS:
   JXSegmentedView: cd73555ce2134d1656db2cb383ba9c2f36fb5078
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
   Kakapos: d811705c58c5bfa0101b2f44f2da7b85b5997c75
-  Kingfisher: f2af9028b16baf9dc6c07c570072bc41cbf009ef
+  Kingfisher: 323e5c4ec7983aaace12af655a7b51a7f88a599d
   KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
   LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
@@ -668,7 +668,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: a74155066daa6450475f6a029068eb919fb00d5d
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: b60ab017e74dc3d2c387fbd11cc85869dd176f76
+  PooTools: 46436ef73756a699a7fc7171824432de9a87a779
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5

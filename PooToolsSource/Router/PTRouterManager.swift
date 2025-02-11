@@ -24,6 +24,9 @@ public class PTRouterManager: NSObject {
     
     static public let shareInstance = PTRouterManager()
     
+    // 是否使用缓存
+    public var useCache: Bool = false
+
     // MARK: - 注册路由
     public static func addGloableRouter(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
@@ -66,14 +69,20 @@ extension PTRouterManager {
             if let number = UInt32(item[PTRouterPriority] ?? "0") {
                 priority = number
             }
-            PTRouter.addRouterItem(item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
+            PTRouter.addRouterItem(patternString: item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
         }
         let endRegisterTime = CFAbsoluteTimeGetCurrent()
-        PTRouter.shareInstance.logcat?("注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
         PTRouter.routerLoadStatus(true)
+        if PTRouterManager.shareInstance.useCache {
+            PTRouter.shareInstance.logcat?("使用缓存注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
+        } else {
+            PTRouter.shareInstance.logcat?("未使用缓存注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
+        }
+        if forceCheckEnable {
 #if DEBUG
-        routerForceRecheck(excludeCocoapods)
+            routerForceRecheck(excludeCocoapods)
 #endif
+        }
         return PTRouter.openURL(urlPath, userInfo: userInfo)
     }
     
@@ -140,7 +149,8 @@ extension PTRouterManager {
 
     public class func loadRouterClass(excludeCocoapods: Bool = false,
                                       useCache: Bool = false) {
-        
+        PTRouterManager.shareInstance.useCache = useCache
+
         if PTRouterDebugTool.checkTracing() || !useCache {
             registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
         } else {
@@ -162,7 +172,7 @@ extension PTRouterManager {
     public static func fetchCurrentVersionRouterCachePath() -> String {
         let appVersion = (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String) ?? ""
         // 获得沙盒的根路径
-        let home = NSHomeDirectory() as NSString
+        let home = FileManager.pt.homeDirectory() as NSString
         // 获得Documents路径，使用NSString对象的appendingPathComponent()方法拼接路径
         let plistPath = home.appendingPathComponent("Documents") as NSString
         // 输出plist文件到指定的路径
@@ -242,6 +252,7 @@ extension PTRouterManager {
         
         for i in 0 ..< resultXLClass.count {
             let currentClass: AnyClass = resultXLClass[i]
+         
             if let cls = currentClass as? PTRouterable.Type {
                 let fullName: String = NSStringFromClass(currentClass.self)
                 if fullName.contains(kSADelegateClassSensorsSuffix)  {
@@ -249,7 +260,6 @@ extension PTRouterManager {
                 }
                 
                 for s in 0 ..< cls.patternString.count {
-                    
                     if fullName.contains(NSKVONotifyingPrefix) {
                         let range = fullName.index(fullName.startIndex, offsetBy: NSKVONotifyingPrefix.count)..<fullName.endIndex
                         let subString = fullName[range]
@@ -258,36 +268,33 @@ extension PTRouterManager {
                         registerRouterList.append([PTRouterPath: cls.patternString[s], PTRouterClassName: fullName, PTRouterPriority: "\(cls.priority)"])
                     }
                 }
+            } else if currentClass.self.conforms(to: PTRouterableProxy.self) {
+                let fullName: String = NSStringFromClass(currentClass.self)
+                if fullName.contains(kSADelegateClassSensorsSuffix)  {
+                    break
+                }
+                
+                for s in 0 ..< currentClass.patternString().count {
+                    if fullName.contains(NSKVONotifyingPrefix) {
+                        let range = fullName.index(fullName.startIndex, offsetBy: NSKVONotifyingPrefix.count)..<fullName.endIndex
+                        let subString = fullName[range]
+                        registerRouterList.append([PTRouterPath: currentClass.patternString()[s], PTRouterClassName: "\(subString)", PTRouterPriority: "\(String(describing: currentClass.priority()))"])
+                    } else {
+                        registerRouterList.append([PTRouterPath: currentClass.patternString()[s], PTRouterClassName: fullName, PTRouterPriority: "\(String(describing: currentClass.priority()))"])
+                    }
+                }
             }
         }
         let endRegisterTime = CFAbsoluteTimeGetCurrent()
         PTRouter.shareInstance.logcat?("提前获取工程中符合路由注册条件的类耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
         writeRouterMapToFile(mapArray: registerRouterList)
         return registerRouterList
-
     }
 
     
     // MARK: - 自动注册服务
     public class func registerServices(excludeCocoapods: Bool = false) {
         
-//        let expectedClassCount = objc_getClassList(nil, 0)
-//        let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
-//        let autoreleasingAllClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(allClasses)
-//        let actualClassCount: Int32 = objc_getClassList(autoreleasingAllClasses, expectedClassCount)
-//        var resultXLClass = [AnyClass]()
-//        for i in 0 ..< actualClassCount {
-//            
-//            let currentClass: AnyClass = allClasses[Int(i)]
-//            if (class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil),
-//               (class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil),
-//               let cls = currentClass as? PTRouterServiceProtocol.Type {
-//                PTNSLogConsole(currentClass)
-//                resultXLClass.append(cls)
-//                
-//                PTRouterServiceManager.default.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
-//            }
-//        }
         let beginRegisterTime = CFAbsoluteTimeGetCurrent()
         let bundles = CFBundleGetAllBundles() as? [CFBundle]
         for bundle in bundles ?? [] {
@@ -326,7 +333,7 @@ extension PTRouterManager {
         }
         
         let endRegisterTime = CFAbsoluteTimeGetCurrent()
-        PTNSLogConsole("服务注册耗时：\(endRegisterTime - beginRegisterTime)",levelType: PTLogMode,loggerType: .Router)
+        PTRouter.shareInstance.logcat?("服务注册耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
     }
     
     // MARK: - 重定向、剔除、新增、重置路由
@@ -393,7 +400,7 @@ extension PTRouterManager {
         do {
             jsonData = try JSONSerialization.data(withJSONObject: mapArray, options: [])
         } catch {
-            print("Error converting array to JSON: \(error)")
+            PTNSLogConsole("Error converting array to JSON: \(error)")
             return
         }
         

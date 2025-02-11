@@ -120,7 +120,6 @@ extension PTRouterParser {
         items.forEach { (item) in
             if let value = item.value {
                 queries[item.name] = value
-            } else {
             }
         }
         
