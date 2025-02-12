@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 import SwifterSwift
+import AVFoundation
 
 /// Style
 @objc public enum PageControlStyle:Int {
@@ -347,6 +348,19 @@ public class PTCycleScrollView: UIView {
     public override func willMove(toSuperview newSuperview: UIView?) {
         if newSuperview == nil {
             invalidateTimer()
+        }
+    }
+    
+    public func pipStar(floatingCallback:@escaping ((AVPlayerLayer?)->Void)) {
+        guard let cell = viewWithTag(100 + currentIndex()) as? PTCycleScrollViewCell else {
+            floatingCallback(nil)
+            return
+        }
+        let imagePath = self.imagePaths[currentIndex()]
+        if let videoPath = imagePath as? String, videoPath.pathExtension.lowercased() == "mp4" || videoPath.pathExtension.lowercased() == "mov" {
+            floatingCallback(cell.playerLayer)
+        } else {
+            floatingCallback(nil)
         }
     }
 }
@@ -803,7 +817,7 @@ extension PTCycleScrollView {
 //        }
 //        // 继续
 //        p_dtimer.resume()
-//        
+//
 //        dtimer = p_dtimer
     }
     
