@@ -357,8 +357,12 @@ public class PTCycleScrollView: UIView {
             return
         }
         let imagePath = self.imagePaths[currentIndex()]
-        if let videoPath = imagePath as? String, videoPath.pathExtension.lowercased() == "mp4" || videoPath.pathExtension.lowercased() == "mov" {
-            floatingCallback(cell.playerLayer)
+        if let videoPath = imagePath as? String, videoPath.pathExtension.lowercased() == "mp4" || videoPath.pathExtension.lowercased() == "mov",let player = cell.player {
+            if player.rate != 0 {
+                floatingCallback(cell.playerLayer)
+            } else {
+                floatingCallback(nil)
+            }
         } else {
             floatingCallback(nil)
         }
