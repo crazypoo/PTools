@@ -125,7 +125,9 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
             )
         }
     }
-    
+    var pipController: AVPictureInPictureController?
+    var playerLayer: AVPlayerLayer?
+
     lazy var playButton:UIButton = {
         let view = UIButton(type:.custom)
         view.setImage(PTCycleScrollView.playButtonImage, for: .normal)
@@ -191,10 +193,23 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         playerViewController.view.isHidden = false
         if player == nil {
             player = AVPlayer(url: videoQ)
+            playerLayer = AVPlayerLayer(player: player)
+            playerLayer?.frame = contentView.bounds
+            contentView.layer.insertSublayer(playerLayer!, at: 0)
             playerViewController.player = player
         }
         player?.play()
         player?.isMuted = true
+        
+        if AVPictureInPictureController.isPictureInPictureSupported() {
+            pipController = AVPictureInPictureController(playerLayer: playerLayer!)
+        }
+    }
+    
+    func startPiP() {
+        if let pipController = pipController, pipController.isPictureInPicturePossible {
+            pipController.startPictureInPicture()
+        }
     }
     
     func resetPlayerView() {
