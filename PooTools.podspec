@@ -1,21 +1,21 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.69.17'
+    s.version     = '3.69.18'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.platform = :ios, '14.0'
-#    s.requires_arc = true
+    s.requires_arc = true
 #    s.static_framework = true
     s.ios.deployment_target = '14.0'
     s.swift_versions = '5.0'
-    s.xcconfig = {"ENABLE_BITCODE" => "NO"}
-    s.pod_target_xcconfig = {
-      'OTHER_SWIFT_FLAGS[config=Debug]' => '-D DEBUG'
-    }
-    s.header_mappings_dir = 'PooToolsSource'
+#    s.xcconfig = {"ENABLE_BITCODE" => "NO"}
+#    s.pod_target_xcconfig = {
+#      'OTHER_SWIFT_FLAGS[config=Debug]' => '-D DEBUG'
+#    }
+#    s.header_mappings_dir = 'PooToolsSource'
     
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|
@@ -684,7 +684,7 @@ Pod::Spec.new do |s|
     s.subspec 'Router' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/Router/*.{h,m,swift}'
-        subspec.public_header_files = 'PooToolsSource/Router/**/*.h'
+#        subspec.public_header_files = 'PooToolsSource/Router/**/*.h'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ROUTER POOTOOLS_COCOAPODS"
         }
