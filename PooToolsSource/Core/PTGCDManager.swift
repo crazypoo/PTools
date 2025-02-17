@@ -173,7 +173,7 @@ public class PTGCDManager :NSObject {
         var tasksCompleted = 0
 
         for i in 0..<threadCount {
-            concurrentQueue.async(group: dispatchGroup?) {
+            concurrentQueue.async(group: dispatchGroup!) {
                 // 等待信号量，限制最大并发数
                 self.dispatchSemaphore?.wait()
 

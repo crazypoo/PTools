@@ -114,7 +114,7 @@ public class PTMediaModel:NSObject {
         }
     }
     
-    public var second: PTCameraFilterConfig.Second {
+    public var second: Int {
         guard type == .video else {
             return 0
         }
@@ -138,8 +138,10 @@ public class PTMediaModel:NSObject {
         }
     }
     
+#if POOTOOLS_IMAGEEDITOR
     // Content of the last edit.
     public var editImageModel: PTEditModel?
+#endif
     
     public init(asset: PHAsset) {
         ident = asset.localIdentifier
@@ -215,14 +217,17 @@ public class PTResultModel: NSObject {
     /// Whether the picture has been edited. Always false when `saveNewImageAfterEdit = true`.
     @objc public let isEdited: Bool
     
+#if POOTOOLS_IMAGEEDITOR
     /// Content of the last edit. Always nil when `saveNewImageAfterEdit = true`.
     @objc public let editModel: PTEditModel?
+#endif
     
     /// The order in which the user selects the models in the album. This index is not necessarily equal to the order of the model's index in the array, as some PHAssets requests may fail.
     @objc public let index: Int
     
     @objc public let avEditorOutputItem:AVPlayerItem?
     
+#if POOTOOLS_IMAGEEDITOR
     @objc public init(asset: PHAsset, image: UIImage, isEdited: Bool, editModel: PTEditModel? = nil,avEditorOutputItem: AVPlayerItem? = nil, index: Int) {
         self.asset = asset
         self.image = image
@@ -232,6 +237,16 @@ public class PTResultModel: NSObject {
         self.avEditorOutputItem = avEditorOutputItem
         super.init()
     }
+#else
+    @objc public init(asset: PHAsset, image: UIImage, isEdited: Bool,avEditorOutputItem: AVPlayerItem? = nil, index: Int) {
+        self.asset = asset
+        self.image = image
+        self.isEdited = isEdited
+        self.index = index
+        self.avEditorOutputItem = avEditorOutputItem
+        super.init()
+    }
+#endif
 }
 
 extension PTResultModel {
