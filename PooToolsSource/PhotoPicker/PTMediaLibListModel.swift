@@ -106,11 +106,16 @@ public class PTMediaModel:NSObject {
             pri_editImage = newValue
         }
         get {
+#if POOTOOLS_IMAGEEDITOR
+
             if let _ = editImageModel {
                 return pri_editImage
             } else {
                 return nil
             }
+#else
+            return nil
+#endif
         }
     }
     
