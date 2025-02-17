@@ -116,6 +116,7 @@ public class PTMediaLibView:UIView {
                                 cellModel.asset.calcelExport()
                                 sender.clearProgressLayer()
                             default:
+#if POOTOOLS_VIDEOEDITOR
                                 cellModel.asset.convertPHAssetToAVAsset { progress in
                                     sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
                                 } completion: { avAsset in
@@ -150,8 +151,10 @@ public class PTMediaLibView:UIView {
                                         }
                                     }
                                 }
+#endif
                             }
                         default:
+#if POOTOOLS_IMAGEEDITOR
                             PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
                                 if !isDegraded {
                                     if let image = image {
@@ -173,6 +176,7 @@ public class PTMediaLibView:UIView {
                                     }
                                 }
                             }
+#endif
                         }
                     }
                     
@@ -217,6 +221,7 @@ public class PTMediaLibView:UIView {
                             vc.sheetViewController?.setSizes([.fullscreen])
                         }
                     } else {
+#if POOTOOLS_FILTERCAMERA
                         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
                             PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
                         } else if C7CameraConfig.hasCameraAuthority() {
@@ -244,6 +249,7 @@ public class PTMediaLibView:UIView {
                         } else {
                             PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
                         }
+#endif
                     }
                 } else {
                     let config = PTMediaLibConfig.share
