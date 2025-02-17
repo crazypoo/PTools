@@ -146,7 +146,7 @@ public class PTMediaLibManager:NSObject {
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
         }) { suc, _ in
             if suc {
-                let asset = PTMediaEditManager.getAsset(from: placeholderAsset?.localIdentifier)
+                let asset = PHPhotoLibrary.getAsset(from: placeholderAsset?.localIdentifier)
                 completion?(suc, asset)
             } else {
                 completion?(false, nil)

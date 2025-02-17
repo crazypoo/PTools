@@ -130,10 +130,17 @@ public class PTMediaLibConfig:NSObject {
     /// This block will be called when selecting an asset.
     public var didSelectAsset: ((PHAsset) -> Void)?
 
+#if POOTOOLS_FILTERCAMERA
     /// Allow to choose the maximum duration of the video. Defaults to 120.
     public var maxSelectVideoDuration: PTCameraFilterConfig.Second = 120
     /// Allow to choose the minimum duration of the video. Defaults to 0.
     public var minSelectVideoDuration: PTCameraFilterConfig.Second = 0
+#else
+    /// Allow to choose the maximum duration of the video. Defaults to 120.
+    public var maxSelectVideoDuration: Int = 120
+    /// Allow to choose the minimum duration of the video. Defaults to 0.
+    public var minSelectVideoDuration: Int = 0
+#endif
     /// Allow to choose the maximum data size of the video. Defaults to infinite.
     public var maxSelectVideoDataSize: PTMediaLibConfig.KBUnit = .greatestFiniteMagnitude
     

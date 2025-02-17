@@ -450,7 +450,7 @@ public class PTMediaLibView:UIView {
     private func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
             PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(), icon:.Heart,style: .Normal)
-            PTMediaEditManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
+            PHPhotoLibrary.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     let model = PTMediaModel(asset: asset)
                     self?.handleDataArray(newModel: model)
