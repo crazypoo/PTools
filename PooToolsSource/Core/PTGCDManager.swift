@@ -173,22 +173,28 @@ public class PTGCDManager :NSObject {
         var tasksCompleted = 0
 
         for i in 0..<threadCount {
-            concurrentQueue.async(group: dispatchGroup!) {
-                // 等待信号量，限制最大并发数
-                self.dispatchSemaphore?.wait()
+            if let dis = dispatchGroup,let disSema = dispatchSemaphore {
+                concurrentQueue.async(group: dis) {
+                    // 等待信号量，限制最大并发数
+                    disSema.wait()
 
-                // 如果标志是取消状态，则直接退出
-                if self.cancelFlag {
-                    self.dispatchGroup?.leave() // 任务直接退出
+                    // 如果标志是取消状态，则直接退出
+                    if self.cancelFlag {
+                        dis.leave() // 任务直接退出
+                        tasksCompleted += 1
+                        return
+                    }
+
+                    dis.enter() // 任务开始
+
+                    // 执行任务
+                    doSomeThing(disSema, dis, i)
+
+                    // 当任务完成时，增加计数
                     tasksCompleted += 1
-                    return
                 }
-
-                self.dispatchGroup?.enter() // 任务开始
-
-                // 执行任务
-                doSomeThing(self.dispatchSemaphore!, self.dispatchGroup!, i)
-
+            } else {
+                self.cancelFlag = true
                 // 当任务完成时，增加计数
                 tasksCompleted += 1
             }

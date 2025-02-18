@@ -986,7 +986,10 @@ extension PTCycleScrollView : UIScrollViewDelegate {
         let index:Int = currentIndex()
         self.setProgressIndex(index: 0)
         
-        if index == 0 { return }
+        if index == 0 {
+            self.scrollViewDidScrollClosure?(0,0)
+            return
+        }
 
         if self.scrollViewDidScrollClosure != nil {
             var offSet: CGFloat = 0
