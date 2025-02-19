@@ -35,4 +35,46 @@ public extension PTPOP where Base: PHPhotoLibrary {
             }
         }
     }
+    
+    /// Save image to album.
+    static func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
+        let status = PHPhotoLibrary.authorizationStatus()
+        
+        if status == .denied || status == .restricted {
+            completion?(false, nil)
+            return
+        }
+        var placeholderAsset: PHObjectPlaceholder?
+        let completionHandler: (Bool, Error?) -> Void = { suc, _ in
+            if suc {
+                let asset = getAsset(from: placeholderAsset?.localIdentifier)
+                completion?(suc, asset)
+            } else {
+                completion?(false, nil)
+            }
+        }
+
+        if image.pt.hasAlphaChannel(), let data = image.pngData() {
+            PHPhotoLibrary.shared().performChanges({
+                let newAssetRequest = PHAssetCreationRequest.forAsset()
+                newAssetRequest.addResource(with: .photo, data: data, options: nil)
+                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+            }, completionHandler: completionHandler)
+        } else {
+            PHPhotoLibrary.shared().performChanges({
+                let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+            }, completionHandler: completionHandler)
+        }
+    }
+    
+    static func getAsset(from localIdentifier: String?) -> PHAsset? {
+        guard let id = localIdentifier else {
+            return nil
+        }
+        
+        let result = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
+        return result.firstObject
+    }
+
 }
