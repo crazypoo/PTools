@@ -76,5 +76,4 @@ public extension PTPOP where Base: PHPhotoLibrary {
         let result = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
         return result.firstObject
     }
-
 }

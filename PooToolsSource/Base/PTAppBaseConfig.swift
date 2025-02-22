@@ -67,7 +67,7 @@ public class PTAppBaseConfig: NSObject {
     open var loadImageRetryMaxCount:Int = 3
     open var loadImageRetryInerval:TimeInterval = 2
     public func gobalWebImageLoadOption(maxCount:Int = PTAppBaseConfig.share.loadImageRetryMaxCount,retryInterval:TimeInterval = PTAppBaseConfig.share.loadImageRetryInerval) -> KingfisherOptionsInfo {
-#if DEBUG
+#if POOTOOLS_DEBUG
         PTDevFunction.gobalWebImageLoadOption()
 #else
         return [KingfisherOptionsInfoItem.cacheOriginalImage,KingfisherOptionsInfoItem.backgroundDecode,KingfisherOptionsInfoItem.retryStrategy(DelayRetryStrategy(maxRetryCount: maxCount, retryInterval: .seconds(retryInterval)))]

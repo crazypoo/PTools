@@ -17,13 +17,17 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
     
     var selIds: [String: Bool] = [:]
     var selEditImage: [String: UIImage] = [:]
+#if POOTOOLS_IMAGEEDITOR
     var selEditModel: [String: PTEditModel] = [:]
+#endif
     var selIdAndIndex: [String: Int] = [:]
     
     for (index, m) in selected.enumerated() {
         selIds[m.ident] = true
         selEditImage[m.ident] = m.editImage
+#if POOTOOLS_IMAGEEDITOR
         selEditModel[m.ident] = m.editImageModel
+#endif
         selIdAndIndex[m.ident] = index
     }
     
@@ -31,7 +35,9 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
         if selIds[m.ident] == true {
             m.isSelected = true
             m.editImage = selEditImage[m.ident]
+#if POOTOOLS_IMAGEEDITOR
             m.editImageModel = selEditModel[m.ident]
+#endif
             selected[selIdAndIndex[m.ident]!] = m
         } else {
             m.isSelected = false
@@ -146,7 +152,7 @@ public class PTMediaLibManager:NSObject {
             placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
         }) { suc, _ in
             if suc {
-                let asset = PTMediaEditManager.getAsset(from: placeholderAsset?.localIdentifier)
+                let asset = PHPhotoLibrary.pt.getAsset(from: placeholderAsset?.localIdentifier)
                 completion?(suc, asset)
             } else {
                 completion?(false, nil)

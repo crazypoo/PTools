@@ -85,7 +85,7 @@ class PTFetchImageOperation: Operation,@unchecked Sendable {
         // 存在编辑的图片
         if let editImage = model.editImage {
             if PTMediaLibConfig.share.saveNewImageAfterEdit {
-                PTMediaEditManager.saveImageToAlbum(image: editImage) { [weak self] _, asset in
+                PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self] _, asset in
                     self?.completion(editImage, asset)
                     self?.fetchFinish()
                 }

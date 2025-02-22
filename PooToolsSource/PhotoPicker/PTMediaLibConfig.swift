@@ -130,10 +130,28 @@ public class PTMediaLibConfig:NSObject {
     /// This block will be called when selecting an asset.
     public var didSelectAsset: ((PHAsset) -> Void)?
 
+    private var pri_maxRecordDuration: Int = 20
+    /// Maximum recording duration. Defaults to 20, minimum is 1.
+    public var maxRecordDuration: Int {
+        get {
+            pri_maxRecordDuration
+        }
+        set {
+            pri_maxRecordDuration = max(1, newValue)
+        }
+    }
+    
+#if POOTOOLS_FILTERCAMERA
     /// Allow to choose the maximum duration of the video. Defaults to 120.
     public var maxSelectVideoDuration: PTCameraFilterConfig.Second = 120
     /// Allow to choose the minimum duration of the video. Defaults to 0.
     public var minSelectVideoDuration: PTCameraFilterConfig.Second = 0
+#else
+    /// Allow to choose the maximum duration of the video. Defaults to 120.
+    public var maxSelectVideoDuration: Int = 120
+    /// Allow to choose the minimum duration of the video. Defaults to 0.
+    public var minSelectVideoDuration: Int = 0
+#endif
     /// Allow to choose the maximum data size of the video. Defaults to infinite.
     public var maxSelectVideoDataSize: PTMediaLibConfig.KBUnit = .greatestFiniteMagnitude
     
@@ -211,7 +229,7 @@ public class PTCameraConfig: NSObject {
     }
         
     /// Video resolution. Defaults to hd1920x1080.
-    public var sessionPreset: C7CameraConfig.CaptureSessionPreset = .hd1920x1080
+    public var sessionPreset: AVCaptureSession.Preset = .hd1920x1080
 
         
     /// Camera flahs switch. Defaults to true.

@@ -116,6 +116,7 @@ public class PTMediaLibView:UIView {
                                 cellModel.asset.calcelExport()
                                 sender.clearProgressLayer()
                             default:
+#if POOTOOLS_VIDEOEDITOR
                                 cellModel.asset.convertPHAssetToAVAsset { progress in
                                     sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
                                 } completion: { avAsset in
@@ -150,8 +151,10 @@ public class PTMediaLibView:UIView {
                                         }
                                     }
                                 }
+#endif
                             }
                         default:
+#if POOTOOLS_IMAGEEDITOR
                             PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
                                 if !isDegraded {
                                     if let image = image {
@@ -173,6 +176,7 @@ public class PTMediaLibView:UIView {
                                     }
                                 }
                             }
+#endif
                         }
                     }
                     
@@ -198,7 +202,8 @@ public class PTMediaLibView:UIView {
                 if itemRow.ID == PTCameraCell.ID {
                     let config = PTMediaLibConfig.share
                     if config.useCustomCamera {
-                        
+#if POOTOOLS_FILTERCAMERA
+
                         PTCameraFilterConfig.share.allowTakePhoto = PTMediaLibConfig.share.allowSelectImage
                         PTCameraFilterConfig.share.allowRecordVideo = PTMediaLibConfig.share.allowSelectVideo
 
@@ -216,16 +221,17 @@ public class PTMediaLibView:UIView {
                         self.currentVc.navigationController?.pushViewController(vc) {
                             vc.sheetViewController?.setSizes([.fullscreen])
                         }
+#endif
                     } else {
                         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
                             PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
-                        } else if C7CameraConfig.hasCameraAuthority() {
+                        } else if PTMediaLibView.hasCameraAuthority() {
                             let picker = UIImagePickerController()
                             picker.delegate = self
                             picker.allowsEditing = false
                             picker.videoQuality = .typeHigh
                             picker.sourceType = .camera
-                            picker.cameraDevice = C7CameraConfig.share.devicePosition.cameraDevice
+                            picker.cameraDevice = UIImagePickerController.CameraDevice.rear
                             if config.cameraConfiguration.showFlashSwitch {
                                 picker.cameraFlashMode = .auto
                             } else {
@@ -239,7 +245,7 @@ public class PTMediaLibView:UIView {
                                 mediaTypes.append("public.movie")
                             }
                             picker.mediaTypes = mediaTypes
-                            picker.videoMaximumDuration = TimeInterval(PTCameraFilterConfig.share.maxRecordDuration)
+                            picker.videoMaximumDuration = TimeInterval(PTMediaLibConfig.share.maxRecordDuration)
                             PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
                         } else {
                             PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
@@ -305,6 +311,14 @@ public class PTMediaLibView:UIView {
         
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public class func hasCameraAuthority() -> Bool {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status == .restricted || status == .denied {
+            return false
+        }
+        return true
     }
     
     func loadMedia(addImage:Bool? = false,loadFinish:((UICollectionView)->Void)? = nil) {
@@ -444,7 +458,7 @@ public class PTMediaLibView:UIView {
     private func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
             PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(), icon:.Heart,style: .Normal)
-            PTMediaEditManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
+            PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     let model = PTMediaModel(asset: asset)
                     self?.handleDataArray(newModel: model)
@@ -833,6 +847,7 @@ extension PTMediaLibViewController {
                 
                 if let image = image {
                     let isEdited = m.editImage != nil && !config.saveNewImageAfterEdit
+#if POOTOOLS_IMAGEEDITOR
                     let model = PTResultModel(
                         asset: asset ?? m.asset,
                         image: image,
@@ -842,6 +857,16 @@ extension PTMediaLibViewController {
                         index: i
                     )
                     results[i] = model
+#else
+                    let model = PTResultModel(
+                        asset: asset ?? m.asset,
+                        image: image,
+                        isEdited: isEdited,
+                        avEditorOutputItem: m.avEditorOutputItem,
+                        index: i
+                    )
+                    results[i] = model
+#endif
                     PTNSLogConsole("PTPhotoBrowser: suc request \(i)",levelType: PTLogMode,loggerType: .Media)
                 } else {
                     errorAssets.append(m.asset)

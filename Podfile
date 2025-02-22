@@ -17,6 +17,11 @@ post_install do |installer|
 #          
 #          config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf-with-dsym'
 #          end
+        if config.name == 'Debug'
+          config.build_settings['STRIP_INSTALLED_PRODUCT'] = 'NO' # strip Linked product
+        else
+          config.build_settings['STRIP_INSTALLED_PRODUCT'] = 'YES'
+        end
       end
       target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
             target.build_configurations.each do |config|
@@ -49,7 +54,7 @@ target 'PooTools_Example' do
 ##JD包体分析
 #https://github.com/helele90/APPAnalyze
 
-  pod 'PooTools', :subspecs => ['InputAll'], :path => 'PooTools.podspec'
+  pod 'PooTools/InputAll', :path => './'
 #  pod 'PooTools/InputAll', :git => 'https://github.com/crazypoo/PTools.git'
 
 #  pod 'MetaCodable'

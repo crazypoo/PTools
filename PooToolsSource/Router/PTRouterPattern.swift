@@ -10,28 +10,26 @@ import Foundation
 
 public class PTRouterPattern: PTRouterParser {
     
-    public typealias HandleBlock = ([String: Any]) -> Any?
     public static let PatternPlaceHolder = "~PT~"
     
     public var patternString: String
     public var sheme: String
     public var patternPaths: [String]
     public var priority: uint
-    public var handle: HandleBlock
     public var matchString: String
+    public var classString: String
     public var paramsMatchDict: [String: Int]
     
     public init(_ string: String,
-                priority: uint = 0,
-                handle: @escaping HandleBlock) {
+                _ classString: String,
+                priority: uint = 0) {
         
-        patternString = string
+        self.patternString = string
         self.priority = priority
-        self.handle = handle
-        sheme = PTRouterPattern.parserSheme(string)
-        patternPaths = PTRouterPattern.parserPaths(string)
-        paramsMatchDict = [String: Int]()
-        
+        self.sheme = PTRouterPattern.parserSheme(string)
+        self.patternPaths = PTRouterPattern.parserPaths(string)
+        self.paramsMatchDict = [String: Int]()
+        self.classString = classString
         var matchPaths = [String]()
         for i in 0..<patternPaths.count {
             var pathComponent = self.patternPaths[i]
@@ -42,6 +40,6 @@ public class PTRouterPattern: PTRouterParser {
             }
             matchPaths.append(pathComponent)
         }
-        matchString = matchPaths.joined(separator: "/")
+        self.matchString = matchPaths.joined(separator: "/")
     }
 }

@@ -61,10 +61,25 @@ public let PTRouterPath = "path"
 public let PTRouterClassName = "class"
 //路由priority常量Key
 public let PTRouterPriority = "priority"
+// tabBar选中参数 tabBarSelecIndex
+public let PTRouterTabBarSelecIndex = "tabBarSelecIndex"
 //路由优先级默认值
 public let PTRouterDefaultPriority: UInt = 1000
 
 public typealias ComplateHandler = (([String: Any]?, Any?) -> Void)?
+
+// 定义一个封装类来存储和执行接受参数的闭包
+public class PTRouerParamsClosureWrapper: NSObject {
+    public var closure: ((Any) -> Void)?
+
+    public init(closure: @escaping (Any) -> Void) {
+        self.closure = closure
+    }
+
+    public func executeClosure(params: Any) {
+        closure?(params)
+    }
+}
 
 public class PTRouter: PTRouterParser {
     
@@ -75,6 +90,9 @@ public class PTRouter: PTRouterParser {
     public typealias LazyRegisterHandleBlock = (_ url: String, _ userInfo: [String: Any]) -> Any?
     public typealias RouterLogHandleBlock = (_ url: String, _ logType: PTRouterLogType, _ errorMsg: String) -> Void
     
+    // MARK: - 自定义跳转
+    public typealias CustomJumpActionClouse = (PTJumpType, UIViewController) -> Void
+
     // MARK: - Private property
     private var interceptors = [PTRouterInterceptor]()
     
@@ -100,16 +118,17 @@ public class PTRouter: PTRouterParser {
     
     public var logcat: RouterLogHandleBlock?
     
+    public var customJumpAction: CustomJumpActionClouse?
+
     // MARK: - Public method
     func addRouterItem(_ patternString: String,
-                       priority: uint = 0,
-                       handle: @escaping PTRouterPattern.HandleBlock) {
-        
-        let pattern = PTRouterPattern.init(patternString.trimmingCharacters(in: CharacterSet.whitespaces), priority: priority, handle: handle)
+                       classString: String,
+                       priority: uint = 0) {
+        let pattern = PTRouterPattern.init(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString, priority: priority)
         patterns.append(pattern)
         patterns.sort { $0.priority > $1.priority }
     }
-    
+
     func addRouterInterceptor(_ whiteList: [String] = [String](),
                               priority: uint = 0,
                               handle: @escaping PTRouterInterceptor.InterceptorHandleBlock) {
@@ -130,6 +149,10 @@ public class PTRouter: PTRouterParser {
         logcat = handle
     }
     
+    func customJumpAction(_ handle: @escaping CustomJumpActionClouse) {
+        customJumpAction = handle
+    }
+
     func removeRouter(_ patternString: String) {
         patterns = patterns.filter { $0.patternString != patternString }
     }
@@ -314,13 +337,17 @@ public extension PTRouter {
     ///   - patternString: register urlstring
     ///   - priority:
     ///   - classString: the class which match the className need inherit the protocol of PTRouterable
-    class func addRouterItem(_ patternString: String, priority: uint = 0, classString: String) {
+    class func addRouterItem(patternString: String, priority: uint = 0, classString: String) {
         let clz: AnyClass? = classString.trimmingCharacters(in: CharacterSet.whitespaces).matchClass()
-        if let routerable = clz as? PTRouterable.Type {
-            self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), priority: priority, handle: routerable.registerAction)
+        if let _ = clz as? PTRouterable.Type {
+            self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: priority)
         } else {
-            shareInstance.logcat?(patternString, .logError, "\(classString) register router error， please implementation the TheRouterable Protocol")
-            assert(clz as? PTRouterable.Type != nil, "register router error， please implementation the TheRouterable Protocol")
+            if let currentCls = clz, currentCls is PTRouterableProxy.Type {
+                self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: priority)
+            } else {
+                shareInstance.logcat?(patternString, .logError, "\(classString) register router error， please implementation the PTRouterable Protocol")
+                assert(clz as? PTRouterable.Type != nil, "register router error， please implementation the PTRouterable Protocol")
+            }
         }
     }
 
@@ -330,10 +357,10 @@ public extension PTRouter {
     ///   - patternString: register urlstring
     ///   - priority: match priority, sort by inverse order
     ///   - handle: block of refister URL
-    class func addRouterItem(_ patternString: String, priority: uint = 0, handle: @escaping PTRouterPattern.HandleBlock) {
-        shareInstance.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), priority: priority, handle: handle)
+    class func addRouterItem(_ patternString: String, classString: String, priority: uint = 0) {
+        shareInstance.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: priority)
     }
-    
+
     /// addRouterItem
     ///
     /// - Parameters:
@@ -359,6 +386,11 @@ public extension PTRouter {
         shareInstance.logcat(handle)
     }
     
+    /// addRouterItemLogHandle
+    class func customJumpAction(_ handle: @escaping CustomJumpActionClouse) {
+        shareInstance.customJumpAction(handle)
+    }
+
     /// removeRouter by register urlstring
     ///
     /// - Parameter patternString: register urlstring
@@ -413,6 +445,7 @@ public extension PTRouter {
     case popToTaget
     case windowNavRoot
     case modalDismissBeforePush
+    case showTab
 }
 
 // 动态路由调用方法返回类型
@@ -523,6 +556,16 @@ public struct PTRouterInfo: Decodable {
 //MARK: extension of viewcontroller jump for PTRouter
 extension PTRouter {
     
+    class func processParameter(_ parameter: Any) -> Int? {
+        if let intValue = parameter as? Int {
+            return intValue
+        } else if let stringValue = parameter as? String, let intValue = Int(stringValue) {
+            return intValue
+        } else {
+            return 0
+        }
+    }
+    
     @discardableResult
     public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) -> Any? {
         if urlString.isEmpty {
@@ -573,16 +616,9 @@ extension PTRouter {
     public class func routerJump(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) -> Any? {
         
         let response = PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
-        let instance = response.pattern?.handle(response.queries)
         let queries = response.queries
-        
         var resultJumpType: PTJumpType = .push
         
-        var resultVC: UIViewController?
-        
-        if let vc = instance as? UIViewController {
-            resultVC = vc
-        }
         if let typeString = queries[PTJumpTypeKey] as? String,
            let jumpType = PTJumpType.init(rawValue: Int(typeString) ?? 1) {
             resultJumpType = jumpType
@@ -590,8 +626,17 @@ extension PTRouter {
             resultJumpType = .push
         }
         
+        let instanceVC = PTRouterDynamicParamsMapping.shared.routerGetInstance(with: response.pattern?.classString ?? "").instanceObject as? NSObject
+        _ = instanceVC?.setPropertyParameter(queries)
+
+        var resultVC: UIViewController?
+        
+        if let vc = instanceVC as? UIViewController {
+            resultVC = vc
+        }
+
         if let jumpVC = resultVC {
-            jump(jumpType: resultJumpType, vc: jumpVC)
+            jump(jumpType: resultJumpType, vc: jumpVC,queries:queries)
             let className = NSStringFromClass(type(of: jumpVC))
             shareInstance.logcat?(uriTuple.0, .logNormal, "resultVC: \(className)")
         } else {
@@ -603,18 +648,43 @@ extension PTRouter {
         return resultVC
     }
     
-    public class func jump(jumpType: PTJumpType, vc: UIViewController) {
-        switch jumpType {
-        case .modal:
-            PTUtils.modal(vc)
-        case .push:
-            PTUtils.push(vc)
-        case .popToTaget:
-            PTUtils.popToTargetVC(vcClass: type(of: vc))
-        case .windowNavRoot:
-            PTUtils.pusbWindowNavRoot(vc)
-        case .modalDismissBeforePush:
-            PTUtils.modalDismissBeforePush(vc)
+    public class func jump(jumpType: PTJumpType, vc: UIViewController, queries: [String: Any]) {
+        DispatchQueue.main.async {
+            if let action = shareInstance.customJumpAction {
+                action(jumpType, vc)
+            } else {
+                switch jumpType {
+                case .modal:
+                    PTUtils.modal(vc)
+                case .push:
+                    PTUtils.push(vc)
+                case .popToTaget:
+                    PTUtils.popToTargetVC(vcClass: type(of: vc))
+                case .windowNavRoot:
+                    PTUtils.pusbWindowNavRoot(vc)
+                case .modalDismissBeforePush:
+                    PTUtils.modalDismissBeforePush(vc)
+                case .showTab:
+                    showTabBar(queries: queries)
+                }
+            }
+        }
+    }
+    
+    private class func showTabBar(queries: [String: Any]) {
+        let selectIndex: Int = processParameter(queries[PTRouterTabBarSelecIndex] ?? 0) ?? 0
+        let tabVC = UIApplication.shared.delegate?.window??.rootViewController
+        if let tabVC = tabVC as? UITabBarController {
+            let navVC: UINavigationController? = PTUtils.getTopViewController(nil)?.navigationController
+            if let navigationController = navVC {
+                navigationController.popToRootViewController(animated: false)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    tabVC.selectedIndex = selectIndex
+                    if let topViewController = PTUtils.getTopViewController(nil), let navController = topViewController.navigationController {
+                        navController.popToRootViewController(animated: false)
+                    }
+                }
+            }
         }
     }
     
@@ -635,22 +705,13 @@ extension PTRouter {
         
         if let functionResultType = uriTuple.1[PTRouterFunctionResultKey] as? Int {
             if functionResultType == PTRouterFunctionResultType.voidType.rawValue {
-                performTargetVoidType(protocolName: protocols,
-                                           actionName: methods,
-                                           param: uriTuple.1[PTRouterIvar1Key],
-                                           otherParam: uriTuple.1[PTRouterIvar2Key])
+                performTargetVoidType(protocolName: protocols, actionName: methods, param: uriTuple.1[PTRouterIvar1Key], otherParam: uriTuple.1[PTRouterIvar2Key])
                 return nil
             } else if functionResultType == PTRouterFunctionResultType.valueType.rawValue {
-                let exectueResult = performTarget(protocolName: protocols,
-                                                       actionName: methods,
-                                                       param: uriTuple.1[PTRouterIvar1Key],
-                                                       otherParam: uriTuple.1[PTRouterIvar2Key])
+                let exectueResult = performTarget(protocolName: protocols, actionName: methods, param: uriTuple.1[PTRouterIvar1Key], otherParam: uriTuple.1[PTRouterIvar2Key])
                 return exectueResult?.takeUnretainedValue()
             } else if functionResultType == PTRouterFunctionResultType.referenceType.rawValue {
-                let exectueResult = performTarget(protocolName: protocols,
-                                                       actionName: methods,
-                                                       param: uriTuple.1[PTRouterIvar1Key],
-                                                       otherParam: uriTuple.1[PTRouterIvar2Key])
+                let exectueResult = performTarget(protocolName: protocols, actionName: methods, param: uriTuple.1[PTRouterIvar1Key], otherParam: uriTuple.1[PTRouterIvar2Key])
                 return exectueResult?.takeRetainedValue()
             }
         }

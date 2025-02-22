@@ -11,8 +11,12 @@ import Foundation
 public protocol PTRouterable {
     
     static var patternString: [String] { get }
-        
-    static func registerAction(info: [String: Any]) -> Any
     
     static var priority: UInt { get }
+}
+
+extension PTRouterable {
+    public static var priority: UInt {
+        1000
+    }
 }
