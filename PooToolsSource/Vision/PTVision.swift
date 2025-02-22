@@ -13,6 +13,43 @@ import VisionKit
 public class PTVision: NSObject {
     public static let share = PTVision()
 
+    public static func funcQRCode(withImage image:UIImage,
+                                  type:VNBarcodeSymbology = .qr,
+                                  callback:@escaping (String)->Void) {
+        guard let ciImage = CIImage(image: image) else {
+            PTNSLogConsole("Failed to convert UIImage to CIImage")
+            callback("")
+            return
+        }
+        
+        // 创建条形码识别请求
+        let barcodeRequest = VNDetectBarcodesRequest { request, error in
+            guard let results = request.results as? [VNBarcodeObservation] else {
+                PTNSLogConsole("No barcodes detected")
+                callback("")
+                return
+            }
+
+            for barcode in results {
+                if barcode.symbology == type {
+                    PTNSLogConsole("Detected barcode: \(barcode.payloadStringValue ?? "Unknown")")
+                    callback(barcode.payloadStringValue ?? "Unknown")
+                }
+            }
+        }
+
+        // 创建图像请求处理器
+        let requestHandler = VNImageRequestHandler(ciImage: ciImage, options: [:])
+
+        // 执行请求
+        do {
+            try requestHandler.perform([barcodeRequest])
+        } catch {
+            PTNSLogConsole("Failed to perform barcode detection request: \(error)")
+            callback("")
+        }
+    }
+    
     //MARK: OCR查找文字方法(UIImage)
     ///OCR查找文字方法(UIImage)
     /// - Parameters:

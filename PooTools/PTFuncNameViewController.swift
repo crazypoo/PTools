@@ -717,8 +717,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
                     let vc = PTActivityViewController(activityItems: items,applicationActivities: [share])
                     vc.previewNumberOfLines = 10
-                    vc.presentActionSheet(self, from: collectionViews.cellForItem(at: indexPath)!)
-
+                    if let cell = self.aaaaaaa.contentCollectionView.cellForItem(at: indexPath) {
+                        vc.presentActionSheet(self, from: cell)
+                    }
                 } else if itemRow.title == .checkUpdate {
                     PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6596749489", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
                 } else if itemRow.title == .route {
@@ -899,7 +900,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     
                     let vc = PTEditImageViewController(readyEditImage: image)
                     vc.editFinishBlock = { ei ,editImageModel in
-                        PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
+                        PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, asset in
                             if !finish {
                                 PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
                             }

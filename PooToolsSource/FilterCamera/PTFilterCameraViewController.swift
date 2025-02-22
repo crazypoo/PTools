@@ -16,6 +16,7 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 import DeviceKit
+import Photos
 
 public class PTFilterCameraViewController: PTBaseViewController {
 
@@ -77,7 +78,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 self.takePhotoView?.actionHandle = { type,image in
                     let vc = PTEditImageViewController(readyEditImage: image)
                     vc.editFinishBlock = { ei ,editImageModel in
-                        PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
+                        PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, asset in
                             if !finish {
                                 PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
                             }
@@ -103,7 +104,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 self.takePhotoView?.dismissTask = {
                     self.takePhotoView = nil
                 }
-                PTMediaEditManager.saveImageToAlbum(image: image) { finish, asset in
+                PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] finish, asset in
                     if !finish {
                         PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
                     }

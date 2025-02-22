@@ -342,7 +342,7 @@ public extension PTRouter {
         if let _ = clz as? PTRouterable.Type {
             self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: priority)
         } else {
-            if let currentCls = clz, currentCls.self.conforms(to: PTRouterableProxy.self) {
+            if let currentCls = clz, currentCls is PTRouterableProxy.Type {
                 self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: priority)
             } else {
                 shareInstance.logcat?(patternString, .logError, "\(classString) register router error， please implementation the PTRouterable Protocol")
@@ -626,9 +626,8 @@ extension PTRouter {
             resultJumpType = .push
         }
         
-        let instanceVC = PTRouterDynamicParamsMapping.router().routerGetInstance(withClassName: response.pattern?.classString) as? NSObject
-        
-        instanceVC?.setPropertyParameter(queries)
+        let instanceVC = PTRouterDynamicParamsMapping.shared.routerGetInstance(with: response.pattern?.classString ?? "").instanceObject as? NSObject
+        _ = instanceVC?.setPropertyParameter(queries)
 
         var resultVC: UIViewController?
         

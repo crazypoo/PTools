@@ -268,19 +268,19 @@ extension PTRouterManager {
                         registerRouterList.append([PTRouterPath: cls.patternString[s], PTRouterClassName: fullName, PTRouterPriority: "\(cls.priority)"])
                     }
                 }
-            } else if currentClass.self.conforms(to: PTRouterableProxy.self) {
+            } else if currentClass is PTRouterableProxy.Type {
                 let fullName: String = NSStringFromClass(currentClass.self)
                 if fullName.contains(kSADelegateClassSensorsSuffix)  {
                     break
                 }
                 
-                for s in 0 ..< currentClass.patternString().count {
+                for s in 0 ..< currentClass.patternString.count {
                     if fullName.contains(NSKVONotifyingPrefix) {
                         let range = fullName.index(fullName.startIndex, offsetBy: NSKVONotifyingPrefix.count)..<fullName.endIndex
                         let subString = fullName[range]
-                        registerRouterList.append([PTRouterPath: currentClass.patternString()[s], PTRouterClassName: "\(subString)", PTRouterPriority: "\(String(describing: currentClass.priority()))"])
+                        registerRouterList.append([PTRouterPath: currentClass.patternString[s], PTRouterClassName: "\(subString)", PTRouterPriority: "\(String(describing: currentClass.priority))"])
                     } else {
-                        registerRouterList.append([PTRouterPath: currentClass.patternString()[s], PTRouterClassName: fullName, PTRouterPriority: "\(String(describing: currentClass.priority()))"])
+                        registerRouterList.append([PTRouterPath: currentClass.patternString[s], PTRouterClassName: fullName, PTRouterPriority: "\(String(describing: currentClass.priority))"])
                     }
                 }
             }
