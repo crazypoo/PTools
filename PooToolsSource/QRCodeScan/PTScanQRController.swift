@@ -464,7 +464,7 @@ public class PTScanQRController: PTBaseViewController {
                     }
                 }
             } else {
-                flag = !flag
+                flag.toggle()
             }
         }
     }
@@ -472,10 +472,8 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 獲取二維碼數據後處理回調
     func processResult(result:String,error:NSError?) {
         PTNSLogConsole(result,levelType: PTLogMode,loggerType: .QRCode)
-        if resultBlock != nil {
-            resultBlock!(result,error)
-        }
-        
+        resultBlock?(result,error)
+
         if viewConfig.autoReturn {
             PTGCDManager.gcdMain {
                 self.returnFrontVC()

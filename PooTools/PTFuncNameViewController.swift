@@ -637,6 +637,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     pickerConfig.allowEditVideo = false
                     pickerConfig.maxSelectCount = 1
                     pickerConfig.maxVideoSelectCount = 1
+                    pickerConfig.useCustomCamera = false
                     
                     let vc = PTMediaLibViewController()
                     vc.mediaLibShow()
@@ -925,6 +926,8 @@ class PTFuncNameViewController: PTBaseViewController {
                     config.maxVideoSelectCount = 1
                     config.allowEditImage = true
                     config.allowEditVideo = true
+                    config.useCustomCamera = false
+
                     let vc = PTMediaLibViewController()
                     vc.mediaLibShow()
                     vc.selectImageBlock = { result,isOriginal in

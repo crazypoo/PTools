@@ -55,8 +55,8 @@ public class PTEditMenuItemsInteraction: NSObject {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        Task { @MainActor in
-            self.clear()
+        PTGCDManager.gcdMain { [weak self] in
+            self?.clear()
         }
     }
     

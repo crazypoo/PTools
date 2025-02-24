@@ -810,27 +810,12 @@ extension PTCycleScrollView {
                 }
             }
         })
-//        let p_dtimer = DispatchSource.makeTimerSource()
-//        p_dtimer.schedule(deadline: .now()+autoScrollTimeInterval, repeating: autoScrollTimeInterval)
-//        p_dtimer.setEventHandler {
-//            PTGCDManager.gcdGobal(qosCls: .background) {
-//                PTGCDManager.gcdMain {
-//                    self.automaticScroll()
-//                }
-//            }
-//        }
-//        // 继续
-//        p_dtimer.resume()
-//
-//        dtimer = p_dtimer
     }
     
     /// 关闭倒计时
     public func invalidateTimer() {
         timer?.invalidate()
         timer = nil
-//        dtimer?.cancel()
-//        dtimer = nil
     }
 }
 
@@ -929,9 +914,7 @@ extension PTCycleScrollView {
     
     fileprivate func cycleScrollViewScrollToIndex() {
         let indexOnPageControl = pageControlIndexWithCurrentCellIndex(index: currentIndex())
-        if scrollToClosure != nil {
-            scrollToClosure!(indexOnPageControl)
-        }
+        scrollToClosure?(indexOnPageControl)
     }
 }
 
@@ -950,9 +933,7 @@ extension PTCycleScrollView : UIScrollViewDelegate {
         }
         
         let indexOnPageControl = self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex())
-        if self.scrollFromClosure != nil {
-            self.scrollFromClosure!(indexOnPageControl)
-        }
+        self.scrollFromClosure?(indexOnPageControl)
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
