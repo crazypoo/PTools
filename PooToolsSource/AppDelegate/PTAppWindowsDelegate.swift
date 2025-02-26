@@ -24,14 +24,18 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
     public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
 #if POOTOOLS_DEBUG
-        switch UIApplication.applicationEnvironment() {
-        case .appStore,.testFlight:
-            window = UIWindow.init(frame: UIScreen.main.bounds)
-        default:
-            window = TouchInspectorWindow(frame: UIScreen.main.bounds)
-            (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.AppTouchInspectShow
-            (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.AppTouchInspectShowHits
-            window?.tintColor = tint
+        Task {
+            let environment = await UIApplication.applicationEnvironment()
+
+            switch environment {
+            case .appStore,.testFlight:
+                window = UIWindow.init(frame: UIScreen.main.bounds)
+            default:
+                window = TouchInspectorWindow(frame: UIScreen.main.bounds)
+                (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.AppTouchInspectShow
+                (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.AppTouchInspectShowHits
+                window?.tintColor = tint
+            }
         }
 #else
         window = UIWindow.init(frame: UIScreen.main.bounds)
@@ -49,14 +53,17 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     
 #if POOTOOLS_DEBUG
     public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil) {
-        switch UIApplication.applicationEnvironment() {
-        case .appStore,.testFlight:
-            break
-        default:
-            let lcm = LocalConsole.shared
-            lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
-            lcm.flex = flex
-            lcm.watchViews = inApp
+        Task {
+            let environment = await UIApplication.applicationEnvironment()
+            switch environment {
+            case .appStore,.testFlight:
+                break
+            default:
+                let lcm = LocalConsole.shared
+                lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
+                lcm.flex = flex
+                lcm.watchViews = inApp
+            }
         }
     }
 #endif
@@ -82,13 +89,16 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
 
     public func createSettingBundle() {
-        switch UIApplication.applicationEnvironment() {
-        case .appStore,.testFlight:
-            break
-        default:
-#if POOTOOLS_DEBUG
-            PTDebugFunction.registerDefaultsFromSettingsBundle()
-#endif
+        Task {
+            let environment = await UIApplication.applicationEnvironment()
+            switch environment {
+            case .appStore,.testFlight:
+                break
+            default:
+    #if POOTOOLS_DEBUG
+                PTDebugFunction.registerDefaultsFromSettingsBundle()
+    #endif
+            }
         }
     }
     

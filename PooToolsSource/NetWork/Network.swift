@@ -284,8 +284,9 @@ public class Network: NSObject {
     }
         
     //MARK: 服务器URL
-    public class func gobalUrl() -> String {
-        if UIApplication.applicationEnvironment() != .appStore {
+    public class func gobalUrl() async -> String {
+        let environment = await UIApplication.applicationEnvironment()
+        if environment != .appStore {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTBaseURLMode {
             case .Development:
@@ -306,8 +307,9 @@ public class Network: NSObject {
     }
     
     //MARK: socket服务器URL
-    open class func socketGobalUrl() -> String {
-        if UIApplication.applicationEnvironment() != .appStore {
+    open class func socketGobalUrl() async -> String {
+        let environment = await UIApplication.applicationEnvironment()
+        if environment != .appStore {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTSocketURLMode {
             case .Development:
@@ -401,7 +403,8 @@ public class Network: NSObject {
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
-        let urlStr1 = (needGobal ? Network.gobalUrl() : "") + (try urlStr.asURL().absoluteString)
+        let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
+        let urlStr1 = gobalUrl + (try urlStr.asURL().absoluteString)
         guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
             throw AFError.invalidURL(url: "https://www.qq.com")
         }
@@ -500,7 +503,8 @@ public class Network: NSObject {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let pathUrl = (needGobal ? Network.gobalUrl() : "") + (try path.asURL().absoluteString)
+                    let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
+                    let pathUrl = gobalUrl + (try path.asURL().absoluteString)
                     guard pathUrl.isURL(), ((try? pathUrl.asURL().absoluteString) != nil) else {
                         throw AFError.invalidURL(url: "https://www.qq.com")
                     }

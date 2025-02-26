@@ -37,14 +37,16 @@ public class PTSocketManager: NSObject {
     }
     
     public func socketSet() {
-        let urlString = Network.socketGobalUrl()
-        guard let webSocketUrl = URL(string: urlString),var urlcomponents = URLComponents(url: webSocketUrl, resolvingAgainstBaseURL: false) else {
-            return
+        Task {
+            let urlString = await Network.socketGobalUrl()
+            guard let webSocketUrl = URL(string: urlString),var urlcomponents = URLComponents(url: webSocketUrl, resolvingAgainstBaseURL: false) else {
+                return
+            }
+            
+            urlcomponents.scheme = webSocketUrl.scheme
+            guard let url = urlcomponents.url else { return }
+            self.request = NSMutableURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
         }
-        
-        urlcomponents.scheme = webSocketUrl.scheme
-        guard let url = urlcomponents.url else { return }
-        self.request = NSMutableURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
     }
 
     @objc func onNetworkStatusChange(notifi:Notification) {

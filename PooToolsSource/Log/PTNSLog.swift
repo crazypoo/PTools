@@ -64,57 +64,63 @@ public func PTNSLog(_ msg: Any...,
                     fn: String = #function,
                     levelType:LoggerEXLevelType = .Info,
                     loggerType:LoggerEXType = .Other) {
-    var msgStr = ""
-    for element in msg {
-        msgStr += "\(element)\n"
-    }
-    let formatResult = formatLogMessage(file: file, line: line, column: column, fn: fn, msgStr: msgStr)
-    let prefix = formatResult.1
-    let currentDate = formatResult.0
-    switch UIApplication.applicationEnvironment() {
-    case .appStore:
-        DDLogSet(levelType: levelType,prefix: prefix)
-    default:
-        let logger = Logger.loger(categoryName: loggerType.rawValue)
-        switch levelType {
-        case .Debug:
-            logger.debug("\(prefix)")
-        case .Error:
-            logger.error("\(prefix)")
-        case .Info:
-            logger.info("\(prefix)")
-        case .Warning:
-            logger.warning("\(prefix)")
-        case .Trace:
-            logger.trace("\(prefix)")
-        case .Notice:
-            logger.notice("\(prefix)")
-        case .Critical:
-            logger.critical("\(prefix)")
-        case .Fault:
-            logger.fault("\(prefix)")
+    Task {
+        var msgStr = ""
+        for element in msg {
+            msgStr += "\(element)\n"
         }
-#if POOTOOLS_DEBUG
-        PTGCDManager.gcdMain {
-            if LocalConsole.shared.isVisiable {
-                LocalConsole.shared.print(prefix)
+        let formatResult = await formatLogMessage(file: file, line: line, column: column, fn: fn, msgStr: msgStr)
+        let prefix = formatResult.1
+        let currentDate = formatResult.0
+
+        let environment = await UIApplication.applicationEnvironment()
+        switch environment {
+        case .appStore:
+            DDLogSet(levelType: levelType,prefix: prefix)
+        default:
+            let logger = Logger.loger(categoryName: loggerType.rawValue)
+            switch levelType {
+            case .Debug:
+                logger.debug("\(prefix)")
+            case .Error:
+                logger.error("\(prefix)")
+            case .Info:
+                logger.info("\(prefix)")
+            case .Warning:
+                logger.warning("\(prefix)")
+            case .Trace:
+                logger.trace("\(prefix)")
+            case .Notice:
+                logger.notice("\(prefix)")
+            case .Critical:
+                logger.critical("\(prefix)")
+            case .Fault:
+                logger.fault("\(prefix)")
             }
+    #if POOTOOLS_DEBUG
+            PTGCDManager.gcdMain {
+                if LocalConsole.shared.isVisiable {
+                    LocalConsole.shared.print(prefix)
+                }
+            }
+    #endif
         }
-#endif
+        
+        guard isWriteLog else {
+            return
+        }
+        // 将内容同步写到文件中去（Caches文件夹下）
+        let cachePath = FileManager.pt.CachesDirectory()
+        let logURL = cachePath + "/log.txt"
+        appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: currentDate,isWriteLog: isWriteLog,file: file,line: line,column: column,fn: fn)
+
     }
-    
-    guard isWriteLog else {
-        return
-    }
-    // 将内容同步写到文件中去（Caches文件夹下）
-    let cachePath = FileManager.pt.CachesDirectory()
-    let logURL = cachePath + "/log.txt"
-    appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: currentDate,isWriteLog: isWriteLog,file: file,line: line,column: column,fn: fn)
 }
 
-private func formatLogMessage(file: NSString, line: Int, column: Int, fn: String, msgStr: String) -> (String,String) {
+private func formatLogMessage(file: NSString, line: Int, column: Int, fn: String, msgStr: String) async -> (String,String) {
     let currentAppStatus: String
-    switch UIApplication.applicationEnvironment() {
+    let environment = await UIApplication.applicationEnvironment()
+    switch environment {
     case .appStore:
         currentAppStatus = "<<<生產環境>>>"
     case .testFlight:

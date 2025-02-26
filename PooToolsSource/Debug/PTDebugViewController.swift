@@ -15,8 +15,10 @@ import ZXNavigationBar
 
 public class PTDebugViewController: PTBaseViewController {
     
-    lazy var settingCellModels:[PTFusionCellModel] = {
-        
+    var settingCellModels:[PTFusionCellModel] = []
+    
+    // 用 async 創建 cell models
+    func createCellModels() async -> [PTFusionCellModel] {
         let disclosureImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
         
         var modeName = ""
@@ -37,9 +39,9 @@ public class PTDebugViewController: PTBaseViewController {
         
         let cell_input = PTFusionCellModel()
         cell_input.name = .addressInput
-        let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
+        let url_debug: String = PTCoreUserDefultsWrapper.AppRequestUrl
         if url_debug.isEmpty {
-            cell_input.content = Network.gobalUrl()
+            cell_input.content = await Network.gobalUrl() // 使用 await
         } else {
             cell_input.content = url_debug
         }
@@ -64,22 +66,21 @@ public class PTDebugViewController: PTBaseViewController {
         
         let cell_input_socket = PTFusionCellModel()
         cell_input_socket.name = .socketAddressInput
-        let url_debug_socket:String = PTCoreUserDefultsWrapper.AppSocketUrl
+        let url_debug_socket: String = PTCoreUserDefultsWrapper.AppSocketUrl
         if url_debug_socket.isEmpty {
-            cell_input_socket.content = Network.socketGobalUrl()
+            cell_input_socket.content = await Network.socketGobalUrl() // 使用 await
         } else {
             cell_input_socket.content = url_debug
         }
         cell_input_socket.accessoryType = .DisclosureIndicator
         cell_input_socket.disclosureIndicatorImage = disclosureImage
-        
-        
+
         let cell_debug = PTFusionCellModel()
         cell_debug.name = .DebugMode
         cell_debug.accessoryType = .Switch
 
-        return [cell_mode,cell_input,cell_mode_socket,cell_input_socket,cell_debug]
-    }()
+        return [cell_mode, cell_input, cell_mode_socket, cell_input_socket, cell_debug]
+    }
 
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
@@ -224,7 +225,10 @@ public class PTDebugViewController: PTBaseViewController {
             make.top.equalToSuperview()
 #endif
         }
-        showDetail()
+        Task {
+            settingCellModels = await self.createCellModels()
+            showDetail()
+        }
     }
     
     func showDetail() {
