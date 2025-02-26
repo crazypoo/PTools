@@ -21,15 +21,20 @@ public extension UIApplication {
     
     //MARK: 獲取軟件的開髮狀態
     ///獲取軟件的開髮狀態
-    @MainActor class func applicationEnvironment() -> Environment {
-        return UIApplication.shared.inferredEnvironment
+    class func applicationEnvironment() -> Environment {
+        var environment: Environment = .debug
+        PTGCDManager.gcdMain {
+            environment = UIApplication.shared.inferredEnvironment
+        }
+        return environment
     }
     
     class func applicationEnvironment() async -> Environment {
         // 在主線程異步更新 environment
         return await withCheckedContinuation { continuation in
             PTGCDManager.gcdMain {
-                continuation.resume(returning: UIApplication.applicationEnvironment())
+                let environment = UIApplication.shared.inferredEnvironment
+                continuation.resume(returning: environment)
             }
         }
     }
