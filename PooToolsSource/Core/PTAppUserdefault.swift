@@ -37,7 +37,7 @@ public struct PTCoreUserDefultsWrapper {
     @PTUserDefault(withKey: DevNetWorkKey, defaultValue: "") public static var AppRequestUrl:String
     //MARK: App测试环境(YES是)
     ///App测试环境(YES是)
-    @PTUserDefault(withKey: ConsoleDebug, defaultValue: true) public static var AppDebugMode:Bool
+    @PTUserDefault(withKey: ConsoleDebug, defaultValue: false) public static var AppDebugMode:Bool
     //MARK: App测试环境图片选项(YES是)
     ///App测试环境图片选项(YES是)
     @PTUserDefault(withKey: "WebImageOption", defaultValue: false) public static var WebImageOption:Bool

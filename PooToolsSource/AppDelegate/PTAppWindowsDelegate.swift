@@ -25,7 +25,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
 #if POOTOOLS_DEBUG
         Task {
-            let environment = await UIApplication.applicationEnvironment()
+            let environment = UIApplication.shared.inferredEnvironment
 
             switch environment {
             case .appStore,.testFlight:
@@ -54,7 +54,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #if POOTOOLS_DEBUG
     public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil) {
         Task {
-            let environment = await UIApplication.applicationEnvironment()
+            let environment = UIApplication.shared.inferredEnvironment
             switch environment {
             case .appStore,.testFlight:
                 break
@@ -90,7 +90,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 
     public func createSettingBundle() {
         Task {
-            let environment = await UIApplication.applicationEnvironment()
+            let environment = UIApplication.shared.inferredEnvironment
             switch environment {
             case .appStore,.testFlight:
                 break

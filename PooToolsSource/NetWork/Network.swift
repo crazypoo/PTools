@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import KakaJSON
 import Network
+import SwifterSwift
 
 public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
 public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
@@ -285,7 +286,7 @@ public class Network: NSObject {
         
     //MARK: 服务器URL
     public class func gobalUrl() async -> String {
-        let environment = await UIApplication.applicationEnvironment()
+        let environment = await UIApplication.shared.inferredEnvironment
         if environment != .appStore {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTBaseURLMode {
@@ -308,7 +309,7 @@ public class Network: NSObject {
     
     //MARK: socket服务器URL
     open class func socketGobalUrl() async -> String {
-        let environment = await UIApplication.applicationEnvironment()
+        let environment = await UIApplication.shared.inferredEnvironment
         if environment != .appStore {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTSocketURLMode {

@@ -22,8 +22,8 @@ public extension PTBaseViewController {
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
 #if POOTOOLS_DEBUG
         Task {
-            let environment = await UIApplication.applicationEnvironment()
-            if environment != .appStore {
+            let environment = UIApplication.shared.inferredEnvironment
+            if environment != .appStore,PTCoreUserDefultsWrapper.AppDebugMode {
                 let console = LocalConsole.shared
                 console.isVisiable = !console.isVisiable
             }
