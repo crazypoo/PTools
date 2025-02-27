@@ -260,10 +260,12 @@ public extension UIView {
     @objc func viewCorner(radius:CGFloat = 0,
                           borderWidth:CGFloat = 0,
                           borderColor:UIColor = UIColor.clear) {
-        layer.cornerRadius = radius
-        layer.masksToBounds = true
-        layer.borderWidth = borderWidth
-        layer.borderColor = borderColor.cgColor
+        PTGCDManager.gcdMain {
+            self.layer.cornerRadius = radius
+            self.layer.masksToBounds = true
+            self.layer.borderWidth = borderWidth
+            self.layer.borderColor = borderColor.cgColor
+        }
     }
         
     @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,

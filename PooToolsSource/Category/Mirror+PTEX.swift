@@ -29,7 +29,7 @@ extension Mirror {
 
      let myInstance = MyClass()
      Mirror.reflectProperties(of: myInstance, matchingType: Int.self) { property in
-        print("The value of myIntProperty is (property)")
+        PTNSLogConsole("The value of myIntProperty is (property)")
      }
      ```
      */

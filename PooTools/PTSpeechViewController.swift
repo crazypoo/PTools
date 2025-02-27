@@ -225,7 +225,7 @@ extension PTSpeechViewController:OSSSpeechDelegate {
     }
     
     func deleteVoiceFile(withFinish finish: Bool, withError error: Error?) {
-        print("\(finish)  error:\(String(describing: error?.localizedDescription))")
+        PTNSLogConsole("\(finish)  error:\(String(describing: error?.localizedDescription))")
     }
     
     func didFinishListening(withText text: String) {

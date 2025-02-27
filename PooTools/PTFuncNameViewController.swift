@@ -1094,7 +1094,7 @@ class PTFuncNameViewController: PTBaseViewController {
 //            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 300, sender: sender, arrowDirections: .any) { itemName, index in
 //                PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
 //            }
-            print("123123123123123123123123123123123123123123")
+            PTNSLogConsole("123123123123123123123123123123123123123123")
             self.sideMenuController?.revealMenu()
         }
         more.addActionHandlers { sender in

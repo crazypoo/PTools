@@ -73,7 +73,7 @@ public func PTNSLog(_ msg: Any...,
         let prefix = formatResult.1
         let currentDate = formatResult.0
 
-        let environment = UIApplication.shared.inferredEnvironment
+        let environment = await UIApplication.applicationEnvironment()
         switch environment {
         case .appStore:
             DDLogSet(levelType: levelType,prefix: prefix)
@@ -130,7 +130,6 @@ private func formatLogMessage(file: NSString, line: Int, column: Int, fn: String
     }
     
     let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:mm:ss")
-//    let dataString = "\n🔨\(currentAppStatus)Empezar🔨\n🌏RootViewController:\(String(describing: PTUtils.getRootViewController())) \n🌑CurrentViewController:\(PTUtils.getCurrentVC()) \n⭐️ActivityViewController:\(String(describing: PTUtils.getActivityViewController())) \n⏰現在⏰：\(currentDate)\n📁當前文件完整的路徑是📁：\(file)\n📄當前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函數名🧾：\(fn)\n📝打印內容如下📝：\n\(msgStr)❌結論❌\n"
     let dataString = "\n🔨\(currentAppStatus)Empezar🔨 \n⏰現在⏰：\(currentDate)\n📁當前文件完整的路徑是📁：\(file)\n📄當前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函數名🧾：\(fn)\n📝打印內容如下📝：\n\(msgStr)❌結論❌\n"
 
     return (currentDate,dataString)

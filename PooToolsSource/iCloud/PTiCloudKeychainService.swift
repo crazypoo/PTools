@@ -93,12 +93,12 @@ public class PTiCloudKeychainService {
 //            let credentialProvider = ASCredentialIdentityStore.shared
 //            credentialProvider.getCredentialIdentityMatches(for: ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "yourdomain.com", type: .domain), user: "", recordIdentifier: nil)) { credentials, error in
 //                guard let credential = credentials.first else {
-//                    print("No credentials found.")
+//                    PTNSLogConsole("No credentials found.")
 //                    return
 //                }
 //
 //                DispatchQueue.main.async {
-//                    print("AutoFill selected: \(credential.user)")
+//                    PTNSLogConsole("AutoFill selected: \(credential.user)")
 //                }
 //            }
 //        }

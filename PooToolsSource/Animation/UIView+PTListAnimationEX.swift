@@ -122,7 +122,7 @@ public extension UIView {
 
      view.animateKeyFrames(animations: animations, initialAlpha: 0.5, finalAlpha: 1.0, delay: 0.2, duration: 2.0) {
          // Completion handler
-         print("Animation completed!")
+        PTNSLogConsole("Animation completed!")
      }
      */
     func animateKeyFrames(animations:[PTListAnimationProtocols],
@@ -156,7 +156,7 @@ public extension UIView {
                     self.alpha = frameAlphaValue
                 }
             }
-            
+
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0) {
                 self.transform = .identity
                 self.alpha = finalAlpha
