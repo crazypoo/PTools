@@ -565,7 +565,7 @@ public class PTCollectionView: UIView {
     ///底部设置
     open var footerInCollection:PTReusableViewHandler?
     ///item设置
-    open var cellInCollection:PTCellInCollectionHandler?
+    @MainActor open var cellInCollection:PTCellInCollectionHandler?
     
     //MARK: Cell delegate handler
     ///item点击事件
