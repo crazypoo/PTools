@@ -671,6 +671,7 @@ public class PTCollectionView: UIView {
         super.init(frame: .zero)
         isUserInteractionEnabled = true
         self.viewConfig = viewConfig
+        self.registerClassCells(classs: ["CELL":UICollectionViewCell.self])
         self.collectionView.addObserver(self, forKeyPath: kPTCollectionIndexViewContentOffsetKeyPath, options: .new, context: &kPTCollectionIndexViewContent)
         addSubview(collectionView)
         self.collectionView.snp.makeConstraints { make in
@@ -1093,7 +1094,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
             
-            let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? UICollectionViewCell()
+            let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
 #if POOTOOLS_SWIPECELL
             if let swipeCell = cell as? SwipeCollectionViewCell {
                 if indexPathSwipe != nil {
@@ -1114,7 +1115,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
             return cell
 #endif
         } else {
-            return UICollectionViewCell()
+            return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
         }
     }
     
