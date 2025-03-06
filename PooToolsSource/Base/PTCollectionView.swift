@@ -554,7 +554,9 @@ public class PTCollectionView: UIView {
     private(set) lazy var refreshControl:UIRefreshControl = {
         let control = UIRefreshControl()
         control.addRefreshHandlers { sender in
-            self.headerRefreshTask?(sender)
+            PTGCDManager.gcdMain {
+                self.headerRefreshTask?(sender)
+            }
         }
         return control
     }()
