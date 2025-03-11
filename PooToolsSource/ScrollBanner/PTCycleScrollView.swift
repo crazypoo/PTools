@@ -710,6 +710,8 @@ extension PTCycleScrollView {
                                 PTGCDManager.gcdAfter(time: 0.1) {
                                     cell.setPlayer(videoQ: url)
                                 }
+                            } else {
+                                cell.playButton.isHidden = false
                             }
                         }
                     } else {

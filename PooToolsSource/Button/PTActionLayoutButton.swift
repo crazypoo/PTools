@@ -222,6 +222,12 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var selectedFont:UIFont?
     public var currentFont:UIFont = .appfont(size: 14)
     
+    fileprivate var normalBGColor:UIColor = .clear
+    fileprivate var highlightedBGColor:UIColor = .clear
+    fileprivate var disabledBGColor:UIColor = .clear
+    fileprivate var selectedBGColor:UIColor = .clear
+    public var currentBGColor:UIColor = .clear
+
     // 更新状态时的外观
     private func updateAppearance() {
         switch state {
@@ -230,21 +236,25 @@ public class PTActionLayoutButton: UIControl {
             currentImage = normalImage ?? currentImage
             currentTitleColor = normalTitleColor
             currentFont = normalFont
+            currentBGColor = normalBGColor
         case .highlighted:
             currentString = highlightedString.stringIsEmpty() ? normalString : highlightedString
             currentImage = highlightedImage ?? normalImage
             currentTitleColor = highlightedTitleColor
             currentFont = highlightedFont ?? normalFont
+            currentBGColor = highlightedBGColor
         case .disabled:
             currentString = disabledString.stringIsEmpty() ? normalString : disabledString
             currentImage = disabledImage ?? normalImage
             currentTitleColor = disabledTitleColor
             currentFont = disabledFont ?? normalFont
+            currentBGColor = disabledBGColor
         case .selected:
             currentString = selectedString.stringIsEmpty() ? normalString : selectedString
             currentImage = selectedImage ?? normalImage
             currentTitleColor = selectedTitleColor
             currentFont = selectedFont ?? normalFont
+            currentBGColor = selectedBGColor
         default:
             break
         }
@@ -253,6 +263,7 @@ public class PTActionLayoutButton: UIControl {
         titleLabel.textAlignment = textAlignment
         titleLabel.font = currentFont
         titleLabel.text = currentString
+        backgroundColor = currentBGColor
         if let currentImage = currentImage {
             imageView.loadImage(contentData: currentImage)
         }
@@ -286,6 +297,22 @@ public class PTActionLayoutButton: UIControl {
 }
 
 public extension PTActionLayoutButton {
+    
+    func setBackgroundColor(_ color:UIColor,state:UIControl.State) {
+        switch state {
+        case .normal:
+            normalBGColor = color
+        case .highlighted:
+            highlightedBGColor = color
+        case .disabled:
+            disabledBGColor = color
+        case .selected:
+            selectedBGColor = color
+        default:
+            break
+        }
+        updateAppearance()
+    }
     
     func setTitleColor(_ titleColor:UIColor,state:UIControl.State) {
         switch state {
