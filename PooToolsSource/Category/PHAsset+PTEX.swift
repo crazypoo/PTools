@@ -152,6 +152,21 @@ public extension PHAsset {
             self.exportTimer?.invalidate()
         }
     }
+    
+    //MARK: LivePhtot轉換Image
+    func convertLivePhotoToImage(completion: @escaping (UIImage?) -> Void) {
+        let imageManager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.isSynchronous = true
+
+        imageManager.requestImage(for: self,
+                                  targetSize: CGSize(width: self.pixelWidth, height: self.pixelHeight),
+                                  contentMode: .aspectFit,
+                                  options: options) { (image, info) in
+            completion(image)
+        }
+    }
 }
 
 public extension PTPOP where Base: PHAsset {

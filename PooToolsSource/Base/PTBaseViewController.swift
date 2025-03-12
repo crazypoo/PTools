@@ -246,23 +246,25 @@ extension PTBaseViewController {
                     
                     if let lastAsset = assets.firstObject {
                         if lastAsset.mediaSubtypes == .photoScreenshot {
-                            if let image = self.getImage(for: lastAsset) {
-                                // 在这里使用截图
-                                if self.screenShotHandle != nil {
-                                    self.screenShotHandle!(image)
-                                } else {
-                                    if self.screenFunc == nil {
-                                        self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image,dismiss: {
-                                            self.screenFunc = nil
-                                        })
-                                        
-                                        if self.screenShotActionHandle != nil {
-                                            self.screenFunc!.actionHandle = self.screenShotActionHandle!
+                            self.getImage(for: lastAsset) { result in
+                                if let image = result {
+                                    // 在这里使用截图
+                                    if self.screenShotHandle != nil {
+                                        self.screenShotHandle!(image)
+                                    } else {
+                                        if self.screenFunc == nil {
+                                            self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image,dismiss: {
+                                                self.screenFunc = nil
+                                            })
+                                            
+                                            if self.screenShotActionHandle != nil {
+                                                self.screenFunc!.actionHandle = self.screenShotActionHandle!
+                                            }
                                         }
                                     }
+                                } else {
+                                    self.screenShotHandle?(nil)
                                 }
-                            } else {
-                                self.screenShotHandle?(nil)
                             }
                         } else {
                             self.screenShotHandle?(nil)
@@ -360,17 +362,10 @@ extension PTBaseViewController {
         }
     }
         
-    func getImage(for asset: PHAsset) -> UIImage? {
-        let imageManager = PHImageManager.default()
-        let options = PHImageRequestOptions()
-        options.isSynchronous = true
-
-        var image: UIImage?
-        imageManager.requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFit, options: options) { (result, info) in
-            image = result
+    func getImage(for asset: PHAsset,finish:@escaping (UIImage?)->Void) {
+        asset.convertLivePhotoToImage { result in
+            finish(result)
         }
-
-        return image
     }
     
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -426,9 +421,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     private lazy var feedback:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "PT Screen feedback".localized(), image: PTAppBaseConfig.share.screenShotFeedback)
         view.addActionHandlers { sender in
-            if self.actionHandle != nil {
-                self.actionHandle!(.Feedback,self.shareImageView.image!)
-            }
+            self.actionHandle?(.Feedback,self.shareImageView.image!)
             self.dismissAlert()
         }
         return view
@@ -437,9 +430,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     private lazy var share:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "PT Screen share".localized(), image: PTAppBaseConfig.share.screenShotShare)
         view.addActionHandlers { sender in
-            if self.actionHandle != nil {
-                self.actionHandle!(.Share,self.shareImageView.image!)
-            }
+            self.actionHandle?(.Share,self.shareImageView.image!)
             self.dismissAlert()
         }
         return view
@@ -513,9 +504,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
             self.alpha = 0
         }) { ok in
             self.removeFromSuperview()
-            if self.dismissTask != nil {
-                self.dismissTask!()
-            }
+            self.dismissTask?()
         }
     }
     

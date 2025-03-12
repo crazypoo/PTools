@@ -186,7 +186,6 @@ public class PTActionLayoutButton: UIControl {
             default:
                 break
             }
-            
         } else if currentImage == nil && !currentString.stringIsEmpty() {
             titleLabel.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
@@ -266,6 +265,8 @@ public class PTActionLayoutButton: UIControl {
         backgroundColor = currentBGColor
         if let currentImage = currentImage {
             imageView.loadImage(contentData: currentImage)
+        } else {
+            imageView.image = nil
         }
         setNeedsLayout()
     }
@@ -362,7 +363,7 @@ public extension PTActionLayoutButton {
         updateAppearance()
     }
 
-    func setImage(_ image:Any!,state:UIControl.State) {
+    func setImage(_ image:Any?,state:UIControl.State) {
         switch state {
         case .normal:
             normalImage = image
