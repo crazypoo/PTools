@@ -1093,31 +1093,36 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let nullCell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
             
-            let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+            if let cell = cellInCollection?(collectionView,itemSec,indexPath) {
 #if POOTOOLS_SWIPECELL
-            if let swipeCell = cell as? SwipeCollectionViewCell {
-                if indexPathSwipe != nil {
-                    let swipe = indexPathSwipe!(itemSec,indexPath)
-                    if swipe {
-                        swipeCell.delegate = self
+                if let swipeCell = cell as? SwipeCollectionViewCell {
+                    if indexPathSwipe != nil {
+                        let swipe = indexPathSwipe!(itemSec,indexPath)
+                       if swipe {
+                           swipeCell.delegate = self
+                       } else {
+                           swipeCell.delegate = nil
+                       }
                     } else {
                         swipeCell.delegate = nil
                     }
+                    return swipeCell
                 } else {
-                    swipeCell.delegate = nil
+                    return cell
                 }
-                return swipeCell
-            } else {
-                return cell
-            }
 #else
-            return cell
+                return cell
 #endif
+            } else {
+                return nullCell
+            }
         } else {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+            return nullCell
         }
     }
     
