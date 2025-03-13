@@ -1093,12 +1093,9 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let nullCell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            
-            if let cell = cellInCollection?(collectionView,itemSec,indexPath) {
+            let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
 #if POOTOOLS_SWIPECELL
                 if let swipeCell = cell as? SwipeCollectionViewCell {
                     if indexPathSwipe != nil {
@@ -1118,11 +1115,8 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
 #else
                 return cell
 #endif
-            } else {
-                return nullCell
-            }
         } else {
-            return nullCell
+            return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
         }
     }
     
