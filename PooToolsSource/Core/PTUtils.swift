@@ -212,6 +212,22 @@ public class PTUtils: NSObject {
         // 本类type
         return anyClass
     }
+    
+    /// 当用户截屏时的监听
+    public static func didTakeScreenShot(_ action: @escaping (_ notification: Notification) -> Void) {
+        // http://stackoverflow.com/questions/13484516/ios-detection-of-screenshot
+        _ = NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification,
+                                                   object: nil,
+                                                   queue: OperationQueue.main) { notification in
+            action(notification)
+        }
+    }
+    
+    /// 主动崩溃
+    public static func exitApp(){
+        /// 这是默认的程序结束函数,
+        abort()
+    }
 }
 
 //MARK: 寻找界面

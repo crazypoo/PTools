@@ -81,6 +81,9 @@ public extension CGFloat {
             return 0
         }
     }
+    
+    static let kLeftSafeAreaWidth = AppWindows?.safeAreaInsets.left ?? 0
+    static let kRightSafeAreaWidth = AppWindows?.safeAreaInsets.right ?? 0
 }
 
 public extension PTPOP where Base == CGFloat {
