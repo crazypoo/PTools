@@ -122,6 +122,10 @@ public class PTFusionCellContent:UIView {
                         } else {
                             moreWith = self.cellModel!.moreDisclosureIndicatorSize.width + 5
                         }
+                    case .title:
+                        moreWith = moreStringWidth + 5
+                    case .image:
+                        moreWith = self.cellModel!.moreDisclosureIndicatorSize.width + 5
                     }
                     self.sectionMore.snp.makeConstraints { make in
                         make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)

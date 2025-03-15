@@ -111,6 +111,9 @@ public class PTActionLayoutButton: UIControl {
         if currentImage != nil && !currentString.stringIsEmpty() {
             switch layoutStyle {
             case .leftImageRightTitle:
+                imageView.isHidden = false
+                titleLabel.isHidden = false
+
                 let maxWidth = frame.width - imageSize.width - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
@@ -129,6 +132,9 @@ public class PTActionLayoutButton: UIControl {
                     make.centerY.equalToSuperview()
                 }
             case .leftTitleRightImage:
+                imageView.isHidden = false
+                titleLabel.isHidden = false
+
                 let maxWidth = frame.width - imageSize.width - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
@@ -146,6 +152,9 @@ public class PTActionLayoutButton: UIControl {
                     make.centerY.equalToSuperview()
                 }
             case .upImageDownTitle:
+                imageView.isHidden = false
+                titleLabel.isHidden = false
+
                 let maxHeight = frame.height - imageSize.height - midSpacing
                 var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 if titleHeight > maxHeight {
@@ -165,6 +174,9 @@ public class PTActionLayoutButton: UIControl {
                     make.bottom.equalTo(self.titleLabel.snp.top).offset(-self.midSpacing)
                 }
             case .upTitleDownImage:
+                imageView.isHidden = false
+                titleLabel.isHidden = false
+                
                 let maxHeight = frame.height - imageSize.height - midSpacing
                 var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 if titleHeight > maxHeight {
@@ -182,6 +194,23 @@ public class PTActionLayoutButton: UIControl {
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
                     make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
+                }
+            case .title:
+                titleLabel.isHidden = false
+                imageView.isHidden = true
+                
+                titleLabel.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.bottom.equalToSuperview()
+                }
+            case .image:
+                titleLabel.isHidden = true
+                imageView.isHidden = false
+
+                imageView.snp.makeConstraints { make in
+                    make.centerX.equalToSuperview()
+                    make.size.equalTo(self.imageSize)
+                    make.centerY.equalToSuperview()
                 }
             default:
                 break

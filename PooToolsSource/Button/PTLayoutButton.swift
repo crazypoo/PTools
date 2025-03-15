@@ -15,6 +15,8 @@ import Kingfisher
     case leftTitleRightImage
     case upImageDownTitle
     case upTitleDownImage
+    case title
+    case image
 }
 
 @objc public enum PTLayoutButtonConnerStyle: Int {
