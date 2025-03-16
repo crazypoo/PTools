@@ -28,9 +28,7 @@ public extension UIImageView {
         kf.setImage(with: URL.init(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
             switch result {
             case .success(let result):
-                if loadedHandler != nil {
-                    loadedHandler!(nil,result.originalSource.url,result.image)
-                }
+                loadedHandler?(nil,result.originalSource.url,result.image)
             case .failure(let error):
                 loadedHandler?(error,nil,nil)
             }
@@ -288,9 +286,7 @@ public extension UIImageView {
             manager.remoteCache[url] = data
             setGifImage(image, manager: manager, loopCount: loopCount)
             startAnimatingGif()
-            if gifURLDidFinish != nil {
-                gifURLDidFinish!(self)
-            }
+            gifURLDidFinish?(self)
         } catch {
             report(url: url, error: error)
         }
@@ -468,18 +464,12 @@ public extension UIImageView {
             
             if displayOrderIndex == 0 {
                 if loopCount == -1 {
-                    if gifDidLoop != nil {
-                        gifDidLoop!(self)
-                    }
+                    gifDidLoop?(self)
                 } else if loopCount > 1 {
-                    if gifDidLoop != nil {
-                        gifDidLoop!(self)
-                    }
+                    gifDidLoop?(self)
                     loopCount -= 1
                 } else {
-                    if gifDidStop != nil {
-                        gifDidStop!(self)
-                    }
+                    gifDidStop?(self)
                     loopCount -= 1
                 }
             }

@@ -108,9 +108,7 @@ public class C7CameraConfig: NSObject {
         if self.hud != nil {
             self.hud!.hide {
                 self.hud = nil
-                if completion != nil {
-                    completion!()
-                }
+                completion?()
             }
         }
     }

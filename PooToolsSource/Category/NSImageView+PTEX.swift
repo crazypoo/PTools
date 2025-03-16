@@ -185,18 +185,14 @@ public extension NSImageView {
             manager.remoteCache[url] = data
             setGifImage(image, manager: manager, loopCount: loopCount)
             startAnimatingGif()
-            if gifURLDidFinish != nil {
-                gifURLDidFinish!(self)
-            }
+            gifURLDidFinish?(self)
         } catch {
             report(url: url, error: error)
         }
     }
     
     private func report(url: URL, error: Error?) {
-        if gifURLDidFail != nil {
-            gifURLDidFail!(self,url,error)
-        }
+        gifURLDidFail?(self,url,error)
     }
 }
 
@@ -374,18 +370,12 @@ public extension NSImageView {
             
             if displayOrderIndex == 0 {
                 if loopCount == -1 {
-                    if gifDidLoop != nil {
-                        gifDidLoop!(self)
-                    }
+                    gifDidLoop?(self)
                 } else if loopCount > 1 {
-                    if gifDidLoop != nil {
-                        gifDidLoop!(self)
-                    }
+                    gifDidLoop?(self)
                     loopCount -= 1
                 } else {
-                    if gifDidStop != nil {
-                        gifDidStop!(self)
-                    }
+                    gifDidStop?(self)
                     loopCount -= 1
                 }
             }
@@ -504,13 +494,9 @@ public extension NSImageView {
             objc_setAssociatedObject(self, AssociatedKeys.NSImageViewGIFIsPlayingKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             
             if newValue {
-                if gifDidStart != nil {
-                    gifDidStart!(self)
-                }
+                gifDidStart?(self)
             } else {
-                if gifDidStop != nil {
-                    gifDidStop!(self)
-                }
+                gifDidStop?(self)
             }
         }
     }

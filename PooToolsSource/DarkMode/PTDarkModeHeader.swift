@@ -82,9 +82,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
                 if sender.isSelected {
                     self.blackButton.isSelected = false
                 }
-                if self.selectModeBlock != nil {
-                    self.selectModeBlock!(.light)
-                }
+                self.selectModeBlock?(.light)
             }
         }
         return view
@@ -108,9 +106,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
                 if sender.isSelected {
                     self.whiteButton.isSelected = false
                 }
-                if self.selectModeBlock != nil {
-                    self.selectModeBlock!(.dark)
-                }
+                self.selectModeBlock?(.dark)
             }
         }
         return view

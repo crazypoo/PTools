@@ -48,13 +48,9 @@ public extension UIButton {
         kf.setImage(with: URL.init(string: imageString), for: forState,placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption(),completionHandler: { result in
             switch result {
             case .success(let result):
-                if loadedHandler != nil {
-                    loadedHandler!(nil,result.originalSource.url,result.image)
-                }
+                loadedHandler?(nil,result.originalSource.url,result.image)
             case .failure(let error):
-                if loadedHandler != nil {
-                    loadedHandler!(error,nil,nil)
-                }
+                loadedHandler?(error,nil,nil)
             }
         })
     }

@@ -761,9 +761,7 @@ extension PTCycleScrollView {
             cell.titleLabelLeading = self.titleLeading
             cell.tag = 100 + i
             let tap = UITapGestureRecognizer { sender in
-                if self.didSelectItemAtIndexClosure != nil {
-                    self.didSelectItemAtIndexClosure!(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
-                }
+                self.didSelectItemAtIndexClosure?(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
             }
             cell.addGestureRecognizer(tap)
             // Only Title

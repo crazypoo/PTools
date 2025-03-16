@@ -71,9 +71,7 @@ public class PTSpeech: NSObject {
             case .notDetermined:
                 self.requestAuthorization()
             case .denied:
-                if self.errorBlock != nil {
-                    self.errorBlock!(self.createError(errorType: .RecognitionDenied))
-                }
+                self.errorBlock?(self.createError(errorType: .RecognitionDenied))
             default:
                 break
             }

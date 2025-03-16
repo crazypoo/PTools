@@ -146,15 +146,11 @@ public extension UIViewController {
     func viewDismiss(dismissBolck:PTActionTask? = nil) {
         if presentingViewController != nil {
             dismiss(animated: true) {
-                if dismissBolck != nil {
-                    dismissBolck!()
-                }
+                dismissBolck?()
             }
         } else {
             navigationController?.popViewController(animated: true) {
-                if dismissBolck != nil {
-                    dismissBolck!()
-                }
+                dismissBolck?()
             }
         }
     }
@@ -344,20 +340,14 @@ public extension UIViewController {
         banner.titleLabel?.textColor = titleColor!
         banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
         banner.onTap = {
-            if notifiTap != nil {
-                notifiTap!()
-            }
+            notifiTap?()
         }
         PTGCDManager.gcdAfter(time: duration) {
-            if notifiDismiss != nil {
-                notifiDismiss!()
-            }
+            notifiDismiss?()
         }
 #else
         UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "PT Button comfirm".localized()) {
-            if notifiDismiss != nil {
-                notifiDismiss!()
-            }
+            notifiDismiss!()
         }
 #endif
     }
@@ -422,9 +412,7 @@ public extension UIViewController {
 
 #if POOTOOLS_DEBUG
         present(vc, animated: animated!) {
-            if completion != nil {
-                completion!()
-            }
+            completion?()
             let share = LocalConsole.shared
             if share.isVisiable {
                 SwizzleTool().swizzleDidAddSubview {

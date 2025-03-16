@@ -154,9 +154,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.setOutPut { url, error in
                     if url != nil {
                         if self.isOnlyAudio {
-                            if self.onEditCompleteHandler != nil {
-                                self.onEditCompleteHandler!(url!)
-                            }
+                            self.onEditCompleteHandler?(url!)
                             self.returnFrontVC()
                         } else {
                             PTGCDManager.gcdMain {
@@ -187,9 +185,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                     case .success(let outputURL):
                                         if self.onlyOutput {
                                             PTGCDManager.gcdMain {
-                                                if self.onEditCompleteHandler != nil {
-                                                    self.onEditCompleteHandler!(outputURL)
-                                                }
+                                                self.onEditCompleteHandler?(outputURL)
                                                 self.returnFrontVC()
                                             }
                                         } else {

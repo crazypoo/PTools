@@ -76,9 +76,7 @@ public class PTHealthKit: NSObject {
                 }
                 self.isLoad = true
                 PTGCDManager.gcdMain {
-                    if self.loadBlock != nil {
-                        self.loadBlock!(self.isLoad,self.stepCounts)
-                    }
+                    self.loadBlock?(self.isLoad,self.stepCounts)
                 }
             })
         }

@@ -691,8 +691,7 @@ public class OSSSpeech: NSObject {
                     let transcription = result.bestTranscription.formattedString
                     if finalBlock != nil {
                         finalBlock!(transcription)
-                    }
-                    else {
+                    } else {
                         self.delegate?.voiceFilePathTranscription(withText: transcription)
                     }
                 }

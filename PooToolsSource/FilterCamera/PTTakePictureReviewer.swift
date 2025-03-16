@@ -39,9 +39,7 @@ public class PTTakePictureReviewer:UIView {
         view.isUserInteractionEnabled = true
         
         let tap = UITapGestureRecognizer { sender in
-            if self.reviewHandle != nil {
-                self.reviewHandle!()
-            }
+            self.reviewHandle?()
         }
         view.addGestureRecognizer(tap)
         return view
@@ -50,9 +48,7 @@ public class PTTakePictureReviewer:UIView {
     private lazy var feedback:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "编辑", image: UIImage(.slider.horizontal_3))
         view.addActionHandlers { sender in
-            if self.actionHandle != nil {
-                self.actionHandle!(.Edit,self.shareImageView.image!)
-            }
+            self.actionHandle?(.Edit,self.shareImageView.image!)
             self.dismissAlert()
         }
         return view
@@ -109,9 +105,7 @@ public class PTTakePictureReviewer:UIView {
             self.alpha = 0
         }) { ok in
             self.removeFromSuperview()
-            if self.dismissTask != nil {
-                self.dismissTask!()
-            }
+            self.dismissTask?()
         }
     }
     

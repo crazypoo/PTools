@@ -121,9 +121,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, @preconcurrency U
             netSpeedUpload()
             netSpeedStateType = .Upload
             PTGCDManager.gcdMain {
-                if self.valueUpdateTask != nil {
-                    self.valueUpdateTask!(PTNetworkSpeedTestType.Latency,latency)
-                }
+                self.valueUpdateTask?(PTNetworkSpeedTestType.Latency,latency)
             }
         } else if task == uploadTask {
             
@@ -131,17 +129,13 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, @preconcurrency U
                 PTGCDManager.gcdGroup(label: "ValueDone", threadCount: 2, doSomeThing: { semaphore,group,index in
                     if index == 0 {
                         PTGCDManager.gcdAfter(time: 0.35) {
-                            if self.valueUpdateTask != nil {
-                                self.valueUpdateTask!(PTNetworkSpeedTestType.Download,self.downloadValue)
-                            }
+                            self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
                             semaphore.signal()
                             group.leave()
                         }
                     } else if index == 1 {
                         PTGCDManager.gcdAfter(time: 0.35) {
-                            if self.valueUpdateTask != nil {
-                                self.valueUpdateTask!(PTNetworkSpeedTestType.Upload,self.uploadValue)
-                            }
+                            self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
                             semaphore.signal()
                             group.leave()
                         }
@@ -175,9 +169,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, @preconcurrency U
         let liveSpeed = self.netFormula(value: currentSpeed)
         downloadValue = self.netFormula(value: currentSpeed)
         downloadValueArrs.append(liveSpeed)
-        if downloadCurrentTask != nil {
-            downloadCurrentTask!(downloadValue)
-        }
+        downloadCurrentTask?(downloadValue)
     }
     
     public func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
@@ -192,8 +184,6 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, @preconcurrency U
         let liveSpeed = self.netFormula(value: currentSpeed)
         uploadValue = self.netFormula(value: currentSpeed)
         downloadValueArrs.append(liveSpeed)
-        if uploadCurrentTask != nil {
-            uploadCurrentTask!(liveSpeed)
-        }
+        uploadCurrentTask?(liveSpeed)
     }
 }

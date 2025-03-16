@@ -61,9 +61,7 @@ public class PTTextField: UITextField {
     private lazy var customRight:UIButton = {
         let view = UIButton(type: .custom)
         view.addActionHandlers { sender in
-            if self.rightTapBlock != nil {
-                self.rightTapBlock!()
-            }
+            self.rightTapBlock?()
         }
         return view
     }()

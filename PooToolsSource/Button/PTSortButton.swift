@@ -267,9 +267,7 @@ public class PTSortButton: UIView {
                 self.sortType = .Normal
             }
             
-            if self.sortTypeHandler != nil {
-                self.sortTypeHandler!(self.sortType)
-            }
+            self.sortTypeHandler?(self.sortType)
         }
         addGestureRecognizer(tap)
     }

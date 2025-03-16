@@ -177,9 +177,7 @@ public class PTPermissionViewController: PTBaseViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if viewDismissBlock != nil {
-            viewDismissBlock!()
-        }
+        viewDismissBlock?()
     }
     
     public override func viewDidLoad() {
@@ -200,9 +198,7 @@ public class PTPermissionViewController: PTBaseViewController {
         }
         closeButton.addActionHandlers(handler: { sender in
             self.returnFrontVC {
-                if self.viewDismissBlock != nil {
-                    self.viewDismissBlock!()
-                }
+                self.viewDismissBlock?()
             }
         })
         

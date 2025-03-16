@@ -62,9 +62,7 @@ public extension TimeInterval {
     ///獲取播放時長(時:分:秒)
     func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String)->Void)?) {
         if self.isNaN{
-            if callBack != nil {
-                callBack!("00","00","00")
-            }
+            callBack?("00","00","00")
         }
         var Min = Int(self / 60)
         let Sec = Int(self.truncatingRemainder(dividingBy: 60))
@@ -72,13 +70,9 @@ public extension TimeInterval {
         if Min>=60 {
             Hour = Int(Min / 60)
             Min = Min - Hour*60
-            if callBack != nil {
-                callBack!(String(format: "%02d", Hour),String(format: "%02d", Min),String(format: "%02d", Sec))
-            }
+            callBack?(String(format: "%02d", Hour),String(format: "%02d", Min),String(format: "%02d", Sec))
         }
-        if callBack != nil {
-            callBack!("00",String(format: "%02d", Min),String(format: "%02d", Sec))
-        }
+        callBack?("00",String(format: "%02d", Min),String(format: "%02d", Sec))
     }
     
     func conversationTimeSet() -> String? {

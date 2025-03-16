@@ -59,14 +59,10 @@ public class PTFaceEye: NSObject {
 
 extension PTFaceEye:PTEyeTrackingDelegate {
     public func didChange(eyeTrackingState: PTEyeTrackingState) {
-        if trackingEyeState != nil {
-            trackingEyeState!(eyeTrackingState)
-        }
+        trackingEyeState?(eyeTrackingState)
     }
     
     public func didChange(lookAtPoint: CGPoint) {
-        if eyeLookAt != nil {
-            eyeLookAt!(lookAtPoint)
-        }
+        eyeLookAt?(lookAtPoint)
     }
 }

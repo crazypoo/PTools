@@ -1291,14 +1291,10 @@ extension PTFuncNameViewController {
         }) { success, error in
             if success {
                 PTNSLogConsole("视频保存成功")
-                if result != nil {
-                    result!(true)
-                }
+                result?(true)
             } else {
                 PTNSLogConsole("视频保存失败：\(error?.localizedDescription ?? "")")
-                if result != nil {
-                    result!(false)
-                }
+                result?(false)
             }
         }
     }

@@ -43,9 +43,7 @@ public class PTMediaLibView:UIView {
     var totalModels:[PTMediaModel]! = [PTMediaModel]()
     var selectedModel: [PTMediaModel] = [] {
         didSet {
-            if selectedModelDidUpdate != nil {
-                selectedModelDidUpdate!()
-            }
+            selectedModelDidUpdate?()
         }
     }
 
@@ -392,9 +390,7 @@ public class PTMediaLibView:UIView {
     
     private func setTitleButton() {
         PTGCDManager.gcdMain {
-            if self.selectedCount != nil {
-                self.selectedCount!(self.selectedModel.count)
-            }
+            self.selectedCount?(self.selectedModel.count)
         }
     }
     

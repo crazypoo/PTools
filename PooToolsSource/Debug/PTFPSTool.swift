@@ -57,9 +57,7 @@ public class PTFPSTool: NSObject {
         count = 0
               
         fpsValue = NSInteger(fps)
-        if fpsHandle != nil {
-            fpsHandle!(NSInteger(round(fps)))
-        }
+        fpsHandle?(NSInteger(round(fps)))
     }
     
     ///开启

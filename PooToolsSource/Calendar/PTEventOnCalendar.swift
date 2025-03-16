@@ -108,14 +108,10 @@ public class PTEventOnCalendar: NSObject {
                             PTEventOnCalendar.eventCreateFunction(eventStore: eventStore, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
                         }
                     default:
-                        if handle != nil {
-                            handle!(false,PTEventOnCalendar.PTEventError)
-                        }
+                        handle?(false,PTEventOnCalendar.PTEventError)
                     }
                 default:
-                    if handle != nil {
-                        handle!(false,PTEventOnCalendar.PTEventError)
-                    }
+                    handle?(false,PTEventOnCalendar.PTEventError)
                 }
             case .reminder:
                 eventStore.requestFullAccessToReminders { granted, error in
@@ -136,9 +132,7 @@ public class PTEventOnCalendar: NSObject {
                         break
                     }
                 } else {
-                    if handle != nil {
-                        handle!(false,error)
-                    }
+                    handle?(false,error)
                 }
             }
         }
@@ -297,15 +291,11 @@ extension PTEventOnCalendar {
         do {
             try eventStore.save(event, span: .thisEvent)
             PTGCDManager.gcdAfter(time: 0.2) {
-                if handle != nil {
-                    handle!(true,nil)
-                }
+                handle?(true,nil)
             }
         } catch {
             PTGCDManager.gcdAfter(time: 0.2) {
-                if handle != nil {
-                    handle!(false,error)
-                }
+                handle?(false,error)
             }
         }
     }
@@ -447,15 +437,11 @@ extension PTEventOnCalendar {
         do {
             try eventStore.save(event, commit: true)
             PTGCDManager.gcdAfter(time: 0.2) {
-                if handle != nil {
-                    handle!(true,nil)
-                }
+                handle?(true,nil)
             }
         } catch {
             PTGCDManager.gcdAfter(time: 0.2) {
-                if handle != nil {
-                    handle!(false,error)
-                }
+                handle?(false,error)
             }
         }
     }

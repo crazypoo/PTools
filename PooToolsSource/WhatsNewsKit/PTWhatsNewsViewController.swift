@@ -260,9 +260,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         view.cornerRadius = 10
         view.addActionHandlers { sender in
             self.returnFrontVC {
-                if self.iKnowTapHandler != nil {
-                    self.iKnowTapHandler!()
-                }
+                self.iKnowTapHandler?()
             }
         }
         return view
@@ -279,9 +277,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
                     PTAppStoreFunction.jumpLink(url: URL(string: self.iKnowItems.privacyURL)!)
                 }
             } else {
-                if self.privacyTapHandler != nil {
-                    self.privacyTapHandler!()
-                }
+                self.privacyTapHandler?()
             }
         }
         return view

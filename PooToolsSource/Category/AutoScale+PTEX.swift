@@ -130,6 +130,5 @@ public extension CGSize {
     func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> CGSize {
         return CGSize(width: width.autoHeight(), height: height.autoHeight())
     }
-    
 }
 

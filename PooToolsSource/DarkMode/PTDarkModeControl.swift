@@ -79,9 +79,7 @@ public class PTDarkModeControl: PTBaseViewController {
                 header.selectModeBlock = { mode in
                     PTDarkModeOption.setDarkModeCustom(isLight: mode == .light ? true : false)
                     self.showDetail()
-                    if self.themeSetBlock != nil {
-                        self.themeSetBlock!()
-                    }
+                    self.themeSetBlock?()
                 }
                 return header
             }

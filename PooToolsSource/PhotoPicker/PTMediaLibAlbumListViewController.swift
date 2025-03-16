@@ -75,9 +75,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                 let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
 
                 if self.selectedModelHandler != nil {
-                    self.selectedModelHandler!(cellModel)
                     self.navigationController?.popViewController(animated: true)
                 }
+                self.selectedModelHandler?(cellModel)
             }
         }
         return view

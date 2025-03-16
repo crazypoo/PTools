@@ -215,7 +215,7 @@ public class PTActionSheetController: PTAlertController {
         view.cellButton.normalTitleColor = titleItem!.titleColor
         view.cellButton.normalSubTitleFont = titleItem!.titleFont
         view.cellButton.normalSubTitleColor = titleItem!.titleColor
-        if titleItem!.image != nil {
+        if let image = titleItem?.image {
             switch titleItem!.itemLayout {
             case .leftImageRightTitle:
                 view.cellButton.layoutStyle = .leftImageRightTitle
@@ -226,7 +226,7 @@ public class PTActionSheetController: PTAlertController {
             let itemSize = titleItem!.imageSize
             view.cellButton.imageSize = itemSize
             view.cellButton.midSpacing = titleItem!.contentImageSpace
-            view.cellButton.layoutLoadImage(contentData: titleItem!.image as Any,iCloudDocumentName: titleItem!.iCloudDocumentName)
+            view.cellButton.layoutLoadImage(contentData: image,iCloudDocumentName: titleItem!.iCloudDocumentName)
         }
         view.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii,corner: [.topLeft,.topRight])
         return view

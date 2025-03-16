@@ -396,9 +396,7 @@ public class PTGuidePageHUD: UIView {
     
     public func removeGuidePageHUD() {
         removeFromSuperview()
-        if adHadRemove != nil {
-            adHadRemove!()
-        }
+        adHadRemove?()
     }
     
     public func guideShow() {

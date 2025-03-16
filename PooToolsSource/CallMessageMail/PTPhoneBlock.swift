@@ -55,9 +55,7 @@ public class PTPhoneBlock: NSObject {
         NotificationCenter.default.removeObserver(self)
         
         if callStartTime != nil {
-            if callBlock != nil {
-                callBlock!(-(callStartTime!.timeIntervalSinceNow) - 3)
-            }
+            callBlock?(-(callStartTime!.timeIntervalSinceNow) - 3)
             callStartTime = nil
         }
         cancelBlock?()
