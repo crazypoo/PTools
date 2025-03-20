@@ -273,7 +273,7 @@ public class PTStepper: UIView {
     }
     
     private func callBack(value:String, type:PTStepperVahleChangeType) {
-        valueBlock?(value, type)
+        self.valueBlock?(value, type)
     }
     
     private func alertAction(max:Bool) {
@@ -291,11 +291,11 @@ extension PTStepper: UITextFieldDelegate {
         if textField.text?.isEmpty ?? true {
             textField.text = recordNumber
         }
-
-        if let text = textField.text, let intValue = Int(text), intValue / multipleNum == 0 {
-            textField.text = "\(multipleNum)"
-        } else if let text = textField.text {
-            textField.text = "\((Int(text) ?? 0) / multipleNum * multipleNum)"
+        
+        if let text = textField.text,!text.stringIsEmpty(),let intValue = text.int,intValue == 0 {
+            textField.text = baseNum
+        } else if (textField.text ?? "").stringIsEmpty() {
+            textField.text = baseNum
         }
         self.callBack(value: textField.text ?? "", type: .Input)
      }
