@@ -18,7 +18,9 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     open var moreActionBlock:PTSectionMoreBlock?
     open var switchValue:Bool? {
         didSet {
-            dataContent.valueSwitch.isOn = switchValue!
+            if let valueSwitch = dataContent.valueSwitch {
+                valueSwitch.isOn = switchValue!
+            }
         }
     }
     
@@ -30,11 +32,15 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.valueSwitch.valueChangeCallBack = { value in
-            self.switchValueChangeBlock?(self.sectionModel!.name,view.valueSwitch)
+        if let valueSwitch = view.valueSwitch {
+            valueSwitch.valueChangeCallBack = { value in
+                self.switchValueChangeBlock?(self.sectionModel!.name,valueSwitch)
+            }
         }
-        view.sectionMore.addActionHandlers { sender in
-            self.moreActionBlock?(self.sectionModel!.name,sender)
+        if let sectionMore = view.sectionMore {
+            sectionMore.addActionHandlers { sender in
+                self.moreActionBlock?(self.sectionModel!.name,sender)
+            }
         }
         return view
     }()
