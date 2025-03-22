@@ -1262,6 +1262,15 @@ public extension PTPOP where Base: UIImage {
     /// - Parameters:
     ///  - maxSize: 最大数据大小
     /// - Returns: 压缩后数据
+    func compressDataSizeAsync(maxSize: Int = 1024 * 1024 * 2) async -> Data? {
+        return await withCheckedContinuation { continuation in
+            PTGCDManager.gcdGobal(qosCls: .unspecified, block: {
+                let compressed = self.base.pt.compressDataSize(maxSize: maxSize)
+                continuation.resume(returning: compressed)
+            })
+        }
+    }
+    
     func compressDataSize(maxSize: Int = 1024 * 1024 * 2) -> Data? {
         var compression: CGFloat = 1
         guard var data = base.jpegData(compressionQuality: 1) else { return nil }
