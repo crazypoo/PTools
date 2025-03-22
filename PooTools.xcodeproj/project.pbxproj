@@ -329,6 +329,7 @@
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
+		5597CADA2D8F093E00947B58 /* MetricsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5597CAD92D8F093E00947B58 /* MetricsManager.swift */; };
 		559978362D5BB07C00484FB1 /* PTRouterBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559978322D5BB07C00484FB1 /* PTRouterBridge.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
@@ -1256,6 +1257,7 @@
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
+		5597CAD92D8F093E00947B58 /* MetricsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsManager.swift; sourceTree = "<group>"; };
 		559978322D5BB07C00484FB1 /* PTRouterBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterBridge.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
@@ -1987,6 +1989,7 @@
 				55B4FA2C2AE10A06006D35F3 /* MicPermission */,
 				55D59C5D28F3E7C400B4FF76 /* Motion */,
 				55B4FA142AE0FC2E006D35F3 /* MotionPermission */,
+				5597CAD82D8F091D00947B58 /* MXMetricKitManager */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
 				55B4FA022AE0F04A006D35F3 /* NotificationPermission */,
@@ -2826,6 +2829,14 @@
 				551CE0032D682B5C00C9A11A /* PTRouterDynamicParamsMapping.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		5597CAD82D8F091D00947B58 /* MXMetricKitManager */ = {
+			isa = PBXGroup;
+			children = (
+				5597CAD92D8F093E00947B58 /* MetricsManager.swift */,
+			);
+			path = MXMetricKitManager;
 			sourceTree = "<group>";
 		};
 		55B13D482B1AE72600C67EDA /* ImageEditor */ = {
@@ -4840,6 +4851,7 @@
 				55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */,
 				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
 				55ECD8452C99D8B300B45EDE /* PTBaseTabBarViewController.swift in Sources */,
+				5597CADA2D8F093E00947B58 /* MetricsManager.swift in Sources */,
 				55BCB9842B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift in Sources */,
 				55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */,
 				55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */,

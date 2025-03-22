@@ -75,5 +75,8 @@ public class PTAppBaseConfig: NSObject {
     }
     
     //MARK: 在AppStore上用来检测更新的AppID
-    open var appID:String = ""    
+    open var appID:String = ""
+    
+    //MARK: 錯誤上傳地址
+    open var MXMetricKitUploadAddress = ""
 }
