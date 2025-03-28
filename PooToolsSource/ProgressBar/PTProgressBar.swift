@@ -6,14 +6,23 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
-import UIKit
+//
+//  PTProgressBar.swift
+//  PooTools_Example
+//
+//  Created by 邓杰豪 on 7/11/23.
+//  Copyright © 2023 crazypoo. All rights reserved.
+//
 
-@objc public enum PTProgressBarShowType:Int {
+import UIKit
+import SnapKit
+
+@objc public enum PTProgressBarShowType: Int {
     case Vertical
     case Horizontal
 }
 
-@objc public enum PTProgressBarAnimationType:Int {
+@objc public enum PTProgressBarAnimationType: Int {
     case Normal
     case Reverse
 }
@@ -21,111 +30,132 @@ import UIKit
 @objcMembers
 public class PTProgressBar: UIView {
     
-    open var barColor:UIColor = UIColor.systemBlue {
+    open var barColor: UIColor = .systemBlue {
         didSet {
             progressView.backgroundColor = barColor
         }
     }
-    
-    public var animationed:Bool {
-        animationEnd
+
+    public var animationed: Bool {
+        return animationEnd
     }
-    
-    fileprivate var animationEnd:Bool = false
+
+    fileprivate var animationEnd: Bool = false
     fileprivate var isAnimating: Bool = false
-    fileprivate var animator: UIViewPropertyAnimator!
-    fileprivate var showType:PTProgressBarShowType!
-    fileprivate lazy var progressView:UIView = {
+    fileprivate var showType: PTProgressBarShowType!
+    
+    fileprivate lazy var progressView: UIView = {
         let view = UIView()
         view.backgroundColor = barColor
         return view
     }()
     
-    public init(showType:PTProgressBarShowType) {
+    // Constraints to update dynamically
+    private var progressWidthConstraint: Constraint?
+    private var progressHeightConstraint: Constraint?
+    private var progressBottomConstraint: Constraint?
+
+    public init(showType: PTProgressBarShowType) {
         super.init(frame: .zero)
         self.showType = showType
-        
-        addSubview(progressView)
+        setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    fileprivate func setProgressFrame() {
+
+    private func setupUI() {
+        addSubview(progressView)
+        
         switch showType {
         case .Vertical:
-            progressView.frame.size.height = 0
-            progressView.frame.size.width = frame.size.width
-            progressView.frame.origin.y = bounds.origin.y + frame.size.height
+            progressView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview()
+                make.bottom.equalToSuperview()
+                progressHeightConstraint = make.height.equalTo(0).constraint
+            }
         case .Horizontal:
-            progressView.frame.size.height = frame.size.height
-            progressView.frame.size.width = 0
+            progressView.snp.makeConstraints { make in
+                make.top.bottom.leading.equalToSuperview()
+                progressWidthConstraint = make.width.equalTo(0).constraint
+            }
         default:
             break
         }
     }
-    
-    public func animationProgress(duration:CGFloat,@PTClampedProperyWrapper(range:0...1) value:CGFloat) {
+
+    public func animationProgress(duration: CGFloat, @PTClampedProperyWrapper(range: 0...1) value: CGFloat) {
         startAnimation(type: .Normal, duration: duration, value: value)
     }
-    
-    public func startAnimation(type:PTProgressBarAnimationType,duration:CGFloat,@PTClampedProperyWrapper(range:0...1) value:CGFloat) {
-        if isAnimating {
-            return
-        }
+
+    public func startAnimation(type: PTProgressBarAnimationType, duration: CGFloat, @PTClampedProperyWrapper(range: 0...1) value: CGFloat) {
+        guard !isAnimating else { return }
         
-        switch type {
-        case .Normal:
-            animationGo(reverse: false, duration: duration,value: value)
-        case .Reverse:
-            animationGo(reverse: true, duration: duration,value: value)
-        }
-    }
-    
-    public func animationGo(reverse:Bool,duration:CGFloat,@PTClampedProperyWrapper(range:0...1) value:CGFloat) {
-        setProgressFrame()
-        var options:UIView.AnimationOptions = []
-        if reverse {
-            options = [.repeat,.autoreverse]
-        } else {
-            options = [.repeat]
-        }
-        animator = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: TimeInterval(duration), delay: 0, options: [.curveEaseInOut], animations: {
-            UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: options) {
-                switch self.showType {
-                case .Vertical:
-                    self.progressView.frame.size.height -= (self.frame.size.height * value)
-                case .Horizontal:
-                    self.progressView.frame.size.width += (self.frame.size.width * value)
-                default:
-                    break
-                }
-            }
-        }, completion: { finish in
-            self.animationEnd = true
-        })
         isAnimating = true
-        animator.startAnimation()
-    }
-    
-    public func stopAnimation() {
-        if !isAnimating {
-            return
-        }
-        isAnimating = false
         animationEnd = false
-        animator.stopAnimation(true)
+        
+        let animations = {
+            switch self.showType {
+            case .Vertical:
+                self.progressHeightConstraint?.update(offset: self.bounds.height * value)
+            case .Horizontal:
+                self.progressWidthConstraint?.update(offset: self.bounds.width * value)
+            default:
+                break
+            }
+            self.layoutIfNeeded()
+        }
+
+        let options: UIView.AnimationOptions = (type == .Reverse) ? [.autoreverse] : []
+        UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: options, animations: animations) { _ in
+            self.animationEnd = true
+        }
     }
-    
-    public func getProgress() ->CGFloat {
+
+    public func stopAnimation() {
+        guard isAnimating else { return }
+
+        progressView.layer.removeAllAnimations()
+        
         switch showType {
         case .Vertical:
-            return (progressView.frame.size.height / frame.size.height)
+            progressHeightConstraint?.update(offset: 0)
         case .Horizontal:
-            return (progressView.frame.size.width / frame.size.width)
+            progressWidthConstraint?.update(offset: 0)
+        default:
+            break
+        }
+        UIView.animate(withDuration: 0.25) {
+            self.layoutIfNeeded()
+        }
+
+        isAnimating = false
+        animationEnd = false
+    }
+
+    public func getProgress() -> CGFloat {
+        switch showType {
+        case .Vertical:
+            return (progressHeightConstraint?.layoutConstraints.first?.constant ?? 0) / bounds.height
+        case .Horizontal:
+            return (progressWidthConstraint?.layoutConstraints.first?.constant ?? 0) / bounds.width
         default:
             return 0
+        }
+    }
+    
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+
+        // 根據 currentProgress 還原 constraint
+        switch showType {
+        case .Vertical:
+            progressHeightConstraint?.update(offset: bounds.height * getProgress())
+        case .Horizontal:
+            progressWidthConstraint?.update(offset: bounds.width * getProgress())
+        default:
+            break
         }
     }
 }
