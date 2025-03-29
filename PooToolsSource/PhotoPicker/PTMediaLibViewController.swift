@@ -60,16 +60,16 @@ public class PTMediaLibView:UIView {
     
     lazy var collectionView : PTCollectionView = {
         
-        let config = PTCollectionViewConfig()
-        config.viewType = .Gird
-        config.itemOriginalX = 1
-        config.cellLeadingSpace = 1
-        config.cellTrailingSpace = 1
-        config.rowCount = 3
-        let itemHeight:CGFloat = (CGFloat.kSCREEN_WIDTH - CGFloat(config.rowCount - 1) * config.cellLeadingSpace) / CGFloat(config.rowCount)
-        config.itemHeight = itemHeight
+        let configs = PTCollectionViewConfig()
+        configs.viewType = .Gird
+        configs.itemOriginalX = 1
+        configs.cellLeadingSpace = 1
+        configs.cellTrailingSpace = 1
+        configs.rowCount = 3
+        let itemHeight:CGFloat = (CGFloat.kSCREEN_WIDTH - CGFloat(configs.rowCount - 1) * configs.cellLeadingSpace) / CGFloat(configs.rowCount)
+        configs.itemHeight = itemHeight
 
-        let view = PTCollectionView(viewConfig: config)
+        let view = PTCollectionView(viewConfig: configs)
         view.registerClassCells(classs: [PTMediaLibCell.ID:PTMediaLibCell.self,PTCameraCell.ID:PTCameraCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share

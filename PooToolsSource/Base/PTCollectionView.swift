@@ -19,6 +19,7 @@ import SwipeCellKit
 #if POOTOOLS_LISTEMPTYDATA
 import EmptyDataSet_Swift
 #endif
+import Photos
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
 private var kPTCollectionIndexViewContent: CChar = 0
@@ -195,6 +196,12 @@ public class PTCollectionViewConfig:NSObject {
     open var alwaysBounceHorizontal:Bool = false
     open var alwaysBounceVertical:Bool = true
     open var contentOffSetZero:Bool = false
+    
+    /*
+     For Photos
+     */
+    open var viewForPhoto:Bool = false
+    open var previewImageSize:CGSize = CGSizeMake(105, 105)
 }
 
 public class PTTextLayer: CATextLayer {
@@ -245,7 +252,12 @@ open class PTBaseCollectionView:UICollectionView {
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
-                    
+    
+    ///Photos
+    let imageManager = PHCachingImageManager()
+    var photoAssets: [PHAsset] = []
+    
+    ///索引
     fileprivate var textLayerArray = [PTTextLayer]()
     fileprivate lazy var indicator: UIView = {
         let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
@@ -542,6 +554,9 @@ public class PTCollectionView: UIView {
             view.mj_footer = footerRefresh
         }
 #endif
+        if self.viewConfig.viewForPhoto {
+            view.prefetchDataSource = self
+        }
         return view
     }()
     
@@ -1205,6 +1220,19 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         collectionDidScrolltoTop?(scrollView as! UICollectionView)
+    }
+}
+
+//MARK: For Photos
+extension PTCollectionView:UICollectionViewDataSourcePrefetching {
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let assets = indexPaths.map { photoAssets[$0.item] }
+        imageManager.startCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+        }
+        
+    public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        let assets = indexPaths.map { photoAssets[$0.item] }
+        imageManager.stopCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
     }
 }
 
