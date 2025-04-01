@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-fileprivate extension String {
+public extension String {
     static let BaiduMap = "PT Map baidu".localized()
     static let AMap = "PT Map avi".localized()
     static let QQMap = "PT Map qq".localized()
@@ -31,32 +31,38 @@ open class PTMapActionSheet: NSObject {
     ///   - location: 跳转坐标
     ///   - dismissTask: 关闭回调
     @MainActor open class func mapNavAlert(currentAppScheme:String,
-                                currentAppName:String? = kAppDisplayName!,
-                                qqKey:String? = "",
-                                formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
-                                location:CLLocationCoordinate2D,
-                                dismissTask:PTActionTask? = nil) {
+                                           currentAppName:String? = kAppDisplayName!,
+                                           qqKey:String? = "",
+                                           formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
+                                           location:CLLocationCoordinate2D,
+                                           sheetTitle:String = "PT Select nav".localized(),
+                                           cancelButtonName:String = "PT Button cancel".localized(),
+                                           baiduName:String = String.BaiduMap,
+                                           aMapName:String = String.AMap,
+                                           gMapName:String = String.GoogleMap,
+                                           qMapName:String = String.QQMap,
+                                           dismissTask:PTActionTask? = nil) {
         let appScheme = currentAppScheme
         let locations = location
         var navAppName = [String]()
         let appName = currentAppName!
         if UIApplication.shared.canOpenURL(URL.init(string: "baidumap://")!) {
-            navAppName.append(.BaiduMap)
+            navAppName.append(baiduName)
         }
         
         if UIApplication.shared.canOpenURL(URL.init(string: "iosamap://")!) {
-            navAppName.append(.AMap)
+            navAppName.append(aMapName)
         }
         
         if UIApplication.shared.canOpenURL(URL.init(string: "comgooglemaps://")!) {
-            navAppName.append(.GoogleMap)
+            navAppName.append(gMapName)
         }
         
         if UIApplication.shared.canOpenURL(URL.init(string: "qqmap://")!) && !qqKey!.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
-            navAppName.append(.QQMap)
+            navAppName.append(qMapName)
         }
         
-        UIAlertController.baseActionSheet(title: "PT Select nav".localized(),destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
+        UIAlertController.baseActionSheet(title: sheetTitle,cancelButtonName:cancelButtonName, destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
             let currentLocation = MKMapItem.forCurrentLocation()
             let toLocation = MKMapItem.init(placemark: MKPlacemark.init(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
@@ -65,13 +71,13 @@ open class PTMapActionSheet: NSObject {
             dismissTask?()
         } otherBlock: { sheet, index,title in
             var urlString :String = ""
-            if navAppName[index] == .BaiduMap {
+            if navAppName[index] == baiduName {
                 urlString = String(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
-            } else if navAppName[index] == .AMap {
+            } else if navAppName[index] == aMapName {
                 urlString = String(format: "iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
-            } else if navAppName[index] == .GoogleMap {
+            } else if navAppName[index] == gMapName {
                 urlString = String(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
-            } else if navAppName[index] == .QQMap {
+            } else if navAppName[index] == qMapName {
                 urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey!).urlToUnicodeURLString() ?? ""
             }
             PTAppStoreFunction.jumpLink(url: URL(string: urlString)!)
