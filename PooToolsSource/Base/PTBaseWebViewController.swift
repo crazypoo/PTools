@@ -11,6 +11,7 @@ import WebKit
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
+import SnapKit
 
 @objc public enum YDSWebViewType:Int {
     case url
@@ -25,6 +26,8 @@ public extension String {
 
 open class PTBaseWebViewController: PTBaseViewController {
 
+    static let sharedProcessPool = WKProcessPool()
+
     public var vcDismiss:PTActionTask?
     
     public var url = ""
@@ -35,6 +38,20 @@ open class PTBaseWebViewController: PTBaseViewController {
     
     fileprivate var type: YDSWebViewType = .url
 
+    public var hiddenNav = false {
+        didSet {
+#if POOTOOLS_NAVBARCONTROLLER
+            self.zx_hideBaseNavBar = hiddenNav
+#else
+            navigationController?.navigationBar.isHidden = true
+#endif
+
+            webView.snp.updateConstraints { make in
+                make.top.equalTo(hiddenNav ? 0 : CGFloat.kNavBarHeight_Total)
+            }
+        }
+    }
+    
     fileprivate lazy var webView: WKWebView = {
         let config = WKWebViewConfiguration()
         //允许视频播放
@@ -44,7 +61,12 @@ open class PTBaseWebViewController: PTBaseViewController {
         // 允许可以与网页交互，选择视图
         config.selectionGranularity = .character
         // web内容处理池
-        config.processPool = WKProcessPool()
+        config.processPool = PTBaseWebViewController.sharedProcessPool
+#if DEBUG
+        config.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+#else
+        config.websiteDataStore = WKWebsiteDataStore.default()
+#endif
         //自定义配置,一般用于 js调用oc方法(OC拦截URL中的数据做自定义操作)
         let userContentController = WKUserContentController()
         // 是否支持记忆读取
