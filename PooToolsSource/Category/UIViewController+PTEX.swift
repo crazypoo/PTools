@@ -172,7 +172,7 @@ public extension UIViewController {
     ///Popover
     @objc func popover(popoverVC:UIViewController,
                        popoverSize:CGSize,
-                       sender:UIButton,
+                       sender:UIView,
                        arrowDirections:UIPopoverArrowDirection) {
         PTGCDManager.gcdAfter(time: 0.1) {
             popoverVC.preferredContentSize = popoverSize
@@ -194,7 +194,7 @@ public extension UIViewController {
     @objc func listPopover(popoverConfig:PTPopoverConfig = PTPopoverConfig(),
                            items:[PTPopoverItem],
                            popoverWidth:CGFloat,
-                           sender:UIButton,
+                           sender:UIView,
                            arrowDirections:UIPopoverArrowDirection,
                            selectedHandler:@escaping PTPopoverHandler) {
         let popoverVC = PTPopoverMenuContent(config:popoverConfig,viewModel: items)
