@@ -19,6 +19,27 @@ public class PTPermissionNotification: PTPermission {
     
     open override var kind: PTPermission.Kind { .notification }
     
+    @MainActor public func authorizationStatus() async throws -> PTPermission.Status {
+        return try await withCheckedThrowingContinuation { continuation in
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                switch settings.authorizationStatus {
+                case .authorized:
+                    continuation.resume(returning: PTPermission.Status.authorized)
+                case .denied:
+                    continuation.resume(returning: PTPermission.Status.denied)
+                case .notDetermined:
+                    continuation.resume(returning: PTPermission.Status.notDetermined)
+                case .provisional:
+                    continuation.resume(returning: PTPermission.Status.authorized)
+                case .ephemeral:
+                    continuation.resume(returning: PTPermission.Status.authorized)
+                @unknown default:
+                    continuation.resume(returning: PTPermission.Status.denied)
+                }
+            }
+        }
+    }
+    
     public override var status: PTPermission.Status {
         guard let authorizationStatus = fetchAuthorizationStatus() else { return .notDetermined }
         switch authorizationStatus {
