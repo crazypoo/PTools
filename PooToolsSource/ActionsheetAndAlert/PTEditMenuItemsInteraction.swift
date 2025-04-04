@@ -176,7 +176,7 @@ public class PTEditMenuItemsInteraction: NSObject {
 }
 
 // MARK: UIEditMenuInteractionDelegate
-extension PTEditMenuItemsInteraction: @preconcurrency UIEditMenuInteractionDelegate {
+extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     @available(iOS 16.0, *)
     public func editMenuInteraction(_: UIEditMenuInteraction, targetRectFor _: UIEditMenuConfiguration) -> CGRect {
         guard let rect = targetRect else {

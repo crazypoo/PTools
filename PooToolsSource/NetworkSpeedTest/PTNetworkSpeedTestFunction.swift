@@ -112,8 +112,8 @@ public class PTNetworkSpeedTestFunction: NSObject {
 }
 
 // MARK: URLSessionTaskDelegate && URLSessionTaskDelegate methods
-extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, @preconcurrency URLSessionTaskDelegate {
-    @MainActor public func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDelegate {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
         if task == downloadTask {
             let latency = (downloadStartTime! - tapStartTime!) * 1000
             latencyValue = latency
@@ -126,34 +126,36 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, @preconcurrency U
         } else if task == uploadTask {
             
             if testDone != nil {
-                PTGCDManager.gcdGroup(label: "ValueDone", threadCount: 2, doSomeThing: { semaphore,group,index in
-                    if index == 0 {
-                        PTGCDManager.gcdAfter(time: 0.35) {
-                            self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
-                            semaphore.signal()
-                            group.leave()
+                PTGCDManager.gcdMain {
+                    PTGCDManager.gcdGroup(label: "ValueDone", threadCount: 2, doSomeThing: { semaphore,group,index in
+                        if index == 0 {
+                            PTGCDManager.gcdAfter(time: 0.35) {
+                                self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
+                                semaphore.signal()
+                                group.leave()
+                            }
+                        } else if index == 1 {
+                            PTGCDManager.gcdAfter(time: 0.35) {
+                                self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
+                                semaphore.signal()
+                                group.leave()
+                            }
                         }
-                    } else if index == 1 {
-                        PTGCDManager.gcdAfter(time: 0.35) {
-                            self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
-                            semaphore.signal()
-                            group.leave()
-                        }
-                    }
-                }, jobDoneBlock: {
-                    self.testDone!()
-                    let historyModel = PTNetworkSpeedHistoriaModel()
-                    historyModel.download = String(format: "%.2f", self.downloadValue)
-                    historyModel.upload = String(format: "%.2f", self.uploadValue)
-                    historyModel.latency = String(format: "%.2f", self.latencyValue)
-                    historyModel.networkType = self.netWorkName
-                    historyModel.date = Date().toString()
-                    
-                    let jsonString = historyModel.kj.JSONString(prettyPrinted: true)
-                    PTNSLogConsole(jsonString,levelType: .Notice,loggerType: .Network)
-                    self.saveHistory(jsonString: jsonString)
-                    self.netSpeedStateType = .Free
-                })
+                    }, jobDoneBlock: {
+                        self.testDone!()
+                        let historyModel = PTNetworkSpeedHistoriaModel()
+                        historyModel.download = String(format: "%.2f", self.downloadValue)
+                        historyModel.upload = String(format: "%.2f", self.uploadValue)
+                        historyModel.latency = String(format: "%.2f", self.latencyValue)
+                        historyModel.networkType = self.netWorkName
+                        historyModel.date = Date().toString()
+                        
+                        let jsonString = historyModel.kj.JSONString(prettyPrinted: true)
+                        PTNSLogConsole(jsonString,levelType: .Notice,loggerType: .Network)
+                        self.saveHistory(jsonString: jsonString)
+                        self.netSpeedStateType = .Free
+                    })
+                }
             }
         }
     }

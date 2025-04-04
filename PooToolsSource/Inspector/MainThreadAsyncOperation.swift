@@ -6,7 +6,7 @@
 
 import Foundation
 
-final class MainThreadAsyncOperation: MainThreadOperation {
+final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {
     override func main() {
         PTGCDManager.gcdMain {
             self.closure()

@@ -312,9 +312,7 @@ extension PTBaseViewController {
     public func hideEmptyView(task:PTActionTask? = nil) {
         let share = PTUnavailableFunction.shared
         share.hideUnavailableView(viewController: self, task: task)
-        if task != nil {
-            task!()
-        }
+        task?()
     }
     
     public func emptyViewLoading() {

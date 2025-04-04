@@ -114,9 +114,9 @@ open class PTFusionCellModel: NSObject {
     ///BottomLineHeight
     open var bottomLineHeight:CGFloat = 1
     ///TopLineColor
-    open var topLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
+    open var topLineColor:UIColor = DynamicColor(hexString: "E8E8E8") ?? .lightGray
     ///BottomLineColor
-    open var bottomLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
+    open var bottomLineColor:UIColor = DynamicColor(hexString: "E8E8E8") ?? .lightGray
         
     @PTClampedProperyWrapper(range:20...51) open var switchControlWidth: CGFloat = 51
 

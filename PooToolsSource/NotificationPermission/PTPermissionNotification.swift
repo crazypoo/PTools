@@ -55,7 +55,7 @@ public class PTPermissionNotification: PTPermission {
     private func fetchAuthorizationStatus() -> UNAuthorizationStatus? {
         var notificationSettings: UNNotificationSettings?
         let semaphore = DispatchSemaphore(value: 0)
-        PTGCDManager.gcdGobal(qosCls: .default) {
+        PTGCDManager.gcdGobalNormal {
             UNUserNotificationCenter.current().getNotificationSettings { setttings in
                 notificationSettings = setttings
                 semaphore.signal()

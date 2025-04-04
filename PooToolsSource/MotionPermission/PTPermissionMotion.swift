@@ -36,7 +36,9 @@ public class PTPermissionMotion: PTPermission {
         let today = Date()
         
         manager.queryActivityStarting(from: today, to: today, to: OperationQueue.main, withHandler: { (activities: [CMMotionActivity]?, error: Error?) -> () in
-            completion()
+            PTGCDManager.gcdMain {
+                completion()
+            }
             manager.stopActivityUpdates()
         })
     }

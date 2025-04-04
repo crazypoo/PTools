@@ -67,7 +67,7 @@ private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionVi
 ///   - sectionModel: Section的model
 ///   - indexPath: 坐标
 ///  - Return: UICollectionReusableView
-public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView?
+public typealias PTReusableViewHandler = @MainActor (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView?
 
 ///Cell设置
 /// - Parameters:
@@ -75,7 +75,7 @@ public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UIColl
 ///   - sectionModel: Section的model
 ///   - index: 坐标
 ///  - Return: UICollectionViewCell
-public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
+public typealias PTCellInCollectionHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
 
 ///Cell点击事件
 /// - Parameters:
@@ -83,7 +83,7 @@ public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,
 ///   - sectionModel: Section的model
 ///   - indexPath: 坐标
 ///  - Return: 事件
-public typealias PTCellDidSelectedHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
+public typealias PTCellDidSelectedHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 ///Cell将要
 /// - Parameters:
@@ -91,13 +91,13 @@ public typealias PTCellDidSelectedHandler = (_ collectionView:UICollectionView,_
 ///   - sectionModel: Section的model
 ///   - indexPath: 坐标
 ///  - Return: 事件
-public typealias PTCellDisplayHandler = (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
+public typealias PTCellDisplayHandler = @MainActor (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 ///CollectionView的Scroll回调
 /// - Parameters:
 ///   - collectionView: collectionView
 ///  - Return: 事件
-public typealias PTCollectionViewScrollHandler = (_ collectionView:UICollectionView) -> Void
+public typealias PTCollectionViewScrollHandler = @MainActor (_ collectionView:UICollectionView) -> Void
 
 #if POOTOOLS_SWIPECELL
 ///CollectionView的Swipe回调
@@ -106,14 +106,14 @@ public typealias PTCollectionViewScrollHandler = (_ collectionView:UICollectionV
 ///   - sectionModel: Section的model
 ///   - indexPath: 坐标
 ///  - Return: 事件
-public typealias PTCollectionViewSwipeHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> [SwipeAction]
+public typealias PTCollectionViewSwipeHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> [SwipeAction]
 #endif
 
-public typealias PTCollectionViewCanSwipeHandler = (_ sectionModel:PTSection,_ indexPath:IndexPath) -> Bool
+public typealias PTCollectionViewCanSwipeHandler = @MainActor (_ sectionModel:PTSection,_ indexPath:IndexPath) -> Bool
 
-public typealias PTDecorationInCollectionHandler = (_ index:Int,_ sectionModel:PTSection) -> [NSCollectionLayoutDecorationItem]
+public typealias PTDecorationInCollectionHandler = @MainActor (_ index:Int,_ sectionModel:PTSection) -> [NSCollectionLayoutDecorationItem]
 
-public typealias PTViewInDecorationResetHandler = (_ collectionView: UICollectionView, _ view: UICollectionReusableView, _ elementKind: String, _ indexPath: IndexPath,_ sectionModel: PTSection) -> Void
+public typealias PTViewInDecorationResetHandler = @MainActor (_ collectionView: UICollectionView, _ view: UICollectionReusableView, _ elementKind: String, _ indexPath: IndexPath,_ sectionModel: PTSection) -> Void
 
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
@@ -299,7 +299,8 @@ public class PTCollectionView: UIView {
     
     fileprivate var layerTopSpacing: CGFloat {
         let count = CGFloat(viewConfig.sideIndexTitles?.count ?? 0)
-        return floor(self.bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)) / 2
+        let floorValue = self.bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)
+        return floor(floorValue) / 2
     }
     
     fileprivate var isTouched: Bool = false

@@ -1738,6 +1738,8 @@
 		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
 		55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringConfiguration.swift; sourceTree = "<group>"; };
 		55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionLayer.swift; sourceTree = "<group>"; };
+		55DBAFBD2DA005050002DD6F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		55DBAFBE2DA005060002DD6F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		55DD93572B9169A000F65872 /* PTSortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSortButton.swift; sourceTree = "<group>"; };
 		55DD936B2B932A0400F65872 /* Logger+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+PTEX.swift"; sourceTree = "<group>"; };
 		55DD936E2B938C6800F65872 /* UIViewController+Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Container.swift"; sourceTree = "<group>"; };
@@ -3912,6 +3914,7 @@
 				"zh-Hans",
 				es,
 				"zh-HK",
+				"zh-Hant",
 			);
 			mainGroup = 6003F581195388D10070C39A;
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
@@ -3985,7 +3988,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3995,9 +3999,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4012,9 +4020,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4921,6 +4933,7 @@
 				55102AC92AFFB8A400E9529D /* en */,
 				55102AD52AFFCEE400E9529D /* es */,
 				55102AD72AFFCEF200E9529D /* zh-HK */,
+				55DBAFBE2DA005060002DD6F /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4932,6 +4945,7 @@
 				55102AC32AFFB86400E9529D /* zh-Hans */,
 				55102AD42AFFCEE300E9529D /* es */,
 				55102AD62AFFCEF200E9529D /* zh-HK */,
+				55DBAFBD2DA005050002DD6F /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
