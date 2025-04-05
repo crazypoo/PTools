@@ -42,7 +42,5 @@ public struct PTBaseStructModel {
     public var customerModel: Any? = nil
     public var resultData:Data? = Data()
     
-    init() {
-        
-    }
+    init() {}
 }

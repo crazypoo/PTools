@@ -659,7 +659,7 @@ extension PTRouter {
                 case .push:
                     PTUtils.push(vc)
                 case .popToTaget:
-                    PTUtils.popToTargetVC(vcClass: type(of: vc))
+                    PTUtils.popToVC(ofType: type(of: vc))
                 case .windowNavRoot:
                     PTUtils.pusbWindowNavRoot(vc)
                 case .modalDismissBeforePush:
