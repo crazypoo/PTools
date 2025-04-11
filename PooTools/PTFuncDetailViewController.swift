@@ -111,7 +111,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.centerX.centerY.equalToSuperview()
             }
         case String.slider:
-            let slider = PTSlider(showTitle: true, titleIsValue: false)
+            let slider = PTSlider(showTitle: true, showRawValue: false)
             view.addSubview(slider)
             slider.snp.makeConstraints { make in
                 make.width.equalTo(100)

@@ -136,8 +136,7 @@ open class Localize: NSObject {
         let availableLanguages: [String] = availableLanguages()
         if (availableLanguages.contains(preferredLanguage)) {
             defaultLanguage = preferredLanguage
-        }
-        else {
+        } else {
             defaultLanguage = PTDefaultLanguage
         }
         return defaultLanguage

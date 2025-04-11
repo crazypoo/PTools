@@ -14,6 +14,13 @@ public let nWebSocketDidReceiveMessageNotification = "nWebSocketDidReceiveMessag
 public let nWebSocketDidConnect = "nWebSocketDidConnect"
 public let nWebSocketDidDisconnect = "nWebSocketDidDisconnect"
 
+public enum SocketConnectionState {
+    case connected
+    case disconnected
+    case connecting
+    case reconnecting
+}
+
 @objcMembers
 public class PTSocketManager: NSObject {
     public static let share = PTSocketManager()
@@ -21,11 +28,13 @@ public class PTSocketManager: NSObject {
     open var MaxReConnectTime = 0
     open var ReconnectTime:TimeInterval = 5
     open var networkStatus:NetWorkStatus = .unknown
-
+    public private(set) var socketState: SocketConnectionState = .disconnected
+    
     fileprivate var reOpenCount:Int = 0
     fileprivate var request:NSMutableURLRequest!
     fileprivate var webSocket:SRWebSocket?
-    
+    private var heartBeatTimer: Timer?
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -36,16 +45,22 @@ public class PTSocketManager: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(self.onNetworkStatusChange(notifi:)), name: NSNotification.Name(rawValue: nNetworkStatesChangeNotification), object: nil)
     }
     
-    public func socketSet() {
+    public func socketSet(completion: @escaping (Bool) -> Void) {
         Task {
             let urlString = await Network.socketGobalUrl()
             guard let webSocketUrl = URL(string: urlString),var urlcomponents = URLComponents(url: webSocketUrl, resolvingAgainstBaseURL: false) else {
+                completion(false)
                 return
             }
             
             urlcomponents.scheme = webSocketUrl.scheme
-            guard let url = urlcomponents.url else { return }
+            guard let url = urlcomponents.url else {
+                completion(false)
+                return
+            }
             self.request = NSMutableURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
+            socketState = .connecting
+            completion(true)
         }
     }
 
@@ -61,7 +76,9 @@ public class PTSocketManager: NSObject {
     }
     
     public func reConnect() {
+        socketState = .reconnecting
         disConnect()
+        socketState = .connecting
         connect()
     }
     
@@ -70,9 +87,11 @@ public class PTSocketManager: NSObject {
             return
         }
         
-        if webSocket != nil {
-            webSocket?.close()
+        if let socket = webSocket {
+            socket.delegate = nil
+            socket.close()
             webSocket = nil
+            socketState = .disconnected
         }
     }
     
@@ -84,10 +103,12 @@ public class PTSocketManager: NSObject {
         webSocket = SRWebSocket(urlRequest: request as URLRequest)
         webSocket?.delegate = self
         webSocket?.open()
+        socketState = .connected
     }
     
     public func startReconnect() {
         if !networkIsNotReachable() {
+            socketState = .reconnecting
             PTGCDManager.gcdAfter(time: self.ReconnectTime) {
                 if !self.isClosed() {
                     self.reOpenCount = 0
@@ -115,6 +136,19 @@ public class PTSocketManager: NSObject {
     
     func networkIsNotReachable() ->Bool {
         return networkStatus == .notReachable
+    }
+    
+    public func startHeartBeat(timeInterval:TimeInterval = 30,
+                               msg:String = "ping") {
+        heartBeatTimer?.invalidate()
+        heartBeatTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { _ in
+            self.sendMessage(msg: msg)
+        }
+    }
+
+    public func stopHeartBeat() {
+        heartBeatTimer?.invalidate()
+        heartBeatTimer = nil
     }
 }
 

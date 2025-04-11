@@ -26,12 +26,13 @@ public class PTHTMLHeightCalculator: NSObject {
         webView.navigationDelegate = self
     }
     
-    public func calculateHeight(for html: String, completion: @escaping (CGFloat) -> Void) {
+    public func calculateHeight(for html: String,
+                                completion: @escaping (CGFloat) -> Void) {
         completionHandler = completion
         webView.loadHTMLString(html, baseURL: nil)
     }
     
-    public static func resetHtimTag(rawHTML:String) ->String {
+    public static func resetHtimTag(rawHTML:String) -> String {
         let completeHTML = """
         <!DOCTYPE html>
         <html>

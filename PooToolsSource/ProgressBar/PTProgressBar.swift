@@ -6,14 +6,6 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
-//
-//  PTProgressBar.swift
-//  PooTools_Example
-//
-//  Created by 邓杰豪 on 7/11/23.
-//  Copyright © 2023 crazypoo. All rights reserved.
-//
-
 import UIKit
 import SnapKit
 

@@ -1021,9 +1021,9 @@ class PTFuncNameViewController: PTBaseViewController {
             PTNSLogConsole("1231231231")
         }
         
-//        let searchBar = PTSearchBar()
-//        searchBar.clearConfig = searchBarConfig
-//        searchBar.bounds = CGRect(x: 0, y: 0, width: 150, height: 34)
+        let searchBar = PTSearchBar()
+        searchBar.clearConfig = searchBarConfig
+        searchBar.bounds = CGRect(x: 0, y: 0, width: 64, height: 34)
         
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubviews([more,popover])
@@ -1041,7 +1041,7 @@ class PTFuncNameViewController: PTBaseViewController {
 #else
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: popover)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
-//        navigationItem.titleView = searchBar
+        navigationItem.titleView = searchBar
 #endif
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
