@@ -1243,8 +1243,7 @@ class PTFuncNameViewController: PTBaseViewController {
             let keyValue = obj[value]
             if keyValue is String {
                 if (keyValue as! String).isURL() {
-                    let vc = PTBaseWebViewController(hideBaseNavBar: true)
-                    vc.url = (keyValue as! String)
+                    let vc = PTBaseWebViewController(showString: (keyValue as! String))
                     self.navigationController?.pushViewController(vc)
 //                    PTAppStoreFunction.jumpLink(url: URL(string: (keyValue as! String))!)
                 }

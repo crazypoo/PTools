@@ -27,31 +27,35 @@ open class PTEmptyDataViewConfig : NSObject {
     public var customerView: UIView? = nil
 }
 
+@MainActor
 @available(iOS 17.0 , *)
 @objcMembers
 public class PTUnavailableFunction: NSObject {
     public static let shared = PTUnavailableFunction()
-    open var emptyViewConfig: PTEmptyDataViewConfig = PTEmptyDataViewConfig()
+    open var emptyViewConfig: PTEmptyDataViewConfig = PTEmptyDataViewConfig() {
+        didSet {
+            emptyConfig = createEmptyConfig()
+        }
+    }
     open var emptyTap: PTActionTask?
 
-    lazy var emptyButtonConfig: UIButton.Configuration = {
+    private func makeEmptyButtonConfig() -> UIButton.Configuration {
         var plainConfig = UIButton.Configuration.plain()
         plainConfig.title = emptyViewConfig.buttonTitle
-        plainConfig.titleTextAttributesTransformer = .init({ container in
+        plainConfig.titleTextAttributesTransformer = .init { container in
             container.merging(
                 AttributeContainer.font(self.emptyViewConfig.buttonFont)
                     .foregroundColor(self.emptyViewConfig.buttonTextColor)
             )
-        })
+        }
         return plainConfig
-    }()
+    }
     
-    var emptyConfig: UIContentUnavailableConfiguration!
+    private lazy var emptyConfig: UIContentUnavailableConfiguration = createEmptyConfig()
     var unavailableView: UIContentUnavailableView?
     var unavailableLoadingView: UIContentUnavailableView?
 
-    @MainActor public func showEmptyView(showIn view: UIView) {
-        emptyConfig = createEmptyConfig()
+    public func showEmptyView(showIn view: UIView) {
         
         unavailableView = UIContentUnavailableView(configuration: emptyConfig)
         view.addSubview(unavailableView!)
@@ -59,13 +63,16 @@ public class PTUnavailableFunction: NSObject {
             make.edges.equalToSuperview()
         }
 
-        if let customerView = emptyViewConfig.customerView {
-            unavailableView?.addSubview(customerView)
-            customerView.snp.makeConstraints { make in
-                make.size.equalTo(customerView.size)
-                make.centerX.equalToSuperview()
-                make.centerY.equalToSuperview().offset(emptyViewConfig.verticalOffSet)
-            }
+        showCustomerView(in: unavailableView!)
+    }
+    
+    private func showCustomerView(in view: UIView) {
+        guard let customerView = emptyViewConfig.customerView else { return }
+        view.addSubview(customerView)
+        customerView.snp.makeConstraints { make in
+            make.size.equalTo(customerView.size)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(emptyViewConfig.verticalOffSet)
         }
     }
 
@@ -84,7 +91,7 @@ public class PTUnavailableFunction: NSObject {
         }
     }
 
-    @MainActor public func hideUnavailableView(showIn view: UIView, task: PTActionTask?) {
+    public func hideUnavailableView(showIn view: UIView, task: PTActionTask?) {
         removeUnavailableViews()
         task?()
     }
@@ -98,7 +105,7 @@ public class PTUnavailableFunction: NSObject {
         viewController.contentUnavailableConfiguration = loadingConfig
     }
 
-    @MainActor public func hideUnavailableView(viewController: PTBaseViewController, task: PTActionTask?) {
+    public func hideUnavailableView(viewController: PTBaseViewController, task: PTActionTask?) {
         viewController.contentUnavailableConfiguration = nil
         task?()
     }
@@ -120,7 +127,7 @@ public class PTUnavailableFunction: NSObject {
         config.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
         
         if !emptyViewConfig.buttonTitle.isEmpty {
-            config.button = self.emptyButtonConfig
+            config.button = makeEmptyButtonConfig()
             config.buttonProperties.primaryAction = UIAction { [weak self] _ in
                 Task { @MainActor in
                     self?.emptyTap?()

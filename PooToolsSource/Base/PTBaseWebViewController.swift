@@ -13,11 +13,6 @@ import ZXNavigationBar
 #endif
 import SnapKit
 
-@objc public enum YDSWebViewType:Int {
-    case url
-    case html
-}
-
 public extension String {
     func joinHtml(lang:String = "zh-CN") -> String {
         return "<!DOCTYPE html><html lang=\"\(lang)\"><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no\"><style>body{padding:0;margin:0;}img{display:block;width:100%;}</style></head><body>\(self)</body></html>"
@@ -30,14 +25,9 @@ open class PTBaseWebViewController: PTBaseViewController {
 
     public var vcDismiss:PTActionTask?
     
-    public var url = ""
-    public var html = ""
-
     public var webHeight: ((CGFloat) -> Void)?
     public var backImage:UIImage = UIColor.random.createImageWithColor().transformImage(size: CGSizeMake(24, 24))
     
-    fileprivate var type: YDSWebViewType = .url
-
     public var hiddenNav = false {
         didSet {
 #if POOTOOLS_NAVBARCONTROLLER
@@ -51,6 +41,8 @@ open class PTBaseWebViewController: PTBaseViewController {
             }
         }
     }
+    
+    fileprivate var showString:String = ""
     
     fileprivate lazy var webView: WKWebView = {
         let config = WKWebViewConfiguration()
@@ -101,6 +93,15 @@ open class PTBaseWebViewController: PTBaseViewController {
         return view
     }()
     
+    public init(showString:String = "") {
+        self.showString = showString
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         vcDismiss?()
@@ -127,15 +128,13 @@ open class PTBaseWebViewController: PTBaseViewController {
     }
     
     func loadWeb() {
-        if !self.url.stringIsEmpty() && self.html.stringIsEmpty() {
-            type = .url
-            let request = URLRequest(url: URL.init(string: self.url)!)
+        if !showString.stringIsEmpty(),let url = URL(string: showString) {
+            let request = URLRequest(url: url)
             self.webView.load(request)
-        } else if self.url.stringIsEmpty() && !self.html.stringIsEmpty() {
-            type = .html
-            self.webView.loadHTMLString(self.html.joinHtml(), baseURL: nil)
+        } else if !showString.stringIsEmpty(),showString.containsHTMLTags() {
+            self.webView.loadHTMLString(self.showString.joinHtml(), baseURL: nil)
         } else {
-            fatalError("No load url or html")
+            fatalError("Not load url or html")
         }
     }
 }
