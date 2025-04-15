@@ -84,24 +84,26 @@ public extension UICollectionView {
         let itemH = itemHeight
         let itemW = (groupW - originalX * 2 - CGFloat(cellRowCount - 1) * cellLeadingSpace) / CGFloat(cellRowCount)
         var x:CGFloat = originalX,y:CGFloat = 0 + topContentSpace
-        data?.enumerated().forEach { index, value in
-            // 每个都加 item
-            let customItem = NSCollectionLayoutGroupCustomItem(
-                frame: CGRect(x: x, y: y, width: itemW, height: itemH),
-                zIndex: 1000 + index
-            )
-            customers.append(customItem)
+        data?.enumerated().forEach { (index,value) in
+            if index < cellRowCount {
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
+                customers.append(customItem)
+                x += itemW + cellLeadingSpace
+                if index == (data!.count - 1) {
+                    groupH = y + itemH + bottomContentSpace
+                }
+            } else {
+                x += itemW + cellLeadingSpace
+                if index > 0 && (index % cellRowCount == 0) {
+                    x = originalX
+                    y += itemH + cellTrailingSpace
+                }
 
-            // 更新位置
-            x += itemW + cellLeadingSpace
-            if index >= cellRowCount, index % cellRowCount == 0 {
-                x = originalX
-                y += itemH + cellTrailingSpace
-            }
-
-            // 处理最后一个 item 的 groupH
-            if index == (data!.count - 1) {
-                groupH = y + itemH + bottomContentSpace
+                if index == (data!.count - 1) {
+                    groupH = y + itemH + bottomContentSpace
+                }
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
+                customers.append(customItem)
             }
         }
         handle(groupH,customers)
