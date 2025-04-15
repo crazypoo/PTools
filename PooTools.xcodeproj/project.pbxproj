@@ -141,6 +141,7 @@
 		553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */; };
 		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
+		553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */; };
 		553FF08F2C670A5600E9EE10 /* PTIAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
 		554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */; };
@@ -1069,6 +1070,7 @@
 		553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetContentViewController.swift; sourceTree = "<group>"; };
 		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
+		553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+PTEX.swift"; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTIAPManager.swift; sourceTree = "<group>"; };
 		554929E928F9089D00C82ABF /* PTPermissionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionModel.swift; sourceTree = "<group>"; };
@@ -2147,6 +2149,7 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -3988,7 +3991,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3998,9 +4002,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4015,9 +4023,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4902,6 +4914,7 @@
 				557E3AA22C046EE0002466A0 /* PTHttpDatasource.swift in Sources */,
 				55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
+				553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */,
 				556CA4C02B29535900A5B189 /* NSLayoutConstraint+PTEX.swift in Sources */,
 				557E3A6C2C036CCD002466A0 /* PTDebugPerformanceViewController.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSFaceIDUsageDescription</key>
-	<string>申请使用faceid</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -63,6 +61,8 @@
 	<string>獲取通訊錄</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>文件使用</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>申请使用faceid</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>定位</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -79,6 +79,10 @@
 	<string>yuyin</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>跟踪数据</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

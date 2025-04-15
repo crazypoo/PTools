@@ -10,10 +10,7 @@ import UIKit
 
 @objcMembers
 public class PTUrlChange: NSObject {
-    public class func unicodeURLChange_chinese(url:String)->String {
-        url.urlToUnicodeURLString(characters: Foundation.CharacterSet.lowercaseLetters)!
-    }
-    
+
     public class func getRange(text: String, findText: String) -> [Int] {
         // 如果 text 是空字符串，直接返回空数组
         if text.stringIsEmpty() {

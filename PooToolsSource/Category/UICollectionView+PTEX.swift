@@ -84,26 +84,24 @@ public extension UICollectionView {
         let itemH = itemHeight
         let itemW = (groupW - originalX * 2 - CGFloat(cellRowCount - 1) * cellLeadingSpace) / CGFloat(cellRowCount)
         var x:CGFloat = originalX,y:CGFloat = 0 + topContentSpace
-        data?.enumerated().forEach { (index,value) in
-            if index < cellRowCount {
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
-                customers.append(customItem)
-                x += itemW + cellLeadingSpace
-                if index == (data!.count - 1) {
-                    groupH = y + itemH + bottomContentSpace
-                }
-            } else {
-                x += itemW + cellLeadingSpace
-                if index > 0 && (index % cellRowCount == 0) {
-                    x = originalX
-                    y += itemH + cellTrailingSpace
-                }
+        data?.enumerated().forEach { index, value in
+            // 每个都加 item
+            let customItem = NSCollectionLayoutGroupCustomItem(
+                frame: CGRect(x: x, y: y, width: itemW, height: itemH),
+                zIndex: 1000 + index
+            )
+            customers.append(customItem)
 
-                if index == (data!.count - 1) {
-                    groupH = y + itemH + bottomContentSpace
-                }
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
-                customers.append(customItem)
+            // 更新位置
+            x += itemW + cellLeadingSpace
+            if index >= cellRowCount, index % cellRowCount == 0 {
+                x = originalX
+                y += itemH + cellTrailingSpace
+            }
+
+            // 处理最后一个 item 的 groupH
+            if index == (data!.count - 1) {
+                groupH = y + itemH + bottomContentSpace
             }
         }
         handle(groupH,customers)
@@ -183,37 +181,40 @@ public extension UICollectionView {
         let cellWidth = (screenWidth - itemOriginalX * 2 - CGFloat(rowCount - 1) * itemSpace) / CGFloat(rowCount)
         let originalX = itemOriginalX
         var x:CGFloat = originalX,y:CGFloat = 0 + topContentSpace
-        data?.enumerated().forEach { (index,model) in
-            let result = itemHeight(index,model)
+        data?.enumerated().forEach { index, model in
+            let itemH = itemHeight(index, model)
+            var itemX = x
+            var itemY = y
 
-            let itemH:CGFloat = result
             if index < rowCount {
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: cellWidth, height: itemH), zIndex: 1000+index)
-                customers.append(customItem)
+                // 第一行：只需排好横向位置
                 x += cellWidth + itemRightSapce
-                if index == (data!.count - 1) {
-                    groupH = y + itemH + bottomContentSpace
-                }
             } else {
-                x += cellWidth + itemRightSapce
-                if index > 0 && (index % rowCount == 0) {
-                    x = originalX
-                    y = (customers[index - rowCount].frame.height + itemTrailingSpace + customers[index - rowCount].frame.origin.y)
-                } else {
-                    y = (customers[index - rowCount].frame.height + itemTrailingSpace + customers[index - rowCount].frame.origin.y)
-                }
+                // 多行：参考前一行同列 item 的位置计算 y
+                let previousIndex = index - rowCount
+                let previousItem = customers[previousIndex]
+                itemY = previousItem.frame.maxY + itemTrailingSpace
 
-                if index == (data!.count - 1) {
-                    let lastHeight = (y + itemH + bottomContentSpace)
-                    let lastLastHeight = (customers[index - 1].frame.height + bottomContentSpace + customers[index - 1].frame.origin.y)
-                    if lastLastHeight > lastHeight {
-                        groupH = lastLastHeight
-                    } else {
-                        groupH = lastHeight
-                    }
+                // 判断是否是换行第一个元素
+                if index % rowCount == 0 {
+                    x = originalX
+                    itemX = x
                 }
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: cellWidth, height: itemH), zIndex: 1000+index)
-                customers.append(customItem)
+                x += cellWidth + itemRightSapce
+            }
+
+            // 添加当前 item
+            let customItem = NSCollectionLayoutGroupCustomItem(
+                frame: CGRect(x: itemX, y: itemY, width: cellWidth, height: itemH),
+                zIndex: 1000 + index
+            )
+            customers.append(customItem)
+
+            // 判断 groupH 最后一项时更新
+            if index == data!.count - 1 {
+                let lastHeight = itemY + itemH + bottomContentSpace
+                let fallbackHeight = customers.last?.frame.maxY ?? 0 + bottomContentSpace
+                groupH = max(lastHeight, fallbackHeight)
             }
         }
         bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
@@ -266,56 +267,47 @@ public extension UICollectionView {
                                          itemLeadingSpace: CGFloat = 10,
                                          itemTrailingSpace: CGFloat = 10,
                                          itemContentSpace: CGFloat = 20) -> (groupHeight: CGFloat, groupItems: [NSCollectionLayoutGroupCustomItem], columnCount: Int) {
-        var customers = [NSCollectionLayoutGroupCustomItem]()
-        var groupWidth: CGFloat = itemOriginalX
-        var groupHeight: CGFloat = topContentSpace + itemHeight
-        var columnCount: Int = 1
-        
-        if let datas = data {
-            for (index, value) in datas.enumerated() {
-                var currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont, height: itemHeight).width + itemContentSpace + (value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
-                if currentCellWidth >= (screenWidth - itemOriginalX * 2) {
-                    currentCellWidth = (screenWidth - itemOriginalX * 2)
-                }
-                
-                let customItem = NSCollectionLayoutGroupCustomItem(
-                    frame: CGRect(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight),
-                    zIndex: 1000 + index
-                )
-                
-                groupWidth += currentCellWidth + itemLeadingSpace
-                
-                let next = (index + 1)
-                if next <= (datas.count - 1) {
-                    var nextCellWidth = UIView.sizeFor(string: datas[next].name, font: datas[next].contentFont, height: itemHeight).width + itemContentSpace + (datas[next].haveImage ? (datas[next].imageWidth + datas[next].contentSpace) : 0)
-                    if nextCellWidth >= (screenWidth - itemOriginalX * 2) {
-                        nextCellWidth = (screenWidth - itemOriginalX * 2)
-                    }
-
-                    let totalWidth = groupWidth + nextCellWidth + itemLeadingSpace
-                    
-                    if totalWidth >= (screenWidth - itemOriginalX * 2) {
-                        groupWidth = itemOriginalX
-                        groupHeight += (itemTrailingSpace + itemHeight)
-                        columnCount += 1
-                    }
-                }
-
-                customers.append(customItem)
-            }
+        guard let datas = data, !datas.isEmpty else {
+            return (topContentSpace + bottomContentSpace, [], 0)
         }
-        // Adjust the final groupHeight
-        if let lastItemFrame = customers.last?.frame {
-            if (lastItemFrame.origin.x + lastItemFrame.width + itemOriginalX) > (screenWidth - itemOriginalX) {
-                groupHeight += (itemHeight + itemTrailingSpace)
-            }
-        }
-        
-        groupHeight += bottomContentSpace
 
-        return (groupHeight, customers, columnCount)
+        var customItems: [NSCollectionLayoutGroupCustomItem] = []
+        var x = itemOriginalX
+        var y: CGFloat = topContentSpace
+        var columnCount = 1
+
+        let maxRowWidth = screenWidth - itemOriginalX * 2
+
+        func calculateCellWidth(for model: PTTagLayoutModel) -> CGFloat {
+            var width = UIView.sizeFor(string: model.name, font: model.contentFont, height: itemHeight).width + itemContentSpace
+            if model.haveImage {
+                width += model.imageWidth + model.contentSpace
+            }
+            return min(width, maxRowWidth)
+        }
+
+        for (index, model) in datas.enumerated() {
+            let currentWidth = calculateCellWidth(for: model)
+
+            // 如果当前内容宽度超出最大行宽，就换行
+            if x + currentWidth > maxRowWidth {
+                x = itemOriginalX
+                y += itemHeight + itemTrailingSpace
+                columnCount += 1
+            }
+
+            let frame = CGRect(x: x, y: y - topContentSpace, width: currentWidth, height: itemHeight)
+            let item = NSCollectionLayoutGroupCustomItem(frame: frame, zIndex: 1000 + index)
+            customItems.append(item)
+
+            x += currentWidth + itemLeadingSpace
+        }
+
+        let totalHeight = y + itemHeight + bottomContentSpace
+
+        return (totalHeight, customItems, columnCount)
     }
-
+    
     //MARK: 設置CollectionView的Horizontallayout
     ///設置CollectionView的Horizontallayout
     /// - Parameters:
@@ -407,68 +399,41 @@ public extension UICollectionView {
                                             rowCount:Int = 2,
                                             itemLeadingSpace:CGFloat = 15,
                                             itemTrailingSpace:CGFloat = 10) -> NSCollectionLayoutGroup {
-        var continerW:CGFloat = 0
-        let pageItemsCount:Int = columnCount * rowCount
-        var groupH:CGFloat = 0
-        let itemW = (monitorWidth - itemOriginalX * 2 - CGFloat(columnCount - 1) * itemLeadingSpace) / CGFloat(columnCount)
-        var x:CGFloat = itemOriginalX,y:CGFloat = 0 + topContentSpace
+        guard let data = data, !data.isEmpty else {
+            return NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(0), heightDimension: .absolute(0)), subitems: [])
+        }
 
+        let itemsPerPage = columnCount * rowCount
+        let totalPages = Int(ceil(Double(data.count) / Double(itemsPerPage)))
+        let itemWidth = (monitorWidth - itemOriginalX * 2 - CGFloat(columnCount - 1) * itemLeadingSpace) / CGFloat(columnCount)
+        
         var customers = [NSCollectionLayoutGroupCustomItem]()
-                    
-        var pageCount:Int = 0
-        if data?.count ?? 0 > 0 {
-            if data!.count % pageItemsCount == 0 {
-                pageCount = data!.count / pageItemsCount
-            } else {
-                let current = CGFloat(data!.count / pageItemsCount)
-                if current < 1 {
-                    pageCount = 1
-                } else {
-                    pageCount = Int(ceil(CGFloat(data!.count) / CGFloat(pageItemsCount)))
-                }
-            }
-        }
-        continerW = monitorWidth * CGFloat(pageCount)
-        
-        data?.enumerated().forEach { index,value in
-            
-            let page = floor(Double(index / pageItemsCount))
-            if index < columnCount {
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemHeight), zIndex: 1000 + index)
-                customers.append(customItem)
-                x += itemW + itemLeadingSpace
-                if index == (data!.count - 1) {
-                    groupH = y + itemHeight + bottomContentSpace
-                }
-            } else {
-                if index % pageItemsCount == 0 {
-                    x = CGFloat(page) * monitorWidth
-                    y = 0
-                } else {
-                    x += itemW + itemLeadingSpace
-                    if index > 0 && (index % columnCount == 0) {
-                        if data!.count > pageItemsCount {
-                            x = CGFloat(page) * monitorWidth
-                        } else {
-                            x = itemOriginalX
-                        }
-                        y += (itemHeight + itemTrailingSpace)
-                    }
-                }
+        var groupHeight: CGFloat = 0
 
-                if index > columnCount {
-                    groupH = y + itemHeight + bottomContentSpace
-                }
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemHeight), zIndex: 1000+index)
-                customers.append(customItem)
-            }
+        for (index, _) in data.enumerated() {
+            let pageIndex = index / itemsPerPage
+            let rowIndex = (index % itemsPerPage) / columnCount
+            let columnIndex = index % columnCount
+
+            let x = CGFloat(pageIndex) * monitorWidth + itemOriginalX + CGFloat(columnIndex) * (itemWidth + itemLeadingSpace)
+            let y = topContentSpace + CGFloat(rowIndex) * (itemHeight + itemTrailingSpace)
+
+            groupHeight = max(groupHeight, y + itemHeight + bottomContentSpace)
+
+            let item = NSCollectionLayoutGroupCustomItem(
+                frame: CGRect(x: x, y: y, width: itemWidth, height: itemHeight),
+                zIndex: 1000 + index
+            )
+            customers.append(item)
         }
-        
-        var bannerGroupSize : NSCollectionLayoutSize
-        
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(continerW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-       return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+
+        let layoutSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(monitorWidth * CGFloat(totalPages)),
+            heightDimension: .absolute(groupHeight)
+        )
+
+        return NSCollectionLayoutGroup.custom(layoutSize: layoutSize) { _ in
             customers
-        })
+        }
     }
 }

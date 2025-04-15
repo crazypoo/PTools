@@ -649,10 +649,8 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
             
             
-            var tagRows = [PTRows]()
-            tagModels.enumerated().forEach { index,value in
-                let row = PTRows(ID: PTTagCell.ID,dataModel: value)
-                tagRows.append(row)
+            let tagRows = tagModels.map {
+                PTRows(ID: PTTagCell.ID,dataModel: $0)
             }
             let tagSection = [PTSection(rows: tagRows)]
             aaaaaaa.showCollectionDetail(collectionData: tagSection)

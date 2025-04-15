@@ -57,6 +57,15 @@ public class PTLaunchAdMonitor: NSObject {
         let v = UIView()
         v.backgroundColor = .lightGray
         
+        let loadImageView = UIImageView(image: PTAppBaseConfig.share.defaultPlaceholderImage)
+        let loadingSkip = UIButton(type: .custom)
+        loadingSkip.setTitle("Skip", for: .normal)
+        loadingSkip.setTitleColor(.white, for: .normal)
+        loadingSkip.setBackgroundColor(color: .DevMaskColor, forState: .normal)
+        loadingSkip.addActionHandlers(handler: { sender in
+            self.hideView(sender: sender)
+        })
+        
         if onView is UIView {
             (onView as! UIView).addSubview(v)
             (onView as! UIView).bringSubviewToFront(v)
@@ -115,9 +124,26 @@ public class PTLaunchAdMonitor: NSObject {
             }
         }
 
+        v.addSubviews([loadImageView,loadingSkip])
+        loadImageView.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.bottom.equalToSuperview().inset(bottomViewHeight)
+        }
+        skipButton.isHidden = true
+        loadingSkip.titleLabel?.font = skipFont
+        loadingSkip.snp.makeConstraints { make in
+            make.size.equalTo(44)
+            make.right.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+        }
+        loadingSkip.viewCorner(radius: 22)
+        
         let mediaHaveData: Bool = param != nil
         loadImageAtPath(path: path) { type, media in
             PTGCDManager.gcdMain {
+                loadingSkip.removeFromSuperview()
+                loadImageView.removeFromSuperview()
+                self.skipButton.isHidden = false
                 switch type {
                 case .Image:
                     if let medias = media as? [UIImage] {

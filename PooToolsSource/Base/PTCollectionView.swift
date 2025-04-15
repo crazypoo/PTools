@@ -328,9 +328,9 @@ public class PTCollectionView: UIView {
         }
         switch viewConfig.decorationItemsType {
         case .Custom:
-            viewConfig.decorationModel?.enumerated().forEach({ index,value in
+            viewConfig.decorationModel?.forEach { value in
                 layout.register(value.decorationClass, forDecorationViewOfKind: value.decorationID)
-            })
+            }
         case .Corner:
             layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: PTBaseDecorationView_Corner.ID)
         case .Normal:
