@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AttributedString
 
 public class PTActionLayoutButton: UIControl {
 
@@ -93,7 +94,6 @@ public class PTActionLayoutButton: UIControl {
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
         view.isUserInteractionEnabled = false
-        view.clipsToBounds = true
         return view
     }()
     
@@ -156,23 +156,26 @@ public class PTActionLayoutButton: UIControl {
                 titleLabel.isHidden = false
 
                 let maxHeight = frame.height - imageSize.height - midSpacing
-                var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
-                if titleHeight > maxHeight {
-                    titleHeight = maxHeight
-                }
-                let labelY = (frame.height - titleHeight) / 2 + imageSize.height / 2 + midSpacing
-
-                titleLabel.snp.makeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.top.equalToSuperview().inset(labelY)
-                    make.height.equalTo(titleHeight)
+                let titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
+                
+                var offSet:CGFloat = 0
+                if titleHeight < maxHeight {
+                    offSet = maxHeight - titleHeight
                 }
                 
+                let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
                 imageView.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
-                    make.bottom.equalTo(self.titleLabel.snp.top).offset(-self.midSpacing)
+                    make.top.equalToSuperview().inset(labelY)
                 }
+
+                titleLabel.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.equalTo(self.imageView.snp.bottom).offset(midSpacing)
+                    make.bottom.equalToSuperview().inset(offSet)
+                }
+                
             case .upTitleDownImage:
                 imageView.isHidden = false
                 titleLabel.isHidden = false
@@ -286,11 +289,13 @@ public class PTActionLayoutButton: UIControl {
         default:
             break
         }
-        titleLabel.textColor = currentTitleColor
         titleLabel.numberOfLines = numbersOfLine
-        titleLabel.textAlignment = textAlignment
-        titleLabel.font = currentFont
-        titleLabel.text = currentString
+        let nameAtt:ASAttributedString = """
+                    \(wrap: .embedding("""
+                    \(currentString,.foreground(currentTitleColor),.font(currentFont))
+                    """),.paragraph(.alignment(textAlignment),.lineSpacing(CGFloat(truncating: labelLineSpace))))
+                    """
+        titleLabel.attributed.text = nameAtt
         backgroundColor = currentBGColor
         if let currentImage = currentImage {
             imageView.loadImage(contentData: currentImage)
