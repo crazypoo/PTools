@@ -45,19 +45,21 @@ public class PTLaunchAdMonitor: NSObject {
     ///   - comNameFont: 公司字體
     ///   - callBack: 回調
     @MainActor public func showAd(path:Any,
-                       onView:Any,
-                       @PTClampedProperyWrapper(range:3...15) timeInterval:TimeInterval = 5,
-                       param:[AnyHashable : Any]?,
-                       skipFont:UIFont = .appfont(size: 16),
-                       ltdString:String = "",
-                       comNameFont:UIFont = .appfont(size: 12),
-                       callBack:PTActionTask? = nil) {
+                                  onView:Any,
+                                  @PTClampedProperyWrapper(range:3...15) timeInterval:TimeInterval = 5,
+                                  param:[AnyHashable : Any]?,
+                                  skipFont:UIFont = .appfont(size: 16),
+                                  ltdString:String = "",
+                                  comNameFont:UIFont = .appfont(size: 12),
+                                  callBack:PTActionTask? = nil) {
         dismissCallBack = callBack
         notifiData = param
         let v = UIView()
         v.backgroundColor = .lightGray
         
         let loadImageView = UIImageView(image: PTAppBaseConfig.share.defaultPlaceholderImage)
+        loadImageView.contentMode = .scaleAspectFit
+        
         let loadingSkip = UIButton(type: .custom)
         loadingSkip.setTitle("Skip", for: .normal)
         loadingSkip.setTitleColor(.white, for: .normal)
@@ -136,7 +138,10 @@ public class PTLaunchAdMonitor: NSObject {
             make.right.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
         }
-        loadingSkip.viewCorner(radius: 22)
+        
+        PTGCDManager.gcdMain(block: {
+            loadingSkip.viewCorner(radius: 22)
+        })
         
         let mediaHaveData: Bool = param != nil
         loadImageAtPath(path: path) { type, media in

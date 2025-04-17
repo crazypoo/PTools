@@ -368,7 +368,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                         value += 0.1
                         if value >= 1 {
                             timer.invalidate()
-                            layoutBtn.clearProgressLayer()
+                            PTGCDManager.gcdAfter(time: 0.5, block: {
+                                layoutBtn.clearProgressLayer()
+                            })
                         }
                     }
                     timer.fire()

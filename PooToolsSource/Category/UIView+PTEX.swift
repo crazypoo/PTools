@@ -134,49 +134,52 @@ public extension UIView {
             return progressLabel
         }
     }
-
-    func layerProgress(value:CGFloat,
-                       borderWidth:CGFloat? = 1,
-                       borderColor:UIColor? = .systemRed,
-                       showValueLabel:Bool? = true,
-                       valueLabelFont:UIFont? = .appfont(size: 16,bold: true),
-                       valueLabelColor:UIColor? = .white,
-                       uniCount:Int? = 0) {
-        if self.viewShapeLayer != nil {
-            updateLayerProgress(progress: value)
-        } else {
-            // 创建一个矩形的路径
-            let path = UIBezierPath(rect: .zero)
+    
+    func layerProgress(value: CGFloat,
+                       borderWidth: CGFloat = 1,
+                       borderColor: UIColor = .systemRed,
+                       showValueLabel: Bool = true,
+                       valueLabelFont: UIFont = .systemFont(ofSize: 16, weight: .bold),
+                       valueLabelColor: UIColor = .white,
+                       uniCount: Int = 0) {
+        if viewShapeLayer == nil {
+            setupLayer(borderWidth: borderWidth, borderColor: borderColor)
             
-            // 设置CAShapeLayer属性
-            viewShapeLayer = CAShapeLayer()
-            viewShapeLayer!.path = path.cgPath
-            viewShapeLayer!.fillColor = UIColor.clear.cgColor
-            viewShapeLayer!.strokeColor = borderColor!.cgColor
-            viewShapeLayer!.lineWidth = borderWidth!
-            viewShapeLayer!.lineCap = .round
-            
-            // 添加CAShapeLayer到视图的layer中
-            layer.addSublayer(viewShapeLayer!)
-            
-            if showValueLabel! {
-                viewShapeLayerProgressLabel = UILabel()
-                viewShapeLayerProgressLabel?.font = valueLabelFont!
-                viewShapeLayerProgressLabel?.textColor = valueLabelColor!
-                viewShapeLayerProgressLabel?.textAlignment = .center
-                addSubview(viewShapeLayerProgressLabel!)
-                viewShapeLayerProgressLabel?.snp.makeConstraints({ make in
-                    make.edges.equalToSuperview()
-                })
+            if showValueLabel {
+                setupLabel(font: valueLabelFont, textColor: valueLabelColor)
             }
-            
-            updateLayerProgress(progress: value)
         }
+        
+        updateLayerProgress(progress: value, uniCount: uniCount)
+    }
+
+    private func setupLayer(borderWidth: CGFloat, borderColor: UIColor) {
+        viewShapeLayer = CAShapeLayer()
+        viewShapeLayer?.fillColor = UIColor.clear.cgColor
+        viewShapeLayer?.strokeColor = borderColor.cgColor
+        viewShapeLayer?.lineWidth = borderWidth
+        viewShapeLayer?.lineCap = .round
+        layer.addSublayer(viewShapeLayer!)
+    }
+
+    private func setupLabel(font: UIFont, textColor: UIColor) {
+        let label = UILabel()
+        label.font = font
+        label.textColor = textColor
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        addSubview(label)
+        label.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(8)
+            make.centerY.equalToSuperview()
+        }
+        viewShapeLayerProgressLabel = label
     }
     
     func updateLayerProgress(progress:CGFloat,
                              uniCount:Int? = 0) {
-        if viewShapeLayer != nil {
+        if let viewShapeLayer = viewShapeLayer {
             let widthAndHeightTotal = (bounds.height + bounds.width)
             if progress >= 1 {
                 clearProgressLayer()
@@ -238,7 +241,7 @@ public extension UIView {
                         progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
                     }
                 }
-                viewShapeLayer!.path = progressPath.cgPath
+                viewShapeLayer.path = progressPath.cgPath
             
                 viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount!)f%%", (100 * progress))
             }
