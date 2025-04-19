@@ -94,6 +94,7 @@ public class PTActionLayoutButton: UIControl {
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
         view.isUserInteractionEnabled = false
+        view.clipsToBounds = true
         return view
     }()
     
@@ -120,13 +121,13 @@ public class PTActionLayoutButton: UIControl {
                     titleWidth = maxWidth
                 }
                 let labelX = (frame.width - titleWidth) / 2 + imageSize.width / 2 + midSpacing
-                titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.remakeConstraints { make in
                     make.width.equalTo(titleWidth)
                     make.top.bottom.equalToSuperview()
                     make.left.equalToSuperview().inset(labelX)
                 }
                 
-                imageView.snp.makeConstraints { make in
+                imageView.snp.remakeConstraints { make in
                     make.right.equalTo(self.titleLabel.snp.left).offset(-midSpacing)
                     make.size.equalTo(self.imageSize)
                     make.centerY.equalToSuperview()
@@ -135,21 +136,31 @@ public class PTActionLayoutButton: UIControl {
                 imageView.isHidden = false
                 titleLabel.isHidden = false
 
-                let maxWidth = frame.width - imageSize.width - midSpacing
+                var currentImageSize:CGFloat = 0
+                if currentImage != nil {
+                    currentImageSize = imageSize.width
+                }
+                
+                let maxWidth = frame.width - currentImageSize - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
                     titleWidth = maxWidth
                 }
-                let labelX = (frame.width - (imageSize.width + midSpacing + titleWidth)) / 2
-                titleLabel.snp.makeConstraints { make in
+                let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+                titleLabel.snp.remakeConstraints { make in
                     make.width.equalTo(titleWidth)
                     make.top.bottom.equalToSuperview()
                     make.left.equalToSuperview().inset(labelX)
                 }
-                imageView.snp.makeConstraints { make in
-                    make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
-                    make.size.equalTo(self.imageSize)
-                    make.centerY.equalToSuperview()
+                if currentImage != nil {
+                    imageView.isHidden = false
+                    imageView.snp.makeConstraints { make in
+                        make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
+                        make.size.equalTo(self.imageSize)
+                        make.centerY.equalToSuperview()
+                    }
+                } else {
+                    imageView.isHidden = true
                 }
             case .upImageDownTitle:
                 imageView.isHidden = false
@@ -164,13 +175,13 @@ public class PTActionLayoutButton: UIControl {
                 }
                 
                 let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
-                imageView.snp.makeConstraints { make in
+                imageView.snp.remakeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
                     make.top.equalToSuperview().inset(labelY)
                 }
 
-                titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.top.equalTo(self.imageView.snp.bottom).offset(midSpacing)
                     make.bottom.equalToSuperview().inset(offSet)
@@ -187,13 +198,13 @@ public class PTActionLayoutButton: UIControl {
                 }
                 let labelY = (frame.height - (imageSize.height + midSpacing + titleHeight)) / 2
 
-                titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.top.equalToSuperview().inset(labelY)
                     make.height.equalTo(titleHeight)
                 }
                 
-                imageView.snp.makeConstraints { make in
+                imageView.snp.remakeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
                     make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
@@ -202,7 +213,7 @@ public class PTActionLayoutButton: UIControl {
                 titleLabel.isHidden = false
                 imageView.isHidden = true
                 
-                titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.top.bottom.equalToSuperview()
                 }
@@ -210,7 +221,7 @@ public class PTActionLayoutButton: UIControl {
                 titleLabel.isHidden = true
                 imageView.isHidden = false
 
-                imageView.snp.makeConstraints { make in
+                imageView.snp.remakeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.size.equalTo(self.imageSize)
                     make.centerY.equalToSuperview()
