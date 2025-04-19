@@ -469,7 +469,7 @@ public extension UIImage {
     
     //MARK: 判断 UIImage 的图片数据大小是否大于某个值（以字节为单位）
     ///判断 UIImage 的图片数据大小是否大于某个值（以字节为单位）
-    @objc func ckeckImageSizeLargerThan(byteSize: Int) -> Bool {
+    @objc func checkImageSizeLargerThan(byteSize: Int) -> Bool {
         // 将 UIImage 转换为 JPEG 格式的图片数据
         // 检查图片数据的字节大小是否大于指定值
         return self.bytesSize > byteSize // 如果转换失败，则默认为大小不超过指定值

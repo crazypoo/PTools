@@ -524,13 +524,20 @@ public class Network: NSObject {
 
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
-                            if let imgData = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.2) {
-                                multipartFormData.append(imgData, withName: fileKey[safe: index] ?? "image", fileName: "image_\(index).png", mimeType: pngData ? "image/png" : "image/jpeg")
-                            }
+                            let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
+                            guard let imageData = data else { return }
+
+                            let key = fileKey[safe: index] ?? "image"
+                            let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
+                            let mimeType = pngData ? "image/png" : "image/jpeg"
+
+                            multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                         }
 
                         params?.forEach { key, value in
-                            multipartFormData.append(Data(value.utf8), withName: key)
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
+                            }
                         }
                     }, to: pathUrl, method: method, headers: apiHeader)
                     .uploadProgress { progress in
