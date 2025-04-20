@@ -115,32 +115,28 @@ public class PTActionLayoutButton: UIControl {
                 imageView.isHidden = false
                 titleLabel.isHidden = false
 
-                let maxWidth = frame.width - imageSize.width - midSpacing
+                let currentImageSize:CGFloat = imageSize.width
+                let maxWidth = frame.width - currentImageSize - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
                     titleWidth = maxWidth
                 }
-                let labelX = (frame.width - titleWidth) / 2 + imageSize.width / 2 + midSpacing
+                let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+                imageView.snp.remakeConstraints { make in
+                    make.left.equalToSuperview().inset(labelX)
+                    make.size.equalTo(self.imageSize)
+                    make.centerY.equalToSuperview()
+                }
                 titleLabel.snp.remakeConstraints { make in
                     make.width.equalTo(titleWidth)
                     make.top.bottom.equalToSuperview()
-                    make.left.equalToSuperview().inset(labelX)
-                }
-                
-                imageView.snp.remakeConstraints { make in
-                    make.right.equalTo(self.titleLabel.snp.left).offset(-midSpacing)
-                    make.size.equalTo(self.imageSize)
-                    make.centerY.equalToSuperview()
+                    make.left.equalTo(self.imageView.snp.right).offset(midSpacing)
                 }
             case .leftTitleRightImage:
                 imageView.isHidden = false
                 titleLabel.isHidden = false
 
-                var currentImageSize:CGFloat = 0
-                if currentImage != nil {
-                    currentImageSize = imageSize.width
-                }
-                
+                let currentImageSize:CGFloat = imageSize.width
                 let maxWidth = frame.width - currentImageSize - midSpacing
                 var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
                 if titleWidth > maxWidth {
@@ -152,15 +148,10 @@ public class PTActionLayoutButton: UIControl {
                     make.top.bottom.equalToSuperview()
                     make.left.equalToSuperview().inset(labelX)
                 }
-                if currentImage != nil {
-                    imageView.isHidden = false
-                    imageView.snp.makeConstraints { make in
-                        make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
-                        make.size.equalTo(self.imageSize)
-                        make.centerY.equalToSuperview()
-                    }
-                } else {
-                    imageView.isHidden = true
+                imageView.snp.remakeConstraints { make in
+                    make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
+                    make.size.equalTo(self.imageSize)
+                    make.centerY.equalToSuperview()
                 }
             case .upImageDownTitle:
                 imageView.isHidden = false
@@ -193,10 +184,8 @@ public class PTActionLayoutButton: UIControl {
                 
                 let maxHeight = frame.height - imageSize.height - midSpacing
                 var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
-                if titleHeight > maxHeight {
-                    titleHeight = maxHeight
-                }
-                let labelY = (frame.height - (imageSize.height + midSpacing + titleHeight)) / 2
+                
+                let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
 
                 titleLabel.snp.remakeConstraints { make in
                     make.left.right.equalToSuperview()
@@ -230,13 +219,9 @@ public class PTActionLayoutButton: UIControl {
                 break
             }
         } else if currentImage == nil && !currentString.stringIsEmpty() {
-            titleLabel.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+            self.layoutStyle = .title
         } else if currentImage != nil && currentString.stringIsEmpty() {
-            imageView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+            self.layoutStyle = .image
         }
     }
     
@@ -304,7 +289,9 @@ public class PTActionLayoutButton: UIControl {
         let nameAtt:ASAttributedString = """
                     \(wrap: .embedding("""
                     \(currentString,.foreground(currentTitleColor),.font(currentFont))
-                    """),.paragraph(.alignment(textAlignment),.lineSpacing(CGFloat(truncating: labelLineSpace))))
+                    """),.paragraph(.alignment(textAlignment),.lineSpacing(CGFloat(truncating: labelLineSpace))),.action {
+                        self.actionTouched(sender: self)
+                    })
                     """
         titleLabel.attributed.text = nameAtt
         backgroundColor = currentBGColor
