@@ -219,9 +219,22 @@ public class PTActionLayoutButton: UIControl {
                 break
             }
         } else if currentImage == nil && !currentString.stringIsEmpty() {
-            self.layoutStyle = .title
+            titleLabel.isHidden = false
+            imageView.isHidden = true
+            
+            titleLabel.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.bottom.equalToSuperview()
+            }
         } else if currentImage != nil && currentString.stringIsEmpty() {
-            self.layoutStyle = .image
+            titleLabel.isHidden = true
+            imageView.isHidden = false
+
+            imageView.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.size.equalTo(self.imageSize)
+                make.centerY.equalToSuperview()
+            }
         }
     }
     
