@@ -182,8 +182,7 @@ public class PTActionLayoutButton: UIControl {
                 imageView.isHidden = false
                 titleLabel.isHidden = false
                 
-                let maxHeight = frame.height - imageSize.height - midSpacing
-                var titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
+                let titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 
                 let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
 
@@ -299,14 +298,10 @@ public class PTActionLayoutButton: UIControl {
             break
         }
         titleLabel.numberOfLines = numbersOfLine
-        let nameAtt:ASAttributedString = """
-                    \(wrap: .embedding("""
-                    \(currentString,.foreground(currentTitleColor),.font(currentFont))
-                    """),.paragraph(.alignment(textAlignment),.lineSpacing(CGFloat(truncating: labelLineSpace))),.action {
-                        self.actionTouched(sender: self)
-                    })
-                    """
-        titleLabel.attributed.text = nameAtt
+        titleLabel.text = currentString
+        titleLabel.font = currentFont
+        titleLabel.textColor = currentTitleColor
+        titleLabel.textAlignment = textAlignment
         backgroundColor = currentBGColor
         if let currentImage = currentImage {
             imageView.loadImage(contentData: currentImage)

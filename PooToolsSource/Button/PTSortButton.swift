@@ -30,50 +30,63 @@ public class PTSortButton: UIView {
             case .Tres:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage)
-                    downImage.loadImage(contentData: dowmNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
+                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { images, image in
+                        self.downImage.image = image
+                    })
                     titleLabel.textColor = buttonTitleNormalColor
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage)
-                    downImage.loadImage(contentData: dowmNormalImage)
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
+                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { images, image in
+                        self.downImage.image = image
+                    })
                     titleLabel.textColor = buttonTitleSelectedColor
                 case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage)
-                    downImage.loadImage(contentData: downSelectedImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
+                    downImage.loadImage(contentData: downSelectedImage, loadFinish:  { images, image in
+                        self.downImage.image = image
+                    })
                     titleLabel.textColor = buttonTitleSelectedColor
                 }
             case .Dos:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                     titleLabel.textColor = buttonTitleNormalColor
                 case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage)
+                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                     titleLabel.textColor = buttonTitleSelectedColor
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage)
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                     titleLabel.textColor = buttonTitleSelectedColor
                 }
             }
-
         }
     }
     
     public var buttonTitle:String = "" {
         didSet {
             titleLabel.text = buttonTitle
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.contentSet(self.frame)
-            }
+            layoutSubviews()
         }
     }
     
     public var buttonTitleFont:UIFont = .appfont(size: 14) {
         didSet {
             titleLabel.font = buttonTitleFont
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.contentSet(self.frame)
-            }
+            layoutSubviews()
         }
     }
     
@@ -105,20 +118,32 @@ public class PTSortButton: UIView {
             case .Tres:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage)
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 }
             case .Dos:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage)
+                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage)
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 }
             }
         }
@@ -130,20 +155,32 @@ public class PTSortButton: UIView {
             case .Tres:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage)
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 }
             case .Dos:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage)
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage)
+                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage)
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                        self.upImage.image = image
+                    })
                 }
             }
         }
@@ -153,11 +190,17 @@ public class PTSortButton: UIView {
         didSet {
             switch sortType {
             case .Normal:
-                upImage.loadImage(contentData: upNormalImage)
+                upImage.loadImage(contentData: upNormalImage, loadFinish:  { images, image in
+                    self.upImage.image = image
+                })
             case .Decrease:
-                upImage.loadImage(contentData: dosDecreaseImage)
+                upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { images, image in
+                    self.upImage.image = image
+                })
             case .Increase:
-                upImage.loadImage(contentData: upSelectedImage)
+                upImage.loadImage(contentData: upSelectedImage, loadFinish:  { images, image in
+                    self.upImage.image = image
+                })
             }
         }
     }
@@ -166,11 +209,17 @@ public class PTSortButton: UIView {
         didSet {
             switch sortType {
             case .Normal:
-                downImage.loadImage(contentData: dowmNormalImage)
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { images, image in
+                    self.downImage.image = image
+                })
             case .Increase:
-                downImage.loadImage(contentData: dowmNormalImage)
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { images, image in
+                    self.downImage.image = image
+                })
             case .Decrease:
-                downImage.loadImage(contentData: downSelectedImage)
+                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { images, image in
+                    self.downImage.image = image
+                })
             }
         }
     }
@@ -179,36 +228,36 @@ public class PTSortButton: UIView {
         didSet {
             switch sortType {
             case .Normal:
-                downImage.loadImage(contentData: dowmNormalImage)
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { images, image in
+                    self.downImage.image = image
+                })
             case .Increase:
-                downImage.loadImage(contentData: dowmNormalImage)
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { images, image in
+                    self.downImage.image = image
+                })
             case .Decrease:
-                downImage.loadImage(contentData: downSelectedImage)
+                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { images, image in
+                    self.downImage.image = image
+                })
             }
         }
     }
     
     public var contentImageSpace:CGFloat = 2 {
         didSet {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.contentSet(self.frame)
-            }
+            layoutSubviews()
         }
     }
     
     public var imageSpace:CGFloat = 4 {
         didSet {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.contentSet(self.frame)
-            }
+            layoutSubviews()
         }
     }
     
     public var imageSize:CGSize = CGSize(width: 6, height: 4) {
         didSet {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.contentSet(self.frame)
-            }
+            layoutSubviews()
         }
     }
     
@@ -240,11 +289,13 @@ public class PTSortButton: UIView {
         self.showType = showType
         super.init(frame: .zero)
         setUpViews()
+        layoutSubviews()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpViews()
+        layoutSubviews()
     }
     
     func setUpViews() {
@@ -279,15 +330,8 @@ public class PTSortButton: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         titleLabel.text = buttonTitle
-    }
-    
-    public override func draw(_ rect: CGRect) {
-        contentSet(rect)
-    }
-    
-    func contentSet(_ rect: CGRect) {
         
-        let halfHeight = (rect.height - imageSpace) / 2
+        let halfHeight = (frame.height - imageSpace) / 2
         var realImageSize:CGSize!
         if halfHeight < self.imageSize.height {
             realImageSize = CGSize(width: self.imageSize.width, height: halfHeight)
@@ -295,22 +339,22 @@ public class PTSortButton: UIView {
             realImageSize = self.imageSize
         }
         
-        let contentMax = rect.width - contentImageSpace - self.imageSize.width
-        var titleWidth = titleLabel.sizeFor(height: rect.height).width + 5
+        let contentMax = frame.width - contentImageSpace - self.imageSize.width
+        var titleWidth = titleLabel.sizeFor(height: frame.height).width + 5
         if titleWidth > contentMax {
             titleWidth = contentMax
         }
-        var titleLeft = (rect.width - titleWidth - contentImageSpace - self.imageSize.width) / 2
+        var titleLeft = (frame.width - titleWidth - contentImageSpace - self.imageSize.width) / 2
         if titleLeft < 0 {
             titleLeft = 0
         }
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.equalToSuperview().inset(titleLeft)
             make.width.equalTo(titleWidth)
         }
         
-        upImage.snp.makeConstraints { make in
+        upImage.snp.remakeConstraints { make in
             make.left.equalTo(self.titleLabel.snp.right).offset(contentImageSpace)
             make.size.equalTo(realImageSize)
             switch showType {
@@ -324,7 +368,7 @@ public class PTSortButton: UIView {
         
         switch showType {
         case .Tres:
-            downImage.snp.makeConstraints { make in
+            downImage.snp.remakeConstraints { make in
                 make.left.size.right.equalTo(self.upImage)
                 make.top.equalTo(self.upImage.snp.bottom).offset(imageSpace)
             }
