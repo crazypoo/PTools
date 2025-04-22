@@ -27,7 +27,7 @@ fileprivate extension UIView {
 @objcMembers
 public class PTFusionCellContent:UIView {
     public static let ContentIconHeight:CGFloat = CGFloat.ScaleW(w: 64)
-    open var switchValueChangeBlock:PTCellSwitchBlock?
+    public var switchValueChangeBlock:PTCellSwitchBlock?
 
     enum PTFusionContentCellType {
         case Name
@@ -95,6 +95,9 @@ public class PTFusionCellContent:UIView {
                     make.height.equalTo(cellModel!.switchControlWidth * (31 / 51))
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                 }
+            }
+            valueSwitch!.valueChangeCallBack = { value in
+                self.switchValueChangeBlock?(self.cellModel?.name ?? "",self.valueSwitch!)
             }
         case .DisclosureIndicator:
             if let _ = self.valueSwitch {
@@ -1045,11 +1048,7 @@ open class PTFusionCell: PTBaseNormalCell {
     
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        if let valueSwitch = view.valueSwitch {
-            valueSwitch.valueChangeCallBack = { value in
-                self.switchValueChangeBlock?(self.cellModel!.name,valueSwitch)
-            }
-        }
+        view.switchValueChangeBlock = self.switchValueChangeBlock
         if let sectionModel = view.sectionMore {
             sectionModel.addActionHandlers { sender in
                 self.moreActionBlock?(self.cellModel!.name,sender)
@@ -1143,11 +1142,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
 
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        if let valueSwitch = view.valueSwitch {
-            valueSwitch.valueChangeCallBack = { value in
-                self.switchValueChangeBlock?(self.cellModel!.name,valueSwitch)
-            }
-        }
+        view.switchValueChangeBlock = self.switchValueChangeBlock
         if let sectionModel = view.sectionMore {
             sectionModel.addActionHandlers { sender in
                 self.moreActionBlock?(self.cellModel!.name,sender)
