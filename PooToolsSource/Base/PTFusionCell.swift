@@ -1048,7 +1048,9 @@ open class PTFusionCell: PTBaseNormalCell {
     
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.switchValueChangeBlock = self.switchValueChangeBlock
+        view.switchValueChangeBlock = { name,view in
+            self.switchValueChangeBlock?(name,view)
+        }
         if let sectionModel = view.sectionMore {
             sectionModel.addActionHandlers { sender in
                 self.moreActionBlock?(self.cellModel!.name,sender)
@@ -1142,7 +1144,9 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
 
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.switchValueChangeBlock = self.switchValueChangeBlock
+        view.switchValueChangeBlock = { name,view in
+            self.switchValueChangeBlock?(name,view)
+        }
         if let sectionModel = view.sectionMore {
             sectionModel.addActionHandlers { sender in
                 self.moreActionBlock?(self.cellModel!.name,sender)
