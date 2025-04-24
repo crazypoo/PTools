@@ -383,6 +383,77 @@ public class Network: NSObject {
         return headers
     }
     
+    /// - Parameters:
+    ///   - needGobal:是否全局使用默认
+    ///   - urlStr: url地址
+    ///   - method: 方法类型，默认post
+    ///   - header: 請求頭
+    ///   - modelType: 是否需要传入接口的数据模型，默认nil
+    ///   - body: 最好utf8
+    ///  - Returns: ResponseModel
+    public class func requestBodyAPI(needGobal:Bool = true,
+                                     urlStr:String,
+                                     body:Data,
+                                     header:HTTPHeaders? = nil,
+                                     method:HTTPMethod = .post,
+                                     modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
+        
+        let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
+        let urlStr1 = gobalUrl + (try urlStr.asURL().absoluteString)
+        guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
+            throw AFError.invalidURL(url: "https://www.qq.com")
+        }
+
+        // 判断网络是否可用
+        guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+            Network.cancelAllNetworkRequest()
+            throw AFError.createURLRequestFailed(error: NetWorkNoError)
+        }
+
+        var newHeader:HTTPHeaders!
+        if let header = header {
+            newHeader = header
+        } else {
+            newHeader = [
+                "Content-Type": "text/plain"  // 或者 "application/json"
+            ]
+        }
+
+        logRequestStart(url: urlStr1, parameters: nil, headers: newHeader, method: method)
+
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.upload(body,
+                      to: urlStr1,
+                      method: method,
+                      headers: newHeader)
+            .response { response in
+                switch response.result {
+                case .success(_):
+                    var requestStruct = PTBaseStructModel()
+                    if let htmlString = response.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
+                        let error = AFError.createUploadableFailed(error: NSError(domain: htmlString, code: 99999999994))
+                        logRequestFailure(url: urlStr1, error: error)
+                        continuation.resume(throwing: error)
+                    } else {
+                        let jsonStr = response.data?.toDict()?.toJSON() ?? ""
+                        requestStruct.originalString = jsonStr
+                        requestStruct.resultData = response.data
+
+                        logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
+
+                        if let modelType = modelType {
+                            requestStruct.customerModel = jsonStr.kj.model(type: modelType)
+                        }
+                        continuation.resume(returning: requestStruct)
+                    }
+                case .failure(let error):
+                    logRequestFailure(url: urlStr1, error: error)
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
     //JSONEncoding  JSON参数
     //URLEncoding    URL参数
     /// 项目总接口

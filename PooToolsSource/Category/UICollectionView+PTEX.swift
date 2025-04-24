@@ -298,7 +298,7 @@ public extension UICollectionView {
                 columnCount += 1
             }
 
-            let frame = CGRect(x: x, y: y - topContentSpace, width: currentWidth, height: itemHeight)
+            let frame = CGRect(x: x, y: y, width: currentWidth, height: itemHeight)
             let item = NSCollectionLayoutGroupCustomItem(frame: frame, zIndex: 1000 + index)
             customItems.append(item)
 
