@@ -27,11 +27,14 @@ public class PTProgressBar: UIView {
             progressView.backgroundColor = barColor
         }
     }
-
+    
     public var animationed: Bool {
         return animationEnd
     }
 
+    /// 當進度變化時回調，回傳範圍 0~1
+    public var progressChanged: ((CGFloat) -> Void)?
+    
     fileprivate var animationEnd: Bool = false
     fileprivate var isAnimating: Bool = false
     fileprivate var showType: PTProgressBarShowType!
@@ -42,10 +45,13 @@ public class PTProgressBar: UIView {
         return view
     }()
     
-    // Constraints to update dynamically
     private var progressWidthConstraint: Constraint?
     private var progressHeightConstraint: Constraint?
-    private var progressBottomConstraint: Constraint?
+    private var currentProgress: CGFloat = 0 {
+        didSet {
+            progressChanged?(currentProgress) // 更新時觸發回調
+        }
+    }
 
     public init(showType: PTProgressBarShowType) {
         super.init(frame: .zero)
@@ -76,7 +82,7 @@ public class PTProgressBar: UIView {
             break
         }
     }
-
+    
     public func animationProgress(duration: CGFloat, @PTClampedProperyWrapper(range: 0...1) value: CGFloat) {
         startAnimation(type: .Normal, duration: duration, value: value)
     }
@@ -86,6 +92,7 @@ public class PTProgressBar: UIView {
         
         isAnimating = true
         animationEnd = false
+        currentProgress = value
         
         let animations = {
             switch self.showType {
@@ -102,6 +109,7 @@ public class PTProgressBar: UIView {
         let options: UIView.AnimationOptions = (type == .Reverse) ? [.autoreverse] : []
         UIView.animate(withDuration: TimeInterval(duration), delay: 0, options: options, animations: animations) { _ in
             self.animationEnd = true
+            self.isAnimating = false
         }
     }
 
@@ -118,6 +126,9 @@ public class PTProgressBar: UIView {
         default:
             break
         }
+        
+        currentProgress = 0
+        
         UIView.animate(withDuration: 0.25) {
             self.layoutIfNeeded()
         }
@@ -127,25 +138,25 @@ public class PTProgressBar: UIView {
     }
 
     public func getProgress() -> CGFloat {
-        switch showType {
-        case .Vertical:
-            return (progressHeightConstraint?.layoutConstraints.first?.constant ?? 0) / bounds.height
-        case .Horizontal:
-            return (progressWidthConstraint?.layoutConstraints.first?.constant ?? 0) / bounds.width
-        default:
-            return 0
-        }
+        return currentProgress
     }
     
     override public func layoutSubviews() {
         super.layoutSubviews()
-
-        // 根據 currentProgress 還原 constraint
+        
+        guard bounds.width > 0 && bounds.height > 0 else { return } // 防止 0 大小時無效更新
+        
         switch showType {
         case .Vertical:
-            progressHeightConstraint?.update(offset: bounds.height * getProgress())
+            let targetHeight = bounds.height * currentProgress
+            if abs((progressHeightConstraint?.layoutConstraints.first?.constant ?? 0) - targetHeight) > 0.5 {
+                progressHeightConstraint?.update(offset: targetHeight)
+            }
         case .Horizontal:
-            progressWidthConstraint?.update(offset: bounds.width * getProgress())
+            let targetWidth = bounds.width * currentProgress
+            if abs((progressWidthConstraint?.layoutConstraints.first?.constant ?? 0) - targetWidth) > 0.5 {
+                progressWidthConstraint?.update(offset: targetWidth)
+            }
         default:
             break
         }
