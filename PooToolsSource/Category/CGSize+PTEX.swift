@@ -48,6 +48,20 @@ public extension CGSize {
         let newWidth = width * scaleFactor
         return CGSize(width: newWidth, height: newHeight)
     }
+    
+    var toString: String {
+        return "\(width),\(height)"
+    }
+    
+    static func from(string: String) -> CGSize? {
+        let components = string.split(separator: ",")
+        guard components.count == 2,
+              let width = Double(components[0]),
+              let height = Double(components[1]) else {
+            return nil
+        }
+        return CGSize(width: width, height: height)
+    }
 }
 
 extension CGSize: PTNumberValueAdapterable {
