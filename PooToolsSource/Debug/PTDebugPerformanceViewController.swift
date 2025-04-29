@@ -72,9 +72,8 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,itemSection,indexPath in
             if let itemRow = itemSection.rows?[indexPath.row] {
-                if itemRow.ID == PTFusionCell.ID {
-                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                    cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                if itemRow.ID == PTFusionCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                    cell.cellModel = cellModel
                     if itemSection.headerID == "Floating" {
                         cell.switchValue = PTDebugPerformanceToolKit.shared.floatingShow
                         cell.switchValueChangeBlock = { title,sender in
@@ -82,8 +81,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                         }
                     }
                     return cell
-                } else if itemRow.ID == PTPerformanceSegmentCell.ID {
-                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPerformanceSegmentCell
+                } else if itemRow.ID == PTPerformanceSegmentCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPerformanceSegmentCell {
                     cell.segmentedControl.selectedSegmentIndex = PerformanceType.allCases.firstIndex(of: self.segmentType)!
                     cell.segmentTapCallBack = { index in
                         self.segmentType = PerformanceType.allCases[index]
@@ -94,11 +92,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                         }
                     }
                     return cell
-                } else if itemRow.ID == PTPerformanceChartCell.ID {
-                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPerformanceChartCell
-                    return cell
-                } else {
-                    let cell = collection.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+                } else if itemRow.ID == PTPerformanceChartCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPerformanceChartCell {
                     return cell
                 }
             }
@@ -106,8 +100,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         }
         view.collectionDidSelect = { collection,model,indexPath in
             if let itemRow = model.rows?[indexPath.row] {
-                if itemRow.ID == PTFusionCell.ID {
-                    let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                if itemRow.ID == PTFusionCell.ID,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                     if cellModel.name == "Set Memory warning" {
                         UIDevice.pt.impactFeedbackGenerator(style: .heavy)
                         PTDebugPerformanceToolKit.generate()

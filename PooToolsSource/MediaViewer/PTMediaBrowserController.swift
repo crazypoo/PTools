@@ -20,24 +20,24 @@ let numberOfVisibleLines = 2
 public class PTMediaBrowserController: PTBaseViewController {
 
     ///界面消失后回调
-    open var viewDismissBlock:PTActionTask?
+    public var viewDismissBlock:PTActionTask?
 
     ///界面配置
-    open var viewConfig:PTMediaBrowserConfig! {
+    public var viewConfig:PTMediaBrowserConfig! {
         didSet {
             showCollectionViewData()
         }
     }
     
     ///更多按钮操作
-    open var viewMoreActionBlock:PTViewerEXIndexBlock?
+    public var viewMoreActionBlock:PTViewerEXIndexBlock?
     ///保存回调
-    open var viewSaveImageBlock:PTViewerSaveBlock?
+    public var viewSaveImageBlock:PTViewerSaveBlock?
     ///删除回调
-    open var viewDeleteImageBlock:PTViewerIndexBlock?
+    public var viewDeleteImageBlock:PTViewerIndexBlock?
     
     ///查看到哪儿
-    open var browserCurrentDataBlock:((Int)->Void)?
+    public var browserCurrentDataBlock:((Int)->Void)?
 
     fileprivate var firstLoad:Bool = false
     fileprivate var hideToolBar:Bool = false
@@ -100,15 +100,12 @@ public class PTMediaBrowserController: PTBaseViewController {
         let collectionView = PTCollectionView(viewConfig: cConfig)
         collectionView.registerClassCells(classs: [PTMediaBrowserCell.ID:PTMediaBrowserCell.self])
         collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row] {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaBrowserCell
+            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaBrowserCell,let cellModel = itemRow.dataModel as? PTMediaBrowserModel {
                 cell.viewConfig = self.viewConfig
-                cell.dataModel = (itemRow.dataModel as! PTMediaBrowserModel)
+                cell.dataModel = cellModel
                 cell.viewerDismissBlock = {
                     self.returnFrontVC {
-                        if self.viewDismissBlock != nil {
-                            self.viewDismissBlock!()
-                        }
+                        self.viewDismissBlock?()
                     }
                 }
                 cell.zoomTask = { boolValue in
@@ -149,41 +146,37 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         
         collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
-            
-            let currentCell = collectionView.visibleCells.first as! PTMediaBrowserCell
-            let currentIndex = collectionView.indexPath(for: currentCell)!
-            
-            if let itemRow = sectionModel.rows?[currentIndex.row] {
-                let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
-                let endCell = cell as! PTMediaBrowserCell
-                switch endCell.currentCellType {
-                case .GIF:
-                    endCell.imageView.stopAnimating()
-                default:
-                    break
-                }
-                
-                if self.viewConfig.pageControlShow {
-                    switch self.viewConfig.pageControlOption {
-                    case .system:
-                        (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
-                    case .fill:
-                        (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
-                    case .pill:
-                        (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
-                    case .snake:
-                        (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
-                    case .image:
-                        (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
-                    case .scrolling:
-                        (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
+            if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell,let currentIndex = collectionView.indexPath(for: currentCell) {
+                if let itemRow = sectionModel.rows?[currentIndex.row],let cellModel = itemRow.dataModel as? PTMediaBrowserModel,let endCell = cell as? PTMediaBrowserCell {
+                    switch endCell.currentCellType {
+                    case .GIF:
+                        endCell.imageView.stopAnimating()
+                    default:
+                        break
                     }
+                    
+                    if self.viewConfig.pageControlShow {
+                        switch self.viewConfig.pageControlOption {
+                        case .system:
+                            (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
+                        case .fill:
+                            (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
+                        case .pill:
+                            (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
+                        case .snake:
+                            (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
+                        case .image:
+                            (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
+                        case .scrolling:
+                            (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
+                        }
+                    }
+                    
+                    if !self.navControl.titleLabel.isHidden {
+                        self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
+                    }
+                    self.updateBottom(models: cellModel)
                 }
-                
-                if !self.navControl.titleLabel.isHidden {
-                    self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
-                }
-                self.updateBottom(models: cellModel)
             }
         }
         collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
@@ -203,9 +196,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(indexPath.row)
                 }
             }
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
-                let endCell = cell as! PTMediaBrowserCell
+            if let itemRow = sectionModel.rows?[indexPath.row], let cellModel = itemRow.dataModel as? PTMediaBrowserModel,let endCell = cell as? PTMediaBrowserCell {
                 switch endCell.currentCellType {
                 case .GIF:
                     endCell.imageView.startAnimating()
@@ -241,25 +232,26 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
             
             let cellModel = self.viewConfig.mediaData[currentPageControlValue]
-            let currentCell = collectionView.visibleCells().first as! PTMediaBrowserCell
-            if abs(collectionViewScrol.contentOffset.y) > 0 {
-                currentCell.contentScrolView.isUserInteractionEnabled = false
-                currentCell.contentScrolView.isScrollEnabled = false
-                currentCell.prepareForHide()
-                var delt = 1 - abs(collectionViewScrol.contentOffset.y ) / currentCell.contentView.frame.size.height
-                delt = max(delt, 0)
-                let s = max(delt, 0.5)
-                let translation = CGAffineTransform(translationX: collectionViewScrol.contentOffset.x / s, y: -(collectionViewScrol.contentOffset.y / s))
-                let scale = CGAffineTransform(scaleX: s, y: s)
-                currentCell.tempView.transform = translation.concatenating(scale)
-            }
-            
-            if abs(collectionViewScrol.contentOffset.y) > self.viewConfig.dismissY {
-                currentCell.hideAnimation()
-            } else if collectionViewScrol.contentOffset.y == 0 {
-                currentCell.bounceToOriginal()
-                currentCell.contentScrolView.isUserInteractionEnabled = true
-                currentCell.contentScrolView.isScrollEnabled = true
+            if let currentCell = collectionView.visibleCells().first as? PTMediaBrowserCell {
+                if abs(collectionViewScrol.contentOffset.y) > 0 {
+                    currentCell.contentScrolView.isUserInteractionEnabled = false
+                    currentCell.contentScrolView.isScrollEnabled = false
+                    currentCell.prepareForHide()
+                    var delt = 1 - abs(collectionViewScrol.contentOffset.y ) / currentCell.contentView.frame.size.height
+                    delt = max(delt, 0)
+                    let s = max(delt, 0.5)
+                    let translation = CGAffineTransform(translationX: collectionViewScrol.contentOffset.x / s, y: -(collectionViewScrol.contentOffset.y / s))
+                    let scale = CGAffineTransform(scaleX: s, y: s)
+                    currentCell.tempView.transform = translation.concatenating(scale)
+                }
+                
+                if abs(collectionViewScrol.contentOffset.y) > self.viewConfig.dismissY {
+                    currentCell.hideAnimation()
+                } else if collectionViewScrol.contentOffset.y == 0 {
+                    currentCell.bounceToOriginal()
+                    currentCell.contentScrolView.isUserInteractionEnabled = true
+                    currentCell.contentScrolView.isScrollEnabled = true
+                }
             }
         }
         return collectionView
@@ -292,7 +284,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.backgroundColor = .DevMaskColor
         }
         
-        let closeButton = UIButton.init(type: .close)
+        let closeButton = UIButton(type: .close)
         closeButton.addActionHandlers(handler: { sender in
             self.returnFrontVC {
                 if self.viewDismissBlock != nil {
@@ -337,12 +329,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     
     func showCollectionViewData(loadedTask:((UICollectionView)->Void)? = nil) {
         var sections = [PTSection]()
-        
-        var rows = [PTRows]()
-        viewConfig.mediaData.enumerated().forEach { index,value in
-            let row_List = PTRows.init(ID: PTMediaBrowserCell.ID,dataModel: value)
-            rows.append(row_List)
-        }
+        let rows = viewConfig.mediaData.map { PTRows.init(ID: PTMediaBrowserCell.ID,dataModel: $0) }
         let cellSection = PTSection.init(rows: rows)
         sections.append(cellSection)
 
@@ -401,24 +388,18 @@ public class PTMediaBrowserController: PTBaseViewController {
         actionSheetTitle.removeAll()
         switch viewConfig.actionType {
         case .All:
-            actionSheetTitle = ["PT Media save".localized(),"PT Media delete".localized()]
+            actionSheetTitle = [viewConfig.saveDesc,viewConfig.deleteDesc]
             viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         case .Save:
-            actionSheetTitle = ["PT Media save".localized()]
-            viewConfig.moreActionEX.enumerated().forEach { index,value in
-                actionSheetTitle.append(value)
-            }
+            actionSheetTitle = [viewConfig.saveDesc]
+            actionSheetTitle.append(contentsOf: viewConfig.moreActionEX.map { $0 })
         case .Delete:
-            actionSheetTitle = ["PT Media delete".localized()]
-            viewConfig.moreActionEX.enumerated().forEach { index,value in
-                actionSheetTitle.append(value)
-            }
+            actionSheetTitle = [viewConfig.deleteDesc]
+            actionSheetTitle.append(contentsOf: viewConfig.moreActionEX.map { $0 })
         case .DIY:
-            viewConfig.moreActionEX.enumerated().forEach { index,value in
-                actionSheetTitle.append(value)
-            }
+            actionSheetTitle.append(contentsOf: viewConfig.moreActionEX.map { $0 })
         default:
             break
         }
@@ -457,9 +438,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     case 0:
                         self.saveImage()
                     default:
-                        if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!((index - 1),currentView.gifImage)
-                        }
+                        self.viewMoreActionBlock?((index - 1),currentView.gifImage)
                         self.viewMoreActionDismiss()
                     }
                 case .Delete:
@@ -467,9 +446,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     case 0:
                         self.deleteImage()
                     default:
-                        if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!((index - 1),currentView.gifImage)
-                        }
+                        self.viewMoreActionBlock?((index - 1),currentView.gifImage)
                         self.viewMoreActionDismiss()
                     }
                 case .All:
@@ -479,15 +456,11 @@ public class PTMediaBrowserController: PTBaseViewController {
                     case 1:
                         self.deleteImage()
                     default:
-                        if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!((index - 2),currentView.gifImage)
-                        }
+                        self.viewMoreActionBlock?((index - 2),currentView.gifImage)
                         self.viewMoreActionDismiss()
                     }
                 case .DIY:
-                    if self.viewMoreActionBlock != nil {
-                        self.viewMoreActionBlock!(index,currentView.gifImage)
-                    }
+                    self.viewMoreActionBlock?(index,currentView.gifImage)
                     self.viewMoreActionDismiss()
                 default:
                     break
@@ -512,9 +485,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 case 0:
                     self.saveImage()
                 default:
-                    if self.viewMoreActionBlock != nil {
-                        self.viewMoreActionBlock!((index - 1),currentView.gifImage)
-                    }
+                    self.viewMoreActionBlock?((index - 1),currentView.gifImage)
                     self.viewMoreActionDismiss()
                 }
             case .Delete:
@@ -522,9 +493,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 case 0:
                     self.deleteImage()
                 default:
-                    if self.viewMoreActionBlock != nil {
-                        self.viewMoreActionBlock!((index - 1),currentView.gifImage)
-                    }
+                    self.viewMoreActionBlock?((index - 1),currentView.gifImage)
                     self.viewMoreActionDismiss()
                 }
             case .All:
@@ -534,9 +503,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 case 1:
                     self.deleteImage()
                 default:
-                    if self.viewMoreActionBlock != nil {
-                        self.viewMoreActionBlock!((index - 2),currentView.gifImage)
-                    }
+                    self.viewMoreActionBlock?((index - 2),currentView.gifImage)
                     self.viewMoreActionDismiss()
                 }
             case .DIY:

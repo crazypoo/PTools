@@ -46,9 +46,8 @@ class PTDebugLocationViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
                 return cell
             }
             return nil
@@ -128,11 +127,8 @@ class PTDebugLocationViewController: PTBaseViewController {
         
         let customRowModel = baseCellModel(name: viewModel.customDescription ?? "Custom location", isSelected: viewModel.customSelected)
         let customRow = PTRows(ID: PTFusionCell.ID, dataModel: customRowModel)
-        
         var rows = [PTRows]()
-        
-        rows.append(customRow)
-        
+        rows.append(customRow)        
         viewModel.locations.enumerated().forEach { index,value in
             let cellRowModel = baseCellModel(name: value.title, isSelected: (viewModel.selectedIndex == index + 1))
             let row = PTRows(ID: PTFusionCell.ID, dataModel: cellRowModel)

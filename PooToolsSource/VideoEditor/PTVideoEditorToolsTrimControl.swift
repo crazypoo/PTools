@@ -45,7 +45,6 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
         PTGCDManager.gcdAfter(time: 0.1) {
             Task {
                 do {
-                    
                     var track:AVAssetTrack!
                     if #available(iOS 16.0, *) {
                         track = try await self.asset.loadTracks(withMediaType: AVMediaType.video).first

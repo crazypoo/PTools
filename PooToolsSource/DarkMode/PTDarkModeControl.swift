@@ -73,8 +73,7 @@ public class PTDarkModeControl: PTBaseViewController {
             })
         }
         view.headerInCollection = { kind,collectionView,model,index in
-            if model.headerID == PTDarkModeHeader.ID {
-                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTDarkModeHeader
+            if model.headerID == PTDarkModeHeader.ID,let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTDarkModeHeader {
                 header.currentMode = PTDarkModeOption.isLight ? .light : .dark
                 header.selectModeBlock = { mode in
                     PTDarkModeOption.setDarkModeCustom(isLight: mode == .light ? true : false)
@@ -86,8 +85,7 @@ public class PTDarkModeControl: PTBaseViewController {
             return nil
         }
         view.footerInCollection = { kind,collectionView,itemSec,indexPath in
-            if itemSec.footerID == PTDarkSmartFooter.ID {
-                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: itemSec.footerID!, for: indexPath) as! PTDarkSmartFooter
+            if itemSec.footerID == PTDarkSmartFooter.ID,let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: itemSec.footerID!, for: indexPath) as? PTDarkSmartFooter {
                 footer.themeTimeButton.normalTitle = self.darkTime
                 footer.themeTimeButton.addActionHandlers { sender in
                     let timeIntervalValue = PTDarkModeOption.smartPeelingTimeIntervalValue.separatedByString(with: "~")
@@ -103,18 +101,14 @@ public class PTDarkModeControl: PTBaseViewController {
                     darkModePickerView.showTime()
                 }
                 return footer
-            } else if itemSec.footerID == PTDarkFollowSystemFooter.ID {
-                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: itemSec.footerID!, for: indexPath) as! PTDarkFollowSystemFooter
+            } else if itemSec.footerID == PTDarkFollowSystemFooter.ID,let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: itemSec.footerID!, for: indexPath) as? PTDarkFollowSystemFooter {
                 return footer
             }
             return nil
         }
         view.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                if itemRow.ID == PTFusionCell.ID {
-                    let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+            if let itemRow = dataModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                if itemRow.ID == PTFusionCell.ID,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell {
                     cell.cellModel = cellModel
                     cell.hideBottomLine = indexPath.row == (dataModel.rows!.count - 1) ? true : false
                     cell.hideTopLine = true
@@ -192,11 +186,7 @@ public class PTDarkModeControl: PTBaseViewController {
         mSections.removeAll()
 
         darkModeControlArr.enumerated().forEach { (index,value) in
-            var rows = [PTRows]()
-            value.enumerated().forEach { subIndex,subValue in
-                let row = PTRows(ID: PTFusionCell.ID,dataModel: subValue)
-                rows.append(row)
-            }
+            let rows = value.map { PTRows(ID: PTFusionCell.ID,dataModel: $0) }
             switch index {
             case 0:
                 var sections:PTSection

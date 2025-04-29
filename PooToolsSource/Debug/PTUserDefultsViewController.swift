@@ -33,9 +33,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+            if let itemRow = itemSection.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell {
                 cell.contentView.backgroundColor = .white
                 cell.cellModel = cellModel
                 return cell
@@ -43,8 +41,7 @@ class PTUserDefultsViewController: PTBaseViewController {
             return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            if let itemRow = model.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = model.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 UIAlertController.base_textfield_alertVC(title:"Edit\n" + cellModel.name,okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [cellModel.name], textFieldTexts: [cellModel.desc], keyboardType: [.default], textFieldDelegate: self) { result in
                     let newValue = result.values.first
                     UserDefaults.standard.setValue(newValue, forKey: cellModel.name)
@@ -112,8 +109,7 @@ class PTUserDefultsViewController: PTBaseViewController {
     func showDetail() {
         var mSections = [PTSection]()
 
-        var userdefultArrs = [PTFusionCellModel]()
-        userdefaultShares.keyAndValues().enumerated().forEach { index,value in
+        let userdefultArrs = userdefaultShares.keyAndValues().map { value in
             let model = PTFusionCellModel()
             model.name = value.keys.first!
             model.desc = String(format: "%@", value.values.first as! CVarArg)
@@ -121,14 +117,10 @@ class PTUserDefultsViewController: PTBaseViewController {
             model.haveTopLine = .NO
             model.accessoryType = .DisclosureIndicator
             model.disclosureIndicatorImage = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
-            userdefultArrs.append(model)
+            return model
         }
         
-        var rows = [PTRows]()
-        userdefultArrs.enumerated().forEach { (index,value) in
-            let row_List = PTRows.init(ID: PTFusionCell.ID, dataModel: value)
-            rows.append(row_List)
-        }
+        let rows = userdefultArrs.map { PTRows.init(ID: PTFusionCell.ID, dataModel: $0) }
         let cellSection = PTSection.init(rows: rows)
         mSections.append(cellSection)
         

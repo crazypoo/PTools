@@ -34,14 +34,15 @@ class PTCrashDetailViewController: PTBaseViewController {
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.headerInCollection = { kind,collectionView,model,index in
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
-            header.sectionModel = (model.headerDataModel as! PTFusionCellModel)
-            return header
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
+                header.sectionModel = headerModel
+                return header
+            }
+            return nil
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
                 return cell
             }
             return nil

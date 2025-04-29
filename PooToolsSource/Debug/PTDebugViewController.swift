@@ -92,9 +92,8 @@ public class PTDebugViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
                 if itemRow.title == .DebugMode {
                     cell.switchValue = PTCoreUserDefultsWrapper.AppDebugMode
                     cell.switchValueChangeBlock = { title,sender in
@@ -234,11 +233,7 @@ public class PTDebugViewController: PTBaseViewController {
     func showDetail() {
         var mSections = [PTSection]()
         
-        var rows = [PTRows]()
-        settingCellModels.enumerated().forEach { index,value in
-            let row = PTRows.init(title: value.name,ID: PTFusionCell.ID,dataModel: value)
-            rows.append(row)
-        }
+        let rows = settingCellModels.map { PTRows(title: $0.name,ID: PTFusionCell.ID,dataModel: $0) }
         let section = PTSection.init(rows: rows)
         mSections.append(section)
         

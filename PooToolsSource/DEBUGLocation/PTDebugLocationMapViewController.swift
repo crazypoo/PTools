@@ -17,7 +17,7 @@ import MapKit
 
 class PTDebugLocationMapViewController: PTBaseViewController {
 
-    var locationCallBack:((CLLocation)->Void)!
+    var locationCallBack:((CLLocation)->Void)?
     
     lazy var fakeNav:UIView = {
         let view = UIView()
@@ -86,7 +86,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
         doneButton.addActionHandlers { sender in
             if let selectedLocationCoordinate = self.selectedLocationAnnotation?.coordinate {
                 let selectedLocation = CLLocation(latitude: selectedLocationCoordinate.latitude, longitude: selectedLocationCoordinate.longitude)
-                self.locationCallBack(selectedLocation)
+                self.locationCallBack?(selectedLocation)
             }
             self.navigationController?.popViewController()
         }

@@ -56,10 +56,8 @@ public class PTFileBrowserViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
                 let cellRealModel = self.dataList[indexPath.row]
                 
                 var actionSheetDatas = [String]()
@@ -261,8 +259,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
         PTGCDManager.gcdAfter(time: 0.5) {
             var mSections = [PTSection]()
             
-            var rows = [PTRows]()
-            self.dataList.enumerated().forEach { index,value in
+            let rows = self.dataList.map { value in
                 let fusionModel = PTFusionCellModel()
                 fusionModel.leftImage = self.getImage(type: value.fileType)
                 fusionModel.name = value.name
@@ -284,9 +281,9 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 }
 
                 let row = PTRows.init(title: value.name,ID: PTFusionCell.ID,dataModel: fusionModel)
-                rows.append(row)
+                return row
             }
-            
+                        
             if rows.count > 0 {
                 let section = PTSection.init(rows: rows)
                 mSections.append(section)

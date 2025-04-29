@@ -46,9 +46,8 @@ class PTLeakListViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
                 return cell
             }
             return nil
@@ -136,14 +135,13 @@ class PTLeakListViewController: PTBaseViewController {
     func loadListModel() {
         var sections = [PTSection]()
         
-        var rows = [PTRows]()
-        viewModel.filteredInfo.enumerated().forEach { index,value in
+        let rows = viewModel.filteredInfo.map { value in
             let cellModel = PTFusionCellModel()
             cellModel.name = "\(value.symbol)\(value.details)"
             cellModel.accessoryType = .DisclosureIndicator
             cellModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
             let row = PTRows(ID: PTFusionCell.ID, dataModel: cellModel)
-            rows.append(row)
+            return row
         }
         let section = PTSection(rows: rows)
         sections.append(section)

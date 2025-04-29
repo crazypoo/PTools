@@ -24,19 +24,19 @@ public class PTChatTypingIndicatorCell: PTBaseNormalCell {
         setupSubviews()
     }
     
-    open func setupSubviews() {
+    public func setupSubviews() {
         contentView.addSubview(typingBubble)
         typingBubble.startAnimating()
     }
 
-    open override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         if typingBubble.isAnimating {
             typingBubble.stopAnimating()
         }
     }
     
-    open override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         typingBubble.frame = bounds.inset(by: insets)
     }

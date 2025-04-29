@@ -33,9 +33,8 @@ class PTCrashLogViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-                cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
                 return cell
             }
             return nil
@@ -107,8 +106,7 @@ class PTCrashLogViewController: PTBaseViewController {
     func listDataSet() {
         var sections = [PTSection]()
         
-        var rows = [PTRows]()
-        viewModel.data.enumerated().forEach( { index,value in
+        let rows = viewModel.data.map { value in
             let row_model = PTFusionCellModel()
             row_model.name = value.details.name
             row_model.desc = value.details.date.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
@@ -116,8 +114,8 @@ class PTCrashLogViewController: PTBaseViewController {
             row_model.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
             
             let row = PTRows(ID: PTFusionCell.ID, dataModel: row_model)
-            rows.append(row)
-        })
+            return row
+        }
         
         let section = PTSection(rows: rows)
         sections.append(section)

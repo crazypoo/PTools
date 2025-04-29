@@ -63,16 +63,15 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTNetworkWatcherCell.ID:PTNetworkWatcherCell.self])
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
-                cell.cellModel = (itemRow.dataModel as! PTHttpModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherCell,let cellModel = itemRow.dataModel as? PTHttpModel {
+                cell.cellModel = cellModel
                 return cell
             }
             return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            if let itemRow = model.rows?[indexPath.row] {
-                let vc = PTNetworkWatcherDetailViewController(viewModel: (itemRow.dataModel as! PTHttpModel))
+            if let itemRow = model.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTHttpModel {
+                let vc = PTNetworkWatcherDetailViewController(viewModel: cellModel)
                 self.navigationController?.pushViewController(vc)
             }
         }
@@ -190,11 +189,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     func loadListModel() {
         var sections = [PTSection]()
         
-        var rows = [PTRows]()
-        viewModel.models.enumerated().forEach { index,value in
-            let row = PTRows(ID: PTNetworkWatcherCell.ID, dataModel: value)
-            rows.append(row)
-        }
+        let rows = viewModel.models.map { PTRows(ID: PTNetworkWatcherCell.ID, dataModel: $0) }
         let section = PTSection(rows: rows)
         sections.append(section)
         newCollectionView.showCollectionDetail(collectionData: sections)

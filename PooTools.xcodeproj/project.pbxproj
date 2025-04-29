@@ -2545,13 +2545,13 @@
 		552F078A2B15C26B00CB47CD /* PhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
-				55BCB97F2B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift */,
-				55BCB9822B1733620016A4C2 /* PTMediaLibViewController.swift */,
 				55BCB96C2B1732030016A4C2 /* PTFetchImageOperation.swift */,
+				55BCB97F2B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift */,
 				55BCB9692B1732030016A4C2 /* PTMediaLibCell.swift */,
 				55BCB96E2B1732030016A4C2 /* PTMediaLibConfig.swift */,
 				55BCB96D2B1732030016A4C2 /* PTMediaLibListModel.swift */,
 				55BCB9722B1732030016A4C2 /* PTMediaLibManager.swift */,
+				55BCB9822B1733620016A4C2 /* PTMediaLibViewController.swift */,
 			);
 			path = PhotoPicker;
 			sourceTree = "<group>";
@@ -3991,7 +3991,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4001,9 +4002,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4018,9 +4023,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

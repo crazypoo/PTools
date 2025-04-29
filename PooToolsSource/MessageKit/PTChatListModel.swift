@@ -27,32 +27,32 @@ public enum PTChatMessageStatus:Int,CaseIterable {
 @objcMembers
 open class PTChatListModel: PTBaseModel {
     ///消息时间戳
-    open var messageTimeStamp:TimeInterval = 0
+    public var messageTimeStamp:TimeInterval = 0
     ///消息ID
-    open var msgId:String = ""
-    open  var messageType:PTChatMessageType = .Text
+    public var msgId:String = ""
+    public  var messageType:PTChatMessageType = .Text
     ///创建者ID
-    open var creatorId:String = "" {
+    public var creatorId:String = "" {
         didSet {
             belongToMe = (creatorId == PTChatConfig.share.imOwnerId)
         }
     }
     ///内容
-    open var msgContent:Any?
+    public var msgContent:Any?
     ///消息人头像
-    open var senderCover:String = ""
+    public var senderCover:String = ""
     ///消息状态
-    open var messageStatus:PTChatMessageStatus = .Arrived
+    public var messageStatus:PTChatMessageStatus = .Arrived
     ///发送者名字
-    open var senderName:String = ""
+    public var senderName:String = ""
     ///是否属于我
-    open var belongToMe:Bool = false
+    public var belongToMe:Bool = false
     
     //MARK: 这个是需要自定义cell时用
     ///自定义CELL的ID
-    open var customerCellId:String = ""
+    public var customerCellId:String = ""
     ///是否已讀
-    open var isRead:Bool = false
+    public var isRead:Bool = false
     ///额外扩展字段
-    open var msgExten:Any?
+    public var msgExten:Any?
 }

@@ -226,7 +226,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             if let urlString = dataModel.imageURL as? String {
                 loadUrl = urlString
             } else if let urlString = dataModel.imageURL as? URL {
-                loadUrl = urlString.description
+                loadUrl = urlString.absoluteString
             }
             
             if !loadUrl.isEmpty {

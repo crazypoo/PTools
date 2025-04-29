@@ -79,17 +79,14 @@ class PTPopoverMenuContent: PTBaseViewController {
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.backgroundColor = .clear
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell {
                 cell.cellModel = cellModel
                 return cell
             }
             return nil
         }
         view.collectionDidSelect = { collectionView,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 self.dismiss(animated: true) {
                     self.didSelectedHandler(cellModel.name,indexPath.row)
                 }
@@ -124,8 +121,7 @@ class PTPopoverMenuContent: PTBaseViewController {
         view.backgroundColor = .clear
         view.addSubviews([collectionView])
         
-        var rows = [PTRows]()
-        viewModel.enumerated().forEach { index,value in
+        let rows = viewModel.map { value in
             let cellModel = PTFusionCellModel()
             cellModel.name = value.name
             cellModel.leftImage = value.icon
@@ -133,7 +129,7 @@ class PTPopoverMenuContent: PTBaseViewController {
             cellModel.cellFont = self.viewConfig.textFont
 
             let row = PTRows(ID: PTFusionCell.ID,dataModel: cellModel)
-            rows.append(row)
+            return row
         }
         
         let sections = [PTSection(rows: rows)]

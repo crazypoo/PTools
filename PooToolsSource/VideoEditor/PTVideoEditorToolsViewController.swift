@@ -603,9 +603,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collectionViews,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
-                let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTVideoEditorToolsCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTVideoEditorToolsModel,let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTVideoEditorToolsCell {
                 cell.configure(with: cellModel)
                 return cell
             }
@@ -615,8 +613,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             self.c7Player.pause()
             self.playerButton.isSelected = false
             
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTVideoEditorToolsModel {
                 switch cellModel.videoControl {
                 case .speed:
                     let vc = PTVideoEditorToolsSpeedControl(speed: self.speed,typeModel: cellModel)
@@ -664,9 +661,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.originImageView.transform = transform
                     self.dimView.transform = transform
                 case .mute:
-                    let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
-                    cell.buttonView.isSelected.toggle()
-                    self.isMute.toggle()
+                    if let cell = collectionViews.cellForItem(at: indexPath) as? PTVideoEditorToolsCell {
+                        cell.buttonView.isSelected.toggle()
+                        self.isMute.toggle()
+                    }
                 case .presets:
                     let presets = AVAssetExportSession.exportPresets(compatibleWith: self.avPlayer.currentItem!.asset)
                     
@@ -681,9 +679,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     }
                     self.sheetPresent(vc: vc, size: 0.3)
                 case .rewrite:
-                    let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
-                    cell.buttonView.isSelected.toggle()
-                    self.rewrite.toggle()
+                    if let cell = collectionViews.cellForItem(at: indexPath) as? PTVideoEditorToolsCell {
+                        cell.buttonView.isSelected.toggle()
+                        self.rewrite.toggle()
+                    }
                 }
             }
         }

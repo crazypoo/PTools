@@ -100,10 +100,8 @@ public class PTEditImageViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTEditToolsCell.ID:PTEditToolsCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTEditToolsCell {
                 let cellTools = self.tools[indexPath.row]
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTEditToolsCell
                 cell.toolModel = cellModel
                 cell.imageView.isSelected = self.selectedTool == cellTools
                 return cell
@@ -112,7 +110,6 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             let cellTools = self.tools[indexPath.row]
-
             switch cellTools {
             case .draw:
                 self.showHandDrawAction()
@@ -156,13 +153,11 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row] {
+            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
                 let cellTools = itemRow.dataModel as! UIImage
                 let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
                 cell.imageView.image = cellTools
                 cell.nameLabel.text = cellFilter.name
-                
                 if self.currentFilter == cellFilter {
                     cell.nameLabel.textColor = config.themeColor
                 } else {
@@ -173,7 +168,6 @@ public class PTEditImageViewController: PTBaseViewController {
             return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            
             let filter = PTImageEditorConfig.share.filters[indexPath.row]
             self.editorManager.storeAction(.filter(oldFilter: self.currentFilter, newFilter: filter))
             self.changeFilter(filter)
@@ -206,11 +200,8 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellTools = itemRow.dataModel as! PTFusionCellModel
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTAdjustToolCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellTools = itemRow.dataModel as? PTFusionCellModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTAdjustToolCell {
                 cell.nameLabel.text = cellTools.name
-                
                 let tool = self.adjustTools[indexPath.row]
                 let isSelected = tool == self.selectedAdjustTool
                 if isSelected {
@@ -811,12 +802,7 @@ public class PTEditImageViewController: PTBaseViewController {
     }
 
     func createToolsBar() {
-        var rows = [PTRows]()
-        toolsModel.enumerated().forEach { index,value in
-            let row = PTRows(ID: PTEditToolsCell.ID,dataModel: value)
-            rows.append(row)
-        }
-
+        let rows = toolsModel.map { PTRows(ID: PTEditToolsCell.ID,dataModel: $0) }
         let section = PTSection(rows: rows)
         toolCollectionView.showCollectionDetail(collectionData: [section])
     }

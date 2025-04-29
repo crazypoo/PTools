@@ -61,9 +61,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         view.registerClassCells(classs: [PTMediaLibAlbumCell.ID:PTMediaLibAlbumCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibAlbumCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaLibAlbumCell {
                 cell.albumModel = cellModel
                 cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum.title)
                 return cell
@@ -71,9 +69,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTMediaLibListModel)
-
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel {
                 if self.selectedModelHandler != nil {
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -170,12 +166,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             albumList.removeAll()
             albumList.append(contentsOf: models)
             
-            var rows = [PTRows]()
-            models.enumerated().forEach { index,value in
-                let row = PTRows(ID: PTMediaLibAlbumCell.ID,dataModel: value)
-                rows.append(row)
-            }
-            
+            let rows = models.map { PTRows(ID: PTMediaLibAlbumCell.ID,dataModel: $0) }
             let section = PTSection(rows:rows)
             collectionView.showCollectionDetail(collectionData: [section])
         }

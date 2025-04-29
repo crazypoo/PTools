@@ -42,13 +42,11 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTVideoEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row] {
+            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
                 let cellTools = itemRow.dataModel as! UIImage
                 let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
                 cell.imageView.image = cellTools
                 cell.nameLabel.text = cellFilter.name
-                
                 if self.currentFilter == cellFilter {
                     cell.nameLabel.textColor = config.themeColor
                 } else {
@@ -90,12 +88,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         }
         
         generateFilterImages {
-            var rows = [PTRows]()
-            self.thumbnailFilterImages.enumerated().forEach { index,value in
-                let row = PTRows(ID:PTFilterImageCell.ID,dataModel: value)
-                rows.append(row)
-            }
-            
+            let rows = self.thumbnailFilterImages.map { PTRows(ID:PTFilterImageCell.ID,dataModel: $0) }            
             let section = PTSection(rows: rows)
             self.filterCollectionView.showCollectionDetail(collectionData: [section])
         }

@@ -324,9 +324,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTWhatsNewsItem)
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTWhatsNewsCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTWhatsNewsItem,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTWhatsNewsCell {
                 cell.cellModel = cellModel
                 return cell
             }

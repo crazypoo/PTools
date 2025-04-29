@@ -52,55 +52,58 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         
         view.headerInCollection = { kind,collectionView,model,index in
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
-            header.sectionModel = (model.headerDataModel as! PTFusionCellModel)
-            return header
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
+                header.sectionModel = headerModel
+                return header
+            }
+            return nil
         }
         view.customerLayout = { sectionIndex,sectionModel in
-            let headerModel = sectionModel.headerDataModel as! PTFusionCellModel
-            
-            if headerModel.name == "Simple info" {
-                return UICollectionView.girdCollectionLayout(data: sectionModel.rows!, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64,cellRowCount: 1,originalX: 0)
-            } else {
-                var bannerGroupSize : NSCollectionLayoutSize
-                var customers = [NSCollectionLayoutGroupCustomItem]()
-                var groupH:CGFloat = 0
-                let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
-                let cellModel = self.currentInfos[sectionIndex - 1]
-                var cellHeight:CGFloat = UIView.sizeFor(string: cellModel.description, font: .appfont(size: 12),width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10
-                if cellHeight < 64 {
-                    cellHeight = 64
-                }
-                
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupH, width: screenW, height: cellHeight), zIndex: 1000)
-                customers.append(customItem)
-                groupH = cellHeight
+            if let headerModel = sectionModel.headerDataModel as? PTFusionCellModel {
+                if headerModel.name == "Simple info" {
+                    return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64,cellRowCount: 1,originalX: 0)
+                } else {
+                    var bannerGroupSize : NSCollectionLayoutSize
+                    var customers = [NSCollectionLayoutGroupCustomItem]()
+                    var groupH:CGFloat = 0
+                    let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
+                    let cellModel = self.currentInfos[sectionIndex - 1]
+                    var cellHeight:CGFloat = UIView.sizeFor(string: cellModel.description, font: .appfont(size: 12),width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10
+                    if cellHeight < 64 {
+                        cellHeight = 64
+                    }
+                    
+                    let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupH, width: screenW, height: cellHeight), zIndex: 1000)
+                    customers.append(customItem)
+                    groupH = cellHeight
 
-                bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-                return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                    customers
-                })
+                    bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+                    return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+                        customers
+                    })
+                }
+            } else {
+                return UICollectionView.girdCollectionLayout(data: sectionModel.rows, itemHeight: 0)
             }
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row] {
-                let headerModel = itemSection.headerDataModel as! PTFusionCellModel
-                if headerModel.name == "Simple info" {
-                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherCell
-                    cell.cellModel = (itemRow.dataModel as! PTHttpModel)
+            if let itemRow = itemSection.rows?[indexPath.row],let headerModel = itemSection.headerDataModel as? PTFusionCellModel {
+                if headerModel.name == "Simple info",let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherCell,let cellModel = itemRow.dataModel as? PTHttpModel {
+                    cell.cellModel = cellModel
                     return cell
                 } else {
-                    let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTNetworkWatcherDetailCell
-                    let cellModel = self.currentInfos[indexPath.section - 1]
-                    cell.setup(cellModel.description, self.searchBar.text)
-                    return cell
+                    if let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherDetailCell {
+                        let cellModel = self.currentInfos[indexPath.section - 1]
+                        cell.setup(cellModel.description, self.searchBar.text)
+                        return cell
+                    }
                 }
             }
             return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            if let itemRow = model.rows?[indexPath.row] {
-                let vc = PTNetworkWatcherDetailViewController(viewModel: (itemRow.dataModel as! PTHttpModel))
+            if let itemRow = model.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTHttpModel {
+                let vc = PTNetworkWatcherDetailViewController(viewModel: cellModel)
                 self.navigationController?.pushViewController(vc)
             }
         }
@@ -190,13 +193,14 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         sections.append(section)
         
         if currentInfos.count > 0 {
-            currentInfos.enumerated().forEach { index,value in
+            let sectionInfos = currentInfos.map { value in
                 let headerModel = PTFusionCellModel()
                 headerModel.name = value.title
                 let row = PTRows(ID: PTNetworkWatcherDetailCell.ID)
                 let section_detail = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [row],headerDataModel: headerModel)
-                sections.append(section_detail)
+                return section_detail
             }
+            sections.append(contentsOf: sectionInfos)
         }
         
         newCollectionView.showCollectionDetail(collectionData: sections)

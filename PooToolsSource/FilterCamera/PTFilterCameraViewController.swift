@@ -255,10 +255,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row] {
+            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
                 let cellTools = itemRow.dataModel as! UIImage
                 let cellFilter = PTCameraFilterConfig.share.filters[indexPath.row]
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
                 cell.imageView.image = cellTools
                 cell.nameLabel.text = cellFilter.name
                 

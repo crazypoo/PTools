@@ -58,7 +58,11 @@ public class PTMediaBrowserConfig: NSObject {
     public var dynamicBackground:Bool = false
     ///更多文字设置
     public var showMore:String = "...\("PT More".localized())"
-    
+    ///保存
+    public var saveDesc:String = "PT Media save".localized()
+    ///删除
+    public var deleteDesc:String = "PT Media delete".localized()
+
     public var pageControlOption:PTMediaPageControlOption = .scrolling
     
     public var pageControlShow:Bool = false

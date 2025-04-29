@@ -37,7 +37,7 @@ public class PTChatTypingIndicator: UIView {
     }
 
     /// The `CABasicAnimation` applied when `isBounceEnabled` is TRUE
-    open var bounceAnimationLayer: CABasicAnimation {
+    public var bounceAnimationLayer: CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "transform.translation.y")
         animation.toValue = -bounceOffset
         animation.fromValue = bounceOffset
@@ -48,7 +48,7 @@ public class PTChatTypingIndicator: UIView {
     }
 
     /// The `CABasicAnimation` applied when `isFadeEnabled` is TRUE
-    open var opacityAnimationLayer: CABasicAnimation {
+    public var opacityAnimationLayer: CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 1
         animation.toValue = 0.5
@@ -58,7 +58,7 @@ public class PTChatTypingIndicator: UIView {
         return animation
     }
 
-    open override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         stackView.frame = bounds
         stackView.spacing = bounds.width > 0 ? 5 : 0
@@ -66,7 +66,7 @@ public class PTChatTypingIndicator: UIView {
 
     // MARK: - Animation API
     /// Sets the state of the `TypingIndicator` to animating and applies animation layers
-    open func startAnimating() {
+    public func startAnimating() {
         defer { isAnimating = true }
         guard !isAnimating else { return }
         var delay: TimeInterval = 0
@@ -89,7 +89,7 @@ public class PTChatTypingIndicator: UIView {
     }
 
     /// Sets the state of the `TypingIndicator` to not animating and removes animation layers
-    open func stopAnimating() {
+    public func stopAnimating() {
         defer { isAnimating = false }
         guard isAnimating else { return }
         dots.forEach {

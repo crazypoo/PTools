@@ -62,22 +62,21 @@ public class PTPermissionViewController: PTBaseViewController {
         }
         
         view.headerInCollection = { kind,collectionView,model,indexPath in
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: indexPath) as! PTPermissionHeader
-            return header
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: indexPath) as? PTPermissionHeader {
+                return header
+            }
+            return nil
         }
         view.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row] {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPermissionCell
-                cell.cellModel  = (itemRow.dataModel as! PTPermissionModel)
+            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPermissionCell,let cellModel = itemRow.dataModel as? PTPermissionModel {
+                cell.cellModel  = cellModel
                 return cell
             }
             return nil
         }
         
         view.collectionDidSelect = { collectionView, sectionModel, indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTPermissionModel)
-                let cell = collectionView.cellForItem(at: indexPath) as! PTPermissionCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTPermissionModel, let cell = collectionView.cellForItem(at: indexPath) as? PTPermissionCell {
                 switch cell.cellStatus {
                 case .authorized:
                     break
@@ -237,13 +236,7 @@ public class PTPermissionViewController: PTBaseViewController {
     
     func showDetail() {
         var mSections = [PTSection]()
-        
-        var permissionRows = [PTRows]()
-        permissions.enumerated().forEach { index,value in
-            let row = PTRows.init(ID: PTPermissionCell.ID,dataModel: value)
-            permissionRows.append(row)
-        }
-        
+        let permissionRows = permissions.map { PTRows.init(ID: PTPermissionCell.ID,dataModel: $0) }
         let section = PTSection.init(headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
         mSections.append(section)
         

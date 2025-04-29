@@ -157,12 +157,9 @@ open class PTStepperView: UIView {
             }
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = itemRow.dataModel as! PTStepperListModel
-                if itemRow.ID == PTStepperHorizontalCell.ID {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperHorizontalCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTStepperListModel {
+                if itemRow.ID == PTStepperHorizontalCell.ID,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTStepperHorizontalCell {
                     cell.cellModel = cellModel
-                    
                     if let forwardCell = collectionView.cellForItem(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)) as? PTStepperHorizontalCell {
                         if forwardCell.cellModel.stopFinish {
                             cell.leftLine.backgroundColor = cellModel.stopSelectedColor
@@ -200,8 +197,7 @@ open class PTStepperView: UIView {
                         }
                     }
                     return cell
-                } else if itemRow.ID == PTStepperVerticalCell.ID {
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTStepperVerticalCell
+                } else if itemRow.ID == PTStepperVerticalCell.ID,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTStepperVerticalCell {
                     cell.cellModel = cellModel
                     cell.verticalLine.isHidden = indexPath.row == (sectionModel.rows!.count - 1) ? true : false
                     if self.viewConfig.currentStopLineColorShow {
@@ -308,18 +304,10 @@ open class PTStepperView: UIView {
         
         switch self.viewConfig.type {
         case .Horizontal(_):
-            var rows = [PTRows]()
-            self.viewConfig.stepperModels.enumerated().forEach { index,value in
-                let row = PTRows(ID:PTStepperHorizontalCell.ID,dataModel: value)
-                rows.append(row)
-            }
+            let rows = self.viewConfig.stepperModels.map { PTRows(ID:PTStepperHorizontalCell.ID,dataModel: $0) }
             sections.append(PTSection(rows: rows))
         case .Vertical(_):
-            var rows = [PTRows]()
-            self.viewConfig.stepperModels.enumerated().forEach { index,value in
-                let row = PTRows(ID:PTStepperVerticalCell.ID,dataModel: value)
-                rows.append(row)
-            }
+            let rows = self.viewConfig.stepperModels.map { PTRows(ID:PTStepperVerticalCell.ID,dataModel: $0) }
             sections.append(PTSection(rows: rows))
         }
         

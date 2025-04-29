@@ -158,18 +158,13 @@ class PTCutViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTImageClipRatio)
-                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCutRatioCell
-                
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTImageClipRatio,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTImageCutRatioCell {
                 cell.configureCell(image: self.thumbnailImage ?? self.editImage, ratio: cellModel)
-                
                 if cellModel == self.selectedRatio {
                     cell.titleLabel.textColor = config.themeColor
                 } else {
                     cell.titleLabel.textColor = .lightGray
                 }
-
                 return cell
             }
             return nil
@@ -439,12 +434,7 @@ class PTCutViewController: PTBaseViewController {
     }
     
     func showCutRatio(handle:((UICollectionView) -> Void)? = nil) {
-        var rows = [PTRows]()
-        clipRatios.enumerated().forEach { index,value in
-            let row = PTRows(ID:PTImageCutRatioCell.ID,dataModel: value)
-            rows.append(row)
-        }
-
+        let rows = clipRatios.map { PTRows(ID:PTImageCutRatioCell.ID,dataModel: $0) }
         let section = PTSection(rows: rows)
         ratioCollectionView.showCollectionDetail(collectionData: [section],finishTask: handle)
     }
