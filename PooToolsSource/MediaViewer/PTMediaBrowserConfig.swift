@@ -62,6 +62,10 @@ public class PTMediaBrowserConfig: NSObject {
     public var saveDesc:String = "PT Media save".localized()
     ///删除
     public var deleteDesc:String = "PT Media delete".localized()
+    ///ActionSheet Title
+    public var actionTitle:String = "PT Media option".localized()
+    ///ActionSheet Cancel
+    public var actionCancel:String = "PT Button cancel".localized()
 
     public var pageControlOption:PTMediaPageControlOption = .scrolling
     

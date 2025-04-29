@@ -287,9 +287,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         let closeButton = UIButton(type: .close)
         closeButton.addActionHandlers(handler: { sender in
             self.returnFrontVC {
-                if self.viewDismissBlock != nil {
-                    self.viewDismissBlock!()
-                }
+                self.viewDismissBlock?()
             }
         })
         
@@ -328,93 +326,102 @@ public class PTMediaBrowserController: PTBaseViewController {
     }
     
     func showCollectionViewData(loadedTask:((UICollectionView)->Void)? = nil) {
-        var sections = [PTSection]()
-        let rows = viewConfig.mediaData.map { PTRows.init(ID: PTMediaBrowserCell.ID,dataModel: $0) }
-        let cellSection = PTSection.init(rows: rows)
-        sections.append(cellSection)
-
-        PTGCDManager.gcdAfter(time: 0.1) {
-            self.newCollectionView.showCollectionDetail(collectionData: sections) { collectionView in
-                if !self.firstLoad {
-                    self.firstLoad = true
-                    var loadSome = 0
-                    if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
-                        loadSome = self.viewConfig.mediaData.count - 1
-                    } else {
-                        loadSome = self.viewConfig.defultIndex
+        PTGCDManager.gcdGobal {
+            
+            if self.viewConfig.mediaData.count > 1 {
+                self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
+                if self.viewConfig.pageControlShow {
+                    let pageCount = self.viewConfig.mediaData.count
+                    switch self.viewConfig.pageControlOption {
+                    case .system:
+                        let pageControl = (self.bottomControl.pageControlView as! UIPageControl)
+                        pageControl.currentPage = 0
+                        pageControl.numberOfPages = pageCount
+                    case .fill:
+                        let pageControl = (self.bottomControl.pageControlView as! PTFilledPageControl)
+                        pageControl.progress = 0
+                        pageControl.pageCount = pageCount
+                    case .pill:
+                        let pageControl = (self.bottomControl.pageControlView as! PTPillPageControl)
+                        pageControl.progress = 0
+                        pageControl.pageCount = pageCount
+                    case .snake:
+                        let pageControl = (self.bottomControl.pageControlView as! PTSnakePageControl)
+                        pageControl.progress = 0
+                        pageControl.pageCount = pageCount
+                    case .image:
+                        let pageControl = (self.bottomControl.pageControlView as! PTImagePageControl)
+                        pageControl.currentPage = 0
+                        pageControl.numberOfPages = pageCount
+                    case .scrolling:
+                        let pageControl = (self.bottomControl.pageControlView as! PTScrollingPageControl)
+                        pageControl.progress = 0
+                        pageControl.pageCount = pageCount
                     }
-                    collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: true)
+                }
+            } else {
+                self.bottomControl.pageControlView.isHidden = true
+            }
+
+            self.actionSheetTitle.removeAll()
+            switch self.viewConfig.actionType {
+            case .All:
+                self.actionSheetTitle = [self.viewConfig.saveDesc,self.viewConfig.deleteDesc]
+                self.actionSheetTitle.append(contentsOf: self.viewConfig.moreActionEX.map { $0 })
+            case .Save:
+                self.actionSheetTitle = [self.viewConfig.saveDesc]
+                self.actionSheetTitle.append(contentsOf: self.viewConfig.moreActionEX.map { $0 })
+            case .Delete:
+                self.actionSheetTitle = [self.viewConfig.deleteDesc]
+                self.actionSheetTitle.append(contentsOf: self.viewConfig.moreActionEX.map { $0 })
+            case .DIY:
+                self.actionSheetTitle.append(contentsOf: self.viewConfig.moreActionEX.map { $0 })
+            default:
+                break
+            }
+
+            var sections = [PTSection]()
+            let rows = self.viewConfig.mediaData.map { PTRows.init(ID: PTMediaBrowserCell.ID,dataModel: $0) }
+            let cellSection = PTSection(rows: rows)
+            sections.append(cellSection)
+            
+            PTGCDManager.gcdMain {
+                if self.viewConfig.mediaData.count >= 10 {
+                    self.navControl.titleLabel.isHidden = false
+                    self.navControl.titleLabel.text = "1/\(self.viewConfig.mediaData.count)"
                 } else {
-                    loadedTask?(collectionView)
+                    self.navControl.titleLabel.isHidden = true
+                }
+
+                self.newCollectionView.showCollectionDetail(collectionData: sections) { collectionView in
+                    if !self.firstLoad {
+                        self.firstLoad = true
+                        var loadSome = 0
+                        if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
+                            loadSome = self.viewConfig.mediaData.count - 1
+                        } else {
+                            loadSome = self.viewConfig.defultIndex
+                        }
+                        collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: true)
+                    } else {
+                        loadedTask?(collectionView)
+                    }
                 }
             }
-        }
-
-        if viewConfig.mediaData.count >= 10 {
-            navControl.titleLabel.isHidden = false
-            navControl.titleLabel.text = "1/\(viewConfig.mediaData.count)"
-        } else {
-            navControl.titleLabel.isHidden = true
-        }
-        
-        if viewConfig.mediaData.count > 1 {
-            bottomControl.pageControlView.isHidden = !viewConfig.pageControlShow
-            if viewConfig.pageControlShow {
-                switch viewConfig.pageControlOption {
-                case .system:
-                    (bottomControl.pageControlView as! UIPageControl).currentPage = 0
-                    (bottomControl.pageControlView as! UIPageControl).numberOfPages = viewConfig.mediaData.count
-                case .fill:
-                    (bottomControl.pageControlView as! PTFilledPageControl).progress = 0
-                    (bottomControl.pageControlView as! PTFilledPageControl).pageCount = viewConfig.mediaData.count
-                case .pill:
-                    (bottomControl.pageControlView as! PTPillPageControl).progress = 0
-                    (bottomControl.pageControlView as! PTPillPageControl).pageCount = viewConfig.mediaData.count
-                case .snake:
-                    (bottomControl.pageControlView as! PTSnakePageControl).progress = 0
-                    (bottomControl.pageControlView as! PTSnakePageControl).pageCount = viewConfig.mediaData.count
-                case .image:
-                    (bottomControl.pageControlView as! PTImagePageControl).currentPage = 0
-                    (bottomControl.pageControlView as! PTImagePageControl).numberOfPages = viewConfig.mediaData.count
-                case .scrolling:
-                    (bottomControl.pageControlView as! PTScrollingPageControl).progress = 0
-                    (bottomControl.pageControlView as! PTScrollingPageControl).pageCount = viewConfig.mediaData.count
-                }
-            }
-        } else {
-            bottomControl.pageControlView.isHidden = true
-        }
-
-        actionSheetTitle.removeAll()
-        switch viewConfig.actionType {
-        case .All:
-            actionSheetTitle = [viewConfig.saveDesc,viewConfig.deleteDesc]
-            viewConfig.moreActionEX.enumerated().forEach { index,value in
-                actionSheetTitle.append(value)
-            }
-        case .Save:
-            actionSheetTitle = [viewConfig.saveDesc]
-            actionSheetTitle.append(contentsOf: viewConfig.moreActionEX.map { $0 })
-        case .Delete:
-            actionSheetTitle = [viewConfig.deleteDesc]
-            actionSheetTitle.append(contentsOf: viewConfig.moreActionEX.map { $0 })
-        case .DIY:
-            actionSheetTitle.append(contentsOf: viewConfig.moreActionEX.map { $0 })
-        default:
-            break
         }
     }
     
     func viewMoreActionDismiss() {
         let currentCell = newCollectionView.visibleCells()
-        let endCell = currentCell.first as! PTMediaBrowserCell
-        switch endCell.currentCellType {
-        case .GIF:
-            endCell.imageView.stopAnimating()
-        default:
-            break
+        if let endCell = currentCell.first as? PTMediaBrowserCell {
+            switch endCell.currentCellType {
+            case .GIF:
+                endCell.imageView.stopAnimating()
+            default:
+                break
+            }
+            returnFrontVC()
         }
-        returnFrontVC()
     }
     
     func toolBarControl(boolValue:Bool) {
@@ -431,7 +438,55 @@ public class PTMediaBrowserController: PTBaseViewController {
         var debugActions: [UIMenuElement] = []
         actionSheetTitle.enumerated().forEach { index,value in
             let menuActions = UIAction(title: value) { _ in
-                let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
+                if let currentView = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell {
+                    switch self.viewConfig.actionType {
+                    case .Save:
+                        switch index {
+                        case 0:
+                            self.saveImage()
+                        default:
+                            self.viewMoreActionBlock?((index - 1),currentView.gifImage)
+                            self.viewMoreActionDismiss()
+                        }
+                    case .Delete:
+                        switch index {
+                        case 0:
+                            self.deleteImage()
+                        default:
+                            self.viewMoreActionBlock?((index - 1),currentView.gifImage)
+                            self.viewMoreActionDismiss()
+                        }
+                    case .All:
+                        switch index {
+                        case 0:
+                            self.saveImage()
+                        case 1:
+                            self.deleteImage()
+                        default:
+                            self.viewMoreActionBlock?((index - 2),currentView.gifImage)
+                            self.viewMoreActionDismiss()
+                        }
+                    case .DIY:
+                        self.viewMoreActionBlock?(index,currentView.gifImage)
+                        self.viewMoreActionDismiss()
+                    default:
+                        break
+                    }
+                }
+            }
+            debugActions.append(menuActions)
+        }
+        
+        var menuContent: [UIMenuElement] = []
+                
+        menuContent.append(contentsOf: debugActions)
+        
+        return UIMenu(title: "", children: menuContent)
+    }
+
+    func actionSheet() {
+        UIAlertController.baseActionSheet(title: viewConfig.actionTitle, cancelButtonName: viewConfig.actionCancel,titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
+            if let currentView = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell {
                 switch self.viewConfig.actionType {
                 case .Save:
                     switch index {
@@ -465,52 +520,6 @@ public class PTMediaBrowserController: PTBaseViewController {
                 default:
                     break
                 }
-            }
-            debugActions.append(menuActions)
-        }
-        
-        var menuContent: [UIMenuElement] = []
-                
-        menuContent.append(contentsOf: debugActions)
-        
-        return UIMenu(title: "", children: menuContent)
-    }
-
-    func actionSheet() {
-        UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
-            let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
-            switch self.viewConfig.actionType {
-            case .Save:
-                switch index {
-                case 0:
-                    self.saveImage()
-                default:
-                    self.viewMoreActionBlock?((index - 1),currentView.gifImage)
-                    self.viewMoreActionDismiss()
-                }
-            case .Delete:
-                switch index {
-                case 0:
-                    self.deleteImage()
-                default:
-                    self.viewMoreActionBlock?((index - 1),currentView.gifImage)
-                    self.viewMoreActionDismiss()
-                }
-            case .All:
-                switch index {
-                case 0:
-                    self.saveImage()
-                case 1:
-                    self.deleteImage()
-                default:
-                    self.viewMoreActionBlock?((index - 2),currentView.gifImage)
-                    self.viewMoreActionDismiss()
-                }
-            case .DIY:
-                self.viewMoreActionBlock?(index,currentView.gifImage)
-                self.viewMoreActionDismiss()
-            default:
-                break
             }
         })
     }
@@ -654,23 +663,29 @@ fileprivate extension PTMediaBrowserController {
                             self.bottomControl.pageControlView.isHidden = false
                             switch self.viewConfig.pageControlOption {
                             case .system:
-                                (self.bottomControl.pageControlView as! UIPageControl).currentPage = newIndex
-                                (self.bottomControl.pageControlView as! UIPageControl).numberOfPages = self.viewConfig.mediaData.count
+                                let pageControl = (self.bottomControl.pageControlView as! UIPageControl)
+                                pageControl.currentPage = newIndex
+                                pageControl.numberOfPages = self.viewConfig.mediaData.count
                             case .fill:
-                                (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(newIndex)
-                                (self.bottomControl.pageControlView as! PTFilledPageControl).pageCount = self.viewConfig.mediaData.count
+                                let pageControl = (self.bottomControl.pageControlView as! PTFilledPageControl)
+                                pageControl.progress = CGFloat(newIndex)
+                                pageControl.pageCount = self.viewConfig.mediaData.count
                             case .pill:
-                                (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(newIndex)
-                                (self.bottomControl.pageControlView as! PTPillPageControl).pageCount = self.viewConfig.mediaData.count
+                                let pageControl = (self.bottomControl.pageControlView as! PTPillPageControl)
+                                pageControl.progress = CGFloat(newIndex)
+                                pageControl.pageCount = self.viewConfig.mediaData.count
                             case .snake:
-                                (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(newIndex)
-                                (self.bottomControl.pageControlView as! PTSnakePageControl).pageCount = self.viewConfig.mediaData.count
+                                let pageControl = (self.bottomControl.pageControlView as! PTSnakePageControl)
+                                pageControl.progress = CGFloat(newIndex)
+                                pageControl.pageCount = self.viewConfig.mediaData.count
                             case .image:
-                                (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = newIndex
-                                (self.bottomControl.pageControlView as! PTImagePageControl).numberOfPages = self.viewConfig.mediaData.count
+                                let pageControl = (self.bottomControl.pageControlView as! PTImagePageControl)
+                                pageControl.currentPage = newIndex
+                                pageControl.numberOfPages = self.viewConfig.mediaData.count
                             case .scrolling:
-                                (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(newIndex)
-                                (self.bottomControl.pageControlView as! PTScrollingPageControl).pageCount = self.viewConfig.mediaData.count
+                                let pageControl = (self.bottomControl.pageControlView as! PTScrollingPageControl)
+                                pageControl.progress = CGFloat(newIndex)
+                                pageControl.pageCount = self.viewConfig.mediaData.count
                             }
                         } else {
                             self.bottomControl.pageControlView.isHidden = true
