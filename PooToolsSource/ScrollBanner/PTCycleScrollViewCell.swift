@@ -16,25 +16,28 @@ import AVFoundation
 class PTCycleScrollViewCell: PTBaseNormalCell {
     static let ID = "PTCycleScrollViewCell"
     
+    var pageControlHeight:CGFloat = 0
+    
+    fileprivate var cellHaveTitle:Bool = false
     // 标题
     var title: Any? {
         didSet {
             if title != nil {
-                titleBackView.isHidden = false
-                titleLabel.isHidden = false
-
-                if title is String {
-                    titleLabel.text = "\(title as! String)"
-                } else if title is ASAttributedString {
-                    titleLabel.attributed.text = (title as! ASAttributedString)
+                if let titleString = title as? String,!titleString.stringIsEmpty() {
+                    titleLabel.text = titleString
+                    cellHaveTitle = true
+                } else if let titleAtt = title as? ASAttributedString {
+                    titleLabel.attributed.text = titleAtt
+                    cellHaveTitle = true
                 } else {
-                    titleBackView.isHidden = true
-                    titleLabel.isHidden = true
+                    cellHaveTitle = false
                 }
             } else {
-                titleBackView.isHidden = true
-                titleLabel.isHidden = true
+                cellHaveTitle = false
             }
+            
+            titleBackView.isHidden = !cellHaveTitle
+            titleLabel.isHidden = !cellHaveTitle
         }
     }
     
@@ -101,7 +104,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
     }()
     
     fileprivate lazy var titleLabel: UILabel = {
-        let view = UILabel.init()
+        let view = UILabel()
         view.isHidden = true
         view.textColor = titleLabelTextColor
         view.numberOfLines = titleLines
@@ -135,8 +138,8 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         let view = UIButton(type:.custom)
         view.setImage(PTCycleScrollView.playButtonImage, for: .normal)
         view.addActionHandlers { sender in
-            if !self.videoLink.stringIsEmpty() {
-                self.setPlayer(videoQ: URL(string: self.videoLink)!)
+            if !self.videoLink.stringIsEmpty(),let url = URL(string: self.videoLink) {
+                self.setPlayer(videoQ: url)
             }
         }
         return view
@@ -180,7 +183,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         titleBackView.snp.remakeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalTo(self.titleLabelHeight)
+            make.height.equalTo(self.titleLabelHeight + self.pageControlHeight)
         }
         
         titleLabel.snp.remakeConstraints { make in
@@ -194,6 +197,10 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         imageView.isHidden = true
         playButton.isHidden = true
         playerViewController.view.isHidden = false
+        if cellHaveTitle {
+            titleBackView.isHidden = true
+            titleLabel.isHidden = true
+        }
         if player == nil {
             player = AVPlayer(url: videoQ)
             playerLayer = AVPlayerLayer(player: player)
@@ -221,6 +228,10 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         playerViewController.view.isHidden = true
         player?.pause()
         player?.seek(to: CMTime.zero)
+        if cellHaveTitle {
+            titleBackView.isHidden = false
+            titleLabel.isHidden = false
+        }
     }
     
     // 视频播放完成后的处理

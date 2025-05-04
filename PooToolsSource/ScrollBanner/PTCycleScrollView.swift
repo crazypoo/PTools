@@ -32,6 +32,90 @@ public typealias PTCycleIndexClosure = (_ index:NSInteger) -> Void
 ///   - offSet: 偏移量大小
 public typealias PTScrollViewDidScrollClosure = (_ index:NSInteger,_ offSet:CGFloat) -> Void
 
+// MARK: 类初始化
+extension PTCycleScrollView {
+    /// 默认初始化
+    /// - Parameters:
+    ///   - imageURLPaths: URL Path Array
+    ///   - titles: Title Array
+    ///   - didSelectItemAtIndex: Closure
+    /// - Returns: PTCycleScrollView
+    public class func cycleScrollViewCreate(imageURLPaths: Array<Any>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
+        let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
+        // Nil
+        cycleScrollView.imagePaths = []
+        cycleScrollView.titles = []
+        
+        if let imageURLPathList = imageURLPaths, imageURLPathList.count > 0 {
+            cycleScrollView.imagePaths = imageURLPathList
+        }
+        
+        if let titleList = titles, titleList.count > 0 {
+            cycleScrollView.titles = titleList
+        }
+        
+        cycleScrollView.didSelectItemAtIndexClosure = didSelectItemAtIndex
+        return cycleScrollView
+    }
+    
+    /// 纯文本
+    /// - Parameters:
+    ///   - backImage: Background Image
+    ///   - titles: Title Array
+    ///   - didSelectItemAtIndex: Closure
+    /// - Returns: PTCycleScrollView
+    public class func cycleScrollViewWithTitles(backImage: UIImage? = nil, titles: Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
+        let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
+        // Nil
+        cycleScrollView.titles = []
+        // Set isOnlyTitle
+        cycleScrollView.isOnlyTitle = true
+        
+        // Titles Data
+        if let titleList = titles, titleList.count > 0 {
+            cycleScrollView.titles = titleList
+        }
+        
+        cycleScrollView.didSelectItemAtIndexClosure = didSelectItemAtIndex
+        return cycleScrollView
+    }
+    
+    /// 支持箭头初始化
+    /// - Parameters:
+    ///   - arrowLRImages: [LeftImage, RightImage]
+    ///   - arrowLRPoint: [LeffImage.CGPoint, RightImage.CGPoint], default nil (center)
+    ///   - arrowLRFrame:
+    ///   - imageURLPaths: URL Path Array
+    ///   - titles: Title Array
+    ///   - didSelectItemAtIndex: Closure
+    ///   - arrowLRFrame:
+    /// - Returns: PTCycleScrollView
+    public class func cycleScrollViewWithArrow(arrowLRImages: [Any], arrowLRFrame: [CGRect]? = nil, imageURLPaths: Array<Any>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
+        let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
+        // Nil
+        cycleScrollView.imagePaths = []
+        cycleScrollView.titles = []
+        
+        // Images
+        cycleScrollView.arrowLRIcon = arrowLRImages
+        cycleScrollView.arrowLRFrame = arrowLRFrame
+        
+        // Setup
+        cycleScrollView.setupArrowIcon()
+        
+        if let imageURLPathList = imageURLPaths, imageURLPathList.count > 0 {
+            cycleScrollView.imagePaths = imageURLPathList
+        }
+        
+        if let titleList = titles, titleList.count > 0 {
+            cycleScrollView.titles = titleList
+        }
+        
+        cycleScrollView.didSelectItemAtIndexClosure = didSelectItemAtIndex
+        return cycleScrollView
+    }
+}
+
 @objcMembers
 public class PTCycleScrollView: UIView {
     // MARK: DataSource
@@ -152,7 +236,6 @@ public class PTCycleScrollView: UIView {
     public var titleBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.3)
     
     // MARK: 箭头标签
-    
     /// Icon - [LeftIcon, RightIcon]
     public var arrowLRIcon: [Any]?
     
@@ -290,7 +373,8 @@ public class PTCycleScrollView: UIView {
     
     /// 高度
     fileprivate var cellHeight: CGFloat = 56
-    
+    fileprivate var pageControlHeight: CGFloat = 0
+
     /// Collection滚动方向
     fileprivate var position: UICollectionView.ScrollPosition! = .centeredHorizontally
             
@@ -350,89 +434,8 @@ public class PTCycleScrollView: UIView {
     }
 }
 
-// MARK: 类初始化
+// MARK: Datas
 extension PTCycleScrollView {
-    /// 默认初始化
-    /// - Parameters:
-    ///   - imageURLPaths: URL Path Array
-    ///   - titles: Title Array
-    ///   - didSelectItemAtIndex: Closure
-    /// - Returns: PTCycleScrollView
-    public class func cycleScrollViewCreate(imageURLPaths: Array<Any>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
-        let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
-        // Nil
-        cycleScrollView.imagePaths = []
-        cycleScrollView.titles = []
-        
-        if let imageURLPathList = imageURLPaths, imageURLPathList.count > 0 {
-            cycleScrollView.imagePaths = imageURLPathList
-        }
-        
-        if let titleList = titles, titleList.count > 0 {
-            cycleScrollView.titles = titleList
-        }
-        
-        cycleScrollView.didSelectItemAtIndexClosure = didSelectItemAtIndex
-        return cycleScrollView
-    }
-    
-    /// 纯文本
-    /// - Parameters:
-    ///   - backImage: Background Image
-    ///   - titles: Title Array
-    ///   - didSelectItemAtIndex: Closure
-    /// - Returns: PTCycleScrollView
-    public class func cycleScrollViewWithTitles(backImage: UIImage? = nil, titles: Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
-        let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
-        // Nil
-        cycleScrollView.titles = []
-        // Set isOnlyTitle
-        cycleScrollView.isOnlyTitle = true
-        
-        // Titles Data
-        if let titleList = titles, titleList.count > 0 {
-            cycleScrollView.titles = titleList
-        }
-        
-        cycleScrollView.didSelectItemAtIndexClosure = didSelectItemAtIndex
-        return cycleScrollView
-    }
-    
-    /// 支持箭头初始化
-    /// - Parameters:
-    ///   - arrowLRImages: [LeftImage, RightImage]
-    ///   - arrowLRPoint: [LeffImage.CGPoint, RightImage.CGPoint], default nil (center)
-    ///   - arrowLRFrame:
-    ///   - imageURLPaths: URL Path Array
-    ///   - titles: Title Array
-    ///   - didSelectItemAtIndex: Closure
-    ///   - arrowLRFrame:
-    /// - Returns: PTCycleScrollView
-    public class func cycleScrollViewWithArrow(arrowLRImages: [Any], arrowLRFrame: [CGRect]? = nil, imageURLPaths: Array<Any>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
-        let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
-        // Nil
-        cycleScrollView.imagePaths = []
-        cycleScrollView.titles = []
-        
-        // Images
-        cycleScrollView.arrowLRIcon = arrowLRImages
-        cycleScrollView.arrowLRFrame = arrowLRFrame
-        
-        // Setup
-        cycleScrollView.setupArrowIcon()
-        
-        if let imageURLPathList = imageURLPaths, imageURLPathList.count > 0 {
-            cycleScrollView.imagePaths = imageURLPathList
-        }
-        
-        if let titleList = titles, titleList.count > 0 {
-            cycleScrollView.titles = titleList
-        }
-        
-        cycleScrollView.didSelectItemAtIndexClosure = didSelectItemAtIndex
-        return cycleScrollView
-    }
-    
     func scrollViewReloadData() {
         invalidateTimer()
         collectionViewSetData()
@@ -454,71 +457,70 @@ extension PTCycleScrollView {
     
     // MARK: 添加自定义箭头
     private func setupArrowIcon() {
-        PTGCDManager.gcdAfter(time: 0.1) {
-            if !self.infiniteLoop {
-                assertionFailure("当前未开启无限轮播`infiniteLoop`，请设置后使用此模式.")
+        PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
+            guard let self = self else { return }
+
+            // 验证无限轮播开启
+            guard self.infiniteLoop else {
+                assertionFailure("当前未开启无限轮播 `infiniteLoop`，请设置后使用此模式。")
                 return
             }
-            
-            guard let ali = self.arrowLRIcon else {
-                assertionFailure("初始化方向图片`arrowLRIcon`数据为空.")
+
+            // 验证方向图标资源存在
+            guard let arrowIcons = self.arrowLRIcon else {
+                assertionFailure("初始化方向图片 `arrowLRIcon` 数据为空。")
                 return
             }
-            
-            /// 添加默认Frame
+
+            // 默认 Frame 初始化
             if self.arrowLRFrame?.count ?? 0 < 2 {
-                let w = self.frame.size.width * 0.25
-                let h = self.frame.size.height
-                
+                let width = self.frame.width * 0.25
+                let height = self.frame.height
                 self.arrowLRFrame = [
-                    CGRect.init(x: 5, y: 0, width: w, height: h),
-                    CGRect.init(x: self.frame.size.width - w - 5, y: 0, width: w, height: h)
+                    CGRect(x: 5, y: 0, width: width, height: height),
+                    CGRect(x: self.frame.width - width - 5, y: 0, width: width, height: height)
                 ]
             }
-            
-            guard let alf = self.arrowLRFrame else {
-                assertionFailure("初始化方向图片`arrowLRFrame`数据为空.")
+
+            guard let arrowFrames = self.arrowLRFrame, arrowFrames.count >= 2 else {
+                assertionFailure("初始化方向图片 `arrowLRFrame` 数据为空或数量不足。")
                 return
             }
-            
-            if let leftFrame = alf.first {
-                let leftImageView = UIImageView(frame: leftFrame)
-                leftImageView.contentMode = .left
-                leftImageView.tag = 0
-                leftImageView.isUserInteractionEnabled = true
-                if let leftImage = ali.first {
-                    leftImageView.loadImage(contentData: leftImage,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
-                } else {
-                    leftImageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
-                }
-                let leftTap = UITapGestureRecognizer { sender in
-                    if let senders = sender as? UITapGestureRecognizer {
-                        self.scrollByDirection(senders)
-                    }
-                }
-                leftImageView.addGestureRecognizer(leftTap)
-                self.addSubview(leftImageView)
-            }
-            
-            if let rightFrame = alf.last {
-                let rightImageView = UIImageView(frame: rightFrame)
-                rightImageView.contentMode = .right
-                rightImageView.tag = 1
-                rightImageView.isUserInteractionEnabled = true
-                if let rightImage = ali.last {
-                    rightImageView.loadImage(contentData: rightImage,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
-                } else {
-                    rightImageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
-                }
-                let rightTap = UITapGestureRecognizer { sender in
-                    if let senders = sender as? UITapGestureRecognizer {
-                        self.scrollByDirection(senders)
-                    }
-                }
-                rightImageView.addGestureRecognizer(rightTap)
-                self.addSubview(rightImageView)
-            }
+
+            // 添加左右箭头图标
+            self.addArrowImageView(
+                frame: arrowFrames[0],
+                image: arrowIcons.first,
+                tag: 0,
+                contentMode: .left
+            )
+            self.addArrowImageView(
+                frame: arrowFrames[1],
+                image: arrowIcons.last,
+                tag: 1,
+                contentMode: .right
+            )
         }
+    }
+
+    private func addArrowImageView(frame: CGRect, image: Any?, tag: Int, contentMode: UIView.ContentMode) {
+        let imageView = UIImageView(frame: frame)
+        imageView.contentMode = contentMode
+        imageView.tag = tag
+        imageView.isUserInteractionEnabled = true
+
+        if let imageData = image {
+            imageView.loadImage(contentData: imageData, iCloudDocumentName: self.iCloudDocument, emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
+        } else {
+            imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+        }
+
+        let tap = UITapGestureRecognizer { [weak self] sender in
+            guard let self = self, let gesture = sender as? UITapGestureRecognizer else { return }
+            self.scrollByDirection(gesture)
+        }
+        imageView.addGestureRecognizer(tap)
+        self.addSubview(imageView)
     }
     
     // MARK: 添加PageControl
@@ -619,6 +621,16 @@ extension PTCycleScrollView {
         // CollectionView
         // Cell Height
         self.cellHeight = self.frame.height
+        
+        switch self.customPageControlStyle {
+        case .none,.system,.image:
+            pageControlHeight = 10
+        case .scrolling:
+            pageControlHeight = 20
+        default:
+            pageControlHeight = 10
+        }
+        
         self.collectionViewSetData()
 
         // 计算最大扩展区大小
@@ -638,7 +650,7 @@ extension PTCycleScrollView {
             if let pageControl = self.customPageControl as? UIPageControl {
                 let pointSize = pageControl.size(forNumberOfPages: self.imagePaths.count)
                 pageControl.snp.makeConstraints { make in
-                    make.height.equalTo(10)
+                    make.height.equalTo(self.pageControlHeight)
                     make.bottom.equalToSuperview().inset(self.pageControlBottom)
                     switch self.pageControlPosition {
                     case .center:
@@ -655,17 +667,8 @@ extension PTCycleScrollView {
                 }
             }
         default:
-            var heights:CGFloat = 10
-            // pill
-            switch self.customPageControlStyle {
-            case .scrolling:
-                heights = 20
-            default:
-                heights = 10
-            }
-                        
             self.customPageControl?.snp.makeConstraints { make in
-                make.height.equalTo(heights)
+                make.height.equalTo(self.pageControlHeight)
                 make.bottom.equalToSuperview().inset(self.pageControlBottom)
                 switch self.pageControlPosition {
                 case .left:
@@ -698,8 +701,8 @@ extension PTCycleScrollView {
     }
         
     func loadImageWithAny(imagePath:Any,cell:PTCycleScrollViewCell,itemIndex:Int) {
-        var currentImage: UIImage?
         Task {
+            var currentImage: UIImage?
             let imageResult = await PTLoadImageFunction.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument)
             if let images = imageResult.0 {
                 if images.count > 1 {
@@ -716,94 +719,130 @@ extension PTCycleScrollView {
             }
             cell.imageView.image = currentImage
             // 对冲数据判断
-            if itemIndex <= (self.titles.count - 1) {
-                cell.title = self.titles[itemIndex]
-            } else {
-                cell.title = ""
-            }
+            setBannerAttTitle(cell: cell, itemIndex: itemIndex)
         }
     }
     
     func collectionViewSetData() {
         pageScrollerView.removeSubviews()
+
         for i in 0..<totalItemsCount {
-            let cell = PTCycleScrollViewCell()
-            cell.titleFont = self.font
-            cell.titleLabelTextColor = self.textColor
-            cell.titleBackViewBackgroundColor = self.titleBackgroundColor
-            cell.titleLines = self.numberOfLines
-            // Leading
-            cell.titleLabelLeading = self.titleLeading
-            cell.tag = 100 + i
-            let tap = UITapGestureRecognizer { sender in
-                self.didSelectItemAtIndexClosure?(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
-            }
-            cell.addGestureRecognizer(tap)
-            // Only Title
+            let cell = createConfiguredCell(at: i)
             pageScrollerView.addSubview(cell)
-            switch self.scrollDirection {
-            case .horizontal:
-                cell.snp.makeConstraints { make in
-                    make.left.equalTo(CGFloat(i) * self.frame.width)
-                    make.top.equalTo(0)
-                    make.width.equalTo(self.frame.width)
-                    make.height.equalTo(self.frame.height)
-                }
-            default:
-                cell.snp.makeConstraints { make in
-                    make.left.equalTo(0)
-                    make.top.equalTo(CGFloat(i) * self.frame.height)
-                    make.width.equalTo(self.frame.width)
-                    make.height.equalTo(self.frame.height)
-                }
-                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
-            }
-            
-            let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
-            if self.isOnlyTitle && !self.titles.isEmpty {
-                cell.titleLabelHeight = self.cellHeight
-                cell.title = self.titles[itemIndex]
+
+            setupCellConstraints(cell: cell, index: i)
+
+            if isOnlyTitle && !titles.isEmpty {
+                configureTitleOnly(cell: cell, index: i)
             } else {
-                // 配置图片模式
-                if let imageViewContentMode = self.imageViewContentMode {
-                    cell.imageView.contentMode = imageViewContentMode
-                }
-                
-                if self.imagePaths.isEmpty {
-                    cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
-                } else {
-                    let imagePath = self.imagePaths[itemIndex]
-                    
-                    if let videoPath = imagePath as? String, ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()) {
-                        self.getVideoFrame(for: videoPath) { image in
-                            cell.imageView.image = image ?? PTAppBaseConfig.share.defaultPlaceholderImage
-                            cell.videoLink = videoPath
-                            if itemIndex == 0, let url = URL(string: videoPath) {
-                                PTGCDManager.gcdAfter(time: 0.1) {
-                                    cell.setPlayer(videoQ: url)
-                                }
-                            } else {
-                                cell.playButton.isHidden = false
-                            }
-                        }
-                    } else {
-                        self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
-                    }
-                }
+                configureImageOrVideo(cell: cell, index: i)
             }
         }
-        switch self.scrollDirection {
+
+        updateContentSize()
+    }
+    
+    private func createConfiguredCell(at index: Int) -> PTCycleScrollViewCell {
+        let cell = PTCycleScrollViewCell()
+        cell.pageControlHeight = pageControlHeight
+        cell.titleFont = font
+        cell.titleLabelTextColor = textColor
+        cell.titleBackViewBackgroundColor = titleBackgroundColor
+        cell.titleLines = numberOfLines
+        cell.titleLabelLeading = titleLeading
+        cell.tag = 100 + index
+
+        let tap = UITapGestureRecognizer { [weak self] _ in
+            guard let self else { return }
+            self.didSelectItemAtIndexClosure?(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
+        }
+        cell.addGestureRecognizer(tap)
+
+        return cell
+    }
+
+    private func setupCellConstraints(cell: PTCycleScrollViewCell, index: Int) {
+        switch scrollDirection {
         case .horizontal:
-            pageScrollerView.contentSize = CGSize(width: self.maxSwipeSize, height: self.frame.height)
+            cell.snp.makeConstraints { make in
+                make.left.equalTo(CGFloat(index) * bounds.width)
+                make.top.equalToSuperview()
+                make.size.equalTo(bounds.size)
+            }
         default:
-            pageScrollerView.contentSize = CGSize(width: self.frame.width, height: self.maxSwipeSize)
+            cell.snp.makeConstraints { make in
+                make.top.equalTo(CGFloat(index) * bounds.height)
+                make.left.equalToSuperview()
+                make.size.equalTo(bounds.size)
+            }
+            maxSwipeSize = CGFloat(imagePaths.count) * bounds.height
+        }
+    }
+
+    private func configureTitleOnly(cell: PTCycleScrollViewCell, index: Int) {
+        cell.titleLabelHeight = cellHeight
+        let itemIndex = pageControlIndexWithCurrentCellIndex(index: index)
+        cell.title = titles[itemIndex]
+    }
+
+    private func configureImageOrVideo(cell: PTCycleScrollViewCell, index: Int) {
+        if let imageViewContentMode = imageViewContentMode {
+            cell.imageView.contentMode = imageViewContentMode
+        }
+
+        guard !imagePaths.isEmpty else {
+            cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+            return
+        }
+
+        let itemIndex = pageControlIndexWithCurrentCellIndex(index: index)
+        let imagePath = imagePaths[itemIndex]
+
+        if let videoPath = imagePath as? String,
+           ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()) {
+            getVideoFrame(for: videoPath) { [weak self] image in
+                guard self != nil else { return }
+                cell.imageView.image = image ?? PTAppBaseConfig.share.defaultPlaceholderImage
+                cell.videoLink = videoPath
+
+                if itemIndex == 0, let url = URL(string: videoPath) {
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        cell.setPlayer(videoQ: url)
+                    }
+                } else {
+                    cell.playButton.isHidden = false
+                }
+            }
+        } else {
+            loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
+        }
+        
+        // 对冲数据判断
+        setBannerAttTitle(cell: cell, itemIndex: itemIndex)
+    }
+    
+    private func setBannerAttTitle(cell:PTCycleScrollViewCell,itemIndex:Int) {
+        // 对冲数据判断
+        if itemIndex <= (self.titles.count - 1) {
+            cell.title = self.titles[itemIndex]
+        } else {
+            cell.title = ""
+        }
+    }
+
+    private func updateContentSize() {
+        switch scrollDirection {
+        case .horizontal:
+            pageScrollerView.contentSize = CGSize(width: maxSwipeSize, height: bounds.height)
+        default:
+            pageScrollerView.contentSize = CGSize(width: bounds.width, height: maxSwipeSize)
         }
     }
 }
 
 // MARK: 定时器模块
 extension PTCycleScrollView {
-    /// 添加DTimer
+    /// 添加Timer
     public func setupTimer() {
         // 仅一张图不进行滚动操纵
         if imagePaths.count <= 1 { return }
