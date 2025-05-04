@@ -35,30 +35,37 @@ public typealias PTScrollViewDidScrollClosure = (_ index:NSInteger,_ offSet:CGFl
 @objcMembers
 public class PTCycleScrollView: UIView {
     // MARK: DataSource
-    
     fileprivate var clearSubs:Bool = false
     
     public static var playButtonImage:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 44))
     
     /// 图片地址
-    open var imagePaths: Array<Any> = [] {
+    public var imagePaths: Array<Any> = [] {
         willSet {
             clearSubs = !imagePaths.elementsEqual(newValue, by: { ($0 as AnyObject).isEqual($1) })
         }
         didSet {
             setTotalItemsMinItems(count: imagePaths.count)
             pageScrollerView.isScrollEnabled = imagePaths.count > 1
-            imagePaths.count > 1 ? setupTimer() : invalidateTimer()
+            if imagePaths.count > 1 {
+                if autoScroll {
+                    setupTimer()
+                } else {
+                    invalidateTimer()
+                }
+            } else {
+                invalidateTimer()
+            }
             if clearSubs {
                 PTGCDManager.gcdAfter(time: 0.01) { [weak self] in
-                    self?.collectionViewSetData()
+                    self?.layoutSubviews()
                 }
             }
         }
     }
     
     /// 标题
-    open var titles: Array<Any> = [] {
+    public var titles: Array<Any> = [] {
         didSet {
             if titles.count > 0 {
                 if imagePaths.count == 0 {
@@ -69,20 +76,19 @@ public class PTCycleScrollView: UIView {
     }
     
     // MARK: - Closure
-    
     /// 点击后回调
-    open var didSelectItemAtIndexClosure : PTCycleIndexClosure? = nil
+    public var didSelectItemAtIndexClosure : PTCycleIndexClosure? = nil
     /// 滚动页内偏移量
-    open var scrollViewDidScrollClosure : PTScrollViewDidScrollClosure? = nil
+    public var scrollViewDidScrollClosure : PTScrollViewDidScrollClosure? = nil
     /// 从哪儿滚动
-    open var scrollFromClosure : PTCycleIndexClosure? = nil
+    public var scrollFromClosure : PTCycleIndexClosure? = nil
     /// 滚动到哪儿
-    open var scrollToClosure : PTCycleIndexClosure? = nil
+    public var scrollToClosure : PTCycleIndexClosure? = nil
     
     // MARK: - Config
     
     /// 自动轮播- 默认true
-    open var autoScroll: Bool = true {
+    public var autoScroll: Bool = true {
         didSet {
             invalidateTimer()
             // 如果关闭的无限循环，则不进行计时器的操作，否则每次滚动到最后一张就不在进行了。
@@ -93,7 +99,7 @@ public class PTCycleScrollView: UIView {
     }
     
     /// 无限循环- 默认true，此属性修改了就不存在轮播的意义了
-    open var infiniteLoop: Bool = true {
+    public var infiniteLoop: Bool = true {
         didSet {
             if imagePaths.count > 0 {
                 let temp = imagePaths
@@ -103,7 +109,7 @@ public class PTCycleScrollView: UIView {
     }
     
     /// 滚动方向，默认horizontal
-    open var scrollDirection: UICollectionView.ScrollDirection? = .horizontal {
+    public var scrollDirection: UICollectionView.ScrollDirection? = .horizontal {
         didSet {
             switch scrollDirection {
             case .horizontal:
@@ -115,181 +121,156 @@ public class PTCycleScrollView: UIView {
     }
     
     /// 滚动间隔时间,默认2秒
-    open var autoScrollTimeInterval: Double = 2.0 {
-        didSet {
-            autoScroll = true
-        }
-    }
+    public var autoScrollTimeInterval: Double = 2.0
     
     // MARK: - Style
-    
     /// 背景颜色
-    open var collectionViewBackgroundColor: UIColor! = UIColor.clear
+    public var collectionViewBackgroundColor: UIColor! = UIColor.clear
         
     // MARK: ImageView
     /// 图片的展示模式
-    open var imageViewContentMode: UIView.ContentMode? {
+    public var imageViewContentMode: UIView.ContentMode? {
         didSet {
-            collectionViewSetData()
-        }
-    }
-    
-    // MARK: Title
-    
-    /// 字体颜色
-    open var textColor: UIColor = UIColor.white
-    
-    /// 设置行数
-    open var numberOfLines: NSInteger = 2
-    
-    /// 标题的左间距
-    open var titleLeading: CGFloat = 15
-    
-    /// 字体
-    open var font: UIFont = UIFont.systemFont(ofSize: 15)
-    
-    /// 背景颜色
-    open var titleBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.3)
-    
-    // MARK: 箭头标签
-    
-    /// Icon - [LeftIcon, RightIcon]
-    open var arrowLRIcon: [Any]?
-    
-    /// Icon Frame - [LeftIconFrame, RightIconFrame]
-    open var arrowLRFrame: [CGRect]?
-    
-    // MARK: PageControl
-        
-    /// 未选中颜色
-    open var pageControlTintColor: UIColor = UIColor.lightGray {
-        didSet {
-            // 重新添加
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    /// 选中颜色
-    open var pageControlCurrentPageColor: UIColor = UIColor.white {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    ///  圆角(.fill,.snake)
-    open var fillPageControlIndicatorRadius: CGFloat = 4 {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    /// 选中颜色(.pill,.snake)
-    open var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3) {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    /// 普通图片(.system)
-    open var pageControlActiveImage: UIImage? = nil {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    /// 选中图片(.system)
-    open var pageControlInActiveImage: UIImage? = nil {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    open var dotSpacing:CGFloat = 8 {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    // MARK: CustomPageControl
-        
-    /// 自定义Pagecontrol风格(.fill,.pill,.snake)
-    open var customPageControlStyle: PageControlStyle = .system {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    /// 自定义Pagecontrol普通颜色
-    open var customPageControlTintColor: UIColor = UIColor.white {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    /// 自定义Pagecontrol点阵边距
-    open var customPageControlIndicatorPadding: CGFloat = 8 {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
-        }
-    }
-    
-    /// pagecontrol的展示方位(左,中,右)
-    open var pageControlPosition: PageControlPosition = .center {
-        didSet {
-            if customPageControl != nil {
-                customPageControl?.removeFromSuperview()
-            }
-            setupPageControl()
             layoutSubviews()
         }
     }
     
-    /// pagecontrol的左右间距
-    open var pageControlLeadingOrTrialingContact: CGFloat = 28 {
+    // MARK: Title
+    /// 字体颜色
+    public var textColor: UIColor = UIColor.white
+    
+    /// 设置行数
+    public var numberOfLines: NSInteger = 2
+    
+    /// 标题的左间距
+    public var titleLeading: CGFloat = 15
+    
+    /// 字体
+    public var font: UIFont = UIFont.systemFont(ofSize: 15)
+    
+    /// 背景颜色
+    public var titleBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.3)
+    
+    // MARK: 箭头标签
+    
+    /// Icon - [LeftIcon, RightIcon]
+    public var arrowLRIcon: [Any]?
+    
+    /// Icon Frame - [LeftIconFrame, RightIconFrame]
+    public var arrowLRFrame: [CGRect]?
+    
+    // MARK: PageControl
+    /// 未选中颜色
+    public var pageControlTintColor: UIColor = UIColor.lightGray {
         didSet {
-            setNeedsDisplay()
+            // 重新添加
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    /// 选中颜色
+    public var pageControlCurrentPageColor: UIColor = UIColor.white {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    ///  圆角(.fill,.snake)
+    public var fillPageControlIndicatorRadius: CGFloat = 4 {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    /// 选中颜色(.pill,.snake)
+    public var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3) {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    /// 普通图片(.system)
+    public var pageControlActiveImage: UIImage? = nil {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    /// 选中图片(.system)
+    public var pageControlInActiveImage: UIImage? = nil {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    public var dotSpacing:CGFloat = 8 {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    // MARK: CustomPageControl
+    /// 自定义Pagecontrol风格(.fill,.pill,.snake)
+    public var customPageControlStyle: PageControlStyle = .system {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    /// 自定义Pagecontrol普通颜色
+    public var customPageControlTintColor: UIColor = UIColor.white {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    /// 自定义Pagecontrol点阵边距
+    public var customPageControlIndicatorPadding: CGFloat = 8 {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    /// pagecontrol的展示方位(左,中,右)
+    public var pageControlPosition: PageControlPosition = .center {
+        didSet {
+            cleanPageControl()
+            layoutSubviews()
+        }
+    }
+    
+    func cleanPageControl() {
+        if let control = customPageControl {
+            control.removeFromSuperview()
+            customPageControl = nil
+        }
+    }
+    
+    /// pagecontrol的左右间距
+    public var pageControlLeadingOrTrialingContact: CGFloat = 28 {
+        didSet {
+            layoutSubviews()
         }
     }
     
     /// pagecontrol的底部间距
-    open var pageControlBottom: CGFloat = 5 {
+    public var pageControlBottom: CGFloat = 5 {
         didSet {
-            setNeedsDisplay()
+            layoutSubviews()
         }
     }
         
-    open var iCloudDocument:String = ""
+    public var iCloudDocument:String = ""
     
     // MARK: - Private
-    
     /// 注意： 由于属性较多，所以请使用style对应的属性，如果没有标明则通用
     /// PageControl
     fileprivate var customPageControl: UIView?
@@ -357,7 +338,7 @@ public class PTCycleScrollView: UIView {
             return
         }
         let imagePath = self.imagePaths[currentIndex()]
-        if let videoPath = imagePath as? String, videoPath.pathExtension.lowercased() == "mp4" || videoPath.pathExtension.lowercased() == "mov",let player = cell.player {
+        if let videoPath = imagePath as? String, ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()),let player = cell.player {
             if player.rate != 0 {
                 floatingCallback(cell.playerLayer)
             } else {
@@ -455,7 +436,9 @@ extension PTCycleScrollView {
     func scrollViewReloadData() {
         invalidateTimer()
         collectionViewSetData()
-        setupTimer()
+        if autoScroll {
+            setupTimer()
+        }
     }
 }
 
@@ -466,10 +449,6 @@ extension PTCycleScrollView {
         addSubview(pageScrollerView)
         pageScrollerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-        
-        PTGCDManager.gcdAfter(time: 0.1) {
-            self.setupPageControl()
         }
     }
     
@@ -502,21 +481,43 @@ extension PTCycleScrollView {
                 return
             }
             
-            let leftImageView = UIImageView.init(frame: alf.first!)
-            leftImageView.contentMode = .left
-            leftImageView.tag = 0
-            leftImageView.isUserInteractionEnabled = true
-            leftImageView.loadImage(contentData: ali.first!,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
-            leftImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.scrollByDirection(_:))))
-            self.addSubview(leftImageView)
+            if let leftFrame = alf.first {
+                let leftImageView = UIImageView(frame: leftFrame)
+                leftImageView.contentMode = .left
+                leftImageView.tag = 0
+                leftImageView.isUserInteractionEnabled = true
+                if let leftImage = ali.first {
+                    leftImageView.loadImage(contentData: leftImage,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
+                } else {
+                    leftImageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+                }
+                let leftTap = UITapGestureRecognizer { sender in
+                    if let senders = sender as? UITapGestureRecognizer {
+                        self.scrollByDirection(senders)
+                    }
+                }
+                leftImageView.addGestureRecognizer(leftTap)
+                self.addSubview(leftImageView)
+            }
             
-            let rightImageView = UIImageView.init(frame: alf.last!)
-            rightImageView.contentMode = .right
-            rightImageView.tag = 1
-            rightImageView.isUserInteractionEnabled = true
-            rightImageView.loadImage(contentData: ali.last!,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
-            rightImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.scrollByDirection(_:))))
-            self.addSubview(rightImageView)
+            if let rightFrame = alf.last {
+                let rightImageView = UIImageView(frame: rightFrame)
+                rightImageView.contentMode = .right
+                rightImageView.tag = 1
+                rightImageView.isUserInteractionEnabled = true
+                if let rightImage = ali.last {
+                    rightImageView.loadImage(contentData: rightImage,iCloudDocumentName: self.iCloudDocument,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
+                } else {
+                    rightImageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+                }
+                let rightTap = UITapGestureRecognizer { sender in
+                    if let senders = sender as? UITapGestureRecognizer {
+                        self.scrollByDirection(senders)
+                    }
+                }
+                rightImageView.addGestureRecognizer(rightTap)
+                self.addSubview(rightImageView)
+            }
         }
     }
     
@@ -527,64 +528,72 @@ extension PTCycleScrollView {
             return
         }
         
-        switch customPageControlStyle {
-        case .none:
-            customPageControl = UIView()
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = true
-        case .system:
-            customPageControl = UIPageControl()
-            (customPageControl as! UIPageControl).pageIndicatorTintColor = pageControlTintColor
-            (customPageControl as! UIPageControl).currentPageIndicatorTintColor = pageControlCurrentPageColor
-            (customPageControl as! UIPageControl).numberOfPages = imagePaths.count
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = false
-        case .fill:
-            customPageControl = PTFilledPageControl()
-            customPageControl?.tintColor = customPageControlTintColor
-            (customPageControl as! PTFilledPageControl).indicatorPadding = customPageControlIndicatorPadding
-            (customPageControl as! PTFilledPageControl).indicatorRadius = fillPageControlIndicatorRadius
-            (customPageControl as! PTFilledPageControl).pageCount = imagePaths.count
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = false
-        case .pill:
-            customPageControl = PTPillPageControl()
-            (customPageControl as! PTPillPageControl).indicatorPadding = customPageControlIndicatorPadding
-            (customPageControl as! PTPillPageControl).activeTint = customPageControlTintColor
-            (customPageControl as! PTPillPageControl).inactiveTint = customPageControlInActiveTintColor
-            (customPageControl as! PTPillPageControl).pageCount = imagePaths.count
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = false
-        case .snake:
-            customPageControl = PTSnakePageControl()
-            (customPageControl as! PTSnakePageControl).activeTint = customPageControlTintColor
-            (customPageControl as! PTSnakePageControl).indicatorPadding = customPageControlIndicatorPadding
-            (customPageControl as! PTSnakePageControl).indicatorRadius = fillPageControlIndicatorRadius
-            (customPageControl as! PTSnakePageControl).inactiveTint = customPageControlInActiveTintColor
-            (customPageControl as! PTSnakePageControl).pageCount = imagePaths.count
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = false
-        case .image:
-            customPageControl = PTImagePageControl()
-            (customPageControl as! PTImagePageControl).pageIndicatorTintColor = UIColor.clear
-            (customPageControl as! PTImagePageControl).currentPageIndicatorTintColor = UIColor.clear
-            if let activeImage = pageControlActiveImage {
-                (customPageControl as! PTImagePageControl).pageImage = activeImage
+        if customPageControl == nil {
+            switch customPageControlStyle {
+            case .none:
+                customPageControl = UIView()
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = true
+            case .system:
+                let control = UIPageControl()
+                control.pageIndicatorTintColor = pageControlTintColor
+                control.currentPageIndicatorTintColor = pageControlCurrentPageColor
+                control.numberOfPages = imagePaths.count
+                customPageControl = control
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = false
+            case .fill:
+                let control = PTFilledPageControl()
+                control.tintColor = customPageControlTintColor
+                control.indicatorPadding = customPageControlIndicatorPadding
+                control.indicatorRadius = fillPageControlIndicatorRadius
+                control.pageCount = imagePaths.count
+                customPageControl = control
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = false
+            case .pill:
+                let control = PTPillPageControl()
+                control.indicatorPadding = customPageControlIndicatorPadding
+                control.activeTint = customPageControlTintColor
+                control.inactiveTint = customPageControlInActiveTintColor
+                control.pageCount = imagePaths.count
+                customPageControl = control
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = false
+            case .snake:
+                let control = PTSnakePageControl()
+                control.activeTint = customPageControlTintColor
+                control.indicatorPadding = customPageControlIndicatorPadding
+                control.indicatorRadius = fillPageControlIndicatorRadius
+                control.inactiveTint = customPageControlInActiveTintColor
+                control.pageCount = imagePaths.count
+                customPageControl = control
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = false
+            case .image:
+                let control = PTImagePageControl()
+                control.pageIndicatorTintColor = UIColor.clear
+                control.currentPageIndicatorTintColor = UIColor.clear
+                if let activeImage = pageControlActiveImage {
+                    control.pageImage = activeImage
+                }
+                if let inActiveImage = pageControlInActiveImage {
+                    control.currentPageImage = inActiveImage
+                }
+                control.dotSpacing = dotSpacing
+                control.numberOfPages = imagePaths.count
+                customPageControl = control
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = false
+            case .scrolling:
+                let control = PTScrollingPageControl()
+                control.pageCount = imagePaths.count
+                customPageControl = control
+                addSubview(customPageControl!)
+                customPageControl?.isHidden = false
             }
-            if let inActiveImage = pageControlInActiveImage {
-                (customPageControl as! PTImagePageControl).currentPageImage = inActiveImage
-            }
-            (customPageControl as! PTImagePageControl).dotSpacing = dotSpacing
-            (customPageControl as! PTImagePageControl).numberOfPages = imagePaths.count
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = false
-        case .scrolling:
-            customPageControl = PTScrollingPageControl()
-            (customPageControl as? PTScrollingPageControl)?.pageCount = imagePaths.count
-            addSubview(customPageControl!)
-            customPageControl?.isHidden = false
+            bringSubviewToFront(customPageControl!)
         }
-        bringSubviewToFront(customPageControl!)
     }
 }
 
@@ -610,7 +619,8 @@ extension PTCycleScrollView {
         // CollectionView
         // Cell Height
         self.cellHeight = self.frame.height
-        
+        self.collectionViewSetData()
+
         // 计算最大扩展区大小
         switch self.scrollDirection {
         case .horizontal:
@@ -619,24 +629,29 @@ extension PTCycleScrollView {
             self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
         }
         
+        let trialingContact = self.pageControlLeadingOrTrialingContact * 0.5
+
+        setupPageControl()
         // Page Frame
         switch self.customPageControlStyle {
         case .none,.system,.image:
-            let pointSize = (self.customPageControl as? UIPageControl)?.size(forNumberOfPages: self.imagePaths.count)
-            (self.customPageControl as? UIPageControl)?.snp.makeConstraints { make in
-                make.height.equalTo(10)
-                make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                switch self.pageControlPosition {
-                case .center:
-                    make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                case .left:
-                    make.width.equalTo(pointSize?.width ?? 0)
-                    make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                case .right:
-                    make.width.equalTo(pointSize?.width ?? 0)
-                    make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                default:
-                    break
+            if let pageControl = self.customPageControl as? UIPageControl {
+                let pointSize = pageControl.size(forNumberOfPages: self.imagePaths.count)
+                pageControl.snp.makeConstraints { make in
+                    make.height.equalTo(10)
+                    make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                    switch self.pageControlPosition {
+                    case .center:
+                        make.left.right.equalToSuperview().inset(trialingContact)
+                    case .left:
+                        make.width.equalTo(pointSize.width)
+                        make.left.equalToSuperview().inset(trialingContact)
+                    case .right:
+                        make.width.equalTo(pointSize.width)
+                        make.right.equalToSuperview().inset(trialingContact)
+                    default:
+                        break
+                    }
                 }
             }
         default:
@@ -648,17 +663,17 @@ extension PTCycleScrollView {
             default:
                 heights = 10
             }
-            
+                        
             self.customPageControl?.snp.makeConstraints { make in
                 make.height.equalTo(heights)
                 make.bottom.equalToSuperview().inset(self.pageControlBottom)
                 switch self.pageControlPosition {
                 case .left:
-                    make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                    make.left.equalToSuperview().inset(trialingContact)
                 case.right:
-                    make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                    make.right.equalToSuperview().inset(trialingContact)
                 default:
-                    make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
+                    make.left.right.equalToSuperview().inset(trialingContact)
                 }
             }
         }
@@ -681,47 +696,7 @@ extension PTCycleScrollView {
             }
         }
     }
-    
-    func setCellData() {
-        for i in 0..<totalItemsCount {
-            guard let cell = viewWithTag(100 + i) as? PTCycleScrollViewCell else { continue }
-            
-            if self.isOnlyTitle && !self.titles.isEmpty {
-                cell.titleLabelHeight = self.cellHeight
-                let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
-                cell.title = self.titles[itemIndex]
-            } else {
-                // 配置图片模式
-                if let imageViewContentMode = self.imageViewContentMode {
-                    cell.imageView.contentMode = imageViewContentMode
-                }
-                
-                if self.imagePaths.isEmpty {
-                    cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
-                } else {
-                    let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
-                    let imagePath = self.imagePaths[itemIndex]
-                    
-                    if let videoPath = imagePath as? String, videoPath.pathExtension.lowercased() == "mp4" || videoPath.pathExtension.lowercased() == "mov" {
-                        self.getVideoFrame(for: videoPath) { image in
-                            cell.imageView.image = image ?? PTAppBaseConfig.share.defaultPlaceholderImage
-                            cell.videoLink = videoPath
-                            if itemIndex == 0, let url = URL(string: videoPath) {
-                                PTGCDManager.gcdAfter(time: 0.1) {
-                                    cell.setPlayer(videoQ: url)
-                                }
-                            } else {
-                                cell.playButton.isHidden = false
-                            }
-                        }
-                    } else {
-                        self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
-                    }
-                }
-            }
-        }
-    }
-    
+        
     func loadImageWithAny(imagePath:Any,cell:PTCycleScrollViewCell,itemIndex:Int) {
         var currentImage: UIImage?
         Task {
@@ -783,8 +758,40 @@ extension PTCycleScrollView {
                 }
                 self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.frame.height
             }
+            
+            let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: i)
+            if self.isOnlyTitle && !self.titles.isEmpty {
+                cell.titleLabelHeight = self.cellHeight
+                cell.title = self.titles[itemIndex]
+            } else {
+                // 配置图片模式
+                if let imageViewContentMode = self.imageViewContentMode {
+                    cell.imageView.contentMode = imageViewContentMode
+                }
+                
+                if self.imagePaths.isEmpty {
+                    cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+                } else {
+                    let imagePath = self.imagePaths[itemIndex]
+                    
+                    if let videoPath = imagePath as? String, ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()) {
+                        self.getVideoFrame(for: videoPath) { image in
+                            cell.imageView.image = image ?? PTAppBaseConfig.share.defaultPlaceholderImage
+                            cell.videoLink = videoPath
+                            if itemIndex == 0, let url = URL(string: videoPath) {
+                                PTGCDManager.gcdAfter(time: 0.1) {
+                                    cell.setPlayer(videoQ: url)
+                                }
+                            } else {
+                                cell.playButton.isHidden = false
+                            }
+                        }
+                    } else {
+                        self.loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
+                    }
+                }
+            }
         }
-        setCellData()
         switch self.scrollDirection {
         case .horizontal:
             pageScrollerView.contentSize = CGSize(width: self.maxSwipeSize, height: self.frame.height)
@@ -898,7 +905,7 @@ extension PTCycleScrollView {
     
     /// 滚动上一个/下一个
     /// - Parameter gestureRecognizer: 手势
-    open func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
+    public func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
         if let index = gestureRecognizer.view?.tag {
             if autoScroll {
                 invalidateTimer()
@@ -911,7 +918,6 @@ extension PTCycleScrollView {
 
 // MARK: Scroll control
 extension PTCycleScrollView {
-    
     fileprivate func cycleScrollViewScrollToIndex() {
         let indexOnPageControl = pageControlIndexWithCurrentCellIndex(index: currentIndex())
         scrollToClosure?(indexOnPageControl)

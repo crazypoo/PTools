@@ -26,7 +26,10 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
                 if title is String {
                     titleLabel.text = "\(title as! String)"
                 } else if title is ASAttributedString {
-                    titleLabel.attributedText = (title as! ASAttributedString).value
+                    titleLabel.attributed.text = (title as! ASAttributedString)
+                } else {
+                    titleBackView.isHidden = true
+                    titleLabel.isHidden = true
                 }
             } else {
                 titleBackView.isHidden = true

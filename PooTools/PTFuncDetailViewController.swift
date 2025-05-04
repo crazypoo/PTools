@@ -596,7 +596,6 @@ class PTFuncDetailViewController: PTBaseViewController {
             banner.didSelectItemAtIndexClosure = { index in
                 PTNSLogConsole(">>>>>>>>>>>>>>>>>>>\(index)")
             }
-            banner.autoScroll = false
             view.addSubviews([banner])
             banner.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
