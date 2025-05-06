@@ -701,26 +701,8 @@ extension PTCycleScrollView {
     }
         
     func loadImageWithAny(imagePath:Any,cell:PTCycleScrollViewCell,itemIndex:Int) {
-        Task {
-            var currentImage: UIImage?
-            let imageResult = await PTLoadImageFunction.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument)
-            if let images = imageResult.0 {
-                if images.count > 1 {
-                    currentImage = UIImage.animatedImage(with: images, duration: 2)
-                } else {
-                    if let singleImage = imageResult.1 {
-                        currentImage = singleImage
-                    } else {
-                        currentImage = PTAppBaseConfig.share.defaultPlaceholderImage
-                    }
-                }
-            } else {
-                currentImage = PTAppBaseConfig.share.defaultPlaceholderImage
-            }
-            cell.imageView.image = currentImage
-            // 对冲数据判断
-            setBannerAttTitle(cell: cell, itemIndex: itemIndex)
-        }
+        cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument)
+        setBannerAttTitle(cell: cell, itemIndex: itemIndex)
     }
     
     func collectionViewSetData() {
