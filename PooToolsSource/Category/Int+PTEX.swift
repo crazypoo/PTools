@@ -71,6 +71,30 @@ public extension Int {
             return true
         }
     }
+    
+    static func displaySmartText(for number: Int) -> String {
+        if number < 1000 {
+            if number <= 11 {
+                return "\(number)"
+            }
+            let digits = Int(log10(Double(number)))
+            let base = Int(pow(10.0, Double(digits)))
+            let rounded = (number / base) * base
+            return "\(rounded)+"
+        } else if number < 1_000_000 {
+            let formatted = Double(number) / 1000
+            return formatNumber(formatted) + "k+"
+        } else {
+            let formatted = Double(number) / 1_000_000
+            return formatNumber(formatted) + "M+"
+        }
+    }
+
+    private static func formatNumber(_ num: Double) -> String {
+        return num.truncatingRemainder(dividingBy: 1) == 0 ?
+            String(format: "%.0f", num) :
+            String(format: "%.1f", num)
+    }
 }
 
 extension Int: PTNumberValueAdapterable {
