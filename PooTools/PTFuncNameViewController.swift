@@ -650,13 +650,14 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                     vc.selectImageBlock = { result, isOriginal in
                         PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
-                        if result.count > 0 {
-                            result.first!.asset.convertPHAssetToAVAsset { progress in
-                                
+                        if let resultFirst = result.first {
+                            resultFirst.asset.convertPHAssetToAVAsset { progress in
+                                PTNSLogConsole("progress:>>>>>>>>>>>>>\(progress)")
+
                             } completion: { avAsset in
-                                if avAsset != nil {
+                                if let getAv = avAsset {
                                     PTGCDManager.gcdMain {
-                                        let controller = PTVideoEditorToolsViewController(asset: result.first!.asset,avAsset: avAsset!)
+                                        let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv)
                                         controller.videoEditorShow(vc: self)
                                         controller.onEditCompleteHandler = { url in
                                             PTAlertTipControl.present(title:"我好了\(url)",icon:.Done,style: .Normal)

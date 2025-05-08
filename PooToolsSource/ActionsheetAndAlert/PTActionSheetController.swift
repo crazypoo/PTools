@@ -18,7 +18,7 @@ public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, 
 public class PTActionCell:UIView {
         
     private lazy var blur:SSBlurView = {
-        let blurs = SSBlurView.init(to: self)
+        let blurs = SSBlurView(to: self)
         blurs.alpha = 0.9
         blurs.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         return blurs
@@ -380,47 +380,50 @@ public class PTActionSheetController: PTAlertController {
     }
 
     func contentSubsSet() {
-        if contentItems.count > 0 {
-            contentItems.enumerated().forEach({ index,value in
-                let lineY = self.sheetConfig.rowHeight * CGFloat(index) + self.sheetConfig.lineHeight * CGFloat(index)
-                let lineView = UIView()
-                lineView.backgroundColor = .lightGray
-                contentScrollerView.addSubview(lineView)
-                lineView.snp.makeConstraints { make in
-                    make.height.equalTo(self.sheetConfig.lineHeight)
-                    make.width.equalTo(CGFloat.kSCREEN_WIDTH - self.sheetConfig.viewSpace * 2)
-                    make.centerX.equalToSuperview()
-                    make.top.equalTo(lineY)
+        guard !contentItems.isEmpty else { return }
+
+        let lastIndex = contentItems.count - 1
+
+        contentItems.enumerated().forEach { index, item in
+            let yOffset = sheetConfig.rowHeight * CGFloat(index) + sheetConfig.lineHeight * CGFloat(index)
+
+            // 分隔線
+            let lineView = UIView()
+            lineView.backgroundColor = .lightGray
+            contentScrollerView.addSubview(lineView)
+            lineView.snp.makeConstraints { make in
+                make.height.equalTo(sheetConfig.lineHeight)
+                make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
+                make.centerX.equalToSuperview()
+                make.top.equalTo(yOffset)
+            }
+
+            // 按鈕
+            let button = createActionCell(for: item, withCorner: false) { [weak self] in
+                self?.dismissAnimation {
+                    self?.actionSheetSelectBlock?(self!, index, item.title)
                 }
-                
-                let btn = createActionCell(for: value,withCorner: false) { [weak self] in
-                    self?.dismissAnimation {
-                        self?.actionSheetSelectBlock?(self!,index,value.title)
-                    }
+            }
+            contentScrollerView.addSubview(button)
+            button.snp.makeConstraints { make in
+                make.left.right.equalTo(lineView)
+                make.top.equalTo(lineView.snp.bottom)
+                make.height.equalTo(sheetConfig.rowHeight)
+            }
+
+            // Corner 處理
+            if titleItem == nil, index == 0 {
+                lineView.isHidden = true
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.topLeft, .topRight])
                 }
-                contentScrollerView.addSubview(btn)
-                
-                btn.snp.makeConstraints { make in
-                    make.left.right.equalTo(lineView)
-                    make.top.equalTo(lineView.snp.bottom)
-                    make.height.equalTo(self.sheetConfig.rowHeight)
+            }
+
+            if index == lastIndex {
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.bottomLeft, .bottomRight])
                 }
-                
-                if titleItem == nil {
-                    if index == 0 {
-                        lineView.isHidden = true
-                        PTGCDManager.gcdAfter(time: 0.1) {
-                            btn.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.topLeft,.topRight])
-                        }
-                    }
-                }
-                
-                if index == (contentItems.count - 1) {
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        btn.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.bottomLeft,.bottomRight])
-                    }
-                }
-            })
+            }
         }
     }
 }

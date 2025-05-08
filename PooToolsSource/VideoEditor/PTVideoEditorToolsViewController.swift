@@ -708,7 +708,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     }()
     
     //MARK: Filter
-    private var currentFilter: PTHarBethFilter! = PTHarBethFilter.none
+    private var currentFilter: PTHarBethFilter = PTHarBethFilter.none
     
     var videoRect: CGRect {
         if self.degree == 0 || self.degree == 180 {
@@ -793,7 +793,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
 #if POOTOOLS_NAVBARCONTROLLER
         zx_navBar?.addSubviews([dismissButtonItem,doneButtonItem])
         dismissButtonItem.snp.makeConstraints { make in
@@ -823,7 +822,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             make.left.right.equalToSuperview().inset(64)
             make.height.equalTo(self.imageContent.snp.width)
         }
-        
+
         imageContent.addSubviews([originImageView,originFilterImageView])
                 
         originImageView.addSubview(dimView)
@@ -861,33 +860,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         
         timeLineContentSet()
-         
+
         Task {
             do {
-                
-//                UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
-//                    if image != nil {
-//                        let imageSize = image!.size
-//                        let scale = self.imageContent.frame.size.height / imageSize.height
-//                        let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
-//                        self.originFilterImageView.image = image
-//                        self.originImageView.image = image
-//                        self.originImageView.snp.makeConstraints { make in
-//                            make.width.equalTo(showImageSize.width)
-//                            make.centerX.equalToSuperview()
-//                            make.top.bottom.equalToSuperview()
-//                            make.centerX.centerY.equalToSuperview()
-//                        }
-//                    } else {
-//                        self.originImageView.snp.makeConstraints { make in
-//                            make.width.equalToSuperview()
-//                            make.centerX.equalToSuperview()
-//                            make.top.bottom.equalToSuperview()
-//                            make.centerX.centerY.equalToSuperview()
-//                        }
-//                    }
-//                }
-
                 self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
                 self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
                 self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
@@ -924,12 +899,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 let x = self.timeLineContent.bounds.midX - width / 2
                 let y = (self.timeLineContent.bounds.height - height) / 2
                 self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
-
+                self.reloadAsset()
             } catch {
                 PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
             }
         }
-
     }
     
     func playContentSet() {

@@ -3443,21 +3443,21 @@
 		55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */ = {
 			isa = PBXGroup;
 			children = (
+				55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */,
+				55B6D7BD2C1D5F1D00033309 /* PTAlertConfig.swift */,
+				55B6D7BF2C1D611800033309 /* PTAlertController.swift */,
+				55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */,
+				55B6D7C12C1D63B100033309 /* PTAlertProtocol.swift */,
 				555818BB2AFA5D2C0051C0AA /* PTAlertTips.swift */,
 				555818BD2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift */,
 				555818B92AFA5AE40051C0AA /* PTAlertTipsIcon.swift */,
+				55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */,
+				55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */,
 				55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */,
 				55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */,
 				554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */,
 				558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */,
 				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
-				55B6D7BD2C1D5F1D00033309 /* PTAlertConfig.swift */,
-				55B6D7BF2C1D611800033309 /* PTAlertController.swift */,
-				55B6D7C12C1D63B100033309 /* PTAlertProtocol.swift */,
-				55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */,
-				55B6D7C52C1D64BF00033309 /* PTAlertManager.swift */,
-				55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */,
-				55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -3991,8 +3991,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4002,13 +4001,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4023,13 +4018,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

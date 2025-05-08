@@ -80,7 +80,9 @@ open class PTMapActionSheet: NSObject {
             } else if navAppName[index] == qMapName {
                 urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey!).urlToUnicodeURLString() ?? ""
             }
-            PTAppStoreFunction.jumpLink(url: URL(string: urlString)!)
+            if let url = URL(string: urlString) {
+                PTAppStoreFunction.jumpLink(url: url)
+            }
         } tapBackgroundBlock: { sheet in
             dismissTask?()
         }

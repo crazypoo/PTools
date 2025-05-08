@@ -61,33 +61,67 @@ public extension PHAsset {
         }
     }
     
-    func convertPHAssetToAVAsset(progress:@escaping (Float)->Void,completion: @escaping (AVAsset?) -> Void) {
+    func convertPHAssetToAVAsset(progress: @escaping (Float) -> Void,
+                                 completion: @escaping (AVAsset?) -> Void) {
         let options = PHVideoRequestOptions()
         options.version = .original
         options.isNetworkAccessAllowed = true
         
-        // 请求 AVAssetExportSession
-        PHImageManager.default().requestExportSession(forVideo: self, options: options, exportPreset: AVAssetExportPresetHighestQuality) { exportSession, info in
-            guard let exportSession = exportSession else {
+        PHImageManager.default().requestExportSession(forVideo: self, options: options, exportPreset: AVAssetExportPresetHighestQuality) { [weak self] exportSession, info in
+            guard let self = self, let exportSession = exportSession else {
                 PTNSLogConsole("导出会话创建失败")
                 completion(nil)
                 return
             }
-            
+
+            let outputURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                .appendingPathComponent("\(Date().timeIntervalSince1970).mov")
+
+            exportSession.outputURL = outputURL
+            exportSession.outputFileType = .mov
             self.exportSession = exportSession
-            var gotAvasset:AVAsset?
-            self.createAVAssetFromExportSession() { asset in
-                gotAvasset = asset
-            }
-            // 启动下载进度监控
-            self.monitorExportProgress(exportSession: self.exportSession!,progressHandler: progress,handler: { finish in
-                if finish {
-                    completion(gotAvasset)
+
+            // 開始導出
+            exportSession.exportAsynchronously {
+                DispatchQueue.main.async {
+                    switch exportSession.status {
+                    case .completed:
+                        PTNSLogConsole("导出完成，路径: \(outputURL)")
+                        let asset = AVAsset(url: outputURL)
+                        completion(asset)
+                    case .failed:
+                        PTNSLogConsole("导出失败: \(exportSession.error?.localizedDescription ?? "未知错误")")
+                        completion(nil)
+                    case .cancelled:
+                        PTNSLogConsole("导出被取消")
+                        completion(nil)
+                    default:
+                        break
+                    }
                 }
-            })
+            }
+
+            // 啟動進度監控（只要 exportAsynchronously 一啟動，progress 才會開始動）
+            self.startExportProgressMonitoring(exportSession: exportSession, progressHandler: progress)
         }
     }
-    
+
+    private func startExportProgressMonitoring(exportSession: AVAssetExportSession, progressHandler: @escaping (Float) -> Void) {
+        exportTimer?.invalidate()  // 保險起見
+        exportTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            let progress = exportSession.progress
+            PTNSLogConsole("当前下载进度：\(progress * 100)%")
+            progressHandler(progress)
+
+            if progress >= 1.0 {
+                self.exportTimer?.invalidate()
+                self.exportTimer = nil
+                PTNSLogConsole("下载完成")
+            }
+        }
+    }
+
     func converPHAssetToAVURLAsset(completion:@escaping (AVURLAsset?) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
@@ -100,52 +134,7 @@ public extension PHAsset {
             }
         }
     }
-    
-    func monitorExportProgress(exportSession: AVAssetExportSession,progressHandler:@escaping (Float)->Void,handler:@escaping ((Bool)->Void)) {
-        // 启动一个定时器来监控进度
-        let progress = exportSession.progress
-        self.exportTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-            Task { @MainActor in
-                PTNSLogConsole("当前下载进度：\(progress * 100)%")
-                progressHandler(progress)
-                // 当下载完成后，停止定时器
-                if progress >= 1.0 {
-                    timer.invalidate()
-                    PTNSLogConsole("下载完成")
-                    handler(true)
-                }
-            }
-        }
-    }
-    
-    func createAVAssetFromExportSession(completion: @escaping (AVAsset?) -> Void) {
-        // 首先导出视频到指定的文件路径
-        let outputURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(Date().timeIntervalSince1970).mov")
-        exportSession!.outputURL = outputURL
-        exportSession!.outputFileType = .mov // 指定导出格式
-
-        exportSession!.exportAsynchronously {
-            switch self.exportSession!.status {
-            case .completed:
-                PTNSLogConsole("导出完成，路径: \(outputURL)")
-                
-                // 使用导出的 URL 创建 AVAsset
-                let exportedAsset = AVAsset(url: outputURL)
-                completion(exportedAsset)
-                
-            case .failed:
-                PTNSLogConsole("导出失败: \(String(describing: self.exportSession!.error))")
-                completion(nil)
-                
-            case .cancelled:
-                PTNSLogConsole("导出被取消")
-                completion(nil)
-            default:
-                break
-            }
-        }
-    }
-    
+            
     func calcelExport() {
         if let exportSession = self.exportSession {
             exportSession.cancelExport()

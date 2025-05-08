@@ -414,7 +414,7 @@ public class PTCollectionView: UIView {
             if tagDatas is [PTTagLayoutModel] {
                 group = UICollectionView.tagShowLayout(data: tagDatas as? [PTTagLayoutModel],screenWidth: self.frame.width,itemOriginalX: viewConfig.itemOriginalX,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace,itemTrailingSpace: viewConfig.cellTrailingSpace,itemContentSpace: viewConfig.tagCellContentSpace)
             } else {
-                group = NSCollectionLayoutGroup.init(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1)))
+                group = NSCollectionLayoutGroup(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1)))
                 fatalError("如果是Tag,則datamodel必須是PTTagLayoutModel")
             }
         case .Custom:
