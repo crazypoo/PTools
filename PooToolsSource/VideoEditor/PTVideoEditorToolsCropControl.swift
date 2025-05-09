@@ -18,7 +18,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     var cropImageHandler:((CGSize,CGRect)->Void)!
     
     lazy var dismissButtonItem:UIButton = {
-        let image = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+        let image = PTVideoEditorConfig.share.dismissImage
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
@@ -28,7 +28,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     }()
     
     lazy var doneButtonItem:UIButton = {
-        let image = "✂️".emojiToImage(emojiFont: .appfont(size: 20))
+        let image = PTVideoEditorConfig.share.cutImage
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
@@ -36,7 +36,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
                 guard let self = self else { return }
                 if let error = crop.error {
                     PTGCDManager.gcdMain {
-                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription,icon:.Error,style: .Normal)
+                        PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error.localizedDescription,icon:.Error,style: .Normal)
                     }
                     return
                 }

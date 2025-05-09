@@ -26,46 +26,42 @@ final public class PTVideoEditorToolsModel {
     var title: String {
         switch videoControl {
         case .speed:
-            return "PT Video editor function speed".localized()
+            return PTVideoEditorConfig.share.speedTitle
         case .trim:
-            return "PT Video editor function trim".localized()
+            return PTVideoEditorConfig.share.trimTitle
         case .crop:
-            return "PT Video editor function crop".localized()
+            return PTVideoEditorConfig.share.cropTitle
         case .rotate:
-            return "PT Video editor function rotate".localized()
+            return PTVideoEditorConfig.share.rotateTitle
         case .mute:
-            return "PT Video editor function mute".localized()
+            return PTVideoEditorConfig.share.muteTitle
         case .presets:
-            return "PT Video editor function export preset".localized()
+            return PTVideoEditorConfig.share.presetsTitle
         case .filter:
-            return "PT Video editor function filter".localized()
+            return PTVideoEditorConfig.share.filterTitle
         case .rewrite:
-            return "PT Video editor function rewrite".localized()
+            return PTVideoEditorConfig.share.rewriteTitle
         }
     }
 
     var titleImage: UIImage {
         switch videoControl {
         case .speed:
-            if #available(iOS 16.0, *) {
-                return UIImage(systemName: "figure.walk.motion")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-            } else {
-                return UIImage(.bolt.horizontalCircle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-            }
+            return PTVideoEditorConfig.share.speedImage
         case .trim:
-            return UIImage(.timeline.selection).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.trimImage
         case .crop:
-            return UIImage(.crop).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.cropImage
         case .rotate:
-            return UIImage(.rotate.right).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.rotateImage
         case .mute:
-            return UIImage(.speaker).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.muteImage
         case .presets:
-            return UIImage(.tv).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.presetsImage
         case .filter:
-            return UIImage(.camera.filters).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.filterImage
         case .rewrite:
-            return UIImage(.repeat).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            return PTVideoEditorConfig.share.rewriteImage
         }
     }
 

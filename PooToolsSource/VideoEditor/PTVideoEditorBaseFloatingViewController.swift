@@ -17,7 +17,7 @@ open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
 
     lazy var doneButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage(PTVideoEditorConfig.share.doneImage, for: .normal)
         return view
     }()
 

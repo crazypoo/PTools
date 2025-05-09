@@ -122,7 +122,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     public var onlyOutput:Bool = false
     
     lazy var dismissButtonItem:UIButton = {
-        let image = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+        let image = PTVideoEditorConfig.share.dismissImage
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
@@ -135,14 +135,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     var loadingProgress:PTMediaBrowserLoadingView?
 
     lazy var doneButtonItem:UIButton = {
-        let image = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+        let image = PTVideoEditorConfig.share.doneImage
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
             self.c7Player.pause()
             
             PTGCDManager.gcdMain {
-                PTAlertTipControl.present(title:"PT Alert Doning".localized(),subtitle:"PT Video editor convetering".localized(),icon:.Heart,style: .Normal)
+                PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleDoing,subtitle:PTVideoEditorConfig.share.alertTitleConvetering,icon:.Heart,style: .Normal)
                 if self.loadingProgress == nil {
                     self.loadingProgress = PTMediaBrowserLoadingView(type: .LoopDiagram)
                     AppWindows!.addSubview(self.loadingProgress!)
@@ -158,7 +158,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                             self.returnFrontVC()
                         } else {
                             PTGCDManager.gcdMain {
-                                PTAlertTipControl.present(title:"PT Alert Doning".localized(),subtitle:"PT Video editor ouputing".localized(),icon:.Heart,style: .Normal)
+                                PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleDoing,subtitle:PTVideoEditorConfig.share.alertTitleOutputing,icon:.Heart,style: .Normal)
 
                                 let hudConfig = PTHudConfig.share
                                 hudConfig.hudColors = [.gray,.gray]
@@ -216,12 +216,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                                 }) { success, error in
                                                     if success {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
+                                                            PTAlertTipControl.present(title:"",subtitle:PTVideoEditorConfig.share.alertTitleSaveDone,icon:.Done,style: .Normal)
                                                             self.returnFrontVC()
                                                         }
                                                     } else {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Photo picker save video error".localized(),icon:.Done,style: .Normal)
+                                                            PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:PTVideoEditorConfig.share.alertTitleSaveError,icon:.Done,style: .Normal)
                                                         }
                                                     }
                                                     FileManager.pt.removefile(filePath: outputURL.description)
@@ -230,12 +230,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                                 PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
                                                     if error == nil,finish {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
+                                                            PTAlertTipControl.present(title:"",subtitle:PTVideoEditorConfig.share.alertTitleSaveDone,icon:.Done,style: .Normal)
                                                             self.returnFrontVC()
                                                         }
                                                     } else {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error!.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                                            PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error!.localizedDescription.localized(),icon:.Done,style: .Normal)
                                                         }
                                                     }
                                                     FileManager.pt.removefile(filePath: outputURL.description)
@@ -246,7 +246,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                         PTGCDManager.gcdMain {
                                             self.loadingProgress?.removeFromSuperview()
                                             self.loadingProgress = nil
-                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                            PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error.localizedDescription.localized(),icon:.Done,style: .Normal)
                                         }
                                     }
                                 })
@@ -256,7 +256,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     } else {
                         self.loadingProgress?.removeFromSuperview()
                         self.loadingProgress = nil
-                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error?.localizedDescription ?? "",icon: .Error,style: .Normal)
+                        PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error?.localizedDescription ?? "",icon: .Error,style: .Normal)
                     }
                 }
             }
@@ -365,15 +365,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var muteButton:PTLayoutButton = {
-        let view = PTLayoutButton()
+    lazy var muteButton:PTActionLayoutButton = {
+        let view = PTActionLayoutButton()
         view.layoutStyle = .leftImageRightTitle
         view.imageSize = CGSizeMake(25, 25)
-        view.normalImage = UIImage(.speaker).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        view.selectedImage = UIImage(.speaker.zzz).withTintColor(PTVideoEditorConfig.share.themeColor)
+        view.setImage(UIImage(.speaker).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)), state: .normal)
+        view.setImage(UIImage(.speaker.zzz).withTintColor(.purple), state: .selected)
         view.isSelected = false
         view.isUserInteractionEnabled = true
-        view.normalTitle = ""
         view.midSpacing = 0
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
@@ -458,7 +457,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 titles.append(value.name)
             }
             
-            UIAlertController.baseActionSheet(title: "PT Video editor output type".localized(),subTitle: String(format: "PT Video editor function export preset select current".localized(), self.currentOutputType.name), titles: titles) { sheet, index, title in
+            UIAlertController.baseActionSheet(title: PTVideoEditorConfig.share.alertTitleOutputType,subTitle: String(format: PTVideoEditorConfig.share.alertTitleOutputTypeOption, self.currentOutputType.name), titles: titles) { sheet, index, title in
                 self.currentOutputType = self.outputTypes[index]
                 self.outputTypeButton.normalTitle = self.currentOutputType.name
                 switch self.currentOutputType.type {
@@ -668,7 +667,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 case .presets:
                     let presets = AVAssetExportSession.exportPresets(compatibleWith: self.avPlayer.currentItem!.asset)
                     
-                    UIAlertController.baseActionSheet(title: "PT Video editor function export preset select".localized(),subTitle: String(format: "PT Video editor function export preset select current".localized(), self.presets), titles: presets) { sheet, index, title in
+                    UIAlertController.baseActionSheet(title: PTVideoEditorConfig.share.alertTitleExportType,subTitle: String(format: PTVideoEditorConfig.share.alertTitleOutputTypeOption, self.presets), titles: presets) { sheet, index, title in
                         self.presets = title
                     }
                 case .filter:
@@ -1076,8 +1075,38 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
     }
     
-    func sheetPresent(vc:UIViewController,size:CGFloat) {
-        UIViewController.currentPresentToSheet(vc: vc,sizes: [.percent(Float(size))])
+    func sheetPresent(vc:UIViewController,size:CGFloat, options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
+        let sheet = PTSheetViewController(controller: vc,sizes:[.percent(Float(size))],options: options,dismissPanGes: dismissPanGes)
+        sheet.overlayColor = UIColor(white: 0, alpha: 0.25)
+        sheet.dismissOnPull = false
+        sheet.dismissOnOverlayTap = true
+        sheet.hasBlurBackground = false
+        sheet.shouldRecognizePanGestureWithUIControls = false
+        sheet.allowPullingPastMinHeight = false
+        sheet.allowPullingPastMaxHeight = false
+        let currentVC = PTUtils.getCurrentVC()
+        if currentVC is PTSideMenuControl {
+            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
+            if let presentedVC = currentVC?.presentedViewController {
+                presentedVC.present(sheet, animated: true) {
+                    completion?()
+                }
+            } else {
+                currentVC!.present(sheet, animated: true) {
+                    completion?()
+                }
+            }
+        } else {
+            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+                presentedVC.present(sheet, animated: true) {
+                    completion?()
+                }
+            } else {
+                PTUtils.getCurrentVC().present(sheet, animated: true) {
+                    completion?()
+                }
+            }
+        }
     }
 }
 
