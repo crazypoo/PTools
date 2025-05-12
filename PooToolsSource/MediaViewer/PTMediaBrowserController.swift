@@ -16,6 +16,63 @@ import AttributedString
 
 let numberOfVisibleLines = 2
 
+public protocol PTPageControllable : AnyObject {
+    var currentPage: Int { get }
+    func setCurrentPage(index: Int)
+    func update(currentPage: Int, totalPages: Int)
+}
+
+extension UIPageControl: PTPageControllable {
+    public func setCurrentPage(index: Int) {
+        self.currentPage = index
+    }
+    
+    public func update(currentPage: Int, totalPages: Int) {
+        self.currentPage = currentPage
+        self.numberOfPages = totalPages
+    }
+}
+extension PTFilledPageControl: PTPageControllable {
+    public func setCurrentPage(index: Int) {
+        self.progress = CGFloat(index)
+    }
+    
+    public func update(currentPage: Int, totalPages: Int) {
+        self.progress = CGFloat(currentPage)
+        self.pageCount = totalPages
+    }
+}
+extension PTPillPageControl: PTPageControllable {
+    public func setCurrentPage(index: Int) {
+        self.progress = CGFloat(index)
+    }
+    
+    public func update(currentPage: Int, totalPages: Int) {
+        self.progress = CGFloat(currentPage)
+        self.pageCount = totalPages
+    }
+}
+extension PTSnakePageControl: PTPageControllable {
+    public func setCurrentPage(index: Int) {
+        self.progress = CGFloat(index)
+    }
+    
+    public func update(currentPage: Int, totalPages: Int) {
+        self.progress = CGFloat(currentPage)
+        self.pageCount = totalPages
+    }
+}
+extension PTScrollingPageControl: PTPageControllable {
+    public func setCurrentPage(index: Int) {
+        self.progress = CGFloat(index)
+    }
+    
+    public func update(currentPage: Int, totalPages: Int) {
+        self.progress = CGFloat(currentPage)
+        self.pageCount = totalPages
+    }
+}
+
 @objcMembers
 public class PTMediaBrowserController: PTBaseViewController {
 
@@ -72,10 +129,12 @@ public class PTMediaBrowserController: PTBaseViewController {
         if viewConfig.pageControlShow {
             switch viewConfig.pageControlOption {
             case .system:
-                (view.pageControlView as! UIPageControl).addPageControlHandlers { sender in
-                    let cellModel = self.viewConfig.mediaData[sender.currentPage]
-                    self.updateBottom(models: cellModel)
-                    self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
+                if let pageControl = view.pageControlView as? UIPageControl {
+                    pageControl.addPageControlHandlers { sender in
+                        let cellModel = self.viewConfig.mediaData[sender.currentPage]
+                        self.updateBottom(models: cellModel)
+                        self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
+                    }
                 }
             default:
                 break
@@ -130,21 +189,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             return nil
         }
         collectionView.customerLayout = { sectionIndex,sectionModel in
-            var groupWidth:CGFloat = 0
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            sectionModel.rows?.enumerated().forEach { (index,model) in
-                let cellHeight:CGFloat = cellHeight
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: CGFloat(index) * cellWidth, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)
-                customers.append(customItem)
-                groupWidth += cellWidth
-            }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
+            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows,itemOriginalX: 0,itemWidth: cellWidth,itemHeight: cellHeight,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
         }
-        
         collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
             if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell,let currentIndex = collectionView.indexPath(for: currentCell) {
                 if let itemRow = sectionModel.rows?[currentIndex.row],let cellModel = itemRow.dataModel as? PTMediaBrowserModel,let endCell = cell as? PTMediaBrowserCell {
@@ -156,20 +202,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                     
                     if self.viewConfig.pageControlShow {
-                        switch self.viewConfig.pageControlOption {
-                        case .system:
-                            (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
-                        case .fill:
-                            (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
-                        case .pill:
-                            (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
-                        case .snake:
-                            (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
-                        case .image:
-                            (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
-                        case .scrolling:
-                            (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
-                        }
+                        self.pageControlProgressSet(indexPath: indexPath)
                     }
                     
                     if !self.navControl.titleLabel.isHidden {
@@ -181,20 +214,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
             if self.viewConfig.pageControlShow {
-                switch self.viewConfig.pageControlOption {
-                case .system:
-                    (self.bottomControl.pageControlView as! UIPageControl).currentPage = indexPath.row
-                case .fill:
-                    (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(indexPath.row)
-                case .pill:
-                    (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(indexPath.row)
-                case .snake:
-                    (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(indexPath.row)
-                case .image:
-                    (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = indexPath.row
-                case .scrolling:
-                    (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(indexPath.row)
-                }
+                self.pageControlProgressSet(indexPath: indexPath)
             }
             if let itemRow = sectionModel.rows?[indexPath.row], let cellModel = itemRow.dataModel as? PTMediaBrowserModel,let endCell = cell as? PTMediaBrowserCell {
                 switch endCell.currentCellType {
@@ -211,24 +231,10 @@ public class PTMediaBrowserController: PTBaseViewController {
                 self.browserCurrentDataBlock?(indexPath.row)
             }
         }
-        
         collectionView.collectionViewDidScroll = { collectionViewScrol in
             var currentPageControlValue = 0
             if self.viewConfig.pageControlShow {
-                switch self.viewConfig.pageControlOption {
-                case .system:
-                    currentPageControlValue = (self.bottomControl.pageControlView as! UIPageControl).currentPage
-                case .fill:
-                    currentPageControlValue = (self.bottomControl.pageControlView as! PTFilledPageControl).currentPage
-                case .pill:
-                    currentPageControlValue = (self.bottomControl.pageControlView as! PTPillPageControl).currentPage
-                case .snake:
-                    currentPageControlValue = (self.bottomControl.pageControlView as! PTSnakePageControl).currentPage
-                case .image:
-                    currentPageControlValue = (self.bottomControl.pageControlView as! PTImagePageControl).currentPage
-                case .scrolling:
-                    currentPageControlValue = (self.bottomControl.pageControlView as! PTScrollingPageControl).currentPage
-                }
+                currentPageControlValue = self.getPageControlCurrentValue()
             }
             
             let cellModel = self.viewConfig.mediaData[currentPageControlValue]
@@ -331,33 +337,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             if self.viewConfig.mediaData.count > 1 {
                 self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
                 if self.viewConfig.pageControlShow {
-                    let pageCount = self.viewConfig.mediaData.count
-                    switch self.viewConfig.pageControlOption {
-                    case .system:
-                        let pageControl = (self.bottomControl.pageControlView as! UIPageControl)
-                        pageControl.currentPage = 0
-                        pageControl.numberOfPages = pageCount
-                    case .fill:
-                        let pageControl = (self.bottomControl.pageControlView as! PTFilledPageControl)
-                        pageControl.progress = 0
-                        pageControl.pageCount = pageCount
-                    case .pill:
-                        let pageControl = (self.bottomControl.pageControlView as! PTPillPageControl)
-                        pageControl.progress = 0
-                        pageControl.pageCount = pageCount
-                    case .snake:
-                        let pageControl = (self.bottomControl.pageControlView as! PTSnakePageControl)
-                        pageControl.progress = 0
-                        pageControl.pageCount = pageCount
-                    case .image:
-                        let pageControl = (self.bottomControl.pageControlView as! PTImagePageControl)
-                        pageControl.currentPage = 0
-                        pageControl.numberOfPages = pageCount
-                    case .scrolling:
-                        let pageControl = (self.bottomControl.pageControlView as! PTScrollingPageControl)
-                        pageControl.progress = 0
-                        pageControl.pageCount = pageCount
-                    }
+                    self.setPageControlValue(0)
                 }
             } else {
                 self.bottomControl.pageControlView.isHidden = true
@@ -381,7 +361,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
 
             var sections = [PTSection]()
-            let rows = self.viewConfig.mediaData.map { PTRows.init(ID: PTMediaBrowserCell.ID,dataModel: $0) }
+            let rows = self.viewConfig.mediaData.map { PTRows(ID: PTMediaBrowserCell.ID,dataModel: $0) }
             let cellSection = PTSection(rows: rows)
             sections.append(cellSection)
             
@@ -438,41 +418,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         var debugActions: [UIMenuElement] = []
         actionSheetTitle.enumerated().forEach { index,value in
             let menuActions = UIAction(title: value) { _ in
-                if let currentView = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell {
-                    switch self.viewConfig.actionType {
-                    case .Save:
-                        switch index {
-                        case 0:
-                            self.saveImage()
-                        default:
-                            self.viewMoreActionBlock?((index - 1),currentView.gifImage)
-                            self.viewMoreActionDismiss()
-                        }
-                    case .Delete:
-                        switch index {
-                        case 0:
-                            self.deleteImage()
-                        default:
-                            self.viewMoreActionBlock?((index - 1),currentView.gifImage)
-                            self.viewMoreActionDismiss()
-                        }
-                    case .All:
-                        switch index {
-                        case 0:
-                            self.saveImage()
-                        case 1:
-                            self.deleteImage()
-                        default:
-                            self.viewMoreActionBlock?((index - 2),currentView.gifImage)
-                            self.viewMoreActionDismiss()
-                        }
-                    case .DIY:
-                        self.viewMoreActionBlock?(index,currentView.gifImage)
-                        self.viewMoreActionDismiss()
-                    default:
-                        break
-                    }
-                }
+                guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
+                self.handleAction(at: index, gifImage: cell.gifImage)
             }
             debugActions.append(menuActions)
         }
@@ -486,41 +433,8 @@ public class PTMediaBrowserController: PTBaseViewController {
 
     func actionSheet() {
         UIAlertController.baseActionSheet(title: viewConfig.actionTitle, cancelButtonName: viewConfig.actionCancel,titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
-            if let currentView = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell {
-                switch self.viewConfig.actionType {
-                case .Save:
-                    switch index {
-                    case 0:
-                        self.saveImage()
-                    default:
-                        self.viewMoreActionBlock?((index - 1),currentView.gifImage)
-                        self.viewMoreActionDismiss()
-                    }
-                case .Delete:
-                    switch index {
-                    case 0:
-                        self.deleteImage()
-                    default:
-                        self.viewMoreActionBlock?((index - 1),currentView.gifImage)
-                        self.viewMoreActionDismiss()
-                    }
-                case .All:
-                    switch index {
-                    case 0:
-                        self.saveImage()
-                    case 1:
-                        self.deleteImage()
-                    default:
-                        self.viewMoreActionBlock?((index - 2),currentView.gifImage)
-                        self.viewMoreActionDismiss()
-                    }
-                case .DIY:
-                    self.viewMoreActionBlock?(index,currentView.gifImage)
-                    self.viewMoreActionDismiss()
-                default:
-                    break
-                }
-            }
+            guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
+            self.handleAction(at: index, gifImage: cell.gifImage)
         })
     }
     
@@ -529,59 +443,92 @@ public class PTMediaBrowserController: PTBaseViewController {
         self.modalPresentationStyle = .fullScreen
         PTUtils.getCurrentVC().pt_present(self)
     }
+    
+    private func handleAction(at index: Int, gifImage: UIImage?) {
+        switch viewConfig.actionType {
+        case .Save:
+            index == 0 ? saveImage() : executeMoreAction(index: index - 1, image: gifImage)
+        case .Delete:
+            index == 0 ? deleteImage() : executeMoreAction(index: index - 1, image: gifImage)
+        case .All:
+            if index == 0 {
+                saveImage()
+            } else if index == 1 {
+                deleteImage()
+            } else {
+                executeMoreAction(index: index - 2, image: gifImage)
+            }
+        case .DIY:
+            executeMoreAction(index: index, image: gifImage)
+        default:
+            break
+        }
+    }
+
+    private func executeMoreAction(index: Int, image: UIImage?) {
+        viewMoreActionBlock?(index, image)
+        viewMoreActionDismiss()
+    }
+    
+    private func pageControlProgressSet(indexPath:IndexPath) {
+        guard viewConfig.pageControlShow,
+              let controllable = bottomControl.pageControlView as? PTPageControllable else { return }
+        controllable.setCurrentPage(index: indexPath.row)
+    }
+    
+    fileprivate func getPageControlCurrentValue() -> Int {
+        return (bottomControl.pageControlView as? PTPageControllable)?.currentPage ?? 0
+    }
+    
+    fileprivate func setPageControlValue(_ value: Int) {
+        guard let control = bottomControl.pageControlView as? PTPageControllable else { return }
+        control.update(currentPage: value, totalPages: viewConfig.mediaData.count)
+    }
 }
 
 fileprivate extension PTMediaBrowserController {
     func saveImage() {
         
-        var currentPageControlValue = 0
-        switch viewConfig.pageControlOption {
-        case .system:
-            currentPageControlValue = (bottomControl.pageControlView as! UIPageControl).currentPage
-        case .fill:
-            currentPageControlValue = (bottomControl.pageControlView as! PTFilledPageControl).currentPage
-        case .pill:
-            currentPageControlValue = (bottomControl.pageControlView as! PTPillPageControl).currentPage
-        case .snake:
-            currentPageControlValue = (bottomControl.pageControlView as! PTSnakePageControl).currentPage
-        case .image:
-            currentPageControlValue = (bottomControl.pageControlView as! PTImagePageControl).currentPage
-        case .scrolling:
-            currentPageControlValue = (bottomControl.pageControlView as! PTScrollingPageControl).currentPage
-        }
+        let currentPageControlValue = self.getPageControlCurrentValue()
 
         let model = viewConfig.mediaData[currentPageControlValue]
         
-        let currentView = newCollectionView.visibleCells().first as! PTMediaBrowserCell
-        switch currentView.currentCellType {
-        case .Video:
-            saveVideoAction(url: model.imageURL as! String)
-        default:
-            saveImageToPhotos(saveImage: currentView.gifImage!)
+        if let currentView = newCollectionView.visibleCells().first as? PTMediaBrowserCell {
+            switch currentView.currentCellType {
+            case .Video:
+                if let imageUrl = model.imageURL as? String {
+                    saveVideoAction(url: imageUrl)
+                }
+            default:
+                if let gifImage = currentView.gifImage {
+                    saveImageToPhotos(saveImage: gifImage)
+                }
+            }
         }
     }
     
     func saveVideoAction(url:String) {
-        let currentMediaView = newCollectionView.visibleCells().first as! PTMediaBrowserCell
-        let loadingView = PTMediaBrowserLoadingView.init(type: .LoopDiagram)
-        currentMediaView.contentView.addSubview(loadingView)
-        loadingView.snp.makeConstraints { make in
-            make.width.equalTo(currentMediaView.frame.size.width * 0.5)
-            make.height.equalTo(currentMediaView.frame.size.height * 0.5)
-            make.centerX.centerY.equalToSuperview()
-        }
-        
-        let documentDirectory = FileManager.pt.DocumnetsDirectory()
-        let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
-        let download = Network()
-        download.createDownload(fileUrl: url, saveFilePath: fullPath, progress: { bytesRead, totalBytesRead, progress in
-            PTGCDManager.gcdMain {
-                loadingView.progress = progress
+        if let currentMediaView = newCollectionView.visibleCells().first as? PTMediaBrowserCell {
+            let loadingView = PTMediaBrowserLoadingView.init(type: .LoopDiagram)
+            currentMediaView.contentView.addSubview(loadingView)
+            loadingView.snp.makeConstraints { make in
+                make.width.equalTo(currentMediaView.frame.size.width * 0.5)
+                make.height.equalTo(currentMediaView.frame.size.height * 0.5)
+                make.centerX.centerY.equalToSuperview()
             }
-        }) { reponse in
-            loadingView.removeFromSuperview()
-            self.saveVideo(videoPath: fullPath)
-        } fail: { error in }
+            
+            let documentDirectory = FileManager.pt.DocumnetsDirectory()
+            let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
+            let download = Network()
+            download.createDownload(fileUrl: url, saveFilePath: fullPath, progress: { bytesRead, totalBytesRead, progress in
+                PTGCDManager.gcdMain {
+                    loadingView.progress = progress
+                }
+            }) { reponse in
+                loadingView.removeFromSuperview()
+                self.saveVideo(videoPath: fullPath)
+            } fail: { error in }
+        }
     }
     
     func saveVideo(videoPath:String) {
@@ -615,93 +562,55 @@ fileprivate extension PTMediaBrowserController {
             viewDeleteImageBlock?(0)
             viewMoreActionDismiss()
         } else {
-            var currentPageControlValue = 0
-            switch viewConfig.pageControlOption {
-            case .system:
-                currentPageControlValue = (bottomControl.pageControlView as! UIPageControl).currentPage
-            case .fill:
-                currentPageControlValue = (bottomControl.pageControlView as! PTFilledPageControl).currentPage
-            case .pill:
-                currentPageControlValue = (bottomControl.pageControlView as! PTPillPageControl).currentPage
-            case .snake:
-                currentPageControlValue = (bottomControl.pageControlView as! PTSnakePageControl).currentPage
-            case .image:
-                currentPageControlValue = (bottomControl.pageControlView as! PTImagePageControl).currentPage
-            case .scrolling:
-                currentPageControlValue = (bottomControl.pageControlView as! PTScrollingPageControl).currentPage
-            }
+            let currentPageControlValue = self.getPageControlCurrentValue()
 
             let index = currentPageControlValue
-            let currentImages = newCollectionView.visibleCells().first as! PTMediaBrowserCell
-            switch currentImages.currentCellType {
-            case .GIF:
-                currentImages.imageView.stopAnimating()
-            default:
-                break
-            }
-            
-            UIView.animate(withDuration: 0.1) {
-                var newIndex = index - 1
-                if newIndex < 0 {
-                    newIndex = 0
-                } else if newIndex == 0 {
-                    newIndex = 0
+            if let currentImages = newCollectionView.visibleCells().first as? PTMediaBrowserCell {
+                switch currentImages.currentCellType {
+                case .GIF:
+                    currentImages.imageView.stopAnimating()
+                default:
+                    break
                 }
-                    
-                self.newCollectionView.scrolToItem(indexPath: IndexPath(row: newIndex, section: 0), position: .right)
-                self.viewConfig.mediaData.remove(at: index)
-
-                var textIndex = newIndex + 1
-                PTGCDManager.gcdAfter(time: 0.35) {
-                    self.showCollectionViewData { reloadCollectionView in
-                        if textIndex == 0 {
-                            textIndex = 1
-                        }
-                        self.navControl.titleLabel.text = "\(textIndex)/\(self.viewConfig.mediaData.count)"
-
-                        if self.viewConfig.mediaData.count > 1 {
-                            self.bottomControl.pageControlView.isHidden = false
-                            switch self.viewConfig.pageControlOption {
-                            case .system:
-                                let pageControl = (self.bottomControl.pageControlView as! UIPageControl)
-                                pageControl.currentPage = newIndex
-                                pageControl.numberOfPages = self.viewConfig.mediaData.count
-                            case .fill:
-                                let pageControl = (self.bottomControl.pageControlView as! PTFilledPageControl)
-                                pageControl.progress = CGFloat(newIndex)
-                                pageControl.pageCount = self.viewConfig.mediaData.count
-                            case .pill:
-                                let pageControl = (self.bottomControl.pageControlView as! PTPillPageControl)
-                                pageControl.progress = CGFloat(newIndex)
-                                pageControl.pageCount = self.viewConfig.mediaData.count
-                            case .snake:
-                                let pageControl = (self.bottomControl.pageControlView as! PTSnakePageControl)
-                                pageControl.progress = CGFloat(newIndex)
-                                pageControl.pageCount = self.viewConfig.mediaData.count
-                            case .image:
-                                let pageControl = (self.bottomControl.pageControlView as! PTImagePageControl)
-                                pageControl.currentPage = newIndex
-                                pageControl.numberOfPages = self.viewConfig.mediaData.count
-                            case .scrolling:
-                                let pageControl = (self.bottomControl.pageControlView as! PTScrollingPageControl)
-                                pageControl.progress = CGFloat(newIndex)
-                                pageControl.pageCount = self.viewConfig.mediaData.count
-                            }
-                        } else {
-                            self.bottomControl.pageControlView.isHidden = true
-                        }
-                        
-                        let models = self.viewConfig.mediaData[newIndex]
-                        self.updateBottom(models: models)
+                
+                UIView.animate(withDuration: 0.1) {
+                    var newIndex = index - 1
+                    if newIndex < 0 {
+                        newIndex = 0
+                    } else if newIndex == 0 {
+                        newIndex = 0
                     }
-                }
+                        
+                    self.newCollectionView.scrolToItem(indexPath: IndexPath(row: newIndex, section: 0), position: .right)
+                    self.viewConfig.mediaData.remove(at: index)
 
-                self.viewDeleteImageBlock?(currentPageControlValue)
+                    var textIndex = newIndex + 1
+                    PTGCDManager.gcdAfter(time: 0.35) {
+                        self.showCollectionViewData { reloadCollectionView in
+                            if textIndex == 0 {
+                                textIndex = 1
+                            }
+                            self.navControl.titleLabel.text = "\(textIndex)/\(self.viewConfig.mediaData.count)"
+
+                            if self.viewConfig.mediaData.count > 1 {
+                                self.bottomControl.pageControlView.isHidden = false
+                                self.setPageControlValue(newIndex)
+                            } else {
+                                self.bottomControl.pageControlView.isHidden = true
+                            }
+                            
+                            let models = self.viewConfig.mediaData[newIndex]
+                            self.updateBottom(models: models)
+                        }
+                    }
+
+                    self.viewDeleteImageBlock?(currentPageControlValue)
+                }
             }
         }
     }
 
-    func labelMoreAtt(models:PTMediaBrowserModel) ->ASAttributedString {
+    func labelMoreAtt(models:PTMediaBrowserModel) -> ASAttributedString {
         let atts:ASAttributedString = """
         \(wrap: .embedding("""
         \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {

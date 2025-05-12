@@ -598,7 +598,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     mediaConfig.actionType = .All
                     mediaConfig.pageControlOption = .snake
                     mediaConfig.mediaData = [model5,model1,model2,model3,model4,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1]
-                    
+                    mediaConfig.imageLongTapAction = true
                     let browser = PTMediaBrowserController()
                     browser.medisShow(mediaConfig: mediaConfig)
                 } else if itemRow.title == .phoneCall {
