@@ -296,6 +296,8 @@ extension PTStepper: UITextFieldDelegate {
             textField.text = baseNum
         } else if (textField.text ?? "").stringIsEmpty() {
             textField.text = baseNum
+        } else if let text = textField.text,!text.stringIsEmpty(),let intValue = text.int,intValue > self.maxNum {
+            textField.text = baseNum
         }
         self.callBack(value: textField.text ?? "", type: .Input)
      }

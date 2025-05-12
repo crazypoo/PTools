@@ -9,9 +9,62 @@
 import UIKit
 import CryptoSwift
 import CommonCrypto
+import Security
 
 @objcMembers
 public class PTDataEncryption {
+    //MARK: RSA key生成
+    public static func rsaPrivateAndPublicKey(groupIdentifier: String = "com.pt.rsa.private",
+                                              saveToKeychain: Bool = true) -> (Bool, Data?, Data?) {
+        let keyAttributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeySizeInBits as String: 2048,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: saveToKeychain,
+                kSecAttrApplicationTag as String: groupIdentifier
+            ]
+        ]
+        
+        var error: Unmanaged<CFError>?
+        guard let privateKey = SecKeyCreateRandomKey(keyAttributes as CFDictionary, &error) else {
+            PTNSLogConsole("生成私钥失败: \(error?.takeRetainedValue().localizedDescription ?? "未知错误")")
+            return (false, nil, nil)
+        }
+        
+        let publicKey = SecKeyCopyPublicKey(privateKey)!
+        
+        guard let privateKeyData = SecKeyCopyExternalRepresentation(privateKey, &error) as Data? else {
+            PTNSLogConsole("导出私钥失败: \(error?.takeRetainedValue().localizedDescription ?? "未知错误")")
+            return (false, nil, nil)
+        }
+        
+        guard let publicKeyData = SecKeyCopyExternalRepresentation(publicKey, &error) as Data? else {
+            PTNSLogConsole("导出公钥失败: \(error?.takeRetainedValue().localizedDescription ?? "未知错误")")
+            return (false, nil, nil)
+        }
+        
+        if saveToKeychain {
+            let deleteQuery: [String: Any] = [
+                kSecClass as String: kSecClassKey,
+                kSecAttrApplicationTag as String: groupIdentifier
+            ]
+            SecItemDelete(deleteQuery as CFDictionary)
+            
+            let saveQuery: [String: Any] = [
+                kSecClass as String: kSecClassKey,
+                kSecAttrApplicationTag as String: groupIdentifier,
+                kSecValueRef as String: privateKey
+            ]
+            
+            let status = SecItemAdd(saveQuery as CFDictionary, nil)
+            if status != errSecSuccess {
+                PTNSLogConsole("存储私钥到钥匙串失败: \(status)")
+                return (false, nil, nil)
+            }
+        }
+        
+        return (true, privateKeyData, publicKeyData)
+    }
     
     //MARK: AES加密
     public static func aesEncryption(data: Data, key: String, iv: String) async throws -> String {
