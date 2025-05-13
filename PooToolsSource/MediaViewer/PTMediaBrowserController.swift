@@ -182,13 +182,9 @@ public class PTMediaBrowserController: PTBaseViewController {
                 }
                 
                 PTGCDManager.gcdMain {
-                    if config.mediaData.count >= 10 {
-                        self.navControl.titleLabel.isHidden = false
-                        self.navControl.titleLabel.text = "1/\(config.mediaData.count)"
-                    } else {
-                        self.navControl.titleLabel.isHidden = true
-                    }
-                    self.mediaScrollerView.contentSize = CGSizeMake(CGFloat.kSCREEN_WIDTH * CGFloat(config.mediaData.count), CGFloat.kSCREEN_HEIGHT)
+                    self.navControl.titleLabel.isHidden = false
+                    self.navControl.titleLabel.text = "1/\(config.mediaData.count)"
+                    self.mediaScrollerView.contentSize = CGSizeMake(CGFloat.kSCREEN_WIDTH * CGFloat(config.mediaData.count), CGFloat.kSCREEN_HEIGHT + config.dismissY)
                     if !self.firstLoad {
                         self.firstLoad = true
                         var loadSome = 0
@@ -288,7 +284,11 @@ public class PTMediaBrowserController: PTBaseViewController {
                 bottomControl.moreActionButton.addActionHandlers { sender in
                     self.actionSheet()
                 }
-            } else {
+            } else if let _ = sideMenuController {
+                bottomControl.moreActionButton.addActionHandlers { sender in
+                    self.actionSheet()
+                }
+            } else {                
                 bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
                 bottomControl.moreActionButton.menu = makeMenu()
             }
@@ -496,7 +496,7 @@ fileprivate extension PTMediaBrowserController {
                             newIndex = 0
                         }
                         viewConfig.mediaData.remove(at: index)
-                        self.mediaScrollerView.contentSize = CGSize(width: CGFloat(viewConfig.mediaData.count) * CGFloat.kSCREEN_WIDTH, height: CGFloat.kSCREEN_HEIGHT)
+                        self.mediaScrollerView.contentSize = CGSize(width: CGFloat(viewConfig.mediaData.count) * CGFloat.kSCREEN_WIDTH, height: CGFloat.kSCREEN_HEIGHT + viewConfig.dismissY)
                         self.mediaScrollerView.contentOffset = CGPointMake(CGFloat(newIndex) * CGFloat.kSCREEN_WIDTH, 0)
 
                         var textIndex = newIndex + 1
@@ -728,23 +728,43 @@ extension PTMediaBrowserController : UIScrollViewDelegate {
         loadVisibleCells(currentIndex: currentPageControlValue)
 
         if let currentCell = scrollView.viewWithTag(PTBroswerBaseTag + currentPageControlValue) as? PTMediaBrowserCell {
-            if abs(scrollView.contentOffset.y) > 0 {
-                currentCell.contentScrolView.isUserInteractionEnabled = false
-                currentCell.contentScrolView.isScrollEnabled = false
+            let offsetY = scrollView.contentOffset.y
+            let absOffsetY = abs(offsetY)
+
+            guard let viewConfig = viewConfig else { return }
+
+            if absOffsetY > 0 {
+                // 只在需要时禁用交互
+                if currentCell.contentScrolView.isUserInteractionEnabled {
+                    currentCell.contentScrolView.isUserInteractionEnabled = false
+                    currentCell.contentScrolView.isScrollEnabled = false
+                }
+
                 currentCell.prepareForHide()
-                var delt = 1 - abs(scrollView.contentOffset.y ) / currentCell.contentView.frame.size.height
-                delt = max(delt, 0)
-                let s = max(delt, 0.5)
-                let translation = CGAffineTransform(translationX: scrollView.contentOffset.x / s, y: -(scrollView.contentOffset.y / s))
-                let scale = CGAffineTransform(scaleX: s, y: s)
+
+                // 缩放比例处理
+                var delta = 1 - absOffsetY / currentCell.contentView.frame.height
+                delta = max(delta, 0)
+                let scaleValue = max(delta, 0.5)
+
+                let translation = CGAffineTransform(
+                    translationX: scrollView.contentOffset.x / scaleValue,
+                    y: -(currentCell.contentScrolView.contentOffset.y / scaleValue)
+                )
+                let scale = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
+
                 currentCell.tempView.transform = translation.concatenating(scale)
-            }
-            
-            if let viewConfig = viewConfig {
-                if abs(scrollView.contentOffset.y) > viewConfig.dismissY {
+
+                // 超出 dismissY 就 dismiss
+                if absOffsetY > viewConfig.dismissY {
                     currentCell.hideAnimation()
-                } else if scrollView.contentOffset.y == 0 {
-                    currentCell.bounceToOriginal()
+                }
+
+            } else {
+                // 回弹并恢复交互
+                currentCell.bounceToOriginal()
+
+                if !currentCell.contentScrolView.isUserInteractionEnabled {
                     currentCell.contentScrolView.isUserInteractionEnabled = true
                     currentCell.contentScrolView.isScrollEnabled = true
                 }
