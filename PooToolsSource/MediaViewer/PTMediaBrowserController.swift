@@ -293,7 +293,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 bottomControl.moreActionButton.menu = makeMenu()
             }
 
-            navControl.titleLabel.font = viewConfig.viewerFont
+            navControl.titleLabel.font = viewConfig.titleFont
             navControl.titleLabel.textColor = viewConfig.titleColor
             navControl.closeButton.setImage(viewConfig.closeViewerImage, for: .normal)
             navControl.closeButton.addActionHandlers { [weak self] _ in

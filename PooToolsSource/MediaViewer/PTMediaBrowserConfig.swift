@@ -38,6 +38,8 @@ public class PTMediaBrowserConfig: NSObject {
     public var mediaData:[PTMediaBrowserModel]!
     ///内容的文字颜色
     public var titleColor:UIColor = UIColor.white
+    ///标题字体
+    public var titleFont:UIFont = UIFont.systemFont(ofSize: 24)
     ///内容字体
     public var viewerFont:UIFont = UIFont.systemFont(ofSize: 13)
     ///内容的容器背景颜色
