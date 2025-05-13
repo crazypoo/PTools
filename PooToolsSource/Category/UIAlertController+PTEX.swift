@@ -52,17 +52,15 @@ public extension UIAlertController {
         let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle!)
         let cancelItem = PTActionSheetItem(title: cancelButtonName)
 
-        var destructiveItems = [PTActionSheetItem]()
-        destructiveButtons.enumerated().forEach { index,value in
+        let destructiveItems = destructiveButtons.map { value in
             let item = PTActionSheetItem(title: value)
             item.titleColor = .systemRed
-            destructiveItems.append(item)
+            return item
         }
         
-        var contentItems = [PTActionSheetItem]()
-        titles.enumerated().forEach { index,value in
+        let contentItems = titles.map { value in
             let item = PTActionSheetItem(title: value)
-            contentItems.append(item)
+            return item
         }
         
         let viewConfig = PTActionSheetViewConfig(dismissWithTapBG: canTapBackground)
@@ -140,22 +138,13 @@ public extension UIAlertController {
         if (okBtns?.count ?? 0) > 0 {
             var dontArrColor = [UIColor]()
             if doneBtnColors!.count == 0 || okBtns?.count != doneBtnColors?.count || okBtns!.count > (doneBtnColors?.count ?? 0) {
-                if doneBtnColors!.count == 0 {
-                    okBtns?.enumerated().forEach({ (index,value) in
-                        dontArrColor.append(.systemBlue)
-                    })
-                } else if okBtns!.count > (doneBtnColors?.count ?? 0) {
-                    let count = okBtns!.count - (doneBtnColors?.count ?? 0)
-                    dontArrColor = doneBtnColors!
-                    for _ in 0..<(count) {
-                        dontArrColor.append(.systemBlue)
-                    }
-                } else if okBtns!.count < (doneBtnColors?.count ?? 0) {
-                    let count = (doneBtnColors?.count ?? 0) - okBtns!.count
-                    dontArrColor = doneBtnColors!
-                    for _ in 0..<(count) {
-                        dontArrColor.removeLast()
-                    }
+                guard let okBtns = okBtns else { return }
+
+                let colorSource = doneBtnColors ?? []
+                let defaultColor: UIColor = .systemBlue
+
+                dontArrColor = (0..<okBtns.count).map { index in
+                    return index < colorSource.count ? colorSource[index] : defaultColor
                 }
             } else {
                 dontArrColor = doneBtnColors!

@@ -722,5 +722,4 @@ fileprivate extension PTMediaBrowserController {
     func truncatedText(fullText:String) -> String {
         fullText.truncatedText(maxLineNumber: numberOfVisibleLines, font: viewConfig.viewerFont, labelShowWidth: labelContentWidth())
     }
-
 }

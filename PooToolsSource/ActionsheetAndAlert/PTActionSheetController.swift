@@ -228,19 +228,10 @@ public class PTActionSheetController: PTAlertController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupCancelButton()
         view.addSubviews([alertContent])
         alertContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
-        if !destructiveItems.isEmpty {
-            setupDestructiveItems()
-        }
-        
-        self.setupContentScrollerView()
-        self.setupTitleLabel()
-        self.contentSubsSet()
     }
 
     // 分离取消按钮的设置
@@ -320,9 +311,7 @@ public class PTActionSheetController: PTAlertController {
         if let action = action {
             btn.addActionHandlers { _ in action() }
         }
-
         return cell
-
     }
 
     /// 分离内容滚动视图的设置
@@ -414,15 +403,11 @@ public class PTActionSheetController: PTAlertController {
             // Corner 處理
             if titleItem == nil, index == 0 {
                 lineView.isHidden = true
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.topLeft, .topRight])
-                }
+                button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.topLeft, .topRight])
             }
 
             if index == lastIndex {
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.bottomLeft, .bottomRight])
-                }
+                button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.bottomLeft, .bottomRight])
             }
         }
     }
@@ -430,24 +415,29 @@ public class PTActionSheetController: PTAlertController {
 
 extension PTActionSheetController {
     public override func showAnimation(completion: PTActionTask?) {
-        self.view.backgroundColor = UIColor.DevMaskColor
-        PTGCDManager.gcdMain {
-            PTAnimationFunction.animationIn(animationView: self.alertContent, animationType: .Bottom, transformValue: CGFloat.kSCREEN_HEIGHT) { anim, finish in
-                if finish {
-                    completion?()
-                }
+        alertContent.transform = CGAffineTransform(translationX: 0, y: alertContent.bounds.height)
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.backgroundColor = UIColor.DevMaskColor
+            self.alertContent.transform = .identity
+        }, completion: { _ in
+            self.setupCancelButton()
+            if !self.destructiveItems.isEmpty {
+                self.setupDestructiveItems()
             }
-        }
+            self.setupContentScrollerView()
+            self.setupTitleLabel()
+            self.contentSubsSet()
+            completion?()
+        })
     }
     
     public override func dismissAnimation(completion: PTActionTask?) {
-        PTAnimationFunction.animationOut(animationView: alertContent, animationType: .Bottom,duration: 0.55) {
-            self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
-        } completion: { ok in
-            if ok {
-                PTAlertManager.dismissAll()
-                completion?()
-            }
-        }
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.backgroundColor = .clear
+            self.alertContent.transform = CGAffineTransform(translationX: 0, y: self.alertContent.bounds.height)
+        }, completion: { _ in
+            PTAlertManager.dismissAll()
+            completion?()
+        })
     }
 }
