@@ -36,39 +36,61 @@ public extension UIImageView {
     }
     
     @objc func loadImage(contentData:Any,
-                   iCloudDocumentName:String = "",
-                   borderWidth:CGFloat = 1.5,
-                   borderColor:UIColor = UIColor.purple,
-                   showValueLabel:Bool = false,
-                   valueLabelFont:UIFont = .appfont(size: 16,bold: true),
-                   valueLabelColor:UIColor = .white,
-                   uniCount:Int = 0,
-                   gifAnimationDuration:Double = 2,
-                   emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
-                   progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
-                   loadFinish:(([UIImage]?,UIImage?)->Void)? = nil) {
+                         iCloudDocumentName:String = "",
+                         borderWidth:CGFloat = 1.5,
+                         borderColor:UIColor = UIColor.purple,
+                         showValueLabel:Bool = false,
+                         valueLabelFont:UIFont = .appfont(size: 16,bold: true),
+                         valueLabelColor:UIColor = .white,
+                         uniCount:Int = 0,
+                         gifAnimationDuration:Double = 2,
+                         emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                         progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
+                         loadFinish:(([UIImage]?,UIImage?)->Void)? = nil) {
         
         self.image = emptyImage
+
         Task {
-            let result = await PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
+            let result = await PTLoadImageFunction.loadImage(contentData: contentData,
+                                                             iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
                 PTGCDManager.gcdMain {
-                    if progressHandle != nil {
-                        progressHandle!(receivedSize,totalSize)
+                    if let handle = progressHandle {
+                        handle(receivedSize, totalSize)
                     } else {
-                        self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+                        self.layerProgress(value: CGFloat(receivedSize) / CGFloat(totalSize),
+                                           borderWidth: borderWidth,
+                                           borderColor: borderColor,
+                                           showValueLabel: showValueLabel,
+                                           valueLabelFont: valueLabelFont,
+                                           valueLabelColor: valueLabelColor,
+                                           uniCount: uniCount)
                     }
                 }
             }
-            if result.0?.count ?? 0 > 0 {
-                if result.0!.count > 1 {
-                    self.image = UIImage.animatedImage(with: result.0!, duration: gifAnimationDuration)
-                } else {
-                    self.image = result.1
+
+            guard let images = result.0, !images.isEmpty else {
+                PTGCDManager.gcdMain {
+                    self.image = emptyImage
+                    loadFinish?(result.0, result.1)
+                }
+                return
+            }
+
+            if images.count > 1 {
+                // 多帧：异步创建 GIF
+                DispatchQueue.global(qos: .userInitiated).async {
+                    let animatedImage = UIImage.animatedImage(with: images, duration: gifAnimationDuration)
+                    DispatchQueue.main.async {
+                        self.image = animatedImage
+                        loadFinish?(images, animatedImage)
+                    }
                 }
             } else {
-                self.image = emptyImage
+                PTGCDManager.gcdMain {
+                    self.image = result.1
+                    loadFinish?(images, result.1)
+                }
             }
-            loadFinish?(result.0,result.1)
         }
     }
     

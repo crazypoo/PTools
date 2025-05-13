@@ -66,6 +66,8 @@ public class PTMediaBrowserConfig: NSObject {
     public var actionTitle:String = "PT Media option".localized()
     ///ActionSheet Cancel
     public var actionCancel:String = "PT Button cancel".localized()
+    ///Image reload
+    public var imageReloadButton:String = "PT Image load fail".localized()
 
     public var pageControlOption:PTMediaPageControlOption = .scrolling
     

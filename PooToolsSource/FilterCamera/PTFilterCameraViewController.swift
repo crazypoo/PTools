@@ -97,8 +97,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     browserConfig.mediaData = [browserModel]
                     
                     let review = PTMediaBrowserController()
-                    review.viewConfig = browserConfig
                     review.modalPresentationStyle = .fullScreen
+                    review.reloadConfig(mediaConfig: browserConfig)
                     self.pt_present(review)
                 }
                 self.takePhotoView?.dismissTask = {
