@@ -184,7 +184,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 PTGCDManager.gcdMain {
                     self.navControl.titleLabel.isHidden = false
                     self.navControl.titleLabel.text = "1/\(config.mediaData.count)"
-                    self.mediaScrollerView.contentSize = CGSizeMake(CGFloat.kSCREEN_WIDTH * CGFloat(config.mediaData.count), CGFloat.kSCREEN_HEIGHT + config.dismissY)
+                    self.mediaScrollerView.contentSize = CGSizeMake(CGFloat.kSCREEN_WIDTH * CGFloat(config.mediaData.count), CGFloat.kSCREEN_HEIGHT)
                     if !self.firstLoad {
                         self.firstLoad = true
                         var loadSome = 0
@@ -288,7 +288,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 bottomControl.moreActionButton.addActionHandlers { sender in
                     self.actionSheet()
                 }
-            } else {                
+            } else {
                 bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
                 bottomControl.moreActionButton.menu = makeMenu()
             }
@@ -496,7 +496,7 @@ fileprivate extension PTMediaBrowserController {
                             newIndex = 0
                         }
                         viewConfig.mediaData.remove(at: index)
-                        self.mediaScrollerView.contentSize = CGSize(width: CGFloat(viewConfig.mediaData.count) * CGFloat.kSCREEN_WIDTH, height: CGFloat.kSCREEN_HEIGHT + viewConfig.dismissY)
+                        self.mediaScrollerView.contentSize = CGSize(width: CGFloat(viewConfig.mediaData.count) * CGFloat.kSCREEN_WIDTH, height: CGFloat.kSCREEN_HEIGHT)
                         self.mediaScrollerView.contentOffset = CGPointMake(CGFloat(newIndex) * CGFloat.kSCREEN_WIDTH, 0)
 
                         var textIndex = newIndex + 1
@@ -723,11 +723,24 @@ extension PTMediaBrowserController {
 //MARK: UIScrollViewDelegate
 extension PTMediaBrowserController : UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentPageControlValue = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
+        let currentPageControlValue = Int(scrollView.contentOffset.x / scrollView.frame.width)
         currentPage = currentPageControlValue
         loadVisibleCells(currentIndex: currentPageControlValue)
+    }
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        let currentPageControlValue = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        if let viewConfig = viewConfig {
+            self.mediaScrollerView.contentSize = CGSizeMake(CGFloat.kSCREEN_WIDTH * CGFloat(viewConfig.mediaData.count), CGFloat.kSCREEN_HEIGHT)
+        }
 
-        if let currentCell = scrollView.viewWithTag(PTBroswerBaseTag + currentPageControlValue) as? PTMediaBrowserCell {
+        if let currentCell = scrollView.viewWithTag(PTBroswerBaseTag + currentPageControlValue ) as? PTMediaBrowserCell {
+            switch currentCell.currentCellType {
+            case .GIF:
+                currentCell.imageView.stopAnimating()
+            default:
+                break
+            }
             let offsetY = scrollView.contentOffset.y
             let absOffsetY = abs(offsetY)
 
@@ -749,7 +762,7 @@ extension PTMediaBrowserController : UIScrollViewDelegate {
 
                 let translation = CGAffineTransform(
                     translationX: scrollView.contentOffset.x / scaleValue,
-                    y: -(currentCell.contentScrolView.contentOffset.y / scaleValue)
+                    y: -(scrollView.contentOffset.y / scaleValue)
                 )
                 let scale = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
 
@@ -772,29 +785,19 @@ extension PTMediaBrowserController : UIScrollViewDelegate {
         }
     }
     
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        let currentPageControlValue = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
-        if let itemRow = scrollView.viewWithTag(PTBroswerBaseTag + currentPageControlValue ) as? PTMediaBrowserCell {
-            switch itemRow.currentCellType {
-            case .GIF:
-                itemRow.imageView.stopAnimating()
-            default:
-                break
-            }
-        }
-    }
-    
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let currentPageControlValue = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
+        let currentPageControlValue = Int(scrollView.contentOffset.x / scrollView.frame.width)
         currentPage = currentPageControlValue
         if let viewConfig = viewConfig {
+            self.mediaScrollerView.contentSize = CGSizeMake(CGFloat.kSCREEN_WIDTH * CGFloat(viewConfig.mediaData.count), CGFloat.kSCREEN_HEIGHT + viewConfig.dismissY)
+
             if !viewConfig.mediaData.isEmpty {
                 let cellModel = viewConfig.mediaData[currentPageControlValue]
 
-                if let itemRow = scrollView.viewWithTag(PTBroswerBaseTag + currentPageControlValue ) as? PTMediaBrowserCell {
-                    switch itemRow.currentCellType {
+                if let currentCell = scrollView.viewWithTag(PTBroswerBaseTag + currentPageControlValue ) as? PTMediaBrowserCell {
+                    switch currentCell.currentCellType {
                     case .GIF:
-                        itemRow.imageView.stopAnimating()
+                        currentCell.imageView.stopAnimating()
                     default:
                         break
                     }
@@ -808,6 +811,10 @@ extension PTMediaBrowserController : UIScrollViewDelegate {
                     }
                     self.updateBottom(models: cellModel)
                     self.browserCurrentDataBlock?(currentPageControlValue)
+                    if !currentCell.contentScrolView.isUserInteractionEnabled {
+                        currentCell.contentScrolView.isUserInteractionEnabled = true
+                        currentCell.contentScrolView.isScrollEnabled = true
+                    }
                 }
             }
         }
