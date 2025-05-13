@@ -82,6 +82,54 @@ public class PTMediaBrowserController: PTBaseViewController {
     ///界面配置
     fileprivate var viewConfig:PTMediaBrowserConfig! {
         didSet {
+            if viewConfig.dynamicBackground {
+                view.backgroundColor = viewConfig.viewerContentBackgroundColor
+            } else {
+                view.backgroundColor = .DevMaskColor
+            }
+                    
+            view.addSubviews([newCollectionView,navControl,bottomControl])
+
+            newCollectionView.snp.makeConstraints { make in
+                make.left.right.bottom.equalToSuperview()
+                make.top.equalToSuperview()
+            }
+            
+            navControl.snp.makeConstraints { make in
+                make.left.right.top.equalToSuperview()
+                make.height.equalTo(CGFloat.kNavBarHeight_Total)
+            }
+            
+            bottomControl.snp.makeConstraints { make in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
+            }
+            
+            //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
+            if let _ = sheetViewController {
+                bottomControl.moreActionButton.addActionHandlers { sender in
+                    self.actionSheet()
+                }
+            } else if let _ = sideMenuController {
+                bottomControl.moreActionButton.addActionHandlers { sender in
+                    self.actionSheet()
+                }
+            } else {
+                bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
+                bottomControl.moreActionButton.menu = makeMenu()
+            }
+
+            PTGCDManager.gcdAfter(time: 0.35) {
+                var loadSome = 0
+                if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
+                    loadSome = self.viewConfig.mediaData.count - 1
+                } else {
+                    loadSome = self.viewConfig.defultIndex
+                }
+
+                let cellModel = self.viewConfig.mediaData[loadSome]
+                self.updateBottom(models: cellModel)
+            }
             showCollectionViewData()
         }
     }
@@ -283,62 +331,6 @@ public class PTMediaBrowserController: PTBaseViewController {
         super.viewDidLoad()
 
         SwizzleTool().swizzleContextMenuReverseOrder()
-
-        if viewConfig.dynamicBackground {
-            view.backgroundColor = viewConfig.viewerContentBackgroundColor
-        } else {
-            view.backgroundColor = .DevMaskColor
-        }
-        
-        let closeButton = UIButton(type: .close)
-        closeButton.addActionHandlers(handler: { sender in
-            self.returnFrontVC {
-                self.viewDismissBlock?()
-            }
-        })
-        
-        view.addSubviews([newCollectionView,navControl,bottomControl])
-
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview()
-        }
-        
-        navControl.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview()
-            make.height.equalTo(CGFloat.kNavBarHeight_Total)
-        }
-        
-        bottomControl.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
-        }
-        
-        //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
-        if let _ = sheetViewController {
-            bottomControl.moreActionButton.addActionHandlers { sender in
-                self.actionSheet()
-            }
-        } else if let _ = sideMenuController {
-            bottomControl.moreActionButton.addActionHandlers { sender in
-                self.actionSheet()
-            }
-        } else {
-            bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
-            bottomControl.moreActionButton.menu = makeMenu()
-        }
-
-        PTGCDManager.gcdAfter(time: 0.35) {
-            var loadSome = 0
-            if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
-                loadSome = self.viewConfig.mediaData.count - 1
-            } else {
-                loadSome = self.viewConfig.defultIndex
-            }
-
-            let cellModel = self.viewConfig.mediaData[loadSome]
-            self.updateBottom(models: cellModel)
-        }
     }
     
     func showCollectionViewData(loadedTask:((UICollectionView)->Void)? = nil) {
