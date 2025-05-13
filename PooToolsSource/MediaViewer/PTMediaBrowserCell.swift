@@ -65,9 +65,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 backgroundImageView.removeFromSuperview()
             }
             reloadButton.setTitle(self.viewConfig.imageReloadButton, for: .normal)
-            PTGCDManager.gcdAfter(time:0.5, block: {
-                self.cellLoadData()
-            })
+            self.cellLoadData()
         }
     }
 
