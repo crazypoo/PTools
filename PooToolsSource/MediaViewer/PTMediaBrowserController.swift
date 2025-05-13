@@ -284,8 +284,14 @@ public class PTMediaBrowserController: PTBaseViewController {
             bottomControl.pageControlView.isHidden = !viewConfig.pageControlShow
 
             //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
-            bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
-            bottomControl.moreActionButton.menu = makeMenu()
+            if let _ = sheetViewController {
+                bottomControl.moreActionButton.addActionHandlers { sender in
+                    self.actionSheet()
+                }
+            } else {
+                bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
+                bottomControl.moreActionButton.menu = makeMenu()
+            }
 
             navControl.titleLabel.font = viewConfig.viewerFont
             navControl.titleLabel.textColor = viewConfig.titleColor
@@ -602,7 +608,6 @@ extension PTMediaBrowserController {
                 make.left.right.bottom.equalToSuperview()
                 make.height.equalTo(bottomH)
             }
-
         }
     }
     
