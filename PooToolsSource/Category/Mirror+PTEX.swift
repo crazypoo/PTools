@@ -43,11 +43,9 @@ extension Mirror {
             (child.value as? T).map(closure)
             guard recursively else { continue }
             
-            Mirror.reflectProperties(
-                of: child.value,
-                recursively: true,
-                using: closure
-            )
+            Mirror.reflectProperties(of: child.value,
+                                     recursively: true,
+                                     using: closure)
         }
     }
 }

@@ -122,19 +122,11 @@ public class PTCustomerAlertController: PTAlertController {
             }
         }
         
-        buttons.enumerated().forEach { index,value in
+        buttonModels = buttons.enumerated().map { index, title in
             let model = PTCustomBottomButtonModel()
-            if buttonsColors.count < buttons.count {
-                if index > (buttonsColors.count - 1) {
-                    model.titleColor = .systemBlue
-                } else {
-                    model.titleColor = buttonsColors[index]
-                }
-            } else {
-                model.titleColor = buttonsColors[index]
-            }
-            model.titleName = value
-            buttonModels.append(model)
+            model.titleName = title
+            model.titleColor = (index < buttonsColors.count) ? buttonsColors[index] : .systemBlue
+            return model
         }
         
         view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
@@ -227,7 +219,7 @@ public class PTCustomerAlertController: PTAlertController {
 
 extension PTCustomerAlertController {
     public override func showAnimation(completion: PTActionTask?) {
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: PTAlertConfig.shared.showALertDuration) {
             self.view.backgroundColor = UIColor.DevMaskColor
             self.contentView.alpha = 1.0
         }
@@ -240,7 +232,7 @@ extension PTCustomerAlertController {
     }
     
     public override func dismissAnimation(completion: PTActionTask?) {
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: PTAlertConfig.shared.hideALertDuration, animations: {
             self.view.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.00)
             self.contentView.alpha = 0.0
         }) { _ in

@@ -236,5 +236,4 @@ public extension PTPOP where Base == Data {
         }
         return String(output)
     }
-
 }

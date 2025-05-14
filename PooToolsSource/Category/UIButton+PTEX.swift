@@ -105,17 +105,18 @@ public extension UIButton {
     ///   - width:
     ///   - height:
     /// - Returns: Size
-    @objc func sizeFor(lineSpacing:NSNumber? = nil,
+    @objc func sizeFor(lineSpacing:CGFloat = 2.5,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,
                        width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         var dic = [NSAttributedString.Key.font: titleLabel!.font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil {
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
-            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineSpacing = lineSpacing
+        dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        if let text = titleLabel?.text,!text.stringIsEmpty() {
+            let size = text.boundingRect(with: CGSize(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
+            return size
         }
-        let size = titleLabel!.text!.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
-        return size
+        return .zero
     }
 
     //MARK: 按鈕倒計時基礎方法

@@ -79,7 +79,7 @@ public class PTChatTextCell: PTChatBaseCell {
             label.textAlignment = .left
             label.text = msgContent
             label.numberOfLines = 0
-            label.lineSpacing = CGFloat(truncating: PTChatConfig.share.textLineSpace)
+            label.lineSpacing = PTChatConfig.share.textLineSpace
             label.font = font
             label.textColor = titleColor
             label.hashtagColor = PTChatConfig.share.hashtagColor

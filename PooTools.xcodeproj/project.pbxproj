@@ -155,6 +155,7 @@
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		554E649F2D4A236800042565 /* PTHTMLHeightCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */; };
+		554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
 		5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */; };
 		55571B382D58EF52004134B8 /* PTiCloudKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */; };
@@ -1085,6 +1086,7 @@
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
 		554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHTMLHeightCalculator.swift; sourceTree = "<group>"; };
+		554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPageControllable.swift; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
 		5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugSnapshotViewController.swift; sourceTree = "<group>"; };
 		55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTiCloudKeychainService.swift; sourceTree = "<group>"; };
@@ -2077,6 +2079,7 @@
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
 				9AE44689285862B0007DC2B5 /* Date+PTEX.swift */,
 				9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */,
+				553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */,
 				9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */,
 				55A5D6FF29B09A1E00DCA096 /* Dictionary+PTEX.swift */,
 				55A5D70129B09AD300DCA096 /* DispatchQueue+PTEX.swift */,
@@ -2149,7 +2152,6 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -3679,9 +3681,10 @@
 			children = (
 				9A14E98328616B4000D7E8EF /* PTFilledPageControl.swift */,
 				9A14E98028616B4000D7E8EF /* PTImagePageControl.swift */,
+				554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */,
 				9A14E98528616B4000D7E8EF /* PTPillPageControl.swift */,
-				9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */,
 				55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */,
+				9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */,
 			);
 			path = PageControl;
 			sourceTree = "<group>";
@@ -4553,6 +4556,7 @@
 				555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */,
 				557E3A962C046472002466A0 /* UIView+PTSwizzle.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
+				554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */,
 				55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */,
 				55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */,
 				55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */,

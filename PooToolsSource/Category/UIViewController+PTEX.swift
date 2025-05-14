@@ -32,12 +32,10 @@ public extension UIViewController {
     }
         
     var systemSafeAreaInsets: UIEdgeInsets {
-        UIEdgeInsets(
-                top: view.safeAreaInsets.top - additionalSafeAreaInsets.top,
-                left: view.safeAreaInsets.left - additionalSafeAreaInsets.left,
-                bottom: view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom,
-                right: view.safeAreaInsets.right - additionalSafeAreaInsets.right
-        )
+        UIEdgeInsets(top: view.safeAreaInsets.top - additionalSafeAreaInsets.top,
+                     left: view.safeAreaInsets.left - additionalSafeAreaInsets.left,
+                     bottom: view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom,
+                     right: view.safeAreaInsets.right - additionalSafeAreaInsets.right)
     }
     
     func addChildWithView(_ childController: UIViewController, to containerView: UIView) {

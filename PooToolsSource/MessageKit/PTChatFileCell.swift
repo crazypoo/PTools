@@ -83,7 +83,7 @@ public class PTChatFileCell: PTChatBaseCell {
         let nameHeight = UIView.sizeFor(
             string: url.lastPathComponent,
             font: config.fileNameFont,
-            lineSpacing: config.fileContentSpace as NSNumber,
+            lineSpacing: config.fileContentSpace,
             width: PTChatFileCell.FileConentWidth - PTChatFileCell.FileCellImageHeight - PTChatFileCell.FileCellConentFixbel * 3
         ).height
         let fileSizeHeight = config.fileSizeFont.pointSize + 2 + PTChatFileCell.FileCellConentFixbel * 2

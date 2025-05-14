@@ -19,7 +19,7 @@ public extension NSMutableArray {
     }
     
     func randomizedArray()->NSMutableArray {
-        let results = NSMutableArray.init(array: self)
+        let results = NSMutableArray(array: self)
         var i = results.count
         i -= 1
         while i > 0 {

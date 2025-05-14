@@ -14,7 +14,7 @@ public extension Bundle {
                                imageName:String) -> UIImage {
         let bundle = PTUtils.cgBaseBundle()
         let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
-        let resourceBundle = Bundle.init(path: resourcePath ?? Bundle.main.bundlePath)
+        let resourceBundle = Bundle(path: resourcePath ?? Bundle.main.bundlePath)
         let image = UIImage(named: imageName, in: resourceBundle, compatibleWith: nil)
         return image ?? UIImage()
     }
@@ -24,13 +24,13 @@ public extension Bundle {
                                  type:String) -> String? {
         let bundle = Bundle.main
         let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
-        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
+        let resourceBundle = Bundle(path: resourcePath ?? "") ?? bundle
         let filePath = resourceBundle.path(forResource: sourceName, ofType: type)
         return filePath
     }
 
     class func bundleResource(bundle:String,resourceName:String,type:String) -> String? {
-        let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: bundle, ofType: "bundle")!)
+        let bundlePath = Bundle(path: PTUtils.cgBaseBundle().path(forResource: bundle, ofType: "bundle")!)
         let filePath = bundlePath?.path(forResource: resourceName, ofType: type)
         return filePath
     }
@@ -40,7 +40,7 @@ public extension Bundle {
     }
     
     class func podBundle(bundleName:String) -> Bundle? {
-        Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
+        Bundle(path: PTUtils.cgBaseBundle().path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
     }
     
     class func appScheme()->[String] {

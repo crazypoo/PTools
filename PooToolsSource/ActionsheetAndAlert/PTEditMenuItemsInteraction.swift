@@ -189,9 +189,7 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     @MainActor public func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
         // items -> UIMenu
         guard let items = showingItems else { return nil }
-        let actions = items.map {
-            action(from: $0)
-        }
+        let actions = items.map { action(from: $0) }
         return UIMenu(children: actions)
     }
     

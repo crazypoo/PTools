@@ -199,7 +199,7 @@ public extension UITextView {
         // Requerid for dynamic height.
         if isScrollEnabled { isScrollEnabled = false }
         
-        frame = CGRect.init(x: x, y: y, width: width, height: frame.height)
+        frame = CGRect(x: x, y: y, width: width, height: frame.height)
         sizeToFit()
         if frame.width != width {
             frame.setWidth(width)

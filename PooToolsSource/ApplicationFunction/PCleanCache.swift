@@ -66,11 +66,6 @@ public class PCleanCache: NSObject {
             await ImageCache.default.clearDiskCache()
             flag = true
         }
-        
-//        if !flag {
-//            PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除", levelType: .Info, loggerType: .CleanCache)
-//        }
-        
         return flag
     }
     

@@ -80,5 +80,4 @@ public extension CLGeocoder {
             }
         }
     }
-    
 }

@@ -86,11 +86,7 @@ extension UITableView {
 extension UICollectionView {
     
     public static func sectionRows(rowsModel:[PTFusionCellModel]) -> [PTRows] {
-        var rows = [PTRows]()
-        rowsModel.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,ID: value.cellID,dataModel: value)
-            rows.append(row)
-        }
+        let rows = rowsModel.map { PTRows(title:$0.name,ID: $0.cellID,dataModel:$0) }
         return rows
     }
     
@@ -102,7 +98,7 @@ extension UICollectionView {
     
     public func registerNibCells(nib:[String:String]) {
         nib.allKeys().enumerated().forEach { index,value in
-            self.register(UINib.init(nibName: value, bundle: nil), forCellWithReuseIdentifier: nib[value]!)
+            self.register(UINib(nibName: value, bundle: nil), forCellWithReuseIdentifier: nib[value]!)
         }
     }
     

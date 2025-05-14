@@ -123,7 +123,7 @@ public class PTChatConfig: NSObject {
     ///別人文本偏移設置
     public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
     ///文本字體間隔
-    public var textLineSpace:NSNumber = 2
+    public var textLineSpace:CGFloat = 2
     ///設置聊天內容框最小Height
     @PTClampedProperyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38
     ///#井号话题颜色

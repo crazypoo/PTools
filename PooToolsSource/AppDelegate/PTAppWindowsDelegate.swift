@@ -29,7 +29,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 
             switch environment {
             case .appStore,.testFlight:
-                window = UIWindow.init(frame: UIScreen.main.bounds)
+                window = UIWindow(frame: UIScreen.main.bounds)
             default:
                 window = TouchInspectorWindow(frame: UIScreen.main.bounds)
                 (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.AppTouchInspectShow
@@ -38,7 +38,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
             }
         }
 #else
-        window = UIWindow.init(frame: UIScreen.main.bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
 #endif
         window?.tintColor = tint
         window?.rootViewController = createViewControllerHandler()

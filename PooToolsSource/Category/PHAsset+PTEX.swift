@@ -19,7 +19,6 @@ public extension PHAsset {
         static var requestID = 1
         static var exportSession = 2
         static var timer = 3
-
     }
     
     var requestID: PHImageRequestID? {

@@ -932,7 +932,7 @@ extension PTLayoutButton {
     }
     
     func getButtonTitleSize(type:UIControl.State,
-                            lineSpacing:NSNumber? = nil,
+                            lineSpacing:CGFloat = 2.5,
                             height:CGFloat = CGFloat.greatestFiniteMagnitude,
                             width:CGFloat = CGFloat.greatestFiniteMagnitude) ->CGSize {
         var sizeString = ""

@@ -19,7 +19,7 @@ public extension UITabBarController {
     }
     
     func addTabBarItem(with controller: UIViewController, _ item: UITabBarItem.SystemItem, tag: Int) {
-        let tabBarItem = UITabBarItem.init(tabBarSystemItem: item, tag: tag)
+        let tabBarItem = UITabBarItem(tabBarSystemItem: item, tag: tag)
         controller.tabBarItem = tabBarItem
         if self.viewControllers == nil { self.viewControllers = [controller] }
         else { self.viewControllers?.append(controller) }

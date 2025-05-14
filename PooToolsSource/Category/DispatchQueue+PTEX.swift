@@ -19,8 +19,8 @@ public extension PTPOP where Base == DispatchQueue {
     ///   - token: 函数标识
     ///   - block: 执行的闭包
     /// - Returns: 一次性函数
-    @MainActor static func una(token: String, 
-                    block: PTActionTask) {
+    @MainActor static func una(token: String,
+                               block: PTActionTask) {
         if unaTracker.contains(token) {
             return
         }

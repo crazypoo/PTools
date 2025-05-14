@@ -391,17 +391,17 @@ public extension UIView {
             gradientLayer.colors = cgColorsss
             switch type {
             case .LeftToRight:
-                gradientLayer.startPoint = CGPoint.init(x: 0, y: 0)
-                gradientLayer.endPoint = CGPoint.init(x: 1, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 1, y: 0)
             case .TopToBottom:
-                gradientLayer.startPoint = CGPoint.init(x: 0, y: 0)
-                gradientLayer.endPoint = CGPoint.init(x: 0, y: 1)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 1)
             case .RightToLeft:
-                gradientLayer.startPoint = CGPoint.init(x: 1, y: 0)
-                gradientLayer.endPoint = CGPoint.init(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 1, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             case .BottomToTop:
-                gradientLayer.startPoint = CGPoint.init(x: 0, y: 1)
-                gradientLayer.endPoint = CGPoint.init(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 1)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             }
             
             let borderShapeLayer = CAShapeLayer()
@@ -452,17 +452,18 @@ public extension UIView {
     
     @objc class func sizeFor(string:String,
                              font:UIFont,
-                             lineSpacing:NSNumber? = nil,
+                             lineSpacing:CGFloat = 2.5,
                              height:CGFloat = CGFloat.greatestFiniteMagnitude,
                              width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil {
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
-            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineSpacing = lineSpacing
+        dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        if !string.stringIsEmpty() {
+            let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
+            return size
         }
-        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
-        return size
+        return .zero
     }
     
     var viewController: UIViewController? {

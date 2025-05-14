@@ -416,7 +416,7 @@ public class PTActionSheetController: PTAlertController {
 extension PTActionSheetController {
     public override func showAnimation(completion: PTActionTask?) {
         alertContent.transform = CGAffineTransform(translationX: 0, y: alertContent.bounds.height)
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: PTAlertConfig.shared.showALertDuration, animations: {
             self.view.backgroundColor = UIColor.DevMaskColor
             self.alertContent.transform = .identity
         }, completion: { _ in
@@ -432,7 +432,7 @@ extension PTActionSheetController {
     }
     
     public override func dismissAnimation(completion: PTActionTask?) {
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: PTAlertConfig.shared.hideALertDuration, animations: {
             self.view.backgroundColor = .clear
             self.alertContent.transform = CGAffineTransform(translationX: 0, y: self.alertContent.bounds.height)
         }, completion: { _ in

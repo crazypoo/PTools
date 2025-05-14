@@ -43,7 +43,7 @@ public extension UIImage {
    }
 
     static func system(_ name: String) -> UIImage {
-        UIImage.init(systemName: name) ?? UIImage()
+        UIImage(systemName: name) ?? UIImage()
     }
     
     static func system(_ name: String, pointSize: CGFloat, weight: UIImage.SymbolWeight) -> UIImage {
@@ -164,7 +164,7 @@ public extension UIImage {
         bitmap.draw(imageRef!, in: CGRect.init(x: 0, y: 0, width: sourceW, height: sourceH))
         
         let ref = bitmap.makeImage()
-        let resultImage = UIImage.init(cgImage: ref!)
+        let resultImage = UIImage(cgImage: ref!)
         return resultImage
     }
     
@@ -184,7 +184,7 @@ public extension UIImage {
     func img(alpha:Float,
              radius:Float,
              colorSaturationFactor:Float)->UIImage {
-        let tintColor = UIColor.init(white: 1, alpha: CGFloat(alpha))
+        let tintColor = UIColor(white: 1, alpha: CGFloat(alpha))
         return imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
     
@@ -192,7 +192,7 @@ public extension UIImage {
                              tintColor:UIColor?,
                              saturationDeltaFactor:Float,
                              maskImage:UIImage?)->UIImage {
-        let imageRect = CGRect.init(origin: .zero, size: size)
+        let imageRect = CGRect(origin: .zero, size: size)
         var effectImage = self
         let hadBlur = blurRadius > Float.ulpOfOne
         let hasSaturationChange = abs(saturationDeltaFactor - 1) > Float.ulpOfOne
@@ -305,7 +305,7 @@ public extension UIImage {
         let newColor = (color == nil) ? originalImage.imageMostColor() : color
         
         UIGraphicsBeginImageContext(CGSize.init(width: viewWidth, height: viewHeight))
-        originalImage.draw(in: CGRect.init(x: 0, y: 0, width: viewWidth, height: viewHeight))
+        originalImage.draw(in: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
         let sqrtLength = sqrt(viewWidth * viewWidth + viewHeight * viewHeight)
         let attr = [NSAttributedString.Key.font:font,NSAttributedString.Key.foregroundColor:newColor!]
         let mark : NSString = title as NSString
@@ -327,7 +327,7 @@ public extension UIImage {
         
         let totalCount : Int = Int(horCount * verCount)
         for i in 0...totalCount {
-            mark.draw(in: CGRect.init(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
+            mark.draw(in: CGRect(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
             if i % horCount == 0 && i != 0 {
                 tempOrignX = orignX
                 tempOrignY += (strHeight + CGFloat(VERTICAL_SPACE))
@@ -377,7 +377,7 @@ public extension UIImage {
         
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
         
-        let cls = NSCountedSet.init(capacity: Int(size.width * size.height))
+        let cls = NSCountedSet(capacity: Int(size.width * size.height))
         for i in 0...Int(size.width) {
             for j in 0...Int(size.height) {
                 let offSet = 4 * (i * j)
@@ -432,7 +432,7 @@ public extension UIImage {
         let thumbSize = CGSize(width: size.width, height: size.height)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
-        let context = CGContext.init(data: nil, width: Int(thumbSize.width), height: Int(thumbSize.height), bitsPerComponent: 8, bytesPerRow: Int(thumbSize.width) * 4, space: colorSpace, bitmapInfo: bitmapInfo)
+        let context = CGContext(data: nil, width: Int(thumbSize.width), height: Int(thumbSize.height), bitsPerComponent: 8, bytesPerRow: Int(thumbSize.width) * 4, space: colorSpace, bitmapInfo: bitmapInfo)
         
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)

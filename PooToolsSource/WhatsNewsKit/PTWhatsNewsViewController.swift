@@ -306,8 +306,8 @@ public class PTWhatsNewsViewController: PTBaseViewController {
                 if cellModel.newsImage != nil {
                     contentViewWidth = contentViewWidth - (PTWhatsNewsCell.CellBaseHeight - 15) - 10
                 }
-                let titleHeight = UIView.sizeFor(string: cellModel.title, font: cellModel.titleFont,lineSpacing: cellModel.contentSpace as NSNumber,width: contentViewWidth).height + 5
-                let subTitleHeight = UIView.sizeFor(string: cellModel.subTitle, font: cellModel.subTitleFont,lineSpacing: cellModel.contentSpace as NSNumber,width: viewWidth).height + 5
+                let titleHeight = UIView.sizeFor(string: cellModel.title, font: cellModel.titleFont,lineSpacing: cellModel.contentSpace,width: contentViewWidth).height + 5
+                let subTitleHeight = UIView.sizeFor(string: cellModel.subTitle, font: cellModel.subTitleFont,lineSpacing: cellModel.contentSpace,width: viewWidth).height + 5
 
                 var cellHeight = (!cellModel.title.stringIsEmpty() ? titleHeight : 0) + (!cellModel.subTitle.stringIsEmpty() ? subTitleHeight : 0) + (!cellModel.title.stringIsEmpty() || !cellModel.subTitle.stringIsEmpty() ? 15 : 0) + (!cellModel.title.stringIsEmpty() && !cellModel.subTitle.stringIsEmpty() ? cellModel.contentSpace : 0)
                 if cellHeight <= PTWhatsNewsCell.CellBaseHeight {

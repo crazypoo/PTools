@@ -11,6 +11,8 @@ import UIKit
 
 @objcMembers
 public class PTAlertConfig: NSObject {
+    public static let shared = PTAlertConfig()
+    
     public enum PTUserInterfaceStyle: Int {
         case unspecified = 0
         case light = 1
@@ -93,4 +95,7 @@ public class PTAlertConfig: NSObject {
     public var userInterfaceStyleOverride = PTUserInterfaceStyle.light
     /// 弹窗的唯一标识符，用于去重
     public var identifier: String?
+    /// 弹框展示时间
+    public var showALertDuration: TimeInterval = 0.35
+    public var hideALertDuration: TimeInterval = 0.35
 }

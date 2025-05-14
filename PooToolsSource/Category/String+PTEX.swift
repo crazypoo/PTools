@@ -711,7 +711,7 @@ public extension String {
     /// - Returns: 行数
     func numberOfLines(font:UIFont,
                        labelShowWidth:CGFloat,
-                       lineSpacing:NSNumber? = nil) -> Int {
+                       lineSpacing:CGFloat = 2.5) -> Int {
         let lineHeight = UIView.sizeFor(string: "A", font: font,lineSpacing: lineSpacing, width: labelShowWidth).height
         let totalHeight = UIView.sizeFor(string: self, font: font,lineSpacing: lineSpacing, width: labelShowWidth).height
 
@@ -721,7 +721,7 @@ public extension String {
     func truncatedText(maxLineNumber:Int,
                        font:UIFont,
                        labelShowWidth:CGFloat,
-                       lineSpacing:NSNumber? = nil) -> String {
+                       lineSpacing:CGFloat = 2.5) -> String {
        var truncatedText = self
 
         guard numberOfLines(font: font, labelShowWidth: labelShowWidth, lineSpacing: lineSpacing) > maxLineNumber else {
@@ -906,7 +906,7 @@ fileprivate extension PTUtils {
         let height = extent.height * scale
         let cs = CGColorSpaceCreateDeviceGray()
         let bitmapRef:CGContext = CGContext(data: nil , width: Int(width), height: Int(height), bitsPerComponent: 8, bytesPerRow: 0, space: cs, bitmapInfo: CGImageAlphaInfo.none.rawValue)!
-        let context = CIContext.init()
+        let context = CIContext()
         let bitmapImage = context.createCGImage(image, from: extent)
         bitmapRef.interpolationQuality = .none
         bitmapRef.scaleBy(x: scale, y: scale)

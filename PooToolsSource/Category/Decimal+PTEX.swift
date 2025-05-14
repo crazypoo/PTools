@@ -17,14 +17,12 @@ public extension Decimal {
     }
     
     static func bankPriceFor3(price:Decimal) -> Decimal {
-        let handler = NSDecimalNumberHandler(
-            roundingMode: .up,           // 無條件進位
-            scale: 2,                    // 保留兩位小數
-            raiseOnExactness: false,
-            raiseOnOverflow: false,
-            raiseOnUnderflow: false,
-            raiseOnDivideByZero: false
-        )
+        let handler = NSDecimalNumberHandler(roundingMode: .up,           // 無條件進位
+                                             scale: 2,                    // 保留兩位小數
+                                             raiseOnExactness: false,
+                                             raiseOnOverflow: false,
+                                             raiseOnUnderflow: false,
+                                             raiseOnDivideByZero: false)
 
         let decimalNumber = NSDecimalNumber(decimal: price)
         let rounded = decimalNumber.rounding(accordingToBehavior: handler)

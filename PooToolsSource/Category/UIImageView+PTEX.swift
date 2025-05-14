@@ -25,7 +25,7 @@ public extension UIImageView {
     }
     
     @objc func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,loadedHandler:PTImageLoadHandler? = nil) {
-        kf.setImage(with: URL.init(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
+        kf.setImage(with: URL(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
             switch result {
             case .success(let result):
                 loadedHandler?(nil,result.originalSource.url,result.image)
