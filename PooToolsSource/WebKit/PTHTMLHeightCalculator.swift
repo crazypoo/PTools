@@ -32,7 +32,14 @@ public class PTHTMLHeightCalculator: NSObject {
         webView.loadHTMLString(html, baseURL: nil)
     }
     
-    public static func resetHtimTag(rawHTML:String) -> String {
+    public static func resetHtmlTag(rawHTML:String) -> String {
+        // Step 1: 替换懒加载图片的 src
+        let processedHTML = rawHTML
+            .replacingOccurrences(of: #"(?i)<img([^>]+)(?:data-src|data-lazy|data-original)=["']([^"']+)["']([^>]*)>"#,
+                                  with: "<img$1src=\"$2\"$3>",
+                                  options: .regularExpression)
+
+        // Step 2: 构造完整 HTML 页面
         let completeHTML = """
         <!DOCTYPE html>
         <html>
@@ -52,10 +59,11 @@ public class PTHTMLHeightCalculator: NSObject {
             </style>
         </head>
         <body>
-        \(rawHTML)
+        \(processedHTML)
         </body>
         </html>
         """
+
         return completeHTML
     }
 }
