@@ -351,8 +351,18 @@ public class PTCycleScrollView: UIView {
         }
     }
         
+    /*
+     Loading image
+     */
+    /// iCloudDocument
     public var iCloudDocument:String = ""
-    
+    /// DefaultPlaceholderImage
+    public var defaultPlaceholderImage:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage
+    /// Loading progress width
+    public var loadingProgressWidth:CGFloat = 1.5
+    /// Loading progress color
+    public var loadingProgressColor:DynamicColor = .purple
+
     // MARK: - Private
     /// 注意： 由于属性较多，所以请使用style对应的属性，如果没有标明则通用
     /// PageControl
@@ -510,9 +520,9 @@ extension PTCycleScrollView {
         imageView.isUserInteractionEnabled = true
 
         if let imageData = image {
-            imageView.loadImage(contentData: imageData, iCloudDocumentName: self.iCloudDocument, emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
+            imageView.loadImage(contentData: imageData,iCloudDocumentName: self.iCloudDocument,borderWidth: loadingProgressWidth,borderColor: loadingProgressColor,emptyImage: self.defaultPlaceholderImage)
         } else {
-            imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+            imageView.image = self.defaultPlaceholderImage
         }
 
         let tap = UITapGestureRecognizer { [weak self] sender in
@@ -694,14 +704,14 @@ extension PTCycleScrollView {
                     self.videoFrameCache.setObject(image, forKey: url as NSString)
                     completion(image)
                 } else {
-                    completion(PTAppBaseConfig.share.defaultEmptyImage)
+                    completion(self.defaultPlaceholderImage)
                 }
             }
         }
     }
         
     func loadImageWithAny(imagePath:Any,cell:PTCycleScrollViewCell,itemIndex:Int) {
-        cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument)
+        cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,borderWidth: loadingProgressWidth,borderColor: loadingProgressColor,emptyImage: self.defaultPlaceholderImage)
         setBannerAttTitle(cell: cell, itemIndex: itemIndex)
     }
     
@@ -773,7 +783,7 @@ extension PTCycleScrollView {
         }
 
         guard !imagePaths.isEmpty else {
-            cell.imageView.image = PTAppBaseConfig.share.defaultPlaceholderImage
+            cell.imageView.image = self.defaultPlaceholderImage
             return
         }
 
@@ -784,7 +794,7 @@ extension PTCycleScrollView {
            ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()) {
             getVideoFrame(for: videoPath) { [weak self] image in
                 guard self != nil else { return }
-                cell.imageView.image = image ?? PTAppBaseConfig.share.defaultPlaceholderImage
+                cell.imageView.image = image ?? self?.defaultPlaceholderImage
                 cell.videoLink = videoPath
 
                 if itemIndex == 0, let url = URL(string: videoPath) {
