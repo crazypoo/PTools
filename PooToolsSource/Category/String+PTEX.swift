@@ -892,6 +892,13 @@ public extension String {
     func urlToUnicodeURLString(characters:CharacterSet = .urlQueryAllowed) -> String? {
         return self.addingPercentEncoding(withAllowedCharacters: characters)
     }
+    
+    func isImageURL() -> Bool {
+        let imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "bmp", "tiff", "heic", "svg"]
+        guard let url = URL(string: self) else { return false }
+        let ext = url.pathExtension.lowercased()
+        return imageExtensions.contains(ext)
+    }
 }
 
 fileprivate extension PTUtils {
