@@ -112,5 +112,24 @@ public extension PTPOP where Base: WKWebView {
             callBack(screenShotImage)
         }
     }
+    
+    static func clearWebKitCache() {
+        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+
+        if #available(iOS 17, *) {
+            // iOS 17+ 使用新的 API
+            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: dataTypes) { records in
+                WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, for: records) {
+                    PTNSLogConsole("✅ WebKit 快取已清除 (iOS 17+)")
+                }
+            }
+        } else {
+            // 舊版本繼續使用原有 API
+            let dateFrom = Date(timeIntervalSince1970: 0)
+            WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: dateFrom) {
+                PTNSLogConsole("✅ WebKit 快取已清除 (iOS < 17)")
+            }
+        }
+    }
 }
 
