@@ -8,70 +8,84 @@
 
 import UIKit
 
-/// 将创建自定义UIView逻辑延迟到数据到来时，同时避免当数据无效时仍创建自定义UIView，导致无意义的内存占用问题
-public final class PTLazyViewContainer<T : UIView> {
+/// 延迟创建视图容器，只有在需要时才创建实际视图，避免不必要的内存开销
+public final class PTLazyViewContainer<T: UIView> {
+    
     private(set) var view: T?
     private let createView: () -> T
     private weak var parentView: UIView?
 
-    public init(createView: @escaping () -> T) {
+    /// 初始化
+    /// - Parameter createView: 用于创建视图的闭包，默认为 `T()`。
+    public init(createView: @escaping () -> T = { T() }) {
         self.createView = createView
     }
 
-    public init() {
-        createView = { T() }
-    }
-
-    /// 获取或创建视图，交给调用方处理布局
+    /// 获取或创建视图，并添加到父视图中
     /// - Parameters:
     ///   - parent: 父视图
-    ///   - customAddition: 自定义添加视图逻辑
-    ///   - onFirstAddition: 首次创建、同时添加到parentView的时机
-    /// - Returns: 自定义视图
+    ///   - configure: 视图创建后的配置闭包（如设置属性、布局等）
+    ///   - customAdd: 自定义添加视图逻辑，默认使用 `parent.addSubview`
+    ///   - onFirstAdd: 首次添加后的回调
+    /// - Returns: 懒加载创建或已有的视图实例
     @discardableResult
-    public func ensureView(in parent: UIView, customAddition: ((T) -> Void)? = nil, onFirstAddition: ((T) -> Void)? = nil) -> T {
-        if let existingView = view {
-            return existingView
+    public func ensureView(in parent: UIView,
+                           configure: ((T) -> Void)? = nil,
+                           customAdd: ((T) -> Void)? = nil,
+                           onFirstAdd: ((T) -> Void)? = nil) -> T {
+        if let view = view {
+            return view
         }
 
-        let newView = Thread.isMainThread ? createView() : DispatchQueue.main.sync { createView() }
+        let newView: T = Thread.isMainThread ? createView() : DispatchQueue.main.sync(execute: createView)
 
-        // 使用自定义添加方式或默认 addSubview
-        if let customAddition {
-            customAddition(newView)
+        configure?(newView)
+
+        let addAction = {
+            if let customAdd = customAdd {
+                customAdd(newView)
+            } else {
+                parent.addSubview(newView)
+            }
+            onFirstAdd?(newView)
+        }
+
+        if Thread.isMainThread {
+            addAction()
         } else {
-            parent.addSubview(newView)
+            DispatchQueue.main.async { addAction() }
         }
 
-        onFirstAddition?(newView)
-        view = newView
-        parentView = parent
+        self.view = newView
+        self.parentView = parent
         return newView
     }
 
-    /// 移除视图
-    /// - Parameter customRemoval: 自定义移除视图逻辑
-    public func removeView(using customRemoval: ((T) -> Void)? = nil) {
+    /// 移除并释放视图
+    /// - Parameter customRemove: 自定义移除逻辑，默认调用 `removeFromSuperview`
+    public func removeView(using customRemove: ((T) -> Void)? = nil) {
         guard let view = view, view.superview != nil else { return }
-        func doRemoving() {
-            if let customRemoval {
-                customRemoval(view)
+
+        let removeAction = {
+            if let customRemove = customRemove {
+                customRemove(view)
             } else {
                 view.removeFromSuperview()
             }
+            self.view = nil
+            self.parentView = nil
         }
+
         if Thread.isMainThread {
-            doRemoving()
+            removeAction()
         } else {
-            DispatchQueue.main.async { doRemoving() }
+            DispatchQueue.main.async { removeAction() }
         }
-        self.view = nil
-        parentView = nil
     }
 
-    // 检查视图是否创建
+    /// 是否已创建视图
     public var isCreated: Bool {
-        view != nil
+        return view != nil
     }
 
     deinit {

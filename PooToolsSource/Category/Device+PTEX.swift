@@ -21,6 +21,17 @@ public enum UIDeviceApplePencilSupportType {
     case BothNot
 }
 
+public extension UIDeviceApplePencilSupportType {
+    var description: String {
+        switch self {
+        case .Both: return "Support All"
+        case .First: return "Only First"
+        case .Second: return "Only Second"
+        case .BothNot: return "Not Supported"
+        }
+    }
+}
+
 public extension PTPOP where Base: UIDevice {
     
     //MARK: 判断是否Mac

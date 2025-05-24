@@ -25,16 +25,27 @@ class PTCrashDetailViewController: PTBaseViewController {
     
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
-        config.viewType = .Normal
-        config.itemOriginalX = 0
-        config.itemHeight = 44
+        config.viewType = .Custom
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
+        view.customerLayout = { index,model in
+            return UICollectionView.waterFallLayout(data: model.rows,rowCount: 1,itemOriginalX: 0, itemSpace: 0) { subIndex, objc in
+                var baseRowHeight:CGFloat = 44
+                let font:UIFont = .appfont(size: 16)
+                if let rowModel = objc as? PTRows,let cellModel = rowModel.dataModel as? PTFusionCellModel {
+                    let viewHeight = UIView.sizeFor(string: (cellModel.name + cellModel.content), font: font,width: CGFloat.kSCREEN_WIDTH).height
+                    if viewHeight > baseRowHeight {
+                        baseRowHeight = viewHeight
+                    }
+                }
+                return baseRowHeight
+            }
+        }
         view.headerInCollection = { kind,collectionView,model,index in
-            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
+            if let headerId = model.headerID,!headerId.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
                 header.sectionModel = headerModel
                 return header
             }
@@ -156,6 +167,7 @@ class PTCrashDetailViewController: PTBaseViewController {
             }
             let headerModel = PTFusionCellModel()
             headerModel.name = value.title
+            headerModel.cellFont = .appfont(size: 18,bold: true)
             let section = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34,rows: rows,headerDataModel: headerModel)
             sections.append(section)
         }

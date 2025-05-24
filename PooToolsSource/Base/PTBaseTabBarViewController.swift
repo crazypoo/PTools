@@ -23,10 +23,10 @@ open class PTBaseTabBarViewController: UITabBarController {
 extension PTBaseTabBarViewController {
     // MARK: 设置Tab
     public func configTab(_ viewController: UIViewController,
-                   title: String,
-                   image: UIImage,
-                   identifier: String,
-                   badgeValue: String? = nil) -> UITab {
+                          title: String,
+                          image: UIImage,
+                          identifier: String,
+                          badgeValue: String? = nil) -> UITab {
         
         let tab = UITab(title: title, image: image, identifier: identifier) { tab in
             // 角标
@@ -43,11 +43,11 @@ extension PTBaseTabBarViewController {
 
     // MARK: 设置UITabGroup
     public func configTabGroup(_ viewController: UIViewController,
-                        title: String,
-                        image: UIImage,
-                        identifier: String,
-                        tabs:[UITab],
-                        badgeValue: String? = nil) -> UITabGroup {
+                               title: String,
+                               image: UIImage,
+                               identifier: String,
+                               tabs:[UITab],
+                               badgeValue: String? = nil) -> UITabGroup {
         // UITabGroup
         let tabGroup = UITabGroup(title: title, image: image, identifier: identifier) { _ in
             // 返回显示的UIViewController

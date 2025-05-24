@@ -276,7 +276,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         SwizzleTool().swizzleContextMenuReverseOrder()
     }
     
-    func showCollectionViewData(loadedTask:((UICollectionView)->Void)? = nil) {
+    func showCollectionViewData(loadedTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdGobal {
             
             if self.viewConfig.mediaData.count > 1 {

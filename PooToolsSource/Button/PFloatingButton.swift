@@ -346,9 +346,7 @@ open class PFloatingButton: UIButton {
     }
     
     public func removeFromSuperView() {
-        if willBeRemovedBlock != nil {
-            willBeRemovedBlock!(self)
-        }
+        willBeRemovedBlock?(self)
         super.removeFromSuperview()
     }
 }

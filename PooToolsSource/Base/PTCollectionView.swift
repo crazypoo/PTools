@@ -25,6 +25,8 @@ private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
 private var kPTCollectionIndexViewContent: CChar = 0
 private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionView.contentOffset)
 
+public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
+
 //MARK: CollectionView展示的样式类型
 @objc public enum PTCollectionViewType:Int {
     case Normal
@@ -666,7 +668,7 @@ public class PTCollectionView: UIView {
 
     public var viewConfig:PTCollectionViewConfig! {
         didSet {
-            if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
+            if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
                 indicator.removeFromSuperview()
                 indexView.removeFromSuperview()
                 collectionView.removeFromSuperview()
@@ -791,7 +793,7 @@ public class PTCollectionView: UIView {
     }
     
     func setIndexViews() {
-        if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
+        if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.setupUI()
             }
@@ -823,7 +825,7 @@ public class PTCollectionView: UIView {
     }
     
     ///加载数据并且刷新界面
-    public func showCollectionDetail(collectionData:[PTSection],finishTask:((UICollectionView)->Void)? = nil) {
+    public func showCollectionDetail(collectionData:[PTSection],finishTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdGobal {
             self.mSections.removeAll()
             self.mSections = collectionData
@@ -843,7 +845,7 @@ public class PTCollectionView: UIView {
         }
     }
     
-    public func clearAllData(finishTask:((UICollectionView)->Void)? = nil) {
+    public func clearAllData(finishTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdGobal {
             self.mSections.removeAll()
             PTGCDManager.gcdMain {
@@ -1229,7 +1231,7 @@ extension PTCollectionView:UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let assets = indexPaths.map { photoAssets[$0.item] }
         imageManager.startCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
-        }
+    }
         
     public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         let assets = indexPaths.map { photoAssets[$0.item] }

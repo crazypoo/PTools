@@ -297,31 +297,22 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTWhatsNewsCell.ID:PTWhatsNewsCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            var groupH:CGFloat = 0
-            sectionModel.rows?.enumerated().forEach { index,model in
-                let cellModel =  model.dataModel as! PTWhatsNewsItem
-                
-                if cellModel.newsImage != nil {
-                    contentViewWidth = contentViewWidth - (PTWhatsNewsCell.CellBaseHeight - 15) - 10
-                }
-                let titleHeight = UIView.sizeFor(string: cellModel.title, font: cellModel.titleFont,lineSpacing: cellModel.contentSpace,width: contentViewWidth).height + 5
-                let subTitleHeight = UIView.sizeFor(string: cellModel.subTitle, font: cellModel.subTitleFont,lineSpacing: cellModel.contentSpace,width: viewWidth).height + 5
+            return UICollectionView.waterFallLayout(data: sectionModel.rows,screenWidth:viewWidth,rowCount: 1,itemOriginalX: 0, itemSpace: 0) { index, obj in
+                if let row = obj as? PTRows,let cellModel = row.dataModel as? PTWhatsNewsItem {
+                    if cellModel.newsImage != nil {
+                        contentViewWidth = contentViewWidth - (PTWhatsNewsCell.CellBaseHeight - 15) - 10
+                    }
+                    let titleHeight = UIView.sizeFor(string: cellModel.title, font: cellModel.titleFont,lineSpacing: cellModel.contentSpace,width: contentViewWidth).height + 5
+                    let subTitleHeight = UIView.sizeFor(string: cellModel.subTitle, font: cellModel.subTitleFont,lineSpacing: cellModel.contentSpace,width: viewWidth).height + 5
 
-                var cellHeight = (!cellModel.title.stringIsEmpty() ? titleHeight : 0) + (!cellModel.subTitle.stringIsEmpty() ? subTitleHeight : 0) + (!cellModel.title.stringIsEmpty() || !cellModel.subTitle.stringIsEmpty() ? 15 : 0) + (!cellModel.title.stringIsEmpty() && !cellModel.subTitle.stringIsEmpty() ? cellModel.contentSpace : 0)
-                if cellHeight <= PTWhatsNewsCell.CellBaseHeight {
-                    cellHeight = PTWhatsNewsCell.CellBaseHeight
+                    var cellHeight = (!cellModel.title.stringIsEmpty() ? titleHeight : 0) + (!cellModel.subTitle.stringIsEmpty() ? subTitleHeight : 0) + (!cellModel.title.stringIsEmpty() || !cellModel.subTitle.stringIsEmpty() ? 15 : 0) + (!cellModel.title.stringIsEmpty() && !cellModel.subTitle.stringIsEmpty() ? cellModel.contentSpace : 0)
+                    if cellHeight <= PTWhatsNewsCell.CellBaseHeight {
+                        cellHeight = PTWhatsNewsCell.CellBaseHeight
+                    }
+                    return cellHeight
                 }
-                
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupH, width: viewWidth, height: cellHeight), zIndex: 1000+index)
-                customers.append(customItem)
-                groupH += cellHeight
+                return 0
             }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(viewWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTWhatsNewsItem,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTWhatsNewsCell {

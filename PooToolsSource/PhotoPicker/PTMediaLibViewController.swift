@@ -339,7 +339,7 @@ public class PTMediaLibView:UIView {
         return true
     }
     
-    func loadMedia(addImage:Bool? = false,loadFinish:((UICollectionView)->Void)? = nil) {
+    func loadMedia(addImage:Bool? = false,loadFinish:PTCollectionCallback? = nil) {
         PTGCDManager.gcdMain {
             if !addImage! {
                 self.totalModels.removeAll()

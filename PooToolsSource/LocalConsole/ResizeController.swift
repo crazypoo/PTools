@@ -130,7 +130,6 @@ class ResizeController {
                 LocalConsole.shared.setAttFontColor(color: color)
             }
 
-
             if isActive {
                 
                 UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {

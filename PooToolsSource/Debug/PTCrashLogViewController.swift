@@ -25,13 +25,27 @@ class PTCrashLogViewController: PTBaseViewController {
     
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
-        config.viewType = .Normal
-        config.itemOriginalX = 0
-        config.itemHeight = 100
+        config.viewType = .Custom
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
+        view.customerLayout = { index,model in
+            return UICollectionView.waterFallLayout(data: model.rows,rowCount: 1,itemOriginalX: 0, itemSpace: 0) { subIndex, objc in
+                var baseRowHeight:CGFloat = 54
+                let font:UIFont = .appfont(size: 16)
+                let descFont:UIFont = .appfont(size: 14)
+                if let rowModel = objc as? PTRows,let cellModel = rowModel.dataModel as? PTFusionCellModel {
+                    let nameHeight = UIView.sizeFor(string: cellModel.name, font: font,width: CGFloat.kSCREEN_WIDTH).height
+                    let descHeight = UIView.sizeFor(string: cellModel.desc, font: descFont,width: CGFloat.kSCREEN_WIDTH).height
+                    let totalHeight = nameHeight + descHeight
+                    if totalHeight > baseRowHeight {
+                        baseRowHeight = totalHeight
+                    }
+                }
+                return baseRowHeight
+            }
+        }
         view.cellInCollection = { collection,itemSection,indexPath in
             if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 cell.cellModel = cellModel

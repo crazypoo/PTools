@@ -16,8 +16,7 @@ enum PTCacheStoragePolicy {
     ///   - request: The request that generated the response; must not be nil.
     ///   - response: The response itself; must not be nil.
     /// - Returns: A cache storage policy to use.
-    static func cacheStoragePolicy(for request: URLRequest, and response: HTTPURLResponse)
-        -> URLCache.StoragePolicy {
+    static func cacheStoragePolicy(for request: URLRequest, and response: HTTPURLResponse) -> URLCache.StoragePolicy {
         var cacheable: Bool
         var result: URLCache.StoragePolicy
 
@@ -40,9 +39,7 @@ enum PTCacheStoragePolicy {
         // If we still think it might be cacheable, look at the "Cache-Control" header in the request.
         if cacheable {
             let requestHeader = (request.allHTTPHeaderFields?["Cache-Control"] as? String)?.lowercased()
-            if let requestHeader,
-               requestHeader.range(of: "no-store") != nil,
-               requestHeader.range(of: "no-cache") != nil {
+            if let requestHeader, requestHeader.range(of: "no-store") != nil, requestHeader.range(of: "no-cache") != nil {
                 cacheable = false
             }
         }

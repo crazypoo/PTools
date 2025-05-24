@@ -56,11 +56,8 @@ public class PTChatView: UIView {
         let view = PTCollectionView(viewConfig: collectionConfig)
         view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
-            var groupHeight:CGFloat = 0 + PTChatConfig.share.chatTopFixel
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            sectionModel.rows?.enumerated().forEach { (index,model) in
-                if let cellModel = model.dataModel as? PTChatListModel {
+            return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount:1,itemOriginalX: 0,topContentSpace:PTChatConfig.share.chatTopFixel, bottomContentSpace: PTChatConfig.share.chatBottomFixel,itemSpace: 0) { index, model in
+                if let row = model as? PTRows,let cellModel = row.dataModel as? PTChatListModel {
                     var cellHeight:CGFloat = 0
                     
                     let timeHeight = (PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
@@ -132,18 +129,10 @@ public class PTChatView: UIView {
                     case .CustomerMessage:
                         cellHeight = self.customerCellHeightHandler?(cellModel,index) ?? 0
                     }
-                    let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupHeight, width: CGFloat.kSCREEN_WIDTH, height: cellHeight), zIndex: 1000+index)
-                    customers.append(customItem)
-                    groupHeight += (cellHeight)
-                    if ((sectionModel.rows?.count ?? 0) - 1) == index {
-                        groupHeight += PTChatConfig.share.chatBottomFixel
-                    }
+                    return cellHeight
                 }
+                return 0
             }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(groupHeight))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTChatListModel {
@@ -281,7 +270,7 @@ public class PTChatView: UIView {
     }
     
     ///刷新数据
-    public func viewReloadData(loadFinish:((UICollectionView)->Void)? = nil) {
+    public func viewReloadData(loadFinish:PTCollectionCallback? = nil) {
         var sections = [PTSection]()
         if chatDataArr.count > 0 {
             let rows: [PTRows] = chatDataArr.compactMap { value in

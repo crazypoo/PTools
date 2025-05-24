@@ -85,13 +85,8 @@ extension PTCrashModel {
 
 extension [PTCrashModel.Trace] {
     static func builder(_ stack: [String]) -> [PTCrashModel.Trace] {
-        var traces = [PTCrashModel.Trace]()
-
-        for symbol in stack {
-            let trace = PTCrashModel.Trace(title: symbol, detail: "")
-            traces.append(trace)
+        return stack.map {
+            PTCrashModel.Trace(title: $0, detail: "")
         }
-
-        return traces
     }
 }

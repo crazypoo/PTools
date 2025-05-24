@@ -52,6 +52,7 @@ fileprivate class PTVisualInfoController:UIView {
 
     public lazy var infoLabel:UILabel = {
         let view = UILabel()
+        view.font = .appfont(size: 16)
         view.numberOfLines = 0
         return view
     }()
@@ -260,7 +261,7 @@ fileprivate class PTRulerInfoView:UIView {
         
         
         AppWindows?.addSubviews([visualController])
-        visualController.infoLabel.text = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        configInfoLabelText()
         visualController.isHidden = false
         
         NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
@@ -272,7 +273,17 @@ fileprivate class PTRulerInfoView:UIView {
     
     func configInfoLabelText() {
         let stringInfo = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        let height = UIView.sizeFor(string: stringInfo, font: .appfont(size: 16),width: CGFloat.kSCREEN_WIDTH - 60 - CGFloat.SizeFrom750(x: 44) - 20 - 5).height
+        var base = CGFloat.SizeFrom750(x: 100)
+        if height > base {
+            base = height
+        }
         visualController.infoLabel.text = stringInfo
+        visualController.snp.remakeConstraints { make in
+            make.left.right.equalToSuperview().inset(30)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.height.equalTo(base)
+        }
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {

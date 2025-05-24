@@ -234,16 +234,16 @@ public class LocalConsole: NSObject {
 
     var currentText: String = "" {
         didSet {
-            PTGCDManager.gcdMain {
+            DispatchQueue.main.async(execute: {
                 self.setLog()
                 if self.isVisiable {
                     UIView.performWithoutAnimation {
-                        PTGCDManager.gcdMain {
+                        DispatchQueue.main.async(execute: {
                             self.commitTextChanges(requestMenuUpdate: oldValue == "" || (oldValue != "" && self.currentText == ""))
-                        }
+                        })
                     }
                 }
-            }
+            })
         }
     }
     
@@ -970,129 +970,125 @@ public class LocalConsole: NSObject {
         activityViewController.previewNumberOfLines = 10
         PTUtils.getCurrentVC().present(activityViewController, animated: true)
     }
-    
+        
     func systemReport() {
-            
-        PTGCDManager.gcdMain { [self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
 
-            if !currentText.stringIsEmpty() { print("\n") }
-            
-            dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] timer in
+            if !self.currentText.stringIsEmpty() {
+                print("\n")
+            }
 
-                guard (DispatchQueue.main.sync(execute: {
-                    self.terminal?.systemText?.panGestureRecognizer.numberOfTouches ?? 0
-                })) == 0 else {
+            if self.dynamicReportTimer?.isValid == true {
+                self.dynamicReportTimer?.invalidate()
+                self.dynamicReportTimer = nil
+            }
+
+            self.dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+                guard let self else {
+                    timer.invalidate()
                     return
                 }
 
-                var _currentText = currentText
-
-                // To optimize performance, only scan the last 2500 characters of text for system report changes.
-                let result: NSRange
-                scope: do {
-                    if _currentText.count <= 2500 {
-                        result = NSMakeRange(0, _currentText.count)
-                        break scope
-                    }
-                    result = NSMakeRange(_currentText.count - 2500, 2500)
+                guard self.terminal?.systemText?.panGestureRecognizer.numberOfTouches == 0 else {
+                    return
                 }
-                let range: NSRange = result
 
-                let regex0 = try! NSRegularExpression(pattern: "ThermalState: .*", options: NSRegularExpression.Options.caseInsensitive)
-                _currentText = regex0.stringByReplacingMatches(in: _currentText, options: [], range: range, withTemplate: "ThermalState: \(SystemReport.shared.thermalState)")
+                var _currentText = self.currentText
 
-                let regex1 = try! NSRegularExpression(pattern: "SystemUptime: .*", options: NSRegularExpression.Options.caseInsensitive)
-                _currentText = regex1.stringByReplacingMatches(in: _currentText, options: [], range: range, withTemplate: "SystemUptime: \(ProcessInfo.processInfo.systemUptime.formattedString!)")
-
-                let regex2 = try! NSRegularExpression(pattern: "LowPowerMode: .*", options: NSRegularExpression.Options.caseInsensitive)
-                _currentText = regex2.stringByReplacingMatches(in: _currentText, options: [], range: range, withTemplate: "LowPowerMode: \(ProcessInfo.processInfo.isLowPowerModeEnabled)")
-
-                if currentText != _currentText {
-                    currentText = _currentText
-
-                    timerInvalidationCounter = 0
-
+                let scanRange: NSRange
+                if _currentText.count <= 2500 {
+                    scanRange = NSMakeRange(0, _currentText.count)
                 } else {
+                    scanRange = NSMakeRange(_currentText.count - 2500, 2500)
+                }
 
-                    timerInvalidationCounter += 1
+                _currentText = self.replacePattern(in: _currentText, pattern: "ThermalState: .*", replacement: "ThermalState: \(SystemReport.shared.thermalState)", range: scanRange)
+                _currentText = self.replacePattern(in: _currentText, pattern: "SystemUptime: .*", replacement: "SystemUptime: \(ProcessInfo.processInfo.systemUptime.formattedString ?? "")", range: scanRange)
+                _currentText = self.replacePattern(in: _currentText, pattern: "LowPowerMode: .*", replacement: "LowPowerMode: \(ProcessInfo.processInfo.isLowPowerModeEnabled)", range: scanRange)
 
-                    // It has been 2 seconds and values have not changed.
-                    if timerInvalidationCounter == 2 {
-
-                        // Invalidate the timer if there is no longer anything to update.
-                        dynamicReportTimer = nil
+                if self.currentText != _currentText {
+                    self.currentText = _currentText
+                    self.timerInvalidationCounter = 0
+                } else {
+                    self.timerInvalidationCounter += 1
+                    if self.timerInvalidationCounter >= 2 {
+                        timer.invalidate()
+                        self.dynamicReportTimer = nil
                     }
                 }
             }
-            var volumeAvailableCapacityForImportantUsageString = ""
-            var volumeAvailableCapacityForOpportunisticUsageString = ""
-            var volumesString = ""
-            volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
-            volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
-            volumesString = String.init(format: "%d", Device.volumes!)
 
-            var hzString = ""
-            hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
-
-            var supportApplePencilString = ""
-            switch UIDevice.pt.supportApplePencil {
-            case .Both:
-                supportApplePencilString = "Support All"
-            case .Second:
-                supportApplePencilString = "Only Support Second"
-            case .First:
-                supportApplePencilString = "Only Support First"
-            case .BothNot:
-                supportApplePencilString = "Both Not Support"
-            }
-            
-            let systemText = """
-                    ModelName: \(SystemReport.shared.gestaltMarketingName)
-                    ModelIdentifier: \(SystemReport.shared.gestaltModelIdentifier)
-                    Architecture: \(SystemReport.shared.gestaltArchitecture)
-                    Firmware: \(SystemReport.shared.gestaltFirmwareVersion)
-                    KernelVersion: \(SystemReport.shared.kernel) \(SystemReport.shared.kernelVersion)
-                    SystemVersion: \(SystemReport.shared.versionString)
-                    OSCompileDate: \(SystemReport.shared.compileDate)
-                    Memory: \(UIDevice.pt.memoryTotal) GB
-                    ProcessorCores: \(Int(UIDevice.pt.processorCount))
-                    ThermalState: \(SystemReport.shared.thermalState)
-                    SystemUptime: \(UIDevice.pt.systemUptime)
-                    LowPowerMode: \(UIDevice.pt.lowPowerMode)
-                    IsSimulator: \(Device.current.isSimulator ? "Yes" : "No")
-                    IsTouchIDCapable: \(Device.current.isTouchIDCapable ? "Yes" : "No")
-                    IsFaceIDCapable: \(Device.current.isFaceIDCapable ? "Yes" : "No")
-                    HasBiometricSensor:\(Device.current.hasBiometricSensor ? "Yes" : "No")
-                    HasSensorHousing: \(Device.current.hasSensorHousing ? "Yes" : "No")
-                    HasRoundedDisplayCorners: \(Device.current.hasRoundedDisplayCorners ? "Yes" : "No")
-                    Has3dTouchSupport: \(Device.current.has3dTouchSupport ? "Yes" : "No")
-                    SupportsWirelessCharging: \(Device.current.supportsWirelessCharging ? "Yes" : "No")
-                    HasLidarSensor: \(Device.current.hasLidarSensor ? "Yes" : "No")
-                    PPI: \(Device.current.ppi ?? 0)
-                    ScreenSize: \(UIScreen.main.bounds.size)
-                    ScreenCornerRadius: \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
-                    ScreenScale: \(UIScreen.main.scale)
-                    \(hzString)
-                    Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
-                    IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
-                    BatteryState: \(Device.current.batteryState!)
-                    BatteryLevel: \(String.init(format: "%d", Device.current.batteryLevel!))
-                    VolumeTotalCapacity: \(String.init(format: "%d", Device.volumeTotalCapacity!))
-                    VolumeAvailableCapacity: \(String.init(format: "%d", Device.volumeAvailableCapacity!))
-                    VolumeAvailableCapacityForImportantUsage: \(volumeAvailableCapacityForImportantUsageString)
-                    VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
-                    Volumes: \(volumesString)
-                    ApplePencilSupport: \(String.init(format: "%@", supportApplePencilString))
-                    HasCamera: \(Device.current.hasCamera ? "Yes" : "No")
-                    HasNormalCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
-                    HasWideCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
-                    HasTelephotoCamera: \(Device.current.hasTelephotoCamera ? "Yes" : "No")
-                    HasUltraWideCamera: \(Device.current.hasUltraWideCamera ? "Yes" : "No")
-                    IsJailBroken: \(UIDevice.pt.isJailBroken ? "Yes" : "No")
-                    """
-
-            print(systemText)
+            self.printStaticSystemInfo()
         }
+    }
+
+    private func replacePattern(in text: String, pattern: String, replacement: String, range: NSRange) -> String {
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else { return text }
+        return regex.stringByReplacingMatches(in: text, options: [], range: range, withTemplate: replacement)
+    }
+
+    private func printStaticSystemInfo() {
+        // 提取静态信息构造字符串（保持你原来的逻辑）
+        // 加入所有 volume、battery 等静态内容的打印
+        var volumeAvailableCapacityForImportantUsageString = ""
+        var volumeAvailableCapacityForOpportunisticUsageString = ""
+        var volumesString = ""
+        volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+        volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+        volumesString = String.init(format: "%d", Device.volumes!)
+
+        var hzString = ""
+        hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
+
+        let supportApplePencilString = UIDevice.pt.supportApplePencil.description
+
+        let systemText = """
+                ModelName: \(SystemReport.shared.gestaltMarketingName)
+                ModelIdentifier: \(SystemReport.shared.gestaltModelIdentifier)
+                Architecture: \(SystemReport.shared.gestaltArchitecture)
+                Firmware: \(SystemReport.shared.gestaltFirmwareVersion)
+                KernelVersion: \(SystemReport.shared.kernel) \(SystemReport.shared.kernelVersion)
+                SystemVersion: \(SystemReport.shared.versionString)
+                OSCompileDate: \(SystemReport.shared.compileDate)
+                Memory: \(UIDevice.pt.memoryTotal) GB
+                ProcessorCores: \(Int(UIDevice.pt.processorCount))
+                ThermalState: \(SystemReport.shared.thermalState)
+                SystemUptime: \(UIDevice.pt.systemUptime)
+                LowPowerMode: \(UIDevice.pt.lowPowerMode)
+                IsSimulator: \(Device.current.isSimulator ? "Yes" : "No")
+                IsTouchIDCapable: \(Device.current.isTouchIDCapable ? "Yes" : "No")
+                IsFaceIDCapable: \(Device.current.isFaceIDCapable ? "Yes" : "No")
+                HasBiometricSensor:\(Device.current.hasBiometricSensor ? "Yes" : "No")
+                HasSensorHousing: \(Device.current.hasSensorHousing ? "Yes" : "No")
+                HasRoundedDisplayCorners: \(Device.current.hasRoundedDisplayCorners ? "Yes" : "No")
+                Has3dTouchSupport: \(Device.current.has3dTouchSupport ? "Yes" : "No")
+                SupportsWirelessCharging: \(Device.current.supportsWirelessCharging ? "Yes" : "No")
+                HasLidarSensor: \(Device.current.hasLidarSensor ? "Yes" : "No")
+                PPI: \(Device.current.ppi ?? 0)
+                ScreenSize: \(UIScreen.main.bounds.size)
+                ScreenCornerRadius: \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
+                ScreenScale: \(UIScreen.main.scale)
+                \(hzString)
+                Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
+                IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
+                BatteryState: \(Device.current.batteryState!)
+                BatteryLevel: \(String.init(format: "%d", Device.current.batteryLevel!))
+                VolumeTotalCapacity: \(String.init(format: "%d", Device.volumeTotalCapacity!))
+                VolumeAvailableCapacity: \(String.init(format: "%d", Device.volumeAvailableCapacity!))
+                VolumeAvailableCapacityForImportantUsage: \(volumeAvailableCapacityForImportantUsageString)
+                VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
+                Volumes: \(volumesString)
+                ApplePencilSupport: \(String.init(format: "%@", supportApplePencilString))
+                HasCamera: \(Device.current.hasCamera ? "Yes" : "No")
+                HasNormalCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
+                HasWideCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
+                HasTelephotoCamera: \(Device.current.hasTelephotoCamera ? "Yes" : "No")
+                HasUltraWideCamera: \(Device.current.hasUltraWideCamera ? "Yes" : "No")
+                IsJailBroken: \(UIDevice.pt.isJailBroken ? "Yes" : "No")
+                """
+
+        print(systemText)
     }
     
     func displayReport() {
