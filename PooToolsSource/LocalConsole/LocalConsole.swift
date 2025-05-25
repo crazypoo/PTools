@@ -14,6 +14,12 @@ import SwifterSwift
 import SafeSFSymbols
 import SnapKit
 import CoreLocation
+#if canImport(InAppViewDebugger)
+import InAppViewDebugger
+#endif
+#if canImport(FLEX)
+import FLEX
+#endif
 
 public let LocalConsoleFontMin:CGFloat = 4
 public let LocalConsoleFontMax:CGFloat = 20
@@ -162,8 +168,6 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 public class LocalConsole: NSObject {
     @MainActor public static let shared = LocalConsole()
             
-    public var flex:PTActionTask?
-    public var watchViews:PTActionTask?
     public var closeAllOutsideFunction:PTActionTask?
     public var leakCallback: ((PTPerformanceLeak) -> Void)?
     public var networkStatus = ""
@@ -476,25 +480,20 @@ public class LocalConsole: NSObject {
     public func createSystemLogView() {
         if terminal == nil {
             var contentView:Any!
-//            if #available(iOS 15, *) {
-                AppWindows!.addSubviews([consoleWindow.view])
-                AppWindows?.rootViewController?.addChild(consoleWindow)
-                
-                consoleWindow.view = PTBaseMaskView()
-                consoleWindow.view.frame = AppWindows!.bounds
-                
-                SwizzleTool().swizzleContextMenuReverseOrder()
-
-                SwizzleTool().swizzleDidAddSubview {
-                    AppWindows!.bringSubviewToFront(self.consoleWindow.view)
-                }
-
-                contentView = consoleWindow.view as Any
-//
-//            } else {
-//                contentView = AppWindows!
-//            }
+            AppWindows!.addSubviews([consoleWindow.view])
+            AppWindows?.rootViewController?.addChild(consoleWindow)
             
+            consoleWindow.view = PTBaseMaskView()
+            consoleWindow.view.frame = AppWindows!.bounds
+            
+            SwizzleTool().swizzleContextMenuReverseOrder()
+
+            SwizzleTool().swizzleDidAddSubview {
+                AppWindows!.bringSubviewToFront(self.consoleWindow.view)
+            }
+
+            contentView = consoleWindow.view as Any
+
             terminal = PTTerminal.init(view: contentView as Any, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width, height:PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height))
             terminal!.tag = SystemLogViewTag
             snapToCachedEndpoint()
@@ -752,7 +751,16 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        debugActions.append(contentsOf: [inspect,logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, Flex, InApp])
+        var actions = [inspect,logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport]
+        
+#if canImport(FLEX)
+        actions.append(Flex)
+#endif
+        
+#if canImport(InAppViewDebugger)
+        actions.append(InApp)
+#endif
+        debugActions.append(contentsOf: actions)
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -913,11 +921,19 @@ public class LocalConsole: NSObject {
     }
     
     @MainActor func watchViewsAction() {
-        watchViews?()
+#if canImport(InAppViewDebugger)
+        InAppViewDebugger.present()
+#endif
     }
         
     @MainActor func flexAction() {
-        flex?()
+#if canImport(FLEX)
+        if FLEXManager.shared.isHidden {
+            FLEXManager.shared.showExplorer()
+        } else {
+            FLEXManager.shared.hideExplorer()
+        }
+#endif
     }
     
     func documentAction() {

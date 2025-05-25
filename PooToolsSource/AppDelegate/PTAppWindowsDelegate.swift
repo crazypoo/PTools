@@ -52,7 +52,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     }
     
 #if POOTOOLS_DEBUG
-    public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil) {
+    public func createDevFunction() {
         Task {
             let environment = UIApplication.shared.inferredEnvironment
             switch environment {
@@ -61,8 +61,6 @@ open class PTAppWindowsDelegate: PTAppDelegate {
             default:
                 let lcm = LocalConsole.shared
                 lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
-                lcm.flex = flex
-                lcm.watchViews = inApp
             }
         }
     }
