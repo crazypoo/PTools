@@ -79,6 +79,19 @@ public extension UICollectionView {
                                                  cellLeadingSpace:CGFloat = 0,
                                                  cellTrailingSpace:CGFloat = 0,
                                                  handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem])->Void) {
+        let result =  UICollectionView.girdCollectionContentHeight(data: data,groupW: groupW,itemHeight: itemHeight,cellRowCount: cellRowCount,originalX: originalX,topContentSpace: topContentSpace,bottomContentSpace: bottomContentSpace,cellLeadingSpace: cellLeadingSpace,cellTrailingSpace: cellTrailingSpace)
+        handle(result.0,result.1)
+    }
+    
+    class func girdCollectionContentHeight(data:[AnyObject]?,
+                                           groupW:CGFloat = CGFloat.kSCREEN_WIDTH,
+                                           itemHeight:CGFloat,
+                                           cellRowCount:NSInteger = 3,
+                                           originalX:CGFloat = 10,
+                                           topContentSpace:CGFloat = 0,
+                                           bottomContentSpace:CGFloat = 0,
+                                           cellLeadingSpace:CGFloat = 0,
+                                           cellTrailingSpace:CGFloat = 0) -> (CGFloat,[NSCollectionLayoutGroupCustomItem]) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupH:CGFloat = 0
         let itemH = itemHeight
@@ -106,7 +119,7 @@ public extension UICollectionView {
                 customers.append(customItem)
             }
         }
-        handle(groupH,customers)
+        return (groupH,customers)
     }
     
     //MARK: 設置CollectionView的GirdLayout
