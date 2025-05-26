@@ -530,7 +530,7 @@ extension PTMediaBrowserCell {
             
             var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
             if viewConfig.imageLongTapAction {
-                let longTap = UILongPressGestureRecognizer.init { sender in
+                let longTap = UILongPressGestureRecognizer { sender in
                     if !self.imageLongTaped {
                         self.longTapWakeUp?()
                         self.imageLongTaped = true

@@ -274,6 +274,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         super.viewDidLoad()
 
         SwizzleTool().swizzleContextMenuReverseOrder()
+        
+        view.backgroundColor = .DevMaskColor
     }
     
     func showCollectionViewData(loadedTask:PTCollectionCallback? = nil) {

@@ -119,7 +119,7 @@ public func PTNSLog(_ msg: Any...,
 
 private func formatLogMessage(file: NSString, line: Int, column: Int, fn: String, msgStr: String) async -> (String,String) {
     let currentAppStatus: String
-    let environment = await UIApplication.shared.inferredEnvironment
+    let environment = await UIApplication.applicationEnvironment()
     switch environment {
     case .appStore:
         currentAppStatus = "<<<生產環境>>>"

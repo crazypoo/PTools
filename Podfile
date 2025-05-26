@@ -64,4 +64,5 @@ target 'PooTools_Example' do
   pod 'Swinject'
 #  pod 'Protobuf'
 #  pod 'SVGAPlayer'
+#  pod 'SmartCodable/Inherit'
 end

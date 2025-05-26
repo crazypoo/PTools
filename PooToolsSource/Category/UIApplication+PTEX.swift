@@ -22,14 +22,10 @@ public extension UIApplication {
     //MARK: 獲取軟件的開髮狀態
     ///獲取軟件的開髮狀態
     class func applicationEnvironment() -> Environment {
-        var environment: Environment = .debug
-        PTGCDManager.gcdMain {
-            environment = UIApplication.shared.inferredEnvironment
-        }
-        return environment
+        UIApplication.shared.inferredEnvironment
     }
     
-    class func applicationEnvironment() async -> Environment {
+    class func applicationEnvironmentAsync() async -> Environment {
         // 在主線程異步更新 environment
         return await withCheckedContinuation { continuation in
             PTGCDManager.gcdMain {
@@ -38,7 +34,7 @@ public extension UIApplication {
             }
         }
     }
-
+    
     /// Overrides the user interface style adopted by all windows in all connected scenes.
     /// - Parameter userInterfaceStyle: The user interface style adopted by all windows in all connected scenes.
     func override(_ userInterfaceStyle: UIUserInterfaceStyle) {
