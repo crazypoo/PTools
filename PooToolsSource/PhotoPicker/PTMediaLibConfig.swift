@@ -211,7 +211,8 @@ public class PTMediaLibConfig:NSObject {
     public var mediaCountMin:String = "PT Photo picker video select less than min".localized()
     public var selectLibTitleFont:UIFont = .appfont(size: 15)
     public var selectLibSubTitleFont:UIFont = .appfont(size: 12)
-
+    public var albumCellTitleFont:UIFont = .appfont(size: 18,bold: true)
+    public var albumCellDescFont:UIFont = .appfont(size: 14)
 }
 
 public class PTMediaLibUIConfig:NSObject {

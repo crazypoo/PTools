@@ -281,8 +281,8 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         didSet {
             let att:ASAttributedString = """
         \(wrap: .embedding("""
-        \(albumModel.title,.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.font(UIFont.appfont(size: 18,bold: true)),.paragraph(.alignment(.left),.lineSpacing(10)))
-        \("\n\(albumModel.count)",.foreground(.lightGray),.font(UIFont.appfont(size: 14)),.paragraph(.alignment(.left)))
+        \(albumModel.title,.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.font(PTMediaLibConfig.share.albumCellTitleFont),.paragraph(.alignment(.left),.lineSpacing(10)))
+        \("\n\(albumModel.count)",.foreground(.lightGray),.font(PTMediaLibConfig.share.albumCellDescFont),.paragraph(.alignment(.left)))
         """))
         """
             contentLabel.attributed.text = att
