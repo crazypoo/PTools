@@ -818,6 +818,7 @@
 		55DD937B2B94CE4800F65872 /* PTBaseSideController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD937A2B94CE4800F65872 /* PTBaseSideController.swift */; };
 		55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE65672B1450A000B436A8 /* SwipeCellOption.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
+		55E1B65E2DE603370013A0B4 /* PTNFCToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */; };
 		55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB62ABDFF1C00858348 /* ICMP.swift */; };
 		55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB72ABDFF1C00858348 /* IPv4.swift */; };
 		55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB82ABDFF1C00858348 /* SimplePing.swift */; };
@@ -1757,6 +1758,7 @@
 		55DD937A2B94CE4800F65872 /* PTBaseSideController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseSideController.swift; sourceTree = "<group>"; };
 		55DE65672B1450A000B436A8 /* SwipeCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellOption.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
+		55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNFCToolKit.swift; sourceTree = "<group>"; };
 		55E3BBB62ABDFF1C00858348 /* ICMP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICMP.swift; sourceTree = "<group>"; };
 		55E3BBB72ABDFF1C00858348 /* IPv4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPv4.swift; sourceTree = "<group>"; };
 		55E3BBB82ABDFF1C00858348 /* SimplePing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePing.swift; sourceTree = "<group>"; };
@@ -2002,6 +2004,7 @@
 				5597CAD82D8F091D00947B58 /* MXMetricKitManager */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
+				55E1B65C2DE602E30013A0B4 /* NFC */,
 				55B4FA022AE0F04A006D35F3 /* NotificationPermission */,
 				550CE4AD2AF233B60052539D /* OSSKit */,
 				55E96E342B0DE79A00AB8ADE /* PageControl */,
@@ -3659,6 +3662,14 @@
 			path = ScrollBanner;
 			sourceTree = "<group>";
 		};
+		55E1B65C2DE602E30013A0B4 /* NFC */ = {
+			isa = PBXGroup;
+			children = (
+				55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */,
+			);
+			path = NFC;
+			sourceTree = "<group>";
+		};
 		55E3BBB52ABDFF0C00858348 /* Ping */ = {
 			isa = PBXGroup;
 			children = (
@@ -3997,7 +4008,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4007,9 +4019,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4024,9 +4040,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4602,6 +4622,7 @@
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				557E3A6A2C034B90002466A0 /* PTViewToPDF.swift in Sources */,
 				5507FF9E2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift in Sources */,
+				55E1B65E2DE603370013A0B4 /* PTNFCToolKit.swift in Sources */,
 				556CA4F82B295D9600A5B189 /* UIColor+VideoEditorEX.swift in Sources */,
 				556CA4BE2B29500600A5B189 /* Provider.swift in Sources */,
 				555BEA012BB25A7C00E5987B /* PTListAnimationProtocols.swift in Sources */,

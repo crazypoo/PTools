@@ -9,90 +9,104 @@
 import UIKit
 import CoreMotion
 
-public typealias PTMotionBlock = (_ step:Int,_ speed:String,_ status:String) -> Void
+public typealias PTMotionBlock = (_ step: Int, _ confidence: String, _ status: String) -> Void
 
 @objcMembers
 public class PTMotion: NSObject {
-    public static let share = PTMotion()
-    
-    open var motionBlock:PTMotionBlock?
-    
-    fileprivate var operationQueue:OperationQueue = OperationQueue()
-    fileprivate var pedometer : CMPedometer = CMPedometer()
-    fileprivate var stepCount : Int = 0
-    fileprivate var activityManager : CMMotionActivityManager = CMMotionActivityManager()
 
-    public func startMotion() {
-        if !CMPedometer.isStepCountingAvailable() || !CMMotionActivityManager.isActivityAvailable() {
-            let msg = "哎喲，不能運行哦,僅支持M7以上處理器, 所以暫時只能在iPhone5s以上玩哦."
-            UIAlertController.base_alertVC(msg:msg,showIn: PTUtils.getCurrentVC(), moreBtn: nil)
+    public static let shared = PTMotion()
+    
+    public var motionBlock: PTMotionBlock?
+    
+    private let operationQueue = OperationQueue()
+    private let pedometer = CMPedometer()
+    private let activityManager = CMMotionActivityManager()
+    private var stepCount: Int = 0
+    
+    private override init() {
+        super.init()
+    }
+
+    // MARK: - Start Motion Tracking
+    public func startMotion(from startDate: Date = Date()) {
+        guard CMPedometer.isStepCountingAvailable(), CMMotionActivityManager.isActivityAvailable() else {
+            let msg = "哎喲，不能運行哦，僅支持 M7 以上處理器，暫時只能在 iPhone5s 以上使用。"
+            UIAlertController.base_alertVC(msg: msg, showIn: PTUtils.getCurrentVC(), moreBtn: nil)
             return
         }
-        
-        if CMPedometer.isStepCountingAvailable() {
-            pedometer.startUpdates(from: Date()) { pedomoterData, error in
-                if error != nil {
-                    let data = pedomoterData!
-                    self.stepCount = Int(truncating: data.numberOfSteps)
-                }
+
+        startPedometer(from: startDate)
+        startActivityUpdates()
+    }
+
+    // MARK: - Stop Motion Tracking
+    public func stopMotion() {
+        pedometer.stopUpdates()
+        activityManager.stopActivityUpdates()
+    }
+
+    // MARK: - Authorization Check (iOS 11+)
+    public func checkAuthorizationStatus() -> Bool {
+        if #available(iOS 11.0, *) {
+            let status = CMPedometer.authorizationStatus()
+            switch status {
+            case .authorized: return true
+            case .notDetermined, .restricted, .denied: return false
+            @unknown default: return false
             }
+        } else {
+            return true
         }
-        
-        if CMMotionActivityManager.isActivityAvailable() {
-            activityManager.startActivityUpdates(to: operationQueue) { activity in
-                PTGCDManager.gcdMain {
-                    if self.motionBlock != nil {
-                        self.motionBlock!(self.stepCount,self.activityConfidenceString(confidence: activity!.confidence),self.statusForActivity(activity: activity!))
-                    }
-                }
+    }
+
+    // MARK: - Private Methods
+    private func startPedometer(from date: Date) {
+        pedometer.startUpdates(from: date) { [weak self] pedometerData, error in
+            guard let self = self, let data = pedometerData, error == nil else { return }
+            self.stepCount = data.numberOfSteps.intValue
+        }
+    }
+
+    private func startActivityUpdates() {
+        activityManager.startActivityUpdates(to: operationQueue) { [weak self] activity in
+            guard let self = self, let activity = activity else { return }
+            PTGCDManager.gcdMain {
+                let confidence = self.confidenceString(from: activity.confidence)
+                let status = self.statusDescription(from: activity)
+                self.motionBlock?(self.stepCount, confidence, status)
             }
         }
     }
-    
-    public func statusForActivity(activity:CMMotionActivity) ->String {
-        var status :NSMutableString = "".nsString.mutableCopy() as! NSMutableString
+
+    private func statusDescription(from activity: CMMotionActivity) -> String {
+        var states: [String] = []
+
         if activity.stationary {
-            status = status.appending("not Moving") as! NSMutableString
+            states.append("Not Moving")
         }
-        
         if activity.walking {
-            if status.length > 0 {
-                status.append(", ")
-            }
-            status = status.appending("on a walking person") as! NSMutableString
+            states.append("Walking")
         }
-        
         if activity.running {
-            if status.length > 0 {
-                status.append(", ")
-            }
-            status = status.appending("on a running person") as! NSMutableString
+            states.append("Running")
         }
-        
         if activity.automotive {
-            if status.length > 0 {
-                status.append(", ")
-            }
-            status = status.appending("in a vehicle") as! NSMutableString
+            states.append("In a Vehicle")
         }
-        
-        if activity.unknown || status.length == 0 {
-            status = status.appending("unknown") as! NSMutableString
+
+        if activity.unknown || states.isEmpty {
+            states.append("Unknown")
         }
-        
-        return status.description
+
+        return states.joined(separator: ", ")
     }
-    
-    public func activityConfidenceString(confidence:CMMotionActivityConfidence)->String {
+
+    private func confidenceString(from confidence: CMMotionActivityConfidence) -> String {
         switch confidence {
-        case .low:
-            return "Low"
-        case .medium:
-            return "Medium"
-        case .high:
-            return "Heigh"
-        default:
-            return ""
+        case .low: return "Low"
+        case .medium: return "Medium"
+        case .high: return "High"
+        @unknown default: return "Unknown"
         }
     }
 }
