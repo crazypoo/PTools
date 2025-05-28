@@ -14,10 +14,10 @@ import SafeSFSymbols
 public class PTDarkSmartFooter: PTBaseCollectionReusableView {
     static let ID = "PTDarkSmartFooter"
     
-    public static let footerDescFont:UIFont = .appfont(size: 14)
-    public static let imageSize:CGSize = CGSizeMake(14, 14)
-    public static let imageContentSpace:CGFloat = 5
-    public static let imageContentFont:UIFont = .appfont(size: 16)
+    public static var footerDescFont:UIFont = .appfont(size: 14)
+    public static var imageSize:CGSize = CGSizeMake(14, 14)
+    public static var imageContentSpace:CGFloat = 5
+    public static var imageContentFont:UIFont = .appfont(size: 16)
 
     static let footerTotalHeight = 10 + UIView.sizeFor(string: PTDarkModeOption.themeSmartInfo, font: PTDarkSmartFooter.footerDescFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10 + 44 * 2
     
