@@ -22,20 +22,22 @@ public class PTDarkModeControl: PTBaseViewController {
 
     lazy var darkModeControlArr : [[PTFusionCellModel]] = {
         let smart = PTFusionCellModel()
-        smart.name = "PT Theme smart".localized()
+        smart.name = PTDarkModeOption.smartCellName
         smart.nameColor = PTAppBaseConfig.share.viewDefaultTextColor
         smart.switchTintColor = PTDarkModeOption.switchTintColor
         smart.switchThumbTintColor = PTDarkModeOption.switchThumbTintColor
         smart.switchOnTinColor = PTDarkModeOption.switchOnTinColor
         smart.accessoryType = .Switch
+        smart.cellFont = PTDarkModeOption.cellFont
         
         let followSystem = PTFusionCellModel()
-        followSystem.name = "PT Theme follow system".localized()
+        followSystem.name = PTDarkModeOption.followSystemCellName
         followSystem.nameColor = PTAppBaseConfig.share.viewDefaultTextColor
         followSystem.switchTintColor = PTDarkModeOption.switchTintColor
         followSystem.switchThumbTintColor = PTDarkModeOption.switchThumbTintColor
         followSystem.switchOnTinColor = PTDarkModeOption.switchOnTinColor
         followSystem.accessoryType = .Switch
+        followSystem.cellFont = PTDarkModeOption.cellFont
 
         return [[smart],[followSystem]]
     }()
@@ -91,7 +93,7 @@ public class PTDarkModeControl: PTBaseViewController {
                     let timeIntervalValue = PTDarkModeOption.smartPeelingTimeIntervalValue.separatedByString(with: "~")
                     let darkModePickerView = PTDarkModePickerView(startTime: timeIntervalValue[0], endTime: timeIntervalValue[1]) { (startTime, endTime) in
                         if startTime == endTime {
-                            PTBaseViewController.gobal_drop(title: "PT Theme time set error".localized())
+                            PTBaseViewController.gobal_drop(title: PTDarkModeOption.timeSetErrorMsg)
                         } else {
                             PTDarkModeOption.setSmartPeelingTimeChange(startTime: startTime, endTime: endTime)
                             self.darkTime = startTime + "~" + endTime
@@ -113,21 +115,21 @@ public class PTDarkModeControl: PTBaseViewController {
                     cell.hideBottomLine = indexPath.row == (dataModel.rows!.count - 1) ? true : false
                     cell.hideTopLine = true
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
-                    if cellModel.name == "PT Theme smart".localized() {
+                    if cellModel.name == PTDarkModeOption.smartCellName {
                         cell.switchValue = PTDarkModeOption.isSmartPeeling
                         PTGCDManager.gcdMain {
                             cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
                         }
-                    } else if cellModel.name == "PT Theme follow system".localized() {
+                    } else if cellModel.name == PTDarkModeOption.followSystemCellName {
                         cell.switchValue = PTDarkModeOption.isFollowSystem
                         PTGCDManager.gcdMain {
                             cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.bottomLeft,.bottomRight])
                         }
                     }
                     cell.switchValueChangeBlock = { title,sender in
-                        if cellModel.name == "PT Theme smart".localized() {
+                        if cellModel.name == PTDarkModeOption.smartCellName {
                             PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: sender.isOn)
-                        } else if cellModel.name == "PT Theme follow system".localized() {
+                        } else if cellModel.name == PTDarkModeOption.followSystemCellName {
                             PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: sender.isOn)
                         }
                         self.showDetail()
@@ -154,7 +156,8 @@ public class PTDarkModeControl: PTBaseViewController {
         super.viewDidLoad()
 
 #if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitle = "PT Theme title".localized()
+        self.zx_navTitle = PTDarkModeOption.titleSting
+        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
         zx_navLeftBtn?.isHidden = true
         zx_navLineView?.isHidden = true
         
@@ -165,7 +168,7 @@ public class PTDarkModeControl: PTBaseViewController {
             make.bottom.equalToSuperview().inset(5)
         }
 #else
-        title = "PT Theme title".localized()
+        title = PTDarkModeOption.titleSting
         backButton.frame = CGRectMake(0, 0, 34, 34)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
 #endif

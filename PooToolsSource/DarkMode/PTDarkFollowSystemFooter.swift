@@ -12,11 +12,11 @@ import SnapKit
 class PTDarkFollowSystemFooter: PTBaseCollectionReusableView {
     static let ID = "PTDarkFollowSystemFooter"
     
-    static let footerHeight = UIView.sizeFor(string: "PT Theme system info".localized(), font: .appfont(size: 14), height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2).height + 20
+    static let footerHeight = UIView.sizeFor(string: PTDarkModeOption.footerDesc, font: PTDarkSmartFooter.footerDescFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2).height + 20
     
     lazy var descLabel:UILabel = {
         let view = UILabel()
-        view.text = "PT Theme system info".localized()
+        view.text = PTDarkModeOption.footerDesc
         view.font = PTDarkSmartFooter.footerDescFont
         view.numberOfLines = 0
         view.textAlignment = .left

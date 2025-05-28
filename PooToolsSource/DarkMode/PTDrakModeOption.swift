@@ -76,6 +76,27 @@ public class PTDarkModeOption {
     /// 没有选中
     public static var tradeValidperiod = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_cycle_unselected@3x")
 
+    public static var smartCellName = "PT Theme smart".localized()
+    public static var followSystemCellName = "PT Theme follow system".localized()
+    public static var timeSetErrorMsg = "PT Theme time set error".localized()
+    public static var titleSting = "PT Theme title".localized()
+    public static var cellFont:UIFont = .appfont(size: 16)
+    public static var footerDesc:String = "PT Theme system info".localized()
+    public static var mtTitle:String = "PT Theme mt".localized()
+    public static var mtTitleFont:UIFont = .appfont(size: 16)
+    public static var whiteThemeString:String = "PT Theme white".localized()
+    public static var blackThemeString:String = "PT Theme black".localized()
+    public static var themeSelectFont:UIFont = .appfont(size: 13)
+    public static var pickerCancel:String = "PT Button cancel".localized()
+    public static var pickerDone:String = "PT Button comfirm".localized()
+    public static var pickerFont:UIFont = .appfont(size: 16)
+    public static var pickerLabelFont:UIFont = .appfont(size: 18)
+    public static var themeSmartInfo:String = "PT Theme smart info".localized()
+    public static var themeSubNightTitle:String = "PT Theme night".localized()
+    public static var themeSubTimeTitle:String = "PT Theme time".localized()
+    public static var themeSubFont:UIFont = .appfont(size: 16)
+    public static var themeSubDescFont:UIFont = .appfont(size: 16)
+    public static var themeSubTimeArrow:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
 }
 
 public extension PTDarkModeOption {

@@ -305,10 +305,8 @@ public struct PTTaskGroupUtils {
     ///   - concurrent: 是否並行執行
     ///   - tasks: 非同步任務陣列（使用 closure 傳入）
     /// - Returns: 所有成功結果與錯誤集合
-    public static func performTaskGroup<T>(
-        concurrent: Bool = true,
-        tasks: [() async throws -> T]
-    ) async -> (results: [T], errors: [Error]) {
+    public static func performTaskGroup<T>(concurrent: Bool = true,
+                                           tasks: [() async throws -> T]) async -> (results: [T], errors: [Error]) {
         var results: [T] = []
         var errors: [Error] = []
         

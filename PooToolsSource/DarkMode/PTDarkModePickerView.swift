@@ -61,8 +61,8 @@ class PTDarkModePickerView: UIView {
     /// 取消
     lazy var cancelButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 88, height: 44))
-        button.setTitle("PT Button cancel".localized(), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.setTitle(PTDarkModeOption.pickerCancel, for: .normal)
+        button.titleLabel?.font = PTDarkModeOption.pickerFont
         button.setTitleColor(.systemBlue, for: .normal)
         button.addActionHandlers { sender in
             self.dismissView()
@@ -72,8 +72,8 @@ class PTDarkModePickerView: UIView {
     /// 确定
     lazy var sureButton: UIButton = {
         let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 88, y: 0, width: 88, height: 44))
-        button.setTitle("PT Button comfirm".localized(), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.setTitle(PTDarkModeOption.pickerDone, for: .normal)
+        button.titleLabel?.font = PTDarkModeOption.pickerFont
         button.setTitleColor(.systemBlue, for: .normal)
         button.addActionHandlers { sender in
             self.sureButtonClick()
@@ -167,7 +167,7 @@ extension PTDarkModePickerView: UIPickerViewDelegate, UIPickerViewDataSource {
         var label = view as? UILabel
         if label == nil {
             label = UILabel()
-            label!.font = .appfont(size: 18)
+            label!.font = PTDarkModeOption.pickerLabelFont
         }
         label!.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         label!.textAlignment = .center

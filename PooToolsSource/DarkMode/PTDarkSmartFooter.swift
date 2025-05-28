@@ -11,16 +11,15 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
-class PTDarkSmartFooter: PTBaseCollectionReusableView {
+public class PTDarkSmartFooter: PTBaseCollectionReusableView {
     static let ID = "PTDarkSmartFooter"
     
-    static let footerDescFont:UIFont = .appfont(size: 14)
-    
-    let imageSize:CGSize = CGSizeMake(14, 14)
-    let imageContentSpace:CGFloat = 5
-    let imageContentFont:UIFont = .appfont(size: 16)
+    public static let footerDescFont:UIFont = .appfont(size: 14)
+    public static let imageSize:CGSize = CGSizeMake(14, 14)
+    public static let imageContentSpace:CGFloat = 5
+    public static let imageContentFont:UIFont = .appfont(size: 16)
 
-    static let footerTotalHeight = 10 + UIView.sizeFor(string: "PT Theme smart info".localized(), font: PTDarkSmartFooter.footerDescFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10 + 44 * 2
+    static let footerTotalHeight = 10 + UIView.sizeFor(string: PTDarkModeOption.themeSmartInfo, font: PTDarkSmartFooter.footerDescFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10 + 44 * 2
     
     lazy var footerContent:UIView = {
         let view = UIView()
@@ -30,7 +29,7 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
     
     lazy var descLabel:UILabel = {
         let view = UILabel()
-        view.text = "PT Theme smart info".localized()
+        view.text = PTDarkModeOption.themeSmartInfo
         view.font = PTDarkSmartFooter.footerDescFont
         view.numberOfLines = 0
         view.textAlignment = .left
@@ -40,8 +39,8 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
     
     lazy var themeName:UILabel = {
         let view = UILabel()
-        view.text = "PT Theme night".localized()
-        view.font = .appfont(size: 16)
+        view.text = PTDarkModeOption.themeSubNightTitle
+        view.font = PTDarkModeOption.themeSubFont
         view.textAlignment = .left
         view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
@@ -49,8 +48,8 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
     
     lazy var themeNight:UILabel = {
         let view = UILabel()
-        view.text = "PT Theme black".localized()
-        view.font = .appfont(size: 16)
+        view.text = PTDarkModeOption.blackThemeString
+        view.font = PTDarkModeOption.themeSubDescFont
         view.textAlignment = .left
         view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
@@ -58,8 +57,8 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
 
     lazy var themeTime:UILabel = {
         let view = UILabel()
-        view.text = "PT Theme time".localized()
-        view.font = .appfont(size: 16)
+        view.text = PTDarkModeOption.themeSubTimeTitle
+        view.font = PTDarkModeOption.themeSubFont
         view.textAlignment = .left
         view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
@@ -68,11 +67,11 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
     lazy var themeTimeButton:PTLayoutButton = {
         let view = PTLayoutButton()
         view.layoutStyle = .leftTitleRightImage
-        view.midSpacing = imageContentSpace
+        view.midSpacing = PTDarkSmartFooter.imageContentSpace
         view.setTitle(PTDarkModeOption.smartPeelingTimeIntervalValue, for: .normal)
-        view.imageSize = imageSize
-        view.normalImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
-        view.normalTitleFont = imageContentFont
+        view.imageSize = PTDarkSmartFooter.imageSize
+        view.normalImage = PTDarkModeOption.themeSubTimeArrow
+        view.normalTitleFont = PTDarkSmartFooter.imageContentFont
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
     }()
@@ -109,7 +108,7 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
         themeTimeButton.snp.makeConstraints { make in
             make.right.equalTo(self.descLabel)
             make.centerY.equalTo(self.themeTime)
-            make.width.equalTo(imageSize.width + imageContentSpace + UIView.sizeFor(string: PTDarkModeOption.smartPeelingTimeIntervalValue, font: imageContentFont,height: 44).width + 5)
+            make.width.equalTo(PTDarkSmartFooter.imageSize.width + PTDarkSmartFooter.imageContentSpace + UIView.sizeFor(string: PTDarkModeOption.smartPeelingTimeIntervalValue, font: PTDarkSmartFooter.imageContentFont,height: 44).width + 5)
         }
     }
     

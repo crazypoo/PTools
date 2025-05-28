@@ -43,9 +43,9 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
     
     lazy var titlaLabel:UILabel = {
         let view = UILabel()
-        view.text = "PT Theme mt".localized()
+        view.text = PTDarkModeOption.mtTitle
         view.textAlignment = .left
-        view.font = .appfont(size: 16)
+        view.font = PTDarkModeOption.mtTitleFont
         view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
     }()
@@ -71,8 +71,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
         view.midSpacing = 7.5
         view.normalImage = PTDarkModeOption.tradeValidperiod
         view.selectedImage = PTDarkModeOption.tradeValidperiodSelected
-        view.normalTitleFont = .appfont(size: 13)
-        view.normalTitle = "PT Theme white".localized()
+        view.normalTitleFont = PTDarkModeOption.themeSelectFont
+        view.normalTitle = PTDarkModeOption.whiteThemeString
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.selectedTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.isSelected = false
@@ -95,8 +95,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
         view.midSpacing = 7.5
         view.normalImage = PTDarkModeOption.tradeValidperiod
         view.selectedImage = PTDarkModeOption.tradeValidperiodSelected
-        view.normalTitleFont = .appfont(size: 13)
-        view.normalTitle = "PT Theme black".localized()
+        view.normalTitleFont = PTDarkModeOption.themeSelectFont
+        view.normalTitle = PTDarkModeOption.blackThemeString
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.selectedTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.isSelected = false
