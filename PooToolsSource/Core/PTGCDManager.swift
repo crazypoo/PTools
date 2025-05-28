@@ -296,3 +296,56 @@ public class PTGCDManager :NSObject {
         timer.resume()
     }
 }
+
+public struct PTTaskGroupUtils {
+
+    /// 執行一組 async 任務並收集結果與錯誤
+    ///
+    /// - Parameters:
+    ///   - concurrent: 是否並行執行
+    ///   - tasks: 非同步任務陣列（使用 closure 傳入）
+    /// - Returns: 所有成功結果與錯誤集合
+    public static func performTaskGroup<T>(
+        concurrent: Bool = true,
+        tasks: [() async throws -> T]
+    ) async -> (results: [T], errors: [Error]) {
+        var results: [T] = []
+        var errors: [Error] = []
+        
+        if concurrent {
+            await withTaskGroup(of: Result<T, Error>.self) { group in
+                for task in tasks {
+                    group.addTask {
+                        do {
+                            let result = try await task()
+                            return .success(result)
+                        } catch {
+                            return .failure(error)
+                        }
+                    }
+                }
+                
+                for await result in group {
+                    switch result {
+                    case .success(let value):
+                        results.append(value)
+                    case .failure(let error):
+                        errors.append(error)
+                    }
+                }
+            }
+        } else {
+            // 順序執行
+            for task in tasks {
+                do {
+                    let result = try await task()
+                    results.append(result)
+                } catch {
+                    errors.append(error)
+                }
+            }
+        }
+        
+        return (results, errors)
+    }
+}
