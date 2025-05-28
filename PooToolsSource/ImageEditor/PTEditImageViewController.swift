@@ -297,7 +297,7 @@ public class PTEditImageViewController: PTBaseViewController {
                 return
             }
             
-            PTAlertTipControl.present(title:"PT Alert Doning".localized(),icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:PTImageEditorConfig.share.doingAlertTitle,icon:.Heart,style: .Normal)
             PTGCDManager.gcdMain {
                 resImage = self.buildImage()
                 resImage = resImage!.pt.clipImage(
@@ -659,7 +659,7 @@ public class PTEditImageViewController: PTBaseViewController {
             make.height.equalTo(54)
         }
         
-        let deleteInfo = "PT Photo picker drop delete".localized()
+        let deleteInfo = PTImageEditorConfig.share.deleteAlertTitle
         let stringFont:UIFont = .appfont(size: 12)
         let ashBinViewHeight:CGFloat = 88
         let stringW = UIView.sizeFor(string: deleteInfo, font: stringFont,height: ashBinViewHeight).width + 20
@@ -744,17 +744,7 @@ public class PTEditImageViewController: PTBaseViewController {
         if tools.contains(.filter) {
             generateFilterImages()
         }
-        
-//        let tapGes = UITapGestureRecognizer { sender in
-//            if self.toolCollectionView.alpha == 1 {
-//                self.viewToolsBar(show: false)
-//            } else {
-//                self.viewToolsBar(show: true)
-//            }
-//        }
-//        tapGes.delegate = self
-//        view.addGestureRecognizer(tapGes)
-//        
+                
         createToolsBar()
         view.addGestureRecognizer(panGes)
         mainScrollView.panGestureRecognizer.require(toFail: panGes)
@@ -1154,9 +1144,9 @@ extension PTEditImageViewController {
         UIView.animate(withDuration: 0.1) {
             self.toolCollectionView.alpha = 1
 #if POOTOOLS_NAVBARCONTROLLER
-                self.zx_navBar?.alpha = 1
+            self.zx_navBar?.alpha = 1
 #else
-                self.navigationController?.navigationBar.alpha = 1
+            self.navigationController?.navigationBar.alpha = 1
 #endif
         }
     }
@@ -1389,15 +1379,15 @@ extension PTEditImageViewController {
                 case .brightness:
                     model.contentIcon = UIImage(.light.min)
                     model.disclosureIndicatorImage = UIImage(.light.max)
-                    model.name = "PT Photo picker brightness".localized()
+                    model.name = PTImageEditorConfig.share.adjustBrightnessString
                 case .saturation:
                     model.contentIcon = UIImage(.drop)
                     model.disclosureIndicatorImage = UIImage(.drop.fill)
-                    model.name = "PT Photo picker saturation".localized()
+                    model.name = PTImageEditorConfig.share.adjustSaturationString
                 default:
                     model.contentIcon = UIImage(.circle)
                     model.disclosureIndicatorImage = UIImage(.circle.fill)
-                    model.name = "PT Photo picker contrast".localized()
+                    model.name = PTImageEditorConfig.share.adjustContrastString
                 }
                 
                 let row = PTRows(ID:PTAdjustToolCell.ID,dataModel: model)

@@ -11,10 +11,10 @@ import UIKit
 public typealias AnimationFinishBlock = (_ finish:Bool) -> Void
 
 public class PTPurchaseCarAnimationTool: NSObject {
-    public static let shared = PTPurchaseCarAnimationTool.init()
-    open var block:AnimationFinishBlock?
-    open var layer:CALayer?
-    open var duration:CFTimeInterval = 1.2
+    public static let shared = PTPurchaseCarAnimationTool()
+    public var block:AnimationFinishBlock?
+    public var layer:CALayer?
+    public var duration:CFTimeInterval = 1.2
     
     public func startAnimationand(view:UIView,
                                   rect:CGRect,

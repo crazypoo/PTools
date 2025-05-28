@@ -40,12 +40,12 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         emptyConfig.image = UIImage(.exclamationmark.triangle)
         emptyConfig.mainTitleAtt = """
             \(wrap: .embedding("""
-            \("PT Alert Opps".localized(),.foreground(pickerConfig.themeColor),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+            \(PTMediaLibConfig.share.emptyTitle,.foreground(pickerConfig.themeColor),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
             """))
             """
         emptyConfig.secondaryEmptyAtt = """
             \(wrap: .embedding("""
-            \("PT Photo picker empty media".localized(),.foreground(pickerConfig.themeColor),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+            \(PTMediaLibConfig.share.emptySubDesc,.foreground(pickerConfig.themeColor),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
             """))
             """
         

@@ -54,7 +54,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
         
     if currentSelectCount >= config.maxSelectCount {
         if showAlert {
-            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker select cout more than".localized(), "\(config.maxSelectCount)"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.mediaCoutError, "\(config.maxSelectCount)"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -71,14 +71,14 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     
     if model.second > config.maxSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video time more than".localized(), "\(config.maxSelectVideoDuration)"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.videoTimeMoreError, "\(config.maxSelectVideoDuration)"),icon:.Error,style:.Normal)
         }
         return false
     }
     
     if model.second < config.minSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video time less than".localized(), "\(config.minSelectVideoDuration)"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.videoTimeLessError, "\(config.minSelectVideoDuration)"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -91,7 +91,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size > config.maxSelectVideoDataSize {
         if showAlert {
             let value = Int(round(config.maxSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video size more than".localized(), "\(String(value))"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.videoSizeMoreError, "\(String(value))"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -99,7 +99,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size < config.minSelectVideoDataSize {
         if showAlert {
             let value = Int(round(config.minSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video size less than".localized(), "\(String(value))"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.videoSizeLessError, "\(String(value))"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -107,7 +107,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     return true
 }
 
-func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, completion: @escaping () -> Void) {
+func downloadAssetIfNeed(alertTitle:String = PTMediaLibConfig.share.alertTitle,subTitle:String = PTMediaLibConfig.share.downloadTimeOutError,model: PTMediaModel, sender: UIViewController?, completion: @escaping () -> Void) {
     let config = PTMediaLibConfig.share
     guard model.type == .video,
           model.asset.pt.isInCloud,
@@ -119,7 +119,7 @@ func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, complet
     var requestAssetID: PHImageRequestID?
         
     let timer = Timer.scheduledTimer(timeInterval: Network.share.netRequsetTime, repeats: false) { timer in
-        PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:"PT Photo picker time out".localized(),icon:.Error,style:.Normal)
+        PTAlertTipControl.present(title: alertTitle,subtitle:subTitle,icon:.Error,style:.Normal)
 
         if let requestAssetID = requestAssetID {
             PHImageManager.default().cancelImageRequest(requestAssetID)

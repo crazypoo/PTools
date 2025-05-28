@@ -15,7 +15,7 @@ public class PTAppStoreFunction: NSObject {
     ///評分App
     /// - Parameters:
     ///   - appid: App的App id
-    class public func rateApp(appid:String = PTAppBaseConfig.share.appID) {
+    static public func rateApp(appid:String = PTAppBaseConfig.share.appID) {
         let openAppStore = "itms-apps://itunes.apple.com/app/id\(appid)?action=write-review"
         PTAppStoreFunction.jumpLink(url: URL(string: openAppStore)!)
     }
@@ -24,16 +24,16 @@ public class PTAppStoreFunction: NSObject {
     ///跳转到AppStore
     /// - Parameters:
     ///   - appid: App的App id
-    class public func appStoreURL(appid:String = PTAppBaseConfig.share.appID) -> String {
+    static public func appStoreURL(appid:String = PTAppBaseConfig.share.appID) -> String {
         let urlString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
         return urlString
     }
     
-    class public func jumpToAppStore(appid:String = PTAppBaseConfig.share.appID) {
+    static public func jumpToAppStore(appid:String = PTAppBaseConfig.share.appID) {
         PTAppStoreFunction.jumpLink(url: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
     }
 
-    class public func jumpLink(url:URL) {
+    static public func jumpLink(url:URL) {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 

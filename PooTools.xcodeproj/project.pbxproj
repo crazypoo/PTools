@@ -819,6 +819,7 @@
 		55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE65672B1450A000B436A8 /* SwipeCellOption.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E1B65E2DE603370013A0B4 /* PTNFCToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */; };
+		55E1B6602DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E1B65F2DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift */; };
 		55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB62ABDFF1C00858348 /* ICMP.swift */; };
 		55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB72ABDFF1C00858348 /* IPv4.swift */; };
 		55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB82ABDFF1C00858348 /* SimplePing.swift */; };
@@ -1759,6 +1760,7 @@
 		55DE65672B1450A000B436A8 /* SwipeCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellOption.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNFCToolKit.swift; sourceTree = "<group>"; };
+		55E1B65F2DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGroupBuyAvatarView.swift; sourceTree = "<group>"; };
 		55E3BBB62ABDFF1C00858348 /* ICMP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICMP.swift; sourceTree = "<group>"; };
 		55E3BBB72ABDFF1C00858348 /* IPv4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPv4.swift; sourceTree = "<group>"; };
 		55E3BBB82ABDFF1C00858348 /* SimplePing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePing.swift; sourceTree = "<group>"; };
@@ -3435,6 +3437,7 @@
 			children = (
 				550CE49D2AEC27410052539D /* PTAnimationFunction.swift */,
 				5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */,
+				55E1B65F2DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift */,
 				555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */,
 				555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */,
 				555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */,
@@ -4482,6 +4485,7 @@
 				557E3A9A2C046CC8002466A0 /* PTCustomHTTPProtocol.swift in Sources */,
 				55BCB9742B1732030016A4C2 /* PTMediaLibCell.swift in Sources */,
 				55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */,
+				55E1B6602DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift in Sources */,
 				552F07902B15C66D00CB47CD /* PHAsset+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				55F162FC2B1963F700320925 /* PTRouterDebugTool.swift in Sources */,

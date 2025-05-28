@@ -120,12 +120,14 @@ class PTLogConsoleViewController: PTBaseViewController {
     
     func reloadText() {
         let handler = FileManager.pt.readFromFile(readType: .TextType, readPath: filePath)
-        let infoAtt:ASAttributedString = """
-                    \(wrap: .embedding("""
-                    \((handler.content as! String),.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)),.foreground(DynamicColor(light: .black, dark: .white)))
-                    """))
-                    """
-        infoLabel.attributedText = infoAtt.value
-        infoLabel.scrollToBottom()
+        if let content = handler.content as? String {
+            let infoAtt:ASAttributedString = """
+                        \(wrap: .embedding("""
+                        \(content,.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)),.foreground(DynamicColor(light: .black, dark: .white)))
+                        """))
+                        """
+            infoLabel.attributedText = infoAtt.value
+            infoLabel.scrollToBottom()
+        }
     }
 }

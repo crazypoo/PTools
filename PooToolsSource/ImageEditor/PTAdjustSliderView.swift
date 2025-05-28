@@ -28,7 +28,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var valueLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = PTImageEditorConfig.share.adjustSliderFont
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.6).cgColor
         label.layer.shadowOffset = .zero
         label.layer.shadowOpacity = 1
@@ -85,11 +85,11 @@ class PTAdjustSliderView: UIView {
     
     private var isVertical = PTImageEditorConfig.share.adjustSliderType == .vertical
     
-    var beginAdjust: (() -> Void)?
+    var beginAdjust: PTActionTask?
     
     var valueChanged: ((Float) -> Void)?
     
-    var endAdjust: (() -> Void)?
+    var endAdjust: PTActionTask?
         
     override init(frame: CGRect) {
         super.init(frame: frame)

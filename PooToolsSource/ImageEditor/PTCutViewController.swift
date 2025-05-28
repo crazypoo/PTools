@@ -225,7 +225,7 @@ class PTCutViewController: PTBaseViewController {
     /// 传回旋转角度，图片编辑区域的rect
     var clipDoneBlock: ((CGFloat, CGRect, PTImageClipRatio) -> Void)?
     
-    var cancelClipBlock: (() -> Void)?
+    var cancelClipBlock: PTActionTask?
     
     override var prefersStatusBarHidden: Bool { true }
     
@@ -422,7 +422,6 @@ class PTCutViewController: PTBaseViewController {
         shadowView.alpha = 0
         bottomToolView.alpha = 0
         rotateBtn.alpha = 0
-        
         
         showCutRatio { collectionView in
             if self.clipRatios.count > 1, let index = self.clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {

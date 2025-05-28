@@ -220,7 +220,7 @@ public class PTMediaLibView:UIView {
 #endif
                     } else {
                         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
+                            PTAlertTipControl.present(title:config.alertTitle,subtitle: config.cameraError, icon:.Error,style: .Normal)
                         } else if PTMediaLibView.hasCameraAuthority() {
                             let picker = UIImagePickerController()
                             
@@ -267,7 +267,7 @@ public class PTMediaLibView:UIView {
                             picker.videoMaximumDuration = TimeInterval(PTMediaLibConfig.share.maxRecordDuration)
                             UIViewController.currentPresentToSheet(vc: picker,sizes: [.fullscreen],dismissPanGes: false)
                         } else {
-                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
+                            PTAlertTipControl.present(title:config.alertTitle,subtitle: config.takePhotoError, icon:.Error,style: .Normal)
                         }
                     }
                 } else {
@@ -469,23 +469,23 @@ public class PTMediaLibView:UIView {
     
     fileprivate func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
-            PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(), icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"",subtitle: PTMediaLibConfig.share.alertDoingTitle, icon:.Heart,style: .Normal)
             PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     let model = PTMediaModel(asset: asset)
                     self?.handleDataArray(newModel: model)
                 } else {
-                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:PTMediaLibConfig.share.alertTitle,subtitle: PTMediaLibConfig.share.saveImageError, icon:.Error,style: .Normal)
                 }
             }
         } else if let videoUrl = videoUrl {
-            PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(), icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"",subtitle: PTMediaLibConfig.share.alertDoingTitle, icon:.Heart,style: .Normal)
             PTMediaLibManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 if suc, let at = asset {
                     let model = PTMediaModel(asset: at)
                     self?.handleDataArray(newModel: model)
                 } else {
-                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save video error".localized(), icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:PTMediaLibConfig.share.alertTitle,subtitle: PTMediaLibConfig.share.saveVideoError, icon:.Error,style: .Normal)
                 }
             }
         }
@@ -635,7 +635,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.normalSubTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.hightlightTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
-        view.normalTitleFont = .appfont(size: 15)
+        view.normalTitleFont = PTMediaLibConfig.share.selectLibTitleFont
         view.addActionHandlers { sender in
             
             switch PTPermission.photoLibrary.status {
@@ -682,8 +682,8 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.currentVc = self
         view.selectedCount = { index in
             if index > 0 {
-                self.selectLibButton.normalSubTitleFont = .appfont(size: 12)
-                self.selectLibButton.normalSubTitle = String(format: "PT Photo picker selected count".localized(), "\(index)")
+                self.selectLibButton.normalSubTitleFont = PTMediaLibConfig.share.selectLibSubTitleFont
+                self.selectLibButton.normalSubTitle = String(format: PTMediaLibConfig.share.mediaCount, "\(index)")
             } else {
                 self.selectLibButton.normalSubTitle = ""
             }
@@ -815,10 +815,10 @@ extension PTMediaLibViewController {
             let videoCount = selectedModel.filter { $0.type == .video }.count
             
             if videoCount > config.maxVideoSelectCount {
-                PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video select more than max".localized(), "\(config.maxVideoSelectCount)"),icon:.Error,style:.Normal)
+                PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.mediaCountMax, "\(config.maxVideoSelectCount)"),icon:.Error,style:.Normal)
                 return
             } else if videoCount < config.minVideoSelectCount {
-                PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video select less than min".localized(), "\(config.minVideoSelectCount)"),icon:.Error,style:.Normal)
+                PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.mediaCountMin, "\(config.minVideoSelectCount)"),icon:.Error,style:.Normal)
                 return
             }
         }

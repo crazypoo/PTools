@@ -150,6 +150,8 @@ public class PTImageEditorConfig: NSObject {
     public var undoDisable:UIImage = "⇠".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray)
     public var redoNormal:UIImage = "↪️".emojiToImage(emojiFont: .appfont(size: 20))
     public var redoDisable:UIImage = "⇢".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray)
+    public var doingAlertTitle:String = "PT Alert Doning".localized()
+    public var deleteAlertTitle:String = "PT Photo picker drop delete".localized()
     /*
      Cut
      */
@@ -157,6 +159,7 @@ public class PTImageEditorConfig: NSObject {
     public var cutSubmitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
     public var cutUndoImage:UIImage = "↩️".emojiToImage(emojiFont: .appfont(size: 20))
     public var cutRotateImage:UIImage = "🔄".emojiToImage(emojiFont: .appfont(size: 20))
+    public var cutTitleFont:UIFont = .appfont(size: 12)
     /*
      Text
      */
@@ -166,4 +169,13 @@ public class PTImageEditorConfig: NSObject {
      ColorPicker
      */
     public var colorPickerBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    /*
+     AdjustSlider
+     */
+    public var adjustSliderFont:UIFont = .appfont(size: 12)
+    public var adjustSliderCellFont:UIFont = .appfont(size: 12)
+    public var adjustBrightnessString:String = "PT Photo picker brightness".localized()
+    public var adjustSaturationString:String = "PT Photo picker saturation".localized()
+    public var adjustContrastString:String = "PT Photo picker contrast".localized()
+    
 }

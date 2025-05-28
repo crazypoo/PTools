@@ -192,6 +192,26 @@ public class PTMediaLibConfig:NSObject {
     public var cameraImage:UIImage = "📸".emojiToImage(emojiFont: .appfont(size: 24))
     public var albumListNavName:String = "PT Photo picker album list title".localized()
     public var editImage:UIImage = UIImage(.pencil)
+    public var emptyTitle:String = "PT Alert Opps".localized()
+    public var emptySubDesc:String = "PT Photo picker empty media".localized()
+    public var alertTitle:String = "PT Alert Opps".localized()
+    public var alertDoingTitle:String = "PT Alert Doning".localized()
+    public var mediaCoutError:String = "PT Photo picker select cout more than".localized()
+    public var videoTimeMoreError:String = "PT Photo picker video time more than".localized()
+    public var videoTimeLessError:String = "PT Photo picker video time less than".localized()
+    public var videoSizeMoreError:String = "PT Photo picker video size more than".localized()
+    public var videoSizeLessError:String = "PT Photo picker video size less than".localized()
+    public var downloadTimeOutError:String = "PT Photo picker time out".localized()
+    public var cameraError:String = "PT Photo picker bad".localized()
+    public var takePhotoError:String = "PT Photo picker can not take photo".localized()
+    public var saveImageError:String = "PT Photo picker save image error".localized()
+    public var saveVideoError:String = "PT Photo picker save video error".localized()
+    public var mediaCount:String = "PT Photo picker selected count".localized()
+    public var mediaCountMax:String = "PT Photo picker video select more than max".localized()
+    public var mediaCountMin:String = "PT Photo picker video select less than min".localized()
+    public var selectLibTitleFont:UIFont = .appfont(size: 15)
+    public var selectLibSubTitleFont:UIFont = .appfont(size: 12)
+
 }
 
 public class PTMediaLibUIConfig:NSObject {

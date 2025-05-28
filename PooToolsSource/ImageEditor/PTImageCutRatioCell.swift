@@ -25,7 +25,7 @@ class PTImageCutRatioCell: PTBaseNormalCell {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .appfont(size: 12)
+        label.font = PTImageEditorConfig.share.cutTitleFont
         label.textColor = .white
         label.textAlignment = .center
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
