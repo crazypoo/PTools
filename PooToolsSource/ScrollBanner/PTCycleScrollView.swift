@@ -892,20 +892,9 @@ extension PTCycleScrollView {
         if index == 1 {
             newIndex = 0
         }
-        switch customPageControlStyle {
-        case .fill:
-            (customPageControl as? PTFilledPageControl)?.progress = CGFloat(newIndex)
-        case .pill:
-            (customPageControl as? PTPillPageControl)?.progress = CGFloat(newIndex)
-        case .snake:
-            (customPageControl as? PTSnakePageControl)?.progress = CGFloat(newIndex)
-        case .scrolling:
-            (customPageControl as? PTScrollingPageControl)?.progress = CGFloat(newIndex)
-        case .none,.system,.image:
-            (customPageControl as? UIPageControl)?.currentPage = newIndex
-        default:
-            break
-        }
+        
+        guard let controllable = customPageControl as? PTPageControllable else { return }
+        controllable.setCurrentPage(index: newIndex)
     }
     
     /// 当前位置
