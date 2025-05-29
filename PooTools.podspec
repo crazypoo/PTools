@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.74.1'
+    s.version     = '3.74.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -118,6 +118,7 @@ Pod::Spec.new do |s|
     s.subspec 'BilogyID' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/FaceIDPermission'
+        subspec.dependency 'PooTools/KeyChain'
         subspec.frameworks = 'LocalAuthentication','Security'
         subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

@@ -14,12 +14,6 @@ import Security
     case none, touchID, faceID, opticID
 }
 
-@objc public enum PTBiologyVerifyStatus: Int {
-    case success, duplicateItem, itemNotFound, keyboardIDNotFound
-    case touchIDNotFound, alertCancel, passwordKilled, unknown
-    case keyboardCancel, keyboardTouchID, touchIDNotOpen, failed, systemCancel
-}
-
 private let kBiologyService = "PTouchIDService"
 private let errSecUserInteractionNotAllowed: OSStatus = -25308
 
@@ -27,8 +21,8 @@ private let errSecUserInteractionNotAllowed: OSStatus = -25308
 public class PTBiologyID: NSObject {
     public static let shared = PTBiologyID()
 
-    open var biologyStatusBlock: ((_ status: PTBiologyStatus) -> Void)?
-    open var biologyVerifyStatusBlock: ((_ status: PTBiologyVerifyStatus) -> Void)?
+    public var biologyStatusBlock: ((_ status: PTBiologyStatus) -> Void)?
+    public var biologyVerifyStatusBlock: ((_ status: PTBiologyVerifyStatus) -> Void)?
 
     private override init() {
         super.init()
@@ -111,21 +105,7 @@ public class PTBiologyID: NSObject {
                                                             kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
                                                             .userPresence,
                                                             nil)
-
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrService: kBiologyService,
-            kSecAttrAccount: account,
-            kSecUseAuthenticationContext: context,
-            kSecAttrAccessControl: accessControl as Any,
-            kSecValueData: passwordData
-        ]
-
-        // 先刪除已存在的（避免 duplicate）
-        SecItemDelete(query as CFDictionary)
-
-        let status = SecItemAdd(query as CFDictionary, nil)
-        return status == errSecSuccess
+        return PTKeyChain.saveAccountInfo(service: kBiologyService.nsString, account: account.nsString, password: password.nsString,context: context,accessControl: accessControl)
     }
 
     /// 讀取帳號密碼（需要生物辨識驗證）
@@ -134,53 +114,14 @@ public class PTBiologyID: NSObject {
         context.localizedReason = reason
         context.interactionNotAllowed = false
 
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrService: kBiologyService,
-            kSecAttrAccount: account,
-            kSecReturnData: true,
-            kSecUseAuthenticationContext: context
-        ]
-
-        DispatchQueue.global().async {
-            var item: CFTypeRef?
-            let status = SecItemCopyMatching(query as CFDictionary, &item)
-
-            DispatchQueue.main.async {
-                if status == errSecSuccess, let data = item as? Data, let password = String(data: data, encoding: .utf8) {
-                    completion(password)
-                } else {
-                    completion(nil)
-                }
-            }
-        }
+        let result = PTKeyChain.getPassword(service: kBiologyService.nsString, account: account.nsString, context: context)
+        completion(result)
     }
 
     /// 刪除帳號密碼
     public func deleteBiologyID(account: String? = nil) {
-        var query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrService: kBiologyService
-        ]
-
-        if let account = account {
-            query[kSecAttrAccount] = account
+        PTKeyChain.deleteAccountInfo(service: kBiologyService.nsString, account: (account ?? "").nsString) { success, status in
+            self.biologyVerifyStatusBlock?(status)
         }
-
-        let status: OSStatus = SecItemDelete(query as CFDictionary)
-
-        let verifyStatus: PTBiologyVerifyStatus
-        switch status {
-        case errSecSuccess:
-            verifyStatus = .passwordKilled
-        case errSecDuplicateItem:
-            verifyStatus = .duplicateItem
-        case errSecItemNotFound:
-            verifyStatus = .itemNotFound
-        default:
-            verifyStatus = .unknown
-        }
-
-        biologyVerifyStatusBlock?(verifyStatus)
     }
 }

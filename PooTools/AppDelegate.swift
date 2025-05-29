@@ -172,7 +172,7 @@ class AppDelegate: PTAppWindowsDelegate {
                 let guideModel = PTGuidePageModel()
                 guideModel.mainView = self.window!
                 guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
-                guideModel.tapHidden = true
+                guideModel.tapHidden = false
                 guideModel.forwardImage = "DemoImage"
                 guideModel.backImage = "DemoImage"
                 guideModel.pageControlTintColor = .gray
