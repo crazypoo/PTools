@@ -1169,3 +1169,37 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     }
 }
 #endif
+
+public extension UICollectionViewCell {
+    func cellContentViewCorners(radius:CGFloat = 0,
+                     borderWidth:CGFloat = 0,
+                     borderColor:UIColor = UIColor.clear) {
+        PTGCDManager.gcdMain {
+            self.contentView.layer.cornerRadius = radius
+            self.contentView.layer.masksToBounds = true
+            self.contentView.layer.borderWidth = borderWidth
+            self.contentView.layer.borderColor = borderColor.cgColor
+            
+            self.layer.cornerRadius = radius
+            self.layer.masksToBounds = true
+            self.layer.borderWidth = borderWidth
+            self.layer.borderColor = borderColor.cgColor
+        }
+    }
+    
+    func cellContentViewCornerRectCorners(cornerRadii:CGFloat = 5,
+                                    borderWidth:CGFloat = 0,
+                                    borderColor:UIColor = UIColor.clear,
+                                    corner:UIRectCorner = .allCorners) {
+        PTGCDManager.gcdMain {
+            let maskPath = UIBezierPath(roundedRect: self.contentView.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
+            let maskLayer = CAShapeLayer()
+            maskLayer.frame = self.contentView.bounds
+            maskLayer.path = maskPath.cgPath
+            self.contentView.layer.mask = maskLayer
+            self.contentView.layer.masksToBounds = true
+            self.contentView.layer.borderWidth = borderWidth
+            self.contentView.layer.borderColor = borderColor.cgColor
+        }
+    }
+}
