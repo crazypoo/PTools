@@ -56,39 +56,16 @@ public class PTBiologyID: NSObject {
     public func biologyStart(alertTitle: String = "生物技術驗證") {
         let context = LAContext()
         context.localizedReason = alertTitle
-        context.interactionNotAllowed = false
 
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: alertTitle) { success, error in
             DispatchQueue.main.async {
                 if success {
                     self.biologyVerifyStatusBlock?(.success)
-                } else {
-                    let status: PTBiologyVerifyStatus
-                    if let err = error as NSError? {
-                        switch err.code {
-                        case LAError.systemCancel.rawValue:
-                            status = .systemCancel
-                        case LAError.userCancel.rawValue:
-                            status = .alertCancel
-                        case LAError.authenticationFailed.rawValue:
-                            status = .failed
-                        case LAError.passcodeNotSet.rawValue:
-                            status = .keyboardIDNotFound
-                        case LAError.biometryNotAvailable.rawValue:
-                            status = .touchIDNotOpen
-                        case LAError.biometryNotEnrolled.rawValue:
-                            status = .touchIDNotFound
-                        case LAError.userFallback.rawValue:
-                            status = .keyboardTouchID
-                        case Int(errSecUserInteractionNotAllowed):
-                            status = .keyboardCancel
-                        default:
-                            status = .unknown
-                        }
-                    } else {
-                        status = .unknown
-                    }
+                } else if let nsError = error as NSError? {
+                    let status = self.mapLAErrorToStatus(nsError, context: context, reason: alertTitle)
                     self.biologyVerifyStatusBlock?(status)
+                } else {
+                    self.biologyVerifyStatusBlock?(.unknown)
                 }
             }
         }
@@ -96,7 +73,7 @@ public class PTBiologyID: NSObject {
 
     /// 儲存帳號密碼（使用生物辨識保護）
     public func saveAccount(_ reason:String = "儲存帳號密碼需要驗證",_ account: String, password: String) -> Bool {
-        guard let passwordData = password.data(using: .utf8) else { return false }
+        guard let _ = password.data(using: .utf8) else { return false }
 
         let context = LAContext()
         context.localizedReason = reason
@@ -112,7 +89,6 @@ public class PTBiologyID: NSObject {
     public func readPassword(for account: String, reason: String = "需要驗證才能讀取密碼", completion: @escaping (String?) -> Void) {
         let context = LAContext()
         context.localizedReason = reason
-        context.interactionNotAllowed = false
 
         let result = PTKeyChain.getPassword(service: kBiologyService.nsString, account: account.nsString, context: context)
         completion(result)
@@ -122,6 +98,43 @@ public class PTBiologyID: NSObject {
     public func deleteBiologyID(account: String? = nil) {
         PTKeyChain.deleteAccountInfo(service: kBiologyService.nsString, account: (account ?? "").nsString) { success, status in
             self.biologyVerifyStatusBlock?(status)
+        }
+    }
+    
+    private func mapLAErrorToStatus(_ error: NSError, context: LAContext, reason: String) -> PTBiologyVerifyStatus {
+        switch error.code {
+        case LAError.systemCancel.rawValue:
+            return .systemCancel
+        case LAError.userCancel.rawValue:
+            return .alertCancel
+        case LAError.authenticationFailed.rawValue:
+            return .failed
+        case LAError.passcodeNotSet.rawValue:
+            return .keyboardIDNotFound
+        case LAError.biometryNotAvailable.rawValue:
+            return .touchIDNotOpen
+        case LAError.biometryNotEnrolled.rawValue:
+            return .touchIDNotFound
+        case LAError.userFallback.rawValue:
+            // 用戶選擇了輸入密碼，執行 fallback
+            fallbackToPassword(context: context, reason: reason)
+            return .keyboardTouchID // 或自定義 fallback 狀態
+        case Int(errSecUserInteractionNotAllowed):
+            return .keyboardCancel
+        default:
+            return .unknown
+        }
+    }
+    
+    private func fallbackToPassword(context: LAContext, reason: String) {
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, error in
+            DispatchQueue.main.async {
+                if success {
+                    self.biologyVerifyStatusBlock?(.success)
+                } else {
+                    self.biologyVerifyStatusBlock?(.keyboardCancel)
+                }
+            }
         }
     }
 }
