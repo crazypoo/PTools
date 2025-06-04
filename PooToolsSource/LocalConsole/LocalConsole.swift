@@ -139,6 +139,14 @@ extension UIImage {
     static let mockLocationImage = UIImage(.location.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let logFile = UIImage(.textformat.abc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let InspectorImage = UIImage(.stethoscope).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    
+    static func LoadedLibImage()->UIImage {
+        if #available(iOS 15.0, *) {
+            return UIImage(.cross.vial).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+        } else {
+            return UIImage(.gift.circle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+        }
+    }
 }
 
 class ConsoleWindow: UIWindow {
@@ -751,7 +759,11 @@ public class LocalConsole: NSObject {
             self.debugControllerAction()
         }
 
-        var actions = [inspect,logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport]
+        let loadedLibs = UIAction(title: "Loaded libs", image: UIImage.LoadedLibImage()) { _ in
+            self.loadedLibs()
+        }
+
+        var actions = [inspect,logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport,loadedLibs]
         
 #if canImport(FLEX)
         actions.append(Flex)
@@ -760,7 +772,9 @@ public class LocalConsole: NSObject {
 #if canImport(InAppViewDebugger)
         actions.append(InApp)
 #endif
-        debugActions.append(contentsOf: actions)
+        let sortActions = actions.sorted { $0.title.lowercased().first ?? Character("") < $1.title.lowercased().first ?? Character("") }
+        
+        debugActions.append(contentsOf: sortActions)
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
@@ -803,6 +817,11 @@ public class LocalConsole: NSObject {
     /// Clear text in the console view.
     public func clear() {
         currentText = ""
+    }
+    
+    func loadedLibs() {
+        let vc = PTLoadedLibsViewController()
+        consoleSheetPresent(vc: vc)
     }
     
     func logFileOpen() {

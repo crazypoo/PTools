@@ -854,6 +854,9 @@
 		55F163052B19A47800320925 /* PTCameraAnimationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F163042B19A47800320925 /* PTCameraAnimationUtils.swift */; };
 		55F163072B19DC5400320925 /* PTFilterImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F163062B19DC5400320925 /* PTFilterImageCell.swift */; };
 		55F163092B1A29BE00320925 /* PTTakePictureReviewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F163082B1A29BE00320925 /* PTTakePictureReviewer.swift */; };
+		55F175A52DF0364400899D38 /* PTLoadedLibsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */; };
+		55F175A72DF03F5E00899D38 /* PTLoadedLibsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */; };
+		55F175A92DF0423500899D38 /* PTLoadedLibCellCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */; };
 		55F299912BEE1D5B00CC970A /* PTImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299902BEE1D5B00CC970A /* PTImageCell.swift */; };
 		55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299922BEE205600CC970A /* PTImageListViewController.swift */; };
 		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
@@ -1796,6 +1799,9 @@
 		55F163042B19A47800320925 /* PTCameraAnimationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCameraAnimationUtils.swift; sourceTree = "<group>"; };
 		55F163062B19DC5400320925 /* PTFilterImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFilterImageCell.swift; sourceTree = "<group>"; };
 		55F163082B1A29BE00320925 /* PTTakePictureReviewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTakePictureReviewer.swift; sourceTree = "<group>"; };
+		55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadedLibsFunction.swift; sourceTree = "<group>"; };
+		55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadedLibsViewController.swift; sourceTree = "<group>"; };
+		55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadedLibCellCollections.swift; sourceTree = "<group>"; };
 		55F299902BEE1D5B00CC970A /* PTImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageCell.swift; sourceTree = "<group>"; };
 		55F299922BEE205600CC970A /* PTImageListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageListViewController.swift; sourceTree = "<group>"; };
 		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
@@ -2400,6 +2406,9 @@
 				557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */,
 				557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */,
 				557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */,
+				55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */,
+				55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */,
+				55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -4113,6 +4122,7 @@
 				558B77C32BBC52B300BD7AB0 /* PTChatView.swift in Sources */,
 				557E3A842C043BAD002466A0 /* PTLaunchTimeTracker.swift in Sources */,
 				557E3A7C2C0437DC002466A0 /* PTCrashHandler.swift in Sources */,
+				55F175A72DF03F5E00899D38 /* PTLoadedLibsViewController.swift in Sources */,
 				55C409A32C09784B009C0FB6 /* PTDebugLocationViewController.swift in Sources */,
 				550F78F92D21AF680066D281 /* PTActionLayoutButton.swift in Sources */,
 				557E3A742C0386C4002466A0 /* PTPerformanceSegmentCell.swift in Sources */,
@@ -4674,6 +4684,7 @@
 				559C3D422B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
+				55F175A52DF0364400899D38 /* PTLoadedLibsFunction.swift in Sources */,
 				5571F6122AFD23B000DB4420 /* PTWindowSceneDelegate.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				55B374552C91F91700CB4ED1 /* PTLoginDescButton.swift in Sources */,
@@ -4738,6 +4749,7 @@
 				5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */,
 				555818D02AFA7E400051C0AA /* UIToolbar+PTEX.swift in Sources */,
 				550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */,
+				55F175A92DF0423500899D38 /* PTLoadedLibCellCollections.swift in Sources */,
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
 				557E3A652C034213002466A0 /* FontName.swift in Sources */,
 				55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */,
