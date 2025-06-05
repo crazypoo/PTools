@@ -10,30 +10,15 @@ import Foundation
 import MachO
 import ObjectiveC
 
-class PTLoadedLibrary:PTBaseModel {
-    var name: String = ""
-    var path: String = ""
-    var isPrivate: Bool = false
-    var size: String = ""
-    var address: String = ""
-    var classes: [String] = []
+struct PTLoadedLibrary {
+    let name: String
+    let path: String
+    let isPrivate: Bool
+    let size: String
+    let address: String
+    var classes: [String]
     var isExpanded: Bool = false
     var isLoading: Bool = false
-    
-    init(name: String, path: String, isPrivate: Bool = false, size: String, address: String, classes: [String] = [], isExpanded: Bool = false, isLoading: Bool = false) {
-        self.name = name
-        self.path = path
-        self.isPrivate = isPrivate
-        self.size = size
-        self.address = address
-        self.classes = classes
-        self.isExpanded = isExpanded
-        self.isLoading = isLoading
-    }
-    
-    required public init() {
-        fatalError("init() has not been implemented")
-    }
 }
 
 extension PTLoadedLibrary: Equatable {
@@ -94,10 +79,10 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     func toggleLibraryExpansion(path: String) {
         syncQueue.async(flags: .barrier) {
             guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
-            let library = self.state.filteredLibraries[index]
+            var library = self.state.filteredLibraries[index]
             library.isExpanded.toggle()
             self.state.filteredLibraries[index] = library
-            
+
             guard library.isExpanded, library.classes.isEmpty, !library.isLoading else {
                 DispatchQueue.main.async {
                     self.onLibraryUpdated?(path)
@@ -178,14 +163,13 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     }
     
     // MARK: - Class Fetching
-    
     private func loadClassesAsync(for library: PTLoadedLibrary) {
         let path = library.path
         DispatchQueue.global().async {
             let fetched = self.fetchClasses(from: path)
             self.syncQueue.async(flags: .barrier) {
                 guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
-                let updated = self.state.filteredLibraries[index]
+                var updated = self.state.filteredLibraries[index]
                 updated.classes = fetched
                 updated.isLoading = false
                 self.state.filteredLibraries[index] = updated
@@ -219,7 +203,7 @@ extension PTLoadedLibrariesViewModel {
                 path: path,
                 isPrivate: isPrivate,
                 size: size,
-                address: address
+                address: address, classes: []
             ))
         }
         

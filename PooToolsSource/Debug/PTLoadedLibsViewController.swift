@@ -49,17 +49,46 @@ enum FileSharingManager {
 }
 
 class PTLoadedLibsViewController: PTBaseViewController {
-
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .black
-        tableView.separatorColor = .darkGray
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.keyboardDismissMode = .onDrag
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: .cell)
-        return tableView
+    
+    lazy var newCollectionView:PTCollectionView = {
+        let config = PTCollectionViewConfig()
+        config.viewType = .Custom
+        config.refreshWithoutAnimation = true
+        
+        let view = PTCollectionView(viewConfig: config)
+        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
+        view.registerSupplementaryView(classs: [PTloadedLibHeader.ID:PTloadedLibHeader.self], kind: UICollectionView.elementKindSectionHeader)
+        view.headerInCollection = { kind,collectionView,model,index in
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTloadedLibHeader {
+                let headerModel = self.libraries[index.section]
+                header.configure(with: headerModel)
+                header.onToggle = { [weak self] in
+                    self?.viewModel.toggleLibraryExpansion(path: headerModel.path)
+                }
+                return header
+            }
+            return nil
+        }
+        view.customerLayout = { sectionIndex,sectionModel in
+            return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount: 1, itemSpace: 8) { index, obj in
+                return 44
+            }
+        }
+        view.cellInCollection = { collection,itemSection,indexPath in
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                cell.cellModel = cellModel
+                return cell
+            }
+            return nil
+        }
+        view.collectionDidSelect = { collection,itemSection,indexPath in
+            let library = self.libraries[indexPath.section]
+            let className = library.classes[indexPath.row]
+            
+            let classExplorer = PTClassExplorerViewController(libraryName: library.name, className: className)
+            self.navigationController?.pushViewController(classExplorer, animated: true)
+        }
+        return view
     }()
 
     private lazy var segmentedControl: UISegmentedControl = {
@@ -102,7 +131,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
 
         // Do any additional setup after loading the view.
         
-        view.addSubviews([exportButton,searchBar,segmentedControl,tableView])
+        view.addSubviews([exportButton,searchBar,segmentedControl,newCollectionView])
         exportButton.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -118,7 +147,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
             make.height.equalTo(44)
             make.top.equalTo(self.searchBar.snp.bottom).offset(10)
         }
-        tableView.snp.makeConstraints { make in
+        newCollectionView.snp.makeConstraints { make in
             make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)
             make.left.right.bottom.equalToSuperview()
         }
@@ -131,7 +160,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         viewModel.onStateChanged = { [weak self] libraries in
             self?.libraries = libraries
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
+                self?.setDataList()
             }
         }
 
@@ -139,7 +168,18 @@ class PTLoadedLibsViewController: PTBaseViewController {
             guard let self = self else { return }
             if let row = self.libraries.firstIndex(where: { $0.path == updatedPath }) {
                 DispatchQueue.main.async {
-                    self.tableView.reloadSections(IndexSet([row]), with: .none)
+                    if self.libraries[row].classes.count > 0 {
+                        let rows = self.libraries[row].classes.map {
+                            let model = PTFusionCellModel()
+                            model.name = $0
+                            let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
+                            return row
+                        }
+                        self.newCollectionView.insertRows(rows, section: row)
+                    } else {
+                        let rows = self.newCollectionView.collectionSectionDatas[row].rows ?? []
+                        self.newCollectionView.deleteRows(rows, from: row)
+                    }
                 }
             }
         }
@@ -154,7 +194,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         default: filter = .all
         }
         viewModel.filterLibraries(by: filter)
-        tableView.reloadData()
+        setDataList()
     }
     
     @objc private func exportLibraries() {
@@ -164,81 +204,39 @@ class PTLoadedLibsViewController: PTBaseViewController {
             fileName: "loaded_libraries_\(Date().timeIntervalSince1970)"
         )
     }
-}
+    
+    func setDataList() {
+        var sections = [PTSection]()
+        
+        let screenWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 24 - 4.5
+        sections = libraries.map { value in
+            var rows = [PTRows]()
+            if value.isExpanded {
+                rows = value.classes.map {
+                    let model = PTFusionCellModel()
+                    model.name = $0
+                    let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
+                    return row
+                }
+            }
+            
+            let nameHeight = UIView.sizeFor(string: value.name, font: .appfont(size: 18),width: screenWidth).height
+            let descString = value.path + "\nSize: " + value.size + " Address: " + value.address
+            let descHeight = UIView.sizeFor(string: descString, font: .appfont(size: 14),width: screenWidth).height
+            let totalHeight = nameHeight + descHeight + 17
 
-// MARK: - UITableViewDataSource
-extension PTLoadedLibsViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        libraries.count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let library = libraries[section]
-        return library.isExpanded ? library.classes.count : 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: .cell, for: indexPath)
-        let library = libraries[indexPath.section]
-        let className = library.classes[indexPath.row]
-        
-        cell.textLabel?.text = className
-        cell.textLabel?.textColor = .white
-        cell.backgroundColor = .clear
-        cell.accessoryType = .disclosureIndicator
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let library = libraries[section]
-        
-        let headerView = PTLibraryHeaderView()
-        headerView.configure(with: library)
-        headerView.onToggle = { [weak self] in
-            self?.viewModel.toggleLibraryExpansion(path: library.path)
+            let section = PTSection(headerID: PTloadedLibHeader.ID,headerHeight: totalHeight,rows: rows)
+            return section
         }
-        
-        return headerView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let screenWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 24 - 4.5
-        let value = libraries[section]
-        let nameHeight = UIView.sizeFor(string: value.name, font: .appfont(size: 18),width: screenWidth).height
-        let descString = value.path + "\nSize: " + value.size + " Address: " + value.address
-        let descHeight = UIView.sizeFor(string: descString, font: .appfont(size: 14),width: screenWidth).height
-        let totalHeight = nameHeight + descHeight + 17
-        return totalHeight
+        newCollectionView.showCollectionDetail(collectionData: sections)
     }
 }
-
-// MARK: - UITableViewDelegate
-
-extension PTLoadedLibsViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let library = libraries[indexPath.section]
-        let className = library.classes[indexPath.row]
-        
-        let classExplorer = PTClassExplorerViewController(
-            libraryName: library.name,
-            className: className
-        )
-        navigationController?.pushViewController(classExplorer, animated: true)
-    }
-}
-
-// MARK: - UISearchResultsUpdating
 
 extension PTLoadedLibsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.textField?.resignFirstResponder()
         viewModel.searchLibraries(with: searchBar.textField?.text ?? "")
-        tableView.reloadData()
+        setDataList()
     }
 }
 

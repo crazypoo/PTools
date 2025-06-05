@@ -11,20 +11,11 @@ import SwifterSwift
 import SnapKit
 import AttributedString
 
-final class PTLibraryHeaderView: UIView {
-    
-    // MARK: - Properties
+class PTloadedLibHeader : PTBaseCollectionReusableView {
+    static let ID = "PTloadedLibHeader"
     
     var onToggle: PTActionTask?
-    
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.3)
-        view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+
     lazy var libName:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
@@ -55,29 +46,11 @@ final class PTLibraryHeaderView: UIView {
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
-    
-    // MARK: - Initialization
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
-    }
-    
-    // MARK: - Setup
-    
-    private func setup() {
-        addSubview(containerView)
-        containerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.bottom.equalToSuperview().inset(4)
-        }
         
-        containerView.addSubviews([arrowImage,libName,statusLabel,loadingIndicator])
+        addSubviews([arrowImage,libName,statusLabel,loadingIndicator])
         arrowImage.snp.makeConstraints { make in
             make.size.equalTo(24)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -103,10 +76,12 @@ final class PTLibraryHeaderView: UIView {
         let tapGesture = UITapGestureRecognizer { sender in
             self.onToggle?()
         }
-        containerView.addGestureRecognizer(tapGesture)
+        addGestureRecognizer(tapGesture)
     }
     
-    // MARK: - Configuration
+    @MainActor required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func configure(with library: PTLoadedLibrary) {
         PTGCDManager.gcdMain {
