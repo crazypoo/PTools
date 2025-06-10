@@ -981,8 +981,8 @@ public class PTFusionCellContent:UIView {
 open class PTFusionCell: PTBaseNormalCell {
     public static let ID = "PTFusionCell"
     
-    open var switchValueChangeBlock:PTCellSwitchBlock?
-    open var moreActionBlock:PTSectionMoreBlock?
+    public var switchValueChangeBlock:PTCellSwitchBlock?
+    public var moreActionBlock:PTSectionMoreBlock?
     open var switchValue:Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
@@ -1078,8 +1078,8 @@ open class PTFusionCell: PTBaseNormalCell {
 open class PTFusionSwipeCell: PTBaseSwipeCell {
     public static let ID = "PTFusionSwipeCell"
     
-    open var switchValueChangeBlock:PTCellSwitchBlock?
-    open var moreActionBlock:PTSectionMoreBlock?
+    public var switchValueChangeBlock:PTCellSwitchBlock?
+    public var moreActionBlock:PTSectionMoreBlock?
     open var switchValue:Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
