@@ -35,6 +35,10 @@ public class PTLaunchAdMonitor: NSObject {
     }()
     private var notifiData:[AnyHashable : Any]?
     
+    private lazy var contentView : UIView = {
+        let view = UIView()
+        return view
+    }()
     //MARK: 初始化廣告界面
     ///初始化廣告界面
     /// - Parameters:
@@ -58,8 +62,7 @@ public class PTLaunchAdMonitor: NSObject {
         dismissCallBack = callBack
         timeUpCallBack = timeUp
         notifiData = param
-        let v = UIView()
-        v.backgroundColor = .lightGray
+        contentView.backgroundColor = .lightGray
         
         let loadImageView = UIImageView(image: PTAppBaseConfig.share.defaultPlaceholderImage)
         loadImageView.contentMode = .scaleAspectFit
@@ -73,16 +76,16 @@ public class PTLaunchAdMonitor: NSObject {
         })
         
         if onView is UIView {
-            (onView as! UIView).addSubview(v)
-            (onView as! UIView).bringSubviewToFront(v)
-            v.snp.makeConstraints { make in
+            (onView as! UIView).addSubview(contentView)
+            (onView as! UIView).bringSubviewToFront(contentView)
+            contentView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         } else if onView is UIWindow {
             let windows = (onView as! UIWindow)
-            windows.addSubview(v)
-            windows.bringSubviewToFront(v)
-            v.snp.makeConstraints { make in
+            windows.addSubview(contentView)
+            windows.bringSubviewToFront(contentView)
+            contentView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
 #if POOTOOLS_DEBUG
@@ -94,7 +97,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
         
         skipButton.titleLabel?.font = skipFont
-        v.addSubview(skipButton)
+        contentView.addSubview(skipButton)
         skipButton.addActionHandlers { sender in
             self.hideView(sender: sender)
         }
@@ -123,14 +126,14 @@ public class PTLaunchAdMonitor: NSObject {
             label.textColor = .black
             label.text = ltdString
             label.textAlignment = .center
-            v.addSubview(label)
+            contentView.addSubview(label)
             label.snp.makeConstraints { make in
                 make.left.right.bottom.equalToSuperview()
                 make.height.equalTo(bottomViewHeight)
             }
         }
 
-        v.addSubviews([loadImageView,loadingSkip])
+        contentView.addSubviews([loadImageView,loadingSkip])
         loadImageView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.bottom.equalToSuperview().inset(bottomViewHeight)
@@ -161,7 +164,7 @@ public class PTLaunchAdMonitor: NSObject {
                             imageView.animationImages = medias
                             imageView.animationDuration = 1
                             imageView.startAnimating()
-                            v.insertSubview(imageView, at: 0)
+                            self.contentView.insertSubview(imageView, at: 0)
                             imageView.snp.makeConstraints { make in
                                 make.left.top.right.equalToSuperview()
                                 make.height.equalTo(bottomViewHeight)
@@ -178,7 +181,7 @@ public class PTLaunchAdMonitor: NSObject {
                                 self.showDetail(sender: sender)
                             }
                             imageBtn.isUserInteractionEnabled = mediaHaveData
-                            v.insertSubview(imageBtn, at: 0)
+                            self.contentView.insertSubview(imageBtn, at: 0)
                             imageBtn.snp.makeConstraints { make in
                                 make.left.top.right.equalToSuperview()
                                 make.bottom.equalToSuperview().inset(bottomViewHeight)
@@ -207,7 +210,7 @@ public class PTLaunchAdMonitor: NSObject {
                         self.player?.player = AVPlayer(url: videoUrl)
                         self.player?.showsPlaybackControls = false
                         self.player?.entersFullScreenWhenPlaybackBegins = true
-                        v.insertSubview((self.player?.view)!, at: 0)
+                        self.contentView.insertSubview((self.player?.view)!, at: 0)
                         self.player?.view.snp.makeConstraints({ make in
                             make.left.top.right.equalToSuperview()
                             make.bottom.equalToSuperview().inset(bottomViewHeight)
@@ -220,7 +223,7 @@ public class PTLaunchAdMonitor: NSObject {
                         self.showDetail(sender: sender)
                     }
                     imageBtn.isUserInteractionEnabled = mediaHaveData
-                    v.addSubview(imageBtn)
+                    self.contentView.addSubview(imageBtn)
                     imageBtn.snp.makeConstraints { make in
                         make.left.top.right.equalToSuperview()
                         make.bottom.equalToSuperview().inset(bottomViewHeight)
@@ -278,9 +281,11 @@ public class PTLaunchAdMonitor: NSObject {
             }
         } else {
             UIView.animate(withDuration: 0.25) {
+                self.contentView.alpha = 0
             } completion: { finish in
                 self.player?.player?.pause()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
+                self.contentView.removeFromSuperview()
                 self.timeUpCallBack?()
             }
         }
