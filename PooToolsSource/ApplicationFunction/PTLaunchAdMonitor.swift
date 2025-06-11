@@ -23,7 +23,9 @@ public class PTLaunchAdMonitor: NSObject {
     public static let share = PTLaunchAdMonitor()
     public var imageContentMode:UIView.ContentMode = .scaleAspectFill
     
+    public var skipName:String = "Skip"
     private var dismissCallBack:PTActionTask?
+    private var timeUpCallBack:PTActionTask?
     private var player:AVPlayerViewController?
     private lazy var skipButton:UIButton = {
         let view = UIButton()
@@ -51,8 +53,10 @@ public class PTLaunchAdMonitor: NSObject {
                                   skipFont:UIFont = .appfont(size: 16),
                                   ltdString:String = "",
                                   comNameFont:UIFont = .appfont(size: 12),
-                                  callBack:PTActionTask? = nil) {
+                                  callBack:PTActionTask? = nil,
+                                  timeUp:PTActionTask? = nil) {
         dismissCallBack = callBack
+        timeUpCallBack = timeUp
         notifiData = param
         let v = UIView()
         v.backgroundColor = .lightGray
@@ -61,7 +65,7 @@ public class PTLaunchAdMonitor: NSObject {
         loadImageView.contentMode = .scaleAspectFit
         
         let loadingSkip = UIButton(type: .custom)
-        loadingSkip.setTitle("Skip", for: .normal)
+        loadingSkip.setTitle(skipName, for: .normal)
         loadingSkip.setTitleColor(.white, for: .normal)
         loadingSkip.setBackgroundColor(color: .DevMaskColor, forState: .normal)
         loadingSkip.addActionHandlers(handler: { sender in
@@ -194,7 +198,7 @@ public class PTLaunchAdMonitor: NSObject {
                     self.skipButton.viewCorner(radius: buttonWidth / 2)
                     PTGCDManager.gcdMain {
                         self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "",timeFinish: {
-                            self.hideView(sender: self.skipButton)
+                            self.hideView()
                         })
                     }
                 case .Video:
@@ -222,7 +226,7 @@ public class PTLaunchAdMonitor: NSObject {
                         make.bottom.equalToSuperview().inset(bottomViewHeight)
                     }
                     
-                    self.skipButton.setTitle("PT Button skip".localized(), for: .normal)
+                    self.skipButton.setTitle(self.skipName, for: .normal)
                     let buttonWidth = self.skipButton.sizeFor().width + 15
                     self.skipButton.snp.remakeConstraints { make in
                         make.right.equalToSuperview().inset(10)
@@ -259,17 +263,26 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
 
-    @MainActor fileprivate func hideView(sender:UIButton) {
-        let sup = sender.superview
-        sup?.isUserInteractionEnabled = false
-        
-        UIView.animate(withDuration: 0.25) {
-            sup?.alpha = 0
-        } completion: { finish in
-            self.player?.player?.pause()
-            sup?.removeFromSuperview()
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
-            self.dismissCallBack?()
+    @MainActor fileprivate func hideView(sender:UIButton? = nil) {
+        if let sup = sender?.superview {
+            sup.isUserInteractionEnabled = false
+            
+            UIView.animate(withDuration: 0.25) {
+                sup.alpha = 0
+            } completion: { finish in
+                self.player?.player?.pause()
+                sup.removeFromSuperview()
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
+                self.skipButton.cancelCountdown()
+                self.dismissCallBack?()
+            }
+        } else {
+            UIView.animate(withDuration: 0.25) {
+            } completion: { finish in
+                self.player?.player?.pause()
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
+                self.timeUpCallBack?()
+            }
         }
     }
     

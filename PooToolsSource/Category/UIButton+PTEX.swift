@@ -23,10 +23,21 @@ public enum PTButtonEdgeInsetsStyle:Int {
 }
 
 public extension UIButton {
+    
     private struct AssociatedKeys {
         static var UIButtonBlockKey = 998
+        static var CountdownTimerKey = 997
     }
     
+    private var countdownTimer: DispatchSourceTimer? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.CountdownTimerKey) as? DispatchSourceTimer
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.CountdownTimerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
     @objc func addActionHandlers(handler:@escaping TouchedBlock) {
         objc_setAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         addTarget(self, action: #selector(actionTouched(sender:)), for: .touchUpInside)
@@ -126,9 +137,15 @@ public extension UIButton {
     ///   - finishBlock:回調
     func buttonTimeRun_Base(timeInterval:TimeInterval,
                             finishBlock: @Sendable @escaping (_ finish:Bool, _ time:Int)->Void) {
-        PTGCDManager.timeRunWithTime_base(timeInterval: timeInterval, finishBlock: finishBlock)
+        countdownTimer = PTGCDManager.timeRun(timeInterval: timeInterval, finishBlock: finishBlock)
     }
     
+    /// 中斷倒數
+    func cancelCountdown() {
+        countdownTimer?.cancel()
+        countdownTimer = nil
+    }
+
     //MARK: 按鈕倒計時方法
     ///按鈕倒計時方法
     /// - Parameters:

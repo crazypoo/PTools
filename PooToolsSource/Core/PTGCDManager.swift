@@ -295,6 +295,30 @@ public class PTGCDManager :NSObject {
         }
         timer.resume()
     }
+    
+    @discardableResult
+    public class func timeRun(timeInterval: TimeInterval,
+                                           finishBlock: @escaping @Sendable (_ finish: Bool, _ time: Int) -> Void) -> DispatchSourceTimer {
+        
+        let semaphore = DispatchSemaphore(value: 1)
+        var newCount = Int(timeInterval) + 1
+        let timer = DispatchSource.makeTimerSource(flags: [], queue: .main)
+
+        timer.schedule(deadline: .now(), repeating: .seconds(1))
+        timer.setEventHandler {
+            semaphore.wait()
+            newCount -= 1
+            if newCount < 1 {
+                timer.cancel()
+                finishBlock(true, 0)
+            } else {
+                finishBlock(false, newCount)
+            }
+            semaphore.signal()
+        }
+        timer.resume()
+        return timer
+    }
 }
 
 public struct PTTaskGroupUtils {
