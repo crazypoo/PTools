@@ -12,81 +12,96 @@ import Foundation
 @objcMembers
 open class PTImagePageControl: UIPageControl {
     
-    // 图片属性
-    open var currentPageImage:Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
-    open var pageImage:Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    // Dot 圖片屬性（可傳 UIImage, String 等）
+    public var currentPageImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    public var pageImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
 
-        // 页码和间距
     open override var numberOfPages: Int {
         didSet {
             setupDots()
         }
     }
 
-    open override var currentPage: Int  {
+    open override var currentPage: Int {
         didSet {
             updateDots()
         }
     }
-    
-    open var dotSpacing: CGFloat = 8.0 {
+
+    public var dotSpacing: CGFloat = 8.0 {
         didSet {
             setupDots()
         }
     }
-    
-    // 私有属性
-    private var dots: [UIImageView] = []
 
-    // 初始化方法
-    override init(frame: CGRect) {
+    private var dots: [UIImageView] = []
+    private var dotSize: [CGSize] = []//CGSize(width: 8, height: 8) // default fallback
+
+    // 初始化
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
 
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
+
     private func setupDots() {
-        // 移除旧的 dots
+        // 清除舊的 dots
         for dot in dots {
             dot.removeFromSuperview()
         }
         dots.removeAll()
-        
-        // 添加新的 dots
-        for _ in 0..<numberOfPages {
+        dotSize.removeAll()
+
+        // 建立新的 dots
+        for i in 0..<numberOfPages {
             let dot = UIImageView()
-            dot.loadImage(contentData: pageImage)
+            dot.loadImage(contentData: pageImage, loadFinish:  { images, image in
+                self.dotSize[i] = (image?.size ?? .zero)
+            })
             addSubview(dot)
             dots.append(dot)
+            dotSize.append(.zero)
         }
-        setNeedsLayout()
+
         updateDots()
+        setNeedsLayout()
     }
-    
+
     private func updateDots() {
         for (index, dot) in dots.enumerated() {
-            dot.loadImage(contentData: (index == currentPage) ? currentPageImage : pageImage,emptyImage: UIColor.clear.createImageWithColor())
+            let imgData = (index == currentPage) ? currentPageImage : pageImage
+            dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(),loadFinish: { images,image in
+                self.dotSize[index] = image?.size ?? .zero
+            })
         }
+        setNeedsLayout()
     }
 
     open override func layoutSubviews() {
         super.layoutSubviews()
-        
-        Task {
-            let results = await PTLoadImageFunction.loadImage(contentData: currentPageImage)
-        
-            let totalWidth = CGFloat(numberOfPages - 1) * dotSpacing + CGFloat(numberOfPages) * (results.1?.size.width ?? 0)
-            var startX = (bounds.width - totalWidth) / 2
-            let centerY = bounds.height / 2
-            
-            for dot in dots {
-                dot.sizeToFit()
-                dot.center = CGPoint(x: startX + dot.frame.width / 2, y: centerY)
-                startX += dot.frame.width + dotSpacing
-            }
+        let totalWidth = dotSize.reduce(0) { $0 + $1.width } + CGFloat(numberOfPages - 1) * dotSpacing
+        var startX = (bounds.width - totalWidth) / 2
+        let centerY = bounds.height / 2
+
+        for (index,_) in dots.enumerated() {
+            let dotSize = dotSize[index]
+            self.dots[index].frame = CGRect(x: startX, y: centerY - dotSize.height / 2, width: dotSize.width, height: dotSize.height)
+            startX += dotSize.width + dotSpacing
+        }
+    }
+
+    // 同步獲取圖片（根據你原本的 Any 類型處理方式擴展）
+    private static func syncImage(from data: Any) -> UIImage? {
+        if let image = data as? UIImage {
+            return image
+        } else if let name = data as? String {
+            return UIImage(named: name)
+        } else if let url = data as? URL {
+            return try? UIImage(data: Data(contentsOf: url))
+        } else {
+            return nil
         }
     }
 }
-
