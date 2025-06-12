@@ -30,12 +30,14 @@ open class PTImagePageControl: UIPageControl {
 
     public var dotSpacing: CGFloat = 8.0 {
         didSet {
-            setupDots()
+            updateDots()
         }
     }
+    
+    public var dotBaseSize:CGSize = CGSizeMake(8, 4)
 
     private var dots: [UIImageView] = []
-    private var dotSize: [CGSize] = []//CGSize(width: 8, height: 8) // default fallback
+    private var dotSize: [CGSize] = []// default fallback
 
     // 初始化
     public override init(frame: CGRect) {
@@ -58,11 +60,15 @@ open class PTImagePageControl: UIPageControl {
         for i in 0..<numberOfPages {
             let dot = UIImageView()
             dot.loadImage(contentData: pageImage, loadFinish:  { images, image in
-                self.dotSize[i] = (image?.size ?? .zero)
+                self.dotSize[i] = (image?.size ?? self.dotBaseSize)
             })
             addSubview(dot)
             dots.append(dot)
-            dotSize.append(.zero)
+            if let pageImage = pageImage as? UIImage {
+                dotSize.append(pageImage.size)
+            } else {
+                dotSize.append(dotBaseSize)
+            }
         }
 
         updateDots()
@@ -73,8 +79,11 @@ open class PTImagePageControl: UIPageControl {
         for (index, dot) in dots.enumerated() {
             let imgData = (index == currentPage) ? currentPageImage : pageImage
             dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(),loadFinish: { images,image in
-                self.dotSize[index] = image?.size ?? .zero
+                self.dotSize[index] = image?.size ?? self.dotBaseSize
             })
+            if let imageData = imgData as? UIImage {
+                self.dotSize[index] = imageData.size
+            }
         }
         setNeedsLayout()
     }
