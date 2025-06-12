@@ -593,8 +593,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     mediaConfig.dismissY = 200
                     mediaConfig.actionType = .All
                     mediaConfig.pageControlOption = .snake
-                    mediaConfig.mediaData = [model1,model2,model3,model4,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1]
+                    mediaConfig.mediaData = [model1]
                     mediaConfig.imageLongTapAction = true
+                    mediaConfig.dynamicBackground = true
                     let browser = PTMediaBrowserController()
                     browser.medisShow(mediaConfig: mediaConfig)
                 } else if itemRow.title == .phoneCall {

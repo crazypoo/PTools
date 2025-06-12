@@ -90,14 +90,14 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
-        view.frame = CGRect.init(x: tempImageX, y: tempImageY, width: tempImageW, height: tempImageH)
+        view.frame = CGRect(x: tempImageX, y: tempImageY, width: tempImageW, height: tempImageH)
         view.image = self.gifImage
         return view
     }()
 
     //MARK: 图片相关
     fileprivate var scrollOffset:CGPoint? = CGPoint.zero
-    fileprivate lazy var zoomImageSize:CGSize? = CGSize.init(width: frame.size.width, height: frame.size.height)
+    fileprivate lazy var zoomImageSize:CGSize? = CGSize(width: frame.size.width, height: frame.size.height)
     
     fileprivate lazy var reloadButton:UIButton = {
         let view = UIButton.init(type: .custom)
@@ -115,6 +115,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     lazy var imageView:UIImageView = {
         let view = UIImageView()
         view.isUserInteractionEnabled = true
+        view.contentMode = .scaleAspectFit
         return view
     }()
     
@@ -123,7 +124,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
         
-        let view = UIButton.init(type: .custom)
+        let view = UIButton(type: .custom)
         view.imageView?.contentMode = .scaleAspectFit
         view.setImage(self.viewConfig.playButtonImage, for: .normal)
         return view
@@ -144,6 +145,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         contentScrolView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        contentScrolView.addSubview(imageView)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -151,17 +154,34 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func adjustFrame(normal:Bool = true,fixed:PTActionTask? = nil) {
-        if gifImage != nil {
-            let imageSize = gifImage!.size
-            let imageFrame = CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
+        var zoomSize:CGSize = .zero
+        if let gifImage = gifImage {
+            let imageSize = gifImage.size
+            let imageFrame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
             
             contentScrolView.contentSize = imageFrame.size
-            
             let iamgeHeight = CGFloat.kSCREEN_WIDTH / imageSize.width * imageSize.height
+            zoomSize = CGSize(width: CGFloat.kSCREEN_WIDTH, height: iamgeHeight)
             if normal {
-                imageView.frame = CGRectMake(0, (CGFloat.kSCREEN_HEIGHT - iamgeHeight) / 2, CGFloat.kSCREEN_WIDTH, iamgeHeight)
+                livePhoto.alpha = 0
+                livePhoto.isHidden = true
+                imageView.alpha = 1
+                imageView.isHidden = false
+                imageView.snp.remakeConstraints { make in
+                    make.width.equalTo(CGFloat.kSCREEN_WIDTH)
+                    make.height.equalTo(iamgeHeight)
+                    make.centerX.centerY.equalToSuperview()
+                }
             } else {
-                livePhoto.frame = CGRectMake(0, (CGFloat.kSCREEN_HEIGHT - iamgeHeight) / 2, CGFloat.kSCREEN_WIDTH, iamgeHeight)
+                imageView.alpha = 0
+                imageView.isHidden = true
+                livePhoto.alpha = 1
+                livePhoto.isHidden = false
+                livePhoto.snp.remakeConstraints { make in
+                    make.width.equalTo(CGFloat.kSCREEN_WIDTH)
+                    make.height.equalTo(iamgeHeight)
+                    make.centerX.centerY.equalToSuperview()
+                }
             }
             
             var maxScale = frame.size.height / imageFrame.size.height
@@ -171,21 +191,18 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             contentScrolView.maximumZoomScale = maxScale
             contentScrolView.zoomScale = 1
         } else {
+            zoomSize = frame.size
             frame.origin = .zero
             if normal {
                 imageView.frame = frame
-                contentScrolView.contentSize = imageView.frame.size
+                contentScrolView.contentSize = zoomSize
             } else {
                 livePhoto.frame = frame
-                contentScrolView.contentSize = livePhoto.frame.size
+                contentScrolView.contentSize = zoomSize
             }
         }
         contentScrolView.contentOffset = .zero
-        if normal {
-            zoomImageSize = imageView.frame.size
-        } else {
-            zoomImageSize = livePhoto.frame.size
-        }
+        zoomImageSize = zoomSize
         fixed?()
     }
             
@@ -202,14 +219,12 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     open class func centerOfScrollVIewContent(scrollView:UIScrollView) ->CGPoint {
         let offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width) ? ((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5) : 0
         let offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height) ? ((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5) : 0
-        let actualCenter = CGPoint.init(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
+        let actualCenter = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
         return actualCenter
     }
     
     private func clearContentView() {
         gifImage = nil
-        imageView.contentMode = .scaleAspectFit
-        contentScrolView.addSubview(imageView)
         reloadButton.removeFromSuperview()
     }
     
@@ -287,7 +302,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     func hideAnimation() {
         contentView.isUserInteractionEnabled = false
         let window = AppWindows!
-        var targetTemp:CGRect? = CGRect.init(x: window.center.x, y: window.center.y, width: 0, height: 0)
+        var targetTemp:CGRect? = CGRect(x: window.center.x, y: window.center.y, width: 0, height: 0)
         targetTemp = contentView.convert(contentView.frame, to: contentView)
 
         window.windowLevel = .normal
