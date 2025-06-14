@@ -169,16 +169,18 @@ class PTLoadedLibsViewController: PTBaseViewController {
             if let row = self.libraries.firstIndex(where: { $0.path == updatedPath }) {
                 DispatchQueue.main.async {
                     if self.libraries[row].classes.count > 0 {
-                        let rows = self.libraries[row].classes.map {
-                            let model = PTFusionCellModel()
-                            model.name = $0
-                            let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
-                            return row
+                        if self.libraries[row].isExpanded {
+                            let rows = self.newCollectionView.collectionSectionDatas[row].rows ?? []
+                            self.newCollectionView.deleteRows(rows, from: row)
+                        } else {
+                            let rows = self.libraries[row].classes.map {
+                                let model = PTFusionCellModel()
+                                model.name = $0
+                                let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
+                                return row
+                            }
+                            self.newCollectionView.insertRows(rows, section: row)
                         }
-                        self.newCollectionView.insertRows(rows, section: row)
-                    } else {
-                        let rows = self.newCollectionView.collectionSectionDatas[row].rows ?? []
-                        self.newCollectionView.deleteRows(rows, from: row)
                     }
                 }
             }
@@ -194,7 +196,9 @@ class PTLoadedLibsViewController: PTBaseViewController {
         default: filter = .all
         }
         viewModel.filterLibraries(by: filter)
-        setDataList()
+        newCollectionView.clearAllData { cView in
+            self.setDataList()
+        }
     }
     
     @objc private func exportLibraries() {
@@ -235,8 +239,10 @@ class PTLoadedLibsViewController: PTBaseViewController {
 extension PTLoadedLibsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.textField?.resignFirstResponder()
-        viewModel.searchLibraries(with: searchBar.textField?.text ?? "")
-        setDataList()
+        self.viewModel.searchLibraries(with: searchBar.textField?.text ?? "")
+        newCollectionView.clearAllData { cView in
+            self.setDataList()
+        }
     }
 }
 

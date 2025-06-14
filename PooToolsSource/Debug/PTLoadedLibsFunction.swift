@@ -46,7 +46,10 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     
     private var state = State()
     private let syncQueue = DispatchQueue(label: "com.loadedLibraries.syncQueue", attributes: .concurrent)
-    
+    private let objcRuntimeLock = NSLock()
+    private var allClasses: [String: [String]] = [:]
+    private var allClassesInitialized = false
+
     var onStateChanged: (([PTLoadedLibrary]) -> Void)?
     var onLibraryUpdated: ((String) -> Void)? // path based update
     
@@ -79,25 +82,35 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     func toggleLibraryExpansion(path: String) {
         syncQueue.async(flags: .barrier) {
             guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
+            
             var library = self.state.filteredLibraries[index]
-            library.isExpanded.toggle()
-            self.state.filteredLibraries[index] = library
-
-            guard library.isExpanded, library.classes.isEmpty, !library.isLoading else {
+            
+            // 如果已经在加载中，直接跳过
+            if library.isLoading {
                 DispatchQueue.main.async {
                     self.onLibraryUpdated?(path)
                 }
                 return
             }
 
-            library.isLoading = true
+            library.isExpanded.toggle()
             self.state.filteredLibraries[index] = library
 
             DispatchQueue.main.async {
                 self.onLibraryUpdated?(path)
             }
 
-            self.loadClassesAsync(for: library)
+            // 如果展开且 class 为空，才加载
+            if library.isExpanded && library.classes.isEmpty {
+                library.isLoading = true
+                self.state.filteredLibraries[index] = library
+
+                DispatchQueue.main.async {
+                    self.onLibraryUpdated?(path)
+                }
+
+                self.loadClassesAsync(for: path)
+            }
         }
     }
     
@@ -163,17 +176,17 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     }
     
     // MARK: - Class Fetching
-    private func loadClassesAsync(for library: PTLoadedLibrary) {
-        let path = library.path
+    private func loadClassesAsync(for path: String) {
         DispatchQueue.global().async {
             let fetched = self.fetchClasses(from: path)
             self.syncQueue.async(flags: .barrier) {
                 guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
+
                 var updated = self.state.filteredLibraries[index]
                 updated.classes = fetched
                 updated.isLoading = false
                 self.state.filteredLibraries[index] = updated
-                
+
                 DispatchQueue.main.async {
                     self.onLibraryUpdated?(path)
                 }
@@ -210,33 +223,35 @@ extension PTLoadedLibrariesViewModel {
         return libraries.sorted { $0.name < $1.name }
     }
 
-    private func fetchClasses(from libraryPath: String) -> [String] {
-        var classes: [String] = []
-        
-        guard let handle = dlopen(libraryPath, RTLD_LAZY) else { return classes }
-        defer { dlclose(handle) }
+    func preloadAllClasses() {
+        guard !allClassesInitialized else { return }
 
-        var classList: AutoreleasingUnsafeMutablePointer<AnyClass>? = nil
-        var classCount: UInt32 = 0
+        DispatchQueue.main.async {
+            self.objcRuntimeLock.lock()
+            defer { self.objcRuntimeLock.unlock() }
 
-        // 切換到主線程執行 objc_copyClassList 以避免崩潰
-        DispatchQueue.main.sync {
-            classList = objc_copyClassList(&classCount)
-        }
+            var classCount: UInt32 = 0
+            guard let classList = objc_copyClassList(&classCount) else { return }
 
-        guard let list = classList else { return classes }
+            let buffer = UnsafeBufferPointer(start: classList, count: Int(classCount))
 
-        // 使用 UnsafeBufferPointer 遍歷 class 列表
-        let buffer = UnsafeBufferPointer(start: list, count: Int(classCount))
-        for cls in buffer {
-            if let imageName = class_getImageName(cls),
-               String(cString: imageName) == libraryPath {
+            var result: [String: [String]] = [:]
+
+            for cls in buffer {
+                guard let imageNamePtr = class_getImageName(cls) else { continue }
+                let imageName = String(cString: imageNamePtr)
                 let className = String(cString: class_getName(cls))
-                classes.append(className)
-            }
-        }
 
-        return classes.sorted()
+                result[imageName, default: []].append(className)
+            }
+
+            self.allClasses = result.mapValues { $0.sorted() }
+            self.allClassesInitialized = true
+        }
+    }
+
+    private func fetchClasses(from libraryPath: String) -> [String] {
+        return allClasses[libraryPath] ?? []
     }
     
     fileprivate func checkIfPrivate(_ path: String) -> Bool {
@@ -420,90 +435,128 @@ final class PTClassExplorerViewModel {
         var methodList: [MethodInfo] = []
         
         // Instance methods
-        var methodCount: UInt32 = 0
-        if let methods = class_copyMethodList(cls, &methodCount) {
-            defer { free(methods) }
-            
-            for i in 0..<Int(methodCount) {
-                let method = methods[i]
-                let selector = method_getName(method)
-                let name = NSStringFromSelector(selector)
+        var instanceMethodCount: UInt32 = 0
+        if let instanceMethods = class_copyMethodList(cls, &instanceMethodCount) {
+            defer { free(instanceMethods) }
+            for i in 0..<Int(instanceMethodCount) {
+                let method = instanceMethods[i]
+                let name = NSStringFromSelector(method_getName(method))
+                let returnType = String(cString: method_copyReturnType(method))
+                let argumentCount = method_getNumberOfArguments(method)
+                var argTypes: [String] = []
                 
-                let methodInfo = createMethodInfo(
-                    method: method,
+                for j in 0..<argumentCount {
+                    if let argTypeCStr = method_copyArgumentType(method, j) {
+                        argTypes.append(String(cString: argTypeCStr))
+                        free(UnsafeMutableRawPointer(mutating: argTypeCStr))
+                    } else {
+                        argTypes.append("Unknown")
+                    }
+                }
+
+                free(UnsafeMutableRawPointer(mutating: method_copyReturnType(method)))
+
+                methodList.append(MethodInfo(
                     name: name,
+                    returnType: returnType,
+                    argumentTypes: argTypes,
                     isClassMethod: false
-                )
-                methodList.append(methodInfo)
+                ))
             }
         }
-        
+
         // Class methods
         if let metaClass = object_getClass(cls) {
-            methodCount = 0
-            if let methods = class_copyMethodList(metaClass, &methodCount) {
-                defer { free(methods) }
-                
-                for i in 0..<Int(methodCount) {
-                    let method = methods[i]
-                    let selector = method_getName(method)
-                    let name = NSStringFromSelector(selector)
-                    
-                    // Skip meta methods
-                    if name.hasPrefix(".") { continue }
-                    
-                    let methodInfo = createMethodInfo(
-                        method: method,
+            var classMethodCount: UInt32 = 0
+            if let classMethods = class_copyMethodList(metaClass, &classMethodCount) {
+                defer { free(classMethods) }
+                for i in 0..<Int(classMethodCount) {
+                    let method = classMethods[i]
+                    let name = NSStringFromSelector(method_getName(method))
+                    let returnType = String(cString: method_copyReturnType(method))
+                    let argumentCount = method_getNumberOfArguments(method)
+                    var argTypes: [String] = []
+
+                    for j in 0..<argumentCount {
+                        if let argTypeCStr = method_copyArgumentType(method, j) {
+                            argTypes.append(String(cString: argTypeCStr))
+                            free(UnsafeMutableRawPointer(mutating: argTypeCStr))
+                        } else {
+                            argTypes.append("Unknown")
+                        }
+                    }
+
+                    free(UnsafeMutableRawPointer(mutating: method_copyReturnType(method)))
+
+                    methodList.append(MethodInfo(
                         name: name,
+                        returnType: returnType,
+                        argumentTypes: argTypes,
                         isClassMethod: true
-                    )
-                    methodList.append(methodInfo)
+                    ))
                 }
             }
         }
-        
-        self.methods = methodList.sorted { $0.name < $1.name }
+
+        self.methods = methodList.sorted {
+            $0.name.localizedCompare($1.name) == .orderedAscending
+        }
     }
     
     private func loadInstanceState() {
-        guard let instance = instance else { return }
-        
-        var propertyList: [InstanceProperty] = []
-        
-        // Get values for all properties
-        for property in properties {
-            let value = getPropertyValue(instance: instance, propertyName: property.name)
-            propertyList.append(InstanceProperty(
-                name: property.name,
-                value: value
-            ))
+        guard let obj = instance else { return }
+
+        var result: [InstanceProperty] = []
+        let mirror = Mirror(reflecting: obj)
+        for child in mirror.children {
+            if let label = child.label {
+                let valueStr = String(describing: child.value)
+                result.append(InstanceProperty(name: label, value: valueStr))
+            }
         }
-        
-        self.instanceProperties = propertyList
+
+        self.instanceProperties = result
     }
     
     // MARK: - Helper Methods
     
     private func parsePropertyAttributes(_ attributes: String) -> String {
-        var parsed: [String] = []
-        
-        if attributes.contains(",R") { parsed.append("readonly") }
-        if attributes.contains(",C") { parsed.append("copy") }
-        if attributes.contains(",&") { parsed.append("strong") }
-        if attributes.contains(",N") { parsed.append("nonatomic") }
-        if attributes.contains(",W") { parsed.append("weak") }
-        
-        return parsed.joined(separator: ", ")
+        let components = attributes.components(separatedBy: ",")
+        return components.filter { !$0.hasPrefix("T") }.joined(separator: ", ")
     }
     
     private func extractTypeFromAttributes(_ attributes: String) -> String {
-        // Extract type from property attributes
-        if let typeStart = attributes.firstIndex(of: "T"),
-           let typeEnd = attributes.firstIndex(of: ",") {
-            let typeString = String(attributes[attributes.index(after: typeStart)..<typeEnd])
-            return parseTypeEncoding(typeString)
+        let components = attributes.components(separatedBy: ",")
+        guard let typeComponent = components.first(where: { $0.hasPrefix("T") }) else {
+            return "Unknown"
         }
-        return "Unknown"
+
+        let typeCode = typeComponent.dropFirst()
+        if typeCode.hasPrefix("@") {
+            // Object type, extract class name
+            if typeCode.count > 2 {
+                return String(typeCode.dropFirst().dropLast())
+            } else {
+                return "AnyObject"
+            }
+        } else {
+            // Primitive types
+            switch typeCode {
+            case "i": return "Int"
+            case "s": return "Int16"
+            case "l": return "Int32"
+            case "q": return "Int64"
+            case "I": return "UInt"
+            case "S": return "UInt16"
+            case "L": return "UInt32"
+            case "Q": return "UInt64"
+            case "f": return "Float"
+            case "d": return "Double"
+            case "B": return "Bool"
+            case "v": return "Void"
+            default: return "Unknown(\(typeCode))"
+            }
+        }
     }
     
     private func parseTypeEncoding(_ encoding: String) -> String {
