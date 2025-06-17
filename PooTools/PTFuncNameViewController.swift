@@ -1200,7 +1200,6 @@ class PTFuncNameViewController: PTBaseViewController {
             }
             vvvvv.showNotification()
             vvvvv.hideHandler = {
-                PTNSLogConsole("123123123123")
             }
         }
         

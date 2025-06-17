@@ -46,9 +46,6 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     
     private var state = State()
     private let syncQueue = DispatchQueue(label: "com.loadedLibraries.syncQueue", attributes: .concurrent)
-    private let objcRuntimeLock = NSLock()
-    private var allClasses: [String: [String]] = [:]
-    private var allClassesInitialized = false
 
     var onStateChanged: (([PTLoadedLibrary]) -> Void)?
     var onLibraryUpdated: ((String) -> Void)? // path based update
@@ -56,6 +53,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     // MARK: - Public Methods
     
     func loadLibraries() {
+        
         DispatchQueue.global().async {
             let libraries = self.fetchLoadedLibraries()
             self.syncQueue.async(flags: .barrier) {
@@ -179,16 +177,18 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     private func loadClassesAsync(for path: String) {
         DispatchQueue.global().async {
             let fetched = self.fetchClasses(from: path)
-            self.syncQueue.async(flags: .barrier) {
-                guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
+            PTGCDManager.gcdMain {
+                self.syncQueue.async(flags: .barrier) {
+                    guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
 
-                var updated = self.state.filteredLibraries[index]
-                updated.classes = fetched
-                updated.isLoading = false
-                self.state.filteredLibraries[index] = updated
+                    var updated = self.state.filteredLibraries[index]
+                    updated.classes = fetched
+                    updated.isLoading = false
+                    self.state.filteredLibraries[index] = updated
 
-                DispatchQueue.main.async {
-                    self.onLibraryUpdated?(path)
+                    DispatchQueue.main.async {
+                        self.onLibraryUpdated?(path)
+                    }
                 }
             }
         }
@@ -222,36 +222,31 @@ extension PTLoadedLibrariesViewModel {
         
         return libraries.sorted { $0.name < $1.name }
     }
-
-    func preloadAllClasses() {
-        guard !allClassesInitialized else { return }
-
-        DispatchQueue.main.async {
-            self.objcRuntimeLock.lock()
-            defer { self.objcRuntimeLock.unlock() }
-
-            var classCount: UInt32 = 0
-            guard let classList = objc_copyClassList(&classCount) else { return }
-
-            let buffer = UnsafeBufferPointer(start: classList, count: Int(classCount))
-
-            var result: [String: [String]] = [:]
-
-            for cls in buffer {
-                guard let imageNamePtr = class_getImageName(cls) else { continue }
-                let imageName = String(cString: imageNamePtr)
-                let className = String(cString: class_getName(cls))
-
-                result[imageName, default: []].append(className)
-            }
-
-            self.allClasses = result.mapValues { $0.sorted() }
-            self.allClassesInitialized = true
-        }
-    }
-
+    
     private func fetchClasses(from libraryPath: String) -> [String] {
-        return allClasses[libraryPath] ?? []
+        var classes: [String] = []
+        
+        guard let handle = dlopen(libraryPath, RTLD_LAZY) else { return classes }
+        defer { dlclose(handle) }
+        
+        // Get all classes registered with the Objective-C runtime
+        var classCount: UInt32 = 0
+        guard let classList = objc_copyClassList(&classCount) else { return classes }
+        // AutoreleasingUnsafeMutablePointer is automatically managed by ARC
+        
+        // Convert to buffer pointer for safe iteration
+        let buffer = UnsafeBufferPointer(start: classList, count: Int(classCount))
+        for cls in buffer {
+            // Check if class belongs to this library
+            if let imageName = class_getImageName(cls),
+               String(cString: imageName) == libraryPath {
+                let className = String(cString: class_getName(cls))
+                classes.append(className)
+            }
+        }
+        
+        return classes.sorted()
+
     }
     
     fileprivate func checkIfPrivate(_ path: String) -> Bool {
