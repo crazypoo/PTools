@@ -31,8 +31,16 @@ public class PTLaunchAdMonitor: NSObject {
         let view = UIButton()
         view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
         view.setTitleColor(.white, for: .normal)
+        view.setBackgroundColor(color: .DevMaskColor, forState: .normal)
         return view
     }()
+    
+    private lazy var loadImageView:UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+    
     private var notifiData:[AnyHashable : Any]?
     
     private lazy var contentView : UIView = {
@@ -63,18 +71,7 @@ public class PTLaunchAdMonitor: NSObject {
         timeUpCallBack = timeUp
         notifiData = param
         contentView.backgroundColor = .lightGray
-        
-        let loadImageView = UIImageView(image: PTAppBaseConfig.share.defaultPlaceholderImage)
-        loadImageView.contentMode = .scaleAspectFit
-        
-        let loadingSkip = UIButton(type: .custom)
-        loadingSkip.setTitle(skipName, for: .normal)
-        loadingSkip.setTitleColor(.white, for: .normal)
-        loadingSkip.setBackgroundColor(color: .DevMaskColor, forState: .normal)
-        loadingSkip.addActionHandlers(handler: { sender in
-            self.hideView(sender: sender)
-        })
-        
+                        
         if onView is UIView {
             (onView as! UIView).addSubview(contentView)
             (onView as! UIView).bringSubviewToFront(contentView)
@@ -95,9 +92,8 @@ public class PTLaunchAdMonitor: NSObject {
             }
 #endif
         }
-        
+        skipButton.setTitle(skipName, for: .normal)
         skipButton.titleLabel?.font = skipFont
-        contentView.addSubview(skipButton)
         skipButton.addActionHandlers { sender in
             self.hideView(sender: sender)
         }
@@ -133,62 +129,55 @@ public class PTLaunchAdMonitor: NSObject {
             }
         }
 
-        contentView.addSubviews([loadImageView,loadingSkip])
+        contentView.addSubviews([loadImageView,skipButton])
         loadImageView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.bottom.equalToSuperview().inset(bottomViewHeight)
         }
-        skipButton.isHidden = true
-        loadingSkip.titleLabel?.font = skipFont
-        loadingSkip.snp.makeConstraints { make in
+        skipButton.snp.makeConstraints { make in
             make.size.equalTo(44)
             make.right.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
         }
         
         PTGCDManager.gcdMain(block: {
-            loadingSkip.viewCorner(radius: 22)
+            self.skipButton.viewCorner(radius: 22)
         })
         
         let mediaHaveData: Bool = param != nil
         loadImageAtPath(path: path) { type, media in
             PTGCDManager.gcdMain {
-                loadingSkip.removeFromSuperview()
-                loadImageView.removeFromSuperview()
-                self.skipButton.isHidden = false
                 switch type {
                 case .Image:
                     if let medias = media as? [UIImage] {
                         if medias.count > 1 {
-                            let imageView = UIImageView()
-                            imageView.animationImages = medias
-                            imageView.animationDuration = 1
-                            imageView.startAnimating()
-                            self.contentView.insertSubview(imageView, at: 0)
-                            imageView.snp.makeConstraints { make in
+                            self.loadImageView.animationImages = medias
+                            self.loadImageView.animationImages = medias
+                            self.loadImageView.animationDuration = 1
+                            self.loadImageView.startAnimating()
+                            self.contentView.insertSubview(self.loadImageView, at: 0)
+                            self.loadImageView.snp.remakeConstraints { make in
                                 make.left.top.right.equalToSuperview()
                                 make.height.equalTo(bottomViewHeight)
                             }
                             
                             let tag = UITapGestureRecognizer { sender in
-                                self.showDetail(sender: imageView)
+                                self.showDetail(sender: self.loadImageView)
                             }
-                            imageView.addGestureRecognizer(tag)
+                            self.loadImageView.addGestureRecognizer(tag)
                         } else if medias.count == 1 {
-                            let imageBtn = UIButton(type: .custom)
-                            imageBtn.setImage(medias.first, for: .normal)
-                            imageBtn.addActionHandlers { sender in
-                                self.showDetail(sender: sender)
+                            self.loadImageView.image = medias.first
+                            let tag = UITapGestureRecognizer { sender in
+                                self.showDetail(sender: self.loadImageView)
                             }
-                            imageBtn.isUserInteractionEnabled = mediaHaveData
-                            self.contentView.insertSubview(imageBtn, at: 0)
-                            imageBtn.snp.makeConstraints { make in
+                            self.loadImageView.addGestureRecognizer(tag)
+                            self.loadImageView.isUserInteractionEnabled = mediaHaveData
+                            self.contentView.insertSubview(self.loadImageView, at: 0)
+                            self.loadImageView.snp.remakeConstraints { make in
                                 make.left.top.right.equalToSuperview()
                                 make.bottom.equalToSuperview().inset(bottomViewHeight)
                             }
-                            imageBtn.imageView?.clipsToBounds = true
-                            imageBtn.imageView?.contentMode = PTLaunchAdMonitor.share.imageContentMode
-                            imageBtn.adjustsImageWhenHighlighted = false
+                            self.loadImageView.contentMode = PTLaunchAdMonitor.share.imageContentMode
                         }
                     }
                     self.skipButton.setTitle("\(timeInterval)", for: .normal)
@@ -205,6 +194,7 @@ public class PTLaunchAdMonitor: NSObject {
                         })
                     }
                 case .Video:
+                    self.loadImageView.removeFromSuperview()
                     if let videoUrl = media as? URL {
                         self.player = AVPlayerViewController()
                         self.player?.player = AVPlayer(url: videoUrl)
@@ -243,23 +233,15 @@ public class PTLaunchAdMonitor: NSObject {
     }
     
     enum PTLaunchAdMediaType {
-        case Image
-        case Video
+        case Image,Video
     }
     
     private func loadImageAtPath(path: Any, completion: @escaping (PTLaunchAdMediaType,Any?) -> Void) {
-        if let imagePath = path as? String {
-            if imagePath.contentTypeForUrl() == PTUrlStringVideoType.MP4 {
-                let videoUrl = (imagePath as NSString).range(of: "/var").length > 0 ? URL(fileURLWithPath: imagePath) : URL(string: imagePath.urlToUnicodeURLString() ?? "")
+        Task {
+            if let imagePath = path as? String,imagePath.contentTypeForUrl() == PTUrlStringVideoType.MP4 {
+                let videoUrl = (imagePath as NSString).range(of: "/var").length > 0 ? URL(fileURLWithPath: imagePath) : URL(string: imagePath)
                 completion(.Video,videoUrl)
             } else {
-                Task {
-                    let result = await PTLoadImageFunction.loadImage(contentData: path)
-                    completion(.Image,result.0)
-                }
-            }
-        } else {
-            Task {
                 let result = await PTLoadImageFunction.loadImage(contentData: path)
                 completion(.Image,result.0)
             }

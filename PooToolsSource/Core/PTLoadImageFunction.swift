@@ -129,10 +129,32 @@ public class PTLoadImageFunction: NSObject {
 
     public static func downloadImage(from url: URL,
                                      _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
+        let options = PTAppBaseConfig.share.gobalWebImageLoadOption()
+        let cacheKey = url.cacheKey
+
+        // 如果有快取就直接取出
+        if ImageCache.default.isCached(forKey: cacheKey) {
+            do {
+                let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
+                if let image = result.image {
+                    if let frames = image.images, !frames.isEmpty {
+                        return (frames, frames.first)
+                    } else {
+                        return ([image], image)
+                    }
+                } else {
+                    return (nil, nil)
+                }
+            } catch {
+                return (nil, nil)
+            }
+        }
+
+        // 沒有快取，下載圖片
         return await withCheckedContinuation { continuation in
             ImageDownloader.default.downloadImage(
                 with: url,
-                options: PTAppBaseConfig.share.gobalWebImageLoadOption(),
+                options: options,
                 progressBlock: { receivedSize, totalSize in
                     DispatchQueue.main.async {
                         progressHandle?(receivedSize, totalSize)
@@ -149,7 +171,7 @@ public class PTLoadImageFunction: NSObject {
                             } else {
                                 continuation.resume(returning: ([value.image], value.image))
                             }
-                        case .failure:
+                        case .failure(let error):
                             continuation.resume(returning: (nil, nil))
                         }
                     }
