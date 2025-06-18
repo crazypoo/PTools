@@ -164,6 +164,7 @@ public class PTLoadImageFunction: NSObject {
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let value):
+                            ImageCache.default.store(value.image, forKey: url.absoluteString)
                             let data = value.originalData
                             if data.detectImageType() == .GIF {
                                 let frames = handleGIFData(data)
