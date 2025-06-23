@@ -184,7 +184,7 @@ extension PTBaseViewController {
                 
         if #available(iOS 16.0, *) {
             setNeedsUpdateOfPrefersPointerLocked()
-            guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+            guard let scence = UIApplication.pt.currentWindowScene else { return }
             let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
             let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
             scence.requestGeometryUpdate(geometryPreferencesIOS) { error in

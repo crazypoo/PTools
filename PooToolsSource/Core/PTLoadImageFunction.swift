@@ -135,12 +135,17 @@ public class PTLoadImageFunction: NSObject {
         // 如果有快取就直接取出
         if ImageCache.default.isCached(forKey: cacheKey) {
             do {
-                let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
+                let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: [.onlyFromCache])
                 if let image = result.image {
-                    if let frames = image.images, !frames.isEmpty {
+                    if let imageData = image.imageData,imageData.detectImageType() == .GIF {
+                        let frames = handleGIFData(imageData)
                         return (frames, frames.first)
                     } else {
-                        return ([image], image)
+                        if let frames = image.images, !frames.isEmpty,frames.count > 1 {
+                            return (frames, frames.first)
+                        } else {
+                            return ([image], image)
+                        }
                     }
                 } else {
                     return (nil, nil)
@@ -164,15 +169,16 @@ public class PTLoadImageFunction: NSObject {
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let value):
-                            ImageCache.default.store(value.image, forKey: url.absoluteString)
                             let data = value.originalData
                             if data.detectImageType() == .GIF {
+                                ImageCache.default.storeToDisk(data, forKey: cacheKey)
                                 let frames = handleGIFData(data)
                                 continuation.resume(returning: (frames, frames.first))
                             } else {
+                                ImageCache.default.store(value.image, forKey: cacheKey)
                                 continuation.resume(returning: ([value.image], value.image))
                             }
-                        case .failure(let error):
+                        case .failure(_):
                             continuation.resume(returning: (nil, nil))
                         }
                     }
