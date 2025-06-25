@@ -151,26 +151,26 @@ public class PTLivePhoto {
     }
     
     private func saveAssetResource(_ resource: PHAssetResource, to directory: URL, resourceData: Data) -> URL? {
-        let fileExtension = UTTypeCopyPreferredTagWithClass(resource.uniformTypeIdentifier as CFString,kUTTagClassFilenameExtension)?.takeRetainedValue()
-        
-        guard let ext = fileExtension else {
+        // 將 resource.uniformTypeIdentifier 轉為 UTType
+        guard let utType = UTType(resource.uniformTypeIdentifier),
+              let ext = utType.preferredFilenameExtension else {
             return nil
         }
-        
-        var fileUrl = directory.appendingPathComponent(NSUUID().uuidString)
-        fileUrl = fileUrl.appendingPathExtension(ext as String)
-        
+
+        var fileUrl = directory.appendingPathComponent(UUID().uuidString)
+        fileUrl = fileUrl.appendingPathExtension(ext)
+
         do {
-            try resourceData.write(to: fileUrl, options: [Data.WritingOptions.atomic])
+            try resourceData.write(to: fileUrl, options: .atomic)
+            return fileUrl
         } catch {
-            PTNSLogConsole("Could not save resource \(resource) to filepath \(String(describing: fileUrl))")
+            PTNSLogConsole("Could not save resource \(resource) to filepath \(fileUrl)")
             return nil
         }
-        return fileUrl
     }
     
     func addAssetID(_ assetIdentifier: String, toImage imageURL: URL, saveTo destinationURL: URL) -> URL? {
-        guard let imageDestination = CGImageDestinationCreateWithURL(destinationURL as CFURL, kUTTypeJPEG, 1, nil),
+        guard let imageDestination = CGImageDestinationCreateWithURL(destinationURL as CFURL, UTType.jpeg.identifier as CFString, 1, nil),
               let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, nil),
               let imageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, nil),
                 var imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [AnyHashable : Any] else { return nil }
@@ -385,7 +385,7 @@ fileprivate extension AVAsset {
                     } else {
                         break;
                     }
-                }                
+                }
                 videoReader.cancelReading()
             }
         }
