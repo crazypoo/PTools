@@ -47,7 +47,7 @@ public extension CGFloat {
     ///獲取StatusBar的高度
     /// - Returns: CGFloat
     static func statusBarHeight()->CGFloat {
-        let window = AppWindows
+        let window = UIApplication.shared.windows.first
         let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame
         return statusBarFrame?.height ?? 0
     }

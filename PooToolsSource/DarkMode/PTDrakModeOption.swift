@@ -108,7 +108,7 @@ public extension PTDarkModeOption {
         if (PTDarkModeOption.isFollowSystem) {
             PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: true)
         } else {
-            AppWindows?.overrideUserInterfaceStyle = PTDarkModeOption.isLight ? .light : .dark
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = PTDarkModeOption.isLight ? .light : .dark
         }
     }
     
@@ -121,16 +121,16 @@ public extension PTDarkModeOption {
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
         // 1.2、设置模式的保存
         if isFollowSystem {
-            AppWindows?.overrideUserInterfaceStyle = .unspecified
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = .unspecified
         } else {
-            AppWindows?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
         }
     }
     
     // MARK: 设置：浅色 / 深色
     static func setDarkModeCustom(isLight: Bool) {
         // 1.1、只要设置了模式：就是黑或者白
-        AppWindows?.overrideUserInterfaceStyle = isLight ? .light : .dark
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
         // 1.2、设置跟随系统和智能换肤：否
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
@@ -145,7 +145,7 @@ public extension PTDarkModeOption {
         // 1.1、设置智能换肤
         UserDefaults.pt.userDefaultsSetValue(value: isSmartPeeling, key: PTSmartPeelingKey)
         // 1.2、智能换肤根据时间段来设置：黑或者白
-        AppWindows?.overrideUserInterfaceStyle = isLight ? .light : .dark
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
         // 1.3、设置跟随系统：否
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
         UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
@@ -170,7 +170,7 @@ public extension PTDarkModeOption {
         PTDarkModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
         
         // 1.1、只要设置了模式：就是黑或者白
-        AppWindows?.overrideUserInterfaceStyle = light ? .light : .dark
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = light ? .light : .dark
         // 1.2、黑白模式的设置
         UserDefaults.pt.userDefaultsSetValue(value: light, key: PTLightDarkKey)
     }

@@ -65,7 +65,7 @@ final class ViewHierarchyRoot {
         catalog: ViewHierarchyElementCatalog
     ) {
         self.application = application
-        windows = application.findWindows
+        windows = application.windows
         self.catalog = catalog
     }
 

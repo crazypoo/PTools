@@ -81,12 +81,12 @@ public class PTGuidePageHUD: UIView {
     public var adHadRemove:PTActionTask?
         
     lazy var forwardButton:UIButton = {
-        let btn = UIButton(type: .custom)
+        let btn = UIButton.init(type: .custom)
         return btn
     }()
     
     lazy var nextButton:UIButton = {
-        let btn = UIButton(type: .custom)
+        let btn = UIButton.init(type: .custom)
         return btn
     }()
     

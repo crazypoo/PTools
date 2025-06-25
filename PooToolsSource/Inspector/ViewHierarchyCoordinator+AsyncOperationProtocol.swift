@@ -10,7 +10,10 @@ extension ViewHierarchyCoordinator: AsyncOperationProtocol {
     func asyncOperation(name: String, execute closure: @escaping Closure) {
         let mainTask = MainThreadOperation(name: name, closure: closure)
 
-        guard let keyWindow = AppWindows
+        guard let keyWindow = UIApplication.shared
+            .windows
+            .filter(\.isKeyWindow)
+            .first
         else {
             return operationQueue.addOperation(mainTask)
         }

@@ -81,6 +81,7 @@ public class PTSpeech: NSObject {
     func setup() {
         if recognizer != nil {
             recognizer?.defaultTaskHint = SFSpeechRecognitionTaskHint.dictation
+            request.interactionIdentifier = "com.Jax.interactionIdentifier"
             let node = audioEndine.inputNode
             let recordingFormat = node.outputFormat(forBus: 0)
             node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, when in

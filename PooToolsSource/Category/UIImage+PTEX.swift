@@ -1097,7 +1097,7 @@ public extension PTPOP where Base: UIImage {
         // Kingfisher
         let info: [String: Any] = [
             kCGImageSourceShouldCache as String: true,
-            kCGImageSourceTypeIdentifierHint as String: UTType.gif
+            kCGImageSourceTypeIdentifierHint as String: kUTTypeGIF
         ]
 
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, info as CFDictionary) else {

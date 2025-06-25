@@ -176,36 +176,33 @@ public class PTDataEncryption {
     }
     
     static func encryptWithRSA(plainText: String, publicKey: SecKey) -> Data? {
-        let data = Data(plainText.utf8)
-        let algorithm: SecKeyAlgorithm = .rsaEncryptionPKCS1
-
-        guard SecKeyIsAlgorithmSupported(publicKey, .encrypt, algorithm) else {
-            PTNSLogConsole("Algorithm not supported for the provided public key")
+        let buffer = [UInt8](plainText.utf8)
+        let keySize = SecKeyGetBlockSize(publicKey)
+        var cipherText = [UInt8](repeating: 0, count: keySize)
+        var cipherTextLen = keySize
+        
+        let status = SecKeyEncrypt(publicKey, SecPadding.PKCS1, buffer, buffer.count, &cipherText, &cipherTextLen)
+        
+        if status == errSecSuccess {
+            return Data(cipherText)
+        } else {
+            PTNSLogConsole("Error encrypting: \(status)")
             return nil
         }
-
-        guard let cfEncryptedData = SecKeyCreateEncryptedData(publicKey, algorithm, data as CFData, nil) else {
-            PTNSLogConsole("Encryption failed")
-            return nil
-        }
-
-        return cfEncryptedData as Data
     }
     
     static func decryptWithRSA(encryptedData: Data, privateKey: SecKey) -> String? {
-        let algorithm: SecKeyAlgorithm = .rsaEncryptionPKCS1
-
-        guard SecKeyIsAlgorithmSupported(privateKey, .decrypt, algorithm) else {
-            PTNSLogConsole("Algorithm not supported for the provided private key")
+        let keySize = SecKeyGetBlockSize(privateKey)
+        var plainText = [UInt8](repeating: 0, count: keySize)
+        var plainTextLen = keySize
+        
+        let status = SecKeyDecrypt(privateKey, SecPadding.PKCS1, [UInt8](encryptedData), encryptedData.count, &plainText, &plainTextLen)
+        
+        if status == errSecSuccess {
+            return String(bytes: plainText, encoding: .utf8)
+        } else {
+            PTNSLogConsole("Error decrypting: \(status)")
             return nil
         }
-
-        guard let decryptedCFData = SecKeyCreateDecryptedData(privateKey, algorithm, encryptedData as CFData, nil) else {
-            PTNSLogConsole("Decryption failed")
-            return nil
-        }
-
-        let decryptedData = decryptedCFData as Data
-        return String(data: decryptedData, encoding: .utf8)
     }
 }

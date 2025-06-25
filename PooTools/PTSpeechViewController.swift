@@ -28,7 +28,7 @@ class PTSpeechViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        AppWindows?.addSubview(soundVisualizerMaskView)
+        AppDelegate.appDelegate()?.window?.addSubview(soundVisualizerMaskView)
         soundVisualizerMaskView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

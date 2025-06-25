@@ -67,7 +67,7 @@ extension UIWindow {
     }
 
     static var keyWindow: UIWindow? {
-        return AppWindows
+        UIApplication.shared.windows.first(where: \.isKeyWindow)
     }
 
     var _snapshot: UIImage? {

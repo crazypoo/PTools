@@ -386,8 +386,7 @@ public class PTSheetViewController: PTBaseViewController {
             if (self.options.useFullScreenMode) {
                 top = 0
             } else {
-                
-                top = max(12, AppWindows?.compatibleSafeAreaInsets.top ?? 12)
+                top = max(12, UIApplication.shared.windows.first(where:  { $0.isKeyWindow })?.compatibleSafeAreaInsets.top ?? 12)
             }
             make.bottom.equalToSuperview()
             make.top.greaterThanOrEqualToSuperview().inset(top).priority(999)

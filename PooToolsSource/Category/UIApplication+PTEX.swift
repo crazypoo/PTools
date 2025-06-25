@@ -55,12 +55,6 @@ public extension UIApplication {
             return self.keyWindow
         }
     }
-    
-    var findWindows:[UIWindow] {
-        return self.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-    }
 }
 
 public extension PTPOP where Base: UIApplication {
@@ -125,7 +119,7 @@ public extension PTPOP where Base: UIApplication {
 @available(iOSApplicationExtension, unavailable)
 public extension UIApplication {
     var statusBarHeight: CGFloat {
-        if let window = AppWindows {
+        if let window = UIApplication.shared.windows.first {
             return window.safeAreaInsets.top
         } else {
             return 0

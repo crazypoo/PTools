@@ -48,7 +48,7 @@ class PTPingActivityIndicator {
 
 private extension PTPingActivityIndicator {
     func createUI() {
-        if let windowScene = AppWindows?.windowScene, let statusBarManager = windowScene.statusBarManager {
+        if let windowScene = UIApplication.shared.windows.first?.windowScene, let statusBarManager = windowScene.statusBarManager {
             mIndicatorWindow.windowScene = windowScene
             mIndicatorWindow.frame = statusBarManager.statusBarFrame
             statusBarStyle = statusBarManager.statusBarStyle

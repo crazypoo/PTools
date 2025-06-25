@@ -200,121 +200,121 @@ public enum UTTTypeOption: Equatable, Hashable {
     private var cfString: CFString {
         switch self {
         case .image:
-            return UTType.image.identifier as CFString
+            return kUTTypeImage
         case .jpeg:
-            return UTType.jpeg.identifier as CFString
+            return kUTTypeJPEG
         case .tiff:
-            return UTType.tiff.identifier as CFString
+            return kUTTypeTIFF
         case .gif:
-            return UTType.gif.identifier as CFString
+            return kUTTypeGIF
         case .png:
-            return UTType.png.identifier as CFString
+            return kUTTypePNG
         case .appleICNS:
-            return UTType.icns.identifier as CFString
+            return kUTTypeAppleICNS
         case .bpm:
-            return UTType.bmp.identifier as CFString
+            return kUTTypeBMP
         case .ico:
-            return UTType.ico.identifier as CFString
+            return kUTTypeICO
         case .rawImage:
-            return UTType.rawImage.identifier as CFString
+            return kUTTypeRawImage
         case .scalableVectorGraphics:
-            return UTType.svg.identifier as CFString
+            return kUTTypeScalableVectorGraphics
         case .livePhoto:
-            return UTType.livePhoto.identifier as CFString
+            return kUTTypeLivePhoto
         case .audiovisualContent:
-            return UTType.audiovisualContent.identifier as CFString
+            return kUTTypeAudiovisualContent
         case .movie:
-            return UTType.movie.identifier as CFString
+            return kUTTypeMovie
         case .video:
-            return UTType.video.identifier as CFString
+            return kUTTypeVideo
         case .audio:
-            return UTType.audio.identifier as CFString
+            return kUTTypeAudio
         case .quickTimeMovie:
-            return UTType.quickTimeMovie.identifier as CFString
+            return kUTTypeQuickTimeMovie
         case .mpeg:
-            return UTType.mpeg.identifier as CFString
+            return kUTTypeMPEG
         case .mpeg2Video:
-            return UTType.mpeg2Video.identifier as CFString
+            return kUTTypeMPEG2Video
         case .mpeg2TransportStream:
-            return UTType.mpeg2TransportStream.identifier as CFString
+            return kUTTypeMPEG2TransportStream
         case .mp3:
-            return UTType.mp3.identifier as CFString
+            return kUTTypeMP3
         case .mpeg4:
-            return UTType.mpeg4Movie.identifier as CFString
+            return kUTTypeMPEG4
         case .mpeg4Audio:
-            return UTType.mpeg4Audio.identifier as CFString
+            return kUTTypeMPEG4Audio
         case .appleProtectedMPEG4Audio:
-            return UTType.appleProtectedMPEG4Audio.identifier as CFString
+            return kUTTypeAppleProtectedMPEG4Audio
         case .appleProtectedMPEG4Video:
-            return UTType.appleProtectedMPEG4Video.identifier as CFString
+            return kUTTypeAppleProtectedMPEG4Video
         case .aviMovie:
-            return UTType.avi.identifier as CFString
+            return kUTTypeAVIMovie
         case .waveformAudio:
-            return UTType.wav.identifier as CFString
+            return kUTTypeWaveformAudio
         case .midiAudio:
-            return UTType.midi.identifier as CFString
+            return kUTTypeMIDIAudio
         case .playlist:
-            return UTType.playlist.identifier as CFString
+            return kUTTypePlaylist
         case .m3uPlaylist:
-            return UTType.m3uPlaylist.identifier as CFString
+            return kUTTypeM3UPlaylist
         case .folder:
-            return UTType.folder.identifier as CFString
+            return kUTTypeFolder
         case .volume:
-            return UTType.volume.identifier as CFString
+            return kUTTypeVolume
         case .package:
-            return UTType.package.identifier as CFString
+            return kUTTypePackage
         case .bundle:
-            return UTType.bundle.identifier as CFString
+            return kUTTypeBundle
         case .pluginBundle:
-            return UTType.pluginBundle.identifier as CFString
+            return kUTTypePluginBundle
         case .spotlightImporter:
-            return UTType.spotlightImporter.identifier as CFString
+            return kUTTypeSpotlightImporter
         case .quickLookGenerator:
-            return UTType.quickLookGenerator.identifier as CFString
+            return kUTTypeQuickLookGenerator
         case .xpcService:
-            return UTType.xpcService.identifier as CFString
+            return kUTTypeXPCService
         case .framework:
-            return UTType.framework.identifier as CFString
+            return kUTTypeFramework
         case .application:
-            return UTType.application.identifier as CFString
+            return kUTTypeApplication
         case .applicationBundle:
-            return UTType.applicationBundle.identifier as CFString
+            return kUTTypeApplicationBundle
         case .unixExecutable:
-            return UTType.unixExecutable.identifier as CFString
+            return kUTTypeUnixExecutable
         case .systemPreferencesPane:
-            return UTType.systemPreferencesPane.identifier as CFString
+            return kUTTypeSystemPreferencesPane
         case .gnuZipArchive:
-            return UTType.gzip.identifier as CFString
+            return kUTTypeGNUZipArchive
         case .bzip2Archive:
-            return UTType.bz2.identifier as CFString
+            return kUTTypeBzip2Archive
         case .zipArchive:
-            return UTType.zip.identifier as CFString
+            return kUTTypeZipArchive
         case .spreadsheet:
-            return UTType.spreadsheet.identifier as CFString
+            return kUTTypeSpreadsheet
         case .presentation:
-            return UTType.presentation.identifier as CFString
+            return kUTTypePresentation
         case .database:
-            return UTType.database.identifier as CFString
+            return kUTTypeDatabase
         case .vCard:
-            return UTType.vCard.identifier as CFString
+            return kUTTypeVCard
         case .toDoItem:
-            return UTType.toDoItem.identifier as CFString
+            return kUTTypeToDoItem
         case .calendarEvent:
-            return UTType.calendarEvent.identifier as CFString
+            return kUTTypeCalendarEvent
         case .emailMessage:
-            return UTType.emailMessage.identifier as CFString
+            return kUTTypeEmailMessage
         case .internetLocation:
-            return UTType.internetLocation.identifier as CFString
+            return kUTTypeInternetLocation
         case .font:
-            return UTType.font.identifier as CFString
+            return kUTTypeFont
         case .bookmark:
-            return UTType.bookmark.identifier as CFString
+            return kUTTypeBookmark
         case .pkcs12:
-            return UTType.pkcs12.identifier as CFString
+            return kUTTypePKCS12
         case .x509Certificate:
-            return UTType.x509Certificate.identifier as CFString
+            return kUTTypeX509Certificate
         case .log:
-            return UTType.log.identifier as CFString
+            return kUTTypeLog
         }
     }
 }

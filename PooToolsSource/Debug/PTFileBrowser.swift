@@ -11,7 +11,6 @@ import MobileCoreServices
 #if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
 #endif
-import UniformTypeIdentifiers
 
 public class PTFileBrowser: NSObject {
     
@@ -42,38 +41,34 @@ public extension PTFileBrowser {
         if (filePath.lastPathComponent.hasPrefix(".")) {
             return .system
         } else if let utType = getFileUTType(filePath: filePath) {
-            if utType.conforms(to: .directory) {
+            if UTTypeConformsTo(utType, kUTTypeDirectory) {
                 return .folder
-            } else if utType.conforms(to: .image) {
+            } else if UTTypeConformsTo(utType, kUTTypeImage) {
                 return .image
-            } else if utType.conforms(to: .movie) || utType.conforms(to: .video) {
+            } else if (UTTypeConformsTo(utType, kUTTypeVideo) || UTTypeConformsTo(utType, kUTTypeMovie) || UTTypeConformsTo(utType, kUTTypeMPEG4) || UTTypeConformsTo(utType, kUTTypeAVIMovie) || UTTypeConformsTo(utType, kUTTypeQuickTimeMovie)) {
                 return .video
-            } else if utType.conforms(to: .audio) {
+            } else if (UTTypeConformsTo(utType, kUTTypeAudio) || UTTypeConformsTo(utType, kUTTypeMP3) || UTTypeConformsTo(utType, kUTTypeMPEG4Audio)) {
                 return .audio
-            } else if utType.conforms(to: .application) || utType.conforms(to: .sourceCode) {
+            } else if UTTypeConformsTo(utType, kUTTypeApplication) || UTTypeConformsTo(utType, kUTTypeSourceCode) {
                 return .application
-            } else if utType.conforms(to: .zip) {
+            } else if (UTTypeConformsTo(utType, kUTTypeZipArchive) || UTTypeConformsTo(utType, kUTTypeGNUZipArchive) || UTTypeConformsTo(utType, kUTTypeBzip2Archive)) {
                 return .zip
-            } else if utType.conforms(to: .html) || utType.conforms(to: .url) || utType.conforms(to: .fileURL) {
+            } else if (UTTypeConformsTo(utType, kUTTypeHTML) || UTTypeConformsTo(utType, kUTTypeURL) || UTTypeConformsTo(utType, kUTTypeFileURL)) {
                 return .web
-            } else if utType.identifier == "com.apple.log" {
+            } else if UTTypeConformsTo(utType, kUTTypeLog) {
                 return .log
-            } else if utType == .pdf {
+            } else if UTTypeConformsTo(utType, kUTTypePDF) {
                 return .pdf
-            } else if utType.conforms(to: .plainText) || utType == .rtf {
+            } else if UTTypeConformsTo(utType, kUTTypeText) || UTTypeConformsTo(utType, kUTTypeRTF) {
                 return .txt
             } else {
-                let identifier = utType.identifier
-                if identifier == "org.openxmlformats.wordprocessingml.document" ||
-                    identifier == "com.microsoft.word.doc" {
+                if UTTypeConformsTo(utType, "org.openxmlformats.wordprocessingml.document" as CFString) || UTTypeConformsTo(utType, "com.microsoft.word.doc" as CFString) {
                     return .word
-                } else if identifier == "org.openxmlformats.presentationml.presentation" ||
-                            identifier == "com.microsoft.powerpoint.ppt" {
+                } else if UTTypeConformsTo(utType, "org.openxmlformats.presentationml.presentation" as CFString) || UTTypeConformsTo(utType, "com.microsoft.powerpoint.ppt" as CFString) {
                     return .ppt
-                } else if identifier == "org.openxmlformats.spreadsheetml.sheet" ||
-                            identifier == "com.microsoft.excel.xls" {
+                } else if UTTypeConformsTo(utType, "org.openxmlformats.spreadsheetml.sheet" as CFString) || UTTypeConformsTo(utType, "com.microsoft.excel.xls" as CFString) {
                     return .excel
-                } else if filePath.absoluteString.lowercased().hasSuffix(".db") {
+                } else if filePath.pathExtension.lowercased() == "db" {
                     return .db
                 } else {
                     return .unknown
@@ -86,22 +81,23 @@ public extension PTFileBrowser {
 }
 
 private extension PTFileBrowser {
-    func getFileUTType(filePath: URL?) -> UTType? {
+    func getFileUTType(filePath: URL?) -> CFString? {
         guard let filePath = filePath else { return nil }
-        
-        // 如果是資料夾
-        var isDirectory: ObjCBool = false
-        if FileManager.default.fileExists(atPath: filePath.path, isDirectory: &isDirectory),
-           isDirectory.boolValue {
-            return .folder
-        }
-        
-        // 根據副檔名推斷 UTI
         let fileExt = filePath.pathExtension
-        if let utType = UTType(filenameExtension: fileExt) {
-            return utType
+        if fileExt.isEmpty {
+            var isDirectory: ObjCBool = false
+            if FileManager.default.fileExists(atPath: filePath.path, isDirectory: &isDirectory) {
+                if isDirectory.boolValue {
+                    return kUTTypeFolder
+                }
+            }
         }
-        
-        return nil
+        // 把文件转换成 Uniform Type Identifiers 后获取文件的 tag
+        let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExt as CFString, nil)
+        if let retainedValue = uti?.takeRetainedValue() {
+            return retainedValue
+        } else {
+            return nil
+        }
     }
 }
