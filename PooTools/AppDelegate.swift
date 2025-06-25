@@ -53,39 +53,10 @@ enum RequestManager {
 }
 
 @main
-class AppDelegate: PTAppWindowsDelegate {
-    
-    var permissionStatic = PTPermissionStatic.share
-
-    var guideHud:PTGuidePageHUD?
+class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-        let locationAlways = PTPermissionModel()
-        locationAlways.type = .location(access: .always)
-        locationAlways.desc = "我们有需要长时间使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
         
-        let locationWhen = PTPermissionModel()
-        locationWhen.type = .location(access: .whenInUse)
-        locationWhen.desc = "我们有需要的时候使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
-
-        let camera = PTPermissionModel()
-        camera.type = .camera
-        camera.desc = "我们需要使用你的照相机,来实现拍照后图片编辑功能"
-
-        let mic = PTPermissionModel()
-        mic.type = .microphone
-        mic.desc = "我们需要访问你的麦克风,来实现视频拍摄和编辑功能"
-
-        let photo = PTPermissionModel()
-        photo.type = .photoLibrary
-        photo.desc = "我们需要访问你的相册和照片,来使用图片的编辑功能"
-        
-        permissionStatic.permissionModels = [locationAlways,locationWhen,camera,mic,photo]
-        
-        if #available(iOS 17.0, *) {
-            PTTip.shared.appdelegateTipSet()
-        }
         // Override point for customization after application launch.
         var debugDevice = false
         let buglyConfig = BuglyConfig()
@@ -101,115 +72,15 @@ class AppDelegate: PTAppWindowsDelegate {
         Bugly.start(withAppId: "32b6206a5d",
                     developmentDevice: debugDevice,
                     config: buglyConfig)
-        
-        PTDarkModeOption.defaultDark()
-        StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
-        
-        createSettingBundle()
-
+                
         IQKeyboardToolbarManager.shared.isEnabled = true
         
-        registerRotation()
-
-#if POOTOOLS_ROUTER
-        registerRouter()
-#endif
         PTAppBaseConfig.share.defaultPlaceholderImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 44))
         
-        sideMenuConfig()
-
-        makeKeyAndVisible(createViewControllerHandler: {
-            let vc = PTFuncNameViewController()
-            let mainNav = PTBaseNavControl(rootViewController: vc)
-            
-            let sideContent = PTSideController()
-            let sideMeniController = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
-            
-            return sideMeniController
-        }, tint: .white)
 #if DEBUG
         let filePath = NSTemporaryDirectory().appending("/demo.order")
         YCSymbolTracker.exportSymbols(filePath: filePath)
 #endif
-                
-//#if DEBUG
-//        PTCoreUserDefultsWrapper.AppDebugMode = true
-        let _ = LocalConsole.shared
-//        lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
-//        if !lcm.terminal?.systemIsVisible
-//        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
-//        lcm.flex = {
-//#if canImport(FLEX)
-//            if FLEXManager.shared.isHidden {
-//                FLEXManager.shared.showExplorer()
-//            } else {
-//                FLEXManager.shared.hideExplorer()
-//            }
-//#endif
-//        }
-//        lcm.watchViews = {
-//#if canImport(InAppViewDebugger)
-//            InAppViewDebugger.present()
-//#endif
-//        }
-//        lcm.closeAllOutsideFunction = {
-//#if canImport(netfox)
-//            if NFX.sharedInstance().isStarted() {
-//                NFX.sharedInstance().hide()
-//            }
-//#endif
-//#if canImport(FLEX)
-//            if !FLEXManager.shared.isHidden {
-//                FLEXManager.shared.hideExplorer()
-//            }
-//#endif
-//        }
-//        #endif
-
-        PTGCDManager.gcdMain(block: {
-            //"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-            PTLaunchAdMonitor.share.showAd(path: "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"],skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10)) {
-                let guideModel = PTGuidePageModel()
-                guideModel.mainView = self.window!
-                guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
-                guideModel.tapHidden = false
-                guideModel.forwardImage = "DemoImage"
-                guideModel.backImage = "DemoImage"
-                guideModel.pageControlTintColor = .gray
-                guideModel.pageControl = .pageControl(type: .system)
-                guideModel.skipShow = true
-                
-                if self.guideHud == nil {
-                    self.guideHud = PTGuidePageHUD(viewModel: guideModel)
-                    self.guideHud!.animationTime = 1.5
-                    self.guideHud!.adHadRemove = {
-                        
-                    }
-                    self.guideHud!.guideShow()
-                }
-            }
-        })
-                
-        PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
-        PTGCDManager.gcdMain {
-            let networkShare = PTNetWorkStatus.shared
-            PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
-            networkShare.reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
-            networkShare.obtainDataFromLocalWhenNetworkUnconnected { state in
-                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
-            }
-            networkShare.netWork { state in
-                PTNSLogConsole("network:>>>>>>>>>>>>>>>>>>>>\(state)")
-            }
-        }
-        
-//        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.url(forResource: "heartbeat", withExtension: "svga")
-        
-//        let filePath = PTUtils.cgBaseBundle().path(forResource: "AuthKey_B9Q98BMSBQ", ofType: "p8")
-//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: filePath))")
-//        
-//        let token = PTAMJWT.generateToken(teamId: "77J8946934", keyId: "B9Q98BMSBQ", keyFileUrl: URL(string: filePath)!)
-//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: token))")
         switch PTPermission.mediaLibrary.status {
         case .notDetermined:
             PTPermission.mediaLibrary.request {
@@ -228,69 +99,24 @@ class AppDelegate: PTAppWindowsDelegate {
 //        let keyID = "B9Q98BMSBQ" // Get from https://developer.apple.com/account/ios/authkey/
 //        let teamID = "77J8946934" // Get from https://developer.apple.com/account/#/membership/
 //        createToken(keyID: keyID, teamID: teamID)
-                
-//        let dateString = "你好吗"
-//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.uppercasePinYinFirstLetter())")
-        
-//        PTAPIFunctionCheck.swiftApiRequest(apiUrl: "http://ceo.neospecs.shop/popup/getLatestPopUp",method:.get, modelType: LXHomePopoverMainModel.self) { resultObject in
-//            let aaaaaa = resultObject as! LXHomePopoverMainModel
-//            PTNSLogConsole("\(aaaaaa.msg?.image ?? "")")
-//        } fail: { error in
-//            
-//        }
-    
     
         PTLocationManager.shared.requestLocation()
             
-//        networkSpeedMonitor.startMonitoring()
-//        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
-//        if #available(iOS 16.0, *) {
-//            Task {
-//                do {
-//                    try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
-//                } catch {
-//                    PTNSLogConsole("123123123123123123123123123123123")
-//                }
-//            }
-//        }
-        
-//        let publicKeyString = """
-//        -----BEGIN PUBLIC KEY-----
-//        -----END PUBLIC KEY-----
-//        """
-//        
-//        let mc_id = ""
-//        let postDic = ["mc_id":mc_id,"tran_id":"ACO97461025","refund_amount":"0.01"].toJSON()?.jsonToTrueJsonString() ?? ""
-//        
-//        let reaKey = PTDataEncryption.publicKeyFromString(publicKeyString)
-//        PTNSLogConsole("reaKey>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: reaKey))")
-//        let rsa = PTDataEncryption.encryptWithRSA(plainText: postDic, publicKey: reaKey!)
-//        let merchant_auth = rsa?.base64EncodedString() ?? ""
-//        
-//        let requestTime = Date(timeIntervalSince1970: Date()!.timeIntervalSince1970).getTimeStr(dateFormat: "yyyyMMddHHmmss")
-//        PTNSLogConsole("Time>>>>>>>>>>>>>>>>>>>>>>>\(requestTime)")
-//
-//        let sha512 = (requestTime + mc_id + merchant_auth).pt.shaCrypt(cryptType: .SHA512, key: "", lower: false)
-//        
-//        let abaPostDic = ["request_time":requestTime,"merchant_id":mc_id,"merchant_auth":merchant_auth,"hash":sha512]
-//        
-//        PTNSLogConsole("RSA>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: merchant_auth))")
-//        Task.init {
-//            do {
-//                let model = try await Network.requestApi(needGobal: false, urlStr: "https://checkout.payway.com.kh/api/merchant-portal/merchant-access/online-transaction/refund",method: .post,parameters:abaPostDic)
-//                PTNSLogConsole("成功\(model)")
-//            } catch {
-//                PTNSLogConsole("請求報錯\(error.localizedDescription)")
-//            }
-//        }
-
         return true
     }
     
-    func sideMenuConfig() {
-        PTSideMenuControl.preferences.basic.direction = .right
-        PTSideMenuControl.preferences.basic.menuWidth = 240
-        PTSideMenuControl.preferences.basic.defaultCacheKey = "0"
+    // MARK: UISceneSession Lifecycle
+
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        // Called when a new scene session is being created.
+        // Use this method to select a configuration to create the new scene with.
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        // Called when the user discards a scene session.
+        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
+        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
     func minCount(@PTClampedProperyWrapper(range:1...10) counts:Int) ->Int {
@@ -434,7 +260,7 @@ extension AppDelegate {
         PSecurityStrategy.removeBlurEffect()
     }
         
-    override class func appDelegate() -> AppDelegate? {
-        UIApplication.shared.delegate as? AppDelegate
-    }
+//    class func appDelegate() -> AppDelegate? {
+//        UIApplication.shared.delegate as? AppDelegate
+//    }
 }

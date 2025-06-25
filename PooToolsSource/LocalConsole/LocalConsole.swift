@@ -291,7 +291,7 @@ public class LocalConsole: NSObject {
             
             var allViews: [UIView] = []
             
-            for window in UIApplication.shared.windows {
+            for window in UIApplication.shared.findWindows {
                 allViews.append(contentsOf: subviewsRecursive(in: window))
             }
             allViews.forEach {
@@ -909,7 +909,7 @@ public class LocalConsole: NSObject {
     }
     
     func respringAction() {
-        guard let window = UIApplication.shared.windows.first else { return }
+        guard let window = AppWindows else { return }
         
         window.layer.cornerRadius = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat
         window.layer.masksToBounds = true
@@ -1248,7 +1248,11 @@ extension String {
 
 extension UIDevice {
     var hasNotch: Bool {
-        UIApplication.shared.windows[0].safeAreaInsets.bottom > 0
+        if let window = AppWindows {
+            return window.safeAreaInsets.bottom > 0
+        } else {
+            return false
+        }
     }
 }
 

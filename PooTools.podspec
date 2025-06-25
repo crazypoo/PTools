@@ -1,15 +1,15 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.75.15'
+    s.version     = '3.76.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
-    s.platform = :ios, '14.0'
+    s.platform = :ios, '15.0'
 #    s.requires_arc = true
 #    s.static_framework = true
-    s.ios.deployment_target = '14.0'
+    s.ios.deployment_target = '15.0'
     s.swift_versions = '5.0'
     s.xcconfig = {"ENABLE_BITCODE" => "NO"}
     s.pod_target_xcconfig = {
@@ -958,7 +958,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/Appz'
-        subspec.dependency 'PooTools/LaunchTimeProfiler'
+#        subspec.dependency 'PooTools/LaunchTimeProfiler'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/PopoverKit'
         subspec.dependency 'PooTools/ScanQRCode'

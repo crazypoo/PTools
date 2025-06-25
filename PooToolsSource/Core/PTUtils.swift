@@ -271,7 +271,7 @@ public extension PTUtils {
     
     // MARK: - Root Controller
     class func getRootViewController() -> UIViewController? {
-        return UIApplication.shared.windows.filter { $0.isKeyWindow }.first?.rootViewController
+        return AppWindows?.rootViewController
     }
     
     //MARK: - 需要注册的时候传入一个导航包含的控制器
@@ -284,7 +284,7 @@ public extension PTUtils {
     
     // MARK: - 活躍 VC
     class func getActivityViewController() -> UIViewController? {
-        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }),
+        guard let window = AppWindows,
               let rootVC = window.rootViewController else {
             return nil
         }
