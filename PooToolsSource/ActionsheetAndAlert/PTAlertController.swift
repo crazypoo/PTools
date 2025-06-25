@@ -22,7 +22,10 @@ open class PTAlertController: PTBaseViewController {
     
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        let keyWindow = UIApplication.pt.currentWindowScene?.windows.first { $0.isKeyWindow }
+        let keyWindow = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow }
 
         if let prefersStatusBarHidden = keyWindow?.rootViewController?.prefersStatusBarHidden {
             StatusBarManager.shared.isHidden = prefersStatusBarHidden

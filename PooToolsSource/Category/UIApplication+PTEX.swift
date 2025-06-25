@@ -105,15 +105,6 @@ public extension PTPOP where Base: UIApplication {
         }
         return (content as! String)
     }
-    
-    static var currentWindowScene : UIWindowScene? {
-        if let windowScene = UIApplication.shared.connectedScenes
-            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
-            // 现在你可以使用 windowScene 了
-            return windowScene
-        }
-        return nil
-    }
 }
 
 @available(iOSApplicationExtension, unavailable)
