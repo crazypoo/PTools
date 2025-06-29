@@ -864,6 +864,7 @@
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
 		55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */; };
 		55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73A29D5C80900CF6272 /* PTTextField.swift */; };
+		55F7C2B62E118C8900EF2945 /* PTAutoScrollLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7C2B52E118C8900EF2945 /* PTAutoScrollLabel.swift */; };
 		55FA6CB12B02354800BC464B /* PTDarkSmartFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */; };
 		55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */; };
 		55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */; };
@@ -1809,6 +1810,7 @@
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
 		55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTRefreshEX.swift"; sourceTree = "<group>"; };
 		55F7A73A29D5C80900CF6272 /* PTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTextField.swift; sourceTree = "<group>"; };
+		55F7C2B52E118C8900EF2945 /* PTAutoScrollLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAutoScrollLabel.swift; sourceTree = "<group>"; };
 		55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkSmartFooter.swift; sourceTree = "<group>"; };
 		55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModeHeader.swift; sourceTree = "<group>"; };
 		55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkFollowSystemFooter.swift; sourceTree = "<group>"; };
@@ -2221,6 +2223,7 @@
 				550CE4A12AF12EB70052539D /* PTActiveType.swift */,
 				5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */,
 				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
+				55F7C2B52E118C8900EF2945 /* PTAutoScrollLabel.swift */,
 			);
 			path = Label;
 			sourceTree = "<group>";
@@ -4020,7 +4023,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4030,9 +4034,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4047,9 +4055,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4313,6 +4325,7 @@
 				55BA90252D29A7D70065FBD0 /* HierarchyIdentitySectionDataSource.swift in Sources */,
 				55BA90262D29A7D70065FBD0 /* ElementChildrenPanelViewCode.swift in Sources */,
 				55BA90272D29A7D70065FBD0 /* ExpirableProtocol.swift in Sources */,
+				55F7C2B62E118C8900EF2945 /* PTAutoScrollLabel.swift in Sources */,
 				55BA90282D29A7D70065FBD0 /* OptionListControl.swift in Sources */,
 				55BA90292D29A7D70065FBD0 /* ApplicationAttributesSectionDataSource.swift in Sources */,
 				55BA902A2D29A7D70065FBD0 /* ViewHierarchyActionableProtocol.swift in Sources */,
