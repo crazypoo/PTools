@@ -363,6 +363,10 @@ public class PTCycleScrollView: UIView {
     /// Loading progress color
     public var loadingProgressColor:DynamicColor = .purple
 
+    public var autoPlayVideo:Bool = false
+    public var playEndCallback:PTActionTask?
+    public var showPlayButton:Bool = true
+    
     // MARK: - Private
     /// 注意： 由于属性较多，所以请使用style对应的属性，如果没有标明则通用
     /// PageControl
@@ -749,7 +753,6 @@ extension PTCycleScrollView {
             self.didSelectItemAtIndexClosure?(self.pageControlIndexWithCurrentCellIndex(index: self.currentIndex()))
         }
         cell.addGestureRecognizer(tap)
-
         return cell
     }
 
@@ -798,12 +801,18 @@ extension PTCycleScrollView {
                 cell.videoLink = videoPath
 
                 if itemIndex == 0, let url = URL(string: videoPath) {
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        cell.setPlayer(videoQ: url)
+                    if self!.autoPlayVideo {
+                        PTGCDManager.gcdAfter(time: 0.1) {
+                            cell.setPlayer(videoQ: url)
+                        }
                     }
                 } else {
-                    cell.playButton.isHidden = false
+                    cell.playButton.isHidden = !self!.showPlayButton
                 }
+            }
+            cell.showPlayButton = self.showPlayButton
+            cell.playEndcallback = {
+                self.playEndCallback?()
             }
         } else {
             loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
@@ -811,6 +820,18 @@ extension PTCycleScrollView {
         
         // 对冲数据判断
         setBannerAttTitle(cell: cell, itemIndex: itemIndex)
+    }
+    
+    public func playCurrentCellVideo(playCallback:((Bool)->Void)? = nil) {
+        guard let cell = viewWithTag(100 + currentIndex()) as? PTCycleScrollViewCell else {
+            return
+        }
+        let imagePath = self.imagePaths[currentIndex()]
+        if let videoPath = imagePath as? String, ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()),let url = URL(string: cell.videoLink) {
+            cell.setPlayer(videoQ: url,playCallback: playCallback)
+        } else {
+            playCallback?(false)
+        }
     }
     
     private func setBannerAttTitle(cell:PTCycleScrollViewCell,itemIndex:Int) {
@@ -899,7 +920,7 @@ extension PTCycleScrollView {
     
     /// 当前位置
     /// - Returns: 下标-Index
-    func currentIndex() -> NSInteger {
+    public func currentIndex() -> NSInteger {
         if pageScrollerView.pt.jx_width == 0 || pageScrollerView.pt.jx_height == 0 {
             return 0
         }

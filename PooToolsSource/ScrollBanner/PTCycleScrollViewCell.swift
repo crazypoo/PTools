@@ -145,6 +145,9 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         return view
     }()
     
+    var playEndcallback: PTActionTask? = nil
+    var showPlayButton:Bool = true
+
     deinit {
         // 移除通知监听器
         NotificationCenter.default.removeObserver(self)
@@ -193,7 +196,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         }
     }
     
-    func setPlayer(videoQ:URL) {
+    func setPlayer(videoQ:URL,playCallback:((Bool)->Void)? = nil) {
         imageView.isHidden = true
         playButton.isHidden = true
         playerViewController.view.isHidden = false
@@ -214,6 +217,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         if AVPictureInPictureController.isPictureInPictureSupported() {
             pipController = AVPictureInPictureController(playerLayer: playerLayer!)
         }
+        playCallback?(true)
     }
     
     func startPiP() {
@@ -223,7 +227,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
     }
     
     func resetPlayerView() {
-        playButton.isHidden = false
+        playButton.isHidden = !showPlayButton
         imageView.isHidden = false
         playerViewController.view.isHidden = true
         player?.pause()
@@ -238,5 +242,6 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
     @objc func videoDidEnd(notification: Notification) {
         // 在这里可以进行进一步的处理，比如重播、显示提示等
         resetPlayerView()
+        playEndcallback?()
     }
 }
