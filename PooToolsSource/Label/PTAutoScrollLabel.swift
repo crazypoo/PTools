@@ -60,12 +60,30 @@ public class PTAutoScrollLabel: UIView {
             let label = UILabel()
             label.numberOfLines = numberOfLines
 
-            let nameAtt:ASAttributedString = """
-                        \(wrap: .embedding("""
-                        \(text,.foreground(textColor),.font(textFont))
-                        """),.paragraph(.alignment(textAlignment),.lineSpacing(lineSpacing)))
-                        """
-            label.attributed.text = nameAtt
+            if text.containsHTMLTags(),let data = text.data(using: .utf8) {
+                let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+                    .documentType: NSAttributedString.DocumentType.html,
+                    .characterEncoding: String.Encoding.utf8.rawValue
+                ]
+                if let attributedString = try? NSMutableAttributedString(data: data, options: options, documentAttributes: nil) {
+                    let fullRange = NSRange(location: 0, length: attributedString.length)
+                    attributedString.addAttribute(.font, value: textFont, range: fullRange)
+                    attributedString.addAttribute(.foregroundColor, value: textColor, range: fullRange)
+                    label.attributedText = attributedString
+                } else {
+                    label.text = text
+                    label.font = textFont
+                    label.textColor = textColor
+                    label.textAlignment = textAlignment
+                }
+            } else {
+                let nameAtt:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(text,.foreground(textColor),.font(textFont))
+                            """),.paragraph(.alignment(textAlignment),.lineSpacing(lineSpacing)))
+                            """
+                label.attributed.text = nameAtt
+            }
             
             label.tag = i
             label.isUserInteractionEnabled = true
@@ -106,7 +124,7 @@ public class PTAutoScrollLabel: UIView {
         }
     }
 
-    private func stopScrolling() {
+    public func stopScrolling() {
         timer?.invalidate()
         timer = nil
     }

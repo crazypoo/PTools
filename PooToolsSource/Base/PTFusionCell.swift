@@ -628,7 +628,7 @@ public class PTFusionCellContent:UIView {
                     case .Switch(type: .None(type: .Name)):
                         make.right.equalTo(self.valueSwitch!.snp.left).offset(-self.cellModel!.contentRightSpace)
                     case .DisclosureIndicator(type: .None(type: .Name)):
-                        make.right.equalTo(self.accessV!.snp.left).offset(-self.cellModel!.contentRightSpace)
+                        make.right.equalToSuperview().inset(self.cellModel!.contentRightSpace)
                     case .More(type: .None(type: .Name)):
                         make.right.equalTo(self.sectionMore!.snp.left).offset(-self.cellModel!.contentRightSpace)
                     case .Switch(type: .BothImage(type: .NameContent)),
@@ -717,7 +717,7 @@ public class PTFusionCellContent:UIView {
                     case .Switch(type: .None(type: .Name)):
                         make.right.equalTo(self.valueSwitch!.snp.left).offset(-self.cellModel!.contentRightSpace)
                     case .DisclosureIndicator(type: .None(type: .Name)):
-                        make.right.equalTo(self.accessV!.snp.left).offset(-self.cellModel!.contentRightSpace)
+                        make.right.equalToSuperview().inset(self.cellModel!.contentRightSpace)
                     case .More(type: .None(type: .Name)):
                         make.right.equalTo(self.sectionMore!.snp.left).offset(-self.cellModel!.contentRightSpace)
                     case .Switch(type: .BothImage(type: .NameContent)),

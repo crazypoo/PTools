@@ -120,8 +120,8 @@ open class PFloatingButton: UIButton {
         super.init(frame: frame)
         if let superview = view as? UIView {
             superview.addSubview(self)
-        } else if view is UIWindow {
-            AppWindows!.addSubview(self)
+        } else if let window = view as? UIWindow {
+            window.addSubview(self)
         } else {
             AppWindows!.addSubview(self)
         }
