@@ -746,7 +746,8 @@ class PTFuncDetailViewController: PTBaseViewController {
             config.stepperModels = [stepperModel1,stepperModel2,stepperModel3,stepperModel4,stepperModel5]
             config.itemOriginalX = 16
             
-            let stepper = PTStepperView(viewConfig: config)
+            let stepper = PTStepperView()
+            stepper.viewConfigSet(viewConfig: config)
             view.addSubviews([stepper])
             stepper.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()

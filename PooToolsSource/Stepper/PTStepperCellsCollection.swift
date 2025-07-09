@@ -21,7 +21,7 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
                     make.size.equalTo(self.cellModel.stopCircleWidth)
                 }
                 if self.cellModel.stopFinish {
-                    self.circleView.viewCorner(radius: self.cellModel.stopCircleWidth / 2,borderWidth: 1,borderColor: self.cellModel.stopSelectedColor)
+                    self.circleView.viewCorner(radius: self.cellModel.stopCircleWidth / 2,borderWidth: self.cellModel.borderWidth,borderColor: self.cellModel.stopSelectedColor)
                     if self.cellModel.circleFillColor {
                         self.circleView.backgroundColor = self.cellModel.stopFinish ? self.cellModel.stopSelectedColor : .clear
                         self.stopLabel.textColor = self.cellModel.stopFinish ? .white : self.cellModel.stopNormalColor
@@ -29,7 +29,7 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
                         self.stopLabel.textColor = self.cellModel.stopFinish ? self.cellModel.stopSelectedColor : self.cellModel.stopNormalColor
                     }
                 } else {
-                    self.circleView.viewCorner(radius: self.cellModel.stopCircleWidth / 2,borderWidth: 1,borderColor: self.cellModel.stopNormalColor)
+                    self.circleView.viewCorner(radius: self.cellModel.stopCircleWidth / 2,borderWidth: self.cellModel.borderWidth,borderColor: self.cellModel.stopNormalColor)
                     self.stopLabel.textColor = self.cellModel.stopFinish ? self.cellModel.stopSelectedColor : self.cellModel.stopNormalColor
                 }
             }

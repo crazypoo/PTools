@@ -634,31 +634,21 @@ public extension PTPOP where Base: UIImage {
             return
         }
         
-        PTGCDManager.gcdGobalNormal {
-            let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
-            let avAsset = AVURLAsset(url: url, options: opts)
-            let generator = AVAssetImageGenerator(asset: avAsset)
-            generator.appliesPreferredTrackTransform = true
-            generator.maximumSize = maximumSize
-            var cgImage: CGImage? = nil
-            let time = CMTimeMake(value: 0, timescale: 600)
-            var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
-            do {
-                try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
-                guard let image = cgImage else {
-                    PTGCDManager.gcdMain {
-                        closure(nil)
-                    }
-                    return
-                }
-                PTGCDManager.gcdMain {
-                    closure(UIImage(cgImage: image))
-                }
-            } catch {
-                PTGCDManager.gcdMain {
+        let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
+        let avAsset = AVURLAsset(url: url, options: opts)
+        let generator = AVAssetImageGenerator(asset: avAsset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = maximumSize
+        
+        let time = CMTimeMake(value: 0, timescale: 600)
+        
+        generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { _, imageRef, _, result, error in
+            DispatchQueue.main.async {
+                if let cgImage = imageRef, result == .succeeded {
+                    closure(UIImage(cgImage: cgImage))
+                } else {
                     closure(nil)
                 }
-                return
             }
         }
     }
@@ -673,29 +663,19 @@ public extension PTPOP where Base: UIImage {
     static func getVideoFirstImage(asset: AVAsset,
                                    maximumSize: CGSize = CGSize(width: 1000, height: 1000),
                                    closure: @escaping (UIImage?) -> Void) {
-        PTGCDManager.gcdGobalNormal {
-            let generator = AVAssetImageGenerator(asset: asset)
-            generator.appliesPreferredTrackTransform = true
-            generator.maximumSize = maximumSize
-            var cgImage: CGImage? = nil
-            let time = CMTimeMake(value: 0, timescale: 600)
-            var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
-            do {
-                try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
-                guard let image = cgImage else {
-                    PTGCDManager.gcdMain {
-                        closure(nil)
-                    }
-                    return
-                }
-                PTGCDManager.gcdMain {
-                    closure(UIImage(cgImage: image))
-                }
-            } catch {
-                PTGCDManager.gcdMain {
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = maximumSize
+        
+        let time = CMTimeMake(value: 0, timescale: 600)
+        
+        generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { _, imageRef, _, result, error in
+            DispatchQueue.main.async {
+                if let cgImage = imageRef, result == .succeeded {
+                    closure(UIImage(cgImage: cgImage))
+                } else {
                     closure(nil)
                 }
-                return
             }
         }
     }

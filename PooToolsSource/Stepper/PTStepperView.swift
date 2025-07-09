@@ -75,7 +75,7 @@ open class PTStepperListModel:PTBaseModel {
     ///圈圈大小min15max64
     @PTClampedProperyWrapper(range:10...64) open var stopCircleWidth: CGFloat = 44
     ///圈圈线宽度min1max8
-    @PTClampedProperyWrapper(range:1...8) open var borderWidth: CGFloat = 1
+    @PTClampedProperyWrapper(range:0...8) open var borderWidth: CGFloat = 0
     ///普通颜色
     open var stopNormalColor = DynamicColor.lightGray
     ///已经完成颜色
@@ -128,9 +128,9 @@ open class PTStepperView: UIView {
                 } else {
                     itemW = self.viewConfig.itemWidth
                 }
-                return UICollectionView.horizontalLayout(data: section.rows!,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
+                return UICollectionView.horizontalLayout(data: section.rows,itemOriginalX: 0,itemWidth: itemW,itemHeight: self.height,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
             case .Vertical(_):
-                return UICollectionView.waterFallLayout(data: section.rows!,rowCount: 1,itemOriginalX: self.viewConfig.itemOriginalX, itemSpace: 0) { index, rowModels in
+                return UICollectionView.waterFallLayout(data: section.rows,rowCount: 1,itemOriginalX: self.viewConfig.itemOriginalX, itemSpace: 0) { index, rowModels in
                     var realHeight:CGFloat = self.viewConfig.itemHeight
                     if let rowModel = rowModels as? PTRows,let cellModel = rowModel.dataModel as? PTStepperListModel {
                         let contentWidth = CGFloat.kSCREEN_WIDTH - self.viewConfig.itemOriginalX * 2 - cellModel.stopCircleWidth - PTStepperVerticalCell.circleRight - PTAppBaseConfig.share.defaultViewSpace
@@ -219,7 +219,7 @@ open class PTStepperView: UIView {
                                 cell.descLabel.attributed.text = att
                             }
                             
-                            if !cellModel.title.stringIsEmpty() {                                
+                            if !cellModel.title.stringIsEmpty() {
                                 cell.infoLabel.textColor = cellModel.titleColor
                                 cell.infoLabel.font = cellModel.titleFont
                                 cell.infoLabel.text = cellModel.title
@@ -266,18 +266,21 @@ open class PTStepperView: UIView {
         return view
     }()
 
-    public init(viewConfig:PTStepperListConfig = .init()) {
-        self.viewConfig = viewConfig
-        super.init(frame: .zero)
+    public override init(frame:CGRect) {
+        super.init(frame: frame)
         
         addSubviews([listCollection])
         listCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-                
-        PTGCDManager.gcdAfter(time: 0.1) {
+    }
+    
+    public func viewConfigSet(viewConfig:PTStepperListConfig) {
+        self.viewConfig = viewConfig
+        self.layoutSubviews()
+        PTGCDManager.gcdAfter(time: 0.1, block: {
             self.dataListSet()
-        }
+        })
     }
     
     required public init?(coder: NSCoder) {
