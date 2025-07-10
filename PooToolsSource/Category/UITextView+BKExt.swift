@@ -144,12 +144,29 @@ public extension UITextView {
         
     @objc private func pt_maxWordCountAction() -> () {
         
-        guard let maxCount = pt_maxWordCount else { return }
-        if text.pt.typeLengh(.utf8) >= maxCount.intValue {
-            /// 输入的文字超过最大值
-            text = (self.text as NSString).substring(to: maxCount.intValue)
-            PTNSLogConsole("已经超过限制的字数了！", levelType: PTLogMode,loggerType: .TextView)
+        guard let maxCount = pt_maxWordCount?.intValue, maxCount > 0 else { return }
+        guard let currentText = self.text else { return }
+
+        if currentText.pt.typeLengh(.utf8) > maxCount {
+            let truncated = truncateToUTF8ByteLimit(currentText, maxBytes: maxCount)
+            self.text = truncated
+            PTNSLogConsole("已经超过限制的字数了！", levelType: PTLogMode, loggerType: .TextView)
         }
+    }
+    
+    private func truncateToUTF8ByteLimit(_ text: String, maxBytes: Int) -> String {
+        var totalBytes = 0
+        var result = ""
+
+        for scalar in text.unicodeScalars {
+            let utf8Len = String(scalar).lengthOfBytes(using: .utf8)
+            if totalBytes + utf8Len > maxBytes {
+                break
+            }
+            totalBytes += utf8Len
+            result.append(String(scalar))
+        }
+        return result
     }
     
     /// text 长度发生了变化
@@ -169,7 +186,7 @@ public extension UITextView {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, 
+    override func observeValue(forKeyPath keyPath: String?,
                                of object: Any?,
                                change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
