@@ -56,6 +56,7 @@
 		55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */; };
 		55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */; };
 		55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DF329F372A600244E44 /* PTDebugFunction.swift */; };
+		55040A842E20B37C0074A047 /* PTTriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55040A832E20B37C0074A047 /* PTTriangleView.swift */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
 		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
@@ -982,6 +983,7 @@
 		55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+FloatPanel.swift"; sourceTree = "<group>"; };
 		55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+Debug.swift"; sourceTree = "<group>"; };
 		55024DF329F372A600244E44 /* PTDebugFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugFunction.swift; sourceTree = "<group>"; };
+		55040A832E20B37C0074A047 /* PTTriangleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTriangleView.swift; sourceTree = "<group>"; };
 		5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentCell.swift; sourceTree = "<group>"; };
 		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
 		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
@@ -3643,6 +3645,7 @@
 				552BECC82DDEDBB900A5BDBB /* PTLazyViewContainer.swift */,
 				552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */,
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
+				55040A832E20B37C0074A047 /* PTTriangleView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4023,7 +4026,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4033,9 +4037,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4050,9 +4058,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4688,6 +4700,7 @@
 				559C3D422B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
+				55040A842E20B37C0074A047 /* PTTriangleView.swift in Sources */,
 				55F175A52DF0364400899D38 /* PTLoadedLibsFunction.swift in Sources */,
 				5571F6122AFD23B000DB4420 /* PTWindowSceneDelegate.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,

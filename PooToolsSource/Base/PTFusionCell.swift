@@ -879,7 +879,8 @@ public class PTFusionCellContent:UIView {
                     if cellModel!.contentAttr != nil && cellModel!.content.stringIsEmpty() {
                         contentLabel!.attributed.text = cellModel!.contentAttr
                     } else if cellModel!.contentAttr == nil && !cellModel!.content.stringIsEmpty() {
-                        let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel!.content)",.paragraph(.alignment(.right),.lineSpacing(cellModel!.labelLineSpace)),.font(cellModel!.contentFont),.foreground(cellModel!.contentTextColor))
+                        contentLabel?.numberOfLines = cellModel?.contentNumberOfLines ?? 0
+                        let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel!.content)",.paragraph(.alignment(.right),.lineSpacing(cellModel!.labelLineSpace),.lineBreakMode(cellModel!.contentLineBreakMode)),.font(cellModel!.contentFont),.foreground(cellModel!.contentTextColor))
                         contentLabel!.attributed.text = contentAtts
                     }
                 default:

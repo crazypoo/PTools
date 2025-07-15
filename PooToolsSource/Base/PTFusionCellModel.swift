@@ -50,6 +50,10 @@ open class PTFusionCellModel: NSObject {
     public var contentAttr:ASAttributedString?
     ///content字体
     public var contentFont:UIFont = .appfont(size: 16)
+    ///content行數
+    public var contentNumberOfLines:Int = 0
+    ///content換行
+    public var contentLineBreakMode:NSLineBreakMode = .byCharWrapping
     ///AccessoryView类型
     public var accessoryType:PTFusionShowAccessoryType = .NoneAccessoryView
     ///是否有线
