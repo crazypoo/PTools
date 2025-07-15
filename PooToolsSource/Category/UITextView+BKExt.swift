@@ -143,46 +143,31 @@ public extension UITextView {
     }
         
     @objc private func pt_maxWordCountAction() -> () {
-        
         guard let maxCount = pt_maxWordCount?.intValue, maxCount > 0 else { return }
         guard let currentText = self.text else { return }
 
-        if currentText.pt.typeLengh(.utf8) > maxCount {
-            let truncated = truncateToUTF8ByteLimit(currentText, maxBytes: maxCount)
-            self.text = truncated
-            PTNSLogConsole("已经超过限制的字数了！", levelType: PTLogMode, loggerType: .TextView)
+        // 只有未組字狀態才強制截斷（防止輸入中被打斷）
+        if let markedTextRange = self.markedTextRange,
+           self.position(from: markedTextRange.start, offset: 0) != nil {
+            return
         }
-    }
-    
-    private func truncateToUTF8ByteLimit(_ text: String, maxBytes: Int) -> String {
-        var totalBytes = 0
-        var result = ""
 
-        for scalar in text.unicodeScalars {
-            let utf8Len = String(scalar).lengthOfBytes(using: .utf8)
-            if totalBytes + utf8Len > maxBytes {
-                break
-            }
-            totalBytes += utf8Len
-            result.append(String(scalar))
+        if currentText.count > maxCount {
+            self.text = String(currentText.prefix(maxCount))
+            PTNSLogConsole("已经超过限制的字数了！（已截断）", levelType: PTLogMode, loggerType: .TextView)
         }
-        return result
     }
-    
+        
     /// text 长度发生了变化
     @objc private func pt_textDidChange() -> () {
         
-        if let placeholderLabel = pt_placeholderLabel {
-            placeholderLabel.isHidden = (text.count > 0)
-        }
-        
-        if let wordCountLabel = pt_wordCountLabel {
-            guard let count = pt_maxWordCount else { return }
-            var valueInt = 0
-            if text.pt.typeLengh(.utf8) > count.intValue {
-                valueInt = (text.pt.typeLengh(.utf8) - count.intValue)
-            }
-            wordCountLabel.text = "\(text.pt.typeLengh(.utf8) - valueInt)/\(count)"
+        pt_placeholderLabel?.isHidden = (text.count > 0)
+
+        if let wordCountLabel = pt_wordCountLabel,
+           let count = pt_maxWordCount {
+            let currentCount = text.count
+            let safeCount = min(currentCount, count.intValue)
+            wordCountLabel.text = "\(safeCount)/\(count)"
         }
     }
     
