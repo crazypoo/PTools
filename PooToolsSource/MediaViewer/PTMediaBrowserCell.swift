@@ -64,7 +64,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 effectView.removeFromSuperview()
                 backgroundImageView.removeFromSuperview()
             }
-            reloadButton.setTitle(self.viewConfig.imageReloadButton, for: .normal)
             self.cellLoadData()
         }
     }
@@ -208,9 +207,17 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             
     func createReloadButton() {
         contentView.addSubview(reloadButton)
+        let reloadMaxWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        reloadButton.setTitle(self.viewConfig.imageReloadButton, for: .normal)
+        var reloadWidth = reloadButton.sizeFor(height: 34).width + 16
+        var baseHeight:CGFloat = 34
+        if reloadWidth > reloadMaxWidth {
+            reloadWidth = reloadMaxWidth
+            baseHeight = reloadButton.sizeFor(lineSpacing: 2.5,width: reloadMaxWidth).height + 16
+        }
         reloadButton.snp.makeConstraints { make in
-            make.width.equalTo(200)
-            make.height.equalTo(34)
+            make.width.equalTo(reloadWidth)
+            make.height.equalTo(baseHeight)
             make.centerY.centerX.equalToSuperview()
         }
         bringSubviewToFront(reloadButton)
