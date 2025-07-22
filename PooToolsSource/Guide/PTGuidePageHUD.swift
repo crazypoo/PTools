@@ -155,6 +155,7 @@ public class PTGuidePageHUD: UIView {
                     self.buttonClick(sender: sender)
                 }
                 imageView.addSubview(startButton)
+                let y = CGFloat.kTabbarSaveAreaHeight + 10 + 44 / 2 + 20
                 startButton.snp.makeConstraints { make in
                     make.width.equalTo(startButton.sizeFor(height: 44).width + 10)
                     make.height.equalTo(44)
@@ -163,7 +164,6 @@ public class PTGuidePageHUD: UIView {
                     case .none:
                         make.bottom.equalTo(imageView).inset(CGFloat.kTabbarSaveAreaHeight + 40)
                     default:
-                        let y = CGFloat.kTabbarSaveAreaHeight + 10 + 44 / 2 + 20
                         make.bottom.equalToSuperview().inset(y)
                     }
                 }

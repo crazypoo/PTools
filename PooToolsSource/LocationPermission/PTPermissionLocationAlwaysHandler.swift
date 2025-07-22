@@ -36,7 +36,7 @@ class PTPermissionLocationAlwaysHandler: NSObject, @preconcurrency CLLocationMan
     @MainActor func requestPermission(_ completionHandler: @escaping PTActionTask) {
         self.completionHandler = completionHandler
         
-        let status = CLLocationManager.authorizationStatus()
+        let status = locationManager.authorizationStatus
 
         switch status {
         case .notDetermined:

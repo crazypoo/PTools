@@ -38,6 +38,8 @@ public struct SVGProcessor: ImageProcessor {
                 return img
             }
             return nil
+        @unknown default:
+            return nil
         }
     }
     

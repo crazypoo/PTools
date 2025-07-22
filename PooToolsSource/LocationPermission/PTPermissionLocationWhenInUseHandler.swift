@@ -45,7 +45,7 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
             #elseif os(macOS)
             locationManager.authorizationStatus
             #else
-            CLLocationManager.authorizationStatus()
+            locationManager.authorizationStatus
             #endif
         }()
 

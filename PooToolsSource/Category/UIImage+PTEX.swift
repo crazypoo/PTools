@@ -293,53 +293,70 @@ public extension UIImage {
     ///加水印
     @objc func watermark(title:String,
                          font:UIFont = UIFont.systemFont(ofSize: 23),
-                         color:UIColor?) -> UIImage {
-        let originalImage = self
+                         color:UIColor? = nil) -> UIImage {
         
-        let HORIZONTAL_SPACE = 30
-        let VERTICAL_SPACE = 50
+        let imageSize = self.size
+        let viewWidth = imageSize.width
+        let viewHeight = imageSize.height
         
-        let viewWidth = originalImage.size.width
-        let viewHeight = originalImage.size.height
+        let horizontalSpacing: CGFloat = 30
+        let verticalSpacing: CGFloat = 50
         
-        let newColor = (color == nil) ? originalImage.imageMostColor() : color
+        // 使用指定颜色或主色
+        let textColor = color ?? self.imageMostColor()
         
-        UIGraphicsBeginImageContext(CGSize.init(width: viewWidth, height: viewHeight))
-        originalImage.draw(in: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
-        let sqrtLength = sqrt(viewWidth * viewWidth + viewHeight * viewHeight)
-        let attr = [NSAttributedString.Key.font:font,NSAttributedString.Key.foregroundColor:newColor!]
-        let mark : NSString = title as NSString
-        let strWidth = UIView.sizeFor(string: title, font: font).width
-        let strHeight = UIView.sizeFor(string: title, font: font).height
-        let context = UIGraphicsGetCurrentContext()!
-        context.concatenate(CGAffineTransform(translationX: viewWidth/2, y: viewHeight/2))
-        context.concatenate(CGAffineTransform(rotationAngle: (Double.pi / 2 / 3)))
-        context.concatenate(CGAffineTransform(translationX: -viewWidth/2, y: -viewHeight/2))
+        // 计算对角线长度用于水印覆盖范围
+        let diagonalLength = hypot(viewWidth, viewHeight)
         
-        let horCount : Int = Int(sqrtLength / (strWidth + CGFloat(HORIZONTAL_SPACE)) + 1)
-        let verCount : Int = Int(sqrtLength / (strHeight + CGFloat(VERTICAL_SPACE)) + 1)
+        // 创建属性字符串属性
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: textColor
+        ]
         
-        let orignX = -(sqrtLength - viewWidth)/2
-        let orignY = -(sqrtLength - viewHeight)/2
+        // 计算文字尺寸
+        let textSize = (title as NSString).size(withAttributes: attributes)
         
-        var tempOrignX = orignX
-        var tempOrignY = orignY
+        // 准备绘图上下文
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
+        defer { UIGraphicsEndImageContext() }
         
-        let totalCount : Int = Int(horCount * verCount)
-        for i in 0...totalCount {
-            mark.draw(in: CGRect(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
-            if i % horCount == 0 && i != 0 {
-                tempOrignX = orignX
-                tempOrignY += (strHeight + CGFloat(VERTICAL_SPACE))
-            } else {
-                tempOrignX += (strWidth + CGFloat(HORIZONTAL_SPACE))
+        // 绘制原始图片
+        self.draw(in: CGRect(origin: .zero, size: imageSize))
+        
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return self
+        }
+        
+        // 保存当前上下文状态
+        context.saveGState()
+        
+        // 旋转整个画布
+        context.translateBy(x: viewWidth / 2, y: viewHeight / 2)
+        context.rotate(by: CGFloat.pi / 3) // 60度
+        context.translateBy(x: -viewWidth / 2, y: -viewHeight / 2)
+        
+        // 计算水印布局起点
+        let startX = -(diagonalLength - viewWidth) / 2
+        let startY = -(diagonalLength - viewHeight) / 2
+        
+        let columns = Int(diagonalLength / (textSize.width + horizontalSpacing)) + 1
+        let rows = Int(diagonalLength / (textSize.height + verticalSpacing)) + 1
+        
+        // 绘制水印文本
+        for row in 0..<rows {
+            for col in 0..<columns {
+                let x = startX + CGFloat(col) * (textSize.width + horizontalSpacing)
+                let y = startY + CGFloat(row) * (textSize.height + verticalSpacing)
+                (title as NSString).draw(in: CGRect(x: x, y: y, width: textSize.width, height: textSize.height), withAttributes: attributes)
             }
         }
         
-        let finalImg = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
+        // 恢复上下文状态
         context.restoreGState()
-        return finalImg
+        
+        // 获取最终图片
+        return UIGraphicsGetImageFromCurrentImageContext() ?? self
     }
     
     func imageScale(scaleSize:CGFloat)->UIImage {

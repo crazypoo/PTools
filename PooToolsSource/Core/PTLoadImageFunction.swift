@@ -135,6 +135,14 @@ public class PTLoadImageFunction: NSObject {
         // 如果有快取就直接取出
         if ImageCache.default.isCached(forKey: cacheKey) {
             do {
+                // 优先从磁盘取原始数据
+                if let data = try? ImageCache.default.diskStorage.value(forKey: cacheKey),
+                   data.detectImageType() == .GIF {
+                    let frames = handleGIFData(data)
+                    return (frames, frames.first)
+                }
+
+                // fallback: 从 Kingfisher 解码过的 UIImage 读取
                 let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
                 if let image = result.image {
                     if let frames = image.images, !frames.isEmpty {
@@ -164,7 +172,7 @@ public class PTLoadImageFunction: NSObject {
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let value):
-                            ImageCache.default.store(value.image, forKey: url.absoluteString)
+                            ImageCache.default.store(value.image,original: value.originalData, forKey: cacheKey)
                             let data = value.originalData
                             if data.detectImageType() == .GIF {
                                 let frames = handleGIFData(data)
