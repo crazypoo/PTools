@@ -15,8 +15,8 @@ public extension View {
                 isPresent.wrappedValue = false
                 completion?()
             }
-            
-            if let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first {
+
+            if let window = AppWindows {
                 view.present(on: window, completion: wrapperCompletion)
             }
         }

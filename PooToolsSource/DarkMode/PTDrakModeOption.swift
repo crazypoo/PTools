@@ -108,7 +108,7 @@ public extension PTDarkModeOption {
         if (PTDarkModeOption.isFollowSystem) {
             PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: true)
         } else {
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = PTDarkModeOption.isLight ? .light : .dark
+            AppWindows?.overrideUserInterfaceStyle = PTDarkModeOption.isLight ? .light : .dark
         }
     }
     
@@ -121,9 +121,9 @@ public extension PTDarkModeOption {
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
         // 1.2、设置模式的保存
         if isFollowSystem {
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = .unspecified
+            AppWindows?.overrideUserInterfaceStyle = .unspecified
         } else {
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
+            AppWindows?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
         }
     }
     
@@ -145,7 +145,7 @@ public extension PTDarkModeOption {
         // 1.1、设置智能换肤
         UserDefaults.pt.userDefaultsSetValue(value: isSmartPeeling, key: PTSmartPeelingKey)
         // 1.2、智能换肤根据时间段来设置：黑或者白
-        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
+        AppWindows?.overrideUserInterfaceStyle = isLight ? .light : .dark
         // 1.3、设置跟随系统：否
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
         UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
@@ -170,7 +170,7 @@ public extension PTDarkModeOption {
         PTDarkModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
         
         // 1.1、只要设置了模式：就是黑或者白
-        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = light ? .light : .dark
+        AppWindows?.overrideUserInterfaceStyle = light ? .light : .dark
         // 1.2、黑白模式的设置
         UserDefaults.pt.userDefaultsSetValue(value: light, key: PTLightDarkKey)
     }

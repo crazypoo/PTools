@@ -101,10 +101,7 @@ class AppDelegate: PTAppWindowsDelegate {
         Bugly.start(withAppId: "32b6206a5d",
                     developmentDevice: debugDevice,
                     config: buglyConfig)
-        
-        PTDarkModeOption.defaultDark()
-        StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
-        
+                
         createSettingBundle()
 
         IQKeyboardToolbarManager.shared.isEnabled = true
@@ -127,6 +124,8 @@ class AppDelegate: PTAppWindowsDelegate {
             
             return sideMeniController
         }, tint: .white)
+        PTDarkModeOption.defaultDark()
+        StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
 #if DEBUG
         let filePath = NSTemporaryDirectory().appending("/demo.order")
         YCSymbolTracker.exportSymbols(filePath: filePath)
@@ -168,7 +167,7 @@ class AppDelegate: PTAppWindowsDelegate {
 
         PTGCDManager.gcdMain(block: {
             //"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-            PTLaunchAdMonitor.share.showAd(path: "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"],skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10)) {
+            PTLaunchAdMonitor.share.showAd(path: "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"],skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10), timeUp:  {
                 let guideModel = PTGuidePageModel()
                 guideModel.mainView = self.window!
                 guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
@@ -187,7 +186,7 @@ class AppDelegate: PTAppWindowsDelegate {
                     }
                     self.guideHud!.guideShow()
                 }
-            }
+            })
         })
                 
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")

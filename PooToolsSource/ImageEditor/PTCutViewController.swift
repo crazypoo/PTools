@@ -432,7 +432,7 @@ class PTCutViewController: PTBaseViewController {
         }
     }
     
-    func showCutRatio(handle:((UICollectionView) -> Void)? = nil) {
+    func showCutRatio(handle:PTCollectionCallback? = nil) {
         let rows = clipRatios.map { PTRows(ID:PTImageCutRatioCell.ID,dataModel: $0) }
         let section = PTSection(rows: rows)
         ratioCollectionView.showCollectionDetail(collectionData: [section],finishTask: handle)

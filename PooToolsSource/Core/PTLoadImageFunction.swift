@@ -172,7 +172,7 @@ public class PTLoadImageFunction: NSObject {
                             } else {
                                 continuation.resume(returning: ([value.image], value.image))
                             }
-                        case .failure(let error):
+                        case .failure( _):
                             continuation.resume(returning: (nil, nil))
                         }
                     }

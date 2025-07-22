@@ -45,12 +45,15 @@ public extension UIApplication {
         }
     }
     
+    var currentWindows:[UIWindow]? {
+        return self.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+    }
+    
     var currentWindow: UIWindow? {
         if #available(iOS 13.0, *) {
-            return self.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first { $0.isKeyWindow }
+            return self.currentWindows?.first { $0.isKeyWindow }
         } else {
             return self.keyWindow
         }
@@ -110,10 +113,6 @@ public extension PTPOP where Base: UIApplication {
 @available(iOSApplicationExtension, unavailable)
 public extension UIApplication {
     var statusBarHeight: CGFloat {
-        if let window = UIApplication.shared.windows.first {
-            return window.safeAreaInsets.top
-        } else {
-            return 0
-        }
+        return AppWindows?.safeAreaInsets.top ?? 0
     }
 }

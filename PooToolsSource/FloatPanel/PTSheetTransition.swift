@@ -106,7 +106,7 @@ public class PTSheetTransition: NSObject, UIViewControllerAnimatedTransitioning 
 
     func restorePresentor(_ presenter: UIViewController, animated: Bool = true, animations: (() -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
         PTSheetTransition.currentPresenters.removeAll(where: { $0 == presenter })
-        let topSafeArea = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.compatibleSafeAreaInsets.top ?? 0
+        let topSafeArea = AppWindows?.compatibleSafeAreaInsets.top ?? 0
         UIView.animate(
             withDuration: self.options.transitionDuration,
             animations: {
@@ -135,8 +135,8 @@ public class PTSheetTransition: NSObject, UIViewControllerAnimatedTransitioning 
         guard self.options.shrinkPresentingViewController, let presenter = self.presenter else { return }
         
         var scale: CGFloat = min(1, 0.92 + (0.08 * percentComplete))
-
-        let topSafeArea = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.compatibleSafeAreaInsets.top ?? 0
+        
+        let topSafeArea = AppWindows?.compatibleSafeAreaInsets.top ?? 0
 
         presenter.view.layer.transform = CATransform3DConcat(CATransform3DMakeTranslation(0, (1 - percentComplete) * topSafeArea/2, 0), CATransform3DMakeScale(scale, scale, 1))
         presenter.view.layer.cornerRadius = self.options.presentingViewCornerRadius * (1 - percentComplete)

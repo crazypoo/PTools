@@ -22,7 +22,7 @@ public enum PTAlertTipsStyle {
 
 public enum PTAlertTipControl {
     public static func present(view: PTAlertTipsProtocol, completion: @escaping PTActionTask) {
-        guard let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first else { return }
+        guard let window = AppWindows else { return }
         view.present(on: window, completion: completion)
     }
     
@@ -30,14 +30,14 @@ public enum PTAlertTipControl {
         switch style {
         #if os(iOS)
         case .Normal:
-            guard let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first else { return }
+            guard let window = AppWindows else { return }
             let view = PTAlertTipsLow(title: title, subtitle: subtitle, icon: icon)
             view.haptic = haptic
             view.present(on: window,completion: dismiss)
         #endif
         #if os(iOS) || os(visionOS)
         case .SupportVisionOS:
-            guard let window = UIApplication.shared.windows.filter({ $0.isKeyWindow }).first else { return }
+            guard let window = AppWindows else { return }
             let view = PTAlertTipsHight(title: title, subtitle: subtitle, icon: icon)
             view.haptic = haptic
             view.present(on: window,completion: dismiss)
@@ -48,7 +48,6 @@ public enum PTAlertTipControl {
     @MainActor public static func dismissAllAlerts(completion: PTActionTask? = nil) {
         
         var alertViews: [PTAlertTipsProtocol] = []
-        
         for window in UIApplication.shared.windows {
             for view in window.subviews {
                 if let view = view as? PTAlertTipsProtocol {
