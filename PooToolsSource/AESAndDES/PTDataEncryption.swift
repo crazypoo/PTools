@@ -139,7 +139,7 @@ public class PTDataEncryption {
     }
     
     //MARK: RSA加密
-    static func stripPEMHeaders(pemString: String) -> String {
+    public static func stripPEMHeaders(pemString: String) -> String {
         return pemString
             .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
             .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
@@ -147,7 +147,7 @@ public class PTDataEncryption {
             .replacingOccurrences(of: "\r", with: "")
     }
     
-    static func publicKeyFromString(_ publicKeyString: String) -> SecKey? {
+    public static func publicKeyFromString(_ publicKeyString: String) -> SecKey? {
         // 去掉 PEM 公钥头尾标识
         let keyString = stripPEMHeaders(pemString: publicKeyString)
         
@@ -175,7 +175,7 @@ public class PTDataEncryption {
         return publicKey
     }
     
-    static func encryptWithRSA(plainText: String, publicKey: SecKey) -> Data? {
+    public static func encryptWithRSA(plainText: String, publicKey: SecKey) -> Data? {
         let data = Data(plainText.utf8)
         let algorithm: SecKeyAlgorithm = .rsaEncryptionPKCS1
 
@@ -192,7 +192,7 @@ public class PTDataEncryption {
         return cfEncryptedData as Data
     }
     
-    static func decryptWithRSA(encryptedData: Data, privateKey: SecKey) -> String? {
+    public static func decryptWithRSA(encryptedData: Data, privateKey: SecKey) -> String? {
         let algorithm: SecKeyAlgorithm = .rsaEncryptionPKCS1
 
         guard SecKeyIsAlgorithmSupported(privateKey, .decrypt, algorithm) else {

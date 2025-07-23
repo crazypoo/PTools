@@ -29,21 +29,12 @@ public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 
 //MARK: CollectionView展示的样式类型
 @objc public enum PTCollectionViewType:Int {
-    case Normal
-    case Gird
-    case WaterFall
-    case Custom
-    case Horizontal
-    case HorizontalLayoutSystem
-    case Tag
+    case Normal,Gird,WaterFall,Custom,Horizontal,HorizontalLayoutSystem,Tag
 }
 
 //MARK: Collection展示的Section底部样式类型
 @objc public enum PTCollectionViewDecorationItemsType:Int {
-    case NoItems
-    case Custom
-    case Normal
-    case Corner
+    case NoItems,Custom,Normal,Corner
 }
 
 @objc public class PTDecorationItemModel:NSObject {
@@ -191,7 +182,7 @@ public class PTCollectionViewConfig:NSObject {
     open var sideIndexTitles:[String]?
     ///索引设置
     open var indexConfig:PTCollectionIndexViewConfiguration?
-    
+    ///移动Item
     open var canMoveItem:Bool = false
     
     ///限制滑动方向
@@ -412,7 +403,7 @@ public class PTCollectionView: UIView {
                 itemLeadingSpace: viewConfig.cellLeadingSpace
             )
         case .Tag:
-            let tagDatas = sectionModel.rows!.map( { $0.dataModel })
+            let tagDatas = sectionModel.rows?.compactMap { $0.dataModel }
             if tagDatas is [PTTagLayoutModel] {
                 group = UICollectionView.tagShowLayout(data: tagDatas as? [PTTagLayoutModel],screenWidth: self.frame.width,itemOriginalX: viewConfig.itemOriginalX,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace,itemTrailingSpace: viewConfig.cellTrailingSpace,itemContentSpace: viewConfig.tagCellContentSpace)
             } else {
@@ -427,12 +418,7 @@ public class PTCollectionView: UIView {
         let sectionWidth: CGFloat
         switch viewConfig.decorationItemsType {
         case .Normal,.Corner,.NoItems:
-            sectionInsets = NSDirectionalEdgeInsets(
-                top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top,
-                leading: sectionInsets.leading,
-                bottom: viewConfig.contentBottomSpace,
-                trailing: sectionInsets.trailing
-            )
+            sectionInsets = NSDirectionalEdgeInsets(top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top, leading: sectionInsets.leading, bottom: viewConfig.contentBottomSpace, trailing: sectionInsets.trailing)
         default:
             sectionInsets = decorationCustomLayoutInsetReset?(section, sectionModel) ?? .zero
         }
@@ -661,10 +647,10 @@ public class PTCollectionView: UIView {
     open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
-    open var itemMoveTo:((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath)->Void)?
+    open var itemMoveTo:((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?
     
-    open var forceController:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->UIViewController?)?
-    open var forceActions:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection)->[UIAction]?)?
+    open var forceController:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> UIViewController?)?
+    open var forceActions:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> [UIAction]?)?
 
     public var viewConfig:PTCollectionViewConfig! {
         didSet {

@@ -46,25 +46,25 @@ open class PTMapActionSheet: NSObject {
         let locations = location
         var navAppName = [String]()
         let appName = currentAppName!
-        if UIApplication.shared.canOpenURL(URL.init(string: "baidumap://")!) {
+        if UIApplication.shared.canOpenURL(URL(string: "baidumap://")!) {
             navAppName.append(baiduName)
         }
         
-        if UIApplication.shared.canOpenURL(URL.init(string: "iosamap://")!) {
+        if UIApplication.shared.canOpenURL(URL(string: "iosamap://")!) {
             navAppName.append(aMapName)
         }
         
-        if UIApplication.shared.canOpenURL(URL.init(string: "comgooglemaps://")!) {
+        if UIApplication.shared.canOpenURL(URL(string: "comgooglemaps://")!) {
             navAppName.append(gMapName)
         }
         
-        if UIApplication.shared.canOpenURL(URL.init(string: "qqmap://")!) && !qqKey!.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
+        if UIApplication.shared.canOpenURL(URL(string: "qqmap://")!) && !qqKey!.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
             navAppName.append(qMapName)
         }
         
         UIAlertController.baseActionSheet(title: sheetTitle,cancelButtonName:cancelButtonName, destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
             let currentLocation = MKMapItem.forCurrentLocation()
-            let toLocation = MKMapItem.init(placemark: MKPlacemark.init(coordinate: locations))
+            let toLocation = MKMapItem(placemark: MKPlacemark(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
             
         } cancelBlock: { sheet in

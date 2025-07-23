@@ -72,7 +72,7 @@ public class PTGuidePageModel: NSObject {
 @objcMembers
 public class PTGuidePageHUD: UIView {
     fileprivate var imageArray : [Any]?
-    fileprivate var imagePageControl:UIView?
+    fileprivate var imagePageControl : UIView?
     fileprivate var slideIntoNumber : Int = 0
     fileprivate var player = AVPlayerViewController()
     
@@ -86,11 +86,31 @@ public class PTGuidePageHUD: UIView {
     }()
     
     lazy var nextButton:UIButton = {
-        let btn = UIButton.init(type: .custom)
+        let btn = UIButton(type: .custom)
         return btn
     }()
     
     fileprivate var viewModel = PTGuidePageModel()
+    
+    lazy var guidePageView:UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = .lightGray
+        view.bounces = false
+        view.isPagingEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.delegate = self
+        return view
+    }()
+    
+    lazy var skipButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.backgroundColor = .gray
+        view.setTitleColor(.white, for: .normal)
+        view.addActionHandlers { sender in
+            self.buttonClick(sender: sender)
+        }
+        return view
+    }()
     
     public init(viewModel:PTGuidePageModel) {
         super.init(frame: viewModel.mainView.frame)
@@ -99,28 +119,14 @@ public class PTGuidePageHUD: UIView {
             imageArray = viewModel.imageArrays
         }
         
-        let guidePageView = UIScrollView()
-        guidePageView.backgroundColor = .lightGray
         guidePageView.contentSize = CGSize.init(width: CGFloat.kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: CGFloat.kSCREEN_HEIGHT)
-        guidePageView.bounces = false
-        guidePageView.isPagingEnabled = true
-        guidePageView.showsHorizontalScrollIndicator = false
-        guidePageView.delegate = self
-        addSubview(guidePageView)
+        addSubviews([guidePageView,skipButton])
         guidePageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        let skipButton = UIButton(type: .custom)
         skipButton.setTitle(viewModel.skipName, for: .normal)
         skipButton.titleLabel?.font = viewModel.skipFont
-        skipButton.backgroundColor = .gray
-        skipButton.setTitleColor(.white, for: .normal)
-        skipButton.layer.cornerRadius =  skipButton.frame.height * 0.5
-        skipButton.addActionHandlers { sender in
-            self.buttonClick(sender: sender)
-        }
-        addSubview(skipButton)
         skipButton.snp.makeConstraints { make in
             make.width.equalTo(skipButton.sizeFor(height: 25).width + 10)
             make.height.equalTo(25)
@@ -129,12 +135,62 @@ public class PTGuidePageHUD: UIView {
         }
         skipButton.isHidden = viewModel.skipShow ? false : true
         skipButton.isUserInteractionEnabled = viewModel.skipShow
+        skipButton.viewCorner(radius: 12.5)
         
+        switch viewModel.pageControl {
+        case .none: break
+        case .pageControl(let type):
+            imagePageControl = setPageControlView(type: type)
+            if let control = imagePageControl as? UIPageControl {
+                control.addPageControlHandlers { sender in
+                    if viewModel.imageArrays.count == (sender.currentPage + 1) {
+                        self.buttonClick(sender: nil)
+                    } else {
+                        self.guidePageView.contentOffset.x = self.guidePageView.contentOffset.x + self.guidePageView.frame.size.width
+                    }
+                }
+            }
+        }
+
+        var pageViews = [UIView]()
+        if let control = imagePageControl {
+            switch viewModel.pageControl {
+            case .none:
+                control.isHidden = true
+            default:
+                control.isHidden = false
+            }
+            pageViews = [forwardButton,nextButton,control]
+        } else {
+            pageViews = [forwardButton,nextButton]
+        }
+        addSubviews(pageViews)
+
+        forwardButton.snp.makeConstraints { make in
+            make.width.height.equalTo(44)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+        
+        nextButton.snp.makeConstraints { make in
+            make.width.height.bottom.equalTo(self.forwardButton)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+
+        if let control = imagePageControl {
+            control.snp.makeConstraints { make in
+                make.left.equalTo(self.forwardButton.snp.right).offset(10)
+                make.right.equalTo(self.nextButton.snp.left).offset(-10)
+                make.height.equalTo(20)
+                make.centerY.equalTo(self.forwardButton)
+            }
+        }
+
         viewModel.imageArrays.enumerated().forEach { (index,value) in
+            let contentData = viewModel.imageArrays[index]
+
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
-            
-            let contentData = viewModel.imageArrays[index]
             imageView.loadImage(contentData: contentData,iCloudDocumentName: viewModel.iCloudDocumentName)
             guidePageView.addSubview(imageView)
             imageView.snp.makeConstraints { make in
@@ -155,68 +211,21 @@ public class PTGuidePageHUD: UIView {
                     self.buttonClick(sender: sender)
                 }
                 imageView.addSubview(startButton)
-                let y = CGFloat.kTabbarSaveAreaHeight + 10 + 44 / 2 + 20
                 startButton.snp.makeConstraints { make in
                     make.width.equalTo(startButton.sizeFor(height: 44).width + 10)
                     make.height.equalTo(44)
                     make.centerX.equalTo(imageView)
                     switch viewModel.pageControl {
                     case .none:
-                        make.bottom.equalTo(imageView).inset(CGFloat.kTabbarSaveAreaHeight + 40)
+                        make.centerY.equalTo(self.forwardButton)
                     default:
-                        make.bottom.equalToSuperview().inset(y)
+                        if let control = self.imagePageControl {
+                            make.bottom.equalTo(control.snp.top).offset(-10)
+                        } else {
+                            make.centerY.equalTo(self.forwardButton)
+                        }
                     }
                 }
-            }
-        }
-        
-        switch viewModel.pageControl {
-        case .none: break
-        case .pageControl(let type):
-            imagePageControl = setPageControlView(type: type)
-            if let control = imagePageControl as? UIPageControl {
-                control.addPageControlHandlers { sender in
-                    if viewModel.imageArrays.count == (sender.currentPage + 1) {
-                        self.buttonClick(sender: nil)
-                    } else {
-                        guidePageView.contentOffset.x = guidePageView.contentOffset.x + guidePageView.frame.size.width
-                    }
-                }
-            }
-            addSubview(imagePageControl!)
-        }
-
-        var pageViews = [UIView]()
-        if let control = imagePageControl {
-            switch viewModel.pageControl {
-            case .none:
-                control.isHidden = true
-            default:
-                control.isHidden = false
-            }
-            pageViews = [forwardButton,nextButton,imagePageControl!]
-        } else {
-            pageViews = [forwardButton,nextButton]
-        }
-        addSubviews(pageViews)
-
-        forwardButton.snp.makeConstraints { make in
-            make.width.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
-            make.left.equalToSuperview().inset(10)
-        }
-        
-        nextButton.snp.makeConstraints { make in
-            make.width.height.bottom.equalTo(forwardButton)
-            make.right.equalToSuperview().inset(10)
-        }
-
-        if let _ = imagePageControl {
-            imagePageControl!.snp.makeConstraints { make in
-                make.left.equalTo(self.forwardButton.snp.right).offset(10)
-                make.right.equalTo(self.nextButton.snp.left).offset(-10)
-                make.height.equalTo(20)
-                make.centerY.equalTo(self.forwardButton)
             }
         }
 
@@ -231,7 +240,7 @@ public class PTGuidePageHUD: UIView {
                 self.pageControlProgressSet(currentIndex: currentCount)
             }
 
-            guidePageView.contentOffset.x = guidePageView.contentOffset.x - guidePageView.frame.size.width
+            self.guidePageView.contentOffset.x = self.guidePageView.contentOffset.x - self.guidePageView.frame.size.width
         }
         
         nextButton.addActionHandlers { seder in
@@ -245,12 +254,12 @@ public class PTGuidePageHUD: UIView {
                     self.buttonClick(sender: seder)
                 } else {
                     self.pageControlProgressSet(currentIndex: currentCount)
-                    guidePageView.contentOffset.x = guidePageView.contentOffset.x + guidePageView.frame.size.width
+                    self.guidePageView.contentOffset.x = self.guidePageView.contentOffset.x + self.guidePageView.frame.size.width
                 }
             }
         }
         
-        if !NSObject.checkObject((viewModel.forwardImage as! NSObject)) && !NSObject.checkObject((viewModel.backImage as! NSObject)) {
+        if let forwardImage = viewModel.forwardImage,let backImage = viewModel.backImage {
             if viewModel.imageArrays.count > 1 {
                 nextButton.isHidden = false
                 nextButton.isUserInteractionEnabled = true
@@ -259,9 +268,8 @@ public class PTGuidePageHUD: UIView {
                 nextButton.isUserInteractionEnabled = false
             }
             
-            nextButton.loadImage(contentData: viewModel.backImage as Any,iCloudDocumentName: viewModel.iCloudDocumentName)
-            
-            forwardButton.loadImage(contentData: viewModel.forwardImage as Any,iCloudDocumentName: viewModel.iCloudDocumentName)
+            nextButton.loadImage(contentData: backImage,iCloudDocumentName: viewModel.iCloudDocumentName)
+            forwardButton.loadImage(contentData: forwardImage,iCloudDocumentName: viewModel.iCloudDocumentName)
         } else {
             nextButton.isHidden = true
             nextButton.isUserInteractionEnabled = false
@@ -273,7 +281,7 @@ public class PTGuidePageHUD: UIView {
     public init(mainView:UIView,
                 videlURL:URL) {
         super.init(frame: mainView.frame)
-        player.player = AVPlayer.init(url: videlURL)
+        player.player = AVPlayer(url: videlURL)
         player.showsPlaybackControls = false
         player.entersFullScreenWhenPlaybackBegins = true
         addSubview(player.view)
@@ -348,7 +356,7 @@ public class PTGuidePageHUD: UIView {
         }
         
         if (imageArray?.count ?? 0 > 0) && page == (imageArray!.count - 1) && slideInto! {
-            let swipeGestureRecognizer = UISwipeGestureRecognizer.init(target: nil, action: nil)
+            let swipeGestureRecognizer = UISwipeGestureRecognizer(target: nil, action: nil)
             if swipeGestureRecognizer.direction == .right {
                 slideIntoNumber += 1
                 if slideIntoNumber == 3 {

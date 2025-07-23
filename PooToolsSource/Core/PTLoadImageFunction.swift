@@ -138,8 +138,9 @@ public class PTLoadImageFunction: NSObject {
                 // 优先从磁盘取原始数据
                 if let data = try? ImageCache.default.diskStorage.value(forKey: cacheKey),
                    data.detectImageType() == .GIF {
-                    let frames = handleGIFData(data)
-                    return (frames, frames.first)
+                    if let frames = imagesAndDurationFromGif(data: data)?.images {
+                        return (frames, frames.first)
+                    }
                 }
 
                 // fallback: 从 Kingfisher 解码过的 UIImage 读取
@@ -175,8 +176,11 @@ public class PTLoadImageFunction: NSObject {
                             ImageCache.default.store(value.image,original: value.originalData, forKey: cacheKey)
                             let data = value.originalData
                             if data.detectImageType() == .GIF {
-                                let frames = handleGIFData(data)
-                                continuation.resume(returning: (frames, frames.first))
+                                if let frames = imagesAndDurationFromGif(data: data)?.images {
+                                    continuation.resume(returning: (frames, frames.first))
+                                } else {
+                                    continuation.resume(returning: (nil, nil))
+                                }
                             } else {
                                 continuation.resume(returning: ([value.image], value.image))
                             }
@@ -189,6 +193,7 @@ public class PTLoadImageFunction: NSObject {
         }
     }
 
+    ///GIF data转GIF实体
     public static func handleGIFData(_ data: Data) -> [UIImage] {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             return []
@@ -206,6 +211,47 @@ public class PTLoadImageFunction: NSObject {
         }
 
         return frames
+    }
+    
+    ///GIF data转GIF实体,带时间
+    public static func imagesAndDurationFromGif(data: Data) -> (images: [UIImage], duration: TimeInterval)? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return nil
+        }
+
+        let count = CGImageSourceGetCount(source)
+        var images: [UIImage] = []
+        var totalDuration: TimeInterval = 0
+
+        for i in 0..<count {
+            guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, nil) else {
+                continue
+            }
+
+            // 获取每帧持续时间
+            let frameDuration = PTLoadImageFunction.gifFrameDuration(source: source, index: i)
+            totalDuration += frameDuration
+
+            let image = UIImage(cgImage: cgImage)
+            images.append(image)
+        }
+
+        return (images, totalDuration)
+    }
+
+    private static func gifFrameDuration(source: CGImageSource, index: Int) -> TimeInterval {
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(source, index, nil) as? [CFString: Any],
+              let gifInfo = properties[kCGImagePropertyGIFDictionary] as? [CFString: Any] else {
+            return 0.1
+        }
+
+        // 获取延迟时间
+        let unclampedDelay = gifInfo[kCGImagePropertyGIFUnclampedDelayTime] as? TimeInterval
+        let clampedDelay = gifInfo[kCGImagePropertyGIFDelayTime] as? TimeInterval
+
+        let delay = unclampedDelay ?? clampedDelay ?? 0.1
+        // 防止 0 延迟导致播放过快
+        return delay < 0.011 ? 0.1 : delay
     }
 
     public static func downloadLivePhoto(photoURL: URL,
