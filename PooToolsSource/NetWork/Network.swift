@@ -11,6 +11,7 @@ import Alamofire
 import KakaJSON
 import Network
 import SwifterSwift
+import CoreTelephony
 
 public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
 public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
@@ -22,10 +23,18 @@ public let AppTestMode = "PT App network environment test".localized()
 public let AppCustomMode = "PT App network environment custom".localized()
 public let AppDisMode = "PT App network environment distribution".localized()
 
-public enum NetWorkStatus: Int {
+public enum NetworkCellularType : String {
+    case ALL = "Cellular"
+    case Cellular2G = "2G"
+    case Cellular3G = "3G"
+    case Cellular4G = "4G"
+    case Cellular5G = "5G"
+}
+
+public enum NetWorkStatus {
     case unknown
     case notReachable
-    case wwan
+    case wwan(type:NetworkCellularType)
     case wifi
     case requiresConnection
     case wiredEthernet
@@ -38,8 +47,8 @@ public enum NetWorkStatus: Int {
             "PT App network status unknow".localized()
         case .notReachable:
             "PT App network status disconnect".localized()
-        case .wwan:
-            "2,3,4G,5G"
+        case .wwan(let subType):
+             subType.rawValue
         case .wifi:
             "WIFI"
         case .requiresConnection:
@@ -54,7 +63,7 @@ public enum NetWorkStatus: Int {
     }
 }
 
-public enum NetWorkEnvironment: Int {
+public enum NetWorkEnvironment : Int {
     case Development
     case Test
     case Distribution
@@ -71,7 +80,7 @@ public enum NetWorkEnvironment: Int {
     }
 }
 
-public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
+public typealias NetWorkStatusBlock = (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double)->()
 public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>)->()
@@ -115,6 +124,8 @@ public class PTNetWorkStatus {
 
     public var reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
     
+    private let ctNetworkInfo = CTTelephonyNetworkInfo()
+
     private func detectNetWork(netWork: @escaping NetWorkStatusBlock) {
         reachabilityManager?.startListening(onUpdatePerforming: { [weak self] (status) in
             guard let weakSelf = self else { return }
@@ -125,7 +136,7 @@ public class PTNetWorkStatus {
                 case .unknown:
                     weakSelf.currentNetWorkStatus = .unknown
                 case .reachable(.cellular):
-                    weakSelf.currentNetWorkStatus = .wwan
+                    weakSelf.currentNetWorkStatus = NetWorkStatus.wwan(type: weakSelf.getCellularType())
                 case .reachable(.ethernetOrWiFi):
                     weakSelf.currentNetWorkStatus = .wifi
                 }
@@ -133,17 +144,53 @@ public class PTNetWorkStatus {
                 weakSelf.currentNetWorkStatus = .notReachable
             }
             
-            netWork(NetWorkStatus.valueName(type: weakSelf.currentNetWorkStatus), NetWorkEnvironment.valueName(type: weakSelf.currentEnvironment),status)
+            netWork(weakSelf.currentNetWorkStatus, weakSelf.currentEnvironment)
         })
     }
     
+    func getCellularType() -> NetworkCellularType {
+        let radioAccess: String
+        if #available(iOS 13.0, *) {
+            guard let id = self.ctNetworkInfo.dataServiceIdentifier else { return .ALL }
+            guard let ra = self.ctNetworkInfo.serviceCurrentRadioAccessTechnology?[id] else { return .ALL }
+            radioAccess = ra
+        } else {
+            guard let ra = self.ctNetworkInfo.serviceCurrentRadioAccessTechnology?.first?.value else { return .ALL }
+            radioAccess = ra
+        }
+        
+        if #available(iOS 14.1, *) {
+            if radioAccess == CTRadioAccessTechnologyNRNSA
+                || radioAccess == CTRadioAccessTechnologyNR {
+                return .Cellular5G
+            }
+        }
+        
+        switch radioAccess {
+        case CTRadioAccessTechnologyGPRS,
+            CTRadioAccessTechnologyEdge,
+        CTRadioAccessTechnologyCDMA1x:
+            return .Cellular2G
+        case CTRadioAccessTechnologyWCDMA,
+            CTRadioAccessTechnologyHSDPA,
+            CTRadioAccessTechnologyHSUPA,
+            CTRadioAccessTechnologyCDMAEVDORev0,
+            CTRadioAccessTechnologyCDMAEVDORevA,
+            CTRadioAccessTechnologyCDMAEVDORevB,
+        CTRadioAccessTechnologyeHRPD:
+            return .Cellular3G
+        case CTRadioAccessTechnologyLTE:
+            return .Cellular4G
+        default:
+            return.Cellular4G
+        }
+    }
+    
     ///监听网络运行状态
-    public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
-        detectNetWork { (status, environment,statusType)  in
-                        
-            PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment),levelType: PTLogMode,loggerType: .Network)
-
-            handle?(statusType)
+    public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetWorkStatus,NetWorkEnvironment)->Void)?) {
+        detectNetWork { (status, environment)  in
+            PTNSLogConsole(String(format: "PT App current mode".localized(), NetWorkStatus.valueName(type: status),NetWorkEnvironment.valueName(type: environment)),levelType: PTLogMode,loggerType: .Network)
+            handle?(status,environment)
         }
     }
     
@@ -154,7 +201,7 @@ public class PTNetWorkStatus {
                     if path.usesInterfaceType(.wifi) {
                         handle(.wifi)
                     } else if path.usesInterfaceType(.cellular) {
-                        handle(.wwan)
+                        handle(NetWorkStatus.wwan(type: self.getCellularType()))
                     } else if path.usesInterfaceType(.wiredEthernet) {
                         handle(.wiredEthernet)
                     } else if path.usesInterfaceType(.loopback) {
@@ -176,7 +223,6 @@ public class PTNetWorkStatus {
             self.monitor.start(queue: queue)
         }
     }
-
     
     public func checkNetworkStatusCancel() {
         monitor.cancel()

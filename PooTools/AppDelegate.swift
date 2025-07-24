@@ -194,7 +194,7 @@ class AppDelegate: PTAppWindowsDelegate {
             let networkShare = PTNetWorkStatus.shared
             PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
             networkShare.reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
-            networkShare.obtainDataFromLocalWhenNetworkUnconnected { state in
+            networkShare.obtainDataFromLocalWhenNetworkUnconnected { state,environment in
                 PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
             }
             networkShare.netWork { state in

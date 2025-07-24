@@ -135,7 +135,12 @@ public class PTSocketManager: NSObject {
     }
     
     func networkIsNotReachable() ->Bool {
-        return networkStatus == .notReachable
+        switch networkStatus {
+        case .notReachable:
+            return true
+        default:
+            return false
+        }
     }
     
     public func startHeartBeat(timeInterval:TimeInterval = 30,

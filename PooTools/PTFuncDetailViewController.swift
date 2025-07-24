@@ -34,7 +34,7 @@ class PTFuncDetailViewController: PTBaseViewController {
     
     var webServer:GCDWebUploader?
     fileprivate var localNetwork:Bool = false
-    var appNetWorkStatus:NetworkReachabilityManager.NetworkReachabilityStatus? = .unknown
+    var appNetWorkStatus:NetWorkStatus? = .unknown
 
     init(typeString: String!) {
         super.init(nibName: nil, bundle: nil)
@@ -48,7 +48,7 @@ class PTFuncDetailViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        PTNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { status in
+        PTNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { status,environment in
             self.appNetWorkStatus = status
         }
     }
@@ -66,7 +66,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             PTGCDManager.gcdAfter(time: 1) {
                 var uploadInfoString = ""
                 switch self.appNetWorkStatus {
-                case .reachable(.ethernetOrWiFi):
+                case .wifi:
                     self.localNetwork = !self.localNetwork
                     if self.localNetwork {
                         FileManager.pt.createFolder(folderPath: PTUploadFilePath)
