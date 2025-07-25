@@ -114,6 +114,13 @@ public class PTStepper: UIView {
         }
     }
     
+    // MARK: 光標顏色
+    open var inputTintColor:UIColor = .systemBlue {
+        didSet {
+            self.numberText.tintColor = inputTintColor
+        }
+    }
+    
     // MARK: 加號圖片
     open var addImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
         didSet {
@@ -156,6 +163,7 @@ public class PTStepper: UIView {
         view.textAlignment = .center
         view.addTarget(self, action: #selector(self.textNumberChange(textField:)), for: .editingChanged)
         view.backgroundColor = self.inputBackgroundColor
+        view.tintColor = self.inputTintColor
         return view
     }()
         
