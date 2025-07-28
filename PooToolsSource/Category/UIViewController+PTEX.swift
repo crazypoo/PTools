@@ -248,8 +248,8 @@ public extension UIViewController {
             }
             return false
         default:
-            var title: String?
-            var msg: String?
+            var title: String = ""
+            var msg: String = ""
             switch avMediaType {
             case .video:
                 title = String.CameraAuthorizationFail
@@ -303,39 +303,28 @@ public extension UIViewController {
     ///   - bannerBackgroundColor: 背景颜色
     ///   - notifiTap: 点击回调
     ///   - notifiDismiss:
-    @objc class func gobal_drop(title:String?,
-                                titleFont:UIFont? = UIFont.appfont(size: 16),
-                                titleColor:UIColor? = .black,
-                                subTitle:String? = nil,
-                                subTitleFont:UIFont? = UIFont.appfont(size: 16),
-                                subTitleColor:UIColor? = .black,
+    @objc class func gobal_drop(title:String = "",
+                                titleFont:UIFont = UIFont.appfont(size: 16),
+                                titleColor:UIColor = .black,
+                                subTitle:String = "",
+                                subTitleFont:UIFont = UIFont.appfont(size: 16),
+                                subTitleColor:UIColor = .black,
                                 duration:CGFloat = 1.5,
-                                bannerBackgroundColor:UIColor? = .white,
+                                bannerBackgroundColor:UIColor = .white,
                                 notifiTap:PTActionTask? = nil,
                                 notifiDismiss:PTActionTask? = nil) {
-        var titleStr = ""
-        if title == nil || (title ?? "").stringIsEmpty() {
-            titleStr = ""
-        } else {
-            titleStr = title!
-        }
-
-        var subTitleStr = ""
-        if subTitle == nil || (subTitle ?? "").stringIsEmpty() {
-            subTitleStr = ""
-        } else {
-            subTitleStr = subTitle!
-        }
+        let titleStr = title
+        let subTitleStr = subTitle
 #if POOTOOLS_NOTIFICATIONBANNER
         let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
         banner.duration = duration
-        banner.backgroundColor = bannerBackgroundColor!
-        banner.subtitleLabel?.textAlignment = UIView.sizeFor(string: subTitleStr, font: subTitleFont!, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
+        banner.backgroundColor = bannerBackgroundColor
+        banner.subtitleLabel?.textAlignment = UIView.sizeFor(string: subTitleStr, font: subTitleFont, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.subtitleLabel?.font = subTitleFont
-        banner.subtitleLabel?.textColor = subTitleColor!
-        banner.titleLabel?.textAlignment = UIView.sizeFor(string: titleStr, font: titleFont!, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
+        banner.subtitleLabel?.textColor = subTitleColor
+        banner.titleLabel?.textAlignment = UIView.sizeFor(string: titleStr, font: titleFont, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.titleLabel?.font = titleFont
-        banner.titleLabel?.textColor = titleColor!
+        banner.titleLabel?.textColor = titleColor
         banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
         banner.onTap = {
             notifiTap?()

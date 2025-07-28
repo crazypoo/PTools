@@ -262,9 +262,18 @@ public extension UIView {
     
     @objc func viewCorner(radius:CGFloat = 0,
                           borderWidth:CGFloat = 0,
-                          borderColor:UIColor = UIColor.clear) {
+                          borderColor:UIColor = UIColor.clear,
+                          capsule:Bool = false) {
         PTGCDManager.gcdMain {
-            self.layer.cornerRadius = radius
+            if #available(iOS 26.0, *) {
+                let topLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                let topRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                let bottomLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                let bottomRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                self.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
+            } else {
+                self.layer.cornerRadius = radius
+            }
             self.layer.masksToBounds = true
             self.layer.borderWidth = borderWidth
             self.layer.borderColor = borderColor.cgColor
@@ -274,16 +283,63 @@ public extension UIView {
     @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,
                                     borderWidth:CGFloat = 0,
                                     borderColor:UIColor = UIColor.clear,
-                                    corner:UIRectCorner = .allCorners) {
+                                    corner:UIRectCorner = .allCorners,
+                                    capsule:Bool = false) {
         PTGCDManager.gcdMain {
-            let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
-            let maskLayer = CAShapeLayer()
-            maskLayer.frame = self.bounds
-            maskLayer.path = maskPath.cgPath
-            self.layer.mask = maskLayer
+            if #available(iOS 26.0, *) {
+                var topLeft:UICornerRadius?
+                var topRight:UICornerRadius?
+                var bottomLeft:UICornerRadius?
+                var bottomRight:UICornerRadius?
+                if corner.contains(.topLeft) {
+                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner.contains(.topRight) {
+                    topRight = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner.contains(.bottomLeft) {
+                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner.contains(.bottomRight) {
+                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner == .allCorners {
+                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
+                    topRight = UICornerRadius(floatLiteral: cornerRadii)
+                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
+                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                self.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
+            } else {
+                let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: cornerRadii, height: cornerRadii))
+                let maskLayer = CAShapeLayer()
+                maskLayer.frame = self.bounds
+                maskLayer.path = maskPath.cgPath
+                self.layer.mask = maskLayer
+            }
+            
             self.layer.masksToBounds = true
             self.layer.borderWidth = borderWidth
             self.layer.borderColor = borderColor.cgColor
+        }
+    }
+    
+    @available(iOS 26.0, *)
+    func corner26(tL:UICornerRadius? = nil,
+                  tR:UICornerRadius? = nil,
+                  bL:UICornerRadius? = nil,
+                  bR:UICornerRadius? = nil,
+                  capsule:Bool = false) {
+        if capsule {
+            self.cornerConfiguration = .capsule()
+        } else {
+            let values = [tL, tR, bL, bR]
+            let isUniform = values.dropFirst().allSatisfy { $0 == values.first }
+            if isUniform {
+                self.cornerConfiguration = .uniformCorners(radius: tL!)
+            } else {
+                self.cornerConfiguration = .corners(topLeftRadius: tL, topRightRadius: tR, bottomLeftRadius: bL, bottomRightRadius: bR)
+            }
         }
     }
     

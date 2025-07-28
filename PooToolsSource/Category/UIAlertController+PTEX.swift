@@ -17,9 +17,9 @@ public extension UIAlertController {
     ///   - msg: 內容
     ///   - cancel: 取消按鈕
     ///   - cancelBlock: 取消回調
-    @objc class func alertVC(title:String? = "",
-                             msg:String? = "",
-                             cancel:String? = "PT Button cancel".localized(),
+    @objc class func alertVC(title:String = "",
+                             msg:String = "",
+                             cancel:String = "PT Button cancel".localized(),
                              cancelBlock:PTActionTask?) {
         UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
     }
@@ -39,7 +39,7 @@ public extension UIAlertController {
     ///   - tapBackgroundBlock: 点击背景消失回调
     ///   - canTapBackground:
     @objc class func baseActionSheet(title:String,
-                                     subTitle:String? = "",
+                                     subTitle:String = "",
                                      cancelButtonName:String = "PT Button cancel".localized(),
                                      destructiveButtons:[String] = [String](),
                                      titles:[String],
@@ -49,7 +49,7 @@ public extension UIAlertController {
                                      otherBlock: @escaping PTActionSheetIndexCallback,
                                      tapBackgroundBlock: PTActionSheetCallback? = nil) {
         
-        let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle!)
+        let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle)
         let cancelItem = PTActionSheetItem(title: cancelButtonName)
 
         let destructiveItems = destructiveButtons.map { value in
@@ -110,24 +110,24 @@ public extension UIAlertController {
     ///   - cancel: 取消回調
     ///   - moreBtn: 更多按鈕點擊回調
     ///   - msgFont:
-    class func base_alertVC(title:String? = "",
-                            titleColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
-                            titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                            msg:String? = "",
-                            msgColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
-                            msgFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                            okBtns:[String]? = [String](),
-                            cancelBtn:String? = "",
-                            showIn:UIViewController? = PTUtils.getCurrentVC(),
-                            cancelBtnColor:UIColor? = .systemBlue,
-                            doneBtnColors:[UIColor]? = [UIColor](),
-                            alertBGColor:UIColor? = .white,
+    class func base_alertVC(title:String = "",
+                            titleColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                            titleFont:UIFont = UIFont.systemFont(ofSize: 15),
+                            msg:String = "",
+                            msgColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                            msgFont:UIFont = UIFont.systemFont(ofSize: 15),
+                            okBtns:[String] = [String](),
+                            cancelBtn:String = "",
+                            showIn:UIViewController = PTUtils.getCurrentVC(),
+                            cancelBtnColor:UIColor = .systemBlue,
+                            doneBtnColors:[UIColor] = [UIColor](),
+                            alertBGColor:UIColor = .white,
     @PTClampedProperyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                             cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
-        if !(cancelBtn!).stringIsEmpty() {
+        if !cancelBtn.stringIsEmpty() {
             let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
                 cancel?()
             }
@@ -135,21 +135,20 @@ public extension UIAlertController {
             alert.addAction(cancelAction)
         }
         
-        if (okBtns?.count ?? 0) > 0 {
+        if okBtns.count > 0 {
             var dontArrColor = [UIColor]()
-            if doneBtnColors!.count == 0 || okBtns?.count != doneBtnColors?.count || okBtns!.count > (doneBtnColors?.count ?? 0) {
-                guard let okBtns = okBtns else { return }
+            if doneBtnColors.count == 0 || okBtns.count != doneBtnColors.count || okBtns.count > doneBtnColors.count {
 
-                let colorSource = doneBtnColors ?? []
+                let colorSource = doneBtnColors
                 let defaultColor: UIColor = .systemBlue
 
                 dontArrColor = (0..<okBtns.count).map { index in
                     return index < colorSource.count ? colorSource[index] : defaultColor
                 }
             } else {
-                dontArrColor = doneBtnColors!
+                dontArrColor = doneBtnColors
             }
-            okBtns?.enumerated().forEach({ (index,value) in
+            okBtns.enumerated().forEach({ (index,value) in
                 let callAction = UIAlertAction(title: value, style: .default) { (action) in
                     moreBtn?(index,value)
                 }
@@ -159,17 +158,17 @@ public extension UIAlertController {
         }
         
         // KVC修改系统弹框文字颜色字号
-        if !(title ?? "").stringIsEmpty() {
-            let alertStr = NSMutableAttributedString(string: title!)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
-            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
+        if !title.stringIsEmpty() {
+            let alertStr = NSMutableAttributedString(string: title)
+            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor, NSAttributedString.Key.font: titleFont]
+            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title.count))
             alert.setValue(alertStr, forKey: "attributedTitle")
         }
         
-        if !(msg ?? "").stringIsEmpty() {
-            let alertMsgStr = NSMutableAttributedString(string: msg!)
-            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColor!, NSAttributedString.Key.font: msgFont!]
-            alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg!.count))
+        if !msg.stringIsEmpty() {
+            let alertMsgStr = NSMutableAttributedString(string: msg)
+            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColor, NSAttributedString.Key.font: msgFont]
+            alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg.count))
             alert.setValue(alertMsgStr, forKey: "attributedMessage")
         }
 
@@ -180,7 +179,7 @@ public extension UIAlertController {
         }
         alertContentView.layer.cornerRadius = alertCornerRadius
         
-        showIn!.present(alert, animated: true, completion: nil)
+        showIn.present(alert, animated: true, completion: nil)
     }
     
     //MARK: ALERT輸入框基類
@@ -202,19 +201,20 @@ public extension UIAlertController {
     ///   - alertCornerRadius: 圓角
     ///   - cancel: 取消回調
     ///   - doneBtn: 更多按鈕點擊回調
-    class func base_textfield_alertVC(title:String? = "",
-                                      titleColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
-                                      titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
+    class func base_textfield_alertVC(title:String = "",
+                                      titleColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                                      titleFont:UIFont = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
                                       cancelBtn:String,
-                                      showIn:UIViewController? = PTUtils.getCurrentVC(),
-                                      cancelBtnColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
-                                      doneBtnColor:UIColor? = .systemBlue,
+                                      showIn:UIViewController = PTUtils.getCurrentVC(),
+                                      cancelBtnColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                                      doneBtnColor:UIColor = .systemBlue,
                                       placeHolders:[String],
                                       textFieldTexts:[String],
+                                      textTintColor:UIColor = .systemBlue,
                                       keyboardType:[UIKeyboardType]?,
                                       textFieldDelegate:UITextFieldDelegate,
-                                      alertBGColor:UIColor? = .white,
+                                      alertBGColor:UIColor = .white,
     @PTClampedProperyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                                       cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String])->Void)?) {
@@ -233,6 +233,7 @@ public extension UIAlertController {
                     textField.delegate = textFieldDelegate
                     textField.tag = index
                     textField.text = textFieldTexts[index]
+                    textField.tintColor = textTintColor
                     if keyboardType?.count == placeHolders.count {
                         textField.keyboardType = keyboardType![index]
                     }
@@ -251,10 +252,10 @@ public extension UIAlertController {
         alert.addAction(doneAction)
 
         // KVC修改系统弹框文字颜色字号
-        if !(title ?? "").stringIsEmpty() {
-            let alertStr = NSMutableAttributedString(string: title!)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
-            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
+        if !title.stringIsEmpty() {
+            let alertStr = NSMutableAttributedString(string: title)
+            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor, NSAttributedString.Key.font: titleFont]
+            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title.count))
             alert.setValue(alertStr, forKey: "attributedTitle")
         }
 
@@ -264,7 +265,7 @@ public extension UIAlertController {
             alertContentView.backgroundColor = alertBGColor
         }
         alertContentView.layer.cornerRadius = alertCornerRadius
-        showIn!.present(alert, animated: true, completion: nil)
+        showIn.present(alert, animated: true, completion: nil)
     }
     
     //MARK: 初始化創建Alert
@@ -282,26 +283,29 @@ public extension UIAlertController {
     ///   - titleFont: 标题字体
     ///   - done: 完成回調(标题,内容)
     ///   - dismiss: 界面離開後的回調
-    class func alertSendFeedBack(alertTitle:String? = "PT Screen feedback".localized(),
-                                 feedBackTitlePlaceholder:String? = "PT Feedback input title".localized(),
-                                 feedBackTitleFont:UIFont? = .appfont(size: 16),
-                                 feedBackContentPlaceholder:String? = "PT Feedback input content".localized(),
-                                 feedBackContentFont:UIFont? = .appfont(size: 16),
-                                 feedBackContentCount:NSNumber? = 100,
-                                 feedBackContentIsSecureTextEntry:Bool? = false,
-                                 cancelString:String? = "PT Button cancel".localized(),
-                                 sendString:String? = "PT Button comfirm".localized(),
-                                 titleFont:UIFont? = .appfont(size: 18),
-                                 textInset:UIEdgeInsets? = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0),
+    class func alertSendFeedBack(alertTitle:String = "PT Screen feedback".localized(),
+                                 feedBackTitlePlaceholder:String = "PT Feedback input title".localized(),
+                                 feedBackTitleFont:UIFont = .appfont(size: 16),
+                                 feedBackContentPlaceholder:String = "PT Feedback input content".localized(),
+                                 feedBackContentFont:UIFont = .appfont(size: 16),
+                                 feedBackContentCount:NSNumber = 100,
+                                 feedBackWordCountFont:UIFont = .appfont(size: 12),
+                                 feedBackContentIsSecureTextEntry:Bool = false,
+                                 cancelString:String = "PT Button cancel".localized(),
+                                 sendString:String = "PT Button comfirm".localized(),
+                                 titleFont:UIFont = .appfont(size: 18),
+                                 textInset:UIEdgeInsets? = .zero,
+                                 titleTintColor:UIColor = .systemBlue,
+                                 textTintColor:UIColor = .systemBlue,
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
         let feedBackTitleText:UITextField
         #if POOTOOLS_INPUT
         let feedBackTitle = PTTextField()
-        feedBackTitle.placeholder = feedBackTitlePlaceholder!
+        feedBackTitle.placeholder = feedBackTitlePlaceholder
         feedBackTitle.setPlaceHolderTextColor(.lightGray)
         feedBackTitle.clearButtonMode = .whileEditing
-        feedBackTitle.font = feedBackTitleFont!
+        feedBackTitle.font = feedBackTitleFont
         feedBackTitle.addPaddingLeft(5)
         feedBackTitle.backgroundColor = .clear
         if let textInsets = textInset {
@@ -309,33 +313,35 @@ public extension UIAlertController {
         }
         
         feedBackTitleText = feedBackTitle
+        feedBackTitleText.tintColor = titleTintColor
         #else
         feedBackTitleText = UITextField()
-        feedBackTitleText.placeholder = feedBackTitlePlaceholder!
+        feedBackTitleText.placeholder = feedBackTitlePlaceholder
         feedBackTitleText.setPlaceHolderTextColor(.lightGray)
         feedBackTitleText.clearButtonMode = .whileEditing
-        feedBackTitleText.font = feedBackTitleFont!
+        feedBackTitleText.font = feedBackTitleFont
         feedBackTitleText.addPaddingLeft(5)
         feedBackTitleText.backgroundColor = .clear
         if let textInsets = textInset {
             let lView = UIView(frame: CGRectMake(0, 0, textInsets.left, 44))
             feedBackTitleText.leftView = lView
         }
+        feedBackTitleText.tintColor = titleTintColor
         #endif
         
         let feedBackContent = UITextView()
         if let textInsets = textInset {
             feedBackContent.textContainerInset = textInsets
         }
-        feedBackContent.pt_placeholder = feedBackContentPlaceholder!
+        feedBackContent.pt_placeholder = feedBackContentPlaceholder
         feedBackContent.pt_placeholderLabel?.textColor = .lightGray
-        feedBackContent.pt_placeholderLabel?.font = feedBackContentFont!
-        feedBackContent.font = feedBackContentFont!
+        feedBackContent.pt_placeholderLabel?.font = feedBackContentFont
+        feedBackContent.font = feedBackContentFont
         feedBackContent.backgroundColor = .clear
-        feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry!
-        feedBackContent.tintColor = .red
+        feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry
+        feedBackContent.tintColor = textTintColor
         
-        let customerAlert = PTCustomerAlertController(title: alertTitle!,customerViewHeight:250,customerViewCallback: { customerView in
+        let customerAlert = PTCustomerAlertController(title: alertTitle,customerViewHeight:250,customerViewCallback: { customerView in
             customerView.addSubviews([feedBackTitleText,feedBackContent])
             feedBackTitleText.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -350,9 +356,9 @@ public extension UIAlertController {
             }
             
             feedBackContent.pt_wordCountLabel?.backgroundColor = .clear
-            feedBackContent.pt_wordCountLabel?.font = .appfont(size: 12)
-            feedBackContent.pt_maxWordCount = feedBackContentCount!
-        },buttons: [cancelString!,sendString!], buttonsColors: [],contentSpace:60)
+            feedBackContent.pt_wordCountLabel?.font = feedBackWordCountFont
+            feedBackContent.pt_maxWordCount = feedBackContentCount
+        },buttons: [cancelString,sendString], buttonsColors: [],contentSpace:60)
         customerAlert.bottomButtonTapCallback = { title,index in
             if index == 1 {
                 done(feedBackTitleText.text ?? "",feedBackContent.text ?? "")
