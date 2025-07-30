@@ -12,6 +12,7 @@ import DeviceKit
 public let CorePodBundleName = "PooToolsResource"
 
 public typealias PTActionTask = @MainActor @Sendable () -> Void
+public typealias PTActionAsyncTask = @MainActor @Sendable () async -> Void
 
 public let AppWindows = UIApplication.shared.currentWindow
 

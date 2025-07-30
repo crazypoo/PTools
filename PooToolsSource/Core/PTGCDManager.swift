@@ -231,6 +231,18 @@ public class PTGCDManager :NSObject {
     
     //MARK: gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
     ///gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
+    public static func runOnMain(_ task: @escaping PTActionTask) {
+        Task { @MainActor in
+            task()
+        }
+    }
+    
+    public static func runOnMainAsync(_ task: @escaping PTActionAsyncTask) {
+        Task { @MainActor in
+            await task()
+        }
+    }
+    
     public class func gcdMain(block: @escaping PTActionTask) {
         DispatchQueue.main.async(execute: block)
     }
