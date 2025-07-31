@@ -96,10 +96,10 @@ public class PTSearchBar: UISearchBar {
             if let clearImage = clearConfig.clearImage {
                 let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
 
-                if let images = result.0, !images.isEmpty {
+                if let images = result.allImages, !images.isEmpty {
                     if images.count > 1 {
-                        clearBtn.setImage(UIImage.animatedImage(with: images, duration: 2), for: .normal)
-                    } else if let image = result.1 {
+                        clearBtn.setImage(UIImage.animatedImage(with: images, duration: result.loadTime), for: .normal)
+                    } else if let image = result.firstImage {
                         let resizedImage = image.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
                         clearBtn.setImage(resizedImage, for: .normal)
                     }

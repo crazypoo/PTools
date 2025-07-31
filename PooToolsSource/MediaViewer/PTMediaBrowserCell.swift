@@ -366,19 +366,19 @@ extension PTMediaBrowserCell {
                 let progress = CGFloat(receivedSize / totalSize)
                 loading.progress = progress
             }
-        } loadFinish: { images, image in
+        } loadFinish: { images, image,gifTime in
             PTGCDManager.gcdMain {
-                self.handleImageLoadFinish(images: images, image: image, loading: loading)
+                self.handleImageLoadFinish(images: images, image: image, loading: loading,time: gifTime)
             }
         }
     }
 
-    private func handleImageLoadFinish(images: [UIImage]?, image: UIImage?, loading: PTMediaBrowserLoadingView) {
+    private func handleImageLoadFinish(images: [UIImage]?, image: UIImage?, loading: PTMediaBrowserLoadingView,time:TimeInterval) {
         if let images = images, images.count > 1 {
             currentCellType = .GIF
             gifImage = image
             if viewConfig.dynamicBackground {
-                backgroundImageView.image = UIImage.animatedImage(with: images, duration: 2)
+                backgroundImageView.image = UIImage.animatedImage(with: images, duration: time)
             }
         } else if let images = images, images.count == 1 {
             currentCellType = .Normal
@@ -427,7 +427,7 @@ extension PTMediaBrowserCell {
             make.centerX.centerY.equalToSuperview()
         }
         
-        let singleTap = UITapGestureRecognizer.init { sender in
+        let singleTap = UITapGestureRecognizer { sender in
             self.tapTask?()
         }
         singleTap.numberOfTapsRequired = 1
@@ -473,7 +473,7 @@ extension PTMediaBrowserCell {
                         make.centerX.centerY.equalToSuperview()
                     }
                     
-                    let singleTap = UITapGestureRecognizer.init { sender in
+                    let singleTap = UITapGestureRecognizer { sender in
                         self.tapTask?()
                     }
                     singleTap.numberOfTapsRequired = 1
@@ -537,7 +537,7 @@ extension PTMediaBrowserCell {
                     self.zoomTask?(true)
                     let scaleX = touchPoint.x + self.contentScrolView.contentOffset.x
                     let scaleY = touchPoint.y + self.contentScrolView.contentOffset.y
-                    self.contentScrolView.zoom(to: CGRect.init(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
+                    self.contentScrolView.zoom(to: CGRect(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
                 } else {
                     self.zoomTask?(false)
                     self.contentScrolView.setZoomScale(1, animated: true)

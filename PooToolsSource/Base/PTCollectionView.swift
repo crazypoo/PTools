@@ -1261,10 +1261,10 @@ extension PTCollectionView:SwipeCollectionViewCellDelegate {
                 } else {
                     Task {
                         let result = await PTLoadImageFunction.loadImage(contentData: customImage as Any)
-                        if (result.0?.count ?? 0 ) > 1 {
-                            actionImage = UIImage.animatedImage(with: result.0!, duration: 2)
-                        } else if (result.0?.count ?? 0 ) == 1 {
-                            actionImage = result.1!
+                        if (result.allImages?.count ?? 0 ) > 1 {
+                            actionImage = UIImage.animatedImage(with: result.allImages!, duration: result.loadTime)
+                        } else if (result.allImages?.count ?? 0 ) == 1 {
+                            actionImage = result.firstImage!
                         } else {
                             actionImage = PTAppBaseConfig.share.defaultEmptyImage
                         }

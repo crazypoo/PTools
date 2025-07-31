@@ -14,9 +14,9 @@ import AttributedString
 public class PTFusionHeader: PTBaseCollectionReusableView {
     public static let ID = "PTFusionHeader"
     
-    open var switchValueChangeBlock:PTCellSwitchBlock?
-    open var moreActionBlock:PTSectionMoreBlock?
-    open var switchValue:Bool? {
+    public var switchValueChangeBlock:PTCellSwitchBlock?
+    public var moreActionBlock:PTSectionMoreBlock?
+    public var switchValue:Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
                 valueSwitch.isOn = switchValue!
@@ -24,7 +24,7 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
         }
     }
     
-    open var sectionModel:PTFusionCellModel? {
+    public var sectionModel:PTFusionCellModel? {
         didSet {
             dataContent.cellModel = sectionModel
         }

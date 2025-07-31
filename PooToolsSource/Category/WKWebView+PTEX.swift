@@ -27,7 +27,6 @@ public extension PTPOP where Base: WKWebView {
             let sender = WKWebViewConfiguration()
             sender.allowsInlineMediaPlayback = true
             sender.defaultWebpagePreferences.allowsContentJavaScript = true
-            sender.selectionGranularity = .dynamic
             sender.preferences = WKPreferences()
             sender.preferences.javaScriptCanOpenWindowsAutomatically = false
             

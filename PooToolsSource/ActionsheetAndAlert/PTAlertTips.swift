@@ -48,10 +48,12 @@ public enum PTAlertTipControl {
     @MainActor public static func dismissAllAlerts(completion: PTActionTask? = nil) {
         
         var alertViews: [PTAlertTipsProtocol] = []
-        for window in UIApplication.shared.windows {
-            for view in window.subviews {
-                if let view = view as? PTAlertTipsProtocol {
-                    alertViews.append(view)
+        if let windows = UIApplication.shared.currentWindows {
+            for window in windows {
+                for view in window.subviews {
+                    if let view = view as? PTAlertTipsProtocol {
+                        alertViews.append(view)
+                    }
                 }
             }
         }

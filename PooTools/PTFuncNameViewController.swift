@@ -1230,7 +1230,7 @@ class PTFuncNameViewController: PTBaseViewController {
         buttonView.accessibilityIdentifier = "expandableButton"
         view.addSubview(buttonView)
         PTGCDManager.gcdAfter(time: 0.35) {
-            buttonView.frame = CGRect(x: 24, y: 400, width: 60, height: 60)
+            buttonView.frame = CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: 400, width: 60, height: 60)
         }
     }
     

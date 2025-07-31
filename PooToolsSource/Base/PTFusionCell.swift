@@ -154,10 +154,10 @@ public class PTFusionCellContent:UIView {
                     self.sectionMore!.midSpacing = self.cellModel!.moreDisclosureIndicatorSpace
                     self.sectionMore!.imageSize = self.cellModel!.moreDisclosureIndicatorSize
                     self.sectionMore!.layoutStyle = self.cellModel!.moreLayoutStyle
-                    if (result.0?.count ?? 0) > 1 {
-                        self.sectionMore!.normalImage = UIImage.animatedImage(with: result.0!, duration: 2)
-                    } else if (result.0?.count ?? 0) == 1 {
-                        self.sectionMore!.normalImage = result.1
+                    if (result.allImages?.count ?? 0) > 1 {
+                        self.sectionMore!.normalImage = UIImage.animatedImage(with: result.allImages!, duration: result.loadTime)
+                    } else if (result.allImages?.count ?? 0) == 1 {
+                        self.sectionMore!.normalImage = result.firstImage
                     }
                     
                     switch self.cellModel!.moreLayoutStyle {
@@ -205,10 +205,10 @@ public class PTFusionCellContent:UIView {
                     self.sectionMore!.midSpacing = 0
                     self.sectionMore!.imageSize = self.cellModel!.moreDisclosureIndicatorSize
                     self.sectionMore!.layoutStyle = self.cellModel!.moreLayoutStyle
-                    if (result.0?.count ?? 0) > 1 {
-                        self.sectionMore!.normalImage = UIImage.animatedImage(with: result.0!, duration: 2)
-                    } else if (result.0?.count ?? 0) == 1 {
-                        self.sectionMore!.normalImage = result.1
+                    if (result.allImages?.count ?? 0) > 1 {
+                        self.sectionMore!.normalImage = UIImage.animatedImage(with: result.allImages!, duration: result.loadTime)
+                    } else if (result.allImages?.count ?? 0) == 1 {
+                        self.sectionMore!.normalImage = result.firstImage
                     }
                     moreWith = self.cellModel!.moreDisclosureIndicatorSize.width + 5
                     self.sectionMore!.snp.makeConstraints { make in

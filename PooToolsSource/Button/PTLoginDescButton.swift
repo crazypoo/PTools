@@ -10,14 +10,14 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-open class PTLoginDescConfig:PTBaseModel {
-    open var textColor:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
-    open var textFont:UIFont = .appfont(size: 12)
-    open var leftDesc:String = "A"
-    open var rightDesc:String = "B"
-    open var lineWidth:CGFloat = 1
-    open var lineTopNBottomSpace:CGFloat = 2
-    open var itemSpace:CGFloat = 8
+public class PTLoginDescConfig:PTBaseModel {
+    public var textColor:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
+    public var textFont:UIFont = .appfont(size: 12)
+    public var leftDesc:String = "A"
+    public var rightDesc:String = "B"
+    public var lineWidth:CGFloat = 1
+    public var lineTopNBottomSpace:CGFloat = 2
+    public var itemSpace:CGFloat = 8
 }
 
 public enum PTLoginDescButtonType {

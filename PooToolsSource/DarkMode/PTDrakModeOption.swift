@@ -130,7 +130,7 @@ public extension PTDarkModeOption {
     // MARK: 设置：浅色 / 深色
     static func setDarkModeCustom(isLight: Bool) {
         // 1.1、只要设置了模式：就是黑或者白
-        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
+        AppWindows?.overrideUserInterfaceStyle = isLight ? .light : .dark
         // 1.2、设置跟随系统和智能换肤：否
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
         UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)

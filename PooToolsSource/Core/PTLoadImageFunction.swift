@@ -14,27 +14,47 @@ import ImageIO
 
 public typealias PTLoadImageProgressBlock = ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)
 
+public struct PTLoadImageResult {
+    public let allImages: [UIImage]?
+    public let firstImage: UIImage?
+    public let loadTime: TimeInterval
+
+    public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval) {
+        self.allImages = allImages
+        self.firstImage = firstImage
+        self.loadTime = loadTime
+    }
+}
+
 @objcMembers
 public class PTLoadImageFunction: NSObject {
 
     public static func loadImage(contentData: Any,
                                  iCloudDocumentName: String = "",
-                                 progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
+                                 progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
 
         if let image = contentData as? UIImage {
-            return ([image], image)
+            return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0)
         } else if let dataUrlString = contentData as? String {
             return await handleStringContent(dataUrlString, iCloudDocumentName, progressHandle)
-        } else if let data = contentData as? Data, let image = UIImage(data: data) {
-            return ([image], image)
+        } else if let data = contentData as? Data {
+            if data.detectImageType() == .GIF,let gifImage = imagesAndDurationFromGif(data: data) {
+                return PTLoadImageResult(allImages: gifImage.images, firstImage: gifImage.images.first, loadTime: gifImage.duration)
+            } else {
+                if let image = UIImage(data: data) {
+                    return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0)
+                } else {
+                    return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
+                }
+            }
         } else if let asset = contentData as? PHAsset {
             return await handleAssetContent(asset: asset)
         } else {
-            return (nil, nil)
+            return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
         }
     }
 
-    public static func handleAssetContent(asset: PHAsset) async -> ([UIImage]?, UIImage?) {
+    public static func handleAssetContent(asset: PHAsset) async -> PTLoadImageResult {
         await withCheckedContinuation { continuation in
             let manager = PHImageManager.default()
             let options = PHImageRequestOptions()
@@ -46,9 +66,9 @@ public class PTLoadImageFunction: NSObject {
                                  contentMode: .aspectFill, options: options) { image, _ in
                 DispatchQueue.main.async {
                     if let img = image {
-                        continuation.resume(returning: ([img], img))
+                        continuation.resume(returning: PTLoadImageResult(allImages: [img], firstImage: img, loadTime: 0))
                     } else {
-                        continuation.resume(returning: (nil, nil))
+                        continuation.resume(returning: PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0))
                     }
                 }
             }
@@ -57,7 +77,7 @@ public class PTLoadImageFunction: NSObject {
 
     public static func handleStringContent(_ dataUrlString: String,
                                            _ iCloudDocumentName: String,
-                                           _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
+                                           _ progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
 
         if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
             return await loadFromLocalFileAsync(path: dataUrlString)
@@ -65,24 +85,24 @@ public class PTLoadImageFunction: NSObject {
             return await handleURLContent(dataUrlString, iCloudDocumentName, progressHandle)
         } else if dataUrlString.isSingleEmoji {
             let emojiImage = dataUrlString.emojiToImage()
-            return ([emojiImage], emojiImage)
+            return PTLoadImageResult(allImages: [emojiImage], firstImage: emojiImage, loadTime: 0)
         } else if let image = UIImage(named: dataUrlString) ?? UIImage(systemName: dataUrlString) {
-            return ([image], image)
+            return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0)
         } else {
-            return (nil, nil)
+            return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
         }
     }
 
-    private static func loadFromLocalFileAsync(path: String) async -> ([UIImage]?, UIImage?) {
+    private static func loadFromLocalFileAsync(path: String) async -> PTLoadImageResult {
         return await withCheckedContinuation { continuation in
             DispatchQueue.global().async {
                 if let image = UIImage(contentsOfFile: path) {
                     DispatchQueue.main.async {
-                        continuation.resume(returning: ([image], image))
+                        continuation.resume(returning: PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
                     }
                 } else {
                     DispatchQueue.main.async {
-                        continuation.resume(returning: (nil, nil))
+                        continuation.resume(returning: PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0))
                     }
                 }
             }
@@ -91,19 +111,19 @@ public class PTLoadImageFunction: NSObject {
 
     public static func handleURLContent(_ dataUrlString: String,
                                         _ iCloudDocumentName: String,
-                                        _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
+                                        _ progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
 
         if dataUrlString.contains("file://") {
             return await handleFileURLAsync(dataUrlString, iCloudDocumentName)
         } else if let imageURL = URL(string: dataUrlString) {
             return await downloadImage(from: imageURL, progressHandle)
         } else {
-            return (nil, nil)
+            return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
         }
     }
 
     private static func handleFileURLAsync(_ dataUrlString: String,
-                                           _ iCloudDocumentName: String) async -> ([UIImage]?, UIImage?) {
+                                           _ iCloudDocumentName: String) async -> PTLoadImageResult {
         return await withCheckedContinuation { continuation in
             DispatchQueue.global().async {
                 var image: UIImage?
@@ -118,9 +138,9 @@ public class PTLoadImageFunction: NSObject {
 
                 DispatchQueue.main.async {
                     if let img = image {
-                        continuation.resume(returning: ([img], img))
+                        continuation.resume(returning: PTLoadImageResult(allImages: [img], firstImage: img, loadTime: 0))
                     } else {
-                        continuation.resume(returning: (nil, nil))
+                        continuation.resume(returning: PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0))
                     }
                 }
             }
@@ -128,7 +148,7 @@ public class PTLoadImageFunction: NSObject {
     }
 
     public static func downloadImage(from url: URL,
-                                     _ progressHandle: PTLoadImageProgressBlock? = nil) async -> ([UIImage]?, UIImage?) {
+                                     _ progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
         let options = PTAppBaseConfig.share.gobalWebImageLoadOption()
         let cacheKey = url.cacheKey
 
@@ -138,8 +158,8 @@ public class PTLoadImageFunction: NSObject {
                 // 优先从磁盘取原始数据
                 if let data = try? ImageCache.default.diskStorage.value(forKey: cacheKey),
                    data.detectImageType() == .GIF {
-                    if let frames = imagesAndDurationFromGif(data: data)?.images {
-                        return (frames, frames.first)
+                    if let frames = imagesAndDurationFromGif(data: data) {
+                        return PTLoadImageResult(allImages: frames.images, firstImage: frames.images.first, loadTime: frames.duration)
                     }
                 }
 
@@ -147,15 +167,15 @@ public class PTLoadImageFunction: NSObject {
                 let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
                 if let image = result.image {
                     if let frames = image.images, !frames.isEmpty {
-                        return (frames, frames.first)
+                        return PTLoadImageResult(allImages: frames, firstImage: frames.first, loadTime: 0)
                     } else {
-                        return ([image], image)
+                        return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0)
                     }
                 } else {
-                    return (nil, nil)
+                    return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
                 }
             } catch {
-                return (nil, nil)
+                return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
             }
         }
 
@@ -176,16 +196,13 @@ public class PTLoadImageFunction: NSObject {
                             ImageCache.default.store(value.image,original: value.originalData, forKey: cacheKey)
                             let data = value.originalData
                             if data.detectImageType() == .GIF {
-                                if let frames = imagesAndDurationFromGif(data: data)?.images {
-                                    continuation.resume(returning: (frames, frames.first))
-                                } else {
-                                    continuation.resume(returning: (nil, nil))
-                                }
+                                let frames = imagesAndDurationFromGif(data: data)
+                                continuation.resume(returning: PTLoadImageResult(allImages: frames?.images ?? nil, firstImage: frames?.images.first ?? nil, loadTime: 0))
                             } else {
-                                continuation.resume(returning: ([value.image], value.image))
+                                continuation.resume(returning: PTLoadImageResult(allImages: [value.image], firstImage: value.image, loadTime: 0))
                             }
                         case .failure( _):
-                            continuation.resume(returning: (nil, nil))
+                            continuation.resume(returning: PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0))
                         }
                     }
                 }

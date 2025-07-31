@@ -81,9 +81,10 @@ public class PTRateView: UIView {
         if config.canTap {
             let tapGes = UITapGestureRecognizer { [weak self] sender in
                 guard let self = self else { return }
-                let ges = sender as! UITapGestureRecognizer
-                let tapPoint = ges.location(in: self)
-                self.handleTapGesture(tapPoint)
+                if let ges = sender as? UITapGestureRecognizer {
+                    let tapPoint = ges.location(in: self)
+                    self.handleTapGesture(tapPoint)
+                }
             }
             tapGes.numberOfTapsRequired = 1
             addGestureRecognizers([tapGes])

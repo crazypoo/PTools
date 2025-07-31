@@ -19,7 +19,7 @@ final class ViewHierarchy {
 // MARK: - ViewHierarchyRepresentable
 
 extension ViewHierarchy: ViewHierarchyRepresentable {
-    var windows: [UIWindow] { application.windows }
+    var windows: [UIWindow] { application.currentWindows ?? [] }
 
     var keyWindow: UIWindow? { windows.first(where: \.isKeyWindow) }
 

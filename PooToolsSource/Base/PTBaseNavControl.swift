@@ -29,13 +29,13 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
     open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         
         if viewControllers.count > 0 {
-            let backBtn = UIButton.init(type: .custom)
+            let backBtn = UIButton(type: .custom)
             backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 34, height: 34)
+            backBtn.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
             backBtn.addActionHandlers { seder in
                 self.back()
             }
-            let leftItem = UIBarButtonItem.init(customView: backBtn)
+            let leftItem = UIBarButtonItem(customView: backBtn)
             viewController.navigationItem.leftBarButtonItem = leftItem
             viewController.hidesBottomBarWhenPushed = true
         }

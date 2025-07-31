@@ -221,11 +221,11 @@ extension PTBaseViewController {
                 // Configure console window.
                 let lcm = LocalConsole.shared
                 if lcm.isVisiable {
-                    if lcm.maskView != nil {
-                        PTUtils.fetchWindow()!.bringSubviewToFront(lcm.maskView!)
+                    if let maskView = lcm.maskView {
+                        PTUtils.fetchWindow()!.bringSubviewToFront(maskView)
                     }
-                    if lcm.terminal != nil {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(lcm.terminal!)
+                    if let terminal = lcm.terminal {
+                        PTUtils.fetchWindow()?.bringSubviewToFront(terminal)
                     }
                 }
             }

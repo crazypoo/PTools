@@ -59,7 +59,7 @@ open class PTImagePageControl: UIPageControl {
         // 建立新的 dots
         for i in 0..<numberOfPages {
             let dot = UIImageView()
-            dot.loadImage(contentData: pageImage, loadFinish:  { images, image in
+            dot.loadImage(contentData: pageImage, loadFinish:  { images, image,_ in
                 self.dotSize[i] = (image?.size ?? self.dotBaseSize)
             })
             addSubview(dot)
@@ -78,7 +78,7 @@ open class PTImagePageControl: UIPageControl {
     private func updateDots() {
         for (index, dot) in dots.enumerated() {
             let imgData = (index == currentPage) ? currentPageImage : pageImage
-            dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(),loadFinish: { images,image in
+            dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(),loadFinish: { images,image,_ in
                 self.dotSize[index] = image?.size ?? self.dotBaseSize
             })
             if let imageData = imgData as? UIImage {

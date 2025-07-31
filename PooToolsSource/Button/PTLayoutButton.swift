@@ -886,7 +886,7 @@ extension PTLayoutButton {
                         self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                     }
                 }
-                if let image = result.1 {
+                if let image = result.firstImage {
                     switch controlState {
                     case .normal:
                         normalImage = image

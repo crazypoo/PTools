@@ -47,6 +47,7 @@ public class PTLaunchAdMonitor: NSObject {
         let view = UIView()
         return view
     }()
+    
     //MARK: 初始化廣告界面
     ///初始化廣告界面
     /// - Parameters:
@@ -72,23 +73,22 @@ public class PTLaunchAdMonitor: NSObject {
         notifiData = param
         contentView.backgroundColor = .lightGray
                         
-        if onView is UIView {
-            (onView as! UIView).addSubview(contentView)
-            (onView as! UIView).bringSubviewToFront(contentView)
+        if let onViews = onView as? UIView {
+            onViews.addSubview(contentView)
+            onViews.bringSubviewToFront(contentView)
             contentView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
-        } else if onView is UIWindow {
-            let windows = (onView as! UIWindow)
-            windows.addSubview(contentView)
-            windows.bringSubviewToFront(contentView)
+        } else if let onWindow = onView as? UIWindow {
+            onWindow.addSubview(contentView)
+            onWindow.bringSubviewToFront(contentView)
             contentView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
 #if POOTOOLS_DEBUG
             let share = LocalConsole.shared
-            if share.isVisiable {
-                windows.bringSubviewToFront(share.terminal!)
+            if share.isVisiable,let terminal = share.terminal {
+                onWindow.bringSubviewToFront(terminal)
             }
 #endif
         }
@@ -145,7 +145,7 @@ public class PTLaunchAdMonitor: NSObject {
         })
         
         let mediaHaveData: Bool = param != nil
-        loadImageAtPath(path: path) { type, media in
+        loadImageAtPath(path: path) { type, media,gifTime in
             PTGCDManager.gcdMain {
                 switch type {
                 case .Image:
@@ -153,7 +153,7 @@ public class PTLaunchAdMonitor: NSObject {
                         if medias.count > 1 {
                             self.loadImageView.animationImages = medias
                             self.loadImageView.animationImages = medias
-                            self.loadImageView.animationDuration = 1
+                            self.loadImageView.animationDuration = gifTime
                             self.loadImageView.startAnimating()
                             self.contentView.insertSubview(self.loadImageView, at: 0)
                             self.loadImageView.snp.remakeConstraints { make in
@@ -187,7 +187,7 @@ public class PTLaunchAdMonitor: NSObject {
                         make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                         make.size.equalTo(buttonWidth)
                     }
-                    self.skipButton.viewCorner(radius: buttonWidth / 2)
+                    self.skipButton.viewCorner(radius: buttonWidth / 2,capsule: true)
                     PTGCDManager.gcdMain {
                         self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "",timeFinish: {
                             self.hideView()
@@ -226,7 +226,7 @@ public class PTLaunchAdMonitor: NSObject {
                         make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                         make.size.equalTo(buttonWidth)
                     }
-                    self.skipButton.viewCorner(radius: buttonWidth / 2)
+                    self.skipButton.viewCorner(radius: buttonWidth / 2,capsule: true)
                 }
             }
         }
@@ -236,14 +236,14 @@ public class PTLaunchAdMonitor: NSObject {
         case Image,Video
     }
     
-    private func loadImageAtPath(path: Any, completion: @escaping (PTLaunchAdMediaType,Any?) -> Void) {
+    private func loadImageAtPath(path: Any, completion: @escaping (PTLaunchAdMediaType,Any?,TimeInterval) -> Void) {
         Task {
             if let imagePath = path as? String,imagePath.contentTypeForUrl() == PTUrlStringVideoType.MP4 {
                 let videoUrl = (imagePath as NSString).range(of: "/var").length > 0 ? URL(fileURLWithPath: imagePath) : URL(string: imagePath)
-                completion(.Video,videoUrl)
+                completion(.Video,videoUrl,0)
             } else {
                 let result = await PTLoadImageFunction.loadImage(contentData: path)
-                completion(.Image,result.0)
+                completion(.Image,result.allImages,result.loadTime)
             }
         }
     }

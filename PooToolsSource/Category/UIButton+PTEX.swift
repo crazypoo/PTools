@@ -73,39 +73,40 @@ public extension UIButton {
          * 如果只有title，那它上下左右都是相对于button的，image也是一样；
          * 如果同时有image和label，那这时候image的上左下是相对于button，右边是相对于label的；title的上右下是相对于button，左边是相对于image的。
          */
-        guard let imageView = self.imageView,
-              let titleLabel = self.titleLabel else {
-            return
-        }
-        
-        let imageWidth = imageView.frame.size.width
-        let imageHeight = imageView.frame.size.height
-        let labelWidth = titleLabel.frame.size.width
-        let labelHeight = titleLabel.frame.size.height
-        
-        var imageEdgeInsets = UIEdgeInsets.zero
-        var labelEdgeInsets = UIEdgeInsets.zero
-        
+        guard let imageView = self.imageView, let titleLabel = self.titleLabel else { return }
+
+        let imageSize = imageView.frame.size
+        let titleSize = titleLabel.frame.size
+        let halfSpace = imageTitleSpace / 2
+
+        let imageW = imageSize.width
+        let imageH = imageSize.height
+        let titleW = titleSize.width
+        let titleH = titleSize.height
+
+        let imageInsets: UIEdgeInsets
+        let titleInsets: UIEdgeInsets
+
         switch style {
         case .Top:
-            imageEdgeInsets = UIEdgeInsets(top: -labelHeight - imageTitleSpace / 2, left: 0, bottom: 0, right: -labelWidth)
-            labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWidth, bottom: -imageHeight - imageTitleSpace / 2, right: 0)
-            
+            imageInsets = UIEdgeInsets(top: -titleH - halfSpace, left: 0, bottom: 0, right: -titleW)
+            titleInsets = UIEdgeInsets(top: 0, left: -imageW, bottom: -imageH - halfSpace, right: 0)
+
         case .Left:
-            imageEdgeInsets = UIEdgeInsets(top: 0, left: -imageTitleSpace / 2, bottom: 0, right: imageTitleSpace / 2)
-            labelEdgeInsets = UIEdgeInsets(top: 0, left: imageTitleSpace / 2, bottom: 0, right: -imageTitleSpace / 2)
-            
+            imageInsets = UIEdgeInsets(top: 0, left: -halfSpace, bottom: 0, right: halfSpace)
+            titleInsets = UIEdgeInsets(top: 0, left: halfSpace, bottom: 0, right: -halfSpace)
+
         case .Bottom:
-            imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: -labelHeight - imageTitleSpace / 2, right: -labelWidth)
-            labelEdgeInsets = UIEdgeInsets(top: -imageHeight - imageTitleSpace / 2, left: -imageWidth, bottom: 0, right: 0)
-            
+            imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: -titleH - halfSpace, right: -titleW)
+            titleInsets = UIEdgeInsets(top: -imageH - halfSpace, left: -imageW, bottom: 0, right: 0)
+
         case .Right:
-            imageEdgeInsets = UIEdgeInsets(top: 0, left: labelWidth + imageTitleSpace / 2, bottom: 0, right: -labelWidth - imageTitleSpace / 2)
-            labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWidth - imageTitleSpace / 2, bottom: 0, right: imageWidth + imageTitleSpace / 2)
+            imageInsets = UIEdgeInsets(top: 0, left: titleW + halfSpace, bottom: 0, right: -titleW - halfSpace)
+            titleInsets = UIEdgeInsets(top: 0, left: -imageW - halfSpace, bottom: 0, right: imageW + halfSpace)
         }
-        
-        self.titleEdgeInsets = labelEdgeInsets
-        self.imageEdgeInsets = imageEdgeInsets
+
+        self.imageEdgeInsets = imageInsets
+        self.titleEdgeInsets = titleInsets
     }
     
     //MARK: 計算文字的Size
@@ -202,10 +203,10 @@ public extension UIButton {
                         self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                     }
                 }
-                if result.0?.count ?? 0 > 1 {
-                    self.setImage(UIImage.animatedImage(with: result.0!, duration: 2), for: controlState)
-                } else if result.0?.count ?? 0 == 1 {
-                    self.setImage(result.1, for: controlState)
+                if result.allImages?.count ?? 0 > 1 {
+                    self.setImage(UIImage.animatedImage(with: result.allImages!, duration: result.loadTime), for: controlState)
+                } else if result.allImages?.count ?? 0 == 1 {
+                    self.setImage(result.firstImage, for: controlState)
                 } else {
                     self.setImage(emptyImage, for: controlState)
                 }

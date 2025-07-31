@@ -53,7 +53,7 @@ import SwifterSwift
         return iPhoneXSeries
     }
 
-    let mainWindow:UIView = UIApplication.shared.delegate!.window!!
+    let mainWindow:UIView = AppWindows!
     if (mainWindow.safeAreaInsets.bottom) > 0.0 {
         iPhoneXSeries = true
     }

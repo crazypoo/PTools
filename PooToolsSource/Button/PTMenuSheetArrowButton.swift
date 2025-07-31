@@ -10,7 +10,7 @@ import UIKit
 
 public class PTMenuSheetArrowButton: UIButton {
     
-    private typealias TopBottomPaths = (top: CGPath, bottom: CGPath)
+    private typealias ArrowPathPair = (top: CGPath, bottom: CGPath)
     
     // MARK: - Public properties
     
@@ -40,119 +40,127 @@ public class PTMenuSheetArrowButton: UIButton {
     
     // MARK: - Private properties
     
-    private lazy var topLineLayer: CAShapeLayer = layer()
-    private lazy var bottomLineLayer: CAShapeLayer = layer()
+    private lazy var topLineLayer: CAShapeLayer = makeArrowLayer()
+    private lazy var bottomLineLayer: CAShapeLayer = makeArrowLayer()
     
-    // MARK: - Public
-  
+    // MARK: - Lifecycle
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        // 初次繪製箭頭方向（可改為你預設想要的方向）
+        if topLineLayer.path == nil || bottomLineLayer.path == nil {
+            showDownArrow()
+        }
+    }
+
+    // MARK: - Public API
+    
     public func showUpArrow()       { animateArrow(with: upArrowPaths()) }
     public func showDownArrow()     { animateArrow(with: downArrowPaths()) }
     public func showLeftArrow()     { animateArrow(with: leftArrowPaths()) }
     public func showRightArrow()    { animateArrow(with: rightArrowPaths()) }
   
-    // MARK: - Private
+    // MARK: - Private helpers
     
-    private func animateArrow(with paths: TopBottomPaths) {
-
+    private func animateArrow(with paths: ArrowPathPair) {
         let keyPath = "path"
         
-        let topLineAnimation = aimation(keyPath: keyPath, duration: animationDuration, fromValue: topLineLayer.path, toValue: paths.top)
+        topLineLayer.add(makeAnimation(keyPath: keyPath, fromValue: topLineLayer.path, toValue: paths.top), forKey: keyPath)
+        bottomLineLayer.add(makeAnimation(keyPath: keyPath, fromValue: bottomLineLayer.path, toValue: paths.bottom), forKey: keyPath)
         
-        let bottomLineAnimation = aimation(keyPath: keyPath, duration: animationDuration, fromValue: bottomLineLayer.path, toValue: paths.bottom)
         topLineLayer.path = paths.top
-        topLineLayer.add(topLineAnimation, forKey: keyPath)
-        
         bottomLineLayer.path = paths.bottom
-        bottomLineLayer.add(bottomLineAnimation, forKey: keyPath)
     }
     
-    private func aimation(keyPath: String, duration: TimeInterval, fromValue: Any?, toValue: Any?) -> CAAnimation {
-        
+    private func makeAnimation(keyPath: String, fromValue: Any?, toValue: Any?) -> CAAnimation {
         let animation = CABasicAnimation(keyPath: keyPath)
-        animation.duration = duration
+        animation.duration = animationDuration
         animation.fromValue = fromValue
         animation.toValue = toValue
-        
         return animation
     }
     
-    private func upArrowPaths() -> TopBottomPaths {
-
-        let verticalInset = bounds.size.height / 3
-        let horizontalInset = bounds.size.width / 2.5
-
-        let firstPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y + verticalInset - arrowInsets.bottom)
-        let secondPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y + verticalInset - arrowInsets.bottom)
-        let centerPoint = CGPoint(x: center.x, y: center.y - verticalInset + arrowInsets.top)
-
-        return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
-    }
-    
-    private func downArrowPaths() -> TopBottomPaths {
-        
-        let verticalInset = bounds.size.height / 3
-        let horizontalInset = bounds.size.width / 2.5
-        
-        let firstPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y - verticalInset + arrowInsets.top)
-        let secondPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y - verticalInset + arrowInsets.top)
-        let centerPoint = CGPoint(x: center.x, y: center.y + verticalInset - arrowInsets.bottom)
-        
-        return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
-    }
-    
-    private func leftArrowPaths() -> TopBottomPaths {
-        
-        let verticalInset = bounds.size.height / 2.5
-        let horizontalInset = bounds.size.width / 3
-        
-        let firstPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y - verticalInset + arrowInsets.top)
-        let secondPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y + verticalInset - arrowInsets.bottom)
-        let centerPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y)
-        
-        return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
-    }
-    
-    private func rightArrowPaths() -> TopBottomPaths {
-        
-        let verticalInset = bounds.size.height / 2.5
-        let horizontalInset = bounds.size.width / 3
-        
-        let firstPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y - verticalInset + arrowInsets.top)
-        let secondPoint = CGPoint(x: center.x - horizontalInset + arrowInsets.left, y: center.y + verticalInset - arrowInsets.bottom)
-        let centerPoint = CGPoint(x: center.x + horizontalInset - arrowInsets.right, y: center.y)
-        
-        return arrowPaths(firstPoint: firstPoint, secondPoint: secondPoint, centerPoint: centerPoint)
-    }
-    
-    private func arrowPaths(firstPoint top: CGPoint, secondPoint: CGPoint, centerPoint: CGPoint) -> TopBottomPaths {
-        
-        let gravityCenter = CGPoint(x: (top.x + secondPoint.x + centerPoint.x) / 3, y: (top.y + secondPoint.y + centerPoint.y) / 3)
-        let offsetFromCenter = CGPoint(x: center.x - gravityCenter.x, y: center.y - gravityCenter.y)
-        
-        let topLinePath = line(from: top, to: centerPoint, offset: offsetFromCenter)
-        let bottomLinePath = line(from: secondPoint, to: centerPoint, offset: offsetFromCenter)
-        
-        return (topLinePath, bottomLinePath)
-    }
-    
-    private func line(from startPoint: CGPoint, to endPoint: CGPoint, offset: CGPoint) -> CGPath {
-        
-        let path = CGMutablePath()
-        
-        path.move(to: CGPoint(x: offset.x + startPoint.x, y: offset.y + startPoint.y))
-        path.addLine(to: CGPoint(x: offset.x + endPoint.x, y: offset.y + endPoint.y))
-
-        return path
-    }
-    
-    private func layer() -> CAShapeLayer {
-        
+    private func makeArrowLayer() -> CAShapeLayer {
         let layer = CAShapeLayer()
         layer.strokeColor = arrowColor.cgColor
         layer.lineWidth = arrowWidth
-        layer.lineJoin = CAShapeLayerLineJoin.round
-        layer.lineCap = CAShapeLayerLineCap.round
+        layer.lineJoin = .round
+        layer.lineCap = .round
         self.layer.addSublayer(layer)
         return layer
+    }
+    
+    // MARK: - Arrow path builders
+    
+    private func upArrowPaths() -> ArrowPathPair {
+        let centerX = bounds.midX
+        let centerY = bounds.midY
+        let verticalInset = bounds.height / 3
+        let horizontalInset = bounds.width / 2.5
+        
+        let point1 = CGPoint(x: centerX - horizontalInset + arrowInsets.left, y: centerY + verticalInset - arrowInsets.bottom)
+        let point2 = CGPoint(x: centerX + horizontalInset - arrowInsets.right, y: centerY + verticalInset - arrowInsets.bottom)
+        let midPoint = CGPoint(x: centerX, y: centerY - verticalInset + arrowInsets.top)
+        
+        return arrowPaths(firstPoint: point1, secondPoint: point2, centerPoint: midPoint)
+    }
+    
+    private func downArrowPaths() -> ArrowPathPair {
+        let centerX = bounds.midX
+        let centerY = bounds.midY
+        let verticalInset = bounds.height / 3
+        let horizontalInset = bounds.width / 2.5
+        
+        let point1 = CGPoint(x: centerX - horizontalInset + arrowInsets.left, y: centerY - verticalInset + arrowInsets.top)
+        let point2 = CGPoint(x: centerX + horizontalInset - arrowInsets.right, y: centerY - verticalInset + arrowInsets.top)
+        let midPoint = CGPoint(x: centerX, y: centerY + verticalInset - arrowInsets.bottom)
+        
+        return arrowPaths(firstPoint: point1, secondPoint: point2, centerPoint: midPoint)
+    }
+    
+    private func leftArrowPaths() -> ArrowPathPair {
+        let centerX = bounds.midX
+        let centerY = bounds.midY
+        let verticalInset = bounds.height / 2.5
+        let horizontalInset = bounds.width / 3
+        
+        let point1 = CGPoint(x: centerX + horizontalInset - arrowInsets.right, y: centerY - verticalInset + arrowInsets.top)
+        let point2 = CGPoint(x: centerX + horizontalInset - arrowInsets.right, y: centerY + verticalInset - arrowInsets.bottom)
+        let midPoint = CGPoint(x: centerX - horizontalInset + arrowInsets.left, y: centerY)
+        
+        return arrowPaths(firstPoint: point1, secondPoint: point2, centerPoint: midPoint)
+    }
+    
+    private func rightArrowPaths() -> ArrowPathPair {
+        let centerX = bounds.midX
+        let centerY = bounds.midY
+        let verticalInset = bounds.height / 2.5
+        let horizontalInset = bounds.width / 3
+        
+        let point1 = CGPoint(x: centerX - horizontalInset + arrowInsets.left, y: centerY - verticalInset + arrowInsets.top)
+        let point2 = CGPoint(x: centerX - horizontalInset + arrowInsets.left, y: centerY + verticalInset - arrowInsets.bottom)
+        let midPoint = CGPoint(x: centerX + horizontalInset - arrowInsets.right, y: centerY)
+        
+        return arrowPaths(firstPoint: point1, secondPoint: point2, centerPoint: midPoint)
+    }
+    
+    private func arrowPaths(firstPoint: CGPoint, secondPoint: CGPoint, centerPoint: CGPoint) -> ArrowPathPair {
+        let gravityCenter = CGPoint(
+            x: (firstPoint.x + secondPoint.x + centerPoint.x) / 3,
+            y: (firstPoint.y + secondPoint.y + centerPoint.y) / 3
+        )
+        let offset = CGPoint(x: bounds.midX - gravityCenter.x, y: bounds.midY - gravityCenter.y)
+        
+        let topPath = buildLine(from: firstPoint, to: centerPoint, offset: offset)
+        let bottomPath = buildLine(from: secondPoint, to: centerPoint, offset: offset)
+        
+        return (top: topPath, bottom: bottomPath)
+    }
+    
+    private func buildLine(from start: CGPoint, to end: CGPoint, offset: CGPoint) -> CGPath {
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x: start.x + offset.x, y: start.y + offset.y))
+        path.addLine(to: CGPoint(x: end.x + offset.x, y: end.y + offset.y))
+        return path
     }
 }

@@ -38,7 +38,9 @@ public class PTEditMenuItemsInteraction: NSObject {
     // iOS 16之后使用官方的UIEditMenuInteraction
     private lazy var rawMenuInteraction: Any? = {
         if #available(iOS 16, *) {
-            return UIEditMenuInteraction(delegate: self) as Any
+            return MainActor.assumeIsolated {
+                UIEditMenuInteraction(delegate: self)
+            }
         }
         return nil
     }()
@@ -176,7 +178,7 @@ public class PTEditMenuItemsInteraction: NSObject {
 }
 
 // MARK: UIEditMenuInteractionDelegate
-extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
+extension PTEditMenuItemsInteraction: @MainActor UIEditMenuInteractionDelegate {
     @available(iOS 16.0, *)
     public func editMenuInteraction(_: UIEditMenuInteraction, targetRectFor _: UIEditMenuConfiguration) -> CGRect {
         guard let rect = targetRect else {

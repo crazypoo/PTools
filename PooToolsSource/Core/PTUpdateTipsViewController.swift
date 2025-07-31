@@ -11,8 +11,8 @@ import SnapKit
 import SwifterSwift
 import AttributedString
 
-class PTUpdateTipsContentView : UIView {
-    init(oV:String,nV:String,descriptionString:String) {
+public class PTUpdateTipsContentView : UIView {
+    public init(oV:String,nV:String,descriptionString:String) {
         super.init(frame: .zero)
         let nameArr = ["PT Current version".localized(), "PT New version".localized(), "PT Version info".localized()]
         let valueArr = [oV, nV, descriptionString]
@@ -111,10 +111,10 @@ class PTUpdateTipsContentView : UIView {
     }
 }
 
-class PTUpdateTipsViewController: PTBaseViewController {
+open class PTUpdateTipsViewController: PTBaseViewController {
 
-    @MainActor var doneTask:PTActionTask? = nil
-    @MainActor var cancelTask:PTActionTask? = nil
+    @MainActor public var doneTask:PTActionTask? = nil
+    @MainActor public var cancelTask:PTActionTask? = nil
 
     lazy var whiteView : UIView = {
         let view = UIView()
@@ -169,24 +169,23 @@ class PTUpdateTipsViewController: PTBaseViewController {
         }
         return view
     }()
-
     
     private var cancelTitle:String? = ""
     private var doneTitle:String!
     private var titleString:String? = ""
 
-    init(titleString:String? = "",cancelTitle:String? = "",doneTitle:String) {
+    public init(titleString:String? = "",cancelTitle:String? = "",doneTitle:String) {
         super.init(nibName: nil, bundle: nil)
         self.titleString = titleString
         self.cancelTitle = cancelTitle
         self.doneTitle = doneTitle
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .clear

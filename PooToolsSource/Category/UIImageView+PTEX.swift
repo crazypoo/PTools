@@ -43,10 +43,9 @@ public extension UIImageView {
                          valueLabelFont:UIFont = .appfont(size: 16,bold: true),
                          valueLabelColor:UIColor = .white,
                          uniCount:Int = 0,
-                         gifAnimationDuration:Double = 2,
                          emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                          progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
-                         loadFinish:(([UIImage]?,UIImage?)->Void)? = nil) {
+                         loadFinish:(([UIImage]?,UIImage?,TimeInterval)->Void)? = nil) {
         
         self.image = emptyImage
 
@@ -68,27 +67,27 @@ public extension UIImageView {
                 }
             }
 
-            guard let images = result.0, !images.isEmpty else {
+            guard let images = result.allImages, !images.isEmpty else {
                 PTGCDManager.gcdMain {
                     self.image = emptyImage
-                    loadFinish?(result.0, result.1)
+                    loadFinish?(result.allImages, result.firstImage,result.loadTime)
                 }
                 return
             }
 
             if images.count > 1 {
                 // 多帧：异步创建 GIF
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let animatedImage = UIImage.animatedImage(with: images, duration: gifAnimationDuration)
-                    DispatchQueue.main.async {
+                PTGCDManager.gcdGobal(block: {
+                    let animatedImage = UIImage.animatedImage(with: images, duration: result.loadTime)
+                    PTGCDManager.gcdMain {
                         self.image = animatedImage
-                        loadFinish?(images, animatedImage)
+                        loadFinish?(images, animatedImage,result.loadTime)
                     }
-                }
+                })
             } else {
                 PTGCDManager.gcdMain {
-                    self.image = result.1
-                    loadFinish?(images, result.1)
+                    self.image = result.firstImage
+                    loadFinish?(images, result.firstImage,result.loadTime)
                 }
             }
         }
