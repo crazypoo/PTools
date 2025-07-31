@@ -321,12 +321,14 @@ public class Network: NSObject {
         }
     }
     
-    func hudHide(completion:PTActionTask? = nil) {
-        if self.hud != nil {
-            self.hud!.hide {
+    @MainActor func hudHide(completion:PTActionTask? = nil) {
+        if let hud = self.hud {
+            hud.hide {
                 self.hud = nil
                 completion?()
             }
+        } else {
+            completion?()
         }
     }
         
@@ -674,7 +676,6 @@ public class Network: NSObject {
                                 requestStruct.resultData = response.data
 
                                 logRequestSuccess(url: pathUrl, jsonStr: jsonStr)
-
                                 if let modelType = modelType {
                                     requestStruct.customerModel = jsonStr.kj.model(type: modelType)
                                 }

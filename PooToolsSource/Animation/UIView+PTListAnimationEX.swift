@@ -163,7 +163,9 @@ public extension UIView {
 
             }
         } completion: { _ in
-            completion?()
+            Task { @MainActor in
+                completion?()
+            }
         }
     }
     // MARK: - UIView Array

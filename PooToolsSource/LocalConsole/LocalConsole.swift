@@ -390,73 +390,71 @@ public class LocalConsole: NSObject {
     }
 
     var possibleEndpoints: [CGPoint] {
-        guard let appWindow = AppWindows else {
-            return []
-        }
+        guard let appWindow = AppWindows else { return [] }
         
         let screenSize = appWindow.frame.size
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
         let hasNotch = UIDevice.current.hasNotch
-        let safeAreaInsets = PTUtils.getCurrentVC().view.safeAreaInsets
+        let safeInsets = PTUtils.getCurrentVC().view.safeAreaInsets
         let isPortrait = screenSize.width < screenSize.height
-        
-        let isPortraitNotchedPhone = hasNotch && isPortrait
-        let isLandscapePhone = isPhone && !isPortrait
         let orientation = UIDevice.current.orientation
 
-        let isLandscapeLeftNotchedPhone = isLandscapePhone && orientation == .landscapeLeft && hasNotch
-        let isLandscapeRightNotchedPhone = isLandscapePhone && orientation == .landscapeRight && hasNotch
-        
-        let leftOffset: CGFloat = (isLandscapePhone ? 4 : 12) + (isLandscapeRightNotchedPhone ? -16 : 0)
-        let rightOffset: CGFloat = (isLandscapePhone ? 4 : 12) + (isLandscapeLeftNotchedPhone ? 16 : 0)
-        let topOffset: CGFloat = 12 + (isPortraitNotchedPhone ? -10 : 0)
-        let bottomOffset: CGFloat = (keyboardHeight ?? safeAreaInsets.bottom) + 12 + (isLandscapePhone ? 10 : 0)
-        
-        let leftEndpointX = consoleSize.width / 2 + safeAreaInsets.left + leftOffset
-        let rightEndpointX = screenSize.width - consoleSize.width / 2 - safeAreaInsets.right - rightOffset
-        let topEndpointY = consoleSize.height / 2 + safeAreaInsets.top + topOffset
-        let bottomEndpointY = screenSize.height - consoleSize.height / 2 - bottomOffset
+        let isLandscape = isPhone && !isPortrait
+        let isLeftNotch = isLandscape && hasNotch && orientation == .landscapeLeft
+        let isRightNotch = isLandscape && hasNotch && orientation == .landscapeRight
 
-        var endpoints: [CGPoint] = []
+        let topOffset: CGFloat = 12 + (hasNotch && isPortrait ? -10 : 0)
+        let bottomOffset: CGFloat = (keyboardHeight ?? safeInsets.bottom) + 12 + (isLandscape ? 10 : 0)
+        let leftOffset: CGFloat = (isLandscape ? 4 : 12) + (isRightNotch ? -16 : 0)
+        let rightOffset: CGFloat = (isLandscape ? 4 : 12) + (isLeftNotch ? 16 : 0)
+
+        let leftX = consoleSize.width / 2 + safeInsets.left + leftOffset
+        let rightX = screenSize.width - consoleSize.width / 2 - safeInsets.right - rightOffset
+        let topY = consoleSize.height / 2 + safeInsets.top + topOffset
+        let bottomY = screenSize.height - consoleSize.height / 2 - bottomOffset
+
         let isLeftEdge = terminal?.frame.minX ?? 0 <= 0
         let isRightEdge = terminal?.frame.maxX ?? 0 >= screenSize.width
+        let terminalCenterY = terminal?.center.y ?? 0
+        let keyboardAwareScreenHeight = screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)
+        let isTopHalf = terminalCenterY < keyboardAwareScreenHeight / 2
+        let yOffset = isTopHalf ? topY : bottomY
+
+        var endpoints: [CGPoint] = []
 
         if consoleSize.width < screenSize.width - 112 {
-            endpoints = [
-                CGPoint(x: leftEndpointX, y: topEndpointY),
-                CGPoint(x: rightEndpointX, y: topEndpointY),
-                CGPoint(x: leftEndpointX, y: bottomEndpointY),
-                CGPoint(x: rightEndpointX, y: bottomEndpointY),
-            ]
+            // 四角點
+            let topLeft = CGPoint(x: leftX, y: topY)
+            let topRight = CGPoint(x: rightX, y: topY)
+            let bottomLeft = CGPoint(x: leftX, y: bottomY)
+            let bottomRight = CGPoint(x: rightX, y: bottomY)
             
             if isLeftEdge {
-                endpoints = [endpoints[0], endpoints[2]]
-                if !isLandscapeLeftNotchedPhone {
-                    let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                endpoints = [topLeft, bottomLeft]
+                if !isLeftNotch {
                     endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: yOffset))
                 }
             } else if isRightEdge {
-                endpoints = [endpoints[1], endpoints[3]]
-                if !isLandscapeRightNotchedPhone {
-                    let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
+                endpoints = [topRight, bottomRight]
+                if !isRightNotch {
                     endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: yOffset))
                 }
+            } else {
+                endpoints = [topLeft, topRight, bottomLeft, bottomRight]
             }
         } else {
-            endpoints = [
-                CGPoint(x: screenSize.width / 2, y: topEndpointY),
-                CGPoint(x: screenSize.width / 2, y: bottomEndpointY)
-            ]
-            
+            // 垂直中線
+            let centerTop = CGPoint(x: screenSize.width / 2, y: topY)
+            let centerBottom = CGPoint(x: screenSize.width / 2, y: bottomY)
+            endpoints = [centerTop, centerBottom]
+
             if isLeftEdge {
-                let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
                 endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: yOffset))
             } else if isRightEdge {
-                let yOffset = (terminal?.center.y ?? 0) < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 ? endpoints[0].y : endpoints[1].y
                 endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: yOffset))
             }
         }
-        
+
         return endpoints
     }
     

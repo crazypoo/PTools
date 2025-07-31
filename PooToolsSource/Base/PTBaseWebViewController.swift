@@ -50,8 +50,6 @@ open class PTBaseWebViewController: PTBaseViewController {
         config.allowsAirPlayForMediaPlayback = true
         // 允许在线播放
         config.allowsInlineMediaPlayback = true
-        // 允许可以与网页交互，选择视图
-        config.selectionGranularity = .character
         // web内容处理池
         config.processPool = PTBaseWebViewController.sharedProcessPool
 #if DEBUG

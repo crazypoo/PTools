@@ -595,8 +595,10 @@ class PlatterView: UIView,UITextFieldDelegate {
             self.frame.origin = self.possibleEndpoints[1]
         }
         animator.addCompletion { _ in
-            self.isHidden = true
-            completion?()
+            Task { @MainActor in
+                self.isHidden = true
+                completion?()
+            }
         }
         animator.startAnimation()
         

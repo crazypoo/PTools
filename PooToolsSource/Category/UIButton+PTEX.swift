@@ -56,7 +56,7 @@ public extension UIButton {
                              placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,
                              forState:UIControl.State = .normal,
                              loadedHandler:PTImageLoadHandler? = nil) {
-        kf.setImage(with: URL.init(string: imageString), for: forState,placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption(),completionHandler: { result in
+        kf.setImage(with: URL(string: imageString), for: forState,placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption(),completionHandler: { result in
             switch result {
             case .success(let result):
                 loadedHandler?(nil,result.originalSource.url,result.image)
