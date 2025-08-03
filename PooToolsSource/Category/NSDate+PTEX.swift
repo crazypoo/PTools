@@ -12,7 +12,7 @@ public extension NSDate {
     //MARK: 判斷當前時間是否在某時間段內
     /// 判斷當前時間是否在某時間段內
     static func nowTimeInTimePeriod(start:Int,
-                                    end:Int)->Bool {
+                                    end:Int) -> Bool {
         if start > end && start > 23 && end > 23  {
             return false
         }
@@ -29,19 +29,19 @@ public extension NSDate {
         
     //MARK: 判斷當前時間是否屬於白天
     /// 判斷當前時間是否屬於白天
-    static func nowIsDayTime()->Bool {
+    static func nowIsDayTime() -> Bool {
         NSDate.nowTimeInTimePeriod(start: 6, end: 19)
     }
     
     //MARK: 判斷當前時間是否屬於凌晨
     /// 判斷當前時間是否屬於凌晨
-    static func nowIsEarlyMorning()->Bool {
+    static func nowIsEarlyMorning() -> Bool {
         NSDate.nowTimeInTimePeriod(start: 0, end: 6)
     }
     
     //MARK: 判斷當前時間是否屬於晚上
     /// 判斷當前時間是否屬於晚上
-    static func nowIsNightTime()->Bool {
+    static func nowIsNightTime() -> Bool {
         NSDate.nowTimeInTimePeriod(start: 19, end: 23)
     }
 }

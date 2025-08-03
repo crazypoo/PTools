@@ -380,7 +380,7 @@ public class PTLayoutButton: UIButton {
     }
     open var selectedSubTitle: String {
         get {
-            normalSubTitle!
+            normalSubTitle ?? ""
         } set {
             if selectedSubTitle != newValue {
                 self.selectedSubTitle = newValue
@@ -394,7 +394,7 @@ public class PTLayoutButton: UIButton {
     }
     open var hightlightSubTitle: String {
         get {
-            normalSubTitle!
+            normalSubTitle ?? ""
         } set {
             if hightlightSubTitle != newValue {
                 self.hightlightSubTitle = newValue
@@ -408,7 +408,7 @@ public class PTLayoutButton: UIButton {
     }
     open var disabledSubTitle: String {
         get {
-            normalSubTitle!
+            normalSubTitle ?? ""
         } set {
             if disabledSubTitle != newValue {
                 self.disabledSubTitle = newValue

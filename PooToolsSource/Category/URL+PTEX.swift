@@ -50,7 +50,7 @@ public extension URL {
         task.resume()
     }
     
-    func audioLinkGetDurationTime() ->Float {
+    func audioLinkGetDurationTime() -> Float {
         let audionAsset = AVURLAsset(url: self)
         return Float(CMTimeGetSeconds(audionAsset.duration))
     }

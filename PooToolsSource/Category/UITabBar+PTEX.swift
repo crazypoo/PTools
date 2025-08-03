@@ -31,34 +31,30 @@ public extension UITabBar {
         case opaqueAlways
         
         public var standardAppearance: UITabBarAppearance {
+            let appearance = UITabBarAppearance()
             switch self {
             case .transparentAlways:
-                let appearance = UITabBarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .transparentStandardOnly:
-                let appearance = UITabBarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             case .opaqueAlways:
-                let appearance = UITabBarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             }
         }
         
         public var scrollEdgeAppearance: UITabBarAppearance {
+            let appearance = UITabBarAppearance()
             switch self {
             case .transparentAlways:
-                let appearance = UITabBarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .transparentStandardOnly:
-                let appearance = UITabBarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .opaqueAlways:
-                let appearance = UITabBarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             }

@@ -370,9 +370,9 @@ public extension UIView {
     ///View的背景渐变
     func backgroundGradient(type:Imagegradien,
                             colors:[UIColor],
-                            radius:CGFloat? = 0,
-                            borderWidth:CGFloat? = 0,
-                            borderColor:UIColor? = UIColor.clear,
+                            radius:CGFloat = 0,
+                            borderWidth:CGFloat = 0,
+                            borderColor:UIColor = UIColor.clear,
                             corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
             // 检查并移除已经存在的渐变背景层，防止重复添加
@@ -386,7 +386,7 @@ public extension UIView {
             gradientBackgroundView.backgroundColor = .clear
             gradientBackgroundView.isUserInteractionEnabled = false // 确保不干扰用户操作
 
-            let maskPath = UIBezierPath(roundedRect: gradientBackgroundView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius!, height: radius!))
+            let maskPath = UIBezierPath(roundedRect: gradientBackgroundView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
             let shapeLayer = CAShapeLayer()
             shapeLayer.path = maskPath.cgPath
 
@@ -414,8 +414,8 @@ public extension UIView {
             maskLayer.frame = gradientBackgroundView.bounds
             maskLayer.mask = shapeLayer
             maskLayer.masksToBounds = true
-            maskLayer.borderWidth = borderWidth!
-            maskLayer.borderColor = borderColor!.cgColor
+            maskLayer.borderWidth = borderWidth
+            maskLayer.borderColor = borderColor.cgColor
 
             gradientBackgroundView.layer.insertSublayer(maskLayer, at: 0)
             gradientBackgroundView.layer.masksToBounds = true
@@ -433,7 +433,7 @@ public extension UIView {
     ///border的背景渐变
     func borderGradient(type:Imagegradien,
                         colors:[UIColor],
-                        radius:CGFloat? = 0,
+                        radius:CGFloat = 0,
                         borderWidth:CGFloat = 1,
                         corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
@@ -461,7 +461,7 @@ public extension UIView {
             }
             
             let borderShapeLayer = CAShapeLayer()
-            let borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: radius!, height: radius!))
+            let borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: radius, height: radius))
             borderShapeLayer.path = borderPath.cgPath
             borderShapeLayer.fillColor = UIColor.clear.cgColor
             borderShapeLayer.strokeColor = UIColor.black.cgColor
@@ -541,7 +541,7 @@ public extension UIView {
             if let aView = view as? T{
                 all.append(aView)
             }
-            guard view.subviews.count>0 else { return }
+            guard view.subviews.count > 0 else { return }
             view.subviews.forEach{ getSubview(view: $0) }
         }
         getSubview(view: self)
@@ -1059,45 +1059,57 @@ public extension UIView {
 
 public extension UILabel {
     @objc func getLabelSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                            height:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
-        UIView.sizeFor(string: text!, font: font!, height: height, width: width)
+                            height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        if let currentText = text,!currentText.stringIsEmpty() {
+            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
+        } else {
+            return .zero
+        }
     }
     
-    @objc func getLabelWidth(height:CGFloat)->CGFloat {
+    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
         getLabelSize(height: height).width
     }
     
-    @objc func getLabelHeight(width:CGFloat)->CGFloat {
+    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
         getLabelSize(width: width).height
     }
 }
 
 public extension UIButton {
     @objc func getButtonSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                             height:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
-        UIView.sizeFor(string: titleLabel!.text!, font: titleLabel!.font!, height: height, width: width)
+                             height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        if let currentText = titleLabel?.text,!currentText.stringIsEmpty() {
+            return UIView.sizeFor(string: currentText, font: titleLabel!.font!, height: height, width: width)
+        } else {
+            return .zero
+        }
     }
     
-    @objc func getButtonWidth(height:CGFloat)->CGFloat {
+    @objc func getButtonWidth(height:CGFloat) -> CGFloat {
         getButtonSize(height: height).width
     }
     
-    @objc func getButtonHeight(width:CGFloat)->CGFloat {
+    @objc func getButtonHeight(width:CGFloat) -> CGFloat {
         getButtonSize(width: width).height
     }
 }
 
 public extension UITextView {
     @objc func getTextViewSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                               height:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
-        UIView.sizeFor(string: text!, font: font!, height: height, width: width)
+                               height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        if let currentText = text,!currentText.stringIsEmpty() {
+            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
+        } else {
+            return .zero
+        }
     }
     
-    @objc func getLabelWidth(height:CGFloat)->CGFloat {
+    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
         getTextViewSize(height: height).width
     }
     
-    @objc func getLabelHeight(width:CGFloat)->CGFloat {
+    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
         getTextViewSize(width: width).height
     }
 }
@@ -1114,7 +1126,10 @@ extension UIFadeOut where Self: UIView {
      - parameter work: Apply view changes here.
      - parameter completion: Call after end of animation.
      */
-    public func fadeUpdate(duration: TimeInterval = 1, delay: TimeInterval = 0.15, work: @escaping (Self)->Void, completion: (()->Void)? = nil) {
+    public func fadeUpdate(duration: TimeInterval = 1,
+                           delay: TimeInterval = 0.15,
+                           work: @escaping (Self) -> Void,
+                           completion: PTActionTask? = nil) {
         let partDuration = (duration - delay) / 2
         let storedAlpha = self.alpha
         UIView.animate(withDuration: partDuration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
@@ -1126,7 +1141,9 @@ extension UIFadeOut where Self: UIView {
             UIView.animate(withDuration: partDuration, delay: delay, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
                 self?.alpha = storedAlpha
             }, completion: { finished in
-                completion?()
+                Task { @MainActor in
+                    completion?()
+                }
             })
         })
     }

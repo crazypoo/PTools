@@ -315,8 +315,8 @@ public class PTCollectionView: UIView {
     }
 
     fileprivate var mSections = [PTSection]()
-    fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout.init { section, environment in
+    fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { section, environment in
             self.generateSection(section: section,environment:environment)
         }
         switch viewConfig.decorationItemsType {
@@ -586,13 +586,13 @@ public class PTCollectionView: UIView {
     open var collectionWillBeginDecelerating:PTCollectionViewScrollHandler?
     open var collectionViewDidScroll:PTCollectionViewScrollHandler?
     open var collectionWillBeginDragging:PTCollectionViewScrollHandler?
-    open var collectionDidEndDragging:((UICollectionView,Bool)->Void)?
+    open var collectionDidEndDragging:((UICollectionView,Bool) -> Void)?
     open var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
     open var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
     open var collectionDidScrolltoTop:PTCollectionViewScrollHandler?
-    open var collectionWillEndDraging:((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>)->Void)?
+    open var collectionWillEndDraging:((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
     ///头部刷新事件
-    open var headerRefreshTask:((UIRefreshControl)->Void)?
+    open var headerRefreshTask:((UIRefreshControl) -> Void)?
     ///底部刷新事件
     open var footRefreshTask:PTActionTask?
     
@@ -609,8 +609,8 @@ public class PTCollectionView: UIView {
     open var customerReuseViews:((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
 
     ///当空数据View展示的时候,点击回调
-    open var emptyTap:((UIView?)->Void)?
-    open var emptyButtonTap:((UIView?)->Void)?
+    open var emptyTap:((UIView?) -> Void)?
+    open var emptyButtonTap:((UIView?) -> Void)?
 
     ///CollectionView的DecorationItem囘調(自定義模式下使用)
     open var decorationInCollectionView:PTDecorationInCollectionHandler!
@@ -619,7 +619,7 @@ public class PTCollectionView: UIView {
     open var decorationViewReset:PTViewInDecorationResetHandler?
     
     ///CollectionView的DecorationItem内的Item与Header&Footer重新設置囘調(自定義模式下使用)
-    open var decorationCustomLayoutInsetReset:((Int,PTSection) ->NSDirectionalEdgeInsets)?
+    open var decorationCustomLayoutInsetReset:((Int,PTSection) -> NSDirectionalEdgeInsets)?
     
     public var contentCollectionView:UICollectionView {
         get {

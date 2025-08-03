@@ -181,13 +181,13 @@ public extension String {
      
     //MARK: 判斷字符串是否帶有數字和字母
     ///判斷字符串是否帶有數字和字母
-    func isNumberAndWord()->Bool {
+    func isNumberAndWord() -> Bool {
         checkWithString(expression: String.NUMBERANDWORD)
     }
 
     //MARK: 判斷字符串是否中國大陸車牌
     ///判斷字符串是否中國大陸車牌
-    func isCnCarLicense()->Bool {
+    func isCnCarLicense() -> Bool {
         checkWithString(expression: String.CNCARLICENSE)
     }
     
@@ -195,7 +195,7 @@ public extension String {
     ///判斷字符串是否純字母
     /// - Parameters:
     ///   - isLower: 是否大小寫
-    func isAlphabet(isLower:Bool)->Bool {
+    func isAlphabet(isLower:Bool) -> Bool {
         if isLower {
             return checkWithString(expression: String.ALPHABETLOWERCASED)
         } else {
@@ -205,31 +205,31 @@ public extension String {
     
     //MARK: 判斷字符串是否第一個為字母
     ///判斷字符串是否第一個為字母
-    func isLetterFirstAlphabet()->Bool {
+    func isLetterFirstAlphabet() -> Bool {
         checkWithString(expression: String.LETTERFIRSTALPHABET)
     }
     
     //MARK: 判斷字符串是否郵箱
     ///判斷字符串是否郵箱
-    func isMail()->Bool {
+    func isMail() -> Bool {
         checkWithString(expression: String.MAIL)
     }
     
     //MARK: 判斷字符串是否中文
     ///判斷字符串是否中文
-    func isChinese()->Bool {
+    func isChinese() -> Bool {
         checkWithString(expression: String.CHINESE)
     }
     
     //MARK: 判斷字符串是否護照號碼
     ///判斷字符串是否護照號碼
-    func isPassportNumber()->Bool {
+    func isPassportNumber() -> Bool {
         checkWithString(expression: String.PASSPORT)
     }
     
     //MARK: 判斷字符串是否URL
     ///判斷字符串是否URL
-    func checkURL()->Bool {
+    func checkURL() -> Bool {
         var newString : String = self
         if newString.countOfChars() < 1 {
             return false
@@ -243,49 +243,49 @@ public extension String {
     
     //MARK: 判斷字符串是否數字
     ///判斷字符串是否數字
-    func isNumberString()->Bool {
+    func isNumberString() -> Bool {
         checkWithString(expression: String.ISNUMBER)
     }
     
     //MARK: 判斷字符串是否中國家庭電話
     ///判斷字符串是否中國家庭電話
-    func isHomePhone()->Bool {
+    func isHomePhone() -> Bool {
         checkWithString(expression: String.HomePhone)
     }
 
     //MARK: 判斷字符串是否中國手機號碼
     ///判斷字符串是否中國手機號碼
-    func isPooPhoneNum()->Bool {
+    func isPooPhoneNum() -> Bool {
         checkWithString(expression: String.POOPHONE)
     }
 
     //MARK: 判斷字符串是否中國工商號碼
     ///判斷字符串是否中國工商號碼
-    func isCOLTDCode()->Bool {
+    func isCOLTDCode() -> Bool {
         checkWithString(expression: String.COLTDCode)
     }
     
     //MARK: 判斷字符串是否URL
     ///判斷字符串是否URL
-    func isURL()->Bool {
+    func isURL() -> Bool {
         checkWithString(expression: String.URLSTRING)
     }
     
     //MARK: 判斷字符串是否IP地址
     ///判斷字符串是否IP地址
-    func isIP()->Bool {
+    func isIP() -> Bool {
         checkWithString(expression: String.IpAddress)
     }
     
     //MARK: 判斷字符串是否金額
     ///判斷字符串是否金額
-    func isMoneyString()->Bool {
+    func isMoneyString() -> Bool {
         !checkWithString(expression: String.AMOUT1) && checkWithString(expression: String.AMOUT2) ? true : false
     }
     
     //MARK: 判斷字符串是否中文姓名
     ///判斷字符串是否中文姓名
-    func isAChineseName()->Bool {
+    func isAChineseName() -> Bool {
         if (self).stringIsEmpty() {
             return false
         }
@@ -299,7 +299,7 @@ public extension String {
             }
             
             do {
-                let regex = try NSRegularExpression.init(pattern: "^[\u{4e00}-\u{9fa5}]+[·•][\u{4e00}-\u{9fa5}]+$", options: NSRegularExpression.Options.caseInsensitive)
+                let regex = try NSRegularExpression(pattern: "^[\u{4e00}-\u{9fa5}]+[·•][\u{4e00}-\u{9fa5}]+$", options: NSRegularExpression.Options.caseInsensitive)
                 let match = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportProgress, range: NSRange.init(location: 0, length: charactersArray.count))
                 let count = match?.numberOfRanges
                 return count == 1
@@ -312,7 +312,7 @@ public extension String {
             }
 
             do {
-                let regex = try NSRegularExpression.init(pattern: "^[\u{4e00}-\u{9fa5}]+$", options: NSRegularExpression.Options.caseInsensitive)
+                let regex = try NSRegularExpression(pattern: "^[\u{4e00}-\u{9fa5}]+$", options: NSRegularExpression.Options.caseInsensitive)
                 let match = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportProgress, range: NSRange.init(location: 0, length: charactersArray.count))
                 let count = match?.numberOfRanges
                 return count == 1
@@ -326,7 +326,7 @@ public extension String {
     ///正則表達式基類
     /// - Parameters:
     ///   - expression: 正則表達式
-    func checkWithString(expression:String)->Bool {
+    func checkWithString(expression:String) -> Bool {
         let regextest = NSPredicate.init(format: "SELF MATCHES %@", expression)
         return regextest.evaluate(with: self)
     }
@@ -335,10 +335,10 @@ public extension String {
     ///正則表達式基類(數組)
     /// - Parameters:
     ///   - expression: 正則表達式(數組)
-    func checkWithArray(expression:NSArray)->Bool {
+    func checkWithArray(expression:NSArray) -> Bool {
         var res = false
         for value in expression {
-            let regextest = NSPredicate.init(format: "SELF MATCHES %@", value as! String)
+            let regextest = NSPredicate(format: "SELF MATCHES %@", value as! String)
             res = regextest.evaluate(with: self)
             if !res {
                 return false
@@ -485,7 +485,7 @@ public extension String {
     
     //MARK: 中文轉換成拼音字母
     ///中文轉換成拼音字母
-    func chineseTransToMandarinAlphabet()->String {
+    func chineseTransToMandarinAlphabet() -> String {
         let chinese:NSMutableString = nsString.mutableCopy() as! NSMutableString
         CFStringTransform((chinese as CFMutableString), nil, kCFStringTransformMandarinLatin, false)
         CFStringTransform((chinese as CFMutableString), nil, kCFStringTransformStripCombiningMarks, false)
@@ -496,13 +496,13 @@ public extension String {
     
     //MARK: 暂时仅限英文换其他
     ///暂时仅限英文换其他
-    func toOtherLanguage(otherLanguage:StringTransform)->String {
+    func toOtherLanguage(otherLanguage:StringTransform) -> String {
         stringIsEmpty() ? "" : applyingTransform(otherLanguage, reverse: false)!
     }
     
     //MARK: 時間與當前時間的對比狀態
     ///時間與當前時間的對比狀態
-    func timeContrastStatus()->String {
+    func timeContrastStatus() -> String {
         var timeInterval = self.dateTime!.timeIntervalSinceNow
         timeInterval = -timeInterval
         var result = ""
@@ -591,7 +591,7 @@ public extension String {
     
     //MARK: JSON字符串轉換成真正的JSON字符串
     ///JSON字符串轉換成真正的JSON字符串
-    func jsonToTrueJsonString()->String {
+    func jsonToTrueJsonString() -> String {
         var validString:NSString = nsString.replacingOccurrences(of: "(\\w+)\\s*:([^A-Za-z0-9_])", with: "\"$1\":$2",options: NSString.CompareOptions.regularExpression,range: NSRange(location: 0, length: nsString.length)) as NSString
         validString = validString.replacingOccurrences(of: "([:\\[,\\{])'", with: "$1\"",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
         validString = validString.replacingOccurrences(of: "'([:\\],\\}])", with: "\"$1",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
@@ -601,10 +601,10 @@ public extension String {
     
     //MARK: 字符串轉換成UTF8字符串
     ///字符串轉換成UTF8字符串
-    func stringToUTF8String(type:UTF8StringType)->NSString {
+    func stringToUTF8String(type:UTF8StringType) -> NSString {
         switch type {
         case .UTF8StringTypeOC:
-            return NSString.init(cString: nsString.utf8String!, encoding: NSUnicodeStringEncoding)!
+            return NSString(cString: nsString.utf8String!, encoding: NSUnicodeStringEncoding)!
         case .UTF8StringTypeC:
             return nsString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet(charactersIn: "`#%^{}\"[]|\\<> ").inverted)! as NSString
         }
@@ -612,7 +612,7 @@ public extension String {
     
     //MARK: 根據字符串轉換成二維碼圖片
     ///根據字符串轉換成二維碼圖片
-    func createQRImage(size:CGFloat)->UIImage {
+    func createQRImage(size:CGFloat) -> UIImage {
         let filter = CIFilter(name: "CIQRCodeGenerator")
         filter?.setDefaults()
         let data = nsString.data(using: String.Encoding.utf8.rawValue)
@@ -905,7 +905,7 @@ fileprivate extension PTUtils {
     //MARK: 創建一個圖片
     ///創建一個圖片
     class func createNoneInterpolatedUIImage(image:CIImage,
-                                             imageSize:CGFloat)->UIImage {
+                                             imageSize:CGFloat) -> UIImage {
         let extent = CGRectIntegral(image.extent)
         let scale = min(imageSize / extent.width, imageSize / extent.height)
         
@@ -957,7 +957,7 @@ public extension String {
         return formatter.number(from: self)?.doubleValue
     }
     
-    static func currencySymbol()->String {
+    static func currencySymbol() -> String {
         let locale:NSLocale = NSLocale.current as NSLocale
         let currency = locale.object(forKey: NSLocale.Key.currencySymbol)
         return currency as! String
@@ -990,7 +990,7 @@ public extension String {
     **/
     //MARK: 金融字符串相关
     ///金融字符串相关
-    func financeDataString(numberStyle:NumberFormatter.Style)->String {
+    func financeDataString(numberStyle:NumberFormatter.Style) -> String {
         var str = self
         if stringIsEmpty() {
             str = "0"
@@ -1005,7 +1005,7 @@ public extension String {
     
     //MARK: 判斷字符串是否為空
     ///判斷字符串是否為空
-    func stringIsEmpty()->Bool {
+    func stringIsEmpty() -> Bool {
         (self as NSString).length == 0 || (charactersArray.count < 1) ? true : false
     }
     
@@ -1021,34 +1021,34 @@ public extension String {
     ///轉換成數字字符串
     /// - Parameters:
     ///   - decimal: 是否帶小數點
-    func numberStringFormatter(decimal:Bool)->String {
+    func numberStringFormatter(decimal:Bool) -> String {
         let numberFormat = NumberFormatter()
         numberFormat.numberStyle = .decimal
         var outputValue = ""
         if decimal {
-            outputValue = numberFormat.string(from: NSDecimalNumber.init(string: self))!
+            outputValue = numberFormat.string(from: NSDecimalNumber(string: self))!
         } else {
-            outputValue = numberFormat.string(from: NSNumber.init(value: int!))!
+            outputValue = numberFormat.string(from: NSNumber(value: int!))!
         }
         return outputValue
     }
     
     //MARK: 轉換成金額
     ///轉換成金額
-    func toMoney()->String {
+    func toMoney() -> String {
         String(format: "%.2f", float() ?? 0.00)
     }
     
-    func toSecurityPhone()->String {
+    func toSecurityPhone() -> String {
         if !(self).stringIsEmpty() && charactersArray.count > 10 && isPooPhoneNum() {
-            return (self as NSString).replacingCharacters(in: NSRange.init(location: 3, length: 4), with: "****")
+            return (self as NSString).replacingCharacters(in: NSRange(location: 3, length: 4), with: "****")
         }
         return self
     }
     
     //MARK: 字符串转Dic
     ///字符串转Dic
-    func jsonStringToDic()->NSDictionary? {
+    func jsonStringToDic() -> NSDictionary? {
         if self.isEmpty {
             return nil
         }
@@ -1075,7 +1075,7 @@ public extension String {
         return nil
     }
         
-    func jsonStringToArray()->NSArray {
+    func jsonStringToArray() -> NSArray {
         do {
             let tmp = try JSONSerialization.jsonObject(with: data(using: String.Encoding.utf8)!, options: [JSONSerialization.ReadingOptions.mutableLeaves,JSONSerialization.ReadingOptions.mutableContainers])
             if tmp is NSArray {
@@ -1091,7 +1091,7 @@ public extension String {
     
     //MARK: 判斷密碼的強度
     ///判斷密碼的強度
-    func passwordLevel()->PStrengthLevel {
+    func passwordLevel() -> PStrengthLevel {
         let level = checkPasswordStrength()
         if level > 0 && level < 4 {
             return .Easy
@@ -1110,7 +1110,7 @@ public extension String {
     ///检查字符的类型，包括数字、大写字母、小写字母等字符。
     /// - Parameters:
     ///   - string: 字符串
-    private func checkCharacterType(string:String)->Int {
+    private func checkCharacterType(string:String) -> Int {
         let asciiCode = (string as NSString).character(at: 0)
         if asciiCode >= 48 && asciiCode <= 57 {
             return NUM
@@ -1126,11 +1126,11 @@ public extension String {
     ///按不同类型计算密码
     /// - Parameters:
     ///   - type: 類型
-    private func countLetter(type:Int)->Int {
+    private func countLetter(type:Int) -> Int {
         var count = 0
         if (self as NSString).length > 0 {
             for i in 0...((self as NSString).length - 1) {
-                let character = (self as NSString).substring(with: NSRange.init(location: i, length: 1))
+                let character = (self as NSString).substring(with: NSRange(location: i, length: 1))
                 if checkCharacterType(string: character) == type {
                     count += 1
                 }
@@ -1139,7 +1139,7 @@ public extension String {
         return count
     }
     
-    private func checkPasswordStrength()->Int {
+    private func checkPasswordStrength() -> Int {
         if isNull() && isCharEqual() {
             return 0
         }
@@ -1247,8 +1247,8 @@ public extension String {
         }
         
         if len % 3 == 0 {
-            let part1 = (self as NSString).substring(with: NSRange.init(location: 0, length: len / 3))
-            let part2 = (self as NSString).substring(with: NSRange.init(location: len / 3, length: len / 3))
+            let part1 = (self as NSString).substring(with: NSRange(location: 0, length: len / 3))
+            let part2 = (self as NSString).substring(with: NSRange(location: len / 3, length: len / 3))
             let part3 = (self as NSString).substring(from: len / 3)
             if part1 == part2 && part2 == part3 {
                 level -= 1
@@ -1261,8 +1261,8 @@ public extension String {
                 year = (self as NSString).substring(to: (self as NSString).length - 4).int!
             }
             let size = len - 4
-            let month = (self as NSString).substring(with: NSRange.init(location: size, length: 2)).int!
-            let day = (self as NSString).substring(with: NSRange.init(location: size + 2, length: 2)).int!
+            let month = (self as NSString).substring(with: NSRange(location: size, length: 2)).int!
+            let day = (self as NSString).substring(with: NSRange(location: size + 2, length: 2)).int!
             if (year >= 1950 && year < 2050) && (month >= 1 && month <= 12) && (day >= 1 && day <= 31) {
                 level -= 1
             }
@@ -1290,21 +1290,21 @@ public extension String {
         return level
     }
     
-    private func isNull()->Bool {
+    private func isNull() -> Bool {
         (self).stringIsEmpty()
     }
     
-    private func isCharEqual()->Bool {
+    private func isCharEqual() -> Bool {
         if (self as NSString).length < 1 {
             return true
         }
         
-        let character = (self as NSString).substring(with: NSRange.init(location: 0, length: 1))
+        let character = (self as NSString).substring(with: NSRange(location: 0, length: 1))
         let string = self.replacingOccurrences(of: character, with: "")
         return ((string as NSString).length < 1)
     }
     
-    private func isNumeric()->Bool {
+    private func isNumeric() -> Bool {
         if (self as NSString).length < 1 {
             return false
         }
@@ -1313,7 +1313,7 @@ public extension String {
     
     //MARK: 根據日期字符串獲取星座名稱
     ///根據日期字符串獲取星座名稱
-    func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss")->String {
+    func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss") -> String {
         let getDate = self.toDate(format)!.date
         let month = getDate.month
         let day = getDate.day
@@ -1360,7 +1360,7 @@ public extension String {
         }
     }
     
-    func getConstellationChinese(format:String = "yyyy-MM-dd HH:mm:ss") ->String {
+    func getConstellationChinese(format:String = "yyyy-MM-dd HH:mm:ss") -> String {
         var constellationChinese = ""
         let constellation = getConstellation(format: format)
         switch constellation {
@@ -1427,7 +1427,7 @@ public extension String {
 
     //MARK: 获取当前时间
     ///获取当前时间
-    static func currentDate(dateFormatterString:String? = "yyyy-MM-dd",timeZone:String = "GMT+0800")->String {
+    static func currentDate(dateFormatterString:String? = "yyyy-MM-dd",timeZone:String = "GMT+0800") -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormatterString
         dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
@@ -1446,7 +1446,7 @@ public extension String {
     
     //MARK: 當前時間的時間戳字符串
     ///當前時間的時間戳字符串
-    func currentTimeInterval(dateFormatter:String = "yyyy-MM-dd")->TimeInterval {
+    func currentTimeInterval(dateFormatter:String = "yyyy-MM-dd") -> TimeInterval {
         String.currentDate(dateFormatterString: dateFormatter).dateStrToTimeInterval(dateFormat: dateFormatter)
     }
     
@@ -1462,7 +1462,7 @@ public extension String {
     
     //MARK: JavaUnicode转苹果可以用的String
     ///JavaUnicode转苹果可以用的String
-    func javaUnicodeToString()->String {
+    func javaUnicodeToString() -> String {
         let string = nsString.mutableCopy()
         CFStringTransform((string as! CFMutableString), nil, "Any-Hex/Java" as NSString, true)
         return (string as! String)
@@ -1496,10 +1496,7 @@ public extension String {
     //MARK: 提取emoji表情字符串
     /// 提取emoji表情字符串
     var emojiString: String {
-        emojis.map {
-                    String($0)
-                }
-                .reduce("", +)
+        emojis.map { String($0) }.reduce("", +)
     }
 
     //MARK: 提取emoji表情数组
@@ -1513,12 +1510,7 @@ public extension String {
     //MARK: 提取单元编码标量
     /// 提取单元编码标量
     var emojiScalars: [UnicodeScalar] {
-        filter {
-            $0.isEmoji
-        }
-                .flatMap {
-                    $0.unicodeScalars
-                }
+        filter { $0.isEmoji }.flatMap { $0.unicodeScalars }
     }
     
     //MARK: Emoji转图片
@@ -1527,7 +1519,7 @@ public extension String {
      如果使用 UIImage(systemName:) 方法转换Emoji表情为图片返回的 UIImage 对象为空，则可能是由于表情不受支持或无效。这是因为 UIImage(systemName:) 方法是根据系统中内置的 SF Symbol 字体来渲染图像的，SF Symbol 字体包含有限的表情符号，因此并不是所有的 Emoji 表情都能被成功转换。
      所以如何系统 UIImage(systemName:) 的方法返回为空则调用 Core Text来绘制图片
     */
-    func emojiToImage(emojiFont:UIFont? = .appfont(size: 24)) -> UIImage {
+    func emojiToImage(emojiFont:UIFont = .appfont(size: 24)) -> UIImage {
         guard isSingleEmoji else { return UIImage() }
         
         // Check if it's a system image first
@@ -1537,7 +1529,7 @@ public extension String {
         
         // Draw the emoji as an image
         let nsText = nsString
-        let font = emojiFont ?? .systemFont(ofSize: 24)
+        let font = emojiFont
         let fontAttributes: [NSAttributedString.Key: Any] = [.font: font]
         let imageSize = nsText.size(withAttributes: fontAttributes)
         
@@ -1551,15 +1543,14 @@ public extension String {
     
     //MARK: 获取视频的一个图片
     ///获取视频的一个图片
-    func thumbnailImage()->UIImage {
+    func thumbnailImage() -> UIImage {
         if self.isEmpty {
             //默认封面图
             return UIColor.randomColor.createImageWithColor()
         }
         
-        let image = FileManager.pt.getLocalVideoImage(videoPath: self)
-        if image != nil {
-            return image!
+        if let image = FileManager.pt.getLocalVideoImage(videoPath: self) {
+            return image
         } else {
             return UIColor.randomColor.createImageWithColor()
         }
@@ -1581,14 +1572,14 @@ public extension String {
                 seconds += hh!*60*60
             }
         }
-        if timeArry.count > 1 && timeArry[1].isNumberString(){
+        if timeArry.count > 1 && timeArry[1].isNumberString() {
             let mm = Int(timeArry[1])
             if mm! > 0 {
                 seconds += mm!*60
             }
         }
 
-        if timeArry.count > 2 && timeArry[2].isNumberString(){
+        if timeArry.count > 2 && timeArry[2].isNumberString() {
             let ss = Int(timeArry[2])
             if ss! > 0 {
                 seconds += ss!
@@ -1603,8 +1594,8 @@ public extension String {
     ///   - traitCollection: 當前系統的顯示模式
     ///   - bundle: 顏色所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    func color(traitCollection:UITraitCollection = (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,
-               bundle:Bundle = PTUtils.cgBaseBundle())->UIColor {
+    func color(traitCollection:UITraitCollection = (AppWindows?.rootViewController?.traitCollection)!,
+               bundle:Bundle = PTUtils.cgBaseBundle()) -> UIColor {
         UIColor(named: self, in: bundle, compatibleWith: traitCollection) ?? .randomColor
     }
     
@@ -1614,8 +1605,8 @@ public extension String {
     ///   - traitCollection: 當前系統的顯示模式
     ///   - bundle: 圖片所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    func image(traitCollection:UITraitCollection = (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,
-               bundle:Bundle = PTUtils.cgBaseBundle())->UIImage {
+    func image(traitCollection:UITraitCollection = (AppWindows?.rootViewController?.traitCollection)!,
+               bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
         UIImage(named: self, in: bundle, compatibleWith: traitCollection) ?? UIColor.randomColor.createImageWithColor()
     }
     
@@ -1624,7 +1615,7 @@ public extension String {
     /// - Parameters:
     ///   - bundle: 圖片所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle())->UIImage {
+    func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
         image(bundle: bundle)
     }
     
@@ -1750,11 +1741,11 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     func jsonStringToArray() -> Array<Any>? {
         let jsonString = base as! String
         let jsonData:Data = jsonString.data(using: .utf8)!
-        let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        if array != nil {
+        if let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
             return (array as! Array<Any>)
+        } else {
+            return nil
         }
-        return nil
     }
     
     //MARK: JSON字符串转urlencode

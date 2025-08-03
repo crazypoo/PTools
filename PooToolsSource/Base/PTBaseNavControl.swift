@@ -43,7 +43,7 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         super.pushViewController(viewController, animated: animated)
     }
     
-    open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+    open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: PTActionTask? = nil) {
         
         // iOS13 默认 UIModalPresentationAutomatic 模式，所以要判断处理一下
         // 当 modalPresentationStyle == .automatic , 才需要处理.
@@ -58,11 +58,11 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
             // Configure console window.
             let lcm = LocalConsole.shared
             if lcm.isVisiable {
-                if lcm.maskView != nil {
-                    PTUtils.fetchWindow()!.bringSubviewToFront(lcm.maskView!)
+                if let mask = lcm.maskView {
+                    PTUtils.fetchWindow()!.bringSubviewToFront(mask)
                 }
-                if lcm.terminal != nil {
-                    PTUtils.fetchWindow()?.bringSubviewToFront(lcm.terminal!)
+                if let ter = lcm.terminal {
+                    PTUtils.fetchWindow()!.bringSubviewToFront(ter)
                 }
             }
         }

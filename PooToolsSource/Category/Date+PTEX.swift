@@ -22,7 +22,7 @@ public enum PTTimestampType: Int {
 
 //MARK: 時間對比狀態
 ///時間對比狀態
-@objc public enum CheckContractTimeRelationships:Int {
+@objc public enum CheckContractTimeRelationships: Int {
     ///過期
     case Expire
     ///準備過期
@@ -80,7 +80,7 @@ public extension Date {
     
     //MARK: 根據時間格式來獲取當前時間戳
     ///根據時間格式來獲取當前時間戳
-    func getCurrentDate(dateFormatterString:String)->TimeInterval {
+    func getCurrentDate(dateFormatterString:String) -> TimeInterval {
         let dformatter = DateFormatter()
         dformatter.dateFormat = dateFormatterString
         let timeDate = dformatter.date(from: String.currentDate(dateFormatterString: dateFormatterString))
@@ -90,17 +90,17 @@ public extension Date {
     
     //MARK: 獲取時區的當前時間戳
     ///獲取時區的當前時間戳
-    func getTimeStamp()->String {
+    func getTimeStamp() -> String {
         return String(format: "%.0f", self.getTimeInterval())
     }
     
-    func getTimeInterval() ->TimeInterval {
+    func getTimeInterval() -> TimeInterval {
         return Date().timeIntervalSince1970
     }
 
     //MARK: Date格式化
     ///Date格式化
-    func dateFormat(formatString:String = "yyyy-MM-dd")->String {
+    func dateFormat(formatString:String = "yyyy-MM-dd") -> String {
         self.toFormat(formatString)
     }
     
@@ -113,7 +113,7 @@ public extension Date {
     /// - Returns : 狀態
     static func checkContractTimeType(begainTime:String,
                                       endTime:String,
-                                      readyExpTime:Int)->CheckContractTimeRelationships {
+                                      readyExpTime:Int) -> CheckContractTimeRelationships {
         let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
         let endTimeDate = endTime.toDate("yyyy-MM-dd")!
         let timeDifference = endTimeDate.timeIntervalSince(begainTimeDate)
@@ -137,7 +137,7 @@ public extension Date {
     ///   - readyExpTime: 多久過期
     /// - Returns : 狀態
     static func checkContractTimeType_now(endTime:String,
-                                          readyExpTime:Int)->CheckContractTimeRelationships {
+                                          readyExpTime:Int) -> CheckContractTimeRelationships {
         Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
 }

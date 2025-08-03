@@ -48,7 +48,7 @@ public extension UICollectionView {
     
     //MARK: 獲取Cell在Window的位置
     ///獲取Cell在Window的位置
-    @objc func cellInWindow(cellFrame:CGRect)->CGRect {
+    @objc func cellInWindow(cellFrame:CGRect) -> CGRect {
         let cellInCollectionViewRect = self.convert(cellFrame, to: self)
         let cellRectInWindow = self.convert(cellInCollectionViewRect, to: AppWindows!)
         return cellRectInWindow
@@ -78,7 +78,7 @@ public extension UICollectionView {
                                                  bottomContentSpace:CGFloat = 0,
                                                  cellLeadingSpace:CGFloat = 0,
                                                  cellTrailingSpace:CGFloat = 0,
-                                                 handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem])->Void) {
+                                                 handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem]) -> Void) {
         let result =  UICollectionView.girdCollectionContentHeight(data: data,groupW: groupW,itemHeight: itemHeight,cellRowCount: cellRowCount,originalX: originalX,topContentSpace: topContentSpace,bottomContentSpace: bottomContentSpace,cellLeadingSpace: cellLeadingSpace,cellTrailingSpace: cellTrailingSpace)
         handle(result.0,result.1)
     }
@@ -99,7 +99,7 @@ public extension UICollectionView {
         var x:CGFloat = originalX,y:CGFloat = 0 + topContentSpace
         data?.enumerated().forEach { (index,value) in
             if index < cellRowCount {
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
                 customers.append(customItem)
                 x += itemW + cellLeadingSpace
                 if index == (data!.count - 1) {
@@ -115,7 +115,7 @@ public extension UICollectionView {
                 if index == (data!.count - 1) {
                     groupH = y + itemH + bottomContentSpace
                 }
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
                 customers.append(customItem)
             }
         }
@@ -146,10 +146,10 @@ public extension UICollectionView {
                                           bottomContentSpace:CGFloat = 0,
                                           cellLeadingSpace:CGFloat = 0,
                                           cellTrailingSpace:CGFloat = 0,
-                                          sectionContentInsets:NSDirectionalEdgeInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)) -> NSCollectionLayoutGroup {
+                                          sectionContentInsets:NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)) -> NSCollectionLayoutGroup {
         var customers = [NSCollectionLayoutGroupCustomItem]()
 
-        let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(1))
+        let bannerItemSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(1))
         let bannerItem = NSCollectionLayoutItem.init(layoutSize: bannerItemSize)
         var bannerGroupSize : NSCollectionLayoutSize
         
@@ -160,7 +160,7 @@ public extension UICollectionView {
         }
         
         bannerItem.contentInsets = sectionContentInsets
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth - originalX * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+        bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth - originalX * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
             customers
         })
@@ -267,7 +267,7 @@ public extension UICollectionView {
 
         let groupH = result.groupHeight
         customers = result.groupItems
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+        bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
             customers
         })
@@ -344,11 +344,11 @@ public extension UICollectionView {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
         data?.enumerated().forEach { (index,model) in
-            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupWidth, y: topContentSpace, width: itemWidth, height: itemHeight), zIndex: 1000+index)
+            let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect.init(x: groupWidth, y: topContentSpace, width: itemWidth, height: itemHeight), zIndex: 1000+index)
             customers.append(customItem)
             groupWidth += (itemWidth + itemLeadingSpace)
         }
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute((itemHeight + topContentSpace + bottomContentSpace)))
+        bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute((itemHeight + topContentSpace + bottomContentSpace)))
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
             customers
         })
@@ -365,13 +365,13 @@ public extension UICollectionView {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutItem]()
         data?.enumerated().forEach { (index,model) in
-            let customItem = NSCollectionLayoutItem.init(layoutSize: NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(itemWidth), heightDimension: NSCollectionLayoutDimension.absolute(itemHeight)))
+            let customItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(itemWidth), heightDimension: NSCollectionLayoutDimension.absolute(itemHeight)))
             
-            customItem.edgeSpacing = NSCollectionLayoutEdgeSpacing.init(leading: NSCollectionLayoutSpacing.fixed(index == 0 ? itemOriginalX : itemLeadingSpace), top: NSCollectionLayoutSpacing.fixed(topContentSpace), trailing: NSCollectionLayoutSpacing.fixed(0), bottom: NSCollectionLayoutSpacing.fixed(bottomContentSpace))
+            customItem.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: NSCollectionLayoutSpacing.fixed(index == 0 ? itemOriginalX : itemLeadingSpace), top: NSCollectionLayoutSpacing.fixed(topContentSpace), trailing: NSCollectionLayoutSpacing.fixed(0), bottom: NSCollectionLayoutSpacing.fixed(bottomContentSpace))
             customers.append(customItem)
             groupWidth += (itemWidth + itemLeadingSpace)
         }
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute((itemHeight + topContentSpace + bottomContentSpace)))
+        bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute((itemHeight + topContentSpace + bottomContentSpace)))
         return NSCollectionLayoutGroup.horizontal(layoutSize: bannerGroupSize, subitems: customers)
     }
     

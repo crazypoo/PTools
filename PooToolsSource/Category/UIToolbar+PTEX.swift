@@ -31,34 +31,30 @@ public extension UIToolbar {
         case opaqueAlways
         
         public var standardAppearance: UIToolbarAppearance {
+            let appearance = UIToolbarAppearance()
             switch self {
             case .transparentAlways:
-                let appearance = UIToolbarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .transparentStandardOnly:
-                let appearance = UIToolbarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             case .opaqueAlways:
-                let appearance = UIToolbarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             }
         }
         
         public var scrollEdgeAppearance: UIToolbarAppearance {
+            let appearance = UIToolbarAppearance()
             switch self {
             case .transparentAlways:
-                let appearance = UIToolbarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .transparentStandardOnly:
-                let appearance = UIToolbarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .opaqueAlways:
-                let appearance = UIToolbarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             }

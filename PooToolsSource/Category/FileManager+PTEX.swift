@@ -195,14 +195,14 @@ public extension PTPOP where Base: FileManager {
     ///    - fileName: 文件的名字
     @discardableResult
     static func isFileExist(filePath:String,
-                            fileName:String)->Bool {
+                            fileName:String) -> Bool {
         let filePaths = (filePath + "/").appendingPathComponent(fileName)
         let result = fileManager.fileExists(atPath: filePaths)
         return result
     }
     
     @discardableResult
-    static func renameFile(oldPath:String,newName:String)->(isSuccess:Bool,filePath:String) {
+    static func renameFile(oldPath:String,newName:String) -> (isSuccess:Bool,filePath:String) {
         let lastPathComponent = oldPath.lastPathComponent
         let fileExtension = oldPath.pathExtension
         let pathNew = oldPath.replacingOccurrences(of: lastPathComponent, with: "")
@@ -315,25 +315,34 @@ public extension PTPOP where Base: FileManager {
                 return (false, "PT FileManager write fail".localized())
             }
         case .ImageType:
-            let data = content as! Data
-            do {
-                try data.write(to: URL(fileURLWithPath: writePath))
-                return (true, "")
-            } catch _ {
+            if let data = content as? Data {
+                do {
+                    try data.write(to: URL(fileURLWithPath: writePath))
+                    return (true, "")
+                } catch _ {
+                    return (false, "PT FileManager write fail".localized())
+                }
+            } else {
                 return (false, "PT FileManager write fail".localized())
             }
         case .ArrayType:
-            let array = content as! NSArray
-            let result = array.write(toFile: writePath, atomically: true)
-            if result {
-                return (true, "")
+            if let array = content as? NSArray {
+                let result = array.write(toFile: writePath, atomically: true)
+                if result {
+                    return (true, "")
+                } else {
+                    return (false, "PT FileManager write fail".localized())
+                }
             } else {
                 return (false, "PT FileManager write fail".localized())
             }
         case .DictionaryType:
-            let result = (content as! NSDictionary).write(toFile: writePath, atomically: true)
-            if result {
-                return (true, "")
+            if let result = (content as? NSDictionary)?.write(toFile: writePath, atomically: true) {
+                if result {
+                    return (true, "")
+                } else {
+                    return (false, "PT FileManager write fail".localized())
+                }
             } else {
                 return (false, "PT FileManager write fail".localized())
             }

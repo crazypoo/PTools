@@ -48,28 +48,28 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 判断机型
     ///小
-    static func oneOfSmallDevice()->Bool {
+    static func oneOfSmallDevice() -> Bool {
         Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
     }
     
     ///大
-    static func oneOfPlusDevice()->Bool {
+    static func oneOfPlusDevice() -> Bool {
         Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
     }
 
     ///X
-    static func oneOfXDevice()->Bool {
+    static func oneOfXDevice() -> Bool {
         Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
     }
     
     ///Pad
-    static func oneOfPadDevice()->Bool {
+    static func oneOfPadDevice() -> Bool {
         Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
     }
 
     //MARK: 獲取當前設備的名稱
     ///獲取當前設備的名稱
-    static var currentDeviceName:String {
+    static var currentDeviceName : String {
         get {
             UIDevice.current.name
         }
@@ -85,7 +85,7 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 越狱检测
     ///越狱检测
-    static var isJailBroken:Bool {
+    static var isJailBroken : Bool {
         let apps = ["/Applications/Cydia.app",
                   "/Applications/limera1n.app",
                   "/Applications/greenpois0n.app",
@@ -120,7 +120,7 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 当前硬盘的空间
     ///当前硬盘的空间
-    static var hardDiskSpace: Int64 {
+    static var hardDiskSpace : Int64 {
         if let attrs = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()) {
             if let space: NSNumber = attrs[FileAttributeKey.systemSize] as? NSNumber {
                 if space.int64Value > 0 {
@@ -131,13 +131,13 @@ public extension PTPOP where Base: UIDevice {
         return -1
     }
     
-    static var volumes: String {
+    static var volumes : String {
         String.init(format: "%d", Device.volumes!)
     }
     
     //MARK: 当前硬盘可用空间
     ///当前硬盘可用空间
-    static var hardDiskSpaceFree: Int64 {
+    static var hardDiskSpaceFree : Int64 {
         if let attrs = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()) {
             if let space: NSNumber = attrs[FileAttributeKey.systemFreeSize] as? NSNumber {
                 if space.int64Value > 0 {
@@ -150,7 +150,7 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 当前硬盘已经使用的空间
     ///当前硬盘已经使用的空间
-    static var hardDiskSpaceUsed: Int64 {
+    static var hardDiskSpaceUsed : Int64 {
         let total = self.hardDiskSpace
         let free = self.hardDiskSpaceFree
         guard total > 0 && free > 0 else { return -1 }
@@ -162,13 +162,13 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 獲取可用的儲存用量(字節為單位)
     ///獲取可用的儲存用量(字節為單位)
-    static var volumeAvailableCapacityForImportantUsage: String {
+    static var volumeAvailableCapacityForImportantUsage : String {
         String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
     }
     
     //MARK: 獲取不能用的儲存用量(字節為單位)
     ///獲取不能用的儲存用量(字節為單位)
-    static var volumeAvailableCapacityForOpportunisticUsage: String {
+    static var volumeAvailableCapacityForOpportunisticUsage : String {
         String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
     }
 
@@ -220,19 +220,19 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 获取最高刷新率
     ///获取最高刷新率
-    static var maximumFramesPerSecond:Int {
+    static var maximumFramesPerSecond: Int {
         UIScreen.main.maximumFramesPerSecond
     }
     
     //MARK: 获取手机的第一个语言
     ///获取手机的第一个语言
-    static var currentDeviceLanguageInIos:String {
+    static var currentDeviceLanguageInIos: String {
         Bundle.main.preferredLocalizations.first!
     }
     
     //MARK: 获取手机的第一个语言字典
     ///获取手机的第一个语言字典
-    static var currentDeviceLanguageInIosWithDic:[String:String] {
+    static var currentDeviceLanguageInIosWithDic: [String:String] {
         var dic:[String:String] = [String:String]()
         let arr = NSLocale.preferredLanguages
         let language = arr.first!
@@ -269,7 +269,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 获取手机当前运营商其他信息
     ///获取手机当前运营商其他信息
     @available(iOS, introduced: 4.0, deprecated: 16.0,message: "可能在16之後就無法使用該API了")
-    static func getSiminfo()->NSMutableDictionary {
+    static func getSiminfo() -> NSMutableDictionary {
         let dic = NSMutableDictionary()
         
         let carrier = CTCarrier()
@@ -426,7 +426,7 @@ public extension PTPOP where Base: UIDevice {
     }
     
     //MARK: 检测时候热启动
-    static func activePrewarm() ->Bool {
+    static func activePrewarm() -> Bool {
         let boolValue = ProcessInfo.processInfo.environment["ActivePrewarm"] == "1" ? true : false
         return boolValue
     }

@@ -17,7 +17,7 @@ public enum PTMontiStatusType:Int {
 public extension Int {
     //MARK: 隨機數
     ///隨機數
-    func random()->Int {
+    func random() -> Int {
         Int(arc4random_uniform(UInt32(self)))
     }
     

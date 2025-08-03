@@ -106,21 +106,24 @@ public extension UILabel {
     ///   - width:
     ///   - height:
     /// - Returns: Size
-    @objc func sizeFor(lineSpacing:NSNumber? = nil,
+    @objc func sizeFor(lineSpacing:CGFloat = 2.5,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,
-                       width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
+                       width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
         var dic = [NSAttributedString.Key.font: font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil {
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
-            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineSpacing = lineSpacing
+        dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        
+        if let currentText = text,!currentText.stringIsEmpty() {
+            let size = currentText.boundingRect(with: CGSize(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
+            return size
+        } else {
+            return .zero
         }
-        let size = text!.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
-        return size
     }
     
     func layoutDynamicHeight(x: CGFloat, y: CGFloat, width: CGFloat) {
-        frame = CGRect.init(x: x, y: y, width: width, height: frame.height)
+        frame = CGRect(x: x, y: y, width: width, height: frame.height)
         sizeToFit()
         if frame.width != width {
             frame = .init(x: x, y: y, width: width, height: frame.height)
@@ -151,7 +154,7 @@ public extension UILabel {
     }
     
     //根據既定的大小來獲取可以顯示的行數
-    func getVisibleLine() ->Int {
+    func getVisibleLine() -> Int {
         let labelWidth = self.frame.size.width
         let labelHeight = self.frame.size.height
         let labelFont = self.font!
@@ -214,7 +217,7 @@ public extension UILabel {
     private func attachLongPressGesture() {
         guard self.enableCopy else { return }
         self.isUserInteractionEnabled = true
-        let longPressGesture = UILongPressGestureRecognizer.init { sender in
+        let longPressGesture = UILongPressGestureRecognizer { sender in
             self.becomeFirstResponder()
             
             let menuItems = PTEditMenuItem(title: "copy") {

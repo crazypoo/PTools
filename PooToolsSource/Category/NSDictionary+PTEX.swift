@@ -11,7 +11,7 @@ import UIKit
 public extension NSDictionary {
     //MARK: Json類型數據轉字符串
     ///Json類型數據轉字符串
-    @objc func jsonDataToString()->String {
+    @objc func jsonDataToString() -> String {
         var jsonData : Data? = nil
                 
         let dic = NSMutableDictionary()

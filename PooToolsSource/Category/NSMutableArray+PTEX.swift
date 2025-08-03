@@ -18,7 +18,7 @@ public extension NSMutableArray {
         }
     }
     
-    func randomizedArray()->NSMutableArray {
+    func randomizedArray() -> NSMutableArray {
         let results = NSMutableArray(array: self)
         var i = results.count
         i -= 1

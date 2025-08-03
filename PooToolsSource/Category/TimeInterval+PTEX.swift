@@ -60,7 +60,7 @@ public extension TimeInterval {
     
     //MARK: 獲取播放時長(時:分:秒)
     ///獲取播放時長(時:分:秒)
-    func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String)->Void)?) {
+    func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String) -> Void)?) {
         if self.isNaN{
             callBack?("00","00","00")
         }

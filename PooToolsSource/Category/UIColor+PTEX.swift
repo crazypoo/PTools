@@ -16,14 +16,14 @@ public extension UIColor {
      - parameter hex: HEX of color.
      - parameter alpha: Opacity.
      */
-    private static func parseHex(hex: String, alpha: CGFloat? = nil) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+    private static func parseHex(hex: String, alpha: CGFloat = 1) -> (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         let hexString = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
         let length = hexString.count
         var hexValue: UInt64 = 0
         
         guard Scanner(string: hexString).scanHexInt64(&hexValue), [3, 4, 6, 8].contains(length) else {
             PTNSLogConsole("UIColorExtension - Invalid RGB string or scan error", levelType: .Error, loggerType: .Color)
-            return (0, 0, 0, alpha ?? 1.0)
+            return (0, 0, 0, alpha)
         }
         
         let divisor: CGFloat = length == 3 || length == 4 ? 15.0 : 255.0
@@ -34,32 +34,32 @@ public extension UIColor {
                 red:   CGFloat((hexValue & 0xF00) >> 8) / divisor,
                 green: CGFloat((hexValue & 0x0F0) >> 4) / divisor,
                 blue:  CGFloat(hexValue & 0x00F) / divisor,
-                alpha: alpha ?? 1.0
+                alpha: alpha
             )
         case 4: // RGBA (16-bit)
             return (
                 red:   CGFloat((hexValue & 0xF000) >> 12) / divisor,
                 green: CGFloat((hexValue & 0x0F00) >> 8) / divisor,
                 blue:  CGFloat((hexValue & 0x00F0) >> 4) / divisor,
-                alpha: alpha ?? CGFloat(hexValue & 0x000F) / divisor
+                alpha: alpha / divisor
             )
         case 6: // RGB (24-bit)
             return (
                 red:   CGFloat((hexValue & 0xFF0000) >> 16) / divisor,
                 green: CGFloat((hexValue & 0x00FF00) >> 8) / divisor,
                 blue:  CGFloat(hexValue & 0x0000FF) / divisor,
-                alpha: alpha ?? 1.0
+                alpha: alpha
             )
         case 8: // RGBA (32-bit)
             return (
                 red:   CGFloat((hexValue & 0xFF000000) >> 24) / divisor,
                 green: CGFloat((hexValue & 0x00FF0000) >> 16) / divisor,
                 blue:  CGFloat((hexValue & 0x0000FF00) >> 8) / divisor,
-                alpha: alpha ?? CGFloat(hexValue & 0x000000FF) / divisor
+                alpha: alpha / divisor
             )
         default:
             PTNSLogConsole("UIColorExtension - Invalid RGB string length", levelType: .Error, loggerType: .Color)
-            return (0, 0, 0, alpha ?? 1.0)
+            return (0, 0, 0, alpha)
         }
     }
 
@@ -127,7 +127,7 @@ public extension UIColor {
     //MARK: 从Hex装换int
     ///从Hex装换int
     @available(iOS, introduced: 2.0, deprecated: 13.0)
-    private class func intFromHexString(_ hexString:String)->UInt32{
+    private class func intFromHexString(_ hexString:String) -> UInt32{
         let scanner = Scanner(string: hexString)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
         var result : UInt32 = 0
@@ -135,7 +135,7 @@ public extension UIColor {
         return result
     }
     
-    private class func intFromHexString_64(_ hexString:String)->UInt64{
+    private class func intFromHexString_64(_ hexString:String) -> UInt64{
         let scanner = Scanner(string: hexString)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
         var result : UInt64 = 0
@@ -143,7 +143,7 @@ public extension UIColor {
         return result
     }
                 
-    internal func hsbaValueModel()->PTColorHSBAModel {
+    internal func hsbaValueModel() -> PTColorHSBAModel {
         var hueF:CGFloat = 0
         var saturationF:CGFloat = 0
         var brightnessF:CGFloat = 0

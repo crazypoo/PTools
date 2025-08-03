@@ -36,9 +36,9 @@ public extension Double {
      */
     //MARK: 物理單位獲取
     ///物理單位獲取
-    func valueAddUnitToString(unit:Unit)->String {
+    func valueAddUnitToString(unit:Unit) -> String {
         let formatter = MeasurementFormatter()
-        formatter.locale = Locale.init(identifier: "zh")
+        formatter.locale = Locale(identifier: "zh")
         formatter.unitOptions = .providedUnit
         
         let measurement = Measurement(value: self, unit: unit)
@@ -47,7 +47,7 @@ public extension Double {
     
     //MARK: 數字金額轉換成人民幣大寫金額
     /// - Parameter return: 人民幣大寫金額
-    func cnySpellOut()->String {
+    func cnySpellOut() -> String {
         let numString = String(format: "%.2f", self)
         let parts = numString.split(separator: ".")
         let integerPart = parts[0]

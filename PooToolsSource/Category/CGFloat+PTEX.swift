@@ -11,7 +11,7 @@ import SwifterSwift
 
 extension CGFloat: PTProtocolCompatible {}
 //MARK: 溫度單位
-@objc public enum TemperatureUnit:Int {
+@objc public enum TemperatureUnit: Int {
     ///華氏
     case Fahrenheit
     ///攝氏
@@ -41,26 +41,26 @@ public extension CGFloat {
 
     //MARK: 獲取導航欄Bar高度
     ///獲取導航欄Bar高度
-    static let kNavBarHeight:CGFloat = 44
+    static let kNavBarHeight: CGFloat = 44
     
     //MARK: 獲取StatusBar的高度
     ///獲取StatusBar的高度
     /// - Returns: CGFloat
-    static func statusBarHeight()->CGFloat {
+    static func statusBarHeight() -> CGFloat {
         let statusBarFrame = AppWindows?.windowScene?.statusBarManager?.statusBarFrame
         return statusBarFrame?.height ?? 0
     }
     
     //MARK: 獲取導航欄總高度
     ///獲取導航欄總高度
-    static let kNavBarHeight_Total:CGFloat = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
+    static let kNavBarHeight_Total: CGFloat = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
 
     //MARK: Tabbar安全高度
     ///Tabbar安全高度
-    static let kTabbarSaveAreaHeight:CGFloat = isXModel ? 34 : 0
+    static let kTabbarSaveAreaHeight: CGFloat = isXModel ? 34 : 0
     //MARK: Tabbar高度
     ///Tabbar高度
-    static let kTabbarHeight:CGFloat = 49
+    static let kTabbarHeight: CGFloat = 49
     //MARK: Tabbar總高度
     ///Tabbar總高度
     static let kTabbarHeight_Total = CGFloat.kTabbarSaveAreaHeight + CGFloat.kTabbarHeight
@@ -68,7 +68,7 @@ public extension CGFloat {
     //MARK: 华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
     ///华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
     static func temperatureUnitExchangeValue(value:CGFloat,
-                                             changeToType:TemperatureUnit) ->CGFloat {
+                                             changeToType:TemperatureUnit) -> CGFloat {
         switch changeToType {
         case .Fahrenheit:
             let values = 32 + 1.8 * value

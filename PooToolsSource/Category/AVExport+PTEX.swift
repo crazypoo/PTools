@@ -74,7 +74,7 @@ public extension PTPOP where Base: AVAssetExportSession {
         }
     }
     
-    static func saveVideoToCache(fileURL:URL = PTUtils.outputURL(),playerItem: AVPlayerItem,result: @escaping (AVAssetExportSession.Status, AVAssetExportSession?, URL?, NSError?)->Void) {
+    static func saveVideoToCache(fileURL:URL = PTUtils.outputURL(),playerItem: AVPlayerItem,result: @escaping (AVAssetExportSession.Status, AVAssetExportSession?, URL?, NSError?) -> Void) {
         let videoAsset = playerItem.asset
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)
         exportSession?.outputFileType = .mp4

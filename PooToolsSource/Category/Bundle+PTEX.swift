@@ -43,7 +43,7 @@ public extension Bundle {
         Bundle(path: PTUtils.cgBaseBundle().path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
     }
     
-    class func appScheme()->[String] {
+    class func appScheme() -> [String] {
         let bundleURL = Bundle.main.bundleURL
         let plistPath = bundleURL.appendingPathComponent("Info.plist")
         if let plistData = try? Data(contentsOf: plistPath),let plist = try? PropertyListSerialization.propertyList(from:plistData,options: [],format: nil) as? [String:Any] {

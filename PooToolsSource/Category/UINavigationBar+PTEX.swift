@@ -82,7 +82,7 @@ public extension UINavigationBar {
         guard let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: cgcolors as NSArray as CFArray, locations: &locations) else { return nil }
         
         // Draw the gradient
-        context.drawLinearGradient(gradient, start: CGPoint(x: 0.0, y: 0.0), end: CGPoint(x: size.width, y: 0.0), options: [])
+        context.drawLinearGradient(gradient, start: .zero, end: CGPoint(x: size.width, y: 0.0), options: [])
         
         // Generate the image (the defer takes care of closing the context)
         return UIGraphicsGetImageFromCurrentImageContext()
@@ -106,34 +106,30 @@ public extension UINavigationBar {
         case opaqueAlways
         
         var standardAppearance: UINavigationBarAppearance {
+            let appearance = UINavigationBarAppearance()
             switch self {
             case .transparentAlways:
-                let appearance = UINavigationBarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .transparentStandardOnly:
-                let appearance = UINavigationBarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             case .opaqueAlways:
-                let appearance = UINavigationBarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             }
         }
         
         var scrollEdgeAppearance: UINavigationBarAppearance {
+            let appearance = UINavigationBarAppearance()
             switch self {
             case .transparentAlways:
-                let appearance = UINavigationBarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .transparentStandardOnly:
-                let appearance = UINavigationBarAppearance()
                 appearance.configureWithTransparentBackground()
                 return appearance
             case .opaqueAlways:
-                let appearance = UINavigationBarAppearance()
                 appearance.configureWithDefaultBackground()
                 return appearance
             }

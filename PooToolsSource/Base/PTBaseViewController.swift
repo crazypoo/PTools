@@ -360,7 +360,7 @@ extension PTBaseViewController {
         }
     }
         
-    func getImage(for asset: PHAsset,finish:@escaping (UIImage?)->Void) {
+    func getImage(for asset: PHAsset,finish:@escaping (UIImage?) -> Void) {
         asset.convertLivePhotoToImage { result in
             finish(result)
         }

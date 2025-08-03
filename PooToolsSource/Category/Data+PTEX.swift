@@ -132,13 +132,13 @@ public extension Data {
     
     //MARK: Data轉Bytes
     ///Data轉Bytes
-    func toBytes()->[UInt8]{
+    func toBytes() -> [UInt8]{
         [UInt8](self)
     }
     
     //MARK: Data轉字典
     ///Data轉字典
-    func toDict()->Dictionary<String, Any>? {
+    func toDict() -> Dictionary<String, Any>? {
         do{
             return try JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String: Any]
         } catch {

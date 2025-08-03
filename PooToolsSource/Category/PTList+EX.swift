@@ -91,27 +91,31 @@ extension UICollectionView {
     }
     
     public func registerClassCells(classs:[String:AnyClass]) {
-        classs.allKeys().enumerated().forEach { index,value in
-            self.register(classs[value].self, forCellWithReuseIdentifier: value)
+        classs.allKeys().forEach { key in
+            if let cellClass = classs[key] {
+                self.register(cellClass, forCellWithReuseIdentifier: key)
+            }
         }
     }
     
     public func registerNibCells(nib:[String:String]) {
-        nib.allKeys().enumerated().forEach { index,value in
-            self.register(UINib(nibName: value, bundle: nil), forCellWithReuseIdentifier: nib[value]!)
+        nib.allKeys().forEach { value in
+            if let nibId = nib[value] {
+                self.register(UINib(nibName: value, bundle: nil), forCellWithReuseIdentifier: nibId)
+            }
         }
     }
     
     public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
         //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
-        classs.allKeys().enumerated().forEach { index,value in
+        classs.allKeys().forEach { value in
             self.register(classs[value].self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
         }
     }
     
     public func registerSupplementaryView(ids:[String],viewClass:AnyClass,kind:String) {
         //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
-        ids.enumerated().forEach { index,value in
+        ids.forEach { value in
             self.register(viewClass.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: value)
         }
     }

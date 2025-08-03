@@ -109,7 +109,7 @@ public extension Array {
     
     //MARK: 數組轉字典
     ///數組轉字典
-    func toJSON()-> String {
+    func toJSON() -> String {
         guard JSONSerialization.isValidJSONObject(self) else {
             PTNSLogConsole("无法解析出JSONString",levelType: .Error,loggerType: .Array)
             return ""
@@ -143,7 +143,7 @@ public extension Array {
         }
     }
     
-    subscript(safe index:Index) ->Element? {
+    subscript(safe index:Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
     

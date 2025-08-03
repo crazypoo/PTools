@@ -256,48 +256,48 @@ public class PTFusionCellContent:UIView {
     }
     
     fileprivate var nameTitle:UILabel?
-    fileprivate func setNameTitle() ->UILabel {
+    fileprivate func setNameTitle() -> UILabel {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }
     
     fileprivate var accessV:UIImageView?
-    fileprivate func setAccessV() ->UIImageView {
+    fileprivate func setAccessV() -> UIImageView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         return view
     }
     
     public var valueSwitch:PTSwitch?
-    fileprivate func setValueSwitch() ->PTSwitch {
+    fileprivate func setValueSwitch() -> PTSwitch {
         let switchV = PTSwitch()
         return switchV
     }
     
     var contentLabel:UILabel?
-    fileprivate func setContentLabel() ->UILabel {
+    fileprivate func setContentLabel() -> UILabel {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }
     
     var cellIcon:UIImageView?
-    fileprivate func setCellIcon() ->UIImageView {
+    fileprivate func setCellIcon() -> UIImageView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         return view
     }
     
     public var sectionMore:PTLayoutButton?
-    fileprivate func setSectionMore() ->PTLayoutButton {
+    fileprivate func setSectionMore() -> PTLayoutButton {
         let view = PTLayoutButton()
         view.isUserInteractionEnabled = true
         return view
     }
     
     fileprivate var contentButtonLabel:PTLayoutButton?
-    fileprivate func setContentButtonLabel() ->PTLayoutButton {
+    fileprivate func setContentButtonLabel() -> PTLayoutButton {
         let view = PTLayoutButton()
         view.titleLabel?.numberOfLines = 0
         view.layoutStyle = .leftImageRightTitle
@@ -328,7 +328,7 @@ public class PTFusionCellContent:UIView {
     }()
     
     fileprivate var cellContentIcon:UIImageView?
-    fileprivate func setCellContentIcon() ->UIImageView {
+    fileprivate func setCellContentIcon() -> UIImageView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         return view

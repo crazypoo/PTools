@@ -12,7 +12,7 @@ extension Bool: PTProtocolCompatible {}
 public extension PTPOP where Base == Bool {
     //MARK: Swift的Bool轉Int
     ///Swift的Bool轉Int
-    var boolToInt:Int {
+    var boolToInt: Int {
         base ? 1 : 0
     }
 }

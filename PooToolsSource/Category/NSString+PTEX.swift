@@ -23,7 +23,7 @@ public extension NSString {
     //MARK: 銀行卡Luhm算法
     ///銀行卡Luhm算法
     /// - Returns: Bool
-    func bankCardLuhmCheck()->Bool {
+    func bankCardLuhmCheck() -> Bool {
         if String(format: "%@", self).stringIsEmpty() {
             return false
         }
@@ -99,7 +99,7 @@ public extension NSString {
     //MARK: 檢測中國公民新份證
     ///檢測中國公民新份證
     /// - Returns: Bool
-    func isValidateIdentity()->Bool {
+    func isValidateIdentity() -> Bool {
         if length != 18 {
             return false
         }
@@ -135,7 +135,7 @@ public extension NSString {
     
     //MARK: 从身份证上获取生日
     ///从身份证上获取生日
-    func birthdayFromIdentityCard()->NSString {
+    func birthdayFromIdentityCard() -> NSString {
         let result = NSMutableString(capacity: 0)
         var year:NSString = ""
         var month:NSString = ""
@@ -158,7 +158,7 @@ public extension NSString {
     
     //MARK: 从身份证上获取年龄
     ///从身份证上获取年龄
-    func getIdentityCardAge()->NSString {
+    func getIdentityCardAge() -> NSString {
         if isValidateIdentity() {
             let formatterTow = DateFormatter()
             formatterTow.dateFormat = "yyyy-MM-dd"
@@ -174,7 +174,7 @@ public extension NSString {
     
     //MARK: 獲取字符串中文件名的格式(媒體)
     ///獲取字符串中文件名的格式(媒體)
-    @objc func contentTypeForUrl()->PTUrlStringVideoType {
+    @objc func contentTypeForUrl() -> PTUrlStringVideoType {
         let pathEX = pathExtension.lowercased()
         
         if pathEX.contains("mp4") {
@@ -187,30 +187,30 @@ public extension NSString {
         return .UNKNOW
     }
     
-    @objc func checkWithString(expression:NSString)->Bool {
+    @objc func checkWithString(expression:NSString) -> Bool {
         String(format: "%@", self).checkWithString(expression: String(format: "%@", expression))
     }
     
-    @objc func checkWithArray(expression:NSArray)->Bool {
+    @objc func checkWithArray(expression:NSArray) -> Bool {
         String(format: "%@", self).checkWithArray(expression: expression)
     }
     
     //MARK: 檢測字符串是否為空
     ///檢測字符串是否為空
     /// - Returns: Bool
-    @objc func stringIsEmpty()->Bool {
+    @objc func stringIsEmpty() -> Bool {
         if let string = self as String?, !string.isEmpty {
             return false
         }
         return true
     }
     
-    @objc class func currentDate(dateFormatter:NSString)->NSString {
+    @objc class func currentDate(dateFormatter:NSString) -> NSString {
         String.currentDate(dateFormatterString: dateFormatter as String).nsString
     }
     
     //MARK: 查找某字符在字符串的位置
-    func rangeOfSubString(subStr:NSString)->[String] {
+    func rangeOfSubString(subStr:NSString) -> [String] {
         var rangeArray = [String]()
         for i in 0..<self.length {
             let temp:NSString = self.substring(with: NSMakeRange(i, subStr.length)) as NSString
@@ -262,28 +262,31 @@ public extension NSString {
     }
     
     func style(attributedString:NSMutableAttributedString,range:NSRange,style:Any,styleBook:NSDictionary) {
-        if style is NSArray {
-            for subStyle in (style as! NSArray) {
+        switch style {
+        case let array as [Any]:
+            for subStyle in array {
                 self.style(attributedString: attributedString, range: range, style: subStyle, styleBook: styleBook)
             }
-        } else if style is NSDictionary {
-            setStyle(style: style as! NSDictionary, range: range, onAttributedString: attributedString)
-        } else if style is UIFont {
-            self.setFont(font: style as! UIFont, range: range, onAttributedString: attributedString)
-        } else if style is UIColor {
-            setText(color: style as! UIColor, range: range, onAttributedString: attributedString)
-        } else if style is NSURL {
-            setLink(url: style as! NSURL, range: range, onAttributedString: attributedString)
-        } else if style is NSString {
-            self.style(attributedString: attributedString, range: range, style: style, styleBook: styleBook)
-        } else if style is UIImage {
+        case let dict as [AnyHashable: Any]:
+            setStyle(style: dict as NSDictionary, range: range, onAttributedString: attributedString)
+        case let font as UIFont:
+            setFont(font: font, range: range, onAttributedString: attributedString)
+        case let color as UIColor:
+            setText(color: color, range: range, onAttributedString: attributedString)
+        case let url as NSURL:
+            setLink(url: url, range: range, onAttributedString: attributedString)
+        case let string as NSString:
+            self.style(attributedString: attributedString, range: range, style: string, styleBook: styleBook)
+        case let image as UIImage:
             let attachment = NSTextAttachment()
-            attachment.image = (style as! UIImage)
+            attachment.image = image
             attributedString.replaceCharacters(in: range, with: NSAttributedString(attachment: attachment))
+        default:
+            break // 或記錄錯誤、log unsupported type
         }
     }
     
-    func attributedString(fontBook:NSDictionary)->NSAttributedString {
+    func attributedString(fontBook:NSDictionary) -> NSAttributedString {
         let tags = [NSDictionary]()
         let ms:NSMutableString = mutableCopy() as! NSMutableString
         ms.replaceOccurrences(of: "<br>", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))

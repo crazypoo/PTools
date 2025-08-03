@@ -56,7 +56,6 @@ public extension NSMutableString {
     }
     
     func replaceAllTags(intoArray array: NSMutableArray) {
-        while replaceFirstTagItoArray(array) {
-        }
+        while replaceFirstTagItoArray(array) {}
     }
 }

@@ -12,7 +12,7 @@ import UIKit
 public extension UIFont {
     @objc class func appfont(size:CGFloat,
                              bold:Bool = false,
-                             scale:Bool = false)-> UIFont {
+                             scale:Bool = false) -> UIFont {
         var setFont:UIFont
         if !bold {
             setFont = UIFont.systemFont(ofSize: size)
@@ -28,7 +28,7 @@ public extension UIFont {
         
     @objc class func appCustomFont(size:CGFloat,
                                    customFont:String = "",
-                                   scale:Bool = false)-> UIFont {
+                                   scale:Bool = false) -> UIFont {
         
         if customFont.stringIsEmpty() {
             fatalError("自定義需要有字體名字")
