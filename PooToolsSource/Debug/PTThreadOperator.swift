@@ -12,7 +12,7 @@ final class PTThreadOperator: NSObject {
     private let thread: Thread
     private let modes: [RunLoop.Mode]
 
-    private var operation: (() -> Void)?
+    private var operation: PTActionTask?
 
     override init() {
         self.thread = Thread.current
@@ -26,13 +26,13 @@ final class PTThreadOperator: NSObject {
         super.init()
     }
 
-    func execute(_ operation: @escaping () -> Void) {
+    func execute(_ operation: @escaping PTActionTask) {
         self.operation = operation
         perform(#selector(operate), on: thread, with: nil, waitUntilDone: true, modes: modes.map(\.rawValue))
         self.operation = nil
     }
 
-    @objc private func operate() {
+    @MainActor @objc private func operate() {
         operation?()
     }
 }

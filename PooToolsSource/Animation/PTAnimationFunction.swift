@@ -15,7 +15,7 @@ public class PTAnimationFunction: NSObject {
     public class func animationIn(animationView:UIView,
                                   animationType:PTAlertAnimationType,
                                   transformValue:CGFloat,
-                                  completion:((_ anim:POPAnimation?,_ finish:Bool)->Void)? = nil) {
+                                  completion:((_ anim:POPAnimation?,_ finish:Bool) -> Void)? = nil) {
         var propertyNamed = ""
         var transform = CATransform3DMakeTranslation(0, 0, 0)
         
@@ -52,7 +52,7 @@ public class PTAnimationFunction: NSObject {
                                    toValue:CGFloat? = 0,
                                    duration:CGFloat? = PTAnimationDuration,
                                    animation:@escaping PTActionTask,
-                                   completion: @escaping (Bool)->Void) {
+                                   completion: @escaping (Bool) -> Void) {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
         

@@ -12,7 +12,7 @@ import SnapKit
 class PTPerformanceSegmentCell: PTBaseNormalCell {
     static let ID = "PTPerformanceSegmentCell"
     
-    var segmentTapCallBack:((Int)->Void)!
+    var segmentTapCallBack:((Int) -> Void)!
     
     lazy var segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()

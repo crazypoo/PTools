@@ -44,9 +44,9 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionHeader)
         view.customerLayout = { sectionIndex,sectionModel in
             if sectionModel.headerID == "Floating" || sectionModel.headerID == "Segment" || sectionModel.headerID == "PerformanceValue" {
-                return UICollectionView.girdCollectionLayout(data: sectionModel.rows!, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)
+                return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)
             } else if sectionModel.headerID == "Chart" {
-                return UICollectionView.girdCollectionLayout(data: sectionModel.rows!, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 250,cellRowCount: 1,originalX: 0)
+                return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 250,cellRowCount: 1,originalX: 0)
             } else {
                 var bannerGroupSize : NSCollectionLayoutSize
                 var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -60,11 +60,11 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                 }
                 sectionModel.rows?.enumerated().forEach { (index,model) in
                     let cellHeight:CGFloat = cellHeight
-                    let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
+                    let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
                     customers.append(customItem)
                     groupH += cellHeight
                 }
-                bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW - PTAppBaseConfig.share.defaultViewSpace * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+                bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(screenW - PTAppBaseConfig.share.defaultViewSpace * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
                 return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                     customers
                 })
@@ -82,7 +82,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                     }
                     return cell
                 } else if itemRow.ID == PTPerformanceSegmentCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPerformanceSegmentCell {
-                    cell.segmentedControl.selectedSegmentIndex = PerformanceType.allCases.firstIndex(of: self.segmentType)!
+                    cell.segmentedControl.selectedSegmentIndex = PerformanceType.allCases.firstIndex(of: self.segmentType) ?? 0
                     cell.segmentTapCallBack = { index in
                         self.segmentType = PerformanceType.allCases[index]
                         self.toolkit.performanceClose()
@@ -177,7 +177,6 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                     self.configureChartCell(chartCell: cellChart, value: self.toolkit.maxCPU, measurements: self.toolkit.cpuMeasurements, markedValueFormat: "%.1lf%%")
                 }
             case .Memory:
-                
                 let usageModel = self.baseCellModel(name: "Memory Usage", value: String(format: "%.1lfMB", self.toolkit.currentMemory))
                 if let cell = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 2)) as? PTFusionCell {
                     cell.cellModel = usageModel
@@ -289,7 +288,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         newCollectionView.showCollectionDetail(collectionData: sections)
     }
     
-    func baseCellModel(name:String,value:String) ->PTFusionCellModel {
+    func baseCellModel(name:String,value:String) -> PTFusionCellModel {
         let model = PTFusionCellModel()
         model.name = name
         model.content = value

@@ -109,7 +109,7 @@ extension UIWindow {
 extension DispatchQueue {
     private static var _onceTracker = [String]()
 
-    class func once(token: String, block: () -> Void) {
+    @MainActor class func once(token: String, block: PTActionTask) {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 

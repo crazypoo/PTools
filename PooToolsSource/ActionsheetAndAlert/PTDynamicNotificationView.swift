@@ -30,7 +30,7 @@ public class PTDynamicNotificationView: UIView {
     fileprivate var showTime:TimeInterval = 3
     fileprivate var canTap:Bool = true
 
-    public init(showTimes:TimeInterval = 3,canTap:Bool = true,content:((UIView)->Void)) {
+    public init(showTimes:TimeInterval = 3,canTap:Bool = true,content:((UIView) -> Void)) {
         super.init(frame: .zero)
         self.showTime = showTimes
         self.canTap = canTap
@@ -58,7 +58,7 @@ public class PTDynamicNotificationView: UIView {
             make.height.equalTo(contentHeight)
             make.centerX.equalToSuperview()
 
-            if Gobal_device_info.isOneOf([.iPhone14Pro,.iPhone14ProMax,.iPhone15,.iPhone15Pro,.iPhone15ProMax,.iPhone15Plus]) {
+            if Gobal_device_info.isOneOf([.iPhone14Pro,.iPhone14ProMax,.iPhone15,.iPhone15Pro,.iPhone15ProMax,.iPhone15Plus,.iPhone16,.iPhone16e,.iPhone16Pro,.iPhone16ProMax,.iPhone16Plus]) {
                 make.top.equalToSuperview().inset(10)
             } else if Gobal_device_info.isOneOf([.iPhoneX, .iPhoneXS, .iPhoneXSMax, .iPhoneXR, .iPhone11, .iPhone11Pro, .iPhone11ProMax, .iPhone12, .iPhone12Mini, .iPhone12Pro, .iPhone12ProMax, .iPhone13, .iPhone13Mini, .iPhone13Pro, .iPhone13ProMax, .iPhone14, .iPhone14Plus]) {
                 make.top.equalToSuperview()

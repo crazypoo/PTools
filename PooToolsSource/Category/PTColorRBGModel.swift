@@ -10,16 +10,16 @@ import UIKit
 
 @objcMembers
 public class PTColorRBGModel: NSObject {
-    var redFloat:CGFloat = 0.0
-    var greenFloat:CGFloat = 0.0
-    var blueFloat:CGFloat = 0.0
-    var alphaFloat:CGFloat = 0.0
+    public var redFloat:CGFloat = 0.0
+    public var greenFloat:CGFloat = 0.0
+    public var blueFloat:CGFloat = 0.0
+    public var alphaFloat:CGFloat = 0.0
 }
 
 @objcMembers
 public class PTColorHSBAModel: NSObject {
-    var hueFloat:CGFloat = 0.0
-    var saturationFloat:CGFloat = 0.0
-    var brightnessFloat:CGFloat = 0.0
-    var alphaFloat:CGFloat = 0.0
+    public var hueFloat:CGFloat = 0.0
+    public var saturationFloat:CGFloat = 0.0
+    public var brightnessFloat:CGFloat = 0.0
+    public var alphaFloat:CGFloat = 0.0
 }

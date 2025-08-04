@@ -31,8 +31,8 @@ open class PTMapActionSheet: NSObject {
     ///   - location: 跳转坐标
     ///   - dismissTask: 关闭回调
     @MainActor open class func mapNavAlert(currentAppScheme:String,
-                                           currentAppName:String? = kAppDisplayName!,
-                                           qqKey:String? = "",
+                                           currentAppName:String = kAppDisplayName!,
+                                           qqKey:String = "",
                                            formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
                                            location:CLLocationCoordinate2D,
                                            sheetTitle:String = "PT Select nav".localized(),
@@ -45,20 +45,20 @@ open class PTMapActionSheet: NSObject {
         let appScheme = currentAppScheme
         let locations = location
         var navAppName = [String]()
-        let appName = currentAppName!
-        if UIApplication.shared.canOpenURL(URL(string: "baidumap://")!) {
+        let appName = currentAppName
+        if let baiduURL = URL(string: "baidumap://"),UIApplication.shared.canOpenURL(baiduURL) {
             navAppName.append(baiduName)
         }
         
-        if UIApplication.shared.canOpenURL(URL(string: "iosamap://")!) {
+        if let aMapURL = URL(string: "iosamap://"),UIApplication.shared.canOpenURL(aMapURL) {
             navAppName.append(aMapName)
         }
         
-        if UIApplication.shared.canOpenURL(URL(string: "comgooglemaps://")!) {
+        if let gMapURL = URL(string: "comgooglemaps://"),UIApplication.shared.canOpenURL(gMapURL) {
             navAppName.append(gMapName)
         }
         
-        if UIApplication.shared.canOpenURL(URL(string: "qqmap://")!) && !qqKey!.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
+        if let qMapURL = URL(string: "qqmap://"),UIApplication.shared.canOpenURL(qMapURL) && !qqKey.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
             navAppName.append(qMapName)
         }
         
@@ -78,7 +78,7 @@ open class PTMapActionSheet: NSObject {
             } else if navAppName[index] == gMapName {
                 urlString = String(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName,appScheme,locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
             } else if navAppName[index] == qMapName {
-                urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey!).urlToUnicodeURLString() ?? ""
+                urlString = String(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey).urlToUnicodeURLString() ?? ""
             }
             if let url = URL(string: urlString) {
                 PTAppStoreFunction.jumpLink(url: url)

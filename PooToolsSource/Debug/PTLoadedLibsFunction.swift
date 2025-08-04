@@ -53,8 +53,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     // MARK: - Public Methods
     
     func loadLibraries() {
-        
-        DispatchQueue.global().async {
+        PTGCDManager.gcdGobalNormal {
             let libraries = self.fetchLoadedLibraries()
             self.syncQueue.async(flags: .barrier) {
                 self.state.libraries = libraries
@@ -85,7 +84,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
             
             // 如果已经在加载中，直接跳过
             if library.isLoading {
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.onLibraryUpdated?(path)
                 }
                 return
@@ -94,7 +93,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
             library.isExpanded.toggle()
             self.state.filteredLibraries[index] = library
 
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 self.onLibraryUpdated?(path)
             }
 
@@ -103,7 +102,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
                 library.isLoading = true
                 self.state.filteredLibraries[index] = library
 
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.onLibraryUpdated?(path)
                 }
 
@@ -175,7 +174,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     
     // MARK: - Class Fetching
     private func loadClassesAsync(for path: String) {
-        DispatchQueue.global().async {
+        PTGCDManager.gcdGobalNormal {
             let fetched = self.fetchClasses(from: path)
             PTGCDManager.gcdMain {
                 self.syncQueue.async(flags: .barrier) {
@@ -186,7 +185,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
                     updated.isLoading = false
                     self.state.filteredLibraries[index] = updated
 
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         self.onLibraryUpdated?(path)
                     }
                 }

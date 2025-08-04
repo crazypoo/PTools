@@ -16,9 +16,7 @@ import SafeSFSymbols
 
 enum FileSharingManager {
     static func generateFileAndShare(text: String, fileName: String) {
-        let tempURL = URL(
-            fileURLWithPath: NSTemporaryDirectory()
-        ).appendingPathComponent("\(fileName).txt")
+        let tempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(fileName).txt")
 
         do {
             try text.write(to: tempURL, atomically: true, encoding: .utf8)
@@ -32,10 +30,7 @@ enum FileSharingManager {
 
     @MainActor
     static func share(_ tempURL: URL) {
-        let activity = UIActivityViewController(
-            activityItems: [tempURL],
-            applicationActivities: nil
-        )
+        let activity = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
 
         guard let controller = PTUtils.getTopViewController() else { return }
 
@@ -59,7 +54,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
         view.registerSupplementaryView(classs: [PTloadedLibHeader.ID:PTloadedLibHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.headerInCollection = { kind,collectionView,model,index in
-            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTloadedLibHeader {
+            if let headerID = model.headerID,!headerID.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index) as? PTloadedLibHeader {
                 let headerModel = self.libraries[index.section]
                 header.configure(with: headerModel)
                 header.onToggle = { [weak self] in

@@ -43,11 +43,11 @@ open class PTSection: NSObject {
 
 open class PTRows: NSObject {
     
-    open var title = ""
-    open var ID: String = ""
-    open var dataModel: AnyObject?
-    open var nibName = ""
-    open var badge:Int = 0
+    public var title = ""
+    public var ID: String = ""
+    public var dataModel: AnyObject?
+    public var nibName = ""
+    public var badge:Int = 0
 
     public init(title: String = "",
                 nibName:String? = "",

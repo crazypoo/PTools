@@ -842,8 +842,8 @@ public extension String {
     //MARK: 检查字符串
     ///是否仅包含数字
     var containsOnlyDigits: Bool {
-            let notDigits = NSCharacterSet.decimalDigits.inverted
-            return rangeOfCharacter(from: notDigits, options: String.CompareOptions.literal, range: nil) == nil
+        let notDigits = NSCharacterSet.decimalDigits.inverted
+        return rangeOfCharacter(from: notDigits, options: String.CompareOptions.literal, range: nil) == nil
     }
         
     ///是否仅包含字符
@@ -1026,9 +1026,9 @@ public extension String {
         numberFormat.numberStyle = .decimal
         var outputValue = ""
         if decimal {
-            outputValue = numberFormat.string(from: NSDecimalNumber(string: self))!
+            outputValue = numberFormat.string(from: NSDecimalNumber(string: self)) ?? ""
         } else {
-            outputValue = numberFormat.string(from: NSNumber(value: int!))!
+            outputValue = numberFormat.string(from: NSNumber(value: int!)) ?? ""
         }
         return outputValue
     }
@@ -1067,26 +1067,34 @@ public extension String {
     /// - Returns: Array
     func jsonStringToArray() -> Array<Any>? {
         let jsonString = self
-        let jsonData:Data = jsonString.data(using: .utf8)!
-        let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        if array != nil {
-            return (array as! Array<Any>)
+        if let jsonData:Data = jsonString.data(using: .utf8) {
+            if let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
+                return array as? Array<Any>
+            }
         }
         return nil
     }
         
     func jsonStringToArray() -> NSArray {
         do {
-            let tmp = try JSONSerialization.jsonObject(with: data(using: String.Encoding.utf8)!, options: [JSONSerialization.ReadingOptions.mutableLeaves,JSONSerialization.ReadingOptions.mutableContainers])
-            if tmp is NSArray {
-                return (tmp as! NSArray)
-            } else if (tmp is NSString) || (tmp is NSDictionary) {
-                return NSArray.init(array: [tmp])
+            if let data = data(using: String.Encoding.utf8) {
+                let tmp = try JSONSerialization.jsonObject(with: data, options: [JSONSerialization.ReadingOptions.mutableLeaves,JSONSerialization.ReadingOptions.mutableContainers])
+                switch tmp {
+                case let tmp as NSArray:
+                    return tmp
+                case let tmp as NSString:
+                    return NSArray(array: [tmp])
+                case let tmp as NSDictionary:
+                    return NSArray(array: [tmp])
+                default:
+                    return []
+                }
+            } else {
+                return []
             }
         } catch {
-            return NSArray.init()
+            return []
         }
-        return NSArray.init()
     }
     
     //MARK: 判斷密碼的強度
@@ -1439,9 +1447,12 @@ public extension String {
     func dateStrToTimeInterval(dateFormat:String = "yyyy-MM-dd") -> TimeInterval  {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = dateFormat
-        let date = dateformatter.date(from: self)
-        let dateTimeInterval:TimeInterval = date!.timeIntervalSince1970
-        return dateTimeInterval
+        if let date = dateformatter.date(from: self) {
+            let dateTimeInterval:TimeInterval = date.timeIntervalSince1970
+            return dateTimeInterval
+        } else {
+            return 0
+        }
     }
     
     //MARK: 當前時間的時間戳字符串
@@ -1727,10 +1738,8 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// - Returns: Dictionary
     func jsonStringToDictionary() -> Dictionary<String, Any>? {
         let jsonString = base as! String
-        let jsonData: Data = jsonString.data(using: .utf8)!
-        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-        if dict != nil {
-            return (dict as! Dictionary<String, Any>)
+        if let jsonData: Data = jsonString.data(using: .utf8),let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
+            return (dict as? Dictionary<String, Any>)
         }
         return nil
     }
@@ -1740,9 +1749,8 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// - Returns: Array
     func jsonStringToArray() -> Array<Any>? {
         let jsonString = base as! String
-        let jsonData:Data = jsonString.data(using: .utf8)!
-        if let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
-            return (array as! Array<Any>)
+        if let jsonData:Data = jsonString.data(using: .utf8),let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) {
+            return (array as? Array<Any>)
         } else {
             return nil
         }

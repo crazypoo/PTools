@@ -136,7 +136,7 @@ public extension UIImage {
 
     //MARK: 更改圖片大小
     ///更改圖片大小
-    @objc func transformImage(size:CGSize)->UIImage {
+    @objc func transformImage(size:CGSize) -> UIImage {
         if #available(iOS 15.0, *) {
             if isSymbolImage {
                 return resize(targetSize: size)
@@ -147,12 +147,12 @@ public extension UIImage {
             if isSymbolImage {
                 return resize(targetSize: size)
             } else {
-                return transform(size: CGSize.init(width: size.width, height: size.height))
+                return transform(size: CGSize(width: size.width, height: size.height))
             }
         }
     }
     
-    private func transform(size:CGSize)->UIImage {
+    private func transform(size:CGSize) -> UIImage {
         let destW = size.width
         let destH = size.height
         let sourceW = size.width
@@ -161,7 +161,7 @@ public extension UIImage {
         let imageRef = cgImage
         let bitmap:CGContext = CGContext(data: nil , width: Int(destW), height: Int(destH), bitsPerComponent: (imageRef?.bitsPerComponent)!, bytesPerRow: 4 * Int(destW), space: (imageRef?.colorSpace)!, bitmapInfo: (CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue))!
         
-        bitmap.draw(imageRef!, in: CGRect.init(x: 0, y: 0, width: sourceW, height: sourceH))
+        bitmap.draw(imageRef!, in: CGRect(x: 0, y: 0, width: sourceW, height: sourceH))
         
         let ref = bitmap.makeImage()
         let resultImage = UIImage(cgImage: ref!)
@@ -170,7 +170,7 @@ public extension UIImage {
     
     //MARK: 圖片高斯模糊
     ///圖片高斯模糊
-    @objc func blurImage()->UIImage {
+    @objc func blurImage() -> UIImage {
         img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
     }
     
@@ -183,7 +183,7 @@ public extension UIImage {
      */
     func img(alpha:Float,
              radius:Float,
-             colorSaturationFactor:Float)->UIImage {
+             colorSaturationFactor:Float) -> UIImage {
         let tintColor = UIColor(white: 1, alpha: CGFloat(alpha))
         return imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
@@ -191,7 +191,7 @@ public extension UIImage {
     func imgBluredWithRadius(blurRadius:Float,
                              tintColor:UIColor?,
                              saturationDeltaFactor:Float,
-                             maskImage:UIImage?)->UIImage {
+                             maskImage:UIImage?) -> UIImage {
         let imageRect = CGRect(origin: .zero, size: size)
         var effectImage = self
         let hadBlur = blurRadius > Float.ulpOfOne
@@ -359,7 +359,7 @@ public extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext() ?? self
     }
     
-    func imageScale(scaleSize:CGFloat)->UIImage {
+    func imageScale(scaleSize:CGFloat) -> UIImage {
         UIGraphicsBeginImageContext(CGSize(width: size.width * scaleSize, height: size.height * scaleSize))
         self.draw(in: CGRect(x: 0, y: 0, width: size.width * scaleSize, height: size.height * scaleSize))
         UIGraphicsEndImageContext()
@@ -368,7 +368,7 @@ public extension UIImage {
     
     func imageMask(text:NSString,
                    point:CGPoint,
-                   attributed:NSDictionary)->UIImage {
+                   attributed:NSDictionary) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         text.draw(at: point,withAttributes: (attributed as! [NSAttributedString.Key : Any]))
@@ -378,7 +378,7 @@ public extension UIImage {
     }
     
     func imageMask(maskImage:UIImage,
-                   maskRect:CGRect)->UIImage {
+                   maskRect:CGRect) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         maskImage.draw(in: maskRect)
@@ -389,7 +389,7 @@ public extension UIImage {
     
     //MARK: 獲取圖片中大部分占有的顏色
     ///獲取圖片中大部分占有的顏色
-    @objc func imageMostColor()->UIColor {
+    @objc func imageMostColor() -> UIColor {
         let context = getImageContext()
         
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
@@ -413,18 +413,14 @@ public extension UIImage {
             }
         }
         
-        var maxColor:NSArray? = nil
-        let enumerator = cls.enumerated()
-        enumerator.forEach { index,value in
-            maxColor = (value as! NSArray)
-        }
+        let maxColor = cls.reversed().compactMap { $0 as? NSArray }.first
         
         return UIColor(red: maxColor![0] as! CGFloat / 255, green: maxColor![1] as! CGFloat / 255, blue: maxColor![2] as! CGFloat / 255, alpha: maxColor![3] as! CGFloat / 255)
     }
     
     //MARK: 獲取圖片中某個像素點的顏色
     ///獲取圖片中某個像素點的顏色
-    func getImgePointColor(point:CGPoint)->UIColor {
+    func getImgePointColor(point:CGPoint) -> UIColor {
         let context = getImageContext()
         
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
@@ -442,7 +438,7 @@ public extension UIImage {
         return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: CGFloat(alpha)/255.0)
     }
     
-    func getImageContext()-> CGContext {
+    func getImageContext() -> CGContext {
         let currentImage = cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
         
         let bitmapInfo = CGBitmapInfo.byteOrderDefault.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue

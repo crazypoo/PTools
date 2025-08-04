@@ -485,7 +485,7 @@ public extension UIView {
         }
     }
     
-    func isRolling()->Bool {
+    func isRolling() -> Bool {
         if self is UIScrollView {
             let scrollView = self as! UIScrollView
             if scrollView.isDragging || scrollView.isDecelerating {
@@ -510,13 +510,13 @@ public extension UIView {
                              font:UIFont,
                              lineSpacing:CGFloat = 2.5,
                              height:CGFloat = CGFloat.greatestFiniteMagnitude,
-                             width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
+                             width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
         var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
         let paraStyle = NSMutableParagraphStyle()
         paraStyle.lineSpacing = lineSpacing
         dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         if !string.stringIsEmpty() {
-            let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
+            let size = string.boundingRect(with: CGSize(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
             return size
         }
         return .zero

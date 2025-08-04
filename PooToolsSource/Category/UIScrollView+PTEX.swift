@@ -74,7 +74,7 @@ public extension PTPOP where Base : UIScrollView {
     func snapShotContentScroll(_ completionHandler: @escaping (_ screenShotImage: UIImage?) -> Void) {
         /// 放一个假的封面
         let snapShotView = base.snapshotView(afterScreenUpdates: true)
-        snapShotView?.frame = CGRect(x: base.frame.origin.x, y: base.frame.origin.y, width: (snapShotView?.frame.size.width)!, height: (snapShotView?.frame.size.height)!)
+        snapShotView?.frame = CGRect(x: base.frame.origin.x, y: base.frame.origin.y, width: snapShotView?.frame.size.width ?? 0, height: snapShotView?.frame.size.height ?? 0)
         base.superview?.addSubview(snapShotView!)
         ///  基的原点偏移
         let originOffset = base.contentOffset

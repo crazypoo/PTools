@@ -243,9 +243,9 @@ public extension UIAlertController {
         
         let doneAction = UIAlertAction(title: okBtn, style: .default) { (action) in
             var resultDic = [String:String]()
-            alert.textFields?.enumerated().forEach({ (index,value) in
+            alert.textFields?.forEach { value in
                 resultDic[value.placeholder!] = value.text
-            })
+            }
             doneBtn?(resultDic)
         }
         doneAction.setValue(doneBtnColor, forKey: "titleTextColor")

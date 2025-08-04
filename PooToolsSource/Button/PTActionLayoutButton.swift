@@ -8,6 +8,7 @@
 
 import UIKit
 import AttributedString
+import SnapKit
 
 public class PTActionLayoutButton: UIControl {
 
@@ -31,7 +32,7 @@ public class PTActionLayoutButton: UIControl {
         }
     }
         
-    public var labelLineSpace:NSNumber = 2 {
+    public var labelLineSpace:CGFloat = 2 {
         didSet {
             updateAppearance()
         }

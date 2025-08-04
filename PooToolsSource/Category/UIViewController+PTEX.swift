@@ -127,7 +127,7 @@ public extension UIViewController {
     
     //MARK: 檢查當前的ViewController是Push還是Pop
     ///檢查當前的ViewController是Push還是Pop
-    func checkVCIsPresenting() ->Bool {
+    func checkVCIsPresenting() -> Bool {
         let vcs = navigationController?.viewControllers
         if (vcs?.count ?? 0) > 1 {
             if vcs![vcs!.count - 1] == self {
@@ -395,10 +395,10 @@ public extension UIViewController {
         view.endEditing(true)
     }
     
-    func pt_present(_ vc:UIViewController,animated:Bool? = true,completion:(()->Void)? = nil) {
+    func pt_present(_ vc:UIViewController,animated:Bool = true,completion:PTActionTask? = nil) {
 
 #if POOTOOLS_DEBUG
-        present(vc, animated: animated!) {
+        present(vc, animated: animated) {
             completion?()
             let share = LocalConsole.shared
             if share.isVisiable {
@@ -414,12 +414,12 @@ public extension UIViewController {
             }
         }
 #else
-        present(vc, animated: animated!, completion:completion)
+        present(vc, animated: animated, completion:completion)
 #endif
     }
     
     @available(iOS 15.0,*)
-    func restApiSheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask?) {
+    func restApiSheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask? = nil) {
         if let sheet = modalViewController.sheetPresentationController {
             // 支持的自定义显示大小
             switch type {
@@ -453,26 +453,19 @@ public extension UIViewController {
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
         sheet.overlayColor = overlayColor
         let currentVC = PTUtils.getCurrentVC()
-        if currentVC is PTSideMenuControl {
-            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
-            if let presentedVC = currentVC?.presentedViewController {
-                presentedVC.present(sheet, animated: true) {
-                    completion?()
-                }
+        switch currentVC {
+        case let currentVCs as PTSideMenuControl:
+            let currentVCc = currentVCs.contentViewController
+            if let presentedVC = currentVCc?.presentedViewController {
+                presentedVC.present(sheet, animated: true, completion: completion)
             } else {
-                currentVC!.present(sheet, animated: true) {
-                    completion?()
-                }
+                currentVCc?.present(sheet, animated: true,completion: completion)
             }
-        } else {
-            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                presentedVC.present(sheet, animated: true) {
-                    completion?()
-                }
+        default:
+            if let presentedVC = currentVC.presentedViewController {
+                presentedVC.present(sheet, animated: true,completion: completion)
             } else {
-                PTUtils.getCurrentVC().present(sheet, animated: true) {
-                    completion?()
-                }
+                currentVC.present(sheet, animated: true,completion: completion)
             }
         }
     }

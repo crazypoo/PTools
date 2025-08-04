@@ -16,7 +16,7 @@ private var UIViewDebugBorderColorKey: UInt8 = 3
 
 extension UIView {
 
-    func simulateButtonTap(completion: (() -> Void)? = nil) {
+    func simulateButtonTap(completion: PTActionTask? = nil) {
         UIDevice.pt.impactFeedbackGenerator(style: .heavy)
         UIView.animate(withDuration: 0.1, animations: {
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)

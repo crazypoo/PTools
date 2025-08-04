@@ -153,7 +153,7 @@ fileprivate class PTColorPickMagnifyLayer: CALayer {
 //MARK: 颜色吸盘的信息界面
 fileprivate class PTColorPickInfoView : UIView {
     
-    public var closeBlock:((UIButton,PTColorPickInfoView)->Void)?
+    public var closeBlock:((UIButton,PTColorPickInfoView) -> Void)?
     
     public var currentColor:String? {
         didSet {
@@ -272,16 +272,16 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
         addSubview(pickInfoView)
         
         let pan = UIPanGestureRecognizer { sender in
-            let pans = sender as! UIPanGestureRecognizer
-            
-            let offsetPoint = pans.translation(in: pans.view)
-            pans.setTranslation(.zero, in: pans.view)
-            let panView = pans.view
-            let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
-            let newY = panView!.frame.origin.y + panView!.frame.size.height / 2 + offsetPoint.y
-            
-            let centerPoint = CGPoint(x: newX, y: newY)
-            panView?.center = centerPoint
+            if let pans = sender as? UIPanGestureRecognizer {
+                let offsetPoint = pans.translation(in: pans.view)
+                pans.setTranslation(.zero, in: pans.view)
+                let panView = pans.view
+                let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
+                let newY = panView!.frame.origin.y + panView!.frame.size.height / 2 + offsetPoint.y
+                
+                let centerPoint = CGPoint(x: newX, y: newY)
+                panView?.center = centerPoint
+            }
         }
         addGestureRecognizer(pan)
         
@@ -332,34 +332,35 @@ fileprivate class PTColorPickWindow : UIWindow {
         layer.addSublayer(magnifyLayer)
         
         let pan = UIPanGestureRecognizer { sender in
-            let pans = sender as! UIPanGestureRecognizer
-            if pans.state == .began {
-                self.updateScreenShotImage()
-            }
-            
-            let offsetPoint = pans.translation(in: pans.view)
-            pans.setTranslation(.zero, in: pans.view)
-            let panView = pans.view
-            let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
-            let newY = panView!.frame.origin.y + panView!.frame.size.height / 2  + offsetPoint.y
+            if let pans = sender as? UIPanGestureRecognizer {
+                if pans.state == .began {
+                    self.updateScreenShotImage()
+                }
+                
+                let offsetPoint = pans.translation(in: pans.view)
+                pans.setTranslation(.zero, in: pans.view)
+                let panView = pans.view
+                let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
+                let newY = panView!.frame.origin.y + panView!.frame.size.height / 2  + offsetPoint.y
 
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-                        
-            let centerPoint = CGPoint(x: newX, y: newY)
-            panView?.center = centerPoint
-            
-            self.magnifyLayer.targetPoint = centerPoint
-            var magnifyFrame = self.magnifyLayer.frame
-            magnifyFrame.origin = CGPoint(x: round(magnifyFrame.origin.x), y: round(magnifyFrame.origin.y))
-            self.magnifyLayer.frame = magnifyFrame
-            self.magnifyLayer.setNeedsDisplay()
-            
-            CATransaction.commit()
-            
-            let hexColor = self.colorAtPoint(point: centerPoint)
-            
-            PTColorPickInfoWindow.share.currentColor = hexColor
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                            
+                let centerPoint = CGPoint(x: newX, y: newY)
+                panView?.center = centerPoint
+                
+                self.magnifyLayer.targetPoint = centerPoint
+                var magnifyFrame = self.magnifyLayer.frame
+                magnifyFrame.origin = CGPoint(x: round(magnifyFrame.origin.x), y: round(magnifyFrame.origin.y))
+                self.magnifyLayer.frame = magnifyFrame
+                self.magnifyLayer.setNeedsDisplay()
+                
+                CATransaction.commit()
+                
+                let hexColor = self.colorAtPoint(point: centerPoint)
+                
+                PTColorPickInfoWindow.share.currentColor = hexColor
+            }
         }
         addGestureRecognizer(pan)
         

@@ -128,8 +128,7 @@ extension UIView {
                     objc_getAssociatedObject(leakedView, &LVCDDeallocator.key) == nil,
                     UIApplication.shared.applicationState == .active, // theoretically not needed when also checking lastBackgroundedDate, but just in case
                     PTPerformanceLeakDetector.lastBackgroundedDate < startTime,
-                    !PTPerformanceLeakDetector.ignoredViewClassNames.contains(type(of: leakedView).description()) 
-                {
+                    !PTPerformanceLeakDetector.ignoredViewClassNames.contains(type(of: leakedView).description()) {
 
                     let errorTitle = "VIEW STILL IN MEMORY"
                     var errorMessage = leakedView.debugDescription.lvcdRemoveBundleAndModuleName()
@@ -560,8 +559,7 @@ extension UIViewController {
                         errorMessage = errorMessage.replacingOccurrences(of: ",;", with: ";")
                     }
 
-                    PTPerformanceLeakDetector.callback?( .init(controller: self, message: "\(errorTitle) \(errorMessage)")
-                    )
+                    PTPerformanceLeakDetector.callback?( .init(controller: self, message: "\(errorTitle) \(errorMessage)"))
                     PTNSLogConsole("\(errorTitle) \(errorMessage)")
 
                     let screenshot = self.view?.rootView.makeScreenshot()
@@ -606,9 +604,11 @@ extension UIViewController {
         static var key = malloc(1)!
 
         weak var splitViewController: UISplitViewController?
-        weak var viewController: UIViewController? { didSet {
-            NotificationCenter.lvcd.addObserver(self, selector: #selector(checkIfBelongsToSplitViewController(_:)), name: UIViewController.lvcdCheckForSplitViewVCMemoryLeakNotification, object: nil)
-        }}
+        weak var viewController: UIViewController? {
+            didSet {
+                NotificationCenter.lvcd.addObserver(self, selector: #selector(checkIfBelongsToSplitViewController(_:)), name: UIViewController.lvcdCheckForSplitViewVCMemoryLeakNotification, object: nil)
+            }
+        }
 
         @objc func checkIfBelongsToSplitViewController(_ notification: Notification) {
             if notification.object as? UISplitViewController == splitViewController, let viewController {
@@ -649,16 +649,18 @@ private class LVCDDeallocator {
     // used by View
     var subviews: [UIView]?
     var subviewObserver: NSKeyValueObservation?
-    weak var weakView: UIView? { didSet {
-        subviewObserver?.invalidate()
-        subviewObserver = weakView?.layer.observe(\.sublayers, options: [.old, .new]) { [weak self] _, _ in
-            if let view = self?.weakView {
-                self?.subviews = view.subviews
+    weak var weakView: UIView? {
+        didSet {
+            subviewObserver?.invalidate()
+            subviewObserver = weakView?.layer.observe(\.sublayers, options: [.old, .new]) { [weak self] _, _ in
+                if let view = self?.weakView {
+                    self?.subviews = view.subviews
+                }
             }
+            // using observer allows to keep track of subviews during leak without themselves leaking
+            // if leaked view clears it can then check its current subviews for leaks
         }
-        // using observer allows to keep track of subviews during leak without themselves leaking
-        // if leaked view clears it can then check its current subviews for leaks
-    }}
+    }
 
     init(_ view: UIView? = nil) {
         self.strongView = view

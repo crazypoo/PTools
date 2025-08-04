@@ -32,12 +32,12 @@ public class PTLoadImageFunction: NSObject {
     public static func loadImage(contentData: Any,
                                  iCloudDocumentName: String = "",
                                  progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
-
-        if let image = contentData as? UIImage {
+        switch contentData {
+        case let image as UIImage:
             return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0)
-        } else if let dataUrlString = contentData as? String {
-            return await handleStringContent(dataUrlString, iCloudDocumentName, progressHandle)
-        } else if let data = contentData as? Data {
+        case let dataString as String:
+            return await handleStringContent(dataString, iCloudDocumentName, progressHandle)
+        case let data as Data:
             if data.detectImageType() == .GIF,let gifImage = imagesAndDurationFromGif(data: data) {
                 return PTLoadImageResult(allImages: gifImage.images, firstImage: gifImage.images.first, loadTime: gifImage.duration)
             } else {
@@ -47,9 +47,9 @@ public class PTLoadImageFunction: NSObject {
                     return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
                 }
             }
-        } else if let asset = contentData as? PHAsset {
+        case let asset as PHAsset:
             return await handleAssetContent(asset: asset)
-        } else {
+        default:
             return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
         }
     }
@@ -95,13 +95,13 @@ public class PTLoadImageFunction: NSObject {
 
     private static func loadFromLocalFileAsync(path: String) async -> PTLoadImageResult {
         return await withCheckedContinuation { continuation in
-            DispatchQueue.global().async {
+            PTGCDManager.gcdGobalNormal {
                 if let image = UIImage(contentsOfFile: path) {
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         continuation.resume(returning: PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
                     }
                 } else {
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         continuation.resume(returning: PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0))
                     }
                 }
@@ -125,7 +125,7 @@ public class PTLoadImageFunction: NSObject {
     private static func handleFileURLAsync(_ dataUrlString: String,
                                            _ iCloudDocumentName: String) async -> PTLoadImageResult {
         return await withCheckedContinuation { continuation in
-            DispatchQueue.global().async {
+            PTGCDManager.gcdGobalNormal {
                 var image: UIImage?
                 if iCloudDocumentName.isEmpty {
                     image = UIImage(contentsOfFile: dataUrlString)
@@ -136,7 +136,7 @@ public class PTLoadImageFunction: NSObject {
                     }
                 }
 
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     if let img = image {
                         continuation.resume(returning: PTLoadImageResult(allImages: [img], firstImage: img, loadTime: 0))
                     } else {
@@ -185,12 +185,12 @@ public class PTLoadImageFunction: NSObject {
                 with: url,
                 options: options,
                 progressBlock: { receivedSize, totalSize in
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         progressHandle?(receivedSize, totalSize)
                     }
                 },
                 completionHandler: { result in
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         switch result {
                         case .success(let value):
                             ImageCache.default.store(value.image,original: value.originalData, forKey: cacheKey)

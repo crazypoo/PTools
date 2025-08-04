@@ -344,7 +344,7 @@ public extension UICollectionView {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
         data?.enumerated().forEach { (index,model) in
-            let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect.init(x: groupWidth, y: topContentSpace, width: itemWidth, height: itemHeight), zIndex: 1000+index)
+            let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: groupWidth, y: topContentSpace, width: itemWidth, height: itemHeight), zIndex: 1000+index)
             customers.append(customItem)
             groupWidth += (itemWidth + itemLeadingSpace)
         }
@@ -380,25 +380,30 @@ public extension UICollectionView {
     func allowsMoveItem() {
         // 长点击事件，做移动cell操作
         let longPressGesture = UILongPressGestureRecognizer { sender in
-            let gesture = sender as! UILongPressGestureRecognizer
-            switch(gesture.state) {
-            // 开始移动
-            case UIGestureRecognizer.State.began:
-                let point = gesture.location(in: gesture.view!)
-                if let selectedIndexPath = self.indexPathForItem(at: point) {
-                    // 开始移动
-                    self.beginInteractiveMovementForItem(at: selectedIndexPath)
+            if let gesture = sender as? UILongPressGestureRecognizer {
+                switch(gesture.state) {
+                // 开始移动
+                case UIGestureRecognizer.State.began:
+                    if let gesView = gesture.view {
+                        let point = gesture.location(in: gesView)
+                        if let selectedIndexPath = self.indexPathForItem(at: point) {
+                            // 开始移动
+                            self.beginInteractiveMovementForItem(at: selectedIndexPath)
+                        }
+                    }
+                case UIGestureRecognizer.State.changed:
+                    // 移动中
+                    if let gesView = gesture.view {
+                        let point = gesture.location(in: gesView)
+                        self.updateInteractiveMovementTargetPosition(point)
+                    }
+                case UIGestureRecognizer.State.ended:
+                    // 结束移动
+                    self.endInteractiveMovement()
+                default:
+                    // 取消移动
+                    self.cancelInteractiveMovement()
                 }
-            case UIGestureRecognizer.State.changed:
-                // 移动中
-                let point = gesture.location(in: gesture.view!)
-                self.updateInteractiveMovementTargetPosition(point)
-            case UIGestureRecognizer.State.ended:
-                // 结束移动
-                self.endInteractiveMovement()
-            default:
-                // 取消移动
-                self.cancelInteractiveMovement()
             }
         }
         self.addGestureRecognizer(longPressGesture)

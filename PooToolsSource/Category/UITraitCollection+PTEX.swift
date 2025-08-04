@@ -19,7 +19,7 @@ public extension UITraitCollection {
     /// - Parameters:
     ///   - traitCollection: A trait collection that you want to compare to the current trait collection.
     ///   - closure: The closure for updating component appearance.
-    func performForDifferentColorAppearance(comparedTo traitCollection: UITraitCollection?, closure: (() -> Void)) {
+    @MainActor func performForDifferentColorAppearance(comparedTo traitCollection: UITraitCollection?, closure: PTActionTask) {
         closure()
     }
 }

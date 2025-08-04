@@ -36,10 +36,14 @@ public enum PTTimestampType: Int {
 public extension Date {
     //MARK: 获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
     ///获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
-    func getWeedayFromeDate() -> String {
+    func getWeekDayType() -> Int? {
         let calendar = Calendar.current
         let dateComponets = calendar.dateComponents([Calendar.Component.year,Calendar.Component.month,Calendar.Component.weekday,Calendar.Component.day], from: self)
-        let weekDay = dateComponets.weekday
+        return dateComponets.weekday
+    }
+    
+    func getWeekDayFromeDate() -> String {
+        let weekDay = self.getWeekDayType()
         var weekDayStr = ""
         switch weekDay {
         case 1:
@@ -83,9 +87,12 @@ public extension Date {
     func getCurrentDate(dateFormatterString:String) -> TimeInterval {
         let dformatter = DateFormatter()
         dformatter.dateFormat = dateFormatterString
-        let timeDate = dformatter.date(from: String.currentDate(dateFormatterString: dateFormatterString))
-        let timeInterval = timeDate!.timeIntervalSince1970
-        return timeInterval
+        if let timeDate = dformatter.date(from: String.currentDate(dateFormatterString: dateFormatterString)) {
+            let timeInterval = timeDate.timeIntervalSince1970
+            return timeInterval
+        } else {
+            return 0
+        }
     }
     
     //MARK: 獲取時區的當前時間戳

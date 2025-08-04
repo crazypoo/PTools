@@ -194,11 +194,12 @@ public extension UIButton {
                    emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    controlState:UIControl.State = .normal) {
         setImage(emptyImage, for: controlState)
-        if let image = contentData as? UIImage {
-            setImage(image, for: controlState)
-        } else if let dataUrlString = contentData as? String {
+        switch contentData {
+        case let contentData as UIImage:
+            setImage(contentData, for: controlState)
+        case let contentData as String:
             Task {
-                let result = await PTLoadImageFunction.handleStringContent(dataUrlString, iCloudDocumentName) { receivedSize, totalSize in
+                let result = await PTLoadImageFunction.handleStringContent(contentData, iCloudDocumentName) { receivedSize, totalSize in
                     PTGCDManager.gcdMain {
                         self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                     }
@@ -211,10 +212,10 @@ public extension UIButton {
                     self.setImage(emptyImage, for: controlState)
                 }
             }
-        } else if let contentDatas = contentData as? Data {
-            let dataImage = UIImage(data: contentDatas)
+        case let contentData as Data:
+            let dataImage = UIImage(data: contentData)
             setImage(dataImage, for: controlState)
-        } else {
+        default:
             setImage(emptyImage, for: controlState)
         }
     }

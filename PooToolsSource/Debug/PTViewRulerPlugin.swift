@@ -48,7 +48,7 @@ open class PTViewRulerPlugin: NSObject {
 
 fileprivate class PTVisualInfoController:UIView {
     
-    var closeBlock:((UIButton,PTVisualInfoController)->Void)?
+    var closeBlock:((UIButton,PTVisualInfoController) -> Void)?
 
     public lazy var infoLabel:UILabel = {
         let view = UILabel()

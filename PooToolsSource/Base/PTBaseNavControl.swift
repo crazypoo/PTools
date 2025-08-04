@@ -202,10 +202,10 @@ extension PTBaseNavControl {
     }
     
     public class func GobalNavControl(nav:UINavigationController,
-                              textColor:UIColor? = PTAppBaseConfig.share.navTitleTextColor,
-                              navColor:UIColor? = PTAppBaseConfig.share.viewControllerBaseBackgroundColor) {
-        let colors:UIColor? = navColor
-        let textColors:UIColor? = textColor
+                              textColor:UIColor = PTAppBaseConfig.share.navTitleTextColor,
+                              navColor:UIColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor) {
+        let colors:UIColor = navColor
+        let textColors:UIColor = textColor
         
         //修改导航栏文字颜色字号
         let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]
@@ -216,7 +216,7 @@ extension PTBaseNavControl {
             navigationBarAppearance.backgroundColor = colors
             navigationBarAppearance.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
             navigationBarAppearance.shadowImage = images
-            navigationBarAppearance.setBackIndicatorImage(colors!.createImageWithColor(), transitionMaskImage: colors!.createImageWithColor())
+            navigationBarAppearance.setBackIndicatorImage(colors.createImageWithColor(), transitionMaskImage: colors.createImageWithColor())
             nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
             nav.navigationBar.standardAppearance = navigationBarAppearance
             nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
@@ -235,9 +235,9 @@ extension PTBaseNavControl {
             nav.navigationItem.leftBarButtonItem?.tintColor = textColors
             /// 导航栏背景图片
             nav.navigationController?.navigationBar.backgroundColor = colors
-            nav.navigationController?.navigationBar.setBackgroundImage(colors!.createImageWithColor(), for: .default)
+            nav.navigationController?.navigationBar.setBackgroundImage(colors.createImageWithColor(), for: .default)
             
-            nav.navigationBar.apply(gradient: [colors!])
+            nav.navigationBar.apply(gradient: [colors])
             
             /// 修改UINavigationBar上各个item的文字、图形的颜色
             nav.navigationBar.tintColor = textColors

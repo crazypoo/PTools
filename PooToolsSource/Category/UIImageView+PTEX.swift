@@ -15,13 +15,17 @@ import ImageIO
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
     ///獲取圖片的某像素點的顏色
-    @objc func getImagePointColor(point:CGPoint)->UIColor {
-        let thumbSize = CGSize(width: image!.size.width, height: image!.size.height)
+    @objc func getImagePointColor(point:CGPoint) -> UIColor {
+        if let currentImage = image {
+            let thumbSize = CGSize(width: image!.size.width, height: currentImage.size.height)
 
-        // 当前点在图片中的相对位置
-        let pInImage = CGPointMake(point.x * thumbSize.width / self.bounds.size.width,
-                                   point.y * thumbSize.height / self.bounds.size.height)
-        return image!.getImgePointColor(point: pInImage)
+            // 当前点在图片中的相对位置
+            let pInImage = CGPointMake(point.x * thumbSize.width / self.bounds.size.width,
+                                       point.y * thumbSize.height / self.bounds.size.height)
+            return currentImage.getImgePointColor(point: pInImage)
+        } else {
+            return .clear
+        }
     }
     
     @objc func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,loadedHandler:PTImageLoadHandler? = nil) {
@@ -44,8 +48,8 @@ public extension UIImageView {
                          valueLabelColor:UIColor = .white,
                          uniCount:Int = 0,
                          emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
-                         progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
-                         loadFinish:(([UIImage]?,UIImage?,TimeInterval)->Void)? = nil) {
+                         progressHandle:((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                         loadFinish:(([UIImage]?,UIImage?,TimeInterval) -> Void)? = nil) {
         
         self.image = emptyImage
 
@@ -95,10 +99,10 @@ public extension UIImageView {
     
     //MARK: 視頻剪輯
     var frameForImageInImageViewAspectFit: CGRect {
-        if  let img = self.image {
+        if let img = self.image {
             let imageRatio = img.size.width / img.size.height
             let viewRatio = self.frame.size.width / self.frame.size.height
-            if(imageRatio < viewRatio) {
+            if (imageRatio < viewRatio) {
                 let scale = self.frame.size.height / img.size.height
                 let width = scale * img.size.width
                 let topLeftX = (self.frame.size.width - width) * 0.5
@@ -110,7 +114,7 @@ public extension UIImageView {
                 return CGRect(x: 0, y: topLeftY, width: self.frame.size.width, height: height)
             }
         }
-        return CGRect(x: 0, y: 0, width: 0, height: 0)
+        return .zero
     }
     
     var imageFrame: CGRect {
@@ -396,7 +400,7 @@ public extension UIImageView {
             updateFrame()
             updateIndex()
             
-            if loopCount == 0 || !isDisplayedInScreen(self)  || !isPlaying {
+            if loopCount == 0 || !isDisplayedInScreen(self) || !isPlaying {
                 stopDisplay()
             }
         } else {
@@ -420,7 +424,7 @@ public extension UIImageView {
     }
     
     /// Get current frame index
-    func currentFrameIndex() -> Int{
+    func currentFrameIndex() -> Int {
         return displayOrderIndex
     }
     
@@ -475,7 +479,7 @@ public extension UIImageView {
         guard let gif = self.gifImage,
             let displayRefreshFactor = gif.displayRefreshFactor,
             displayRefreshFactor > 0 else {
-                return
+            return
         }
         
         syncFactor = (syncFactor + 1) % displayRefreshFactor

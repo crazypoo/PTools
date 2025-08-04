@@ -256,8 +256,9 @@ public extension NSString {
     func setStyle(style:NSDictionary,range:NSRange,onAttributedString:NSMutableAttributedString) {
         for key in style.allKeys {
             let newKey = NSString(format: "%@", key as! CVarArg)
-            let value = style.value(forKey: newKey as String)
-            setTextStyle(styleName:newKey, value: value!, range: range, onAttributedString: onAttributedString)
+            if let value = style.value(forKey: newKey as String) {
+                setTextStyle(styleName:newKey, value: value, range: range, onAttributedString: onAttributedString)
+            }
         }
     }
     
@@ -296,19 +297,14 @@ public extension NSString {
         let attributedString = NSMutableAttributedString(string: ms as String)
         attributedString.setAttributes([.underlineStyle:[NSNumber(integerLiteral: 0)]], range: NSMakeRange(0, attributedString.length))
         
-        let bodyStyle = fontBook["body"]
-        if bodyStyle != nil {
-            style(attributedString: attributedString, range: NSMakeRange(0, attributedString.length), style: bodyStyle!, styleBook: fontBook)
+        if let bodyStyle = fontBook["body"] {
+            style(attributedString: attributedString, range: NSMakeRange(0, attributedString.length), style: bodyStyle, styleBook: fontBook)
         }
         
         for tag in tags {
-            let t:NSString = tag["tag"] as! NSString
-            let loc:NSNumber? = tag["loc"] as? NSNumber
-            let endloc:NSNumber? = tag["endloc"] as? NSNumber
-            if loc != nil && endloc != nil {
-                let range = NSMakeRange(loc!.intValue, endloc!.intValue - loc!.intValue)
-                let style = fontBook[t]
-                self.style(attributedString: attributedString, range: range, style: style!, styleBook: fontBook)
+            if let t = tag["tag"] as? NSString,let loc = tag["loc"] as? NSNumber,let endloc = tag["endloc"] as? NSNumber,let style = fontBook[t] {
+                let range = NSMakeRange(loc.intValue, endloc.intValue - loc.intValue)
+                self.style(attributedString: attributedString, range: range, style: style, styleBook: fontBook)
             }
         }
         return attributedString

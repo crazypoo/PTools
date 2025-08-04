@@ -69,10 +69,10 @@ public extension UIColor {
     ///   - alpha:0~1
     /// - Returns: UIColor
     class func hex(_ hex: String, 
-                   alpha: CGFloat? = 1.0) -> UIColor {
+                   alpha: CGFloat = 1.0) -> UIColor {
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         let hexint = intFromHexString_64(tempStr)
-        let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
+        let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha)
         return color
     }
             
@@ -127,7 +127,7 @@ public extension UIColor {
     //MARK: 从Hex装换int
     ///从Hex装换int
     @available(iOS, introduced: 2.0, deprecated: 13.0)
-    private class func intFromHexString(_ hexString:String) -> UInt32{
+    private class func intFromHexString(_ hexString:String) -> UInt32 {
         let scanner = Scanner(string: hexString)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
         var result : UInt32 = 0
@@ -135,7 +135,7 @@ public extension UIColor {
         return result
     }
     
-    private class func intFromHexString_64(_ hexString:String) -> UInt64{
+    private class func intFromHexString_64(_ hexString:String) -> UInt64 {
         let scanner = Scanner(string: hexString)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
         var result : UInt64 = 0
@@ -160,7 +160,7 @@ public extension UIColor {
         return colorModel
     }
     
-    internal func rgbaValueModel()->PTColorRBGModel {
+    internal func rgbaValueModel() -> PTColorRBGModel {
         var redF:CGFloat = 0
         var greenF:CGFloat = 0
         var blueF:CGFloat = 0

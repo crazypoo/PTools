@@ -14,12 +14,7 @@ struct PTCrashModel: Codable, Equatable {
     let context: Context
     let traces: [Trace]
 
-    init(
-        type: PTCrashType,
-        details: Details,
-        context: Context = .builder(),
-        traces: [Trace]
-    ) {
+    init(type: PTCrashType, details: Details, context: Context = .builder(), traces: [Trace]) {
         self.type = type
         self.details = details
         self.context = context
@@ -42,14 +37,13 @@ extension PTCrashModel {
         let reachability: String
 
         @MainActor static func builder(name: String) -> Self {
-            .init(
-                name: name,
-                date: .init(),
-                appVersion: PTDebugUserInfo.getAppVersionInfo()?.detail,
-                appBuild: PTDebugUserInfo.getAppBuildInfo()?.detail,
-                iosVersion: PTDebugUserInfo.getIOSVersionInfo().detail,
-                deviceModel: PTDebugUserInfo.getDeviceModelInfo().detail,
-                reachability: PTDebugUserInfo.getReachability().detail
+            .init(name: name,
+                  date: .init(),
+                  appVersion: PTDebugUserInfo.getAppVersionInfo()?.detail,
+                  appBuild: PTDebugUserInfo.getAppBuildInfo()?.detail,
+                  iosVersion: PTDebugUserInfo.getIOSVersionInfo().detail,
+                  deviceModel: PTDebugUserInfo.getDeviceModelInfo().detail,
+                  reachability: PTDebugUserInfo.getReachability().detail
             )
         }
     }

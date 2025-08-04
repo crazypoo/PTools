@@ -175,14 +175,14 @@ class PTCrashDetailViewController: PTBaseViewController {
         newCollectionView.showCollectionDetail(collectionData: sections)
     }
     
-    func normalCellModel(name:String,content:String) ->PTFusionCellModel {
+    func normalCellModel(name:String,content:String) -> PTFusionCellModel {
         let model = PTFusionCellModel()
         model.name = name
         model.content = content
         return model
     }
     
-    func tapCellModel(name:String) ->PTFusionCellModel {
+    func tapCellModel(name:String) -> PTFusionCellModel {
         let model = PTFusionCellModel()
         model.name = name
         model.accessoryType = .DisclosureIndicator

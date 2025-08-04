@@ -34,7 +34,7 @@ class PTCreateLeakViewController: PTBaseViewController {
 }
 
 class PTLeakClass {
-    var closure:(()->Void)?
+    var closure:PTActionTask?
     
     init() {
         PTNSLogConsole("LeakingClass initialized")

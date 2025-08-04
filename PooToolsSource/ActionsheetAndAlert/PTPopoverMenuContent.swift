@@ -15,16 +15,16 @@ import SwifterSwift
 
 @objcMembers
 public class PTPopoverItem:NSObject {
-    open var name:String = ""
-    open var icon:Any?
+    public var name:String = ""
+    public var icon:Any?
 }
 
 @objcMembers
 public class PTPopoverConfig:NSObject {
-    open var textFont:UIFont = .appfont(size: 16)
-    open var textColor:UIColor = PTAppBaseConfig.share.viewDefaultTextColor
-    open var backgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .white, darkColor: .black)
-    open var rowHeight:CGFloat = 44
+    public var textFont:UIFont = .appfont(size: 16)
+    public var textColor:UIColor = PTAppBaseConfig.share.viewDefaultTextColor
+    public var backgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .white, darkColor: .black)
+    public var rowHeight:CGFloat = 44
 }
 
 public typealias PTPopoverHandler = (String,Int) -> Void

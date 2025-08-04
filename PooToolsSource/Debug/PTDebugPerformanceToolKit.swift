@@ -33,16 +33,17 @@ final class PTDebugPerformanceToolKit {
         label.font = .appfont(size: 12)
         return label
     }()
+    
     var floatingShow:Bool {
         get {
-            if floatingView != nil {
-                return !floatingView!.isHidden
+            if let floating = floatingView {
+                return !floating.isHidden
             } else {
                 return false
             }
         } set {
-            if floatingView != nil {
-                floatingView!.isHidden = !newValue
+            if let floating = floatingView {
+                floating.isHidden = !newValue
             }
         }
     }
@@ -194,7 +195,7 @@ final class PTDebugPerformanceToolKit {
         return totalUsageOfCPU
     }
 
-    private func memory() ->CGFloat {
+    private func memory() -> CGFloat {
         var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
 

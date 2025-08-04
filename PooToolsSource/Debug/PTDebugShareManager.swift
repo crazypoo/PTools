@@ -29,18 +29,19 @@ enum PTDebugShareManager {
         vc.previewNumberOfLines = 10
         
         let currentVC = PTUtils.getCurrentVC()
-        if currentVC is PTSideMenuControl {
-            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
-            if let presentedVC = currentVC?.presentedViewController {
+        switch currentVC {
+        case let currentVCs as PTSideMenuControl :
+            let currentVCc = currentVCs.contentViewController
+            if let presentedVC = currentVCc?.presentedViewController {
                 vc.presentActionSheet(presentedVC, from: presentedVC.view)
             } else {
-                vc.presentActionSheet(currentVC!, from: currentVC!.view)
+                vc.presentActionSheet(currentVCc!, from: currentVCc!.view)
             }
-        } else {
-            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+        default:
+            if let presentedVC = currentVC.presentedViewController {
                 vc.presentActionSheet(presentedVC, from: presentedVC.view)
             } else {
-                vc.presentActionSheet(PTUtils.getCurrentVC(), from: PTUtils.getCurrentVC().view)
+                vc.presentActionSheet(currentVC, from: currentVC.view)
             }
         }
     }

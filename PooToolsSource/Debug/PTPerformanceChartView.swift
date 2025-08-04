@@ -95,10 +95,7 @@ final class PTPerformanceChartView: UIView {
         // Set up coordinate system
         let xAxisHeight: CGFloat = 30.0
         let yAxisWidth: CGFloat = 30.0
-        let graphRect = CGRect(
-            x: yAxisWidth, y: topPadding, width: rect.width - yAxisWidth,
-            height: graphHeight - xAxisHeight
-        )
+        let graphRect = CGRect(x: yAxisWidth, y: topPadding, width: rect.width - yAxisWidth, height: graphHeight - xAxisHeight)
 
         // Draw the x-axis
         drawXAxis(in: context, graphRect: graphRect)

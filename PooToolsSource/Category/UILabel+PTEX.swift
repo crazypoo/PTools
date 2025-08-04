@@ -301,14 +301,13 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///  - space: 行间距大小
     func changeLineSpace(space: CGFloat) {
-        if base.text == nil || base.text == "" {
+        guard let text = base.text,!text.stringIsEmpty() else {
             return
         }
-        let text = base.text
-        let attributedString = NSMutableAttributedString(string: text!)
+        let attributedString = NSMutableAttributedString(string: text)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = space
-        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text!.count))
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text.count))
         self.base.attributedText = attributedString
         base.sizeToFit()
     }
@@ -318,13 +317,13 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///  -  space: 字间距大小
     func changeWordSpace(space: CGFloat) {
-        if base.text == nil || base.text == "" {
+        guard let text = base.text,!text.stringIsEmpty() else {
             return
         }
-        let text = base.text
-        let attributedString = NSMutableAttributedString(string: text!, attributes: [NSAttributedString.Key.kern:space])
+
+        let attributedString = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern:space])
         let paragraphStyle = NSMutableParagraphStyle()
-        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text!.count))
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text.count))
         self.base.attributedText = attributedString
         base.sizeToFit()
     }
@@ -336,14 +335,14 @@ public extension PTPOP where Base: UILabel {
     ///   - wordSpace: 字间距
     func changeSpace(lineSpace: CGFloat, 
                      wordSpace: CGFloat) {
-        if base.text == nil || base.text == "" {
+        guard let text = base.text,!text.stringIsEmpty() else {
             return
         }
-        let text = base.text
-        let attributedString = NSMutableAttributedString(string: text!, attributes: [NSAttributedString.Key.kern:wordSpace])
+
+        let attributedString = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern:wordSpace])
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = lineSpace
-        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text!.count))
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text.count))
         self.base.attributedText = attributedString
         base.sizeToFit()
     }

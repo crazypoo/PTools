@@ -13,7 +13,7 @@ public class PTFPSTool: NSObject {
     public static let shared = PTFPSTool.init()
     
     var fpsValue:NSInteger = 0
-    open var fpsHandle:((_ fps:NSInteger)->Void)?
+    open var fpsHandle:((_ fps:NSInteger) -> Void)?
     open var closed:Bool = true
     
     private var displayLink : CADisplayLink?
@@ -73,14 +73,14 @@ public class PTFPSTool: NSObject {
     }
     
     func applicationDidBecomeActiveNotification() {
-        if displayLink != nil {
-            displayLink!.isPaused = false
+        if let dp = displayLink {
+            dp.isPaused = false
         }
     }
     
     func applicationWillResignActiveNotification() {
-        if displayLink != nil {
-            displayLink!.isPaused = true
+        if let dp = displayLink {
+            dp.isPaused = true
         }
     }
 }
