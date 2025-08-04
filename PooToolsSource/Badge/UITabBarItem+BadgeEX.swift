@@ -10,7 +10,7 @@ import UIKit
 
 extension UITabBarItem:PTBadgeProtocol {
     
-    fileprivate func getActualBadgeSuperView() ->UIView? {
+    fileprivate func getActualBadgeSuperView() -> UIView? {
         var actualSuperView:UIView?
         if let bottomView = self.value(forKey: "_view") {
             actualSuperView = self.find(view: bottomView as! UIView, classs: NSClassFromString("UITabBarSwappableImageView"))
@@ -18,7 +18,7 @@ extension UITabBarItem:PTBadgeProtocol {
         return actualSuperView
     }
     
-    fileprivate func find(view:UIView,classs:AnyClass?) ->UIView? {
+    fileprivate func find(view:UIView,classs:AnyClass?) -> UIView? {
         var targetView:UIView?
         for (_,value) in view.subviews.enumerated() {
             if classs != nil {

@@ -142,8 +142,8 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
     var cellModel: PTWhatsNewsItem? {
         didSet {
             
-            if cellModel?.newsImage != nil {
-                imageView.loadImage(contentData: cellModel!.newsImage as Any)
+            if let newImage = cellModel?.newsImage {
+                imageView.loadImage(contentData: newImage as Any)
             } else {
                 imageView.image = nil
             }
@@ -204,34 +204,32 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if cellModel != nil {
-            if cellModel!.newsImage != nil {
-                imageView.isHidden = false
-                imageView.snp.makeConstraints { make in
-                    make.left.equalToSuperview()
-                    make.top.equalToSuperview().inset(7.5)
-                    make.height.equalTo(49)
-                }
-                
-                titleLabel.snp.makeConstraints { make in
-                    make.left.equalTo(self.imageView.snp.right).offset(10)
-                    make.top.bottom.equalToSuperview().inset(7.5)
-                    make.right.equalToSuperview()
-                }
-            } else {
-                imageView.isHidden = true
-                imageView.snp.makeConstraints { make in
-                    make.left.equalToSuperview()
-                    make.top.equalToSuperview().inset(7.5)
-                    make.height.equalTo(49)
-                    make.width.equalTo(0)
-                }
-                
-                titleLabel.snp.makeConstraints { make in
-                    make.left.equalTo(self.imageView.snp.right)
-                    make.top.bottom.equalToSuperview().inset(7.5)
-                    make.right.equalToSuperview()
-                }
+        if let image = cellModel?.newsImage {
+            imageView.isHidden = false
+            imageView.snp.makeConstraints { make in
+                make.left.equalToSuperview()
+                make.top.equalToSuperview().inset(7.5)
+                make.height.equalTo(49)
+            }
+            
+            titleLabel.snp.makeConstraints { make in
+                make.left.equalTo(self.imageView.snp.right).offset(10)
+                make.top.bottom.equalToSuperview().inset(7.5)
+                make.right.equalToSuperview()
+            }
+        } else {
+            imageView.isHidden = true
+            imageView.snp.makeConstraints { make in
+                make.left.equalToSuperview()
+                make.top.equalToSuperview().inset(7.5)
+                make.height.equalTo(49)
+                make.width.equalTo(0)
+            }
+            
+            titleLabel.snp.makeConstraints { make in
+                make.left.equalTo(self.imageView.snp.right)
+                make.top.bottom.equalToSuperview().inset(7.5)
+                make.right.equalToSuperview()
             }
         }
     }
@@ -272,10 +270,8 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         view.setTitleColor(iKnowItems.privacyColor, for: .normal)
         view.setTitle(iKnowItems.privacy, for: .normal)
         view.addActionHandlers { sender in
-            if !self.iKnowItems.privacyURL.stringIsEmpty() {
-                if self.iKnowItems.privacyURL.isURL() {
-                    PTAppStoreFunction.jumpLink(url: URL(string: self.iKnowItems.privacyURL)!)
-                }
+            if let jumpURL = URL(string: self.iKnowItems.privacyURL) {
+                PTAppStoreFunction.jumpLink(url: jumpURL)
             } else {
                 self.privacyTapHandler?()
             }
@@ -408,10 +404,8 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     }
     
     func showNewsData() {
-        var rows = [PTRows]()
-        newsItems.enumerated().forEach { index,value in
-            let row = PTRows(ID: PTWhatsNewsCell.ID,dataModel: value)
-            rows.append(row)
+        let rows = newsItems.map {
+            PTRows(ID: PTWhatsNewsCell.ID,dataModel: $0)
         }
         
         collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)])

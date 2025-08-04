@@ -268,7 +268,7 @@ open class PTSideMenuControl: PTBaseViewController {
 
     private func animateMenu(with reveal: Bool,
                              shouldChangeStatusBar: Bool = true,
-                             animations: @escaping () -> Void,
+                             animations: @escaping PTActionTask,
                              completion: ((Bool) -> Void)? = nil) {
         let duration = reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration
         UIView.animate(withDuration: duration,
@@ -467,7 +467,7 @@ open class PTSideMenuControl: PTBaseViewController {
     ///   - completion: 完成闭包将在转换完成时调用。注意，如果调用者是当前内容视图控制器，一旦转换完成，调用者将从父视图控制器中移除，并且它将无法通过`sideMenuController `访问侧菜单控制器
     open func setContentViewController(with identifier: String,
                                        animated: Bool = false,
-                                       completion: (() -> Void)? = nil) {
+                                       completion: PTActionTask? = nil) {
         if let viewController = lazyCachedViewControllers[identifier] {
             setContentViewController(to: viewController, animated: animated, completion: completion)
         } else if let viewController = lazyCachedViewControllerGenerators[identifier]?() {
@@ -486,7 +486,7 @@ open class PTSideMenuControl: PTBaseViewController {
     ///   - completion: 完成闭包将在转换完成时调用。注意，如果调用者是当前内容视图控制器，一旦转换完成，调用者将从父视图中移除
     open func setContentViewController(to viewController: UIViewController,
                                        animated: Bool = false,
-                                       completion: (() -> Void)? = nil) {
+                                       completion: PTActionTask? = nil) {
         guard contentViewController !== viewController && isViewLoaded else {
             completion?()
             return

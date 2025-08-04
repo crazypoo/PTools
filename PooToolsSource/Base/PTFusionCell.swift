@@ -1193,7 +1193,7 @@ public extension UICollectionViewCell {
                                     borderColor:UIColor = UIColor.clear,
                                     corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
-            let maskPath = UIBezierPath(roundedRect: self.contentView.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
+            let maskPath = UIBezierPath(roundedRect: self.contentView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: cornerRadii, height: cornerRadii))
             let maskLayer = CAShapeLayer()
             maskLayer.frame = self.contentView.bounds
             maskLayer.path = maskPath.cgPath

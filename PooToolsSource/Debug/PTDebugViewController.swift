@@ -142,7 +142,7 @@ public class PTDebugViewController: PTBaseViewController {
                             PTCoreUserDefultsWrapper.AppRequestUrl = newURL!
                             
                             self.settingCellModels[indexPath.row].content = newURL!
-                            let cell = collection.cellForItem(at: IndexPath.init(row: 1, section: 0)) as! PTFusionCell
+                            let cell = collection.cellForItem(at: IndexPath(row: 1, section: 0)) as! PTFusionCell
                             cell.cellModel = self.settingCellModels[indexPath.row]
                         }
                     default:
@@ -234,7 +234,7 @@ public class PTDebugViewController: PTBaseViewController {
         var mSections = [PTSection]()
         
         let rows = settingCellModels.map { PTRows(title: $0.name,ID: PTFusionCell.ID,dataModel: $0) }
-        let section = PTSection.init(rows: rows)
+        let section = PTSection(rows: rows)
         mSections.append(section)
         
         newCollectionView.layoutIfNeeded()

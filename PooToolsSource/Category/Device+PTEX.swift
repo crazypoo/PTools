@@ -132,7 +132,7 @@ public extension PTPOP where Base: UIDevice {
     }
     
     static var volumes : String {
-        String.init(format: "%d", Device.volumes!)
+        String(format: "%d", Device.volumes!)
     }
     
     //MARK: 当前硬盘可用空间
@@ -163,13 +163,13 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 獲取可用的儲存用量(字節為單位)
     ///獲取可用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForImportantUsage : String {
-        String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+        String(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
     }
     
     //MARK: 獲取不能用的儲存用量(字節為單位)
     ///獲取不能用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForOpportunisticUsage : String {
-        String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+        String(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
     }
 
     //MARK: 获取总内存大小
@@ -207,11 +207,11 @@ public extension PTPOP where Base: UIDevice {
     ///是否支持ApplePencil
     static var supportApplePencil: UIDeviceApplePencilSupportType {
         
-        if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
+        if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
             return .Both
-        } else if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration != Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
+        } else if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration != Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
             return .Second
-        } else if Device.ApplePencilSupport.secondGeneration != Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
+        } else if Device.ApplePencilSupport.secondGeneration != Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
             return .First
         } else {
             return .BothNot

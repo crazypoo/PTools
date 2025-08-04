@@ -89,11 +89,11 @@ public class PTLabel: UILabel {
             var lineRect : CGRect? = .zero
             switch strikeThroughAlignment {
             case .Top:
-                lineRect = CGRect.init(x: textRect.origin.x, y: textRect.origin.y, width: strikeWidth, height: 1)
+                lineRect = CGRect(x: textRect.origin.x, y: textRect.origin.y, width: strikeWidth, height: 1)
             case .Bottom:
-                lineRect = CGRect.init(x: textRect.origin.x, y: textRect.origin.y + textRect.size.height, width: strikeWidth, height: 1)
+                lineRect = CGRect(x: textRect.origin.x, y: textRect.origin.y + textRect.size.height, width: strikeWidth, height: 1)
             default:
-                lineRect = CGRect.init(x: textRect.origin.x, y: textRect.origin.y + textRect.size.height/2, width: strikeWidth, height: 1)
+                lineRect = CGRect(x: textRect.origin.x, y: textRect.origin.y + textRect.size.height/2, width: strikeWidth, height: 1)
             }
             
             let context : CGContext = UIGraphicsGetCurrentContext()!

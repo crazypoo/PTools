@@ -34,7 +34,7 @@ public class PTFPSTool: NSObject {
     
     func createUI() {
         if displayLink == nil {
-            displayLink = CADisplayLink.init(target: self, selector: #selector(displayLinkTick(link:)))
+            displayLink = CADisplayLink(target: self, selector: #selector(displayLinkTick(link:)))
             displayLink?.isPaused = false
             displayLink?.add(to: RunLoop.current, forMode: .common)
         }

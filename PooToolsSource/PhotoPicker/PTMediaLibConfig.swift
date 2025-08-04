@@ -72,11 +72,11 @@ public class PTMediaLibConfig:NSObject {
     }
     
     ///允许选择图片
-    open var allowSelectImage = true
+    public var allowSelectImage = true
     ///允许选择视频
-    open var allowSelectVideo = true
+    public var allowSelectVideo = true
     ///只允许选择LivePhoto
-    open var allowOnlySelectLivePhoto = false
+    public var allowOnlySelectLivePhoto = false
     ///只允许选择Photo
 //    open var allowOnlySelectRegularImage = false
 

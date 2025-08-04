@@ -300,7 +300,7 @@ public extension String {
             
             do {
                 let regex = try NSRegularExpression(pattern: "^[\u{4e00}-\u{9fa5}]+[·•][\u{4e00}-\u{9fa5}]+$", options: NSRegularExpression.Options.caseInsensitive)
-                let match = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportProgress, range: NSRange.init(location: 0, length: charactersArray.count))
+                let match = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportProgress, range: NSRange(location: 0, length: charactersArray.count))
                 let count = match?.numberOfRanges
                 return count == 1
             } catch  {
@@ -313,7 +313,7 @@ public extension String {
 
             do {
                 let regex = try NSRegularExpression(pattern: "^[\u{4e00}-\u{9fa5}]+$", options: NSRegularExpression.Options.caseInsensitive)
-                let match = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportProgress, range: NSRange.init(location: 0, length: charactersArray.count))
+                let match = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportProgress, range: NSRange(location: 0, length: charactersArray.count))
                 let count = match?.numberOfRanges
                 return count == 1
             } catch  {
@@ -327,7 +327,7 @@ public extension String {
     /// - Parameters:
     ///   - expression: 正則表達式
     func checkWithString(expression:String) -> Bool {
-        let regextest = NSPredicate.init(format: "SELF MATCHES %@", expression)
+        let regextest = NSPredicate(format: "SELF MATCHES %@", expression)
         return regextest.evaluate(with: self)
     }
 
@@ -1243,7 +1243,7 @@ public extension String {
         }
         
         if len % 2 == 0 {
-            let part1 = (self as NSString).substring(with: NSRange.init(location: 0, length: len / 2))
+            let part1 = (self as NSString).substring(with: NSRange(location: 0, length: len / 2))
             let part2 = (self as NSString).substring(from: len / 2)
             if part1 == part2 {
                 level -= 1

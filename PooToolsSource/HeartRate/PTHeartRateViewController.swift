@@ -137,7 +137,7 @@ public class PTHeartRateViewController: PTBaseViewController {
     }()
     
     lazy var player : LottieAnimationView = {
-        let view = LottieAnimationView.init(dotLottieUrl: URL(string: "https://lottie.host/80012aeb-ac39-44e4-8ae0-20b9ba56f1bf/73xBogjj9i.lottie")!)
+        let view = LottieAnimationView(dotLottieUrl: URL(string: "https://lottie.host/80012aeb-ac39-44e4-8ae0-20b9ba56f1bf/73xBogjj9i.lottie")!)
         view.frame = CGRectMake(0, 0, 88, 88)
         view.contentMode = .scaleAspectFit
         view.loopMode = .loop

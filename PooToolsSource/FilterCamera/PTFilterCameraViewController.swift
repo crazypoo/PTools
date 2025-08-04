@@ -21,7 +21,7 @@ import Photos
 public class PTFilterCameraViewController: PTBaseViewController {
 
     public var onlyCamera:Bool = true
-    public var useThisImageHandler:((UIImage)->Void)?
+    public var useThisImageHandler:((UIImage) -> Void)?
     public var mediaLibDismissCallback:PTActionTask? = nil
     
     private lazy var cameraConfig = PTCameraFilterConfig.share
@@ -54,7 +54,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     }()
     
     lazy var camera: C7CollectorCamera = {
-        let camera = C7CollectorCamera.init(delegate: self)
+        let camera = C7CollectorCamera(delegate: self)
         camera.largeCircleView = self.largeCircleView
         camera.smallCircleView = self.smallCircleView
         camera.borderLayer = self.borderLayer
@@ -75,10 +75,10 @@ public class PTFilterCameraViewController: PTBaseViewController {
         camera.shotImageCallback = { image in
             if self.onlyCamera {
                 self.takePhotoView = PTTakePictureReviewer(screenShotImage: image)
-                self.takePhotoView?.actionHandle = { type,image in
-                    let vc = PTEditImageViewController(readyEditImage: image)
-                    vc.editFinishBlock = { ei ,editImageModel in
-                        PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, asset in
+                self.takePhotoView?.actionHandle = { type,images in
+                    let vc = PTEditImageViewController(readyEditImage: images)
+                    vc.editFinishBlock = { ei ,_ in
+                        PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, _ in
                             if !finish {
                                 PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
                             }
@@ -104,7 +104,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 self.takePhotoView?.dismissTask = {
                     self.takePhotoView = nil
                 }
-                PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] finish, asset in
+                PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] finish, _ in
                     if !finish {
                         PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
                     }
@@ -227,7 +227,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     lazy var backBtn : UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(cameraConfig.backImage, for: .normal)
-        view.addActionHandlers { sender in
+        view.addActionHandlers { _ in
             self.camera.stopRunning()
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 self.navigationController?.popViewController(animated: true) {
@@ -255,8 +255,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
-                let cellTools = itemRow.dataModel as! UIImage
+            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell,let cellTools = itemRow.dataModel as? UIImage {
                 let cellFilter = PTCameraFilterConfig.share.filters[indexPath.row]
                 cell.imageView.image = cellTools
                 cell.nameLabel.text = cellFilter.name
@@ -309,10 +308,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
             }
             view.bringSubviewToFront(filterCollectionView)
             
-            var rows = [PTRows]()
-            thumbnailFilterImages.enumerated().forEach { index,value in
-                let row = PTRows(ID:PTFilterImageCell.ID,dataModel: value)
-                rows.append(row)
+            let rows = thumbnailFilterImages.map {
+                PTRows(ID:PTFilterImageCell.ID,dataModel: $0)
             }
             
             let section = PTSection(rows: rows)
@@ -584,11 +581,12 @@ public class PTFilterCameraViewController: PTBaseViewController {
         if cameraConfig.allowRecordVideo {
             camera.isTakingPicture = true
             let longGes = UILongPressGestureRecognizer { sender in
-                let ges = sender as! UILongPressGestureRecognizer
-                if ges.state == .began {
-                    self.camera.startRecord()
-                } else if ges.state == .cancelled || ges.state == .ended {
-                    self.camera.finishRecord()
+                if let ges = sender as? UILongPressGestureRecognizer {
+                    if ges.state == .began {
+                        self.camera.startRecord()
+                    } else if ges.state == .cancelled || ges.state == .ended {
+                        self.camera.finishRecord()
+                    }
                 }
             }
             longGes.minimumPressDuration = 0.3
@@ -598,29 +596,29 @@ public class PTFilterCameraViewController: PTBaseViewController {
             recordLongGes = longGes
 
             let panGes = UIPanGestureRecognizer { sender in
-                let pan = sender as! UIPanGestureRecognizer
-                let convertRect = self.toolBar.convert(self.largeCircleView.frame, to: self.view)
-                let point = pan.location(in: self.view)
+                if let pan = sender as? UIPanGestureRecognizer {
+                    let convertRect = self.toolBar.convert(self.largeCircleView.frame, to: self.view)
+                    let point = pan.location(in: self.view)
 
-                if pan.state == .began {
-                    self.dragStart = true
-                    self.camera.startRecord()
-                } else if pan.state == .changed {
-                    guard self.dragStart else {
-                        return
+                    if pan.state == .began {
+                        self.dragStart = true
+                        self.camera.startRecord()
+                    } else if pan.state == .changed {
+                        guard self.dragStart else {
+                            return
+                        }
+                        let maxZoomFactor = self.getMaxZoomFactor()
+                        var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
+                        zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
+                        self.camera.setVideoZoomFactor(zoomFactor)
+                    } else if pan.state == .cancelled || pan.state == .ended {
+                        guard self.dragStart else {
+                            return
+                        }
+                        self.dragStart = false
+                        self.camera.finishRecord()
                     }
-                    let maxZoomFactor = self.getMaxZoomFactor()
-                    var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
-                    zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
-                    self.camera.setVideoZoomFactor(zoomFactor)
-                } else if pan.state == .cancelled || pan.state == .ended {
-                    guard self.dragStart else {
-                        return
-                    }
-                    self.dragStart = false
-                    self.camera.finishRecord()
                 }
-
             }
             panGes.delegate = self
             panGes.maximumNumberOfTouches = 1
@@ -647,11 +645,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
         
         // UI坐标转换为摄像头坐标
         let cameraPoint = view.center
-        focusCamera(
-            mode: cameraConfig.focusMode.avFocusMode,
-            exposureMode: cameraConfig.exposureMode.avFocusMode,
-            point: cameraPoint
-        )
+        focusCamera(mode: cameraConfig.focusMode.avFocusMode,
+                    exposureMode: cameraConfig.exposureMode.avFocusMode,
+                    point: cameraPoint)
     }
     
     private func animateFocusCursor(point: CGPoint) {

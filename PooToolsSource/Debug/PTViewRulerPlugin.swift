@@ -77,7 +77,7 @@ fileprivate class PTVisualInfoController:UIView {
     
     func initUI() {
         isUserInteractionEnabled = true
-        backgroundColor = UIColor.init(dynamicProvider: { traitCollection in
+        backgroundColor = UIColor(dynamicProvider: { traitCollection in
             if traitCollection.userInterfaceStyle == .light {
                 return .white
             } else {

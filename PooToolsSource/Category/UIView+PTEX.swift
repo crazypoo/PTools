@@ -461,7 +461,7 @@ public extension UIView {
             }
             
             let borderShapeLayer = CAShapeLayer()
-            let borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: radius, height: radius))
+            let borderPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
             borderShapeLayer.path = borderPath.cgPath
             borderShapeLayer.fillColor = UIColor.clear.cgColor
             borderShapeLayer.strokeColor = UIColor.black.cgColor

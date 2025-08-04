@@ -55,9 +55,9 @@ public class PTGuidePageModel: NSObject {
     /// 选中颜色(.pill,.snake)
     public var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3)
     /// 普通图片(.system)
-    public var pageControlActiveImage: Any? = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    public var pageControlActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
     /// 选中图片(.system)
-    public var pageControlInActiveImage: Any? = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    public var pageControlInActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
     /// 自定义Pagecontrol普通颜色
     public var customPageControlTintColor: UIColor = UIColor.white
     /// 自定义Pagecontrol点阵边距
@@ -81,7 +81,7 @@ public class PTGuidePageHUD: UIView {
     public var adHadRemove:PTActionTask?
         
     lazy var forwardButton:UIButton = {
-        let btn = UIButton.init(type: .custom)
+        let btn = UIButton(type: .custom)
         return btn
     }()
     
@@ -119,7 +119,7 @@ public class PTGuidePageHUD: UIView {
             imageArray = viewModel.imageArrays
         }
         
-        guidePageView.contentSize = CGSize.init(width: CGFloat.kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: CGFloat.kSCREEN_HEIGHT)
+        guidePageView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: CGFloat.kSCREEN_HEIGHT)
         addSubviews([guidePageView,skipButton])
         guidePageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -424,12 +424,8 @@ fileprivate extension PTGuidePageHUD {
             let view = PTImagePageControl()
             view.pageIndicatorTintColor = UIColor.clear
             view.currentPageIndicatorTintColor = UIColor.clear
-            if let activeImage = viewModel.pageControlActiveImage {
-                view.pageImage = activeImage
-            }
-            if let inActiveImage = viewModel.pageControlInActiveImage {
-                view.currentPageImage = inActiveImage
-            }
+            view.pageImage = viewModel.pageControlActiveImage
+            view.currentPageImage = viewModel.pageControlInActiveImage
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             return view
         case .scrolling:

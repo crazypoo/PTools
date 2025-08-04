@@ -29,7 +29,7 @@ public class PTGetGPSData: NSObject {
         locationManager.distanceFilter = 1000
     }
     
-    public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String)->Void)?) {
+    public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?) {
         let lon:String = (UserDefaults.standard.value(forKey: "lon") as? String) ?? "0.0"
         let lat:String = (UserDefaults.standard.value(forKey: "lat") as? String) ?? "0.0"
         let city:String = (UserDefaults.standard.value(forKey: "locCity") as? String) ?? "Unnkow city"

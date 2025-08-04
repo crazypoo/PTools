@@ -9,7 +9,7 @@
 import UIKit
 
 open class PTSwitch: UIControl {
-    public var valueChangeCallBack:((Bool)->Void)?
+    public var valueChangeCallBack:((Bool) -> Void)?
     
     public var isOn = false {
         didSet {
@@ -40,11 +40,7 @@ open class PTSwitch: UIControl {
             return UIColor.white
         }
         set {
-            if newValue is UIColor {
-                switchThumbView.backgroundColor = (newValue as! UIColor)
-            } else {
-                switchThumbView.loadImage(contentData: newValue)
-            }
+            switchThumbView.loadImage(contentData: newValue)
         }
     }
     

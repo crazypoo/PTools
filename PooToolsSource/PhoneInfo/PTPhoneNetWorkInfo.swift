@@ -25,7 +25,7 @@ public class PTPhoneNetWorkInfo:NSObject {
         let netmask: String
     }
         
-    public class func ipv4String()->String {
+    public class func ipv4String() -> String {
         for info in PTPhoneNetWorkInfo.enumerate() {
             if info.name == "en0" {
                 return info.ip

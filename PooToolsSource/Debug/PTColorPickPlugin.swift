@@ -220,7 +220,7 @@ fileprivate class PTColorPickInfoView : UIView {
     }
     
     func commonInit() {
-        backgroundColor = UIColor.init(dynamicProvider: { traitCollection in
+        backgroundColor = UIColor(dynamicProvider: { traitCollection in
             if traitCollection.userInterfaceStyle == .light {
                 return .white
             } else {

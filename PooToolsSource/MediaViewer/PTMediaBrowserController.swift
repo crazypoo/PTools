@@ -370,7 +370,7 @@ fileprivate extension PTMediaBrowserController {
     func makeMenu() -> UIMenu {
         
         bottomControl.moreActionButton.isSelected = false
-        
+                
         var debugActions: [UIMenuElement] = []
         actionSheetTitle.enumerated().forEach { index,value in
             let menuActions = UIAction(title: value) { _ in

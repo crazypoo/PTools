@@ -61,12 +61,7 @@ class PTFetchImageOperation: Operation,@unchecked Sendable {
         pri_isCancelled
     }
     
-    init(
-        model: PTMediaModel,
-        isOriginal: Bool,
-        progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
-        completion: @escaping (UIImage?, PHAsset?) -> Void
-    ) {
+    init(model: PTMediaModel, isOriginal: Bool, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, PHAsset?) -> Void) {
         self.model = model
         self.isOriginal = isOriginal
         self.progress = progress

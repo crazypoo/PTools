@@ -280,12 +280,12 @@ public class PTFileBrowserViewController: PTBaseViewController {
                     fusionModel.accessoryType = .NoneAccessoryView
                 }
 
-                let row = PTRows.init(title: value.name,ID: PTFusionCell.ID,dataModel: fusionModel)
+                let row = PTRows(title: value.name,ID: PTFusionCell.ID,dataModel: fusionModel)
                 return row
             }
                         
             if rows.count > 0 {
-                let section = PTSection.init(rows: rows)
+                let section = PTSection(rows: rows)
                 mSections.append(section)
             }
             

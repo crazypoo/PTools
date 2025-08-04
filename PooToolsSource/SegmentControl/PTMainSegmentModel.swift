@@ -34,5 +34,5 @@ public class PTMainSegmentModel: JXSegmentedTitleItemModel {
     open var subTitleSelectedFont: UIFont = .appfont(size: 12,bold: true)
     open var modelIndex:Int = 0
     open var itemSpace:CGFloat = 0
-    open var imageURL:String? = ""
+    open var imageURL:String = ""
 }

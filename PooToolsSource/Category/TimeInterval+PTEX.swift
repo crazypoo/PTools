@@ -19,7 +19,7 @@ public extension TimeInterval {
     //MARK: 時間戳轉換成Date
     ///時間戳轉換成Date
     func timeToDate(timeZone:TimeZone = TimeZone.current) -> Date {
-        Date.init(timeIntervalSince1970: self).addingTimeInterval(TimeInterval(timeZone.secondsFromGMT()))
+        Date(timeIntervalSince1970: self).addingTimeInterval(TimeInterval(timeZone.secondsFromGMT()))
     }
 
     func timeToDateWithFormatter(timeZone: TimeZone = TimeZone.current) -> Date {
@@ -34,7 +34,7 @@ public extension TimeInterval {
     ///時間戳轉換成Date
     func msTimeToDate() -> Date {
         let timeSta:TimeInterval = TimeInterval(self / 1000)
-        return Date.init(timeIntervalSince1970: timeSta)
+        return Date(timeIntervalSince1970: timeSta)
     }
     
     func toTimeString(dateFormat:String)->String {

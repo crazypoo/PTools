@@ -107,7 +107,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     return true
 }
 
-func downloadAssetIfNeed(alertTitle:String = PTMediaLibConfig.share.alertTitle,subTitle:String = PTMediaLibConfig.share.downloadTimeOutError,model: PTMediaModel, sender: UIViewController?, completion: @escaping () -> Void) {
+@MainActor func downloadAssetIfNeed(alertTitle:String = PTMediaLibConfig.share.alertTitle,subTitle:String = PTMediaLibConfig.share.downloadTimeOutError,model: PTMediaModel, sender: UIViewController?, completion: @escaping PTActionTask) {
     let config = PTMediaLibConfig.share
     guard model.type == .video,
           model.asset.pt.isInCloud,
@@ -269,7 +269,7 @@ public class PTMediaLibManager:NSObject {
         return predicates
     }
     
-    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/,handler: @escaping (PTMediaLibListModel)->Void) {
+    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/,handler: @escaping (PTMediaLibListModel) -> Void) {
         PTGCDManager.gcdGobal {
             let option = PHFetchOptions()
             let predicates : [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly/*, allowSelectRegularImageOnly: allowSelectRegularImageOnly*/)

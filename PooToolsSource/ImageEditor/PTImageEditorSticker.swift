@@ -18,16 +18,14 @@ public class PTBaseStickertState: NSObject {
     let gesRotation: CGFloat
     let totalTranslationPoint: CGPoint
     
-    init(
-        id: String,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat,
-        gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
-    ) {
+    init(id: String,
+         image: UIImage,
+         originScale: CGFloat,
+         originAngle: CGFloat,
+         originFrame: CGRect,
+         gesScale: CGFloat,
+         gesRotation: CGFloat,
+         totalTranslationPoint: CGPoint) {
         self.id = id
         self.image = image
         self.originScale = originScale
@@ -48,33 +46,29 @@ public class PTTextStickerState: PTBaseStickertState {
     let font: UIFont?
     let style: PTInputTextStyle
     
-    init(
-        id: String,
-        text: String,
-        textColor: UIColor,
-        font: UIFont?,
-        style: PTInputTextStyle,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat,
-        gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
-    ) {
+    init(id: String,
+         text: String,
+         textColor: UIColor,
+         font: UIFont?,
+         style: PTInputTextStyle,
+         image: UIImage,
+         originScale: CGFloat,
+         originAngle: CGFloat,
+         originFrame: CGRect,
+         gesScale: CGFloat,
+         gesRotation: CGFloat,
+         totalTranslationPoint: CGPoint) {
         self.text = text
         self.textColor = textColor
         self.font = font
         self.style = style
-        super.init(
-            id: id,
-            image: image,
-            originScale: originScale,
-            originAngle: originAngle,
-            originFrame: originFrame,
-            gesScale: gesScale,
-            gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
-        )
+        super.init(id: id,
+                   image: image,
+                   originScale: originScale,
+                   originAngle: originAngle,
+                   originFrame: originFrame,
+                   gesScale: gesScale,
+                   gesRotation: gesRotation,
+                   totalTranslationPoint: totalTranslationPoint)
     }
 }

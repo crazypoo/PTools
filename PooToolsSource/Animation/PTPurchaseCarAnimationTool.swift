@@ -32,13 +32,13 @@ public class PTPurchaseCarAnimationTool: NSObject {
         
         let keyWindow = AppWindows!
         keyWindow.layer.addSublayer(layer!)
-        layer?.position = CGPoint.init(x: newRect.origin.x + view.frame.size.width / 2, y: newRect.midY)
+        layer?.position = CGPoint(x: newRect.origin.x + view.frame.size.width / 2, y: newRect.midY)
         createAnimation(rect: newRect, finishPoint: finishPoint)
         block = handle
     }
     
     public class func shakeAnimation(view:UIView) {
-        let animation = CABasicAnimation.init(keyPath: "transform.translation.y")
+        let animation = CABasicAnimation(keyPath: "transform.translation.y")
         animation.duration = 0.25
         animation.fromValue = -5
         animation.toValue = 5
@@ -50,15 +50,15 @@ public class PTPurchaseCarAnimationTool: NSObject {
                                 finishPoint:CGPoint) {
         let path = UIBezierPath()
         path.move(to: layer!.position)
-        path.addQuadCurve(to: finishPoint, controlPoint: CGPoint.init(x: CGFloat.kSCREEN_WIDTH/2, y: rect.origin.y - 80))
-        let pathAnimation = CAKeyframeAnimation.init(keyPath: "position")
+        path.addQuadCurve(to: finishPoint, controlPoint: CGPoint(x: CGFloat.kSCREEN_WIDTH/2, y: rect.origin.y - 80))
+        let pathAnimation = CAKeyframeAnimation(keyPath: "position")
         pathAnimation.path = path.cgPath
         
-        let rotateAnimation = CABasicAnimation.init(keyPath: "transform.rotation")
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.isRemovedOnCompletion = true
         rotateAnimation.fromValue = 0
         rotateAnimation.toValue = 12
-        rotateAnimation.timingFunction = CAMediaTimingFunction.init(name: CAMediaTimingFunctionName.easeIn)
+        rotateAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
         
         let groups = CAAnimationGroup()
         groups.animations = [pathAnimation,rotateAnimation]

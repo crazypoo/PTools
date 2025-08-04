@@ -86,6 +86,6 @@ class PTEyeTrackingDataManager {
         let x = smoothEyeLookAtPositionX / (phoneScreenSize.width / 2) * screenSize.width
         let y = smoothEyeLookAtPositionY / (phoneScreenSize.height / 2) * screenSize.height
         
-        return CGPoint.init(x: x, y: y)
+        return CGPoint(x: x, y: y)
     }
 }

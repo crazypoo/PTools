@@ -46,7 +46,7 @@ public class PTPermissionViewController: PTBaseViewController {
         cConfig.itemHeight = 88
         cConfig.headerWidthOffset = PTAppBaseConfig.share.defaultViewSpace
         cConfig.decorationItemsType = .Corner
-        cConfig.decorationItemsEdges = NSDirectionalEdgeInsets.init(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
+        cConfig.decorationItemsEdges = NSDirectionalEdgeInsets(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
         
         let view = PTCollectionView(viewConfig: cConfig)
         view.registerClassCells(classs: [PTPermissionCell.ID:PTPermissionCell.self])
@@ -188,7 +188,7 @@ public class PTPermissionViewController: PTBaseViewController {
         
         permissions = permissionStatic.permissionModels
         
-        let closeButton = UIButton.init(type: .close)
+        let closeButton = UIButton(type: .close)
         view?.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -236,8 +236,8 @@ public class PTPermissionViewController: PTBaseViewController {
     
     func showDetail() {
         var mSections = [PTSection]()
-        let permissionRows = permissions.map { PTRows.init(ID: PTPermissionCell.ID,dataModel: $0) }
-        let section = PTSection.init(headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
+        let permissionRows = permissions.map { PTRows(ID: PTPermissionCell.ID,dataModel: $0) }
+        let section = PTSection(headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
         mSections.append(section)
         
         newCollectionView.layoutIfNeeded()

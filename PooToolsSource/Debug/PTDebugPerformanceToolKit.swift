@@ -223,7 +223,7 @@ final class PTDebugPerformanceToolKit {
     
     private func floatingButtonCreate() {
         if floatingView == nil {
-            floatingView = PFloatingButton.init(view: AppWindows as Any, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))
+            floatingView = PFloatingButton(view: AppWindows as Any, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))
             floatingView?.adjustsImageWhenHighlighted = false
             floatingView?.tag = 9999
             floatingView?.autoDocking = false

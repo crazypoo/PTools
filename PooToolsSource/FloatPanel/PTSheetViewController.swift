@@ -469,13 +469,12 @@ public class PTSheetViewController: PTBaseViewController {
                 
                 guard finalHeight > 0 || !(self.dismissOnPull && self.shouldDismiss?(self) ?? true) else {
                     // Dismiss
-                    UIView.animate(
-                        withDuration: animationDuration,
-                        delay: 0,
-                        usingSpringWithDamping: self.options.transitionDampening,
-                        initialSpringVelocity: self.options.transitionVelocity,
-                        options: self.options.transitionAnimationOptions,
-                        animations: {
+                    UIView.animate(withDuration: animationDuration,
+                                   delay: 0,
+                                   usingSpringWithDamping: self.options.transitionDampening,
+                                   initialSpringVelocity: self.options.transitionVelocity,
+                                   options: self.options.transitionAnimationOptions,
+                                   animations: {
                         self.contentViewController.view.transform = CGAffineTransform(translationX: 0, y: self.contentViewController.view.bounds.height)
                         self.view.backgroundColor = UIColor.clear
                         self.transition.setPresentor(percentComplete: 1)
@@ -512,13 +511,12 @@ public class PTSheetViewController: PTBaseViewController {
                 self.currentSize = newSize
                 
                 let newContentHeight = self.height(for: newSize)
-                UIView.animate(
-                    withDuration: animationDuration,
-                    delay: 0,
-                    usingSpringWithDamping: self.options.transitionDampening,
-                    initialSpringVelocity: self.options.transitionVelocity,
-                    options: self.options.transitionAnimationOptions,
-                    animations: {
+                UIView.animate(withDuration: animationDuration,
+                               delay: 0,
+                               usingSpringWithDamping: self.options.transitionDampening,
+                               initialSpringVelocity: self.options.transitionVelocity,
+                               options: self.options.transitionAnimationOptions,
+                               animations: {
                     self.contentViewController.view.transform = CGAffineTransform.identity
                     self.contentViewController.view.snp.updateConstraints { make in
                         make.height.equalTo(newContentHeight)
@@ -702,16 +700,13 @@ public class PTSheetViewController: PTBaseViewController {
         self.overlayView.alpha = 0
         self.updateOrderedSizes()
         
-        UIView.animate(
-            withDuration: duration,
-            animations: {
-                contentView.transform = .identity
-                self.overlayView.alpha = 1
-            },
-            completion: { _ in
-                completion?()
-            }
-        )
+        UIView.animate(withDuration: duration,
+                       animations: {
+            contentView.transform = .identity
+            self.overlayView.alpha = 1
+        },completion: { _ in
+            completion?()
+        })
     }
     
     /// Animates the sheet out, but only if presenting using the inline mode
@@ -719,22 +714,19 @@ public class PTSheetViewController: PTBaseViewController {
         guard self.options.useInlineMode else { return }
         let contentView = self.contentViewController.view!
         
-        UIView.animate(
-            withDuration: duration,
-            delay: 0,
-            usingSpringWithDamping: self.options.transitionDampening,
-            initialSpringVelocity: self.options.transitionVelocity,
-            options: self.options.transitionAnimationOptions,
-            animations: {
-                contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
-                self.overlayView.alpha = 0
-            },
-            completion: { _ in
-                self.view.removeFromSuperview()
-                self.removeFromParent()
-                completion?()
-            }
-        )
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       usingSpringWithDamping: self.options.transitionDampening,
+                       initialSpringVelocity: self.options.transitionVelocity,
+                       options: self.options.transitionAnimationOptions,
+                       animations: {
+            contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
+            self.overlayView.alpha = 0
+        }, completion: { _ in
+            self.view.removeFromSuperview()
+            self.removeFromParent()
+            completion?()
+        })
     }
 }
 

@@ -87,7 +87,11 @@ public class PTAutoScrollLabel: UIView {
             
             label.tag = i
             label.isUserInteractionEnabled = true
-            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+            let tap = UITapGestureRecognizer { sender in
+                if let ges = sender as? UITapGestureRecognizer {
+                    self.handleTap(ges)
+                }
+            }
             label.addGestureRecognizer(tap)
 
             scrollView.addSubview(label)

@@ -10,9 +10,9 @@ import UIKit
 
 @objcMembers
 public class PTSearchBarTextFieldClearButtonConfig:NSObject {
-    open var clearAction:PTActionTask?
-    open var clearImage:Any?
-    open var clearTopSpace:CGFloat = 12.5
+    public var clearAction:PTActionTask?
+    public var clearImage:Any?
+    public var clearTopSpace:CGFloat = 12.5
 }
 
 @objcMembers

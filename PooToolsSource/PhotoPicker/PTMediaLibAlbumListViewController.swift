@@ -21,7 +21,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     var albumList = [PTMediaLibListModel]()
     var selectedAlbum:PTMediaLibListModel!
 
-    var selectedModelHandler:((PTMediaLibListModel)->Void)?
+    var selectedModelHandler:((PTMediaLibListModel) -> Void)?
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)

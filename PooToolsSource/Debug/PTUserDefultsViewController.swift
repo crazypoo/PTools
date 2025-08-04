@@ -120,8 +120,8 @@ class PTUserDefultsViewController: PTBaseViewController {
             return model
         }
         
-        let rows = userdefultArrs.map { PTRows.init(ID: PTFusionCell.ID, dataModel: $0) }
-        let cellSection = PTSection.init(rows: rows)
+        let rows = userdefultArrs.map { PTRows(ID: PTFusionCell.ID, dataModel: $0) }
+        let cellSection = PTSection(rows: rows)
         mSections.append(cellSection)
         
         newCollectionView.showCollectionDetail(collectionData: mSections)

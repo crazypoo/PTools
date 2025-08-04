@@ -11,11 +11,11 @@ import UIKit
 @objcMembers
 public class PTCycleLoadingView: UIView {
 
-    open var lineWidth:CGFloat! = 1
-    open var lineColor:UIColor! = .lightGray
-    open var isAnimation:Bool! = false
+    open var lineWidth:CGFloat = 1
+    open var lineColor:UIColor = .lightGray
+    open var isAnimation:Bool = false
 
-    fileprivate var anglePer:CGFloat? = 0 {
+    fileprivate var anglePer:CGFloat = 0 {
         didSet {
             self.setNeedsDisplay()
         }
@@ -59,8 +59,8 @@ public class PTCycleLoadingView: UIView {
     }
     
     func drawPathAnimation(timer:Timer) {
-        anglePer! += 0.03
-        if anglePer! >= 1 {
+        anglePer += 0.03
+        if anglePer >= 1 {
             anglePer = 1
             timer.invalidate()
             self.timer = nil
@@ -69,7 +69,7 @@ public class PTCycleLoadingView: UIView {
     }
     
     func startRotateAnimation() {
-        let animation = CABasicAnimation.init(keyPath: "transform.rotation.z")
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
         animation.fromValue = 0
         animation.toValue = (2 * Double.pi)
         animation.duration = 1
@@ -89,18 +89,18 @@ public class PTCycleLoadingView: UIView {
     }
     
     public override func draw(_ rect: CGRect) {
-        if anglePer! <= 0 {
-            anglePer! = 0
+        if anglePer <= 0 {
+            anglePer = 0
         }
         
         let context = UIGraphicsGetCurrentContext()
         context!.setLineWidth(lineWidth)
         context!.setStrokeColor(lineColor.cgColor)
-        context!.addArc(center: CGPoint(x: bounds.midX, y: bounds.midY), radius: bounds.width / 2 - lineWidth, startAngle: angle(float: 120), endAngle: angle(float: 120) + angle(float: 330) * anglePer!, clockwise: false)
+        context!.addArc(center: CGPoint(x: bounds.midX, y: bounds.midY), radius: bounds.width / 2 - lineWidth, startAngle: angle(float: 120), endAngle: angle(float: 120) + angle(float: 330) * anglePer, clockwise: false)
         context!.strokePath()
     }
     
-    func angle(float:CGFloat)->CGFloat {
+    func angle(float:CGFloat) -> CGFloat {
         2 * Double.pi / 360 * float
     }
 }

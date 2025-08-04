@@ -279,13 +279,13 @@ extension PTEventOnCalendar {
                                    notes:String,
                                    remindTime:TimeInterval,
                                    handle:((_ finish:Bool,_ error:Error?)->Void)? = nil) {
-        let event = EKEvent.init(eventStore: eventStore)
+        let event = EKEvent(eventStore: eventStore)
         event.title = eventTitle
         event.location = location
         event.startDate = startDate.date
         event.endDate = endDate.date
         event.notes = notes
-        event.addAlarm(EKAlarm.init(relativeOffset: remindTime))
+        event.addAlarm(EKAlarm(relativeOffset: remindTime))
         event.calendar = eventStore.defaultCalendarForNewEvents
 
         do {
@@ -425,14 +425,14 @@ extension PTEventOnCalendar {
                                    notes:String,
                                    remindTime:TimeInterval,
                                    handle:((_ finish:Bool,_ error:Error?)->Void)? = nil) {
-        let event = EKReminder.init(eventStore: eventStore)
+        let event = EKReminder(eventStore: eventStore)
         event.title = eventTitle
         event.location = location
         event.startDateComponents = startDate.date.dateComponents
         event.dueDateComponents = endDate.date.dateComponents
         event.notes = notes
         event.priority = 1
-        event.addAlarm(EKAlarm.init(absoluteDate: (startDate - abs(remindTime).int.seconds).date))
+        event.addAlarm(EKAlarm(absoluteDate: (startDate - abs(remindTime).int.seconds).date))
         event.calendar = eventStore.defaultCalendarForNewReminders()
         do {
             try eventStore.save(event, commit: true)

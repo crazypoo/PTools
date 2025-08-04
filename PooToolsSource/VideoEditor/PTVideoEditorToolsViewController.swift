@@ -171,7 +171,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                 let random = Int(arc4random_uniform(89999) + 10000)
                                 let outputURL = documents.appendingPathComponent("condy_export_video_\(random).\(self.currentOutputType.name)")
 
-                                let exporter = Exporter(provider: Exporter.Provider.init(with: url!,to: URL(fileURLWithPath: outputURL)))
+                                let exporter = Exporter(provider: Exporter.Provider(with: url!,to: URL(fileURLWithPath: outputURL)))
                                 exporter.export(options: [
                                     .OptimizeForNetworkUse: true,
                                 ], filtering: { buffer in
@@ -589,14 +589,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             var groupW:CGFloat = itemOriginalX
             sectionModel.rows?.enumerated().forEach { (index,model) in
                 let cellHeight:CGFloat = cellHeight
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupW, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: groupW, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += cellWidth
                 if index == (self.bottomControlModels.count - 1) {
                     groupW += itemOriginalX
                 }
             }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                 customers
             })

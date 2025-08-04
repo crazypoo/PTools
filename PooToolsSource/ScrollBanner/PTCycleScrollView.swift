@@ -209,7 +209,7 @@ public class PTCycleScrollView: UIView {
     
     // MARK: - Style
     /// 背景颜色
-    public var collectionViewBackgroundColor: UIColor! = UIColor.clear
+    public var collectionViewBackgroundColor: UIColor = UIColor.clear
         
     // MARK: ImageView
     /// 图片的展示模式
@@ -430,7 +430,7 @@ public class PTCycleScrollView: UIView {
         }
     }
     
-    public func pipStar(floatingCallback:@escaping ((AVPlayerLayer?)->Void)) {
+    public func pipStar(floatingCallback:@escaping ((AVPlayerLayer?) -> Void)) {
         guard let cell = viewWithTag(100 + currentIndex()) as? PTCycleScrollViewCell else {
             floatingCallback(nil)
             return
@@ -822,7 +822,7 @@ extension PTCycleScrollView {
         setBannerAttTitle(cell: cell, itemIndex: itemIndex)
     }
     
-    public func playCurrentCellVideo(playCallback:((Bool)->Void)? = nil) {
+    public func playCurrentCellVideo(playCallback:((Bool) -> Void)? = nil) {
         guard let cell = viewWithTag(100 + currentIndex()) as? PTCycleScrollViewCell else {
             return
         }

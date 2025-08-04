@@ -48,43 +48,38 @@ public class PTEditImageViewController: PTBaseViewController {
     private var selectedAdjustTool: PTHarBethFilter.FiltersTool?
 
     var toolsModel:[PTFusionCellModel]! {
-        var cellModels = [PTFusionCellModel]()
-        tools.enumerated().forEach { index,value in
-            switch value {
+        let cellModels: [PTFusionCellModel] = tools.map { tool in
+            let model = PTFusionCellModel()
+            switch tool {
             case .draw:
-                let drawModel = PTFusionCellModel()
-                drawModel.contentIcon = UIImage(.hand.draw)
-                drawModel.disclosureIndicatorImage = UIImage(.hand.drawFill)
-                cellModels.append(drawModel)
+                model.contentIcon = UIImage(.hand.draw)
+                model.disclosureIndicatorImage = UIImage(.hand.drawFill)
+                
             case .clip:
-                let cutModel = PTFusionCellModel()
-                cutModel.contentIcon = UIImage(.scissors)
-                cellModels.append(cutModel)
+                model.contentIcon = UIImage(.scissors)
+                
             case .textSticker:
-                let textModel = PTFusionCellModel()
-                textModel.contentIcon = UIImage(.pencil)
-                cellModels.append(textModel)
+                model.contentIcon = UIImage(.pencil)
+                
             case .mosaic:
-                let bitModel = PTFusionCellModel()
-                bitModel.disclosureIndicatorImage = UIImage(.square.grid_2x2Fill)
-                bitModel.contentIcon = UIImage(.square.grid_2x2)
-                cellModels.append(bitModel)
+                model.contentIcon = UIImage(.square.grid_2x2)
+                model.disclosureIndicatorImage = UIImage(.square.grid_2x2Fill)
+                
             case .filter:
-                let filtersModel = PTFusionCellModel()
                 if #available(iOS 15.0, *) {
-                    filtersModel.disclosureIndicatorImage = UIImage(.line._3HorizontalDecreaseCircleFill)
-                    filtersModel.contentIcon = UIImage(.line._3HorizontalDecreaseCircle)
+                    model.contentIcon = UIImage(.line._3HorizontalDecreaseCircle)
+                    model.disclosureIndicatorImage = UIImage(.line._3HorizontalDecreaseCircleFill)
                 } else {
-                    filtersModel.contentIcon = UIImage(.f.cursiveCircle)
-                    filtersModel.disclosureIndicatorImage = UIImage(.f.cursiveCircleFill)
+                    model.contentIcon = UIImage(.f.cursiveCircle)
+                    model.disclosureIndicatorImage = UIImage(.f.cursiveCircleFill)
                 }
-                cellModels.append(filtersModel)
+                
             case .adjust:
-                let lightModel = PTFusionCellModel()
-                lightModel.contentIcon = UIImage(.ellipsis.rectangle)
-                lightModel.disclosureIndicatorImage = UIImage(.ellipsis.rectangleFill)
-                cellModels.append(lightModel)
+                model.contentIcon = UIImage(.ellipsis.rectangle)
+                model.disclosureIndicatorImage = UIImage(.ellipsis.rectangleFill)
             }
+            
+            return model
         }
         return cellModels
     }
@@ -142,11 +137,11 @@ public class PTEditImageViewController: PTBaseViewController {
             let screenW:CGFloat = 88
             let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
             sectionModel.rows?.enumerated().forEach { (index,model) in
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += (cellHeight + 10)
             }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
+            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                 customers
             })
@@ -189,11 +184,11 @@ public class PTEditImageViewController: PTBaseViewController {
             let screenW:CGFloat = 54
             let cellHeight:CGFloat = self.adjustCollectionViewHeight
             sectionModel.rows?.enumerated().forEach { (index,model) in
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 5, width: screenW, height: cellHeight - 10), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 5, width: screenW, height: cellHeight - 10), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += (cellHeight + 10)
             }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
+            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                 customers
             })
@@ -433,81 +428,81 @@ public class PTEditImageViewController: PTBaseViewController {
     private var editorManager: PTMediaEditManager!
     private lazy var panGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer { sender in
-            let pan = sender as! UIPanGestureRecognizer
-            
-            if self.eraser.isSelected {
-                self.eraserAction(pan)
-                return
-            }
-            
-            if self.selectedTool == .draw {
-                let point = pan.location(in: self.drawingImageView)
-                if pan.state == .began {
-                    self.viewToolsBar(show: false)
-                    
-                    let originalRatio = min(self.mainScrollView.frame.width / self.originalImage.size.width, self.mainScrollView.frame.height / self.originalImage.size.height)
-                    let ratio = min(
-                        self.mainScrollView.frame.width / self.currentClipStatus.editRect.width,
-                        self.mainScrollView.frame.height / self.currentClipStatus.editRect.height
-                    )
-                    let scale = ratio / originalRatio
-                    // 缩放到最初的size
-                    var size = self.drawingImageView.frame.size
-                    size.width /= scale
-                    size.height /= scale
-                    if self.shouldSwapSize {
-                        swap(&size.width, &size.height)
-                    }
-                    
-                    var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
-                    if self.editImage.size.width / self.editImage.size.height > 1 {
-                        toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
-                    }
-                    
-                    let path = PTDrawPath(pathColor: self.drawColor, pathWidth: self.drawLineWidth / self.mainScrollView.zoomScale, defaultLinePath: self.defaultDrawPathWidth, ratio: ratio / originalRatio / toImageScale, startPoint: point)
-                    self.drawPaths.append(path)
-                } else if pan.state == .changed {
-                    let path = self.drawPaths.last
-                    path!.addLine(to: point)
-                    self.drawLine()
-                } else if pan.state == .cancelled || pan.state == .ended {
-                    self.viewToolsBar(show: true)
-
-                    if let path = self.drawPaths.last {
-                        self.editorManager.storeAction(.draw(path))
-                    }
+            if let pan = sender as? UIPanGestureRecognizer {
+                if self.eraser.isSelected {
+                    self.eraserAction(pan)
+                    return
                 }
-            } else if self.selectedTool == .mosaic {
-                let point = pan.location(in: self.imageView)
-                if pan.state == .began {
-                    self.viewToolsBar(show: false)
+                
+                if self.selectedTool == .draw {
+                    let point = pan.location(in: self.drawingImageView)
+                    if pan.state == .began {
+                        self.viewToolsBar(show: false)
+                        
+                        let originalRatio = min(self.mainScrollView.frame.width / self.originalImage.size.width, self.mainScrollView.frame.height / self.originalImage.size.height)
+                        let ratio = min(
+                            self.mainScrollView.frame.width / self.currentClipStatus.editRect.width,
+                            self.mainScrollView.frame.height / self.currentClipStatus.editRect.height
+                        )
+                        let scale = ratio / originalRatio
+                        // 缩放到最初的size
+                        var size = self.drawingImageView.frame.size
+                        size.width /= scale
+                        size.height /= scale
+                        if self.shouldSwapSize {
+                            swap(&size.width, &size.height)
+                        }
+                        
+                        var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
+                        if self.editImage.size.width / self.editImage.size.height > 1 {
+                            toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
+                        }
+                        
+                        let path = PTDrawPath(pathColor: self.drawColor, pathWidth: self.drawLineWidth / self.mainScrollView.zoomScale, defaultLinePath: self.defaultDrawPathWidth, ratio: ratio / originalRatio / toImageScale, startPoint: point)
+                        self.drawPaths.append(path)
+                    } else if pan.state == .changed {
+                        let path = self.drawPaths.last
+                        path!.addLine(to: point)
+                        self.drawLine()
+                    } else if pan.state == .cancelled || pan.state == .ended {
+                        self.viewToolsBar(show: true)
 
-                    var actualSize = self.currentClipStatus.editRect.size
-                    if self.shouldSwapSize {
-                        swap(&actualSize.width, &actualSize.height)
+                        if let path = self.drawPaths.last {
+                            self.editorManager.storeAction(.draw(path))
+                        }
                     }
-                    let ratio = min(
-                        self.mainScrollView.frame.width / self.currentClipStatus.editRect.width,
-                        self.mainScrollView.frame.height / self.currentClipStatus.editRect.height
-                    )
-                    
-                    let pathW = self.mosaicLineWidth / self.mainScrollView.zoomScale
-                    let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
-                    
-                    self.mosaicImageLayerMaskLayer?.lineWidth = pathW
-                    self.mosaicImageLayerMaskLayer?.path = path.path.cgPath
-                    self.mosaicPaths.append(path)
-                } else if pan.state == .changed {
-                    let path = self.mosaicPaths.last
-                    path?.addLine(to: point)
-                    self.mosaicImageLayerMaskLayer?.path = path?.path.cgPath
-                } else if pan.state == .cancelled || pan.state == .ended {
-                    self.viewToolsBar(show: true)
-                    if let path = self.mosaicPaths.last {
-                        self.editorManager.storeAction(.mosaic(path))
+                } else if self.selectedTool == .mosaic {
+                    let point = pan.location(in: self.imageView)
+                    if pan.state == .began {
+                        self.viewToolsBar(show: false)
+
+                        var actualSize = self.currentClipStatus.editRect.size
+                        if self.shouldSwapSize {
+                            swap(&actualSize.width, &actualSize.height)
+                        }
+                        let ratio = min(
+                            self.mainScrollView.frame.width / self.currentClipStatus.editRect.width,
+                            self.mainScrollView.frame.height / self.currentClipStatus.editRect.height
+                        )
+                        
+                        let pathW = self.mosaicLineWidth / self.mainScrollView.zoomScale
+                        let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
+                        
+                        self.mosaicImageLayerMaskLayer?.lineWidth = pathW
+                        self.mosaicImageLayerMaskLayer?.path = path.path.cgPath
+                        self.mosaicPaths.append(path)
+                    } else if pan.state == .changed {
+                        let path = self.mosaicPaths.last
+                        path?.addLine(to: point)
+                        self.mosaicImageLayerMaskLayer?.path = path?.path.cgPath
+                    } else if pan.state == .cancelled || pan.state == .ended {
+                        self.viewToolsBar(show: true)
+                        if let path = self.mosaicPaths.last {
+                            self.editorManager.storeAction(.mosaic(path))
+                        }
+                        
+                        self.generateNewMosaicImage()
                     }
-                    
-                    self.generateNewMosaicImage()
                 }
             }
         }
@@ -1267,10 +1262,8 @@ extension PTEditImageViewController {
                 make.height.equalTo(PTCutViewController.cutRatioHeight)
             }
             
-            var rows = [PTRows]()
-            thumbnailFilterImages.enumerated().forEach { index,value in
-                let row = PTRows(ID:PTFilterImageCell.ID,dataModel: value)
-                rows.append(row)
+            let rows = thumbnailFilterImages.map {
+                PTRows(ID:PTFilterImageCell.ID,dataModel: $0)
             }
 
             let section = PTSection(rows: rows)
@@ -1372,10 +1365,9 @@ extension PTEditImageViewController {
                 }
             }
             
-            var rows = [PTRows]()
-            adjustTools.enumerated().forEach { index,value in
+            let rows = adjustTools.map {
                 let model = PTFusionCellModel()
-                switch value {
+                switch $0 {
                 case .brightness:
                     model.contentIcon = UIImage(.light.min)
                     model.disclosureIndicatorImage = UIImage(.light.max)
@@ -1389,11 +1381,8 @@ extension PTEditImageViewController {
                     model.disclosureIndicatorImage = UIImage(.circle.fill)
                     model.name = PTImageEditorConfig.share.adjustContrastString
                 }
-                
-                let row = PTRows(ID:PTAdjustToolCell.ID,dataModel: model)
-                rows.append(row)
-            }
-            
+                return PTRows(ID:PTAdjustToolCell.ID,dataModel: model)
+            }            
             
             let section = PTSection(rows: rows)
             adjustCollectionView.showCollectionDetail(collectionData: [section])

@@ -134,7 +134,7 @@ extension PTRouterParser {
             return nil
         }
         
-        guard let url = URL.init(string: encodeString) else {
+        guard let url = URL(string: encodeString) else {
             return nil
         }
         

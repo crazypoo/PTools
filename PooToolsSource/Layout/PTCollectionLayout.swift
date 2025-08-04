@@ -15,7 +15,7 @@ public class PTCollectionLayout: NSObject {
                                    paddingY:CGFloat,
                                    paddingX:CGFloat,
                                    sd:UICollectionView.ScrollDirection)->UICollectionViewFlowLayout {
-        let inset = UIEdgeInsets.init(top: paddingY, left: paddingX, bottom: paddingY, right: paddingX)
+        let inset = UIEdgeInsets(top: paddingY, left: paddingX, bottom: paddingY, right: paddingX)
         return PTCollectionLayout.createLayoutBase(itemSize: itemSize, inset: inset, minimumLineSpaceing: paddingY, minimumInteritemSpacing: 0, sd: sd)
     }
     

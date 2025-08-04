@@ -68,34 +68,35 @@ extension UIView: PTBadgeProtocol {
         if canDragToDelete {
             if badge != nil {
                 let panGes = UIPanGestureRecognizer { sender in
-                    let pan = sender as! UIPanGestureRecognizer
-                    let location = pan.translation(in: self)
-                    
-                    switch pan.state {
-                    case .began:
-                        // 记录起始触摸点
-                        self.initialChangeCenter = location
-                    case .changed:
-                        // 计算拖动偏移量
-                        let offsetX = location.x - self.initialChangeCenter!.x
-                        let offsetY = location.y - self.initialChangeCenter!.y
-                        // 更新视图位置
-                        self.badge!.center = CGPoint(x: self.badge!.center.x + offsetX, y: self.badge!.center.y + offsetY)
-                        // 更新起始触摸点
-                        self.initialChangeCenter = location
-                    case .ended, .cancelled:
-                        // 拖动结束，清除起始触摸点
-                        self.initialChangeCenter = nil
-                        // 检查视图位置是否超出父视图范围
-                        let badgeFrameInSelf = self.badge!.convert(self.badge!.bounds, to: self)
-                        if self.bounds.intersects(badgeFrameInSelf) {
-                            self.badge!.center = self.initialSubviewCenter
-                        } else {
-                            self.badgeRemoveCallback?()
-                            self.badge!.removeFromSuperview()
+                    if let pan = sender as? UIPanGestureRecognizer {
+                        let location = pan.translation(in: self)
+                        
+                        switch pan.state {
+                        case .began:
+                            // 记录起始触摸点
+                            self.initialChangeCenter = location
+                        case .changed:
+                            // 计算拖动偏移量
+                            let offsetX = location.x - self.initialChangeCenter!.x
+                            let offsetY = location.y - self.initialChangeCenter!.y
+                            // 更新视图位置
+                            self.badge!.center = CGPoint(x: self.badge!.center.x + offsetX, y: self.badge!.center.y + offsetY)
+                            // 更新起始触摸点
+                            self.initialChangeCenter = location
+                        case .ended, .cancelled:
+                            // 拖动结束，清除起始触摸点
+                            self.initialChangeCenter = nil
+                            // 检查视图位置是否超出父视图范围
+                            let badgeFrameInSelf = self.badge!.convert(self.badge!.bounds, to: self)
+                            if self.bounds.intersects(badgeFrameInSelf) {
+                                self.badge!.center = self.initialSubviewCenter
+                            } else {
+                                self.badgeRemoveCallback?()
+                                self.badge!.removeFromSuperview()
+                            }
+                        default:
+                            break
                         }
-                    default:
-                        break
                     }
                 }
                 self.badge!.addGestureRecognizer(panGes)
@@ -374,7 +375,7 @@ extension UIView: PTBadgeProtocol {
             self.badge?.tag = PTBadgeStyle.RedDot.rawValue
             self.resetBadgeForRedDot()
             PTGCDManager.gcdMain {
-                self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
+                self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor,capsule: true)
             }
         }
         self.badge?.isHidden = false

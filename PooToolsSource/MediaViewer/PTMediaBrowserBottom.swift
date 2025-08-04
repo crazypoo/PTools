@@ -13,7 +13,7 @@ import AttributedString
 
 let PageControlHeight:CGFloat = 20
 let PageControlBottomSpace:CGFloat = 5
-let MediaBrowserToolBarColor = UIColor.init(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.4)
+let MediaBrowserToolBarColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.4)
 
 class PTMediaBrowserBottom: UIView {
     

@@ -8,8 +8,8 @@
 
 import UIKit
 
-open class PTSegmentControlBaseModel: NSObject {
-    open var categoryName:String = ""
-    open var subTitle:String = ""
-    open var imageURL:String = ""
+public class PTSegmentControlBaseModel: NSObject {
+    public var categoryName:String = ""
+    public var subTitle:String = ""
+    public var imageURL:String = ""
 }

@@ -502,7 +502,7 @@ public class PTCollectionView: UIView {
     }
 
     fileprivate lazy var collectionView : PTBaseCollectionView = {
-        let view = PTBaseCollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
+        let view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
         view.dataSource = self
         view.delegate = self

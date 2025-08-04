@@ -38,7 +38,7 @@ public class PTTakePictureReviewer:UIView {
         view.contentMode = .scaleAspectFill
         view.isUserInteractionEnabled = true
         
-        let tap = UITapGestureRecognizer { sender in
+        let tap = UITapGestureRecognizer { _ in
             self.reviewHandle?()
         }
         view.addGestureRecognizer(tap)

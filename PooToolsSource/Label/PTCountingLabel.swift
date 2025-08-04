@@ -159,10 +159,7 @@ public class PTCountingLabel: UILabel {
     }
     
     func runCompletionBlock() {
-        if showCompletionBlock != nil {
-            showCompletionBlock!()
-            showCompletionBlock = nil
-        }
+        showCompletionBlock?()
     }
     
     func textValue(value:CGFloat) {

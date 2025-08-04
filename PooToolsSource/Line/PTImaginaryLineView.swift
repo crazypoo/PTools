@@ -18,10 +18,10 @@ public class PTImaginaryLineView: UIView {
     
     //MARK: 虛線顏色
     ///虛線顏色
-    open var lineColor:UIColor? = .lightGray
+    open var lineColor:UIColor = .lightGray
     //MARK: 虛線方向
     ///虛線方向
-    open var lineType:PTImaginaryLineType? = .Hor
+    open var lineType:PTImaginaryLineType = .Hor
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,14 +37,14 @@ public class PTImaginaryLineView: UIView {
         context?.setFillColor(UIColor.clear.cgColor)
         context?.setLineDash(phase: 4, lengths: [4])
         context?.fill(bounds)
-        context?.setStrokeColor(lineColor!.cgColor)
+        context?.setStrokeColor(lineColor.cgColor)
         switch lineType {
         case .Hor:
-            context?.move(to: CGPoint.init(x: 0, y: frame.size.height / 2))
-            context?.addLine(to: CGPoint.init(x: frame.size.width, y: 0))
+            context?.move(to: CGPoint(x: 0, y: frame.size.height / 2))
+            context?.addLine(to: CGPoint(x: frame.size.width, y: 0))
         default:
-            context?.move(to: CGPoint.init(x: frame.size.width / 2, y: 0))
-            context?.addLine(to: CGPoint.init(x: frame.size.width / 2, y: frame.size.height))
+            context?.move(to: CGPoint(x: frame.size.width / 2, y: 0))
+            context?.addLine(to: CGPoint(x: frame.size.width / 2, y: frame.size.height))
         }
         context?.strokePath()
     }

@@ -209,7 +209,7 @@ class PTPermissionCell: PTBaseNormalCell {
     }
     
     fileprivate lazy var authorizedButton:UIButton = {
-        let view = UIButton.init(type: .custom)
+        let view = UIButton(type: .custom)
         view.titleLabel?.font = PTAppBaseConfig.share.permissionAuthorizedButtonFont
         view.setTitleColor(.systemBlue, for: .normal)
         view.setTitle("PT Permission Not determined".localized(), for: .normal)

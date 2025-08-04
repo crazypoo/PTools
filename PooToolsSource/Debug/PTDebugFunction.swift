@@ -23,9 +23,9 @@ public class PTDebugFunction: NSObject {
         }
         
         if let settingsBundle = bundleSelected.path(forResource: "Settings", ofType: "bundle") {
-            let settings = NSDictionary.init(contentsOfFile: settingsBundle.nsString.appendingPathComponent("Root.plist"))
+            let settings = NSDictionary(contentsOfFile: settingsBundle.nsString.appendingPathComponent("Root.plist"))
             let prefernces = settings!["PreferenceSpecifiers"] as! [NSDictionary]
-            let defaultsToRegister = NSMutableDictionary.init(capacity: prefernces.count)
+            let defaultsToRegister = NSMutableDictionary(capacity: prefernces.count)
             for prefSpecification in prefernces {
                 if let key :String = prefSpecification["Key"] as? String {
                     defaultsToRegister[key] = prefSpecification["DefaultValue"]

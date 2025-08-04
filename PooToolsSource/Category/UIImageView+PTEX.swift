@@ -272,23 +272,21 @@ public extension UIImageView {
         addSubview(loader)
         loader.translatesAutoresizingMaskIntoConstraints = false
         
-        addConstraint(NSLayoutConstraint(
-            item: loader,
-            attribute: .centerX,
-            relatedBy: .equal,
-            toItem: self,
-            attribute: .centerX,
-            multiplier: 1,
-            constant: 0))
+        addConstraint(NSLayoutConstraint(item: loader,
+                                         attribute: .centerX,
+                                         relatedBy: .equal,
+                                         toItem: self,
+                                         attribute: .centerX,
+                                         multiplier: 1,
+                                         constant: 0))
         
-        addConstraint(NSLayoutConstraint(
-            item: loader,
-            attribute: .centerY,
-            relatedBy: .equal,
-            toItem: self,
-            attribute: .centerY,
-            multiplier: 1,
-            constant: 0))
+        addConstraint(NSLayoutConstraint(item: loader,
+                                         attribute: .centerY,
+                                         relatedBy: .equal,
+                                         toItem: self,
+                                         attribute: .centerY,
+                                         multiplier: 1,
+                                         constant: 0))
         
         (loader as? UIActivityIndicatorView)?.startAnimating()
         

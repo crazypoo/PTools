@@ -21,7 +21,7 @@ public class PTCallMessageMailFunction: NSObject {
     var mailResultBlock:MailResultBlock?
     
     lazy var webView:WKWebView = {
-        let webView = WKWebView.init(frame: .zero)
+        let webView = WKWebView(frame: .zero)
         return webView
     }()
     
@@ -29,7 +29,9 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.webView.navigationDelegate = PTCallMessageMailFunction.share
         
         let urlPhoneString = "tel://\(phone)"
-        PTCallMessageMailFunction.share.webView.load(URLRequest.init(url: URL(string: urlPhoneString)!))
+        if let pURL = URL(string: urlPhoneString) {
+            PTCallMessageMailFunction.share.webView.load(URLRequest(url: pURL))
+        }
     }
     
     public class func sendMessage(content:String,

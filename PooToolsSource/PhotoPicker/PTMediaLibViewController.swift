@@ -23,7 +23,7 @@ public class PTMediaLibView:UIView {
     
     fileprivate var currentVc:PTMediaLibViewController!
     
-    fileprivate static func outputURL()->URL {
+    fileprivate static func outputURL() -> URL {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
         return outputURL
@@ -38,7 +38,7 @@ public class PTMediaLibView:UIView {
         return false
     }
     
-    var selectedCount:((Int)->Void)?
+    var selectedCount:((Int) -> Void)?
     
     var totalModels:[PTMediaModel]! = [PTMediaModel]()
     var selectedModel: [PTMediaModel] = [] {
@@ -542,7 +542,7 @@ extension PTMediaLibView:UIImagePickerControllerDelegate, UINavigationController
 
 extension PTMediaLibView {
     
-    func saveVideoToCache(fileURL:URL = PTMediaLibView.outputURL(),playerItem: AVPlayerItem,result:((_ fileURL:URL?,_ finish:Bool)->Void)? = nil) {
+    func saveVideoToCache(fileURL:URL = PTMediaLibView.outputURL(),playerItem: AVPlayerItem,result:((_ fileURL:URL?,_ finish:Bool) -> Void)? = nil) {
         AVAssetExportSession.pt.saveVideoToCache(fileURL: fileURL, playerItem: playerItem) { status, exportSession, fileUrl, error in
             if status == .completed {
                 result?(fileUrl,true)

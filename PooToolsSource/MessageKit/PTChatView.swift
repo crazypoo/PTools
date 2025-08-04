@@ -67,28 +67,29 @@ public class PTChatView: UIView {
                     
                     switch cellModel.messageType {
                     case .Text:
-                        let msgContent = cellModel.msgContent as! String
+                        if let msgContent = cellModel.msgContent as? String {
+                            
+                            var dataContentFont:UIFont!
+                            if cellModel.belongToMe {
+                                dataContentFont = PTChatConfig.share.textMeMessageFont
+                            } else {
+                                dataContentFont = PTChatConfig.share.textOtherMessageFont
+                            }
+                            
+                            var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 40
+                            
+                            let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
+                            if contentNumberOfLines <= 1 {
+                                contentHeight = PTChatConfig.share.contentBaseHeight
+                            }
                         
-                        var dataContentFont:UIFont!
-                        if cellModel.belongToMe {
-                            dataContentFont = PTChatConfig.share.textMeMessageFont
-                        } else {
-                            dataContentFont = PTChatConfig.share.textOtherMessageFont
+                            var nameContentTotal = nameHeight + contentHeight + readStatusHeight
+                            if nameContentTotal < PTChatConfig.share.messageUserIconSize {
+                                nameContentTotal = PTChatConfig.share.messageUserIconSize
+                            }
+                            
+                            cellHeight = nameContentTotal + timeHeight + spaceHeight
                         }
-                        
-                        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 40
-                        
-                        let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
-                        if contentNumberOfLines <= 1 {
-                            contentHeight = PTChatConfig.share.contentBaseHeight
-                        }
-                    
-                        var nameContentTotal = nameHeight + contentHeight + readStatusHeight
-                        if nameContentTotal < PTChatConfig.share.messageUserIconSize {
-                            nameContentTotal = PTChatConfig.share.messageUserIconSize
-                        }
-                        
-                        cellHeight = nameContentTotal + timeHeight + spaceHeight
                     case .Map:
                         let mapHeight = PTChatConfig.share.mapMessageImageHeight
                         cellHeight = timeHeight + nameHeight + mapHeight + spaceHeight + readStatusHeight
@@ -241,28 +242,29 @@ public class PTChatView: UIView {
     
     func cellLongTap(cell:PTChatBaseCell,itemId:String,cellModel:PTChatListModel,indexPath:IndexPath) ->UILongPressGestureRecognizer {
         let longTap = UILongPressGestureRecognizer { sender in
-            let longGes = sender as! UILongPressGestureRecognizer
-            switch longGes.state {
-            case .possible:break
-            case .began:
-                cell.dataContentStatusView.isHighlighted = true
-            case .changed:break
-            case .ended:
-                cell.dataContentStatusView.isHighlighted = false
-            case .cancelled:break
-            case .failed:break
-            case .recognized:break
-            @unknown default:break
-            }
-            
-            if let menuTitles = self.cellMenuItemsHandler?(itemId), !menuTitles.isEmpty {
-                let items = menuTitles.enumerated().map { index, title in
-                    PTEditMenuItem(title: title) {
-                        self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
-                    }
+            if let longGes = sender as? UILongPressGestureRecognizer {
+                switch longGes.state {
+                case .possible:break
+                case .began:
+                    cell.dataContentStatusView.isHighlighted = true
+                case .changed:break
+                case .ended:
+                    cell.dataContentStatusView.isHighlighted = false
+                case .cancelled:break
+                case .failed:break
+                case .recognized:break
+                @unknown default:break
                 }
+                
+                if let menuTitles = self.cellMenuItemsHandler?(itemId), !menuTitles.isEmpty {
+                    let items = menuTitles.enumerated().map { index, title in
+                        PTEditMenuItem(title: title) {
+                            self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
+                        }
+                    }
 
-                PTEditMenuItemsInteraction.share.showMenu(items, targetRect: cell.dataContentStatusView.frame, for: cell.dataContentStatusView)
+                    PTEditMenuItemsInteraction.share.showMenu(items, targetRect: cell.dataContentStatusView.frame, for: cell.dataContentStatusView)
+                }
             }
         }
         longTap.minimumPressDuration = 0.5

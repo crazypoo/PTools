@@ -35,10 +35,10 @@ public extension NSDictionary {
         do {
             jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
             let jsonString : NSString = String(data: jsonData!, encoding: .utf8)! as NSString
-            let mutableString = NSMutableString.init(string: jsonString)
-            let range : NSRange = NSRange.init(location: 0, length: jsonString.length)
+            let mutableString = NSMutableString(string: jsonString)
+            let range : NSRange = NSRange(location: 0, length: jsonString.length)
             mutableString.replaceOccurrences(of: " ", with: "", options: .literal, range: range)
-            let range2 : NSRange = NSRange.init(location: 0, length: mutableString.length)
+            let range2 : NSRange = NSRange(location: 0, length: mutableString.length)
             mutableString.replaceOccurrences(of: "\n", with: "", options: .literal, range: range2)
             return mutableString as String
         } catch {

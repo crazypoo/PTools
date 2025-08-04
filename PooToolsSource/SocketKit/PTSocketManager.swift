@@ -134,7 +134,7 @@ public class PTSocketManager: NSObject {
         }
     }
     
-    func networkIsNotReachable() ->Bool {
+    func networkIsNotReachable() -> Bool {
         switch networkStatus {
         case .notReachable:
             return true

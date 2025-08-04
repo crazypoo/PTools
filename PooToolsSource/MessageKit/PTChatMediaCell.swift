@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 import SnapKit
 import Photos
+import SwifterSwift
 
 public class PTChatMediaCell: PTChatBaseCell {
     public static let ID = "PTChatMediaCell"

@@ -486,7 +486,7 @@ public extension DynamicColor {
     //MARK: 顏色轉圖片
     ///顏色轉圖片
     @objc func createImageWithColor()->UIImage {
-        let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
         let ccontext = UIGraphicsGetCurrentContext()
         ccontext?.setFillColor(cgColor)

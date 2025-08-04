@@ -67,11 +67,13 @@ public class PTChatMapCell: PTChatBaseCell {
         guard let _ = cellModel.msgContent else { return }
 
         var dic:NSDictionary?
-        if cellModel.msgContent is NSDictionary {
-            dic = (cellModel.msgContent as! NSDictionary)
-        } else if cellModel.msgContent is String {
-            let addressString = cellModel.msgContent as! String
-            dic = addressString.jsonStringToDic()
+        switch cellModel.msgContent {
+        case let dicContent as NSDictionary:
+            dic = dicContent
+        case let dicString as String:
+            dic = dicString.jsonStringToDic()
+        default:
+            break
         }
         
         if dic != nil {

@@ -26,12 +26,12 @@ public extension CGRect {
     
     mutating func setWidth(_ width: CGFloat) {
         if width == self.width { return }
-        self = CGRect.init(x: origin.x, y: origin.y, width: width, height: height)
+        self = CGRect(x: origin.x, y: origin.y, width: width, height: height)
     }
     
     mutating func setHeight(_ height: CGFloat) {
         if height == self.height { return }
-        self = CGRect.init(x: origin.x, y: origin.y, width: width, height: height)
+        self = CGRect(x: origin.x, y: origin.y, width: width, height: height)
     }
     
     // MARK: - Init

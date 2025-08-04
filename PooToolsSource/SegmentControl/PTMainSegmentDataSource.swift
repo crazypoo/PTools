@@ -41,7 +41,7 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
             titleModel.subTitleSelectedColor = titleNormalColor
             titleModel.subTitleNormalColor = titleNormalColor
             titleModel.subTitleCurrentColor = titleSelectedColor
-            titleModel.imageURL = model?.imageURL
+            titleModel.imageURL = model?.imageURL ?? ""
             titleModel.itemWidth = itemWidths
             dataSource.append(titleModel)
         }

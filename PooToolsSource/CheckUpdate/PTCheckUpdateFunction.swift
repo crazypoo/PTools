@@ -392,7 +392,7 @@ public class PTCheckUpdateFunction: NSObject {
                 }
             }
         },doneTitle: "PT Upgrade".localized()) {
-            let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL.init(string: "https://" + url.description)! : url
+            let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL(string: "https://" + url.description)! : url
             PTAppStoreFunction.jumpLink(url: realURL)
         } tipContentView: { contentView in
             let tipsContent = PTUpdateTipsContentView(oV: oV, nV: nV, descriptionString: descriptionString)
@@ -472,7 +472,7 @@ public class PTCheckUpdateFunction: NSObject {
         Task {
             do {
                 let headerDic = ["Authorization":"Bearer \(token)","Content-Type":"application/json"]
-                let header = HTTPHeaders.init(headerDic)
+                let header = HTTPHeaders(headerDic)
                 let model = try await Network.requestApi(needGobal:false,urlStr: apiUrl,method: .get,header: header,parameters: parameters,modelType: modelType,encoder: URLEncoding.default)
                 if showHud {
                     toggleHud(show: false)

@@ -207,16 +207,14 @@ class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
-    init(
-        id: String = UUID().uuidString,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat = 1,
-        gesRotation: CGFloat = 0,
-        totalTranslationPoint: CGPoint = .zero,
-        showBorder: Bool = true
-    ) {
+    init(id: String = UUID().uuidString,
+         originScale: CGFloat,
+         originAngle: CGFloat,
+         originFrame: CGRect,
+         gesScale: CGFloat = 1,
+         gesRotation: CGFloat = 0,
+         totalTranslationPoint: CGPoint = .zero,
+         showBorder: Bool = true) {
         self.id = id
         self.originScale = originScale
         self.originAngle = originAngle
@@ -522,55 +520,49 @@ class PTTextStickerView: PTBaseStickerView {
 
     // Convert all states to model.
     override var state: PTTextStickerState {
-        PTTextStickerState(
-                id: id,
-                text: text,
-                textColor: textColor,
-                font: font,
-                style: style,
-                image: image,
-                originScale: originScale,
-                originAngle: originAngle,
-                originFrame: originFrame,
-                gesScale: gesScale,
-                gesRotation: gesRotation,
-                totalTranslationPoint: totalTranslationPoint
-        )
+        PTTextStickerState(id: id,
+                           text: text,
+                           textColor: textColor,
+                           font: font,
+                           style: style,
+                           image: image,
+                           originScale: originScale,
+                           originAngle: originAngle,
+                           originFrame: originFrame,
+                           gesScale: gesScale,
+                           gesRotation: gesRotation,
+                           totalTranslationPoint: totalTranslationPoint)
     }
         
     convenience init(state: PTTextStickerState) {
-        self.init(
-            id: state.id,
-            text: state.text,
-            textColor: state.textColor,
-            font: state.font,
-            style: state.style,
-            image: state.image,
-            originScale: state.originScale,
-            originAngle: state.originAngle,
-            originFrame: state.originFrame,
-            gesScale: state.gesScale,
-            gesRotation: state.gesRotation,
-            totalTranslationPoint: state.totalTranslationPoint,
-            showBorder: false
-        )
+        self.init(id: state.id,
+                  text: state.text,
+                  textColor: state.textColor,
+                  font: state.font,
+                  style: state.style,
+                  image: state.image,
+                  originScale: state.originScale,
+                  originAngle: state.originAngle,
+                  originFrame: state.originFrame,
+                  gesScale: state.gesScale,
+                  gesRotation: state.gesRotation,
+                  totalTranslationPoint: state.totalTranslationPoint,
+                  showBorder: false)
     }
     
-    init(
-        id: String = UUID().uuidString,
-        text: String,
-        textColor: UIColor,
-        font: UIFont?,
-        style: PTInputTextStyle,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat = 1,
-        gesRotation: CGFloat = 0,
-        totalTranslationPoint: CGPoint = .zero,
-        showBorder: Bool = true
-    ) {
+    init(id: String = UUID().uuidString,
+         text: String,
+         textColor: UIColor,
+         font: UIFont?,
+         style: PTInputTextStyle,
+         image: UIImage,
+         originScale: CGFloat,
+         originAngle: CGFloat,
+         originFrame: CGRect,
+         gesScale: CGFloat = 1,
+         gesRotation: CGFloat = 0,
+         totalTranslationPoint: CGPoint = .zero,
+         showBorder: Bool = true) {
         self.text = text
         self.textColor = textColor
         self.font = font
@@ -700,16 +692,13 @@ class PTEditInputViewController: PTBaseViewController {
         return textView
     }()
     
-    private lazy var toolView = UIView(frame: CGRect(
-        x: 0,
-        y: view.pt.jx_height - Self.toolViewHeight,
-        width: view.pt.jx_width,
-        height: Self.toolViewHeight
-    ))
+    private lazy var toolView = UIView(frame: CGRect(x: 0, y: view.pt.jx_height - Self.toolViewHeight, width: view.pt.jx_width, height: Self.toolViewHeight))
     
     private lazy var textStyleBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.addTarget(self, action: #selector(textStyleBtnClick), for: .touchUpInside)
+        btn.addActionHandlers { _ in
+            self.textStyleBtnClick()
+        }
         return btn
     }()
     
@@ -935,12 +924,7 @@ class PTEditInputViewController: PTBaseViewController {
         let keyboardH = rect?.height ?? 366
         let duration: TimeInterval = notify.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
         
-        let toolViewFrame = CGRect(
-            x: 0,
-            y: view.pt.jx_height - keyboardH - Self.toolViewHeight,
-            width: view.pt.jx_width,
-            height: Self.toolViewHeight
-        )
+        let toolViewFrame = CGRect(x: 0, y: view.pt.jx_height - keyboardH - Self.toolViewHeight, width: view.pt.jx_width, height: Self.toolViewHeight)
         
         var textViewFrame = textView.frame
         textViewFrame.size.height = toolViewFrame.minY - textViewFrame.minY - 20

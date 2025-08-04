@@ -241,7 +241,7 @@ public class PTSegmentView: UIView {
         }
     }
     
-    public var segTapBlock:((_ currentIndex:Int)->Void)?
+    public var segTapBlock:((_ currentIndex:Int) -> Void)?
     
     private var viewConfig = PTSegmentConfig()
     private var subViewArr = [UIView]()
@@ -261,7 +261,7 @@ public class PTSegmentView: UIView {
     }
     
     ///刷新items
-    public func reloadViewData(block:((_ index:Int)->Void)?) {
+    public func reloadViewData(block:((_ index:Int) -> Void)?) {
         subViewArr.forEach { (value) in
             let subV = value as! PTSegmentSubView
             subV.removeFromSuperview()
@@ -301,7 +301,7 @@ public class PTSegmentView: UIView {
         }
     }
     
-    func getTotalW(datas:[PTSegmentModel],completeHandle: (CGFloat, Bool)->Void) {
+    func getTotalW(datas:[PTSegmentModel],completeHandle: (CGFloat, Bool) -> Void) {
         var scrolContentW:CGFloat = 0
         var isExceed:Bool = false
         if datas.count > 0 {
@@ -318,7 +318,6 @@ public class PTSegmentView: UIView {
                     if viewConfig.itemSpace > 0 {
                         scrolContentW = scrolContentW + CGFloat(datas.count - 1) * viewConfig.itemSpace
                     }
-
                     
                     if viewConfig.leftEdges {
                         scrolContentW += viewConfig.originalX
@@ -331,7 +330,7 @@ public class PTSegmentView: UIView {
         }
     }
     
-    func getCurrentSubWidthAndType(value:PTSegmentModel,handle: (CGFloat, PTSegmentButtonShowType)->Void) {
+    func getCurrentSubWidthAndType(value:PTSegmentModel,handle: (CGFloat, PTSegmentButtonShowType) -> Void) {
         var subShowType:PTSegmentButtonShowType!
         let normalW = UIView.sizeFor(string: value.titles, font: viewConfig.normalFont, height: frame.size.height).width
         let selectedW = UIView.sizeFor(string: value.titles, font: viewConfig.selectedFont, height: frame.size.height).width
@@ -379,7 +378,7 @@ public class PTSegmentView: UIView {
                                         
                     let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: currentModel,contentW: (subContentW-self.viewConfig.subViewInContentSpace),showType: showType)
                     subView.tag = index
-                    subView.frame = CGRect.init(x: newX, y: 0, width: subContentW, height: self.frame.size.height)
+                    subView.frame = CGRect(x: newX, y: 0, width: subContentW, height: self.frame.size.height)
                     
                     switch showType {
                     case .TitleImage:
@@ -403,7 +402,7 @@ public class PTSegmentView: UIView {
                 self.scrolView.snp.makeConstraints { (make) in
                     make.edges.equalToSuperview()
                 }
-                self.scrolView.contentSize = CGSize.init(width: totalWidth, height: self.frame.size.height)
+                self.scrolView.contentSize = CGSize(width: totalWidth, height: self.frame.size.height)
                 self.selectedIndex = self.viewConfig.normalSelecdIndex
                 
                 self.scrolView.isScrollEnabled = isExceed
@@ -415,35 +414,30 @@ public class PTSegmentView: UIView {
     ///选择某个item
     public func setSelectItem(indexs:Int) {
         if indexs <= (subViewArr.count - 1) {
-            let subV = subViewArr[indexs] as! PTSegmentSubView
-            
-            switch indexs {
-            case 0:
-                scrolView.pt.scrolToLeftAnimation(animation: true)
-            default:
-                scrolView.scrollRectToVisible(CGRect.init(x: (subV.frame.origin.x) + (subV.frame.size.width) / 2, y: 0, width: (subV.frame.size.width), height: frame.size.height), animated: true)
+            if let subV = subViewArr[indexs] as? PTSegmentSubView {
+                switch indexs {
+                case 0:
+                    scrolView.pt.scrolToLeftAnimation(animation: true)
+                default:
+                    scrolView.scrollRectToVisible(CGRect(x: (subV.frame.origin.x) + (subV.frame.size.width) / 2, y: 0, width: (subV.frame.size.width), height: frame.size.height), animated: true)
+                }
             }
             
-            subViewArr.enumerated().forEach { (index,value) in
-                let viewInArr = value as! PTSegmentSubView
-                if index != indexs {
-                    switch viewConfig.showType {
-                    case .UnderLine,.Dog,.SubBackground:
-                        viewInArr.underLine.isSelected = false
-                    case .Background:
-                        viewInArr.backgroundColor = viewConfig.normalColor_BG
-                    default:break
-                    }
-                    viewInArr.imageBtn.isSelected = false
-                } else {
-                    switch viewConfig.showType {
-                    case .UnderLine,.Dog,.SubBackground:
-                        viewInArr.underLine.isSelected = true
-                    case .Background:
-                        viewInArr.backgroundColor = viewConfig.selectedColor_BG
-                    default:break
-                    }
-                    viewInArr.imageBtn.isSelected = true
+            for (index, element) in subViewArr.enumerated() {
+                guard let subview = element as? PTSegmentSubView else { continue }
+
+                let isSelected = (index == indexs)
+                subview.imageBtn.isSelected = isSelected
+
+                switch viewConfig.showType {
+                case .UnderLine, .Dog, .SubBackground:
+                    subview.underLine.isSelected = isSelected
+
+                case .Background:
+                    subview.backgroundColor = isSelected ? viewConfig.selectedColor_BG : viewConfig.normalColor_BG
+
+                default:
+                    break
                 }
             }
         }
@@ -457,52 +451,48 @@ public class PTSegmentView: UIView {
                             badgeAnimation:PTBadgeAnimType? = .Breathe,
                             badgeValue:Int? = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
-            self.subViewArr.enumerated().forEach { (index,value) in
-                if index == indexView {
-                    let subViews = (value as! PTSegmentSubView)
-                    var badgePoint = CGPoint.init(x: 0, y: 0)
-                    switch badgePosition {
-                    case .TopLeft:
-                        badgePoint = CGPoint(x: -subViews.pt.jx_width+5, y: 5)
-                    case .TopMiddle:
-                        badgePoint = CGPoint(x: -(subViews.pt.jx_width/2), y: 5)
-                    case .TopRight:
-                        badgePoint = CGPoint(x: 0, y: 5)
-                    case .MiddleLeft:
-                        badgePoint = CGPoint(x: -subViews.pt.jx_width+5, y: subViews.pt.jx_height/2)
-                    case .MiddleRigh:
-                        badgePoint = CGPoint(x: -5, y: subViews.pt.jx_height/2)
-                    case .BottomLeft:
-                        badgePoint = CGPoint(x: -subViews.pt.jx_width+5, y: subViews.pt.jx_height-5)
-                    case .BottomMiddle:
-                        badgePoint = CGPoint(x: -(subViews.pt.jx_width/2), y: subViews.pt.jx_height-5)
-                    case .BottomRight:
-                        badgePoint = CGPoint(x: -5, y: subViews.pt.jx_height-5)
-                    default:break
-                    }
-                    subViews.badgeCenterOffset = badgePoint
-                    subViews.badgeBgColor = badgeBGColor!
-                    subViews.showBadge(style: badgeShowType!, value: badgeValue!, aniType: badgeAnimation!)
+            guard indexView < self.subViewArr.count,
+                  let subView = self.subViewArr[indexView] as? PTSegmentSubView,
+                  let badgeBGColor,
+                  let badgeShowType,
+                  let badgeValue,
+                  let badgeAnimation else { return }
+
+            let width = subView.pt.jx_width
+            let height = subView.pt.jx_height
+
+            let badgePoint: CGPoint = {
+                switch badgePosition {
+                case .TopLeft:      return CGPoint(x: -width + 5, y: 5)
+                case .TopMiddle:    return CGPoint(x: -width / 2, y: 5)
+                case .TopRight:     return CGPoint(x: 0, y: 5)
+                case .MiddleLeft:   return CGPoint(x: -width + 5, y: height / 2)
+                case .MiddleRigh:   return CGPoint(x: -5, y: height / 2)
+                case .BottomLeft:   return CGPoint(x: -width + 5, y: height - 5)
+                case .BottomMiddle: return CGPoint(x: -width / 2, y: height - 5)
+                case .BottomRight:  return CGPoint(x: -5, y: height - 5)
+                default:            return .zero
                 }
-            }
+            }()
+
+            subView.badgeCenterOffset = badgePoint
+            subView.badgeBgColor = badgeBGColor
+            subView.showBadge(style: badgeShowType, value: badgeValue, aniType: badgeAnimation)
         }
     }
     
     ///移除某个Badge
     public func removeBadgeAtIndex(indexView:Int) {
-        subViewArr.enumerated().forEach { (index,value) in
-            if index == indexView {
-                let subViews = (value as! PTSegmentSubView)
-                subViews.clearBadge()
-            }
-        }
+        guard indexView < subViewArr.count,
+              let subView = subViewArr[indexView] as? PTSegmentSubView else { return }
+
+        subView.clearBadge()
     }
     
     ///移除全部Badge
     public func removeAllBadge() {
-        subViewArr.enumerated().forEach { (index,value) in
-            let subViews = (value as! PTSegmentSubView)
-            subViews.clearBadge()
+        for case let subview as PTSegmentSubView in subViewArr {
+            subview.clearBadge()
         }
     }
     

@@ -224,7 +224,7 @@ extension PTEyeTrackingManager {
             screenSize = portraitScreenSize
         case UIDeviceOrientation.landscapeLeft: fallthrough
         case UIDeviceOrientation.landscapeRight:
-            screenSize = CGRect.init(x: 0, y: 0, width: portraitScreenSize.height, height: portraitScreenSize.width)
+            screenSize = CGRect(x: 0, y: 0, width: portraitScreenSize.height, height: portraitScreenSize.width)
         default:break
         }
         

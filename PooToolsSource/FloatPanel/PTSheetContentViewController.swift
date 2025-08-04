@@ -66,7 +66,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         }
     }
     
-    var sheetContentViewPreferredHeightChanged:((_ oldHeight:CGFloat,_ newSize:CGFloat)->Void)?
+    var sheetContentViewPreferredHeightChanged:((_ oldHeight:CGFloat,_ newSize:CGFloat) -> Void)?
     var pullBarTappedAction:PTActionTask?
     
     public var contentWrapperView = UIView()

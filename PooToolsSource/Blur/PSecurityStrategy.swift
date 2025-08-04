@@ -15,14 +15,14 @@ public class PSecurityStrategy: NSObject {
     
     class public func addBlurEffect() {
         PTGCDManager.gcdMain {
-            let imageView = UIImageView.init(frame: UIScreen.main.bounds)
+            let imageView = UIImageView(frame: UIScreen.main.bounds)
             imageView.tag = effectTag
             imageView.image = PSecurityStrategy.screenShot()
             AppWindows!.addSubview(imageView)
             
-            let blueView = UIView.init(frame: imageView.frame)
+            let blueView = UIView(frame: imageView.frame)
             imageView.addSubview(blueView)
-            let aaaa = SSBlurView.init(to: blueView)
+            let aaaa = SSBlurView(to: blueView)
             aaaa.style = .extraLight
             aaaa.alpha = 1
             aaaa.enable()
@@ -31,32 +31,30 @@ public class PSecurityStrategy: NSObject {
     
     class public func removeBlurEffect() {
         let subViews = AppWindows!.subviews
-        subViews.enumerated().forEach { (index,value) in
-            if value is UIImageView {
-                if (value as! UIImageView).tag == effectTag {
-                    UIView.animate(withDuration: 0.2) {
-                        (value as! UIImageView).alpha = 0
-                        (value as! UIImageView).removeFromSuperview()
-                    }
+        subViews.forEach { value in
+            if let newValue = value as? UIImageView,newValue.tag == effectTag {
+                UIView.animate(withDuration: 0.2) {
+                    newValue.alpha = 0
+                    newValue.removeFromSuperview()
                 }
             }
         }
     }
     
-    class public func blurImage()->UIImage {
+    class public func blurImage() -> UIImage {
         let image = PSecurityStrategy.screenShot().blurImage()
         return image
     }
     
-    class public func screenShot()->UIImage {
-        UIGraphicsBeginImageContextWithOptions(CGSize.init(width: CGFloat.kSCREEN_WIDTH * UIScreen.main.scale, height: CGFloat.kSCREEN_HEIGHT * UIScreen.main.scale), true, 0)
+    class public func screenShot() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: CGFloat.kSCREEN_WIDTH * UIScreen.main.scale, height: CGFloat.kSCREEN_HEIGHT * UIScreen.main.scale), true, 0)
         AppWindows!.layer.render(in: UIGraphicsGetCurrentContext()!)
         let viewImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         let imageRef = viewImage?.cgImage
-        let rect = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH * UIScreen.main.scale, height: CGFloat.kSCREEN_HEIGHT * UIScreen.main.scale)
+        let rect = CGRect(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH * UIScreen.main.scale, height: CGFloat.kSCREEN_HEIGHT * UIScreen.main.scale)
         let imageRefRect = imageRef!.cropping(to: rect)
-        let sendImage = UIImage.init(cgImage: imageRefRect!)
+        let sendImage = UIImage(cgImage: imageRefRect!)
         return sendImage
     }
 }

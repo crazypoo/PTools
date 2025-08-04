@@ -107,12 +107,14 @@ public class PTChatFileCell: PTChatBaseCell {
 
     // 从 msgContent 中提取 URL
     private func extractURL(from content: Any?) -> URL? {
-        if let contentString = content as? String {
+        switch content {
+        case let contentString as String:
             return URL(string: contentString)
-        } else if let contentURL = content as? URL {
+        case let contentURL as URL:
             return contentURL
+        default:
+            return nil
         }
-        return nil
     }
 
     // 更新文件信息

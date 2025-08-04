@@ -570,10 +570,10 @@ extension C7CollectorCamera: AVCaptureFileOutputRecordingDelegate {
     @MainActor private func playRecordVideo(fileUrl: URL) {
         haveRecordVideo?()
         stopRunning()
-        let asset = AVURLAsset.init(url: fileUrl)
+        let asset = AVURLAsset(url: fileUrl)
         let playerItem = AVPlayerItem(asset: asset)
-        let player = AVPlayer.init(playerItem: playerItem)
-        avPlayer = C7CollectorVideo.init(player: player, delegate: self)
+        let player = AVPlayer(playerItem: playerItem)
+        avPlayer = C7CollectorVideo(player: player, delegate: self)
         avPlayer?.filters = self.filters
 
         avPlayer?.play()

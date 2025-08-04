@@ -37,7 +37,7 @@ public class PTAnimationFunction: NSObject {
             transform = CATransform3DMakeTranslation(0, 0, 0)
         }
         
-        let animation = POPSpringAnimation.init(propertyNamed: propertyNamed)
+        let animation = POPSpringAnimation(propertyNamed: propertyNamed)
         animationView.layer.transform = transform
         animation?.toValue = 0
         animation?.springBounciness = 1

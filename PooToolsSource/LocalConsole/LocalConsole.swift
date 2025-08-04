@@ -62,30 +62,30 @@ extension String {
 }
 
 extension UIImage {
-    static func resizeImage()->UIImage {
+    static func resizeImage()-> UIImage {
         return UIImage(.arrow.upBackwardAndArrowDownForward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let shareImage = UIImage(.square.andArrowUp).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let copyImage = UIImage(.doc.onDocFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-    static func clearImage()->UIImage {
+    static func clearImage()-> UIImage {
         if #available(iOS 15.0, *) {
             return UIImage(.delete.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
             return UIImage(.delete).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
-    static func userDefaultsImage()->UIImage {
+    static func userDefaultsImage()-> UIImage {
         return UIImage(.doc.badgeGearshape).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
-    static func colorImage()->UIImage {
+    static func colorImage()-> UIImage {
         return UIImage(.paintpalette).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
-    static func rulerImage()->UIImage {
+    static func rulerImage()-> UIImage {
         return UIImage(.ruler).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let docImage = UIImage(.doc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let dev3thPartyImage = UIImage(.plus.magnifyingglass).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-    static func maskImage()->UIImage {
+    static func maskImage()-> UIImage {
         if #available(iOS 15.0, *) {
             return UIImage(.theatermasks).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
@@ -93,17 +93,17 @@ extension UIImage {
         }
     }
     static let maskBubbleImage = UIImage(systemName: "bubble.right")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-    static func viewFrameImage()->UIImage {
+    static func viewFrameImage()-> UIImage {
         if #available(iOS 15.0, *) {
             return UIImage(.square.insetFilled).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
             return UIImage(systemName: "rectangle.3.offgrid")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
-    static func cpuImage()->UIImage {
+    static func cpuImage()-> UIImage {
         return UIImage(.cpu).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
-    static func displayImage()->UIImage {
+    static func displayImage()-> UIImage {
         let result: String
 
         let hasHomeButton = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat == 0
@@ -129,7 +129,7 @@ extension UIImage {
     }
     static let debugControllerImage = UIImage(.pencil).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let terminateAppImage = UIImage(.xmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-    static func respringImage()->UIImage {
+    static func respringImage()-> UIImage {
         return UIImage(.arrowtriangle.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -140,7 +140,7 @@ extension UIImage {
     static let logFile = UIImage(.textformat.abc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let InspectorImage = UIImage(.stethoscope).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     
-    static func LoadedLibImage()->UIImage {
+    static func LoadedLibImage()-> UIImage {
         if #available(iOS 15.0, *) {
             return UIImage(.cross.vial).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
@@ -170,7 +170,7 @@ class ConsoleWindow: UIWindow {
     case NoActionCallBack
 }
 
-public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL)->Void
+public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void
 
 @objcMembers
 public class LocalConsole: NSObject {
@@ -500,7 +500,7 @@ public class LocalConsole: NSObject {
 
             contentView = consoleWindow.view as Any
 
-            terminal = PTTerminal.init(view: contentView as Any, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width, height:PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height))
+            terminal = PTTerminal(view: contentView as Any, frame: CGRect(x: 0, y: CGFloat.kNavBarHeight_Total, width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width, height:PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height))
             terminal!.tag = SystemLogViewTag
             snapToCachedEndpoint()
             terminal!.dragEnd = {
@@ -1067,9 +1067,9 @@ public class LocalConsole: NSObject {
         var volumeAvailableCapacityForImportantUsageString = ""
         var volumeAvailableCapacityForOpportunisticUsageString = ""
         var volumesString = ""
-        volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
-        volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
-        volumesString = String.init(format: "%d", Device.volumes!)
+        volumeAvailableCapacityForImportantUsageString = String(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+        volumeAvailableCapacityForOpportunisticUsageString = String(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+        volumesString = String(format: "%d", Device.volumes!)
 
         var hzString = ""
         hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
@@ -1106,13 +1106,13 @@ public class LocalConsole: NSObject {
                 Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
                 IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
                 BatteryState: \(Device.current.batteryState!)
-                BatteryLevel: \(String.init(format: "%d", Device.current.batteryLevel!))
-                VolumeTotalCapacity: \(String.init(format: "%d", Device.volumeTotalCapacity!))
-                VolumeAvailableCapacity: \(String.init(format: "%d", Device.volumeAvailableCapacity!))
+                BatteryLevel: \(String(format: "%d", Device.current.batteryLevel!))
+                VolumeTotalCapacity: \(String(format: "%d", Device.volumeTotalCapacity!))
+                VolumeAvailableCapacity: \(String(format: "%d", Device.volumeAvailableCapacity!))
                 VolumeAvailableCapacityForImportantUsage: \(volumeAvailableCapacityForImportantUsageString)
                 VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
                 Volumes: \(volumesString)
-                ApplePencilSupport: \(String.init(format: "%@", supportApplePencilString))
+                ApplePencilSupport: \(String(format: "%@", supportApplePencilString))
                 HasCamera: \(Device.current.hasCamera ? "Yes" : "No")
                 HasNormalCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
                 HasWideCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
@@ -1160,7 +1160,7 @@ public class PTTerminal:PFloatingButton {
         draggable = true
         layer.shadowRadius = 16
         layer.shadowOpacity = 0.5
-        layerShadowOffset = CGSize.init(width: 0, height: 2)
+        layerShadowOffset = CGSize(width: 0, height: 2)
         layer.cornerRadius = 22
         tag = SystemLogViewTag
         layer.cornerCurve = .continuous

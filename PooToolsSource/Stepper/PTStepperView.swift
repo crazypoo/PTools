@@ -28,20 +28,20 @@ public enum PTStepperViewType {
 
 open class PTStepperListConfig:NSObject {
     ///展示的类型
-    open var type:PTStepperViewType = .Horizontal(type: .Normal)
+    public var type:PTStepperViewType = .Horizontal(type: .Normal)
     ///数据Model
-    open var stepperModels:[PTStepperListModel]!
+    public var stepperModels:[PTStepperListModel]!
     
     ///用于横向混动的W(Scroll模式下使用)
-    open var itemWidth:CGFloat = 100
+    public var itemWidth:CGFloat = 100
     ///用于竖向滑动的H
-    open var itemHeight:CGFloat =   100
+    public var itemHeight:CGFloat =   100
     ///用于竖向滑动的起始点
-    open var itemOriginalX:CGFloat = 0
+    public var itemOriginalX:CGFloat = 0
     ///空白頁
-    open var emptyConfig:PTEmptyDataViewConfig?
+    public var emptyConfig:PTEmptyDataViewConfig?
     ///当前线是否填充颜色
-    open var currentStopLineColorShow:Bool = true
+    public var currentStopLineColorShow:Bool = true
 }
 
 public enum PTStepperModelStopType {
@@ -55,41 +55,41 @@ public enum PTStepperModelStopType {
 
 open class PTStepperListModel:PTBaseModel {
     ///标题
-    open var title:String = ""
+    public var title:String = ""
     
-    open var titleAtt:ASAttributedString?
+    public var titleAtt:ASAttributedString?
     ///标题颜色
-    open var titleColor:UIColor = DynamicColor(light: .black, dark: .white)
+    public var titleColor:UIColor = DynamicColor(light: .black, dark: .white)
     ///标题字体
-    open var titleFont:UIFont = .appfont(size: 14)
+    public var titleFont:UIFont = .appfont(size: 14)
     ///描述
-    open var desc:String = ""
+    public var desc:String = ""
     ///描述颜色
-    open var descColor:UIColor = DynamicColor(light: .black, dark: .white)
+    public var descColor:UIColor = DynamicColor(light: .black, dark: .white)
     ///描述字体
-    open var descFont:UIFont = .appfont(size: 14)
+    public var descFont:UIFont = .appfont(size: 14)
     ///描述富文本
-    open var descAtt:ASAttributedString?
+    public var descAtt:ASAttributedString?
     ///圈圈是否填充颜色
-    open var circleFillColor:Bool = true
+    public var circleFillColor:Bool = true
     ///圈圈大小min15max64
-    @PTClampedProperyWrapper(range:10...64) open var stopCircleWidth: CGFloat = 44
+    @PTClampedProperyWrapper(range:10...64) public var stopCircleWidth: CGFloat = 44
     ///圈圈线宽度min1max8
-    @PTClampedProperyWrapper(range:0...8) open var borderWidth: CGFloat = 0
+    @PTClampedProperyWrapper(range:0...8) public var borderWidth: CGFloat = 0
     ///普通颜色
-    open var stopNormalColor = DynamicColor.lightGray
+    public var stopNormalColor = DynamicColor.lightGray
     ///已经完成颜色
-    open var stopSelectedColor = DynamicColor.cyan
+    public var stopSelectedColor = DynamicColor.cyan
     ///线宽度
-    @PTClampedProperyWrapper(range:1...5) open var stopLineHeight: CGFloat = 1
+    @PTClampedProperyWrapper(range:1...5) public var stopLineHeight: CGFloat = 1
     ///是否已经完成
-    open var stopFinish:Bool = true
+    public var stopFinish:Bool = true
     ///圈圈展示类型
-    open var stopType:PTStepperModelStopType = .Step
+    public var stopType:PTStepperModelStopType = .Step
     ///圈圈展示内容
-    open var stopInfo:Any?
+    public var stopInfo:Any?
     ///圈圈展示内字体
-    open var stopFont:UIFont = .appfont(size: 14)
+    public var stopFont:UIFont = .appfont(size: 14)
 }
 
 open class PTStepperView: UIView {

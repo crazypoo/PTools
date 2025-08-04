@@ -19,12 +19,12 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
     
     var viewerDismissBlock:PTActionTask?
-    var zoomTask:((Bool)->Void)?
+    var zoomTask:((Bool) -> Void)?
     var tapTask:PTActionTask?
     var currentCellType:PTViewerDataType = .None
     var longTapWakeUp:PTActionTask?
     var imageLongTaped:Bool = false
-    var videoPlayHandler:((AVPlayerViewController)->Void)!
+    var videoPlayHandler:((AVPlayerViewController) -> Void)!
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
@@ -223,7 +223,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         bringSubviewToFront(reloadButton)
     }
         
-    open class func centerOfScrollVIewContent(scrollView:UIScrollView) ->CGPoint {
+    open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint {
         let offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width) ? ((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5) : 0
         let offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height) ? ((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5) : 0
         let actualCenter = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
@@ -244,39 +244,17 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 make.centerX.centerY.equalToSuperview()
             }
             
-            if self.dataModel.imageURL is String || self.dataModel.imageURL is URL {
-                var loadUrl:String = ""
-                if let urlString = self.dataModel.imageURL as? String {
-                    loadUrl = urlString.urlToUnicodeURLString() ?? ""
-                } else if let urlString = self.dataModel.imageURL as? URL {
-                    loadUrl = urlString.absoluteString
-                }
-                
-                if !loadUrl.isEmpty {
-                    if ["mp4","mov"].contains(loadUrl.pathExtension.lowercased()) {
-                        self.videoUrlLoad(url: loadUrl, loading: loading)
-                    } else {
-                        if !loadUrl.stringIsEmpty() {
-                            self.setImageTypeView(url:loadUrl,loading: loading)
-                        } else {
-                            self.currentCellType = .None
-                            self.createReloadButton()
-                            self.adjustFrame()
-                            loading.removeFromSuperview()
-                        }
-                    }
-                } else {
-                    self.currentCellType = .None
-                    self.createReloadButton()
-                    self.adjustFrame()
-                    loading.removeFromSuperview()
-                }
-            } else if let avItem = self.dataModel.imageURL as? AVPlayerItem {
+            switch self.dataModel.imageURL {
+            case let urlString as String:
+                self.loadDataUrl(loadUrl: urlString, loading: loading)
+            case let url as URL:
+                self.loadDataUrl(loadUrl: url.absoluteString, loading: loading)
+            case let avItem as AVPlayerItem:
                 self.videoAVItem(avItem: avItem, loading: loading)
-            } else if let avAsset = self.dataModel.imageURL as? AVAsset {
+            case let avAsset as AVAsset:
                 let avPlayerItem = AVPlayerItem(asset: avAsset)
                 self.videoAVItem(avItem: avPlayerItem, loading: loading)
-            } else if let livePhotoTarget = self.dataModel.imageURL as? PHLivePhoto {
+            case let livePhotoTarget as PHLivePhoto:
                 self.currentCellType = .LivePhoto
                 PTLivePhoto.extractResources(from: livePhotoTarget) { resources in
                     if let keyPhotoPath = resources?.pairedImage {
@@ -294,9 +272,31 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     }
                     self.setupGestureRecognizers(normal: false)
                 }
-            } else {
+            default:
                 self.baseLoadImageData(imageData: self.dataModel.imageURL as Any, loading: loading)
             }
+        }
+    }
+    
+    func loadDataUrl(loadUrl:String,loading:PTMediaBrowserLoadingView) {
+        if !loadUrl.isEmpty {
+            if ["mp4","mov"].contains(loadUrl.pathExtension.lowercased()) {
+                self.videoUrlLoad(url: loadUrl, loading: loading)
+            } else {
+                if !loadUrl.stringIsEmpty() {
+                    self.setImageTypeView(url:loadUrl,loading: loading)
+                } else {
+                    self.currentCellType = .None
+                    self.createReloadButton()
+                    self.adjustFrame()
+                    loading.removeFromSuperview()
+                }
+            }
+        } else {
+            self.currentCellType = .None
+            self.createReloadButton()
+            self.adjustFrame()
+            loading.removeFromSuperview()
         }
     }
             
@@ -532,20 +532,22 @@ extension PTMediaBrowserCell {
     private func setupGestureRecognizers(normal:Bool = true) {
         if normal {
             let doubleTap = UITapGestureRecognizer { sender in
-                let touchPoint = (sender as! UITapGestureRecognizer).location(in: self)
-                if self.contentScrolView.zoomScale <= 1 {
-                    self.zoomTask?(true)
-                    let scaleX = touchPoint.x + self.contentScrolView.contentOffset.x
-                    let scaleY = touchPoint.y + self.contentScrolView.contentOffset.y
-                    self.contentScrolView.zoom(to: CGRect(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
-                } else {
-                    self.zoomTask?(false)
-                    self.contentScrolView.setZoomScale(1, animated: true)
+                if let ges = sender as? UITapGestureRecognizer {
+                    let touchPoint = ges.location(in: self)
+                    if self.contentScrolView.zoomScale <= 1 {
+                        self.zoomTask?(true)
+                        let scaleX = touchPoint.x + self.contentScrolView.contentOffset.x
+                        let scaleY = touchPoint.y + self.contentScrolView.contentOffset.y
+                        self.contentScrolView.zoom(to: CGRect(x: scaleX, y: scaleY, width: 10, height: 10), animated: true)
+                    } else {
+                        self.zoomTask?(false)
+                        self.contentScrolView.setZoomScale(1, animated: true)
+                    }
                 }
             }
             doubleTap.numberOfTapsRequired = 2
             
-            let singleTap = UITapGestureRecognizer.init { sender in
+            let singleTap = UITapGestureRecognizer { sender in
                 self.tapTask?()
             }
             singleTap.numberOfTapsRequired = 1

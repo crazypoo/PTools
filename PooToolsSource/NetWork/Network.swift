@@ -379,7 +379,7 @@ public class Network: NSObject {
     }
     
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
-        var apiHeader = HTTPHeaders.init([:])
+        var apiHeader = HTTPHeaders([:])
         apiHeader["Content-Type"] = "application/json;charset=UTF-8"
         apiHeader["Accept"] = "application/json"
 
@@ -391,7 +391,7 @@ public class Network: NSObject {
     class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel? {
         
         let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
-        var apiHeader = HTTPHeaders.init([:])
+        var apiHeader = HTTPHeaders([:])
         apiHeader["Content-Type"] = "application/json;charset=UTF-8"
         apiHeader["Accept"] = "application/json"
         let models = try await Network.requestApi(needGobal: false, urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTIPInfoModel.self)

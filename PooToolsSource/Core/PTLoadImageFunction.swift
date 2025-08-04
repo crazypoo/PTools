@@ -49,6 +49,9 @@ public class PTLoadImageFunction: NSObject {
             }
         case let asset as PHAsset:
             return await handleAssetContent(asset: asset)
+        case let color as UIColor:
+            let colorImage = color.createImageWithColor()
+            return PTLoadImageResult(allImages: [colorImage], firstImage: colorImage, loadTime: 0)
         default:
             return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
         }

@@ -42,7 +42,7 @@ public class PTHarBethFilter:NSObject {
         guard let texture = try? TextureLoader.emptyTexture(width: Int(PTHarBethFilter.share.texureSize.width), height: Int(PTHarBethFilter.share.texureSize.height)) else {
             return nil
         }
-        let filter = C7SolidColor.init(color: color)
+        let filter = C7SolidColor(color: color)
         let dest = HarbethIO(element: texture, filter: filter)
         return try? dest.output()
     }

@@ -52,7 +52,7 @@ public class PTHudView: UIView {
     }()
     
     lazy var hudView:PTLoadingHud = {
-        let views = PTLoadingHud.init(frame: CGRect(x: loadingHudSpace, y: loadingHudSpace, width: hudShare.conterViewSize - loadingHudSpace * 2, height: hudShare.conterViewSize - loadingHudSpace * 2))
+        let views = PTLoadingHud(frame: CGRect(x: loadingHudSpace, y: loadingHudSpace, width: hudShare.conterViewSize - loadingHudSpace * 2, height: hudShare.conterViewSize - loadingHudSpace * 2))
         return views
     }()
     
@@ -102,9 +102,7 @@ public class PTHudView: UIView {
             self.centerView.alpha = 0
         } completion: { finish in
             self.removeFromSuperview()
-            if completion != nil {
-                completion!()
-            }
+            completion?()
         }
     }
     

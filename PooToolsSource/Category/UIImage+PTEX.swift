@@ -1036,15 +1036,13 @@ public extension PTPOP where Base: UIImage {
     func resize_vI(_ size: CGSize, scale: CGFloat? = nil) -> UIImage? {
         guard let cgImage = base.cgImage else { return nil }
         
-        var format = vImage_CGImageFormat(
-            bitsPerComponent: 8,
-            bitsPerPixel: 32,
-            colorSpace: nil,
-            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),
-            version: 0,
-            decode: nil,
-            renderingIntent: .defaultIntent
-        )
+        var format = vImage_CGImageFormat(bitsPerComponent: 8,
+                                          bitsPerPixel: 32,
+                                          colorSpace: nil,
+                                          bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.first.rawValue),
+                                          version: 0,
+                                          decode: nil,
+                                          renderingIntent: .defaultIntent)
         
         var sourceBuffer = vImage_Buffer()
         defer {

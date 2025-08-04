@@ -11,7 +11,7 @@ import SafeSFSymbols
 import SwiftDate
 
 public extension UIImage {
-    @objc func resizeImage() ->UIImage {
+    @objc func resizeImage() -> UIImage {
         let w = self.size.width * 0.7
         let h = self.size.height * 0.7
         return self.resizableImage(withCapInsets: UIEdgeInsets(top: h, left: w, bottom: h, right: w))
@@ -36,7 +36,7 @@ public class PTChatConfig: NSObject {
     public var imOwnerId:String = ""
     @PTClampedProperyWrapper(range:10...120) public var messageExpTime: Int = 60
 
-    class public func timeExp(expTime:Date) ->Bool {
+    class public func timeExp(expTime:Date) -> Bool {
         
         let newExpTime = expTime + PTChatConfig.share.messageExpTime.seconds
         let current = Date()

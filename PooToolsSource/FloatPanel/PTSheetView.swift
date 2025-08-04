@@ -11,7 +11,7 @@ import UIKit
 
 class PTSheetView: UIView {
     
-    var sheetPointHandler:((_ point:CGPoint,_ event:UIEvent?)->Bool)?
+    var sheetPointHandler:((_ point:CGPoint,_ event:UIEvent?) -> Bool)?
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return self.sheetPointHandler?(point,event) ?? true

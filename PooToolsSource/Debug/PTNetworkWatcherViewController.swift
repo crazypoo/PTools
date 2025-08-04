@@ -233,7 +233,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     
     private func floatingButtonCreate() {
         if floatingView == nil {
-            floatingView = PFloatingButton.init(view: AppWindows as Any, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
+            floatingView = PFloatingButton(view: AppWindows as Any, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
             floatingView?.adjustsImageWhenHighlighted = false
             floatingView?.tag = PTNetworkTestFloatingTap
             floatingView?.autoDocking = false

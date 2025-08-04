@@ -26,7 +26,7 @@ class PTEyeTrackingTestUtility {
         if CGFloat.kSCREEN_WIDTH < CGFloat.kSCREEN_HEIGHT {
             portraitScreenSize = kSCREEN_BOUNDS
         } else {
-            portraitScreenSize = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_HEIGHT, height: CGFloat.kSCREEN_WIDTH)
+            portraitScreenSize = CGRect(x: 0, y: 0, width: CGFloat.kSCREEN_HEIGHT, height: CGFloat.kSCREEN_WIDTH)
         }
     }
     

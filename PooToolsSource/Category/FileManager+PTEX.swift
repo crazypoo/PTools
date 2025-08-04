@@ -208,7 +208,7 @@ public extension PTPOP where Base: FileManager {
         let pathNew = oldPath.replacingOccurrences(of: lastPathComponent, with: "")
         let newPath = pathNew + newName + "." + fileExtension
         do {
-            try fileManager.moveItem(at: URL.init(fileURLWithPath: oldPath), to: URL(fileURLWithPath: pathNew))
+            try fileManager.moveItem(at: URL(fileURLWithPath: oldPath), to: URL(fileURLWithPath: pathNew))
             return (true,newPath)
         } catch {
             return (false,"")

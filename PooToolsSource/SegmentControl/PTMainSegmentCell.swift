@@ -16,8 +16,7 @@ import Kingfisher
 public class PTMainSegmentCell: JXSegmentedBaseCell {
     
     open override var isSelected: Bool {
-        didSet {
-        }
+        didSet { }
     }
     
     private var cellItemModel:PTMainSegmentModel?
@@ -125,7 +124,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
 
         switch cellItemModel!.onlyShowTitle! {
         case .ImageTitle:
-            ImageDownloader.default.downloadImage(with: URL.init(string: myItemModel.imageURL!)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
+            ImageDownloader.default.downloadImage(with: URL(string: myItemModel.imageURL)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
                 switch result {
                 case .success(let value):
                     let imageAtt:ASAttributedString = """
@@ -151,7 +150,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             titleLabel.textColor = myItemModel.titleCurrentColor
             titleLabel.textAlignment = .center
         case .OnlyImage:
-            imageIcon.pt_SDWebImage(imageString: myItemModel.imageURL!)
+            imageIcon.pt_SDWebImage(imageString: myItemModel.imageURL)
         }
                 
         startSelectedAnimationIfNeeded(itemModel: itemModel, selectedType: selectedType)

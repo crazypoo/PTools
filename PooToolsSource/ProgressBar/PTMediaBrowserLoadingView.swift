@@ -64,11 +64,11 @@ public class PTMediaBrowserLoadingView: UIView {
             ctx!.fillPath()
             
             PTLoadingBackgroundColor.set()
-            ctx!.move(to: CGPoint.init(x: xCenter, y: yCenter))
-            ctx?.addLine(to: CGPoint.init(x: xCenter, y: 0))
+            ctx!.move(to: CGPoint(x: xCenter, y: yCenter))
+            ctx?.addLine(to: CGPoint(x: xCenter, y: 0))
             let piFloat :CGFloat = -.pi
             let to = (piFloat * 0.5 + progress * .pi * 2 + 0.01)
-            ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: yCenter / 2, startAngle: (piFloat * 0.5), endAngle: to, clockwise: true)
+            ctx!.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: yCenter / 2, startAngle: (piFloat * 0.5), endAngle: to, clockwise: true)
             ctx!.closePath()
             ctx!.fillPath()
         case .LoopDiagram:
@@ -77,7 +77,7 @@ public class PTMediaBrowserLoadingView: UIView {
             let piFloat :CGFloat = -.pi
             let to = (piFloat * 0.5 + progress * .pi * 2 + 0.05)
             let radius = min(rect.size.width, rect.self.size.height) * 0.5 - PTLoadingItemSpace
-            ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: radius, startAngle: (piFloat * 0.5), endAngle: to, clockwise: false)
+            ctx!.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: radius, startAngle: (piFloat * 0.5), endAngle: to, clockwise: false)
             ctx!.strokePath()
         }
         

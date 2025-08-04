@@ -82,7 +82,7 @@ public class PTMediaModel:NSObject {
     
     public var duration = ""
     
-    open var isSelected = false
+    public var isSelected = false
     
     private var pri_dataSize: PTMediaLibConfig.KBUnit?
     
@@ -97,7 +97,7 @@ public class PTMediaModel:NSObject {
         return size
     }
     
-    open var avEditorOutputItem:AVPlayerItem?
+    public var avEditorOutputItem:AVPlayerItem?
     
     private var pri_editImage: UIImage?
     

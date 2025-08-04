@@ -27,7 +27,7 @@ public enum PTStepperShowType:Int {
 @objcMembers
 public class PTStepper: UIView {
 
-    public var inputingCallback:((String)->Void)?
+    public var inputingCallback:((String) -> Void)?
     
     /// 輸入框的背景顏色
     open var inputBackgroundColor:UIColor = .clear {

@@ -12,8 +12,8 @@ import Photos
 import SwifterSwift
 
 public class PTScanBarInfo:NSObject {
-    open var codeView:UIView = UIView()
-    open var codeString:String = ""
+    public var codeView:UIView = UIView()
+    public var codeString:String = ""
 }
 
 @objcMembers
@@ -347,8 +347,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 檢測相機模塊
     func startScanAction(handle: @escaping PTActionTask) {
         
-        let device = AVCaptureDevice.default(for: .video)
-        if device != nil {
+        if let device = AVCaptureDevice.default(for: .video) {
             switch PTPermission.camera.status {
             case .authorized:
                 handle()
@@ -503,7 +502,7 @@ public class PTScanQRController: PTBaseViewController {
 }
 
 extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
-    func showMaskView(showTips:Bool)->UIView {
+    func showMaskView(showTips:Bool) -> UIView {
         let maskView = UIView(frame: view.bounds)
         maskView.backgroundColor = UIColor(red: 0, green:  0, blue: 0, alpha: 0.6)
         if showTips {
@@ -514,8 +513,8 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
                 if self.session.isRunning {
                     self.session.stopRunning()
                 }
-                self.layerArr.enumerated().forEach { index,value in
-                    value.codeView.removeFromSuperview()
+                for layer in self.layerArr {
+                    layer.codeView.removeFromSuperview()
                 }
                 self.layerArr.removeAll()
                 if !self.session.isRunning {
@@ -545,7 +544,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         return maskView
     }
     
-    func showCodeButton(bounds:CGRect,icon:Bool)->UIButton {
+    func showCodeButton(bounds:CGRect,icon:Bool) -> UIButton {
         let btn = UIButton(type: .custom)
         btn.frame = bounds
         btn.backgroundColor = .clear
@@ -565,7 +564,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         return btn
     }
     
-    func btnAnimation()->CAKeyframeAnimation {
+    func btnAnimation() -> CAKeyframeAnimation {
         let animation = CAKeyframeAnimation(keyPath: "transform.scale")
         animation.duration = 2.8
         animation.isRemovedOnCompletion = false

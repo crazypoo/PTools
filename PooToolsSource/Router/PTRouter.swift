@@ -124,7 +124,7 @@ public class PTRouter: PTRouterParser {
     func addRouterItem(_ patternString: String,
                        classString: String,
                        priority: uint = 0) {
-        let pattern = PTRouterPattern.init(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString, priority: priority)
+        let pattern = PTRouterPattern(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString, priority: priority)
         patterns.append(pattern)
         patterns.sort { $0.priority > $1.priority }
     }
@@ -132,7 +132,7 @@ public class PTRouter: PTRouterParser {
     func addRouterInterceptor(_ whiteList: [String] = [String](),
                               priority: uint = 0,
                               handle: @escaping PTRouterInterceptor.InterceptorHandleBlock) {
-        let interceptor = PTRouterInterceptor.init(whiteList, priority: priority, handle: handle)
+        let interceptor = PTRouterInterceptor(whiteList, priority: priority, handle: handle)
         interceptors.append(interceptor)
         interceptors.sort { $0.priority > $1.priority }
     }
@@ -171,7 +171,7 @@ public class PTRouter: PTRouterParser {
     // MARK: - Private method
     private func matchURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> RouteResponse {
         
-        let request = PTRouterRequest.init(urlString)
+        let request = PTRouterRequest(urlString)
         var queries = request.queries
         var matched: PTRouterPattern?
         var matchUserInfo: [String: Any] = userInfo
@@ -620,7 +620,7 @@ extension PTRouter {
         var resultJumpType: PTJumpType = .push
         
         if let typeString = queries[PTJumpTypeKey] as? String,
-           let jumpType = PTJumpType.init(rawValue: Int(typeString) ?? 1) {
+           let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) {
             resultJumpType = jumpType
         } else {
             resultJumpType = .push
@@ -690,7 +690,7 @@ extension PTRouter {
     
     // 服务调用
     public class func routerService(_ uriTuple: (String, [String: Any])) -> Any? {
-        let request = PTRouterRequest.init(uriTuple.0)
+        let request = PTRouterRequest(uriTuple.0)
         let queries = request.queries
         guard let protocols = queries["protocol"] as? String,
               let methods = queries["method"] as? String else {

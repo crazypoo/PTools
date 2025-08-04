@@ -9,7 +9,7 @@ import UIKit
 import SwifterSwift
 import SnapKit
 
-typealias LocalConsoleTextColorTask = ((_ color:UIColor)->Void)
+typealias LocalConsoleTextColorTask = ((_ color:UIColor) -> Void)
 
 @available(iOSApplicationExtension, unavailable)
 class ResizeController {
@@ -36,12 +36,10 @@ class ResizeController {
         consoleViewReference.addSubview(view)
         
         view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: consoleViewReference.leadingAnchor, constant: -6),
-            view.trailingAnchor.constraint(equalTo: consoleViewReference.trailingAnchor, constant: 6),
-            view.topAnchor.constraint(equalTo: consoleViewReference.topAnchor, constant: -6),
-            view.bottomAnchor.constraint(equalTo: consoleViewReference.bottomAnchor, constant: 6)
-        ])
+        view.snp.makeConstraints { make in
+            make.top.left.equalToSuperview().offset(-6)
+            make.bottom.right.equalToSuperview().offset(6)
+        }
         
         return view
     }()
@@ -51,23 +49,27 @@ class ResizeController {
     @MainActor lazy var bottomGrabber: UIView = {
         let view = UIView()
         AppWindows!.addSubview(view)
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalToConstant: 116),
-            view.heightAnchor.constraint(equalToConstant: 46),
-            view.centerXAnchor.constraint(equalTo: consoleOutlineView.centerXAnchor),
-            view.topAnchor.constraint(equalTo: consoleOutlineView.bottomAnchor, constant: -18)
-        ])
-        
-        bottomGrabberPillView.frame = CGRect(x: 58 - 18, y: 25, width: 36, height: 5)
+        view.snp.makeConstraints { make in
+            make.size.equalTo(CGSizeMake(116, 46))
+            make.centerX.equalTo(self.consoleOutlineView)
+            make.top.equalTo(self.consoleOutlineView.snp.bottom).offset(18)
+        }
+                
         bottomGrabberPillView.backgroundColor = .randomColor
         bottomGrabberPillView.alpha = 0.3
         bottomGrabberPillView.layer.cornerRadius = 2.5
         bottomGrabberPillView.layer.cornerCurve = .continuous
         view.addSubview(bottomGrabberPillView)
+        bottomGrabberPillView.snp.makeConstraints { make in
+            make.size.equalTo(CGSizeMake(36, 5))
+            make.centerX.centerY.equalToSuperview()
+        }
         
-        let verticalPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(verticalPanner(recognizer:)))
+        let verticalPanGestureRecognizer = UIPanGestureRecognizer { sender in
+            if let ges = sender as? UIPanGestureRecognizer {
+                self.verticalPanner(recognizer: ges)
+            }
+        }
         verticalPanGestureRecognizer.maximumNumberOfTouches = 1
         view.addGestureRecognizer(verticalPanGestureRecognizer)
         
@@ -81,23 +83,27 @@ class ResizeController {
     @MainActor lazy var rightGrabber: UIView = {
         let view = UIView()
         AppWindows!.addSubview(view)
+        view.snp.makeConstraints { make in
+            make.size.equalTo(CGSizeMake(46, 116))
+            make.centerY.equalTo(self.consoleOutlineView)
+            make.left.equalTo(self.consoleOutlineView.snp.right).offset(18)
+        }
         
-        view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalToConstant: 46),
-            view.heightAnchor.constraint(equalToConstant: 116),
-            view.centerYAnchor.constraint(equalTo: consoleOutlineView.centerYAnchor),
-            view.leftAnchor.constraint(equalTo: consoleOutlineView.rightAnchor, constant: -18)
-        ])
-        
-        rightGrabberPillView.frame = CGRect(x: 25, y: 58 - 18, width: 5, height: 36)
         rightGrabberPillView.backgroundColor = .randomColor
         rightGrabberPillView.alpha = 0.3
         rightGrabberPillView.layer.cornerRadius = 2.5
         rightGrabberPillView.layer.cornerCurve = .continuous
         view.addSubview(rightGrabberPillView)
-        
-        let horizontalPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(horizontalPanner(recognizer:)))
+        rightGrabberPillView.snp.makeConstraints { make in
+            make.size.equalTo(CGSizeMake(5, 36))
+            make.centerX.centerY.equalToSuperview()
+        }
+
+        let horizontalPanGestureRecognizer = UIPanGestureRecognizer { sender in
+            if let ges = sender as? UIPanGestureRecognizer {
+                self.horizontalPanner(recognizer: ges)
+            }
+        }
         horizontalPanGestureRecognizer.maximumNumberOfTouches = 1
         view.addGestureRecognizer(horizontalPanGestureRecognizer)
         
@@ -122,7 +128,7 @@ class ResizeController {
             
             LocalConsole.shared.terminal!.menuButton.isHidden = isActive
             
-            platterView.fontText.text = String.init(format: "%f", LocalConsole.shared.terminal!.fontSize)
+            platterView.fontText.text = String(format: "%f", LocalConsole.shared.terminal!.fontSize)
             platterView.FontSizeBlock = { (fontSize) in
                 LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
             }
@@ -368,7 +374,11 @@ class PlatterView: UIView,UITextFieldDelegate {
         
         _ = backgroundButton
         
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(platterPanner(recognizer:)))
+        let panRecognizer = UIPanGestureRecognizer { sender in
+            if let ges = sender as? UIPanGestureRecognizer {
+                self.platterPanner(recognizer: ges)
+            }
+        }
         panRecognizer.maximumNumberOfTouches = 1
         addGestureRecognizer(panRecognizer)
         
@@ -487,7 +497,7 @@ class PlatterView: UIView,UITextFieldDelegate {
             }
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-                LocalConsole.shared.consoleSize = CGSize.init(width: systemLog_base_width, height: systemLog_base_height)
+                LocalConsole.shared.consoleSize = CGSize(width: systemLog_base_width, height: systemLog_base_height)
                 LocalConsole.shared.terminal!.center = ResizeController.shared.consoleCenterPoint
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = 7.5
                 LocalConsole.shared.terminal!.fontSize = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
@@ -614,7 +624,7 @@ class PlatterView: UIView,UITextFieldDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var possibleEndpoints = [CGPoint(x: 0, y: (UIScreen.hasRoundedCorners ? 44 : -8) + 63), CGPoint(x: 0, y: UIScreen.portraitSize.height + 5)]
+    lazy var possibleEndpoints = [CGPoint(x: 0, y: (UIScreen.hasRoundedCorners ? 44 : -8) + 63), CGPoint(x: 0, y: CGFloat.statusBarHeight() + 5)]
     
     var initialPlatterOriginY = CGFloat.zero
     
@@ -710,17 +720,15 @@ class PlatterView: UIView,UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        if FontSizeBlock != nil {
-            if !(textField.text ?? "").stringIsEmpty() {
-                if (textField.text?.cgFloat())! < LocalConsoleFontMin {
-                    textField.text = "\(LocalConsoleFontMin)"
-                    FontSizeBlock!(LocalConsoleFontMin)
-                } else if (textField.text?.cgFloat())! > LocalConsoleFontMax {
-                    textField.text = "\(LocalConsoleFontMax)"
-                    FontSizeBlock!(LocalConsoleFontMax)
-                } else {
-                    FontSizeBlock!((textField.text?.cgFloat())!)
-                }
+        if !(textField.text ?? "").stringIsEmpty() {
+            if (textField.text?.cgFloat())! < LocalConsoleFontMin {
+                textField.text = "\(LocalConsoleFontMin)"
+                FontSizeBlock?(LocalConsoleFontMin)
+            } else if (textField.text?.cgFloat())! > LocalConsoleFontMax {
+                textField.text = "\(LocalConsoleFontMax)"
+                FontSizeBlock?(LocalConsoleFontMax)
+            } else {
+                FontSizeBlock?((textField.text?.cgFloat())!)
             }
         }
     }
@@ -731,9 +739,7 @@ extension PlatterView: UIColorPickerViewControllerDelegate {
         // 用户完成选择后执行的操作
         PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = viewController.selectedColor.hexString
         viewController.dismiss(animated: true) {
-            if self.FontSColorBlock != nil {
-                self.FontSColorBlock!(viewController.selectedColor)
-            }
+            self.FontSColorBlock?(viewController.selectedColor)
         }
     }
     

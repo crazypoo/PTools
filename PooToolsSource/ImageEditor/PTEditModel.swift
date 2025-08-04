@@ -24,15 +24,13 @@ public class PTEditModel:NSObject {
     
     public let actions: [PTMediaEditorAction]
     
-    public init(
-        drawPaths: [PTDrawPath],
-        mosaicPaths: [PTMosaicPath],
-        clipStatus: PTClipStatus,
-        adjustStatus: PTAdjustStatus,
-        selectFilter: PTHarBethFilter,
-        stickers: [PTBaseStickertState],
-        actions: [PTMediaEditorAction]
-    ) {
+    public init(drawPaths: [PTDrawPath],
+                mosaicPaths: [PTMosaicPath],
+                clipStatus: PTClipStatus,
+                adjustStatus: PTAdjustStatus,
+                selectFilter: PTHarBethFilter,
+                stickers: [PTBaseStickertState],
+                actions: [PTMediaEditorAction]) {
         self.drawPaths = drawPaths
         self.mosaicPaths = mosaicPaths
         self.clipStatus = clipStatus

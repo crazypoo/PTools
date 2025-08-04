@@ -69,19 +69,16 @@ public class PTSheetTransition: NSObject, UIViewControllerAnimatedTransitioning 
             }, completion: nil)
 
             // Use a bounce effect to animate the view in
-            UIView.animate(
-                withDuration: self.options.transitionDuration,
-                delay: 0,
-                usingSpringWithDamping: self.options.transitionDampening + ((heightPercent - 0.2) * 1.25 * 0.17),
-                initialSpringVelocity: self.options.transitionVelocity * heightPercent,
-                options: self.options.transitionAnimationOptions,
-                animations: {
-                    contentView.transform = .identity
-                },
-                completion: { _ in
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-                }
-            )
+            UIView.animate(withDuration: self.options.transitionDuration,
+                           delay: 0,
+                           usingSpringWithDamping: self.options.transitionDampening + ((heightPercent - 0.2) * 1.25 * 0.17),
+                           initialSpringVelocity: self.options.transitionVelocity * heightPercent,
+                           options: self.options.transitionAnimationOptions,
+                           animations: {
+                contentView.transform = .identity
+            },completion: { _ in
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            })
         } else {
             guard let presenter = transitionContext.viewController(forKey: .to),
             let sheet = transitionContext.viewController(forKey: .from) as? PTSheetViewController else {

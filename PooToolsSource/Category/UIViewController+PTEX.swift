@@ -360,14 +360,14 @@ public extension UIViewController {
 
     #if os(iOS)
     var closeBarButtonItem: UIBarButtonItem {
-        return UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
+        return UIBarButtonItem(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
             self?.dismissAnimated()
         }), menu: nil)
     }
     
     @available(iOSApplicationExtension, unavailable)
     func closeBarButtonItem(sceneName: String? = nil) -> UIBarButtonItem {
-        UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
+        UIBarButtonItem(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
             guard let self = self else {
                 return
             }

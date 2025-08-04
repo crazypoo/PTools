@@ -215,6 +215,8 @@ public extension UIButton {
         case let contentData as Data:
             let dataImage = UIImage(data: contentData)
             setImage(dataImage, for: controlState)
+        case let color as UIColor:
+            setImage(color.createImageWithColor(), for: controlState)
         default:
             setImage(emptyImage, for: controlState)
         }

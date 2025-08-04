@@ -48,11 +48,11 @@ public class PTPermissionSettingViewController: PTBaseViewController {
                 }
                 
                 let cellHeight:CGFloat = descHeight + 1 + PTPermissionSettingCell.CellHeight + 1 + PTPermissionSettingCell.CellHeight + 20
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupH, width: cellWidth, height: cellHeight), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: 0, y: groupH, width: cellWidth, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupH += cellHeight
             }
-            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(cellWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(cellWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                 customers
             })
