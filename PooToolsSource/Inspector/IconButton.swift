@@ -7,7 +7,7 @@
 import UIKit
 
 final class IconButton: BaseControl {
-    typealias Action = () -> Void
+    typealias Action = PTActionTask
 
     enum Style: ElementInspectorAppearanceProviding {
         case rounded
@@ -33,13 +33,11 @@ final class IconButton: BaseControl {
 
     var actionHandler: Action?
 
-    init(
-        _ glyph: Icon.Glyph,
-        style: Style = .rounded,
-        size: CGSize = .init(16),
-        tintColor: UIColor = Inspector.sharedInstance.configuration.colorStyle.textColor,
-        actionHandler: Action? = nil
-    ) {
+    init(_ glyph: Icon.Glyph,
+         style: Style = .rounded,
+         size: CGSize = .init(16),
+         tintColor: UIColor = Inspector.sharedInstance.configuration.colorStyle.textColor,
+         actionHandler: Action? = nil) {
         icon = Icon(glyph, color: tintColor, size: size)
         self.style = style
         self.actionHandler = actionHandler

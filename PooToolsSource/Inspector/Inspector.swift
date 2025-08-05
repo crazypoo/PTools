@@ -106,7 +106,7 @@ public final class Inspector {
 // MARK: - Presentation
 
 extension Inspector {
-    func present(animated: Bool = true) {
+    @MainActor func present(animated: Bool = true) {
         manager?.presentInspector(animated: animated)
     }
 }
@@ -175,7 +175,7 @@ public extension Inspector {
         sharedInstance.stop()
     }
 
-    static func present(animated: Bool = true) {
+    @MainActor static func present(animated: Bool = true) {
         sharedInstance.present(animated: animated)
     }
 

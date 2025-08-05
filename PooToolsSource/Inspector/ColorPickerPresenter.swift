@@ -8,12 +8,10 @@ import UIKit
 
 final class ColorPickerPresenter: NSObject, UIColorPickerViewControllerDelegate {
     let onColorSelectedHandler: (UIColor) -> Void
-    let onDimissHandler: () -> Void
+    let onDimissHandler: PTActionTask
 
-    init(
-        onColorSelected: @escaping (UIColor) -> Void,
-        onDimiss: @escaping () -> Void
-    ) {
+    init(onColorSelected: @escaping (UIColor) -> Void,
+         onDimiss: @escaping PTActionTask) {
         onColorSelectedHandler = onColorSelected
         onDimissHandler = onDimiss
     }

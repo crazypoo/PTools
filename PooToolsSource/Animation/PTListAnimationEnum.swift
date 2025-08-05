@@ -32,7 +32,7 @@ public enum PTListAnimationDirection:Int,CaseIterable {
         }
     }
     
-    static func random() ->PTListAnimationDirection {
+    static func random() -> PTListAnimationDirection {
         allCases.randomElement()!
     }
 }
@@ -64,7 +64,7 @@ public enum PTListAnimationType:PTListAnimationProtocols {
         }
     }
     
-    public static func random() ->PTListAnimationType {
+    public static func random() -> PTListAnimationType {
         let index = Int.random(in: 0..<3 )
         if index == 1 {
             return PTListAnimationType.vector(CGVector(dx: .random(in: -10...10), dy: .random(in: -30...30)))

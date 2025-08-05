@@ -15,12 +15,10 @@ class PTCameraAnimationUtils: NSObject {
         case rotate = "transform.rotation"
     }
     
-    class func animation(
-        type: PTCameraAnimationUtils.AnimationType,
-        fromValue: CGFloat,
-        toValue: CGFloat,
-        duration: TimeInterval
-    ) -> CAAnimation {
+    class func animation(type: PTCameraAnimationUtils.AnimationType,
+                         fromValue: CGFloat,
+                         toValue: CGFloat,
+                         duration: TimeInterval) -> CAAnimation {
         let animation = CABasicAnimation(keyPath: type.rawValue)
         animation.fromValue = fromValue
         animation.toValue = toValue

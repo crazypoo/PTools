@@ -202,7 +202,7 @@ public class PTCheckUpdateFunction: NSObject {
         case User
     }
     
-    public func compareVesionWithServerVersion(version:String)->Bool {
+    public func compareVesionWithServerVersion(version:String) -> Bool {
         let currentVersion = kAppVersion
         let versionArray = version.components(separatedBy: ".")
         let currentVesionArray = currentVersion!.components(separatedBy: ".")
@@ -353,12 +353,12 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
         
-    @MainActor func alert_Tips(tipsTitle:String? = "",
-                          cancelTitle:String = "",
-                          cancelBlock: PTActionTask? = nil,
-                          doneTitle:String,
-                          doneBlock: PTActionTask? = nil,
-                          tipContentView:((_ contentView:UIView)->Void)? = nil) {
+    @MainActor func alert_Tips(tipsTitle: String = "",
+                               cancelTitle: String = "",
+                               cancelBlock: PTActionTask? = nil,
+                               doneTitle: String,
+                               doneBlock: PTActionTask? = nil,
+                               tipContentView:((_ contentView:UIView) -> Void)? = nil) {
         let tipsControl = PTUpdateTipsViewController(titleString: tipsTitle,cancelTitle: cancelTitle, doneTitle: doneTitle)
         tipsControl.modalPresentationStyle = .formSheet
         tipsControl.cancelTask = cancelBlock
@@ -378,12 +378,12 @@ public class PTCheckUpdateFunction: NSObject {
     ///   - isShowError: 是否顯示錯誤
     ///   - isForcedUpgrade: 是否強制升級
     @MainActor func alert_updateTips(oldVersion oV: String,
-                                newVersion nV: String,
-                                description descriptionString: String,
-                                downloadUrl url: URL,
-                                isTest test:Bool = false,
-                                showError isShowError:Bool = true,
-                                forcedUpgrade isForcedUpgrade:Bool = false) {
+                                     newVersion nV: String,
+                                     description descriptionString: String,
+                                     downloadUrl url: URL,
+                                     isTest test:Bool = false,
+                                     showError isShowError:Bool = true,
+                                     forcedUpgrade isForcedUpgrade:Bool = false) {
         let cancelTitle:String = isForcedUpgrade ? "" : "PT Cancel upgrade".localized()
         alert_Tips(tipsTitle: "PT Found new version".localized(),cancelTitle: cancelTitle,cancelBlock: {
             if test {
@@ -464,7 +464,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
 
-    public static func appConnectApiRequest(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: Convertible.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError)->Void)) {
+    public static func appConnectApiRequest(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: Convertible.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
         if showHud {
             toggleHud(show: true)
         }
@@ -490,7 +490,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
 
-    public static func fetchTestFlightBuilds(issuerID:String,keyID:String,privateKey:String,expTime:TimeInterval = 1200,updateModelCallback:@escaping ((PTTFUpdateCustomModel?)->Void)) {
+    public static func fetchTestFlightBuilds(issuerID:String,keyID:String,privateKey:String,expTime:TimeInterval = 1200,updateModelCallback:@escaping ((PTTFUpdateCustomModel?) -> Void)) {
         guard let token = generateJWT(issuerID:issuerID,keyID:keyID,privateKey:privateKey,expTime:expTime) else {
             PTNSLogConsole("无法生成 JWT")
             return

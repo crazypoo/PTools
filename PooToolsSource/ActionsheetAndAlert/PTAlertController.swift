@@ -96,7 +96,7 @@ extension PTAlertController {
 }
 
 extension PTAlertController: PTAlertProtocol {
-    public func showAnimation(completion: PTActionTask?) {}
+    public func showAnimation(completion: PTActionTask? = nil) { }
 
-    public func dismissAnimation(completion: PTActionTask?) {}
+    public func dismissAnimation(completion: PTActionTask? = nil) { }
 }

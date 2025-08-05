@@ -67,9 +67,9 @@ open class PTMapActionSheet: NSObject {
             let toLocation = MKMapItem(placemark: MKPlacemark(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
             
-        } cancelBlock: { sheet in
+        } cancelBlock: { _ in
             dismissTask?()
-        } otherBlock: { sheet, index,title in
+        } otherBlock: { _, index, _ in
             var urlString :String = ""
             if navAppName[index] == baiduName {
                 urlString = String(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", locations.latitude,locations.longitude).urlToUnicodeURLString() ?? ""
@@ -83,7 +83,7 @@ open class PTMapActionSheet: NSObject {
             if let url = URL(string: urlString) {
                 PTAppStoreFunction.jumpLink(url: url)
             }
-        } tapBackgroundBlock: { sheet in
+        } tapBackgroundBlock: { _ in
             dismissTask?()
         }
     }

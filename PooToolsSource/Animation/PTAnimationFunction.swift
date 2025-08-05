@@ -48,40 +48,40 @@ public class PTAnimationFunction: NSObject {
     }
     
     @MainActor public class func animationOut(animationView:UIView,
-                                   animationType:PTAlertAnimationType,
-                                   toValue:CGFloat? = 0,
-                                   duration:CGFloat? = PTAnimationDuration,
-                                   animation:@escaping PTActionTask,
-                                   completion: @escaping (Bool) -> Void) {
+                                              animationType:PTAlertAnimationType,
+                                              toValue:CGFloat = 0,
+                                              duration:CGFloat = PTAnimationDuration,
+                                              animation: @escaping PTActionTask,
+                                              completion: @escaping (Bool) -> Void) {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
         
         switch animationType {
         case .Top:
             propertyNamed = kPOPLayerTranslationY
-            if toValue! > 0 {
-                offsetValue = toValue!
+            if toValue > 0 {
+                offsetValue = toValue
             } else {
                 offsetValue = -animationView.layer.position.y
             }
         case .Bottom:
             propertyNamed = kPOPLayerTranslationY
-            if toValue! > 0 {
-                offsetValue = toValue!
+            if toValue > 0 {
+                offsetValue = toValue
             } else {
                 offsetValue = animationView.layer.position.y + animationView.frame.size.height
             }
         case .Left:
             propertyNamed = kPOPLayerTranslationX
-            if toValue! > 0 {
-                offsetValue = toValue!
+            if toValue > 0 {
+                offsetValue = toValue
             } else {
                 offsetValue = -animationView.layer.position.x - animationView.frame.size.width / 2
             }
         case .Right:
             propertyNamed = kPOPLayerTranslationX
-            if toValue! > 0 {
-                offsetValue = toValue!
+            if toValue > 0 {
+                offsetValue = toValue
             } else {
                 offsetValue = animationView.layer.position.x + animationView.frame.size.width / 2
             }
@@ -93,9 +93,9 @@ public class PTAnimationFunction: NSObject {
         let offscreenAnimation = POPBasicAnimation.easeOut()
         offscreenAnimation?.property = (POPAnimatableProperty.property(withName: propertyNamed) as! POPAnimatableProperty)
         offscreenAnimation?.toValue = offsetValue
-        offscreenAnimation?.duration = duration!
-        offscreenAnimation?.completionBlock = { (anim,finish) in
-            UIView.animate(withDuration: duration!, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {
+        offscreenAnimation?.duration = duration
+        offscreenAnimation?.completionBlock = { _, _ in
+            UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {
                 animation()
             } completion: { ok in
                 completion(ok)

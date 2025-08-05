@@ -170,11 +170,11 @@ open class PTUpdateTipsViewController: PTBaseViewController {
         return view
     }()
     
-    private var cancelTitle:String? = ""
+    private var cancelTitle:String = ""
     private var doneTitle:String!
-    private var titleString:String? = ""
+    private var titleString:String = ""
 
-    public init(titleString:String? = "",cancelTitle:String? = "",doneTitle:String) {
+    public init(titleString:String = "",cancelTitle:String = "",doneTitle:String) {
         super.init(nibName: nil, bundle: nil)
         self.titleString = titleString
         self.cancelTitle = cancelTitle

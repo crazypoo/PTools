@@ -561,7 +561,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         
         var takePictureTap: UITapGestureRecognizer?
         if cameraConfig.allowTakePhoto {
-            takePictureTap = UITapGestureRecognizer { sender in
+            takePictureTap = UITapGestureRecognizer { _ in
                 self.resetToolBarView()
                 if self.onlyCamera {
                     if self.takePhotoView != nil {

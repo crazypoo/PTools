@@ -10,7 +10,7 @@ typealias Command = Inspector.Command
 
 public extension Inspector {
     struct Command: Hashable {
-        public typealias Closure = () -> Void
+        public typealias Closure = PTActionTask
 
         public var title: String
 

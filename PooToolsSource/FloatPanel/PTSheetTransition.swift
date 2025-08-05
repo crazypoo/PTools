@@ -101,7 +101,7 @@ public class PTSheetTransition: NSObject, UIViewControllerAnimatedTransitioning 
         }
     }
 
-    func restorePresentor(_ presenter: UIViewController, animated: Bool = true, animations: (() -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
+    func restorePresentor(_ presenter: UIViewController, animated: Bool = true, animations: PTActionTask? = nil, completion: ((Bool) -> Void)? = nil) {
         PTSheetTransition.currentPresenters.removeAll(where: { $0 == presenter })
         let topSafeArea = AppWindows?.compatibleSafeAreaInsets.top ?? 0
         UIView.animate(

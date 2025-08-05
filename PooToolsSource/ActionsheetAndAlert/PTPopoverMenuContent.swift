@@ -85,7 +85,7 @@ class PTPopoverMenuContent: PTBaseViewController {
             }
             return nil
         }
-        view.collectionDidSelect = { collectionView,sectionModel,indexPath in
+        view.collectionDidSelect = { _,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 self.dismiss(animated: true) {
                     self.didSelectedHandler(cellModel.name,indexPath.row)

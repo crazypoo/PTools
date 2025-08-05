@@ -10,7 +10,7 @@ import UIKit
 
 extension UIBarButtonItem:PTBadgeProtocol {
     
-    fileprivate func getActualBadgeSuperView() ->UIView {
+    fileprivate func getActualBadgeSuperView() -> UIView {
         return self.value(forKey: "_view") as! UIView
     }
     

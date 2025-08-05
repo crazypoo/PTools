@@ -194,7 +194,7 @@ final class InspectorViewController: UIViewController, InternalViewProtocol, Key
         viewCode.tableViewContentSize = contentSize
     }
 
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+    override func dismiss(animated flag: Bool, completion: PTActionTask? = nil) {
         startDismissing(animated: flag)
         super.dismiss(animated: flag, completion: completion)
     }

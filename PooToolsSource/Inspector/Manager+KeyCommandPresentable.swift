@@ -191,7 +191,7 @@ extension Manager: KeyCommandPresentable {
         let keyInput = "i"
         let modifierFlags: UIKeyModifierFlags = [.control, .shift]
 
-        let closure: () -> Void = {
+        let closure: PTActionTask = {
             keyWindow.overrideUserInterfaceStyle = {
                 switch keyWindow.traitCollection.userInterfaceStyle {
                 case .dark: return .light

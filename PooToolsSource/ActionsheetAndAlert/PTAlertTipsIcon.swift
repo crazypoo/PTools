@@ -16,7 +16,7 @@ public enum PTAlertTipsIcon:Equatable {
     case SpinnerLarge
     case Custom(image:UIImage)
     
-    func createView(lineThick:CGFloat) ->UIView {
+    func createView(lineThick:CGFloat) -> UIView {
         switch self {
         case .Done:
             return PTAlertTipsDone(lineThick: lineThick)

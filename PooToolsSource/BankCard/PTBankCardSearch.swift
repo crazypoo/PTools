@@ -68,7 +68,7 @@ public class PTBankCardSearch: NSObject {
             throw NSError(domain: "PT Bank card not support".localized(), code: 0)
         }
         //6位Bin號
-        let cardbin6 = (bankCardNumber as NSString?)?.substring(with: NSRange(location: 0, length: 6))
+        let cardbin6 = bankCardNumber.nsString.substring(with: NSRange(location: 0, length: 6))
         for i in 0..<bankBin.count {
             if (cardbin6 == bankBin[i]) {
                 index = i
@@ -78,7 +78,8 @@ public class PTBankCardSearch: NSObject {
             return bankName[index]
         }
         //8位Bin號
-        let cardbin8 = (bankCardNumber as NSString?)?.substring(with: NSRange(location: 0, length: 8))
+       
+        let cardbin8 = bankCardNumber.nsString.substring(with: NSRange(location: 0, length: 8))
         for i in 0..<bankBin.count {
             if (cardbin8 == bankBin[i]) {
                 index = i

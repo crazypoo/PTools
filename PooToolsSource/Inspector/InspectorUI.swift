@@ -19,18 +19,16 @@ final class InspectorUI: UIViewControllerRepresentable, InspectorSwiftUIHost {
 
     let elementIconProvider: Inspector.ElementIconProvider?
 
-    var didFinish: (() -> Void)?
+    var didFinish: PTActionTask?
 
     // MARK: - Initializer
 
-    private init(
-        layers: [Inspector.ViewHierarchyLayer]?,
-        colorScheme: Inspector.ElementColorProvider?,
-        commandGroups: [Inspector.CommandsGroup]?,
-        elementLibraries: [Inspector.ElementPanelType: [InspectorElementLibraryProtocol]]?,
-        elementIconProvider: Inspector.ElementIconProvider?,
-        didFinish: (() -> Void)?
-    ) {
+    private init(layers: [Inspector.ViewHierarchyLayer]?,
+                 colorScheme: Inspector.ElementColorProvider?,
+                 commandGroups: [Inspector.CommandsGroup]?,
+                 elementLibraries: [Inspector.ElementPanelType: [InspectorElementLibraryProtocol]]?,
+                 elementIconProvider: Inspector.ElementIconProvider?,
+                 didFinish: PTActionTask?) {
         viewHierarchyLayers = layers
         elementColorProvider = colorScheme
         self.commandGroups = commandGroups
@@ -41,25 +39,21 @@ final class InspectorUI: UIViewControllerRepresentable, InspectorSwiftUIHost {
 
     private(set) static var sharedInstance: InspectorUI?
 
-    static func shared(
-        layers: [Inspector.ViewHierarchyLayer]?,
-        colorScheme: Inspector.ElementColorProvider?,
-        commandGroups: [Inspector.CommandsGroup]?,
-        elementLibraries: [Inspector.ElementPanelType: [InspectorElementLibraryProtocol]]?,
-        elementIconProvider: Inspector.ElementIconProvider?,
-        didFinish: (() -> Void)?
-    ) -> InspectorUI {
+    static func shared(layers: [Inspector.ViewHierarchyLayer]?,
+                       colorScheme: Inspector.ElementColorProvider?,
+                       commandGroups: [Inspector.CommandsGroup]?,
+                       elementLibraries: [Inspector.ElementPanelType: [InspectorElementLibraryProtocol]]?,
+                       elementIconProvider: Inspector.ElementIconProvider?,
+                       didFinish: PTActionTask?) -> InspectorUI {
         if let sharedInstance = sharedInstance {
             return sharedInstance
         }
-        let instance = self.init(
-            layers: layers,
-            colorScheme: colorScheme,
-            commandGroups: commandGroups,
-            elementLibraries: elementLibraries,
-            elementIconProvider: elementIconProvider,
-            didFinish: didFinish
-        )
+        let instance = self.init(layers: layers,
+                                 colorScheme: colorScheme,
+                                 commandGroups: commandGroups,
+                                 elementLibraries: elementLibraries,
+                                 elementIconProvider: elementIconProvider,
+                                 didFinish: didFinish)
         sharedInstance = instance
         return instance
     }

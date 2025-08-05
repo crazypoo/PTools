@@ -28,8 +28,8 @@ public class PTCustomBottomButtonModel:NSObject {
 
 public class PTCustomerAlertController: PTAlertController {
 
-    public var bottomButtonTapCallback:((_ title:String,_ index:Int)->Void)? = nil
-    public var backgroundTapCallback:((PTCustomerAlertController)->Void)? = nil
+    public var bottomButtonTapCallback:((_ title:String,_ index:Int) -> Void)? = nil
+    public var backgroundTapCallback:((PTCustomerAlertController) -> Void)? = nil
 
     fileprivate lazy var contentView:UIView = {
         let view = UIView()
@@ -138,7 +138,7 @@ public class PTCustomerAlertController: PTAlertController {
         }
         
         if canTapBackground {
-            let tap = UITapGestureRecognizer { ges in
+            let tap = UITapGestureRecognizer { _ in
                 self.dismissAnimation {
                     self.backgroundTapCallback?(self)
                 }

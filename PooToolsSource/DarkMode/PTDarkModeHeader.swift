@@ -20,7 +20,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
     
     static let contentHeight:CGFloat = 256
     
-    var selectModeBlock:((DarkMode)->Void)?
+    var selectModeBlock:((DarkMode) -> Void)?
     
     var currentMode:DarkMode? {
         didSet {

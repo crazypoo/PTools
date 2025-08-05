@@ -28,23 +28,23 @@ private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionVi
 public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 
 //MARK: CollectionView展示的样式类型
-@objc public enum PTCollectionViewType:Int {
+@objc public enum PTCollectionViewType: Int {
     case Normal,Gird,WaterFall,Custom,Horizontal,HorizontalLayoutSystem,Tag
 }
 
 //MARK: Collection展示的Section底部样式类型
-@objc public enum PTCollectionViewDecorationItemsType:Int {
+@objc public enum PTCollectionViewDecorationItemsType: Int {
     case NoItems,Custom,Normal,Corner
 }
 
-@objc public class PTDecorationItemModel:NSObject {
+@objc public class PTDecorationItemModel: NSObject {
     ///Collection展示的Section底部Class
-    open var decorationClass:AnyClass!
+    open var decorationClass: AnyClass!
     ///Collection展示的Section底部ID
-    open var decorationID:String!
+    open var decorationID: String!
 }
 
-@objc public enum PTCollectionEmptyViewSet:Int {
+@objc public enum PTCollectionEmptyViewSet: Int {
     ///17之前用第三方17之後包括17用系統
     case Auto
     ///用第三方
@@ -110,91 +110,91 @@ public typealias PTViewInDecorationResetHandler = @MainActor (_ collectionView: 
 
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
-public class PTCollectionViewConfig:NSObject {
+public class PTCollectionViewConfig: NSObject {
     ///CollectionView上下滑动条
-    open var showsVerticalScrollIndicator:Bool = true
+    open var showsVerticalScrollIndicator: Bool = true
     ///CollectionView水平滑动条
-    open var showsHorizontalScrollIndicator:Bool = true
+    open var showsHorizontalScrollIndicator: Bool = true
     ///CollectionView展示的样式类型
-    open var viewType:PTCollectionViewType = .Normal
+    open var viewType: PTCollectionViewType = .Normal
     ///每行多少个(仅在瀑布流和Gird样式中使用)
-    open var rowCount:Int = 3
+    open var rowCount: Int = 3
     ///item高度
-    open var itemHeight:CGFloat = PTAppBaseConfig.share.baseCellHeight
+    open var itemHeight: CGFloat = PTAppBaseConfig.share.baseCellHeight
     ///item宽度(Horizontal下使用)
-    open var itemWidth:CGFloat = 100
+    open var itemWidth: CGFloat = 100
     ///item起始坐标X
-    open var itemOriginalX:CGFloat = 0
+    open var itemOriginalX: CGFloat = 0
     ///item的展示距离顶部的高度
-    open var contentTopSpace:CGFloat = 0
+    open var contentTopSpace: CGFloat = 0
     ///item的展示距离底部的高度
-    open var contentBottomSpace:CGFloat = 0
+    open var contentBottomSpace: CGFloat = 0
     ///每个item的间隔(左右)
-    open var cellLeadingSpace:CGFloat = 0
+    open var cellLeadingSpace: CGFloat = 0
     ///每个item的间隔(上下)
-    open var cellTrailingSpace:CGFloat = 0
+    open var cellTrailingSpace: CGFloat = 0
     ///如果是Tagview,則這是內容的左右間距
-    open var tagCellContentSpace:CGFloat = 20
+    open var tagCellContentSpace: CGFloat = 20
     ///是否开启头部刷新
-    open var topRefresh:Bool = false
+    open var topRefresh: Bool = false
 #if POOTOOLS_SCROLLREFRESH
     ///是否开启底部刷新
-    open var footerRefresh:Bool = false
-    open var footerRefreshTextColor:UIColor = .white
-    open var footerRefreshTextFont:UIFont = .appfont(size: 14)
-    open var footerRefreshIdle:String = ""
-    open var footerRefreshPulling:String = "鬆開即可刷新"
-    open var footerRefreshRefreshing:String = "正在刷新中"
-    open var footerRefreshWillRefresh:String = "即將刷新"
-    open var footerRefreshNoMoreData:String = "已經全部加載完畢"
-    open var triggerAutomaticallyRefreshPercent:CGFloat = 0.5
-    open var isAutomaticallyRefresh:Bool = true
+    open var footerRefresh: Bool = false
+    open var footerRefreshTextColor: UIColor = .white
+    open var footerRefreshTextFont: UIFont = .appfont(size: 14)
+    open var footerRefreshIdle: String = ""
+    open var footerRefreshPulling: String = "鬆開即可刷新"
+    open var footerRefreshRefreshing: String = "正在刷新中"
+    open var footerRefreshWillRefresh: String = "即將刷新"
+    open var footerRefreshNoMoreData: String = "已經全部加載完畢"
+    open var triggerAutomaticallyRefreshPercent: CGFloat = 0.5
+    open var isAutomaticallyRefresh: Bool = true
 #endif
     ///section偏移
-    open var sectionEdges:NSDirectionalEdgeInsets = .zero
+    open var sectionEdges: NSDirectionalEdgeInsets = .zero
     ///头部长度偏移
-    open var headerWidthOffset:CGFloat = 0
+    open var headerWidthOffset: CGFloat = 0
     ///底部长度偏移
-    open var footerWidthOffset:CGFloat = 0
+    open var footerWidthOffset: CGFloat = 0
     ///是否开启空数据展示
-    open var showEmptyAlert:Bool = false
+    open var showEmptyAlert: Bool = false
     ///空数据展示参数设置
-    open var emptyViewConfig:PTEmptyDataViewConfig?
+    open var emptyViewConfig: PTEmptyDataViewConfig?
     ///空數據展示類型
-    open var emptyShowType:PTCollectionEmptyViewSet = .Auto
+    open var emptyShowType: PTCollectionEmptyViewSet = .Auto
     ///Collection展示的Section底部样式类型
-    open var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
+    open var decorationItemsType: PTCollectionViewDecorationItemsType = .NoItems
     ///Collection展示的Section底部样式偏移
-    open var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
+    open var decorationItemsEdges: NSDirectionalEdgeInsets = .zero
     ///Collection展示的Section底部Model
     open var decorationModel: [PTDecorationItemModel]?
     ///Collection展示的Section底部样式偏移
-    open var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
+    open var collectionViewBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
     ///是否开启自定义Header和Footer
-    open var customReuseViews:Bool = false
+    open var customReuseViews: Bool = false
     ///首是否开启刷新动画
-    open var refreshWithoutAnimation:Bool = false
+    open var refreshWithoutAnimation: Bool = false
 #if POOTOOLS_SWIPECELL
     ///设置Swipe的样式
-    open var swipeButtonStyle:ButtonStyle = .circular
+    open var swipeButtonStyle: ButtonStyle = .circular
 #endif
     ///索引
-    open var sideIndexTitles:[String]?
+    open var sideIndexTitles: [String]?
     ///索引设置
-    open var indexConfig:PTCollectionIndexViewConfiguration?
+    open var indexConfig: PTCollectionIndexViewConfiguration?
     ///移动Item
-    open var canMoveItem:Bool = false
+    open var canMoveItem: Bool = false
     
     ///限制滑动方向
-    open var alwaysBounceHorizontal:Bool = false
-    open var alwaysBounceVertical:Bool = true
-    open var contentOffSetZero:Bool = false
+    open var alwaysBounceHorizontal: Bool = false
+    open var alwaysBounceVertical: Bool = true
+    open var contentOffSetZero: Bool = false
     
     /*
      For Photos
      */
-    open var viewForPhoto:Bool = false
-    open var previewImageSize:CGSize = CGSizeMake(105, 105)
+    open var viewForPhoto: Bool = false
+    open var previewImageSize: CGSize = CGSizeMake(105, 105)
 }
 
 public class PTTextLayer: CATextLayer {
@@ -221,16 +221,16 @@ public class PTCollectionIndexViewConfiguration: NSObject {
     ///放大索引字体颜色
     open var indicatorTextColor: UIColor = UIColor.white
     ///索引背景颜色
-    open var indexViewBackgroundColor:UIColor = .clear
+    open var indexViewBackgroundColor: UIColor = .clear
     ///索引字体
-    open var indexViewFont:UIFont = .appfont(size: 12)
+    open var indexViewFont: UIFont = .appfont(size: 12)
     ///放大索引字体,这个属性只会使用字体名字
-    open var indexViewHudFont:UIFont = .appfont(size: 18)
+    open var indexViewHudFont: UIFont = .appfont(size: 18)
 }
 
-open class PTBaseCollectionView:UICollectionView {
+open class PTBaseCollectionView: UICollectionView {
     
-    public var contentOffSetZero:Bool = false
+    public var contentOffSetZero: Bool = false
     
     open override var contentOffset: CGPoint {
         didSet {
@@ -549,7 +549,7 @@ public class PTCollectionView: UIView {
         return view
     }()
     
-    fileprivate lazy var indexView:UIView = {
+    fileprivate lazy var indexView: UIView = {
         let view = UIView()
         view.backgroundColor = viewConfig.indexConfig?.indexViewBackgroundColor
         return view
@@ -567,59 +567,59 @@ public class PTCollectionView: UIView {
     
     //MARK: Cell datasource handler
     ///头部设置
-    open var headerInCollection:PTReusableViewHandler?
+    open var headerInCollection: PTReusableViewHandler?
     ///底部设置
-    open var footerInCollection:PTReusableViewHandler?
+    open var footerInCollection: PTReusableViewHandler?
     ///item设置
-    @MainActor open var cellInCollection:PTCellInCollectionHandler?
+    @MainActor open var cellInCollection: PTCellInCollectionHandler?
     
     //MARK: Cell delegate handler
     ///item点击事件
-    open var collectionDidSelect:PTCellDidSelectedHandler?
+    open var collectionDidSelect: PTCellDidSelectedHandler?
     ///item将要展示事件
-    open var collectionWillDisplay:PTCellDisplayHandler?
+    open var collectionWillDisplay: PTCellDisplayHandler?
     ///item消失事件
-    open var collectionDidEndDisplay:PTCellDisplayHandler?
+    open var collectionDidEndDisplay: PTCellDisplayHandler?
     
     //MARK: UIScrollView call back
     ///UICollectionView的Scroll事件
-    open var collectionWillBeginDecelerating:PTCollectionViewScrollHandler?
-    open var collectionViewDidScroll:PTCollectionViewScrollHandler?
-    open var collectionWillBeginDragging:PTCollectionViewScrollHandler?
-    open var collectionDidEndDragging:((UICollectionView,Bool) -> Void)?
-    open var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
-    open var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
-    open var collectionDidScrolltoTop:PTCollectionViewScrollHandler?
-    open var collectionWillEndDraging:((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
+    open var collectionWillBeginDecelerating: PTCollectionViewScrollHandler?
+    open var collectionViewDidScroll: PTCollectionViewScrollHandler?
+    open var collectionWillBeginDragging: PTCollectionViewScrollHandler?
+    open var collectionDidEndDragging: ((UICollectionView,Bool) -> Void)?
+    open var collectionDidEndDecelerating: PTCollectionViewScrollHandler?
+    open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?
+    open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?
+    open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
     ///头部刷新事件
-    open var headerRefreshTask:((UIRefreshControl) -> Void)?
+    open var headerRefreshTask: ((UIRefreshControl) -> Void)?
     ///底部刷新事件
-    open var footRefreshTask:PTActionTask?
+    open var footRefreshTask: PTActionTask?
     
     //MARK: Cell layout (仅仅限于在瀑布流或者自定义的情况下使用)
     ///瀑布流item高度设置
-    open var waterFallLayout:((Int, AnyObject) -> CGFloat)?
+    open var waterFallLayout: ((Int, AnyObject) -> CGFloat)?
     
     ///自定义情况下调用该设置
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
-    open var customerLayout:((Int,PTSection) -> NSCollectionLayoutGroup)?
+    open var customerLayout: ((Int,PTSection) -> NSCollectionLayoutGroup)?
     
     ///自定义情况下调用该设置
     ///这个是用来设置Header跟Footer的
-    open var customerReuseViews:((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
+    open var customerReuseViews: ((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
 
     ///当空数据View展示的时候,点击回调
-    open var emptyTap:((UIView?) -> Void)?
-    open var emptyButtonTap:((UIView?) -> Void)?
+    open var emptyTap: ((UIView?) -> Void)?
+    open var emptyButtonTap: ((UIView?) -> Void)?
 
     ///CollectionView的DecorationItem囘調(自定義模式下使用)
-    open var decorationInCollectionView:PTDecorationInCollectionHandler!
+    open var decorationInCollectionView: PTDecorationInCollectionHandler!
     
     ///CollectionView的DecorationItem重新設置囘調(自定義模式下使用)
-    open var decorationViewReset:PTViewInDecorationResetHandler?
+    open var decorationViewReset: PTViewInDecorationResetHandler?
     
     ///CollectionView的DecorationItem内的Item与Header&Footer重新設置囘調(自定義模式下使用)
-    open var decorationCustomLayoutInsetReset:((Int,PTSection) -> NSDirectionalEdgeInsets)?
+    open var decorationCustomLayoutInsetReset: ((Int,PTSection) -> NSDirectionalEdgeInsets)?
     
     public var contentCollectionView:UICollectionView {
         get {
@@ -636,23 +636,23 @@ public class PTCollectionView: UIView {
     //MARK: Swipe handler(Cell须要引用SwipeCellKit)
 #if POOTOOLS_SWIPECELL
     ///设置IndexPath是否开启向左swipe
-    open var indexPathSwipe:PTCollectionViewCanSwipeHandler?
+    open var indexPathSwipe: PTCollectionViewCanSwipeHandler?
     ///设置IndexPath是否开启向右swipe
-    open var indexPathSwipeRight:PTCollectionViewCanSwipeHandler?
+    open var indexPathSwipeRight: PTCollectionViewCanSwipeHandler?
     ///设置向左滑动作
-    open var swipeLeftHandler:PTCollectionViewSwipeHandler?
+    open var swipeLeftHandler :PTCollectionViewSwipeHandler?
     ///设置向右滑动作
-    open var swipeRightHandler:PTCollectionViewSwipeHandler?
+    open var swipeRightHandler: PTCollectionViewSwipeHandler?
     ///设置滑动content的间隔
-    open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
+    open var swipeContentSpaceHandler: ((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
-    open var itemMoveTo:((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?
+    open var itemMoveTo: ((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?
     
-    open var forceController:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> UIViewController?)?
-    open var forceActions:((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> [UIAction]?)?
+    open var forceController: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> UIViewController?)?
+    open var forceActions: ((_ collectionView:UICollectionView,_ indexPath:IndexPath,_ sectionModel:PTSection) -> [UIAction]?)?
 
-    public var viewConfig:PTCollectionViewConfig! {
+    public var viewConfig: PTCollectionViewConfig! {
         didSet {
             if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
                 indicator.removeFromSuperview()

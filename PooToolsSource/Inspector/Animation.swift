@@ -68,13 +68,12 @@ extension UIView {
 }
 
 extension NSObject {
-    func animate(
-        withDuration duration: TimeInterval = .average,
-        delay: TimeInterval = .zero,
-        damping: CGFloat = Animation.defaultDamping,
-        options: UIView.AnimationOptions = Animation.defaultOptions,
-        animations: @escaping () -> Void,
-        completion: ((Bool) -> Void)? = nil) {
+    func animate(withDuration duration: TimeInterval = .average,
+                 delay: TimeInterval = .zero,
+                 damping: CGFloat = Animation.defaultDamping,
+                 options: UIView.AnimationOptions = Animation.defaultOptions,
+                 animations: @escaping PTActionTask,
+                 completion: ((Bool) -> Void)? = nil) {
         UIView.animate(
             withDuration: duration,
             delay: delay,

@@ -11,8 +11,8 @@ import SnapKit
 import AttributedString
 import SwifterSwift
 
-public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:PTSwitch)->Void
-public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:UIButton)->Void
+public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:PTSwitch) -> Void
+public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:UIButton) -> Void
 
 fileprivate extension UIView {
     /// 绘制简单横线
@@ -255,34 +255,34 @@ public class PTFusionCellContent:UIView {
         }
     }
     
-    fileprivate var nameTitle:UILabel?
+    fileprivate var nameTitle: UILabel?
     fileprivate func setNameTitle() -> UILabel {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }
     
-    fileprivate var accessV:UIImageView?
+    fileprivate var accessV: UIImageView?
     fileprivate func setAccessV() -> UIImageView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         return view
     }
     
-    public var valueSwitch:PTSwitch?
+    public var valueSwitch: PTSwitch?
     fileprivate func setValueSwitch() -> PTSwitch {
         let switchV = PTSwitch()
         return switchV
     }
     
-    var contentLabel:UILabel?
+    var contentLabel: UILabel?
     fileprivate func setContentLabel() -> UILabel {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }
     
-    var cellIcon:UIImageView?
+    var cellIcon: UIImageView?
     fileprivate func setCellIcon() -> UIImageView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -296,7 +296,7 @@ public class PTFusionCellContent:UIView {
         return view
     }
     
-    fileprivate var contentButtonLabel:PTLayoutButton?
+    fileprivate var contentButtonLabel: PTLayoutButton?
     fileprivate func setContentButtonLabel() -> PTLayoutButton {
         let view = PTLayoutButton()
         view.titleLabel?.numberOfLines = 0
@@ -305,29 +305,29 @@ public class PTFusionCellContent:UIView {
         return view
     }
         
-    public lazy var topLineView:UIView = {
+    public lazy var topLineView: UIView = {
         let view = drawLine()
         view.backgroundColor = self.cellModel!.topLineColor
         return view
     }()
-    public lazy var lineView:UIView = {
+    public lazy var lineView: UIView = {
         let view = drawLine()
         view.backgroundColor = self.cellModel!.bottomLineColor
         return view
     }()
     
-    public lazy var topImaginaryLineView:PTImaginaryLineView = {
+    public lazy var topImaginaryLineView: PTImaginaryLineView = {
         let view = PTImaginaryLineView()
         view.lineColor = self.cellModel!.topLineColor
         return view
     }()
-    public lazy var imaginaryLineView:PTImaginaryLineView = {
+    public lazy var imaginaryLineView: PTImaginaryLineView = {
         let view = PTImaginaryLineView()
         view.lineColor = self.cellModel!.bottomLineColor
         return view
     }()
     
-    fileprivate var cellContentIcon:UIImageView?
+    fileprivate var cellContentIcon: UIImageView?
     fileprivate func setCellContentIcon() -> UIImageView {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -982,9 +982,9 @@ public class PTFusionCellContent:UIView {
 open class PTFusionCell: PTBaseNormalCell {
     public static let ID = "PTFusionCell"
     
-    public var switchValueChangeBlock:PTCellSwitchBlock?
-    public var moreActionBlock:PTSectionMoreBlock?
-    open var switchValue:Bool? {
+    public var switchValueChangeBlock: PTCellSwitchBlock?
+    public var moreActionBlock: PTSectionMoreBlock?
+    open var switchValue: Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
                 valueSwitch.isOn = switchValue!
@@ -992,14 +992,14 @@ open class PTFusionCell: PTBaseNormalCell {
         }
     }
 
-    open var cellModel:PTFusionCellModel? {
+    open var cellModel: PTFusionCellModel? {
         didSet {
             dataContent.cellModel = cellModel
         }
     }
     
     //MARK: 需要在cellModel配置了之後設置
-    open var hideTopLine:Bool! = true {
+    open var hideTopLine: Bool! = true {
         didSet {
             if cellModel == nil {
                 dataContent.topLineView.isHidden = true
@@ -1023,7 +1023,7 @@ open class PTFusionCell: PTBaseNormalCell {
         }
     }
     
-    open var hideBottomLine:Bool! = true {
+    open var hideBottomLine: Bool! = true {
         didSet {
             if cellModel == nil {
                 dataContent.lineView.isHidden = true
@@ -1047,7 +1047,7 @@ open class PTFusionCell: PTBaseNormalCell {
         }
     }
     
-    fileprivate lazy var dataContent:PTFusionCellContent = {
+    fileprivate lazy var dataContent: PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.switchValueChangeBlock = { name,view in
             self.switchValueChangeBlock?(name,view)
@@ -1079,9 +1079,9 @@ open class PTFusionCell: PTBaseNormalCell {
 open class PTFusionSwipeCell: PTBaseSwipeCell {
     public static let ID = "PTFusionSwipeCell"
     
-    public var switchValueChangeBlock:PTCellSwitchBlock?
-    public var moreActionBlock:PTSectionMoreBlock?
-    open var switchValue:Bool? {
+    public var switchValueChangeBlock: PTCellSwitchBlock?
+    public var moreActionBlock: PTSectionMoreBlock?
+    open var switchValue: Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
                 valueSwitch.isOn = switchValue!
@@ -1089,13 +1089,13 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         }
     }
 
-    open var cellModel:PTFusionCellModel? {
+    open var cellModel: PTFusionCellModel? {
         didSet {
             self.dataContent.cellModel = self.cellModel
         }
     }
     
-    open var hideTopLine:Bool! {
+    open var hideTopLine: Bool! {
         didSet {
             if cellModel == nil {
                 dataContent.topLineView.isHidden = true
@@ -1119,7 +1119,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         }
     }
     
-    open var hideBottomLine:Bool! {
+    open var hideBottomLine: Bool! {
         didSet {
             if cellModel == nil {
                 dataContent.lineView.isHidden = true
@@ -1143,7 +1143,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         }
     }
 
-    fileprivate lazy var dataContent:PTFusionCellContent = {
+    fileprivate lazy var dataContent: PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.switchValueChangeBlock = { name,view in
             self.switchValueChangeBlock?(name,view)
@@ -1173,15 +1173,25 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
 
 public extension UICollectionViewCell {
     func cellContentViewCorners(radius:CGFloat = 0,
-                     borderWidth:CGFloat = 0,
-                     borderColor:UIColor = UIColor.clear) {
+                                borderWidth:CGFloat = 0,
+                                borderColor:UIColor = UIColor.clear,
+                                capsule:Bool = false) {
         PTGCDManager.gcdMain {
-            self.contentView.layer.cornerRadius = radius
+            if #available(iOS 26.0, *) {
+                let topLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                let topRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                let bottomLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                let bottomRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
+                self.contentView.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
+                self.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
+            } else {
+                self.contentView.layer.cornerRadius = radius
+                self.layer.cornerRadius = radius
+            }
             self.contentView.layer.masksToBounds = true
             self.contentView.layer.borderWidth = borderWidth
             self.contentView.layer.borderColor = borderColor.cgColor
             
-            self.layer.cornerRadius = radius
             self.layer.masksToBounds = true
             self.layer.borderWidth = borderWidth
             self.layer.borderColor = borderColor.cgColor
@@ -1189,15 +1199,42 @@ public extension UICollectionViewCell {
     }
     
     func cellContentViewCornerRectCorners(cornerRadii:CGFloat = 5,
-                                    borderWidth:CGFloat = 0,
-                                    borderColor:UIColor = UIColor.clear,
-                                    corner:UIRectCorner = .allCorners) {
+                                          borderWidth:CGFloat = 0,
+                                          borderColor:UIColor = UIColor.clear,
+                                          corner:UIRectCorner = .allCorners,
+                                          capsule:Bool = false) {
         PTGCDManager.gcdMain {
-            let maskPath = UIBezierPath(roundedRect: self.contentView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: cornerRadii, height: cornerRadii))
-            let maskLayer = CAShapeLayer()
-            maskLayer.frame = self.contentView.bounds
-            maskLayer.path = maskPath.cgPath
-            self.contentView.layer.mask = maskLayer
+            if #available(iOS 26.0, *) {
+                var topLeft:UICornerRadius?
+                var topRight:UICornerRadius?
+                var bottomLeft:UICornerRadius?
+                var bottomRight:UICornerRadius?
+                if corner.contains(.topLeft) {
+                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner.contains(.topRight) {
+                    topRight = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner.contains(.bottomLeft) {
+                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner.contains(.bottomRight) {
+                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                if corner == .allCorners {
+                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
+                    topRight = UICornerRadius(floatLiteral: cornerRadii)
+                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
+                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
+                }
+                self.contentView.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
+            } else {
+                let maskPath = UIBezierPath(roundedRect: self.contentView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: cornerRadii, height: cornerRadii))
+                let maskLayer = CAShapeLayer()
+                maskLayer.frame = self.contentView.bounds
+                maskLayer.path = maskPath.cgPath
+                self.contentView.layer.mask = maskLayer
+            }
             self.contentView.layer.masksToBounds = true
             self.contentView.layer.borderWidth = borderWidth
             self.contentView.layer.borderColor = borderColor.cgColor

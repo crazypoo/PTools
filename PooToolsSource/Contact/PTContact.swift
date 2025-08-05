@@ -37,8 +37,8 @@ public class PTContact: NSObject {
     public static func getContractData() async throws -> PTContactIndexModel {
         await withUnsafeContinuation { continuation in
             PTContact.share.getContactData { model in
-                if model != nil {
-                    continuation.resume(returning: model!)
+                if let m = model {
+                    continuation.resume(returning: m)
                 } else {
                     continuation.resume(throwing: NSError(domain: "Model nil", code: 0) as! Never)
                 }
@@ -73,7 +73,7 @@ public class PTContact: NSObject {
         }
     }
 
-    public func getContactData(handle: @escaping (_ model:PTContactIndexModel?)->Void) {
+    public func getContactData(handle: @escaping (_ model:PTContactIndexModel?) -> Void) {
         PTGCDManager.gcdGobal(qosCls: .background) {
             PTContact.selectContactsData { contacts, error in
                 if error == nil {

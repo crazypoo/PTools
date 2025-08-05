@@ -32,10 +32,10 @@ public class PTGCDManager :NSObject {
     ///   - repeats: 是否重复
     ///   - action: 执行任务的闭包
     @MainActor public func scheduledDispatchTimer(WithTimerName name: String?,
-                                timeInterval: Double,
-                                queue: DispatchQueue,
-                                repeats: Bool,
-                                action: @escaping @Sendable PTActionTask) {
+                                                  timeInterval: Double,
+                                                  queue: DispatchQueue,
+                                                  repeats: Bool,
+                                                  action: @escaping @Sendable PTActionTask) {
         
         if name == nil {
             return
@@ -101,13 +101,13 @@ public class PTGCDManager :NSObject {
     ///   - doSomeThing: 須要執行的任務(如果該任務執行完畢,須要調用dispatchSemaphore的.signal()方法,和dispatchGroup的.leave()方法,來處理後續事情)
     ///   - jobDoneBlock: 任務完成
     @MainActor public class func gcdGroup(label:String,
-                                          semaphoreCount:Int? = nil,
+                                          semaphoreCount:Int = 0,
                                           threadCount:Int,
-                                          doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
+                                          doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int) -> Void,
                                           jobDoneBlock: @escaping PTActionTask) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
-        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount ?? 0)
+        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount)
         dispatchQueue.async {
             for i in 0..<threadCount {
                 dispatchGroup.enter()
@@ -124,7 +124,7 @@ public class PTGCDManager :NSObject {
     public class func gcdGroupUtility(label: String,
                                       semaphoreCount: Int = 3, // 最大并发数
                                       threadCount:Int,
-                                      doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int)->Void,
+                                      doSomeThing: @escaping @Sendable (_ dispatchSemaphore:DispatchSemaphore, _ dispatchGroup:DispatchGroup, _ currentIndex:Int) -> Void,
                                       allRequestsFinished: @escaping PTActionTask) {
         
         let dispatchGroup = DispatchGroup()
@@ -159,11 +159,11 @@ public class PTGCDManager :NSObject {
 
     // 执行并发任务的方法
     @MainActor public func gcdGroupUtility(label: String,
-                                semaphoreCount: Int = 3, // 最大并发数
-                                threadCount: Int,
-                                doSomeThing: @escaping @Sendable (_ dispatchSemaphore: DispatchSemaphore, _ dispatchGroup: DispatchGroup, _ currentIndex: Int) -> Void,
+                                           semaphoreCount: Int = 3, // 最大并发数
+                                           threadCount: Int,
+                                           doSomeThing: @escaping @Sendable (_ dispatchSemaphore: DispatchSemaphore, _ dispatchGroup: DispatchGroup, _ currentIndex: Int) -> Void,
                                            allRequestsFinished: @escaping PTActionTask,
-                                cancelCompletion: @escaping PTActionTask) {
+                                           cancelCompletion: @escaping PTActionTask) {
 
         dispatchGroup = DispatchGroup()
         dispatchSemaphore = DispatchSemaphore(value: semaphoreCount)
@@ -309,7 +309,7 @@ public class PTGCDManager :NSObject {
     ///   - timeInterval: 時間
     ///   - finishBlock: 回調
     public class func timeRunWithTime_base(timeInterval:TimeInterval,
-                                           finishBlock: @escaping @Sendable (_ finish:Bool, _ time:Int)->Void) {
+                                           finishBlock: @escaping @Sendable (_ finish:Bool, _ time:Int) -> Void) {
         let semaphore = DispatchSemaphore(value: 1)
         var newCount = Int(timeInterval) + 1
         let timer = DispatchSource.makeTimerSource(flags: [], queue: .main)

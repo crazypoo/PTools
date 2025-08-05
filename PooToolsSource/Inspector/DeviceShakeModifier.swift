@@ -20,11 +20,10 @@ extension UIWindow {
 
 /// A view modifier that detects shaking and calls a function of our choosing.
 struct DeviceShakeViewModifier: ViewModifier {
-    let action: () -> Void
+    let action: PTActionTask
 
     func body(content: Content) -> some View {
-        content
-            .onAppear()
+        content.onAppear()
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.deviceDidShakeNotification)) { _ in
                 action()
             }
@@ -33,7 +32,7 @@ struct DeviceShakeViewModifier: ViewModifier {
 
 public extension View {
     /// A View extension to make the modifier easier to use.
-    func onShake(perform action: @escaping () -> Void) -> some View {
+    func onShake(perform action: @escaping PTActionTask) -> some View {
         modifier(DeviceShakeViewModifier(action: action))
     }
 }

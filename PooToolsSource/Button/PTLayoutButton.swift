@@ -58,6 +58,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 图片和文字的间距，默认值5
     open var midSpacing: CGFloat = 5 {
         didSet {
@@ -68,6 +69,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 指定图片size
     open var imageSize: CGSize = .zero {
         didSet {
@@ -78,6 +80,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 按钮圆角风格
     open var cornerStyle: PTLayoutButtonConnerStyle = .none {
         didSet {
@@ -86,6 +89,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 按钮Border粗度
     open var borderWidth: CGFloat = 0 {
         didSet {
@@ -96,6 +100,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 文本对齐方向
     open var textAlignment: PTLayoutButtonTitleAlignmentStyle = .center {
         didSet {
@@ -104,6 +109,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 按钮Border颜色
     open var borderColor: UIColor = .clear {
         didSet {
@@ -114,6 +120,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     /// 按钮圆角大小
     open var cornerRadius: CGFloat = 0 {
         didSet {
@@ -124,6 +131,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var configBackgroundColor: UIColor = .clear {
         didSet {
             if #available(iOS 15.0, *) {
@@ -133,6 +141,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var configBackgroundSelectedColor: UIColor = .clear {
         didSet {
             if #available(iOS 15.0, *) {
@@ -142,6 +151,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var configBackgroundHightlightColor: UIColor = .clear {
         didSet {
             if #available(iOS 15.0, *) {
@@ -151,6 +161,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var configBackgroundDisableColor: UIColor = .clear {
         didSet {
             if #available(iOS 15.0, *) {
@@ -160,6 +171,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var buttonSizeStyle: PTLayoutButtonSizeStyle = .none {
         didSet {
             if #available(iOS 15.0, *) {
@@ -167,6 +179,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var titlePadding: CGFloat = 0 {
         didSet {
             if #available(iOS 15.0, *) {
@@ -176,6 +189,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var showHightlightActivity: Bool = false {
         didSet {
             if #available(iOS 15.0, *) {
@@ -183,6 +197,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var activityColor: UIColor = .systemPurple {
         didSet {
             if #available(iOS 15.0, *) {
@@ -190,6 +205,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var loadingCanTap: Bool = false {
         didSet {
             if #available(iOS 15.0, *) {
@@ -207,6 +223,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedImage: UIImage? = nil {
         didSet {
             if #available(iOS 15.0, *) {
@@ -216,6 +233,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightImage: UIImage? = nil {
         didSet {
             if #available(iOS 15.0, *) {
@@ -225,6 +243,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledImage: UIImage? = nil {
         didSet {
             if #available(iOS 15.0, *) {
@@ -245,6 +264,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedTitle: String! {
         didSet {
             if #available(iOS 15.0, *) {
@@ -254,6 +274,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightTitle: String {
         get {
             normalTitle
@@ -268,6 +289,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledTitle: String {
         get {
             normalTitle
@@ -292,6 +314,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedTitleColor: UIColor = .black {
         didSet {
             if #available(iOS 15.0, *) {
@@ -301,6 +324,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightTitleColor: UIColor = .black {
         didSet {
             if #available(iOS 15.0, *) {
@@ -310,6 +334,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledTitleColor: UIColor = .lightGray {
         didSet {
             if #available(iOS 15.0, *) {
@@ -330,6 +355,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedTitleFont: UIFont = .appfont(size: 14) {
         didSet {
             if #available(iOS 15.0, *) {
@@ -340,6 +366,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightTitleFont: UIFont = .appfont(size: 14) {
         didSet {
             if #available(iOS 15.0, *) {
@@ -354,6 +381,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledTitleFont: UIFont = .appfont(size: 14) {
         didSet {
             if #available(iOS 15.0, *) {
@@ -378,6 +406,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedSubTitle: String {
         get {
             normalSubTitle ?? ""
@@ -392,6 +421,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightSubTitle: String {
         get {
             normalSubTitle ?? ""
@@ -406,6 +436,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledSubTitle: String {
         get {
             normalSubTitle ?? ""
@@ -430,6 +461,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedSubTitleColor: UIColor {
         get {
             normalSubTitleColor
@@ -444,6 +476,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightSubTitleColor: UIColor {
         get {
             normalSubTitleColor
@@ -458,6 +491,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledSubTitleColor: UIColor = .lightGray {
         didSet {
             if #available(iOS 15.0, *) {
@@ -477,6 +511,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var selectedSubTitleFont: UIFont {
         get {
             normalSubTitleFont
@@ -491,6 +526,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var hightlightSubTitleFont: UIFont {
         get {
             normalSubTitleFont
@@ -505,6 +541,7 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    
     open var disabledSubTitleFont: UIFont {
         get {
             normalSubTitleFont

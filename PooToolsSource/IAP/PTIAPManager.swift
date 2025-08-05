@@ -10,13 +10,11 @@ import Foundation
 import StoreKit
 
 // Typealiases for completion blocks
-public typealias PurchasedProductsChanged = () -> Void
 public typealias ProductsCompletionBlock = ([SKProduct]) -> Void
 public typealias PurchaseCompletionBlock = (SKPaymentTransaction?) -> Void
 public typealias IAPErrorBlock = (Error) -> Void
-public typealias RestorePurchasesCompletionBlock = () -> Void
 
-public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+public class PTIAPManager: NSObject, SKProductsRequestDelegate, @MainActor SKPaymentTransactionObserver {
     
     public static let shared = PTIAPManager()
     
@@ -26,9 +24,9 @@ public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransac
     
     private var productRequests: [(SKProductsRequest, (Result<[SKProduct], Error>) -> Void)] = []
     private var payments: [(String, PurchaseCompletionBlock, IAPErrorBlock)] = []
-    private var purchasesChangedCallbacks: [(PurchasedProductsChanged, AnyObject)] = []
+    private var purchasesChangedCallbacks: [(PTActionTask, AnyObject)] = []
     
-    private var restoreCompletionBlock: RestorePurchasesCompletionBlock?
+    private var restoreCompletionBlock: PTActionTask?
     private var restoreErrorBlock: IAPErrorBlock?
     
     override init() {
@@ -42,7 +40,9 @@ public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransac
         super.init()
         
         NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
-        SKPaymentQueue.default().add(self)
+        Task { @MainActor in
+            SKPaymentQueue.default().add(self)
+        }
     }
     
     deinit {
@@ -132,7 +132,7 @@ public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransac
         restorePurchases(completion: nil, error: nil)
     }
     
-    public func restorePurchases(completion: RestorePurchasesCompletionBlock?, error: IAPErrorBlock?) {
+    public func restorePurchases(completion: PTActionTask?, error: IAPErrorBlock?) {
         restoreCompletionBlock = completion
         restoreErrorBlock = error
         SKPaymentQueue.default().restoreCompletedTransactions()
@@ -159,7 +159,7 @@ public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransac
         }
     }
     
-    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    @MainActor public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         var newPurchases = false
         
         for transaction in transactions {
@@ -210,7 +210,7 @@ public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransac
     
     // MARK: - Observation
     
-    public func addPurchasesChangedCallback(_ callback: @escaping PurchasedProductsChanged, withContext context: AnyObject) {
+    public func addPurchasesChangedCallback(_ callback: @escaping PTActionTask, withContext context: AnyObject) {
         purchasesChangedCallbacks.append((callback, context))
     }
     
@@ -218,7 +218,7 @@ public class PTIAPManager: NSObject, SKProductsRequestDelegate, SKPaymentTransac
         purchasesChangedCallbacks.removeAll { $0.1 === context }
     }
     
-    public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+    @MainActor public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         restoreCompletionBlock?()
         restoreCompletionBlock = nil
         restoreErrorBlock = nil

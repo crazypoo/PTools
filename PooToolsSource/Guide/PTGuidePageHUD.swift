@@ -187,7 +187,7 @@ public class PTGuidePageHUD: UIView {
         }
 
         viewModel.imageArrays.enumerated().forEach { (index,value) in
-            let contentData = viewModel.imageArrays[index]
+            let contentData = value
 
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit

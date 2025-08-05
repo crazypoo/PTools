@@ -68,7 +68,7 @@ public class PTDynamicNotificationView: UIView {
         }
         
         if canTap {
-            let tap = UITapGestureRecognizer { sender in
+            let tap = UITapGestureRecognizer { _ in
                 self.hideNotification()
             }
             addGestureRecognizer(tap)
@@ -93,7 +93,7 @@ public class PTDynamicNotificationView: UIView {
     public func hideNotification() {
         PTAnimationFunction.animationOut(animationView: self, animationType: .Top,toValue: -(self.contentHeight + 10)) {
             self.alpha = 0
-        } completion: { finish in
+        } completion: { _ in
             self.removeFromSuperview()
             self.hideHandler?()
         }

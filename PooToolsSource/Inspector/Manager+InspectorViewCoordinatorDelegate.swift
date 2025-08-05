@@ -49,12 +49,12 @@ extension Manager {
         }
     }
 
-    func presentInspector(animated: Bool) {
+    @MainActor func presentInspector(animated: Bool) {
         guard let presenter = dependencies.viewHierarchy.topPresentableViewController else { return }
         return presentInspector(animated: animated, from: presenter)
     }
 
-    func presentInspector(animated: Bool, from presenter: UIViewController) {
+    @MainActor func presentInspector(animated: Bool, from presenter: UIViewController) {
         dismissInspectorViewIfNeeded { [weak self] in
             guard let self = self else { return }
 

@@ -313,14 +313,14 @@ public class PTActionLayoutButton: UIControl {
     }
     
     public func getKitTitleSize(lineSpacing:CGFloat = 2.5,
-                            height:CGFloat = CGFloat.greatestFiniteMagnitude,
-                            width:CGFloat = CGFloat.greatestFiniteMagnitude) ->CGSize {
+                                height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                                width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
         return UIView.sizeFor(string: currentString, font: currentFont,lineSpacing: lineSpacing,height: height,width: width)
     }
     
     public func getKitCurrentDimension(lineSpacing:CGFloat = 2.5,
-                            height:CGFloat = CGFloat.greatestFiniteMagnitude,
-                            width:CGFloat = CGFloat.greatestFiniteMagnitude) ->CGFloat {
+                                       height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                                       width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGFloat {
         var total:CGFloat = 0
         switch layoutStyle {
         case .leftImageRightTitle,.leftTitleRightImage:

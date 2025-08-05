@@ -33,7 +33,7 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         if let valueSwitch = view.valueSwitch {
-            valueSwitch.valueChangeCallBack = { value in
+            valueSwitch.valueChangeCallBack = { _ in
                 self.switchValueChangeBlock?(self.sectionModel!.name,valueSwitch)
             }
         }

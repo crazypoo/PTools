@@ -605,7 +605,7 @@ public class PTSheetViewController: PTBaseViewController {
                        duration: TimeInterval = 0.2,
                        options: UIView.AnimationOptions = [.curveEaseOut],
                        animated: Bool = true,
-                       complete: (() -> Void)? = nil) {
+                       complete: PTActionTask? = nil) {
         
         let previousSize = self.currentSize
         self.currentSize = size
@@ -669,7 +669,7 @@ public class PTSheetViewController: PTBaseViewController {
     }
     
     /// Animates the sheet in, but only if presenting using the inline mode
-    public func animateIn(to view: UIView, in parent: UIViewController, size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    public func animateIn(to view: UIView, in parent: UIViewController, size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: PTActionTask? = nil) {
         
         self.willMove(toParent: parent)
         parent.addChild(self)
@@ -686,7 +686,7 @@ public class PTSheetViewController: PTBaseViewController {
         self.animateIn(size: size, duration: duration, completion: completion)
     }
     
-    public func animateIn(size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    public func animateIn(size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: PTActionTask? = nil) {
         guard self.options.useInlineMode else { return }
         guard self.view.superview != nil else {
             PTNSLogConsole("It appears your sheet is not set as a subview of another view. Make sure to add this view as a subview before trying to animate it in.",levelType: .Error,loggerType: .Alert)
@@ -710,7 +710,7 @@ public class PTSheetViewController: PTBaseViewController {
     }
     
     /// Animates the sheet out, but only if presenting using the inline mode
-    public func animateOut(duration: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+    public func animateOut(duration: TimeInterval = 0.3, completion: PTActionTask? = nil) {
         guard self.options.useInlineMode else { return }
         let contentView = self.contentViewController.view!
         

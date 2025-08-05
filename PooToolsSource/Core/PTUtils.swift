@@ -94,7 +94,7 @@ public func deviceSafeAreaInsets() -> UIEdgeInsets {
     return insets
 }
 
-public func PTIVarList(_ className:String) ->[String] {
+public func PTIVarList(_ className:String) -> [String] {
     var listName = [String]()
     var count : UInt32 = 0
     let list = class_copyIvarList(NSClassFromString(className), &count)
@@ -109,7 +109,7 @@ public func PTIVarList(_ className:String) ->[String] {
     return listName
 }
 
-public func PTPropertyList(_ classString: String) ->[String] {
+public func PTPropertyList(_ classString: String) -> [String] {
     var propertyListName = [String]()
     var count : UInt32 = 0
     let list = class_copyPropertyList(NSClassFromString(classString), &count)
@@ -128,7 +128,7 @@ public func PTPropertyList(_ classString: String) ->[String] {
     return propertyListName
 }
 
-public func PTMethodsList(_ classString: String) ->[Selector] {
+public func PTMethodsList(_ classString: String) -> [Selector] {
     var methodNum: UInt32 = 0
     var list = [Selector]()
     let methods = class_copyMethodList(NSClassFromString(classString), &methodNum)
@@ -495,10 +495,10 @@ public class SwizzleTool: NSObject {
         return false
     }
     
-    public static var swizzledDidAddSubviewClosure: (() -> Void)?
+    public static var swizzledDidAddSubviewClosure: PTActionTask?
     public static var pauseDidAddSubviewSwizzledClosure: Bool = false
     
-    public func swizzleDidAddSubview(_ closure: @escaping () -> Void) {
+    public func swizzleDidAddSubview(_ closure: @escaping PTActionTask) {
         guard let originalMethod = class_getInstanceMethod(UIWindow.self, #selector(UIWindow.didAddSubview(_:))),
               let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_did_add_subview(_:)))
         else { PTNSLogConsole("Swizzle Error Occurred"); return }
@@ -508,7 +508,7 @@ public class SwizzleTool: NSObject {
         Self.swizzledDidAddSubviewClosure = closure
     }
 
-    @objc public func swizzled_did_add_subview(_ subview: UIView) {
+    @MainActor @objc public func swizzled_did_add_subview(_ subview: UIView) {
         guard !Self.pauseDidAddSubviewSwizzledClosure else { return }
         
         if let closure = Self.swizzledDidAddSubviewClosure {

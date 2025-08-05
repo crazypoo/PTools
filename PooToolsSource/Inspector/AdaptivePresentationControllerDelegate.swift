@@ -19,12 +19,12 @@ public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptiveP
 
     public let shouldDismissProvider: DismissDecisionProvider?
 
-    public let dismissAttemptHandler: (() -> Void)?
+    public let dismissAttemptHandler: PTActionTask?
 
     public init(onDismiss dismissHandler: ((AdaptivePresentationControllerDelegate) -> Void)? = .none,
                 adaptivePresentationStyle adaptivePresentationStyleProvider: ModalPresentationStyleProvider? = .none,
                 shouldDismiss shouldDismissProvider: DismissDecisionProvider? = .none,
-                onDismissAttempt dismissAttemptHandler: (() -> Void)? = .none) {
+                onDismissAttempt dismissAttemptHandler: PTActionTask? = .none) {
         self.dismissHandler = dismissHandler
         self.adaptivePresentationStyleProvider = adaptivePresentationStyleProvider
         self.shouldDismissProvider = shouldDismissProvider

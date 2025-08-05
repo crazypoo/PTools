@@ -37,7 +37,7 @@ public class PTPhoneBlock: NSObject {
         canCall(canCallSomeOne!)
     }
     
-    public class func validPhone(phoneNumber:String)->Bool {
+    public class func validPhone(phoneNumber:String) -> Bool {
         let type = NSTextCheckingResult.phoneNumberCheckingResult(range: NSRange(location: 0, length: phoneNumber.charactersArray.count), phoneNumber: phoneNumber).resultType
         return type == NSTextCheckingResult.CheckingType.phoneNumber
     }

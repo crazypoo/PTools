@@ -13,7 +13,7 @@ import AttributedString
 import pop
 
 public typealias PTActionSheetCallback = (_ sheet:PTActionSheetController) -> Void
-public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, _ index:Int,_ title:String)->Void
+public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, _ index:Int,_ title:String) -> Void
 
 public class PTActionCell:UIView {
         
@@ -140,13 +140,12 @@ public class PTActionSheetViewConfig:NSObject {
     fileprivate var cornerRadii:CGFloat = 0
     fileprivate var dismissWithTapBG:Bool = true
     
-    public init(
-    @PTClampedProperyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
-    @PTClampedProperyWrapper(range:44...74) rowHeight: CGFloat = 54,
-    @PTClampedProperyWrapper(range:1...10) separatorHeight: CGFloat = 5,
-    @PTClampedProperyWrapper(range:10...50) viewSpace: CGFloat = 10,
-    @PTClampedProperyWrapper(range:0...15) cornerRadii: CGFloat = 15,
-dismissWithTapBG: Bool = true) {
+    public init(@PTClampedProperyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
+                @PTClampedProperyWrapper(range:44...74) rowHeight: CGFloat = 54,
+                @PTClampedProperyWrapper(range:1...10) separatorHeight: CGFloat = 5,
+                @PTClampedProperyWrapper(range:10...50) viewSpace: CGFloat = 10,
+                @PTClampedProperyWrapper(range:0...15) cornerRadii: CGFloat = 15,
+                dismissWithTapBG: Bool = true) {
         self.lineHeight = lineHeight
         self.rowHeight = rowHeight
         self.separatorHeight = separatorHeight

@@ -26,7 +26,7 @@ public enum PTLoginDescButtonType {
 
 open class PTLoginDescButton: UIView {
     
-    public var descHandler:((PTLoginDescButtonType)->Void)?
+    public var descHandler:((PTLoginDescButtonType) -> Void)?
     
     private lazy var leftDesc:UIButton = {
         let view = baseButton()

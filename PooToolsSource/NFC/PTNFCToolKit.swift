@@ -36,7 +36,7 @@ public class PTNFCToolKit: NSObject {
 
     private var readerSession: NFCTagReaderSession?
     private var onReadSuccess: (([NFCNDEFPayload]) -> Void)?
-    private var onWriteSuccess: (() -> Void)?
+    private var onWriteSuccess: PTActionTask?
     private var onError: ((Error) -> Void)?
     private var apduCommand: NFCISO7816APDU?
     private var apduCompletion: ((Data) -> Void)?
@@ -63,7 +63,7 @@ public class PTNFCToolKit: NSObject {
 
     public func startWriting(message: NFCNDEFMessage,
                       lockAfterWrite: Bool = false,
-                      onSuccess: @escaping () -> Void,
+                      onSuccess: @escaping PTActionTask,
                       onError: @escaping (Error) -> Void) {
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 1, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))

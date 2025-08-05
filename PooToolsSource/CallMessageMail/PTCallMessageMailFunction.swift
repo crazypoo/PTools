@@ -10,8 +10,8 @@ import UIKit
 @preconcurrency import WebKit
 import MessageUI
 
-public typealias MessageResultBlock = (_ sendResult: MessageComposeResult)->Void
-public typealias MailResultBlock = (_ sendResult: MFMailComposeResult)->Void
+public typealias MessageResultBlock = (_ sendResult: MessageComposeResult) -> Void
+public typealias MailResultBlock = (_ sendResult: MFMailComposeResult) -> Void
 
 @objcMembers
 public class PTCallMessageMailFunction: NSObject {
@@ -35,8 +35,8 @@ public class PTCallMessageMailFunction: NSObject {
     }
     
     public class func sendMessage(content:String,
-                                users:[String],
-                                resultBlock:MessageResultBlock?) {
+                                  users:[String],
+                                  resultBlock:MessageResultBlock?) {
         let vc = MFMessageComposeViewController()
         vc.body = content
         vc.recipients = users
@@ -47,12 +47,12 @@ public class PTCallMessageMailFunction: NSObject {
     }
     
     public class func sendMail(title:String,
-                             content:String,
-                             recipients:[String]?,
-                             ccRecipients:[String]?,
-                             bccRecipients:[String]?,
-                             image:UIImage?,
-                             resultBlock:MailResultBlock?) {
+                               content:String,
+                               recipients:[String]?,
+                               ccRecipients:[String]?,
+                               bccRecipients:[String]?,
+                               image:UIImage?,
+                               resultBlock:MailResultBlock?) {
         let vc = MFMailComposeViewController()
         vc.setSubject(title)
         vc.setMessageBody(content, isHTML: false)

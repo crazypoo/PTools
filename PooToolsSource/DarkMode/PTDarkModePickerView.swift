@@ -87,7 +87,7 @@ class PTDarkModePickerView: UIView {
         return line
     }()
 
-    init(startTime: String, endTime: String, complete: @escaping (String, String)->Void) {
+    init(startTime: String, endTime: String, complete: @escaping (String, String) -> Void) {
         self.startTime = startTime
         self.endTime = endTime
         sureClosure = complete

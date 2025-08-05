@@ -78,10 +78,7 @@ public class PTBiologyID: NSObject {
         let context = LAContext()
         context.localizedReason = reason
 
-        let accessControl = SecAccessControlCreateWithFlags(nil,
-                                                            kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly,
-                                                            .userPresence,
-                                                            nil)
+        let accessControl = SecAccessControlCreateWithFlags(nil,  kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, .userPresence, nil)
         return PTKeyChain.saveAccountInfo(service: kBiologyService.nsString, account: account.nsString, password: password.nsString,context: context,accessControl: accessControl)
     }
 
@@ -96,7 +93,7 @@ public class PTBiologyID: NSObject {
 
     /// 刪除帳號密碼
     public func deleteBiologyID(account: String? = nil) {
-        PTKeyChain.deleteAccountInfo(service: kBiologyService.nsString, account: (account ?? "").nsString) { success, status in
+        PTKeyChain.deleteAccountInfo(service: kBiologyService.nsString, account: (account ?? "").nsString) { _, status in
             self.biologyVerifyStatusBlock?(status)
         }
     }
@@ -127,7 +124,7 @@ public class PTBiologyID: NSObject {
     }
     
     private func fallbackToPassword(context: LAContext, reason: String) {
-        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, error in
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, _ in
             DispatchQueue.main.async {
                 if success {
                     self.biologyVerifyStatusBlock?(.success)

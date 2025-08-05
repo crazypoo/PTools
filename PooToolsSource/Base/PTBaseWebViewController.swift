@@ -81,7 +81,7 @@ open class PTBaseWebViewController: PTBaseViewController {
     lazy var backButton:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(backImage, for: .normal)
-        view.addActionHandlers { sender in
+        view.addActionHandlers { _ in
             if self.checkVCIsPresenting() {
                 self.dismissAnimated()
             } else {

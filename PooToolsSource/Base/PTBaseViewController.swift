@@ -39,7 +39,7 @@ open class PTBaseViewController: ZXNavigationBarController {
     //MARK: 拦截返回上一页
     ///拦截返回上一页
     /// - Parameter popBlock: 是否允许放回上一页
-    @objc open func openPopIntercept(popBlock: @escaping (_ viewController:ZXNavigationBarController, _ popBlockFrom:ZXNavPopBlockFrom)-> Bool) {
+    @objc open func openPopIntercept(popBlock: @escaping (_ viewController:ZXNavigationBarController, _ popBlockFrom:ZXNavPopBlockFrom) -> Bool) {
         //因FDFullscreenPopGesture默认会在控制器即将展示时显示系统导航栏，与ZXNavigationBar共同使用时会造成系统导航栏出现一下又马上消失，因此需要以下设置
         self.fd_prefersNavigationBarHidden = true
         //当您通过zx_handlePopBlock拦截侧滑返回手势时，请设置fd_interactivePopDisabled为YES以关闭FDFullscreenPopGesture在当前控制器的全屏返回手势，否则无法拦截。
@@ -237,44 +237,42 @@ extension PTBaseViewController {
     ///截图反馈注册
     public func registerScreenShotService() {
         UIScreen.pt.detectScreenShot { type in
-            switch type {
-            case .Normal:
-                PTGCDManager.gcdAfter(time: 1) {
-                    let fetchOptions = PHFetchOptions()
-                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-                    let assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-                    
-                    if let lastAsset = assets.firstObject {
-                        if lastAsset.mediaSubtypes == .photoScreenshot {
-                            self.getImage(for: lastAsset) { result in
-                                if let image = result {
-                                    // 在这里使用截图
-                                    if self.screenShotHandle != nil {
-                                        self.screenShotHandle!(image)
-                                    } else {
-                                        if self.screenFunc == nil {
-                                            self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image,dismiss: {
-                                                self.screenFunc = nil
-                                            })
-                                            
-                                            if self.screenShotActionHandle != nil {
-                                                self.screenFunc!.actionHandle = self.screenShotActionHandle!
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    self.screenShotHandle?(nil)
-                                }
+            guard type == .Normal else {
+                self.screenShotHandle?(nil)
+                return
+            }
+
+            PTGCDManager.gcdAfter(time: 1) {
+                let fetchOptions = PHFetchOptions()
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+                guard let lastAsset = PHAsset.fetchAssets(with: .image, options: fetchOptions).firstObject,
+                      lastAsset.mediaSubtypes == .photoScreenshot else {
+                    self.screenShotHandle?(nil)
+                    return
+                }
+
+                self.getImage(for: lastAsset) { image in
+                    guard let image else {
+                        self.screenShotHandle?(nil)
+                        return
+                    }
+
+                    if let handler = self.screenShotHandle {
+                        handler(image)
+                    } else {
+                        if self.screenFunc == nil {
+                            self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image) {
+                                self.screenFunc = nil
+                            }
+                            if let actionHandle = self.screenShotActionHandle {
+                                self.screenFunc?.actionHandle = actionHandle
                             }
                         } else {
                             self.screenShotHandle?(nil)
                         }
-                    } else {
-                        self.screenShotHandle?(nil)
                     }
                 }
-            case .Video:
-                break
             }
         }
     }
@@ -312,7 +310,6 @@ extension PTBaseViewController {
     public func hideEmptyView(task:PTActionTask? = nil) {
         let share = PTUnavailableFunction.shared
         share.hideUnavailableView(viewController: self, task: task)
-        task?()
     }
     
     public func emptyViewLoading() {
@@ -374,9 +371,9 @@ extension PTBaseViewController {
         }
                 
         let touchLocation = touch.location(in: view)
-        if screenFunc != nil {
-            if !screenFunc!.frame.contains(touchLocation) {
-                screenFunc!.dismissAlert()
+        if let scree = screenFunc {
+            if !scree.frame.contains(touchLocation) {
+                scree.dismissAlert()
             }
         }
     }
@@ -419,17 +416,21 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     private lazy var feedback:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "PT Screen feedback".localized(), image: PTAppBaseConfig.share.screenShotFeedback)
         view.addActionHandlers { sender in
-            self.actionHandle?(.Feedback,self.shareImageView.image!)
-            self.dismissAlert()
+            if let image = self.shareImageView.image {
+                self.actionHandle?(.Feedback,image)
+                self.dismissAlert()
+            }
         }
         return view
     }()
     
     private lazy var share:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "PT Screen share".localized(), image: PTAppBaseConfig.share.screenShotShare)
-        view.addActionHandlers { sender in
-            self.actionHandle?(.Share,self.shareImageView.image!)
-            self.dismissAlert()
+        view.addActionHandlers { _ in
+            if let image = self.shareImageView.image {
+                self.actionHandle?(.Share,image)
+                self.dismissAlert()
+            }
         }
         return view
     }()

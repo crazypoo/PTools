@@ -259,7 +259,7 @@ public class PTCountryCodes: NSObject {
         "Zimbabwe":"+263"
         ]
     
-    public func codesModels()->[PTCountryCodeModel] {
+    public func codesModels() -> [PTCountryCodeModel] {
         let arr = Array(countryCodeDic.keys).sorted(by: <)
         var models = [PTCountryCodeModel]()
         arr.enumerated().forEach { index,value in

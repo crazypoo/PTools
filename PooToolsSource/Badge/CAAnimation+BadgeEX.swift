@@ -13,7 +13,7 @@ public enum PTAxisType:Int {
 }
 
 extension CAAnimation {
-    public class func opacityForeverAnimation(time:CFTimeInterval) ->CABasicAnimation {
+    public class func opacityForeverAnimation(time:CFTimeInterval) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 1
         animation.toValue = 0.1
@@ -26,7 +26,7 @@ extension CAAnimation {
         return animation
     }
     
-    public class func opacityTimesAnimation(repeatTimes:Float,time:CFTimeInterval) ->CABasicAnimation {
+    public class func opacityTimesAnimation(repeatTimes:Float,time:CFTimeInterval) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = 1
         animation.toValue = 0.4
@@ -39,7 +39,7 @@ extension CAAnimation {
         return animation
     }
     
-    public class func rotation(duration:CFTimeInterval,degree:Float,direction:PTAxisType,repeatCount:Float) ->CABasicAnimation {
+    public class func rotation(duration:CFTimeInterval,degree:Float,direction:PTAxisType,repeatCount:Float) -> CABasicAnimation {
         let axisArr = ["transform.rotation.x","transform.rotation.y","transform.rotation.z"]
         let animation = CABasicAnimation(keyPath: axisArr[direction.rawValue])
         animation.fromValue = 0
@@ -53,7 +53,7 @@ extension CAAnimation {
         return animation
     }
     
-    public class func scale(fromScale:Float,toScale:Float,duration:CFTimeInterval,repeatCount:Float) ->CABasicAnimation {
+    public class func scale(fromScale:Float,toScale:Float,duration:CFTimeInterval,repeatCount:Float) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "transform.scale")
         animation.fromValue = fromScale
         animation.toValue = toScale

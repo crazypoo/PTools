@@ -14,7 +14,7 @@ enum HierarchyInspectorCellViewModel {
 protocol HierarchyInspectorViewModelProtocol: HierarchyInspectorSectionViewModelProtocol {
     var isSearching: Bool { get }
     var searchQuery: String? { get }
-    func search(_ searchQuery: String?, completion: () -> Void)
+    func search(_ searchQuery: String?, completion: PTActionTask)
 }
 
 protocol HierarchyInspectorSectionViewModelProtocol {
@@ -68,8 +68,8 @@ final class HierarchyInspectorViewModel {
 
 // MARK: - HierarchyInspectorViewModelProtocol
 
-extension HierarchyInspectorViewModel: HierarchyInspectorViewModelProtocol {
-    func search(_ searchQuery: String?, completion: () -> Void) {
+extension HierarchyInspectorViewModel: @MainActor HierarchyInspectorViewModelProtocol {
+    @MainActor func search(_ searchQuery: String?, completion: PTActionTask) {
         self.searchQuery = searchQuery
         completion()
     }

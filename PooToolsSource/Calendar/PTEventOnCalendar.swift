@@ -69,12 +69,12 @@ public class PTEventOnCalendar: NSObject {
     ///   - remindTime: 大于0是开始后提醒,小于0就开始时间前提醒
     ///   - handle: 成功回调
     public class func createEvent(startDate:DateInRegion,
-                                endDate:DateInRegion,
-                                eventTitle:String,
-                                location:String,
-                                notes:String,
-                                eventType:EKEntityType,
-                                remindTime:TimeInterval) async throws {
+                                  endDate:DateInRegion,
+                                  eventTitle:String,
+                                  location:String,
+                                  notes:String,
+                                  eventType:EKEntityType,
+                                  remindTime:TimeInterval) async throws {
         return try await withUnsafeThrowingContinuation { continuation in
             PTEventOnCalendar.createEvent(startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, eventType: eventType, remindTime: remindTime) { finish, error in
                 if error != nil {
@@ -85,13 +85,13 @@ public class PTEventOnCalendar: NSObject {
     }
     
     public class func createEvent(startDate:DateInRegion,
-                                endDate:DateInRegion,
-                                eventTitle:String,
-                                location:String,
-                                notes:String,
-                                eventType:EKEntityType,
-                                remindTime:TimeInterval,
-                                handle:((_ finish:Bool,_ error:Error?)->Void)? = nil) {
+                                  endDate:DateInRegion,
+                                  eventTitle:String,
+                                  location:String,
+                                  notes:String,
+                                  eventType:EKEntityType,
+                                  remindTime:TimeInterval,
+                                  handle:((_ finish:Bool,_ error:Error?) -> Void)? = nil) {
         let eventStore = EKEventStore()
         if #available(iOS 17.0, *) {
             switch eventType {
@@ -278,7 +278,7 @@ extension PTEventOnCalendar {
                                    location:String,
                                    notes:String,
                                    remindTime:TimeInterval,
-                                   handle:((_ finish:Bool,_ error:Error?)->Void)? = nil) {
+                                   handle:((_ finish:Bool,_ error:Error?) -> Void)? = nil) {
         let event = EKEvent(eventStore: eventStore)
         event.title = eventTitle
         event.location = location
@@ -418,13 +418,13 @@ extension PTEventOnCalendar {
     ///   - remindTime:
     ///   - handle: 成功回调
     class func remindCreateFunction(eventStore:EKEventStore,
-                                   startDate:DateInRegion,
-                                   endDate:DateInRegion,
-                                   eventTitle:String,
-                                   location:String,
-                                   notes:String,
-                                   remindTime:TimeInterval,
-                                   handle:((_ finish:Bool,_ error:Error?)->Void)? = nil) {
+                                    startDate:DateInRegion,
+                                    endDate:DateInRegion,
+                                    eventTitle:String,
+                                    location:String,
+                                    notes:String,
+                                    remindTime:TimeInterval,
+                                    handle:((_ finish:Bool,_ error:Error?) -> Void)? = nil) {
         let event = EKReminder(eventStore: eventStore)
         event.title = eventTitle
         event.location = location

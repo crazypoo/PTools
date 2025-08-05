@@ -2392,6 +2392,9 @@
 				557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */,
 				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
 				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
+				55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */,
+				55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */,
+				55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */,
 				5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */,
 				557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */,
 				55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */,
@@ -2414,9 +2417,6 @@
 				557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */,
 				557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */,
 				557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */,
-				55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */,
-				55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */,
-				55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";

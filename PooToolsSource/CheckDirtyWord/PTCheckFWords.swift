@@ -53,7 +53,7 @@ public class PTCheckFWords: NSObject {
         node.setObject(NSNumber(integerLiteral: 1), forKey: EXIST as NSCopying)
     }
     
-    public func haveFWord(str:NSString)->Bool {
+    public func haveFWord(str:NSString) -> Bool {
         for i in stride(from: 0, to: str.length, by: 1) {
             let subString:NSString = str.substring(from: i) as NSString
             var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary
@@ -79,7 +79,7 @@ public class PTCheckFWords: NSObject {
         return false
     }
     
-    public func filter(str:NSString)->NSString {
+    public func filter(str:NSString) -> NSString {
         if isFilterClose || root.count == 0 {
             return str
         }

@@ -21,7 +21,7 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
 
     lazy var keyCommandsStore = ExpirableStore<[UIKeyCommand]>(lifespan: dependencies.configuration.snapshotExpirationTimeInterval)
 
-    func dismissInspectorViewIfNeeded(_ closure: @escaping () -> Void) {
+    @MainActor func dismissInspectorViewIfNeeded(_ closure: @escaping PTActionTask) {
         let coordinators = children.compactMap { $0 as? InspectorViewCoordinator }
 
         if coordinators.isEmpty { return closure() }
