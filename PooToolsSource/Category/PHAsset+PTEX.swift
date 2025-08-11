@@ -155,6 +155,14 @@ public extension PHAsset {
             completion(image)
         }
     }
+    
+    func convertLivePhotoToImageAsync() async -> UIImage? {
+        await withCheckedContinuation { continuation in
+            convertLivePhotoToImage { image in
+                continuation.resume(returning: image)
+            }
+        }
+    }
 }
 
 public extension PTPOP where Base: PHAsset {
