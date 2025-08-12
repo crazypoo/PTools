@@ -53,9 +53,7 @@ public extension PHAsset {
             self.convertPHAssetToAVAsset(progress: { progress in
                 progressHandler(progress)
             }, completion: { avAsset in
-                if avAsset != nil {
-                    continuation.resume(returning: avAsset!)
-                }
+                continuation.resume(returning: avAsset)
             })
         }
     }
@@ -133,7 +131,15 @@ public extension PHAsset {
             }
         }
     }
-            
+           
+    func converPHAssetToAVURLAssetAsync() async -> AVURLAsset? {
+        await withCheckedContinuation { continuation in
+            converPHAssetToAVURLAsset { aSet in
+                continuation.resume(returning: aSet)
+            }
+        }
+    }
+    
     func calcelExport() {
         if let exportSession = self.exportSession {
             exportSession.cancelExport()
@@ -194,23 +200,7 @@ public extension PTPOP where Base: PHAsset {
     func isLivePhoto() -> Bool {
         return base.mediaSubtypes.contains(.photoLive)
     }
-    
-    //MARK: 根據如果是LivePhoto,可以獲取圖片真身
-    ///根據如果是LivePhoto,可以獲取圖片真身
-    func convertLivePhotoToImage(completion: @escaping (UIImage?) -> Void) {
-        let imageManager = PHImageManager.default()
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isSynchronous = true
-
-        imageManager.requestImage(for: base,
-                                  targetSize: CGSize(width: base.pixelWidth, height: base.pixelHeight),
-                                  contentMode: .aspectFit,
-                                  options: options) { (image, info) in
-            completion(image)
-        }
-    }
-    
+        
     func convertPHAssetToPHLivePhoto(completion: @escaping (PHLivePhoto?) -> Void) {
         // 检查该 PHAsset 是否为 Live Photo 类型
         guard base.pt.isLivePhoto() else {
@@ -227,6 +217,14 @@ public extension PTPOP where Base: PHAsset {
                 completion(livePhoto)
             } else {
                 completion(nil)
+            }
+        }
+    }
+    
+    func convertPHAssetToPHLivePhotoAsync() async -> PHLivePhoto? {
+        await withCheckedContinuation { continuation in
+            convertPHAssetToPHLivePhoto { livePhoto in
+                continuation.resume(returning: livePhoto)
             }
         }
     }

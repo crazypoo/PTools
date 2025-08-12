@@ -141,10 +141,10 @@ public class PTFusionCellContent:UIView {
                 sectionMore = setSectionMore()
                 addSubview(sectionMore!)
             }
-
+            
             var moreWith:CGFloat = 0
             let moreStringWidth = UIView.sizeFor(string: cellModel!.moreString, font: cellModel!.moreFont, height: height - (cellModel!.imageTopOffset + cellModel!.imageBottomOffset)).width
-            if !NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
+            if !cellModel!.moreDisclosureIndicator.isNullOrEmpty() && !cellModel!.moreString.stringIsEmpty() {
                 //两个都有
                 Task {
                     let result = await PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument)
@@ -182,7 +182,7 @@ public class PTFusionCellContent:UIView {
                         make.width.equalTo(moreWith)
                     }
                 }
-            } else if NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
+            } else if cellModel!.moreDisclosureIndicator.isNullOrEmpty() && !cellModel!.moreString.stringIsEmpty() {
                 //没图片
                 sectionMore!.normalTitleFont = cellModel!.moreFont
                 sectionMore!.normalTitle = cellModel!.moreString
@@ -198,7 +198,7 @@ public class PTFusionCellContent:UIView {
                     make.centerY.equalToSuperview()
                     make.width.equalTo(moreWith)
                 }
-            } else if NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
+            } else if cellModel!.moreDisclosureIndicator.isNullOrEmpty() && !cellModel!.moreString.stringIsEmpty() {
                 //没字
                 Task {
                     let result = await PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument)

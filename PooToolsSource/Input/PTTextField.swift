@@ -30,7 +30,7 @@ public class PTTextField: UITextField {
     public var rightConfig:PTTextCustomRightViewConfig? {
         didSet {
             PTGCDManager.gcdAfter(time: 0.5) {
-                if !NSObject.checkObject(self.rightConfig!.image as? NSObject) {
+                if !self.rightConfig!.image.isNullOrEmpty() {
                     var viewSize:CGSize = self.rightConfig!.size
                     if self.rightConfig!.size.height > self.frame.size.height {
                         viewSize.height = self.frame.size.height

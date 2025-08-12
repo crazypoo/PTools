@@ -21,53 +21,53 @@ import Kingfisher
 @objcMembers
 public class PTSegmentConfig: NSObject {
     ///选中字体
-    open var selectedFont:UIFont = .systemFont(ofSize: 16)
+    public var selectedFont:UIFont = .systemFont(ofSize: 16)
     ///未选中字体
-    open var normalFont:UIFont = .boldSystemFont(ofSize: 14)
+    public var normalFont:UIFont = .boldSystemFont(ofSize: 14)
     ///显示类型
-    open var showType:PTSegmentSelectedType = PTSegmentSelectedType(rawValue: 0)!
+    public var showType:PTSegmentSelectedType = PTSegmentSelectedType(rawValue: 0)!
     ///选中颜色
-    open var selectedColor:UIColor = .red
+    public var selectedColor:UIColor = .red
     ///普通颜色
-    open var normalColor:UIColor = .black
+    public var normalColor:UIColor = .black
     
-    open var normalColor_BG:UIColor = .clear
+    public var normalColor_BG:UIColor = .clear
     ///选中颜色(背景)
-    open var selectedColor_BG:UIColor = .systemBlue
+    public var selectedColor_BG:UIColor = .systemBlue
     ///底线height
-    open var underHight:CGFloat = 3
+    public var underHight:CGFloat = 3
     ///默认选中第X
-    open var normalSelecdIndex:Int = 0
+    public var normalSelecdIndex:Int = 0
     ///子界面到他的父界面的左右距离总和
-    open var subViewInContentSpace:CGFloat = 20
+    public var subViewInContentSpace:CGFloat = 20
     ///设置底线角
-    open var underlineRadius:Bool = true
+    public var underlineRadius:Bool = true
     ///文字图片位置
-    open var imagePosition:PTLayoutButtonStyle = PTLayoutButtonStyle(rawValue: 0)!
+    public var imagePosition:PTLayoutButtonStyle = PTLayoutButtonStyle(rawValue: 0)!
     ///文字图片间距
-    open var imageTitleSpace:CGFloat = 5
+    public var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
-    open var bottomSquare:CGFloat = 5
+    public var bottomSquare:CGFloat = 5
     ///是否左对齐
-    open var leftEdges:Bool = false
+    public var leftEdges:Bool = false
     ///每个item的间隙
-    open var itemSpace:CGFloat = 0
+    public var itemSpace:CGFloat = 0
     ///初始x(左对齐生效)
-    open var originalX:CGFloat = 0
+    public var originalX:CGFloat = 0
 }
 
 @objcMembers
 public class PTSegmentModel:NSObject {
     ///标题
-    open var titles:String = ""
+    public var titles:String = ""
     ///图片
-    open var imageURL:Any?
+    public var imageURL:Any?
     ///图片
-    open var imagePlaceHolder:String = ""
+    public var imagePlaceHolder:String = ""
     ///选中图片
-    open var selectedImageURL:Any?
+    public var selectedImageURL:Any?
     ///iCloud文件夹名称
-    open var iCloudDocument:String = ""
+    public var iCloudDocument:String = ""
 }
 
 @objc public enum PTSegmentButtonShowType:Int {
@@ -342,13 +342,14 @@ public class PTSegmentView: UIView {
             subContentW = normalW + viewConfig.subViewInContentSpace + 10
         }
         
-        if NSObject.checkObject(value.imageURL as? NSObject) && !value.titles.stringIsEmpty() && NSObject.checkObject(value.selectedImageURL as? NSObject) {
+        
+        if value.imageURL.isNullOrEmpty() && !value.titles.stringIsEmpty() && value.selectedImageURL.isNullOrEmpty() {
             subShowType = .OnlyTitle
             subContentW = subContentW + 10
-        } else if !NSObject.checkObject(value.imageURL as? NSObject) && value.titles.stringIsEmpty() && !NSObject.checkObject(value.selectedImageURL as? NSObject) {
+        } else if !value.imageURL.isNullOrEmpty() && value.titles.stringIsEmpty() && !value.selectedImageURL.isNullOrEmpty() {
             subShowType = .OnlyImage
             subContentW = frame.height - 5 + viewConfig.subViewInContentSpace + 10
-        } else if !NSObject.checkObject(value.imageURL as? NSObject) && !value.titles.stringIsEmpty() && !NSObject.checkObject(value.selectedImageURL as? NSObject) {
+        } else if !value.imageURL.isNullOrEmpty() && !value.titles.stringIsEmpty() && !value.selectedImageURL.isNullOrEmpty() {
             subShowType = .TitleImage
             switch viewConfig.imagePosition {
             case .leftImageRightTitle,.leftTitleRightImage:
