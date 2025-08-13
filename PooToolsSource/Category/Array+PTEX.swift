@@ -228,7 +228,7 @@ public extension Array where Element : NSObjectProtocol {
     mutating func removeArray(objects: [NSObjectProtocol], 
                               isRepeat: Bool = true) -> Array {
         for object in objects {
-            if contains(where: {$0.isEqual(object)} ){
+            if contains(where: {$0.isEqual(object)} ) {
                 self.remove(object: object, isRepeat: isRepeat)
             }
         }

@@ -23,10 +23,7 @@ public extension Character {
     //MARK: 检查标量是否将合并到emoji中
     /// 检查标量是否将合并到emoji中
     var isCombinedIntoEmoji: Bool {
-        unicodeScalars.count > 1 &&
-                unicodeScalars.contains {
-                    $0.properties.isJoinControl || $0.properties.isVariationSelector
-                }
+        unicodeScalars.count > 1 && unicodeScalars.contains { $0.properties.isJoinControl || $0.properties.isVariationSelector }
     }
 
     //MARK: 是否为emoji表情

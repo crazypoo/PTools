@@ -10,13 +10,16 @@ import AVFoundation
 import UIKit
 
 public extension AVPlayerItem {
-    func generateThumbnail(startTime:Double = 0,completion: @escaping (UIImage?) -> Void) {
+    func generateThumbnail(startTime:Double = 0,
+                           maximumSize: CGSize = CGSize(width: 1000, height: 1000),
+                           completion: @escaping (UIImage?) -> Void) {
         let assetImageGenerator = AVAssetImageGenerator(asset: asset)
         assetImageGenerator.appliesPreferredTrackTransform = true
+        assetImageGenerator.maximumSize = maximumSize
 
         let time = CMTime(seconds: startTime, preferredTimescale: 1) // 时间为视频开始的时间，这里设置为0秒
-        assetImageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { (_, image, _, _, _) in
-            if let cgImage = image {
+        assetImageGenerator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { (_, image, _, result, _) in
+            if let cgImage = image, result == .succeeded {
                 let thumbnail = UIImage(cgImage: cgImage)
                 completion(thumbnail)
             } else {

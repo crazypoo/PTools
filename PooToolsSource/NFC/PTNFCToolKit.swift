@@ -232,10 +232,12 @@ extension PTNFCToolKit: NFCTagReaderSessionDelegate {
             if self?.shouldLockAfterWrite == true {
                 self?.lockTag(tag: tag, session: session)
             } else {
-                session.alertMessage = self?.writingSuccessMsg ?? ""
-                session.invalidate()
-                self?.onWriteSuccess?()
-                self?.clear()
+                Task{ @MainActor in
+                    session.alertMessage = self?.writingSuccessMsg ?? ""
+                    session.invalidate()
+                    self?.onWriteSuccess?()
+                    self?.clear()
+                }
             }
         }
     }
@@ -246,9 +248,11 @@ extension PTNFCToolKit: NFCTagReaderSessionDelegate {
                 session.invalidate(errorMessage: "\(self!.lockErrorMsg)\(error.localizedDescription)")
                 self?.onError?(error)
             } else {
-                session.alertMessage = self?.onlyReadMsg ?? ""
-                session.invalidate()
-                self?.onWriteSuccess?()
+                Task{ @MainActor in
+                    session.alertMessage = self?.onlyReadMsg ?? ""
+                    session.invalidate()
+                    self?.onWriteSuccess?()
+                }
             }
             self?.clear()
         }

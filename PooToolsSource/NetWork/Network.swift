@@ -333,8 +333,9 @@ public class Network: NSObject {
     }
         
     //MARK: 服务器URL
+    @MainActor
     public class func gobalUrl() async -> String {
-        let environment = await UIApplication.shared.inferredEnvironment
+        let environment = UIApplication.shared.inferredEnvironment
         if environment != .appStore {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTBaseURLMode {
@@ -356,8 +357,9 @@ public class Network: NSObject {
     }
     
     //MARK: socket服务器URL
-    open class func socketGobalUrl() async -> String {
-        let environment = await UIApplication.shared.inferredEnvironment
+    @MainActor
+    public class func socketGobalUrl() async -> String {
+        let environment = UIApplication.shared.inferredEnvironment
         if environment != .appStore {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
             switch PTSocketURLMode {

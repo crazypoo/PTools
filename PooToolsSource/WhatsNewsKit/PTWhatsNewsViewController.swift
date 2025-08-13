@@ -204,7 +204,7 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if let image = cellModel?.newsImage {
+        if let _ = cellModel?.newsImage {
             imageView.isHidden = false
             imageView.snp.makeConstraints { make in
                 make.left.equalToSuperview()

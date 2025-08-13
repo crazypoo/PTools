@@ -34,14 +34,11 @@ public extension Optional where Wrapped: NSObject {
     /// 判断对象是否为 nil、NSNull 或空集合/字符串/数据
     func isNullOrEmpty() -> Bool {
         guard let obj = self else { return true }
-
         if obj is NSNull { return true }
-        
         if let data = obj as? Data, data.isEmpty { return true }
         if let array = obj as? NSArray, array.count == 0 { return true }
         if let dict = obj as? NSDictionary, dict.count == 0 { return true }
         if let str = obj as? NSString, str.length == 0 { return true }
-        
         return false
     }
 }

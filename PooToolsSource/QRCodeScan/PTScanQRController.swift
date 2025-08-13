@@ -347,7 +347,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 檢測相機模塊
     func startScanAction(handle: @escaping PTActionTask) {
         
-        if let device = AVCaptureDevice.default(for: .video) {
+        if let _ = AVCaptureDevice.default(for: .video) {
             switch PTPermission.camera.status {
             case .authorized:
                 handle()

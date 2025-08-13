@@ -58,7 +58,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
                 let headerModel = self.libraries[index.section]
                 header.configure(with: headerModel)
                 header.onToggle = { [weak self] in
-                    self?.viewModel.toggleLibraryExpansion(path: headerModel.path)
+                    self?.viewModel.toggleLibraryExpansion(at: index.section)
                 }
                 return header
             }
@@ -152,34 +152,37 @@ class PTLoadedLibsViewController: PTBaseViewController {
     }
     
     private func bindViewModel() {
-        viewModel.onStateChanged = { [weak self] libraries in
-            self?.libraries = libraries
-            DispatchQueue.main.async {
-                self?.setDataList()
-            }
+        viewModel.onLoadingStateChanged = { [weak self] index in
+            self!.setDataList()
         }
-
-        viewModel.onLibraryUpdated = { [weak self] updatedPath in
-            guard let self = self else { return }
-            if let row = self.libraries.firstIndex(where: { $0.path == updatedPath }) {
-                DispatchQueue.main.async {
-                    if self.libraries[row].classes.count > 0 {
-                        if self.libraries[row].isExpanded {
-                            let rows = self.newCollectionView.collectionSectionDatas[row].rows ?? []
-                            self.newCollectionView.deleteRows(rows, from: row)
-                        } else {
-                            let rows = self.libraries[row].classes.map {
-                                let model = PTFusionCellModel()
-                                model.name = $0
-                                let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
-                                return row
-                            }
-                            self.newCollectionView.insertRows(rows, section: row)
-                        }
-                    }
-                }
-            }
-        }
+//        viewModel.onStateChanged = { [weak self] libraries in
+//            self?.libraries = libraries
+//            DispatchQueue.main.async {
+//                self?.setDataList()
+//            }
+//        }
+//
+//        viewModel.onLibraryUpdated = { [weak self] updatedPath in
+//            guard let self = self else { return }
+//            if let row = self.libraries.firstIndex(where: { $0.path == updatedPath }) {
+//                DispatchQueue.main.async {
+//                    if self.libraries[row].classes.count > 0 {
+//                        if self.libraries[row].isExpanded {
+//                            let rows = self.newCollectionView.collectionSectionDatas[row].rows ?? []
+//                            self.newCollectionView.deleteRows(rows, from: row)
+//                        } else {
+//                            let rows = self.libraries[row].classes.map {
+//                                let model = PTFusionCellModel()
+//                                model.name = $0
+//                                let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
+//                                return row
+//                            }
+//                            self.newCollectionView.insertRows(rows, section: row)
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
     
     @objc private func filterChanged() {
@@ -208,7 +211,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         var sections = [PTSection]()
         
         let screenWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 24 - 4.5
-        sections = libraries.map { value in
+        sections = viewModel.filteredLibraries.map { value in
             var rows = [PTRows]()
             if value.isExpanded {
                 rows = value.classes.map {

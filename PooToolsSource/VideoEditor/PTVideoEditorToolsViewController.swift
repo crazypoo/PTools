@@ -1033,8 +1033,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.avPlayerItem.videoComposition = avc
                 self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
                 
-                
-                UIImage.pt.getVideoFirstImage(asset: self.avPlayer.currentItem!.asset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+                self.avPlayer.currentItem!.asset.getVideoFirstImage(maximumSize: CGSizeMake(.infinity, .infinity)) { image in
                     self.originImageView.image = image
                 }
                 self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)

@@ -35,78 +35,54 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
         case all,`public`,`private`
     }
     
-    struct State {
-        var libraries: [PTLoadedLibrary] = []
-        var filteredLibraries: [PTLoadedLibrary] = []
-        var currentFilter: LibraryFilter = .all
-        var searchText: String = ""
-    }
-    
     // MARK: - Properties
-    
-    private var state = State()
-    private let syncQueue = DispatchQueue(label: "com.loadedLibraries.syncQueue", attributes: .concurrent)
+    private var allLibraries: [PTLoadedLibrary] = []
+    private(set) var filteredLibraries: [PTLoadedLibrary] = []
+    private var currentFilter: LibraryFilter = .all
+    private var searchText: String = ""
 
-    var onStateChanged: (([PTLoadedLibrary]) -> Void)?
-    var onLibraryUpdated: ((String) -> Void)? // path based update
+    // Callback for UI updates
+    var onLoadingStateChanged: ((Int) -> Void)?
     
     // MARK: - Public Methods
     
     func loadLibraries() {
-        PTGCDManager.gcdGobalNormal {
-            let libraries = self.fetchLoadedLibraries()
-            self.syncQueue.async(flags: .barrier) {
-                self.state.libraries = libraries
-                self.applyFilters()
-            }
-        }
+        allLibraries = fetchLoadedLibraries()
+        applyFilters()
     }
     
     func filterLibraries(by filter: LibraryFilter) {
-        syncQueue.async(flags: .barrier) {
-            self.state.currentFilter = filter
-            self.applyFilters()
-        }
+        currentFilter = filter
+        applyFilters()
     }
     
     func searchLibraries(with text: String) {
-        syncQueue.async(flags: .barrier) {
-            self.state.searchText = text
-            self.applyFilters()
-        }
+        searchText = text
+        applyFilters()
     }
     
-    func toggleLibraryExpansion(path: String) {
-        syncQueue.async(flags: .barrier) {
-            guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
+    func toggleLibraryExpansion(at index: Int) {
+        guard index < filteredLibraries.count else { return }
+        filteredLibraries[index].isExpanded.toggle()
+        
+        // Load classes if expanding and not yet loaded
+        if filteredLibraries[index].isExpanded && filteredLibraries[index].classes.isEmpty {
+            // Set loading state
+            filteredLibraries[index].isLoading = true
             
-            var library = self.state.filteredLibraries[index]
-            
-            // 如果已经在加载中，直接跳过
-            if library.isLoading {
-                PTGCDManager.gcdMain {
-                    self.onLibraryUpdated?(path)
+            // Load classes asynchronously
+            let libraryPath = filteredLibraries[index].path
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                let classes = self?.fetchClasses(from: libraryPath) ?? []
+                
+                DispatchQueue.main.async {
+                    guard let self = self, index < self.filteredLibraries.count else { return }
+                    self.filteredLibraries[index].classes = classes
+                    self.filteredLibraries[index].isLoading = false
+                    
+                    // Notify UI to update
+                    self.onLoadingStateChanged?(index)
                 }
-                return
-            }
-
-            library.isExpanded.toggle()
-            self.state.filteredLibraries[index] = library
-
-            PTGCDManager.gcdMain {
-                self.onLibraryUpdated?(path)
-            }
-
-            // 如果展开且 class 为空，才加载
-            if library.isExpanded && library.classes.isEmpty {
-                library.isLoading = true
-                self.state.filteredLibraries[index] = library
-
-                PTGCDManager.gcdMain {
-                    self.onLibraryUpdated?(path)
-                }
-
-                self.loadClassesAsync(for: path)
             }
         }
     }
@@ -114,108 +90,87 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     func generateReport() -> String {
         var report = "=== Loaded Libraries Report ===\n"
         report += "Generated at: \(Date())\n"
+        report += "Total Libraries: \(allLibraries.count)\n"
+        report += "Private Libraries: \(allLibraries.filter { $0.isPrivate }.count)\n"
+        report += "Public Libraries: \(allLibraries.filter { !$0.isPrivate }.count)\n\n"
         
-        let libraries = syncQueue.sync { state.libraries }
-        
-        report += "Total Libraries: \(libraries.count)\n"
-        report += "Private Libraries: \(libraries.filter { $0.isPrivate }.count)\n"
-        report += "Public Libraries: \(libraries.filter { !$0.isPrivate }.count)\n\n"
-        
-        for lib in libraries {
-            report += """
-            Library: \(lib.name)
-              Path: \(lib.path)
-              Type: \(lib.isPrivate ? "Private" : "Public")
-              Size: \(lib.size)
-              Address: \(lib.address)
-            """
-            if !lib.classes.isEmpty {
-                report += "\n  Classes (\(lib.classes.count)):\n"
-                for cls in lib.classes.prefix(10) {
-                    report += "    - \(cls)\n"
+        for library in allLibraries {
+            report += "Library: \(library.name)\n"
+            report += "  Path: \(library.path)\n"
+            report += "  Type: \(library.isPrivate ? "Private" : "Public")\n"
+            report += "  Size: \(library.size)\n"
+            report += "  Address: \(library.address)\n"
+            
+            if !library.classes.isEmpty {
+                report += "  Classes (\(library.classes.count)):\n"
+                for className in library.classes.prefix(10) {
+                    report += "    - \(className)\n"
                 }
-                if lib.classes.count > 10 {
-                    report += "    ... and \(lib.classes.count - 10) more\n"
+                if library.classes.count > 10 {
+                    report += "    ... and \(library.classes.count - 10) more\n"
                 }
             }
-            report += "\n\n"
+            report += "\n"
         }
+        
         return report
     }
     
-    // MARK: - Internal Filter Logic
+    // MARK: - Private Methods
     
     private func applyFilters() {
-        var result = state.libraries
+        filteredLibraries = allLibraries
         
-        switch state.currentFilter {
-        case .public:
-            result = result.filter { !$0.isPrivate }
-        case .private:
-            result = result.filter { $0.isPrivate }
+        // Apply library type filter
+        switch currentFilter {
         case .all:
             break
-        }
-
-        if !state.searchText.isEmpty {
-            let search = state.searchText.lowercased()
-            result = result.filter {
-                $0.name.lowercased().contains(search) ||
-                $0.classes.contains(where: { $0.lowercased().contains(search) })
-            }
+        case .public:
+            filteredLibraries = filteredLibraries.filter { !$0.isPrivate }
+        case .private:
+            filteredLibraries = filteredLibraries.filter { $0.isPrivate }
         }
         
-        state.filteredLibraries = result
-        
-        DispatchQueue.main.async {
-            self.onStateChanged?(result)
-        }
-    }
-    
-    // MARK: - Class Fetching
-    private func loadClassesAsync(for path: String) {
-        PTGCDManager.gcdGobalNormal {
-            let fetched = self.fetchClasses(from: path)
-            PTGCDManager.gcdMain {
-                self.syncQueue.async(flags: .barrier) {
-                    guard let index = self.state.filteredLibraries.firstIndex(where: { $0.path == path }) else { return }
-
-                    var updated = self.state.filteredLibraries[index]
-                    updated.classes = fetched
-                    updated.isLoading = false
-                    self.state.filteredLibraries[index] = updated
-
-                    PTGCDManager.gcdMain {
-                        self.onLibraryUpdated?(path)
-                    }
-                }
+        // Apply search filter
+        if !searchText.isEmpty {
+            let lowercasedSearch = searchText.lowercased()
+            filteredLibraries = filteredLibraries.filter { library in
+                library.name.lowercased().contains(lowercasedSearch) ||
+                library.classes.contains { $0.lowercased().contains(lowercasedSearch) }
             }
         }
     }
-}
-
-extension PTLoadedLibrariesViewModel {
     
-    fileprivate func fetchLoadedLibraries() -> [PTLoadedLibrary] {
+    private func fetchLoadedLibraries() -> [PTLoadedLibrary] {
         var libraries: [PTLoadedLibrary] = []
-        let count = _dyld_image_count()
         
-        for i in 0..<count {
-            guard let cName = _dyld_get_image_name(i) else { continue }
-            let path = String(cString: cName)
-            let header = _dyld_get_image_header(i)
+        let imageCount = _dyld_image_count()
+        
+        for i in 0..<imageCount {
+            guard let imageName = _dyld_get_image_name(i) else { continue }
+            let name = String(cString: imageName)
+            guard let header = _dyld_get_image_header(i) else { continue }
+            _ = _dyld_get_image_vmaddr_slide(i)
+            
+            // Get file size
+            let fileSize = getFileSize(at: name)
+            
+            // Determine if library is private
+            let isPrivate = isPrivateLibrary(path: name)
+            
+            // Format address
             let address = String(format: "0x%lX", Int(bitPattern: header))
-
-            let libraryName = (path as NSString).lastPathComponent
-            let isPrivate = checkIfPrivate(path)
-            let size = formattedFileSize(at: path)
+            
+            // Extract library name from path
+            let libraryName = (name as NSString).lastPathComponent
             
             libraries.append(PTLoadedLibrary(
                 name: libraryName,
-                path: path,
+                path: name,
                 isPrivate: isPrivate,
-                size: size,
-                address: address, classes: []
+                size: fileSize,
+                address: address,
+                classes: []
             ))
         }
         
@@ -235,6 +190,7 @@ extension PTLoadedLibrariesViewModel {
         
         // Convert to buffer pointer for safe iteration
         let buffer = UnsafeBufferPointer(start: classList, count: Int(classCount))
+        
         for cls in buffer {
             // Check if class belongs to this library
             if let imageName = class_getImageName(cls),
@@ -245,25 +201,136 @@ extension PTLoadedLibrariesViewModel {
         }
         
         return classes.sorted()
-
     }
     
-    fileprivate func checkIfPrivate(_ path: String) -> Bool {
-        let privatePrefixes = ["/System/Library/PrivateFrameworks/", "/usr/lib/system/introspection/"]
-        for prefix in privatePrefixes where path.hasPrefix(prefix) {
-            return true
+    private func isPrivateLibrary(path: String) -> Bool {
+        let publicPrefixes = [
+            "/System/Library/",
+            "/usr/lib/",
+            "/Applications/Xcode.app/",
+            "/Library/Developer/"
+        ]
+        
+        let privatePrefixes = [
+            "/System/Library/PrivateFrameworks/",
+            "/usr/lib/system/introspection/"
+        ]
+        
+        // Check private prefixes first
+        for prefix in privatePrefixes {
+            if path.hasPrefix(prefix) {
+                return true
+            }
         }
-        return !path.hasPrefix("/System/Library/") && !path.hasPrefix("/usr/lib/")
+        
+        // Check public prefixes
+        for prefix in publicPrefixes {
+            if path.hasPrefix(prefix) {
+                return false
+            }
+        }
+        
+        // Default to private for app-specific libraries
+        return true
     }
-
-    fileprivate func formattedFileSize(at path: String) -> String {
+    
+    private func getFileSize(at path: String) -> String {
+        // Try file attributes first (works on simulator)
         do {
-            let attrs = try FileManager.default.attributesOfItem(atPath: path)
-            if let size = attrs[.size] as? Int64 {
+            let attributes = try FileManager.default.attributesOfItem(atPath: path)
+            if let size = attributes[.size] as? Int64 {
                 return ByteCountFormatter.string(fromByteCount: size, countStyle: .binary)
             }
-        } catch {}
-        return "Unknown"
+        } catch {
+            // File attributes failed - try alternative methods for device
+        }
+        
+        // Alternative method: Use mach-o introspection for loaded libraries
+        if let size = getLibrarySizeFromMachO(path: path) {
+            return ByteCountFormatter.string(fromByteCount: size, countStyle: .binary)
+        }
+        
+        // Final fallback: Estimate from memory mapping
+        if let size = estimateSizeFromMemoryLayout(path: path) {
+            return ByteCountFormatter.string(fromByteCount: size, countStyle: .binary)
+        }
+        
+        return "N/A (Device)"
+    }
+    
+    private func getLibrarySizeFromMachO(path: String) -> Int64? {
+        let imageCount = _dyld_image_count()
+        
+        for i in 0..<imageCount {
+            guard let imageName = _dyld_get_image_name(i),
+                  String(cString: imageName) == path else { continue }
+            
+            guard let header = _dyld_get_image_header(i) else { continue }
+            
+            // Calculate actual file size from segments (not vmsize)
+            var totalFileSize: Int64 = 0
+            let headerPtr = UnsafeRawPointer(header)
+            var cmdPtr = headerPtr.advanced(by: MemoryLayout<mach_header_64>.size)
+            
+            for _ in 0..<header.pointee.ncmds {
+                let cmd = cmdPtr.assumingMemoryBound(to: load_command.self)
+                
+                if cmd.pointee.cmd == LC_SEGMENT_64 {
+                    let segment = cmdPtr.assumingMemoryBound(to: segment_command_64.self)
+                    // Use filesize instead of vmsize for accurate disk size
+                    if segment.pointee.filesize > 0 {
+                        totalFileSize += Int64(segment.pointee.filesize)
+                    }
+                }
+                
+                cmdPtr = cmdPtr.advanced(by: Int(cmd.pointee.cmdsize))
+            }
+            
+            return totalFileSize > 0 ? totalFileSize : nil
+        }
+        
+        return nil
+    }
+    
+    private func estimateSizeFromMemoryLayout(path: String) -> Int64? {
+        // Simplified estimation - try to get a reasonable approximation
+        let imageCount = _dyld_image_count()
+        
+        for i in 0..<imageCount {
+            guard let imageName = _dyld_get_image_name(i),
+                  String(cString: imageName) == path else { continue }
+            
+            guard let header = _dyld_get_image_header(i) else { continue }
+            
+            // Count only TEXT and DATA segments for a more realistic estimate
+            var estimatedSize: Int64 = 0
+            let headerPtr = UnsafeRawPointer(header)
+            var cmdPtr = headerPtr.advanced(by: MemoryLayout<mach_header_64>.size)
+            
+            for _ in 0..<header.pointee.ncmds {
+                let cmd = cmdPtr.assumingMemoryBound(to: load_command.self)
+                
+                if cmd.pointee.cmd == LC_SEGMENT_64 {
+                    let segment = cmdPtr.assumingMemoryBound(to: segment_command_64.self)
+                    let segmentName = withUnsafePointer(to: segment.pointee.segname) {
+                        $0.withMemoryRebound(to: CChar.self, capacity: 16) {
+                            String(cString: $0)
+                        }
+                    }
+                    
+                    // Only count essential segments, not virtual memory
+                    if segmentName == "__TEXT" || segmentName == "__DATA" || segmentName == "__DATA_CONST" {
+                        estimatedSize += Int64(segment.pointee.filesize)
+                    }
+                }
+                
+                cmdPtr = cmdPtr.advanced(by: Int(cmd.pointee.cmdsize))
+            }
+            
+            return estimatedSize > 0 ? estimatedSize : nil
+        }
+        
+        return nil
     }
 }
 

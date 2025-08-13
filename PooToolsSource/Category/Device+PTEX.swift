@@ -66,6 +66,11 @@ public extension PTPOP where Base: UIDevice {
     static func oneOfPadDevice() -> Bool {
         Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
     }
+    
+    //Pro
+    static func oneOfProDevice() -> Bool {
+        Gobal_device_info.isOneOf(Gobal_group_of_all_pro_device)
+    }
 
     //MARK: 獲取當前設備的名稱
     ///獲取當前設備的名稱
