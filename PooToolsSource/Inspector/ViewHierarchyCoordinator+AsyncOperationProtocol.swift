@@ -28,7 +28,7 @@ extension ViewHierarchyCoordinator: AsyncOperationProtocol {
         operationQueue.addOperation(showLoaderTask)
     }
 
-    private func showLoaderTask(_ loaderView: LoaderView, in window: UIWindow, completion: @escaping (Bool) -> Void) -> MainThreadOperation {
+    private func showLoaderTask(_ loaderView: LoaderView, in window: UIWindow, completion: @escaping PTBoolTask) -> MainThreadOperation {
         MainThreadOperation(name: "show loader") {
             window.addSubview(loaderView)
             window.installView(loaderView, .centerXY)

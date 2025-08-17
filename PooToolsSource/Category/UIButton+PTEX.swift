@@ -119,7 +119,7 @@ public extension UIButton {
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:CGFloat = 2.5,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,
-                       width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
+                       width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
         var dic = [NSAttributedString.Key.font: titleLabel!.font] as! [NSAttributedString.Key:Any]
         let paraStyle = NSMutableParagraphStyle()
         paraStyle.lineSpacing = lineSpacing
@@ -137,7 +137,7 @@ public extension UIButton {
     ///   - timeInterval: 時間
     ///   - finishBlock:回調
     func buttonTimeRun_Base(timeInterval:TimeInterval,
-                            finishBlock: @Sendable @escaping (_ finish:Bool, _ time:Int)->Void) {
+                            finishBlock: @Sendable @escaping (_ finish:Bool, _ time:Int) -> Void) {
         countdownTimer = PTGCDManager.timeRun(timeInterval: timeInterval, finishBlock: finishBlock)
     }
     

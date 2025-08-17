@@ -27,7 +27,7 @@ public class PTLivePhoto {
         }
     }
     /// Save a Live Photo to the Photo Library by passing the paired image and video.
-    public class func saveToLibrary(_ resources: PTLivePhotoResources, completion: @escaping (Bool) -> Void) {
+    public class func saveToLibrary(_ resources: PTLivePhotoResources, completion: @escaping PTBoolTask) {
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = PHAssetCreationRequest.forAsset()
             let options = PHAssetResourceCreationOptions()

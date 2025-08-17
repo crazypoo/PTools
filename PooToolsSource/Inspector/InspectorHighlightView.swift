@@ -258,7 +258,7 @@ final class InspectorHighlightView: LayerView {
         }
     }
 
-    func perform(_ transition: Transition?, completion: ((Bool) -> Void)? = .none) {
+    func perform(_ transition: Transition?, completion: PTBoolTask? = .none) {
         let start: Transition.Settings
         let finish: Transition.Settings
         let delay: TimeInterval

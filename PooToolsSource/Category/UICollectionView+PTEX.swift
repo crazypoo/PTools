@@ -186,7 +186,7 @@ public extension UICollectionView {
                                      bottomContentSpace:CGFloat = 0,
                                      itemSpace:CGFloat,
                                      itemTrailingSpace:CGFloat = 0,
-                                     itemHeight:(Int,AnyObject)->CGFloat) -> NSCollectionLayoutGroup {
+                                     itemHeight:(Int,AnyObject) -> CGFloat) -> NSCollectionLayoutGroup {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupH:CGFloat = 0

@@ -588,7 +588,7 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
 public class PTMediaLibViewController: PTBaseViewController {
 
     ///用於點擊導航欄的確定後,顯示等待HUD的囘調
-    public var selectedHudStatusBlock: ((Bool) -> Void)?
+    public var selectedHudStatusBlock: PTBoolTask?
     ///選擇沒以後的囘調
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     /// Callback for photos that failed to parse

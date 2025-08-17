@@ -668,7 +668,7 @@ public extension UIView {
      - parameter duration: Duration of animation.
      - parameter completion: Completion when animation ended.
      */
-    func fadeIn(duration: TimeInterval = 0.3, completion: ((Bool) -> Void)? = nil) {
+    func fadeIn(duration: TimeInterval = 0.3, completion: PTBoolTask? = nil) {
         UIView.animate(withDuration: duration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: {
             self.alpha = 1
         }, completion: completion)
@@ -680,7 +680,7 @@ public extension UIView {
      - parameter duration: Duration of animation.
      - parameter completion: Completion when animation ended.
      */
-    func fadeOut(duration: TimeInterval = 0.3, completion: ((Bool) -> Void)? = nil) {
+    func fadeOut(duration: TimeInterval = 0.3, completion: PTBoolTask? = nil) {
         UIView.animate(withDuration: duration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: {
             self.alpha = 0
         }, completion: completion)

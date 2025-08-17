@@ -17,7 +17,7 @@ import SafeSFSymbols
 class PTMediaLibCell: PTBaseNormalCell {
     static let ID = "PTMediaLibCell"
     
-    var selectedBlock: ((@escaping (Bool) -> Void) -> Void)?
+    var selectedBlock: ((@escaping PTBoolTask) -> Void)?
     var cellSelectedIndex = 0 {
         didSet {
             selectButton.normalTitle = "\(cellSelectedIndex)"

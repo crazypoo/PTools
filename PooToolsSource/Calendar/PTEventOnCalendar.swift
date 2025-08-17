@@ -173,7 +173,7 @@ public class PTEventOnCalendar: NSObject {
     ///   - endDate: 结束时间
     ///   - notes: 备注
     ///   - eventsClosure: 事件闭包
-    static func updateCalendarsEvents(eventIdentifier: String, title: String, startDate: Date, endDate: Date, notes: String, eventsClosure: @escaping ((Bool) -> Void)) {
+    static func updateCalendarsEvents(eventIdentifier: String, title: String, startDate: Date, endDate: Date, notes: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
         // 请求日历事件
         eventStore.requestAccess(to: .event, completion: {
@@ -214,7 +214,7 @@ public class PTEventOnCalendar: NSObject {
     /// - Parameters:
     ///   - eventIdentifier: 唯一标识符区分某个事件
     ///   - eventsClosure: 事件闭包
-    static func removeCalendarsEvent(eventIdentifier: String, eventsClosure: @escaping ((Bool) -> Void)) {
+    static func removeCalendarsEvent(eventIdentifier: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
         // 请求日历事件
         eventStore.requestAccess(to: .event, completion: {
@@ -328,7 +328,7 @@ extension PTEventOnCalendar {
     ///   - endDate: 结束时间
     ///   - notes: 备注
     ///   - eventsClosure: 事件闭包
-    static func updateEvent(eventIdentifier: String, title: String, startDate: Date, endDate: Date, notes: String, eventsClosure: @escaping ((Bool) -> Void)) {
+    static func updateEvent(eventIdentifier: String, title: String, startDate: Date, endDate: Date, notes: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
         // 获取"提醒"的访问授权
         eventStore.requestAccess(to: .reminder) {(granted, error) in
@@ -373,7 +373,7 @@ extension PTEventOnCalendar {
     ///   - endDate: 结束时间
     ///   - notes: 备注
     ///   - eventsClosure: 事件闭包
-    static func removeEvent(eventIdentifier: String, eventsClosure: @escaping ((Bool) -> Void)) {
+    static func removeEvent(eventIdentifier: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
         // 获取"提醒"的访问授权
         eventStore.requestAccess(to: .reminder) {(granted, error) in

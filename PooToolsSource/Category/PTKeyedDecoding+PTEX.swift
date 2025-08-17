@@ -116,17 +116,17 @@ extension KeyedEncodingContainerProtocol where Key == PTJsonCodingKeys {
 extension KeyedEncodingContainerProtocol {
     mutating func encode(_ value: Dictionary<String, Any>?,
                          forKey key: Key) throws {
-        if value != nil {
+        if let newValue = value {
             var container = self.nestedContainer(keyedBy: PTJsonCodingKeys.self, forKey: key)
-            try container.encode(value!)
+            try container.encode(newValue)
         }
     }
     
     mutating func encode(_ value: Array<Any>?,
                          forKey key: Key) throws {
-        if value != nil {
+        if let newValue = value {
             var container = self.nestedUnkeyedContainer(forKey: key)
-            try container.encode(value!)
+            try container.encode(newValue)
         }
     }
 }

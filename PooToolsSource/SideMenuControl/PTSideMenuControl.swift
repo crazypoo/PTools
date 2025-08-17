@@ -193,7 +193,7 @@ open class PTSideMenuControl: PTBaseViewController {
     /// - Parameters:
     ///   - animated: 动画
     ///   - completion: 完成回调
-    open func revealMenu(animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+    open func revealMenu(animated: Bool = true, completion: PTBoolTask? = nil) {
         changeMenuVisibility(reveal: true, animated: animated, completion: completion)
     }
 
@@ -201,7 +201,7 @@ open class PTSideMenuControl: PTBaseViewController {
     /// - Parameters:
     ///   - animated: 动画
     ///   - completion: 完成回调
-    open func hideMenu(animated: Bool = true, completion: ((Bool) -> Void)? = nil) {
+    open func hideMenu(animated: Bool = true, completion: PTBoolTask? = nil) {
         changeMenuVisibility(reveal: false, animated: animated, completion: completion)
     }
 
@@ -209,7 +209,7 @@ open class PTSideMenuControl: PTBaseViewController {
                                       animated: Bool = true,
                                       shouldCallDelegate: Bool = true,
                                       shouldChangeStatusBar: Bool = true,
-                                      completion: ((Bool) -> Void)? = nil) {
+                                      completion: PTBoolTask? = nil) {
         menuViewController.beginAppearanceTransition(reveal, animated: animated)
 
         if shouldCallDelegate {
@@ -230,7 +230,7 @@ open class PTSideMenuControl: PTBaseViewController {
             }
         }
 
-        let animationCompletionClosure: (Bool) -> Void = { finish in
+        let animationCompletionClosure: PTBoolTask = { finish in
             self.menuViewController.endAppearanceTransition()
 
             if shouldCallDelegate {
@@ -269,7 +269,7 @@ open class PTSideMenuControl: PTBaseViewController {
     private func animateMenu(with reveal: Bool,
                              shouldChangeStatusBar: Bool = true,
                              animations: @escaping PTActionTask,
-                             completion: ((Bool) -> Void)? = nil) {
+                             completion: PTBoolTask? = nil) {
         let duration = reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration
         UIView.animate(withDuration: duration,
                        delay: 0,
@@ -734,7 +734,7 @@ extension PTSideMenuControl {
             return false
         }
 
-        var completion: ((Bool) -> Void)?
+        var completion: PTBoolTask?
 
         init(with fromViewController: UIViewController, toViewController: UIViewController) {
             guard let superView = fromViewController.view.superview else {

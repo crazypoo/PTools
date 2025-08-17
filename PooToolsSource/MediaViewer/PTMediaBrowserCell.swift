@@ -19,7 +19,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
     
     var viewerDismissBlock:PTActionTask?
-    var zoomTask:((Bool) -> Void)?
+    var zoomTask:PTBoolTask?
     var tapTask:PTActionTask?
     var currentCellType:PTViewerDataType = .None
     var longTapWakeUp:PTActionTask?

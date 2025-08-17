@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import AVKit
+import SwifterSwift
 
 extension FileManager: PTProtocolCompatible {}
 // MARK: 沙盒路径的获取
@@ -512,7 +513,7 @@ public extension PTPOP where Base: FileManager {
     ///  - path: 文件路径
     /// - Returns: 文件扩展类型
     static func fileSuffixAtPath(path: String) -> String {
-        (path as NSString).pathExtension
+        path.pathExtension
     }
     
     //MARK: 根据文件路径获取文件名称，是否需要后缀
@@ -523,10 +524,10 @@ public extension PTPOP where Base: FileManager {
     /// - Returns: 文件名称
     static func fileName(path: String,
                          suffix: Bool = true) -> String {
-        let fileName = (path as NSString).lastPathComponent
+        let fileName = path.lastPathComponent
         guard suffix else {
             // 删除后缀
-            return (fileName as NSString).deletingPathExtension
+            return fileName.deletingPathExtension
         }
         return fileName
     }

@@ -217,7 +217,7 @@ public extension UIAlertController {
                                       alertBGColor:UIColor = .white,
     @PTClampedProperyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                                       cancel:PTActionTask? = nil,
-                                      doneBtn:((_ result:[String:String])->Void)?) {
+                                      doneBtn:((_ result:[String:String]) -> Void)?) {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in

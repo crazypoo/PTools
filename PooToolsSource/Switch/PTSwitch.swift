@@ -9,7 +9,7 @@
 import UIKit
 
 open class PTSwitch: UIControl {
-    public var valueChangeCallBack:((Bool) -> Void)?
+    public var valueChangeCallBack:PTBoolTask?
     
     public var isOn = false {
         didSet {

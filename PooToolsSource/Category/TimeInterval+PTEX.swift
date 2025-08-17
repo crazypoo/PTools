@@ -37,13 +37,13 @@ public extension TimeInterval {
         return Date(timeIntervalSince1970: timeSta)
     }
     
-    func toTimeString(dateFormat:String)->String {
+    func toTimeString(dateFormat:String) -> String {
         msTimeToDate().getTimeStr(dateFormat: dateFormat)
     }
     
     //MARK: 獲取播放時長(分:秒)
     ///獲取播放時長(分:秒)
-    func getFormatPlayTime()->String {
+    func getFormatPlayTime() -> String {
         if self.isNaN{
             return "00:00"
         }

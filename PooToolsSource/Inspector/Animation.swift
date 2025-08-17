@@ -44,7 +44,7 @@ extension UIView {
         to toAnimation: Animation,
         duration: TimeInterval = .average,
         delay: TimeInterval = .zero,
-        completion: ((Bool) -> Void)? = nil) {
+        completion: PTBoolTask? = nil) {
         transform = fromAnimation.transform
 
         animate(toAnimation, duration: duration, delay: delay, completion: completion)
@@ -54,7 +54,7 @@ extension UIView {
         _ animation: Animation,
         duration: TimeInterval = .average,
         delay: TimeInterval = .zero,
-        completion: ((Bool) -> Void)? = nil) {
+        completion: PTBoolTask? = nil) {
         UIView.animate(
             withDuration: duration,
             delay: delay,
@@ -73,7 +73,7 @@ extension NSObject {
                  damping: CGFloat = Animation.defaultDamping,
                  options: UIView.AnimationOptions = Animation.defaultOptions,
                  animations: @escaping PTActionTask,
-                 completion: ((Bool) -> Void)? = nil) {
+                 completion: PTBoolTask? = nil) {
         UIView.animate(
             withDuration: duration,
             delay: delay,

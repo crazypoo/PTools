@@ -12,35 +12,15 @@ public extension NSDictionary {
     //MARK: Json類型數據轉字符串
     ///Json類型數據轉字符串
     @objc func jsonDataToString() -> String {
-        var jsonData : Data? = nil
-                
-        let dic = NSMutableDictionary()
-        self.enumerateKeysAndObjects { keys, obj, stop in
-            var keyString = ""
-            var valueString = ""
-            if keys is NSString || keys is String {
-                keyString = keys as! String
-            } else {
-                keyString = String(format: "%@", keys as! CVarArg)
-            }
-            
-            if obj is NSString || obj is String {
-                valueString = obj as! String
-            } else {
-                valueString = String(format: "%@", obj as! CVarArg)
-            }
-            dic.setObject(valueString as NSCopying, forKey: keyString as NSCopying)
+        let stringDict = self.reduce(into: [String: String]()) { result, element in
+            let key = "\(element.key)"
+            let value = "\(element.value)"
+            result[key] = value
         }
         
         do {
-            jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-            let jsonString : NSString = String(data: jsonData!, encoding: .utf8)! as NSString
-            let mutableString = NSMutableString(string: jsonString)
-            let range : NSRange = NSRange(location: 0, length: jsonString.length)
-            mutableString.replaceOccurrences(of: " ", with: "", options: .literal, range: range)
-            let range2 : NSRange = NSRange(location: 0, length: mutableString.length)
-            mutableString.replaceOccurrences(of: "\n", with: "", options: .literal, range: range2)
-            return mutableString as String
+            let data = try JSONSerialization.data(withJSONObject: stringDict, options: [])
+            return String(data: data, encoding: .utf8) ?? ""
         } catch {
             return ""
         }

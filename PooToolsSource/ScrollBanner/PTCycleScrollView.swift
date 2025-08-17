@@ -822,7 +822,7 @@ extension PTCycleScrollView {
         setBannerAttTitle(cell: cell, itemIndex: itemIndex)
     }
     
-    public func playCurrentCellVideo(playCallback:((Bool) -> Void)? = nil) {
+    public func playCurrentCellVideo(playCallback:PTBoolTask? = nil) {
         guard let cell = viewWithTag(100 + currentIndex()) as? PTCycleScrollViewCell else {
             return
         }

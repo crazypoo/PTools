@@ -183,7 +183,7 @@ extension ElementInspectorFormPanelViewController: DataReloadingProtocol {
 }
 
 extension ElementInspectorFormPanelViewController {
-    func togglePanels(to newState: ElementInspectorPanelListState?, animated: Bool, completion: ((Bool) -> Void)? = nil) {
+    func togglePanels(to newState: ElementInspectorPanelListState?, animated: Bool, completion: PTBoolTask? = nil) {
         let newState = newState ?? .allCollapsed
 
         guard animated else {

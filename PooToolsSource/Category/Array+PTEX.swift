@@ -109,14 +109,19 @@ public extension Array {
     
     //MARK: 數組轉字典
     ///數組轉字典
-    func toJSON() -> String {
+    func toJSON(prettyPrinted:Bool = false) -> String? {
         guard JSONSerialization.isValidJSONObject(self) else {
-            PTNSLogConsole("无法解析出JSONString",levelType: .Error,loggerType: .Array)
-            return ""
+            PTNSLogConsole("无法解析出JSONString", levelType: .Error, loggerType: .Array)
+            return nil
         }
-        let data : NSData = try! JSONSerialization.data(withJSONObject: self, options: []) as NSData
-        let JSONString = NSString(data:data as Data,encoding: String.Encoding.utf8.rawValue)
-        return JSONString! as String
+        do {
+            let options: JSONSerialization.WritingOptions = prettyPrinted ? [.prettyPrinted] : []
+            let data = try JSONSerialization.data(withJSONObject: self, options: options)
+            return String(data: data, encoding: .utf8)
+        } catch {
+            PTNSLogConsole("JSON 序列化失败: \(error)", levelType: .Error, loggerType: .Array)
+            return nil
+        }
     }
     
     /**

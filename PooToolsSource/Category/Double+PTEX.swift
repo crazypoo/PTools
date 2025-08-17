@@ -36,9 +36,9 @@ public extension Double {
      */
     //MARK: 物理單位獲取
     ///物理單位獲取
-    func valueAddUnitToString(unit:Unit) -> String {
+    func valueAddUnitToString(unit:Unit,local:String = "zh") -> String {
         let formatter = MeasurementFormatter()
-        formatter.locale = Locale(identifier: "zh")
+        formatter.locale = Locale(identifier: local)
         formatter.unitOptions = .providedUnit
         
         let measurement = Measurement(value: self, unit: unit)

@@ -123,7 +123,7 @@ public extension PHAsset {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = .highQualityFormat
-        PHImageManager.default().requestAVAsset(forVideo: self, options: options) { avAsset, avAudioMix, info in
+        PHImageManager.default().requestAVAsset(forVideo: self, options: options) { avAsset, _, _ in
             if let urlAsset = avAsset as? AVURLAsset {
                 completion(urlAsset)
             } else {
@@ -157,7 +157,7 @@ public extension PHAsset {
         imageManager.requestImage(for: self,
                                   targetSize: CGSize(width: self.pixelWidth, height: self.pixelHeight),
                                   contentMode: .aspectFit,
-                                  options: options) { (image, info) in
+                                  options: options) { (image, _) in
             completion(image)
         }
     }

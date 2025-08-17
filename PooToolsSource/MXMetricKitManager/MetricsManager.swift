@@ -83,7 +83,7 @@ public class MetricsManager: NSObject, MXMetricManagerSubscriber {
         }
     }
     
-    func uploadToServer(data: Data, completion: ((Bool) -> Void)? = nil) {
+    func uploadToServer(data: Data, completion: PTBoolTask? = nil) {
         if let uploadURL = URL(string: PTAppBaseConfig.share.MXMetricKitUploadAddress) {
             var request = URLRequest(url: uploadURL)
             request.httpMethod = "POST"

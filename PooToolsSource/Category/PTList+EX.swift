@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class PTSection: NSObject {
+public class PTSection: NSObject {
     
     public var headerTitle: String?
     public var headerID: String?
@@ -41,7 +41,7 @@ open class PTSection: NSObject {
 }
 
 
-open class PTRows: NSObject {
+public class PTRows: NSObject {
     
     public var title = ""
     public var ID: String = ""
@@ -61,26 +61,6 @@ open class PTRows: NSObject {
         self.nibName = nibName!
         self.badge = badge!
     }
-}
-
-extension UITableView {
-//    //MARK: 註冊TableView的Cell
-//    ///註冊TableView的Cell
-//    public func pt_register(by ptSections: [PTSection]) {
-//        
-//        ptSections.forEach { [weak self] (tmpSection) in
-//            // 注册 hederView
-//            if let cls = tmpSection.headerCls, let id = tmpSection.headerID {
-//                self?.register(cls.self,
-//                         forHeaderFooterViewReuseIdentifier: id)
-//            }
-//            // 注册 cell
-//            tmpSection.rows.forEach { (tmpRow) in
-//                self?.register(tmpRow.cls.self,
-//                         forCellReuseIdentifier: tmpRow.ID)
-//            }
-//        }
-//    }
 }
 
 extension UICollectionView {

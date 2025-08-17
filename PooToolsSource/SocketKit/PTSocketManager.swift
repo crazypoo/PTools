@@ -45,7 +45,7 @@ public class PTSocketManager: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(self.onNetworkStatusChange(notifi:)), name: NSNotification.Name(rawValue: nNetworkStatesChangeNotification), object: nil)
     }
     
-    public func socketSet(completion: @escaping (Bool) -> Void) {
+    public func socketSet(completion: @escaping PTBoolTask) {
         Task {
             let urlString = await Network.socketGobalUrl()
             guard let webSocketUrl = URL(string: urlString),var urlcomponents = URLComponents(url: webSocketUrl, resolvingAgainstBaseURL: false) else {

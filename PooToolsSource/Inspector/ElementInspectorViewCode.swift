@@ -129,7 +129,7 @@ final class ElementInspectorViewCode: BaseView {
         installView(hostScrollView, position: .behind, priority: .required)
     }
 
-    func setContentAnimated(_ content: Content, animateAlongSideTransition animations: PTActionTask? = nil, completion: ((Bool) -> Void)? = nil) {
+    func setContentAnimated(_ content: Content, animateAlongSideTransition animations: PTActionTask? = nil, completion: PTBoolTask? = nil) {
         switch content.type {
         case .panelView:
             content.view.alpha = 0

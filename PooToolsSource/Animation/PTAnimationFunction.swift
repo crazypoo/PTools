@@ -52,7 +52,7 @@ public class PTAnimationFunction: NSObject {
                                               toValue:CGFloat = 0,
                                               duration:CGFloat = PTAnimationDuration,
                                               animation: @escaping PTActionTask,
-                                              completion: @escaping (Bool) -> Void) {
+                                              completion: @escaping PTBoolTask) {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
         
