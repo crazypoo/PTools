@@ -362,6 +362,7 @@
 		559C3D562B282F9E00EE46BC /* CropDimView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C3D4C2B282F9E00EE46BC /* CropDimView.swift */; };
 		559C3D592B282F9E00EE46BC /* CropPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C3D4F2B282F9E00EE46BC /* CropPickerView.swift */; };
 		559C3D5C2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */; };
+		559F81302E54683500D2D155 /* PTTagLabelScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559F812F2E54683500D2D155 /* PTTagLabelScrollView.swift */; };
 		55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */; };
 		55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */; };
 		55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */; };
@@ -1302,6 +1303,7 @@
 		559C3D4C2B282F9E00EE46BC /* CropDimView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropDimView.swift; sourceTree = "<group>"; };
 		559C3D4F2B282F9E00EE46BC /* CropPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropPickerView.swift; sourceTree = "<group>"; };
 		559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorToolsCropControl.swift; sourceTree = "<group>"; };
+		559F812F2E54683500D2D155 /* PTTagLabelScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTagLabelScrollView.swift; sourceTree = "<group>"; };
 		55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftMethodSwizzle.swift; sourceTree = "<group>"; };
 		55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+PTEX.swift"; sourceTree = "<group>"; };
 		55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreLocation+PTEX.swift"; sourceTree = "<group>"; };
@@ -2229,6 +2231,7 @@
 				5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */,
 				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
 				55F7C2B52E118C8900EF2945 /* PTAutoScrollLabel.swift */,
+				559F812F2E54683500D2D155 /* PTTagLabelScrollView.swift */,
 			);
 			path = Label;
 			sourceTree = "<group>";
@@ -4030,7 +4033,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4040,9 +4044,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4057,9 +4065,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4959,6 +4971,7 @@
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				55CFC6922B446A3A00CC6CF5 /* PTGifManager.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
+				559F81302E54683500D2D155 /* PTTagLabelScrollView.swift in Sources */,
 				55B30E0F2B97200D00D99BD4 /* PTSheetViewController.swift in Sources */,
 				55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */,
 				55C4099F2C097547009C0FB6 /* CLLocationManager+PTDebugEx.swift in Sources */,
