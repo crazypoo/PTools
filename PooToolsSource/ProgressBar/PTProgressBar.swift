@@ -22,9 +22,17 @@ import SnapKit
 @objcMembers
 public class PTProgressBar: UIView {
     
+    /// 进度条颜色
     open var barColor: UIColor = .systemBlue {
         didSet {
             progressView.backgroundColor = barColor
+        }
+    }
+    
+    /// 底部轨道颜色
+    open var trackColor: UIColor = .systemGray5 {
+        didSet {
+            trackView.backgroundColor = trackColor
         }
     }
     
@@ -38,6 +46,12 @@ public class PTProgressBar: UIView {
     fileprivate var animationEnd: Bool = false
     fileprivate var isAnimating: Bool = false
     fileprivate var showType: PTProgressBarShowType!
+    
+    fileprivate lazy var trackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = trackColor
+        return view
+    }()
     
     fileprivate lazy var progressView: UIView = {
         let view = UIView()
@@ -64,7 +78,13 @@ public class PTProgressBar: UIView {
     }
 
     private func setupUI() {
+        // 先加轨道，再加进度条
+        addSubview(trackView)
         addSubview(progressView)
+        
+        trackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         switch showType {
         case .Vertical:
@@ -82,6 +102,8 @@ public class PTProgressBar: UIView {
             break
         }
     }
+    
+    // MARK: - Public Methods
     
     public func animationProgress(duration: CGFloat, @PTClampedProperyWrapper(range: 0...1) value: CGFloat) {
         startAnimation(type: .Normal, duration: duration, value: value)
@@ -141,6 +163,7 @@ public class PTProgressBar: UIView {
         return currentProgress
     }
     
+    // MARK: - Layout
     override public func layoutSubviews() {
         super.layoutSubviews()
         
