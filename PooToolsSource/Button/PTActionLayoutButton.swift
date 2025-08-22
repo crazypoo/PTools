@@ -50,6 +50,12 @@ public class PTActionLayoutButton: UIControl {
         }
     }
     
+    public var imageContentMode:UIView.ContentMode = .scaleAspectFit {
+        didSet {
+            updateAppearance()
+        }
+    }
+    
     // 重写 `state` 属性
     public override var state: UIControl.State {
         if !isEnabled {
@@ -86,7 +92,6 @@ public class PTActionLayoutButton: UIControl {
         
     fileprivate lazy var imageView:UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         return view
@@ -304,6 +309,7 @@ public class PTActionLayoutButton: UIControl {
         titleLabel.textColor = currentTitleColor
         titleLabel.textAlignment = textAlignment
         backgroundColor = currentBGColor
+        imageView.contentMode = self.imageContentMode
         if let currentImage = currentImage {
             imageView.loadImage(contentData: currentImage)
         } else {
