@@ -273,6 +273,12 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var selectedBGColor:UIColor = .clear
     public var currentBGColor:UIColor = .clear
 
+    fileprivate var normalAtt:ASAttributedString?
+    fileprivate var highlightedAtt:ASAttributedString?
+    fileprivate var disabledAtt:ASAttributedString?
+    fileprivate var selectedAtt:ASAttributedString?
+    public var currentAtt:ASAttributedString? = nil
+
     // 更新状态时的外观
     private func updateAppearance() {
         switch state {
@@ -282,32 +288,42 @@ public class PTActionLayoutButton: UIControl {
             currentTitleColor = normalTitleColor
             currentFont = normalFont
             currentBGColor = normalBGColor
+            currentAtt = normalAtt
         case .highlighted:
             currentString = highlightedString.stringIsEmpty() ? normalString : highlightedString
             currentImage = highlightedImage ?? normalImage
             currentTitleColor = highlightedTitleColor
             currentFont = highlightedFont ?? normalFont
             currentBGColor = highlightedBGColor
+            currentAtt = highlightedAtt
         case .disabled:
             currentString = disabledString.stringIsEmpty() ? normalString : disabledString
             currentImage = disabledImage ?? normalImage
             currentTitleColor = disabledTitleColor
             currentFont = disabledFont ?? normalFont
             currentBGColor = disabledBGColor
+            currentAtt = disabledAtt
         case .selected:
             currentString = selectedString.stringIsEmpty() ? normalString : selectedString
             currentImage = selectedImage ?? normalImage
             currentTitleColor = selectedTitleColor
             currentFont = selectedFont ?? normalFont
             currentBGColor = selectedBGColor
+            currentAtt = selectedAtt
         default:
             break
         }
         titleLabel.numberOfLines = numbersOfLine
-        titleLabel.text = currentString
-        titleLabel.font = currentFont
-        titleLabel.textColor = currentTitleColor
-        titleLabel.textAlignment = textAlignment
+        if let att = currentAtt {
+            titleLabel.attributed.text = att
+        } else {
+            let nameAtt:ASAttributedString = """
+                        \(wrap: .embedding("""
+                        \(currentString,.foreground(currentTitleColor),.font(currentFont),.paragraph(.alignment(textAlignment),.lineSpacing(labelLineSpace)))
+                        """))
+                        """
+            titleLabel.attributed.text = nameAtt
+        }
         backgroundColor = currentBGColor
         imageView.contentMode = self.imageContentMode
         if let currentImage = currentImage {
@@ -321,7 +337,11 @@ public class PTActionLayoutButton: UIControl {
     public func getKitTitleSize(lineSpacing:CGFloat = 2.5,
                                 height:CGFloat = CGFloat.greatestFiniteMagnitude,
                                 width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        return UIView.sizeFor(string: currentString, font: currentFont,lineSpacing: lineSpacing,height: height,width: width)
+        if let att = currentAtt {
+            return att.value.sizeOfAttributedString()
+        } else {
+            return UIView.sizeFor(string: currentString, font: currentFont,lineSpacing: lineSpacing,height: height,width: width)
+        }
     }
     
     public func getKitCurrentDimension(lineSpacing:CGFloat = 2.5,
@@ -420,6 +440,22 @@ public extension PTActionLayoutButton {
             disabledImage = image
         case .selected:
             selectedImage = image
+        default:
+            break
+        }
+        updateAppearance()
+    }
+    
+    func setAtt(_ att:ASAttributedString?,state:UIControl.State) {
+        switch state {
+        case .normal:
+            normalAtt = att
+        case .highlighted:
+            highlightedAtt = att
+        case .disabled:
+            disabledAtt = att
+        case .selected:
+            selectedAtt = att
         default:
             break
         }
