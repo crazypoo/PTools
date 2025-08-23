@@ -702,7 +702,7 @@ public extension String {
         let totalHeight = UIView.sizeFor(string: self, font: font,lineSpacing: lineSpacing, width: labelShowWidth).height
 
         return Int(totalHeight / lineHeight)
-    }   
+    }
     
     func truncatedText(maxLineNumber:Int,
                        font:UIFont,
@@ -1048,17 +1048,16 @@ public extension String {
     //MARK: 字符串转Dic
     ///字符串转Dic
     func jsonStringToDic() -> NSDictionary? {
-        guard !self.isEmpty,
-              let jsonData = self.data(using: .utf8) else { return nil }
-        
+        guard self.isEmpty,let jsonData = data(using: Encoding.utf8) else {
+            return nil
+        }
         do {
-            if let dic = try JSONSerialization.jsonObject(with: jsonData, options: []) as? NSDictionary {
+            if let dic = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
                 return dic
             } else {
                 return nil
             }
-        } catch {
-            PTNSLogConsole("JSON 解析失败: \(error)")
+        } catch  {
             return nil
         }
     }
@@ -1879,7 +1878,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
 //MARK: 加密类型
 public enum DDYSHAType {
     case SHA1, SHA224, SHA256, SHA384, SHA512
-    var infoTuple: (algorithm: CCHmacAlgorithm, 
+    var infoTuple: (algorithm: CCHmacAlgorithm,
                     length: Int) {
         switch self {
         case .SHA1:
