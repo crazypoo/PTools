@@ -115,7 +115,7 @@ public class PTActionLayoutButton: UIControl {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if currentImage != nil && !currentString.stringIsEmpty() {
+        if currentImage != nil && (!currentString.stringIsEmpty() || currentAtt != nil) {
             switch layoutStyle {
             case .leftImageRightTitle:
                 imageView.isHidden = false
@@ -164,7 +164,7 @@ public class PTActionLayoutButton: UIControl {
                 titleLabel.isHidden = false
 
                 let maxHeight = frame.height - imageSize.height - midSpacing
-                let titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
+                let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 
                 var offSet:CGFloat = 0
                 if titleHeight < maxHeight {
@@ -188,7 +188,7 @@ public class PTActionLayoutButton: UIControl {
                 imageView.isHidden = false
                 titleLabel.isHidden = false
                 
-                let titleHeight = titleLabel.sizeFor(lineSpacing: labelLineSpace,width: frame.width).height + 5
+                let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
                 
                 let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
 
@@ -223,7 +223,7 @@ public class PTActionLayoutButton: UIControl {
             default:
                 break
             }
-        } else if currentImage == nil && !currentString.stringIsEmpty() {
+        } else if currentImage == nil && (!currentString.stringIsEmpty() || currentAtt != nil) {
             titleLabel.isHidden = false
             imageView.isHidden = true
             
@@ -231,7 +231,7 @@ public class PTActionLayoutButton: UIControl {
                 make.left.right.equalToSuperview()
                 make.top.bottom.equalToSuperview()
             }
-        } else if currentImage != nil && currentString.stringIsEmpty() {
+        } else if currentImage != nil && (currentString.stringIsEmpty() && currentAtt != nil) {
             titleLabel.isHidden = true
             imageView.isHidden = false
 
