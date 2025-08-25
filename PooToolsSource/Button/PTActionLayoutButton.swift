@@ -169,6 +169,10 @@ public class PTActionLayoutButton: UIControl {
                 var offSet:CGFloat = 0
                 if titleHeight < maxHeight {
                     offSet = maxHeight - titleHeight
+                    
+                    if offSet < 0 {
+                        offSet = 0
+                    }
                 }
                 
                 let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
@@ -181,14 +185,18 @@ public class PTActionLayoutButton: UIControl {
                 titleLabel.snp.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.top.equalTo(self.imageView.snp.bottom).offset(midSpacing)
-                    make.bottom.equalToSuperview().inset(offSet)
+                    make.height.equalTo(maxHeight - offSet)
                 }
                 
             case .upTitleDownImage:
                 imageView.isHidden = false
                 titleLabel.isHidden = false
                 
-                let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
+                let maxHeight = frame.height - imageSize.height - midSpacing
+                var titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
+                if titleHeight > maxHeight {
+                    titleHeight = maxHeight
+                }
                 
                 let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
 
@@ -231,7 +239,7 @@ public class PTActionLayoutButton: UIControl {
                 make.left.right.equalToSuperview()
                 make.top.bottom.equalToSuperview()
             }
-        } else if currentImage != nil && (currentString.stringIsEmpty() && currentAtt != nil) {
+        } else if currentImage != nil && (currentString.stringIsEmpty() && currentAtt == nil) {
             titleLabel.isHidden = true
             imageView.isHidden = false
 
