@@ -40,6 +40,7 @@ public enum NetWorkStatus {
     case wiredEthernet
     case loopback
     case other
+    case checking
     
     public static func valueName(type:NetWorkStatus) -> String {
         switch type {
@@ -59,6 +60,8 @@ public enum NetWorkStatus {
             "loopback"
         case .other:
             "Other"
+        case .checking:
+            "Checking"
         }
     }
 }
@@ -82,9 +85,9 @@ public enum NetWorkEnvironment : Int {
 
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
-public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double)->()
-public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>)->()
-public typealias FileDownloadFail = (_ error:Error?)->()
+public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
+public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>) -> ()
+public typealias FileDownloadFail = (_ error:Error?) -> ()
 
 public var PTBaseURLMode:NetWorkEnvironment {
     guard let sliderValue = PTCoreUserDefultsWrapper.AppServiceIdentifier else { return .Distribution }
@@ -187,14 +190,14 @@ public class PTNetWorkStatus {
     }
     
     ///监听网络运行状态
-    public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetWorkStatus,NetWorkEnvironment)->Void)?) {
+    public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetWorkStatus,NetWorkEnvironment) -> Void)?) {
         detectNetWork { (status, environment)  in
             PTNSLogConsole(String(format: "PT App current mode".localized(), NetWorkStatus.valueName(type: status),NetWorkEnvironment.valueName(type: environment)),levelType: PTLogMode,loggerType: .Network)
             handle?(status,environment)
         }
     }
     
-    public func netWork(handle: @escaping (_ status:NetWorkStatus)->Void) {
+    public func netWork(handle: @escaping (_ status:NetWorkStatus) -> Void) {
         PTGCDManager.gcdMain {
             self.monitor.pathUpdateHandler = { path in
                 if path.status == .satisfied {
@@ -208,6 +211,8 @@ public class PTNetWorkStatus {
                         handle(.loopback)
                     } else if path.usesInterfaceType(.other) {
                         handle(.other)
+                    } else if path.isExpensive {
+                        handle(.checking)
                     } else {
                         handle(.unknown)
                     }
