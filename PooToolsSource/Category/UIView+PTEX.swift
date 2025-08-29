@@ -1055,6 +1055,12 @@ public extension UIView {
         return image ?? UIImage()
     }
     
+    func toImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: self.bounds.size)
+        return renderer.image { ctx in
+            self.layer.render(in: ctx.cgContext)
+        }
+    }
 }
 
 public extension UILabel {

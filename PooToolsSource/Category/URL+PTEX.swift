@@ -10,6 +10,32 @@ import Foundation
 import AVFoundation
 
 public extension URL {
+    var urlQueryParameters: [String: String] {
+        var params: [String: String] = [:]
+        if let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+           let queryItems = components.queryItems {
+            for item in queryItems {
+                if let value = item.value {
+                    params[item.name] = value
+                }
+            }
+        } else {
+            // 手动解析 scheme 里可能没有 "?" 的情况，如 scheme://key=value&key2=value2
+            let raw = self.absoluteString
+            if let range = raw.range(of: "://") {
+                let queryPart = String(raw[range.upperBound...])
+                let keyValuePairs = queryPart.components(separatedBy: "&")
+                for pair in keyValuePairs {
+                    let kv = pair.components(separatedBy: "=")
+                    if kv.count == 2 {
+                        params[kv[0]] = kv[1]
+                    }
+                }
+            }
+        }
+        return params
+    }
+    
     var urlParameters: [String: String]? {
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: true),
               let queryItems = components.queryItems else { return nil }
@@ -53,5 +79,24 @@ public extension URL {
     func audioLinkGetDurationTime() -> Float {
         let audionAsset = AVURLAsset(url: self)
         return Float(CMTimeGetSeconds(audionAsset.duration))
+    }
+    
+    //MARK: URL获取数据字符串
+    func queryToJSON() -> String? {
+        guard let fragment = self.fragment, // 取 # 后面的部分
+              let fragmentComponents = URLComponents(string: fragment),
+              let queryItems = fragmentComponents.queryItems else {
+            return nil
+        }
+
+        let dict = Dictionary(uniqueKeysWithValues: queryItems.compactMap { item in
+            item.value.map { (item.name, $0) }
+        })
+
+        if let data = try? JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted]),
+           let jsonString = String(data: data, encoding: .utf8) {
+            return jsonString
+        }
+        return nil
     }
 }
