@@ -10,10 +10,12 @@ import Foundation
 import AVFoundation
 
 public extension URL {
-    var urlQueryParameters: [String: String] {
+    var urlQueryParameters: [String: String]? {
         var params: [String: String] = [:]
+        
         if let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
-           let queryItems = components.queryItems {
+           let queryItems = components.queryItems,
+           !queryItems.isEmpty {
             for item in queryItems {
                 if let value = item.value {
                     params[item.name] = value
@@ -33,7 +35,8 @@ public extension URL {
                 }
             }
         }
-        return params
+        
+        return params.isEmpty ? nil : params
     }
     
     var urlParameters: [String: String]? {

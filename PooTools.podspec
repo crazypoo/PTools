@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.79.7'
+    s.version     = '3.80.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -56,14 +56,14 @@ Pod::Spec.new do |s|
         }
     end
 
-    s.subspec 'SwipeCell' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'SwipeCellKit'
-        subspec.source_files = 'PooToolsSource/SwipeCell/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SWIPECELL POOTOOLS_COCOAPODS"
-        }
-    end
+#    s.subspec 'SwipeCell' do |subspec|
+#        subspec.dependency 'PooTools/Core'
+#        subspec.dependency 'SwipeCellKit'
+#        subspec.source_files = 'PooToolsSource/SwipeCell/*.{h,m,swift}'
+#        subspec.pod_target_xcconfig = {
+#            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SWIPECELL POOTOOLS_COCOAPODS"
+#        }
+#    end
 
     s.subspec 'NotificationBanner' do |subspec|
         subspec.dependency 'PooTools/Core'
@@ -973,7 +973,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Vision'
         subspec.dependency 'PooTools/NavBarController'
         subspec.dependency 'PooTools/NotificationBanner'
-        subspec.dependency 'PooTools/SwipeCell'
+#        subspec.dependency 'PooTools/SwipeCell'
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/Router'
         subspec.dependency 'PooTools/Ping'

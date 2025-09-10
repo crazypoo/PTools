@@ -1078,7 +1078,6 @@ open class PTFusionCell: PTBaseNormalCell {
     }
 }
 
-#if POOTOOLS_SWIPECELL
 @objcMembers
 open class PTFusionSwipeCell: PTBaseSwipeCell {
     public static let ID = "PTFusionSwipeCell"
@@ -1173,7 +1172,6 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-#endif
 
 public extension UICollectionViewCell {
     func cellContentViewCorners(radius:CGFloat = 0,
