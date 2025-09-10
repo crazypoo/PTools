@@ -118,6 +118,8 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
 }
 
+extension PTBaseNavControl:UINavigationControllerDelegate {}
+
 #else
 @objcMembers
 open class PTBaseNavControl: UINavigationController {
