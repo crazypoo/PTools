@@ -100,6 +100,7 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                                 self.tapGesture = UITapGestureRecognizer { tapSender in
                                     self.closeActions(animated: true)
                                     self.contentView.removeGestureRecognizer(self.tapGesture!)
+                                    self.tapGesture = nil
                                 }
                                 self.contentView.addGestureRecognizer(self.tapGesture!)
                             }
@@ -112,8 +113,10 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                                 self.openLeftActions()
                             } else {
                                 self.closeActions(animated: true)
-                                self.tapGesture = nil
-                                self.contentView.removeGestureRecognizer(self.tapGesture!)
+                                if let tapGes = self.tapGesture {
+                                    self.contentView.removeGestureRecognizer(tapGes)
+                                    self.tapGesture = nil
+                                }
                             }
                         default:
                             break
@@ -124,8 +127,8 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                 self.contentView.addGestureRecognizer(panGesture)
             } else {
                 self.closeActions(animated: true)
-                self.tapGesture = nil
                 self.contentView.removeGestureRecognizers()
+                self.tapGesture = nil
             }
         }
     }
