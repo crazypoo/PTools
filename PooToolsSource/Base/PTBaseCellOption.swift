@@ -96,6 +96,13 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                             let maxRight = CGFloat(self.rightActionButtons.count) * self.actionWidth
                             offsetX = max(-maxRight, min(offsetX, maxLeft))
                             self.contentLeadingConstraint?.update(offset: offsetX)
+                            if self.tapGesture == nil {
+                                self.tapGesture = UITapGestureRecognizer { tapSender in
+                                    self.closeActions(animated: true)
+                                    self.contentView.removeGestureRecognizer(self.tapGesture!)
+                                }
+                                self.contentView.addGestureRecognizer(self.tapGesture!)
+                            }
                             self.layoutIfNeeded()   // 🔥 必須要這個才能看到移動效果
                         case .ended, .cancelled:
                             let threshold: CGFloat = 40
@@ -105,6 +112,8 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                                 self.openLeftActions()
                             } else {
                                 self.closeActions(animated: true)
+                                self.tapGesture = nil
+                                self.contentView.removeGestureRecognizer(self.tapGesture!)
                             }
                         default:
                             break
@@ -112,13 +121,10 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                     }
                 }
                 panGesture.delegate = self
-                
-                let tap = UITapGestureRecognizer { sender in
-                    self.closeActions(animated: true)
-                }
-                self.contentView.addGestureRecognizers([tap,panGesture])
+                self.contentView.addGestureRecognizer(panGesture)
             } else {
                 self.closeActions(animated: true)
+                self.tapGesture = nil
                 self.contentView.removeGestureRecognizers()
             }
         }
@@ -128,6 +134,8 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
     private let actionContainer = UIView()
     
     private var panGesture: UIPanGestureRecognizer!
+    private var tapGesture: UITapGestureRecognizer?
+    
     private var isOpen = false
     private let actionWidth: CGFloat = 80
     private var leftActionButtons: [PTActionLayoutButton] = []
