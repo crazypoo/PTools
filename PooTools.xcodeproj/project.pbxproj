@@ -830,6 +830,7 @@
 		55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */; };
 		55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBC42ABE193200858348 /* PTFileBrowser.swift */; };
 		55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E51757292C9DB200BFF122 /* PTDataEncryption.swift */; };
+		55E780242E71438D00DC4DB8 /* PTFullScreenPopGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E780232E71438D00DC4DB8 /* PTFullScreenPopGesture.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
 		55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */; };
@@ -1778,6 +1779,7 @@
 		55E3BBC42ABE193200858348 /* PTFileBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFileBrowser.swift; sourceTree = "<group>"; };
 		55E51757292C9DB200BFF122 /* PTDataEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDataEncryption.swift; sourceTree = "<group>"; };
 		55E51759292CB87500BFF122 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		55E780232E71438D00DC4DB8 /* PTFullScreenPopGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFullScreenPopGesture.swift; sourceTree = "<group>"; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DB128ED63F9004CF2C1 /* PTSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSignView.swift; sourceTree = "<group>"; };
 		55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsDemoController.swift; sourceTree = "<group>"; };
@@ -3531,6 +3533,7 @@
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
 				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
+				55E780232E71438D00DC4DB8 /* PTFullScreenPopGesture.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -4022,7 +4025,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4032,9 +4036,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4049,9 +4057,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4910,6 +4922,7 @@
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
 				55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */,
 				55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */,
+				55E780242E71438D00DC4DB8 /* PTFullScreenPopGesture.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
 				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
