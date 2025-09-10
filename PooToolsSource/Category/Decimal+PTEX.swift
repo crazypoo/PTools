@@ -29,4 +29,23 @@ public extension Decimal {
 
         return rounded.decimalValue
     }
+    
+    /*
+     把金額分割成小數點前和小數點後
+     */
+    func priceCut() -> (String,String) {
+        var beforeDecimal = ""
+        var afterDecimal = ".00"
+
+        // 轉成字串（用 String(describing:) 或 NumberFormatter）
+        let numberString = String(describing: self)
+        // 找到小數點位置
+        if let dotIndex = numberString.firstIndex(of: ".") {
+            beforeDecimal = String(numberString[..<dotIndex])      // "46"
+            afterDecimal = String(numberString[dotIndex...])        // ".5"
+        } else {
+            beforeDecimal = numberString
+        }
+        return (beforeDecimal,afterDecimal)
+    }
 }
