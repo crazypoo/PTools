@@ -118,22 +118,6 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
 }
 
-// MARK: - 左滑手势返回
-extension PTBaseNavControl: UIGestureRecognizerDelegate,UINavigationControllerDelegate {
-    
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if viewControllers.count == 1 {
-            return false
-        }
-        return true
-    }
-    
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        /******处理右滑手势与scrollview手势冲突*******/
-        gestureRecognizer is UIScreenEdgePanGestureRecognizer
-    }
-}
-
 #else
 @objcMembers
 open class PTBaseNavControl: UINavigationController {
@@ -169,12 +153,6 @@ open class PTBaseNavControl: UINavigationController {
     }
     
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
-}
-
-extension PTBaseNavControl:UIGestureRecognizerDelegate {
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        false
-    }
 }
 
 #endif

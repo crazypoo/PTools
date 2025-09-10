@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SwifterSwift
 
 @objcMembers
 open class PTBaseNormalCell: UICollectionViewCell {
@@ -111,7 +112,14 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                     }
                 }
                 panGesture.delegate = self
-                self.contentView.addGestureRecognizer(panGesture)
+                
+                let tap = UITapGestureRecognizer { sender in
+                    self.closeActions(animated: true)
+                }
+                self.contentView.addGestureRecognizers([tap,panGesture])
+            } else {
+                self.closeActions(animated: true)
+                self.contentView.removeGestureRecognizers()
             }
         }
     }
