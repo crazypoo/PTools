@@ -1162,7 +1162,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     public override init(frame:CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(dataContent)
+        contentContainer.addSubview(dataContent)
         dataContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

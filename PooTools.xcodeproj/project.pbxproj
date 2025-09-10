@@ -818,7 +818,6 @@
 		55DD93772B942FFB00F65872 /* PTSideMenuSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD93762B942FFB00F65872 /* PTSideMenuSegue.swift */; };
 		55DD93792B94C1EE00F65872 /* PTSideController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD93782B94C1EE00F65872 /* PTSideController.swift */; };
 		55DD937B2B94CE4800F65872 /* PTBaseSideController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD937A2B94CE4800F65872 /* PTBaseSideController.swift */; };
-		55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE65672B1450A000B436A8 /* SwipeCellOption.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E1B65E2DE603370013A0B4 /* PTNFCToolKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */; };
 		55E1B6602DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E1B65F2DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift */; };
@@ -1766,7 +1765,6 @@
 		55DD93762B942FFB00F65872 /* PTSideMenuSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSideMenuSegue.swift; sourceTree = "<group>"; };
 		55DD93782B94C1EE00F65872 /* PTSideController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSideController.swift; sourceTree = "<group>"; };
 		55DD937A2B94CE4800F65872 /* PTBaseSideController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseSideController.swift; sourceTree = "<group>"; };
-		55DE65672B1450A000B436A8 /* SwipeCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellOption.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E1B65D2DE603370013A0B4 /* PTNFCToolKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNFCToolKit.swift; sourceTree = "<group>"; };
 		55E1B65F2DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGroupBuyAvatarView.swift; sourceTree = "<group>"; };
@@ -2056,7 +2054,6 @@
 				55C742582AD7BE2F007FC330 /* SpeedPanel */,
 				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
 				5589FF4B29A8527D00519383 /* Stepper */,
-				55DE65662B14505300B436A8 /* SwipeCell */,
 				552748522BF8CD6100BF4D18 /* Switch */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
@@ -3669,14 +3666,6 @@
 			path = SideMenuControl;
 			sourceTree = "<group>";
 		};
-		55DE65662B14505300B436A8 /* SwipeCell */ = {
-			isa = PBXGroup;
-			children = (
-				55DE65672B1450A000B436A8 /* SwipeCellOption.swift */,
-			);
-			path = SwipeCell;
-			sourceTree = "<group>";
-		};
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
 			isa = PBXGroup;
 			children = (
@@ -4854,7 +4843,6 @@
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
 				553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */,
 				557E3A942C044CCE002466A0 /* PTCrashLogViewController.swift in Sources */,
-				55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */,
 				556CA4C22B295A5600A5B189 /* PTVideoEditorToolsModel.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
 				55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */,

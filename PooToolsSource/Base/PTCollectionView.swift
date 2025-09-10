@@ -629,14 +629,10 @@ public class PTCollectionView: UIView {
     //MARK: Swipe handler(Cell须要引用SwipeCellKit)
     ///设置IndexPath是否开启向左swipe
     open var indexPathSwipe: PTCollectionViewCanSwipeHandler?
-//    ///设置IndexPath是否开启向右swipe
-//    open var indexPathSwipeRight: PTCollectionViewCanSwipeHandler?
     ///设置向左滑动作
     open var swipeLeftHandler :PTCollectionViewSwipeHandler?
     ///设置向右滑动作
     open var swipeRightHandler: PTCollectionViewSwipeHandler?
-    ///设置滑动content的间隔
-//    open var swipeContentSpaceHandler: ((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
     
     open var itemMoveTo: ((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?
     
@@ -1211,137 +1207,6 @@ extension PTCollectionView:UICollectionViewDataSourcePrefetching {
         let assets = indexPaths.map { photoAssets[$0.item] }
         imageManager.stopCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
     }
-}
-
-//MARK: 滑动Cell设置
-extension PTCollectionView {
-    
-//    func swipeCell(_ cell: PTBaseSwipeCell, didSelectActionAt index: Int) {
-//        if index == 0 {
-//            print("刪除")
-//        } else {
-//            print("更多")
-//        }
-//    }
-
-//    func swipe_cell_configure_action(swipeType:SwipeActionStyle = .destructive,
-//                                     title:String,
-//                                     titleFont:UIFont = UIFont.appfont(size: 13),
-//                                     with descriptor: ActionDescriptor,
-//                                     buttonDisplayMode: ButtonDisplayMode? = .imageOnly,
-//                                     customImage:Any? = nil,
-//                                     customColor:UIColor? = .clear,
-//                                     handler: ((SwipeAction, IndexPath) -> Void)?) -> SwipeAction {
-//        var titleAction:String? = ""
-//        switch buttonDisplayMode {
-//        case .imageOnly:
-//            titleAction = nil
-//        case .titleAndImage:
-//            titleAction = title
-//        case .titleOnly:
-//            titleAction = title
-//        default:break
-//        }
-//        let action = SwipeAction(style: swipeType, title: titleAction, handler: handler)
-//        
-//        let cellHeight = viewConfig.itemHeight == 0 ? PTAppBaseConfig.share.baseCellHeight : viewConfig.itemHeight
-//        
-//        var actionImage:UIImage?
-//        switch buttonDisplayMode {
-//        case .imageOnly,.titleAndImage:
-//            switch descriptor {
-//            case .custom:
-//                if customImage == nil {
-//                    actionImage = nil
-//                } else {
-//                    Task {
-//                        let result = await PTLoadImageFunction.loadImage(contentData: customImage as Any)
-//                        if (result.allImages?.count ?? 0 ) > 1 {
-//                            actionImage = UIImage.animatedImage(with: result.allImages!, duration: result.loadTime)
-//                        } else if (result.allImages?.count ?? 0 ) == 1 {
-//                            actionImage = result.firstImage!
-//                        } else {
-//                            actionImage = PTAppBaseConfig.share.defaultEmptyImage
-//                        }
-//                        var circularIconSize:CGSize = .zero
-//                        switch buttonDisplayMode {
-//                        case .imageOnly:
-//                            circularIconSize = CGSize(width: cellHeight - 10, height: cellHeight - 10)
-//                        default:
-//                            circularIconSize = CGSize(width: cellHeight - 30, height: cellHeight - 30)
-//                        }
-//                        actionImage = actionImage!.transformImage(size: circularIconSize)
-//                    }
-//                }
-//            default:
-//                actionImage = descriptor.image(forStyle: viewConfig.swipeButtonStyle, displayMode: buttonDisplayMode!,cellHeight: cellHeight)
-//            }
-//        default:break
-//        }
-//        
-//        switch buttonDisplayMode {
-//        case .imageOnly:
-//            action.image = actionImage
-//        case .titleAndImage:
-//            action.image = actionImage
-//            action.font = titleFont
-//        case .titleOnly:
-//            action.font = titleFont
-//        default:break
-//        }
-//        action.hidesWhenSelected = true
-//        
-//        switch viewConfig.swipeButtonStyle {
-//        case .backgroundColor:
-//            action.backgroundColor = descriptor.color(forStyle: viewConfig.swipeButtonStyle,customColor: customColor)
-//        case .circular:
-//            action.backgroundColor = .clear
-//            action.textColor = descriptor.color(forStyle: viewConfig.swipeButtonStyle,customColor: customColor)
-//            action.transitionDelegate = ScaleTransition.default
-//        }
-//        return action
-//   }
-//   
-//    public func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-//        var options = SwipeOptions()
-//        options.expansionStyle = orientation == .left ? .selection : .destructive(automaticallyDelete: false)
-//        options.transitionStyle = .border
-//
-//        if swipeContentSpaceHandler != nil {
-//            options.buttonSpacing = swipeContentSpaceHandler!(collectionView,orientation,indexPath)
-//        } else {
-//            options.buttonSpacing = 0
-//        }
-//        return options
-//   }
-//   
-//    public func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-//        if orientation == .right {
-//
-//            if swipeLeftHandler != nil {
-//                let itemSec = mSections[indexPath.section]
-//                return swipeLeftHandler!(collectionView,itemSec,indexPath)
-//            }
-//            
-//            return []
-//        } else {
-//            if indexPathSwipeRight != nil {
-//                let itemSec = mSections[indexPath.section]
-//                let swipeRight = indexPathSwipeRight!(itemSec,indexPath)
-//                if swipeRight {
-//                    if swipeRightHandler != nil {
-//                        let itemSec = mSections[indexPath.section]
-//                        return swipeRightHandler!(collectionView,itemSec,indexPath)
-//                    }
-//                    return []
-//                } else {
-//                    return []
-//                }
-//            } else {
-//                return []
-//            }
-//        }
-//    }
 }
 
 //MARK: 索引设置

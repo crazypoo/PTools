@@ -520,9 +520,6 @@ class PTFuncNameViewController: PTBaseViewController {
         aaaaaaa.indexPathSwipe = { model,indxPath in
             return true
         }
-        aaaaaaa.indexPathSwipeRight = { model,indxPath in
-            return true
-        }
         aaaaaaa.swipeLeftHandler = { collection,sectionModel,indexPath in
             let swipeAction = PTSwipeAction(name: "1111111", image: nil, backgroundColor: .random) { sender in
                 PTNSLogConsole("123123123123123")

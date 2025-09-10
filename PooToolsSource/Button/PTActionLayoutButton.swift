@@ -324,11 +324,20 @@ public class PTActionLayoutButton: UIControl {
         titleLabel.numberOfLines = numbersOfLine
         if let att = currentAtt {
             titleLabel.attributed.text = att
+            if !att.value.containsAction() {
+                if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+                    block(self)
+                }
+            }
         } else {
             let nameAtt:ASAttributedString = """
                         \(wrap: .embedding("""
                         \(currentString,.foreground(currentTitleColor),.font(currentFont),.paragraph(.alignment(textAlignment),.lineSpacing(labelLineSpace)))
-                        """))
+                        """),.action {
+                            if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+                                block(self)
+                            }
+                        })
                         """
             titleLabel.attributed.text = nameAtt
         }
@@ -468,6 +477,22 @@ public extension PTActionLayoutButton {
             break
         }
         updateAppearance()
+    }
+}
+
+extension NSAttributedString {
+    func containsAction() -> Bool {
+        var hasAction = false
+        self.enumerateAttributes(in: NSRange(location: 0, length: self.length), options: []) { attrs, _, stop in
+            if attrs.keys.contains(where: { key in
+                // 檢查任一 key 表示為 action attribute
+                String(describing: key).contains("action")
+            }) {
+                hasAction = true
+                stop.pointee = true
+            }
+        }
+        return hasAction
     }
 }
 
