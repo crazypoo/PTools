@@ -99,7 +99,7 @@ public class PTActionLayoutButton: UIControl {
     
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
-        view.isUserInteractionEnabled = false
+        view.isUserInteractionEnabled = true
         view.clipsToBounds = true
         return view
     }()
@@ -115,123 +115,102 @@ public class PTActionLayoutButton: UIControl {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if currentImage != nil && (!currentString.stringIsEmpty() || currentAtt != nil) {
-            switch layoutStyle {
-            case .leftImageRightTitle:
-                imageView.isHidden = false
-                titleLabel.isHidden = false
+        switch layoutStyle {
+        case .leftImageRightTitle:
+            imageView.isHidden = false
+            titleLabel.isHidden = false
 
-                let currentImageSize:CGFloat = imageSize.width
-                let maxWidth = frame.width - currentImageSize - midSpacing
-                var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
-                if titleWidth > maxWidth {
-                    titleWidth = maxWidth
-                }
-                let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
-                imageView.snp.remakeConstraints { make in
-                    make.left.equalToSuperview().inset(labelX)
-                    make.size.equalTo(self.imageSize)
-                    make.centerY.equalToSuperview()
-                }
-                titleLabel.snp.remakeConstraints { make in
-                    make.width.equalTo(titleWidth)
-                    make.top.bottom.equalToSuperview()
-                    make.left.equalTo(self.imageView.snp.right).offset(midSpacing)
-                }
-            case .leftTitleRightImage:
-                imageView.isHidden = false
-                titleLabel.isHidden = false
-
-                let currentImageSize:CGFloat = imageSize.width
-                let maxWidth = frame.width - currentImageSize - midSpacing
-                var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
-                if titleWidth > maxWidth {
-                    titleWidth = maxWidth
-                }
-                let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
-                titleLabel.snp.remakeConstraints { make in
-                    make.width.equalTo(titleWidth)
-                    make.top.bottom.equalToSuperview()
-                    make.left.equalToSuperview().inset(labelX)
-                }
-                imageView.snp.remakeConstraints { make in
-                    make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
-                    make.size.equalTo(self.imageSize)
-                    make.centerY.equalToSuperview()
-                }
-            case .upImageDownTitle:
-                imageView.isHidden = false
-                titleLabel.isHidden = false
-
-                let maxHeight = frame.height - imageSize.height - midSpacing
-                let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
-                
-                var offSet:CGFloat = 0
-                if titleHeight < maxHeight {
-                    offSet = maxHeight - titleHeight
-                    
-                    if offSet < 0 {
-                        offSet = 0
-                    }
-                }
-                
-                let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
-                imageView.snp.remakeConstraints { make in
-                    make.centerX.equalToSuperview()
-                    make.size.equalTo(self.imageSize)
-                    make.top.equalToSuperview().inset(labelY)
-                }
-
-                titleLabel.snp.remakeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.top.equalTo(self.imageView.snp.bottom).offset(midSpacing)
-                    make.height.equalTo(maxHeight - offSet)
-                }
-                
-            case .upTitleDownImage:
-                imageView.isHidden = false
-                titleLabel.isHidden = false
-                
-                let maxHeight = frame.height - imageSize.height - midSpacing
-                var titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
-                if titleHeight > maxHeight {
-                    titleHeight = maxHeight
-                }
-                
-                let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
-
-                titleLabel.snp.remakeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.top.equalToSuperview().inset(labelY)
-                    make.height.equalTo(titleHeight)
-                }
-                
-                imageView.snp.remakeConstraints { make in
-                    make.centerX.equalToSuperview()
-                    make.size.equalTo(self.imageSize)
-                    make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
-                }
-            case .title:
-                titleLabel.isHidden = false
-                imageView.isHidden = true
-                
-                titleLabel.snp.remakeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.top.bottom.equalToSuperview()
-                }
-            case .image:
-                titleLabel.isHidden = true
-                imageView.isHidden = false
-
-                imageView.snp.remakeConstraints { make in
-                    make.centerX.equalToSuperview()
-                    make.size.equalTo(self.imageSize)
-                    make.centerY.equalToSuperview()
-                }
-            default:
-                break
+            let currentImageSize:CGFloat = imageSize.width
+            let maxWidth = frame.width - currentImageSize - midSpacing
+            var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
+            if titleWidth > maxWidth {
+                titleWidth = maxWidth
             }
-        } else if currentImage == nil && (!currentString.stringIsEmpty() || currentAtt != nil) {
+            let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+            imageView.snp.remakeConstraints { make in
+                make.left.equalToSuperview().inset(labelX)
+                make.size.equalTo(self.imageSize)
+                make.centerY.equalToSuperview()
+            }
+            titleLabel.snp.remakeConstraints { make in
+                make.width.equalTo(titleWidth)
+                make.top.bottom.equalToSuperview()
+                make.left.equalTo(self.imageView.snp.right).offset(midSpacing)
+            }
+        case .leftTitleRightImage:
+            imageView.isHidden = false
+            titleLabel.isHidden = false
+
+            let currentImageSize:CGFloat = imageSize.width
+            let maxWidth = frame.width - currentImageSize - midSpacing
+            var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
+            if titleWidth > maxWidth {
+                titleWidth = maxWidth
+            }
+            let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+            titleLabel.snp.remakeConstraints { make in
+                make.width.equalTo(titleWidth)
+                make.top.bottom.equalToSuperview()
+                make.left.equalToSuperview().inset(labelX)
+            }
+            imageView.snp.remakeConstraints { make in
+                make.left.equalTo(self.titleLabel.snp.right).offset(midSpacing)
+                make.size.equalTo(self.imageSize)
+                make.centerY.equalToSuperview()
+            }
+        case .upImageDownTitle:
+            imageView.isHidden = false
+            titleLabel.isHidden = false
+
+            let maxHeight = frame.height - imageSize.height - midSpacing
+            let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
+            
+            var offSet:CGFloat = 0
+            if titleHeight < maxHeight {
+                offSet = maxHeight - titleHeight
+                
+                if offSet < 0 {
+                    offSet = 0
+                }
+            }
+            
+            let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
+            imageView.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.size.equalTo(self.imageSize)
+                make.top.equalToSuperview().inset(labelY)
+            }
+
+            titleLabel.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalTo(self.imageView.snp.bottom).offset(midSpacing)
+                make.height.equalTo(maxHeight - offSet)
+            }
+            
+        case .upTitleDownImage:
+            imageView.isHidden = false
+            titleLabel.isHidden = false
+            
+            let maxHeight = frame.height - imageSize.height - midSpacing
+            var titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
+            if titleHeight > maxHeight {
+                titleHeight = maxHeight
+            }
+            
+            let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
+
+            titleLabel.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview().inset(labelY)
+                make.height.equalTo(titleHeight)
+            }
+            
+            imageView.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.size.equalTo(self.imageSize)
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
+            }
+        case .title:
             titleLabel.isHidden = false
             imageView.isHidden = true
             
@@ -239,7 +218,7 @@ public class PTActionLayoutButton: UIControl {
                 make.left.right.equalToSuperview()
                 make.top.bottom.equalToSuperview()
             }
-        } else if currentImage != nil && (currentString.stringIsEmpty() && currentAtt == nil) {
+        case .image:
             titleLabel.isHidden = true
             imageView.isHidden = false
 
@@ -248,6 +227,9 @@ public class PTActionLayoutButton: UIControl {
                 make.size.equalTo(self.imageSize)
                 make.centerY.equalToSuperview()
             }
+        default:
+            imageView.isHidden = true
+            titleLabel.isHidden = true
         }
     }
     
@@ -328,18 +310,26 @@ public class PTActionLayoutButton: UIControl {
                 if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
                     block(self)
                 }
+                self.sendActions(for: .touchUpInside)
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    self.updateAppearance()
+                }
             }
         } else {
             let nameAtt:ASAttributedString = """
                         \(wrap: .embedding("""
-                        \(currentString,.foreground(currentTitleColor),.font(currentFont),.paragraph(.alignment(textAlignment),.lineSpacing(labelLineSpace)))
+                        \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace)))
                         """),.action {
-                            if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-                                block(self)
-                            }
+                        if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+                            block(self)
+                        }
+                        self.sendActions(for: .touchUpInside)
+                                PTGCDManager.gcdAfter(time: 0.1) {
+                                    self.updateAppearance()
+                                }
                         })
                         """
-            titleLabel.attributed.text = nameAtt
+            self.titleLabel.attributed.text = nameAtt
         }
         backgroundColor = currentBGColor
         imageView.contentMode = self.imageContentMode
