@@ -37,6 +37,7 @@ public class PTSortButton: UIView {
                         self.downImage.image = image
                     })
                     titleLabel.textColor = buttonTitleNormalColor
+                    titleLabel.font = buttonTitleFont
                 case .Increase:
                     upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
                         self.upImage.image = image
@@ -45,6 +46,7 @@ public class PTSortButton: UIView {
                         self.downImage.image = image
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
+                    titleLabel.font = buttonTitleSelectedFont
                 case .Decrease:
                     upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
                         self.upImage.image = image
@@ -53,6 +55,7 @@ public class PTSortButton: UIView {
                         self.downImage.image = image
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
+                    titleLabel.font = buttonTitleSelectedFont
                 }
             case .Dos:
                 switch sortType {
@@ -61,16 +64,19 @@ public class PTSortButton: UIView {
                         self.upImage.image = image
                     })
                     titleLabel.textColor = buttonTitleNormalColor
+                    titleLabel.font = buttonTitleFont
                 case .Decrease:
                     upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { _, image,_ in
                         self.upImage.image = image
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
+                    titleLabel.font = buttonTitleSelectedFont
                 case .Increase:
                     upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
                         self.upImage.image = image
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
+                    titleLabel.font = buttonTitleSelectedFont
                 }
             }
         }
@@ -87,6 +93,19 @@ public class PTSortButton: UIView {
         didSet {
             titleLabel.font = buttonTitleFont
             layoutSubviews()
+        }
+    }
+    
+    public var buttonTitleSelectedFont:UIFont = .appfont(size: 14) {
+        didSet {
+            switch sortType {
+            case .Increase,.Decrease:
+                titleLabel.font = buttonTitleSelectedFont
+                layoutSubviews()
+            default:
+                titleLabel.font = buttonTitleFont
+                layoutSubviews()
+            }
         }
     }
     
