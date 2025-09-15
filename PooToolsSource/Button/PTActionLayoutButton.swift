@@ -320,13 +320,12 @@ public class PTActionLayoutButton: UIControl {
                         \(wrap: .embedding("""
                         \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace)))
                         """),.action {
-                        if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-                            block(self)
-                        }
-                        self.sendActions(for: .touchUpInside)
-                                PTGCDManager.gcdAfter(time: 0.1) {
-                                    self.updateAppearance()
-                                }
+                            if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+                                block(self)
+                            }
+                            PTGCDManager.gcdAfter(time: 0.1) {
+                                self.updateAppearance()
+                            }
                         })
                         """
             self.titleLabel.attributed.text = nameAtt

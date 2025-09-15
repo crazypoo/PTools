@@ -885,6 +885,14 @@ public extension String {
         let ext = url.pathExtension.lowercased()
         return imageExtensions.contains(ext)
     }
+    
+    //MARK: 根据内容分割字符串
+    func split(around token: String) -> (before: String, after: String)? {
+        guard let range = self.range(of: token) else { return nil }
+        let before = String(self[..<range.lowerBound])
+        let after  = String(self[range.upperBound...])
+        return (before, after)
+    }
 }
 
 fileprivate extension PTUtils {
@@ -914,7 +922,7 @@ fileprivate extension PTUtils {
         guard let cgImage = context.createCGImage(ciImage, from: extent) else { return nil }
 
         // 使用 CGAffineTransform 缩放，避免插值
-        var transform = CGAffineTransform(scaleX: scale, y: scale)
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
         bitmapRef.concatenate(transform)
 
         bitmapRef.draw(cgImage, in: extent)
