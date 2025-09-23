@@ -52,7 +52,7 @@ open class PTBaseNavControl: UINavigationController {
         super.setViewControllers(viewControllers, animated: animated)
     }
     
-    @objc public func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
+    @objc open func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
         .portrait
     }
     
@@ -85,7 +85,7 @@ open class PTBaseNavControl: UINavigationController {
         super.present(viewControllerToPresent, animated: flag, completion: completion)
     }
     
-    @objc func back() {
+    @objc public func back() {
         if self.presentingViewController != nil {
             self.dismiss(animated: true, completion: nil)
         } else {
