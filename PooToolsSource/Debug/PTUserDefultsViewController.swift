@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 class PTUserDefultsViewController: PTBaseViewController {
     
@@ -51,17 +48,9 @@ class PTUserDefultsViewController: PTBaseViewController {
         }
         return view
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        
-        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
-        
-        let dic = UserDefaults.standard.dictionaryRepresentation()
-        PTNSLogConsole(dic,levelType: PTLogMode,loggerType: .UserDefaults)
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         let backBtn = UIButton(type: .custom)
         backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         backBtn.addActionHandlers { sender in
@@ -73,34 +62,26 @@ class PTUserDefultsViewController: PTBaseViewController {
         cleanBtn.addActionHandlers { sender in
             self.clearUserdefults()
         }
-        
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.addSubviews([backBtn,cleanBtn])
-        backBtn.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(21)
-        }
-            
-        cleanBtn.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.size.equalTo(backBtn)
-        }
-#else
         backBtn.frame = CGRectMake(0, 0, 34, 34)
         cleanBtn.frame = CGRectMake(0, 0, 34, 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cleanBtn)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: backBtn)
-#endif
+        setCustomBackButtonView(backBtn)
+        setCustomRightButtons(buttons: [cleanBtn], rightPadding: 0)
+    }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        
+        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        
+        let dic = UserDefaults.standard.dictionaryRepresentation()
+        PTNSLogConsole(dic,levelType: PTLogMode,loggerType: .UserDefaults)
+        
         view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
-                make.top.equalToSuperview()
-#endif
+            make.top.equalToSuperview()
         }
         
         showDetail()

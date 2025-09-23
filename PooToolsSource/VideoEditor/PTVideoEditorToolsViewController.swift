@@ -13,9 +13,6 @@ import SnapKit
 import Harbeth
 import Photos
 import SafeSFSymbols
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
 
@@ -773,11 +770,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 PTNSLogConsole("創建失敗", levelType: .Error,loggerType: .Media)
             }
         }
-#if POOTOOLS_NAVBARCONTROLLER
-#else
         guard let nav = navigationController else { return }
         PTBaseNavControl.GobalNavControl(nav: nav)
-#endif
+        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        setCustomBackButtonView(dismissButtonItem)
+        setCustomRightButtons(buttons: [doneButtonItem], rightPadding: 0)
     }
     
     public init(asset:PHAsset,avAsset:AVAsset) {
@@ -792,32 +790,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-#if POOTOOLS_NAVBARCONTROLLER
-        zx_navBar?.addSubviews([dismissButtonItem,doneButtonItem])
-        dismissButtonItem.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(5)
-        }
-        
-        doneButtonItem.snp.makeConstraints { make in
-            make.size.bottom.equalTo(self.dismissButtonItem)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-#else
-        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonItem)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButtonItem)
-#endif
         
         view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
         imageContent.snp.makeConstraints { make in
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-#else
             make.top.equalToSuperview().inset(10)
-#endif
             make.left.right.equalToSuperview().inset(64)
             make.height.equalTo(self.imageContent.snp.width)
         }

@@ -30,11 +30,15 @@ public class PTAppBaseConfig: NSObject {
 
     //MARK: App全局的导航栏返回按钮
     ///App全局的导航栏返回按钮
+    public var navGradientBack26Image:UIImage = UIImage()
+    public var navGradientBackImage:UIImage = UIImage()
     public var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
+    public var viewControllerBackDarkItemImage:UIImage = UIImage(.chevron.left)
     public var navTitleFont:UIFont = .appfont(size: 24)
     public var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
     public var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
     public var hidesBarsOnSwipe:Bool = false
+    public var navGradientColors:[UIColor] = []
     
     //MARK: 权限请求配置
     public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)

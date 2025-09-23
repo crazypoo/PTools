@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SnapKit
 import Photos
 import SwifterSwift
@@ -559,12 +556,11 @@ public class PTEditImageViewController: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-#else
         guard let nav = navigationController else { return }
         PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
-#endif
         changeStatusBar(type: .Dark)
+        setCustomBackButtonView(dismissButton)
+        setCustomRightButtons(buttons: [doneButton,redoButton,undoButton], rightPadding: 0)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -583,10 +579,7 @@ public class PTEditImageViewController: PTBaseViewController {
         let width = drawLineWidth / mainScrollView.zoomScale * toImageScale
         defaultDrawPathWidth = width
         
-#if POOTOOLS_NAVBARCONTROLLER
-#else
         PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
-#endif
     }
     
     public override func viewDidLayoutSubviews() {
@@ -604,38 +597,6 @@ public class PTEditImageViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navLineViewBackgroundColor = .clear
-        self.zx_navBarBackgroundColor = .clear
-        self.zx_navBar?.addSubviews([dismissButton,undoButton,redoButton,doneButton])
-        dismissButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-        
-        doneButton.snp.makeConstraints { make in
-            make.size.bottom.equalTo(dismissButton)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-        
-        undoButton.snp.makeConstraints { make in
-            make.size.bottom.equalTo(dismissButton)
-            make.right.equalTo(self.doneButton.snp.left).offset(-10)
-        }
-        
-        redoButton.snp.makeConstraints { make in
-            make.size.bottom.equalTo(dismissButton)
-            make.right.equalTo(self.undoButton.snp.left).offset(-10)
-        }
-#else
-        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        undoButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        redoButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: doneButton),UIBarButtonItem(customView: redoButton),UIBarButtonItem(customView: undoButton)]
-#endif
         
         redoButton.isEnabled = (editorManager.actions.count != editorManager.redoActions.count)
         undoButton.isEnabled = !(editorManager.actions.count > 0)
@@ -794,28 +755,16 @@ public class PTEditImageViewController: PTBaseViewController {
     
     func viewToolsBar(show:Bool) {
         toolCollectionView.layer.removeAllAnimations()
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.layer.removeAllAnimations()
-#else
         navigationController?.navigationBar.layer.removeAllAnimations()
-#endif
         if show {
             UIView.animate(withDuration: 0.25) {
                 self.toolCollectionView.alpha = 1
-#if POOTOOLS_NAVBARCONTROLLER
-                self.zx_navBar?.alpha = 1
-#else
                 self.navigationController?.navigationBar.alpha = 1
-#endif
             }
         } else {
             UIView.animate(withDuration: 0.25) {
                 self.toolCollectionView.alpha = 0
-#if POOTOOLS_NAVBARCONTROLLER
-                self.zx_navBar?.alpha = 0
-#else
                 self.navigationController?.navigationBar.alpha = 0
-#endif
             }
         }
     }
@@ -1138,11 +1087,7 @@ extension PTEditImageViewController {
         mainScrollView.alpha = 1
         UIView.animate(withDuration: 0.1) {
             self.toolCollectionView.alpha = 1
-#if POOTOOLS_NAVBARCONTROLLER
-            self.zx_navBar?.alpha = 1
-#else
             self.navigationController?.navigationBar.alpha = 1
-#endif
         }
     }
 }

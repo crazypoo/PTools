@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SnapKit
 import SwifterSwift
 
@@ -107,12 +104,7 @@ class PTPopoverMenuContent: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.navigationBar.isHidden = true
-#endif
     }
     
     override func viewDidLoad() {

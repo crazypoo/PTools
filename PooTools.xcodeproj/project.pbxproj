@@ -130,6 +130,7 @@
 		552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */; };
 		552BECC92DDEDBB900A5BDBB /* PTLazyViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552BECC82DDEDBB900A5BDBB /* PTLazyViewContainer.swift */; };
 		552C4D642D9B87FA00B0CE53 /* PTSnapKitEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */; };
+		552CCF4B2E82BA2200646943 /* PTBaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CCF4A2E82BA2200646943 /* PTBaseButton.swift */; };
 		552F07902B15C66D00CB47CD /* PHAsset+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */; };
 		552F07A02B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */; };
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
@@ -1070,6 +1071,7 @@
 		552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserModel.swift; sourceTree = "<group>"; };
 		552BECC82DDEDBB900A5BDBB /* PTLazyViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLazyViewContainer.swift; sourceTree = "<group>"; };
 		552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSnapKitEX.swift; sourceTree = "<group>"; };
+		552CCF4A2E82BA2200646943 /* PTBaseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseButton.swift; sourceTree = "<group>"; };
 		552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHAsset+PTEX.swift"; sourceTree = "<group>"; };
 		552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGraphicsImageRenderer+PTEX.swift"; sourceTree = "<group>"; };
 		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
@@ -3652,6 +3654,7 @@
 				552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */,
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
 				55040A832E20B37C0074A047 /* PTTriangleView.swift */,
+				552CCF4A2E82BA2200646943 /* PTBaseButton.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4192,6 +4195,7 @@
 				55BA8FA82D29A7D70065FBD0 /* SnapshotStore.swift in Sources */,
 				55BA8FA92D29A7D70065FBD0 /* ElementChildrenPanelViewController+UITableViewDelegate.swift in Sources */,
 				55BA8FAA2D29A7D70065FBD0 /* InspectorConfiguration.swift in Sources */,
+				552CCF4B2E82BA2200646943 /* PTBaseButton.swift in Sources */,
 				55BA8FAB2D29A7D70065FBD0 /* SliderAttributesSectionDataSource.swift in Sources */,
 				55BA8FAC2D29A7D70065FBD0 /* ViewHierarchyInformation.swift in Sources */,
 				55BA8FAD2D29A7D70065FBD0 /* LengthMeasurementView+ArrowView.swift in Sources */,

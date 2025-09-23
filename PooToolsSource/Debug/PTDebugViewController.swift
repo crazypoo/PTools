@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 public class PTDebugViewController: PTBaseViewController {
     
@@ -194,35 +191,22 @@ public class PTDebugViewController: PTBaseViewController {
         return view
     }()
 
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         let backBtn = UIButton(type: .custom)
         backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         backBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
-        
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.addSubview(backBtn)
-        backBtn.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-        }
-#else
-        backBtn.frame = CGRectMake(0, 0, 34, 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
-#endif
-
+        setCustomBackButtonView(backBtn)
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
         }
         Task {
             settingCellModels = await self.createCellModels()

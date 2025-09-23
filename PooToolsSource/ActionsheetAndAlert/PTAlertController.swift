@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 @objcMembers
 open class PTAlertController: PTBaseViewController {
@@ -55,11 +52,7 @@ extension PTAlertController {
 extension PTAlertController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.navigationBar.isHidden = true
-#endif
     }
 
     override open func viewDidAppear(_ animated: Bool) {

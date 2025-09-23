@@ -8,9 +8,6 @@
 
 import UIKit
 import WebKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SnapKit
 
 public extension String {
@@ -30,12 +27,7 @@ open class PTBaseWebViewController: PTBaseViewController {
     
     public var hiddenNav = false {
         didSet {
-#if POOTOOLS_NAVBARCONTROLLER
-            self.zx_hideBaseNavBar = hiddenNav
-#else
             navigationController?.navigationBar.isHidden = true
-#endif
-
             webView.snp.updateConstraints { make in
                 make.top.equalTo(hiddenNav ? 0 : CGFloat.kNavBarHeight_Total)
             }
@@ -91,6 +83,11 @@ open class PTBaseWebViewController: PTBaseViewController {
         return view
     }()
     
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCustomBackButtonView(backButton)
+    }
+    
     public init(showString:String = "") {
         self.showString = showString
         super.init(nibName: nil, bundle: nil)
@@ -109,14 +106,8 @@ open class PTBaseWebViewController: PTBaseViewController {
         super.viewDidLoad()
         
         var topSpace:CGFloat = 0
-#if POOTOOLS_NAVBARCONTROLLER
-        zx_navBar?.zx_leftBtn?.setImage(backImage, for: .normal)
-        topSpace = self.zx_hideBaseNavBar ? 0 : CGFloat.kNavBarHeight_Total
-#else
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         topSpace = (navigationController?.navigationBar.isHidden ?? false) ? -CGFloat.kNavBarHeight_Total : 0
-#endif
         view.addSubviews([webView])
         webView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
@@ -159,11 +150,7 @@ extension PTBaseWebViewController: WKNavigationDelegate,WKUIDelegate,UIScrollVie
     /// 页面加载完成
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         PTNSLogConsole("页面加载完成>>>>>>\(webView)")
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitle = webView.title ?? ""
-#else
         self.title = webView.title ?? ""
-#endif
     }
     
     /// 提交发生错误

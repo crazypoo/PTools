@@ -7,126 +7,12 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
-#if POOTOOLS_NAVBARCONTROLLER
-@objcMembers
-open class PTBaseNavControl: ZXNavigationBarNavigationController {
-        
-    open override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        clearSubStatusBars(isUpdate: false)
-        pushStatusBars(for: viewControllers)
-        super.setViewControllers(viewControllers, animated: animated)
-    }
-    
-    public func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
-        .portrait
-    }
-    
-    /// 修改导航栏返回按钮
-    open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        
-        if viewControllers.count > 0 {
-            let backBtn = UIButton(type: .custom)
-            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-            backBtn.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
-            backBtn.addActionHandlers { seder in
-                self.back()
-            }
-            let leftItem = UIBarButtonItem(customView: backBtn)
-            viewController.navigationItem.leftBarButtonItem = leftItem
-            viewController.hidesBottomBarWhenPushed = true
-        }
-        topViewController?.addSubStatusBar(for: viewController)
-        super.pushViewController(viewController, animated: animated)
-    }
-    
-    open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: PTActionTask? = nil) {
-        
-        // iOS13 默认 UIModalPresentationAutomatic 模式，所以要判断处理一下
-        // 当 modalPresentationStyle == .automatic , 才需要处理.
-        // 如果不加这个判断,可能会导致 present 出来是一个黑色背景的界面. 比如, 做背景半透明的弹窗的时候.
-        if viewControllerToPresent.modalPresentationStyle == .automatic {
-            viewControllerToPresent.modalPresentationStyle = .fullScreen
-        }
-        
-        super.present(viewControllerToPresent, animated: flag, completion: completion)
-#if POOTOOLS_DEBUG
-        SwizzleTool().swizzleDidAddSubview {
-            // Configure console window.
-            let lcm = LocalConsole.shared
-            if lcm.isVisiable {
-                if let mask = lcm.maskView {
-                    PTUtils.fetchWindow()!.bringSubviewToFront(mask)
-                }
-                if let ter = lcm.terminal {
-                    PTUtils.fetchWindow()!.bringSubviewToFront(ter)
-                }
-            }
-        }
-#endif
-    }
-    
-    @objc func back() {
-        self.popViewController(animated: true)
-    }
-    
-    open override var childForStatusBarStyle: UIViewController? {
-        /**
-         自定义UINavigationController，需要重写childForStatusBarStyle。
-         否则preferredStatusBarStyle不执行。
-         */
-        topViewController
-    }
-    
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.zx_disableFullScreenGesture = false
-    }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if #available(iOS 18.0, *) {
-            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
-            setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    
-    // MARK: Lifecycle
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.navigationBar.isTranslucent = true
-        pushStatusBars(for: viewControllers)
-        interactivePopGestureRecognizer?.delegate = self
-        delegate = self
-        
-        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
-        
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
-                self.setNeedsStatusBarAppearanceUpdate()
-            }
-        }
-    }
-    
-    open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
-}
-
-extension PTBaseNavControl:UINavigationControllerDelegate {}
-
-#else
 @objcMembers
 open class PTBaseNavControl: UINavigationController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         PTBaseNavControl.GobalNavControl(nav: self)
     }
     
@@ -142,6 +28,10 @@ open class PTBaseNavControl: UINavigationController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationBar.isTranslucent = true
+        pushStatusBars(for: viewControllers)
+        interactivePopGestureRecognizer?.delegate = self
+        delegate = self
         // Do any additional setup after loading the view.
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
@@ -155,9 +45,64 @@ open class PTBaseNavControl: UINavigationController {
     }
     
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
+    
+    open override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+        clearSubStatusBars(isUpdate: false)
+        pushStatusBars(for: viewControllers)
+        super.setViewControllers(viewControllers, animated: animated)
+    }
+    
+    @objc public func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
+        .portrait
+    }
+    
+    /// 修改导航栏返回按钮
+    open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        
+        if viewControllers.count > 0 {
+            let backBtn = UIButton(type: .custom)
+            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
+            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 24, height: 24)
+            backBtn.addActionHandlers { seder in
+                self.back()
+            }
+            let leftItem = UIBarButtonItem(customView: backBtn)
+            viewController.navigationItem.leftBarButtonItem = leftItem
+            viewController.hidesBottomBarWhenPushed = true
+        }
+        topViewController?.addSubStatusBar(for: viewController)
+        super.pushViewController(viewController, animated: animated)
+    }
+    
+    open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        
+        // iOS13 默认 UIModalPresentationAutomatic 模式，所以要判断处理一下
+        // 当 modalPresentationStyle == .automatic , 才需要处理.
+        // 如果不加这个判断,可能会导致 present 出来是一个黑色背景的界面. 比如, 做背景半透明的弹窗的时候.
+        if viewControllerToPresent.modalPresentationStyle == .automatic {
+            viewControllerToPresent.modalPresentationStyle = .fullScreen
+        }
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+    
+    @objc func back() {
+        if self.presentingViewController != nil {
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true, nil)
+        }
+    }
+    
+    open override var childForStatusBarStyle: UIViewController? {
+        /**
+         自定义UINavigationController，需要重写childForStatusBarStyle。
+         否则preferredStatusBarStyle不执行。
+         */
+        topViewController
+    }
 }
 
-#endif
+extension PTBaseNavControl: UINavigationControllerDelegate {}
 
 extension PTBaseNavControl {
     

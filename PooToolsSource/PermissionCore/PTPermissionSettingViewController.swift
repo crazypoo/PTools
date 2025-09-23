@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 @objcMembers
 public class PTPermissionSettingViewController: PTBaseViewController {
@@ -75,44 +72,24 @@ public class PTPermissionSettingViewController: PTBaseViewController {
         }
         return view
     }()
-
+    
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
-        self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
-        self.zx_navBarBackgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
-#else
         guard let nav = navigationController else { return }
         PTBaseNavControl.GobalNavControl(nav: nav)
-#endif
+        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        setCustomBackButtonView(dismissButton)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitle = "PT Permission Authorize title".localized()
-        self.zx_navBar?.addSubviews([dismissButton])
-        dismissButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-#else
         self.title = "PT Permission Authorize title".localized()
-        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
-#endif
         
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
         }
 
         let sections = permissionStatic.permissionModels.map { value in

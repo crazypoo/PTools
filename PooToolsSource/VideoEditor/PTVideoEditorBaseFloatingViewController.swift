@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
 
@@ -47,11 +44,8 @@ open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         self.navigationController?.isNavigationBarHidden = true
-#endif
+
     }
 
     open override func viewDidLoad() {

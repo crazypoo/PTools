@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 class PTVideoEditorToolsCropControl: PTBaseViewController {
 
@@ -64,13 +61,12 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitleColor = .white
-        self.zx_navBarBackgroundColor = .black
-#else
         guard let nav = navigationController else { return }
         PTBaseNavControl.GobalNavControl(nav: nav,textColor: .white,navColor: .black)
-#endif
+        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        setCustomBackButtonView(dismissButtonItem)
+        setCustomRightButtons(buttons: [doneButtonItem], rightPadding: 0)
     }
 
     init(image: UIImage) {
@@ -85,34 +81,11 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-#if POOTOOLS_NAVBARCONTROLLER
-        zx_navBar?.addSubviews([dismissButtonItem,doneButtonItem])
-        dismissButtonItem.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(5)
-        }
-        
-        doneButtonItem.snp.makeConstraints { make in
-            make.size.bottom.equalTo(self.dismissButtonItem)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-#else
-        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonItem)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButtonItem)
-#endif
-
         self.view.clipsToBounds = true
         self.view.backgroundColor = .black
         self.view.addSubview(self.cropView)
         self.cropView.snp.makeConstraints { make in
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-#else
             make.top.equalToSuperview().inset(10)
-#endif
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }

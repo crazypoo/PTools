@@ -8,9 +8,6 @@
 
 import UIKit
 import SnapKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SwifterSwift
 import AttributedString
 
@@ -256,12 +253,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBarBackgroundColorAlpha = 0
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.isNavigationBarHidden = true
-#endif
         self.changeStatusBar(type: .Dark)
     }
     

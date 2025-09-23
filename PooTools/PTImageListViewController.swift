@@ -42,11 +42,7 @@ class PTImageListViewController: PTBaseViewController {
 
         view.addSubview(listCollection)
         listCollection.snp.makeConstraints { make in
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
             make.left.right.bottom.equalToSuperview()
         }
         loadCell()

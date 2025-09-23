@@ -8,9 +8,6 @@
 
 import UIKit
 import Harbeth
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import AVFoundation
 import SnapKit
 import SwifterSwift
@@ -440,25 +437,15 @@ public class PTFilterCameraViewController: PTBaseViewController {
     //MARK: 生命週期
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBarBackgroundColor = .clear
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.view.backgroundColor = .clear
-#endif
         changeStatusBar(type: .Dark)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBarBackgroundColor = .clear
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.view.backgroundColor = .clear
-#endif
     }
     
     public override func viewDidDisappear(_ animated: Bool) {

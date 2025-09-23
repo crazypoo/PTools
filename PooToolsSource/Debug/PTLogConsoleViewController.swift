@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SafeSFSymbols
 import AttributedString
 
@@ -47,11 +44,7 @@ class PTLogConsoleViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.navigationBar.isHidden = true
-#endif
     }
 
     override func viewDidLoad() {

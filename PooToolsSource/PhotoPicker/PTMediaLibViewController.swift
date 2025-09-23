@@ -13,9 +13,6 @@ import Photos
 import Combine
 import AVFoundation
 import SafeSFSymbols
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 public class PTMediaLibView:UIView {
         
@@ -700,11 +697,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.navigationBar.isHidden = true
-#endif
     }
 
     public override func viewWillLayoutSubviews() {

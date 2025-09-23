@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SnapKit
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
@@ -181,11 +178,6 @@ public class PTPermissionViewController: PTBaseViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBarBackgroundColorAlpha = 0
-        self.zx_hideBaseNavBar = true
-#endif
-        
         permissions = permissionStatic.permissionModels
         
         let closeButton = UIButton(type: .close)

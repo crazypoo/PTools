@@ -196,7 +196,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         }
     }
     
-    func setPlayer(videoQ:URL,playCallback:((Bool)->Void)? = nil) {
+    func setPlayer(videoQ:URL,playCallback:PTBoolTask? = nil) {
         imageView.isHidden = true
         playButton.isHidden = true
         playerViewController.view.isHidden = false

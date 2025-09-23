@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SafeSFSymbols
 
 enum FileSharingManager {
@@ -114,11 +111,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.navigationBar.isHidden = true
-#endif
     }
     
     override func viewDidLoad() {
@@ -282,11 +275,7 @@ class PTClassExplorerViewController: PTBaseViewController {
     // MARK: - Initialization
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = true
-#else
         navigationController?.navigationBar.isHidden = true
-#endif
     }
 
     init(libraryName: String, className: String) {

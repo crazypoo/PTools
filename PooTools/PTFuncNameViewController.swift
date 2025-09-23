@@ -948,14 +948,8 @@ class PTFuncNameViewController: PTBaseViewController {
         .portrait
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-                
-        registerScreenShotService()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         let more = UIButton(type: .custom)
         more.setTitleColor(.random, for: .normal)
@@ -985,25 +979,21 @@ class PTFuncNameViewController: PTBaseViewController {
         let searchBar = PTSearchBar()
         searchBar.clearConfig = searchBarConfig
         searchBar.bounds = CGRect(x: 0, y: 0, width: 64, height: 34)
-        
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.addSubviews([more,popover])
-        more.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            more.size.equalTo(more.bounds.size)
-            make.bottom.equalToSuperview().inset(2)
+        setCustomBackButtonView(popover)
+        setCustomRightButtons(buttons: [more], rightPadding: 0)
+        setCustomTitleView(searchBar)
+        popover.addActionHandlers { sender in
+//            let items = PTPopoverItem()
+//            items.name = "123123123123"
+////            items.icon = "DemoImage"
+//
+//            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 300, sender: sender, arrowDirections: .any) { itemName, index in
+//                PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
+//            }
+            PTNSLogConsole("123123123123123123123123123123123123123123")
+            self.sideMenuController?.revealMenu()
         }
         
-        popover.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            more.size.equalTo(more.bounds.size)
-            make.bottom.equalToSuperview().inset(5)
-        }
-#else
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: popover)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
-        navigationItem.titleView = searchBar
-#endif
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
         let popoverButton = UIButton(type: .custom)
@@ -1046,30 +1036,26 @@ class PTFuncNameViewController: PTBaseViewController {
             let vc = PTTestVC()
             self.currentPresentToSheet(vc: vc,sizes: [.percent(0.9)])
         }
-        
-        popover.addActionHandlers { sender in
-//            let items = PTPopoverItem()
-//            items.name = "123123123123"
-////            items.icon = "DemoImage"
-//            
-//            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 300, sender: sender, arrowDirections: .any) { itemName, index in
-//                PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
-//            }
-            PTNSLogConsole("123123123123123123123123123123123123123123")
-            self.sideMenuController?.revealMenu()
-        }
+
         more.addActionHandlers { sender in
             self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+                
+        registerScreenShotService()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
+        
+                        
         collectionView.backgroundColor = .random
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
@@ -1077,11 +1063,7 @@ class PTFuncNameViewController: PTBaseViewController {
         PTRotationManager.shared.orientationMaskDidChange = { orientationMask in
             PTNSLogConsole("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\(orientationMask)")
             self.collectionView.snp.remakeConstraints { make in
-    #if POOTOOLS_NAVBARCONTROLLER
-                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-    #else
                 make.top.equalToSuperview()
-    #endif
                 make.right.bottom.equalToSuperview()
                 make.left.right.equalToSuperview()
             }

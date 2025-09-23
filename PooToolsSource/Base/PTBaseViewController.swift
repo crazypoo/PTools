@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import FDFullscreenPopGesture
 import SwifterSwift
 import AttributedString
@@ -28,27 +25,19 @@ public enum PTScreenShotActionType {
     case Dark,Light,Auto
 }
 
-#if POOTOOLS_NAVBARCONTROLLER
-@objcMembers
-open class PTBaseViewController: ZXNavigationBarController {
-    deinit {
-        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
-        removeFromSuperStatusBar()
-    }
-        
-    //MARK: 拦截返回上一页
-    ///拦截返回上一页
-    /// - Parameter popBlock: 是否允许放回上一页
-    @objc open func openPopIntercept(popBlock: @escaping (_ viewController:ZXNavigationBarController, _ popBlockFrom:ZXNavPopBlockFrom) -> Bool) {
-        //因FDFullscreenPopGesture默认会在控制器即将展示时显示系统导航栏，与ZXNavigationBar共同使用时会造成系统导航栏出现一下又马上消失，因此需要以下设置
-        self.fd_prefersNavigationBarHidden = true
-        //当您通过zx_handlePopBlock拦截侧滑返回手势时，请设置fd_interactivePopDisabled为YES以关闭FDFullscreenPopGesture在当前控制器的全屏返回手势，否则无法拦截。
-        self.fd_interactivePopDisabled = true
-        
-        self.zx_handlePopBlock = popBlock
+// MARK: - 导航栏样式枚举
+public enum PTNavigationBarStyle {
+    case gradient(type: Imagegradien = .LeftToRight, colors: [DynamicColor])
+    case solid(UIColor)
+    case transparent
+    case custom((UINavigationBar) -> Void)   // 给子类最大自由度
+    
+    // 提供一个默认样式入口（避免把默认写在关联值上）
+    public static var `default`: PTNavigationBarStyle {
+        return .gradient(type: .LeftToRight, colors: [UIColor.white,UIColor.white])
     }
 }
-#else
+
 @objcMembers
 open class PTBaseViewController: UIViewController {
             
@@ -56,8 +45,366 @@ open class PTBaseViewController: UIViewController {
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
         removeFromSuperStatusBar()
     }
+    
+    // 用于自定义背景View（渐变、纯色、透明）
+    public private(set) lazy var navBackgroundView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
+        view.clipsToBounds = true
+        return view
+    }()
+    private weak var currentCustomNavView: UIView?
+    public private(set) lazy var navBackgroundControlView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
+        view.clipsToBounds = true
+        return view
+    }()
+
+    // MARK: - 子类 override 以决定样式
+    open func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .default
+    }
+
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+        applyNavigationBarStyle()
+        setOtherToControlBar()
+        navViewSet()
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    open override func viewWillDisappear(_ animated:Bool) {
+        super.viewWillDisappear(animated)
+        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+    }
+    
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+        
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        setupBaseConfigs()
+    }
+        
+    // 定義一個函數來解析URL中的鍵值對
+    public func parseURLParameters(url: URL) -> [String: String]? {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let queryItems = components.queryItems else {
+            return nil
+        }
+        
+        var parameters = [String: String]()
+        
+        for queryItem in queryItems {
+            parameters[queryItem.name] = queryItem.value
+        }
+        
+        return parameters
+    }
+        
+    // MARK: - 公共 API（子类/外部可调用）
+    open func setCustomBackButton(image: UIImage?,
+                                  backgroundColor: UIColor = .clear,
+                                  size: CGSize = CGSize(width: 30, height: 30),
+                                  leftPadding: CGFloat = 0,
+                                  action: PTActionTask? = nil) {
+        let navBarHeight = CGFloat.kNavBarHeight
+        
+        let backButton = PTBaseButton(type: .custom)
+        if let img = image { backButton.setImage(img.withRenderingMode(.alwaysOriginal), for: .normal) }
+        backButton.backgroundColor = backgroundColor
+        backButton.frame = CGRect(origin: .zero, size: size)
+        backButton.isUserInteractionEnabled = true
+        backButton.addActionHandlers { sender in
+            if let tapAction = action {
+                tapAction()
+            } else {
+                self.backButtonTapped()
+            }
+        }
+        backButton.viewCorner(radius: size.height / 2)
+        let container = UIView()
+        container.snp.makeConstraints { make in
+            make.height.equalTo(navBarHeight)
+            make.width.equalTo(size.width + leftPadding)
+        }
+        container.isUserInteractionEnabled = true
+        container.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().offset(leftPadding)
+            make.size.equalTo(size)
+        }
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: container)
+        if let nav = navigationController {
+            nav.navigationBar.subviews.forEach {
+                if $0 is UIButton || $0.description.contains("BarButton") || $0.description.contains("SearchBar") {
+                    nav.navigationBar.bringSubviewToFront($0)
+                }
+            }
+        }
+    }
+    
+    // 新增：直接传入任意自定义 view
+    open func setCustomBackButtonView(_ customView: UIView,
+                                      leftPadding: CGFloat = 7,
+                                      size: CGSize? = CGSize(width: 30, height: 30),
+                                      action: PTActionTask? = nil) {
+        let finalSize = size ?? customView.frame.size
+        
+        // 用 UIButton 当容器
+        let button = UIButton(frame: CGRect(x: 0, y: 0,
+                                            width: finalSize.width + leftPadding,
+                                            height: finalSize.height))
+        button.addSubview(customView)
+        customView.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(leftPadding)
+            make.size.equalTo(finalSize)
+            make.centerY.equalToSuperview()
+        }
+        
+        // 点击事件
+        if let action = action {
+            button.addActionHandlers(handler: { _ in
+                action()
+            })
+        }
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
+    }
+
+    open func setCustomRightButtons(buttons: [UIView], buttonSpacing: CGFloat = 10, rightPadding: CGFloat = 10) {
+        guard !buttons.isEmpty else {
+            navigationItem.rightBarButtonItem = nil
+            return
+        }
+
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.axis = .horizontal
+        stackView.spacing = buttonSpacing
+        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
+        stackView.isUserInteractionEnabled = true
+
+        let container = UIView()
+        container.addSubview(stackView)
+        container.isUserInteractionEnabled = true
+
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: rightPadding))
+        }
+
+        // 自动测量合适大小
+        let fittingSize = stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        container.frame = CGRect(origin: .zero, size: fittingSize)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: container)
+    }
+
+    open func setCustomTitleView(_ view: UIView? = nil) {
+        navigationItem.titleView = view
+    }
+
+    // MARK: - 设置自定义导航栏背景
+    open func setFullNavigationBarView(_ customView: UIView? = nil) {
+        guard let _ = navigationController else { return }
+        // 先保证背景存在
+        applyNavigationBarStyle()
+        navBackgroundControlView.isUserInteractionEnabled = false
+        // 移除旧的
+        if let oldView = currentCustomNavView, oldView != customView {
+            oldView.removeFromSuperview()
+            currentCustomNavView = nil
+        }
+        
+        guard let navView = customView else { return }
+        navBackgroundControlView.addSubview(navView)
+        navBackgroundControlView.isUserInteractionEnabled = true
+        navView.snp.remakeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(CGFloat.kNavBarHeight)
+        }
+    }
+    
+    // MARK: - 设置自定义导航栏背景
+    open func setOtherToControlBar(_ customView: UIView? = nil) {
+        guard let _ = navigationController else { return }
+        // 先保证背景存在
+        applyNavigationBarStyle()
+        navBackgroundControlView.isHidden = true
+        guard let navView = customView else { return }
+        navBackgroundControlView.addSubview(navView)
+        navBackgroundControlView.isHidden = false
+    }
+
+    open func updateNavigationBarBackground(scrollView: UIScrollView, changeOffset: CGFloat = 100, color: UIColor = .white) {
+        let offset = scrollView.contentOffset.y
+        let alpha = min(1, max(0, offset / changeOffset))
+        // 根据 preferredNavigationBarStyle 应用
+        switch preferredNavigationBarStyle() {
+        case .gradient( _, _):
+            navBackgroundView.alpha = alpha
+        case .solid(_):
+            navBackgroundView.backgroundColor = color.withAlphaComponent(alpha)
+        case .transparent:break
+        case .custom(_):break
+        }
+    }
+    
+    open func setNavigationBarBackgroundAlpha(clear:Bool = false) {
+        navBackgroundView.alpha = clear ? 0 : 1
+    }
+
+    open func setNavTitleFont(_ navigationController: UINavigationController, color: DynamicColor = PTAppBaseConfig.share.navTitleTextColor, font: UIFont = PTAppBaseConfig.share.navTitleFont) {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
+        appearance.shadowColor = .clear
+        // 设置标题属性
+        appearance.titleTextAttributes = [
+            .font: font,
+            .foregroundColor: color
+        ]
+        navigationController.navigationBar.standardAppearance = appearance
+        navigationController.navigationBar.scrollEdgeAppearance = appearance
+        navigationController.navigationBar.compactAppearance = appearance
+    }
+
+    // MARK: - 私有实现
+    private func setupBaseConfigs() {
+        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+        extendedLayoutIncludesOpaqueBars = true
+        edgesForExtendedLayout = [.top, .left, .bottom, .right]
+        definesPresentationContext = true
+        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
+
+    private func applyNavigationBarStyle() {
+        guard let nav = navigationController else { return }
+        // 先清理旧背景
+        clearNavBackgroundView()
+
+        // 根据 preferredNavigationBarStyle 应用
+        switch preferredNavigationBarStyle() {
+        case .gradient(let type, let colors):
+            setupCustomNavigationBar(nav, isGradient: true, type: type, gradientColors: colors,fontColor: .white)
+            changeStatusBar(type: .Dark)
+        case .solid(let color):
+            setupCustomNavigationBar(nav, isGradient: false, barColor: color,fontColor: .black)
+            changeStatusBar(type: .Auto)
+        case .transparent:
+            setupCustomNavigationBar(nav, isGradient: false, barColor: .clear,fontColor: .black)
+            changeStatusBar(type: .Auto)
+        case .custom(let config):
+            config(nav.navigationBar)
+        }
+    }
+
+    // MARK: - 清理背景
+    public func clearNavBackgroundView() {
+        navBackgroundView.subviews.forEach { $0.removeFromSuperview() }
+        navBackgroundView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        navBackgroundView.removeFromSuperview()
+        navBackgroundControlView.subviews.forEach { $0.removeFromSuperview() }
+        navBackgroundControlView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        navBackgroundControlView.removeFromSuperview()
+
+        // 保险检查，避免 pop 过程中 navigationController 已释放导致崩溃
+        if let nav = navigationController {
+            nav.navigationBar.subviews.first?.subviews.filter({ $0.tag == 9999 }).forEach { $0.removeFromSuperview() }
+            nav.navigationBar.subviews.filter({ $0.tag == 100001 }).forEach { $0.removeFromSuperview() }
+        }
+    }
+
+    /// 创建并插入一个背景容器到 navigationBar 的最底层
+    public func setupCustomNavigationBar(_ navigationController: UINavigationController,
+                                  isGradient: Bool = false,
+                                  type: Imagegradien = .LeftToRight,
+                                  gradientColors: [UIColor] = [],
+                                  barColor: UIColor = .white,
+                                  fontColor: UIColor = PTAppBaseConfig.share.navTitleTextColor,
+                                  font: UIFont = PTAppBaseConfig.share.navTitleFont) {
+        // 保证 navigationBar 是透明配置（appearance 已处理）
+        navigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController.navigationBar.shadowImage = UIImage()
+        navigationController.navigationBar.isTranslucent = true
+
+        // 先移除旧 tag 的 view（额外保险）
+        navigationController.navigationBar.subviews.first?.subviews.filter({ $0.tag == 9999 }).forEach { $0.removeFromSuperview() }
+        navigationController.navigationBar.subviews.filter({ $0.tag == 100001 }).forEach { $0.removeFromSuperview() }
+
+        if let barBackground = navigationController.navigationBar.subviews.first {
+            let container = UIView(frame: barBackground.bounds)
+            container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            container.isUserInteractionEnabled = false
+            container.tag = 9999
+            
+            if isGradient {
+                let colorsToUse = gradientColors.isEmpty ? PTAppBaseConfig.share.navGradientColors : gradientColors
+                container.backgroundGradient(type: type, colors: colorsToUse)
+            } else {
+                container.backgroundColor = barColor
+            }
+            
+            barBackground.insertSubview(container, at: 0)
+            self.navBackgroundView = container
+        }
+        
+        let controlContainer = UIView(frame: CGRectMake(0, -CGFloat.statusBarHeight(), CGFloat.kSCREEN_WIDTH, CGFloat.kNavBarHeight_Total))
+        controlContainer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        controlContainer.isUserInteractionEnabled = false
+        controlContainer.clipsToBounds = true
+        controlContainer.tag = 100001
+        navigationController.navigationBar.insertSubview(controlContainer, at: 0)
+        self.navBackgroundControlView = controlContainer
+
+        // 使用 UINavigationBarAppearance 保证无黑条
+        setNavTitleFont(navigationController, color: fontColor, font: font)
+    }
+
+    // MARK: - 其他
+    open func navViewSet() {
+        guard let nav = navigationController else { return }
+        if nav.viewControllers.firstIndex(of: self) ?? 0 > 0 {
+            // 子类可以在 preferredNavigationBarStyle 控制颜色，这里只决定使用哪个 back image
+            var imageName:UIImage
+            switch preferredNavigationBarStyle() {
+            case .gradient(type: .LeftToRight, colors: PTAppBaseConfig.share.navGradientColors):
+                if #available(iOS 26.0, *) {
+                    imageName = PTAppBaseConfig.share.navGradientBack26Image
+                } else {
+                    imageName = PTAppBaseConfig.share.navGradientBackImage
+                }
+                setNavTitleFont(nav,color: .white)
+            default:
+                imageName = (PTDarkModeOption.isLight ? PTAppBaseConfig.share.viewControllerBackItemImage : PTAppBaseConfig.share.viewControllerBackDarkItemImage)
+                setNavTitleFont(nav,color: .black)
+            }
+            setCustomBackButton(image: imageName)
+        }
+    }
+
+    @objc func backButtonTapped() {
+        self.returnFrontVC()
+    }
 }
-#endif
 
 /**
     抽出两个Controller同样用到的地方
@@ -88,27 +435,7 @@ extension PTBaseViewController {
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         StatusBarManager.shared.animation
     }
-    
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-#if POOTOOLS_NAVBARCONTROLLER
-        if presentationController != nil {
-            self.zx_leftClickedBlock { itenBtn in
-                self.viewDismiss()
-            }
-        }
-#endif
-    }
-    
-    override open func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-    }
-    
-    override open func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
+            
     
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -129,39 +456,9 @@ extension PTBaseViewController {
     ///是否隱藏NavBar
     public convenience init(hideBaseNavBar: Bool) {
         self.init()
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_hideBaseNavBar = hideBaseNavBar
-#else
         navigationController?.navigationBar.isHidden = hideBaseNavBar
-#endif
     }
-        
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
-        // Do any additional setup after loading the view.
-        edgesForExtendedLayout = []
-        definesPresentationContext = true
-        
-        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
-        
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
-        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
-#else
-        navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
-#endif
-        
-        if #available(iOS 17.0, *) {
-            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
-                self.setNeedsStatusBarAppearanceUpdate()
-            }
-        }
-    }
-    
+            
     //MARK: 動態更換StatusBar
     ///動態更換StatusBar
     open func changeStatusBar(type:VCStatusBarChangeStatusType) {
@@ -212,8 +509,14 @@ extension PTBaseViewController {
     public func returnFrontVC(completion:PTActionTask? = nil) {
         if presentingViewController != nil {
             dismiss(animated: true, completion: completion)
+        } else if let nav = navigationController {
+            // pop 时用主线程保证安全
+            PTGCDManager.gcdMain {
+                nav.popViewController(animated: true)
+                completion?()
+            }
         } else {
-            navigationController?.popViewController(animated: true, completion)
+            completion?()
         }
 #if POOTOOLS_DEBUG
         if UIApplication.shared.inferredEnvironment != .appStore {

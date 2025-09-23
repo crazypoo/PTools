@@ -22,7 +22,7 @@ public extension UIControl {
     }
 
     /// 扩大点击区域
-    var expandClickEdgeInsets: UIEdgeInsets {
+    var expandClickEdgeInsets: UIEdgeInsets? {
         get {
             objc_getAssociatedObject(self, &Container.expandClickEdgeInsets) as? UIEdgeInsets ?? .zero
         }
@@ -31,8 +31,17 @@ public extension UIControl {
         }
     }
 
-    override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
-        let biggerFrame = CGRect(x: bounds.minX - expandClickEdgeInsets.left, y: bounds.minY - expandClickEdgeInsets.top, width: bounds.width + expandClickEdgeInsets.left + expandClickEdgeInsets.right, height: bounds.height + expandClickEdgeInsets.top + expandClickEdgeInsets.bottom)
-        return biggerFrame.contains(point)
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard let insets = expandClickEdgeInsets else {
+            return super.point(inside: point, with: event)
+        }
+        let hitFrame = bounds.inset(by: insets.inverted) // 注意是反向扩大
+        return hitFrame.contains(point)
+    }
+}
+
+private extension UIEdgeInsets {
+    var inverted: UIEdgeInsets {
+        return UIEdgeInsets(top: -top, left: -left, bottom: -bottom, right: -right)
     }
 }

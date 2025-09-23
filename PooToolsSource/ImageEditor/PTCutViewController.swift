@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SnapKit
 import SwifterSwift
 
@@ -239,12 +236,14 @@ class PTCutViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-#else
         if let nav = navigationController {
             PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
         }
-#endif
+        cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+
+        setCustomBackButtonView(cancelBtn)
+        setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
     }
 
     init(image: UIImage, status: PTClipStatus) {
@@ -285,27 +284,6 @@ class PTCutViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navLineViewBackgroundColor = .clear
-        self.zx_navBarBackgroundColor = .clear
-        self.zx_navLeftBtn?.isHidden = true
-        self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
-        cancelBtn.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-        
-        doneBtn.snp.makeConstraints { make in
-            make.size.bottom.equalTo(self.cancelBtn)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-#else
-        cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
-#endif
         setupUI()
         generateThumbnailImage()
     }

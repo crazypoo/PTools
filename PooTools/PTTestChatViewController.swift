@@ -218,11 +218,7 @@ class PTTestChatViewController: PTBaseViewController {
         view.addSubviews([chatContent])
         chatContent.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
         }
         
         chatContent.chatDataArr = testModel()

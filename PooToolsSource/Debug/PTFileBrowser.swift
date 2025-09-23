@@ -8,9 +8,6 @@
 
 import UIKit
 import MobileCoreServices
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import UniformTypeIdentifiers
 
 public class PTFileBrowser: NSObject {
@@ -21,11 +18,7 @@ public class PTFileBrowser: NSObject {
     lazy var navigationController: PTBaseNavControl = {
         let rootViewController = PTFileBrowserViewController()
         let navigation = PTBaseNavControl(rootViewController: rootViewController)
-#if POOTOOLS_NAVBARCONTROLLER
-        rootViewController.zx_navTitleColor = .black
-#else
         navigation.navigationBar.barTintColor = .black
-#endif
         return navigation
     }()
 }

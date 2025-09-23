@@ -8,9 +8,6 @@
 
 import UIKit
 import SnapKit
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 import SwifterSwift
 
 @objcMembers
@@ -152,35 +149,22 @@ public class PTDarkModeControl: PTBaseViewController {
         return view
     }()
 
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        backButton.frame = CGRectMake(0, 0, 34, 34)
+        setCustomBackButtonView(backButton)
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitle = PTDarkModeOption.titleSting
-        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
-        zx_navLeftBtn?.isHidden = true
-        zx_navLineView?.isHidden = true
-        
-        zx_navBar?.addSubviews([backButton])
-        backButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(5)
-        }
-#else
         title = PTDarkModeOption.titleSting
-        backButton.frame = CGRectMake(0, 0, 34, 34)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-#endif
+        
         // Do any additional setup after loading the view.
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
         }
         apply()
     }
@@ -224,12 +208,7 @@ extension PTDarkModeControl: PTThemeable {
             self.backButton.setImage(PTDarkModeOption.backImage, for: .normal)
             self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
             self.showDetail()
-#if POOTOOLS_NAVBARCONTROLLER
-            self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
-            self.zx_navBarBackgroundColor = PTAppBaseConfig.share.navBackgroundColor
-#else
             PTBaseNavControl.GobalNavControl(nav: self.navigationController!)
-#endif
         }
     }
 }
