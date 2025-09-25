@@ -296,7 +296,7 @@ open class PTBaseViewController: UIViewController {
         }
     }
 
-    private func applyNavigationBarStyle() {
+    public func applyNavigationBarStyle() {
         guard let nav = navigationController else { return }
         // 先清理旧背景
         clearNavBackgroundView()
