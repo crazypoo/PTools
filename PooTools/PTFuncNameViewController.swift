@@ -1051,11 +1051,10 @@ class PTFuncNameViewController: PTBaseViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
         
-                        
         collectionView.backgroundColor = .random
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }

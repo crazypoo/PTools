@@ -65,7 +65,7 @@ open class PTBaseViewController: UIViewController {
 
     // MARK: - 子类 override 以决定样式
     open func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-        return .default
+        return .solid(.white)
     }
 
     open override func viewWillAppear(_ animated: Bool) {
@@ -93,8 +93,32 @@ open class PTBaseViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         setupBaseConfigs()
+        
+        PTRotationManager.shared.orientationMaskDidChange = { orientationMask in
+            if let barBackground = self.navigationController?.navigationBar.subviews.first {
+                self.navBackgroundView.frame = barBackground.bounds
+            }
+            self.viewControllerOrientation(orientationMask)
+        }
     }
         
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if #available(iOS 18.0, *) {
+            /*
+            该方式在以下方法中自动生效。
+
+            UIView：draw()、layoutSubviews()、updateConstraints()。
+            UIViewController：viewWillLayoutSubviews()、viewDidLayoutSubviews()、updateViewConstraints()、updateContentUnavailableConfiguration()。
+             */
+            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    open func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {}
+    
     // 定義一個函數來解析URL中的鍵值對
     public func parseURLParameters(url: URL) -> [String: String]? {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
@@ -351,7 +375,9 @@ open class PTBaseViewController: UIViewController {
         navigationController.navigationBar.subviews.filter({ $0.tag == 100001 }).forEach { $0.removeFromSuperview() }
 
         if let barBackground = navigationController.navigationBar.subviews.first {
-            let container = UIView(frame: barBackground.bounds)
+            
+            let containerFrame = barBackground.bounds
+            let container = UIView(frame: containerFrame)
             container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             container.isUserInteractionEnabled = false
             container.tag = 9999
@@ -367,7 +393,17 @@ open class PTBaseViewController: UIViewController {
             self.navBackgroundView = container
         }
         
-        let controlContainer = UIView(frame: CGRectMake(0, -CGFloat.statusBarHeight(), CGFloat.kSCREEN_WIDTH, CGFloat.kNavBarHeight_Total))
+        var controlContainerFrame = CGRect.zero
+        switch PTRotationManager.shared.orientationMask {
+        case .landscape,.landscapeLeft,.landscapeRight:
+            controlContainerFrame = CGRectMake(0, 0, CGFloat.kNavBarWidth, CGFloat.kNavBarHeight)
+        case .portrait,.portraitUpsideDown:
+            controlContainerFrame = CGRectMake(0, -CGFloat.statusBarHeight(), CGFloat.kNavBarWidth, CGFloat.kNavBarHeight_Total)
+        default:
+            controlContainerFrame = CGRectMake(0, -CGFloat.statusBarHeight(), CGFloat.kNavBarWidth, CGFloat.kNavBarHeight_Total)
+        }
+        
+        let controlContainer = UIView(frame: controlContainerFrame)
         controlContainer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         controlContainer.isUserInteractionEnabled = false
         controlContainer.clipsToBounds = true
@@ -436,22 +472,6 @@ extension PTBaseViewController {
         StatusBarManager.shared.animation
     }
             
-    
-    open override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if #available(iOS 18.0, *) {
-            /*
-            该方式在以下方法中自动生效。
-
-            UIView：draw()、layoutSubviews()、updateConstraints()。
-            UIViewController：viewWillLayoutSubviews()、viewDidLayoutSubviews()、updateViewConstraints()、updateContentUnavailableConfiguration()。
-             */
-            baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
-            setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    
     //MARK: 是否隱藏NavBar
     ///是否隱藏NavBar
     public convenience init(hideBaseNavBar: Bool) {

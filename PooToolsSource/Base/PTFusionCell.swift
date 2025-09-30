@@ -11,7 +11,7 @@ import SnapKit
 import AttributedString
 import SwifterSwift
 
-public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:PTSwitch) -> Void
+public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UIControl) -> Void
 public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:UIButton) -> Void
 
 fileprivate extension UIView {
@@ -74,34 +74,40 @@ public class PTFusionCellContent:UIView {
                 self.sectionMore?.removeFromSuperview()
                 self.sectionMore = nil
             }
+            let switchHeight = cellModel.switchControlWidth * (31 / 51)
+            let rightSpacing:CGFloat = cellModel.rightSpace
             
             if let valueSwitch = self.valueSwitch {
-                valueSwitch.onTintColor = cellModel.switchOnTinColor
-                valueSwitch.thumbColor = cellModel.switchThumbTintColor
-                valueSwitch.switchTintColor = cellModel.switchTintColor
-                valueSwitch.backgroundColor = cellModel.switchBackgroundColor
-                valueSwitch.snp.remakeConstraints { (make) in
-                    make.width.equalTo(cellModel.switchControlWidth)
+                switchDataSet(switchControl: valueSwitch)
+                valueSwitch.snp.remakeConstraints { make in
+                    if #available(iOS 26.0, *) {} else {
+                        make.width.equalTo(cellModel.switchControlWidth)
+                        make.height.equalTo(switchHeight)
+                    }
                     make.centerY.equalToSuperview()
-                    make.height.equalTo(cellModel.switchControlWidth * (31 / 51))
-                    make.right.equalToSuperview().inset(cellModel.rightSpace)
+                    make.right.equalToSuperview().inset(rightSpacing)
                 }
             } else {
                 valueSwitch = setValueSwitch()
-                valueSwitch!.onTintColor = cellModel.switchOnTinColor
-                valueSwitch!.thumbColor = cellModel.switchThumbTintColor
-                valueSwitch!.switchTintColor = cellModel.switchTintColor
-                valueSwitch!.backgroundColor = cellModel.switchBackgroundColor
+                switchDataSet(switchControl: valueSwitch!)
+                if valueSwitch is PTSwitch {
+                    (valueSwitch as! PTSwitch).valueChangeCallBack = { value in
+                        self.switchValueChangeBlock?(cellModel.name,self.valueSwitch!)
+                    }
+                } else if valueSwitch is UISwitch {
+                    (valueSwitch as! UISwitch).addSwitchAction { sender in
+                        self.switchValueChangeBlock?(cellModel.name,sender)
+                    }
+                }
                 addSubview(valueSwitch!)
                 valueSwitch!.snp.makeConstraints { (make) in
-                    make.width.equalTo(cellModel.switchControlWidth)
+                    if #available(iOS 26.0, *) {} else {
+                        make.width.equalTo(cellModel.switchControlWidth)
+                        make.height.equalTo(switchHeight)
+                    }
                     make.centerY.equalToSuperview()
-                    make.height.equalTo(cellModel.switchControlWidth * (31 / 51))
-                    make.right.equalToSuperview().inset(cellModel.rightSpace)
+                    make.right.equalToSuperview().inset(rightSpacing)
                 }
-            }
-            valueSwitch!.valueChangeCallBack = { value in
-                self.switchValueChangeBlock?(cellModel.name,self.valueSwitch!)
             }
         case .DisclosureIndicator:
             if let _ = self.valueSwitch {
@@ -273,10 +279,31 @@ public class PTFusionCellContent:UIView {
         return view
     }
     
-    public var valueSwitch: PTSwitch?
-    fileprivate func setValueSwitch() -> PTSwitch {
-        let switchV = PTSwitch()
-        return switchV
+    public var valueSwitch: UIControl?
+    fileprivate func setValueSwitch() -> UIControl {
+        if #available(iOS 26.0, *) {
+            let switchV = UISwitch()
+            return switchV
+        } else {
+            let switchV = PTSwitch()
+            return switchV
+        }
+    }
+    
+    fileprivate func switchDataSet(switchControl:UIControl) {
+        if let currentCellModel = cellModel {
+            if let ptSwitch = switchControl as? PTSwitch {
+                ptSwitch.onTintColor = currentCellModel.switchOnTinColor
+                ptSwitch.thumbColor = currentCellModel.switchThumbTintColor
+                ptSwitch.switchTintColor = currentCellModel.switchTintColor
+                ptSwitch.backgroundColor = currentCellModel.switchBackgroundColor
+            } else if let iOSSwitch = switchControl as? UISwitch {
+                iOSSwitch.onTintColor = currentCellModel.switchOnTinColor
+                iOSSwitch.thumbTintColor = currentCellModel.switchThumbTintColor
+                iOSSwitch.tintColor = currentCellModel.switchTintColor
+                iOSSwitch.backgroundColor = currentCellModel.switchBackgroundColor
+            }
+        }
     }
     
     var contentLabel: UILabel?
@@ -991,7 +1018,11 @@ open class PTFusionCell: PTBaseNormalCell {
     open var switchValue: Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
-                valueSwitch.isOn = switchValue!
+                if let ptSwitch = valueSwitch as? PTSwitch {
+                    ptSwitch.isOn = switchValue!
+                } else if let iosSwitch = valueSwitch as? UISwitch {
+                    iosSwitch.isOn = switchValue!
+                }
             }
         }
     }
@@ -1087,7 +1118,11 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     open var switchValue: Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
-                valueSwitch.isOn = switchValue!
+                if let ptSwitch = valueSwitch as? PTSwitch {
+                    ptSwitch.isOn = switchValue!
+                } else if let iosSwitch = valueSwitch as? UISwitch {
+                    iosSwitch.isOn = switchValue!
+                }
             }
         }
     }

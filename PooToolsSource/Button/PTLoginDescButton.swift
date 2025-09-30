@@ -11,7 +11,9 @@ import SnapKit
 import SwifterSwift
 
 public class PTLoginDescConfig:PTBaseModel {
-    public var textColor:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
+    public var textColor_L:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
+    public var textColor_R:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
+    public var textColor_line:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
     public var textFont:UIFont = .appfont(size: 12)
     public var leftDesc:String = "A"
     public var rightDesc:String = "B"
@@ -30,6 +32,7 @@ open class PTLoginDescButton: UIView {
     
     private lazy var leftDesc:UIButton = {
         let view = baseButton()
+        view.setTitleColor(viewConfig.textColor_L, for: .normal)
         view.setTitle(viewConfig.leftDesc, for: .normal)
         view.addActionHandlers { sender in
             self.descHandler?(.Left)
@@ -39,6 +42,7 @@ open class PTLoginDescButton: UIView {
     
     private lazy var rightDesc:UIButton = {
         let view = baseButton()
+        view.setTitleColor(viewConfig.textColor_R, for: .normal)
         view.setTitle(viewConfig.rightDesc, for: .normal)
         view.addActionHandlers { sender in
             self.descHandler?(.Right)
@@ -48,7 +52,7 @@ open class PTLoginDescButton: UIView {
     
     private lazy var verLine:UIView = {
         let view = UIView()
-        view.backgroundColor = viewConfig.textColor
+        view.backgroundColor = viewConfig.textColor_line
         return view
     }()
     
@@ -84,7 +88,6 @@ open class PTLoginDescButton: UIView {
     private func baseButton() -> UIButton {
         let view = UIButton(type: .custom)
         view.titleLabel?.font = viewConfig.textFont
-        view.setTitleColor(viewConfig.textColor, for: .normal)
         return view
     }
 }

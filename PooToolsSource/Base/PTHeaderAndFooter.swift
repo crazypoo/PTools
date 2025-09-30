@@ -19,7 +19,11 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     public var switchValue:Bool? {
         didSet {
             if let valueSwitch = dataContent.valueSwitch {
-                valueSwitch.isOn = switchValue!
+                if let ptSwitch = valueSwitch as? PTSwitch {
+                    ptSwitch.isOn = switchValue!
+                } else if let iosSwitch = valueSwitch as? UISwitch {
+                    iosSwitch.isOn = switchValue!
+                }
             }
         }
     }
@@ -33,8 +37,14 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         if let valueSwitch = view.valueSwitch {
-            valueSwitch.valueChangeCallBack = { _ in
-                self.switchValueChangeBlock?(self.sectionModel!.name,valueSwitch)
+            if let ptSwitch = valueSwitch as? PTSwitch {
+                ptSwitch.valueChangeCallBack = { _ in
+                    self.switchValueChangeBlock?(self.sectionModel!.name,valueSwitch)
+                }
+            } else if let iOSSwitch = valueSwitch as? UISwitch {
+                iOSSwitch.addSwitchAction { sender in
+                    self.switchValueChangeBlock?(self.sectionModel!.name,sender)
+                }
             }
         }
         if let sectionMore = view.sectionMore {

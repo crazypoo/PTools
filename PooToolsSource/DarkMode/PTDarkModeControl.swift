@@ -125,9 +125,17 @@ public class PTDarkModeControl: PTBaseViewController {
                     }
                     cell.switchValueChangeBlock = { title,sender in
                         if cellModel.name == PTDarkModeOption.smartCellName {
-                            PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: sender.isOn)
+                            if let ptSwitch = sender as? PTSwitch {
+                                PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: ptSwitch.isOn)
+                            } else if let iosSwitch = sender as? UISwitch {
+                                PTDarkModeOption.setSmartPeelingDarkMode(isSmartPeeling: iosSwitch.isOn)
+                            }
                         } else if cellModel.name == PTDarkModeOption.followSystemCellName {
-                            PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: sender.isOn)
+                            if let ptSwitch = sender as? PTSwitch {
+                                PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: ptSwitch.isOn)
+                            } else if let iosSwitch = sender as? UISwitch {
+                                PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: iosSwitch.isOn)
+                            }
                         }
                         self.showDetail()
                         self.themeSetBlock?()

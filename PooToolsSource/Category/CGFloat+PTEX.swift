@@ -42,6 +42,7 @@ public extension CGFloat {
     //MARK: 獲取導航欄Bar高度
     ///獲取導航欄Bar高度
     static let kNavBarHeight: CGFloat = UINavigationController().navigationBar.frame.height
+    static let kNavBarWidth: CGFloat = UINavigationController().navigationBar.frame.width
 
     //MARK: 獲取StatusBar的高度
     ///獲取StatusBar的高度
