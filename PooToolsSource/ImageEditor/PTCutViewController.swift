@@ -102,8 +102,6 @@ class PTCutViewController: PTBaseViewController {
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutBackImage, for: .normal)
-        btn.adjustsImageWhenHighlighted = false
-        btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
         return btn
     }()
     
@@ -118,7 +116,6 @@ class PTCutViewController: PTBaseViewController {
     lazy var doneBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutSubmitImage, for: .normal)
-        btn.adjustsImageWhenHighlighted = false
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -126,7 +123,6 @@ class PTCutViewController: PTBaseViewController {
     private lazy var rotateBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutRotateImage, for: .normal)
-        btn.adjustsImageWhenHighlighted = false
         btn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         return btn
     }()
@@ -234,6 +230,10 @@ class PTCutViewController: PTBaseViewController {
         cleanTimer()
     }
     
+    public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let nav = navigationController {
@@ -242,7 +242,9 @@ class PTCutViewController: PTBaseViewController {
         cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
 
-        setCustomBackButtonView(cancelBtn)
+        setCustomBackButtonView(cancelBtn) {
+            self.cancelBtnClick()
+        }
         setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
     }
 

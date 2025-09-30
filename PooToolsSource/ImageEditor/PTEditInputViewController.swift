@@ -743,6 +743,10 @@ class PTEditInputViewController: PTBaseViewController {
         true
     }
             
+    public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let nav = navigationController {

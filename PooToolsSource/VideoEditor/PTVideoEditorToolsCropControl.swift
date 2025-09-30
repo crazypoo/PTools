@@ -58,6 +58,10 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
 
     private let image: UIImage
 
+    override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -67,6 +71,11 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         setCustomBackButtonView(dismissButtonItem)
         setCustomRightButtons(buttons: [doneButtonItem], rightPadding: 0)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        applyNavigationBarStyle()
     }
 
     init(image: UIImage) {
@@ -85,7 +94,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         self.view.backgroundColor = .black
         self.view.addSubview(self.cropView)
         self.cropView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }

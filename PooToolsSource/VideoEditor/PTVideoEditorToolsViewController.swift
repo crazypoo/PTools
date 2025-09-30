@@ -761,6 +761,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     //MARK: 覆蓋源文件
     fileprivate var rewrite:Bool = false
     
+    public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -793,7 +797,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         
         view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
         imageContent.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
             make.left.right.equalToSuperview().inset(64)
             make.height.equalTo(self.imageContent.snp.width)
         }

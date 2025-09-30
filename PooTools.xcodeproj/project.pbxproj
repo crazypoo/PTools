@@ -146,6 +146,7 @@
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */; };
 		553FF08F2C670A5600E9EE10 /* PTIAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */; };
+		55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55442C852E8C264F000B38DD /* PTNavBar.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
 		554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */; };
 		554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */; };
@@ -1088,6 +1089,7 @@
 		553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+PTEX.swift"; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTIAPManager.swift; sourceTree = "<group>"; };
+		55442C852E8C264F000B38DD /* PTNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavBar.swift; sourceTree = "<group>"; };
 		554929E928F9089D00C82ABF /* PTPermissionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionModel.swift; sourceTree = "<group>"; };
 		554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionViewController.swift; sourceTree = "<group>"; };
 		554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionHeader.swift; sourceTree = "<group>"; };
@@ -3655,6 +3657,7 @@
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
 				55040A832E20B37C0074A047 /* PTTriangleView.swift */,
 				552CCF4A2E82BA2200646943 /* PTBaseButton.swift */,
+				55442C852E8C264F000B38DD /* PTNavBar.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4492,6 +4495,7 @@
 				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
 				55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */,
 				557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */,
+				55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */,
 				557E3A902C0441D6002466A0 /* String+PTDebugEx.swift in Sources */,
 				557E3A9A2C046CC8002466A0 /* PTCustomHTTPProtocol.swift in Sources */,
 				55BCB9742B1732030016A4C2 /* PTMediaLibCell.swift in Sources */,

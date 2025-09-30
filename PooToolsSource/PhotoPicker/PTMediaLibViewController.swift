@@ -601,8 +601,8 @@ public class PTMediaLibViewController: PTBaseViewController {
     var selectedModel: [PTMediaModel] = []
 
     private var isSelectOriginal = false
-    private lazy var fakeNav:UIView = {
-        let view = UIView()
+    private lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -612,6 +612,9 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
         return view
     }()
     
@@ -620,6 +623,9 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.setImage(PTMediaLibConfig.share.submitImage, for: .normal)
         view.addActionHandlers { sender in
             self.requestSelectPhoto(viewController: self)
+        }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
         }
         return view
     }()
@@ -671,6 +677,7 @@ public class PTMediaLibViewController: PTBaseViewController {
                 break
             }
         }
+        view.clearGlass = true
         return view
     }()
     
@@ -710,8 +717,8 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.addSubviews([fakeNav])
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(8)
-            make.height.equalTo(54)
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
         createNavSubs()
@@ -734,7 +741,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             }
         }
     }
-    
+        
     func loadImageData() {
         let config = PTMediaLibConfig.share
         PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage*/) { model in
@@ -761,31 +768,32 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
     
     func createList() {
+        
+        var collectionInset_Top:CGFloat = 0
+        var collectionInset_Bottom:CGFloat = 0
+        if #available(iOS 26.0, *) {
+            collectionInset_Top = CGFloat.kNavBarHeight
+            collectionInset_Bottom = CGFloat.kTabbarSaveAreaHeight
+        }
+        
+        mediaListView.collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        mediaListView.collectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        mediaListView.collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
+        mediaListView.collectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset_Bottom
+
         view.addSubviews([mediaListView])
         mediaListView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            make.bottom.equalToSuperview()
         }
+        view.insertSubview(mediaListView, at: 0)
     }
     
     func createNavSubs() {
-        fakeNav.addSubviews([dismissButton,submitButton,selectLibButton])
-        dismissButton.snp.makeConstraints { make in
-            make.size.equalTo(44)
-            make.bottom.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-        
-        submitButton.snp.makeConstraints { make in
-            make.size.bottom.equalTo(self.dismissButton)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-        
-        selectLibButton.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
+        fakeNav.titleView = selectLibButton
+        fakeNav.setLeftButtons([dismissButton])
+        fakeNav.setRightButtons([submitButton])
     }
         
     public func mediaLibShow() {

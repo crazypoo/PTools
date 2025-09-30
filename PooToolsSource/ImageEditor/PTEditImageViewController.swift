@@ -404,6 +404,7 @@ public class PTEditImageViewController: PTBaseViewController {
                 colorPickerBack.addActionHandlers { sender in
                     colorPicker.navigationController?.popViewController(animated: true)
                 }
+                colorPicker.navigationController?.navigationBar.backgroundColor = .clear
                 colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
             })
         }
@@ -526,6 +527,10 @@ public class PTEditImageViewController: PTBaseViewController {
         return view
     }()
     public lazy var ashbinImgView = UIImageView(image: UIImage(.trash), highlightedImage: UIImage(.trash.fill))
+
+    public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
 
     public init(readyEditImage: UIImage) {
         super.init(nibName: nil, bundle: nil)
@@ -1056,14 +1061,7 @@ extension PTEditImageViewController {
             self.mainScrollView.alpha = 1
         }
         
-        vc.cancelClipBlock = { [weak self] () in
-            self?.mainScrollView.alpha = 1
-            self?.resetContainerViewFrame()
-        }
-        
-        self.navigationController?.pushViewController(vc,completion: {
-            self.mainScrollView.alpha = 0
-        })
+        self.navigationController?.pushViewController(vc)
         
         selectedTool = nil
         showHandDrawBar(show: false)

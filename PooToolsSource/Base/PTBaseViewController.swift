@@ -180,18 +180,17 @@ open class PTBaseViewController: UIViewController {
     
     // 新增：直接传入任意自定义 view
     open func setCustomBackButtonView(_ customView: UIView,
-                                      leftPadding: CGFloat = 7,
                                       size: CGSize? = CGSize(width: 30, height: 30),
                                       action: PTActionTask? = nil) {
         let finalSize = size ?? customView.frame.size
         
         // 用 UIButton 当容器
         let button = UIButton(frame: CGRect(x: 0, y: 0,
-                                            width: finalSize.width + leftPadding,
+                                            width: finalSize.width,
                                             height: finalSize.height))
         button.addSubview(customView)
         customView.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(leftPadding)
+            make.centerX.equalToSuperview()
             make.size.equalTo(finalSize)
             make.centerY.equalToSuperview()
         }

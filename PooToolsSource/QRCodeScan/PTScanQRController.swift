@@ -283,6 +283,7 @@ public class PTScanQRController: PTBaseViewController {
             view.selectedImage = selectedImage
         }
         view.addActionHandlers(handler: action)
+        view.clearGlass = true
         return view
     }
     

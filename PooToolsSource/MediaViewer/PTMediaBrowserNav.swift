@@ -15,6 +15,9 @@ class PTMediaBrowserNav: UIView {
     lazy var closeButton:UIButton = {
         let view = UIButton(type: .custom)
         view.imageView?.contentMode = .scaleAspectFit
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
         return view
     }()
     
@@ -24,22 +27,27 @@ class PTMediaBrowserNav: UIView {
         return view
     }()
     
+    lazy var navBar:PTNavBar = {
+        let view = PTNavBar()
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = MediaBrowserToolBarColor
+        if #available(iOS 26.0, *) {
+            backgroundColor = .clear
+        } else {
+            backgroundColor = MediaBrowserToolBarColor
+        }
 
-        addSubviews([closeButton, titleLabel])
-        closeButton.snp.makeConstraints { make in
-            make.width.height.equalTo(34)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(5)
+        addSubviews([navBar])
+        navBar.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(CGFloat.kNavBarHeight)
         }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.height.bottom.equalTo(self.closeButton)
-        }
+        navBar.setLeftButtons([closeButton])
+        navBar.titleView = titleLabel
     }
     
     required init?(coder: NSCoder) {

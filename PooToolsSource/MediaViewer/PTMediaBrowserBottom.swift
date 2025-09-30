@@ -73,7 +73,11 @@ class PTMediaBrowserBottom: UIView {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
         
-        backgroundColor = MediaBrowserToolBarColor
+        if #available(iOS 26.0, *) {
+            backgroundColor = .clear
+        } else {
+            backgroundColor = MediaBrowserToolBarColor
+        }
 
         addSubviews([pageControlView, moreActionButton, titleLabel])
         pageControlView.snp.makeConstraints { make in

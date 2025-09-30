@@ -48,6 +48,17 @@ import Kingfisher
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
 @objcMembers
 public class PTLayoutButton: UIButton {
+    
+    open var clearGlass:Bool = false {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setNeedsLayout()
+            }
+        }
+    }
+    
     /// 布局方式
     open var layoutStyle: PTLayoutButtonStyle = .leftImageRightTitle {
         didSet {
@@ -677,10 +688,22 @@ public class PTLayoutButton: UIButton {
     @available(iOS 15.0,*)
     private var layoutConfig: UIButton.Configuration {
         var btnconfig:UIButton.Configuration
-        if configBackgroundSelectedColor != .clear || configBackgroundColor != .clear || configBackgroundHightlightColor != .clear {
-            btnconfig = UIButton.Configuration.filled()
+        if clearGlass {
+            if #available(iOS 26.0, *) {
+                btnconfig = UIButton.Configuration.clearGlass()
+            } else {
+                if configBackgroundSelectedColor != .clear || configBackgroundColor != .clear || configBackgroundHightlightColor != .clear {
+                    btnconfig = UIButton.Configuration.filled()
+                } else {
+                    btnconfig = UIButton.Configuration.plain()
+                }
+            }
         } else {
-            btnconfig = UIButton.Configuration.plain()
+            if configBackgroundSelectedColor != .clear || configBackgroundColor != .clear || configBackgroundHightlightColor != .clear {
+                btnconfig = UIButton.Configuration.filled()
+            } else {
+                btnconfig = UIButton.Configuration.plain()
+            }
         }
         switch cornerStyle {
         case .none:

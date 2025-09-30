@@ -23,6 +23,9 @@ public class PTAppBaseConfig: NSObject {
     ///App的全局邊距
     public var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)
     
+    public var navContainerSpacing:CGFloat = CGFloat.ScaleW(w: 8)
+    public var navBarButtonSpacing:CGFloat = CGFloat.ScaleW(w: 8)
+
     //MARK: App的全局背景顏色
     ///App的全局背景顏色
     public var viewControllerBaseBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
