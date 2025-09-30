@@ -307,13 +307,15 @@ public class PTActionLayoutButton: UIControl {
         if let att = currentAtt {
             titleLabel.attributed.text = att
             if !att.value.containsAction() {
-                if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-                    block(self)
+                let tap = UITapGestureRecognizer { _ in
+                    if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+                        block(self)
+                    }
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        self.updateAppearance()
+                    }
                 }
-                self.sendActions(for: .touchUpInside)
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    self.updateAppearance()
-                }
+                self.titleLabel.addGestureRecognizer(tap)
             }
         } else {
             let nameAtt:ASAttributedString = """
