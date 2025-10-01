@@ -44,6 +44,9 @@ public extension CGFloat {
     static let kNavBarHeight: CGFloat = UINavigationController().navigationBar.frame.height
     static let kNavBarWidth: CGFloat = UINavigationController().navigationBar.frame.width
 
+    //MARK: Picker height
+    static let kPickerHeight: CGFloat = 216
+    
     //MARK: 獲取StatusBar的高度
     ///獲取StatusBar的高度
     /// - Returns: CGFloat

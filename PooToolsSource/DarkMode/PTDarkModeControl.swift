@@ -157,6 +157,10 @@ public class PTDarkModeControl: PTBaseViewController {
         return view
     }()
 
+    public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         backButton.frame = CGRectMake(0, 0, 34, 34)
@@ -169,6 +173,18 @@ public class PTDarkModeControl: PTBaseViewController {
         title = PTDarkModeOption.titleSting
         
         // Do any additional setup after loading the view.
+        var collectionInset:CGFloat = 0
+        var collectionInset_Top:CGFloat = 0
+        if #available(iOS 26.0, *) {
+            collectionInset = CGFloat.kTabbarSaveAreaHeight
+            collectionInset_Top = CGFloat.kNavBarHeight_Total
+        }
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()

@@ -29,9 +29,12 @@ public class PTLaunchAdMonitor: NSObject {
     private var player:AVPlayerViewController?
     private lazy var skipButton:UIButton = {
         let view = UIButton()
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
         view.setTitleColor(.white, for: .normal)
-        view.setBackgroundColor(color: .DevMaskColor, forState: .normal)
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        } else {
+            view.setBackgroundColor(color: .DevMaskColor, forState: .normal)
+        }
         return view
     }()
     

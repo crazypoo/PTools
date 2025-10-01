@@ -192,6 +192,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 }
             }
         }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
         return view
     }()
     
@@ -218,6 +221,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 }
             }
         }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
         return view
     }()
     
@@ -233,6 +239,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
             } else {
                 self.returnFrontVC()
             }
+        }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
         }
         return view
     }()
@@ -291,6 +300,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
             self.showFilterView(show: sender.isSelected)
+        }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
         }
         return view
     }()

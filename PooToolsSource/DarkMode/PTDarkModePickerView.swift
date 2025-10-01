@@ -8,8 +8,13 @@
 // MARK: - 暗黑模式时间的设置
 import UIKit
 import SwifterSwift
+import SnapKit
 
 class PTDarkModePickerView: UIView {
+    
+    let navBarHeight:CGFloat = 44
+    let lineViewHeight:CGFloat = (1.0 / UIScreen.main.scale)
+    
     /// 确定时间段的返回
     var sureClosure: (String, String)->Void
     /// 开始时间
@@ -23,7 +28,7 @@ class PTDarkModePickerView: UIView {
     }()
     /// 时间选择器
     lazy var leftTimePickerView: UIPickerView = {
-        let pickerView = UIPickerView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.width / 2.0, height: 200))
+        let pickerView = UIPickerView()
         pickerView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -35,7 +40,7 @@ class PTDarkModePickerView: UIView {
     
     /// 时间选择器
     lazy var rightTimePickerView: UIPickerView = {
-        let pickerView = UIPickerView(frame: CGRect(x: UIScreen.main.bounds.width / 2.0, y: 44, width: UIScreen.main.bounds.width / 2.0, height: 200))
+        let pickerView = UIPickerView()
         pickerView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -46,7 +51,7 @@ class PTDarkModePickerView: UIView {
     }()
     /// 至
     lazy var middeleLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: UIScreen.main.bounds.width / 2.0 - 20, y: 44 + 200 / 2.0 - 20, width: 40, height: 40))
+        let label = UILabel()
         label.text = "~"
         label.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         label.textAlignment = .center
@@ -54,37 +59,60 @@ class PTDarkModePickerView: UIView {
     }()
     /// 视图的父视图
     lazy var bgView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 200 - 44, width:  UIScreen.main.bounds.width, height: 200 + 44))
-        view.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
+        let view = UIView()
+        if #available(iOS 26.0, *) {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
+        }
         return view
     }()
     /// 取消
     lazy var cancelButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 88, height: 44))
+        let button = UIButton(type: .custom)
         button.setTitle(PTDarkModeOption.pickerCancel, for: .normal)
         button.titleLabel?.font = PTDarkModeOption.pickerFont
         button.setTitleColor(.systemBlue, for: .normal)
         button.addActionHandlers { sender in
             self.dismissView()
         }
+        let titleWidth = button.sizeFor().width + 16
+        var itemHeight:CGFloat = 34
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+            itemHeight = navBarHeight
+        }
+        button.bounds = CGRect(origin: .zero, size: CGSize(width: titleWidth, height: itemHeight))
         return button
     }()
     /// 确定
     lazy var sureButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 88, y: 0, width: 88, height: 44))
+        let button = UIButton(type: .custom)
         button.setTitle(PTDarkModeOption.pickerDone, for: .normal)
         button.titleLabel?.font = PTDarkModeOption.pickerFont
         button.setTitleColor(.systemBlue, for: .normal)
         button.addActionHandlers { sender in
             self.sureButtonClick()
         }
+        let titleWidth = button.sizeFor().width + 16
+        var itemHeight:CGFloat = 34
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+            itemHeight = navBarHeight
+        }
+        button.bounds = CGRect(origin: .zero, size: CGSize(width: titleWidth, height: itemHeight))
         return button
     }()
     /// 顶部的横线
     lazy var topLineView: UIView = {
-        let line = UIView(frame: CGRect(x: 0, y: 44 - (1.0 / UIScreen.main.scale), width: UIScreen.main.bounds.width, height: (1.0 / UIScreen.main.scale)))
+        let line = UIView()
         line.backgroundColor = .gray
         return line
+    }()
+    
+    lazy var topToolBar:PTNavBar = {
+        let view = PTNavBar()
+        return view
     }()
 
     init(startTime: String, endTime: String, complete: @escaping (String, String) -> Void) {
@@ -106,10 +134,47 @@ class PTDarkModePickerView: UIView {
         }
         addGestureRecognizer(tap)
         addSubview(bgView)
-        bgView.addSubviews([cancelButton,sureButton,leftTimePickerView,rightTimePickerView,middeleLabel,topLineView])
-        bgView.viewCornerRectCorner(cornerRadii: 10,corner: [.topLeft,.topRight])
+        bgView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(CGFloat.kPickerHeight + self.navBarHeight)
+        }
         
-        PTAnimationFunction.animationIn(animationView: bgView, animationType: .Bottom, transformValue: 244)
+        bgView.addSubviews([topToolBar,leftTimePickerView,rightTimePickerView,middeleLabel,topLineView])
+        topToolBar.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(self.navBarHeight)
+        }
+        
+        topToolBar.setLeftButtons([cancelButton])
+        topToolBar.setRightButtons([sureButton])
+        
+        leftTimePickerView.snp.makeConstraints { make in
+            make.left.bottom.equalToSuperview()
+            make.right.equalTo(self.bgView.snp.centerX)
+            make.top.equalTo(self.topToolBar.snp.bottom)
+        }
+        
+        rightTimePickerView.snp.makeConstraints { make in
+            make.right.bottom.equalToSuperview()
+            make.left.equalTo(self.bgView.snp.centerX)
+            make.top.equalTo(self.leftTimePickerView)
+        }
+        
+        middeleLabel.snp.makeConstraints { make in
+            make.size.equalTo(40)
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(self.leftTimePickerView)
+        }
+        
+        topLineView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.topToolBar.snp.bottom).offset((-self.lineViewHeight) / 2)
+            make.height.equalTo(self.lineViewHeight)
+        }
+
+        bgView.viewCornerRectCorner(cornerRadii: PTDarkModeOption.timeRangePickerCornerRadius,corner: [.topLeft,.topRight])
+        
+        PTAnimationFunction.animationIn(animationView: bgView, animationType: .Bottom, transformValue: CGFloat.kPickerHeight + self.navBarHeight)
     }
     
     /// 添加控件和设置约束

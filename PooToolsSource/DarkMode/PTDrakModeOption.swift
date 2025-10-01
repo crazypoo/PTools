@@ -70,6 +70,7 @@ public class PTDarkModeOption {
     public static var switchTintColor:DynamicColor = .white
     public static var switchThumbTintColor:DynamicColor = .white
     public static var switchOnTinColor:DynamicColor = .lightGray
+    public static var timeRangePickerCornerRadius:CGFloat = 0
     
     ///选中
     public static var tradeValidperiodSelected = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_cycle_selected@3x")
