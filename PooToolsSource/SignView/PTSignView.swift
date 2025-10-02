@@ -31,9 +31,13 @@ public class PTSignView: UIView {
         return view
     }()
     
-    lazy var viewNavView:UIView = {
-        let view = UIView()
-        view.backgroundColor = self.viewConfig.navBarColor
+    lazy var viewNavView:PTNavBar = {
+        let view = PTNavBar()
+        if #available(iOS 26.0, *) {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = self.viewConfig.navBarColor
+        }
         return view
     }()
     
@@ -47,6 +51,9 @@ public class PTSignView: UIView {
             self.doneBlock?(self.signView.SignatureImg)
             self.viewDismiss()
         }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
         return view
     }()
     
@@ -57,6 +64,9 @@ public class PTSignView: UIView {
         view.setTitle(self.viewConfig.clearName, for: .normal)
         view.addActionHandlers { sender in
             self.signView.clearSign()
+        }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
         }
         return view
     }()

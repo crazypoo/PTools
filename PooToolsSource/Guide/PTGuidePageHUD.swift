@@ -82,11 +82,17 @@ public class PTGuidePageHUD: UIView {
         
     lazy var forwardButton:UIButton = {
         let btn = UIButton(type: .custom)
+        if #available(iOS 26.0, *) {
+            btn.configuration = UIButton.Configuration.clearGlass()
+        }
         return btn
     }()
     
     lazy var nextButton:UIButton = {
         let btn = UIButton(type: .custom)
+        if #available(iOS 26.0, *) {
+            btn.configuration = UIButton.Configuration.clearGlass()
+        }
         return btn
     }()
     
@@ -104,7 +110,11 @@ public class PTGuidePageHUD: UIView {
     
     lazy var skipButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.backgroundColor = .gray
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        } else {
+            view.backgroundColor = .gray
+        }
         view.setTitleColor(.white, for: .normal)
         view.addActionHandlers { sender in
             self.buttonClick(sender: sender)
@@ -127,15 +137,23 @@ public class PTGuidePageHUD: UIView {
         
         skipButton.setTitle(viewModel.skipName, for: .normal)
         skipButton.titleLabel?.font = viewModel.skipFont
+        var skioButtonWidthOffset:CGFloat = 0
+        if #available(iOS 26.0, *) {
+            skioButtonWidthOffset = 15
+        } else {
+            skioButtonWidthOffset = 5
+        }
+        let skioButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont,height: 44).width + 10 + skioButtonWidthOffset
+        
         skipButton.snp.makeConstraints { make in
-            make.width.equalTo(skipButton.sizeFor(height: 25).width + 10)
-            make.height.equalTo(25)
+            make.width.equalTo(skioButtonWidth)
+            make.height.equalTo(44)
             make.right.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 10)
         }
         skipButton.isHidden = viewModel.skipShow ? false : true
         skipButton.isUserInteractionEnabled = viewModel.skipShow
-        skipButton.viewCorner(radius: 12.5)
+        skipButton.viewCorner(radius: 22)
         
         switch viewModel.pageControl {
         case .none: break

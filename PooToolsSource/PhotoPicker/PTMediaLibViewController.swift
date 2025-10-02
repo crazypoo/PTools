@@ -678,6 +678,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             }
         }
         view.clearGlass = true
+        view.bounds = CGRect(origin: .zero, size: CGSizeMake(320, 44))
         return view
     }()
     

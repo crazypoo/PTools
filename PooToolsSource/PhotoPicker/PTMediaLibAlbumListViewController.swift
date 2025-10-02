@@ -26,6 +26,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.navigationController?.popViewController(animated: true)
         }
+        if #available(iOS 26.0, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
         return view
     }()
     
@@ -76,8 +79,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         return view
     }()
 
-    fileprivate lazy var fakeNav:UIView = {
-        let view = UIView()
+    fileprivate lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -111,16 +114,28 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 24)
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
         }
         
         fakeNavSet()
         
-        collectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
+        var collectionInset_Top:CGFloat = 0
+        var collectionInset_Bottom:CGFloat = 0
+        if #available(iOS 26.0, *) {
+            collectionInset_Top = CGFloat.kNavBarHeight
+            collectionInset_Bottom = CGFloat.kTabbarSaveAreaHeight
         }
         
+        collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
+        
+        view.insertSubview(collectionView, at: 0)
+        collectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.fakeNav)
+        }
+
         if selectedAlbum.models.isEmpty {
             selectedAlbum.refetchPhotos()
         }
@@ -138,19 +153,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     }
     
     func fakeNavSet() {
-        fakeNav.addSubviews([dismissButton,navTitle])
-        dismissButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
-        
-        navTitle.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.left.lessThanOrEqualTo(self.dismissButton.snp.right).offset(7.5)
-        }
+        fakeNav.setLeftButtons([dismissButton])
         navTitle.text = PTMediaLibConfig.share.albumListNavName
+        fakeNav.titleView = navTitle
     }
     
     func loadAlbumList() {

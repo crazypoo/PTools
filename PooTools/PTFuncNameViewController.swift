@@ -1052,9 +1052,22 @@ class PTFuncNameViewController: PTBaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
         
         collectionView.backgroundColor = .random
+        
+        var collectionInset:CGFloat = 0
+        var collectionInset_Top:CGFloat = 0
+        if #available(iOS 26.0, *) {
+            collectionInset = CGFloat.kTabbarSaveAreaHeight
+            collectionInset_Top = CGFloat.kNavBarHeight_Total + 20
+        }
+        
+        collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        collectionView.contentCollectionView.contentInset.bottom = collectionInset
+        collectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+            make.top.equalToSuperview()
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
