@@ -15,8 +15,8 @@ class PTLeakListViewController: PTBaseViewController {
 
     var viewModel = PTLeakViewModel()
     
-    lazy var fakeNav:UIView = {
-        let view = UIView()
+    lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -30,6 +30,7 @@ class PTLeakListViewController: PTBaseViewController {
         view.searchPlaceholderColor = .gray
         view.searchPlaceholder = "Search"
         view.viewCorner(radius: 17)
+        view.bounds = CGRect(origin: .zero, size: CGSize(width: 320, height: 34))
         return view
     }()
 
@@ -64,61 +65,58 @@ class PTLeakListViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviews([fakeNav,newCollectionView])
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
+        view.addSubviews([newCollectionView,fakeNav])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+        
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat.kNavBarHeight + 53)
+            make.top.equalTo(self.newCollectionView)
+            make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
 
         let deleteButton = UIButton(type: .custom)
         deleteButton.setImage(UIImage(.trash), for: .normal)
-        
+        if #available(iOS 26.0, *) {
+            deleteButton.configuration = UIButton.Configuration.clearGlass()
+        }
+
         let shareButton = UIButton(type: .custom)
         shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
-
-        fakeNav.addSubviews([button,searchBar,deleteButton,shareButton])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            shareButton.configuration = UIButton.Configuration.clearGlass()
         }
+
+        fakeNav.setLeftButtons([button])
+        fakeNav.titleView = searchBar
+        fakeNav.setRightButtons([deleteButton,shareButton])
         button.addActionHandlers { sender in
             self.navigationController?.popViewController()
         }
 
-        deleteButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
         deleteButton.addActionHandlers { sender in
             self.viewModel.handleClearAction()
             self.loadListModel()
         }
-        
-        shareButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.right.equalTo(deleteButton.snp.left).offset(-7.5)
-        }
         shareButton.addActionHandlers { sender in
             let allLeaks = PTPerformanceLeakDetector.leaks.reduce("") { $0 + "\n\n\($1.symbol)\($1.details)" }
             PTDebugShareManager.generateFileAndShare(text: allLeaks, fileName: "leaks")
-        }
-        
-        searchBar.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(48)
-            make.bottom.equalToSuperview().inset(5)
-        }
-        
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
         }
         
         viewModel.applyFilter()

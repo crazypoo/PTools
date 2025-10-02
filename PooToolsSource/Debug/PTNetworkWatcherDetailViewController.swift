@@ -22,8 +22,8 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     
     fileprivate var searchIsActivity:Bool = false
     
-    lazy var fakeNav:UIView = {
-        let view = UIView()
+    lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -36,6 +36,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         view.searchPlaceholderColor = .gray
         view.searchPlaceholder = "Search"
         view.viewCorner(radius: 17)
+        view.bounds = CGRect(origin: .zero, size: CGSizeMake(320, 34))
         return view
     }()
 
@@ -125,33 +126,43 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviews([fakeNav,newCollectionView])
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
+        view.addSubviews([newCollectionView,fakeNav])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat.kNavBarHeight + 53)
+            make.top.equalTo(self.newCollectionView)
+            make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
 
         let shareButton = UIButton(type: .custom)
         shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
-
-        fakeNav.addSubviews([button,searchBar,shareButton])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            shareButton.configuration = UIButton.Configuration.clearGlass()
         }
+
+        fakeNav.setLeftButtons([button])
+        fakeNav.titleView = searchBar
+        fakeNav.setRightButtons([shareButton])
         button.addActionHandlers { sender in
             self.navigationController?.popViewController()
-        }
-
-        shareButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         shareButton.addActionHandlers { sender in
             let logText = self.formatLog(model: self.viewModel)
@@ -161,18 +172,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
 
             PTDebugShareManager.generateFileAndShare(text: logText, fileName: fileName)
         }
-        
-        searchBar.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(48)
-            make.bottom.equalToSuperview().inset(5)
-        }
-        
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
-        }
-        
+                
         loadListModel()
     }
     

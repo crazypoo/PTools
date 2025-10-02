@@ -19,8 +19,8 @@ class PTNetworkWatcherViewController: PTBaseViewController {
 
     private let viewModel = PTNetworkViewModel()
 
-    lazy var fakeNav:UIView = {
-        let view = UIView()
+    lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -34,6 +34,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         view.searchPlaceholderColor = .gray
         view.searchPlaceholder = "Search"
         view.viewCorner(radius: 17)
+        view.frame = CGRect(origin: .zero, size: CGSizeMake(320, 34))
         return view
     }()
     
@@ -47,6 +48,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
                 PTNetworkHelper.shared.disable()
             }
         }
+        view.bounds = CGRect(origin: .zero, size: CGSize.SwitchSize)
         return view
     }()
     
@@ -94,60 +96,56 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviews([fakeNav,newCollectionView])
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
+        view.addSubviews([newCollectionView,fakeNav])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat.kNavBarHeight + 53)
+            make.top.equalTo(self.newCollectionView)
+            make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
 
         let deleteButton = UIButton(type: .custom)
         deleteButton.setImage(UIImage(.trash), for: .normal)
-        
+        if #available(iOS 26.0, *) {
+            deleteButton.configuration = UIButton.Configuration.clearGlass()
+        }
+
         let testButton = UIButton(type: .custom)
         testButton.setImage(UIImage(.sparkles), for: .normal)
-
-        fakeNav.addSubviews([button,searchBar,deleteButton,valueSwitch,testButton])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            testButton.configuration = UIButton.Configuration.clearGlass()
         }
+        fakeNav.setLeftButtons([button])
+        fakeNav.titleView = searchBar
+        fakeNav.titleViewMode = .auto
+        fakeNav.setRightButtons([deleteButton,valueSwitch,testButton])
         button.addActionHandlers { sender in
             self.dismissAnimated()
         }
 
-        deleteButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
         deleteButton.addActionHandlers { sender in
             self.viewModel.handleClearAction()
             self.loadListModel()
         }
-                
-        searchBar.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(48)
-            make.bottom.equalToSuperview().inset(5)
-        }
-        
-        valueSwitch.snp.makeConstraints { make in
-            make.right.equalTo(deleteButton.snp.left).offset(-7.5)
-            make.centerY.equalTo(deleteButton)
-            make.width.equalTo(51)
-            make.height.equalTo(31)
-        }
-        
-        testButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.right.equalTo(self.valueSwitch.snp.left).offset(-8)
-        }
+                        
         testButton.addActionHandlers { sender in
             let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
             networkSpeedMonitor.startMonitoring()
@@ -169,12 +167,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
                 }
             }
         }
-        
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
-        }
-        
+                
         loadListModel()
         setup()
     }

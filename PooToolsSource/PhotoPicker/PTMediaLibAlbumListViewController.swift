@@ -119,12 +119,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         
         fakeNavSet()
         
-        var collectionInset_Top:CGFloat = 0
-        var collectionInset_Bottom:CGFloat = 0
-        if #available(iOS 26.0, *) {
-            collectionInset_Top = CGFloat.kNavBarHeight
-            collectionInset_Bottom = CGFloat.kTabbarSaveAreaHeight
-        }
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Bottom:CGFloat = CGFloat.kTabbarSaveAreaHeight
         
         collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         collectionView.contentCollectionView.contentInset.top = collectionInset_Top

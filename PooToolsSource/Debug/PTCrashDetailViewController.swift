@@ -15,8 +15,8 @@ class PTCrashDetailViewController: PTBaseViewController {
     
     fileprivate var viewModel:PTCrashDetailModel!
     
-    lazy var fakeNav : UIView = {
-        let view = UIView()
+    lazy var fakeNav : PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -85,34 +85,46 @@ class PTCrashDetailViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubviews([fakeNav,newCollectionView])
+        
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
+        view.addSubviews([newCollectionView,fakeNav])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+        
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalTo(20)
+            make.top.equalTo(self.newCollectionView)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
+
         let shareButton = UIButton(type: .custom)
         shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
-
-        fakeNav.addSubviews([button,shareButton])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            shareButton.configuration = UIButton.Configuration.clearGlass()
         }
+
+        fakeNav.setLeftButtons([button])
+        fakeNav.setRightButtons([shareButton])
+
         button.addActionHandlers { sender in
             self.navigationController?.popViewController()
         }
         
-        shareButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
         shareButton.addActionHandlers { sender in
             let image = self.viewModel.data.context.uiImage
 
@@ -128,12 +140,7 @@ class PTCrashDetailViewController: PTBaseViewController {
             }
             PTDebugShareManager.share(fileURL)
         }
-        
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
-        }
-                
+                        
         loadListData()
     }
     

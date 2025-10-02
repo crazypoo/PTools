@@ -9,6 +9,9 @@
 import UIKit
 
 public extension CGSize {
+    
+    static let SwitchSize = CGSizeMake(51, 31)
+    
     static func from(archivedData data: Data) throws -> CGSize {
         var sizeObj = CGSize.zero
         let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)

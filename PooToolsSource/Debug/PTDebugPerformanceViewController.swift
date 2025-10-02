@@ -114,8 +114,8 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var fakeNav:UIView = {
-        let view = UIView()
+    lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -127,29 +127,36 @@ class PTDebugPerformanceViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubviews([fakeNav,newCollectionView])
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
+        view.addSubviews([newCollectionView,fakeNav])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
+            make.top.equalTo(self.newCollectionView)
             make.height.equalTo(CGFloat.kNavBarHeight)
         }
 
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        fakeNav.addSubviews([button])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
         }
+        fakeNav.setLeftButtons([button])
         button.addActionHandlers { sender in
             self.dismissAnimated()
         }
         
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
-        }
         listDataSet()
         
         toolkit.performanceDataUpdateCallBack = { toolKit in 

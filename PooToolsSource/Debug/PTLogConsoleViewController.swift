@@ -14,8 +14,8 @@ import AttributedString
 
 class PTLogConsoleViewController: PTBaseViewController {
 
-    lazy var fakeNav:UIView = {
-        let view = UIView()
+    lazy var fakeNav:PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
 
@@ -25,6 +25,7 @@ class PTLogConsoleViewController: PTBaseViewController {
         view.valueChangeCallBack = { value in
             PTCoreUserDefultsWrapper.PTLogWrite = value
         }
+        view.bounds = CGRect(origin: .zero, size: CGSize.SwitchSize)
         return view
     }()
     
@@ -53,48 +54,39 @@ class PTLogConsoleViewController: PTBaseViewController {
         view.addSubviews([fakeNav,infoLabel])
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
             make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
+
         let refreshButton = UIButton(type: .custom)
         refreshButton.setImage(UIImage(.arrow.clockwise), for: .normal)
+        if #available(iOS 26.0, *) {
+            refreshButton.configuration = UIButton.Configuration.clearGlass()
+        }
 
         let clearButton = UIButton(type: .custom)
         clearButton.setImage(UIImage(.paintbrush), for: .normal)
-
-        fakeNav.addSubviews([button,valueSwitch,refreshButton,clearButton])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(5)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            clearButton.configuration = UIButton.Configuration.clearGlass()
         }
+
+        fakeNav.setLeftButtons([button])
+        fakeNav.setRightButtons([valueSwitch,refreshButton,clearButton])
+        
         button.addActionHandlers { sender in
             self.dismissAnimated()
         }
-                        
-        valueSwitch.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.centerY.equalTo(button)
-            make.width.equalTo(51)
-            make.height.equalTo(31)
-        }
         
-        refreshButton.snp.makeConstraints { make in
-            make.size.centerY.equalTo(button)
-            make.right.equalTo(valueSwitch.snp.left).offset(-7.5)
-        }
         refreshButton.addActionHandlers { sender in
             self.reloadText()
         }
         
-        clearButton.snp.makeConstraints { make in
-            make.size.centerY.equalTo(button)
-            make.right.equalTo(refreshButton.snp.left).offset(-7.5)
-        }
         clearButton.addActionHandlers { sender in
             let callBack = FileManager.pt.writeToFile(writeType: .TextType, content: "", writePath: self.filePath)
             if callBack.isSuccess {

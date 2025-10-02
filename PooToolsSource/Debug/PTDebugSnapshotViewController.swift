@@ -15,8 +15,8 @@ class PTDebugSnapshotViewController: PTBaseViewController {
 
     fileprivate var snapshotImage:UIImage!
     
-    lazy var fakeNav : UIView = {
-        let view = UIView()
+    lazy var fakeNav : PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
 
@@ -49,17 +49,15 @@ class PTDebugSnapshotViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalTo(20)
+            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        fakeNav.addSubviews([button])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
         }
+        fakeNav.setLeftButtons([button])
         button.addActionHandlers { sender in
             self.navigationController?.popViewController()
         }

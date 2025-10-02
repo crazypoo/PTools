@@ -15,8 +15,8 @@ class PTCrashLogViewController: PTBaseViewController {
 
     private let viewModel = PTCrashViewModel()
 
-    lazy var fakeNav : UIView = {
-        let view = UIView()
+    lazy var fakeNav : PTNavBar = {
+        let view = PTNavBar()
         return view
     }()
     
@@ -67,46 +67,52 @@ class PTCrashLogViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+        
         view.addSubviews([fakeNav,newCollectionView])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalTo(20)
+            make.top.equalTo(self.newCollectionView)
         }
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
 
         let crashButton = UIButton(type: .custom)
         crashButton.setImage(UIImage(.bolt.fill), for: .normal)
-
-        fakeNav.addSubviews([button,crashButton])
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        if #available(iOS 26.0, *) {
+            crashButton.configuration = UIButton.Configuration.clearGlass()
         }
+
+        fakeNav.setLeftButtons([button])
+        fakeNav.setRightButtons([crashButton])
+        
         button.addActionHandlers { sender in
             self.returnFrontVC()
         }
         
-        crashButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
         crashButton.addActionHandlers { sender in
             let array = NSArray()
             let _ = array.object(at: 4)
         }
         
         PTNSLogConsole("▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️\(PTHttpDatasource.shared.httpModels)")
-        
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav.snp.bottom)
-        }
-        
+    
         listDataSet()
     }
     

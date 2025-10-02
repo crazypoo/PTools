@@ -173,12 +173,8 @@ public class PTDarkModeControl: PTBaseViewController {
         title = PTDarkModeOption.titleSting
         
         // Do any additional setup after loading the view.
-        var collectionInset:CGFloat = 0
-        var collectionInset_Top:CGFloat = 0
-        if #available(iOS 26.0, *) {
-            collectionInset = CGFloat.kTabbarSaveAreaHeight
-            collectionInset_Top = CGFloat.kNavBarHeight_Total
-        }
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
