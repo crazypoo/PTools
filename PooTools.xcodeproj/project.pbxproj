@@ -160,6 +160,7 @@
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		554E649F2D4A236800042565 /* PTHTMLHeightCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */; };
 		554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */; };
+		554F3A122E94C21D001F4078 /* PTTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554F3A112E94C21D001F4078 /* PTTipsView.swift */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
 		5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */; };
 		55571B382D58EF52004134B8 /* PTiCloudKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */; };
@@ -1103,6 +1104,7 @@
 		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
 		554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHTMLHeightCalculator.swift; sourceTree = "<group>"; };
 		554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPageControllable.swift; sourceTree = "<group>"; };
+		554F3A112E94C21D001F4078 /* PTTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsView.swift; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
 		5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugSnapshotViewController.swift; sourceTree = "<group>"; };
 		55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTiCloudKeychainService.swift; sourceTree = "<group>"; };
@@ -1952,6 +1954,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				554F3A102E94C1A8001F4078 /* TipsView */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2602,6 +2605,14 @@
 				554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */,
 			);
 			path = WebKit;
+			sourceTree = "<group>";
+		};
+		554F3A102E94C1A8001F4078 /* TipsView */ = {
+			isa = PBXGroup;
+			children = (
+				554F3A112E94C21D001F4078 /* PTTipsView.swift */,
+			);
+			path = TipsView;
 			sourceTree = "<group>";
 		};
 		55571B362D58EEF2004134B8 /* iCloud */ = {
@@ -4814,6 +4825,7 @@
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				555818C42AFA79580051C0AA /* UIEdgeInsets+PTEX.swift in Sources */,
 				556F84C42B4A874D008675EB /* AVPlayerItem+PTEX.swift in Sources */,
+				554F3A122E94C21D001F4078 /* PTTipsView.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				55B6D7BE2C1D5F1D00033309 /* PTAlertConfig.swift in Sources */,
 				557E3A7E2C043842002466A0 /* PTCrashModel.swift in Sources */,

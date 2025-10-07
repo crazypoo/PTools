@@ -954,10 +954,9 @@ class PTFuncNameViewController: PTBaseViewController {
         let more = UIButton(type: .custom)
         more.setTitleColor(.random, for: .normal)
         more.setTitle("More", for: .normal)
-        more.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        more.frame = CGRect(x: 0, y: 0, width: 54, height: 34)
         more.badge?.badgeBorderLine = 1
         more.badge?.badgeBorderColor = .random
-        more.showBadge(style: .New, value: "我愛你", aniType: .None)
         
         let popover = PTActionLayoutButton()
         popover.imageSize = CGSize(width: 15, height: 15)
@@ -966,8 +965,8 @@ class PTFuncNameViewController: PTBaseViewController {
         popover.setTitleFont(.appfont(size: 12), state: .normal)
         popover.setTitleColor(.random, state: .normal)
         popover.setTitle("Popover", state: .normal)
-        popover.bounds = CGRect(x: 0, y: 0, width: 100, height: 40)
         popover.setImage("http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", state: .normal)
+        popover.isUserInteractionEnabled = false
         
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
         searchBarConfig.clearTopSpace = 20
@@ -978,21 +977,13 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let searchBar = PTSearchBar()
         searchBar.clearConfig = searchBarConfig
-        searchBar.bounds = CGRect(x: 0, y: 0, width: 64, height: 34)
-        setCustomBackButtonView(popover)
-        setCustomRightButtons(buttons: [more], rightPadding: 0)
-        setCustomTitleView(searchBar)
-        popover.addActionHandlers { sender in
-//            let items = PTPopoverItem()
-//            items.name = "123123123123"
-////            items.icon = "DemoImage"
-//
-//            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 300, sender: sender, arrowDirections: .any) { itemName, index in
-//                PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
-//            }
-            PTNSLogConsole("123123123123123123123123123123123123123123")
+        searchBar.frame = CGRect(origin: .zero, size: CGSizeMake(64, 34))
+        setCustomBackButtonView(popover,size: CGSizeMake(64, 34)) {
             self.sideMenuController?.revealMenu()
         }
+        setCustomRightButtons(buttons: [more], rightPadding: 44)
+        more.showBadge(style: .New, value: "我愛你", aniType: .None)
+        setCustomTitleView(searchBar)
         
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         

@@ -180,32 +180,42 @@ open class PTBaseViewController: UIViewController {
     
     // 新增：直接传入任意自定义 view
     open func setCustomBackButtonView(_ customView: UIView,
-                                      size: CGSize? = CGSize(width: 30, height: 30),
+                                      size: CGSize? = CGSize(width: 34, height: 34),
                                       action: PTActionTask? = nil) {
         let finalSize = size ?? customView.frame.size
+        // 容器 UIView
+        let container = UIView()
         
-        // 用 UIButton 当容器
-        let button = UIButton(frame: CGRect(x: 0, y: 0,
-                                            width: finalSize.width,
-                                            height: finalSize.height))
-        button.addSubview(customView)
+        // 加 customView
+        container.addSubview(customView)
         customView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.size.equalTo(finalSize)
-            make.centerY.equalToSuperview()
+            make.edges.equalToSuperview() // 填满 container
         }
         
         // 点击事件
         if let action = action {
-            button.addActionHandlers(handler: { _ in
+            let button = UIButton(type: .custom)
+            button.addSubview(container)
+            container.snp.makeConstraints { make in
+                make.size.equalTo(finalSize)
+            }
+            button.addActionHandlers { _ in
                 action()
-            })
+            }
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
+            button.snp.makeConstraints { make in
+                make.size.equalTo(finalSize)
+            }
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: container)
+            container.snp.makeConstraints { make in
+                make.size.equalTo(finalSize)
+            }
         }
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
     }
 
-    open func setCustomRightButtons(buttons: [UIView], buttonSpacing: CGFloat = 10, rightPadding: CGFloat = 10) {
+    //MARK: 需要设置按钮Bounds
+    open func setCustomRightButtons(buttons: [UIView], buttonSpacing: CGFloat = 10, rightPadding: CGFloat = 0) {
         guard !buttons.isEmpty else {
             navigationItem.rightBarButtonItem = nil
             return
@@ -217,20 +227,34 @@ open class PTBaseViewController: UIViewController {
         stackView.alignment = .center
         stackView.distribution = .fillProportionally
         stackView.isUserInteractionEnabled = true
+        stackView.arrangedSubviews.forEach { view in
+            view.snp.makeConstraints { make in
+                make.size.equalTo(view.bounds.size)
+            }
+        }
 
         let container = UIView()
         container.addSubview(stackView)
         container.isUserInteractionEnabled = true
 
         stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: rightPadding))
+            make.edges.equalToSuperview()
         }
 
         // 自动测量合适大小
         let fittingSize = stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        container.frame = CGRect(origin: .zero, size: fittingSize)
+        
+        if rightPadding <= 0 {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: container)
+        } else {
+            let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+            fixedSpace.width = rightPadding // 距离屏幕右侧的间距
+            navigationItem.rightBarButtonItems = [fixedSpace,UIBarButtonItem(customView: container)]
+        }
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: container)
+        container.snp.makeConstraints { make in
+            make.size.equalTo(fittingSize)
+        }
     }
 
     open func setCustomTitleView(_ view: UIView? = nil) {
