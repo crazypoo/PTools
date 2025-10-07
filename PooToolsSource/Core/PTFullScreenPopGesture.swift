@@ -20,8 +20,8 @@ open class PTFullscreenPopGesture {
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
 
     private struct AssociatedKeys {
-        static var fullscreenPopGesture = "fullscreenPopGesture"
-        static var viewControllerBasedNavBar = "viewControllerBasedNavBar"
+        static var fullscreenPopGesture = 1001
+        static var viewControllerBasedNavBar = 1002
     }
     
     // Fullscreen pan gesture
@@ -94,10 +94,10 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
 extension UIViewController {
 
     private struct AssociatedKeys {
-        static var interactivePopDisabled = "interactivePopDisabled"
-        static var prefersNavigationBarHidden = "prefersNavigationBarHidden"
-        static var maxInitialDistance = "maxInitialDistance"
-        static var willAppearBlockContainer = "willAppearBlockContainer"
+        static var interactivePopDisabled = 1003
+        static var prefersNavigationBarHidden = 1004
+        static var maxInitialDistance = 1005
+        static var willAppearBlockContainer = 1006
     }
     
     public var interactivePopDisabled: Bool {

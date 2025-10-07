@@ -320,7 +320,7 @@ class AppDelegate: PTAppWindowsDelegate {
             // 这里假设你想分享第一个播放列表
             if let playlist = playlists.first as? MPMediaPlaylist {
                 // 获取播放列表的 persistentID
-                let persistentID = playlist.persistentID
+                _ = playlist.persistentID
 //                self.fetchPlaylistLink(gotID: "\(persistentID)")
                 // 创建分享链接
 //                let playlistLink = "https://music.apple.com/playlist/\(persistentID)"

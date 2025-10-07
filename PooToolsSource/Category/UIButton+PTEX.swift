@@ -8,19 +8,9 @@
 
 import UIKit
 import Kingfisher
+import AttributedString
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
-
-public enum PTButtonEdgeInsetsStyle:Int {
-    /// image在上，label在下
-    case Top
-    /// image在左，label在右
-    case Left
-    /// image在下，label在上
-    case Bottom
-    /// image在右，label在左
-    case Right
-}
 
 public extension UIButton {
     
@@ -66,47 +56,9 @@ public extension UIButton {
         })
     }
     
-    func layoutButtonWithEdgeInsets(style:PTButtonEdgeInsetsStyle,
+    func layoutButtonWithEdgeInsets(style:PTLayoutButtonStyle,
                                     imageTitleSpace:CGFloat) {
-        /**
-         * 知识点：titleEdgeInsets是title相对于其上下左右的inset，跟tableView的contentInset是类似的，
-         * 如果只有title，那它上下左右都是相对于button的，image也是一样；
-         * 如果同时有image和label，那这时候image的上左下是相对于button，右边是相对于label的；title的上右下是相对于button，左边是相对于image的。
-         */
-        guard let imageView = self.imageView, let titleLabel = self.titleLabel else { return }
-
-        let imageSize = imageView.frame.size
-        let titleSize = titleLabel.frame.size
-        let halfSpace = imageTitleSpace / 2
-
-        let imageW = imageSize.width
-        let imageH = imageSize.height
-        let titleW = titleSize.width
-        let titleH = titleSize.height
-
-        let imageInsets: UIEdgeInsets
-        let titleInsets: UIEdgeInsets
-
-        switch style {
-        case .Top:
-            imageInsets = UIEdgeInsets(top: -titleH - halfSpace, left: 0, bottom: 0, right: -titleW)
-            titleInsets = UIEdgeInsets(top: 0, left: -imageW, bottom: -imageH - halfSpace, right: 0)
-
-        case .Left:
-            imageInsets = UIEdgeInsets(top: 0, left: -halfSpace, bottom: 0, right: halfSpace)
-            titleInsets = UIEdgeInsets(top: 0, left: halfSpace, bottom: 0, right: -halfSpace)
-
-        case .Bottom:
-            imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: -titleH - halfSpace, right: -titleW)
-            titleInsets = UIEdgeInsets(top: -imageH - halfSpace, left: -imageW, bottom: 0, right: 0)
-
-        case .Right:
-            imageInsets = UIEdgeInsets(top: 0, left: titleW + halfSpace, bottom: 0, right: -titleW - halfSpace)
-            titleInsets = UIEdgeInsets(top: 0, left: -imageW - halfSpace, bottom: 0, right: imageW + halfSpace)
-        }
-
-        self.imageEdgeInsets = imageInsets
-        self.titleEdgeInsets = titleInsets
+        self.applyConfiguration(layout:style,imagePadding: imageTitleSpace)
     }
     
     //MARK: 計算文字的Size
@@ -220,6 +172,95 @@ public extension UIButton {
         default:
             setImage(emptyImage, for: controlState)
         }
+    }
+    
+    /// 高度封装的配置方法，支持图片尺寸、subtitle、全方向布局
+    func applyConfiguration(image: UIImage? = nil,
+                            highlightedImage: UIImage? = nil,
+                            attributedTitle: ASAttributedString? = nil,
+                            highlightedAttributedTitle: ASAttributedString? = nil,
+                            attributedSubtitle: ASAttributedString? = nil,
+                            layout: PTLayoutButtonStyle = .leftImageRightTitle,
+                            imagePadding: CGFloat = 6,
+                            contentInsets: UIEdgeInsets = .zero,
+                            imageSize: CGSize? = nil,
+                            imageContentMode: UIView.ContentMode = .scaleAspectFit,
+                            titleAlignment: NSTextAlignment = .center,
+                            baseForegroundColor: UIColor? = nil,
+                            backgroundColor: UIColor? = nil,
+                            cornerRadius: CGFloat = 0,
+                            updateHandler: ((UIButton) -> Void)? = nil) {
+        var config = UIButton.Configuration.plain()
+        
+        // MARK: - 基础属性
+        config.image = image
+        config.baseForegroundColor = baseForegroundColor
+        config.background.backgroundColor = backgroundColor
+        config.background.cornerRadius = cornerRadius
+        
+        // MARK: - 布局方向
+        switch layout {
+        case .leftImageRightTitle: config.imagePlacement = .leading
+        case .leftTitleRightImage: config.imagePlacement = .trailing
+        case .upImageDownTitle: config.imagePlacement = .top
+        case .upTitleDownImage: config.imagePlacement = .bottom
+        default:break
+        }
+        config.imagePadding = imagePadding
+        
+        // MARK: - 内边距
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: contentInsets.top,
+            leading: contentInsets.left,
+            bottom: contentInsets.bottom,
+            trailing: contentInsets.right
+        )
+        
+        // MARK: - 标题 & 副标题
+        if let attributedTitle = attributedTitle {
+            config.attributedTitle = AttributedString(attributedTitle.value)
+        }
+        if let attributedSubtitle = attributedSubtitle {
+            config.attributedSubtitle = AttributedString(attributedSubtitle.value)
+            config.titleAlignment = .center
+        } else {
+            config.titleAlignment = .center
+        }
+        
+        // MARK: - 居中
+        self.contentHorizontalAlignment = .center
+        self.contentVerticalAlignment = .center
+        
+        // MARK: - 固定图片尺寸
+        if let imageSize = imageSize {
+            var imageConfig = UIImage.SymbolConfiguration(pointSize: imageSize.height)
+            if image?.renderingMode != .alwaysTemplate {
+                imageConfig = UIImage.SymbolConfiguration(scale: .default)
+            }
+            self.setPreferredSymbolConfiguration(imageConfig, forImageIn: .normal)
+            self.configuration?.imagePadding = imagePadding
+        }
+        
+        // 应用配置
+        self.configuration = config
+        
+        // MARK: - 状态支持（高亮）
+        self.setImage(highlightedImage, for: .highlighted)
+        self.setAttributedTitle(highlightedAttributedTitle?.value, for: .highlighted)
+        
+        // 额外属性
+        self.imageView?.contentMode = imageContentMode
+        self.titleLabel?.textAlignment = titleAlignment
+        
+        // MARK: - 动态样式更新
+        if let updateHandler = updateHandler {
+            self.configurationUpdateHandler = { button in
+                updateHandler(button)
+            }
+        }
+        
+        // 更新布局
+        self.layoutIfNeeded()
     }
 }
 

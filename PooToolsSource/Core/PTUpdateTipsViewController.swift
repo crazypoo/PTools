@@ -202,7 +202,7 @@ open class PTUpdateTipsViewController: PTBaseViewController {
     func createAlert() {
         whiteView.addSubviews([downLoadButton,contentView])
         
-        if !(titleString ?? "").stringIsEmpty() {
+        if !(titleString).stringIsEmpty() {
             whiteView.addSubviews([titleLabel])
             titleLabel.snp.makeConstraints { (make) in
                 make.centerX.equalTo(whiteView)
@@ -212,7 +212,7 @@ open class PTUpdateTipsViewController: PTBaseViewController {
             }
         }
         
-        let hasCancel:Bool = !(cancelTitle ?? "").stringIsEmpty()
+        let hasCancel:Bool = !(cancelTitle).stringIsEmpty()
         
         if hasCancel {
             whiteView.addSubview(closeButton)
@@ -238,7 +238,7 @@ open class PTUpdateTipsViewController: PTBaseViewController {
             make.left.equalTo(whiteView.snp.left).offset(15)
             make.right.equalTo(whiteView).offset(-15)
             make.bottom.equalTo(downLoadButton.snp.top).offset(-10)
-            if !(titleString ?? "").stringIsEmpty() {
+            if !(titleString).stringIsEmpty() {
                 make.top.equalTo(titleLabel.snp.bottom).offset(15)
             } else {
                 make.top.equalToSuperview().inset(15)

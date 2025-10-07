@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class CompositionInstruction: AVMutableVideoCompositionInstruction {
+class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {
     
     let trackID: CMPersistentTrackID
     let videoTrack: AVCompositionTrack

@@ -172,19 +172,40 @@ public class PTMenuSheetButtonView: UIView {
             let button = UIButton(type: .custom)
             insertSubview(button, belowSubview: arrowButton)
             
-            button.setImage(item.image, for: .normal)
-            button.setImage(item.highlightedImage, for: .highlighted)
-            
-            button.setAttributedTitle(item.attributedTitle, for: .normal)
-            button.setAttributedTitle(item.highlightedAttributedTitle, for: .highlighted)
-            
-            button.contentEdgeInsets = item.contentEdgeInsets
-            button.titleEdgeInsets = item.titleEdgeInsets
-            button.imageEdgeInsets = item.imageEdgeInsets
-            
+
+            // 使用 configuration 风格
+            var config = UIButton.Configuration.plain()
+
+            // 1️⃣ 图片设置
+            config.image = item.image
+            config.imagePlacement = .leading // 可选：.trailing / .top / .bottom
+            config.imagePadding = item.imageEdgeInsets.left + item.imageEdgeInsets.right // 图片与标题间距
+
+            // 2️⃣ 标题设置（支持富文本）
+            if let attributedTitle = item.attributedTitle {
+                config.attributedTitle = AttributedString(attributedTitle)
+            }
+
+            // 3️⃣ 内容内边距（取代 contentEdgeInsets）
+            config.contentInsets = NSDirectionalEdgeInsets(
+                top: item.contentEdgeInsets.top,
+                leading: item.contentEdgeInsets.left,
+                bottom: item.contentEdgeInsets.bottom,
+                trailing: item.contentEdgeInsets.right
+            )
+
+            // 4️⃣ 文字对齐方式（UIKit 仍需用 titleLabel）
             button.titleLabel?.textAlignment = item.titleAlignment
+
+            // 5️⃣ 图片显示模式
             button.imageView?.contentMode = item.imageContentMode
-            
+
+            // 6️⃣ 高亮状态支持（Configuration 不支持多状态 image/title）
+            button.setImage(item.highlightedImage, for: .highlighted)
+            button.setAttributedTitle(item.highlightedAttributedTitle, for: .highlighted)
+
+            // 应用配置
+            button.configuration = config
             if let size = item.size { button.frame = CGRect(origin: .zero, size: size) }
             button.addActionHandlers { [weak self] sender in
                 item.action(item)
