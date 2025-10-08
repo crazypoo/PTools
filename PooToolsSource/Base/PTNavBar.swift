@@ -133,10 +133,12 @@ open class PTNavBar: UIView {
         view.snp.remakeConstraints { make in
             switch titleViewMode {
             case .auto:
+                let targetWidth = max(view.intrinsicContentSize.width, view.bounds.width)
+                let width = min(targetWidth, titleViewMAxWidth)
+                                
                 make.centerX.centerY.equalToSuperview()
                 make.height.equalToSuperview()
-                let targetWidth = max(view.intrinsicContentSize.width, view.bounds.width)
-                make.width.equalTo(min(targetWidth, titleViewMAxWidth))
+                make.width.equalTo(width)
             case .fixed(let width):
                 make.center.equalToSuperview()
                 make.width.equalTo(min(width, titleViewMAxWidth))
@@ -216,21 +218,12 @@ open class PTNavBar: UIView {
     private func calculateMaxWidth() {
         let rightWidthToTal:CGFloat = stackTotalWidth(rightStack)
         let leftWidthToTal:CGFloat = stackTotalWidth(leftStack)
-        if leftStack.arrangedSubviews.count == rightStack.arrangedSubviews.count {
-            titleContainer.snp.remakeConstraints { make in
-                make.centerY.equalToSuperview()
-                make.centerX.equalToSuperview()
-                make.left.lessThanOrEqualTo(leftStack.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-                make.right.lessThanOrEqualTo(rightStack.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
-                make.height.equalTo(34)
-            }
-        } else {
-            titleContainer.snp.remakeConstraints { make in
-                make.centerY.equalToSuperview()
-                make.left.equalTo(leftStack.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-                make.right.equalTo(rightStack.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
-                make.height.equalTo(34)
-            }
+        titleContainer.snp.remakeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.left.lessThanOrEqualTo(leftStack.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
+            make.right.lessThanOrEqualTo(rightStack.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
+            make.height.equalTo(34)
         }
 
         let newWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - PTAppBaseConfig.share.navContainerSpacing * 2 - leftWidthToTal - rightWidthToTal

@@ -50,6 +50,12 @@ public class PTActionLayoutButton: UIControl {
         }
     }
     
+    public var textLineBreakMode:NSLineBreakMode = .byCharWrapping {
+        didSet {
+            updateAppearance()
+        }
+    }
+    
     public var imageContentMode:UIView.ContentMode = .scaleAspectFit {
         didSet {
             updateAppearance()
@@ -320,7 +326,7 @@ public class PTActionLayoutButton: UIControl {
         } else {
             let nameAtt:ASAttributedString = """
                         \(wrap: .embedding("""
-                        \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace)))
+                        \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace),.lineBreakMode(self.textLineBreakMode)))
                         """),.action {
                             if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
                                 block(self)

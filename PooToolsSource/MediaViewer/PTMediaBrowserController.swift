@@ -95,8 +95,14 @@ public class PTMediaBrowserController: PTBaseViewController {
         view.titleLabel.textColor = self.viewConfig.titleColor
         view.closeButton.setImage(self.viewConfig.closeViewerImage, for: .normal)
         view.closeButton.addActionHandlers { [weak self] _ in
-            self?.returnFrontVC {
-                self?.viewDismissBlock?()
+            if let sheet = self?.sheetViewController {
+                self?.navigationController?.popViewController() {
+                    self?.viewDismissBlock?()
+                }
+            } else {
+                self?.returnFrontVC {
+                    self?.viewDismissBlock?()
+                }
             }
         }
         return view
@@ -254,6 +260,10 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.changeStatusBar(type: .Dark)
     }
     

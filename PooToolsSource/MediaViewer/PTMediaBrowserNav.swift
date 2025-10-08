@@ -48,6 +48,7 @@ class PTMediaBrowserNav: UIView {
         }
         navBar.setLeftButtons([closeButton])
         navBar.titleView = titleLabel
+        navBar.titleViewMode = .auto
     }
     
     required init?(coder: NSCoder) {
