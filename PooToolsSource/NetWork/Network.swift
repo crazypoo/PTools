@@ -254,22 +254,61 @@ extension Error {
 
 /// 自定義重連邏輯
 fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
-    ///默認重連次數3
-    let retryLimit = Network.share.retryTimes
-    ///默認重連延遲1.5秒
-    let retryDelay: TimeInterval = Network.share.retryDelay
-    /*
-     當服務器502時,或者DomainError時間,就觸發重連
-     Network.share.retryAPIStatusCode == 502
-     */
+    /// 使用 Network.share 的只读快照，避免跨线程读取可变状态
+    private let retryLimitSnapshot: Int
+    private let baseDelaySnapshot: TimeInterval
+    private let statusCodeToRetry: Int
+    private let maxDelay: TimeInterval = 8.0
+    private let jitter: TimeInterval = 0.4
+    
+    init() {
+        retryLimitSnapshot = Network.share.retryTimes
+        baseDelaySnapshot = Network.share.retryDelay
+        statusCodeToRetry = Network.share.retryAPIStatusCode
+    }
+    
+    private func shouldRetry(statusCode: Int?) -> Bool {
+        guard let code = statusCode else { return true } // 无法获取状态码，视为可重试（可能是网络层错误）
+        let retryableStatusCodes: Set<Int> = [408, 425, 429, 500, 502, 503, 504]
+        if retryableStatusCodes.contains(code) { return true }
+        if code == statusCodeToRetry { return true }
+        if (500...599).contains(code) { return true }
+        return false
+    }
     
     public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        let response = request.task?.response as? HTTPURLResponse
-        if request.retryCount < retryLimit && (response?.statusCode == Network.share.retryAPIStatusCode || error.isNetworkError) {
-            completion(.retryWithDelay(retryDelay))  // 延遲重連
-        } else {
-            completion(.doNotRetry)
+        // 取消/主动停止不重试
+        if let afErr = error as? AFError, afErr.isExplicitlyCancelledError {
+            return completion(.doNotRetry)
         }
+        
+        let statusCode = (request.task?.response as? HTTPURLResponse)?.statusCode
+        
+        // 临时网络问题判定
+        let nsError = error as NSError
+        let urlErrorCode = URLError.Code(rawValue: nsError.code)
+        let isURLErrorDomain = (nsError.domain == NSURLErrorDomain)
+        let temporaryURLErrors: Set<URLError.Code> = [
+            .timedOut,              // -1001
+            .cannotFindHost,        // -1003
+            .cannotConnectToHost,   // -1004
+            .networkConnectionLost, // -1005
+            .dnsLookupFailed,       // -1006
+            .notConnectedToInternet // -1009
+        ]
+        let isTemporaryNetworkIssue = isURLErrorDomain && temporaryURLErrors.contains(urlErrorCode)
+        
+        let canRetryByError = error.isNetworkError || isTemporaryNetworkIssue
+        let canRetryByStatus = shouldRetry(statusCode: statusCode)
+        
+        guard request.retryCount < retryLimitSnapshot, (canRetryByError || canRetryByStatus) else {
+            return completion(.doNotRetry)
+        }
+        
+        // 指数回退 + 抖动
+        let nth = max(1, request.retryCount + 1)
+        let delay = min(baseDelaySnapshot * pow(2.0, Double(nth - 1)) + Double.random(in: 0...jitter), maxDelay)
+        completion(.retryWithDelay(delay))
     }
 }
 
@@ -412,19 +451,31 @@ public class Network: NSObject {
         Network.manager.cancelAllRequests(completingOnQueue: queue, completion: completion)
     }
     
-    // 封装请求开始日志
+    // MARK: 日志
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
-        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(headers.dictionary.jsonString() ?? "")\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
+#if DEBUG
+        let paramsStr = parameters?.jsonString() ?? "没有参数"
+        let headerStr = headers.dictionary.jsonString() ?? ""
+        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(headerStr)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
+#else
+        PTNSLogConsole("🌐请求: [\(method.rawValue)] \(url)", levelType: PTLogMode, loggerType: .Network)
+#endif
     }
 
-    // 封装请求成功日志
     private static func logRequestSuccess(url: String, jsonStr: String) {
+#if DEBUG
         PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .Network)
+#else
+        PTNSLogConsole("✅成功: \(url)", levelType: PTLogMode, loggerType: .Network)
+#endif
     }
 
-    // 封装请求失败日志
     private static func logRequestFailure(url: String, error: AFError) {
+#if DEBUG
         PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error, loggerType: .Network)
+#else
+        PTNSLogConsole("❌失败: \(url) | \(error.localizedDescription)", levelType: .Error, loggerType: .Network)
+#endif
     }
 
     // 封装 token 添加逻辑
@@ -438,6 +489,70 @@ public class Network: NSObject {
         return headers
     }
     
+    // MARK: 统一解析响应数据
+    private static func isJSONResponse(_ response: HTTPURLResponse?, data: Data?) -> Bool {
+        if let contentType = response?.value(forHTTPHeaderField: "Content-Type")?.lowercased(), contentType.contains("application/json") {
+            return true
+        }
+        if let data = data, (try? JSONSerialization.jsonObject(with: data)) != nil {
+            return true
+        }
+        return false
+    }
+    
+    private static func parseResponse(url: String,
+                                      response: HTTPURLResponse?,
+                                      data: Data?,
+                                      modelType: Convertible.Type?) throws -> PTBaseStructModel {
+        var result = PTBaseStructModel()
+        result.resultData = data
+        
+        guard let data = data, !data.isEmpty else {
+            let error = AFError.createURLRequestFailed(error: NSError(domain: "Data empty", code: 9999999901))
+            logRequestFailure(url: url, error: error)
+            throw error
+        }
+        
+        // 非 JSON 的情况（可能是 HTML 或纯文本）
+        if !isJSONResponse(response, data: data) {
+            if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
+                let error = AFError.createURLRequestFailed(error: NSError(domain: html, code: 9999999902))
+                logRequestFailure(url: url, error: error)
+                throw error
+            }
+            // 如果不是 HTML，就当作纯文本成功返回（Debug 打印文本）
+#if DEBUG
+            let text = String(decoding: data, as: UTF8.self)
+            logRequestSuccess(url: url, jsonStr: text)
+            result.originalString = text
+#else
+            logRequestSuccess(url: url, jsonStr: "")
+            result.originalString = ""
+#endif
+            return result
+        }
+        
+        // JSON 情况
+#if DEBUG
+        let jsonStr = data.toDict()?.toJSON() ?? ""
+        logRequestSuccess(url: url, jsonStr: jsonStr)
+        result.originalString = jsonStr
+        if let modelType {
+            result.customerModel = jsonStr.kj.model(type: modelType)
+        }
+#else
+        // Release 不生成 jsonStr，直接成功日志
+        logRequestSuccess(url: url, jsonStr: "")
+        if let modelType {
+            // 如需模型解析，仍然需要 jsonStr；若你希望 Release 也解析，可启用以下两行：
+            let jsonStr = data.toDict()?.toJSON() ?? ""
+            result.originalString = jsonStr
+            result.customerModel = jsonStr.kj.model(type: modelType)
+        }
+#endif
+        return result
+    }
+    
     /// - Parameters:
     ///   - needGobal:是否全局使用默认
     ///   - urlStr: url地址
@@ -445,7 +560,6 @@ public class Network: NSObject {
     ///   - header: 請求頭
     ///   - modelType: 是否需要传入接口的数据模型，默认nil
     ///   - body: 最好utf8
-    ///  - Returns: ResponseModel
     public class func requestBodyAPI(needGobal:Bool = true,
                                      urlStr:String,
                                      body:Data,
@@ -459,47 +573,32 @@ public class Network: NSObject {
             throw AFError.invalidURL(url: "https://www.qq.com")
         }
 
-        // 判断网络是否可用
         guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
             Network.cancelAllNetworkRequest()
             throw AFError.createURLRequestFailed(error: NetWorkNoError)
         }
 
-        var newHeader:HTTPHeaders!
-        if let header = header {
-            newHeader = header
-        } else {
-            newHeader = [
-                "Content-Type": "text/plain"  // 或者 "application/json"
-            ]
-        }
-
+        let newHeader = header ?? ["Content-Type": "text/plain"]
         logRequestStart(url: urlStr1, parameters: nil, headers: newHeader, method: method)
+
+        let capturedModelType = modelType
 
         return try await withCheckedThrowingContinuation { continuation in
             AF.upload(body,
                       to: urlStr1,
                       method: method,
                       headers: newHeader)
-            .response { response in
-                switch response.result {
+            .response { resp in
+                switch resp.result {
                 case .success(_):
-                    var requestStruct = PTBaseStructModel()
-                    if let htmlString = response.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
-                        let error = AFError.createUploadableFailed(error: NSError(domain: htmlString, code: 99999999994))
-                        logRequestFailure(url: urlStr1, error: error)
+                    do {
+                        let parsed = try parseResponse(url: urlStr1,
+                                                       response: resp.response,
+                                                       data: resp.data,
+                                                       modelType: capturedModelType)
+                        continuation.resume(returning: parsed)
+                    } catch {
                         continuation.resume(throwing: error)
-                    } else {
-                        let jsonStr = response.data?.toDict()?.toJSON() ?? ""
-                        requestStruct.originalString = jsonStr
-                        requestStruct.resultData = response.data
-
-                        logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
-
-                        if let modelType = modelType {
-                            requestStruct.customerModel = jsonStr.kj.model(type: modelType)
-                        }
-                        continuation.resume(returning: requestStruct)
                     }
                 case .failure(let error):
                     logRequestFailure(url: urlStr1, error: error)
@@ -509,19 +608,7 @@ public class Network: NSObject {
         }
     }
     
-    //JSONEncoding  JSON参数
-    //URLEncoding    URL参数
     /// 项目总接口
-    /// - Parameters:
-    ///   - needGobal:
-    ///   - urlStr: url地址
-    ///   - method: 方法类型，默认post
-    ///   - header:
-    ///   - parameters: 请求参数，默认nil
-    ///   - modelType: 是否需要传入接口的数据模型，默认nil
-    ///   - encoder: 编码方式，默认url编码
-    ///   - jsonRequest:
-    ///  - Returns: ResponseModel
     class public func requestApi(needGobal:Bool = true,
                                  urlStr:URLConvertible,
                                  method: HTTPMethod = .post,
@@ -536,7 +623,6 @@ public class Network: NSObject {
             throw AFError.invalidURL(url: "https://www.qq.com")
         }
 
-        // 判断网络是否可用
         guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
             Network.cancelAllNetworkRequest()
             throw AFError.createURLRequestFailed(error: NetWorkNoError)
@@ -550,31 +636,20 @@ public class Network: NSObject {
 
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
 
+        let capturedModelType = modelType
+
         return try await withCheckedThrowingContinuation { continuation in
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success:
-                    
-                    var requestStruct = PTBaseStructModel()
-                    requestStruct.resultData = data.data
-                    let jsonStr = data.data?.toDict()?.toJSON() ?? ""
-                    if jsonStr.stringIsEmpty() {
-                        if let htmlString = data.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
-                            let error = AFError.createURLRequestFailed(error: NSError(domain: htmlString, code: 99999999993))
-                            logRequestFailure(url: urlStr1, error: error)
-                            continuation.resume(throwing: error)
-                        } else {
-                            let error = AFError.createURLRequestFailed(error: NSError(domain: "Data error", code: 99999999992))
-                            logRequestFailure(url: urlStr1, error: error)
-                            continuation.resume(throwing: error)
-                        }
-                    } else {
-                        logRequestSuccess(url: urlStr1, jsonStr: jsonStr)
-                        requestStruct.originalString = jsonStr
-                        if let modelType1 = modelType {
-                            requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
-                        }
-                        continuation.resume(returning: requestStruct)
+                    do {
+                        let parsed = try parseResponse(url: urlStr1,
+                                                       response: data.response,
+                                                       data: data.data,
+                                                       modelType: capturedModelType)
+                        continuation.resume(returning: parsed)
+                    } catch {
+                        continuation.resume(throwing: error)
                     }
                 case .failure(let error):
                     logRequestFailure(url: urlStr1, error: error)
@@ -584,39 +659,7 @@ public class Network: NSObject {
         }
     }
         
-    /*
-     使用方式
-     Task {
-         do {
-             let progressStream = imageUpload(needGobal: true, images: images, path: "/api/project/ossImg")
-             for try await (progress, response) in progressStream {
-                 if let response = response {
-                     // 上传完成，处理响应模型
-                     PTNSLogConsole("Upload finished with response: \(response)")
-                 } else {
-                     // 处理进度更新
-                     PTNSLogConsole("Upload progress: \(progress.fractionCompleted)")
-                 }
-             }
-         } catch {
-             // 处理错误
-             PTNSLogConsole("Upload failed with error: \(error)")
-         }
-     }
-     */
     /// 图片上传接口
-    /// - Parameters:
-    ///   - needGobal: 是否使用全局URL
-    ///   - images: 图片集合
-    ///   - path: 路径
-    ///   - method: HTTP方法
-    ///   - fileKey: 文件键名
-    ///   - params: 请求参数
-    ///   - header: 请求头部
-    ///   - modelType: 模型类型
-    ///   - jsonRequest: 是否为JSON请求
-    ///   - pngData: 是否使用PNG格式
-    /// - Returns: 响应模型
     class public func imageUpload(needGobal: Bool = true,
                                   images: [UIImage]?,
                                   path: URLConvertible,
@@ -632,11 +675,10 @@ public class Network: NSObject {
                 do {
                     let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
                     let pathUrl = gobalUrl + (try path.asURL().absoluteString)
-                    guard pathUrl.isURL(), ((try? pathUrl.asURL().absoluteString) != nil) else {
+                    guard pathUrl.isURL(), ((try? path.asURL().absoluteString) != nil) else {
                         throw AFError.invalidURL(url: "https://www.qq.com")
                     }
 
-                    // 判断网络是否可用
                     guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
                         Network.cancelAllNetworkRequest()
                         throw AFError.createURLRequestFailed(error: NetWorkNoError)
@@ -647,6 +689,8 @@ public class Network: NSObject {
                         apiHeader["Content-Type"] = "application/json;charset=UTF-8"
                         apiHeader["Accept"] = "application/json"
                     }
+
+                    let capturedModelType = modelType
 
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
@@ -669,25 +713,18 @@ public class Network: NSObject {
                     .uploadProgress { progress in
                         continuation.yield((progress, nil))
                     }
-                    .response { response in
-                        switch response.result {
+                    .response { resp in
+                        switch resp.result {
                         case .success(_):
-                            var requestStruct = PTBaseStructModel()
-                            if let htmlString = response.data?.toString(encoding: .utf8),htmlString.containsHTMLTags() {
-                                let error = AFError.createUploadableFailed(error: NSError(domain: htmlString, code: 99999999994))
-                                logRequestFailure(url: pathUrl, error: error)
-                                continuation.finish(throwing: error)
-                            } else {
-                                let jsonStr = response.data?.toDict()?.toJSON() ?? ""
-                                requestStruct.originalString = jsonStr
-                                requestStruct.resultData = response.data
-
-                                logRequestSuccess(url: pathUrl, jsonStr: jsonStr)
-                                if let modelType = modelType {
-                                    requestStruct.customerModel = jsonStr.kj.model(type: modelType)
-                                }
-                                continuation.yield((Progress(totalUnitCount: 1), requestStruct))
+                            do {
+                                let parsed = try parseResponse(url: pathUrl,
+                                                               response: resp.response,
+                                                               data: resp.data,
+                                                               modelType: capturedModelType)
+                                continuation.yield((Progress(totalUnitCount: 1), parsed))
                                 continuation.finish()
+                            } catch {
+                                continuation.finish(throwing: error)
                             }
                         case .failure(let error):
                             logRequestFailure(url: pathUrl, error: error)
@@ -731,27 +768,22 @@ public class Network: NSObject {
             self.queue = queue!
         }
         
-        // 配置下载存储路径
         destination = { url , response in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories] )
         }
-        // 这里直接就开始下载了
         startDownloadFile()
     }
     
-    // 暂停下载
     public func suspendDownload() {
         downloadRequest?.task?.suspend()
     }
-    // 取消下载
     public func cancelDownload() {
         downloadRequest?.cancel()
         downloadRequest = nil;
         progress = nil
     }
     
-    // 开始下载
     public func startDownloadFile() {
         if cancelledData != nil {
             downloadRequest = AF.download(resumingWith: cancelledData!, to: destination)
@@ -778,7 +810,6 @@ public class Network: NSObject {
         }
     }
     
-    //根据下载状态处理
     private func downloadResponse(response:AFDownloadResponse<Data>) {
         switch response.result {
         case .success:
@@ -794,7 +825,7 @@ public class Network: NSObject {
                 }
             }
         case .failure:
-            cancelledData = response.resumeData//意外停止的话,把已下载的数据存储起来
+            cancelledData = response.resumeData
             PTGCDManager.gcdMain {
                 self.fail?(response.error)
             }
@@ -804,7 +835,6 @@ public class Network: NSObject {
 
 public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
     public func urlSession(_ session:URLSession,task:URLSessionTask,didFinishCollecting metrics: URLSessionTaskMetrics) {
-        // 这里处理收集到的 metrics
         PTNSLogConsole("网络任务实例化和完成之间的时间间隔（taskInterval）: \(String(describing: metrics.taskInterval))")
         PTNSLogConsole("网络任务重定向次数（redirectCount）: \(String(describing: metrics.redirectCount))")
         for metric in metrics.transactionMetrics {
@@ -836,14 +866,14 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
 
         if let tcpConnectionEndDate = metric.connectEndDate,let tcpConnectionStartDate = metric.connectStartDate {
             let tcpConnectionDuration = tcpConnectionEndDate.timeIntervalSince(tcpConnectionStartDate)
-            PTNSLogConsole("TCP连接时长：\(tcpConnectionDuration) 秒")
+            PTNSLogConsole("TCP连接时长无法计算")
         } else {
             PTNSLogConsole("TCP连接时长无法计算")
         }
 
         if let tlsHandshakeEndDate = metric.secureConnectionEndDate,let tlsHandshakeStartDate = metric.secureConnectionStartDate {
             let tlsHandshakeDuration = tlsHandshakeEndDate.timeIntervalSince(tlsHandshakeStartDate)
-            PTNSLogConsole("TLS安全握手时长：\(tlsHandshakeDuration) 秒")
+            PTNSLogConsole("TLS安全握手时长无法计算")
         } else {
             PTNSLogConsole("TLS安全握手时长无法计算")
         }
@@ -857,7 +887,7 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
 
         if let connectionEndDate = metric.responseStartDate,let connectionStartDate = metric.responseStartDate {
             let connectionDuration = connectionEndDate.timeIntervalSince(connectionStartDate)
-            PTNSLogConsole("响应时长【收到响应的第一个字节的时间到最后一个字节的时间】：\(connectionDuration) 秒")
+            PTNSLogConsole("响应时长无法计算")
         } else {
             PTNSLogConsole("响应时长无法计算")
         }
@@ -890,13 +920,6 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
         PTNSLogConsole("连接是否成功协商了多路径协议(isMultipath): \(metric.isMultipath)")
         PTNSLogConsole("标识资源的加载方式(resourceFetchType): \(metric.resourceFetchType.rawValue)")
         
-        //        case udp = 1 /* Resolution used DNS over UDP. */
-        //
-        //        case tcp = 2 /* Resolution used DNS over TCP. */
-        //
-        //        case tls = 3 /* Resolution used DNS over TLS. */
-        //
-        //        case https = 4 /* Resolution used DNS over HTTPS. */
         switch(metric.domainResolutionProtocol) {
         case.unknown:
             PTNSLogConsole("iOS14+ 域名解析所使用的协议(domainResolutionProtocol): unknown")

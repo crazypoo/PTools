@@ -18,8 +18,6 @@ public extension String {
 
 open class PTBaseWebViewController: PTBaseViewController {
 
-    static let sharedProcessPool = WKProcessPool()
-
     public var vcDismiss:PTActionTask?
     
     public var webHeight: ((CGFloat) -> Void)?
@@ -42,8 +40,6 @@ open class PTBaseWebViewController: PTBaseViewController {
         config.allowsAirPlayForMediaPlayback = true
         // 允许在线播放
         config.allowsInlineMediaPlayback = true
-        // web内容处理池
-        config.processPool = PTBaseWebViewController.sharedProcessPool
 #if DEBUG
         config.websiteDataStore = WKWebsiteDataStore.nonPersistent()
 #else

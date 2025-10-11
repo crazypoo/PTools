@@ -647,7 +647,9 @@ public class LocalConsole: NSObject {
         }
         
         let inspect = UIAction(title: "Inspectors",image: UIImage.InspectorImage) { _ in
-            Inspector.sharedInstance.present(animated: true)
+            Task {
+                await Inspector.sharedInstance.present(animated: true)
+            }
         }
         
         let logFile = UIAction(title: .log, image: UIImage.logFile) { _ in

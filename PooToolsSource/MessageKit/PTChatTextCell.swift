@@ -145,7 +145,7 @@ public class PTChatTextCell: PTChatBaseCell {
         let titleColor = isOwner ? PTChatConfig.share.textMeMessageColor : PTChatConfig.share.textOtherMessageColor
         dataContentStatusView.setBackgroundImage(isOwner ? PTChatConfig.share.chatMeBubbleImage.resizeImage() : PTChatConfig.share.chatOtherBubbleImage.resizeImage(), for: .normal)
         dataContentStatusView.setBackgroundImage(isOwner ? PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage() : PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
-        dataContentStatusView.contentEdgeInsets = isOwner ? PTChatConfig.share.textOwnerContentEdges : PTChatConfig.share.textOtherContentEdges
+//        dataContentStatusView.contentEdgeInsets = isOwner ? PTChatConfig.share.textOwnerContentEdges : PTChatConfig.share.textOtherContentEdges
 
         setupConstraints(for: cellModel, contentHeight: contentHeight, contentWidth: contentWidth, contentNumberOfLines: contentNumberOfLines)
 

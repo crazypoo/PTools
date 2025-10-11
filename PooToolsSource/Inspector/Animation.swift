@@ -72,7 +72,7 @@ extension NSObject {
                  delay: TimeInterval = .zero,
                  damping: CGFloat = Animation.defaultDamping,
                  options: UIView.AnimationOptions = Animation.defaultOptions,
-                 animations: @escaping PTActionTask,
+                 animations: @escaping () -> Void,
                  completion: PTBoolTask? = nil) {
         UIView.animate(
             withDuration: duration,

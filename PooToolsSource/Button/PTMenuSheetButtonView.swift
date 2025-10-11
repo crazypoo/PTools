@@ -50,10 +50,6 @@ public class PTMenuSheetButtonView: UIView {
         set { arrowButton.arrowColor = newValue }
     }
     
-    public var closeOpenImagesInsets: UIEdgeInsets {
-        get { return arrowButton.imageEdgeInsets }
-        set { arrowButton.imageEdgeInsets = newValue }
-    }
     public var closeImage: UIImage?
     public var openImage: UIImage?
     

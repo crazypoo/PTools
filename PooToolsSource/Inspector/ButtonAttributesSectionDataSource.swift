@@ -167,7 +167,8 @@ extension DefaultElementAttributesLibrary {
                 case .adjustsImageWhenDisabled:
                     return .switch(
                         title: property.rawValue,
-                        isOn: { button.adjustsImageWhenDisabled }
+                        isOn: {
+                            button.adjustsImageWhenDisabled }
                     ) { adjustsImageWhenDisabled in
                         button.adjustsImageWhenDisabled = adjustsImageWhenDisabled
                     }

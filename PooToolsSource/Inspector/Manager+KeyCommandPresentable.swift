@@ -119,7 +119,9 @@ extension Manager: KeyCommandPresentable {
                 Inspector.sharedInstance.configuration.showFullApplicationHierarchy.toggle()
 
                 if Inspector.sharedInstance.configuration.showFullApplicationHierarchy {
-                    Inspector.present()
+                    Task {
+                        await Inspector.present()
+                    }
                 }
             }
         )
@@ -191,7 +193,7 @@ extension Manager: KeyCommandPresentable {
         let keyInput = "i"
         let modifierFlags: UIKeyModifierFlags = [.control, .shift]
 
-        let closure: PTActionTask = {
+        let closure: () -> Void = {
             keyWindow.overrideUserInterfaceStyle = {
                 switch keyWindow.traitCollection.userInterfaceStyle {
                 case .dark: return .light

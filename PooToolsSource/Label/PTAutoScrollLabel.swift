@@ -1,35 +1,49 @@
 //
 //  PTAutoScrollLabel.swift
-//  PooTools_Example
+//  BABBox
 //
-//  Created by 邓杰豪 on 2025/6/29.
-//  Copyright © 2025 crazypoo. All rights reserved.
+//  Created by 邓杰豪 on 2025/10/8.
+//  Copyright © 2025 BAB. All rights reserved.
 //
 
 import UIKit
+import SnapKit
 import AttributedString
+import SwifterSwift
 
 public enum PTScrollDirection {
-    case up,down
+    case up
+    case down
+    case left
+    case right
 }
 
 public class PTAutoScrollLabel: UIView {
+
     private let scrollView = UIScrollView()
     private var labels: [UILabel] = []
     private var timer: Timer?
-    private var currentIndex = 0
     private var messages: [String] = []
+    private var bgColors: [UIColor] = []
 
+    // 当前偏移量（仅跑马灯模式）
+    private var marqueeOffset: CGFloat = 0
+
+    // MARK: - Configurable Properties
     public var scrollInterval: TimeInterval = 2.0
     public var textFont: UIFont = .systemFont(ofSize: 14)
     public var textColor: UIColor = .label
     public var numberOfLines: Int = 1
     public var lineSpacing: CGFloat = 4
+    public var textAlignment: NSTextAlignment = .left
     public var scrollDirection: PTScrollDirection = .up
-    public var textAlignment:NSTextAlignment = .right
+    public var itemSpacing: CGFloat = 20 // 左右方向间隔距离
+    public var marqueeSpeed: CGFloat = 40 // 跑马灯速度（点/秒）
+
     public var onTap: ((Int, String) -> Void)?
 
-    public override init(frame: CGRect) {
+    // MARK: - Init
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
@@ -42,124 +56,185 @@ public class PTAutoScrollLabel: UIView {
     private func setupView() {
         scrollView.isScrollEnabled = false
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.clipsToBounds = true
         addSubview(scrollView)
         scrollView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
 
-    public func configure(with texts: [String]) {
+    // MARK: - Configure
+    public func configure(with texts: [String], backgroundColors: [UIColor]? = nil) {
         stopScrolling()
         messages = texts
-        currentIndex = scrollDirection == .up ? 0 : max(0, texts.count - 1)
+        bgColors = backgroundColors ?? Array(repeating: .clear, count: texts.count)
 
-        // 清空旧内容
         labels.forEach { $0.removeFromSuperview() }
         labels.removeAll()
 
-        for (i, text) in texts.enumerated() {
-            let label = UILabel()
-            label.numberOfLines = numberOfLines
+        guard !texts.isEmpty else { return }
 
-            if text.containsHTMLTags(),let data = text.data(using: .utf8) {
-                let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
-                    .documentType: NSAttributedString.DocumentType.html,
-                    .characterEncoding: String.Encoding.utf8.rawValue
-                ]
-                if let attributedString = try? NSMutableAttributedString(data: data, options: options, documentAttributes: nil) {
-                    let fullRange = NSRange(location: 0, length: attributedString.length)
-                    attributedString.addAttribute(.font, value: textFont, range: fullRange)
-                    attributedString.addAttribute(.foregroundColor, value: textColor, range: fullRange)
-                    label.attributedText = attributedString
-                } else {
-                    label.text = text
-                    label.font = textFont
-                    label.textColor = textColor
-                    label.textAlignment = textAlignment
-                }
-            } else {
-                let nameAtt:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            \(text,.foreground(textColor),.font(textFont))
-                            """),.paragraph(.alignment(textAlignment),.lineSpacing(lineSpacing)))
-                            """
-                label.attributed.text = nameAtt
-            }
-            
-            label.tag = i
-            label.isUserInteractionEnabled = true
-            let tap = UITapGestureRecognizer { sender in
-                if let ges = sender as? UITapGestureRecognizer {
-                    self.handleTap(ges)
-                }
-            }
-            label.addGestureRecognizer(tap)
-
-            scrollView.addSubview(label)
-            labels.append(label)
-
-            // 使用 SnapKit 设置 label 位置
-            label.snp.makeConstraints { make in
-                make.width.equalTo(self.frame.size.width)
-                make.height.equalTo(self.frame.size.height)
-                make.top.equalToSuperview().offset(CGFloat(i) * bounds.height)
-                make.left.equalTo(0)
-            }
+        if scrollDirection == .left || scrollDirection == .right {
+            setupHorizontalMarqueeLabels()
+        } else {
+            setupVerticalLabels()
         }
-
-        scrollView.contentSize = CGSize(width: bounds.width, height: bounds.height * CGFloat(texts.count))
-        scrollView.contentOffset = scrollDirection == .up ? .zero : CGPoint(x: 0, y: scrollView.contentSize.height - bounds.height)
 
         startScrolling()
     }
 
+    // MARK: - Label Setup
+    private func setupVerticalLabels() {
+        for (i, text) in messages.enumerated() {
+            let label = createLabel(text: text, index: i)
+            scrollView.addSubview(label)
+            labels.append(label)
+
+            label.snp.makeConstraints { make in
+                make.width.equalToSuperview()
+                make.height.equalToSuperview()
+                make.left.equalTo(0)
+                make.top.equalToSuperview().offset(CGFloat(i) * bounds.height)
+            }
+        }
+        scrollView.contentSize = CGSize(width: bounds.width, height: bounds.height * CGFloat(labels.count))
+    }
+
+    private func setupHorizontalMarqueeLabels() {
+        var xOffset: CGFloat = 0
+        for (i, text) in messages.enumerated() {
+            let label = createLabel(text: text, index: i)
+            scrollView.addSubview(label)
+            labels.append(label)
+
+            let size = text.size(withAttributes: [.font: textFont])
+            label.frame = CGRect(x: xOffset, y: 0, width: size.width + 10, height: bounds.height)
+            xOffset += label.frame.width + itemSpacing
+            
+            label.viewCorner(radius: self.bounds.height / 2)
+        }
+
+        // 为了实现无缝滚动，复制一份内容拼接在后面
+        for (i, text) in messages.enumerated() {
+            let label = createLabel(text: text, index: i + messages.count)
+            label.backgroundColor = bgColors[i % bgColors.count]
+            scrollView.addSubview(label)
+            labels.append(label)
+
+            let size = text.size(withAttributes: [.font: textFont])
+            label.frame = CGRect(x: xOffset, y: 0, width: size.width + 10, height: bounds.height)
+            xOffset += label.frame.width + itemSpacing
+            
+            label.viewCorner(radius: self.bounds.height / 2)
+        }
+
+        scrollView.contentSize = CGSize(width: xOffset, height: bounds.height)
+        scrollView.contentOffset = scrollDirection == .left ? .zero : CGPoint(x: scrollView.contentSize.width / 2, y: 0)
+    }
+
+    private func createLabel(text: String, index: Int) -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = numberOfLines
+        label.backgroundColor = bgColors[safe: index % bgColors.count] ?? .clear
+        label.font = textFont
+        label.textColor = textColor
+        label.textAlignment = textAlignment
+        label.text = text
+        label.isUserInteractionEnabled = true
+        label.tag = index % messages.count
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        return label
+    }
+
+    // MARK: - Tap
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         guard let label = gesture.view as? UILabel else { return }
         let index = label.tag
-        if index < messages.count {
-            onTap?(index, messages[index])
-        }
+        guard index < messages.count else { return }
+        onTap?(index, messages[index])
     }
 
+    // MARK: - Scrolling Logic
     private func startScrolling() {
-        guard messages.count > 1 else { return }
+        guard messages.count > 0 else { return }
+        stopScrolling()
 
-        timer = Timer.scheduledTimer(withTimeInterval: scrollInterval, repeats: true) { [weak self] _ in
-            self?.scrollToNext()
+        if scrollDirection == .left || scrollDirection == .right {
+            // 跑马灯效果用 displayLink 更平滑
+            let displayLink = CADisplayLink(target: self, selector: #selector(updateMarquee))
+            displayLink.add(to: .main, forMode: .common)
+            self.displayLink = displayLink
+        } else {
+            // 垂直方向用 timer
+            timer = Timer.scheduledTimer(withTimeInterval: scrollInterval, repeats: true) { [weak self] _ in
+                self?.scrollVerticalNext()
+            }
         }
     }
 
     public func stopScrolling() {
         timer?.invalidate()
         timer = nil
+        displayLink?.invalidate()
+        displayLink = nil
     }
 
-    private func scrollToNext() {
-        guard !messages.isEmpty else { return }
+    private func scrollVerticalNext() {
+        guard labels.count > 1 else { return }
+        var offset = scrollView.contentOffset
+        let step = bounds.height
 
-        if scrollDirection == .up {
-            currentIndex = (currentIndex + 1) % messages.count
-        } else {
-            currentIndex = (currentIndex - 1 + messages.count) % messages.count
+        switch scrollDirection {
+        case .up:
+            offset.y += step
+            if offset.y >= scrollView.contentSize.height - step {
+                offset.y = 0
+            }
+        case .down:
+            offset.y -= step
+            if offset.y < 0 {
+                offset.y = scrollView.contentSize.height - step
+            }
+        default:
+            break
         }
 
-        let offsetY = CGFloat(currentIndex) * bounds.height
         UIView.animate(withDuration: 0.3) {
-            self.scrollView.contentOffset.y = offsetY
+            self.scrollView.contentOffset = offset
         }
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        // 重设 contentSize 和偏移（因为用到了 bounds）
-        scrollView.contentSize = CGSize(width: bounds.width, height: bounds.height * CGFloat(labels.count))
-        for (i, label) in labels.enumerated() {
-            label.snp.updateConstraints { make in
-                make.width.equalTo(self.frame.size.width)
-                make.height.equalTo(self.frame.size.height)
-                make.top.equalToSuperview().offset(CGFloat(i) * bounds.height)
+    private weak var displayLink: CADisplayLink?
+
+    @objc private func updateMarquee() {
+        guard scrollView.contentSize.width > bounds.width else { return }
+
+        let frameInterval: CGFloat = 1.0 / 60.0 // 每帧
+        let delta = marqueeSpeed * frameInterval
+
+        if scrollDirection == .left {
+            marqueeOffset += delta
+            if marqueeOffset >= scrollView.contentSize.width / 2 {
+                marqueeOffset = 0
+            }
+        } else if scrollDirection == .right {
+            marqueeOffset -= delta
+            if marqueeOffset <= 0 {
+                marqueeOffset = scrollView.contentSize.width / 2
             }
         }
-        scrollView.contentOffset.y = CGFloat(currentIndex) * bounds.height
+
+        scrollView.contentOffset.x = marqueeOffset
+    }
+
+    // MARK: - Lifecycle
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        // 当方向变化时重置布局
+        if scrollDirection == .left || scrollDirection == .right {
+            setupHorizontalMarqueeLabels()
+        } else {
+            setupVerticalLabels()
+        }
     }
 
     public override func didMoveToWindow() {

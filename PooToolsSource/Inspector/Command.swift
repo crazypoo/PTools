@@ -10,7 +10,7 @@ typealias Command = Inspector.Command
 
 public extension Inspector {
     struct Command: Hashable {
-        public typealias Closure = PTActionTask
+        public typealias Closure = () -> Void
 
         public var title: String
 
@@ -97,13 +97,13 @@ extension Command {
     }
 
     static func presentInspector(animated: Bool = true) -> Command {
-        Command(
-            title: Texts.presentInspector.lowercased(),
-            icon: nil,
-            keyInput: keyCommandSettings.presentationOptions.input,
-            modifierFlags: keyCommandSettings.presentationOptions.modifierFlags
-        ) {
-            Inspector.present(animated: animated)
+        Command(title: Texts.presentInspector.lowercased(),
+                icon: nil,
+                keyInput: keyCommandSettings.presentationOptions.input,
+                modifierFlags: keyCommandSettings.presentationOptions.modifierFlags) {
+            Task {
+                await Inspector.present(animated: animated)
+            }
         }
     }
 
