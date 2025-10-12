@@ -19,8 +19,6 @@ import EmptyDataSet_Swift
 import Photos
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
-private var kPTCollectionIndexViewContent: CChar = 0
-private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionView.contentOffset)
 
 public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 
@@ -51,50 +49,21 @@ public typealias PTCollectionCallback = @MainActor (UICollectionView) -> Void
 }
 
 ///ReusableView回调
-/// - Parameters:
-///   - kind: header的头部kind
-///   - collectionView: collectionView
-///   - sectionModel: Section的model
-///   - indexPath: 坐标
-///  - Return: UICollectionReusableView
 public typealias PTReusableViewHandler = @MainActor (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView?
 
 ///Cell设置
-/// - Parameters:
-///   - collectionView: collectionView
-///   - sectionModel: Section的model
-///   - index: 坐标
-///  - Return: UICollectionViewCell
 public typealias PTCellInCollectionHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
 
 ///Cell点击事件
-/// - Parameters:
-///   - collectionView: collectionView
-///   - sectionModel: Section的model
-///   - indexPath: 坐标
-///  - Return: 事件
 public typealias PTCellDidSelectedHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 ///Cell将要
-/// - Parameters:
-///   - collectionView: collectionView
-///   - sectionModel: Section的model
-///   - indexPath: 坐标
-///  - Return: 事件
 public typealias PTCellDisplayHandler = @MainActor (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 ///CollectionView的Scroll回调
-/// - Parameters:
-///   - collectionView: collectionView
-///  - Return: 事件
 public typealias PTCollectionViewScrollHandler = @MainActor (_ collectionView:UICollectionView) -> Void
 
 ///CollectionView的Swipe回调
-/// - Parameters:
-///   - collectionView: collectionView
-///   - sectionModel: Section的model
-///   - indexPath: 坐标
-///  - Return: 事件
 public typealias PTCollectionViewSwipeHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> [PTSwipeAction]
 
 public typealias PTCollectionViewCanSwipeHandler = @MainActor (_ sectionModel:PTSection,_ indexPath:IndexPath) -> Bool
@@ -169,8 +138,6 @@ public class PTCollectionViewConfig: NSObject {
     open var customReuseViews: Bool = false
     ///首是否开启刷新动画
     open var refreshWithoutAnimation: Bool = false
-    ///设置Swipe的样式
-//    open var swipeButtonStyle: ButtonStyle = .circular
     ///索引
     open var sideIndexTitles: [String]?
     ///索引设置
@@ -228,8 +195,8 @@ open class PTBaseCollectionView: UICollectionView {
     open override var contentOffset: CGPoint {
         didSet {
             // 始终锁定垂直方向
-            if contentOffSetZero {
-                self.setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
+            if contentOffSetZero, contentOffset.y != 0 {
+                setContentOffset(CGPoint(x: contentOffset.x, y: 0), animated: false)
             }
         }
     }
@@ -258,8 +225,6 @@ public class PTCollectionView: UIView {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 2.414 * indicatorRadius, y: indicatorRadius))
         path.addLine(to: CGPoint(x: 1.707 * indicatorRadius, y: 1.707 * indicatorRadius))
-        // 注意，这个画线的方法与数学中的坐标系不一样，0在3点钟方向，pi/2在6点钟方向，pi在9点钟方向。。。具体可以看文档
-        // 这里是以圆的0.25pi处和1.75pi处的切线的交点为箭头位置
         path.addArc(withCenter: CGPoint(x: indicatorRadius, y: indicatorRadius), radius: indicatorRadius, startAngle: 0.25 * CGFloat.pi, endAngle: 1.75 * CGFloat.pi, clockwise: true)
         path.close()
         maskLayer.path = path.cgPath
@@ -285,7 +250,7 @@ public class PTCollectionView: UIView {
     
     fileprivate var layerTopSpacing: CGFloat {
         let count = CGFloat(viewConfig.sideIndexTitles?.count ?? 0)
-        let floorValue = self.bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)
+        let floorValue = bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)
         return floor(floorValue) / 2
     }
     
@@ -294,10 +259,20 @@ public class PTCollectionView: UIView {
     fileprivate var touchedIndex: Int = 0 {
         didSet {
             if touchedIndex != oldValue {
-                UIDevice.pt.impactFeedbackGenerator(style: .light)
+                impactFeedbackGenerator.impactOccurred()
             }
         }
     }
+    
+    // 懒加载震动反馈（替换原 Any? 强转的做法）
+    fileprivate lazy var impactFeedbackGenerator : UIImpactFeedbackGenerator = {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.prepare()
+        return generator
+    }()
+    
+    // 使用 NSKeyValueObservation 替代手动 KVO
+    private var contentOffsetObservation: NSKeyValueObservation?
         
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
@@ -356,20 +331,23 @@ public class PTCollectionView: UIView {
                 cellTrailingSpace: viewConfig.cellTrailingSpace
             )
         case .WaterFall:
-            guard let waterFall = waterFallLayout else {
-                fatalError("WaterFallLayout empty")
+            if let waterFall = waterFallLayout {
+                group = UICollectionView.waterFallLayout(
+                    data: sectionModel.rows,
+                    screenWidth: screenWidth,
+                    rowCount: viewConfig.rowCount,
+                    itemOriginalX: viewConfig.itemOriginalX,
+                    topContentSpace: viewConfig.contentTopSpace,
+                    bottomContentSpace: viewConfig.contentBottomSpace,
+                    itemSpace: viewConfig.cellLeadingSpace,
+                    itemTrailingSpace: viewConfig.cellTrailingSpace,
+                    itemHeight: waterFall
+                )
+            } else {
+                PTNSLogConsole("Warning: WaterFallLayout is nil. Fallback to 1x1 group.")
+                let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+                group = NSCollectionLayoutGroup(layoutSize: size)
             }
-            group = UICollectionView.waterFallLayout(
-                data: sectionModel.rows,
-                screenWidth: screenWidth,
-                rowCount: viewConfig.rowCount,
-                itemOriginalX: viewConfig.itemOriginalX,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                itemSpace: viewConfig.cellLeadingSpace,
-                itemTrailingSpace: viewConfig.cellTrailingSpace,
-                itemHeight: waterFall
-            )
         case .Horizontal:
             group = UICollectionView.horizontalLayout(
                 data: sectionModel.rows,
@@ -392,17 +370,31 @@ public class PTCollectionView: UIView {
             )
         case .Tag:
             let tagDatas = sectionModel.rows?.compactMap { $0.dataModel }
-            if tagDatas is [PTTagLayoutModel] {
-                group = UICollectionView.tagShowLayout(data: tagDatas as? [PTTagLayoutModel],screenWidth: self.frame.width,itemOriginalX: viewConfig.itemOriginalX,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace,itemTrailingSpace: viewConfig.cellTrailingSpace,itemContentSpace: viewConfig.tagCellContentSpace)
+            if let tags = tagDatas as? [PTTagLayoutModel] {
+                group = UICollectionView.tagShowLayout(
+                    data: tags,
+                    screenWidth: self.frame.width,
+                    itemOriginalX: viewConfig.itemOriginalX,
+                    itemHeight: viewConfig.itemHeight,
+                    topContentSpace: viewConfig.contentTopSpace,
+                    bottomContentSpace: viewConfig.contentBottomSpace,
+                    itemLeadingSpace: viewConfig.cellLeadingSpace,
+                    itemTrailingSpace: viewConfig.cellTrailingSpace,
+                    itemContentSpace: viewConfig.tagCellContentSpace
+                )
             } else {
-                group = NSCollectionLayoutGroup(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1)))
-                fatalError("如果是Tag,則datamodel必須是PTTagLayoutModel")
+                PTNSLogConsole("Warning: Tag viewType requires PTTagLayoutModel. Fallback to 1x1 group.")
+                let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+                group = NSCollectionLayoutGroup(layoutSize: size)
             }
         case .Custom:
-            guard let customerLayout = customerLayout else {
-                fatalError("CustomerLayout empty")
+            if let customerLayout {
+                group = customerLayout(section, sectionModel)
+            } else {
+                PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
+                let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+                group = NSCollectionLayoutGroup(layoutSize: size)
             }
-            group = customerLayout(section, sectionModel)
         }
         
         var sectionInsets = viewConfig.sectionEdges
@@ -477,8 +469,12 @@ public class PTCollectionView: UIView {
     private func generateDecorationItems(section: NSInteger, sectionModel: PTSection) -> [NSCollectionLayoutDecorationItem] {
         switch viewConfig.decorationItemsType {
         case .Custom:
-            guard mSections.count > 0,let decorationInCollectionView = decorationInCollectionView else { return [] }
-            return decorationInCollectionView(section, sectionModel)
+            guard mSections.count > 0 else { return [] }
+            if let decorationInCollectionView {
+                return decorationInCollectionView(section, sectionModel)
+            } else {
+                return []
+            }
         case .Normal:
             let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView.ID)
             backItem.contentInsets = viewConfig.decorationItemsEdges
@@ -557,23 +553,16 @@ public class PTCollectionView: UIView {
     }()
     
     //MARK: Cell datasource handler
-    ///头部设置
     open var headerInCollection: PTReusableViewHandler?
-    ///底部设置
     open var footerInCollection: PTReusableViewHandler?
-    ///item设置
     @MainActor open var cellInCollection: PTCellInCollectionHandler?
     
     //MARK: Cell delegate handler
-    ///item点击事件
     open var collectionDidSelect: PTCellDidSelectedHandler?
-    ///item将要展示事件
     open var collectionWillDisplay: PTCellDisplayHandler?
-    ///item消失事件
     open var collectionDidEndDisplay: PTCellDisplayHandler?
     
     //MARK: UIScrollView call back
-    ///UICollectionView的Scroll事件
     open var collectionWillBeginDecelerating: PTCollectionViewScrollHandler?
     open var collectionViewDidScroll: PTCollectionViewScrollHandler?
     open var collectionWillBeginDragging: PTCollectionViewScrollHandler?
@@ -588,15 +577,8 @@ public class PTCollectionView: UIView {
     open var footRefreshTask: PTActionTask?
     
     //MARK: Cell layout (仅仅限于在瀑布流或者自定义的情况下使用)
-    ///瀑布流item高度设置
     open var waterFallLayout: ((Int, AnyObject) -> CGFloat)?
-    
-    ///自定义情况下调用该设置
-    ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
     open var customerLayout: ((Int,PTSection) -> NSCollectionLayoutGroup)?
-    
-    ///自定义情况下调用该设置
-    ///这个是用来设置Header跟Footer的
     open var customerReuseViews: ((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
 
     ///当空数据View展示的时候,点击回调
@@ -612,24 +594,12 @@ public class PTCollectionView: UIView {
     ///CollectionView的DecorationItem内的Item与Header&Footer重新設置囘調(自定義模式下使用)
     open var decorationCustomLayoutInsetReset: ((Int,PTSection) -> NSDirectionalEdgeInsets)?
     
-    public var contentCollectionView:UICollectionView {
-        get {
-            collectionView
-        }
-    }
+    public var contentCollectionView:UICollectionView { collectionView }
+    public var collectionSectionDatas:[PTSection] { mSections }
     
-    public var collectionSectionDatas:[PTSection] {
-        get {
-            mSections
-        }
-    }
-    
-    //MARK: Swipe handler(Cell须要引用SwipeCellKit)
-    ///设置IndexPath是否开启向左swipe
+    //MARK: Swipe handler
     open var indexPathSwipe: PTCollectionViewCanSwipeHandler?
-    ///设置向左滑动作
     open var swipeLeftHandler :PTCollectionViewSwipeHandler?
-    ///设置向右滑动作
     open var swipeRightHandler: PTCollectionViewSwipeHandler?
     
     open var itemMoveTo: ((_ cView:UICollectionView,_ move:IndexPath,_ to:IndexPath) -> Void)?
@@ -642,11 +612,12 @@ public class PTCollectionView: UIView {
             if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
                 indicator.removeFromSuperview()
                 indexView.removeFromSuperview()
-                collectionView.removeFromSuperview()
                 clearTextLayers()
-                addSubview(collectionView)
-                collectionView.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
+                if collectionView.superview == nil {
+                    addSubview(collectionView)
+                    collectionView.snp.makeConstraints { make in
+                        make.edges.equalToSuperview()
+                    }
                 }
                 setIndexViews()
             }
@@ -663,12 +634,25 @@ public class PTCollectionView: UIView {
         isUserInteractionEnabled = true
         self.viewConfig = viewConfig
         self.registerClassCells(classs: ["CELL":UICollectionViewCell.self])
-        self.collectionView.addObserver(self, forKeyPath: kPTCollectionIndexViewContentOffsetKeyPath, options: .new, context: &kPTCollectionIndexViewContent)
+
         addSubview(collectionView)
-        self.collectionView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        self.collectionView.allowsMoveItem()
+        collectionView.allowsMoveItem()
+
+        // 使用 NSKeyValueObservation 监听 contentOffset
+        contentOffsetObservation = collectionView.observe(\.contentOffset, options: [.new]) { [weak self] _, _ in
+            guard let self else { return }
+            guard isTouched == false else { return }
+            let indexPathArray = self.collectionView.indexPathsForVisibleItems
+            let minIndexPath = indexPathArray.min { one, two in
+                one.section <= two.section
+            }
+            if let temp = minIndexPath?.section {
+                self.updateTextLayers(forSelectedIndex: temp)
+            }
+        }
 
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
@@ -715,7 +699,8 @@ public class PTCollectionView: UIView {
     }
     
     deinit {
-        collectionView.removeObserver(self, forKeyPath: kPTCollectionIndexViewContentOffsetKeyPath)
+        // NSKeyValueObservation 自动释放，无需手动 removeObserver
+        contentOffsetObservation = nil
     }
     
     ///展示界面
@@ -756,11 +741,9 @@ public class PTCollectionView: UIView {
     }
     
     func clearTextLayers() {
-        if let sublayers = self.layer.sublayers {
-            for layer in sublayers {
-                layer.removeFromSuperlayer()
-            }
-        }
+        // 仅清理索引相关的图层，避免误删其他 layer
+        textLayerArray.forEach { $0.removeFromSuperlayer() }
+        textLayerArray.removeAll()
     }
     
     func setIndexViews() {
@@ -881,17 +864,12 @@ public class PTCollectionView: UIView {
     
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
-            // 找到需要删除的行的索引
-            if let startIndex = self.mSections[section].rows?.firstIndex(of: rows.first!) {
+            if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
                 let endIndex = startIndex + rows.count - 1
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-
-                // 从数据源中移除这些行
                 self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
-
                 PTGCDManager.gcdMain {
                     self.collectionView.performBatchUpdates {
-                        // 在 UICollectionView 中删除这些行
                         self.collectionView.deleteItems(at: indexPaths)
                     } completion: { _ in
                         self.collectionView.collectionViewLayout.invalidateLayout()
@@ -906,16 +884,15 @@ public class PTCollectionView: UIView {
     
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
-            let startIndex = self.mSections.firstIndex(of: sections.first!)
-            let endIndex = startIndex! + sections.count - 1
-            let indexSet = IndexSet(startIndex!...endIndex)
-
-            // 从数据源中移除这些 section
-            self.mSections.removeSubrange(startIndex!...endIndex)
-
+            guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
+                PTNSLogConsole("Error: Can't find the section to delete")
+                return
+            }
+            let endIndex = startIndex + sections.count - 1
+            let indexSet = IndexSet(startIndex...endIndex)
+            self.mSections.removeSubrange(startIndex...endIndex)
             PTGCDManager.gcdMain {
                 self.collectionView.performBatchUpdates {
-                    // 在 UICollectionView 中删除这些 section
                     self.collectionView.deleteSections(indexSet)
                 } completion: { _ in
                     self.collectionView.collectionViewLayout.invalidateLayout()
@@ -926,7 +903,6 @@ public class PTCollectionView: UIView {
     }
     
     //MARK: 刷新相关
-    ///停止头部或者底部的刷新控件使用
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH
         if viewConfig.footerRefresh {
@@ -944,7 +920,6 @@ public class PTCollectionView: UIView {
     }
     
 #if POOTOOLS_SCROLLREFRESH
-    ///展示底部已经没有更多数据
     public func footerRefreshNoMore () {
         collectionView.mj_footer?.endRefreshingWithNoMoreData()
     }
@@ -955,18 +930,15 @@ public class PTCollectionView: UIView {
 #endif
     
 #if POOTOOLS_PAGINGCONTROL
-    ///用于SegmentView上
     public func segmentScrolView() -> UIScrollView {
         collectionView
     }
 #endif
     
-    ///用户获取CollectionView的可视cell
     public func visibleCells() -> [UICollectionViewCell] {
         collectionView.visibleCells
     }
     
-    ///滚动到某一个Item
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
         collectionView.scrollToItem(at: indexPath, at: position, animated: true)
     }
@@ -1081,22 +1053,22 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
             let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-                if let swipeCell = cell as? PTBaseSwipeCell {
-                    if indexPathSwipe != nil {
-                        let swipe = indexPathSwipe!(itemSec,indexPath)
-                        swipeCell.cellCanSwipe = swipe
-                        if swipe {
-                            if let actions = swipeRightHandler?(collectionView,itemSec,indexPath) {
-                                swipeCell.configureRightActions(actions)
-                            } else if let actions = swipeLeftHandler?(collectionView,itemSec,indexPath) {
-                                swipeCell.configureLeftActions(actions)
-                            }
+            if let swipeCell = cell as? PTBaseSwipeCell {
+                if let indexPathSwipe {
+                    let swipe = indexPathSwipe(itemSec,indexPath)
+                    swipeCell.cellCanSwipe = swipe
+                    if swipe {
+                        if let actions = swipeRightHandler?(collectionView,itemSec,indexPath) {
+                            swipeCell.configureRightActions(actions)
+                        } else if let actions = swipeLeftHandler?(collectionView,itemSec,indexPath) {
+                            swipeCell.configureLeftActions(actions)
                         }
                     }
-                    return swipeCell
-                } else {
-                    return cell
                 }
+                return swipeCell
+            } else {
+                return cell
+            }
         } else {
             return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
         }
@@ -1135,21 +1107,15 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     
     // MARK: 移动cell结束
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // Example:
-        // let temp = self.data[sourceIndexPath.section].remove(at: sourceIndexPath.item)
-        // self.data[destinationIndexPath.section].insert(temp, at: destinationIndexPath.item)
         itemMoveTo?(collectionView,sourceIndexPath,destinationIndexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let itemSec = self.mSections[indexPath.section]
-        // 配置上下文菜单
         return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
             let preview = self.forceController?(collectionView,indexPath,itemSec)
-            // 返回你想展示的预览视图控制器
             return preview
         }, actionProvider: { suggestedActions in
-            // 配置菜单项
             if let actions = self.forceActions?(collectionView,indexPath,itemSec) {
                 return UIMenu(title: "", children: actions)
             }
@@ -1193,15 +1159,25 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
 //MARK: For Photos
 extension PTCollectionView:UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let assets = indexPaths.compactMap { photoAssets[$0.item] }
+        guard viewConfig.viewForPhoto, !photoAssets.isEmpty else { return }
+        let assets = indexPaths.compactMap { idx -> PHAsset? in
+            let item = idx.item
+            return (item >= 0 && item < photoAssets.count) ? photoAssets[item] : nil
+        }
         if !assets.isEmpty {
             imageManager.startCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
         }
     }
         
     public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        let assets = indexPaths.map { photoAssets[$0.item] }
-        imageManager.stopCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+        guard viewConfig.viewForPhoto, !photoAssets.isEmpty else { return }
+        let assets = indexPaths.compactMap { idx -> PHAsset? in
+            let item = idx.item
+            return (item >= 0 && item < photoAssets.count) ? photoAssets[item] : nil
+        }
+        if !assets.isEmpty {
+            imageManager.stopCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+        }
     }
 }
 
@@ -1210,18 +1186,19 @@ private extension PTCollectionView {
     
     func setupUI() {
         var layerArray = [PTTextLayer]()
-        for i in 0 ..< viewConfig.sideIndexTitles!.count {
-            let title = viewConfig.sideIndexTitles![i]
+        for i in 0 ..< (viewConfig.sideIndexTitles?.count ?? 0) {
+            guard let title = viewConfig.sideIndexTitles?[i], let indexCfg = viewConfig.indexConfig else { continue }
             let textLayer = PTTextLayer()
             textLayer.index = i
-            textLayer.font = CTFontCreateWithName(viewConfig.indexConfig!.indexViewFont.fontName as CFString, viewConfig.indexConfig!.indexViewFont.pointSize, nil)
-            textLayer.fontSize = viewConfig.indexConfig!.indexViewFont.pointSize
+            textLayer.font = CTFontCreateWithName(indexCfg.indexViewFont.fontName as CFString, indexCfg.indexViewFont.pointSize, nil)
+            textLayer.fontSize = indexCfg.indexViewFont.pointSize
             textLayer.alignmentMode = CATextLayerAlignmentMode.center
             textLayer.string = title
-            textLayer.frame = self.frame(forTextLayer: textLayer)
-            textLayer.cornerRadius = viewConfig.indexConfig!.itemSize.width / 2
+            let frame = self.frame(forTextLayer: textLayer)
+            textLayer.frame = frame
+            textLayer.cornerRadius = indexCfg.itemSize.width / 2
             textLayer.masksToBounds = true
-            textLayer.position = self.frame(forTextLayer: textLayer).origin
+            textLayer.position = frame.origin
             self.layer.zPosition = CGFloat.greatestFiniteMagnitude
             self.layer.insertSublayer(textLayer, above: nil)
             layerArray.append(textLayer)
@@ -1233,16 +1210,17 @@ private extension PTCollectionView {
     }
     
     func frame(forTextLayer textLayer: PTTextLayer) -> CGRect {
-        let width = viewConfig.indexConfig!.itemSize.width
-        let height = viewConfig.indexConfig!.itemSize.height
-        return CGRect(x: self.bounds.width - width, y: layerTopSpacing + CGFloat(textLayer.index) * height + viewConfig.indexConfig!.itemSpacing * CGFloat(textLayer.index), width: width, height: height)
+        guard let indexCfg = viewConfig.indexConfig else { return .zero }
+        let width = indexCfg.itemSize.width
+        let height = indexCfg.itemSize.height
+        return CGRect(x: self.bounds.width - width, y: layerTopSpacing + CGFloat(textLayer.index) * height + indexCfg.itemSpacing * CGFloat(textLayer.index), width: width, height: height)
     }
     
     func showIndicator(forTextLayer textLayer: PTTextLayer) {
-        //直接修改calayer属性是有默认的隐式动画的，可以用CATransaction关闭隐式动画
+        guard let indexCfg = viewConfig.indexConfig else { return }
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        indicator.center = CGPoint(x: self.frame.size.width - indicator.frame.size.width / 2 - viewConfig.indexConfig!.itemSize.width, y: textLayer.position.y)
+        indicator.center = CGPoint(x: self.frame.size.width - indicator.frame.size.width / 2 - indexCfg.itemSize.width, y: textLayer.position.y)
         bigTextLabel.text = textLayer.string as? String
         indicator.alpha = 1
         CATransaction.commit()
@@ -1255,11 +1233,9 @@ private extension PTCollectionView {
     func scrollCollectionView(toTextLayer textLayer: PTTextLayer, animated: Bool) {
         let indexPath = IndexPath(item: 0, section: textLayer.index)
         if let attributes = collectionView.layoutAttributesForSupplementaryElement(ofKind: UICollectionView.elementKindSectionHeader, at: indexPath),
-            let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
+           let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
             var targetPoint = cellAttributes.frame.origin
             targetPoint.y = targetPoint.y - attributes.frame.size.height
-            // 用这种计算方法可以不考虑layout的sectionHeadersPinToVisibleBounds属性
-            // 如果直接用attributes的frame需要考虑sectionHeadersPinToVisibleBounds
             collectionView.setContentOffset(targetPoint, animated: animated)
         } else {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
@@ -1267,34 +1243,15 @@ private extension PTCollectionView {
     }
     
     func updateTextLayers(forSelectedIndex index: Int) {
+        guard let cfg = viewConfig.indexConfig else { return }
         for textLayer in textLayerArray {
             if textLayer.index == index {
-                textLayer.backgroundColor = viewConfig.indexConfig!.itemSelectedBackgroundColor.cgColor
-                textLayer.foregroundColor = viewConfig.indexConfig!.itemSelectedTextColor.cgColor
+                textLayer.backgroundColor = cfg.itemSelectedBackgroundColor.cgColor
+                textLayer.foregroundColor = cfg.itemSelectedTextColor.cgColor
             } else {
-                textLayer.backgroundColor = viewConfig.indexConfig!.itemBackgroundColor.cgColor
-                textLayer.foregroundColor = viewConfig.indexConfig!.itemTextColor.cgColor
+                textLayer.backgroundColor = cfg.itemBackgroundColor.cgColor
+                textLayer.foregroundColor = cfg.itemTextColor.cgColor
             }
-        }
-    }
-}
-
-//MARK: KVO
-extension PTCollectionView {
-        
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if let context = context, context == &kPTCollectionIndexViewContent,
-            let keyPath = keyPath, keyPath == kPTCollectionIndexViewContentOffsetKeyPath {
-            guard isTouched == false else { return }
-            let indexPathArray = self.collectionView.indexPathsForVisibleItems
-            let minIndexPath = indexPathArray.min { (one, two) -> Bool in
-                return one.section <= two.section
-            }
-            if let temp = minIndexPath?.section {
-                updateTextLayers(forSelectedIndex: temp)
-            }
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }
@@ -1343,8 +1300,6 @@ extension PTCollectionView {
     func textLayer(forTouches touches: Set<UITouch>) -> PTTextLayer? {
         guard let touch = touches.first else { return nil }
         let touchPoint = touch.location(in: self)
-        
-        /// 为了达到微信的效果，即开始后就算滑动到非索引区域也行，这里不能用frame的包含，用了一条横线是否与textLayer相交来判断
         let touchLine = CGRect(x: 0, y: touchPoint.y, width: self.frame.size.width, height: 1)
         for textLayer in textLayerArray {
             if touchLine.intersects(textLayer.frame) {
@@ -1363,3 +1318,4 @@ extension PTCollectionView {
         scrollCollectionView(toTextLayer: touchedLayer, animated: false)
     }
 }
+
