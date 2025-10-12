@@ -294,19 +294,11 @@ public class PTCollectionView: UIView {
     fileprivate var touchedIndex: Int = 0 {
         didSet {
             if touchedIndex != oldValue {
-                self.impactFeedbackGenerator.impactOccurred()
+                UIDevice.pt.impactFeedbackGenerator(style: .light)
             }
         }
     }
-    
-    private var _impactFeedbackGenerator: Any? = nil
-    fileprivate var impactFeedbackGenerator: UIImpactFeedbackGenerator {
-        if _impactFeedbackGenerator == nil {
-            _impactFeedbackGenerator = UIImpactFeedbackGenerator()
-        }
-        return _impactFeedbackGenerator as! UIImpactFeedbackGenerator
-    }
-
+        
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, environment in
@@ -364,6 +356,9 @@ public class PTCollectionView: UIView {
                 cellTrailingSpace: viewConfig.cellTrailingSpace
             )
         case .WaterFall:
+            guard let waterFall = waterFallLayout else {
+                fatalError("WaterFallLayout empty")
+            }
             group = UICollectionView.waterFallLayout(
                 data: sectionModel.rows,
                 screenWidth: screenWidth,
@@ -373,7 +368,7 @@ public class PTCollectionView: UIView {
                 bottomContentSpace: viewConfig.contentBottomSpace,
                 itemSpace: viewConfig.cellLeadingSpace,
                 itemTrailingSpace: viewConfig.cellTrailingSpace,
-                itemHeight: waterFallLayout!
+                itemHeight: waterFall
             )
         case .Horizontal:
             group = UICollectionView.horizontalLayout(
@@ -404,7 +399,10 @@ public class PTCollectionView: UIView {
                 fatalError("如果是Tag,則datamodel必須是PTTagLayoutModel")
             }
         case .Custom:
-            group = customerLayout!(section, sectionModel)
+            guard let customerLayout = customerLayout else {
+                fatalError("CustomerLayout empty")
+            }
+            group = customerLayout(section, sectionModel)
         }
         
         var sectionInsets = viewConfig.sectionEdges
@@ -479,7 +477,7 @@ public class PTCollectionView: UIView {
     private func generateDecorationItems(section: NSInteger, sectionModel: PTSection) -> [NSCollectionLayoutDecorationItem] {
         switch viewConfig.decorationItemsType {
         case .Custom:
-            guard mSections.count > 0 else { return [] }
+            guard mSections.count > 0,let decorationInCollectionView = decorationInCollectionView else { return [] }
             return decorationInCollectionView(section, sectionModel)
         case .Normal:
             let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView.ID)
@@ -606,7 +604,7 @@ public class PTCollectionView: UIView {
     open var emptyButtonTap: ((UIView?) -> Void)?
 
     ///CollectionView的DecorationItem囘調(自定義模式下使用)
-    open var decorationInCollectionView: PTDecorationInCollectionHandler!
+    open var decorationInCollectionView: PTDecorationInCollectionHandler?
     
     ///CollectionView的DecorationItem重新設置囘調(自定義模式下使用)
     open var decorationViewReset: PTViewInDecorationResetHandler?
@@ -799,39 +797,35 @@ public class PTCollectionView: UIView {
     
     ///加载数据并且刷新界面
     public func showCollectionDetail(collectionData:[PTSection],finishTask:PTCollectionCallback? = nil) {
-        PTGCDManager.gcdGobal {
+        PTGCDManager.gcdMain {
             self.mSections.removeAll()
             self.mSections = collectionData
-            PTGCDManager.gcdMain {
-                if self.viewConfig.refreshWithoutAnimation {
-                    self.collectionView.reloadDataWithOutAnimation {
-                        self.setiOS17EmptyDataView()
-                        finishTask?(self.collectionView)
-                    }
-                } else {
-                    self.collectionView.reloadData {
-                        self.setiOS17EmptyDataView()
-                        finishTask?(self.collectionView)
-                    }
+            if self.viewConfig.refreshWithoutAnimation {
+                self.collectionView.reloadDataWithOutAnimation {
+                    self.setiOS17EmptyDataView()
+                    finishTask?(self.collectionView)
+                }
+            } else {
+                self.collectionView.reloadData {
+                    self.setiOS17EmptyDataView()
+                    finishTask?(self.collectionView)
                 }
             }
         }
     }
     
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
-        PTGCDManager.gcdGobal {
+        PTGCDManager.gcdMain {
             self.mSections.removeAll()
-            PTGCDManager.gcdMain {
-                if self.viewConfig.refreshWithoutAnimation {
-                    self.collectionView.reloadDataWithOutAnimation {
-                        self.setiOS17EmptyDataView()
-                        finishTask?(self.collectionView)
-                    }
-                } else {
-                    self.collectionView.reloadData {
-                        self.setiOS17EmptyDataView()
-                        finishTask?(self.collectionView)
-                    }
+            if self.viewConfig.refreshWithoutAnimation {
+                self.collectionView.reloadDataWithOutAnimation {
+                    self.setiOS17EmptyDataView()
+                    finishTask?(self.collectionView)
+                }
+            } else {
+                self.collectionView.reloadData {
+                    self.setiOS17EmptyDataView()
+                    finishTask?(self.collectionView)
                 }
             }
         }
@@ -1199,8 +1193,10 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
 //MARK: For Photos
 extension PTCollectionView:UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let assets = indexPaths.map { photoAssets[$0.item] }
-        imageManager.startCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+        let assets = indexPaths.compactMap { photoAssets[$0.item] }
+        if !assets.isEmpty {
+            imageManager.startCachingImages(for: assets, targetSize: self.viewConfig.previewImageSize, contentMode: .aspectFill, options: nil)
+        }
     }
         
     public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
