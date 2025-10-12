@@ -453,29 +453,17 @@ public class Network: NSObject {
     
     // MARK: 日志
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
-#if DEBUG
         let paramsStr = parameters?.jsonString() ?? "没有参数"
         let headerStr = headers.dictionary.jsonString() ?? ""
         PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(headerStr)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
-#else
-        PTNSLogConsole("🌐请求: [\(method.rawValue)] \(url)", levelType: PTLogMode, loggerType: .Network)
-#endif
     }
 
     private static func logRequestSuccess(url: String, jsonStr: String) {
-#if DEBUG
         PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .Network)
-#else
-        PTNSLogConsole("✅成功: \(url)", levelType: PTLogMode, loggerType: .Network)
-#endif
     }
 
     private static func logRequestFailure(url: String, error: AFError) {
-#if DEBUG
         PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error, loggerType: .Network)
-#else
-        PTNSLogConsole("❌失败: \(url) | \(error.localizedDescription)", levelType: .Error, loggerType: .Network)
-#endif
     }
 
     // 封装 token 添加逻辑
@@ -521,35 +509,27 @@ public class Network: NSObject {
                 throw error
             }
             // 如果不是 HTML，就当作纯文本成功返回（Debug 打印文本）
-#if DEBUG
-            let text = String(decoding: data, as: UTF8.self)
-            logRequestSuccess(url: url, jsonStr: text)
-            result.originalString = text
-#else
-            logRequestSuccess(url: url, jsonStr: "")
-            result.originalString = ""
-#endif
+            var originalText = ""
+            switch UIApplication.shared.inferredEnvironment {
+            case .debug:
+                originalText = String(decoding: data, as: UTF8.self)
+            default:
+                originalText = ""
+            }
+            logRequestSuccess(url: url, jsonStr: originalText)
+            result.originalString = originalText
             return result
         }
         
         // JSON 情况
-#if DEBUG
-        let jsonStr = data.toDict()?.toJSON() ?? ""
-        logRequestSuccess(url: url, jsonStr: jsonStr)
-        result.originalString = jsonStr
+        let jsonString = data.toDict()?.toJSON() ?? ""
+        result.originalString = jsonString
+        logRequestSuccess(url: url, jsonStr: jsonString)
         if let modelType {
-            result.customerModel = jsonStr.kj.model(type: modelType)
+            result.customerModel = jsonString.kj.model(type: modelType)
         }
-#else
-        // Release 不生成 jsonStr，直接成功日志
-        logRequestSuccess(url: url, jsonStr: "")
-        if let modelType {
-            // 如需模型解析，仍然需要 jsonStr；若你希望 Release 也解析，可启用以下两行：
-            let jsonStr = data.toDict()?.toJSON() ?? ""
-            result.originalString = jsonStr
-            result.customerModel = jsonStr.kj.model(type: modelType)
-        }
-#endif
+
+        
         return result
     }
     
