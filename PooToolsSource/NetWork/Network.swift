@@ -581,8 +581,6 @@ public class Network: NSObject {
         let newHeader = header ?? ["Content-Type": "text/plain"]
         logRequestStart(url: urlStr1, parameters: nil, headers: newHeader, method: method)
 
-        let capturedModelType = modelType
-
         return try await withCheckedThrowingContinuation { continuation in
             AF.upload(body,
                       to: urlStr1,
@@ -595,7 +593,7 @@ public class Network: NSObject {
                         let parsed = try parseResponse(url: urlStr1,
                                                        response: resp.response,
                                                        data: resp.data,
-                                                       modelType: capturedModelType)
+                                                       modelType: modelType)
                         continuation.resume(returning: parsed)
                     } catch {
                         continuation.resume(throwing: error)
@@ -636,8 +634,6 @@ public class Network: NSObject {
 
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
 
-        let capturedModelType = modelType
-
         return try await withCheckedThrowingContinuation { continuation in
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
@@ -646,7 +642,7 @@ public class Network: NSObject {
                         let parsed = try parseResponse(url: urlStr1,
                                                        response: data.response,
                                                        data: data.data,
-                                                       modelType: capturedModelType)
+                                                       modelType: modelType)
                         continuation.resume(returning: parsed)
                     } catch {
                         continuation.resume(throwing: error)
@@ -690,8 +686,6 @@ public class Network: NSObject {
                         apiHeader["Accept"] = "application/json"
                     }
 
-                    let capturedModelType = modelType
-
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
                             let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
@@ -720,7 +714,7 @@ public class Network: NSObject {
                                 let parsed = try parseResponse(url: pathUrl,
                                                                response: resp.response,
                                                                data: resp.data,
-                                                               modelType: capturedModelType)
+                                                               modelType: modelType)
                                 continuation.yield((Progress(totalUnitCount: 1), parsed))
                                 continuation.finish()
                             } catch {
@@ -866,14 +860,14 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
 
         if let tcpConnectionEndDate = metric.connectEndDate,let tcpConnectionStartDate = metric.connectStartDate {
             let tcpConnectionDuration = tcpConnectionEndDate.timeIntervalSince(tcpConnectionStartDate)
-            PTNSLogConsole("TCP连接时长无法计算")
+            PTNSLogConsole("TCP连接时长: \(tcpConnectionDuration * 1000) 秒")
         } else {
             PTNSLogConsole("TCP连接时长无法计算")
         }
 
         if let tlsHandshakeEndDate = metric.secureConnectionEndDate,let tlsHandshakeStartDate = metric.secureConnectionStartDate {
             let tlsHandshakeDuration = tlsHandshakeEndDate.timeIntervalSince(tlsHandshakeStartDate)
-            PTNSLogConsole("TLS安全握手时长无法计算")
+            PTNSLogConsole("TLS安全握手时长: \(tlsHandshakeDuration * 1000) 秒")
         } else {
             PTNSLogConsole("TLS安全握手时长无法计算")
         }
@@ -887,7 +881,7 @@ public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate{
 
         if let connectionEndDate = metric.responseStartDate,let connectionStartDate = metric.responseStartDate {
             let connectionDuration = connectionEndDate.timeIntervalSince(connectionStartDate)
-            PTNSLogConsole("响应时长无法计算")
+            PTNSLogConsole("响应时长: \(connectionDuration * 1000) 秒")
         } else {
             PTNSLogConsole("响应时长无法计算")
         }

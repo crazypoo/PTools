@@ -954,10 +954,8 @@ class PTFuncNameViewController: PTBaseViewController {
         let more = UIButton(type: .custom)
         more.setTitleColor(.random, for: .normal)
         more.setTitle("More", for: .normal)
-        more.frame = CGRect(x: 0, y: 0, width: 54, height: 34)
-        more.badge?.badgeBorderLine = 1
-        more.badge?.badgeBorderColor = .random
-        
+        more.frame = CGRect(x: 0, y: 0, width: 54, height: 40)
+
         let popover = PTActionLayoutButton()
         popover.imageSize = CGSize(width: 15, height: 15)
         popover.layoutStyle = .leftImageRightTitle
@@ -981,7 +979,11 @@ class PTFuncNameViewController: PTBaseViewController {
         setCustomBackButtonView(popover,size: CGSizeMake(64, 34)) {
             self.sideMenuController?.revealMenu()
         }
-        setCustomRightButtons(buttons: [more], rightPadding: 44)
+        setCustomRightButtons(buttons: [more], rightPadding: 0)
+        
+        more.badgeCenterOffset = CGPointMake(-5, -5)
+        more.badgeBorderLine = 1
+        more.badgeBorderColor = .random
         more.showBadge(style: .New, value: "我愛你", aniType: .None)
         setCustomTitleView(searchBar)
         
@@ -1044,12 +1046,8 @@ class PTFuncNameViewController: PTBaseViewController {
         
         collectionView.backgroundColor = .random
         
-        var collectionInset:CGFloat = 0
-        var collectionInset_Top:CGFloat = 0
-        if #available(iOS 26.0, *) {
-            collectionInset = CGFloat.kTabbarSaveAreaHeight
-            collectionInset_Top = CGFloat.kNavBarHeight_Total + 20
-        }
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total + 20
         
         collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         collectionView.contentCollectionView.contentInset.top = collectionInset_Top
