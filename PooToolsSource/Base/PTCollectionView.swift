@@ -839,7 +839,10 @@ public class PTCollectionView: UIView {
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertItems(at: indexPaths)
                 } completion: { _ in
-                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.collectionView.collectionViewLayout.invalidateLayout()
+                    }
                     completion?()
                 }
             }
@@ -855,7 +858,10 @@ public class PTCollectionView: UIView {
                 self.collectionView.performBatchUpdates {
                     self.collectionView.insertSections(indexPaths)
                 } completion: { _ in
-                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.collectionView.collectionViewLayout.invalidateLayout()
+                    }
                     completion?()
                 }
             }
@@ -872,7 +878,10 @@ public class PTCollectionView: UIView {
                     self.collectionView.performBatchUpdates {
                         self.collectionView.deleteItems(at: indexPaths)
                     } completion: { _ in
-                        self.collectionView.collectionViewLayout.invalidateLayout()
+                        // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                        if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                            self.collectionView.collectionViewLayout.invalidateLayout()
+                        }
                         completion?()
                     }
                 }
@@ -895,7 +904,10 @@ public class PTCollectionView: UIView {
                 self.collectionView.performBatchUpdates {
                     self.collectionView.deleteSections(indexSet)
                 } completion: { _ in
-                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.collectionView.collectionViewLayout.invalidateLayout()
+                    }
                     completion?()
                 }
             }
@@ -1318,4 +1330,3 @@ extension PTCollectionView {
         scrollCollectionView(toTextLayer: touchedLayer, animated: false)
     }
 }
-
