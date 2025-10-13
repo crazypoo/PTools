@@ -113,6 +113,7 @@ public class PTCollectionViewConfig: NSObject {
     open var footerRefreshNoMoreData: String = "已經全部加載完畢"
     open var triggerAutomaticallyRefreshPercent: CGFloat = 0.5
     open var isAutomaticallyRefresh: Bool = true
+    open var ignoredScrollViewContentInsetBottom:CGFloat = 0
 #endif
     ///section偏移
     open var sectionEdges: NSDirectionalEdgeInsets = .zero
@@ -527,6 +528,7 @@ public class PTCollectionView: UIView {
             footerRefresh.stateLabel?.textColor = self.viewConfig.footerRefreshTextColor
             footerRefresh.triggerAutomaticallyRefreshPercent = self.viewConfig.triggerAutomaticallyRefreshPercent
             footerRefresh.isAutomaticallyRefresh = self.viewConfig.isAutomaticallyRefresh
+            footerRefresh.ignoredScrollViewContentInsetBottom = self.viewConfig.ignoredScrollViewContentInsetBottom
             view.mj_footer = footerRefresh
         }
 #endif
