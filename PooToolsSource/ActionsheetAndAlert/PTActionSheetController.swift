@@ -172,7 +172,8 @@ public class PTActionSheetController: PTAlertController {
     private lazy var cancelBtn : PTActionCell = {
         createActionCell(for: cancelSheetItem, withCorner: true) { [weak self] in
             self?.dismissAnimation {
-                self?.actionSheetCancelSelectBlock?(self!)
+                guard let SELF = self else { return }
+                self?.actionSheetCancelSelectBlock?(SELF)
             }
         }
     }()
@@ -243,7 +244,7 @@ public class PTActionSheetController: PTAlertController {
         }
     }
 
-    // 分离毁灭性项目的设置
+    // 分离Destructive的设置
     private func setupDestructiveItems() {
         setDestructiveCount(counts: destructiveItems.count)
         
@@ -252,7 +253,8 @@ public class PTActionSheetController: PTAlertController {
         for (index, destructiveItem) in destructiveItems.enumerated() {
             let destructiveView = createActionCell(for: destructiveItem,withCorner: true) { [weak self] in
                 self?.dismissAnimation {
-                    self?.actionSheetDestructiveSelectBlock?(self!, index, destructiveItem.title)
+                    guard let SELF = self else { return }
+                    self?.actionSheetDestructiveSelectBlock?(SELF, index, destructiveItem.title)
                 }
             }
             
@@ -389,7 +391,8 @@ public class PTActionSheetController: PTAlertController {
             // 按鈕
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
                 self?.dismissAnimation {
-                    self?.actionSheetSelectBlock?(self!, index, item.title)
+                    guard let SELF = self else { return }
+                    self?.actionSheetSelectBlock?(SELF, index, item.title)
                 }
             }
             contentScrollerView.addSubview(button)
@@ -414,6 +417,7 @@ public class PTActionSheetController: PTAlertController {
 
 extension PTActionSheetController {
     public override func showAnimation(completion: PTActionTask?) {
+        alertContent.layoutIfNeeded()
         alertContent.transform = CGAffineTransform(translationX: 0, y: alertContent.bounds.height)
         UIView.animate(withDuration: PTAlertConfig.shared.showALertDuration, animations: {
             self.view.backgroundColor = UIColor.DevMaskColor
@@ -431,6 +435,7 @@ extension PTActionSheetController {
     }
     
     public override func dismissAnimation(completion: PTActionTask?) {
+        self.alertContent.layoutIfNeeded()
         UIView.animate(withDuration: PTAlertConfig.shared.hideALertDuration, animations: {
             self.view.backgroundColor = .clear
             self.alertContent.transform = CGAffineTransform(translationX: 0, y: self.alertContent.bounds.height)
