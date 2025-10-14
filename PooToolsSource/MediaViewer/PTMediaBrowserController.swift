@@ -174,8 +174,9 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                 }
                 cell.videoPlayHandler = { videoController in
+                    videoController.modalPresentationStyle = .fullScreen
                     self.present(videoController, animated: true) {
-                        videoController.player?.play()
+                        videoController.videoPlayer?.play()
                     }
                 }
                 return cell

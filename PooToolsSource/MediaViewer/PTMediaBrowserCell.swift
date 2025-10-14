@@ -24,7 +24,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     var currentCellType:PTViewerDataType = .None
     var longTapWakeUp:PTActionTask?
     var imageLongTaped:Bool = false
-    var videoPlayHandler:((AVPlayerViewController) -> Void)!
+    var videoPlayHandler:((PTPlayerViewController) -> Void)!
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
@@ -442,8 +442,8 @@ extension PTMediaBrowserCell {
         
         reloadButton.removeFromSuperview()
         playBtn.addActionHandlers { sender in
-            let videoController = AVPlayerViewController()
-            videoController.player = AVPlayer(url: URL(string: videoUrl)!)
+            let videoController = PTPlayerViewController()
+            videoController.videoPlayer = AVPlayer(url: URL(string: videoUrl)!)
             self.videoPlayHandler(videoController)
         }
     }
@@ -486,8 +486,8 @@ extension PTMediaBrowserCell {
                         self.backgroundImageView.image = image
                     }
                     self.playBtn.addActionHandlers { sender in
-                        let videoController = AVPlayerViewController()
-                        videoController.player = AVPlayer(playerItem: avItem)
+                        let videoController = PTPlayerViewController()
+                        videoController.videoPlayer = AVPlayer(playerItem: avItem)
                         self.videoPlayHandler(videoController)
                     }
                 } else {

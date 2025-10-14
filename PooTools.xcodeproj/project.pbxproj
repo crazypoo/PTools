@@ -113,6 +113,7 @@
 		551CDFFA2D68288A00C9A11A /* PTRouterableProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551CDFF92D68288A00C9A11A /* PTRouterableProxy.swift */; };
 		551CE0042D682B5C00C9A11A /* PTRouterDynamicParamsMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551CE0032D682B5C00C9A11A /* PTRouterDynamicParamsMapping.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
+		551D9B892E9E304000EE99BF /* PTPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D9B882E9E304000EE99BF /* PTPlayerViewController.swift */; };
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55228F172B0909130010E76E /* PTDocumentViewController.swift */; };
@@ -1056,6 +1057,7 @@
 		551CDFF92D68288A00C9A11A /* PTRouterableProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterableProxy.swift; sourceTree = "<group>"; };
 		551CE0032D682B5C00C9A11A /* PTRouterDynamicParamsMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterDynamicParamsMapping.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
+		551D9B882E9E304000EE99BF /* PTPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPlayerViewController.swift; sourceTree = "<group>"; };
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		55228F172B0909130010E76E /* PTDocumentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDocumentViewController.swift; sourceTree = "<group>"; };
@@ -3669,6 +3671,7 @@
 				55040A832E20B37C0074A047 /* PTTriangleView.swift */,
 				552CCF4A2E82BA2200646943 /* PTBaseButton.swift */,
 				55442C852E8C264F000B38DD /* PTNavBar.swift */,
+				551D9B882E9E304000EE99BF /* PTPlayerViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4042,8 +4045,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4053,13 +4055,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4074,13 +4072,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4737,6 +4731,7 @@
 				551CDFFA2D68288A00C9A11A /* PTRouterableProxy.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */,
+				551D9B892E9E304000EE99BF /* PTPlayerViewController.swift in Sources */,
 				55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */,
 				556CA4BD2B29500600A5B189 /* Exporter.swift in Sources */,
 				550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */,

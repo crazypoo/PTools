@@ -545,7 +545,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     model2.imageInfo = "123"
 
                     let model3 = PTMediaBrowserModel()
-                    model3.imageURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+                    model3.imageURL = "http://ss.esatr.com/storage/upload/video/20251010/758c757da75652cc6767eb0187050053b95c73f8.mp4"
                     model3.imageInfo = "MP4"
 
                     let model4 = PTMediaBrowserModel()
@@ -556,7 +556,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     mediaConfig.dismissY = 200
                     mediaConfig.actionType = .All
                     mediaConfig.pageControlOption = .snake
-                    mediaConfig.mediaData = [model1]
+                    mediaConfig.mediaData = [model3]
                     mediaConfig.imageLongTapAction = true
                     mediaConfig.dynamicBackground = true
                     let browser = PTMediaBrowserController()
