@@ -24,8 +24,22 @@ open class PTPlayerViewController: PTBaseViewController {
     private var timeObserverToken: Any?
     
     // MARK: - Public
-    var videoPlayer: AVPlayer?
-    var onCloseTapped: PTActionTask? // 🔹 你可以拦截返回逻辑
+    public var videoPlayer: AVPlayer?
+    public var onCloseTapped: PTActionTask? // 🔹 你可以拦截返回逻辑
+    
+    open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyNavigationBarStyle()
+        closeButton.setImage(PTAppBaseConfig.share.playerBackItemImage, for: .normal)
+        closeButton.isUserInteractionEnabled = false
+        setCustomBackButtonView(closeButton,size: .init(width: 34, height: 34)) {
+            self.closeTapped()
+        }
+    }
     
     // MARK: - Lifecycle
     open override func viewDidLoad() {
@@ -73,21 +87,9 @@ open class PTPlayerViewController: PTBaseViewController {
         }
         
         // 关闭按钮
-        closeButton.setImage(PTAppBaseConfig.share.playerBackItemImage, for: .normal)
-        closeButton.addActionHandlers { sender in
-            self.closeTapped()
-        }
-        if #available(iOS 26.0, *) {
-            closeButton.configuration = UIButton.Configuration.clearGlass()
-        }
         
         // 添加子视图
-        view.addSubviews([playPauseButton, slider, currentTimeLabel, durationLabel, closeButton])
-        closeButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.size.equalTo(34)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
-        }
+        view.addSubviews([playPauseButton, slider, currentTimeLabel, durationLabel])
         
         playPauseButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)

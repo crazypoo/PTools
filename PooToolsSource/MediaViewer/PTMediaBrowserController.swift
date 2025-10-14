@@ -175,8 +175,24 @@ public class PTMediaBrowserController: PTBaseViewController {
                 }
                 cell.videoPlayHandler = { videoController in
                     videoController.modalPresentationStyle = .fullScreen
-                    self.present(videoController, animated: true) {
-                        videoController.videoPlayer?.play()
+                    videoController.onCloseTapped = {
+                        let current = PTUtils.getCurrentVC()
+                        if let sheet = current as? PTSheetViewController,let currentVC = sheet.contentViewController.childViewController as? PTBaseNavControl,let currentNavLast = currentVC.viewControllers.last as? PTPlayerViewController {
+                            currentNavLast.navigationController?.popViewController(animated: true)
+                        } else {
+                            current.dismissAnimated()
+                        }
+                    }
+                    let current = PTUtils.getCurrentVC()
+                    if let sheet = current as? PTSheetViewController,let currentVC = sheet.contentViewController.childViewController as? PTBaseNavControl,let currentNavLast = currentVC.viewControllers.last {
+                        currentNavLast.navigationController?.pushViewController(videoController) {
+                            videoController.videoPlayer?.play()
+                            videoController.sheetViewController?.setSizes([.fullscreen])
+                        }
+                    } else {
+                        self.present(videoController, animated: true) {
+                            videoController.videoPlayer?.play()
+                        }
                     }
                 }
                 return cell
