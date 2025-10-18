@@ -650,6 +650,7 @@ public class PTMediaLibViewController: PTBaseViewController {
                     self.navigationController?.pushViewController(vc, animated: true)
                     vc.selectedModelHandler = { model in
                         self.selectLibButton.normalTitle = "\(model.title)"
+                        self.resetTitleSelectBounds()
                         if model.models.isEmpty {
                             model.refetchPhotos()
                             self.mediaListView.currentAlbum = model
@@ -666,6 +667,7 @@ public class PTMediaLibViewController: PTBaseViewController {
                         self.navigationController?.pushViewController(vc, animated: true)
                         vc.selectedModelHandler = { model in
                             self.selectLibButton.normalTitle = "\(model.title)"
+                            self.resetTitleSelectBounds()
                             self.mediaListView.currentAlbum = model
                             PTGCDManager.gcdAfter(time: 0.05) {
                                 self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
@@ -678,7 +680,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             }
         }
         view.clearGlass = true
-        view.bounds = CGRect(origin: .zero, size: CGSizeMake(320, 44))
+        view.bounds = CGRect(origin: .zero, size: CGSizeMake(100, 34))
         return view
     }()
     
@@ -695,6 +697,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         }
         view.updateTitle = {
             self.selectLibButton.normalTitle = self.mediaListView.currentAlbum!.title
+            self.resetTitleSelectBounds()
         }
         view.selectedModelDidUpdate = {
             self.selectedModel = self.mediaListView.selectedModel
@@ -788,9 +791,16 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
     
     func createNavSubs() {
-        fakeNav.titleView = selectLibButton
+        fakeNav.titleViewMode = .auto
+        resetTitleSelectBounds()
         fakeNav.setLeftButtons([dismissButton])
         fakeNav.setRightButtons([submitButton])
+    }
+    
+    func resetTitleSelectBounds() {
+        let titleWidth = UIView.sizeFor(string: self.selectLibButton.normalTitle, font: self.selectLibButton.normalTitleFont,height: 34).width + self.selectLibButton.imageSize.width + self.selectLibButton.midSpacing + 15
+        self.selectLibButton.bounds = CGRect(origin: .zero, size: CGSizeMake(titleWidth, 34))
+        self.fakeNav.titleView = self.selectLibButton
     }
         
     public func mediaLibShow() {
