@@ -624,7 +624,10 @@ public class PTSheetViewController: PTBaseViewController {
                 self.contentViewController.view.snp.updateConstraints { make in
                     make.height.equalTo(newHeight)
                 }
-                self.view.layoutIfNeeded()
+                if #available(iOS 26.0, *) {
+                } else {
+                    self.view.layoutIfNeeded()
+                }
             }, completion: { _ in
                 if previousSize != size {
                     self.sizeChanged?(self, size, newHeight)
