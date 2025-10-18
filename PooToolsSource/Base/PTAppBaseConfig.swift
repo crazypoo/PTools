@@ -42,6 +42,7 @@ public class PTAppBaseConfig: NSObject {
     public var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
     public var hidesBarsOnSwipe:Bool = false
     public var navGradientColors:[UIColor] = []
+    public var bavTitleContainerHeight:CGFloat = 32
     
     //MARK: 权限请求配置
     public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)

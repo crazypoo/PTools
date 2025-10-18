@@ -38,6 +38,19 @@ public enum PTNavigationBarStyle {
     }
 }
 
+open class PTNavTitleContainer: UIView {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required public init?(coder: NSCoder) { fatalError() }
+
+    open override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIView.noIntrinsicMetric, height: PTAppBaseConfig.share.bavTitleContainerHeight) // 保持标准高度
+    }
+}
+
 @objcMembers
 open class PTBaseViewController: UIViewController {
             
