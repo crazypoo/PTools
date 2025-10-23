@@ -711,6 +711,72 @@ public class Network: NSObject {
             }
         }
     }
+    
+    class open func videoUpload(needGobal: Bool = true,
+                                fileURL: URL,
+                                path: URLConvertible,
+                                method: HTTPMethod = .post,
+                                fileKey: String = "file",
+                                params: [String: String]? = nil,
+                                header: HTTPHeaders? = nil,
+                                modelType: Convertible.Type? = nil,
+                                jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
+                    let pathUrl = gobalUrl + (try path.asURL().absoluteString)
+                    guard pathUrl.isURL(), ((try? path.asURL().absoluteString) != nil) else {
+                        throw AFError.invalidURL(url: "https://www.qq.com")
+                    }
+
+                    guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+                        Network.cancelAllNetworkRequest()
+                        throw AFError.createURLRequestFailed(error: NetWorkNoError)
+                    }
+
+                    var apiHeader = addToken(to: header ?? HTTPHeaders())
+                    if jsonRequest {
+                        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                        apiHeader["Accept"] = "application/json"
+                    }
+
+                    Network.manager.upload(multipartFormData: { multipartFormData in
+                        multipartFormData.append(fileURL, withName: "file", fileName: "\(fileURL.lastPathComponent).mp4", mimeType: "video/mp4")
+
+                        params?.forEach { key, value in
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
+                            }
+                        }
+                    }, to: pathUrl, method: method, headers: apiHeader)
+                    .uploadProgress { progress in
+                        continuation.yield((progress, nil))
+                    }
+                    .response { resp in
+                        switch resp.result {
+                        case .success(_):
+                            do {
+                                let parsed = try parseResponse(url: pathUrl,
+                                                               response: resp.response,
+                                                               data: resp.data,
+                                                               modelType: modelType)
+                                continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                continuation.finish()
+                            } catch {
+                                continuation.finish(throwing: error)
+                            }
+                        case .failure(let error):
+                            logRequestFailure(url: pathUrl, error: error)
+                            continuation.finish(throwing: error)
+                        }
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
 
     class open func fileDownLoad(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?) async throws -> Data {
         
