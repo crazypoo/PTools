@@ -96,8 +96,14 @@ public class PTMediaBrowserController: PTBaseViewController {
         view.closeButton.setImage(self.viewConfig.closeViewerImage, for: .normal)
         view.closeButton.addActionHandlers { [weak self] _ in
             if let sheet = self?.sheetViewController {
-                self?.navigationController?.popViewController() {
-                    self?.viewDismissBlock?()
+                if self?.navigationController?.viewControllers.first == self {
+                    self?.returnFrontVC {
+                        self?.viewDismissBlock?()
+                    }
+                } else {
+                    self?.navigationController?.popViewController() {
+                        self?.viewDismissBlock?()
+                    }
                 }
             } else {
                 self?.returnFrontVC {
