@@ -75,6 +75,32 @@ public extension TimeInterval {
         callBack?("00",String(format: "%02d", Min),String(format: "%02d", Sec))
     }
     
+    /// 获取播放时长（天:时:分:秒）
+    /// - Parameter callBack: 返回格式化的天、时、分、秒字符串
+    func getFormatPlayTimeDHMS(callBack: ((_ d: String, _ h: String, _ m: String, _ s: String) -> Void)?) {
+        guard !self.isNaN, self > 0 else {
+            callBack?("00", "00", "00", "00")
+            return
+        }
+
+        var seconds = Int(self)
+        let days = seconds / 86400
+        seconds %= 86400
+
+        let hours = seconds / 3600
+        seconds %= 3600
+
+        let minutes = seconds / 60
+        let secs = seconds % 60
+
+        callBack?(
+            String(format: "%02d", days),
+            String(format: "%02d", hours),
+            String(format: "%02d", minutes),
+            String(format: "%02d", secs)
+        )
+    }
+
     func conversationTimeSet() -> String? {
         var timeInterval = self;
         if(self > 140000000000) {
