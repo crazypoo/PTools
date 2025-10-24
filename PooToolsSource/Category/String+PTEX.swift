@@ -893,6 +893,33 @@ public extension String {
         let after  = String(self[range.upperBound...])
         return (before, after)
     }
+    
+    //MARK: 根據鏈接獲取圖片第一個圖片
+    func getVideoFirstImage(maximumSize: CGSize = CGSize(width: 1000, height: 1000),
+                            closure: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: self) else {
+            closure(nil)
+            return
+        }
+        
+        let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
+        let avAsset = AVURLAsset(url: url, options: opts)
+        let generator = AVAssetImageGenerator(asset: avAsset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = maximumSize
+        
+        let time = CMTimeMake(value: 0, timescale: 600)
+        
+        generator.generateCGImagesAsynchronously(forTimes: [NSValue(time: time)]) { _, imageRef, _, result, error in
+            DispatchQueue.main.async {
+                if let cgImage = imageRef, result == .succeeded {
+                    closure(UIImage(cgImage: cgImage))
+                } else {
+                    closure(nil)
+                }
+            }
+        }
+    }
 }
 
 fileprivate extension PTUtils {

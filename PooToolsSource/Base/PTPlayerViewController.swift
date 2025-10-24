@@ -19,13 +19,30 @@ open class PTPlayerViewController: PTBaseViewController {
     private let slider = UISlider()
     private let currentTimeLabel = UILabel()
     private let durationLabel = UILabel()
-    private let closeButton = UIButton(type: .custom)
+    private lazy var closeButton:UIButton = {
+        let view = UIButton(type: .custom)
+        if #available(iOS 26, *) {
+            view.configuration = UIButton.Configuration.clearGlass()
+        }
+        view.setImage(PTAppBaseConfig.share.playerBackItemImage, for: .normal)
+        view.bounds = .init(origin: .zero, size: .init(width: 34, height: 34))
+        view.addActionHandlers(handler: { _ in
+            self.closeTapped()
+        })
+        return view
+    }()
     
     private var timeObserverToken: Any?
     
     // MARK: - Public
     public var videoPlayer: AVPlayer?
     public var onCloseTapped: PTActionTask? // 🔹 你可以拦截返回逻辑
+    
+    lazy var videoNavBar:PTNavBar = {
+        let view = PTNavBar()
+        view.setLeftButtons([closeButton])
+        return view
+    }()
     
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
         return .solid(.clear)
@@ -34,11 +51,12 @@ open class PTPlayerViewController: PTBaseViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyNavigationBarStyle()
-        closeButton.setImage(PTAppBaseConfig.share.playerBackItemImage, for: .normal)
-        closeButton.isUserInteractionEnabled = false
-        setCustomBackButtonView(closeButton,size: .init(width: 34, height: 34)) {
-            self.closeTapped()
-        }
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        applyNavigationBarStyle()
+        changeStatusBar(type: .Dark)
     }
     
     // MARK: - Lifecycle
@@ -89,7 +107,12 @@ open class PTPlayerViewController: PTBaseViewController {
         // 关闭按钮
         
         // 添加子视图
-        view.addSubviews([playPauseButton, slider, currentTimeLabel, durationLabel])
+        view.addSubviews([videoNavBar,playPauseButton, slider, currentTimeLabel, durationLabel])
+        videoNavBar.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            make.left.right.equalToSuperview()
+            make.height.equalTo(CGFloat.kNavBarHeight)
+        }
         
         playPauseButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -177,6 +200,7 @@ open class PTPlayerViewController: PTBaseViewController {
     
     @objc private func closeTapped() {
         // ✅ 这里你可以完全拦截返回逻辑
+        self.videoPlayer?.pause()
         if let onCloseTapped = onCloseTapped {
             onCloseTapped()  // 由外部控制是否真的关闭
         } else {
