@@ -119,10 +119,16 @@ public extension PHAsset {
         }
     }
 
-    func converPHAssetToAVURLAsset(completion:@escaping (AVURLAsset?) -> Void) {
+    //MARK: PHAsset轉換成AVURLAsset
+    func converPHAssetToAVURLAsset(version:PHVideoRequestOptionsVersion = .current,
+                                   supportIcloud:Bool  = true,
+                                   deliveryMode:PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                                   completion:@escaping (AVURLAsset?) -> Void) {
         let options = PHVideoRequestOptions()
-        options.isNetworkAccessAllowed = true
-        options.deliveryMode = .highQualityFormat
+        options.version = version
+        options.isNetworkAccessAllowed = supportIcloud
+        options.deliveryMode = deliveryMode
+        
         PHImageManager.default().requestAVAsset(forVideo: self, options: options) { avAsset, _, _ in
             if let urlAsset = avAsset as? AVURLAsset {
                 completion(urlAsset)
@@ -169,6 +175,77 @@ public extension PHAsset {
             }
         }
     }
+    
+    //MARK: PHAsset轉換成圖片
+    func fetchImage(targetSize: CGSize = PHImageManagerMaximumSize,
+                    contentMode: PHImageContentMode = .aspectFit,
+                    deliveryMode:PHImageRequestOptionsDeliveryMode = .highQualityFormat,
+                    version:PHImageRequestOptionsVersion = .current,
+                    supportIcloud:Bool  = true,
+                    completion: @escaping (UIImage?) -> Void) {
+        let options = PHImageRequestOptions()
+        options.version = version
+        options.deliveryMode = deliveryMode
+        options.isNetworkAccessAllowed = supportIcloud
+
+        PHImageManager.default().requestImage(for: self, targetSize: targetSize, contentMode: contentMode, options: options) { image, info in
+            completion(image)
+        }
+    }
+    
+    //MARK: 獲取PHAsset的視頻第一針
+    func fetchVideoFirstFrame(targetSize: CGSize = CGSize(width: 300, height: 300),
+                              version:PHVideoRequestOptionsVersion = .current,
+                              supportIcloud:Bool  = true,
+                              deliveryMode:PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                              completion: @escaping (UIImage?) -> Void) {
+        self.converPHAssetToAVURLAsset(version:version,supportIcloud: supportIcloud,deliveryMode: deliveryMode) { asset in
+            asset?.getVideoFirstImage(maximumSize: targetSize) { image in
+                completion(image)
+            }
+        }
+    }
+    
+    /// 导出 PHAsset 视频为临时文件
+    func exportVideo(version:PHVideoRequestOptionsVersion = .current,
+                     supportIcloud:Bool  = true,
+                     deliveryMode:PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                     completion: @escaping (URL?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.version = version
+        options.isNetworkAccessAllowed = supportIcloud
+        options.deliveryMode = deliveryMode
+
+        PHImageManager.default().requestExportSession(forVideo: self, options: options, exportPreset: AVAssetExportPresetHighestQuality) { exportSession, _ in
+            guard let session = exportSession else {
+                DispatchQueue.main.async { completion(nil) }
+                return
+            }
+
+            // 输出路径
+            let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).mp4")
+
+            session.outputURL = outputURL
+            session.outputFileType = .mp4
+            session.shouldOptimizeForNetworkUse = true
+
+            session.exportAsynchronously {
+                DispatchQueue.main.async {
+                    switch session.status {
+                    case .completed:
+                        PTNSLogConsole("✅ 导出成功: \(outputURL)")
+                        completion(outputURL)
+                    case .failed, .cancelled:
+                        PTNSLogConsole("❌ 导出失败: \(session.error?.localizedDescription ?? "未知错误")")
+                        completion(nil)
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 public extension PTPOP where Base: PHAsset {
