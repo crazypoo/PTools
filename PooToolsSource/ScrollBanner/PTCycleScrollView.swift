@@ -142,7 +142,7 @@ public class PTCycleScrollView: UIView {
             }
             if clearSubs {
                 PTGCDManager.gcdAfter(time: 0.01) { [weak self] in
-                    self?.layoutSubviews()
+                    self?.collectionViewSetData()
                 }
             }
         }
@@ -645,8 +645,6 @@ extension PTCycleScrollView {
             pageControlHeight = 10
         }
         
-        self.collectionViewSetData()
-
         // 计算最大扩展区大小
         switch self.scrollDirection {
         case .horizontal:
