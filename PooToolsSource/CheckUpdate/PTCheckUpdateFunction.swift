@@ -201,26 +201,7 @@ public class PTCheckUpdateFunction: NSObject {
         case System
         case User
     }
-    
-    public func compareVesionWithServerVersion(version:String) -> Bool {
-        let currentVersion = kAppVersion
-        let versionArray = version.components(separatedBy: ".")
-        let currentVesionArray = currentVersion!.components(separatedBy: ".")
-        let a = min(versionArray.count,currentVesionArray.count)
         
-        for i in 0..<a {
-            let forA = versionArray[i].int!
-            let forB:Int = currentVesionArray[i].int!
-            
-            if forA > forB {
-                return true
-            } else if forA < forB {
-                return false
-            }
-        }
-        return false
-    }
-    
     public func renewVersion(newVersion:String) -> (String,String) {
         var appStoreVersion = newVersion.replacingOccurrences(of: ".", with: "")
         if appStoreVersion.nsString.length == 2 {

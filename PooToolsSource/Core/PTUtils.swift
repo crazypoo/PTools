@@ -464,6 +464,27 @@ public extension PTUtils {
     }
 }
 
+public extension PTUtils {
+    static func compareVersionWithServerVersion(_ version: String) -> ComparisonResult {
+        let currentVersion = kAppVersion!
+        let serverArray = version.split(separator: ".").map { Int($0) ?? 0 }
+        let currentArray = currentVersion.split(separator: ".").map { Int($0) ?? 0 }
+        let count = max(serverArray.count, currentArray.count)
+        
+        for i in 0..<count {
+            let server = i < serverArray.count ? serverArray[i] : 0
+            let current = i < currentArray.count ? currentArray[i] : 0
+            
+            if current < server {
+                return .orderedAscending   // 本地版本低
+            } else if current > server {
+                return .orderedDescending  // 本地版本高
+            }
+        }
+        return .orderedSame
+    }
+}
+
 //MARK: OC-FUNCTION
 public extension PTUtils {
     class func oc_isiPhoneSeries()->Bool {

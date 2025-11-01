@@ -948,6 +948,28 @@ class PTFuncNameViewController: PTBaseViewController {
         .portrait
     }
     
+    lazy var searchBar:PTSearchBar = {
+        let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
+        searchBarConfig.clearTopSpace = 20
+        searchBarConfig.clearImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
+        searchBarConfig.clearAction = {
+            PTNSLogConsole("1231231231")
+        }
+        
+        let searchBar = PTSearchBar()
+        searchBar.clearConfig = searchBarConfig
+        return searchBar
+    }()
+    
+    lazy var navTitleView:PTNavTitleContainer = {
+        let view = PTNavTitleContainer()
+        view.addSubview(searchBar)
+        searchBar.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        return view
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -973,9 +995,8 @@ class PTFuncNameViewController: PTBaseViewController {
             PTNSLogConsole("1231231231")
         }
         
-        let searchBar = PTSearchBar()
-        searchBar.clearConfig = searchBarConfig
-        searchBar.frame = CGRect(origin: .zero, size: CGSizeMake(64, 34))
+        setCustomTitleView(navTitleView)
+
         setCustomBackButtonView(popover,size: CGSizeMake(64, 34)) {
             self.sideMenuController?.revealMenu()
         }
@@ -985,7 +1006,7 @@ class PTFuncNameViewController: PTBaseViewController {
         more.badgeBorderLine = 1
         more.badgeBorderColor = .random
         more.showBadge(style: .New, value: "我愛你", aniType: .None)
-        setCustomTitleView(searchBar)
+        
         
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
@@ -1047,7 +1068,7 @@ class PTFuncNameViewController: PTBaseViewController {
         collectionView.backgroundColor = .random
         
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total + 20
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         collectionView.contentCollectionView.contentInset.top = collectionInset_Top

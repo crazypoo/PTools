@@ -105,6 +105,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        changeStatusBar(type: .Dark)
     }
 
     override func viewDidLoad() {
