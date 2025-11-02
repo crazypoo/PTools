@@ -73,6 +73,84 @@ public enum PTHashType {
     case sha512
 }
 
+public enum PTConstellationType {
+    case Aquarius
+    case Pisces
+    case Aries
+    case Taurus
+    case Gemini
+    case Cancer
+    case Leo
+    case Virgo
+    case Libra
+    case Scorpio
+    case Sagittarius
+    case Capricorn
+    case Unknown
+    
+    var getTypeName:String {
+        switch self {
+        case .Aquarius:
+            "水瓶座"
+        case .Pisces:
+            "双鱼座"
+        case .Aries:
+            "白羊座"
+        case .Taurus:
+            "金牛座"
+        case .Gemini:
+            "双子座"
+        case .Cancer:
+            "巨蟹座"
+        case .Leo:
+            "狮子座"
+        case .Virgo:
+            "处女座"
+        case .Libra:
+            "天秤座"
+        case .Scorpio:
+            "天蝎座"
+        case .Sagittarius:
+            "射手座"
+        case .Capricorn:
+            "摩羯座"
+        default:
+            ""
+        }
+    }
+    
+    var getTypeEmojiString:String {
+        switch self {
+        case .Aries:
+            return "♈️"
+        case .Taurus:
+            return "♉️"
+        case .Gemini:
+            return "♊️"
+        case .Cancer:
+            return "♋️"
+        case .Leo:
+            return "♌️"
+        case .Virgo:
+            return "♍️"
+        case .Libra:
+            return "♎️"
+        case .Scorpio:
+            return "♏️"
+        case .Sagittarius:
+            return "♐️"
+        case .Capricorn:
+            return "♑️"
+        case .Aquarius:
+            return "♒️"
+        case .Pisces:
+            return "♓️"
+        default:
+            return ""
+        }
+    }
+}
+
 public extension String {
     static let CameraAuthorizationFail = "PT Setting camera fail".localized()
     static let PhotoAuthorizationFail = "PT Setting photo fail".localized()
@@ -920,6 +998,19 @@ public extension String {
             }
         }
     }
+    
+    func timeConvert(timeTimeZone:Zones,
+                     locale:LocaleConvertible = Locales.current,
+                     timeFormatter:String = "yyyy-MM-dd HH:mm:ss") -> DateInRegion? {
+        let currentRegion = Region(calendar: Calendars.gregorian, zone: Zones.current, locale: Locales.current)
+        let khRegion = Region(calendar: Calendars.gregorian, zone: timeTimeZone, locale: locale)
+                
+        if let khSwiftDate = self.toDate(timeFormatter,region: khRegion) {
+            let currentDate = khSwiftDate.date.convertTo(region: currentRegion)
+            return currentDate
+        }
+        return nil
+    }
 }
 
 fileprivate extension PTUtils {
@@ -1247,7 +1338,7 @@ public extension String {
 
     //MARK: 根據日期字符串獲取星座名稱
     ///根據日期字符串獲取星座名稱
-    func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss") -> String {
+    func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss") -> PTConstellationType {
         let getDate = self.toDate(format)!.date
         let month = getDate.month
         let day = getDate.day
@@ -1255,107 +1346,42 @@ public extension String {
         switch (month, day) {
         case (1, 20...31), (2, 1...18):
             ///水瓶
-            return "Aquarius"
+            return .Aquarius
         case (2, 19...29), (3, 1...20):
             ///双鱼
-            return "Pisces"
+            return .Pisces
         case (3, 21...31), (4, 1...19):
             ///白羊
-            return "Aries"
+            return .Aries
         case (4, 20...30), (5, 1...20):
             ///金牛
-            return "Taurus"
+            return .Taurus
         case (5, 21...31), (6, 1...20):
             ///双子
-            return "Gemini"
+            return .Gemini
         case (6, 21...30), (7, 1...22):
             ///巨蟹
-            return "Cancer"
+            return .Cancer
         case (7, 23...31), (8, 1...22):
             ///狮子
-            return "Leo"
+            return .Leo
         case (8, 23...31), (9, 1...22):
             ///处女
-            return "Virgo"
+            return .Virgo
         case (9, 23...30), (10, 1...22):
             ///天秤
-            return "Libra"
+            return .Libra
         case (10, 23...31), (11, 1...21):
             ///天蝎
-            return "Scorpio"
+            return .Scorpio
         case (11, 22...30), (12, 1...21):
             ///射手
-            return "Sagittarius"
+            return .Sagittarius
         case (12, 22...31), (1, 1...19):
             ///摩羯
-            return "Capricorn"
+            return .Capricorn
         default:
-            return ""
-        }
-    }
-    
-    func getConstellationChinese(format:String = "yyyy-MM-dd HH:mm:ss") -> String {
-        var constellationChinese = ""
-        let constellation = getConstellation(format: format)
-        switch constellation {
-        case "Aquarius":
-            constellationChinese = "水瓶座"
-        case "Pisces":
-            constellationChinese = "双鱼座"
-        case "Aries":
-            constellationChinese = "白羊座"
-        case "Taurus":
-            constellationChinese = "金牛座"
-        case "Gemini":
-            constellationChinese = "双子座"
-        case "Cancer":
-            constellationChinese = "巨蟹座"
-        case "Leo":
-            constellationChinese = "狮子座"
-        case "Virgo":
-            constellationChinese = "处女座"
-        case "Libra":
-            constellationChinese = "天秤座"
-        case "Scorpio":
-            constellationChinese = "天蝎座"
-        case "Sagittarius":
-            constellationChinese = "射手座"
-        case "Capricorn":
-            constellationChinese = "摩羯座"
-        default:
-            constellationChinese = ""
-        }
-        return constellationChinese
-    }
-    
-    func emojiConstellationSign() -> String {
-        switch lowercased() {
-            case "aries":
-                return "♈️"
-            case "taurus":
-                return "♉️"
-            case "gemini":
-                return "♊️"
-            case "cancer":
-                return "♋️"
-            case "leo":
-                return "♌️"
-            case "virgo":
-                return "♍️"
-            case "libra":
-                return "♎️"
-            case "scorpio":
-                return "♏️"
-            case "sagittarius":
-                return "♐️"
-            case "capricorn":
-                return "♑️"
-            case "aquarius":
-                return "♒️"
-            case "pisces":
-                return "♓️"
-            default:
-                return ""
+            return .Unknown
         }
     }
 
