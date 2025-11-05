@@ -559,7 +559,15 @@ public class Network: NSObject {
         }
 
         let newHeader = header ?? ["Content-Type": "text/plain"]
-        logRequestStart(url: urlStr1, parameters: nil, headers: newHeader, method: method)
+        
+        var dic:[String:Any] = [:]
+        
+        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []),
+           let dictionary = jsonObject as? [String: Any] {
+            dic = dictionary
+        }
+        
+        logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
 
         return try await withCheckedThrowingContinuation { continuation in
             AF.upload(body,

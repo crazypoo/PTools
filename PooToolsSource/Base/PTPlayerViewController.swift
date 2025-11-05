@@ -50,6 +50,7 @@ open class PTPlayerViewController: PTBaseViewController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
         applyNavigationBarStyle()
     }
     
@@ -201,10 +202,18 @@ open class PTPlayerViewController: PTBaseViewController {
     @objc private func closeTapped() {
         // ✅ 这里你可以完全拦截返回逻辑
         self.videoPlayer?.pause()
-        if let onCloseTapped = onCloseTapped {
-            onCloseTapped()  // 由外部控制是否真的关闭
+        if let _ = onCloseTapped {
+            onCloseTapped?()  // 由外部控制是否真的关闭
         } else {
-            dismiss(animated: true)
+            if let _ = self.sheetViewController {
+                if self.navigationController?.viewControllers.last == self {
+                    self.navigationController?.popViewController()
+                } else {
+                    self.returnFrontVC()
+                }
+            } else {
+                self.returnFrontVC()
+            }
         }
     }
     
