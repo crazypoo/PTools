@@ -560,7 +560,12 @@ class PTFuncNameViewController: PTBaseViewController {
                     mediaConfig.imageLongTapAction = true
                     mediaConfig.dynamicBackground = true
                     let browser = PTMediaBrowserController()
-                    browser.medisShow(mediaConfig: mediaConfig)
+                    browser.mediasShow(mediaConfig: mediaConfig)
+//                    let nav = PTBaseNavControl(rootViewController: browser)
+//                    self.navigationController?.present(nav, animated: true)
+//                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],completion: {
+//                        browser.reloadConfig(mediaConfig: mediaConfig)
+//                    }, dismissPanGes: false)
                 } else if itemRow.title == .phoneCall {
                     PTPhoneBlock.callPhoneNumber(phoneNumber: "13800138000", call: { duration in
                     }, cancel: {

@@ -45,20 +45,6 @@ public class PTMediaBrowserController: PTBaseViewController {
                 make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
             }
             
-            //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
-            if let _ = sheetViewController {
-                bottomControl.moreActionButton.addActionHandlers { sender in
-                    self.actionSheet()
-                }
-            } else if let _ = sideMenuController {
-                bottomControl.moreActionButton.addActionHandlers { sender in
-                    self.actionSheet()
-                }
-            } else {
-                bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
-                bottomControl.moreActionButton.menu = makeMenu()
-            }
-
             PTGCDManager.gcdAfter(time: 0.35) {
                 var loadSome = 0
                 if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
@@ -288,6 +274,21 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.changeStatusBar(type: .Dark)
+        self.becomeFirstResponder()
+        self.view.window?.makeKeyAndVisible()
+        
+        if let _ = sheetViewController {
+            bottomControl.moreActionButton.addActionHandlers { sender in
+                self.actionSheet()
+            }
+        } else if let _ = sideMenuController {
+            bottomControl.moreActionButton.addActionHandlers { sender in
+                self.actionSheet()
+            }
+        } else {
+            bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
+            bottomControl.moreActionButton.menu = makeMenu()
+        }
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
@@ -379,7 +380,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         bottomControl.backgroundColor = navControl.isHidden ? .clear : MediaBrowserToolBarColor
     }
         
-    public func medisShow(mediaConfig:PTMediaBrowserConfig) {
+    public func mediasShow(mediaConfig:PTMediaBrowserConfig) {
         self.viewConfig = mediaConfig
         self.modalPresentationStyle = .fullScreen
         PTUtils.getCurrentVC().pt_present(self)
