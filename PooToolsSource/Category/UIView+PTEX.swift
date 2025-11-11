@@ -548,20 +548,6 @@ public extension UIView {
         return all
     }
 
-    var screenshot: UIImage? {
-        /*UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, 0)
-         defer {
-         UIGraphicsEndImageContext()
-         }
-         guard let context = UIGraphicsGetCurrentContext() else { return nil }
-         layer.render(in: context)
-         return UIGraphicsGetImageFromCurrentImageContext()*/
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
-        return renderer.image { rendererContext in
-            layer.render(in: rendererContext.cgContext)
-        }
-    }
-
     func addShadow(ofColor color: UIColor, radius: CGFloat, offset: CGSize, opacity: Float) {
         layer.shadowColor = color.cgColor
         layer.shadowOffset = offset
