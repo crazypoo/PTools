@@ -127,8 +127,8 @@ extension PTBaseNavControl {
     }
     
     public class func GobalNavControl(nav:UINavigationController,
-                              textColor:UIColor = PTAppBaseConfig.share.navTitleTextColor,
-                              navColor:UIColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor) {
+                                      textColor:UIColor = PTAppBaseConfig.share.navTitleTextColor,
+                                      navColor:UIColor = .clear) {
         let colors:UIColor = navColor
         let textColors:UIColor = textColor
         
