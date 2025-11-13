@@ -832,60 +832,57 @@ public class PTCollectionView: UIView {
     }
     
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
-        PTGCDManager.gcdGobal {
+        PTGCDManager.gcdMain {
+            // 🟢 1. 在主線程更新數據源
             let startIndex = self.mSections[section].rows?.count ?? 0
             self.mSections[section].rows?.append(contentsOf: rows)
             let endIndex = (self.mSections[section].rows?.count ?? 0) - 1
             let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-            PTGCDManager.gcdMain {
-                self.collectionView.performBatchUpdates {
-                    self.collectionView.insertItems(at: indexPaths)
-                } completion: { _ in
-                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.collectionView.collectionViewLayout.invalidateLayout()
-                    }
-                    completion?()
+
+            // 🟢 2. 再在主線程執行 UI 更新
+            self.collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: indexPaths)
+            }, completion: { _ in
+                // 🟢 3. 插入後可無效化布局（保持原有邏輯）
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
                 }
-            }
+                completion?()
+            })
         }
     }
     
     public func insertSection(_ sections:[PTSection],completion:PTActionTask? = nil) {
-        PTGCDManager.gcdGobal {
+        PTGCDManager.gcdMain {
             let startIndex = self.mSections.count
             self.mSections.append(contentsOf: sections)
             let indexPaths = IndexSet(startIndex..<startIndex + sections.count)
-            PTGCDManager.gcdMain {
-                self.collectionView.performBatchUpdates {
-                    self.collectionView.insertSections(indexPaths)
-                } completion: { _ in
-                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.collectionView.collectionViewLayout.invalidateLayout()
-                    }
-                    completion?()
+            self.collectionView.performBatchUpdates {
+                self.collectionView.insertSections(indexPaths)
+            } completion: { _ in
+                // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
                 }
+                completion?()
             }
         }
     }
     
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
-        PTGCDManager.gcdGobal {
+        PTGCDManager.gcdMain {
             if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
                 let endIndex = startIndex + rows.count - 1
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
                 self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
-                PTGCDManager.gcdMain {
-                    self.collectionView.performBatchUpdates {
-                        self.collectionView.deleteItems(at: indexPaths)
-                    } completion: { _ in
-                        // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                        if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                            self.collectionView.collectionViewLayout.invalidateLayout()
-                        }
-                        completion?()
+                self.collectionView.performBatchUpdates {
+                    self.collectionView.deleteItems(at: indexPaths)
+                } completion: { _ in
+                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.collectionView.collectionViewLayout.invalidateLayout()
                     }
+                    completion?()
                 }
             } else {
                 PTNSLogConsole("Error: Can't find the row in section \(section)")
