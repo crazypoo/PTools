@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.81.37'
+    s.version     = '3.82.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -353,7 +353,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'SmartScreenshot' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'SnapshotKit'
+        subspec.source_files = 'PooToolsSource/ScreenShot/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SMARTSCREENSHOT POOTOOLS_COCOAPODS"
         }

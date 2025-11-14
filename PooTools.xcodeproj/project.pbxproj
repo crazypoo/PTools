@@ -145,6 +145,13 @@
 		553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */; };
 		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
+		553BFE662EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */; };
+		553BFE682EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */; };
+		553BFE6A2EC7052400D6DCB6 /* UITableView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE692EC7052400D6DCB6 /* UITableView+PTSnapShot.swift */; };
+		553BFE6C2EC7055300D6DCB6 /* UIView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE6B2EC7055300D6DCB6 /* UIView+PTSnapShot.swift */; };
+		553BFE6E2EC7057500D6DCB6 /* UIWindow+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE6D2EC7057500D6DCB6 /* UIWindow+PTSnapShot.swift */; };
+		553BFE702EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE6F2EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift */; };
+		553BFE722EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */; };
 		553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */; };
 		553FF08F2C670A5600E9EE10 /* PTIAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */; };
 		55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55442C852E8C264F000B38DD /* PTNavBar.swift */; };
@@ -1089,6 +1096,13 @@
 		553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetContentViewController.swift; sourceTree = "<group>"; };
 		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
+		553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSnapShotKitProtocol.swift; sourceTree = "<group>"; };
+		553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTSnapShot.swift"; sourceTree = "<group>"; };
+		553BFE692EC7052400D6DCB6 /* UITableView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTSnapShot.swift"; sourceTree = "<group>"; };
+		553BFE6B2EC7055300D6DCB6 /* UIView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTSnapShot.swift"; sourceTree = "<group>"; };
+		553BFE6D2EC7057500D6DCB6 /* UIWindow+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+PTSnapShot.swift"; sourceTree = "<group>"; };
+		553BFE6F2EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWebViewPrintPageRenderer.swift; sourceTree = "<group>"; };
+		553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+PTSnapShot.swift"; sourceTree = "<group>"; };
 		553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+PTEX.swift"; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTIAPManager.swift; sourceTree = "<group>"; };
@@ -1956,6 +1970,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				553BFE642EC703FF00D6DCB6 /* ScreenShot */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2591,6 +2606,20 @@
 				55BCB9822B1733620016A4C2 /* PTMediaLibViewController.swift */,
 			);
 			path = PhotoPicker;
+			sourceTree = "<group>";
+		};
+		553BFE642EC703FF00D6DCB6 /* ScreenShot */ = {
+			isa = PBXGroup;
+			children = (
+				553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */,
+				553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */,
+				553BFE692EC7052400D6DCB6 /* UITableView+PTSnapShot.swift */,
+				553BFE6B2EC7055300D6DCB6 /* UIView+PTSnapShot.swift */,
+				553BFE6D2EC7057500D6DCB6 /* UIWindow+PTSnapShot.swift */,
+				553BFE6F2EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift */,
+				553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */,
+			);
+			path = ScreenShot;
 			sourceTree = "<group>";
 		};
 		553FF08D2C670A4000E9EE10 /* IAP */ = {
@@ -4140,6 +4169,7 @@
 				55BCB9862B1733620016A4C2 /* PTEditImageViewController.swift in Sources */,
 				555818C22AFA77130051C0AA /* UIBezierPath+PTEX.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
+				553BFE682EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift in Sources */,
 				55DD936C2B932A0400F65872 /* Logger+PTEX.swift in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				555818BC2AFA5D2C0051C0AA /* PTAlertTips.swift in Sources */,
@@ -4204,6 +4234,7 @@
 				55BA8FA02D29A7D70065FBD0 /* AdaptiveModalPresenter.swift in Sources */,
 				55BA8FA12D29A7D70065FBD0 /* ViewHierarchyLayer.swift in Sources */,
 				55BA8FA22D29A7D70065FBD0 /* IndexPath+InspectorEX.swift in Sources */,
+				553BFE6E2EC7057500D6DCB6 /* UIWindow+PTSnapShot.swift in Sources */,
 				55BA8FA32D29A7D70065FBD0 /* ElementInspectorFormPanelDataSource.swift in Sources */,
 				55BA8FA42D29A7D70065FBD0 /* UIStepper+InspectorEX.swift in Sources */,
 				55BA8FA52D29A7D70065FBD0 /* InspectorElementLibraryProtocol.swift in Sources */,
@@ -4479,8 +4510,10 @@
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				555818C82AFA7BDB0051C0AA /* UINavigationController+PTEX.swift in Sources */,
 				5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */,
+				553BFE722EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift in Sources */,
 				557E3A8C2C0440FD002466A0 /* PTCallStackParser.swift in Sources */,
 				555818D42AFA7FFB0051C0AA /* CGPoint+PTEX.swift in Sources */,
+				553BFE6A2EC7052400D6DCB6 /* UITableView+PTSnapShot.swift in Sources */,
 				55B6D7CC2C1DB47300033309 /* PTActionSheetController.swift in Sources */,
 				550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */,
 				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
@@ -4603,6 +4636,7 @@
 				55B13D5E2B1AFA8100C67EDA /* PTWeakProxy.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
+				553BFE662EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift in Sources */,
 				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
 				55BCB9792B1732030016A4C2 /* PTMediaLibConfig.swift in Sources */,
 				55BCB9772B1732030016A4C2 /* PTFetchImageOperation.swift in Sources */,
@@ -4666,6 +4700,7 @@
 				55B13D5A2B1AF03F00C67EDA /* PTAdjustToolCell.swift in Sources */,
 				55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
+				553BFE702EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift in Sources */,
 				557E3AB42C047556002466A0 /* FileHandle+PTDebugEx.swift in Sources */,
 				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
@@ -4942,6 +4977,7 @@
 				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
+				553BFE6C2EC7055300D6DCB6 /* UIView+PTSnapShot.swift in Sources */,
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
 				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
