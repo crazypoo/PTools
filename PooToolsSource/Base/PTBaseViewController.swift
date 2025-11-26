@@ -568,8 +568,9 @@ extension PTBaseViewController {
         } else if let nav = navigationController {
             // pop 时用主线程保证安全
             PTGCDManager.gcdMain {
-                nav.popViewController(animated: true)
-                completion?()
+                nav.popViewController(animated: true) {
+                    completion?()
+                }
             }
         } else {
             completion?()
