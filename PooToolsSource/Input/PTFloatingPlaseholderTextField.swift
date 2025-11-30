@@ -14,7 +14,8 @@ import AttributedString
 
 public class PTFloatingPlaseholderConfig:PTBaseModel {
     public var containerRadius:CGFloat = 0
-    public var borderLayerColor:UIColor = .lightGray
+    public var borderLayerColor:UIColor = .clear
+    public var borderLayerFloatingColor:UIColor = .systemBlue
     public var borderLayerWidth:CGFloat = 1
     public var floatingPlaceholderColor:UIColor = .systemBlue
     public var normalPlaceholderColor:UIColor = .gray
@@ -216,6 +217,7 @@ public class PTFloatingPlaseholderTextField: UIView {
         path.move(to: CGPoint(x: radius, y: 0))
 
         if isFloating {
+            borderLayer.strokeColor = viewConfig.borderLayerFloatingColor.cgColor
             // 未浮起：上边分为左段 -> gap -> 右段
             // 左段
             path.addLine(to: CGPoint(x: gapStartX, y: 0))
@@ -224,6 +226,7 @@ public class PTFloatingPlaseholderTextField: UIView {
             // 继续到右侧圆角起点
             path.addLine(to: CGPoint(x: rect.width - radius, y: 0))
         } else {
+            borderLayer.strokeColor = viewConfig.borderLayerColor.cgColor
             // 已浮起：完整上边（无 gap）
             path.addLine(to: CGPoint(x: rect.width - radius, y: 0))
         }
