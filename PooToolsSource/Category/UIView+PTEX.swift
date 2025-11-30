@@ -511,15 +511,27 @@ public extension UIView {
                              lineSpacing:CGFloat = 2.5,
                              height:CGFloat = CGFloat.greatestFiniteMagnitude,
                              width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.lineSpacing = lineSpacing
-        dic[NSAttributedString.Key.paragraphStyle] = paraStyle
-        if !string.stringIsEmpty() {
-            let size = string.boundingRect(with: CGSize(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
-            return size
-        }
-        return .zero
+        guard !string.isEmpty else { return .zero }
+
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineSpacing = lineSpacing
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .paragraphStyle: paragraph
+        ]
+
+        let constraintSize = CGSize(width: width, height: height)
+
+        let rect = string.boundingRect(
+            with: constraintSize,
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: attributes,
+            context: nil
+        )
+
+        // 使用 ceil 防止 Label 渲染被裁切
+        return CGSize(width: ceil(rect.width), height: ceil(rect.height))
     }
     
     var viewController: UIViewController? {

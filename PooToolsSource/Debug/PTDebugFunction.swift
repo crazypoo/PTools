@@ -34,7 +34,7 @@ public class PTDebugFunction: NSObject {
             UserDefaults.standard.register(defaults: defaultsToRegister as! [String : Any])
             UserDefaults.standard.synchronize()
         } else {
-            PTCoreUserDefultsWrapper.AppServiceIdentifier = nil
+            PTCoreUserDefultsWrapper.AppServiceIdentifier = "1"
             PTNSLogConsole("没有发现Settings.bundle",levelType: PTLogMode,loggerType: .Settings)
         }
     }

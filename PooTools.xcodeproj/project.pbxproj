@@ -171,6 +171,7 @@
 		554F3A122E94C21D001F4078 /* PTTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554F3A112E94C21D001F4078 /* PTTipsView.swift */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
 		5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */; };
+		555719932EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555719922EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift */; };
 		55571B382D58EF52004134B8 /* PTiCloudKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */; };
 		555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */; };
 		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
@@ -1123,6 +1124,7 @@
 		554F3A112E94C21D001F4078 /* PTTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsView.swift; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
 		5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugSnapshotViewController.swift; sourceTree = "<group>"; };
+		555719922EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingPlaseholderTextField.swift; sourceTree = "<group>"; };
 		55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTiCloudKeychainService.swift; sourceTree = "<group>"; };
 		555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeaderAndFooter.swift; sourceTree = "<group>"; };
 		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
@@ -1970,7 +1972,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				553BFE642EC703FF00D6DCB6 /* ScreenShot */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2063,6 +2064,7 @@
 				55102A9C2AFFAB1700E9529D /* Resource */,
 				231D15F1272CDEE9003D6F62 /* Rotation */,
 				558D5EDF2AAF4D8300C02042 /* Router */,
+				553BFE642EC703FF00D6DCB6 /* ScreenShot */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				55F7A73729D5949900CF6272 /* ScrollRefresh */,
 				55D59C6028F3E84900B4FF76 /* SearchBar */,
@@ -2217,6 +2219,7 @@
 				5507026E28F7A02300C48239 /* PTGrowingText.swift */,
 				55F7A73A29D5C80900CF6272 /* PTTextField.swift */,
 				55C409952C08AB0B009C0FB6 /* PTInputBoxView.swift */,
+				555719922EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -4074,7 +4077,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4084,9 +4088,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4101,9 +4109,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4571,6 +4583,7 @@
 				55F162EA2B1951E500320925 /* PTVideoEditorConfig.swift in Sources */,
 				555EEEAE2BDE2F3D00A60833 /* UIBarButtonItem+BadgeEX.swift in Sources */,
 				555818AD2AFA33570051C0AA /* PTRouteViewController.swift in Sources */,
+				555719932EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift in Sources */,
 				557E3A9E2C046DDA002466A0 /* PTThreadOperator.swift in Sources */,
 				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
