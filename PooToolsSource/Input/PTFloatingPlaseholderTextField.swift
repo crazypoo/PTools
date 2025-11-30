@@ -51,7 +51,7 @@ public class PTFloatingPlaseholderTextField: UIView {
     public var inputingCallback:((String)->Void)?
     public var actionTouchBlock:TouchedBlock?
 
-    fileprivate lazy var textField:UITextField = {
+    public lazy var textField:UITextField = {
         let view = UITextField()
         view.borderStyle = .none
         view.tintColor = self.viewConfig.tinColor
@@ -69,7 +69,7 @@ public class PTFloatingPlaseholderTextField: UIView {
         return view
     }()
     
-    fileprivate lazy var actionButton:UIButton = {
+    public lazy var actionButton:UIButton = {
         let view = UIButton(type: .custom)
         if let normal = viewConfig.actionNormal {
             view.loadImage(contentData: normal,controlState: .normal)
@@ -195,9 +195,6 @@ public class PTFloatingPlaseholderTextField: UIView {
 
     // MARK: - Floating
     private func setFloating(_ float: Bool, animated: Bool) {
-        // 如果状态没有变化，不做任何操作
-        guard float != isFloating else { return }
-
         // 先更新状态标志（后续绘制用到）
         isFloating = float
 
