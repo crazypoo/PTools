@@ -70,12 +70,12 @@ class PTFuncDetailViewController: PTBaseViewController {
                     self.localNetwork = !self.localNetwork
                     if self.localNetwork {
                         FileManager.pt.createFolder(folderPath: PTUploadFilePath)
-                                
+                        
                         self.webServer = GCDWebUploader(uploadDirectory: PTUploadFilePath)
                         self.webServer!.delegate = self
                         self.webServer!.allowHiddenItems = false
                         self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
-
+                        
                         self.webServer.run { server in
                             if self.webServer!.start() {
                                 let port = self.webServer!.port
@@ -145,7 +145,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             model2.titles = "2222222222222"
             model2.imageURL = "DemoImage"
             model2.selectedImageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
-
+            
             let model3 = PTSegmentModel()
             model3.titles = "3333333333333"
             model3.imageURL = "DemoImage"
@@ -153,7 +153,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             
             let model4 = PTSegmentModel()
             model4.titles = "4444444444444"
-
+            
             let config = PTSegmentConfig()
             config.showType = .SubBackground
             config.itemSpace = 0
@@ -172,7 +172,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             segView.reloadViewData { index in
                 
             }
-
+            
         case String.countLabel:
             let countLabel = PTCountingLabel()
             countLabel.textAlignment = .center
@@ -198,7 +198,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.top.equalTo(countLabel.snp.bottom)
                 make.bottom.equalToSuperview()
             }
-
+            
         case String.throughLabel:
             let throughLabel = PTLabel()
             throughLabel.text = "111111111"
@@ -267,19 +267,19 @@ class PTFuncDetailViewController: PTBaseViewController {
             let customType = PTActiveType.custom(pattern: "\\s克狗扑\\b") //Looks for "克狗扑"
             let customType2 = PTActiveType.custom(pattern: "\\s标签\\b") //Looks for "标签"
             let customType3 = PTActiveType.custom(pattern: "\\s支持\\b") //Looks for "支持"
-
+            
             let label = PTActiveLabel()
-
+            
             label.enabledTypes.append(customType)
             label.enabledTypes.append(customType2)
             label.enabledTypes.append(customType3)
-
+            
             label.urlMaximumLength = 10
-
+            
             label.customize { label in
                 label.text = "我是一个推文 13800138000 微信号:xxxx123 t:aaaaaaaaaaa #推文1 #我是辣鸡 @crazypoo. 推文发自" +
                 " https://192.168.0.1 . 13800138000 我顺便 支持 自定义 标签 -> 克狗扑\n\n" +
-                    "还可以缩短链接长度: \n https://github.com/crazypoo"
+                "还可以缩短链接长度: \n https://github.com/crazypoo"
                 label.numberOfLines = 0
                 label.lineSpacing = 4
                 
@@ -302,9 +302,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                 label.handleChinaCellPhoneTap { phone in
                     self.alert(title:"CellPhone", message: phone)
                 }
-
+                
                 //Custom types
-
+                
                 label.customColor[customType] = UIColor.purple
                 label.customSelectedColor[customType] = UIColor.green
                 label.customColor[customType2] = UIColor.magenta
@@ -322,7 +322,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     
                     return atts
                 }
-
+                
                 label.handleCustomTap(for: customType) { text in
                     self.alert(title:"Custom type", message: text)
                 }
@@ -333,7 +333,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     self.alert(title:"Custom type", message: text)
                 }
             }
-
+            
             view.addSubview(label)
             label.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(20)
@@ -395,7 +395,7 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.progressBar:
             let verProgress = PTProgressBar(showType: .Vertical)
             let horProgress = PTProgressBar(showType: .Horizontal)
-
+            
             view.addSubviews([verProgress,horProgress])
             verProgress.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(20)
@@ -425,7 +425,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             
             let testKey = "0523iZTd7tkX0820"
             let testIV = "1333000000000000"
-
+            
             let returnButton = UIButton(type: .custom)
             returnButton.setImage(UIImage.system("arrowshape.turn.up.left"), for: .normal)
             
@@ -436,11 +436,11 @@ class PTFuncDetailViewController: PTBaseViewController {
             let switchAESECB = UISwitch()
             switchAESECB.onTintColor = .systemRed
             switchAESECB.isOn = false
-
+            
             let switchAESCBC = UISwitch()
             switchAESCBC.onTintColor = .systemGreen
             switchAESCBC.isOn = false
-
+            
             let contentLabel = UILabel()
             contentLabel.textColor = .black
             contentLabel.text = "潮州周杰伦是GAY"
@@ -614,7 +614,7 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.CollectionTag:
             
             let tagValue = ["1123123","1","123123123123123","22222","1233"]
-
+            
             var tagModels = [PTTagLayoutModel]()
             tagValue.enumerated().forEach { index,value in
                 let tagModel = PTTagLayoutModel()
@@ -657,7 +657,12 @@ class PTFuncDetailViewController: PTBaseViewController {
             aaaaaaa.showCollectionDetail(collectionData: tagSection)
         case String.InputBox:
             let config = PTFloatingPlaseholderConfig()
+            config.actionNormal = UIImage(named: "image_aircondition_gray")
+            config.actionSelected = UIImage(named: "DemoImage")
             let aaaaaa = PTFloatingPlaseholderTextField(config: config)
+            aaaaaa.actionTouchBlock = { sender in
+                sender.isSelected .toggle()
+            }
             aaaaaa.configure(placeholder: "123123123123123123")
             
             

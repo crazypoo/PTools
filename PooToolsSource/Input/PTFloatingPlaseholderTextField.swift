@@ -27,13 +27,18 @@ public class PTFloatingPlaseholderConfig:PTBaseModel {
     public var textColor:UIColor = .black
     public var keyboardType:UIKeyboardType = UIKeyboardType.default
     public var isSecureTextEntry:Bool = false
-    public var isMust:Bool = true
+    public var isMust:Bool = false
     
     public var insidePadding:CGFloat = 12
     public var placeholderPaddingOffset:CGFloat = 4
     public var placeholderWidthOffset:CGFloat = 8
     ///placeholder 上浮时距离 superview top 的偏移
     public var placeholderFloatingTopOffset:CGFloat = -8
+    public var haveAction:Bool = false
+    public var actionSize:CGSize = .zero
+    public var actionNormal:Any?
+    public var actionSelected:Any?
+    public var actionSapcing:CGFloat = 8
 }
 
 public class PTFloatingPlaseholderTextField: UIView {
@@ -44,8 +49,9 @@ public class PTFloatingPlaseholderTextField: UIView {
     public var inputedCallback:((String)->Void)?
     public var inputBegainCallback:PTActionTask?
     public var inputingCallback:((String)->Void)?
+    public var actionTouchBlock:TouchedBlock?
 
-    lazy var  textField:UITextField = {
+    fileprivate lazy var textField:UITextField = {
         let view = UITextField()
         view.borderStyle = .none
         view.tintColor = self.viewConfig.tinColor
@@ -57,10 +63,27 @@ public class PTFloatingPlaseholderTextField: UIView {
         view.delegate = self
         return view
     }()
-    lazy var  placeholderLabel:UILabel = {
+    
+    fileprivate lazy var placeholderLabel:UILabel = {
         let view = UILabel()
         return view
     }()
+    
+    fileprivate lazy var actionButton:UIButton = {
+        let view = UIButton(type: .custom)
+        if let normal = viewConfig.actionNormal {
+            view.loadImage(contentData: normal,controlState: .normal)
+        }
+        if let selected = viewConfig.actionSelected {
+            view.loadImage(contentData: selected,controlState: .selected)
+        }
+        view.isHidden = !viewConfig.haveAction
+        view.addActionHandlers(handler: { sender in
+            self.actionTouchBlock?(sender)
+        })
+        return view
+    }()
+    
     private let borderLayer = CAShapeLayer()
 
     /// true = placeholder 上浮（左上角）
@@ -86,8 +109,14 @@ public class PTFloatingPlaseholderTextField: UIView {
         borderLayer.lineWidth = viewConfig.borderLayerWidth
         layer.addSublayer(borderLayer)
 
-        addSubviews([placeholderLabel,textField])
+        addSubviews([actionButton,placeholderLabel,textField])
 
+        actionButton.snp.makeConstraints { make in
+            make.size.equalTo(self.viewConfig.actionSize)
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
+        }
+        
         // 初始约束（placeholder 使用 centerY，未浮起时居中在边框线上）
         placeholderLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.viewConfig.placeholderPaddingOffset)
@@ -95,8 +124,12 @@ public class PTFloatingPlaseholderTextField: UIView {
         }
 
         textField.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(self.viewConfig.insidePadding)
-            make.right.equalToSuperview().offset(-self.viewConfig.insidePadding)
+            make.left.equalToSuperview().inset(self.viewConfig.insidePadding)
+            if self.viewConfig.haveAction {
+                make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+            } else {
+                make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
+            }
             make.top.bottom.equalToSuperview().inset(self.viewConfig.floatingPlaceholderFont.pointSize / 2)
         }
 
