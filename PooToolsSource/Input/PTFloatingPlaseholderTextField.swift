@@ -64,8 +64,9 @@ public class PTFloatingPlaseholderTextField: UIView {
         return view
     }()
     
-    fileprivate lazy var placeholderLabel:UILabel = {
+    public lazy var placeholderLabel:UILabel = {
         let view = UILabel()
+        view.numberOfLines = 0
         return view
     }()
     
@@ -120,6 +121,11 @@ public class PTFloatingPlaseholderTextField: UIView {
         // 初始约束（placeholder 使用 centerY，未浮起时居中在边框线上）
         placeholderLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.viewConfig.placeholderPaddingOffset)
+            if self.viewConfig.haveAction {
+                make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+            } else {
+                make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
+            }
             make.centerY.equalToSuperview()
         }
 
@@ -207,6 +213,11 @@ public class PTFloatingPlaseholderTextField: UIView {
             } else {
                 // 居中于边框线上
                 make.centerY.equalToSuperview()
+                if self.viewConfig.haveAction {
+                    make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+                } else {
+                    make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
+                }
             }
         }
 
