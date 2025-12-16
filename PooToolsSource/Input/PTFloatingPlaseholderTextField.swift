@@ -39,6 +39,7 @@ public class PTFloatingPlaseholderConfig:PTBaseModel {
     public var actionNormal:Any?
     public var actionSelected:Any?
     public var actionSapcing:CGFloat = 8
+    public var textAlignment:NSTextAlignment = .left
 }
 
 public class PTFloatingPlaseholderTextField: UIView {
@@ -156,13 +157,13 @@ public class PTFloatingPlaseholderTextField: UIView {
         let plaseHolderColor = isNormal ? viewConfig.normalPlaceholderColor : viewConfig.floatingPlaceholderColor
         var placeholderAtt:ASAttributedString = """
                     \(wrap: .embedding("""
-                    \(mainString,.foreground(plaseHolderColor),.font(plaseHolderFont),.paragraph(.alignment(.center)))
+                    \(mainString,.foreground(plaseHolderColor),.font(plaseHolderFont),.paragraph(.alignment(viewConfig.textAlignment)))
                     """))
                     """
         if viewConfig.isMust {
             let placeholderLastAtt:ASAttributedString = """
                         \(wrap: .embedding("""
-                        \(" *",.foreground(.systemRed),.font(plaseHolderFont),.paragraph(.alignment(.center)))
+                        \(" *",.foreground(.systemRed),.font(plaseHolderFont),.paragraph(.alignment(viewConfig.textAlignment)))
                         """))
                         """
             placeholderAtt += placeholderLastAtt
