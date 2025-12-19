@@ -890,6 +890,53 @@ public class PTCollectionView: UIView {
         }
     }
     
+    public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+
+            var indexPaths: [IndexPath] = []
+
+            // section 倒序，防止 index 偏移
+            let sortedSections = rowsMap.keys.sorted(by: >)
+
+            for section in sortedSections {
+
+                guard let rows = rowsMap[section],
+                      let sectionRows = self.mSections[section].rows else { continue }
+
+                // 找出要删除的 row index（倒序）
+                let deleteIndexes = rows.compactMap {
+                    sectionRows.firstIndex(of: $0)
+                }.sorted(by: >)
+
+                guard !deleteIndexes.isEmpty else { continue }
+
+                // 更新数据源（倒序 remove）
+                for index in deleteIndexes {
+                    self.mSections[section].rows?.remove(at: index)
+                    indexPaths.append(IndexPath(item: index, section: section))
+                }
+            }
+
+            guard !indexPaths.isEmpty else {
+                completion?()
+                return
+            }
+
+            self.collectionView.performBatchUpdates {
+                self.collectionView.deleteItems(at: indexPaths)
+            } completion: { _ in
+
+                // 瀑布流布局需要 invalidate
+                if self.viewConfig.viewType == .WaterFall,
+                   self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+
+                completion?()
+            }
+        }
+    }
+    
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
             guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
