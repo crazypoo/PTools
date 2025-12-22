@@ -1075,6 +1075,20 @@ public class PTCollectionView: UIView {
 #endif
 }
 
+public enum CornerPosition {
+    case single, top, middle, bottom
+}
+
+extension PTCollectionView {
+
+    public func cornerPosition(row: Int, count: Int) -> CornerPosition {
+        if count == 1 { return .single }
+        if row == 0 { return .top }
+        if row == count - 1 { return .bottom }
+        return .middle
+    }
+}
+
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
 extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate {
         
