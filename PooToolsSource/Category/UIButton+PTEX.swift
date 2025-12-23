@@ -115,7 +115,7 @@ public extension UIButton {
                        countdownFinishCanTap:Bool = true,
                        uni:String = "",
                        timeFinish:PTActionTask? = nil,
-                       timingCallPack:PTActionTask? = nil) {
+                       timingCallPack:((TimeInterval)->Void)? = nil) {
         buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
             if finish {
                 self.setTitle(originalTitle, for: self.state)
@@ -129,7 +129,7 @@ public extension UIButton {
                 self.setTitle(buttonTime, for: self.state)
                 self.isUserInteractionEnabled = countdowningCanTap
                 PTGCDManager.gcdMain {
-                    timingCallPack?()
+                    timingCallPack?(TimeInterval(integerLiteral: Int64(time)))
                 }
             }
         }

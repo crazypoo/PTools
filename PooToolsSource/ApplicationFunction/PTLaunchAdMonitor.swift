@@ -15,6 +15,19 @@ import SwifterSwift
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
+public class PTLaunchADModel:PTBaseModel {
+    public var image:Any?
+    public var time:TimeInterval = 0
+    public var tapURL:[AnyHashable : Any]?
+}
+
+public struct CountdownItem<T> {
+    let duration: TimeInterval   // 自身时长
+    let value: T                 // 业务对象
+    let start: TimeInterval      // 正向开始时间
+    let end: TimeInterval        // 正向结束时间
+}
+
 /*
  启动页面
  */
@@ -22,7 +35,7 @@ public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 public class PTLaunchAdMonitor: NSObject {
     public static let share = PTLaunchAdMonitor()
     public var imageContentMode:UIView.ContentMode = .scaleAspectFill
-    
+    public var adShowed:Bool = false
     public var skipName:String = "Skip"
     private var dismissCallBack:PTActionTask?
     private var timeUpCallBack:PTActionTask?
@@ -51,6 +64,7 @@ public class PTLaunchAdMonitor: NSObject {
         return view
     }()
     
+    private var adLaunchModels:[PTLaunchADModel] = []
     //MARK: 初始化廣告界面
     ///初始化廣告界面
     /// - Parameters:
@@ -62,10 +76,8 @@ public class PTLaunchAdMonitor: NSObject {
     ///   - ltdString: 公司年份
     ///   - comNameFont: 公司字體
     ///   - callBack: 回調
-    @MainActor public func showAd(path:Any,
+    @MainActor public func showAd(adModels:[PTLaunchADModel],
                                   onView:Any,
-                                  @PTClampedProperyWrapper(range:3...15) timeInterval:TimeInterval = 5,
-                                  param:[AnyHashable : Any]?,
                                   skipFont:UIFont = .appfont(size: 16),
                                   ltdString:String = "",
                                   comNameFont:UIFont = .appfont(size: 12),
@@ -73,9 +85,9 @@ public class PTLaunchAdMonitor: NSObject {
                                   timeUp:PTActionTask? = nil) {
         dismissCallBack = callBack
         timeUpCallBack = timeUp
-        notifiData = param
+        adLaunchModels = adModels
         contentView.backgroundColor = .lightGray
-                        
+        
         if let onViews = onView as? UIView {
             onViews.addSubview(contentView)
             onViews.bringSubviewToFront(contentView)
@@ -131,7 +143,7 @@ public class PTLaunchAdMonitor: NSObject {
                 make.height.equalTo(bottomViewHeight)
             }
         }
-
+        
         contentView.addSubviews([loadImageView,skipButton])
         loadImageView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
@@ -147,92 +159,114 @@ public class PTLaunchAdMonitor: NSObject {
             self.skipButton.viewCorner(radius: 22)
         })
         
-        let mediaHaveData: Bool = param != nil
-        loadImageAtPath(path: path) { type, media,gifTime in
-            PTGCDManager.gcdMain {
-                switch type {
-                case .Image:
-                    if let medias = media as? [UIImage] {
-                        if medias.count > 1 {
-                            self.loadImageView.animationImages = medias
-                            self.loadImageView.animationImages = medias
-                            self.loadImageView.animationDuration = gifTime
-                            self.loadImageView.startAnimating()
-                            self.contentView.insertSubview(self.loadImageView, at: 0)
-                            self.loadImageView.snp.remakeConstraints { make in
-                                make.left.top.right.equalToSuperview()
-                                make.height.equalTo(bottomViewHeight)
+        let totalTime: TimeInterval = adModels.reduce(0) { $0 + $1.time }
+        let result = buildCountdownTimeline(
+            items: adModels.map { ($0.time, $0) }
+        )
+        var currentIndex = -1
+        let timeline = result.timeline
+
+        self.skipButton.setTitle("\(totalTime)", for: .normal)
+        let buttonWidth = self.skipButton.sizeFor().width + 15
+        self.skipButton.snp.remakeConstraints { make in
+            make.right.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            make.size.equalTo(buttonWidth)
+        }
+        self.skipButton.viewCorner(radius: buttonWidth / 2,capsule: true)
+        self.skipButton.buttonTimeRun(timeInterval: totalTime, originalTitle: "",timeFinish: {
+            self.adShowed = false
+            self.hideView()
+        },timingCallPack: { time in
+            self.adShowed = true
+            // 获取当前 index
+            guard let newIndex = self.currentCountdownIndex(
+                    remainTime: time,
+                    totalTime: totalTime,
+                    timeline: timeline
+                ) else { return }
+
+            // ⭐️ 只在切换时触发
+            if newIndex != currentIndex {
+                currentIndex = newIndex
+                let model = timeline[newIndex].value
+                let mediaHaveData: Bool = model.tapURL != nil
+                self.notifiData = model.tapURL
+                // 👉 你的业务逻辑（展示 / 播放 / 曝光）
+                self.loadImageAtPath(path: model.image as Any) { type, media,gifTime in
+                    PTGCDManager.gcdMain {
+                        switch type {
+                        case .Image:
+                            if let medias = media as? [UIImage] {
+                                if medias.count > 1 {
+                                    self.loadImageView.animationImages = medias
+                                    self.loadImageView.animationImages = medias
+                                    self.loadImageView.animationDuration = gifTime
+                                    self.loadImageView.startAnimating()
+                                    self.contentView.insertSubview(self.loadImageView, at: 0)
+                                    self.loadImageView.snp.remakeConstraints { make in
+                                        make.left.top.right.equalToSuperview()
+                                        make.height.equalTo(bottomViewHeight)
+                                    }
+                                    
+                                    let tag = UITapGestureRecognizer { sender in
+                                        self.showDetail(sender: self.loadImageView)
+                                    }
+                                    self.loadImageView.addGestureRecognizer(tag)
+                                } else if medias.count == 1 {
+                                    self.loadImageView.image = medias.first
+                                    let tag = UITapGestureRecognizer { sender in
+                                        self.showDetail(sender: self.loadImageView)
+                                    }
+                                    self.loadImageView.addGestureRecognizer(tag)
+                                    self.loadImageView.isUserInteractionEnabled = mediaHaveData
+                                    self.contentView.insertSubview(self.loadImageView, at: 0)
+                                    self.loadImageView.snp.remakeConstraints { make in
+                                        make.left.top.right.equalToSuperview()
+                                        make.bottom.equalToSuperview().inset(bottomViewHeight)
+                                    }
+                                    self.loadImageView.contentMode = PTLaunchAdMonitor.share.imageContentMode
+                                }
+                            }
+                        case .Video:
+                            self.loadImageView.removeFromSuperview()
+                            if let videoUrl = media as? URL {
+                                self.player = AVPlayerViewController()
+                                self.player?.player = AVPlayer(url: videoUrl)
+                                self.player?.showsPlaybackControls = false
+                                self.player?.entersFullScreenWhenPlaybackBegins = true
+                                self.contentView.insertSubview((self.player?.view)!, at: 0)
+                                self.player?.view.snp.makeConstraints({ make in
+                                    make.left.top.right.equalToSuperview()
+                                    make.bottom.equalToSuperview().inset(bottomViewHeight)
+                                })
+                                self.player?.player?.play()
                             }
                             
-                            let tag = UITapGestureRecognizer { sender in
-                                self.showDetail(sender: self.loadImageView)
+                            let imageBtn = UIButton(type: .custom)
+                            imageBtn.addActionHandlers { sender in
+                                self.showDetail(sender: sender)
                             }
-                            self.loadImageView.addGestureRecognizer(tag)
-                        } else if medias.count == 1 {
-                            self.loadImageView.image = medias.first
-                            let tag = UITapGestureRecognizer { sender in
-                                self.showDetail(sender: self.loadImageView)
-                            }
-                            self.loadImageView.addGestureRecognizer(tag)
-                            self.loadImageView.isUserInteractionEnabled = mediaHaveData
-                            self.contentView.insertSubview(self.loadImageView, at: 0)
-                            self.loadImageView.snp.remakeConstraints { make in
+                            imageBtn.isUserInteractionEnabled = mediaHaveData
+                            self.contentView.addSubview(imageBtn)
+                            imageBtn.snp.makeConstraints { make in
                                 make.left.top.right.equalToSuperview()
                                 make.bottom.equalToSuperview().inset(bottomViewHeight)
                             }
-                            self.loadImageView.contentMode = PTLaunchAdMonitor.share.imageContentMode
+                            
+                            self.skipButton.setTitle(self.skipName, for: .normal)
+                            let buttonWidth = self.skipButton.sizeFor().width + 15
+                            self.skipButton.snp.remakeConstraints { make in
+                                make.right.equalToSuperview().inset(10)
+                                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+                                make.size.equalTo(buttonWidth)
+                            }
+                            self.skipButton.viewCorner(radius: buttonWidth / 2,capsule: true)
                         }
                     }
-                    self.skipButton.setTitle("\(timeInterval)", for: .normal)
-                    let buttonWidth = self.skipButton.sizeFor().width + 15
-                    self.skipButton.snp.remakeConstraints { make in
-                        make.right.equalToSuperview().inset(10)
-                        make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
-                        make.size.equalTo(buttonWidth)
-                    }
-                    self.skipButton.viewCorner(radius: buttonWidth / 2,capsule: true)
-                    PTGCDManager.gcdMain {
-                        self.skipButton.buttonTimeRun(timeInterval: timeInterval, originalTitle: "",timeFinish: {
-                            self.hideView()
-                        })
-                    }
-                case .Video:
-                    self.loadImageView.removeFromSuperview()
-                    if let videoUrl = media as? URL {
-                        self.player = AVPlayerViewController()
-                        self.player?.player = AVPlayer(url: videoUrl)
-                        self.player?.showsPlaybackControls = false
-                        self.player?.entersFullScreenWhenPlaybackBegins = true
-                        self.contentView.insertSubview((self.player?.view)!, at: 0)
-                        self.player?.view.snp.makeConstraints({ make in
-                            make.left.top.right.equalToSuperview()
-                            make.bottom.equalToSuperview().inset(bottomViewHeight)
-                        })
-                        self.player?.player?.play()
-                    }
-                    
-                    let imageBtn = UIButton(type: .custom)
-                    imageBtn.addActionHandlers { sender in
-                        self.showDetail(sender: sender)
-                    }
-                    imageBtn.isUserInteractionEnabled = mediaHaveData
-                    self.contentView.addSubview(imageBtn)
-                    imageBtn.snp.makeConstraints { make in
-                        make.left.top.right.equalToSuperview()
-                        make.bottom.equalToSuperview().inset(bottomViewHeight)
-                    }
-                    
-                    self.skipButton.setTitle(self.skipName, for: .normal)
-                    let buttonWidth = self.skipButton.sizeFor().width + 15
-                    self.skipButton.snp.remakeConstraints { make in
-                        make.right.equalToSuperview().inset(10)
-                        make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
-                        make.size.equalTo(buttonWidth)
-                    }
-                    self.skipButton.viewCorner(radius: buttonWidth / 2,capsule: true)
                 }
             }
-        }
+        })
     }
     
     enum PTLaunchAdMediaType {
@@ -250,7 +284,7 @@ public class PTLaunchAdMonitor: NSObject {
             }
         }
     }
-
+    
     @MainActor fileprivate func hideView(sender:UIButton? = nil) {
         if let sup = sender?.superview {
             sup.isUserInteractionEnabled = false
@@ -283,9 +317,42 @@ public class PTLaunchAdMonitor: NSObject {
         UIView.animate(withDuration: 0.25) {
             sup?.alpha = 0
         } completion: { finish in
+            self.adShowed = false
             sup?.removeFromSuperview()
             self.player?.player?.pause()
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdDetailDisplayNotification), object: self.notifiData)
+        }
+    }
+    
+    func buildCountdownTimeline<T>(
+        items: [(TimeInterval, T)]
+    ) -> (timeline: [CountdownItem<T>], totalTime: TimeInterval) {
+        
+        var current: TimeInterval = 0
+        let timeline = items.map { duration, value in
+            let item = CountdownItem(
+                duration: duration,
+                value: value,
+                start: current,
+                end: current + duration
+            )
+            current += duration
+            return item
+        }
+        
+        return (timeline, current)
+    }
+    
+    func currentCountdownIndex<T>(
+        remainTime: TimeInterval,
+        totalTime: TimeInterval,
+        timeline: [CountdownItem<T>]
+    ) -> Int? {
+        
+        let elapsed = max(0, totalTime - remainTime)
+        
+        return timeline.firstIndex {
+            elapsed >= $0.start && elapsed < $0.end
         }
     }
 }
