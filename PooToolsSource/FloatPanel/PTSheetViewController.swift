@@ -160,6 +160,11 @@ public class PTSheetViewController: PTBaseViewController {
     public var sizeChanged: ((PTSheetViewController, PTSheetSize, CGFloat) -> Void)?
     public var panGestureShouldBegin: ((UIPanGestureRecognizer) -> Bool?)?
     
+    public lazy var overlayControlView:UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     public private(set) var contentViewController: PTSheetContentViewController
     var overlayView = UIView()
     var blurView = UIVisualEffectView()
@@ -391,6 +396,13 @@ public class PTSheetViewController: PTBaseViewController {
             make.bottom.equalToSuperview()
             make.top.greaterThanOrEqualToSuperview().inset(top).priority(999)
         }
+        
+        self.view.addSubviews([overlayControlView])
+        overlayControlView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(self.contentViewController.view.snp.top)
+        }
     }
     
     private func addPanGestureRecognizer() {
@@ -441,6 +453,10 @@ public class PTSheetViewController: PTBaseViewController {
                     }
                     self.transition.setPresentor(percentComplete: 0)
                     self.overlayView.alpha = 1
+                    self.overlayControlView.alpha = 1
+                    self.overlayControlView.subviews.forEach { value in
+                        value.alpha = 1
+                    }
                 }, completion: { _ in
                     self.isPanning = false
                 })
@@ -453,6 +469,10 @@ public class PTSheetViewController: PTBaseViewController {
                     let percent = max(0, min(1, offset / max(1, newHeight)))
                     self.transition.setPresentor(percentComplete: percent)
                     self.overlayView.alpha = 1 - percent
+                    self.overlayControlView.alpha = 1 - percent
+                    self.overlayControlView.subviews.forEach { value in
+                        value.alpha = (1 - percent)
+                    }
                     self.contentViewController.view.transform = CGAffineTransform(translationX: 0, y: offset)
                 } else {
                     self.contentViewController.view.transform = CGAffineTransform.identity
@@ -479,6 +499,10 @@ public class PTSheetViewController: PTBaseViewController {
                         self.view.backgroundColor = UIColor.clear
                         self.transition.setPresentor(percentComplete: 1)
                         self.overlayView.alpha = 0
+                        self.overlayControlView.alpha = 0
+                        self.overlayControlView.subviews.forEach { value in
+                            value.alpha = 0
+                        }
                     }, completion: { complete in
                         self.attemptDismiss(animated: false)
                     })
@@ -523,6 +547,10 @@ public class PTSheetViewController: PTBaseViewController {
                     }
                     self.transition.setPresentor(percentComplete: 0)
                     self.overlayView.alpha = 1
+                    self.overlayControlView.alpha = 1
+                    self.overlayControlView.subviews.forEach { value in
+                        value.alpha = 1
+                    }
                     self.view.layoutIfNeeded()
                 }, completion: { complete in
                     self.isPanning = false
@@ -680,12 +708,9 @@ public class PTSheetViewController: PTBaseViewController {
         self.didMove(toParent: parent)
         
         self.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.view.topAnchor.constraint(equalTo: view.topAnchor),
-            self.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            self.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            self.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        self.view.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         self.animateIn(size: size, duration: duration, completion: completion)
     }
     
@@ -707,6 +732,10 @@ public class PTSheetViewController: PTBaseViewController {
                        animations: {
             contentView.transform = .identity
             self.overlayView.alpha = 1
+            self.overlayControlView.alpha = 1
+            self.overlayControlView.subviews.forEach { value in
+                value.alpha = 1
+            }
         },completion: { _ in
             completion?()
         })
@@ -725,6 +754,10 @@ public class PTSheetViewController: PTBaseViewController {
                        animations: {
             contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
             self.overlayView.alpha = 0
+            self.overlayControlView.alpha = 0
+            self.overlayControlView.subviews.forEach { value in
+                value.alpha = 0
+            }
         }, completion: { _ in
             self.view.removeFromSuperview()
             self.removeFromParent()
