@@ -162,6 +162,7 @@ public class PTSheetViewController: PTBaseViewController {
     
     public lazy var overlayControlView:UIView = {
         let view = UIView()
+        view.isUserInteractionEnabled = true
         return view
     }()
     
@@ -399,7 +400,7 @@ public class PTSheetViewController: PTBaseViewController {
         
         self.view.addSubviews([overlayControlView])
         overlayControlView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            make.top.equalToSuperview()
             make.left.right.equalToSuperview()
             make.bottom.equalTo(self.contentViewController.view.snp.top)
         }
@@ -668,7 +669,11 @@ public class PTSheetViewController: PTBaseViewController {
                 self.contentViewController.view.snp.updateConstraints { make in
                     make.height.equalTo(self.height(for: size))
                 }
-                self.contentViewController.view.layoutIfNeeded()
+                
+                if #available(iOS 26.0, *) {
+                } else {
+                    self.contentViewController.view.layoutIfNeeded()
+                }
             }
             complete?()
         }
