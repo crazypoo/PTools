@@ -225,7 +225,7 @@ public class PTMediaLibView:UIView {
                             if currentVC is PTSideMenuControl {
                                 let currentVCContent = (currentVC as! PTSideMenuControl).contentViewController
                                 if let presentedVC = currentVCContent?.presentedViewController {
-                                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.first as? PTMediaLibViewController {
+                                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.last as? PTMediaLibViewController {
                                         picker.delegate = pSheet.contentViewController
                                     } else {
                                         picker.delegate = self
@@ -234,12 +234,8 @@ public class PTMediaLibView:UIView {
                                     picker.delegate = self
                                 }
                             } else {
-                                if let presentedVC = currentVC.presentedViewController {
-                                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.first as? PTMediaLibViewController {
-                                        picker.delegate = pSheet.contentViewController
-                                    } else {
-                                        picker.delegate = self
-                                    }
+                                if let mediaLib = currentVC as? PTMediaLibViewController {
+                                    picker.delegate = mediaLib.sheetViewController?.contentViewController
                                 } else {
                                     picker.delegate = self
                                 }
@@ -913,24 +909,21 @@ extension PTSheetContentViewController:UIImagePickerControllerDelegate {
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true) {
-            
             let currentVC = PTUtils.getCurrentVC()
             if currentVC is PTSideMenuControl {
                 let currentVCContent = (currentVC as! PTSideMenuControl).contentViewController
                 if let presentedVC = currentVCContent?.presentedViewController {
-                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.first as? PTMediaLibViewController {
+                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.last as? PTMediaLibViewController {
                         let image = info[.originalImage] as? UIImage
                         let url = info[.mediaURL] as? URL
                         navRoot.mediaListView.save(image: image, videoUrl: url)
                     }
                 }
             } else {
-                if let presentedVC = currentVC.presentedViewController {
-                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.first as? PTMediaLibViewController {
-                        let image = info[.originalImage] as? UIImage
-                        let url = info[.mediaURL] as? URL
-                        navRoot.mediaListView.save(image: image, videoUrl: url)
-                    }
+                if let mediaLib = currentVC as? PTMediaLibViewController {
+                    let image = info[.originalImage] as? UIImage
+                    let url = info[.mediaURL] as? URL
+                    mediaLib.mediaListView.save(image: image, videoUrl: url)
                 }
             }
         }
