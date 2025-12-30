@@ -230,7 +230,15 @@ public extension PTUtils {
         case let nav as UINavigationController:
             return getCurrentVC(from: nav.visibleViewController ?? nav)
         case let presentedVC where presentedVC.presentedViewController != nil:
-            return getCurrentVC(from: presentedVC.presentedViewController!)
+            if let vc = presentedVC.presentedViewController as? PTSheetViewController {
+                if let currentVC = vc.contentViewController.childViewController as? UINavigationController,let findLastNav = currentVC.viewControllers.last {
+                    return findLastNav
+                } else {
+                    return vc
+                }
+            } else {
+                return getCurrentVC(from: presentedVC.presentedViewController!)
+            }
         default:
             return rootVC
         }
