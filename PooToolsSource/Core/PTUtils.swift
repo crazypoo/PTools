@@ -239,6 +239,12 @@ public extension PTUtils {
             } else {
                 return getCurrentVC(from: presentedVC.presentedViewController!)
             }
+        case let sheet as PTSheetViewController:
+            if let currentVC = sheet.contentViewController.childViewController as? UINavigationController,let findLastNav = currentVC.viewControllers.last {
+                return findLastNav
+            } else {
+                return sheet.contentViewController.childViewController
+            }
         default:
             return rootVC
         }
