@@ -991,7 +991,7 @@ class PTFuncNameViewController: PTBaseViewController {
         popover.setTitleColor(.random, state: .normal)
         popover.setTitle("Popover", state: .normal)
         popover.setImage("http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", state: .normal)
-        popover.isUserInteractionEnabled = false
+        popover.isUserInteractionEnabled = true
         
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
         searchBarConfig.clearTopSpace = 20
@@ -1002,9 +1002,12 @@ class PTFuncNameViewController: PTBaseViewController {
         
         setCustomTitleView(navTitleView)
 
-        setCustomBackButtonView(popover,size: CGSizeMake(64, 34)) {
+        setCustomBackButtonView(popover,size: CGSizeMake(64, 34))
+        popover.addActionHandlers(handler: { _ in
+            PTNSLogConsole("123123123")
             self.sideMenuController?.revealMenu()
-        }
+        })
+        
         setCustomRightButtons(buttons: [more], rightPadding: 0)
         
         more.badgeCenterOffset = CGPointMake(-5, -5)

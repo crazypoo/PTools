@@ -245,6 +245,16 @@ public extension PTUtils {
             } else {
                 return sheet.contentViewController.childViewController
             }
+        case let sideMenu as PTSideMenuControl:
+            if let presentedVC = sideMenu.contentViewController?.presentedViewController,let pSheet = presentedVC as? PTSheetViewController {
+                if let nav = pSheet.childViewController as? UINavigationController,let navRoot = nav.viewControllers.last {
+                    return navRoot
+                } else {
+                    return pSheet.childViewController
+                }
+            } else {
+                return sideMenu.contentViewController
+            }
         default:
             return rootVC
         }

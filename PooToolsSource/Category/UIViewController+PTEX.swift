@@ -448,7 +448,6 @@ public extension UIViewController {
         present(modalViewController, animated: true,completion: completion)
     }
     
-    
     class func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
         sheet.overlayColor = overlayColor

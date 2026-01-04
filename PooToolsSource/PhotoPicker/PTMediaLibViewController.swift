@@ -153,15 +153,15 @@ public class PTMediaLibView:UIView {
                                     if let image = image {
                                         let vc = PTEditImageViewController(readyEditImage: image)
                                         vc.editFinishBlock = { ei ,editImageModel in
-                                            for (index, selM) in self.selectedModel.enumerated() {
-                                                if cellModel == selM {
-                                                    cellModel.isSelected = true
-                                                    cellModel.editImage = ei
-                                                    cellModel.editImageModel = editImageModel
-                                                    self.selectedModel[index] = cellModel
-                                                    PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
-                                                    break
-                                                }
+                                            if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
+                                                var updated = self.selectedModel[index]
+                                                updated.isSelected = true
+                                                updated.editImage = ei
+                                                updated.editImageModel = editImageModel
+
+                                                self.selectedModel[index] = updated
+
+                                                PTMediaLibConfig.share.didSelectAsset?(updated.asset)
                                             }
                                         }
                                         let nav = PTBaseNavControl(rootViewController: vc)
@@ -169,6 +169,8 @@ public class PTMediaLibView:UIView {
                                     }
                                 }
                             }
+#else
+                            PTNSLogConsole("Not import POOTOOLS_IMAGEEDITOR")
 #endif
                         }
                     }
@@ -222,23 +224,10 @@ public class PTMediaLibView:UIView {
                             let picker = UIImagePickerController()
                             
                             let currentVC = PTUtils.getCurrentVC()
-                            if currentVC is PTSideMenuControl {
-                                let currentVCContent = (currentVC as! PTSideMenuControl).contentViewController
-                                if let presentedVC = currentVCContent?.presentedViewController {
-                                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.last as? PTMediaLibViewController {
-                                        picker.delegate = pSheet.contentViewController
-                                    } else {
-                                        picker.delegate = self
-                                    }
-                                } else {
-                                    picker.delegate = self
-                                }
+                            if let current = currentVC as? PTMediaLibViewController {
+                                picker.delegate = current.sheetViewController?.contentViewController
                             } else {
-                                if let mediaLib = currentVC as? PTMediaLibViewController {
-                                    picker.delegate = mediaLib.sheetViewController?.contentViewController
-                                } else {
-                                    picker.delegate = self
-                                }
+                                picker.delegate = self
                             }
                             picker.allowsEditing = false
                             picker.videoQuality = .typeHigh
@@ -910,21 +899,10 @@ extension PTSheetContentViewController:UIImagePickerControllerDelegate {
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true) {
             let currentVC = PTUtils.getCurrentVC()
-            if currentVC is PTSideMenuControl {
-                let currentVCContent = (currentVC as! PTSideMenuControl).contentViewController
-                if let presentedVC = currentVCContent?.presentedViewController {
-                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.last as? PTMediaLibViewController {
-                        let image = info[.originalImage] as? UIImage
-                        let url = info[.mediaURL] as? URL
-                        navRoot.mediaListView.save(image: image, videoUrl: url)
-                    }
-                }
-            } else {
-                if let mediaLib = currentVC as? PTMediaLibViewController {
-                    let image = info[.originalImage] as? UIImage
-                    let url = info[.mediaURL] as? URL
-                    mediaLib.mediaListView.save(image: image, videoUrl: url)
-                }
+            if let mediaLib = currentVC as? PTMediaLibViewController {
+                let image = info[.originalImage] as? UIImage
+                let url = info[.mediaURL] as? URL
+                mediaLib.mediaListView.save(image: image, videoUrl: url)
             }
         }
     }
