@@ -242,6 +242,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.undoAction()
         }
+        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view
     }()
     
@@ -252,6 +253,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.redoAction()
         }
+        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view
     }()
     
@@ -309,6 +311,7 @@ public class PTEditImageViewController: PTBaseViewController {
                 callback()
             }
         }
+        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view
     }()
     
@@ -1325,7 +1328,7 @@ extension PTEditImageViewController {
                     model.name = PTImageEditorConfig.share.adjustContrastString
                 }
                 return PTRows(ID:PTAdjustToolCell.ID,dataModel: model)
-            }            
+            }
             
             let section = PTSection(rows: rows)
             adjustCollectionView.showCollectionDetail(collectionData: [section])

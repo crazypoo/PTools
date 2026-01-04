@@ -884,7 +884,9 @@ extension PTMediaLibViewController {
                 
                 guard sucCount >= totalCount else { return }
                 
-                callback(results.compactMap { $0 },errorAssets,errorIndexs)
+                PTGCDManager.gcdMain(block: {
+                    callback(results.compactMap { $0 },errorAssets,errorIndexs)
+                })
             }
             fetchImageQueue.addOperation(operation)
         }
