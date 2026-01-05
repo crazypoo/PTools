@@ -370,47 +370,65 @@ public class PTActionSheetController: PTAlertController {
     }
 
     func contentSubsSet() {
-        guard !contentItems.isEmpty else { return }
-
+        var previousView: UIView?
         let lastIndex = contentItems.count - 1
 
-        contentItems.enumerated().forEach { index, item in
-            let yOffset = sheetConfig.rowHeight * CGFloat(index) + sheetConfig.lineHeight * CGFloat(index)
-
-            // 分隔線
-            let lineView = UIView()
-            lineView.backgroundColor = .lightGray
-            contentScrollerView.addSubview(lineView)
-            lineView.snp.makeConstraints { make in
-                make.height.equalTo(sheetConfig.lineHeight)
-                make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
-                make.centerX.equalToSuperview()
-                make.top.equalTo(yOffset)
+        for index in contentItems.indices {
+            let item = contentItems[index]
+            
+            // 分隔线（第一行不需要）
+            if index != 0 {
+                let line = UIView()
+                line.backgroundColor = .lightGray
+                contentScrollerView.addSubview(line)
+                
+                line.snp.makeConstraints { make in
+                    make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
+                    make.centerX.equalToSuperview()
+                    make.height.equalTo(sheetConfig.lineHeight)
+                    if let prev = previousView {
+                        make.top.equalTo(prev.snp.bottom)
+                    } else {
+                        make.top.equalToSuperview()
+                    }
+                }
+                
+                previousView = line
             }
-
-            // 按鈕
+            
+            // 按钮
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
                 self?.dismissAnimation {
-                    guard let SELF = self else { return }
-                    self?.actionSheetSelectBlock?(SELF, index, item.title)
+                    guard let self else { return }
+                    self.actionSheetSelectBlock?(self, index, item.title)
                 }
             }
+            
             contentScrollerView.addSubview(button)
+            
             button.snp.makeConstraints { make in
-                make.left.right.equalTo(lineView)
-                make.top.equalTo(lineView.snp.bottom)
+                make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
+                make.centerX.equalToSuperview()
                 make.height.equalTo(sheetConfig.rowHeight)
+                make.top.equalTo(previousView?.snp.bottom ?? contentScrollerView.snp.top)
             }
-
-            // Corner 處理
-            if titleItem == nil, index == 0 {
-                lineView.isHidden = true
-                button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.topLeft, .topRight])
+            
+            // Corner 处理
+            if titleItem == nil && index == 0 {
+                button.viewCornerRectCorner(
+                    cornerRadii: sheetConfig.cornerRadii,
+                    corner: [.topLeft, .topRight]
+                )
             }
-
+            
             if index == lastIndex {
-                button.viewCornerRectCorner(cornerRadii: self.sheetConfig.cornerRadii, corner: [.bottomLeft, .bottomRight])
+                button.viewCornerRectCorner(
+                    cornerRadii: sheetConfig.cornerRadii,
+                    corner: [.bottomLeft, .bottomRight]
+                )
             }
+            
+            previousView = button
         }
     }
 }
