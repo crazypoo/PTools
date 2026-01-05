@@ -75,30 +75,7 @@ public class PTMediaLibView:UIView {
                 if itemRow.ID == PTMediaLibCell.ID,let cellModel = itemRow.dataModel as? PTMediaModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaLibCell {
                     cell.selectedBlock = { [weak self] isSelected in
                         guard let `self` = self else { return }
-
-                        if !cellModel.isSelected {
-                            guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
-                            
-                            PTGCDManager.gcdMain {
-                                downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                                    cellModel.isSelected = true
-                                    self.selectedModel.append(cellModel)
-                                    isSelected(true)
-                                    config.didSelectAsset?(cellModel.asset)
-                                    self.refreshCellIndex()
-                                }
-                            }
-                        } else {
-                            if cellModel.asset.exportSession?.status == .exporting {
-                                cellModel.asset.calcelExport()
-                                cell.editButton.clearProgressLayer()
-                            }
-                            cellModel.isSelected = false
-                            self.selectedModel.removeAll(where: { $0 == cellModel })
-                            isSelected(false)
-                            config.didDeselectAsset?(cellModel.asset)
-                            self.refreshCellIndex()
-                        }
+                        self.cellSelectedFunction(cellModel: cellModel, cell: cell, isSelected: isSelected)
                     }
                     
                     cell.editButton.addActionHandlers { sender in
@@ -153,15 +130,15 @@ public class PTMediaLibView:UIView {
                                     if let image = image {
                                         let vc = PTEditImageViewController(readyEditImage: image)
                                         vc.editFinishBlock = { ei ,editImageModel in
-                                            if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
-                                                var updated = self.selectedModel[index]
-                                                updated.isSelected = true
-                                                updated.editImage = ei
-                                                updated.editImageModel = editImageModel
-
-                                                self.selectedModel[index] = updated
-
-                                                PTMediaLibConfig.share.didSelectAsset?(updated.asset)
+                                            for (index, selM) in self.selectedModel.enumerated() {
+                                                if cellModel == selM {
+                                                    cellModel.isSelected = true
+                                                    cellModel.editImage = ei
+                                                    cellModel.editImageModel = editImageModel
+                                                    self.selectedModel[index] = cellModel
+                                                    PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
+                                                    break
+                                                }
                                             }
                                         }
                                         let nav = PTBaseNavControl(rootViewController: vc)
@@ -169,8 +146,6 @@ public class PTMediaLibView:UIView {
                                     }
                                 }
                             }
-#else
-                            PTNSLogConsole("Not import POOTOOLS_IMAGEEDITOR")
 #endif
                         }
                     }
@@ -224,10 +199,23 @@ public class PTMediaLibView:UIView {
                             let picker = UIImagePickerController()
                             
                             let currentVC = PTUtils.getCurrentVC()
-                            if let current = currentVC as? PTMediaLibViewController {
-                                picker.delegate = current.sheetViewController?.contentViewController
+                            if currentVC is PTSideMenuControl {
+                                let currentVCContent = (currentVC as! PTSideMenuControl).contentViewController
+                                if let presentedVC = currentVCContent?.presentedViewController {
+                                    if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.last as? PTMediaLibViewController {
+                                        picker.delegate = pSheet.contentViewController
+                                    } else {
+                                        picker.delegate = self
+                                    }
+                                } else {
+                                    picker.delegate = self
+                                }
                             } else {
-                                picker.delegate = self
+                                if let mediaLib = currentVC as? PTMediaLibViewController {
+                                    picker.delegate = mediaLib.sheetViewController?.contentViewController
+                                } else {
+                                    picker.delegate = self
+                                }
                             }
                             picker.allowsEditing = false
                             picker.videoQuality = .typeHigh
@@ -253,36 +241,8 @@ public class PTMediaLibView:UIView {
                         }
                     }
                 } else {
-                    let config = PTMediaLibConfig.share
                     if let cellModel = itemRow.dataModel as? PTMediaModel,let currentCell = collection.cellForItem(at: indexPath) as? PTMediaLibCell {
-                        if !cellModel.isSelected {
-                            guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
-                            
-                            PTGCDManager.gcdMain {
-                                downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                                    cellModel.isSelected = true
-                                    self.selectedModel.append(cellModel)
-                                    PTGCDManager.gcdMain {
-                                        currentCell.selectButton.isSelected = true
-                                        currentCell.layer.removeAllAnimations()
-                                        currentCell.fetchBigImage()
-                                    }
-                                    config.didSelectAsset?(cellModel.asset)
-                                    self.refreshCellIndex()
-                                }
-                            }
-                        } else {
-                            cellModel.isSelected = false
-                            self.selectedModel.removeAll(where: { $0 == cellModel })
-                            PTGCDManager.gcdMain {
-                                currentCell.selectButton.isSelected = false
-                                currentCell.layer.removeAllAnimations()
-                                currentCell.cancelFetchBigImage()
-                            }
-
-                            config.didDeselectAsset?(cellModel.asset)
-                            self.refreshCellIndex()
-                        }
+                        self.cellSelectedFunction(cellModel: cellModel, cell: currentCell)
                     }
                 }
             }
@@ -386,13 +346,17 @@ public class PTMediaLibView:UIView {
             cell.layer.borderColor = config.selectedBorderColor.cgColor
             cell.layer.borderWidth = 4
             
+#if POOTOOLS_IMAGEEDITOR
             if model.type == .image {
                 cell.editButton.isHidden = !config.allowEditImage
             }
-            
+#endif
+          
+#if POOTOOLS_VIDEOEDITOR
             if model.type == .video {
                 cell.editButton.isHidden = !config.allowEditVideo
             }
+#endif
         } else {
             cell.editButton.isHidden = true
             let selCount = selectedModel.count
@@ -564,6 +528,63 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
                 }
             }
         }
+    }
+}
+
+///Cell control
+extension PTMediaLibView {
+    func cellSelectedFunction(cellModel:PTMediaModel,
+                              cell:PTMediaLibCell,
+                              isSelected:PTBoolTask? = nil) {
+
+        let config = PTMediaLibConfig.share
+        if !cellModel.isSelected {
+            guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else {
+                PTGCDManager.gcdMain {
+                    cell.editButton.isHidden = true
+                    self.selectedModel.removeAll(where: { $0 == cellModel })
+                    self.cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
+                }
+                return
+            }
+            
+            PTGCDManager.gcdMain {
+                downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                    cellModel.isSelected = true
+                    self.selectedModel.append(cellModel)
+                    isSelected?(true)
+                    PTGCDManager.gcdMain {
+                        cell.selectButton.isSelected = true
+                        cell.layer.removeAllAnimations()
+                        cell.fetchBigImage()
+                    }
+                    config.didSelectAsset?(cellModel.asset)
+                    self.refreshCellIndex()
+                }
+            }
+        } else {
+            cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
+        }
+    }
+    
+    func cellStatusReset(cellModel:PTMediaModel,
+                         cell:PTMediaLibCell,
+                         isSelected:PTBoolTask? = nil) {
+        let config = PTMediaLibConfig.share
+        if cellModel.asset.exportSession?.status == .exporting {
+            cellModel.asset.calcelExport()
+            cell.editButton.clearProgressLayer()
+        }
+        cellModel.isSelected = false
+        self.selectedModel.removeAll(where: { $0 == cellModel })
+        isSelected?(false)
+        PTGCDManager.gcdMain {
+            cell.selectButton.isSelected = false
+            cell.layer.removeAllAnimations()
+            cell.cancelFetchBigImage()
+        }
+        config.didDeselectAsset?(cellModel.asset)
+        self.refreshCellIndex()
     }
 }
 
