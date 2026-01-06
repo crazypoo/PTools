@@ -16,11 +16,6 @@ class PTDebugLocationViewController: PTBaseViewController {
 
     private let viewModel = PTDebugLocationModel()
 
-    lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
-
     lazy var valueSwitch:PTSwitch = {
         let view = PTSwitch()
         view.isOn = PTCoreUserDefultsWrapper.PTMockLocationOpen
@@ -70,52 +65,47 @@ class PTDebugLocationViewController: PTBaseViewController {
         return view
     }()
 
+    lazy var backButton:UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
+        button.addActionHandlers { sender in
+            self.dismissAnimated()
+        }
+        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        return button
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [valueSwitch], rightPadding: 10)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
         newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
-        view.addSubviews([newCollectionView,fakeNav])
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-        }
-
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.newCollectionView)
-            make.height.equalTo(CGFloat.kNavBarHeight)
+            make.top.equalToSuperview()
         }
         
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let deleteButton = UIButton(type: .custom)
-        deleteButton.setImage(UIImage(.trash), for: .normal)
-        if #available(iOS 26.0, *) {
-            deleteButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        fakeNav.setLeftButtons([button])
-        fakeNav.setRightButtons([valueSwitch])
-        button.addActionHandlers { sender in
-            self.dismissAnimated()
-        }
-                
+//        let deleteButton = UIButton(type: .custom)
+//        deleteButton.setImage(UIImage(.trash), for: .normal)
+//        if #available(iOS 26.0, *) {
+//            deleteButton.configuration = UIButton.Configuration.clearGlass()
+//        }
         loadListModel()
     }
     
@@ -125,7 +115,8 @@ class PTDebugLocationViewController: PTBaseViewController {
         let customRowModel = baseCellModel(name: viewModel.customDescription ?? "Custom location", isSelected: viewModel.customSelected)
         let customRow = PTRows(ID: PTFusionCell.ID, dataModel: customRowModel)
         var rows = [PTRows]()
-        rows.append(customRow)        
+        rows.append(customRow)
+        
         viewModel.locations.enumerated().forEach { index,value in
             let cellRowModel = baseCellModel(name: value.title, isSelected: (viewModel.selectedIndex == index + 1))
             let row = PTRows(ID: PTFusionCell.ID, dataModel: cellRowModel)

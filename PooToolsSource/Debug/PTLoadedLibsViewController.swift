@@ -91,6 +91,19 @@ class PTLoadedLibsViewController: PTBaseViewController {
         return control
     }()
     
+    private lazy var titleViewContailer:PTNavTitleContainer = {
+        let view = PTNavTitleContainer()
+        view.addSubviews([searchBar])
+        searchBar.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        view.snp.makeConstraints { make in
+            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)
+            make.height.equalTo(32)
+        }
+        return view
+    }()
+    
     private lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
         view.delegate = self
@@ -103,7 +116,21 @@ class PTLoadedLibsViewController: PTBaseViewController {
         view.addActionHandlers(handler: { sender in
             self.exportLibraries()
         })
+        view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view
+    }()
+
+    lazy var backButton:UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
+        button.addActionHandlers { sender in
+            self.dismissAnimated()
+        }
+        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        return button
     }()
 
     private let viewModel = PTLoadedLibrariesViewModel()
@@ -111,7 +138,9 @@ class PTLoadedLibsViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
+        setCustomTitleView(titleViewContailer)
+        setCustomRightButtons(buttons: [exportButton], rightPadding: 10)
     }
     
     override func viewDidLoad() {
@@ -119,21 +148,11 @@ class PTLoadedLibsViewController: PTBaseViewController {
 
         // Do any additional setup after loading the view.
         
-        view.addSubviews([exportButton,searchBar,segmentedControl,newCollectionView])
-        exportButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset((self.sheetViewController?.options.pullBarHeight ?? 0) + 10)
-        }
-        searchBar.snp.makeConstraints { make in
-            make.top.equalTo(self.exportButton.snp.bottom).offset(5)
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(44)
-        }
+        view.addSubviews([segmentedControl,newCollectionView])
         segmentedControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(44)
-            make.top.equalTo(self.searchBar.snp.bottom).offset(10)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
         newCollectionView.snp.makeConstraints { make in
             make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)

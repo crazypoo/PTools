@@ -851,7 +851,7 @@ public class LocalConsole: NSObject {
     
     func consoleSheetPresent(vc:PTBaseViewController) {
         let nav = PTBaseNavControl(rootViewController: vc)
-        UIViewController.currentPresentToSheet(vc: nav,sizes: [.percent(0.9)])
+        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
     }
     
     func maskOpenFunction() {
@@ -895,6 +895,7 @@ public class LocalConsole: NSObject {
     func debugControllerAction() {
         let vc = PTDebugViewController()
         let nav = PTBaseNavControl(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
         let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.9)])
         
         if let presentedVC = PTUtils.getCurrentVC().presentedViewController {

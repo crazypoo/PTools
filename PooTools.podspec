@@ -779,9 +779,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/CameraPermission'
         subspec.dependency 'PooTools/NetWork'
-#        subspec.dependency 'PooTools/VideoEditor'
-#        subspec.dependency 'PooTools/FilterCamera'
-#        subspec.dependency 'PooTools/ImageEditor'
         subspec.dependency 'PooTools/Loading'
         subspec.dependency 'Kakapos'
         subspec.source_files = 'PooToolsSource/PhotoPicker/*.{h,m,swift}','PooToolsSource/ImagePicker/*.{h,m,swift}'
@@ -796,7 +793,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/MicPermission'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/MediaViewer'
-        subspec.dependency 'PooTools/ImageEditor'
         subspec.source_files = 'PooToolsSource/FilterCamera/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
@@ -980,7 +976,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/WhatsNewsKit'
         subspec.dependency 'PooTools/HeartRate'
         subspec.dependency 'PooTools/PhotoPicker'
-        subspec.dependency 'PooTools/FilterCamera'
         subspec.dependency 'PooTools/ImageEditor'
         subspec.dependency 'PooTools/ProgressBar'
         subspec.dependency 'PooTools/ChinesePinyin'

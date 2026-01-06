@@ -14,11 +14,6 @@ import AttributedString
 
 class PTLogConsoleViewController: PTBaseViewController {
 
-    lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
-
     lazy var valueSwitch:PTSwitch = {
         let view = PTSwitch()
         view.isOn = PTCoreUserDefultsWrapper.PTLogWrite
@@ -43,61 +38,62 @@ class PTLogConsoleViewController: PTBaseViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.addSubviews([fakeNav,infoLabel])
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-            make.height.equalTo(CGFloat.kNavBarHeight)
-        }
-        
+    lazy var backButton:UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
         if #available(iOS 26.0, *) {
             button.configuration = UIButton.Configuration.clearGlass()
         }
-
+        button.addActionHandlers { sender in
+            self.dismissAnimated()
+        }
+        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        return button
+    }()
+    
+    lazy var refreshButton:UIButton = {
         let refreshButton = UIButton(type: .custom)
         refreshButton.setImage(UIImage(.arrow.clockwise), for: .normal)
         if #available(iOS 26.0, *) {
             refreshButton.configuration = UIButton.Configuration.clearGlass()
         }
-
+        refreshButton.addActionHandlers { sender in
+            self.reloadText()
+        }
+        refreshButton.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        return refreshButton
+    }()
+    
+    lazy var clearButton:UIButton = {
         let clearButton = UIButton(type: .custom)
         clearButton.setImage(UIImage(.paintbrush), for: .normal)
         if #available(iOS 26.0, *) {
             clearButton.configuration = UIButton.Configuration.clearGlass()
         }
-
-        fakeNav.setLeftButtons([button])
-        fakeNav.setRightButtons([valueSwitch,refreshButton,clearButton])
-        
-        button.addActionHandlers { sender in
-            self.dismissAnimated()
-        }
-        
-        refreshButton.addActionHandlers { sender in
-            self.reloadText()
-        }
-        
+        clearButton.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         clearButton.addActionHandlers { sender in
             let callBack = FileManager.pt.writeToFile(writeType: .TextType, content: "", writePath: self.filePath)
             if callBack.isSuccess {
                 self.reloadText()
             }
         }
-        
+        return clearButton
+    }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [valueSwitch,refreshButton,clearButton], rightPadding: 10)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.addSubviews([infoLabel])
         infoLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
-            make.top.equalTo(self.fakeNav.snp.bottom)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
         
         reloadText()
