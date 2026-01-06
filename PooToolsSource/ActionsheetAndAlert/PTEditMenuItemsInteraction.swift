@@ -10,8 +10,8 @@ import UIKit
 
 @objcMembers
 public class PTEditMenuItem:NSObject {
-    var title: String = ""
-    var callback: PTActionTask?
+    public var title: String = ""
+    public var callback: PTActionTask?
     
     public init(title: String, callback: PTActionTask? = nil) {
         self.title = title
@@ -83,7 +83,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         if #available(iOS 16, *) {
             guard let menuInteraction = menuInteraction else { return }
             view.addInteraction(menuInteraction)
-            let config = UIEditMenuConfiguration(identifier: nil, sourcePoint: .zero)
+            let config = UIEditMenuConfiguration(identifier: nil, sourcePoint: targetRect.center)
             menuInteraction.presentEditMenu(with: config)
         } else {
             menuController.menuItems = nil

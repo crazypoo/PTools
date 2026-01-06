@@ -200,7 +200,7 @@ public class PTActionSheetController: PTAlertController {
     fileprivate lazy var alertContent:UIView = {
         let view = UIView()
         if canTapBackground {
-            let tap = UITapGestureRecognizer { ges in
+            let tap = UITapGestureRecognizer { _ in
                 self.dismissAnimation {
                     self.tapBackgroundBlock?(self)
                 }

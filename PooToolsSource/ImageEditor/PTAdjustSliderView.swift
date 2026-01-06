@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 public struct PTAdjustStatus {
     var brightness: Float = 1
@@ -129,11 +130,8 @@ class PTAdjustSliderView: UIView {
     }
     
     private func setupUI() {
-        addSubview(shadowView)
-        addSubview(whiteView)
-        whiteView.addSubview(tintView)
-        whiteView.addSubview(separator)
-        addSubview(valueLabel)
+        addSubviews([shadowView,whiteView,valueLabel])
+        whiteView.addSubviews([tintView,separator])
     }
     
     private func calculateTintFrame() -> CGRect {

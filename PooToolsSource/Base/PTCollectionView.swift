@@ -749,7 +749,7 @@ public class PTCollectionView: UIView {
     }
     
     func setIndexViews() {
-        if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
+        if (viewConfig.sideIndexTitles?.count ?? 0) > 0 , let indexConfig = viewConfig.indexConfig {
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.setupUI()
             }
@@ -758,7 +758,7 @@ public class PTCollectionView: UIView {
             indexView.snp.makeConstraints { make in
                 make.right.equalToSuperview().inset(7.5)
                 make.top.bottom.equalToSuperview()
-                make.width.equalTo(viewConfig.indexConfig!.itemSize.width)
+                make.width.equalTo(indexConfig.itemSize.width)
             }
         }
     }

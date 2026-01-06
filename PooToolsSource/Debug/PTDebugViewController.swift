@@ -94,7 +94,7 @@ public class PTDebugViewController: PTBaseViewController {
                 if itemRow.title == .DebugMode {
                     cell.switchValue = PTCoreUserDefultsWrapper.AppDebugMode
                     cell.switchValueChangeBlock = { title,sender in
-                        PTCoreUserDefultsWrapper.AppDebugMode = !PTCoreUserDefultsWrapper.AppDebugMode
+                        PTCoreUserDefultsWrapper.AppDebugMode.toggle()
                         let console = LocalConsole.shared
                         console.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
                     }
@@ -206,7 +206,7 @@ public class PTDebugViewController: PTBaseViewController {
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight)
         }
         Task {
             settingCellModels = await self.createCellModels()

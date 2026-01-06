@@ -43,9 +43,8 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTVideoEditorConfig.share
             if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
-                let cellTools = itemRow.dataModel as! UIImage
                 let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
-                cell.imageView.image = cellTools
+                cell.imageView.loadImage(contentData: itemRow.dataModel as Any)
                 cell.nameLabel.text = cellFilter.name
                 if self.currentFilter == cellFilter {
                     cell.nameLabel.textColor = config.themeColor

@@ -903,7 +903,6 @@ extension PTEditImageViewController {
         size.width *= toImageScale
         size.height *= toImageScale
         
-        
         drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: size) { context in
             context.setAllowsAntialiasing(true)
             context.setShouldAntialias(true)

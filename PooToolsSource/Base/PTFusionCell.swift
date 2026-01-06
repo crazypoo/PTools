@@ -90,15 +90,15 @@ public class PTFusionCellContent:UIView {
             } else {
                 valueSwitch = setValueSwitch()
                 switchDataSet(switchControl: valueSwitch!)
-                if valueSwitch is PTSwitch {
-                    (valueSwitch as! PTSwitch).valueChangeCallBack = { value in
-                        self.switchValueChangeBlock?(cellModel.name,self.valueSwitch!)
+                if let ptSwitch = valueSwitch as? PTSwitch {
+                    ptSwitch.valueChangeCallBack = { value in
+                        self.switchValueChangeBlock?(cellModel.name,ptSwitch)
                     }
-                } else if valueSwitch is UISwitch {
-                    (valueSwitch as! UISwitch).addSwitchAction { sender in
+                } else if let normal = valueSwitch as? UISwitch {
+                    normal.addSwitchAction { sender in
                         self.switchValueChangeBlock?(cellModel.name,sender)
                     }
-                }
+                }                
                 addSubview(valueSwitch!)
                 valueSwitch!.snp.makeConstraints { (make) in
                     if #available(iOS 26.0, *) {} else {
