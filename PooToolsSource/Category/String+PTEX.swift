@@ -1011,6 +1011,16 @@ public extension String {
         }
         return nil
     }
+    
+    func timeConverToString(timeTimeZone:Zones,
+                            formatter:String = "yyyy-MM-dd HH:mm:ss",
+                            toFormatter:String = "yyyy-MM-dd HH:mm:ss") -> String {
+        if let date = self.timeConvert(timeTimeZone:timeTimeZone,timeFormatter: formatter) {
+            return date.toString(.custom(toFormatter))
+        } else {
+            return ""
+        }
+    }
 }
 
 fileprivate extension PTUtils {
