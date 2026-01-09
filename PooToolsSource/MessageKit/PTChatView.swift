@@ -101,16 +101,15 @@ public class PTChatView: UIView {
                         cellHeight = timeHeight + nameHeight + voiceHeight + spaceHeight + readStatusHeight
                     case .File:
                         var url:URL?
-                        if cellModel.msgContent is String {
-                            let contentString = cellModel.msgContent as! String
+                        if let contentString = cellModel.msgContent as? String {
                             url = URL(string: contentString)
-                        } else if cellModel.msgContent is URL {
-                            url = (cellModel.msgContent as! URL)
+                        } else if let contentURL = cellModel.msgContent as? URL {
+                            url = contentURL
                         }
                         
                         var contentHeight:CGFloat = PTChatFileCell.FileCellHeight
-                        if url != nil {
-                            let nameHeight = UIView.sizeFor(string: url!.lastPathComponent, font: PTChatConfig.share.fileNameFont,lineSpacing: PTChatConfig.share.fileContentSpace,width: PTChatFileCell.FileConentWidth - PTChatFileCell.FileCellImageHeight - PTChatFileCell.FileCellConentFixbel * 3).height
+                        if let findURL = url {
+                            let nameHeight = UIView.sizeFor(string: findURL.lastPathComponent, font: PTChatConfig.share.fileNameFont,lineSpacing: PTChatConfig.share.fileContentSpace,width: PTChatFileCell.FileConentWidth - PTChatFileCell.FileCellImageHeight - PTChatFileCell.FileCellConentFixbel * 3).height
                             let fileSizeHeight = PTChatConfig.share.fileSizeFont.pointSize + 2 + PTChatFileCell.FileCellConentFixbel * 2
                             let total = nameHeight + fileSizeHeight
                             if total >= contentHeight {
@@ -121,8 +120,8 @@ public class PTChatView: UIView {
                     case .SystemMessage:
                         let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().toFormat("yyyy-MM-dd HH:MM:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
                         var contentHeight:CGFloat = 0
-                        if cellModel.msgContent is String {
-                            contentHeight = UIView.sizeFor(string: cellModel.msgContent as! String, font: PTChatConfig.share.chatSystemMessageFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
+                        if let contentString = cellModel.msgContent as? String {
+                            contentHeight = UIView.sizeFor(string: contentString, font: PTChatConfig.share.chatSystemMessageFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
                         }
                         cellHeight = timeHeight + contentHeight + 20
                     case .Typing:
@@ -137,17 +136,18 @@ public class PTChatView: UIView {
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTChatListModel {
-                if itemRow.ID == PTChatSystemMessageCell.ID,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTChatSystemMessageCell {
+                let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
+                if itemRow.ID == PTChatSystemMessageCell.ID,let cell = baseCell as? PTChatSystemMessageCell {
                     cell.cellModel = cellModel
                     return cell
-                } else if itemRow.ID == PTChatTypingIndicatorCell.ID,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTChatTypingIndicatorCell {
+                } else if itemRow.ID == PTChatTypingIndicatorCell.ID,let cell = baseCell as? PTChatTypingIndicatorCell {
                     return cell
                 } else {
                     switch cellModel.messageType {
                     case .CustomerMessage:
                         return self.customerCellHandler?(collectionView,sectionModel,indexPath)
                     default:
-                        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTChatBaseCell {
+                        if let cell = baseCell as? PTChatBaseCell {
                             if itemRow.ID == PTChatTextCell.ID,let textCell = cell as? PTChatTextCell {
                                 textCell.cellModel = cellModel
                                 textCell.chinaPhoneCallback = { text in
@@ -270,8 +270,8 @@ public class PTChatView: UIView {
     
     ///刷新数据
     public func viewReloadData(loadFinish:PTCollectionCallback? = nil) {
-        var sections = [PTSection]()
-        if chatDataArr.count > 0 {
+        if !chatDataArr.isEmpty {
+            var sections = [PTSection]()
             let rows: [PTRows] = chatDataArr.compactMap { value in
                 switch value.messageType {
                 case .SystemMessage:
@@ -296,6 +296,8 @@ public class PTChatView: UIView {
             let section = PTSection(rows: rows)
             sections.append(section)
             listCollection.showCollectionDetail(collectionData: sections,finishTask: loadFinish)
+        } else {
+            loadFinish?(listCollection.contentCollectionView)
         }
     }
     

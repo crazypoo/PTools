@@ -1184,15 +1184,15 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     
     public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let itemSec = self.mSections[indexPath.section]
-        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
-            let preview = self.forceController?(collectionView,indexPath,itemSec)
-            return preview
-        }, actionProvider: { suggestedActions in
-            if let actions = self.forceActions?(collectionView,indexPath,itemSec) {
+        if let preView = self.forceController?(collectionView,indexPath,itemSec),let actions = self.forceActions?(collectionView,indexPath,itemSec) {
+            return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
+                return preView
+            }, actionProvider: { suggestedActions in
                 return UIMenu(title: "", children: actions)
-            }
+            })
+        } else {
             return nil
-        })
+        }
     }
             
     public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {

@@ -19,16 +19,14 @@ public class PTChatSystemMessageCell: PTBaseNormalCell {
                     \(cellModel.messageTimeStamp.conversationTimeSet()!,.foreground(PTChatConfig.share.chatTimeColor),.font(PTChatConfig.share.chatTimeFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemTimeLineSpace))))
                     """))
                     """
-            if cellModel.msgContent is String {
-                let msgContent = cellModel.msgContent as! String
-                if !msgContent.stringIsEmpty() {
-                    let contentAtt:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            \("\n\(msgContent)",.foreground(PTChatConfig.share.chatSystemMessageColor),.font(PTChatConfig.share.chatSystemMessageFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemContentLineSpace))))
-                            """))
-                            """
-                    timeAtt += contentAtt
-                }
+            if let msgContent = cellModel.msgContent as? String,!msgContent.stringIsEmpty() {
+                let contentAtt:ASAttributedString = """
+                        \(wrap: .embedding("""
+                        \("\n\(msgContent)",.foreground(PTChatConfig.share.chatSystemMessageColor),.font(PTChatConfig.share.chatSystemMessageFont),.paragraph(.alignment(.center),.lineSpacing(CGFloat(truncating: PTChatConfig.share.chatSystemContentLineSpace))))
+                        """))
+                        """
+                timeAtt += contentAtt
+
             }
             
             timeLabel.attributedText = timeAtt.value
