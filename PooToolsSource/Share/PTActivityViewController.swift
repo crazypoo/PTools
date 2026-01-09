@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SwifterSwift
 
 open class PTShareItem: NSObject,UIActivityItemSource {
     let title: String
@@ -136,7 +137,7 @@ open class PTActivityViewController:UIActivityViewController {
         preview.translatesAutoresizingMaskIntoConstraints = false
         preview.layer.cornerRadius = previewCornerRadius
         preview.clipsToBounds = true
-        preview.alpha = 0
+        preview.alpha = 1
         return preview
     }()
 
@@ -217,6 +218,7 @@ open class PTActivityViewController:UIActivityViewController {
         let value:CGFloat = (CGFloat.kSCREEN_HEIGHT / 2) - previewBottomMargin * 5 - (CGFloat.kNavBarHeight_Total + previewTopMargin)
         return value
     }()
+    
     private lazy var contentAtt:NSMutableAttributedString = {
         let attributedString = NSMutableAttributedString()
         
@@ -241,6 +243,22 @@ open class PTActivityViewController:UIActivityViewController {
         let contentText = contentString.truncatedText(maxLineNumber: (textMaxLines - (urlLines + 1)), font: self.previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
         attributedString.append(NSAttributedString(string: contentText + (contentLines > textMaxLines ? "...." : "") + "\n\(urlString)"))
         return attributedString
+    }()
+    
+    lazy var previewContainer:UIView = {
+        let view = UIView()
+                
+//        let blurs = SSBlurView(to: view)
+//        blurs.alpha = 0.1
+//        blurs.style = .dark
+//        blurs.alpha = 1
+//        blurs.enable()
+        return view
+    }()
+    
+    lazy var previewInfoContainer:UIView = {
+        let view = UIView()
+        return view
     }()
     
     public convenience init(activityItems: [Any]) {
@@ -278,18 +296,28 @@ open class PTActivityViewController:UIActivityViewController {
         super.viewDidAppear(animated)
                 
         UIView.animate(withDuration: fadeInDuration) {
-            self.preview.alpha = 1
+            self.previewContainer.alpha = 1
         }
-                
-        AppWindows!.addSubview(preview)
+        AppWindows!.addSubviews([previewContainer])
+        previewContainer.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+            make.left.right.top.equalToSuperview()
+            make.bottom.equalTo(self.view.snp.top)
+        }
         
-        preview.snp.makeConstraints { make in
+        previewContainer.addSubviews([previewInfoContainer])
+        previewInfoContainer.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+//            make.left.right.top.equalToSuperview()
+//            make.bottom.equalTo(self.view.snp.top)
+        }
+
+        previewInfoContainer.addSubviews([preview])
+        self.preview.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            if #available(iOS 17.0, *) {
-                make.bottom.equalTo(AppWindows!.snp.centerY).offset(-(previewBottomMargin * 5))
-            } else {
-                make.bottom.equalTo(self.view.snp.top).offset(-previewBottomMargin)
-            }
+//            make.bottom.equalToSuperview().inset(self.previewBottomMargin)
+            make.centerY.equalToSuperview()
             make.height.equalTo(self.fullContentHeight)
         }
     }
@@ -298,9 +326,9 @@ open class PTActivityViewController:UIActivityViewController {
         super.viewWillDisappear(animated)
         
         UIView.animate(withDuration: fadeOutDuration, animations: {
-            self.preview.alpha = 0
+            self.previewContainer.alpha = 0
         }) { _ in
-            self.preview.removeFromSuperview()
+            self.previewContainer.removeFromSuperview()
         }
     }
     
@@ -343,7 +371,7 @@ open class PTActivityViewController:UIActivityViewController {
         
         var showContentHeight:CGFloat = fullContentHeight
         let contentHeight = UIView.sizeFor(string: contentAtt.string, font: previewFont,lineSpacing: 2, width: labelContentWidth()).height + previewPadding * 2
-        if contentHeight < fullContentHeight {
+        if contentHeight < showContentHeight {
             showContentHeight = contentHeight
         }
         preview.snp.updateConstraints { make in
