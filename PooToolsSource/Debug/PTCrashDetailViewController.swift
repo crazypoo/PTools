@@ -14,12 +14,7 @@ import SafeSFSymbols
 class PTCrashDetailViewController: PTBaseViewController {
     
     fileprivate var viewModel:PTCrashDetailModel!
-    
-    lazy var fakeNav : PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
-    
+        
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
         config.viewType = .Custom
@@ -68,9 +63,38 @@ class PTCrashDetailViewController: PTBaseViewController {
         return view
     }()
     
+    lazy var backButton:UIButton = {
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
+        button.addActionHandlers(handler: { _ in
+            self.navigationController?.popViewController()
+        })
+        return button
+    }()
+
+    lazy var shareButton:UIButton = {
+        let shareButton = baseButtonCreate(image: UIImage(.square.andArrowUp))
+        shareButton.addActionHandlers { sender in
+            let image = self.viewModel.data.context.uiImage
+
+            guard let pdf = PTPDFManager.generatePDF(title: "Crash", body: self.viewModel.getAllValues(), image: image, logs: self.viewModel.data.context.consoleOutput
+            ) else {
+                PTNSLogConsole("Failure in create PDF")
+                return
+            }
+
+            guard let fileURL = PTPDFManager.savePDFData(pdf, fileName: "Crash-\(UUID().uuidString).pdf") else {
+                PTNSLogConsole("Failure to save PDF")
+                return
+            }
+            PTDebugShareManager.share(fileURL)
+        }
+        return shareButton
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [shareButton], rightPadding: 10)
     }
     
     init(viewModel: PTCrashDetailModel!) {
@@ -87,60 +111,19 @@ class PTCrashDetailViewController: PTBaseViewController {
         
         
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
         newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
-        view.addSubviews([newCollectionView,fakeNav])
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
+            make.top.equalToSuperview()
         }
-        
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalTo(self.newCollectionView)
-        }
-        
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let shareButton = UIButton(type: .custom)
-        shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
-        if #available(iOS 26.0, *) {
-            shareButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        fakeNav.setLeftButtons([button])
-        fakeNav.setRightButtons([shareButton])
-
-        button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
-        }
-        
-        shareButton.addActionHandlers { sender in
-            let image = self.viewModel.data.context.uiImage
-
-            guard let pdf = PTPDFManager.generatePDF(title: "Crash", body: self.viewModel.getAllValues(), image: image, logs: self.viewModel.data.context.consoleOutput
-            ) else {
-                PTNSLogConsole("Failure in create PDF")
-                return
-            }
-
-            guard let fileURL = PTPDFManager.savePDFData(pdf, fileName: "Crash-\(UUID().uuidString).pdf") else {
-                PTNSLogConsole("Failure to save PDF")
-                return
-            }
-            PTDebugShareManager.share(fileURL)
-        }
-                        
+                
         loadListData()
     }
     

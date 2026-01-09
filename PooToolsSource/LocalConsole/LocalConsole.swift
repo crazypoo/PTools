@@ -894,15 +894,7 @@ public class LocalConsole: NSObject {
 
     func debugControllerAction() {
         let vc = PTDebugViewController()
-        let nav = PTBaseNavControl(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.9)])
-        
-        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-            presentedVC.present(sheet, animated: true)
-        } else {
-            PTUtils.getCurrentVC().present(sheet, animated: true)
-        }
+        self.consoleSheetPresent(vc: vc)
     }
     
     func copyTextAction() {
@@ -958,7 +950,7 @@ public class LocalConsole: NSObject {
     
     func documentAction() {
         let vc = PTFileBrowserViewController()
-        present(content: vc)
+        consoleSheetPresent(vc: vc)
     }
     
     func present(content:UIViewController) {

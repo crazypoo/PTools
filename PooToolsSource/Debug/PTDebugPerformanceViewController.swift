@@ -113,48 +113,35 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         }
         return view
     }()
-    
-    lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
+
+    lazy var backButton:UIButton = {
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
+        button.addActionHandlers { sender in
+            self.dismissAnimated()
+        }
+        return button
     }()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
         newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
-        view.addSubviews([newCollectionView,fakeNav])
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-        }
-
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.newCollectionView)
-            make.height.equalTo(CGFloat.kNavBarHeight)
-        }
-
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-        fakeNav.setLeftButtons([button])
-        button.addActionHandlers { sender in
-            self.dismissAnimated()
+            make.top.equalToSuperview()
         }
         
         listDataSet()

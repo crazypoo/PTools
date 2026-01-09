@@ -39,38 +39,23 @@ class PTLogConsoleViewController: PTBaseViewController {
     }
     
     lazy var backButton:UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
         button.addActionHandlers { sender in
             self.dismissAnimated()
         }
-        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return button
     }()
     
     lazy var refreshButton:UIButton = {
-        let refreshButton = UIButton(type: .custom)
-        refreshButton.setImage(UIImage(.arrow.clockwise), for: .normal)
-        if #available(iOS 26.0, *) {
-            refreshButton.configuration = UIButton.Configuration.clearGlass()
-        }
+        let refreshButton = baseButtonCreate(image: UIImage(.arrow.clockwise))
         refreshButton.addActionHandlers { sender in
             self.reloadText()
         }
-        refreshButton.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return refreshButton
     }()
     
     lazy var clearButton:UIButton = {
-        let clearButton = UIButton(type: .custom)
-        clearButton.setImage(UIImage(.paintbrush), for: .normal)
-        if #available(iOS 26.0, *) {
-            clearButton.configuration = UIButton.Configuration.clearGlass()
-        }
-        clearButton.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        let clearButton = baseButtonCreate(image: UIImage(.paintbrush))
         clearButton.addActionHandlers { sender in
             let callBack = FileManager.pt.writeToFile(writeType: .TextType, content: "", writePath: self.filePath)
             if callBack.isSuccess {

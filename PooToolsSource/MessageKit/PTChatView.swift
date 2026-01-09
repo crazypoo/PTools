@@ -46,6 +46,12 @@ public class PTChatView: UIView {
     public var cellMenuItemsHandler:PTCellMenuItemsHandler? = nil
     public var cellMenuItemsTapCallBack:PTCellMenuItemsTapCallBack? = nil
 
+    public var listBottomOffset:CGFloat = 0 {
+        didSet {
+            listContentInset(bottomInset: listBottomOffset)
+        }
+    }
+    
     ///消息列表
     public lazy var listCollection:PTCollectionView = {
         let collectionConfig = PTCollectionViewConfig()
@@ -222,6 +228,8 @@ public class PTChatView: UIView {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        listContentInset()
         addSubviews([listCollection])
         listCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -312,5 +320,11 @@ public class PTChatView: UIView {
             self.listCollection.contentCollectionView.scrollToBottom()
             self.resendMessageHandler?(cellModel,indexPath)
         }
+    }
+    
+    func listContentInset(bottomInset:CGFloat = 0,topInset:CGFloat = 0) {
+        listCollection.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        listCollection.contentCollectionView.contentInset.top = topInset
+        listCollection.contentCollectionView.contentInset.bottom = bottomInset
     }
 }

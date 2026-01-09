@@ -30,4 +30,14 @@ public extension PTBaseViewController {
         }
 #endif
     }
+    
+    func baseButtonCreate(image:UIImage) -> UIButton {
+        let button = UIButton(type: .custom)
+        button.setImage(image, for: .normal)
+        if #available(iOS 26.0, *) {
+            button.configuration = UIButton.Configuration.clearGlass()
+        }
+        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
+        return button
+    }
 }

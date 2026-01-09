@@ -18,11 +18,6 @@ let PTNetworkTestFloatingTap = 9997
 class PTNetworkWatcherViewController: PTBaseViewController {
 
     private let viewModel = PTNetworkViewModel()
-
-    lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
     
     lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
@@ -38,6 +33,19 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         return view
     }()
     
+    private lazy var titleViewContailer:PTNavTitleContainer = {
+        let view = PTNavTitleContainer()
+        view.addSubviews([searchBar])
+        searchBar.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        view.snp.makeConstraints { make in
+            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)
+            make.height.equalTo(32)
+        }
+        return view
+    }()
+
     lazy var valueSwitch:PTSwitch = {
         let view = PTSwitch()
         view.isOn = PTNetworkHelper.shared.isNetworkEnable
@@ -88,64 +96,25 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         return label
     }()
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
-        
-        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
-        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
-        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
-
-        view.addSubviews([newCollectionView,fakeNav])
-        newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-        }
-
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.newCollectionView)
-            make.height.equalTo(CGFloat.kNavBarHeight)
-        }
-        
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let deleteButton = UIButton(type: .custom)
-        deleteButton.setImage(UIImage(.trash), for: .normal)
-        if #available(iOS 26.0, *) {
-            deleteButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let testButton = UIButton(type: .custom)
-        testButton.setImage(UIImage(.sparkles), for: .normal)
-        if #available(iOS 26.0, *) {
-            testButton.configuration = UIButton.Configuration.clearGlass()
-        }
-        fakeNav.setLeftButtons([button])
-        fakeNav.titleView = searchBar
-        fakeNav.titleViewMode = .auto
-        fakeNav.setRightButtons([deleteButton,valueSwitch,testButton])
-        button.addActionHandlers { sender in
+    lazy var backButton:UIButton = {
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
+        button.addActionHandlers(handler: { _ in
             self.dismissAnimated()
-        }
-
+        })
+        return button
+    }()
+    
+    lazy var deleteButton:UIButton = {
+        let deleteButton = baseButtonCreate(image: UIImage(.trash))
         deleteButton.addActionHandlers { sender in
             self.viewModel.handleClearAction()
             self.loadListModel()
         }
-                        
+        return deleteButton
+    }()
+    
+    lazy var testButton:UIButton = {
+        let testButton = baseButtonCreate(image: UIImage(.sparkles))
         testButton.addActionHandlers { sender in
             let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
             networkSpeedMonitor.startMonitoring()
@@ -167,7 +136,32 @@ class PTNetworkWatcherViewController: PTBaseViewController {
                 }
             }
         }
-                
+        return testButton
+    }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [deleteButton,valueSwitch,testButton], rightPadding: 10)
+        setCustomTitleView(titleViewContailer)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
+        view.addSubviews([newCollectionView])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+        }
         loadListModel()
         setup()
     }

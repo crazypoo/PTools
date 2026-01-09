@@ -206,7 +206,7 @@ public class PTDebugViewController: PTBaseViewController {
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
         Task {
             settingCellModels = await self.createCellModels()

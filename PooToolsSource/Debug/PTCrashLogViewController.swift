@@ -14,11 +14,6 @@ import SafeSFSymbols
 class PTCrashLogViewController: PTBaseViewController {
 
     private let viewModel = PTCrashViewModel()
-
-    lazy var fakeNav : PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
     
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
@@ -59,56 +54,44 @@ class PTCrashLogViewController: PTBaseViewController {
         return view
     }()
     
+    lazy var backButton:UIButton = {
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
+        button.addActionHandlers(handler: { _ in
+            self.dismissAnimated()
+        })
+        return button
+    }()
+    
+    lazy var crashButton:UIButton = {
+        let crashButton = baseButtonCreate(image: UIImage(.bolt.fill))
+        crashButton.addActionHandlers { sender in
+            let array = NSArray()
+            let _ = array.object(at: 4)
+        }
+        return crashButton
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [crashButton], rightPadding: 10)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
         newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
         
-        view.addSubviews([fakeNav,newCollectionView])
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
-        }
-
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalTo(self.newCollectionView)
-        }
-        
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let crashButton = UIButton(type: .custom)
-        crashButton.setImage(UIImage(.bolt.fill), for: .normal)
-        if #available(iOS 26.0, *) {
-            crashButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        fakeNav.setLeftButtons([button])
-        fakeNav.setRightButtons([crashButton])
-        
-        button.addActionHandlers { sender in
-            self.returnFrontVC()
-        }
-        
-        crashButton.addActionHandlers { sender in
-            let array = NSArray()
-            let _ = array.object(at: 4)
+            make.top.equalToSuperview()
         }
         
         PTNSLogConsole("▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️\(PTHttpDatasource.shared.httpModels)")

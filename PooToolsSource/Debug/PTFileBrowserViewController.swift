@@ -159,8 +159,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
     }()
     
     lazy var closeBtn :UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        let view = baseButtonCreate(image: "❌".emojiToImage(emojiFont: .appfont(size: 20)))
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -168,8 +167,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
     }()
 
     lazy var back :UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage("◀️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        let view = baseButtonCreate(image: "◀️".emojiToImage(emojiFont: .appfont(size: 20)))
         view.addActionHandlers { sender in
             var array = self.extensionDirectoryPath.components(separatedBy: "/")
             array.removeLast()
@@ -181,12 +179,19 @@ public class PTFileBrowserViewController: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        closeBtn.frame = CGRectMake(0, 0, 34, 34)
         setCustomRightButtons(buttons: [closeBtn], rightPadding: 0)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in

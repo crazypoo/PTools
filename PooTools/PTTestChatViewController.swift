@@ -16,6 +16,7 @@ class PTTestChatViewController: PTBaseViewController {
 
     lazy var chatContent:PTChatView = {
         let view = PTChatView()
+        view.listBottomOffset = CGFloat.kTabbarSaveAreaHeight
         view.headerLoadReadyHandler = {
             self.testModel().enumerated().forEach { index,value in
                 self.chatContent.chatDataArr.insert(value, at: 0)

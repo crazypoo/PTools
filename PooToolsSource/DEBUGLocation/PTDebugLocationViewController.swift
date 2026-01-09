@@ -66,15 +66,10 @@ class PTDebugLocationViewController: PTBaseViewController {
     }()
 
     lazy var backButton:UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
         button.addActionHandlers { sender in
             self.dismissAnimated()
         }
-        button.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return button
     }()
 

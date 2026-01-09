@@ -16,19 +16,35 @@ class PTDebugLocationMapViewController: PTBaseViewController {
 
     var locationCallBack:((CLLocation)->Void)?
     
-    lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
-
     private var mapView: MKMapView?
 
     private var selectedLocationAnnotation: MKPointAnnotation?
     private var selectedLocation: CLLocation?
 
+    lazy var backButton:UIButton = {
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
+        button.addActionHandlers(handler: { _ in
+            self.navigationController?.popViewController()
+        })
+        return button
+    }()
+    
+    lazy var doneButton:UIButton = {
+        let doneButton = baseButtonCreate(image: UIImage(.checkmark))
+        doneButton.addActionHandlers { sender in
+            if let selectedLocationCoordinate = self.selectedLocationAnnotation?.coordinate {
+                let selectedLocation = CLLocation(latitude: selectedLocationCoordinate.latitude, longitude: selectedLocationCoordinate.longitude)
+                self.locationCallBack?(selectedLocation)
+            }
+            self.navigationController?.popViewController()
+        }
+        return doneButton
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [doneButton], rightPadding: 10)
     }
 
     // Handle back button press
@@ -48,42 +64,11 @@ class PTDebugLocationMapViewController: PTBaseViewController {
         setupMapView()
         setupGestureRecognizer()
         
-        view.addSubviews([fakeNav,mapView!])
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-            make.height.equalTo(CGFloat.kNavBarHeight)
-        }
-        
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let doneButton = UIButton(type: .custom)
-        doneButton.setImage(UIImage(.checkmark), for: .normal)
-        if #available(iOS 26.0, *) {
-            doneButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        fakeNav.setLeftButtons([button])
-        fakeNav.setRightButtons([doneButton])
-        button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
-        }
-        
-        doneButton.addActionHandlers { sender in
-            if let selectedLocationCoordinate = self.selectedLocationAnnotation?.coordinate {
-                let selectedLocation = CLLocation(latitude: selectedLocationCoordinate.latitude, longitude: selectedLocationCoordinate.longitude)
-                self.locationCallBack?(selectedLocation)
-            }
-            self.navigationController?.popViewController()
-        }
+        view.addSubviews([mapView!])
         
         mapView!.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav)
+            make.top.equalToSuperview()
         }
     }
     

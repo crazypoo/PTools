@@ -14,12 +14,7 @@ import SafeSFSymbols
 class PTLeakListViewController: PTBaseViewController {
 
     var viewModel = PTLeakViewModel()
-    
-    lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
-    
+        
     lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
         view.delegate = self
@@ -31,6 +26,19 @@ class PTLeakListViewController: PTBaseViewController {
         view.searchPlaceholder = "Search"
         view.viewCorner(radius: 17)
         view.bounds = CGRect(origin: .zero, size: CGSize(width: 320, height: 34))
+        return view
+    }()
+
+    private lazy var titleViewContailer:PTNavTitleContainer = {
+        let view = PTNavTitleContainer()
+        view.addSubviews([searchBar])
+        searchBar.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        view.snp.makeConstraints { make in
+            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 132)
+            make.height.equalTo(32)
+        }
         return view
     }()
 
@@ -57,68 +65,56 @@ class PTLeakListViewController: PTBaseViewController {
         return view
     }()
 
+    lazy var backButton:UIButton = {
+        let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
+        button.addActionHandlers { sender in
+            self.navigationController?.popViewController()
+        }
+        return button
+    }()
+    
+    lazy var deleteButton:UIButton = {
+        let deleteButton = baseButtonCreate(image: UIImage(.trash))
+        deleteButton.addActionHandlers { sender in
+            self.viewModel.handleClearAction()
+            self.loadListModel()
+        }
+        return deleteButton
+    }()
+
+    lazy var shareButton:UIButton = {
+        let shareButton = baseButtonCreate(image: UIImage(.square.andArrowUp))
+        shareButton.addActionHandlers { sender in
+            let allLeaks = PTPerformanceLeakDetector.leaks.reduce("") { $0 + "\n\n\($1.symbol)\($1.details)" }
+            PTDebugShareManager.generateFileAndShare(text: allLeaks, fileName: "leaks")
+        }
+        return shareButton
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [deleteButton,shareButton], rightPadding: 10)
+        setCustomTitleView(titleViewContailer)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
         newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
-        view.addSubviews([newCollectionView,fakeNav])
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.sheetViewController?.options.pullBarHeight ?? 0)
+            make.top.equalToSuperview()
         }
-        
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.newCollectionView)
-            make.height.equalTo(CGFloat.kNavBarHeight)
-        }
-        
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        if #available(iOS 26.0, *) {
-            button.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let deleteButton = UIButton(type: .custom)
-        deleteButton.setImage(UIImage(.trash), for: .normal)
-        if #available(iOS 26.0, *) {
-            deleteButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        let shareButton = UIButton(type: .custom)
-        shareButton.setImage(UIImage(.square.andArrowUp), for: .normal)
-        if #available(iOS 26.0, *) {
-            shareButton.configuration = UIButton.Configuration.clearGlass()
-        }
-
-        fakeNav.setLeftButtons([button])
-        fakeNav.titleView = searchBar
-        fakeNav.setRightButtons([deleteButton,shareButton])
-        button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
-        }
-
-        deleteButton.addActionHandlers { sender in
-            self.viewModel.handleClearAction()
-            self.loadListModel()
-        }
-        shareButton.addActionHandlers { sender in
-            let allLeaks = PTPerformanceLeakDetector.leaks.reduce("") { $0 + "\n\n\($1.symbol)\($1.details)" }
-            PTDebugShareManager.generateFileAndShare(text: allLeaks, fileName: "leaks")
-        }
-        
+                
         viewModel.applyFilter()
         loadListModel()
     }
