@@ -143,6 +143,7 @@
 		553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */; };
 		553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */; };
 		553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */; };
+		5531D2632F1095A70094CFFE /* PTEditMenuKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */; };
 		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		553BFE662EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */; };
@@ -165,7 +166,6 @@
 		554A67382C855BB900FE1B10 /* UITraitCollection+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */; };
 		554A673A2C855C1300FE1B10 /* UIWindow+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
-		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		554E649F2D4A236800042565 /* PTHTMLHeightCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */; };
 		554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */; };
 		554F3A122E94C21D001F4078 /* PTTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554F3A112E94C21D001F4078 /* PTTipsView.swift */; };
@@ -382,7 +382,6 @@
 		55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70129B09AD300DCA096 /* DispatchQueue+PTEX.swift */; };
 		55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */; };
 		55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */; };
-		55AEDB282BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */; };
 		55AF2E232C1CC2B40001D094 /* PTTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AF2E222C1CC2B40001D094 /* PTTagCell.swift */; };
 		55B13D4A2B1AE83200C67EDA /* PTImageEditorSticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */; };
 		55B13D4C2B1AE8CC00C67EDA /* PTImageEditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */; };
@@ -1095,6 +1094,7 @@
 		553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInitialTouchPanGestureRecognizer.swift; sourceTree = "<group>"; };
 		553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetEXCombos.swift; sourceTree = "<group>"; };
 		553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetContentViewController.swift; sourceTree = "<group>"; };
+		5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuKit.swift; sourceTree = "<group>"; };
 		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSnapShotKitProtocol.swift; sourceTree = "<group>"; };
@@ -1118,7 +1118,6 @@
 		554A67372C855BB900FE1B10 /* UITraitCollection+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITraitCollection+PTEX.swift"; sourceTree = "<group>"; };
 		554A67392C855C1300FE1B10 /* UIWindow+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+PTEX.swift"; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
-		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
 		554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHTMLHeightCalculator.swift; sourceTree = "<group>"; };
 		554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPageControllable.swift; sourceTree = "<group>"; };
 		554F3A112E94C21D001F4078 /* PTTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsView.swift; sourceTree = "<group>"; };
@@ -1336,7 +1335,6 @@
 		55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDecimalNumberHandler+PTEX.swift"; sourceTree = "<group>"; };
 		55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+PTEX.swift"; sourceTree = "<group>"; };
 		55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
-		55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuInteractionDummy.swift; sourceTree = "<group>"; };
 		55AF2E222C1CC2B40001D094 /* PTTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTagCell.swift; sourceTree = "<group>"; };
 		55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorSticker.swift; sourceTree = "<group>"; };
 		55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorConfig.swift; sourceTree = "<group>"; };
@@ -3532,10 +3530,9 @@
 				55B6D7C32C1D640A00033309 /* PTAlertWindow.swift */,
 				55B6D7C72C1D88D600033309 /* PTCustomerAlertController.swift */,
 				55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */,
-				55AEDB272BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift */,
-				554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */,
 				558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */,
 				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
+				5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -4077,7 +4074,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4087,9 +4085,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4104,9 +4106,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4375,6 +4381,7 @@
 				55BA90272D29A7D70065FBD0 /* ExpirableProtocol.swift in Sources */,
 				55F7C2B62E118C8900EF2945 /* PTAutoScrollLabel.swift in Sources */,
 				55BA90282D29A7D70065FBD0 /* OptionListControl.swift in Sources */,
+				5531D2632F1095A70094CFFE /* PTEditMenuKit.swift in Sources */,
 				55BA90292D29A7D70065FBD0 /* ApplicationAttributesSectionDataSource.swift in Sources */,
 				55BA902A2D29A7D70065FBD0 /* ViewHierarchyActionableProtocol.swift in Sources */,
 				55BA902B2D29A7D70065FBD0 /* InternalViewProtocol.swift in Sources */,
@@ -4504,7 +4511,6 @@
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				55B4FA162AE0FC3E006D35F3 /* PTPermissionMotion.swift in Sources */,
 				55B13D4A2B1AE83200C67EDA /* PTImageEditorSticker.swift in Sources */,
-				554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */,
 				556CA51A2B295E7E00A5B189 /* PTVideoEditorToolsCell.swift in Sources */,
 				55BD5B8329C620C80023458A /* PTActivityViewController.swift in Sources */,
 				55F299912BEE1D5B00CC970A /* PTImageCell.swift in Sources */,
@@ -4793,7 +4799,6 @@
 				55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */,
 				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
 				5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */,
-				55AEDB282BF9DBD3005C3A78 /* PTEditMenuInteractionDummy.swift in Sources */,
 				55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */,
 				557E3A502C031BDD002466A0 /* Color+PTrgbaEX.swift in Sources */,
 				555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */,

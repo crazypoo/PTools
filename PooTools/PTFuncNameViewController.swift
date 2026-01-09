@@ -533,8 +533,7 @@ class PTFuncNameViewController: PTBaseViewController {
             return [swipeAction]
         }
         aaaaaaa.collectionDidSelect = { collectionViews,sModel,indexPath in
-            if let itemRow = sModel.rows?[indexPath.row] {
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            if let itemRow = sModel.rows?[indexPath.row], let cellModel = (itemRow.dataModel as? PTFusionCellModel) {
                 if itemRow.title == .imageReview {
                     let model1 = PTMediaBrowserModel()
                     model1.imageURL = "https://i-blog.csdnimg.cn/blog_migrate/becd8bdd2845791b0f9b28ba58a27bac.jpeg"
@@ -1003,7 +1002,7 @@ class PTFuncNameViewController: PTBaseViewController {
         setCustomTitleView(navTitleView)
 
         setCustomBackButtonView(popover,size: CGSizeMake(64, 34))
-        popover.addActionHandlers(handler: { _ in
+        popover.addActionHandlers(handler: { sender in
             PTNSLogConsole("123123123")
             self.sideMenuController?.revealMenu()
         })

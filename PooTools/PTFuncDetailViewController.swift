@@ -382,12 +382,14 @@ class PTFuncDetailViewController: PTBaseViewController {
                 layoutBtn.isSelected = !sender.isSelected
                 switch self.typeString {
                 case String.menu:
-                    let menuItems = PTEditMenuItem(title: "111") {
-                        PTNSLogConsole("我点击了")
-                    }
                     
-                    let menu = PTEditMenuItemsInteraction()
-                    menu.showMenu([menuItems], targetRect: sender.frame, for: sender)
+                    DispatchQueue.main.async { [weak sender] in
+                        guard let sender = sender, sender.window != nil else { return }
+                        let aaaaaaa = PTEditMenuAction(title: "111111") {
+                            PTNSLogConsole("我点击了")
+                        }
+                        sender.pt_bindEditMenu(actions: [aaaaaaa])
+                    }
                 default:
                     break
                 }
