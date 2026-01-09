@@ -122,4 +122,14 @@ public extension TimeInterval {
             return ret.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
         }
     }
+    
+    /// 返回以秒为单位的时间（如果是毫秒则自动 /1000）
+    var asSecondsSafe: TimeInterval {
+        // 如果看起来像毫秒（大于 10^11 ~ 2004 年），就除以 1000
+        if self > 1_000_000_000_000 { // > ~2001-09-09 in ms
+            return self / 1000.0
+        } else {
+            return self
+        }
+    }
 }

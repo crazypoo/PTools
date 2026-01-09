@@ -111,7 +111,7 @@ extension PTEditMenuKit: UIEditMenuInteractionDelegate {
     }
 
     public func editMenuInteraction(_ interaction: UIEditMenuInteraction, menuFor configuration: UIEditMenuConfiguration, suggestedActions: [UIMenuElement]) -> UIMenu? {
-        guard !actions.isEmpty else { return nil }
+        guard !actions.isEmpty else { return UIMenu(title: "", children: []) }
         let children:[UIAction] = actions.map { action in
             UIAction(title: action.title,
                      image: action.image,

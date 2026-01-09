@@ -147,6 +147,50 @@ public extension Date {
                                           readyExpTime:Int) -> CheckContractTimeRelationships {
         Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
+    
+    /// 将「已知为柬埔寨时区的时间戳（秒或毫秒）」格式化为字符串
+    /// - Parameters:
+    ///   - timestamp: 传入时间戳（可能是秒或毫秒）
+    ///   - dateFormat: 输出格式
+    /// - Returns: 显示字符串（按设备时区显示；若设备不是柬埔寨会先按差值修正）
+    static func formattedCambodiaTimestampSafe(_ timestamp: TimeInterval,
+                                               timeStamplocation:TimeZone = TimeZone(identifier: "Asia/Phnom_Penh")!,
+                                               timeStampOffset:TimeInterval = 0,
+                                               dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let khTZ = timeStamplocation
+        let localTZ = TimeZone.current
+
+        // 1) 统一成秒
+        let seconds = timestamp.asSecondsSafe
+
+        // 2) 把传入的时间戳视为“柬埔寨时刻对应的 Date”
+        //    注意：这里我们把 timestamp (seconds) 直接转成 Date（表示那个瞬间）
+        //    如果你的 timestamp 本来就是“以 UTC 为基准的时间戳”，这一步也是正确的。
+        //    关键是：如果服务器返回的是「当地时刻的时间戳（把当地时间当成 epoch 来算）」，那就要不同处理。
+        let khDate = Date(timeIntervalSince1970: seconds)
+
+        // 3) 若设备在柬埔寨，直接格式化（不再偏移）
+        if localTZ.identifier == khTZ.identifier {
+            let fmt = DateFormatter()
+            fmt.dateFormat = dateFormat
+            fmt.timeZone = khTZ // 或者用 localTZ（两者相同）
+            let newKHDate = Date(timeIntervalSince1970: seconds + timeStampOffset)
+            return fmt.string(from: newKHDate)
+        }
+
+        // 4) 设备不在柬埔寨：计算时区差并修正日期
+        //    使用 secondsFromGMT(for:) 可以正确处理历史/夏令时（如果有）的差值
+        let khOffset = khTZ.secondsFromGMT(for: khDate)
+        let localOffset = localTZ.secondsFromGMT(for: khDate)
+        let offsetDiff = TimeInterval(localOffset - khOffset) // 要把“柬埔寨时间”变成本地显示，需加这个差值
+        let adjustedDate = khDate.addingTimeInterval(offsetDiff)
+
+        // 5) 格式化显示（用本地时区）
+        let fmt = DateFormatter()
+        fmt.dateFormat = dateFormat
+        fmt.timeZone = localTZ
+        return fmt.string(from: adjustedDate)
+    }
 }
 
 public extension PTPOP where Base == Date {

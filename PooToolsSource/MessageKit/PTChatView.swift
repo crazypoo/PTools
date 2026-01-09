@@ -178,17 +178,17 @@ public class PTChatView: UIView {
                                 self.resendMessage(cellModel: errorModel, indexPath: indexPath)
                             }
                             
+                            var gess:[UIGestureRecognizer] = []
+                            let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
                             if itemRow.ID != PTChatTextCell.ID {
-                                let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
                                 let tap = UITapGestureRecognizer { sender in
                                     self.tapMessageHandler?(cellModel,indexPath)
                                 }
-                                cell.dataContent.addGestureRecognizers([tap,longTap])
+                                gess = [tap,longTap]
                             } else {
-                                let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
-                                cell.contentView.isUserInteractionEnabled = true
-                                cell.contentView.addGestureRecognizers([longTap])
+                                gess = [longTap]
                             }
+                            cell.dataContent.addGestureRecognizers(gess)
 
                             cell.sendExp = { expModel in
                                 self.chatDataArr[indexPath.row].messageStatus = .Error
@@ -217,10 +217,6 @@ public class PTChatView: UIView {
         view.headerRefreshTask = { control in
             self.headerLoadReadyHandler?()
         }
-//        let tap = UITapGestureRecognizer { sender in
-//            self.listTapHandler?()
-//        }
-//        view.addGestureRecognizer(tap)
         return view
     }()
 
@@ -250,20 +246,21 @@ public class PTChatView: UIView {
                 case .changed:break
                 case .ended:
                     cell.dataContentStatusView.isHighlighted = false
+                    if let menuTitles = self.cellMenuItemsHandler?(itemId), !menuTitles.isEmpty {
+                        let items = menuTitles.enumerated().map { index, title in
+                            
+                            let menuItem = PTEditMenuAction(title: title) {
+                                self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
+                            }
+                            return menuItem
+                        }
+
+                        cell.dataContent.pt_bindEditMenu(actions: items)
+                    }
                 case .cancelled:break
                 case .failed:break
                 case .recognized:break
                 @unknown default:break
-                }
-                
-                if let menuTitles = self.cellMenuItemsHandler?(itemId), !menuTitles.isEmpty {
-                    let items = menuTitles.enumerated().map { index, title in
-                        PTEditMenuItem(title: title) {
-                            self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
-                        }
-                    }
-
-                    PTEditMenuItemsInteraction.share.showMenu(items, targetRect: cell.dataContentStatusView.frame, for: cell.dataContentStatusView)
                 }
             }
         }

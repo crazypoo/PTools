@@ -220,12 +220,10 @@ public extension UILabel {
         let longPressGesture = UILongPressGestureRecognizer { sender in
             self.becomeFirstResponder()
             
-            let menuItems = PTEditMenuItem(title: "copy") {
+            let menuItems = PTEditMenuAction(title: "copy") {
                 (self.text ?? self.attributedText?.string)?.copyToPasteboard()
             }
-            
-            let menu = PTEditMenuItemsInteraction.share
-            menu.showMenu([menuItems], targetRect: self.frame, for: self)
+            self.pt_bindEditMenu(actions: [menuItems])
         }
         let pressDuration = self.copyPressDuration != 0.5 ? self.copyPressDuration : 0.5
         longPressGesture.minimumPressDuration = TimeInterval(pressDuration)
