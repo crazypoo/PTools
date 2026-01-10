@@ -439,9 +439,7 @@ public extension PTUtils {
             let nav = PTBaseNavControl(rootViewController: vc)
             nav.modalPresentationStyle = .formSheet
             PTUtils.getCurrentVC().present(nav, animated: true, completion: {
-                if completion != nil {
-                    completion!()
-                }
+                completion?()
                 SwizzleTool().swizzleDidAddSubview {
                     // Configure console window.
                     if share.maskView != nil {
@@ -507,7 +505,7 @@ public extension PTUtils {
 
 //MARK: OC-FUNCTION
 public extension PTUtils {
-    class func oc_isiPhoneSeries()->Bool {
+    class func oc_isiPhoneSeries() -> Bool {
         isIPhoneXSeries()
     }
 }

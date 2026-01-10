@@ -36,20 +36,20 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        if let valueSwitch = view.valueSwitch {
+        if let valueSwitch = view.valueSwitch,let section = self.sectionModel {
             if let ptSwitch = valueSwitch as? PTSwitch {
                 ptSwitch.valueChangeCallBack = { _ in
-                    self.switchValueChangeBlock?(self.sectionModel!.name,valueSwitch)
+                    self.switchValueChangeBlock?(section.name,valueSwitch)
                 }
             } else if let iOSSwitch = valueSwitch as? UISwitch {
                 iOSSwitch.addSwitchAction { sender in
-                    self.switchValueChangeBlock?(self.sectionModel!.name,sender)
+                    self.switchValueChangeBlock?(section.name,sender)
                 }
             }
         }
-        if let sectionMore = view.sectionMore {
+        if let sectionMore = view.sectionMore,let section = self.sectionModel {
             sectionMore.addActionHandlers { sender in
-                self.moreActionBlock?(self.sectionModel!.name,sender)
+                self.moreActionBlock?(section.name,sender)
             }
         }
         return view

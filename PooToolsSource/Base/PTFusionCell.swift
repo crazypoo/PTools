@@ -1017,11 +1017,11 @@ open class PTFusionCell: PTBaseNormalCell {
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {
         didSet {
-            if let valueSwitch = dataContent.valueSwitch {
+            if let valueSwitch = dataContent.valueSwitch,let findValue = switchValue {
                 if let ptSwitch = valueSwitch as? PTSwitch {
-                    ptSwitch.isOn = switchValue!
+                    ptSwitch.isOn = findValue
                 } else if let iosSwitch = valueSwitch as? UISwitch {
-                    iosSwitch.isOn = switchValue!
+                    iosSwitch.isOn = findValue
                 }
             }
         }
@@ -1087,9 +1087,9 @@ open class PTFusionCell: PTBaseNormalCell {
         view.switchValueChangeBlock = { name,view in
             self.switchValueChangeBlock?(name,view)
         }
-        if let sectionModel = view.sectionMore {
+        if let sectionModel = view.sectionMore,let findCellModel = self.cellModel {
             sectionModel.addActionHandlers { sender in
-                self.moreActionBlock?(self.cellModel!.name,sender)
+                self.moreActionBlock?(findCellModel.name,sender)
             }
         }
         return view
@@ -1117,11 +1117,11 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {
         didSet {
-            if let valueSwitch = dataContent.valueSwitch {
+            if let valueSwitch = dataContent.valueSwitch,let findValue = switchValue {
                 if let ptSwitch = valueSwitch as? PTSwitch {
-                    ptSwitch.isOn = switchValue!
+                    ptSwitch.isOn = findValue
                 } else if let iosSwitch = valueSwitch as? UISwitch {
-                    iosSwitch.isOn = switchValue!
+                    iosSwitch.isOn = findValue
                 }
             }
         }
@@ -1186,9 +1186,9 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         view.switchValueChangeBlock = { name,view in
             self.switchValueChangeBlock?(name,view)
         }
-        if let sectionModel = view.sectionMore {
+        if let sectionModel = view.sectionMore,let findCellModel = self.cellModel {
             sectionModel.addActionHandlers { sender in
-                self.moreActionBlock?(self.cellModel!.name,sender)
+                self.moreActionBlock?(findCellModel.name,sender)
             }
         }
         return view

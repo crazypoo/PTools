@@ -142,8 +142,7 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
-                let cellTools = itemRow.dataModel as! UIImage
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellTools = itemRow.dataModel as? UIImage,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
                 let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
                 cell.imageView.image = cellTools
                 cell.nameLabel.text = cellFilter.name

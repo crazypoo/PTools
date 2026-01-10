@@ -297,8 +297,7 @@ public class PTCollectionView: UIView {
     fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         
         guard mSections.count > 0 else {
-            let bannerGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
-            return NSCollectionLayoutSection(group: NSCollectionLayoutGroup(layoutSize: bannerGroupSize))
+            return NSCollectionLayoutSection(group: oneSquareGroup())
         }
         
         let sectionModel = mSections[section]
@@ -345,9 +344,7 @@ public class PTCollectionView: UIView {
                     itemHeight: waterFall
                 )
             } else {
-                PTNSLogConsole("Warning: WaterFallLayout is nil. Fallback to 1x1 group.")
-                let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
-                group = NSCollectionLayoutGroup(layoutSize: size)
+                group = oneSquareGroup()
             }
         case .Horizontal:
             group = UICollectionView.horizontalLayout(
@@ -384,17 +381,13 @@ public class PTCollectionView: UIView {
                     itemContentSpace: viewConfig.tagCellContentSpace
                 )
             } else {
-                PTNSLogConsole("Warning: Tag viewType requires PTTagLayoutModel. Fallback to 1x1 group.")
-                let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
-                group = NSCollectionLayoutGroup(layoutSize: size)
+                group = oneSquareGroup()
             }
         case .Custom:
             if let customerLayout {
                 group = customerLayout(section, sectionModel)
             } else {
-                PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
-                let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
-                group = NSCollectionLayoutGroup(layoutSize: size)
+                group = oneSquareGroup()
             }
         }
         
@@ -418,8 +411,7 @@ public class PTCollectionView: UIView {
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
         
-        if viewConfig.customReuseViews {
-            let items = customerReuseViews?(section,sectionModel) ?? [NSCollectionLayoutBoundarySupplementaryItem]()
+        if viewConfig.customReuseViews,let items = customerReuseViews?(section,sectionModel) {
             laySection.boundarySupplementaryItems = items
         } else {
             laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth)
@@ -428,6 +420,12 @@ public class PTCollectionView: UIView {
         laySection.decorationItems = generateDecorationItems(section: section, sectionModel: sectionModel)
         
         return laySection
+    }
+    
+    private func oneSquareGroup() -> NSCollectionLayoutGroup {
+        PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
+        let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+        return NSCollectionLayoutGroup(layoutSize: size)
     }
 
     private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
@@ -471,8 +469,8 @@ public class PTCollectionView: UIView {
         switch viewConfig.decorationItemsType {
         case .Custom:
             guard mSections.count > 0 else { return [] }
-            if let decorationInCollectionView {
-                return decorationInCollectionView(section, sectionModel)
+            if let decorationInCollectionView = decorationInCollectionView?(section, sectionModel) {
+                return decorationInCollectionView
             } else {
                 return []
             }
@@ -1103,18 +1101,14 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if kind == UICollectionView.elementKindSectionHeader {
-                if !(itemSec.headerID ?? "").stringIsEmpty() {
-                    if let headerHeight = itemSec.headerHeight,headerHeight != CGFloat.leastNormalMagnitude {
-                        return headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
-                    }
-                }
-            } else if kind == UICollectionView.elementKindSectionFooter {
-                if !(itemSec.footerID ?? "").stringIsEmpty() {
-                    if let footerHeight = itemSec.footerHeight,footerHeight != CGFloat.leastNormalMagnitude {
-                        return footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
-                    }
-                }
+            if kind == UICollectionView.elementKindSectionHeader,
+               !(itemSec.headerID ?? "").stringIsEmpty(),
+               let headerHeight = itemSec.headerHeight,
+               headerHeight != CGFloat.leastNormalMagnitude,
+               let headerReusableView = headerInCollection?(kind,collectionView,itemSec,indexPath) {
+                return headerReusableView
+            } else if kind == UICollectionView.elementKindSectionFooter,!(itemSec.footerID ?? "").stringIsEmpty(),let footerHeight = itemSec.footerHeight,footerHeight != CGFloat.leastNormalMagnitude,let footerReusableView = footerInCollection?(kind,collectionView,itemSec,indexPath) {
+                return footerReusableView
             }
         }
         let reuseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath) as! PTBaseCollectionReusableView
@@ -1124,26 +1118,26 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-            if let swipeCell = cell as? PTBaseSwipeCell {
-                if let indexPathSwipe {
-                    let swipe = indexPathSwipe(itemSec,indexPath)
-                    swipeCell.cellCanSwipe = swipe
-                    if swipe {
-                        if let actions = swipeRightHandler?(collectionView,itemSec,indexPath) {
-                            swipeCell.configureRightActions(actions)
-                        } else if let actions = swipeLeftHandler?(collectionView,itemSec,indexPath) {
-                            swipeCell.configureLeftActions(actions)
+            if let cell = cellInCollection?(collectionView,itemSec,indexPath) {
+                if let swipeCell = cell as? PTBaseSwipeCell {
+                    if let indexPathSwipe {
+                        let swipe = indexPathSwipe(itemSec,indexPath)
+                        swipeCell.cellCanSwipe = swipe
+                        if swipe {
+                            if let actions = swipeRightHandler?(collectionView,itemSec,indexPath) {
+                                swipeCell.configureRightActions(actions)
+                            } else if let actions = swipeLeftHandler?(collectionView,itemSec,indexPath) {
+                                swipeCell.configureLeftActions(actions)
+                            }
                         }
                     }
+                    return swipeCell
+                } else {
+                    return cell
                 }
-                return swipeCell
-            } else {
-                return cell
             }
-        } else {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
         }
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -1152,21 +1146,21 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if mSections.count > 0 {
+        if !mSections.isEmpty {
             let itemSec = mSections[indexPath.section]
             collectionDidEndDisplay?(collectionView,cell,itemSec,indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if mSections.count > 0 {
+        if !mSections.isEmpty {
             let itemSec = mSections[indexPath.section]
             collectionWillDisplay?(collectionView,cell,itemSec,indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        if mSections.count > 0 {
+        if !mSections.isEmpty {
             let itemSec = mSections[indexPath.section]
             decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
         }
