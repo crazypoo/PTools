@@ -68,11 +68,7 @@ extension UIImage {
     static let shareImage = UIImage(.square.andArrowUp).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let copyImage = UIImage(.doc.onDocFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func clearImage()-> UIImage {
-        if #available(iOS 15.0, *) {
-            return UIImage(.delete.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.delete).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.delete.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static func userDefaultsImage()-> UIImage {
         return UIImage(.doc.badgeGearshape).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -86,19 +82,11 @@ extension UIImage {
     static let docImage = UIImage(.doc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static let dev3thPartyImage = UIImage(.plus.magnifyingglass).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func maskImage()-> UIImage {
-        if #available(iOS 15.0, *) {
-            return UIImage(.theatermasks).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.bookmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.theatermasks).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static let maskBubbleImage = UIImage(systemName: "bubble.right")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func viewFrameImage()-> UIImage {
-        if #available(iOS 15.0, *) {
-            return UIImage(.square.insetFilled).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(systemName: "rectangle.3.offgrid")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.square.insetFilled).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
     static func cpuImage()-> UIImage {
         return UIImage(.cpu).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -141,11 +129,7 @@ extension UIImage {
     static let InspectorImage = UIImage(.stethoscope).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     
     static func LoadedLibImage()-> UIImage {
-        if #available(iOS 15.0, *) {
-            return UIImage(.cross.vial).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        } else {
-            return UIImage(.gift.circle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
-        }
+        return UIImage(.cross.vial).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
 }
 
@@ -262,9 +246,7 @@ public class LocalConsole: NSObject {
     func commitTextChanges(requestMenuUpdate menuUpdateRequested: Bool) {
         if menuUpdateRequested {
             // Update the context menu to show the clipboard/clear actions.
-            if #available(iOS 15, *) {
-                terminal!.menuButton.menu = makeMenu()
-            }
+            terminal!.menuButton.menu = makeMenu()
         }
     }
     
@@ -586,9 +568,7 @@ public class LocalConsole: NSObject {
         // If device is phone in landscape, disable resize controller.
         if UIDevice.current.userInterfaceIdiom == .phone && PTUtils.getCurrentVC().view.frame.width > PTUtils.getCurrentVC().view.frame.height {
             resize.attributes = .disabled
-            if #available(iOS 15, *) {
-                resize.subtitle = "Portrait Orientation Only"
-            }
+            resize.subtitle = "Portrait Orientation Only"
         }
 
         let clear = UIAction(title: .clearConsole, image: UIImage.clearImage(), attributes: .destructive) { _ in
@@ -597,55 +577,47 @@ public class LocalConsole: NSObject {
 
         var debugActions: [UIMenuElement] = []
 
-        if #available(iOS 15, *) {
+        let deferredUserDefaultsList = UIDeferredMenuElement.uncached { completion in
+            var actions: [UIAction] = []
 
-            let deferredUserDefaultsList = UIDeferredMenuElement.uncached { completion in
-                var actions: [UIAction] = []
+            if self.userdefaultShares.keyAndValues().count == 0 {
+                actions.append(UIAction(title: "No Entries", attributes: .disabled, handler: { _ in }))
+            } else {
+                self.userdefaultShares.keyAndValues().enumerated().forEach { index, value in
+                    let action = UIAction(title: value.keys.first!, image: nil) { _ in
 
-                if self.userdefaultShares.keyAndValues().count == 0 {
-                    actions.append(UIAction(title: "No Entries", attributes: .disabled, handler: { _ in }))
-                } else {
-                    self.userdefaultShares.keyAndValues().enumerated().forEach { index, value in
-                        let action = UIAction(title: value.keys.first!, image: nil) { _ in
-
-                            UIAlertController.base_alertVC(title: "Key\n" + value.keys.first!, msg: "\nValue\n" + "\(value.values.first!)", okBtns: ["Copy Value", "Clear Value", "Edit value"], cancelBtn: "Cancel", moreBtn: { index, title in
-                                if title == "Copy Value" {
-                                    "\(value.values.first!)".copyToPasteboard()
-                                } else if title == "Clear Value" {
-                                    UserDefaults.standard.removeObject(forKey: value.keys.first!)
-                                } else if title == "Edit value" {
-                                    UIAlertController.base_textfield_alertVC(title: "Edit\n" + value.keys.first!, okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [value.keys.first!], textFieldTexts: ["\(value.values.first!)"], keyboardType: [.default], textFieldDelegate: self) { result in
-                                        let newValue = result.values.first
-                                        UserDefaults.standard.setValue(newValue, forKey: value.keys.first!)
-                                    }
+                        UIAlertController.base_alertVC(title: "Key\n" + value.keys.first!, msg: "\nValue\n" + "\(value.values.first!)", okBtns: ["Copy Value", "Clear Value", "Edit value"], cancelBtn: "Cancel", moreBtn: { index, title in
+                            if title == "Copy Value" {
+                                "\(value.values.first!)".copyToPasteboard()
+                            } else if title == "Clear Value" {
+                                UserDefaults.standard.removeObject(forKey: value.keys.first!)
+                            } else if title == "Edit value" {
+                                UIAlertController.base_textfield_alertVC(title: "Edit\n" + value.keys.first!, okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [value.keys.first!], textFieldTexts: ["\(value.values.first!)"], keyboardType: [.default], textFieldDelegate: self) { result in
+                                    let newValue = result.values.first
+                                    UserDefaults.standard.setValue(newValue, forKey: value.keys.first!)
                                 }
-                            })
-                        }
-                        action.subtitle = "\(value.values.first!)"
-                        actions.append(action)
+                            }
+                        })
                     }
-
-                    actions.append(
-                            UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive, handler: { _ in
-                                self.userdefaultShares.keyAndValues().enumerated().forEach { index, value in
-                                    UserDefaults.standard.removeObject(forKey: value.keys.first!)
-                                }
-                            })
-                    )
+                    action.subtitle = "\(value.values.first!)"
+                    actions.append(action)
                 }
-                completion(actions)
-            }
 
-            let userDefaults = UIMenu(title: .userDefaults, image: UIImage.userDefaultsImage(), children: [deferredUserDefaultsList])
-
-            debugActions.append(userDefaults)
-        } else {
-            let userDefaults = UIAction(title: .userDefaults, image: UIImage.userDefaultsImage()) { _ in
-                self.userdefaultAction()
+                actions.append(
+                        UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive, handler: { _ in
+                            self.userdefaultShares.keyAndValues().enumerated().forEach { index, value in
+                                UserDefaults.standard.removeObject(forKey: value.keys.first!)
+                            }
+                        })
+                )
             }
-            debugActions.append(userDefaults)
+            completion(actions)
         }
-        
+
+        let userDefaults = UIMenu(title: .userDefaults, image: UIImage.userDefaultsImage(), children: [deferredUserDefaultsList])
+
+        debugActions.append(userDefaults)
+
         let inspect = UIAction(title: "Inspectors",image: UIImage.InspectorImage) { _ in
             Task {
                 await Inspector.sharedInstance.present(animated: true)
@@ -696,42 +668,28 @@ public class LocalConsole: NSObject {
             }
         }
 
-        if #available(iOS 15.0, *) {
+        let deferredMaskList = UIDeferredMenuElement.uncached { completion in
+            var actions: [UIAction] = []
 
-            let deferredMaskList = UIDeferredMenuElement.uncached { completion in
-                var actions: [UIAction] = []
-
-                let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { _ in
-                    self.maskOpenFunction()
-                }
-                actions.append(maskOpen)
-
-                if self.maskView != nil {
-                    let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { _ in
-                        self.maskOpenBubbleFunction()
-                    }
-                    actions.append(maskTouchBubble)
-                }
-
-                completion(actions)
-            }
-
-
-            let masks = UIMenu(title: "Dev Mask", image: UIImage.maskImage(), children: [deferredMaskList])
-            debugActions.append(masks)
-        } else {
-            let maskOpen = UIAction(title: maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { _ in
+            let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { _ in
                 self.maskOpenFunction()
             }
-            debugActions.append(maskOpen)
+            actions.append(maskOpen)
 
-            if maskView != nil {
+            if self.maskView != nil {
                 let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { _ in
                     self.maskOpenBubbleFunction()
                 }
-                debugActions.append(maskTouchBubble)
+                actions.append(maskTouchBubble)
             }
+
+            completion(actions)
         }
+
+
+        let masks = UIMenu(title: "Dev Mask", image: UIImage.maskImage(), children: [deferredMaskList])
+        debugActions.append(masks)
+
 
         let viewFrames = UIAction(title: debugBordersEnabled ? .showViewFrames : .hideViewFrames, image: UIImage.viewFrameImage()) { _ in
             self.viewFramesAction()

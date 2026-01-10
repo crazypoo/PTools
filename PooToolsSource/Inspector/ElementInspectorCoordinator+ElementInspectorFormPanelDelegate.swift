@@ -30,7 +30,7 @@ extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
                 $0.selectedColor = selectedColor
             }
 
-            if #available(iOS 15.0, *), let sheet = $0.sheetPresentationController {
+            if let sheet = $0.sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
                 sheet.selectedDetentIdentifier = .medium
                 sheet.prefersGrabberVisible = true

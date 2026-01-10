@@ -44,13 +44,10 @@ enum ViewHierarchyIssue: CustomStringConvertible, Hashable {
             array.append(.controlDisabled)
         }
 
-        guard #available(iOS 15.0, *) else { return array }
-
         let defaultAppearance = UINavigationBarAppearance()
         defaultAppearance.configureWithDefaultBackground()
 
-        if
-            let navigationBar = view as? UINavigationBar,
+        if let navigationBar = view as? UINavigationBar,
             navigationBar.scrollEdgeAppearance == nil,
             navigationBar.standardAppearance.backgroundColor != defaultAppearance.backgroundColor,
             navigationBar.standardAppearance.backgroundEffect?.style != defaultAppearance.backgroundEffect?.style

@@ -76,8 +76,6 @@ extension DefaultElementAttributesLibrary {
                         handler: nil
                     )
                 case .canBecomeKey:
-                    guard #available(iOS 15.0, *) else { return nil }
-
                     return .switch(
                         title: property.rawValue,
                         isOn: { window.canBecomeKey },

@@ -55,10 +55,12 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                 } else {
                     cellHeight = CGFloat.ScaleW(w: 44)
                 }
-                sectionModel.rows?.enumerated().forEach { (index,model) in
-                    let cellHeight:CGFloat = cellHeight
-                    let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
-                    customers.append(customItem)
+                let rows = sectionModel.rows
+                let inset = PTAppBaseConfig.share.defaultViewSpace
+                let width = screenW - inset * 2
+                rows?.indices.forEach { index in
+                    let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: inset, y: groupH, width: width, height: cellHeight), zIndex: 1000 + index)
+                    customers.append(item)
                     groupH += cellHeight
                 }
                 bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(screenW - PTAppBaseConfig.share.defaultViewSpace * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))

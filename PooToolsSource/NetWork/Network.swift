@@ -153,22 +153,15 @@ public class PTNetWorkStatus {
     
     func getCellularType() -> NetworkCellularType {
         let radioAccess: String
-        if #available(iOS 13.0, *) {
-            guard let id = self.ctNetworkInfo.dataServiceIdentifier else { return .ALL }
-            guard let ra = self.ctNetworkInfo.serviceCurrentRadioAccessTechnology?[id] else { return .ALL }
-            radioAccess = ra
-        } else {
-            guard let ra = self.ctNetworkInfo.serviceCurrentRadioAccessTechnology?.first?.value else { return .ALL }
-            radioAccess = ra
+        guard let id = self.ctNetworkInfo.dataServiceIdentifier else { return .ALL }
+        guard let ra = self.ctNetworkInfo.serviceCurrentRadioAccessTechnology?[id] else { return .ALL }
+        radioAccess = ra
+
+        if radioAccess == CTRadioAccessTechnologyNRNSA
+            || radioAccess == CTRadioAccessTechnologyNR {
+            return .Cellular5G
         }
-        
-        if #available(iOS 14.1, *) {
-            if radioAccess == CTRadioAccessTechnologyNRNSA
-                || radioAccess == CTRadioAccessTechnologyNR {
-                return .Cellular5G
-            }
-        }
-        
+
         switch radioAccess {
         case CTRadioAccessTechnologyGPRS,
             CTRadioAccessTechnologyEdge,

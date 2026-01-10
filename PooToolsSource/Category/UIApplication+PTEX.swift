@@ -52,11 +52,7 @@ public extension UIApplication {
     }
     
     var currentWindow: UIWindow? {
-        if #available(iOS 13.0, *) {
-            return self.currentWindows?.first { $0.isKeyWindow }
-        } else {
-            return self.keyWindow
-        }
+        return self.currentWindows?.first { $0.isKeyWindow }
     }
 }
 

@@ -51,238 +51,154 @@ public class PTLayoutButton: UIButton {
     
     open var clearGlass:Bool = false {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 布局方式
     open var layoutStyle: PTLayoutButtonStyle = .leftImageRightTitle {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 图片和文字的间距，默认值5
     open var midSpacing: CGFloat = 5 {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 指定图片size
     open var imageSize: CGSize = .zero {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 按钮圆角风格
     open var cornerStyle: PTLayoutButtonConnerStyle = .none {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 按钮Border粗度
     open var borderWidth: CGFloat = 0 {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                viewCorner(radius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 文本对齐方向
     open var textAlignment: PTLayoutButtonTitleAlignmentStyle = .center {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 按钮Border颜色
     open var borderColor: UIColor = .clear {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                viewCorner(radius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
-            }
+            configuration = layoutConfig
         }
     }
     
     /// 按钮圆角大小
     open var cornerRadius: CGFloat = 0 {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                viewCorner(radius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var configBackgroundColor: UIColor = .clear {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                backgroundColor = configBackgroundColor
-            }
+            configuration = layoutConfig
         }
     }
     
     open var configBackgroundSelectedColor: UIColor = .clear {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                backgroundColor = configBackgroundSelectedColor
-            }
+            configuration = layoutConfig
         }
     }
     
     open var configBackgroundHightlightColor: UIColor = .clear {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                backgroundColor = configBackgroundHightlightColor
-            }
+            configuration = layoutConfig
         }
     }
     
     open var configBackgroundDisableColor: UIColor = .clear {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                backgroundColor = configBackgroundDisableColor
-            }
+            configuration = layoutConfig
         }
     }
     
     open var buttonSizeStyle: PTLayoutButtonSizeStyle = .none {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
     
     open var titlePadding: CGFloat = 0 {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     open var showHightlightActivity: Bool = false {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
     
     open var activityColor: UIColor = .systemPurple {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
     
     open var loadingCanTap: Bool = false {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
 
     open var normalImage: UIImage? = nil {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setImage(normalImage, for: .normal)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var selectedImage: UIImage? = nil {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setImage(selectedImage, for: .selected)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var hightlightImage: UIImage? = nil {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setImage(hightlightImage, for: .highlighted)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var disabledImage: UIImage? = nil {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setImage(disabledImage, for: .disabled)
-            }
+            configuration = layoutConfig
         }
     }
 
     open var normalTitle: String = "" {
         didSet {
             selectedTitle = normalTitle
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setTitle(normalTitle, for: .normal)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var selectedTitle: String! {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setTitle(selectedTitle, for: .selected)
-            }
+            configuration = layoutConfig
         }
     }
     
@@ -292,11 +208,7 @@ public class PTLayoutButton: UIButton {
         } set {
             if hightlightTitle != newValue {
                 self.hightlightTitle = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setTitle(hightlightTitle, for: .highlighted)
-                }
+                configuration = layoutConfig
             }
         }
     }
@@ -307,114 +219,62 @@ public class PTLayoutButton: UIButton {
         } set {
             if disabledTitle != newValue {
                 self.disabledTitle = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setTitle(disabledTitle, for: .disabled)
-                }
+                configuration = layoutConfig
             }
         }
     }
 
     open var normalTitleColor: UIColor = .black {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setTitleColor(normalTitleColor, for: .normal)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var selectedTitleColor: UIColor = .black {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setTitleColor(selectedTitleColor, for: .disabled)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var hightlightTitleColor: UIColor = .black {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setTitleColor(hightlightTitleColor, for: .disabled)
-            }
+            configuration = layoutConfig
         }
     }
     
     open var disabledTitleColor: UIColor = .lightGray {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setTitleColor(disabledTitleColor, for: .disabled)
-            }
+            configuration = layoutConfig
         }
     }
 
     open var normalTitleFont: UIFont = .appfont(size: 14) {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                titleLabel?.font = normalTitleFont
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     open var selectedTitleFont: UIFont = .appfont(size: 14) {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                titleLabel?.font = selectedTitleFont
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     open var hightlightTitleFont: UIFont = .appfont(size: 14) {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                if isHighlighted {
-                    titleLabel?.font = hightlightTitleFont
-                } else {
-                    titleLabel?.font = normalTitleFont
-                }
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
     
     open var disabledTitleFont: UIFont = .appfont(size: 14) {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                if isEnabled {
-                    titleLabel?.font = normalTitleFont
-                } else {
-                    titleLabel?.font = disabledTitleFont
-                }
-                setNeedsLayout()
-            }
+            configuration = layoutConfig
         }
     }
 
     open var normalSubTitle: String? = "" {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setAttValue(title: normalTitle, titleFont: normalTitleFont, titleColor: normalTitleColor, subTitle: normalSubTitle ?? "", subTitleFont: normalSubTitleFont, subTitleColor: normalSubTitleColor, state: .normal)
-            }
+            configuration = layoutConfig
         }
     }
     
@@ -424,11 +284,7 @@ public class PTLayoutButton: UIButton {
         } set {
             if selectedSubTitle != newValue {
                 self.selectedSubTitle = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: selectedTitle, titleFont: selectedTitleFont, titleColor: selectedTitleColor, subTitle: selectedSubTitle, subTitleFont: selectedSubTitleFont, subTitleColor: selectedSubTitleColor, state: .selected)
-                }
+                configuration = layoutConfig
             }
         }
     }
@@ -439,11 +295,7 @@ public class PTLayoutButton: UIButton {
         } set {
             if hightlightSubTitle != newValue {
                 self.hightlightSubTitle = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: hightlightTitle, titleFont: hightlightTitleFont, titleColor: hightlightTitleColor, subTitle: hightlightSubTitle, subTitleFont: hightlightSubTitleFont, subTitleColor: hightlightSubTitleColor, state: .highlighted)
-                }
+                configuration = layoutConfig
             }
         }
     }
@@ -454,22 +306,14 @@ public class PTLayoutButton: UIButton {
         } set {
             if disabledSubTitle != newValue {
                 self.disabledSubTitle = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
-                }
+                configuration = layoutConfig
             }
         }
     }
 
     open var normalSubTitleColor: UIColor = .black {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setAttValue(title: normalTitle, titleFont: normalTitleFont, titleColor: normalTitleColor, subTitle: normalSubTitle ?? "", subTitleFont: normalSubTitleFont, subTitleColor: normalSubTitleColor, state: .normal)
-            }
+            configuration = layoutConfig
         }
     }
     
@@ -479,11 +323,7 @@ public class PTLayoutButton: UIButton {
         } set {
             if selectedSubTitleColor != newValue {
                 self.selectedSubTitleColor = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: selectedTitle, titleFont: selectedTitleFont, titleColor: selectedTitleColor, subTitle: selectedSubTitle, subTitleFont: selectedSubTitleFont, subTitleColor: selectedSubTitleColor, state: .selected)
-                }
+                configuration = layoutConfig
             }
         }
     }
@@ -494,32 +334,20 @@ public class PTLayoutButton: UIButton {
         } set {
             if hightlightSubTitleColor != newValue {
                 self.hightlightSubTitleColor = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: hightlightTitle, titleFont: hightlightTitleFont, titleColor: hightlightTitleColor, subTitle: hightlightSubTitle, subTitleFont: hightlightSubTitleFont, subTitleColor: hightlightSubTitleColor, state: .highlighted)
-                }
+                configuration = layoutConfig
             }
         }
     }
     
     open var disabledSubTitleColor: UIColor = .lightGray {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
-            }
+            configuration = layoutConfig
         }
     }
 
     open var normalSubTitleFont: UIFont = .appfont(size: 12) {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            } else {
-                setAttValue(title: normalTitle, titleFont: normalTitleFont, titleColor: normalTitleColor, subTitle: normalSubTitle ?? "", subTitleFont: normalSubTitleFont, subTitleColor: normalSubTitleColor, state: .normal)
-            }
+            configuration = layoutConfig
         }
     }
     
@@ -529,11 +357,7 @@ public class PTLayoutButton: UIButton {
         } set {
             if selectedSubTitleFont != newValue {
                 self.selectedSubTitleFont = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: selectedTitle, titleFont: selectedTitleFont, titleColor: selectedTitleColor, subTitle: selectedSubTitle, subTitleFont: selectedSubTitleFont, subTitleColor: selectedSubTitleColor, state: .selected)
-                }
+                configuration = layoutConfig
             }
         }
     }
@@ -544,11 +368,7 @@ public class PTLayoutButton: UIButton {
         } set {
             if hightlightSubTitleFont != newValue {
                 self.hightlightSubTitleFont = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
-                }
+                configuration = layoutConfig
             }
         }
     }
@@ -559,20 +379,14 @@ public class PTLayoutButton: UIButton {
         } set {
             if disabledSubTitleFont != newValue {
                 self.disabledSubTitleFont = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
-                }
+                configuration = layoutConfig
             }
         }
     }
 
     open var contentEdges: NSDirectionalEdgeInsets = .zero {
         didSet {
-            if #available(iOS 15.0, *) {
-                configuration = layoutConfig
-            }
+            configuration = layoutConfig
         }
     }
 
@@ -580,9 +394,7 @@ public class PTLayoutButton: UIButton {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        if #available(iOS 15.0, *) {
-            configuration = layoutConfig
-        }
+        configuration = layoutConfig
     }
 
     @available(*, unavailable)

@@ -205,7 +205,6 @@ public class PTFileBrowserViewController: PTBaseViewController {
         if extensionDirectoryPath.isEmpty {
             navigationItem.leftBarButtonItem = nil
         } else {
-            back.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
             setCustomBackButtonView(back)
         }
         dataList.removeAll()
@@ -264,7 +263,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 return row
             }
                         
-            if rows.count > 0 {
+            if !rows.isEmpty {
                 let section = PTSection(rows: rows)
                 mSections.append(section)
             }

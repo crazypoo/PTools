@@ -39,15 +39,17 @@ public class PTPermissionSettingViewController: PTBaseViewController {
             let screenW:CGFloat = self.view.frame.size.width
             let cellWidth = screenW - PTAppBaseConfig.share.defaultViewSpace * 2
             sectionModel.rows?.enumerated().forEach { (index,model) in
-                var descHeight = UIView.sizeFor(string: (model.dataModel as! PTPermissionModel).desc, font: PTPermissionStatic.share.permissionSettingFont,lineSpacing: 2,width: cellWidth).height
-                if descHeight <= PTPermissionSettingCell.CellHeight {
-                    descHeight = PTPermissionSettingCell.CellHeight
+                if let dataModel = model.dataModel as? PTPermissionModel {
+                    var descHeight = UIView.sizeFor(string: dataModel.desc, font: PTPermissionStatic.share.permissionSettingFont,lineSpacing: 2,width: cellWidth).height
+                    if descHeight <= PTPermissionSettingCell.CellHeight {
+                        descHeight = PTPermissionSettingCell.CellHeight
+                    }
+                    
+                    let cellHeight:CGFloat = descHeight + 1 + PTPermissionSettingCell.CellHeight + 1 + PTPermissionSettingCell.CellHeight + 20
+                    let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: 0, y: groupH, width: cellWidth, height: cellHeight), zIndex: 1000+index)
+                    customers.append(customItem)
+                    groupH += cellHeight
                 }
-                
-                let cellHeight:CGFloat = descHeight + 1 + PTPermissionSettingCell.CellHeight + 1 + PTPermissionSettingCell.CellHeight + 20
-                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: 0, y: groupH, width: cellWidth, height: cellHeight), zIndex: 1000+index)
-                customers.append(customItem)
-                groupH += cellHeight
             }
             bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(cellWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in

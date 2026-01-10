@@ -235,22 +235,20 @@ extension UIViewController {
             return
         }
 
-        if #available(iOS 15.0, *) {
-            modalPresentationStyle = .popover
+        modalPresentationStyle = .popover
 
-            guard let popoverPresentationController = popoverPresentationController else { return }
+        guard let popoverPresentationController = popoverPresentationController else { return }
 
-            popoverPresentationController.sourceView = sourceView
-            popoverPresentationController.delegate = delegate as? UIPopoverPresentationControllerDelegate
+        popoverPresentationController.sourceView = sourceView
+        popoverPresentationController.delegate = delegate as? UIPopoverPresentationControllerDelegate
 
-            let sheet = popoverPresentationController.adaptiveSheetPresentationController
-            sheet.delegate = delegate as? UISheetPresentationControllerDelegate
-            sheet.detents = [.medium(), .large()]
-            sheet.largestUndimmedDetentIdentifier = .medium
-            sheet.preferredCornerRadius = Inspector.sharedInstance.appearance.elementInspector.horizontalMargins
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.sourceView = sourceView
-        }
+        let sheet = popoverPresentationController.adaptiveSheetPresentationController
+        sheet.delegate = delegate as? UISheetPresentationControllerDelegate
+        sheet.detents = [.medium(), .large()]
+        sheet.largestUndimmedDetentIdentifier = .medium
+        sheet.preferredCornerRadius = Inspector.sharedInstance.appearance.elementInspector.horizontalMargins
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        sheet.sourceView = sourceView
     }
 }
 

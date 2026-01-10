@@ -43,10 +43,8 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
             case let navigationController as ElementInspectorNavigationController where navigationController.shouldAdaptModalPresentation == false:
                 return .none
             default:
-                if #available(iOS 15.0, *) {
-                    if presentationController is UIPopoverPresentationController {
-                        return presentationController.presentationStyle
-                    }
+                if presentationController is UIPopoverPresentationController {
+                    return presentationController.presentationStyle
                 }
                 return .formSheet
             }
@@ -122,20 +120,11 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
     }
 
     func setPopoverModalPresentationStyle(for viewController: UIViewController, from sourceView: UIView) {
-        if #available(iOS 15.0, *) {
-            viewController.setPopoverModalPresentationStyle(
-                delegate: adaptiveModalPresenter,
-                transitionDelegate: transitionDelegate(for: viewController),
-                from: sourceView
-            )
-        }
-        else {
-            viewController.setPopoverModalPresentationStyle(
-                delegate: adaptiveModalPresenter,
-                transitionDelegate: transitionDelegate(for: viewController),
-                from: sourceView
-            )
-        }
+        viewController.setPopoverModalPresentationStyle(
+            delegate: adaptiveModalPresenter,
+            transitionDelegate: transitionDelegate(for: viewController),
+            from: sourceView
+        )
     }
 
     static func makeElementInspectorViewController(
@@ -151,8 +140,7 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
 
         if let preferredPanel = preferredPanel, availablePanels.contains(preferredPanel) {
             selectedPanel = preferredPanel
-        }
-        else {
+        } else {
             selectedPanel = initialPanel
         }
 

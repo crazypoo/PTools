@@ -37,11 +37,7 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator: UIActivityIndicatorView
-        if #available(iOS 13.0, *) {
-            indicator = UIActivityIndicatorView(style: .medium)
-        } else {
-            indicator = UIActivityIndicatorView(style: .white)
-        }
+        indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator

@@ -232,29 +232,20 @@ public class PTGCDManager :NSObject {
     //MARK: gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
     ///gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
     public class func runOnMainAsync(_ block: @escaping PTActionAsyncTask) {
-        if #available(iOS 15.0, *) {
-            #if swift(>=6.0)
-            Task { @MainActor in
+#if swift(>=6.0)
+        Task { @MainActor in
+            await block()
+        }
+#else
+        DispatchQueue.main.async {
+            Task {
                 await block()
             }
-            #else
-            DispatchQueue.main.async {
-                Task {
-                    await block()
-                }
-            }
-            #endif
-        } else {
-            DispatchQueue.main.async {
-                Task {
-                    await block()
-                }
-            }
         }
+#endif
     }
     
     public class func gcdMain(block: @escaping PTActionTask) {
-        if #available(iOS 15.0, *) {
 #if swift(>=6.0)
             Task { @MainActor in
                 block()
@@ -262,9 +253,6 @@ public class PTGCDManager :NSObject {
 #else
             DispatchQueue.main.async(execute: block)
 #endif
-        } else {
-            DispatchQueue.main.async(execute: block)
-        }
     }
     
     public class func gcdGobal(qosCls:DispatchQoS.QoSClass,

@@ -849,13 +849,8 @@ class PTFuncNameViewController: PTBaseViewController {
                     cameraConfig.flashImage = UIImage(.flashlight.offFill).withTintColor(.white)
                     cameraConfig.flashImageSelected = UIImage(.flashlight.onFill).withTintColor(.white)
                     
-                    if #available(iOS 15.0, *) {
-                        cameraConfig.filtersImageSelected = UIImage(.line._3HorizontalDecreaseCircleFill)
-                        cameraConfig.filtersImage = UIImage(.line._3HorizontalDecreaseCircle)
-                    } else {
-                        cameraConfig.filtersImage = UIImage(.f.cursiveCircle)
-                        cameraConfig.filtersImageSelected = UIImage(.f.cursiveCircleFill)
-                    }
+                    cameraConfig.filtersImageSelected = UIImage(.line._3HorizontalDecreaseCircleFill)
+                    cameraConfig.filtersImage = UIImage(.line._3HorizontalDecreaseCircle)
 
                     let vc = PTFilterCameraViewController()
                     vc.onlyCamera = false

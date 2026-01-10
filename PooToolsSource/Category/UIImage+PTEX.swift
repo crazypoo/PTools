@@ -137,18 +137,10 @@ public extension UIImage {
     //MARK: 更改圖片大小
     ///更改圖片大小
     @objc func transformImage(size:CGSize) -> UIImage {
-        if #available(iOS 15.0, *) {
-            if isSymbolImage {
-                return resize(targetSize: size)
-            } else {
-                return preparingThumbnail(of: size) ?? resize(targetSize: size)
-            }
+        if isSymbolImage {
+            return resize(targetSize: size)
         } else {
-            if isSymbolImage {
-                return resize(targetSize: size)
-            } else {
-                return transform(size: CGSize(width: size.width, height: size.height))
-            }
+            return preparingThumbnail(of: size) ?? resize(targetSize: size)
         }
     }
     

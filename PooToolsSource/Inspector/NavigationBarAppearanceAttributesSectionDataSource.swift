@@ -243,10 +243,7 @@ extension DefaultElementAttributesLibrary.NavigationBarAppearanceAttributesSecti
             case .scrollEdge:
                 return navigationBar.scrollEdgeAppearance
             case .compactScrollEdge:
-                if #available(iOS 15.0, *) {
-                    return navigationBar.compactScrollEdgeAppearance
-                }
-                return .none
+                return navigationBar.compactScrollEdgeAppearance
             }
         }
 
@@ -281,8 +278,6 @@ extension DefaultElementAttributesLibrary.NavigationBarAppearanceAttributesSecti
         }
 
         var warning: InspectorElementProperty? {
-            guard #available(iOS 15.0, *) else { return .none }
-
             switch self {
             case .scrollEdge:
                 return .infoNote(

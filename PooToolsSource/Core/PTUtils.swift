@@ -328,19 +328,15 @@ public extension PTUtils {
 
     // Configure console window.
     class func fetchWindow() -> UIWindow? {
-        if #available(iOS 15.0, *) {
-            let windowScene = UIApplication.shared
-                .connectedScenes
-                .filter { $0.activationState == .foregroundActive }
-                .first
-            
-            if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
-                return keyWindow
-            }
-            return nil
-        } else {
-            return UIApplication.shared.windows.first
+        let windowScene = UIApplication.shared
+            .connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .first
+        
+        if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
+            return keyWindow
         }
+        return nil
     }
                         
     class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {

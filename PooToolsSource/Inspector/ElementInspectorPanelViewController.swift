@@ -55,13 +55,7 @@ class ElementInspectorPanelViewController: UIViewController, ElementInspectorApp
 
         let newValue: Bool = {
             if let popover = parent.popoverPresentationController {
-                if #available(iOS 15.0, *) {
-                    return popover.adaptiveSheetPresentationController.selectedDetentIdentifier == .large
-                }
-
-                _ = popover
-
-                return false
+                return popover.adaptiveSheetPresentationController.selectedDetentIdentifier == .large
             }
 
             return true

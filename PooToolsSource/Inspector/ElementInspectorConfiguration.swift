@@ -8,10 +8,7 @@ import UIKit
 
 final class ElementInspectorConfiguration {
     var isPresentingFromBottomSheet: Bool {
-        if #available(iOS 15.0, *) {
-            return isPhoneIdiom
-        }
-        return false
+        return isPhoneIdiom
     }
 
     var isPhoneIdiom: Bool {

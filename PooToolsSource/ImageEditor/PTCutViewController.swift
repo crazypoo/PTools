@@ -139,9 +139,11 @@ class PTCutViewController: PTBaseViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 88
             let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
-            sectionModel.rows?.enumerated().forEach { (index,model) in
-                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
-                customers.append(customItem)
+            let rows = sectionModel.rows
+            rows?.indices.forEach { index in
+                let x = PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index)
+                let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: x, y: 0, width: screenW, height: cellHeight), zIndex: 1000 + index)
+                customers.append(item)
                 groupW += (cellHeight + 10)
             }
             bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))

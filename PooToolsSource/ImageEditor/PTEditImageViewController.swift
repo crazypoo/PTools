@@ -63,14 +63,9 @@ public class PTEditImageViewController: PTBaseViewController {
                 model.disclosureIndicatorImage = UIImage(.square.grid_2x2Fill)
                 
             case .filter:
-                if #available(iOS 15.0, *) {
-                    model.contentIcon = UIImage(.line._3HorizontalDecreaseCircle)
-                    model.disclosureIndicatorImage = UIImage(.line._3HorizontalDecreaseCircleFill)
-                } else {
-                    model.contentIcon = UIImage(.f.cursiveCircle)
-                    model.disclosureIndicatorImage = UIImage(.f.cursiveCircleFill)
-                }
-                
+                model.contentIcon = UIImage(.line._3HorizontalDecreaseCircle)
+                model.disclosureIndicatorImage = UIImage(.line._3HorizontalDecreaseCircleFill)
+
             case .adjust:
                 model.contentIcon = UIImage(.ellipsis.rectangle)
                 model.disclosureIndicatorImage = UIImage(.ellipsis.rectangleFill)
@@ -133,9 +128,11 @@ public class PTEditImageViewController: PTBaseViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 88
             let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
-            sectionModel.rows?.enumerated().forEach { (index,model) in
-                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
-                customers.append(customItem)
+            let rows = sectionModel.rows
+            rows?.indices.forEach { index in
+                let x = PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index)
+                let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: x, y: 0, width: screenW, height: cellHeight), zIndex: 1000 + index)
+                customers.append(item)
                 groupW += (cellHeight + 10)
             }
             bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
@@ -180,9 +177,11 @@ public class PTEditImageViewController: PTBaseViewController {
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 54
             let cellHeight:CGFloat = self.adjustCollectionViewHeight
-            sectionModel.rows?.enumerated().forEach { (index,model) in
-                let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 5, width: screenW, height: cellHeight - 10), zIndex: 1000+index)
-                customers.append(customItem)
+            let rows = sectionModel.rows
+            rows?.indices.forEach { index in
+                let x = PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index)
+                let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: x, y: 5, width: screenW, height: cellHeight - 10), zIndex: 1000 + index)
+                customers.append(item)
                 groupW += (cellHeight + 10)
             }
             bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))

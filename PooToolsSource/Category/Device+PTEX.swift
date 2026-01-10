@@ -324,7 +324,7 @@ public extension PTPOP where Base: UIDevice {
          CTRadioAccessTechnologyNRNSA：5G NSA
          CTRadioAccessTechnologyNR：5G
          */
-        if #available(iOS 14.1, *), currentRadioTech == CTRadioAccessTechnologyNRNSA || currentRadioTech == CTRadioAccessTechnologyNR {
+        if currentRadioTech == CTRadioAccessTechnologyNRNSA || currentRadioTech == CTRadioAccessTechnologyNR {
             return "5G"
         }
     

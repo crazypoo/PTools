@@ -136,38 +136,22 @@ extension PTBaseNavControl {
         let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]
         
         let images = UIColor.clear.createImageWithColor()
-        if #available(iOS 15.0, *) {
-            let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.backgroundColor = colors
-            navigationBarAppearance.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
-            navigationBarAppearance.shadowImage = images
-            navigationBarAppearance.setBackIndicatorImage(colors.createImageWithColor(), transitionMaskImage: colors.createImageWithColor())
-            nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-            nav.navigationBar.standardAppearance = navigationBarAppearance
-            nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
-            nav.navigationBar.tintColor = textColor
-            nav.navigationItem.leftBarButtonItem?.tintColor = textColors
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.backgroundColor = colors
+        navigationBarAppearance.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
+        navigationBarAppearance.shadowImage = images
+        navigationBarAppearance.setBackIndicatorImage(colors.createImageWithColor(), transitionMaskImage: colors.createImageWithColor())
+        nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        nav.navigationBar.standardAppearance = navigationBarAppearance
+        nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
+        nav.navigationBar.tintColor = textColor
+        nav.navigationItem.leftBarButtonItem?.tintColor = textColors
 
-            let toolBarAppearance = UIToolbarAppearance()
-            toolBarAppearance.backgroundColor = colors
-            nav.toolbar.scrollEdgeAppearance = toolBarAppearance
-            nav.toolbar.standardAppearance = toolBarAppearance
-            nav.toolbar.compactScrollEdgeAppearance = toolBarAppearance
-            nav.toolbar.isTranslucent = false
-        } else {
-            /// 去掉导航栏底部黑线。需要同时设置shadowImage 和 setBackgroundImage
-            nav.navigationBar.shadowImage = images
-            nav.navigationItem.leftBarButtonItem?.tintColor = textColors
-            /// 导航栏背景图片
-            nav.navigationController?.navigationBar.backgroundColor = colors
-            nav.navigationController?.navigationBar.setBackgroundImage(colors.createImageWithColor(), for: .default)
-            
-            nav.navigationBar.apply(gradient: [colors])
-            
-            /// 修改UINavigationBar上各个item的文字、图形的颜色
-            nav.navigationBar.tintColor = textColors
-            
-            nav.navigationBar.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
-        }
+        let toolBarAppearance = UIToolbarAppearance()
+        toolBarAppearance.backgroundColor = colors
+        nav.toolbar.scrollEdgeAppearance = toolBarAppearance
+        nav.toolbar.standardAppearance = toolBarAppearance
+        nav.toolbar.compactScrollEdgeAppearance = toolBarAppearance
+        nav.toolbar.isTranslucent = false
     }
 }
