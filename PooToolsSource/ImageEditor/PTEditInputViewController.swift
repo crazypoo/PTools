@@ -670,6 +670,7 @@ class PTEditInputViewController: PTBaseViewController {
         btn.setImage(PTImageEditorConfig.share.textSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
         btn.layer.masksToBounds = true
+        btn.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return btn
     }()
     
@@ -703,24 +704,13 @@ class PTEditInputViewController: PTBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage(UIImage(.paintpalette), for: .normal)
         view.addActionHandlers { sender in
-            let colorPicker = UIColorPickerViewController()
-            colorPicker.delegate = self
-            
-            // 设置预选颜色
-            colorPicker.selectedColor = self.currentColor
-            
-            // 显示 alpha 通道
-            colorPicker.supportsAlpha = true
-            
-            // 呈现颜色选择器
+            let colorPicker = PTColorPickerContainerViewController()
+            colorPicker.backButton.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+            colorPicker.picker.selectedColor = self.currentColor
+            colorPicker.selectedColorCallback = { color in
+                self.currentColor = color
+            }
             self.navigationController?.pushViewController(colorPicker, completion: {
-                let colorPickerBack = UIButton(type: .custom)
-                colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
-                colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
-                colorPickerBack.addActionHandlers { sender in
-                    colorPicker.navigationController?.popViewController(animated: true)
-                }
-                colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
             })
         }
         return view
@@ -1082,30 +1072,6 @@ extension PTEditInputViewController: NSLayoutManagerDelegate {
         drawTextBackground()
     }
 }
-
-//MARK: UIColorPickerViewControllerDelegate
-extension PTEditInputViewController: UIColorPickerViewControllerDelegate {
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        if viewController.checkVCIsPresenting() {
-            viewController.dismiss(animated: true) {
-                PTGCDManager.gcdMain {
-                    self.currentColor = viewController.selectedColor
-                }
-            }
-        } else {
-            viewController.navigationController?.popViewController(animated: true) {
-                PTGCDManager.gcdMain {
-                    self.currentColor = viewController.selectedColor
-                }
-            }
-        }
-    }
-    
-    func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-        self.currentColor = viewController.selectedColor
-    }
-}
-
 
 public enum PTInputTextStyle {
     case normal

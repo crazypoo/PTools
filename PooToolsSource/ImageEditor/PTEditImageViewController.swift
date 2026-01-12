@@ -387,26 +387,13 @@ public class PTEditImageViewController: PTBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage(UIImage(.paintpalette), for: .normal)
         view.addActionHandlers { sender in
-            let colorPicker = UIColorPickerViewController()
-            colorPicker.delegate = self
-            
-            // 设置预选颜色
-            colorPicker.selectedColor = self.drawColor
-            
-            // 显示 alpha 通道
-            colorPicker.supportsAlpha = true
-            
-            // 呈现颜色选择器
-            colorPicker.modalPresentationStyle = .fullScreen
+            let colorPicker = PTColorPickerContainerViewController()
+            colorPicker.backButton.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
+            colorPicker.picker.selectedColor = self.drawColor
+            colorPicker.selectedColorCallback = { color in
+                self.drawColor = color
+            }
             self.navigationController?.pushViewController(colorPicker, completion: {
-                let colorPickerBack = UIButton(type: .custom)
-                colorPickerBack.bounds = CGRectMake(0, 0, 34, 34)
-                colorPickerBack.setImage(PTImageEditorConfig.share.colorPickerBackImage, for: .normal)
-                colorPickerBack.addActionHandlers { sender in
-                    colorPicker.navigationController?.popViewController(animated: true)
-                }
-                colorPicker.navigationController?.navigationBar.backgroundColor = .clear
-                colorPicker.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: colorPickerBack)
             })
         }
         return view
@@ -1470,29 +1457,6 @@ extension PTEditImageViewController:UIScrollViewDelegate {
             return
         }
         isScrolling = false
-    }
-}
-
-//MARK: UIColorPickerViewControllerDelegate
-extension PTEditImageViewController: UIColorPickerViewControllerDelegate {
-    public func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        if viewController.checkVCIsPresenting() {
-            viewController.dismiss(animated: true) {
-                PTGCDManager.gcdMain {
-                    self.drawColor = viewController.selectedColor
-                }
-            }
-        } else {
-            viewController.navigationController?.popViewController(animated: true) {
-                PTGCDManager.gcdMain {
-                    self.drawColor = viewController.selectedColor
-                }
-            }
-        }
-    }
-    
-    public func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-        self.drawColor = viewController.selectedColor
     }
 }
 

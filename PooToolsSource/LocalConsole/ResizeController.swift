@@ -531,38 +531,25 @@ class PlatterView: UIView,UITextFieldDelegate {
     }()
     
     lazy var colorButton:UIButton = {
+        let image = "🎨".emojiToImage(emojiFont: .appfont(size: 17))
         let view = UIButton(type: .custom)
-        view.setImage("🎨".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
+        view.setImage(image, for: .normal)
         view.addActionHandlers() { sender in
             ResizeController.shared.isActive = false
-            self.dismiss() {
-                let colorPicker = UIColorPickerViewController()
-                colorPicker.delegate = self
-                
-                // 设置预选颜色
-                colorPicker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
-                
-                // 显示 alpha 通道
-                colorPicker.supportsAlpha = true
-                
-                // 呈现颜色选择器
-                colorPicker.modalPresentationStyle = .formSheet
-                let vc = PTUtils.getCurrentVC()
-                if vc is PTSideMenuControl {
-                    let currentVC = (vc as! PTSideMenuControl).contentViewController
-                    if let presentedVC = currentVC?.presentedViewController {
-                        presentedVC.present(colorPicker, animated: true)
-                    } else {
-                        currentVC!.present(colorPicker, animated: true)
-                    }
-                } else {
-                    if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                        presentedVC.present(colorPicker, animated: true)
-                    } else {
-                        PTUtils.getCurrentVC().present(colorPicker, animated: true)
-                    }
+            let colorPicker = PTColorPickerContainerViewController()
+            colorPicker.backButton.setImage(image, for: .normal)
+            colorPicker.picker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor) ?? .white
+            colorPicker.selectedColorCallback = { color in
+                PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = color.hexString
+                self.FontSColorBlock?(color)
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    ResizeController.shared.isActive.toggle()
+                    ResizeController.shared.platterView.reveal()
                 }
             }
+            let nav = PTBaseNavControl(rootViewController: colorPicker)
+            nav.modalPresentationStyle = .formSheet
+            PTUtils.getCurrentVC().present(nav, animated: true)
         }
         return view
     }()
@@ -731,19 +718,5 @@ class PlatterView: UIView,UITextFieldDelegate {
                 FontSizeBlock?((textField.text?.cgFloat())!)
             }
         }
-    }
-}
-
-extension PlatterView: UIColorPickerViewControllerDelegate {
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        // 用户完成选择后执行的操作
-        PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = viewController.selectedColor.hexString
-        viewController.dismiss(animated: true) {
-            self.FontSColorBlock?(viewController.selectedColor)
-        }
-    }
-    
-    func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-       // 当用户选择颜色时执行的操作
     }
 }
