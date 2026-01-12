@@ -102,6 +102,9 @@ class PTCutViewController: PTBaseViewController {
     private lazy var cancelBtn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutBackImage, for: .normal)
+        btn.addActionHandlers(handler: { _ in
+            self.cancelBtnClick()
+        })
         return btn
     }()
     
@@ -244,9 +247,7 @@ class PTCutViewController: PTBaseViewController {
         cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
 
-        setCustomBackButtonView(cancelBtn) {
-            self.cancelBtnClick()
-        }
+        setCustomBackButtonView(cancelBtn)
         setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
     }
 

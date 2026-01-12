@@ -617,15 +617,14 @@ class PTFuncDetailViewController: PTBaseViewController {
             
             let tagValue = ["1123123","1","123123123123123","22222","1233"]
             
-            var tagModels = [PTTagLayoutModel]()
-            tagValue.enumerated().forEach { index,value in
+            let tagModels = tagValue.map { value in
                 let tagModel = PTTagLayoutModel()
                 tagModel.name = value
-                tagModels.append(tagModel)
+                return tagModel
             }
             
             let cConfig = PTCollectionViewConfig()
-            cConfig.viewType = .Tag
+            cConfig.viewType = .Custom
             cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
             cConfig.itemHeight = 32
             cConfig.cellLeadingSpace = 10
@@ -635,10 +634,11 @@ class PTFuncDetailViewController: PTBaseViewController {
             let aaaaaaa = PTCollectionView(viewConfig: cConfig)
             aaaaaaa.backgroundColor = .random
             aaaaaaa.registerClassCells(classs: [PTTagCell.ID:PTTagCell.self])
+            aaaaaaa.customerLayout = { indexPath,sectionModel in
+                return UICollectionView.tagShowLayout(data: tagModels,itemHeight: cConfig.itemHeight, topContentSpace: cConfig.contentTopSpace, bottomContentSpace: cConfig.contentBottomSpace,itemLeadingSpace: cConfig.cellLeadingSpace,itemTrailingSpace: cConfig.cellTrailingSpace)
+            }
             aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
-                if let itemRow = dataModel.rows?[indexPath.row] {
-                    let cellModel = (itemRow.dataModel as! PTTagLayoutModel)
-                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTTagCell
+                if let itemRow = dataModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTTagLayoutModel,let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTTagCell {
                     cell.cellModel = cellModel
                     return cell
                 }

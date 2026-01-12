@@ -93,22 +93,34 @@ public extension PTAlertManager {
         mainSync {
             guard let window = shared.windows[key] else { return }
             window.rootPopoverController?.dismissAnimation {
-                completion?()
+                // ✅ 核心：彻底销毁 window 的事件能力
+                window.isHidden = true
+                window.resignKey()
+                window.rootViewController = nil
                 shared.waitQueue.removeValue(forKey: key)
                 shared.windows.removeValue(forKey: key)
+                UIApplication.shared.currentWindows?.first { $0.windowLevel == .normal }?.makeKey()
                 guard !(shared.windows.isEmpty && shared.waitQueue.isEmpty) else { return dismissAll() }
                 guard let lastController = shared.waitQueue.values.max(by: { $0.config.popoverPriority < $1.config.popoverPriority }) else { return }
                 show(lastController)
+                completion?()
             }
         }
     }
 
     /// 隐藏所有弹窗
-    static func dismissAll() {
+    @MainActor static func dismissAll(completion: PTActionTask? = nil) {
         mainSync {
+            shared.windows.values.forEach { window in
+                window.isHidden = true
+                window.resignKey()
+                window.rootViewController = nil
+            }
             shared.waitQueue.removeAll()
             shared.windows.removeAll()
             manager = nil
+            UIApplication.shared.currentWindows?.first { $0.windowLevel == .normal }?.makeKey()
+            completion?()
         }
     }
 }

@@ -26,8 +26,7 @@ class PTImageListViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: collectionConfig)
         view.registerClassCells(classs: [PTImageCell.ID:PTImageCell.self])
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCell
+            if let itemRow = sectionModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTImageCell {
                 cell.showAnimator = true
                 cell.imageData = self.images[indexPath.row]
                 return cell
@@ -42,7 +41,7 @@ class PTImageListViewController: PTBaseViewController {
 
         view.addSubview(listCollection)
         listCollection.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.left.right.bottom.equalToSuperview()
         }
         loadCell()
@@ -50,13 +49,7 @@ class PTImageListViewController: PTBaseViewController {
     
     func loadCell() {
         var section = [PTSection]()
-        
-        var rows = [PTRows]()
-        images.enumerated().forEach { index,value in
-            let row = PTRows(ID: PTImageCell.ID)
-            rows.append(row)
-        }
-
+        let rows = images.map( { _ in PTRows(ID: PTImageCell.ID) } )
         section.append(PTSection(rows: rows))
         listCollection.showCollectionDetail(collectionData: section)
     }
