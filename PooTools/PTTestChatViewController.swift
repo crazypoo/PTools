@@ -63,8 +63,7 @@ class PTTestChatViewController: PTBaseViewController {
                 mediaBroswer.actionType = .Save
                 mediaBroswer.dynamicBackground = true
                 
-                let vc = PTMediaBrowserController()
-                vc.reloadConfig(mediaConfig: mediaBroswer)
+                let vc = PTMediaBrowserController(viewConfig: mediaBroswer)
                 vc.viewSaveImageBlock = { finish in
                     if finish {
                         PTAlertTipControl.present(title:"",subtitle: "ok",icon:.Done,style: .Normal)

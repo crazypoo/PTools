@@ -20,46 +20,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     public var viewDismissBlock:PTActionTask?
 
     ///界面配置
-    fileprivate var viewConfig:PTMediaBrowserConfig! {
-        didSet {
-            if viewConfig.dynamicBackground {
-                view.backgroundColor = viewConfig.viewerContentBackgroundColor
-            } else {
-                view.backgroundColor = .DevMaskColor
-            }
-                    
-            view.addSubviews([newCollectionView,navControl,bottomControl])
-
-            newCollectionView.snp.makeConstraints { make in
-                make.left.right.bottom.equalToSuperview()
-                make.top.equalToSuperview()
-            }
-            
-            navControl.snp.makeConstraints { make in
-                make.left.right.top.equalToSuperview()
-                make.height.equalTo(CGFloat.kNavBarHeight_Total)
-            }
-            
-            bottomControl.snp.makeConstraints { make in
-                make.left.right.bottom.equalToSuperview()
-                make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
-            }
-            
-            PTGCDManager.gcdAfter(time: 0.35) {
-                var loadSome = 0
-                if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
-                    loadSome = self.viewConfig.mediaData.count - 1
-                } else {
-                    loadSome = self.viewConfig.defultIndex
-                }
-                self.currentIndex = loadSome
-
-                let cellModel = self.viewConfig.mediaData[loadSome]
-                self.updateBottom(models: cellModel)
-            }
-            showCollectionViewData()
-        }
-    }
+    fileprivate var viewConfig:PTMediaBrowserConfig!
     
     ///更多按钮操作
     public var viewMoreActionBlock:PTViewerEXIndexBlock?
@@ -129,6 +90,17 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
         }
         view.pageControlView.isHidden = !viewConfig.pageControlShow
+        view.moreActionButton.addActionHandlers(handler: { sender in
+            var actions = [PTEditMenuAction]()
+            self.actionSheetTitle.enumerated().forEach { index,value in
+                let action = PTEditMenuAction(title: value) {
+                    guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
+                    self.handleAction(at: index, gifImage: cell.gifImage)
+                }
+                actions.append(action)
+            }
+            sender.pt_bindEditMenu(actions: actions)
+        })
         return view
     }()
     
@@ -209,7 +181,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     if self.viewConfig.pageControlShow {
                         self.pageControlProgressSet(indexPath: indexPath)
                     }
-                    self.currentIndex = indexPath.row
+                    self.currentIndex = currentIndex.row
                     
                     if !self.navControl.titleLabel.isHidden {
                         self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
@@ -268,6 +240,15 @@ public class PTMediaBrowserController: PTBaseViewController {
         return collectionView
     }()
     
+    public init(viewConfig: PTMediaBrowserConfig!) {
+        self.viewConfig = viewConfig
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
@@ -278,9 +259,6 @@ public class PTMediaBrowserController: PTBaseViewController {
         self.changeStatusBar(type: .Dark)
         self.becomeFirstResponder()
         self.view.window?.makeKeyAndVisible()
-        
-        bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
-        bottomControl.moreActionButton.menu = makeMenu()
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
@@ -293,7 +271,44 @@ public class PTMediaBrowserController: PTBaseViewController {
 
         SwizzleTool().swizzleContextMenuReverseOrder()
         
+        if viewConfig.dynamicBackground {
+            view.backgroundColor = viewConfig.viewerContentBackgroundColor
+        } else {
+            view.backgroundColor = .DevMaskColor
+        }
+        
         view.backgroundColor = .DevMaskColor
+        view.addSubviews([newCollectionView,navControl,bottomControl])
+
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+        
+        navControl.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(CGFloat.kNavBarHeight_Total)
+        }
+        
+        bottomControl.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
+        }
+                
+        PTGCDManager.gcdAfter(time: 0.35) {
+            var loadSome = 0
+            if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
+                loadSome = self.viewConfig.mediaData.count - 1
+            } else {
+                loadSome = self.viewConfig.defultIndex
+            }
+            self.currentIndex = loadSome
+
+            let cellModel = self.viewConfig.mediaData[loadSome]
+            self.updateBottom(models: cellModel)
+        }
+        self.showCollectionViewData()
+
     }
     
     func showCollectionViewData(loadedTask:PTCollectionCallback? = nil) {
@@ -373,39 +388,48 @@ public class PTMediaBrowserController: PTBaseViewController {
         bottomControl.backgroundColor = navControl.isHidden ? .clear : MediaBrowserToolBarColor
     }
         
-    public func mediasShow(mediaConfig:PTMediaBrowserConfig) {
-        self.viewConfig = mediaConfig
+    public func mediasShow() {
         self.modalPresentationStyle = .fullScreen
         PTUtils.getCurrentVC().pt_present(self)
     }
     
     public func reloadConfig(mediaConfig:PTMediaBrowserConfig) {
         viewConfig = mediaConfig
+        if viewConfig.dynamicBackground {
+            view.backgroundColor = viewConfig.viewerContentBackgroundColor
+        } else {
+            view.backgroundColor = .DevMaskColor
+        }
+        switch self.viewConfig.actionType {
+        case .Empty:
+            bottomControl.moreActionButton.isHidden = true
+            bottomControl.moreActionButton.isUserInteractionEnabled = false
+        default:
+            bottomControl.moreActionButton.setImage(self.viewConfig.moreActionImage, for: .normal)
+            bottomControl.moreActionButton.isHidden = false
+            bottomControl.moreActionButton.isUserInteractionEnabled = true
+        }
+
+        newCollectionView.clearAllData(finishTask: { _ in
+            PTGCDManager.gcdAfter(time: 0.35) {
+                var loadSome = 0
+                if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
+                    loadSome = self.viewConfig.mediaData.count - 1
+                } else {
+                    loadSome = self.viewConfig.defultIndex
+                }
+                self.currentIndex = loadSome
+
+                let cellModel = self.viewConfig.mediaData[loadSome]
+                self.updateBottom(models: cellModel)
+            }
+            self.showCollectionViewData()
+        })
     }
 }
 
 //MARK: Action&Menu
 fileprivate extension PTMediaBrowserController {
-    func makeMenu() -> UIMenu {
-        
-        bottomControl.moreActionButton.isSelected = false
-                
-        var debugActions: [UIMenuElement] = []
-        actionSheetTitle.enumerated().forEach { index,value in
-            let menuActions = UIAction(title: value) { _ in
-                guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
-                self.handleAction(at: index, gifImage: cell.gifImage)
-            }
-            debugActions.append(menuActions)
-        }
-        
-        var menuContent: [UIMenuElement] = []
-                
-        menuContent.append(contentsOf: debugActions)
-        
-        return UIMenu(title: "", children: menuContent)
-    }
-
     func actionSheet() {
         UIAlertController.baseActionSheet(title: viewConfig.actionTitle, cancelButtonName: viewConfig.actionCancel,titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
             guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
@@ -549,34 +573,23 @@ fileprivate extension PTMediaBrowserController {
                     break
                 }
                 if let findIndexRow = self.newCollectionView.collectionSectionDatas.first?.rows?[currentPageControlValue] {
-                    var newIndex = currentPageControlValue - 1
-                    if newIndex < 0 {
-                        newIndex = 0
-                    } else if newIndex == 0 {
-                        newIndex = 0
-                    }
-                    self.newCollectionView.scrolToItem(indexPath: IndexPath(row: newIndex, section: 0), position: .right)
                     self.newCollectionView.deleteRows([findIndexRow], from: 0)
                     self.viewConfig.mediaData.remove(at: currentPageControlValue)
                     
-                    var textIndex = newIndex + 1
                     PTGCDManager.gcdAfter(time: 0.35) {
-                        if textIndex == 0 {
-                            textIndex = 1
-                        }
-                        self.navControl.titleLabel.text = "\(textIndex)/\(self.viewConfig.mediaData.count)"
+                        let newCurrentPageControlValue = self.getPageControlCurrentValue()
+                        self.navControl.titleLabel.text = "\(newCurrentPageControlValue + 1)/\(self.viewConfig.mediaData.count)"
 
                         if self.viewConfig.mediaData.count > 1 {
-                            self.bottomControl.pageControlView.isHidden = false
-                            self.setPageControlValue(newIndex)
+                            self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
+                            self.setPageControlValue(newCurrentPageControlValue)
                         } else {
                             self.bottomControl.pageControlView.isHidden = true
                         }
                         
-                        let models = self.viewConfig.mediaData[newIndex]
+                        let models = self.viewConfig.mediaData[newCurrentPageControlValue]
                         self.updateBottom(models: models)
                     }
-
                     self.viewDeleteImageBlock?(currentPageControlValue)
                 }
             }
@@ -625,7 +638,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func updateBottom(models:PTMediaBrowserModel) {
-                
+              
         var bottomH:CGFloat = 0
         if models.imageInfo.stringIsEmpty() {
             bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))

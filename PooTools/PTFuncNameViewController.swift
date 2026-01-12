@@ -555,11 +555,11 @@ class PTFuncNameViewController: PTBaseViewController {
                     mediaConfig.dismissY = 200
                     mediaConfig.actionType = .All
                     mediaConfig.pageControlOption = .snake
-                    mediaConfig.mediaData = [model3]
+                    mediaConfig.mediaData = [model3,model1,model2,model4]
                     mediaConfig.imageLongTapAction = true
                     mediaConfig.dynamicBackground = true
-                    let browser = PTMediaBrowserController()
-                    browser.mediasShow(mediaConfig: mediaConfig)
+                    let browser = PTMediaBrowserController(viewConfig: mediaConfig)
+                    browser.mediasShow()
 //                    let nav = PTBaseNavControl(rootViewController: browser)
 //                    self.navigationController?.present(nav, animated: true)
 //                    UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],completion: {
