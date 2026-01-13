@@ -250,6 +250,11 @@ class PTCutViewController: PTBaseViewController {
         setCustomBackButtonView(cancelBtn)
         setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
     }
+        
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        changeStatusBar(type: .Auto)
+    }
 
     init(image: UIImage, status: PTClipStatus) {
         originalImage = image
@@ -334,6 +339,7 @@ class PTCutViewController: PTBaseViewController {
             overlayView.alpha = 1
             shadowView.alpha = 1
         }
+        changeStatusBar(type: .Dark)
     }
     
     override func viewDidLayoutSubviews() {

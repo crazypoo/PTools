@@ -9,8 +9,6 @@
 import UIKit
 import SafeSFSymbols
 
-let PTVideoEditorPodBundleName = "PTVideoEditorResources"
-
 @objcMembers
 public class PTVideoEditorConfig: NSObject {
     public static let share = PTVideoEditorConfig()
@@ -32,6 +30,8 @@ public class PTVideoEditorConfig: NSObject {
     public var presetsImage:UIImage = UIImage(.tv).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     public var filterImage:UIImage = UIImage(.camera.filters).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     public var rewriteImage:UIImage = UIImage(.repeat).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    public var trimLeftImage:UIImage = UIImage(.arrow.left)
+    public var trimRightImage:UIImage = UIImage(.arrow.right)
 
     public var trimTitle:String = "PT Video editor function trim".localized()
     public var cropTitle:String = "PT Video editor function crop".localized()

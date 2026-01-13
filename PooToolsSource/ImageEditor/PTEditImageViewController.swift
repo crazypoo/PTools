@@ -551,7 +551,6 @@ public class PTEditImageViewController: PTBaseViewController {
         super.viewWillAppear(animated)
         guard let nav = navigationController else { return }
         PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
-        changeStatusBar(type: .Dark)
         setCustomBackButtonView(dismissButton)
         setCustomRightButtons(buttons: [doneButton,redoButton,undoButton], rightPadding: 0)
     }
@@ -573,6 +572,12 @@ public class PTEditImageViewController: PTBaseViewController {
         defaultDrawPathWidth = width
         
         PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
+        changeStatusBar(type: .Dark)
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        changeStatusBar(type: .Auto)
     }
     
     public override func viewDidLayoutSubviews() {

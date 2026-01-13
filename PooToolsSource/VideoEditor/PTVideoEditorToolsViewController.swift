@@ -502,8 +502,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     //MARK: 時間線
     var trimPositions: (Double, Double) = (0.0,1.0) {
         didSet {
-            self.setVideoAsset()
-            self.reloadAsset()
+            self.setVideoAsset {
+                self.reloadAsset()
+            }
         }
     }
     
@@ -688,8 +689,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     //MARK: 速度
     fileprivate var speed:Double = 1 {
         didSet {
-            self.setVideoAsset()
-            self.reloadAsset()
+            self.setVideoAsset {
+                self.reloadAsset()
+            }
         }
     }
     
@@ -996,7 +998,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         },completion: completion)
     }
     
-    fileprivate func setVideoAsset() {
+    fileprivate func setVideoAsset(covertFinish:PTActionTask? = nil) {
 
         let options = ConverterOption(
             trimRange: trimPositions,
@@ -1017,6 +1019,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.originImageView.image = image
                 }
                 self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+                covertFinish?()
             }
         }
     }
@@ -1064,27 +1067,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         sheet.allowPullingPastMinHeight = false
         sheet.allowPullingPastMaxHeight = false
         let currentVC = PTUtils.getCurrentVC()
-        if currentVC is PTSideMenuControl {
-            let currentVC = (currentVC as! PTSideMenuControl).contentViewController
-            if let presentedVC = currentVC?.presentedViewController {
-                presentedVC.present(sheet, animated: true) {
-                    completion?()
-                }
-            } else {
-                currentVC!.present(sheet, animated: true) {
-                    completion?()
-                }
-            }
-        } else {
-            if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
-                presentedVC.present(sheet, animated: true) {
-                    completion?()
-                }
-            } else {
-                PTUtils.getCurrentVC().present(sheet, animated: true) {
-                    completion?()
-                }
-            }
+        currentVC.present(sheet, animated: true) {
+            completion?()
         }
     }
 }

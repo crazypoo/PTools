@@ -46,7 +46,6 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         }
         return buttonItem
     }()
-
     
     private var cropView: CropPickerView = {
         let view = CropPickerView()
@@ -76,6 +75,12 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         applyNavigationBarStyle()
+        changeStatusBar(type: .Dark)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        changeStatusBar(type: .Auto)
     }
 
     init(image: UIImage) {

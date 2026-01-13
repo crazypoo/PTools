@@ -745,6 +745,16 @@ class PTEditInputViewController: PTBaseViewController {
         setCustomBackButtonView(cancelBtn)
         setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        changeStatusBar(type: .Dark)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        changeStatusBar(type: .Auto)
+    }
 
     init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal) {
         self.image = image

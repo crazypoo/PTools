@@ -121,11 +121,12 @@ open class VideoConverter {
                     let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
                     // mute trim
                     try? audioCompositionTrack?.insertTimeRange(range, of: audioTrack, at: .zero)
+                    audioCompositionTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: duration), toDuration: time)
                 }
             }
 
             let compositionInstructions = AVMutableVideoCompositionInstruction()
-            compositionInstructions.timeRange = CMTimeRange(start: .zero, duration: self.asset.duration)
+            compositionInstructions.timeRange = CMTimeRange(start: .zero, duration: time)
             compositionInstructions.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1).cgColor
 
             let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)

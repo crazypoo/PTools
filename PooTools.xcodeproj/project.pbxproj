@@ -308,7 +308,6 @@
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
 		5585F5842C500D620033E1D1 /* PTGradientBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */; };
-		5585F71D2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */; };
 		55868D4B2CC761D800A2DD25 /* PTFrostedGlassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */; };
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
@@ -800,7 +799,6 @@
 		55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */; };
 		55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9DD29753CCB00F2E57C /* PTKeyChain.swift */; };
 		55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9E12976E67800F2E57C /* UILabel+PTEX.swift */; };
-		55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9E32977EDAC00F2E57C /* PTObject2Json.swift */; };
 		55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */; };
 		55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */; };
 		55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */; };
@@ -1261,7 +1259,6 @@
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
 		5585F5832C500D620033E1D1 /* PTGradientBorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGradientBorderView.swift; sourceTree = "<group>"; };
-		5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PTVideoEditorAssets.xcassets; sourceTree = "<group>"; };
 		55868D4A2CC761D800A2DD25 /* PTFrostedGlassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFrostedGlassView.swift; sourceTree = "<group>"; };
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
@@ -1758,7 +1755,6 @@
 		55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableString+PTEX.swift"; sourceTree = "<group>"; };
 		55D3D9DD29753CCB00F2E57C /* PTKeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTKeyChain.swift; sourceTree = "<group>"; };
 		55D3D9E12976E67800F2E57C /* UILabel+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+PTEX.swift"; sourceTree = "<group>"; };
-		55D3D9E32977EDAC00F2E57C /* PTObject2Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTObject2Json.swift; sourceTree = "<group>"; };
 		55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCallMessageMailFunction.swift; sourceTree = "<group>"; };
 		55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+PTEX.swift"; sourceTree = "<group>"; };
 		55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppStoreFunction.swift; sourceTree = "<group>"; };
@@ -2022,7 +2018,6 @@
 				231D1537272CDEE9003D6F62 /* Input */,
 				55BA8F702D29A7D70065FBD0 /* Inspector */,
 				55E96E2F2B08896E00AB8ADE /* iOS17Tips */,
-				231D15A1272CDEE9003D6F62 /* Json */,
 				55D59C5428F2980000B4FF76 /* Keyboard */,
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
 				5516CCBF29E8557200614980 /* KingfisherSVG */,
@@ -2286,14 +2281,6 @@
 				55E80DB128ED63F9004CF2C1 /* PTSignView.swift */,
 			);
 			path = SignView;
-			sourceTree = "<group>";
-		};
-		231D15A1272CDEE9003D6F62 /* Json */ = {
-			isa = PBXGroup;
-			children = (
-				55D3D9E32977EDAC00F2E57C /* PTObject2Json.swift */,
-			);
-			path = Json;
 			sourceTree = "<group>";
 		};
 		231D15DF272CDEE9003D6F62 /* KeyChain */ = {
@@ -2826,7 +2813,6 @@
 				556CA4B32B29500500A5B189 /* MovieFileType.swift */,
 				556CA4B42B29500500A5B189 /* Options.swift */,
 				556CA4B72B29500600A5B189 /* Provider.swift */,
-				5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */,
 				559C3D452B27571900EE46BC /* PTVideoEditorBaseFloatingViewController.swift */,
 				55F162E92B1951E500320925 /* PTVideoEditorConfig.swift */,
 				55FF406B2B299F0000CD3906 /* PTVideoEditorFilterControl.swift */,
@@ -4041,7 +4027,6 @@
 				555818A92AF8DE8F0051C0AA /* Settings.bundle in Resources */,
 				55B8FD942CBC9163006D82AD /* ElementLibrary.xcassets in Resources */,
 				55B8FD952CBC9163006D82AD /* Symbols.xcassets in Resources */,
-				5585F71D2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets in Resources */,
 				550CE4B72AF234E10052539D /* OSSKitImages.xcassets in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				55102AC22AFFB74500E9529D /* minganci.txt in Resources */,
@@ -4970,7 +4955,6 @@
 				55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */,
 				55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */,
 				55B6D7C22C1D63B100033309 /* PTAlertProtocol.swift in Sources */,
-				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				559C3D2F2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift in Sources */,
 				558B77BD2BBC52B300BD7AB0 /* PTChatMediaCell.swift in Sources */,
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
