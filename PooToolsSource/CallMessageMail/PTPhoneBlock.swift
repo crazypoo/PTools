@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 public typealias CallBlock = (_ timeInterval:TimeInterval)->Void
 public typealias CanCall = (_ ok:Bool)->Void
@@ -22,19 +23,22 @@ public class PTPhoneBlock: NSObject {
     open var canCall:CanCall?
 
     public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping PTActionTask,canCall:@escaping CanCall) {
-        var canCallSomeOne:Bool? = false
+        var canCallSomeOne:Bool = false
         if PTPhoneBlock.validPhone(phoneNumber: phoneNumber) {
             let share = PTPhoneBlock.shared
             share.setNotifications()
             share.callBlock = call
             share.cancelBlock = cancel
             
+            let telPrompt = "telprompt://"
             let simplePhoneNumber = (phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted) as NSArray).componentsJoined(by: "")
-            let stringURL = ("telprompt://" as NSString).appending(simplePhoneNumber)
-            PTAppStoreFunction.jumpLink(url: URL(string: stringURL)!)
-            canCallSomeOne = true
+            let stringURL = telPrompt.nsString.appending(simplePhoneNumber)
+            if let url =  URL(string: stringURL) {
+                PTAppStoreFunction.jumpLink(url: url)
+                canCallSomeOne = true
+            }
         }
-        canCall(canCallSomeOne!)
+        canCall(canCallSomeOne)
     }
     
     public class func validPhone(phoneNumber:String) -> Bool {
@@ -54,8 +58,8 @@ public class PTPhoneBlock: NSObject {
     @MainActor func applicationDidBecomeActive(notification:NSNotification) {
         NotificationCenter.default.removeObserver(self)
         
-        if callStartTime != nil {
-            callBlock?(-(callStartTime!.timeIntervalSinceNow) - 3)
+        if let startTime = callStartTime {
+            callBlock?(-(startTime.timeIntervalSinceNow) - 3)
             callStartTime = nil
         }
         cancelBlock?()

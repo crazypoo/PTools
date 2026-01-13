@@ -12,7 +12,7 @@ import UIKit
 public class PTSearchBarTextFieldClearButtonConfig:NSObject {
     public var clearAction:PTActionTask?
     public var clearImage:Any?
-    public var clearTopSpace:CGFloat = 12.5
+    public var clearTopSpace:CGFloat = 2
 }
 
 @objcMembers
@@ -28,8 +28,8 @@ public class PTSearchBar: UISearchBar {
     open var searchBarTextFieldBorderColor : UIColor = UIColor.random
     //MARK: 輸入框放大鏡位置的圖片
     ///輸入框放大鏡位置的圖片
-    open var searchBarImage : UIImage = UIColor.clear.createImageWithColor()
-    //MARK: 輸入框光標顏色
+    open var searchBarImage : Any?
+    open var searchImageTopSpacing:CGFloat = 2
     ///輸入框光標顏色
     open var cursorColor : UIColor = .lightGray
     //MARK: 輸入框Placeholder字體顏色
@@ -73,41 +73,82 @@ public class PTSearchBar: UISearchBar {
                 ]
             )
             backgroundImage = searchBarOutViewColor.createImageWithColor()
-            setImage(searchBarImage, for: .search, state: .normal)
+            
+            if let clearImage = searchBarImage {
+                let clearTopSpace = min(
+                    max(searchImageTopSpacing, 0),
+                    self.frame.height * 0.5
+                )
+                let clearHeight = self.frame.height - clearTopSpace * 2
+
+                Task { @MainActor in
+                    let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
+
+                    if let images = result.allImages, !images.isEmpty {
+                        if images.count > 1 {
+                            let images = UIImage.animatedImage(with: images, duration: result.loadTime)?.transformImage(size: .init(width: clearHeight, height: clearHeight))
+                            setImage(images, for: .search, state: .normal)
+                        } else if let image = result.firstImage {
+                            let reNewImage = image.transformImage(size: .init(width: clearHeight, height: clearHeight))
+                            setImage(reNewImage, for: .search, state: .normal)
+                        } else {
+                            setImage(PTAppBaseConfig.share.defaultEmptyImage, for: .search, state: .normal)
+                        }
+                    }
+                }
+            }
             searchTextField.viewCorner(radius: searchBarTextFieldCornerRadius, borderWidth: searchBarTextFieldBorderWidth, borderColor: searchBarTextFieldBorderColor)
         }
     }
     
     private func updateClearButton() {
         guard let clearConfig = clearConfig,
-              let searchField = self.value(forKey: "searchField") as? UITextField,
-              let clearBtn = searchField.value(forKey: "_clearButton") as? UIButton else {
+              let searchField = self.value(forKey: "searchField") as? UITextField else {
             return
         }
 
-        Task {
-            try await Task.sleep(nanoseconds: 100_000_000)
-            let clearTopSpace = min(max(clearConfig.clearTopSpace, 0), self.frame.height - 15)
+        // ⚠️ clearButton 可能还没生成，必须延迟
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self = self,
+                  let clearBtn = searchField.value(forKey: "_clearButton") as? UIButton else {
+                return
+            }
+            let clearTopSpace = min(
+                max(clearConfig.clearTopSpace, 0),
+                self.frame.height * 0.5
+            )
             let clearHeight = self.frame.height - clearTopSpace * 2
 
-            clearBtn.imageView?.contentMode = .scaleAspectFit
-            clearBtn.bounds = CGRect(x: 0, y: clearTopSpace, width: clearHeight, height: clearHeight)
-
-            if let clearImage = clearConfig.clearImage {
-                let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
-
-                if let images = result.allImages, !images.isEmpty {
-                    if images.count > 1 {
-                        clearBtn.setImage(UIImage.animatedImage(with: images, duration: result.loadTime), for: .normal)
-                    } else if let image = result.firstImage {
-                        let resizedImage = image.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
-                        clearBtn.setImage(resizedImage, for: .normal)
-                    }
-                }
+            clearBtn.imageView?.contentMode = .scaleAspectFill
+            clearBtn.imageView?.clipsToBounds = true
+            clearBtn.snp.remakeConstraints { make in
+                make.size.equalTo(clearHeight)
             }
+            clearBtn.bounds = CGRect(x: 0, y: clearTopSpace, width: clearHeight, height: clearHeight)
+            // ⚠️ 防止重复绑定
+            clearBtn.removeTarget(nil, action: nil, for: .allEvents)
 
             clearBtn.addActionHandlers { _ in
                 clearConfig.clearAction?()
+            }
+
+            // 图片加载
+            if let clearImage = clearConfig.clearImage {
+                Task { @MainActor in
+                    let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
+
+                    if let images = result.allImages, !images.isEmpty {
+                        if images.count > 1 {
+                            let images = UIImage.animatedImage(with: images, duration: result.loadTime)?.transformImage(size: .init(width: clearHeight, height: clearHeight))
+                            clearBtn.setImage(images, for: .normal)
+                        } else if let image = result.firstImage {
+                            let reNewImage = image.transformImage(size: .init(width: clearHeight, height: clearHeight))
+                            clearBtn.setImage(reNewImage, for: .normal)
+                        } else {
+                            clearBtn.setImage(PTAppBaseConfig.share.defaultEmptyImage, for: .normal)
+                        }
+                    }
+                }
             }
         }
     }

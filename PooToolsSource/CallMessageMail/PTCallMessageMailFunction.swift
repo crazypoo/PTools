@@ -59,29 +59,44 @@ public class PTCallMessageMailFunction: NSObject {
         vc.setToRecipients(recipients)
         vc.setCcRecipients(ccRecipients)
         vc.setBccRecipients(bccRecipients)
-        if image != nil {
-            let imageData = image!.pngData()
-            vc.addAttachmentData(imageData!, mimeType: "image/png", fileName: "SendImage.png")
+        if let findImage = image,let imageData = findImage.pngData() {
+            vc.addAttachmentData(imageData, mimeType: "image/png", fileName: "SendImage.png")
         }
         vc.mailComposeDelegate = PTCallMessageMailFunction.share
         PTUtils.getCurrentVC().present(vc, animated: true)
         PTCallMessageMailFunction.share.mailResultBlock = resultBlock
     }
+    
+    private func openSystemURLIfPossible(_ url: URL,
+                                         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+
+        let application = UIApplication.shared
+
+        guard application.canOpenURL(url) else {
+            decisionHandler(.cancel)
+            return
+        }
+
+        application.open(url, options: [:]) { _ in
+            decisionHandler(.cancel)
+        }
+    }
 }
 
 extension PTCallMessageMailFunction:WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let url = navigationAction.request.url
-        let scheme = url!.scheme
-        let app = UIApplication.shared
-        if scheme == "tel" {
-            if app.canOpenURL(url!) {
-                app.open(url!)
-                decisionHandler(.cancel)
-                return
-            }
+        guard let url = navigationAction.request.url,
+              let scheme = url.scheme?.lowercased() else {
+            decisionHandler(.allow)
+            return
         }
-        decisionHandler(.allow)
+
+        switch scheme {
+        case "tel":
+            openSystemURLIfPossible(url, decisionHandler: decisionHandler)
+        default:
+            decisionHandler(.allow)
+        }
     }
 }
 

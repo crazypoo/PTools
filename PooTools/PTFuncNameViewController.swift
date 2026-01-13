@@ -949,7 +949,7 @@ class PTFuncNameViewController: PTBaseViewController {
     
     lazy var searchBar:PTSearchBar = {
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
-        searchBarConfig.clearTopSpace = 20
+        searchBarConfig.clearTopSpace = 2
         searchBarConfig.clearImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         searchBarConfig.clearAction = {
             PTNSLogConsole("1231231231")
@@ -957,6 +957,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let searchBar = PTSearchBar()
         searchBar.clearConfig = searchBarConfig
+        searchBar.searchBarImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         return searchBar
     }()
     
@@ -965,6 +966,10 @@ class PTFuncNameViewController: PTBaseViewController {
         view.addSubview(searchBar)
         searchBar.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        view.frame = CGRect(origin: .zero, size: .init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
+        view.snp.makeConstraints { make in
+            make.size.equalTo(CGSize.init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
         }
         return view
     }()
