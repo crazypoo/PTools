@@ -521,9 +521,19 @@ public class Network: NSObject {
         if let modelType {
             result.customerModel = jsonString.kj.model(type: modelType)
         }
-
         
         return result
+    }
+    
+    fileprivate static func makeResponseParser(url: String, modelType: Convertible.Type?) -> (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel {
+        return { response, data in
+            try parseResponse(
+                url: url,
+                response: response,
+                data: data,
+                modelType: modelType
+            )
+        }
     }
     
     /// - Parameters:
@@ -561,6 +571,8 @@ public class Network: NSObject {
         }
         
         logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
+        
+        let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
         return try await withCheckedThrowingContinuation { continuation in
             AF.upload(body,
@@ -571,10 +583,7 @@ public class Network: NSObject {
                 switch resp.result {
                 case .success(_):
                     do {
-                        let parsed = try parseResponse(url: urlStr1,
-                                                       response: resp.response,
-                                                       data: resp.data,
-                                                       modelType: modelType)
+                        let parsed = try parser(resp.response,resp.data)
                         continuation.resume(returning: parsed)
                     } catch {
                         continuation.resume(throwing: error)
@@ -615,15 +624,14 @@ public class Network: NSObject {
 
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
 
+        let parser = makeResponseParser(url: urlStr1, modelType: modelType)
+
         return try await withCheckedThrowingContinuation { continuation in
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success:
                     do {
-                        let parsed = try parseResponse(url: urlStr1,
-                                                       response: data.response,
-                                                       data: data.data,
-                                                       modelType: modelType)
+                        let parsed = try parser(data.response,data.data)
                         continuation.resume(returning: parsed)
                     } catch {
                         continuation.resume(throwing: error)
@@ -667,6 +675,8 @@ public class Network: NSObject {
                         apiHeader["Accept"] = "application/json"
                     }
 
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
                             let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
@@ -692,10 +702,7 @@ public class Network: NSObject {
                         switch resp.result {
                         case .success(_):
                             do {
-                                let parsed = try parseResponse(url: pathUrl,
-                                                               response: resp.response,
-                                                               data: resp.data,
-                                                               modelType: modelType)
+                                let parsed = try parser(resp.response,resp.data)
                                 continuation.yield((Progress(totalUnitCount: 1), parsed))
                                 continuation.finish()
                             } catch {
@@ -741,6 +748,8 @@ public class Network: NSObject {
                         apiHeader["Content-Type"] = "application/json;charset=UTF-8"
                         apiHeader["Accept"] = "application/json"
                     }
+                    
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         multipartFormData.append(fileURL, withName: "file", fileName: "\(fileURL.lastPathComponent).mp4", mimeType: "video/mp4")
@@ -758,10 +767,7 @@ public class Network: NSObject {
                         switch resp.result {
                         case .success(_):
                             do {
-                                let parsed = try parseResponse(url: pathUrl,
-                                                               response: resp.response,
-                                                               data: resp.data,
-                                                               modelType: modelType)
+                                let parsed = try parser(resp.response,resp.data)
                                 continuation.yield((Progress(totalUnitCount: 1), parsed))
                                 continuation.finish()
                             } catch {
