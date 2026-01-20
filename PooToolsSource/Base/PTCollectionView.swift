@@ -296,7 +296,7 @@ public class PTCollectionView: UIView {
     
     fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         
-        guard mSections.count > 0 else {
+        guard !mSections.isEmpty else {
             return NSCollectionLayoutSection(group: oneSquareGroup())
         }
         
@@ -468,7 +468,7 @@ public class PTCollectionView: UIView {
     private func generateDecorationItems(section: NSInteger, sectionModel: PTSection) -> [NSCollectionLayoutDecorationItem] {
         switch viewConfig.decorationItemsType {
         case .Custom:
-            guard mSections.count > 0 else { return [] }
+            guard !mSections.isEmpty else { return [] }
             if let decorationInCollectionView = decorationInCollectionView?(section, sectionModel) {
                 return decorationInCollectionView
             } else {
@@ -1095,11 +1095,11 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mSections.count == 0 ? 0 : (mSections[section].rows?.count ?? 0)
+        mSections[section].rows?.count ?? 0
     }
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if mSections.count > 0 {
+        if !mSections.isEmpty {
             let itemSec = mSections[indexPath.section]
             if kind == UICollectionView.elementKindSectionHeader,
                !(itemSec.headerID ?? "").stringIsEmpty(),
@@ -1116,7 +1116,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if mSections.count > 0 {
+        if !mSections.isEmpty {
             let itemSec = mSections[indexPath.section]
             if let cell = cellInCollection?(collectionView,itemSec,indexPath) {
                 if let swipeCell = cell as? PTBaseSwipeCell {
