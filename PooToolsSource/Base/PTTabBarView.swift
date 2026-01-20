@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if canImport(Lottie)
 import Lottie
+#endif
 
 public protocol PTTabBarItemContent {
     var view: UIView { get }
@@ -41,6 +43,7 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
     }
 }
 
+#if canImport(Lottie)
 final public class PTTabBarLottieContent: PTTabBarItemContent {
 
     private let lottieView = LottieAnimationView()
@@ -67,6 +70,7 @@ final public class PTTabBarLottieContent: PTTabBarItemContent {
         }
     }
 }
+#endif
 
 final public class PTTabBarItemView: UIControl {
 
