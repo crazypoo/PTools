@@ -341,6 +341,9 @@
 		558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF42AAF586700C02042 /* URL+PTEX.swift */; };
 		558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */; };
 		558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */; };
+		5590C9B22F1F2B23003DD740 /* PTTestTabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590C9B12F1F2B23003DD740 /* PTTestTabbarViewController.swift */; };
+		5590CB982F1F2F3A003DD740 /* PTTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */; };
+		5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */; };
 		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
@@ -1292,6 +1295,9 @@
 		558D5EF42AAF586700C02042 /* URL+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+PTEX.swift"; sourceTree = "<group>"; };
 		558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTJson+PTEX.swift"; sourceTree = "<group>"; };
 		558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTKeyedDecoding+PTEX.swift"; sourceTree = "<group>"; };
+		5590C9B12F1F2B23003DD740 /* PTTestTabbarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestTabbarViewController.swift; sourceTree = "<group>"; };
+		5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarView.swift; sourceTree = "<group>"; };
+		5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarTestOneViewController.swift; sourceTree = "<group>"; };
 		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
@@ -3690,6 +3696,7 @@
 				552C4D632D9B87FA00B0CE53 /* PTSnapKitEX.swift */,
 				55040A832E20B37C0074A047 /* PTTriangleView.swift */,
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
+				5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -3896,6 +3903,7 @@
 				550CE4C22AF295B10052539D /* PTSpeechViewController.swift */,
 				55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */,
 				552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */,
+				5590C9B12F1F2B23003DD740 /* PTTestTabbarViewController.swift */,
 				550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
@@ -3906,6 +3914,7 @@
 				55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */,
 				55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */,
 				55F299922BEE205600CC970A /* PTImageListViewController.swift */,
+				5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -4129,6 +4138,7 @@
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
 				557E3AAA2C046FF7002466A0 /* InputStream+PTEX.swift in Sources */,
+				5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
 				55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */,
@@ -4485,6 +4495,7 @@
 				55BA90A12D29A7D70065FBD0 /* ButtonSizeSectionDataSource.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */,
+				5590C9B22F1F2B23003DD740 /* PTTestTabbarViewController.swift in Sources */,
 				557E3A522C031D0C002466A0 /* Color+PThsbaEX.swift in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
@@ -4528,6 +4539,7 @@
 				55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */,
 				555818CA2AFA7CBA0051C0AA /* UISegmentedControl+PTEX.swift in Sources */,
 				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
+				5590CB982F1F2F3A003DD740 /* PTTabBarView.swift in Sources */,
 				55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */,
 				557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */,
 				55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */,

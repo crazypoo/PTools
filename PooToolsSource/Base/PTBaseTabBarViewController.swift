@@ -17,6 +17,12 @@ open class PTBaseTabBarViewController: UITabBarController {
         //tabBarController.mode = .tabSidebar
          */
     }
+    
+    // MARK: 设置UIViewController
+    public func configViewController(viewController: UIViewController, title: String) -> PTBaseNavControl {
+        let navigationController = PTBaseNavControl(rootViewController: viewController)
+        return navigationController
+    }
 }
 
 @available(iOS 18.0, *)
@@ -56,13 +62,6 @@ extension PTBaseTabBarViewController {
         // 可以添加多个Tab，siderBar时肯定会显示，tabBar时根据Tab的preferredPlacement取值决定
         tabGroup.children.append(contentsOf: tabs)
         return tabGroup
-    }
-
-    // MARK: 设置UIViewController
-    public func configViewController(viewController: UIViewController, title: String) -> PTBaseNavControl {
-        let navigationController = PTBaseNavControl(rootViewController: viewController)
-        viewController.navigationItem.title = title
-        return navigationController
     }
 }
 

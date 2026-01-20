@@ -121,8 +121,9 @@ class AppDelegate: PTAppWindowsDelegate {
             
             let sideContent = PTSideController()
             let sideMeniController = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
-            
             return sideMeniController
+//            let tab = PTTestTabbarViewController()
+//            return tab
         }, tint: .white)
         PTDarkModeOption.defaultDark()
         StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent

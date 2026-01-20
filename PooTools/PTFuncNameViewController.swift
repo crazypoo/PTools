@@ -1009,7 +1009,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         setCustomRightButtons(buttons: [more], rightPadding: 0)
         
-        more.badgeCenterOffset = CGPointMake(-5, -5)
+        more.badgeCenterOffset = CGPointMake(-25, -5)
         more.badgeBorderLine = 1
         more.badgeBorderColor = .random
         more.showBadge(style: .New, value: "我愛你", aniType: .None)
@@ -1065,6 +1065,9 @@ class PTFuncNameViewController: PTBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
 
         // Do any additional setup after loading the view.
                 
