@@ -12,6 +12,7 @@ import KakaJSON
 import Network
 import SwifterSwift
 import CoreTelephony
+import Photos
 
 public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
 public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
@@ -302,6 +303,28 @@ fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
         let nth = max(1, request.retryCount + 1)
         let delay = min(baseDelaySnapshot * pow(2.0, Double(nth - 1)) + Double.random(in: 0...jitter), maxDelay)
         completion(.retryWithDelay(delay))
+    }
+}
+
+public enum MimeTypeHelper {
+
+    static func mimeType(for ext: String) -> String {
+        switch ext.lowercased() {
+        case "jpg", "jpeg": return "image/jpeg"
+        case "png": return "image/png"
+        case "gif": return "image/gif"
+        case "mp4": return "video/mp4"
+        case "mov": return "video/quicktime"
+        case "m4v": return "video/x-m4v"
+        case "mp3": return "audio/mpeg"
+        case "m4a": return "audio/mp4"
+        case "aac": return "audio/aac"
+        case "wav": return "audio/wav"
+        case "caf": return "audio/x-caf"
+        case "pdf": return "application/pdf"
+        case "zip": return "application/zip"
+        default: return "application/octet-stream"
+        }
     }
 }
 
@@ -644,6 +667,175 @@ public class Network: NSObject {
         }
     }
         
+    class public func fileUpload(needGobal: Bool = true,
+                                 media: Any,
+                                 path: URLConvertible,
+                                 method: HTTPMethod = .post,
+                                 fileKey: String = "",
+                                 params: [String: String]? = nil,
+                                 header: HTTPHeaders? = nil,
+                                 modelType: Convertible.Type? = nil,
+                                 jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
+                    let pathUrl = gobalUrl + (try path.asURL().absoluteString)
+                    guard pathUrl.isURL(), ((try? path.asURL().absoluteString) != nil) else {
+                        throw AFError.invalidURL(url: "https://www.qq.com")
+                    }
+
+                    guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+                        Network.cancelAllNetworkRequest()
+                        throw AFError.createURLRequestFailed(error: NetWorkNoError)
+                    }
+
+                    var apiHeader = addToken(to: header ?? HTTPHeaders())
+                    if jsonRequest {
+                        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                        apiHeader["Accept"] = "application/json"
+                    }
+
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+                    
+                    Network.manager.upload(multipartFormData: { multipartFormData in
+                        if let phasset = media as? PHAsset {
+                            switch phasset.mediaType {
+                            case .image:
+                                phasset.fetchImage { image in
+                                    if let findImage = image {
+                                        let canPNG = findImage.pngData() != nil
+                                        if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
+                                            let key = fileKey
+                                            let fileName = "image_\(Date().timeIntervalSince1970).\(canPNG ? "png" : "jpg")"
+                                            let mimeType = canPNG ? "image/png" : "image/jpeg"
+                                            multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
+                                        } else {
+                                            continuation.finish(throwing: NSError(domain: "Image data error", code: 666))
+                                        }
+                                    }
+                                }
+                            case .video:
+                                phasset.converPHAssetToAVURLAsset { urlAsset in
+                                    if let url = urlAsset?.url {
+                                        let ext = url.pathExtension.lowercased()
+                                        let fileName = "video_\(Date().timeIntervalSince1970).\(ext)"
+                                        let mimeType: String = MimeTypeHelper.mimeType(for: ext)
+                                        multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                                    } else {
+                                        continuation.finish(throwing: NSError(domain: "Video data error", code: 666))
+                                    }
+                                }
+                            case .audio:
+                                phasset.converPHAssetToAVURLAsset { urlAsset in
+                                    if let url = urlAsset?.url {
+                                        let ext = url.pathExtension.lowercased()
+                                        let fileName = "audio_\(Date().timeIntervalSince1970).\(ext)"
+                                        let mimeType: String = MimeTypeHelper.mimeType(for: ext)
+
+                                        multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                                    }
+                                }
+                            default:
+                                continuation.finish(throwing: NSError(domain: "Unknow data error", code: 666))
+                            }
+                        } else if let findImage = media as? UIImage {
+                            let canPNG = findImage.pngData() != nil
+                            if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
+                                let key = fileKey
+                                let fileName = "image_\(Date().timeIntervalSince1970).\(canPNG ? "png" : "jpg")"
+                                let mimeType = canPNG ? "image/png" : "image/jpeg"
+                                multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
+                            } else {
+                                continuation.finish(throwing: NSError(domain: "Image data error", code: 666))
+                            }
+                        } else if let findUrl = media as? URL {
+                            if findUrl.isFileURL {
+                                // fileProvider / iCloud 需要先复制
+                                let uploadURL: URL
+
+                                if findUrl.path.contains("File Provider Storage")
+                                    || findUrl.path.contains("com.apple.FileProvider") {
+
+                                    let tmpURL = FileManager.default.temporaryDirectory
+                                        .appendingPathComponent(findUrl.lastPathComponent)
+
+                                    try? FileManager.default.removeItem(at: tmpURL)
+                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
+
+                                    uploadURL = tmpURL
+                                } else {
+                                    uploadURL = findUrl
+                                }
+
+                                let ext = uploadURL.pathExtension.lowercased()
+                                let mimeType = MimeTypeHelper.mimeType(for: ext)
+                                let fileName = uploadURL.lastPathComponent
+
+                                multipartFormData.append(uploadURL, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                            } else {
+                                continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
+                            }
+                        } else if let findString = media as? String,let findUrl = URL(string: findString) {
+                            if findUrl.isFileURL {
+                                // fileProvider / iCloud 需要先复制
+                                let uploadURL: URL
+
+                                if findUrl.path.contains("File Provider Storage")
+                                    || findUrl.path.contains("com.apple.FileProvider") {
+
+                                    let tmpURL = FileManager.default.temporaryDirectory
+                                        .appendingPathComponent(findUrl.lastPathComponent)
+
+                                    try? FileManager.default.removeItem(at: tmpURL)
+                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
+
+                                    uploadURL = tmpURL
+                                } else {
+                                    uploadURL = findUrl
+                                }
+
+                                let ext = uploadURL.pathExtension.lowercased()
+                                let mimeType = MimeTypeHelper.mimeType(for: ext)
+                                let fileName = uploadURL.lastPathComponent
+
+                                multipartFormData.append(uploadURL, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                            } else {
+                                continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
+                            }
+                        }
+                        
+                        params?.forEach { key, value in
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
+                            }
+                        }
+                    }, to: pathUrl, method: method, headers: apiHeader)
+                    .uploadProgress { progress in
+                        continuation.yield((progress, nil))
+                    }
+                    .response { resp in
+                        switch resp.result {
+                        case .success(_):
+                            do {
+                                let parsed = try parser(resp.response,resp.data)
+                                continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                continuation.finish()
+                            } catch {
+                                continuation.finish(throwing: error)
+                            }
+                        case .failure(let error):
+                            logRequestFailure(url: pathUrl, error: error)
+                            continuation.finish(throwing: error)
+                        }
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+    
     /// 图片上传接口
     class public func imageUpload(needGobal: Bool = true,
                                   images: [UIImage]?,
