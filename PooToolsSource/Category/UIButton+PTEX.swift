@@ -137,12 +137,12 @@ public extension UIButton {
     
     func loadImage(contentData:Any,
                    iCloudDocumentName:String = "",
-                   borderWidth:CGFloat = 1.5,
-                   borderColor:UIColor = UIColor.purple,
-                   showValueLabel:Bool = false,
-                   valueLabelFont:UIFont = .appfont(size: 16,bold: true),
-                   valueLabelColor:UIColor = .white,
-                   uniCount:Int = 0,
+                   borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
+                   borderColor:UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
+                   showValueLabel:Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
+                   valueLabelFont:UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
+                   valueLabelColor:UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
+                   uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
                    emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    controlState:UIControl.State = .normal) {
         setImage(emptyImage, for: controlState)

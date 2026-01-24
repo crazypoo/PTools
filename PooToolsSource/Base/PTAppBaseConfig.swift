@@ -19,6 +19,14 @@ public class PTAppBaseConfig: NSObject {
     public var defaultPlaceholderImage:UIImage = UIImage()
     ///没有获取到图片
     public var defaultEmptyImage:UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_placeholder")
+    ///图片加载的进度条框颜色
+    public var loadImageProgressBorderColor:UIColor = .purple
+    public var loadImageProgressBorderWidth:CGFloat = 1.5
+    public var loadImageShowValueLabel:Bool = false
+    public var loadImageShowValueFont:UIFont = .appfont(size: 16)
+    public var loadImageShowValueColor:UIColor = .white
+    public var loadImageShowValueUniCount:Int = 0
+    
     //MARK: App的全局邊距
     ///App的全局邊距
     public var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)
