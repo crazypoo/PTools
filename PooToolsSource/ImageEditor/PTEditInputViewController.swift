@@ -748,7 +748,12 @@ class PTEditInputViewController: PTBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        changeStatusBar(type: .Dark)
+        PTGCDManager.gcdMain {
+            self.applyNavigationBarStyle()
+        }
+        PTGCDManager.gcdAfter(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {

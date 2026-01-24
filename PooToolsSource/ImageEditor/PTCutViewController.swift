@@ -241,9 +241,6 @@ class PTCutViewController: PTBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let nav = navigationController {
-            PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
-        }
         cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
 
@@ -340,6 +337,14 @@ class PTCutViewController: PTBaseViewController {
             shadowView.alpha = 1
         }
         changeStatusBar(type: .Dark)
+        
+        PTGCDManager.gcdMain {
+            self.applyNavigationBarStyle()
+        }
+        
+        PTGCDManager.gcdAfter(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
+        })
     }
     
     override func viewDidLayoutSubviews() {

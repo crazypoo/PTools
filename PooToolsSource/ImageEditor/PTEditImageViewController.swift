@@ -549,14 +549,16 @@ public class PTEditImageViewController: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let nav = navigationController else { return }
-        PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
         setCustomBackButtonView(dismissButton)
         setCustomRightButtons(buttons: [doneButton,redoButton,undoButton], rightPadding: 0)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        PTGCDManager.gcdMain {
+            self.applyNavigationBarStyle()
+        }
         
         var size = drawingImageView.frame.size
         if shouldSwapSize {
@@ -571,8 +573,9 @@ public class PTEditImageViewController: PTBaseViewController {
         let width = drawLineWidth / mainScrollView.zoomScale * toImageScale
         defaultDrawPathWidth = width
         
-        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .clear)
-        changeStatusBar(type: .Dark)
+        PTGCDManager.gcdAfter(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
+        })
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
