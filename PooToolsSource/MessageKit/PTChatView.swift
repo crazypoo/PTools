@@ -46,9 +46,15 @@ public class PTChatView: UIView {
     public var cellMenuItemsHandler:PTCellMenuItemsHandler? = nil
     public var cellMenuItemsTapCallBack:PTCellMenuItemsTapCallBack? = nil
 
+    public var listTopOffset:CGFloat = 0 {
+        didSet {
+            listContentInset(bottomInset: listBottomOffset,topInset: listTopOffset)
+        }
+    }
+    
     public var listBottomOffset:CGFloat = 0 {
         didSet {
-            listContentInset(bottomInset: listBottomOffset)
+            listContentInset(bottomInset: listBottomOffset,topInset: listTopOffset)
         }
     }
     
@@ -133,7 +139,7 @@ public class PTChatView: UIView {
                     case .Typing:
                         cellHeight = 44
                     case .CustomerMessage:
-                        cellHeight = self.customerCellHeightHandler?(cellModel,index) ?? 0
+                        cellHeight = self.customerCellHeightHandler?(cellModel,index) ?? 44
                     }
                     return cellHeight
                 }
@@ -151,7 +157,12 @@ public class PTChatView: UIView {
                 } else {
                     switch cellModel.messageType {
                     case .CustomerMessage:
-                        return self.customerCellHandler?(collectionView,sectionModel,indexPath)
+                        let baseCell = self.customerCellHandler?(collectionView,sectionModel,indexPath)
+                        if let cell = baseCell {
+                            let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
+                            cell.dataContent.addGestureRecognizers([longTap])
+                        }
+                        return baseCell
                     default:
                         if let cell = baseCell as? PTChatBaseCell {
                             if itemRow.ID == PTChatTextCell.ID,let textCell = cell as? PTChatTextCell {

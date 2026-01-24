@@ -144,7 +144,11 @@ public class PTMediaBrowserController: PTBaseViewController {
                     videoController.onCloseTapped = {
                         let current = PTUtils.getCurrentVC()
                         if let sheet = current as? PTPlayerViewController {
-                            sheet.navigationController?.popViewController(animated: true)
+                            if sheet.checkVCIsPresenting() {
+                                sheet.dismissAnimated()
+                            } else {
+                                sheet.navigationController?.popViewController(animated: true)
+                            }
                         } else {
                             current.dismissAnimated()
                         }
@@ -261,9 +265,13 @@ public class PTMediaBrowserController: PTBaseViewController {
         self.view.window?.makeKeyAndVisible()
     }
     
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.changeStatusBar(type: .Auto)
+    }
+    
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.changeStatusBar(type: .Auto)
     }
 
     public override func viewDidLoad() {

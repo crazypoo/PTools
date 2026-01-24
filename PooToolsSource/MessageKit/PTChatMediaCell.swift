@@ -104,10 +104,10 @@ public class PTChatMediaCell: PTChatBaseCell {
         switch contentString.nsString.contentTypeForUrl() {
         case .MOV, .MP4, .ThreeGP:
             self.mediaPlayImageView.isHidden = false
-            videoUrlLoad(url: contentString)
+            videoUrlLoad(url: contentString.urlToUnicodeURLString() ?? "")
         default:
             self.mediaPlayImageView.isHidden = true
-            self.contentImageView.loadImage(contentData: contentString)
+            self.contentImageView.loadImage(contentData: contentString.urlToUnicodeURLString() ?? "")
         }
     }
 
