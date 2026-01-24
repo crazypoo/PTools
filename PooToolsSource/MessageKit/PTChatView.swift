@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 public typealias PTChatHandler = (PTChatListModel,IndexPath) -> Void
-public typealias PTChatCellHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> PTChatBaseCell?
+public typealias PTChatCellHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath,_ baseCell:UICollectionViewCell) -> PTChatBaseCell?
 public typealias PTChatCustomerCellHeightHandler = (_ dataModel:PTChatListModel,_ indexPath:Int) -> CGFloat
 public typealias PTAttCellCallBack = (String,IndexPath,PTChatListModel) -> Void
 public typealias PTCellMenuItemsHandler = (_ cellId:String) -> [String]?
@@ -157,12 +157,12 @@ public class PTChatView: UIView {
                 } else {
                     switch cellModel.messageType {
                     case .CustomerMessage:
-                        let baseCell = self.customerCellHandler?(collectionView,sectionModel,indexPath)
-                        if let cell = baseCell {
+                        let cBaseCell = self.customerCellHandler?(collectionView,sectionModel,indexPath,baseCell)
+                        if let cell = cBaseCell {
                             let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
                             cell.dataContent.addGestureRecognizers([longTap])
                         }
-                        return baseCell
+                        return cBaseCell
                     default:
                         if let cell = baseCell as? PTChatBaseCell {
                             if itemRow.ID == PTChatTextCell.ID,let textCell = cell as? PTChatTextCell {
