@@ -717,6 +717,18 @@ public class PTMediaLibViewController: PTBaseViewController {
         navigationController?.navigationBar.isHidden = true
     }
 
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PTGCDManager.gcdAfter(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
+        })
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.changeStatusBar(type: .Auto)
+    }
+    
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
     }

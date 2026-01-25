@@ -260,9 +260,11 @@ public class PTMediaBrowserController: PTBaseViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.changeStatusBar(type: .Dark)
         self.becomeFirstResponder()
         self.view.window?.makeKeyAndVisible()
+        PTGCDManager.gcdAfter(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
+        })
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
