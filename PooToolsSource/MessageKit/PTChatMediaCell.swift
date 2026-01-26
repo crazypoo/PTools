@@ -142,9 +142,10 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
 
     private func videoUrlLoad(url: String) {
-        UIImage.pt.getVideoFirstImage(videoUrl: url) { [weak self] image in
-            guard let self = self else { return }
-            self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+        PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
+            PTGCDManager.gcdMain {
+                self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+            }
         }
     }
 }

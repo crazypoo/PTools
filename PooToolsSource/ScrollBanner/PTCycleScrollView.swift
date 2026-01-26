@@ -701,12 +701,14 @@ extension PTCycleScrollView {
         }
         
         PTGCDManager.gcdMain {
-            UIImage.pt.getVideoFirstImage(videoUrl: url) { image in
-                if let image = image {
-                    self.videoFrameCache.setObject(image, forKey: url as NSString)
-                    completion(image)
-                } else {
-                    completion(self.defaultPlaceholderImage)
+            PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
+                PTGCDManager.gcdMain {
+                    if let image = image {
+                        self.videoFrameCache.setObject(image, forKey: url as NSString)
+                        completion(image)
+                    } else {
+                        completion(self.defaultPlaceholderImage)
+                    }
                 }
             }
         }

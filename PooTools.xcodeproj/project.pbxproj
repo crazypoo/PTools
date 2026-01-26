@@ -344,6 +344,7 @@
 		5590C9B22F1F2B23003DD740 /* PTTestTabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590C9B12F1F2B23003DD740 /* PTTestTabbarViewController.swift */; };
 		5590CB982F1F2F3A003DD740 /* PTTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */; };
 		5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */; };
+		5590CE2F2F2731FF003DD740 /* PTVideoCoverCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */; };
 		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
@@ -1298,6 +1299,7 @@
 		5590C9B12F1F2B23003DD740 /* PTTestTabbarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestTabbarViewController.swift; sourceTree = "<group>"; };
 		5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarView.swift; sourceTree = "<group>"; };
 		5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarTestOneViewController.swift; sourceTree = "<group>"; };
+		5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoCoverCache.swift; sourceTree = "<group>"; };
 		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
@@ -3697,6 +3699,7 @@
 				55040A832E20B37C0074A047 /* PTTriangleView.swift */,
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
 				5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */,
+				5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4244,6 +4247,7 @@
 				552CCF4B2E82BA2200646943 /* PTBaseButton.swift in Sources */,
 				55BA8FAB2D29A7D70065FBD0 /* SliderAttributesSectionDataSource.swift in Sources */,
 				55BA8FAC2D29A7D70065FBD0 /* ViewHierarchyInformation.swift in Sources */,
+				5590CE2F2F2731FF003DD740 /* PTVideoCoverCache.swift in Sources */,
 				55BA8FAD2D29A7D70065FBD0 /* LengthMeasurementView+ArrowView.swift in Sources */,
 				55BA8FAE2D29A7D70065FBD0 /* NSDirectionalEdgeInsets+InspectorEX.swift in Sources */,
 				55BA8FAF2D29A7D70065FBD0 /* InspectorElementItemSeparatorStyle.swift in Sources */,

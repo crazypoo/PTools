@@ -408,8 +408,7 @@ extension PTMediaBrowserCell {
     }
 
     func handleVideoLoading(loading: PTMediaBrowserLoadingView, videoUrl: String) {
-        
-        UIImage.pt.getVideoFirstImage(videoUrl: videoUrl) { image in
+        PTVideoCoverCache.getVideoFirstImage(videoUrl: videoUrl) { image in
             PTGCDManager.gcdMain {
                 if let image = image {
                     self.setupVideoView(image: image, videoUrl: videoUrl, loading: loading)
