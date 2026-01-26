@@ -144,9 +144,10 @@ open class PTPlayerViewController: PTBaseViewController {
 #if POOTOOLS_VIDEOCACHE
         if PTAppBaseConfig.share.videoCache {
             var observer: NSKeyValueObservation?
-            observer = playerItem.observe(\.status, options: [.new, .initial]) { item, _ in
+            observer = player.currentItem?.observe(\.status, options: [.new, .initial]) { item, _ in
                 if item.status == .readyToPlay {
                     DispatchQueue.main.async {
+                        self.playerPlay(player: player)
                         player.play()
                     }
                     observer?.invalidate()
