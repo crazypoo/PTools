@@ -99,4 +99,6 @@ public class PTAppBaseConfig: NSObject {
     public var playerBackItemImage:UIImage = UIImage(.chevron.left)
     public var playerPlayItemPlayImage:UIImage = UIImage(.play)
     public var playerPlayItemPauseImage:UIImage = UIImage(.pause)
+    
+    public var videoCache:Bool = false
 }

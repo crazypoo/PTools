@@ -141,6 +141,28 @@ open class PTPlayerViewController: PTBaseViewController {
     private func setupPlayer() {
         guard let player = videoPlayer else { return }
         
+#if POOTOOLS_VIDEOCACHE
+        if PTAppBaseConfig.share.videoCache {
+            var observer: NSKeyValueObservation?
+            observer = playerItem.observe(\.status, options: [.new, .initial]) { item, _ in
+                if item.status == .readyToPlay {
+                    DispatchQueue.main.async {
+                        player.play()
+                    }
+                    observer?.invalidate()
+                } else if item.status == .failed {
+                    observer?.invalidate()
+                }
+            }
+        } else {
+            playerPlay(player: player)
+        }
+#else
+        playerPlay(player: player)
+#endif
+    }
+    
+    func playerPlay(player:AVPlayer) {
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.videoGravity = .resizeAspect
         view.layer.insertSublayer(playerLayer!, at: 0)

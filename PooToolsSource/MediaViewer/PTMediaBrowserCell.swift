@@ -448,13 +448,18 @@ extension PTMediaBrowserCell {
             let videoController = PTPlayerViewController()
             if let url = URL(string: videoUrl) {
 #if POOTOOLS_VIDEOCACHE
-                if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
-                    let playerItem = AVPlayerItem(url: proxyURL)
-                    let player = AVPlayer(playerItem: playerItem)
-                    videoController.videoPlayer = player
-                    self.videoPlayHandler(videoController)
+                if PTAppBaseConfig.share.videoCache {
+                    if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
+                        let playerItem = AVPlayerItem(url: proxyURL)
+                        let player = AVPlayer(playerItem: playerItem)
+                        videoController.videoPlayer = player
+                        self.videoPlayHandler(videoController)
+                    } else {
+                        PTNSLogConsole("Video url error")
+                    }
                 } else {
-                    PTNSLogConsole("Video url error")
+                    videoController.videoPlayer = AVPlayer(url: url)
+                    self.videoPlayHandler(videoController)
                 }
 #else
                 videoController.videoPlayer = AVPlayer(url: url)
