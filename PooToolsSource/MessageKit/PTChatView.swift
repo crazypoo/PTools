@@ -142,6 +142,7 @@ public class PTChatView: UIView {
                     cellHeight = self.customerCellHeightHandler?(cellModel,index) ?? 44
                 }
                 return cellHeight
+
             }
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in

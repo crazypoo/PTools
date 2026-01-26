@@ -456,4 +456,12 @@ public extension UICollectionView {
             customers
         }
     }
+    
+    func hasVisibleCell<T: UICollectionViewCell>(of type: T.Type) -> Bool {
+        visibleCells.contains { $0 is T }
+    }
+
+    func visibleCell<T: UICollectionViewCell>(of type: T.Type) -> T? {
+        visibleCells.first { $0 is T } as? T
+    }
 }
