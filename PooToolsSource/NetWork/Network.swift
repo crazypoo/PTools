@@ -708,7 +708,8 @@ public class Network: NSObject {
                                         if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
                                             let key = fileKey
                                             let ext = canPNG ? "png" : "jpg"
-                                            let fileName = "image_\(Date().timeIntervalSince1970).\(ext)"
+                                            let dateString = Int(Date().timeIntervalSince1970)
+                                            let fileName = "image_\(dateString).\(ext)"
                                             let mimeType = MimeTypeHelper.mimeType(for: ext)
                                             multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                                         } else {
@@ -720,7 +721,8 @@ public class Network: NSObject {
                                 phasset.converPHAssetToAVURLAsset { urlAsset in
                                     if let url = urlAsset?.url {
                                         let ext = url.pathExtension.lowercased()
-                                        let fileName = "video_\(Date().timeIntervalSince1970).\(ext)"
+                                        let dateString = Int(Date().timeIntervalSince1970)
+                                        let fileName = "video_\(dateString).\(ext)"
                                         let mimeType: String = MimeTypeHelper.mimeType(for: ext)
                                         multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
                                     } else {
@@ -731,7 +733,8 @@ public class Network: NSObject {
                                 phasset.converPHAssetToAVURLAsset { urlAsset in
                                     if let url = urlAsset?.url {
                                         let ext = url.pathExtension.lowercased()
-                                        let fileName = "audio_\(Date().timeIntervalSince1970).\(ext)"
+                                        let dateString = Int(Date().timeIntervalSince1970)
+                                        let fileName = "audio_\(dateString).\(ext)"
                                         let mimeType: String = MimeTypeHelper.mimeType(for: ext)
 
                                         multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
@@ -745,7 +748,8 @@ public class Network: NSObject {
                             if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
                                 let key = fileKey
                                 let ext = canPNG ? "png" : "jpg"
-                                let fileName = "image_\(Date().timeIntervalSince1970).\(ext)"
+                                let dateString = Int(Date().timeIntervalSince1970)
+                                let fileName = "image_\(dateString).\(ext)"
                                 let mimeType = MimeTypeHelper.mimeType(for: ext)
                                 multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                             } else {
