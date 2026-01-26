@@ -14,6 +14,9 @@ import AVKit
 import Kingfisher
 import Photos
 import PhotosUI
+#if POOTOOLS_VIDEOCACHE
+import KTVHTTPCache
+#endif
 
 class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
@@ -443,8 +446,23 @@ extension PTMediaBrowserCell {
         reloadButton.removeFromSuperview()
         playBtn.addActionHandlers { sender in
             let videoController = PTPlayerViewController()
-            videoController.videoPlayer = AVPlayer(url: URL(string: videoUrl)!)
-            self.videoPlayHandler(videoController)
+            if let url = URL(string: videoUrl) {
+#if POOTOOLS_VIDEOCACHE
+                if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
+                    let playerItem = AVPlayerItem(url: proxyURL)
+                    let player = AVPlayer(playerItem: playerItem)
+                    videoController.videoPlayer = player
+                    self.videoPlayHandler(videoController)
+                } else {
+                    PTNSLogConsole("Video url error")
+                }
+#else
+                videoController.videoPlayer = AVPlayer(url: url)
+                self.videoPlayHandler(videoController)
+#endif
+            } else {
+                PTNSLogConsole("Video url error")
+            }
         }
     }
     
