@@ -707,8 +707,9 @@ public class Network: NSObject {
                                         let canPNG = findImage.pngData() != nil
                                         if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
                                             let key = fileKey
-                                            let fileName = "image_\(Date().timeIntervalSince1970).\(canPNG ? "png" : "jpg")"
-                                            let mimeType = canPNG ? "image/png" : "image/jpeg"
+                                            let ext = canPNG ? "png" : "jpg"
+                                            let fileName = "image_\(Date().timeIntervalSince1970).\(ext)"
+                                            let mimeType = MimeTypeHelper.mimeType(for: ext)
                                             multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                                         } else {
                                             continuation.finish(throwing: NSError(domain: "Image data error", code: 666))
@@ -743,8 +744,9 @@ public class Network: NSObject {
                             let canPNG = findImage.pngData() != nil
                             if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
                                 let key = fileKey
-                                let fileName = "image_\(Date().timeIntervalSince1970).\(canPNG ? "png" : "jpg")"
-                                let mimeType = canPNG ? "image/png" : "image/jpeg"
+                                let ext = canPNG ? "png" : "jpg"
+                                let fileName = "image_\(Date().timeIntervalSince1970).\(ext)"
+                                let mimeType = MimeTypeHelper.mimeType(for: ext)
                                 multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                             } else {
                                 continuation.finish(throwing: NSError(domain: "Image data error", code: 666))

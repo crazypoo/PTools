@@ -186,62 +186,97 @@ public class PTLivePhoto {
     var videoReader: AVAssetReader?
     var assetWriter: AVAssetWriter?
     
-    func addAssetID(_ assetIdentifier: String, toVideo videoURL: URL, saveTo destinationURL: URL, progress: @escaping (CGFloat) -> Void, completion: @escaping (URL?) -> Void) {
-        
+    func addAssetID(_ assetIdentifier: String, toVideo videoURL: URL, saveTo destinationURL: URL, progress: @escaping (CGFloat) -> Void, completion: @escaping (URL?) -> Void ) {
+
         var audioWriterInput: AVAssetWriterInput?
         var audioReaderOutput: AVAssetReaderOutput?
+
         let videoAsset = AVURLAsset(url: videoURL)
         let frameCount = videoAsset.countFrames(exact: false)
+
         guard let videoTrack = videoAsset.tracks(withMediaType: .video).first else {
             completion(nil)
             return
         }
+
         do {
-            // Create the Asset Writer
+            // Writer
             assetWriter = try AVAssetWriter(outputURL: destinationURL, fileType: .mov)
-            // Create Video Reader Output
+
+            // Video Reader
             videoReader = try AVAssetReader(asset: videoAsset)
-            let videoReaderSettings = [kCVPixelBufferPixelFormatTypeKey as String: NSNumber(value: kCVPixelFormatType_32BGRA as UInt32)]
-            let videoReaderOutput = AVAssetReaderTrackOutput(track: videoTrack, outputSettings: videoReaderSettings)
+            let videoReaderSettings: [String: Any] = [
+                kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA
+            ]
+            let videoReaderOutput = AVAssetReaderTrackOutput(
+                track: videoTrack,
+                outputSettings: videoReaderSettings
+            )
+            videoReaderOutput.alwaysCopiesSampleData = false
             videoReader?.add(videoReaderOutput)
-            // Create Video Writer Input
-            let videoWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: [AVVideoCodecKey : AVVideoCodecType.h264, AVVideoWidthKey : videoTrack.naturalSize.width, AVVideoHeightKey : videoTrack.naturalSize.height])
+
+            // Video Writer Input
+            let videoWriterInput = AVAssetWriterInput(
+                mediaType: .video,
+                outputSettings: [
+                    AVVideoCodecKey: AVVideoCodecType.h264,
+                    AVVideoWidthKey: videoTrack.naturalSize.width,
+                    AVVideoHeightKey: videoTrack.naturalSize.height
+                ]
+            )
             videoWriterInput.transform = videoTrack.preferredTransform
-            videoWriterInput.expectsMediaDataInRealTime = true
+            videoWriterInput.expectsMediaDataInRealTime = false   // ✅ 修正点
             assetWriter?.add(videoWriterInput)
-            // Create Audio Reader Output & Writer Input
+
+            // Audio
             if let audioTrack = videoAsset.tracks(withMediaType: .audio).first {
-                do {
-                    let _audioReader = try AVAssetReader(asset: videoAsset)
-                    let _audioReaderOutput = AVAssetReaderTrackOutput(track: audioTrack, outputSettings: nil)
-                    _audioReader.add(_audioReaderOutput)
-                    audioReader = _audioReader
-                    audioReaderOutput = _audioReaderOutput
-                    let _audioWriterInput = AVAssetWriterInput(mediaType: .audio, outputSettings: nil)
-                    _audioWriterInput.expectsMediaDataInRealTime = false
-                    assetWriter?.add(_audioWriterInput)
-                    audioWriterInput = _audioWriterInput
-                } catch {
-                    PTNSLogConsole(error)
-                }
+                let _audioReader = try AVAssetReader(asset: videoAsset)
+                let _audioReaderOutput = AVAssetReaderTrackOutput(
+                    track: audioTrack,
+                    outputSettings: nil
+                )
+                _audioReader.add(_audioReaderOutput)
+
+                let _audioWriterInput = AVAssetWriterInput(
+                    mediaType: .audio,
+                    outputSettings: nil
+                )
+                _audioWriterInput.expectsMediaDataInRealTime = false
+
+                assetWriter?.add(_audioWriterInput)
+
+                audioReader = _audioReader
+                audioReaderOutput = _audioReaderOutput
+                audioWriterInput = _audioWriterInput
             }
-            // Create necessary identifier metadata and still image time metadata
+
+            // Metadata
             let assetIdentifierMetadata = metadataForAssetID(assetIdentifier)
             let stillImageTimeMetadataAdapter = createMetadataAdaptorForStillImageTime()
             assetWriter?.metadata = [assetIdentifierMetadata]
             assetWriter?.add(stillImageTimeMetadataAdapter.assetWriterInput)
-            // Start the Asset Writer
+
             assetWriter?.startWriting()
-            assetWriter?.startSession(atSourceTime: CMTime.zero)
-            // Add still image metadata
-            let _stillImagePercent: Float = 0.5
-            stillImageTimeMetadataAdapter.append(AVTimedMetadataGroup(items: [metadataItemForStillImageTime()],timeRange: videoAsset.makeStillImageTimeRange(percent: _stillImagePercent, inFrameCount: frameCount)))
-            // For end of writing / progress
+            assetWriter?.startSession(atSourceTime: .zero)
+
+            let stillPercent: Float = 0.5
+            let timeRange = videoAsset.makeStillImageTimeRange(
+                percent: stillPercent,
+                inFrameCount: frameCount
+            )
+            stillImageTimeMetadataAdapter.append(
+                AVTimedMetadataGroup(
+                    items: [metadataItemForStillImageTime()],
+                    timeRange: timeRange
+                )
+            )
+
             var writingVideoFinished = false
-            var writingAudioFinished = false
-            var currentFrameCount = 0
-            func didCompleteWriting() {
-                guard writingAudioFinished && writingVideoFinished else { return }
+            var writingAudioFinished = audioWriterInput == nil
+            var currentFrame = 0
+
+            func finishIfPossible() {
+                guard writingVideoFinished && writingAudioFinished else { return }
                 assetWriter?.finishWriting {
                     if self.assetWriter?.status == .completed {
                         completion(destinationURL)
@@ -250,46 +285,55 @@ public class PTLivePhoto {
                     }
                 }
             }
-            // Start writing video
-            if videoReader?.startReading() ?? false {
-                videoWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "videoWriterInputQueue")) {
+
+            // Video writing
+            if videoReader?.startReading() == true {
+                videoWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "pt.livephoto.video")) {
                     while videoWriterInput.isReadyForMoreMediaData {
-                        if let sampleBuffer = videoReaderOutput.copyNextSampleBuffer()  {
-                            currentFrameCount += 1
-                            let percent:CGFloat = CGFloat(currentFrameCount)/CGFloat(frameCount)
-                            progress(percent)
-                            if !videoWriterInput.append(sampleBuffer) {
-                                PTNSLogConsole("Cannot write: \(String(describing: self.assetWriter?.error?.localizedDescription))")
-                                self.videoReader?.cancelReading()
-                            }
-                        } else {
+                        guard let sample = videoReaderOutput.copyNextSampleBuffer() else {
                             videoWriterInput.markAsFinished()
                             writingVideoFinished = true
-                            didCompleteWriting()
+                            finishIfPossible()
+                            return
+                        }
+
+                        currentFrame += 1
+                        progress(CGFloat(currentFrame) / CGFloat(frameCount))
+
+                        if !videoWriterInput.append(sample) {
+                            self.videoReader?.cancelReading()
+                            writingVideoFinished = true
+                            finishIfPossible()
+                            return
                         }
                     }
                 }
             } else {
                 writingVideoFinished = true
-                didCompleteWriting()
+                finishIfPossible()
             }
-            // Start writing audio
-            if audioReader?.startReading() ?? false {
-                audioWriterInput?.requestMediaDataWhenReady(on: DispatchQueue(label: "audioWriterInputQueue")) {
-                    while audioWriterInput?.isReadyForMoreMediaData ?? false {
-                        guard let sampleBuffer = audioReaderOutput?.copyNextSampleBuffer() else {
-                            audioWriterInput?.markAsFinished()
+
+            // Audio writing
+            if let audioReader = audioReader,
+               audioReader.startReading(),
+               let audioWriterInput = audioWriterInput {
+
+                audioWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "pt.livephoto.audio")) {
+                    while audioWriterInput.isReadyForMoreMediaData {
+                        guard let sample = audioReaderOutput?.copyNextSampleBuffer() else {
+                            audioWriterInput.markAsFinished()
                             writingAudioFinished = true
-                            didCompleteWriting()
+                            finishIfPossible()
                             return
                         }
-                        audioWriterInput?.append(sampleBuffer)
+                        audioWriterInput.append(sample)
                     }
                 }
             } else {
                 writingAudioFinished = true
-                didCompleteWriting()
+                finishIfPossible()
             }
+
         } catch {
             PTNSLogConsole(error)
             completion(nil)
