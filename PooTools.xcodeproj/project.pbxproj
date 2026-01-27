@@ -169,6 +169,7 @@
 		554E649F2D4A236800042565 /* PTHTMLHeightCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */; };
 		554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */; };
 		554F3A122E94C21D001F4078 /* PTTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554F3A112E94C21D001F4078 /* PTTipsView.swift */; };
+		55557DC62F28568D008EB4B2 /* PTAudioCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557DC52F28568D008EB4B2 /* PTAudioCache.swift */; };
 		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
 		5555B4B02C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */; };
 		555719932EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555719922EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift */; };
@@ -1124,6 +1125,7 @@
 		554E649E2D4A236800042565 /* PTHTMLHeightCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHTMLHeightCalculator.swift; sourceTree = "<group>"; };
 		554EF7AC2DD42B9500A270CD /* PTPageControllable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPageControllable.swift; sourceTree = "<group>"; };
 		554F3A112E94C21D001F4078 /* PTTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsView.swift; sourceTree = "<group>"; };
+		55557DC52F28568D008EB4B2 /* PTAudioCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAudioCache.swift; sourceTree = "<group>"; };
 		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
 		5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugSnapshotViewController.swift; sourceTree = "<group>"; };
 		555719922EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingPlaseholderTextField.swift; sourceTree = "<group>"; };
@@ -3700,6 +3702,7 @@
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
 				5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */,
 				5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */,
+				55557DC52F28568D008EB4B2 /* PTAudioCache.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4074,7 +4077,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4084,9 +4088,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4101,9 +4109,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4144,6 +4156,7 @@
 				5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
+				55557DC62F28568D008EB4B2 /* PTAudioCache.swift in Sources */,
 				55C409862C04BE22009C0FB6 /* PTNetworkWatcherCell.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
