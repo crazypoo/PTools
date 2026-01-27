@@ -344,17 +344,17 @@ public class Network: NSObject {
     open var retryDelay:TimeInterval = 1.5
     open var retryAPIStatusCode:Int = 502
 
-    open var fileUrl:String = ""
-    open var saveFilePath:String = "" // 文件下载保存的路径
-    open var cancelledData : Data?//用于停止下载时,保存已下载的部分
-    open var downloadRequest:DownloadRequest? //下载请求对象
-    open var destination:DownloadRequest.Destination!//下载文件的保存路径
+//    open var fileUrl:String = ""
+//    open var saveFilePath:String = "" // 文件下载保存的路径
+//    open var cancelledData : Data?//用于停止下载时,保存已下载的部分
+//    open var downloadRequest:DownloadRequest? //下载请求对象
+//    open var destination:DownloadRequest.Destination!//下载文件的保存路径
+//    
+//    open var progress:FileDownloadProgress?
+//    open var success:FileDownloadSuccess?
+//    open var fail:FileDownloadFail?
     
-    open var progress:FileDownloadProgress?
-    open var success:FileDownloadSuccess?
-    open var fail:FileDownloadFail?
-    
-    private var queue:DispatchQueue = DispatchQueue.main
+    private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
     /// manager
     private static var manager: Session = {
@@ -983,97 +983,140 @@ public class Network: NSObject {
         }
     }
 
-    class open func fileDownLoad(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?) async throws -> Data {
-        
-        await withUnsafeContinuation { continuation in
-            let download = Network()
-            download.createDownload(fileUrl: fileUrl, saveFilePath: saveFilePath,queue: queue, progress: progress) { reponse in
-                continuation.resume(returning: reponse.value!)
-            } fail: { error in
-                continuation.resume(throwing: error as! Never)
+    private class DownloadTask {
+        let url: String
+        let destination: (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
+        var downloadRequest: DownloadRequest?
+        var resumeData: Data?
+
+        var progressClosures: [FileDownloadProgress] = []
+        var successClosures: [FileDownloadSuccess] = []
+        var failClosures: [FileDownloadFail] = []
+
+        init(url: String, destination: @escaping (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
+            self.url = url
+            self.destination = destination
+        }
+
+        func start(queue: DispatchQueue? = DispatchQueue.main) {
+            if let resumeData = self.resumeData {
+                // 断点续传
+                downloadRequest = AF.download(resumingWith: resumeData, to: destination)
+            } else {
+                downloadRequest = AF.download(url, to: destination)
             }
+
+            downloadRequest?.downloadProgress { [weak self] pro in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    for closure in self.progressClosures {
+                        closure(pro.completedUnitCount, pro.totalUnitCount, pro.fractionCompleted)
+                    }
+                }
+            }
+
+            downloadRequest?.responseData(queue: queue!, completionHandler: { [weak self] response in
+                guard let self = self else { return }
+
+                // 清理 resumeData
+                self.resumeData = nil
+
+                switch response.result {
+                case .success(let data):
+                    DispatchQueue.main.async {
+                        for closure in self.successClosures { closure(response) }
+                    }
+                case .failure(let error):
+                    // 保存 resumeData
+                    self.resumeData = response.resumeData
+                    DispatchQueue.main.async {
+                        for closure in self.failClosures { closure(error) }
+                    }
+                }
+            })
+        }
+
+        func suspend() {
+            downloadRequest?.suspend()
+        }
+
+        func resume() {
+            start()
+        }
+
+        func cancel() {
+            downloadRequest?.cancel()
         }
     }
 
-    // 默认主线程
-    public func createDownload(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?,success:FileDownloadSuccess?, fail:FileDownloadFail?) {
-        
-        self.fileUrl = fileUrl
-        self.saveFilePath = saveFilePath
-        self.success = success
-        self.progress = progress
-        self.fail = fail
-        
-        if !fileUrl.isURL() || fileUrl.stringIsEmpty() {
-            self.fail?(AFError.invalidURL(url: "https://www.qq.com"))
+    private var tasks: [String: DownloadTask] = [:]
+    private let queue = DispatchQueue(label: "pt.downloader.queue")
+
+    // MARK: - 下载入口
+    public func download(fileUrl: String,
+                         saveFilePath: String,
+                         queue: DispatchQueue? = DispatchQueue.main,
+                         progress: FileDownloadProgress? = nil,
+                         success: FileDownloadSuccess? = nil,
+                         fail: FileDownloadFail? = nil) {
+        guard fileUrl.isURL(), !fileUrl.stringIsEmpty() else {
+            fail?(AFError.invalidURL(url: "https://www.qq.com"))
             return
         }
 
-        if queue != nil {
-            self.queue = queue!
-        }
-        
-        destination = { url , response in
+        let dest: (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options) = { _, _ in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
-            return (saveUrl,[.removePreviousFile, .createIntermediateDirectories] )
+            return (saveUrl,[.removePreviousFile, .createIntermediateDirectories])
         }
-        startDownloadFile()
-    }
-    
-    public func suspendDownload() {
-        downloadRequest?.task?.suspend()
-    }
-    public func cancelDownload() {
-        downloadRequest?.cancel()
-        downloadRequest = nil;
-        progress = nil
-    }
-    
-    public func startDownloadFile() {
-        if cancelledData != nil {
-            downloadRequest = AF.download(resumingWith: cancelledData!, to: destination)
-            downloadRequest?.downloadProgress { [weak self] (pro) in
-                guard let `self` = self else {return}
-                PTGCDManager.gcdMain {
-                    self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
-                }
+
+        self.queue.async {
+            if let task = self.tasks[fileUrl] {
+                // 已存在任务，添加闭包
+                if let p = progress { task.progressClosures.append(p) }
+                if let s = success { task.successClosures.append(s) }
+                if let f = fail { task.failClosures.append(f) }
+                return
             }
-            downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
-            
-        } else if downloadRequest != nil {
-            downloadRequest?.task?.resume()
-        } else {
-            downloadRequest = AF.download(fileUrl, to: destination)
-            downloadRequest?.downloadProgress { [weak self] (pro) in
-                guard let `self` = self else {return}
-                PTGCDManager.gcdMain {
-                    self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
-                }
-            }
-            
-            downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
+
+            // 新任务
+            let task = DownloadTask(url: fileUrl, destination: dest)
+            if let p = progress { task.progressClosures.append(p) }
+            if let s = success { task.successClosures.append(s) }
+            if let f = fail { task.failClosures.append(f) }
+
+            self.tasks[fileUrl] = task
+            task.start(queue: queue)
         }
     }
-    
-    private func downloadResponse(response:AFDownloadResponse<Data>) {
-        switch response.result {
-        case .success:
-            if let data = response.value, data.count > 1000 {
-                if success != nil {
-                    PTGCDManager.gcdMain {
-                        self.success?(response)
-                    }
-                }
-            } else {
-                PTGCDManager.gcdMain {
-                    self.fail?(NetWorkDownloadError as Error)
-                }
-            }
-        case .failure:
-            cancelledData = response.resumeData
-            PTGCDManager.gcdMain {
-                self.fail?(response.error)
-            }
+
+    // MARK: - Async/Await
+    public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = DispatchQueue.main, progress: FileDownloadProgress? = nil) async throws -> Data? {
+        try await withCheckedThrowingContinuation { continuation in
+            self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: queue, progress: progress, success: { data in
+                continuation.resume(returning: data.resumeData ?? nil)
+            }, fail: { error in
+                continuation.resume(throwing: error ?? NSError(domain: "PTDownloader", code: -1))
+            })
+        }
+    }
+
+    // MARK: - 暂停 / 恢复 / 取消
+    public func suspend(fileUrl: String) {
+        queue.async {
+            self.tasks[fileUrl]?.suspend()
+        }
+    }
+
+    public func resume(fileUrl: String) {
+        queue.async {
+            self.tasks[fileUrl]?.resume()
+        }
+    }
+
+    public func cancel(fileUrl: String) {
+        queue.async {
+            self.tasks[fileUrl]?.cancel()
+            self.tasks[fileUrl] = nil
         }
     }
 }
