@@ -146,7 +146,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     private func setupUserIconConstraints(cellModel: PTChatListModel) {
         userIcon.snp.remakeConstraints { make in
             make.size.equalTo(PTChatConfig.share.messageUserIconSize)
-            make.top.equalTo(messageTimeLabel.snp.bottom)
+            make.top.equalTo(messageTimeLabel.snp.bottom).offset(PTChatConfig.share.userIconTopSpacing)
             make.rightOrLeftEqualToSuperView(belongToMe: cellModel.belongToMe, inset: PTChatConfig.share.userIconFixelSpace)
         }
     }

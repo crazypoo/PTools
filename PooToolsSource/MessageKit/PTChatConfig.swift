@@ -84,6 +84,7 @@ public class PTChatConfig: NSObject {
     public var senderNameBackgroundColor:UIColor = .clear
     public var receiverNameColor:UIColor = UIColor(hexString: "919191")!
     public var receiverNameBackgroundColor:UIColor = .clear
+    public var userIconTopSpacing:CGFloat = 0
     ///頭像到邊的距離
     public var userIconFixelSpace:CGFloat = 10
     ///自己消息的聊天氣泡
