@@ -13,6 +13,9 @@ public class PTChatVoiceCell: PTChatBaseCell {
     
     public static let ID = "PTChatVoiceCell"
 
+    var audioCachePath:URL?
+    var audioDuration:Float = 0
+
     public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
@@ -31,8 +34,21 @@ public class PTChatVoiceCell: PTChatBaseCell {
         let view = UIButton(type: .custom)
         view.setImage(PTChatConfig.share.playButtonImage, for: .normal)
         view.setImage(PTChatConfig.share.pauseButtonImage, for: .selected)
-        
         view.isSelected = false
+        // 播放按钮点击事件
+        view.addActionHandlers { sender in
+            sender.isSelected.toggle()
+            if sender.isSelected {
+                if let cachePath = self.audioCachePath {
+                    let localURL = URL(fileURLWithPath:cachePath.path)
+                    self.startAudioPlayback(from: localURL)
+                } else {
+                    self.configureContent(cellModel: self.cellModel)
+                }
+            } else {
+                self.pauseAudioPlayback()
+            }
+        }
         return view
     }()
     
@@ -117,18 +133,17 @@ public class PTChatVoiceCell: PTChatBaseCell {
         }
         
         if let url = audioURL {
-            self.durationLabel.text = url.audioLinkGetDurationTime().floatToPlayTimeString()
-            
-            // 播放按钮点击事件
-            playButton.addActionHandlers { sender in
-                sender.isSelected.toggle()
-                
-                if sender.isSelected {
-                    self.startAudioPlayback(from: url)
-                } else {
-                    self.pauseAudioPlayback()
-                }
-            }
+            waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
+            startWaitAnimation()
+            waitImageView.isHidden = false
+            PTAudioService.shared.fetchDuration(for: url, completion: { duration,url in
+                self.audioDuration = duration
+                self.audioCachePath = url
+                self.durationLabel.text = duration.floatToPlayTimeString()
+                self.stopWaitAnimation()
+                self.waitImageView.isHidden = true
+                self.waitImageView.isUserInteractionEnabled = false
+            })
         }
     }
     
@@ -138,18 +153,8 @@ public class PTChatVoiceCell: PTChatBaseCell {
             self.audioPlayer?.play()
             self.isPaused = false
         } else {
-            if FileManager.pt.judgeFileOrFolderExists(filePath: url.absoluteString.replace("file://", with: "")) {
-                playAudio(at: url)
-                startTimerProgres()
-            } else {
-                let localPath = FileManager.pt.CachesDirectory().appendingPathComponent(url.lastPathComponent)
-                if FileManager.pt.judgeFileOrFolderExists(filePath: localPath) {
-                    playAudio(at:  URL(fileURLWithPath: localPath))
-                    startTimerProgres()
-                } else {
-                    downloadAudio(from: url, localPath: localPath)
-                }
-            }
+            self.playAudio(at: url)
+            self.startTimerProgres()
         }
     }
 
@@ -164,27 +169,6 @@ public class PTChatVoiceCell: PTChatBaseCell {
         audioPlayer = try? AVAudioPlayer(contentsOf: url)
         audioPlayer?.delegate = self
         audioPlayer?.play()
-    }
-
-    // 下载音频并播放
-    private func downloadAudio(from url: URL, localPath: String) {
-        waitImageView.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
-        startWaitAnimation()
-        waitImageView.isHidden = false
-        Network.share.createDownload(fileUrl: url.absoluteString, saveFilePath: localPath) { _, _, _ in
-            // Progress handling
-        } success: { response in
-            self.playAudio(at: URL(fileURLWithPath: localPath))
-            self.startTimerProgres()
-            self.stopWaitAnimation()
-            self.waitImageView.isHidden = true
-            self.waitImageView.isUserInteractionEnabled = false
-        } fail: { error in
-            PTNSLogConsole("Failed to download audio: \(error!.localizedDescription)", levelType: .Error)
-            self.stopWaitAnimation()
-            self.waitImageView.isHidden = true
-            self.waitImageView.isUserInteractionEnabled = false
-        }
     }
     
     func startTimerProgres() {
@@ -205,7 +189,7 @@ public class PTChatVoiceCell: PTChatBaseCell {
         progressView.progress = 0
         playButton.isSelected = false
         audioPlayer = nil
-        durationLabel.text = "0:00"
+        durationLabel.text = self.audioDuration.floatToPlayTimeString()
         isPaused = false
     }
 }

@@ -530,15 +530,14 @@ fileprivate extension PTMediaBrowserController {
             
             let documentDirectory = FileManager.pt.DocumnetsDirectory()
             let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
-            let download = Network()
-            download.createDownload(fileUrl: url, saveFilePath: fullPath, progress: { bytesRead, totalBytesRead, progress in
+            Network.share.download(fileUrl: url, saveFilePath: fullPath) { bytesRead, totalBytesRead, progress in
                 PTGCDManager.gcdMain {
                     loadingView.progress = progress
                 }
-            }) { reponse in
+            } success: { reponse in
                 loadingView.removeFromSuperview()
                 self.saveVideo(videoPath: fullPath)
-            } fail: { error in }
+            }
         }
     }
     
