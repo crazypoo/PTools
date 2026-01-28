@@ -182,5 +182,9 @@ public class PTChatMediaCell: PTChatBaseCell {
                 self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
             }
         }
+        
+        if let urlReal = URL(string: url) {
+            PTVideoFileCache.shared.prepareVideo(url: urlReal, completion: { _ in })
+        }
     }
 }

@@ -10,6 +10,63 @@ import UIKit
 import AVFoundation
 import CryptoKit
 
+public final class PTVideoFileCache {
+
+    public static let shared = PTVideoFileCache()
+    private init() {}
+
+    private let directoryName = "PTVideoFileCache"
+
+    private lazy var cacheDirectory: URL = {
+        let base = FileManager.default.urls(for: .cachesDirectory,
+                                           in: .userDomainMask)[0]
+        let dir = base.appendingPathComponent(directoryName, isDirectory: true)
+        if !FileManager.default.fileExists(atPath: dir.path) {
+            try? FileManager.default.createDirectory(
+                at: dir,
+                withIntermediateDirectories: true
+            )
+        }
+        return dir
+    }()
+
+    // 同一个 URL → 同一个文件
+    public func cacheURL(for videoURL: URL) -> URL {
+        let key = PTVideoCoverCache.cacheKeyForVideo(videoURL.absoluteString)
+        let ext = videoURL.pathExtension.isEmpty ? "mp4" : videoURL.pathExtension
+        return cacheDirectory.appendingPathComponent("\(key).\(ext)")
+    }
+
+    /// 核心：获取可用的视频文件（本地 or 下载）
+    public func prepareVideo( url: URL,progress:FileDownloadProgress? = nil, completion: @escaping (URL?) -> Void) {
+        // 本地文件直接返回
+        if url.isFileURL {
+            completion(url)
+            return
+        }
+
+        let localURL = cacheURL(for: url)
+
+        // 已缓存
+        if FileManager.default.fileExists(atPath: localURL.path) {
+            completion(localURL)
+            return
+        }
+
+        let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
+
+        Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path,progress: progress) { reponse in
+            DispatchQueue.main.async {
+                completion(localURL)
+            }
+        } fail: { error in
+            DispatchQueue.main.async {
+                completion(nil)
+            }
+        }
+    }
+}
+
 public final class PTVideoCoverCache {
 
     private static let workQueue = DispatchQueue(label: "com.pt.video.cover.cache",

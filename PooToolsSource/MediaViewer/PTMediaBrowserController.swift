@@ -10,6 +10,9 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import AttributedString
+#if POOTOOLS_VIDEOCACHE
+import KTVHTTPCache
+#endif
 
 let numberOfVisibleLines = 2
 
@@ -519,34 +522,38 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func saveVideoAction(url:String) {
-        if let currentMediaView = newCollectionView.visibleCells().first as? PTMediaBrowserCell {
-            let loadingView = PTMediaBrowserLoadingView.init(type: .LoopDiagram)
+        if let currentMediaView = newCollectionView.visibleCells().first as? PTMediaBrowserCell,let urlReal = URL(string: url) {
+            let loadingView = PTMediaBrowserLoadingView(type: .LoopDiagram)
             currentMediaView.contentView.addSubview(loadingView)
             loadingView.snp.makeConstraints { make in
-                make.width.equalTo(currentMediaView.frame.size.width * 0.5)
-                make.height.equalTo(currentMediaView.frame.size.height * 0.5)
+                make.size.equalTo(currentMediaView.frame.size.width * 0.5)
                 make.centerX.centerY.equalToSuperview()
             }
             
-            let documentDirectory = FileManager.pt.DocumnetsDirectory()
-            let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
-            Network.share.download(fileUrl: url, saveFilePath: fullPath) { bytesRead, totalBytesRead, progress in
-                PTGCDManager.gcdMain {
-                    loadingView.progress = progress
-                }
-            } success: { reponse in
+            PTVideoFileCache.shared.prepareVideo(url: urlReal) { bytesRead, totalBytesRead, progress in
+                loadingView.progress = progress
+            } completion: { localURL in
                 loadingView.removeFromSuperview()
-                self.saveVideo(videoPath: fullPath)
+                if let findLocal = localURL {
+                    self.saveVideo(videoPath: findLocal.path,videoOrURL: url)
+                } else {
+                    self.viewSaveImageBlock?(false)
+                }
             }
+        } else {
+            viewSaveImageBlock?(false)
         }
     }
-    
-    func saveVideo(videoPath:String) {
+        
+    func saveVideo(videoPath:String,videoOrURL:String) {
         let url = NSURL.fileURL(withPath: videoPath)
         let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.path)
         if compatible {
             UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
         } else {
+            if let urlReal = URL(string: videoOrURL) {
+                PTVideoFileCache.shared.prepareVideo(url: urlReal,completion: { _ in })
+            }
             viewSaveImageBlock?(compatible)
         }
     }

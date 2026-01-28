@@ -349,7 +349,7 @@ public class Network: NSObject {
 //    open var cancelledData : Data?//用于停止下载时,保存已下载的部分
 //    open var downloadRequest:DownloadRequest? //下载请求对象
 //    open var destination:DownloadRequest.Destination!//下载文件的保存路径
-//    
+//
 //    open var progress:FileDownloadProgress?
 //    open var success:FileDownloadSuccess?
 //    open var fail:FileDownloadFail?
@@ -1022,10 +1022,11 @@ public class Network: NSObject {
                 self.resumeData = nil
 
                 switch response.result {
-                case .success(let data):
+                case .success( _):
                     DispatchQueue.main.async {
                         for closure in self.successClosures { closure(response) }
                     }
+                    Network.share.removeTask(self.url)
                 case .failure(let error):
                     // 保存 resumeData
                     self.resumeData = response.resumeData
@@ -1035,9 +1036,12 @@ public class Network: NSObject {
                 }
             })
         }
-
+        
         func suspend() {
-            downloadRequest?.suspend()
+            downloadRequest?.cancel { [weak self] data in
+                self?.resumeData = data
+                self?.downloadRequest = nil
+            }
         }
 
         func resume() {
@@ -1117,6 +1121,12 @@ public class Network: NSObject {
         queue.async {
             self.tasks[fileUrl]?.cancel()
             self.tasks[fileUrl] = nil
+        }
+    }
+    
+    public func removeTask(_ url: String) {
+        queue.async {
+            self.tasks[url] = nil
         }
     }
 }
