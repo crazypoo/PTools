@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
+import Photos
 
 public typealias PTChatHandler = (PTChatListModel,IndexPath) -> Void
 public typealias PTChatCellHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath,_ baseCell:UICollectionViewCell) -> PTChatBaseCell?
@@ -106,7 +108,35 @@ public class PTChatView: UIView {
                     let mapHeight = PTChatConfig.share.mapMessageImageHeight
                     cellHeight = timeHeight + nameHeight + mapHeight + spaceHeight + readStatusHeight + PTChatConfig.share.userIconTopSpacing
                 case .Media:
-                    let imageHeight = PTChatConfig.share.imageMessageImageHeight
+                    var imageHeight = PTChatConfig.share.imageMessageImageHeight
+                    if let mediaString = cellModel.msgContent as? String {
+                        switch mediaString.nsString.contentTypeForUrl() {
+                        case .MOV, .MP4, .ThreeGP:
+                            imageHeight = PTChatConfig.share.mediaMessageVideoHeight
+                        default:
+                            imageHeight = PTChatConfig.share.imageMessageImageHeight
+                        }
+                    } else if let mediaURL = cellModel.msgContent as? URL {
+                        switch mediaURL.absoluteString.nsString.contentTypeForUrl() {
+                        case .MOV, .MP4, .ThreeGP:
+                            imageHeight = PTChatConfig.share.mediaMessageVideoHeight
+                        default:
+                            imageHeight = PTChatConfig.share.imageMessageImageHeight
+                        }
+                    } else if let avItem = cellModel.msgContent as? AVPlayerItem {
+                        imageHeight = PTChatConfig.share.mediaMessageVideoHeight
+                    } else if let avAsset = cellModel.msgContent as? AVAsset {
+                        imageHeight = PTChatConfig.share.mediaMessageVideoHeight
+                    } else if let asset = cellModel.msgContent as? PHAsset {
+                        switch asset.mediaType {
+                        case .image:
+                            imageHeight = PTChatConfig.share.imageMessageImageHeight
+                        case .video:
+                            imageHeight = PTChatConfig.share.mediaMessageVideoHeight
+                        default:
+                            imageHeight = PTChatConfig.share.imageMessageImageHeight
+                        }
+                    }
                     cellHeight = timeHeight + nameHeight + imageHeight + spaceHeight + readStatusHeight + PTChatConfig.share.userIconTopSpacing
                 case .Voice:
                     let voiceHeight:CGFloat = 38

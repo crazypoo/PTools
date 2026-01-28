@@ -54,7 +54,7 @@ public class PTChatMediaCell: PTChatBaseCell {
         }
         
         mediaPlayImageView.snp.makeConstraints { make in
-            make.size.equalTo(34)
+            make.size.equalTo(PTChatConfig.share.mediaPlayButtonSize)
             make.centerX.centerY.equalToSuperview()
         }
     }
@@ -76,8 +76,43 @@ public class PTChatMediaCell: PTChatBaseCell {
                 make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
             make.top.equalTo(self.senderNameLabel.snp.bottom)
-            make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
-            make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
+            if let mediaString = cellModel.msgContent as? String {
+                switch mediaString.nsString.contentTypeForUrl() {
+                case .MOV, .MP4, .ThreeGP:
+                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
+                default:
+                    make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
+                    make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
+                }
+            } else if let mediaURL = cellModel.msgContent as? URL {
+                switch mediaURL.absoluteString.nsString.contentTypeForUrl() {
+                case .MOV, .MP4, .ThreeGP:
+                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
+                default:
+                    make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
+                    make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
+                }
+            } else if let _ = cellModel.msgContent as? AVPlayerItem {
+                make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
+            } else if let _ = cellModel.msgContent as? AVAsset {
+                make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
+            } else if let asset = cellModel.msgContent as? PHAsset {
+                switch asset.mediaType {
+                case .image:
+                    make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
+                    make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
+                case .video:
+                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
+                default:
+                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
+                }
+            }
         }
     }
 

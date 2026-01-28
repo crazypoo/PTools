@@ -149,8 +149,13 @@ public class PTChatConfig: NSObject {
     @PTClampedProperyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200
     ///Media的Coner大小
     @PTClampedProperyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5
+    ///Media的Width大小
+    @PTClampedProperyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200
+    ///Media的Height大小
+    @PTClampedProperyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200
     public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40))
-    
+    public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34)
+
     //MARK: Map message
     ///地圖Width大小
     @PTClampedProperyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200
