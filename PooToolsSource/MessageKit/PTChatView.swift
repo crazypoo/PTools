@@ -172,11 +172,10 @@ public class PTChatView: UIView {
                     cellHeight = self.customerCellHeightHandler?(cellModel,index) ?? 44
                 }
                 return cellHeight
-
             }
         }
         view.cellInCollection = { collectionView,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row] {
+            if let itemRow = sectionModel.rows?[indexPath.row],let _ = itemRow.dataModel as? PTChatListModel {
                 let cellModel = self.chatDataArr[indexPath.row]
                 let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
                 if itemRow.ID == PTChatSystemMessageCell.ID,let cell = baseCell as? PTChatSystemMessageCell {

@@ -14,6 +14,8 @@ import SwifterSwift
 public class PTChatMediaCell: PTChatBaseCell {
     public static let ID = "PTChatMediaCell"
 
+    fileprivate var videoCacheURL:URL? = nil
+    
     public var cellModel: PTChatListModel! {
         didSet {
             self.updateCellModel(cellModel: self.cellModel)
@@ -184,7 +186,14 @@ public class PTChatMediaCell: PTChatBaseCell {
         }
         
         if let urlReal = URL(string: url) {
-            PTVideoFileCache.shared.prepareVideo(url: urlReal, completion: { _ in })
+            if let _ = self.videoCacheURL {
+                
+            } else {
+                PTVideoFileCache.shared.prepareVideo(url: urlReal,progress: { bytesRead, totalBytesRead, progress in
+                }, completion: { localURL in
+                    self.videoCacheURL = localURL
+                })
+            }
         }
     }
 }

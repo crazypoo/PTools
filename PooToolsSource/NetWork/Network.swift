@@ -335,6 +335,8 @@ public class Network: NSObject {
             
     ///网络请求时间
     open var netRequsetTime:TimeInterval = 20
+    open var downloadRequsetTime:TimeInterval = 5
+    open var downloadEndTime:TimeInterval = 3600
     open var serverAddress:String = ""
     open var serverAddress_dev:String = ""
     open var socketAddress:String = ""
@@ -343,16 +345,6 @@ public class Network: NSObject {
     open var retryTimes:Int = 3
     open var retryDelay:TimeInterval = 1.5
     open var retryAPIStatusCode:Int = 502
-
-//    open var fileUrl:String = ""
-//    open var saveFilePath:String = "" // 文件下载保存的路径
-//    open var cancelledData : Data?//用于停止下载时,保存已下载的部分
-//    open var downloadRequest:DownloadRequest? //下载请求对象
-//    open var destination:DownloadRequest.Destination!//下载文件的保存路径
-//
-//    open var progress:FileDownloadProgress?
-//    open var success:FileDownloadSuccess?
-//    open var fail:FileDownloadFail?
     
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
@@ -983,6 +975,14 @@ public class Network: NSObject {
         }
     }
 
+    // 自定义 Session，支持总超时
+    private static var session: Session = {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = Network.share.downloadRequsetTime          // 请求超时时间
+        configuration.timeoutIntervalForResource = Network.share.downloadEndTime       // 下载资源最大耗时（秒）
+        return Session(configuration: configuration)
+    }()
+
     private class DownloadTask {
         let url: String
         let destination: (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
@@ -1001,9 +1001,9 @@ public class Network: NSObject {
         func start(queue: DispatchQueue? = DispatchQueue.main) {
             if let resumeData = self.resumeData {
                 // 断点续传
-                downloadRequest = AF.download(resumingWith: resumeData, to: destination)
+                downloadRequest = Network.session.download(resumingWith: resumeData, to: destination)
             } else {
-                downloadRequest = AF.download(url, to: destination)
+                downloadRequest = Network.session.download(url, to: destination)
             }
 
             downloadRequest?.downloadProgress { [weak self] pro in
@@ -1073,23 +1073,25 @@ public class Network: NSObject {
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories])
         }
 
-        self.queue.async {
-            if let task = self.tasks[fileUrl] {
-                // 已存在任务，添加闭包
+        queue?.async {
+            self.queue.async {
+                if let task = self.tasks[fileUrl] {
+                    // 已存在任务，添加闭包
+                    if let p = progress { task.progressClosures.append(p) }
+                    if let s = success { task.successClosures.append(s) }
+                    if let f = fail { task.failClosures.append(f) }
+                    return
+                }
+
+                // 新任务
+                let task = DownloadTask(url: fileUrl, destination: dest)
                 if let p = progress { task.progressClosures.append(p) }
                 if let s = success { task.successClosures.append(s) }
                 if let f = fail { task.failClosures.append(f) }
-                return
+
+                self.tasks[fileUrl] = task
+                task.start(queue: queue)
             }
-
-            // 新任务
-            let task = DownloadTask(url: fileUrl, destination: dest)
-            if let p = progress { task.progressClosures.append(p) }
-            if let s = success { task.successClosures.append(s) }
-            if let f = fail { task.failClosures.append(f) }
-
-            self.tasks[fileUrl] = task
-            task.start(queue: queue)
         }
     }
 

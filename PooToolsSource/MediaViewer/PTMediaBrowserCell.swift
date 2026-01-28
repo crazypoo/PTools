@@ -31,6 +31,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
+    fileprivate var videoCacheURL:URL?
     
     lazy var contentScrolView:UIScrollView = {
         let view = UIScrollView()
@@ -409,23 +410,19 @@ extension PTMediaBrowserCell {
 
     func handleVideoLoading(loading: PTMediaBrowserLoadingView, videoUrl: String) {
         if let url = URL(string: videoUrl) {
-            PTVideoFileCache.shared.prepareVideo(url: url) { bytesRead, totalBytesRead, progress in
-                loading.progress = progress
-            } completion: { localURL in
-                if let _ = localURL {
-                    PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
-                        PTGCDManager.gcdMain {
-                            if let image = image {
-                                loading.removeFromSuperview()
-                                self.setupVideoView(image: image, videoUrl: videoUrl)
-                            } else {
-                                self.handleVideoLoadError(loading: loading)
-                            }
-                        }
+            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
+                PTGCDManager.gcdMain {
+                    if let image = image {
+                        loading.removeFromSuperview()
+                        self.setupVideoView(image: image, videoUrl: videoUrl)
+                    } else {
+                        self.handleVideoLoadError(loading: loading)
                     }
-                } else {
-                    self.handleVideoLoadError(loading: loading)
                 }
+            }
+            
+            PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
+                self.videoCacheURL = localURL
             }
         } else {
             self.handleVideoLoadError(loading: loading)
@@ -459,24 +456,45 @@ extension PTMediaBrowserCell {
         playBtn.addActionHandlers { sender in
             let videoController = PTPlayerViewController()
             if let url = URL(string: videoUrl) {
-                PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
-                    if let findLocalURL = localURL {
-                        videoController.videoPlayer = AVPlayer(url: findLocalURL)
+                if let findLocal = self.videoCacheURL {
+                    videoController.videoPlayer = AVPlayer(url: findLocal)
+                    self.videoPlayHandler(videoController)
+                } else {
+#if POOTOOLS_VIDEOCACHE
+                    if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
+                        let playerItem = AVPlayerItem(url: proxyURL)
+                        let player = AVPlayer(playerItem: playerItem)
+                        videoController.videoPlayer = player
                         self.videoPlayHandler(videoController)
                     } else {
-#if POOTOOLS_VIDEOCACHE
-                        if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
-                            let playerItem = AVPlayerItem(url: proxyURL)
-                            let player = AVPlayer(playerItem: playerItem)
-                            videoController.videoPlayer = player
-                            self.videoPlayHandler(videoController)
-                        } else {
-                            videoController.videoPlayer = AVPlayer(url: url)
-                            self.videoPlayHandler(videoController)
-                        }
-#endif
+                        self.prepareVideoFunction(url: url, videoController: videoController)
                     }
+#else
+                    self.prepareVideoFunction(url: url, videoController: videoController)
+#endif
                 }
+            } else {
+                PTNSLogConsole("Video url error")
+            }
+        }
+    }
+    
+    func prepareVideoFunction(url:URL,videoController:PTPlayerViewController) {
+        let loading = PTMediaBrowserLoadingView(type: .LoopDiagram)
+        self.contentView.addSubview(loading)
+        loading.snp.makeConstraints { make in
+            make.width.height.equalTo(50)
+            make.centerX.centerY.equalToSuperview()
+        }
+        
+        PTVideoFileCache.shared.prepareVideo(url: url) { _, _, progress in
+            loading.progress = progress
+        } completion: { localURL in
+            loading.removeFromSuperview()
+            self.videoCacheURL = localURL
+            if let findLocal = localURL {
+                videoController.videoPlayer = AVPlayer(url: findLocal)
+                self.videoPlayHandler(videoController)
             } else {
                 PTNSLogConsole("Video url error")
             }
