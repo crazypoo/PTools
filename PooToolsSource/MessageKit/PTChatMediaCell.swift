@@ -45,6 +45,7 @@ public class PTChatMediaCell: PTChatBaseCell {
     
     private lazy var loadingView : PTMediaBrowserLoadingView = {
         let view = PTMediaBrowserLoadingView(type: .LoopDiagram)
+        view.viewCanTap = true
         return view
     }()
 
@@ -244,6 +245,11 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
     
     public func mediaDownloadFunction(urlReal:URL) {
+        self.loadingView.hubTapCallback = {
+            self.loadingView.removeFromSuperview()
+            self.mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadPauseImage, for: .normal)
+            Network.share.suspend(fileUrl: urlReal.absoluteString)
+        }
         dataContent.addSubviews([loadingView])
         loadingView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

@@ -19,6 +19,19 @@ public let PTLoadingItemSpace :CGFloat = 10
 @objcMembers
 public class PTMediaBrowserLoadingView: UIView {
     
+    public var hubTapCallback:PTActionTask?
+    
+    public var viewCanTap:Bool = false {
+        didSet {
+            if viewCanTap {
+                let tap = UITapGestureRecognizer { sender in
+                    self.hubTapCallback?()
+                }
+                self.addGestureRecognizer(tap)
+            }
+        }
+    }
+    
     public var progress:CGFloat = 0 {
         didSet {
             self.setNeedsDisplay()
