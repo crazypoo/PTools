@@ -56,7 +56,16 @@ class PTMediaBrowserCell: PTBaseNormalCell {
       return view
     }()
 
-    var viewConfig:PTMediaBrowserConfig!
+    var viewConfig:PTMediaBrowserConfig! {
+        didSet {
+            playBtn.snp.makeConstraints { make in
+                make.size.equalTo(self.viewConfig.playButtonImageSize)
+                make.centerX.centerY.equalToSuperview()
+            }
+            playBtn.setImage(self.viewConfig.playButtonImage, for: .normal)
+            contentView.bringSubviewToFront(playBtn)
+        }
+    }
     var dataModel:PTMediaBrowserModel! {
         didSet {
             if viewConfig.dynamicBackground {
@@ -126,10 +135,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
     //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
-        
         let view = UIButton(type: .custom)
-        view.imageView?.contentMode = .scaleAspectFit
-        view.setImage(self.viewConfig.playButtonImage, for: .normal)
+        view.imageView?.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -141,14 +148,18 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         return view
     }()
     
+    fileprivate lazy var loading: PTMediaBrowserLoadingView = {
+        let view = PTMediaBrowserLoadingView(type: .LoopDiagram)
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
                 
-        contentView.addSubview(contentScrolView)
+        contentView.addSubviews([contentScrolView,playBtn])
         contentScrolView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
         contentScrolView.addSubview(imageView)
     }
     
@@ -225,6 +236,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             make.centerY.centerX.equalToSuperview()
         }
         bringSubviewToFront(reloadButton)
+        self.playBtn.isHidden = true
+        self.playBtn.isUserInteractionEnabled = false
     }
         
     open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint {
@@ -241,23 +254,22 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     func cellLoadData() {
         PTGCDManager.gcdMain {
-            let loading = PTMediaBrowserLoadingView(type: .LoopDiagram)
-            self.contentView.addSubview(loading)
-            loading.snp.makeConstraints { make in
+            self.contentView.addSubview(self.loading)
+            self.loading.snp.makeConstraints { make in
                 make.width.height.equalTo(50)
                 make.centerX.centerY.equalToSuperview()
             }
             
             switch self.dataModel.imageURL {
             case let urlString as String:
-                self.loadDataUrl(loadUrl: urlString, loading: loading)
+                self.loadDataUrl(loadUrl: urlString.urlToUnicodeURLString() ?? "")
             case let url as URL:
-                self.loadDataUrl(loadUrl: url.absoluteString, loading: loading)
+                self.loadDataUrl(loadUrl: url.absoluteString.urlToUnicodeURLString() ?? "")
             case let avItem as AVPlayerItem:
-                self.videoAVItem(avItem: avItem, loading: loading)
+                self.videoAVItem(avItem: avItem)
             case let avAsset as AVAsset:
                 let avPlayerItem = AVPlayerItem(asset: avAsset)
-                self.videoAVItem(avItem: avPlayerItem, loading: loading)
+                self.videoAVItem(avItem: avPlayerItem)
             case let livePhotoTarget as PHLivePhoto:
                 self.currentCellType = .LivePhoto
                 PTLivePhoto.extractResources(from: livePhotoTarget) { resources in
@@ -277,18 +289,18 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     self.setupGestureRecognizers(normal: false)
                 }
             default:
-                self.baseLoadImageData(imageData: self.dataModel.imageURL as Any, loading: loading)
+                self.baseLoadImageData(imageData: self.dataModel.imageURL as Any)
             }
         }
     }
     
-    func loadDataUrl(loadUrl:String,loading:PTMediaBrowserLoadingView) {
+    func loadDataUrl(loadUrl:String) {
         if !loadUrl.isEmpty {
             if ["mp4","mov"].contains(loadUrl.pathExtension.lowercased()) {
-                self.videoUrlLoad(url: loadUrl, loading: loading)
+                self.videoUrlLoad(url: loadUrl)
             } else {
                 if !loadUrl.stringIsEmpty() {
-                    self.setImageTypeView(url:loadUrl,loading: loading)
+                    self.setImageTypeView(url:loadUrl)
                 } else {
                     self.currentCellType = .None
                     self.createReloadButton()
@@ -346,7 +358,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             self.imageView.alpha = 1
             self.contentView.alpha = 1
             if self.currentCellType == .Video {
-                self.contentScrolView.bringSubviewToFront(self.playBtn)
+                self.playBtn.isHidden = false
+                self.playBtn.isUserInteractionEnabled = true
+            } else {
+                self.playBtn.isHidden = true
+                self.playBtn.isUserInteractionEnabled = false
             }
         }
     }
@@ -354,30 +370,32 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
 //MARK: Image handling logic
 extension PTMediaBrowserCell {
-    func setImageTypeView(url:String,loading:PTMediaBrowserLoadingView) {
+    func setImageTypeView(url:String) {
         clearContentView()
         setupGestureRecognizers()
-        loadImageData(url:url,loading: loading)
+        playBtn.isHidden = true
+        playBtn.isUserInteractionEnabled = false
+        loadImageData(url:url)
     }
     
-    private func loadImageData(url:String,loading: PTMediaBrowserLoadingView) {
-        baseLoadImageData(imageData: url, loading: loading)
+    private func loadImageData(url:String) {
+        baseLoadImageData(imageData: url)
      }
     
-    private func baseLoadImageData(imageData:Any,loading: PTMediaBrowserLoadingView) {
+    private func baseLoadImageData(imageData:Any) {
         imageView.loadImage(contentData: imageData, iCloudDocumentName: viewConfig.iCloudDocumentName, emptyImage: UIImage()) { receivedSize, totalSize in
             PTGCDManager.gcdMain {
                 let progress = CGFloat(receivedSize / totalSize)
-                loading.progress = progress
+                self.loading.progress = progress
             }
         } loadFinish: { images, image,gifTime in
             PTGCDManager.gcdMain {
-                self.handleImageLoadFinish(images: images, image: image, loading: loading,time: gifTime)
+                self.handleImageLoadFinish(images: images, image: image,time: gifTime)
             }
         }
     }
 
-    private func handleImageLoadFinish(images: [UIImage]?, image: UIImage?, loading: PTMediaBrowserLoadingView,time:TimeInterval) {
+    private func handleImageLoadFinish(images: [UIImage]?, image: UIImage?,time:TimeInterval) {
         if let images = images, images.count > 1 {
             currentCellType = .GIF
             gifImage = image
@@ -401,31 +419,37 @@ extension PTMediaBrowserCell {
 
 //MARK: Video handling logic
 extension PTMediaBrowserCell {
-    func videoUrlLoad(url:String,loading:PTMediaBrowserLoadingView) {
+    func videoUrlLoad(url:String) {
         imageView.image = UIImage()
         gifImage = nil
         reloadButton.removeFromSuperview()
-        handleVideoLoading(loading: loading, videoUrl: url)
+        playBtn.isHidden = true
+        playBtn.isUserInteractionEnabled = false
+        handleVideoLoading(videoUrl: url)
     }
 
-    func handleVideoLoading(loading: PTMediaBrowserLoadingView, videoUrl: String) {
+    func handleVideoLoading(videoUrl: String) {
         if let url = URL(string: videoUrl) {
+            self.videoCacheURL = PTVideoFileCache.shared.cachedFileURL(for: url)
             PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
                 PTGCDManager.gcdMain {
-                    if let image = image {
-                        loading.removeFromSuperview()
-                        self.setupVideoView(image: image, videoUrl: videoUrl)
+                    if let findImage = image {
+                        self.loading.removeFromSuperview()
+                        self.setupVideoView(image: findImage, videoUrl: videoUrl)
                     } else {
-                        self.handleVideoLoadError(loading: loading)
+                        self.handleVideoLoadError()
                     }
                 }
             }
             
-            PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
-                self.videoCacheURL = localURL
+            if let _ = self.videoCacheURL {
+            } else {
+                PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
+                    self.videoCacheURL = localURL
+                }
             }
         } else {
-            self.handleVideoLoadError(loading: loading)
+            self.handleVideoLoadError()
         }
     }
     
@@ -433,11 +457,9 @@ extension PTMediaBrowserCell {
         currentCellType = .Video
         loading?.removeFromSuperview()
         
-        contentScrolView.addSubviews([imageView, playBtn])
-        playBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(44)
-            make.centerX.centerY.equalToSuperview()
-        }
+        playBtn.isHidden = false
+        playBtn.isUserInteractionEnabled = true
+        contentScrolView.addSubviews([imageView])
         
         let singleTap = UITapGestureRecognizer { sender in
             self.tapTask?()
@@ -480,7 +502,6 @@ extension PTMediaBrowserCell {
     }
     
     func prepareVideoFunction(url:URL,videoController:PTPlayerViewController) {
-        let loading = PTMediaBrowserLoadingView(type: .LoopDiagram)
         self.contentView.addSubview(loading)
         loading.snp.makeConstraints { make in
             make.width.height.equalTo(50)
@@ -488,9 +509,9 @@ extension PTMediaBrowserCell {
         }
         
         PTVideoFileCache.shared.prepareVideo(url: url) { _, _, progress in
-            loading.progress = progress
+            self.loading.progress = progress
         } completion: { localURL in
-            loading.removeFromSuperview()
+            self.loading.removeFromSuperview()
             self.videoCacheURL = localURL
             if let findLocal = localURL {
                 videoController.videoPlayer = AVPlayer(url: findLocal)
@@ -501,7 +522,7 @@ extension PTMediaBrowserCell {
         }
     }
     
-    private func handleVideoLoadError(loading: PTMediaBrowserLoadingView) {
+    private func handleVideoLoadError() {
         gifImage = nil
         imageView.contentMode = .scaleAspectFit
         contentScrolView.addSubview(imageView)
@@ -511,7 +532,7 @@ extension PTMediaBrowserCell {
         createReloadButton()
     }
     
-    private func videoAVItem(avItem:AVPlayerItem,loading:PTMediaBrowserLoadingView) {
+    private func videoAVItem(avItem:AVPlayerItem) {
         reloadButton.removeFromSuperview()
         imageView.image = UIImage()
         gifImage = nil
@@ -519,13 +540,8 @@ extension PTMediaBrowserCell {
             PTGCDManager.gcdMain {
                 if image != nil {
                     self.currentCellType = .Video
-                    loading.removeFromSuperview()
-                    self.contentScrolView.addSubviews([self.imageView,self.playBtn])
-                    self.playBtn.snp.makeConstraints { make in
-                        make.width.height.equalTo(44)
-                        make.centerX.centerY.equalToSuperview()
-                    }
-                    
+                    self.loading.removeFromSuperview()
+                    self.contentScrolView.addSubviews([self.imageView])
                     let singleTap = UITapGestureRecognizer { sender in
                         self.tapTask?()
                     }
@@ -544,12 +560,14 @@ extension PTMediaBrowserCell {
                         self.videoPlayHandler(videoController)
                     }
                 } else {
+                    self.playBtn.isHidden = true
+                    self.playBtn.isUserInteractionEnabled = false
                     self.gifImage = nil
                     self.imageView.contentMode = .scaleAspectFit
                     self.contentScrolView.addSubview(self.imageView)
                     self.imageView.image = UIImage()
                     self.currentCellType = .None
-                    loading.removeFromSuperview()
+                    self.loading.removeFromSuperview()
                     self.createReloadButton()
                 }
             }
@@ -584,6 +602,7 @@ extension PTMediaBrowserCell:UIScrollViewDelegate {
 extension PTMediaBrowserCell {
     private func setupGestureRecognizers(normal:Bool = true) {
         if normal {
+            imageView.removeGestureRecognizers()
             let doubleTap = UITapGestureRecognizer { sender in
                 if let ges = sender as? UITapGestureRecognizer {
                     let touchPoint = ges.location(in: self)
@@ -601,18 +620,23 @@ extension PTMediaBrowserCell {
             doubleTap.numberOfTapsRequired = 2
             
             let singleTap = UITapGestureRecognizer { sender in
-                self.tapTask?()
+                if let ges = sender as? UITapGestureRecognizer {
+                    self.tapTask?()
+                }
             }
             singleTap.numberOfTapsRequired = 1
             
             var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
             if viewConfig.imageLongTapAction {
                 let longTap = UILongPressGestureRecognizer { sender in
-                    if !self.imageLongTaped {
-                        self.longTapWakeUp?()
-                        self.imageLongTaped = true
+                    if let ges = sender as? UILongPressGestureRecognizer {
+                        if !self.imageLongTaped {
+                            self.longTapWakeUp?()
+                            self.imageLongTaped = true
+                        }
                     }
                 }
+                longTap.numberOfTapsRequired = 1
                 longTap.minimumPressDuration = 1.5
                 imageActions = [singleTap,doubleTap,longTap]
             }

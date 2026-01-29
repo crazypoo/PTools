@@ -32,6 +32,7 @@ public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Vo
 
 @objcMembers
 public class PTMediaBrowserConfig: NSObject {
+    public static let share = PTMediaBrowserConfig()
     ///默认到哪一页,默认0
     public var defultIndex:Int = 0
     ///数据源
@@ -52,6 +53,8 @@ public class PTMediaBrowserConfig: NSObject {
     public var moreActionImage:UIImage = "🗃️".emojiToImage(emojiFont: .appfont(size: 20))
     ///播放按钮
     public var playButtonImage:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 44))
+    public var playButtonImageSize:CGSize = .init(width: 44, height: 44)
+
     ///更多功能扩展,如果选择全部,则默认保存0删除1........
     public var moreActionEX:[String] = []
     ///iCloudDocumentName

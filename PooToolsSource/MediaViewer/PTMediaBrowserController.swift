@@ -94,15 +94,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         view.pageControlView.isHidden = !viewConfig.pageControlShow
         view.moreActionButton.addActionHandlers(handler: { sender in
-            var actions = [PTEditMenuAction]()
-            self.actionSheetTitle.enumerated().forEach { index,value in
-                let action = PTEditMenuAction(title: value) {
-                    guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
-                    self.handleAction(at: index, gifImage: cell.gifImage)
-                }
-                actions.append(action)
-            }
-            sender.pt_bindEditMenu(actions: actions)
+            self.moreAction(sender: self.bottomControl.moreActionButton)
         })
         return view
     }()
@@ -112,17 +104,13 @@ public class PTMediaBrowserController: PTBaseViewController {
         let cellWidth = CGFloat.kSCREEN_WIDTH
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
-        cConfig.itemOriginalX = 0
-        cConfig.contentTopSpace = 0
-        cConfig.contentBottomSpace = 0
-        cConfig.cellTrailingSpace = 0
-        cConfig.cellLeadingSpace = 0
         cConfig.collectionViewBehavior = .paging
         
         let collectionView = PTCollectionView(viewConfig: cConfig)
         collectionView.registerClassCells(classs: [PTMediaBrowserCell.ID:PTMediaBrowserCell.self])
         collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaBrowserCell,let cellModel = itemRow.dataModel as? PTMediaBrowserModel {
+            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaBrowserCell {
+                let cellModel = self.viewConfig.mediaData[indexPath.row]
                 cell.viewConfig = self.viewConfig
                 cell.dataModel = cellModel
                 cell.viewerDismissBlock = {
@@ -137,7 +125,8 @@ public class PTMediaBrowserController: PTBaseViewController {
                     self.toolBarControl(boolValue: !self.navControl.isHidden)
                 }
                 cell.longTapWakeUp = {
-                    self.actionSheet()
+                    self.toolBarControl(boolValue: false)
+                    self.moreAction(sender: self.bottomControl.moreActionButton)
                     PTGCDManager.gcdAfter(time: 0.5) {
                         cell.imageLongTaped = false
                     }
@@ -177,7 +166,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
             if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell,let currentIndex = collectionView.indexPath(for: currentCell) {
-                if let itemRow = sectionModel.rows?[currentIndex.row],let cellModel = itemRow.dataModel as? PTMediaBrowserModel,let endCell = cell as? PTMediaBrowserCell {
+                if let itemRow = sectionModel.rows?[currentIndex.row],let endCell = cell as? PTMediaBrowserCell {
+                    let cellModel = self.viewConfig.mediaData[currentIndex.row]
                     switch endCell.currentCellType {
                     case .GIF:
                         endCell.imageView.stopAnimating()
@@ -203,7 +193,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
             self.currentIndex = indexPath.row
 
-            if let itemRow = sectionModel.rows?[indexPath.row], let cellModel = itemRow.dataModel as? PTMediaBrowserModel,let endCell = cell as? PTMediaBrowserCell {
+            if let itemRow = sectionModel.rows?[indexPath.row],let endCell = cell as? PTMediaBrowserCell {
+                let cellModel = self.viewConfig.mediaData[indexPath.row]
                 switch endCell.currentCellType {
                 case .GIF:
                     endCell.imageView.startAnimating()
@@ -443,8 +434,21 @@ public class PTMediaBrowserController: PTBaseViewController {
 
 //MARK: Action&Menu
 fileprivate extension PTMediaBrowserController {
+    
+    func moreAction(sender:ConsoleMenuButton) {
+        var actions = [PTEditMenuAction]()
+        self.actionSheetTitle.enumerated().forEach { index,value in
+            let action = PTEditMenuAction(title: value) {
+                guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
+                self.handleAction(at: index, gifImage: cell.gifImage)
+            }
+            actions.append(action)
+        }
+        sender.pt_bindEditMenu(actions: actions)
+    }
+    
     func actionSheet() {
-        UIAlertController.baseActionSheet(title: viewConfig.actionTitle, cancelButtonName: viewConfig.actionCancel,titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
+        UIAlertController.base_alertVC(title: viewConfig.actionTitle,okBtns: self.actionSheetTitle,cancelBtn: viewConfig.actionCancel, moreBtn:  { index, title in
             guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
             self.handleAction(at: index, gifImage: cell.gifImage)
         })
@@ -511,7 +515,7 @@ fileprivate extension PTMediaBrowserController {
             switch currentView.currentCellType {
             case .Video:
                 if let imageUrl = model.imageURL as? String {
-                    saveVideoAction(url: imageUrl)
+                    saveVideoAction(url: imageUrl.urlToUnicodeURLString() ?? "")
                 }
             default:
                 if let gifImage = currentView.gifImage {
@@ -522,22 +526,23 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func saveVideoAction(url:String) {
-        if let currentMediaView = newCollectionView.visibleCells().first as? PTMediaBrowserCell,let urlReal = URL(string: url) {
+        if let urlReal = URL(string: url) {
             let loadingView = PTMediaBrowserLoadingView(type: .LoopDiagram)
-            currentMediaView.contentView.addSubview(loadingView)
-            loadingView.snp.makeConstraints { make in
-                make.size.equalTo(currentMediaView.frame.size.width * 0.5)
-                make.centerX.centerY.equalToSuperview()
-            }
+            loadingView.hudShow(hudSize: .init(width: CGFloat.kSCREEN_WIDTH * 0.5, height: CGFloat.kSCREEN_WIDTH * 0.5))
             
-            PTVideoFileCache.shared.prepareVideo(url: urlReal) { bytesRead, totalBytesRead, progress in
-                loadingView.progress = progress
-            } completion: { localURL in
+            if let findCurrentLocal = PTVideoFileCache.shared.cachedFileURL(for: urlReal) {
                 loadingView.removeFromSuperview()
-                if let findLocal = localURL {
-                    self.saveVideo(videoPath: findLocal.path,videoOrURL: url)
-                } else {
-                    self.viewSaveImageBlock?(false)
+                self.saveVideo(videoPath: findCurrentLocal.path,videoOrURL: url)
+            } else {
+                PTVideoFileCache.shared.prepareVideo(url: urlReal) { bytesRead, totalBytesRead, progress in
+                    loadingView.progress = progress
+                } completion: { localURL in
+                    loadingView.hudHide()
+                    if let findLocal = localURL {
+                        self.saveVideo(videoPath: findLocal.path,videoOrURL: url)
+                    } else {
+                        self.viewSaveImageBlock?(false)
+                    }
                 }
             }
         } else {

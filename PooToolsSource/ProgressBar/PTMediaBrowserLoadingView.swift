@@ -24,13 +24,19 @@ public class PTMediaBrowserLoadingView: UIView {
             self.setNeedsDisplay()
             if progress >= 1 {
                 PTGCDManager.gcdMain {
-                    self.removeFromSuperview()
+                    self.hudHide()
                 }
             }
         }
     }
     
     fileprivate var progressMode:PTLoadingViewMode = .LoopDiagram
+    
+    lazy var backgroundView:UIView = {
+        let view = UIView()
+        view.backgroundColor = .DevMaskColor
+        return view
+    }()
     
     public init(type:PTLoadingViewMode) {
         super.init(frame: .zero)
@@ -82,5 +88,36 @@ public class PTMediaBrowserLoadingView: UIView {
         }
         
         viewCorner(radius: rect.size.height * 0.1)
+    }
+    
+    public func hudShow(hudSize:CGSize = .init(width: 64, height: 64)) {
+        AppWindows?.addSubview(backgroundView)
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        backgroundView.addSubviews([self])
+        self.snp.makeConstraints { make in
+            make.size.equalTo(hudSize)
+            make.centerX.centerY.equalToSuperview()
+        }
+        
+        self.transform = CGAffineTransformScale(.identity, 0.001, 0.001)
+        UIView.animate(withDuration: 0.3 / 1.5) {
+            self.transform = CGAffineTransformScale(.identity, 1.1, 1.1)
+        } completion: { finish in
+            UIView.animate(withDuration: 0.3 / 2) {
+                self.transform = CGAffineTransformScale(.identity, 0.9, 0.9)
+            } completion: { finish in
+                UIView.animate(withDuration: 0.3 / 2) {
+                    self.transform = .identity
+                }
+            }
+        }
+    }
+    
+    public func hudHide() {
+        self.backgroundView.removeFromSuperview()
+        self.removeFromSuperview()
     }
 }
