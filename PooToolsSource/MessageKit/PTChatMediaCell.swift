@@ -14,8 +14,13 @@ import SwifterSwift
 public class PTChatMediaCell: PTChatBaseCell {
     public static let ID = "PTChatMediaCell"
 
-    fileprivate var videoCacheURL:URL? = nil
+    public var videoCacheURL:URL? = nil
+    public var loadMediaURL:URL? = nil
+    public var needLoadVideo:Bool = false
     
+    public var mediaPlayButtonTapCallback:PTActionTask?
+    public var mediaDownloadFinishCallback:PTActionTask?
+
     public var cellModel: PTChatListModel! {
         didSet {
             self.updateCellModel(cellModel: self.cellModel)
@@ -31,12 +36,18 @@ public class PTChatMediaCell: PTChatBaseCell {
         return view
     }()
     
-    private lazy var mediaPlayImageView: UIImageView = {
-        let view = UIImageView()
-        view.image = PTChatConfig.share.mediaPlayButton
+    private lazy var mediaPlayImageView: UIButton = {
+        let view = UIButton(type:.custom)
+        view.setImage(PTChatConfig.share.mediaPlayButton, for: .normal)
         view.isHidden = true
         return view
     }()
+    
+    private lazy var loadingView : PTMediaBrowserLoadingView = {
+        let view = PTMediaBrowserLoadingView(type: .LoopDiagram)
+        return view
+    }()
+
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,6 +72,41 @@ public class PTChatMediaCell: PTChatBaseCell {
         }
     }
 
+    public var isImage:Bool {
+        get {
+            if let mediaString = cellModel.msgContent as? String {
+                switch mediaString.nsString.contentTypeForUrl() {
+                case .MOV, .MP4, .ThreeGP:
+                    return false
+                default:
+                    return true
+                }
+            } else if let mediaURL = cellModel.msgContent as? URL {
+                switch mediaURL.absoluteString.nsString.contentTypeForUrl() {
+                case .MOV, .MP4, .ThreeGP:
+                    return false
+                default:
+                    return true
+                }
+            } else if let _ = cellModel.msgContent as? AVPlayerItem {
+                return false
+            } else if let _ = cellModel.msgContent as? AVAsset {
+                return false
+            } else if let asset = cellModel.msgContent as? PHAsset {
+                switch asset.mediaType {
+                case .image:
+                    return true
+                case .video:
+                    return false
+                default:
+                    return true
+                }
+            } else {
+                return true
+            }
+        }
+    }
+    
     private func updateCellModel(cellModel: PTChatListModel) {
         // 避免每次调用时都重新设置视图属性，提前配置
         PTGCDManager.gcdMain {
@@ -78,23 +124,21 @@ public class PTChatMediaCell: PTChatBaseCell {
                 make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
             make.top.equalTo(self.senderNameLabel.snp.bottom)
-            if let mediaString = cellModel.msgContent as? String {
-                switch mediaString.nsString.contentTypeForUrl() {
-                case .MOV, .MP4, .ThreeGP:
-                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
-                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
-                default:
+            if let _ = cellModel.msgContent as? String {
+                if self.isImage {
                     make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
                     make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
+                } else {
+                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
                 }
-            } else if let mediaURL = cellModel.msgContent as? URL {
-                switch mediaURL.absoluteString.nsString.contentTypeForUrl() {
-                case .MOV, .MP4, .ThreeGP:
-                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
-                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
-                default:
+            } else if let _ = cellModel.msgContent as? URL {
+                if self.isImage {
                     make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
                     make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
+                } else {
+                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
+                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
                 }
             } else if let _ = cellModel.msgContent as? AVPlayerItem {
                 make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
@@ -102,18 +146,17 @@ public class PTChatMediaCell: PTChatBaseCell {
             } else if let _ = cellModel.msgContent as? AVAsset {
                 make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
                 make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
-            } else if let asset = cellModel.msgContent as? PHAsset {
-                switch asset.mediaType {
-                case .image:
+            } else if let _ = cellModel.msgContent as? PHAsset {
+                if self.isImage {
                     make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
                     make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
-                case .video:
-                    make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
-                    make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
-                default:
+                } else {
                     make.height.equalTo(PTChatConfig.share.mediaMessageVideoHeight)
                     make.width.equalTo(PTChatConfig.share.mediaMessageVideoWidth)
                 }
+            } else {
+                make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
+                make.width.equalTo(PTChatConfig.share.imageMessageImageWidth)
             }
         }
     }
@@ -124,43 +167,38 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
 
     private func checkIsVideo(msgContent: Any) {
-        if let contentString = msgContent as? String {
-            handleContentString(contentString)
+        if let contentString = msgContent as? String,let contentURL = URL(string: contentString.urlToUnicodeURLString() ?? "") {
+            handleContentURL(contentURL)
         } else if let contentURL = msgContent as? URL {
             handleContentURL(contentURL)
         } else if let avItem = msgContent as? AVPlayerItem {
+            needLoadVideo = false
             handleAVPlayerItem(avItem)
         } else if let avAsset = msgContent as? AVAsset {
+            needLoadVideo = false
             handleAVAsset(avAsset)
         } else if let asset = msgContent as? PHAsset {
             handlePHAsset(asset)
         }
     }
 
-    private func handleContentString(_ contentString: String) {
-        switch contentString.nsString.contentTypeForUrl() {
-        case .MOV, .MP4, .ThreeGP:
-            self.mediaPlayImageView.isHidden = false
-            videoUrlLoad(url: contentString.urlToUnicodeURLString() ?? "")
-        default:
-            self.mediaPlayImageView.isHidden = true
-            self.contentImageView.loadImage(contentData: contentString.urlToUnicodeURLString() ?? "")
-        }
-    }
-
     private func handleContentURL(_ contentURL: URL) {
-        switch contentURL.pathExtension.nsString.contentTypeForUrl() {
-        case .MOV, .MP4, .ThreeGP:
-            self.mediaPlayImageView.isHidden = false
-            videoUrlLoad(url: contentURL.absoluteString)
-        default:
+        if isImage {
+            needLoadVideo = false
             self.mediaPlayImageView.isHidden = true
+            self.mediaPlayImageView.isUserInteractionEnabled = false
             self.contentImageView.loadImage(contentData: contentURL)
+        } else {
+            needLoadVideo = true
+            self.mediaPlayImageView.isHidden = false
+            self.mediaPlayImageView.isUserInteractionEnabled = true
+            videoUrlLoad(url: contentURL.absoluteString)
         }
     }
 
     private func handleAVPlayerItem(_ avItem: AVPlayerItem) {
         self.mediaPlayImageView.isHidden = false
+        self.mediaPlayImageView.isUserInteractionEnabled = true
         avItem.generateThumbnail { [weak self] image in
             guard let self = self else { return }
             self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
@@ -169,12 +207,14 @@ public class PTChatMediaCell: PTChatBaseCell {
 
     private func handleAVAsset(_ avAsset: AVAsset) {
         self.mediaPlayImageView.isHidden = false
+        self.mediaPlayImageView.isUserInteractionEnabled = true
         let avPlayerItem = AVPlayerItem(asset: avAsset)
         handleAVPlayerItem(avPlayerItem)
     }
 
     private func handlePHAsset(_ asset: PHAsset) {
         self.mediaPlayImageView.isHidden = true
+        self.mediaPlayImageView.isUserInteractionEnabled = false
         self.contentImageView.loadImage(contentData: asset)
     }
 
@@ -185,15 +225,44 @@ public class PTChatMediaCell: PTChatBaseCell {
             }
         }
         
-        if let urlReal = URL(string: url) {
+        if let urlSave = URL(string: url) {
+            loadMediaURL = urlSave
+            self.videoCacheURL = PTVideoFileCache.shared.cachedFileURL(for: urlSave)
+        }
+        
+        mediaPlayButtonImageSet()
+        
+        mediaPlayImageView.addActionHandlers { sender in
             if let _ = self.videoCacheURL {
-                
+                self.mediaPlayButtonTapCallback?()
             } else {
-                PTVideoFileCache.shared.prepareVideo(url: urlReal,progress: { bytesRead, totalBytesRead, progress in
-                }, completion: { localURL in
-                    self.videoCacheURL = localURL
-                })
+                if let urlReal = URL(string: url) {
+                    self.mediaDownloadFunction(urlReal: urlReal)
+                }
             }
+        }
+    }
+    
+    public func mediaDownloadFunction(urlReal:URL) {
+        dataContent.addSubviews([loadingView])
+        loadingView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        PTVideoFileCache.shared.prepareVideo(url: urlReal,progress: { _, _, progress in
+            self.loadingView.progress = progress
+        }, completion: { localURL in
+            self.loadingView.removeFromSuperview()
+            self.videoCacheURL = localURL
+            self.mediaPlayButtonImageSet()
+            self.mediaDownloadFinishCallback?()
+        })
+    }
+    
+    func mediaPlayButtonImageSet() {
+        if let _ = self.videoCacheURL {
+            mediaPlayImageView.setImage(PTChatConfig.share.mediaPlayButton, for: .normal)
+        } else {
+            mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadImage, for: .normal)
         }
     }
 }

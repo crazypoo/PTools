@@ -52,6 +52,8 @@ public class PTLoadImageFunction: NSObject {
         case let color as UIColor:
             let colorImage = color.createImageWithColor()
             return PTLoadImageResult(allImages: [colorImage], firstImage: colorImage, loadTime: 0)
+        case let url as URL:
+            return await handleStringContent(url.absoluteString, iCloudDocumentName, progressHandle)
         default:
             return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
         }

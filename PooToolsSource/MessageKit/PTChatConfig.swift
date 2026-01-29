@@ -154,6 +154,7 @@ public class PTChatConfig: NSObject {
     ///Media的Height大小
     @PTClampedProperyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200
     public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40))
+    public var mediaDownloadImage:UIImage = "⏬️".emojiToImage(emojiFont: .appfont(size: 40))
     public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34)
 
     //MARK: Map message

@@ -37,22 +37,35 @@ public final class PTVideoFileCache {
         return cacheDirectory.appendingPathComponent("\(key).\(ext)")
     }
 
-    /// 核心：获取可用的视频文件（本地 or 下载）
-    public func prepareVideo( url: URL,progress:FileDownloadProgress? = nil, completion: @escaping (URL?) -> Void) {
-        // 本地文件直接返回
-        if url.isFileURL {
-            completion(url)
-            return
+    public func cachedFileURL(for url: URL) -> URL? {
+        guard !url.isFileURL else {
+            return FileManager.default.fileExists(atPath: url.path) ? url : nil
         }
 
         let localURL = cacheURL(for: url)
 
-        // 已缓存
-        if FileManager.default.fileExists(atPath: localURL.path) {
-            completion(localURL)
+        guard FileManager.default.fileExists(atPath: localURL.path) else {
+            return nil
+        }
+
+        // 可选：防止 0 字节 / 下载未完成的脏文件
+        if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),
+           let fileSize = attr[.size] as? NSNumber,
+           fileSize.int64Value > 0 {
+            return localURL
+        }
+        return nil
+    }
+    
+    /// 核心：获取可用的视频文件（本地 or 下载）
+    public func prepareVideo( url: URL,progress:FileDownloadProgress? = nil, completion: @escaping (URL?) -> Void) {
+        // 本地文件直接返回
+        if let cached = cachedFileURL(for: url) {
+            completion(cached)
             return
         }
 
+        let localURL = cacheURL(for: url)
         let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
 
         Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path,progress: progress) { reponse in

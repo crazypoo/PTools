@@ -43,6 +43,7 @@ public class PTChatView: UIView {
     public var attCellHashtagTapCallBack:PTAttCellCallBack? = nil
     public var attCellMentionTapCallBack:PTAttCellCallBack? = nil
     public var attCellCustomTapCallBack:PTAttCellCallBack? = nil
+    public var messageDownloadedHandler:PTChatHandler? = nil
 
     ///Cell的Menu
     public var cellMenuItemsHandler:PTCellMenuItemsHandler? = nil
@@ -213,6 +214,12 @@ public class PTChatView: UIView {
                                 }
                             } else if itemRow.ID == PTChatMediaCell.ID,let mediaCell = cell as? PTChatMediaCell {
                                 mediaCell.cellModel = cellModel
+                                mediaCell.mediaPlayButtonTapCallback = {
+                                    self.tapMessageHandler?(cellModel,indexPath)
+                                }
+                                mediaCell.mediaDownloadFinishCallback = {
+                                    self.messageDownloadedHandler?(cellModel,indexPath)
+                                }
                             } else if itemRow.ID == PTChatMapCell.ID,let mapCell = cell as? PTChatMapCell {
                                 mapCell.cellModel = cellModel
                             } else if itemRow.ID == PTChatVoiceCell.ID,let voiceCell = cell as? PTChatVoiceCell {
@@ -228,7 +235,23 @@ public class PTChatView: UIView {
                             let longTap = self.cellLongTap(cell: cell, itemId: itemRow.ID, cellModel: cellModel, indexPath: indexPath)
                             if itemRow.ID != PTChatTextCell.ID {
                                 let tap = UITapGestureRecognizer { sender in
-                                    self.tapMessageHandler?(cellModel,indexPath)
+                                    if itemRow.ID == PTChatMediaCell.ID,let mediaCell = cell as? PTChatMediaCell {
+                                        if mediaCell.isImage {
+                                            self.tapMessageHandler?(cellModel,indexPath)
+                                        } else {
+                                            if let _ = mediaCell.videoCacheURL {
+                                                self.tapMessageHandler?(cellModel,indexPath)
+                                            } else {
+                                                if mediaCell.needLoadVideo,let needLoadURL = mediaCell.loadMediaURL {
+                                                    mediaCell.mediaDownloadFunction(urlReal: needLoadURL)
+                                                } else {
+                                                    self.tapMessageHandler?(cellModel,indexPath)
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        self.tapMessageHandler?(cellModel,indexPath)
+                                    }
                                 }
                                 gess = [tap,longTap]
                             } else {
