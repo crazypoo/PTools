@@ -22,119 +22,112 @@ public enum SocketConnectionState {
 }
 
 @objcMembers
-public class PTSocketManager: NSObject {
+public final class PTSocketManager: NSObject {
+
+    // MARK: - Singleton
     public static let share = PTSocketManager()
-    
-    open var MaxReConnectTime = 0
-    open var ReconnectTime:TimeInterval = 5
-    open var networkStatus:NetWorkStatus = .unknown
-    public private(set) var socketState: SocketConnectionState = .disconnected
-    
-    fileprivate var reOpenCount:Int = 0
-    fileprivate var request:NSMutableURLRequest!
-    fileprivate var webSocket:SRWebSocket?
-    private var heartBeatTimer: Timer?
+    private override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(onNetworkStatusChange(_:)), name: NSNotification.Name(rawValue: nNetworkStatesChangeNotification), object: nil)
+    }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        disConnect()
     }
 
-    override init() {
-        super.init()
-                        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onNetworkStatusChange(notifi:)), name: NSNotification.Name(rawValue: nNetworkStatesChangeNotification), object: nil)
+    // MARK: - Public Config
+    public var MaxReConnectTime: Int = 5
+    public var ReconnectTime: TimeInterval = 5
+    public private(set) var socketState: SocketConnectionState = .disconnected
+    public var networkStatus: NetWorkStatus = .unknown
+
+    // MARK: - Private Properties
+    private var request: NSMutableURLRequest?
+    private var webSocket: SRWebSocket?
+    private var reOpenCount: Int = 0
+    private var heartBeatTimer: Timer?
+
+    // MARK: - State Check
+    private var isConnectingOrConnected: Bool {
+        guard let socket = webSocket else { return false }
+        return socket.readyState == .OPEN || socket.readyState == .CONNECTING
     }
-    
-    public func socketSet(completion: @escaping PTBoolTask) {
+
+    private func isClosed() -> Bool {
+        guard let socket = webSocket else { return true }
+        return socket.readyState == .CLOSED || socket.readyState == .CLOSING
+    }
+
+    // MARK: - Setup
+    public func socketSet(completion: @escaping (Bool) -> Void) {
         Task {
             let urlString = await Network.socketGobalUrl()
-            guard let webSocketUrl = URL(string: urlString),var urlcomponents = URLComponents(url: webSocketUrl, resolvingAgainstBaseURL: false) else {
+            guard let url = URL(string: urlString) else {
                 completion(false)
                 return
             }
-            
-            urlcomponents.scheme = webSocketUrl.scheme
-            guard let url = urlcomponents.url else {
-                completion(false)
-                return
-            }
-            self.request = NSMutableURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
-            socketState = .connecting
+
+            let req = NSMutableURLRequest(
+                url: url,
+                cachePolicy: .reloadIgnoringCacheData,
+                timeoutInterval: 5
+            )
+            self.request = req
             completion(true)
         }
     }
 
-    @objc func onNetworkStatusChange(notifi:Notification) {
-        if webSocket != nil && !networkIsNotReachable() && !isClosed() {
-            reConnect()
-        }
-    }
-    
-    public func isClosed() -> Bool {
-        PTNSLogConsole("socket连接状态---\(webSocket?.readyState.rawValue ?? 0)",levelType: PTLogMode,loggerType: .Network)
-        return webSocket?.readyState != .OPEN
-    }
-    
-    public func reConnect() {
-        socketState = .reconnecting
-        disConnect()
+    // MARK: - Connect Control
+    public func connect() {
+        guard let request else { return }
+        guard !isConnectingOrConnected else { return }
+
         socketState = .connecting
-        connect()
+
+        let socket = SRWebSocket(urlRequest: request as URLRequest)
+        socket.delegate = self
+        socket.open()
+        webSocket = socket
     }
-    
+
     public func disConnect() {
-        if webSocket?.readyState == .CLOSING || webSocket?.readyState == .CLOSED {
+        guard let socket = webSocket else { return }
+
+        socket.delegate = nil
+        socket.close()
+        webSocket = nil
+
+        stopHeartBeat()
+        socketState = .disconnected
+    }
+
+    public func reConnect() {
+        guard !networkIsNotReachable() else { return }
+        guard isClosed() else { return }
+
+        if reOpenCount >= MaxReConnectTime {
+            reOpenCount = 0
             return
         }
-        
-        if let socket = webSocket {
-            socket.delegate = nil
-            socket.close()
-            webSocket = nil
-            socketState = .disconnected
-        }
-    }
-    
-    public func connect() {
-        if webSocket?.readyState == .OPEN {
-            disConnect()
-        }
-        
-        webSocket = SRWebSocket(urlRequest: request as URLRequest)
-        webSocket?.delegate = self
-        webSocket?.open()
-        socketState = .connected
-    }
-    
-    public func startReconnect() {
-        if !networkIsNotReachable() {
-            socketState = .reconnecting
-            PTGCDManager.gcdAfter(time: self.ReconnectTime) {
-                if !self.isClosed() {
-                    self.reOpenCount = 0
-                    return
-                }
-                if self.reOpenCount >= self.MaxReConnectTime {
-                    self.reOpenCount = 0
-                    return
-                }
-                self.reConnect()
-                self.reOpenCount += 1
-            }
-        }
-    }
-    
-    public func sendMessage(msg:String) {
-        guard webSocket?.readyState == .OPEN else { return }
 
-        do {
-            try webSocket?.send(string: msg)
-        } catch {
-            PTNSLogConsole("\(error.localizedDescription)",levelType: .Error,loggerType: .Network)
+        socketState = .reconnecting
+        reOpenCount += 1
+
+        disConnect()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + ReconnectTime) {
+            self.connect()
         }
     }
-    
-    func networkIsNotReachable() -> Bool {
+
+    // MARK: - Network
+    @objc private func onNetworkStatusChange(_ notifi: Notification) {
+        guard !networkIsNotReachable() else { return }
+        reConnect()
+    }
+
+    private func networkIsNotReachable() -> Bool {
         switch networkStatus {
         case .notReachable:
             return true
@@ -142,12 +135,18 @@ public class PTSocketManager: NSObject {
             return false
         }
     }
-    
-    public func startHeartBeat(timeInterval:TimeInterval = 30,
-                               msg:String = "ping") {
-        heartBeatTimer?.invalidate()
-        heartBeatTimer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { _ in
-            self.sendMessage(msg: msg)
+
+    // MARK: - Send
+    public func sendMessage(_ msg: String) {
+        guard webSocket?.readyState == .OPEN else { return }
+        try? webSocket?.send(string: msg)
+    }
+
+    // MARK: - HeartBeat
+    public func startHeartBeat(interval: TimeInterval = 30, msg: String = "ping") {
+        stopHeartBeat()
+        heartBeatTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            self?.sendMessage(msg)
         }
     }
 
@@ -157,26 +156,29 @@ public class PTSocketManager: NSObject {
     }
 }
 
-extension PTSocketManager:SRWebSocketDelegate {
+// MARK: - SRWebSocketDelegate
+extension PTSocketManager: SRWebSocketDelegate {
+
+    public func webSocketDidOpen(_ webSocket: SRWebSocket) {
+        socketState = .connected
+        reOpenCount = 0
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidConnect), object: nil)
+    }
+
     public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any) {
-        PTNSLogConsole("接受到的socket信息:\(message)",levelType: PTLogMode,loggerType: .Network)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidReceiveMessageNotification), object: message)
     }
-    
-    public func webSocketDidOpen(_ webSocket: SRWebSocket) {
-        if webSocket.readyState == .OPEN {
-            PTNSLogConsole("socket连接成功",levelType: PTLogMode,loggerType: .Network)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidConnect), object: nil)
-        }
-        reOpenCount = 0
+
+    public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error) {
+        reConnect()
     }
-    
-    public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: any Error) {
-        startReconnect()
-    }
-    
+
     public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect), object: nil)
+        socketState = .disconnected
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect),object: nil)
+
+        reConnect()
     }
 }
-
