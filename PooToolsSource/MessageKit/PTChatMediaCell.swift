@@ -163,7 +163,10 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
 
     private func checkAndLoadMediaContent(cellModel: PTChatListModel) {
-        guard let msgContent = cellModel.msgContent else { return }
+        guard let msgContent = cellModel.msgContent else {
+            self.contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
+            return
+        }
         checkIsVideo(msgContent: msgContent)
     }
 
@@ -180,6 +183,8 @@ public class PTChatMediaCell: PTChatBaseCell {
             handleAVAsset(avAsset)
         } else if let asset = msgContent as? PHAsset {
             handlePHAsset(asset)
+        } else {
+            self.contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
         }
     }
 

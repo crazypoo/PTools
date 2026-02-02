@@ -38,7 +38,7 @@ open class PTPlayerViewController: PTBaseViewController {
     public var videoPlayer: AVPlayer?
     public var onCloseTapped: PTActionTask? // 🔹 你可以拦截返回逻辑
     
-    lazy var videoNavBar:PTNavBar = {
+    public lazy var videoNavBar:PTNavBar = {
         let view = PTNavBar()
         view.setLeftButtons([closeButton])
         return view

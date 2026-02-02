@@ -363,7 +363,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                             loadSome = self.viewConfig.defultIndex
                         }
                         self.currentIndex = loadSome
-                        collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: true)
+                        collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: false)
                     } else {
                         loadedTask?(collectionView)
                     }
@@ -447,13 +447,6 @@ fileprivate extension PTMediaBrowserController {
         sender.pt_bindEditMenu(actions: actions)
     }
     
-    func actionSheet() {
-        UIAlertController.base_alertVC(title: viewConfig.actionTitle,okBtns: self.actionSheetTitle,cancelBtn: viewConfig.actionCancel, moreBtn:  { index, title in
-            guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
-            self.handleAction(at: index, gifImage: cell.gifImage)
-        })
-    }
-
     private func handleAction(at index: Int, gifImage: UIImage?) {
         switch viewConfig.actionType {
         case .Save:
