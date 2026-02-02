@@ -48,16 +48,16 @@ public extension UITextView {
                 label.isUserInteractionEnabled = false
                 label.translatesAutoresizingMaskIntoConstraints = false
                 addSubview(label)
-                // 添加约束。要约束宽，否则可能导致label不换行。如果需要設置便宜,則需要先設置本體文字的便宜,再加載Placeholder
+                // 添加约束。要约束宽，否则可能导致label不换行。如果需要設置偏移,則需要先設置本體文字的偏移,再加載Placeholder
                 label.snp.makeConstraints { make in
                     make.left.equalToSuperview().inset(self.textContainerInset.left)
                     make.top.equalToSuperview().inset(self.textContainerInset.top)
-                    make.bottom.equalToSuperview().inset(self.textContainerInset.bottom)
                     make.right.equalToSuperview().inset(self.textContainerInset.right)
                 }
                 // 设置pt_placeholderLabel，自动调用set方法
                 
-                addObserver(self, forKeyPath: "text", options: NSKeyValueObservingOptions.new, context: nil)
+                addObserver(self, forKeyPath: "bounds", options: [.new], context: nil)
+                addObserver(self, forKeyPath: "text", options: [.new], context: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidChangeNotification, object: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidBeginEditingNotification, object: nil)
                 
@@ -112,15 +112,25 @@ public extension UITextView {
                     // 这里添加到 self.superview。如果添加到self，发现自动布局效果不理想。
                     grandfatherView.addSubview(label)
                     label.translatesAutoresizingMaskIntoConstraints = false
-                    grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1.0, constant: -7))
-                    grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -7))
+                    label.snp.makeConstraints { make in
+                        make.right.equalTo(self).offset(-self.textContainerInset.right)
+                        make.bottom.equalTo(self).offset(-self.textContainerInset.right)
+                    }
                 } else {
-                    PTNSLogConsole("请先将您的UITextView添加到视图中", levelType: .Error,loggerType: .TextView)
+                    // 关键：延迟到下一轮 RunLoop
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self, let containerView = self.superview else { return }
+                        containerView.addSubview(label)
+                        label.snp.makeConstraints { make in
+                            make.right.equalTo(self).offset(-self.textContainerInset.right)
+                            make.bottom.equalTo(self).offset(-self.textContainerInset.right)
+                        }
+                    }
                 }
                 
                 self.pt_wordCountLabel = label
                 // 调用setter
-                NotificationCenter.default.addObserver(self, selector: #selector(pt_maxWordCountAction), name: UITextView.textDidChangeNotification, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(pt_maxWordCountAction), name: UITextView.textDidChangeNotification, object: self)
                 
                 return label
             }
@@ -161,7 +171,7 @@ public extension UITextView {
     /// text 长度发生了变化
     @objc private func pt_textDidChange() -> () {
         
-        pt_placeholderLabel?.isHidden = (text.count > 0)
+        pt_placeholderLabel?.isHidden = !text.isEmpty
 
         if let wordCountLabel = pt_wordCountLabel,
            let count = pt_maxWordCount {
@@ -171,17 +181,32 @@ public extension UITextView {
         }
     }
     
+    private func pt_updatePlaceholderPreferredWidth() {
+        guard let label = pt_placeholderLabel else { return }
+
+        let maxWidth = bounds.width - textContainerInset.left - textContainerInset.right - textContainer.lineFragmentPadding * 2
+
+        guard maxWidth > 0 else { return }
+
+        if label.preferredMaxLayoutWidth != maxWidth {
+            label.preferredMaxLayoutWidth = maxWidth
+            label.setNeedsLayout()
+            label.layoutIfNeeded()
+        }
+    }
+    
     override func observeValue(forKeyPath keyPath: String?,
                                of object: Any?,
                                change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
-        if object is UITextView {
-            let lbl = object as! UITextView
+        if let lbl = object as? UITextView {
             if lbl === self && keyPath == "text" {
                 if lbl.text == " " {
                     text = ""
                 }
                 pt_textDidChange()
+            } else if lbl === self && keyPath == "bounds" {
+                pt_updatePlaceholderPreferredWidth()
             }
         }
     }

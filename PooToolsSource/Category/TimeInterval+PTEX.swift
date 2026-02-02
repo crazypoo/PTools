@@ -101,7 +101,7 @@ public extension TimeInterval {
         )
     }
 
-    func conversationTimeSet() -> String? {
+    func conversationTimeSet(yesterdayString:String = "昨天") -> String? {
         var timeInterval = self;
         if(self > 140000000000) {
             timeInterval = self / 1000;
@@ -112,9 +112,9 @@ public extension TimeInterval {
             return ret.dateFormat(formatString: "HH:mm")
         } else if ret.isInCurrentWeek {
             if ret.isYesterday {
-                return "昨天" + " " + ret.dateFormat(formatString: "HH:mm")
+                return yesterdayString + " " + ret.dateFormat(formatString: "HH:mm")
             } else {
-                return ret.weekdayName(.default,locale: Locales.chinese)
+                return ret.weekdayName(.default,locale: Locales.current)
             }
         } else if ret.isInCurrentYear {
             return ret.dateFormat(formatString: "MM-dd")

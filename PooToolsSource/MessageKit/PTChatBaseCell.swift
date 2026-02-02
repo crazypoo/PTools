@@ -119,7 +119,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     private func setupUIWithModel(cellModel: PTChatListModel) {
         // Configure UI elements based on the data model
         userIcon.loadImage(contentData: cellModel.senderCover)
-        messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet()
+        messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet(yesterdayString: PTChatConfig.share.yesterDayName)
         
         setupTimeLabelConstraints()
         setupUserIconConstraints(cellModel: cellModel)
