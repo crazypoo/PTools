@@ -111,6 +111,7 @@ public class PTChatMediaCell: PTChatBaseCell {
     private func updateCellModel(cellModel: PTChatListModel) {
         // 避免每次调用时都重新设置视图属性，提前配置
         PTGCDManager.gcdMain {
+            self.contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
             self.setBaseSubviews(cellModel: self.cellModel)
             self.updateConstraintsForCellModel(cellModel)
             self.checkAndLoadMediaContent(cellModel: cellModel)
