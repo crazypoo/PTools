@@ -446,7 +446,7 @@ public class OSSSpeech: NSObject {
     }
 
     private func getMicroPhoneAuthorization() {
-        weak var weakSelf = self
+        weak let weakSelf = self
         weakSelf?.srp.requestAuthorization { authStatus in
             let status = OSSSpeechKitAuthorizationStatus(rawValue: authStatus.rawValue) ?? .notDetermined
             weakSelf?.delegate?.authorizationToMicrophone(withAuthentication: status)

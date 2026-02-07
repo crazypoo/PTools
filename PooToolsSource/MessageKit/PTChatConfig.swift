@@ -155,6 +155,7 @@ public class PTChatConfig: NSObject {
     @PTClampedProperyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200
     public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40))
     public var mediaDownloadImage:UIImage = "⏬️".emojiToImage(emojiFont: .appfont(size: 40))
+    public var mediaDownloadPauseImage:UIImage = "🔁".emojiToImage(emojiFont: .appfont(size: 40))
     public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34)
 
     //MARK: Map message
@@ -197,4 +198,5 @@ public class PTChatConfig: NSObject {
     public var fileSizeColor:UIColor = .lightGray
     @PTClampedProperyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2
     public var fileImage:UIImage = "📁".emojiToImage(emojiFont: .appfont(size: 40))
+    public var yesterDayName:String = "昨天"
 }

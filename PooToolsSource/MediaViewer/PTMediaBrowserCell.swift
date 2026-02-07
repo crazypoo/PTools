@@ -620,7 +620,7 @@ extension PTMediaBrowserCell {
             doubleTap.numberOfTapsRequired = 2
             
             let singleTap = UITapGestureRecognizer { sender in
-                if let ges = sender as? UITapGestureRecognizer {
+                if let _ = sender as? UITapGestureRecognizer {
                     self.tapTask?()
                 }
             }
@@ -629,7 +629,7 @@ extension PTMediaBrowserCell {
             var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
             if viewConfig.imageLongTapAction {
                 let longTap = UILongPressGestureRecognizer { sender in
-                    if let ges = sender as? UILongPressGestureRecognizer {
+                    if let _ = sender as? UILongPressGestureRecognizer {
                         if !self.imageLongTaped {
                             self.longTapWakeUp?()
                             self.imageLongTaped = true
