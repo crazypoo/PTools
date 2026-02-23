@@ -1077,7 +1077,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         collectionView.backgroundColor = .random
         
-        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset:CGFloat = CGFloat.kTabbarHeight_Total
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never

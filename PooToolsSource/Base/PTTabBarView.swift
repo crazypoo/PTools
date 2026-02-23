@@ -78,6 +78,7 @@ final public class PTTabBarLottieContent: PTTabBarItemContent {
         self.normalName = normal
         self.selectedName = selected
         lottieView.loopMode = .autoReverse
+        lottieView.isUserInteractionEnabled = false
         if let lottieURL = URL(string: normal) {
             Task { @MainActor in
                 lottieView.animation = await LottieAnimation.loadedFrom(url: lottieURL)
@@ -136,6 +137,15 @@ final public class PTTabBarItemView: UIControl {
     private let titleLabel = UILabel()
     private var content: PTTabBarItemContent!
 
+    public class func itemImageSize() -> CGFloat {
+        var safeAreaHeight:CGFloat = 0
+        if #available(iOS 26.0, *) {
+            safeAreaHeight = PTAppBaseConfig.share.tab26BottomSpacing
+        }
+        let imageSize = CGFloat.kTabbarHeight_Total - safeAreaHeight - PTAppBaseConfig.share.tabTopSpacing - PTAppBaseConfig.share.tabContentSpacing - (PTAppBaseConfig.share.tabSelectedFont.pointSize + 2)
+        return imageSize
+    }
+    
     public var imageContent: UIView {
         get {
             return content.view
@@ -161,21 +171,21 @@ final public class PTTabBarItemView: UIControl {
 
     private func setupUI(title: String) {
         
+        titleLabel.numberOfLines = 1
         titleLabel.text = title
         titleLabel.font = PTAppBaseConfig.share.tabNormalFont
         titleLabel.textAlignment = .center
         titleLabel.textColor = PTAppBaseConfig.share.tabNormalColor
 
-        addSubview(content.view)
-        addSubview(titleLabel)
+        addSubviews([titleLabel,content.view])
 
         content.view.snp.makeConstraints {
             $0.top.centerX.equalToSuperview()
-            $0.size.equalTo(28)
+            $0.size.equalTo(PTTabBarItemView.itemImageSize())
         }
 
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(content.view.snp.bottom).offset(2)
+            $0.top.equalTo(content.view.snp.bottom).offset(PTAppBaseConfig.share.tabContentSpacing)
             $0.left.right.bottom.equalToSuperview()
         }
     }
@@ -475,7 +485,8 @@ final public class PTTabBarView: UIView {
                 itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
             }
         }
-        item.badgeCenterOffset = CGPointMake(itemWidth / 2 + 14, 7)
+        
+        item.badgeCenterOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize() / 2, 7)
         item.badgeBorderLine = PTAppBaseConfig.share.tabBadgeBorderHeight
         item.badgeBorderColor = PTAppBaseConfig.share.tabBadgeBorderColor
         item.badgeFont = PTAppBaseConfig.share.tabBadgeFont

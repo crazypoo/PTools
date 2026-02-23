@@ -109,4 +109,7 @@ public class PTAppBaseConfig: NSObject {
     public var tabBadgeFont:UIFont = .systemFont(ofSize: 10)
     public var tabBadgeBorderHeight:CGFloat = 1
     public var tabBadgeBorderColor:UIColor = .white
+    public var tabTopSpacing:CGFloat = 5
+    public var tabContentSpacing:CGFloat = 2
+    public var tab26BottomSpacing:CGFloat = 15
 }
