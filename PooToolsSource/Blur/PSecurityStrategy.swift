@@ -15,27 +15,31 @@ public class PSecurityStrategy: NSObject {
     
     class public func addBlurEffect() {
         PTGCDManager.gcdMain {
-            let imageView = UIImageView(frame: UIScreen.main.bounds)
-            imageView.tag = effectTag
-            imageView.image = PSecurityStrategy.screenShot()
-            AppWindows!.addSubview(imageView)
-            
-            let blueView = UIView(frame: imageView.frame)
-            imageView.addSubview(blueView)
-            let aaaa = SSBlurView(to: blueView)
-            aaaa.style = .extraLight
-            aaaa.alpha = 1
-            aaaa.enable()
+            if let window = AppWindows {
+                let imageView = UIImageView(frame: UIScreen.main.bounds)
+                imageView.tag = effectTag
+                imageView.image = PSecurityStrategy.screenShot()
+                window.addSubview(imageView)
+                
+                let blueView = UIView(frame: imageView.frame)
+                imageView.addSubview(blueView)
+                let aaaa = SSBlurView(to: blueView)
+                aaaa.style = .extraLight
+                aaaa.alpha = 1
+                aaaa.enable()
+            }
         }
     }
     
     class public func removeBlurEffect() {
-        let subViews = AppWindows!.subviews
-        subViews.forEach { value in
-            if let newValue = value as? UIImageView,newValue.tag == effectTag {
-                UIView.animate(withDuration: 0.2) {
-                    newValue.alpha = 0
-                    newValue.removeFromSuperview()
+        if let windows = AppWindows {
+            let subViews = windows.subviews
+            subViews.forEach { value in
+                if let newValue = value as? UIImageView,newValue.tag == effectTag {
+                    UIView.animate(withDuration: 0.2) {
+                        newValue.alpha = 0
+                        newValue.removeFromSuperview()
+                    }
                 }
             }
         }

@@ -18,9 +18,9 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
 
         setupTabBar()
 
-        let homeNormalImage = UIImage(.homepod)
-        let homeSelectedImage = UIImage(.homepodmini)
-        let homeTitle = "Casa"
+//        let homeNormalImage = UIImage(.homepod)
+//        let homeSelectedImage = UIImage(.homepodmini)
+//        let homeTitle = "Casa"
         
         let vc = PTFuncNameViewController()
         let mainNav = PTBaseNavControl(rootViewController: vc)
@@ -30,23 +30,27 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         
         let home = PTTabBarItemConfig(title: "首页", content: PTTabBarImageContent(normal: UIImage(named: "image_aircondition_gray")!, selected: UIImage(named: "DemoImage")!),viewController: homeVC)
         
-        let yo = PTTabBarItemConfig(title: "11111111", content: PTTabBarImageContent(normal: UIImage(named: "image_aircondition_gray")!, selected: UIImage(named: "DemoImage")!), viewController: PTTabBarTestOneViewController())
+        let yoVC = PTTabBarTestOneViewController()
+        let yoNav = PTBaseNavControl(rootViewController: yoVC)
+        let yo = PTTabBarItemConfig(title: "11111111", content: PTTabBarImageContent(normal: UIImage(named: "image_aircondition_gray")!, selected: UIImage(named: "DemoImage")!), viewController: yoNav)
+
+        configure(items: [home,yo])
 
 //        if #available(iOS 18.0, *) {
-//            tabs.append(configTab(homeVC, title: homeTitle, imageName: homeNormalImage,selectedImage: homeSelectedImage, identifier: "casa"))
 //            selectedTab = tabs.first
 //        } else {
-//            let homeNav = homeVC
-//            homeNav.tabBarItem = UITabBarItem(title: homeTitle, image: homeNormalImage, selectedImage: homeSelectedImage)
-//            viewControllers = [homeNav]
+////            let homeNav = homeVC
+////            homeNav.tabBarItem = UITabBarItem(title: homeTitle, image: homeNormalImage, selectedImage: homeSelectedImage)
+////            yoNav.tabBarItem = UITabBarItem(title: "YO", image: homeNormalImage, selectedImage: homeSelectedImage)
+////            viewControllers = [homeNav,yoNav]
 //            selectedIndex = 0
 //        }
+        customTabBar.select(0)
         
         if #available(iOS 26.0, *) {
             // iOS26新增，向下滚动时，只显示第一个与UISearchTab的图标，中间显示辅助UITabAccessory
             self.tabBarMinimizeBehavior = .onScrollDown
         }
-        configure(items: [home,yo])
     }
         
     // MARK: 设置UITab
@@ -77,10 +81,24 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
 
         view.addSubview(customTabBar)
         customTabBar.snp.makeConstraints {
-            $0.left.right.bottom.equalToSuperview()
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
             $0.height.equalTo(CGFloat.kTabbarHeight_Total)
         }
 
+        customTabBar.willSelectIndex = { index in
+            PTNSLogConsole("\(index)")
+        }
+        customTabBar.shouldSelectIndex = { index in
+            PTNSLogConsole("should\(index)")
+//            if index == 1 {
+//                return false
+//            }
+            return true
+        }
+        customTabBar.didTapCenter = {
+            PTNSLogConsole("123123123123123123123123")
+        }
         customTabBar.didSelectIndex = { [weak self] index in
             self?.selectedIndex = index
         }
@@ -88,6 +106,8 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
 
     func configure(items: [PTTabBarItemConfig]) {
         viewControllers = items.map { $0.viewController }
-        customTabBar.setup(configs: items)
+        let aaaaaa = PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)
+        customTabBar.setup(configs: items,layoutStyle: .normal,centerContent: aaaaaa)
+        customTabBar.badge(index: 0,badgeValue: 10)        
     }
 }

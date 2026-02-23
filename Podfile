@@ -66,4 +66,5 @@ target 'PooTools_Example' do
 #  pod 'Protobuf'
 #  pod 'SVGAPlayer'
 #  pod 'SmartCodable/Inherit'
+  pod 'lottie-ios'
 end

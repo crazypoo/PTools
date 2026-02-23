@@ -56,8 +56,6 @@ enum RequestManager {
 class AppDelegate: PTAppWindowsDelegate {
     
     var permissionStatic = PTPermissionStatic.share
-
-    var guideHud:PTGuidePageHUD?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
@@ -115,16 +113,16 @@ class AppDelegate: PTAppWindowsDelegate {
         
         sideMenuConfig()
 
-        makeKeyAndVisible(createViewControllerHandler: {
-            let vc = PTFuncNameViewController()
-            let mainNav = PTBaseNavControl(rootViewController: vc)
-            
-            let sideContent = PTSideController()
-            let sideMeniController = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
-            return sideMeniController
+//        makeKeyAndVisible(createViewControllerHandler: {
+////            let vc = PTFuncNameViewController()
+////            let mainNav = PTBaseNavControl(rootViewController: vc)
+////            
+////            let sideContent = PTSideController()
+////            let sideMeniController = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
+////            return sideMeniController
 //            let tab = PTTestTabbarViewController()
 //            return tab
-        }, tint: .white)
+//        }, tint: .white)
         PTDarkModeOption.defaultDark()
         StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
 #if DEBUG
@@ -134,7 +132,6 @@ class AppDelegate: PTAppWindowsDelegate {
                 
 //#if DEBUG
 //        PTCoreUserDefultsWrapper.AppDebugMode = true
-        let _ = LocalConsole.shared
 //        lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
 //        if !lcm.terminal?.systemIsVisible
 //        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
@@ -165,36 +162,6 @@ class AppDelegate: PTAppWindowsDelegate {
 //#endif
 //        }
 //        #endif
-
-        PTGCDManager.gcdMain(block: {
-            //"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-            
-            let adModel = PTLaunchADModel()
-            adModel.image = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
-            adModel.time = 10
-            adModel.tapURL = ["123":"https://www.qq.com"]
-            
-            PTLaunchAdMonitor.share.showAd(adModels: [adModel], onView: self.window!,skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10), timeUp:  {
-                let guideModel = PTGuidePageModel()
-                guideModel.mainView = self.window!
-                guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
-                guideModel.tapHidden = false
-                guideModel.forwardImage = "DemoImage"
-                guideModel.backImage = "DemoImage"
-                guideModel.pageControlTintColor = .gray
-                guideModel.pageControl = .pageControl(type: .system)
-                guideModel.skipShow = true
-                
-                if self.guideHud == nil {
-                    self.guideHud = PTGuidePageHUD(viewModel: guideModel)
-                    self.guideHud!.animationTime = 1.5
-                    self.guideHud!.adHadRemove = {
-                        
-                    }
-                    self.guideHud!.guideShow()
-                }
-            })
-        })
                 
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
         PTGCDManager.gcdMain {
@@ -428,6 +395,19 @@ class AppDelegate: PTAppWindowsDelegate {
 //            PTNSLogConsole(error.localizedDescription)
 //        }
 //    }
+    // MARK: UISceneSession Lifecycle
+
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        // Called when a new scene session is being created.
+        // Use this method to select a configuration to create the new scene with.
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        // Called when the user discards a scene session.
+        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
+        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
 }
 
 extension AppDelegate {

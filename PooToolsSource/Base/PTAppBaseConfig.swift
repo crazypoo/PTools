@@ -101,4 +101,12 @@ public class PTAppBaseConfig: NSObject {
     public var playerPlayItemPauseImage:UIImage = UIImage(.pause)
     
     public var videoCache:Bool = false
+    
+    public var tabNormalFont:UIFont = .systemFont(ofSize: 11)
+    public var tabSelectedFont:UIFont = .systemFont(ofSize: 11)
+    public var tabNormalColor:UIColor = .gray
+    public var tabSelectedColor:UIColor = .systemBlue
+    public var tabBadgeFont:UIFont = .systemFont(ofSize: 10)
+    public var tabBadgeBorderHeight:CGFloat = 1
+    public var tabBadgeBorderColor:UIColor = .white
 }

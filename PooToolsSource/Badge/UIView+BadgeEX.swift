@@ -29,7 +29,7 @@ extension UIView: PTBadgeProtocol {
         get {
             let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterChangeKey)
             guard let label = obj as? CGPoint else {
-                return nil
+                return badgeCenterOffset
             }
             return label
         }
@@ -89,7 +89,7 @@ extension UIView: PTBadgeProtocol {
                             // 检查视图位置是否超出父视图范围
                             let badgeFrameInSelf = self.badge!.convert(self.badge!.bounds, to: self)
                             if self.bounds.intersects(badgeFrameInSelf) {
-                                self.badge!.center = self.initialSubviewCenter
+                                self.badge!.center = self.badgeCenterOffset
                             } else {
                                 self.badgeRemoveCallback?()
                                 self.badge!.removeFromSuperview()
@@ -391,13 +391,13 @@ extension UIView: PTBadgeProtocol {
         if self.badge?.tag != PTBadgeStyle.New.rawValue {
             self.badge?.text = newValue
             self.badge?.tag = PTBadgeStyle.New.rawValue
+            self.badge?.font = badgeFont
             self.adjustLabelWidth(label: self.badge!)
             var frame = self.badge!.frame
-            frame.size.width += 0
-            frame.size.height = self.badge!.font.pointSize + 4
+            frame.size.width += 8
+            frame.size.height = self.badge!.font.pointSize + 6
             self.badge?.frame = frame
             self.badge?.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
-            self.badge?.font = .appfont(size: 9)
             PTGCDManager.gcdMain {
                 self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 3,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
             }
@@ -414,9 +414,10 @@ extension UIView: PTBadgeProtocol {
         self.badge?.tag = PTBadgeStyle.Number.rawValue
         self.badge?.font = self.badgeFont
         self.badge?.text = value > self.badgeMaximumBadgeNumber ? "\(self.badgeMaximumBadgeNumber)+" : "\(value)"
+        self.adjustLabelWidth(label: self.badge!)
         var frame = self.badge!.frame
-        frame.size.width = self.badge?.sizeFor(height: CGRectGetHeight(self.badge!.frame)).width ?? 0 + 4
-        frame.size.height = frame.size.width
+        frame.size.width += 8
+        frame.size.height = self.badge!.font.pointSize + 6
         self.badge?.frame = frame
         self.badge?.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
         PTGCDManager.gcdMain {

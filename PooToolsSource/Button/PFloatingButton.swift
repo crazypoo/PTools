@@ -122,8 +122,8 @@ open class PFloatingButton: UIButton {
             superview.addSubview(self)
         } else if let window = view as? UIWindow {
             window.addSubview(self)
-        } else {
-            AppWindows!.addSubview(self)
+        } else if let window = AppWindows {
+            window.addSubview(self)
         }
         defaultSetting()
     }
