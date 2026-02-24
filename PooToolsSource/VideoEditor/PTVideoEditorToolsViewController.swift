@@ -1067,7 +1067,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         sheet.allowPullingPastMinHeight = false
         sheet.allowPullingPastMaxHeight = false
         let currentVC = PTUtils.getCurrentVC()
-        currentVC.present(sheet, animated: true) {
+        currentVC?.present(sheet, animated: true) {
             completion?()
         }
     }

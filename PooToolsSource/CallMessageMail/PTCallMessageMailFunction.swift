@@ -42,7 +42,7 @@ public class PTCallMessageMailFunction: NSObject {
         vc.recipients = users
         vc.messageComposeDelegate = PTCallMessageMailFunction.share
         vc.modalPresentationStyle = .fullScreen
-        PTUtils.getCurrentVC().pt_present(vc, animated: true)
+        PTUtils.getCurrentVC()?.pt_present(vc, animated: true)
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     
@@ -63,7 +63,7 @@ public class PTCallMessageMailFunction: NSObject {
             vc.addAttachmentData(imageData, mimeType: "image/png", fileName: "SendImage.png")
         }
         vc.mailComposeDelegate = PTCallMessageMailFunction.share
-        PTUtils.getCurrentVC().present(vc, animated: true)
+        PTUtils.getCurrentVC()?.present(vc, animated: true)
         PTCallMessageMailFunction.share.mailResultBlock = resultBlock
     }
     

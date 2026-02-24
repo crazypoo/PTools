@@ -79,7 +79,7 @@ public class PTTakePictureReviewer:UIView {
             make.bottom.equalTo(self.feedback.snp.top).offset(-5)
         }
         
-        PTUtils.getCurrentVC().view.addSubview(self)
+        PTUtils.getCurrentVC()?.view.addSubview(self)
         showAlert()
         
         PTGCDManager.gcdMain {

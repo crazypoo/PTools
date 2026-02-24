@@ -461,10 +461,10 @@ public extension UIViewController {
                 currentVCc?.present(sheet, animated: true,completion: completion)
             }
         default:
-            if let presentedVC = currentVC.presentedViewController {
+            if let presentedVC = currentVC?.presentedViewController {
                 presentedVC.present(sheet, animated: true,completion: completion)
             } else {
-                currentVC.present(sheet, animated: true,completion: completion)
+                currentVC?.present(sheet, animated: true,completion: completion)
             }
         }
     }

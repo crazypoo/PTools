@@ -142,12 +142,12 @@ public class PTMediaBrowserController: PTBaseViewController {
                                 sheet.navigationController?.popViewController(animated: true)
                             }
                         } else {
-                            current.dismissAnimated()
+                            current?.dismissAnimated()
                         }
                     }
                     let current = PTUtils.getCurrentVC()
-                    if let _ = current.sheetViewController {
-                        current.navigationController?.pushViewController(videoController, completion: {
+                    if let _ = current?.sheetViewController {
+                        current?.navigationController?.pushViewController(videoController, completion: {
                             videoController.videoPlayer?.play()
                             videoController.sheetViewController?.setSizes([.fullscreen])
                         })
@@ -394,7 +394,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         
     public func mediasShow() {
         self.modalPresentationStyle = .fullScreen
-        PTUtils.getCurrentVC().pt_present(self)
+        PTUtils.getCurrentVC()?.pt_present(self)
     }
     
     public func reloadConfig(mediaConfig:PTMediaBrowserConfig) {

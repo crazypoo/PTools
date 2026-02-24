@@ -260,8 +260,10 @@ public extension PTUtils {
         }
     }
     
-    class func getCurrentVC() -> UIViewController {
-        let root = AppWindows?.rootViewController ?? UIViewController()
+    class func getCurrentVC() -> UIViewController? {
+        guard let root = AppWindows?.rootViewController else {
+               return nil
+           }
         return getCurrentVC(from: root)
     }
     
@@ -425,10 +427,10 @@ public extension PTUtils {
 
     class func returnFrontVC() {
         let vc = PTUtils.getCurrentVC()
-        if vc.presentingViewController != nil {
-            vc.dismiss(animated: true, completion: nil)
+        if vc?.presentingViewController != nil {
+            vc?.dismiss(animated: true, completion: nil)
         } else {
-            vc.navigationController?.popViewController(animated: true, nil)
+            vc?.navigationController?.popViewController(animated: true, nil)
         }
     }
 
@@ -438,7 +440,7 @@ public extension PTUtils {
         if share.isVisiable {
             let nav = PTBaseNavControl(rootViewController: vc)
             nav.modalPresentationStyle = .formSheet
-            PTUtils.getCurrentVC().present(nav, animated: true, completion: {
+            PTUtils.getCurrentVC()?.present(nav, animated: true, completion: {
                 completion?()
                 SwizzleTool().swizzleDidAddSubview {
                     // Configure console window.
@@ -452,10 +454,10 @@ public extension PTUtils {
             })
 
         } else {
-            PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
+            PTUtils.getCurrentVC()?.navigationController?.pushViewController(vc)
         }
 #else
-        PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
+        PTUtils.getCurrentVC()?.navigationController?.pushViewController(vc)
 #endif
     }
     

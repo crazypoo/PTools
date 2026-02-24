@@ -38,10 +38,14 @@ enum PTDebugShareManager {
                 vc.presentActionSheet(currentVCc!, from: currentVCc!.view)
             }
         default:
-            if let presentedVC = currentVC.presentedViewController {
+            if let presentedVC = currentVC?.presentedViewController {
                 vc.presentActionSheet(presentedVC, from: presentedVC.view)
             } else {
-                vc.presentActionSheet(currentVC, from: currentVC.view)
+                if let findVC = currentVC {
+                    vc.presentActionSheet(findVC, from: findVC.view)
+                } else {
+                    PTNSLogConsole("Error")
+                }
             }
         }
     }

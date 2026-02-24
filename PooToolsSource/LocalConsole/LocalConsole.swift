@@ -377,7 +377,7 @@ public class LocalConsole: NSObject {
         let screenSize = appWindow.frame.size
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
         let hasNotch = UIDevice.current.hasNotch
-        let safeInsets = PTUtils.getCurrentVC().view.safeAreaInsets
+        let safeInsets = PTUtils.getCurrentVC()?.view.safeAreaInsets ?? .zero
         let isPortrait = screenSize.width < screenSize.height
         let orientation = UIDevice.current.orientation
 
@@ -566,7 +566,8 @@ public class LocalConsole: NSObject {
         }
 
         // If device is phone in landscape, disable resize controller.
-        if UIDevice.current.userInterfaceIdiom == .phone && PTUtils.getCurrentVC().view.frame.width > PTUtils.getCurrentVC().view.frame.height {
+        let currentVCFrame = PTUtils.getCurrentVC()?.view.frame ?? .zero
+        if UIDevice.current.userInterfaceIdiom == .phone && currentVCFrame.width > currentVCFrame.height {
             resize.attributes = .disabled
             resize.subtitle = "Portrait Orientation Only"
         }
@@ -915,10 +916,10 @@ public class LocalConsole: NSObject {
         let nav = PTBaseNavControl(rootViewController: content)
         nav.modalPresentationStyle = .fullScreen
         
-        if let presentedVC = PTUtils.getCurrentVC().presentedViewController {
+        if let presentedVC = PTUtils.getCurrentVC()?.presentedViewController {
             presentedVC.present(nav, animated: true)
         } else {
-            PTUtils.getCurrentVC().present(nav, animated: true)
+            PTUtils.getCurrentVC()?.present(nav, animated: true)
         }
     }
         
@@ -954,7 +955,7 @@ public class LocalConsole: NSObject {
     func shareAction() {
         let activityViewController = PTActivityViewController(text: terminal!.systemText!.text ?? "")
         activityViewController.previewNumberOfLines = 10
-        PTUtils.getCurrentVC().present(activityViewController, animated: true)
+        PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
     }
         
     func systemReport() {
@@ -1083,7 +1084,7 @@ public class LocalConsole: NSObject {
 
             if !currentText.stringIsEmpty() { print("\n") }
             
-            let safeAreaInsets = PTUtils.getCurrentVC().view.safeAreaInsets
+            let safeAreaInsets = PTUtils.getCurrentVC()?.view.safeAreaInsets ?? .zero
             
             print(
                   """

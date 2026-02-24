@@ -84,7 +84,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     let nav = PTBaseNavControl(rootViewController: vc)
                     nav.view.backgroundColor = .black
                     nav.modalPresentationStyle = .fullScreen
-                    PTUtils.getCurrentVC().present(nav, animated: true)
+                    PTUtils.getCurrentVC()?.present(nav, animated: true)
                 }
                 self.takePhotoView?.reviewHandle = {
                     let browserModel = PTMediaBrowserModel()

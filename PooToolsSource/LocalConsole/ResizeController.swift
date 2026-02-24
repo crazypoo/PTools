@@ -549,7 +549,7 @@ class PlatterView: UIView,UITextFieldDelegate {
             }
             let nav = PTBaseNavControl(rootViewController: colorPicker)
             nav.modalPresentationStyle = .formSheet
-            PTUtils.getCurrentVC().present(nav, animated: true)
+            PTUtils.getCurrentVC()?.present(nav, animated: true)
         }
         return view
     }()
@@ -567,7 +567,7 @@ class PlatterView: UIView,UITextFieldDelegate {
     }
     
     func configureFrame() {
-        self.frame.size = PTUtils.getCurrentVC().view.frame.size
+        self.frame.size = PTUtils.getCurrentVC()?.view.frame.size ?? .zero
         // Make sure bottom doesn't show on upwards pan.
         self.frame.size.height += 50
         self.frame.origin = possibleEndpoints[1]

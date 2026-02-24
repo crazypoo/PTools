@@ -14,28 +14,26 @@ open class PTWindowSceneDelegate: UIResponder,UIWindowSceneDelegate {
     open var window: UIWindow?
 
     open func makeKeyAndVisible(in scene: UIWindowScene, createViewControllerHandler: () -> UIViewController, tint: UIColor) {
-        window = UIWindow(frame: scene.coordinateSpace.bounds)
-        window?.windowScene = scene
-        window?.tintColor = tint
-        window?.rootViewController = createViewControllerHandler()
-        window?.makeKeyAndVisible()
+        let root = createViewControllerHandler()
+        window = UIWindow(windowScene:scene)
+        window!.tintColor = tint
+        window!.rootViewController = root
+        window!.makeKeyAndVisible()
     }
 
     open func makeKeyAndVisible(in scene: UIWindowScene, viewController: UIViewController, tint: UIColor) {
         makeKeyAndVisible(in: scene, createViewControllerHandler: {
-            viewController
+            return viewController
         }, tint: tint)
     }
 }
 
 public extension PTWindowSceneDelegate {
     @objc class func sceneDelegate() -> PTWindowSceneDelegate? {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-            let sceneDelegate = windowScene.delegate as? PTWindowSceneDelegate {
-            return sceneDelegate
-        } else {
-            return nil
-        }
+        return UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .first { $0.activationState == .foregroundActive }?
+                .delegate as? PTWindowSceneDelegate
     }
 }
 

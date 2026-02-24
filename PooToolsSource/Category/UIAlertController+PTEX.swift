@@ -118,7 +118,7 @@ public extension UIAlertController {
                             msgFont:UIFont = UIFont.systemFont(ofSize: 15),
                             okBtns:[String] = [String](),
                             cancelBtn:String = "",
-                            showIn:UIViewController = PTUtils.getCurrentVC(),
+                            showIn:UIViewController? = PTUtils.getCurrentVC(),
                             cancelBtnColor:UIColor = .systemBlue,
                             doneBtnColors:[UIColor] = [UIColor](),
                             alertBGColor:UIColor = .white,
@@ -179,7 +179,7 @@ public extension UIAlertController {
         }
         alertContentView.layer.cornerRadius = alertCornerRadius
         
-        showIn.present(alert, animated: true, completion: nil)
+        showIn?.present(alert, animated: true, completion: nil)
     }
     
     //MARK: ALERT輸入框基類
@@ -206,7 +206,7 @@ public extension UIAlertController {
                                       titleFont:UIFont = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
                                       cancelBtn:String,
-                                      showIn:UIViewController = PTUtils.getCurrentVC(),
+                                      showIn:UIViewController? = PTUtils.getCurrentVC(),
                                       cancelBtnColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
                                       doneBtnColor:UIColor = .systemBlue,
                                       placeHolders:[String],
@@ -265,7 +265,7 @@ public extension UIAlertController {
             alertContentView.backgroundColor = alertBGColor
         }
         alertContentView.layer.cornerRadius = alertCornerRadius
-        showIn.present(alert, animated: true, completion: nil)
+        showIn?.present(alert, animated: true, completion: nil)
     }
     
     //MARK: 初始化創建Alert

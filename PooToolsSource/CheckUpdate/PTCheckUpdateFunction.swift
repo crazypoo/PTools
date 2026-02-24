@@ -345,7 +345,7 @@ public class PTCheckUpdateFunction: NSObject {
         tipsControl.cancelTask = cancelBlock
         tipsControl.doneTask = doneBlock
         tipContentView?(tipsControl.contentView)
-        PTUtils.getCurrentVC().pt_present(tipsControl, animated: true, completion: nil)
+        PTUtils.getCurrentVC()?.pt_present(tipsControl, animated: true, completion: nil)
     }
     
     //MARK: 初始化UpdateTips

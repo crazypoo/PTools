@@ -839,7 +839,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
             make.bottom.equalTo(self.share.snp.top).offset(-5)
         }
         
-        PTUtils.getCurrentVC().view.addSubview(self)
+        PTUtils.getCurrentVC()?.view.addSubview(self)
         showAlert()
         
         PTGCDManager.gcdMain {

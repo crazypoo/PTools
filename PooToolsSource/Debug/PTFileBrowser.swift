@@ -26,7 +26,7 @@ public class PTFileBrowser: NSObject {
 public extension PTFileBrowser {
     func start() {
         navigationController.dismiss(animated: false) {
-            PTUtils.getCurrentVC().pt_present(self.navigationController, animated: true, completion: nil)
+            PTUtils.getCurrentVC()?.pt_present(self.navigationController, animated: true, completion: nil)
         }
     }
 
