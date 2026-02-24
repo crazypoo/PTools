@@ -380,6 +380,7 @@
 		559C3D5C2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */; };
 		559F81302E54683500D2D155 /* PTTagLabelScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559F812F2E54683500D2D155 /* PTTagLabelScrollView.swift */; };
 		55A3B0602F4C15AF007D9C63 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3B05F2F4C15AF007D9C63 /* SceneDelegate.swift */; };
+		55A3B08A2F4D3163007D9C63 /* camera.json in Resources */ = {isa = PBXBuildFile; fileRef = 55A3B0892F4D3163007D9C63 /* camera.json */; };
 		55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */; };
 		55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */; };
 		55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */; };
@@ -1337,6 +1338,7 @@
 		559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorToolsCropControl.swift; sourceTree = "<group>"; };
 		559F812F2E54683500D2D155 /* PTTagLabelScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTagLabelScrollView.swift; sourceTree = "<group>"; };
 		55A3B05F2F4C15AF007D9C63 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		55A3B0892F4D3163007D9C63 /* camera.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = camera.json; sourceTree = "<group>"; };
 		55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftMethodSwizzle.swift; sourceTree = "<group>"; };
 		55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+PTEX.swift"; sourceTree = "<group>"; };
 		55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreLocation+PTEX.swift"; sourceTree = "<group>"; };
@@ -3924,6 +3926,7 @@
 				55F299922BEE205600CC970A /* PTImageListViewController.swift */,
 				5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */,
 				55A3B05F2F4C15AF007D9C63 /* SceneDelegate.swift */,
+				55A3B0892F4D3163007D9C63 /* camera.json */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -4038,6 +4041,7 @@
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
 				55102AB22AFFAB5900E9529D /* icon_permission_siri.png in Resources */,
 				55102AB82AFFAB5900E9529D /* icon_permission_motion.png in Resources */,
+				55A3B08A2F4D3163007D9C63 /* camera.json in Resources */,
 				55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */,
 				55102AB52AFFAB5900E9529D /* icon_permission_notification.png in Resources */,
 				55102AAD2AFFAB5900E9529D /* icon_permission_media.png in Resources */,
@@ -4080,7 +4084,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4090,9 +4095,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4107,9 +4116,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

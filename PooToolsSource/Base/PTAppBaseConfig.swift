@@ -112,4 +112,5 @@ public class PTAppBaseConfig: NSObject {
     public var tabTopSpacing:CGFloat = 5
     public var tabContentSpacing:CGFloat = 2
     public var tab26BottomSpacing:CGFloat = 15
+    public var tab26Mode:Bool = true
 }

@@ -93,8 +93,8 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
 
     func configure(items: [PTTabBarItemConfig]) {
         viewControllers = items.map { $0.viewController }
-        let aaaaaa = PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)
-        customTabBar.setup(configs: items,layoutStyle: .normal,centerContent: aaaaaa)
+        let aaaaaa = PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)//PTTabBarBigLottieContent(normal: "camera")
+        customTabBar.setup(configs: items,layoutStyle: .centerRaised,centerContent: aaaaaa)
         customTabBar.badge(index: 0,badgeValue: 10)
     }
 }

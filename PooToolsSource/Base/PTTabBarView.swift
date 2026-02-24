@@ -121,8 +121,9 @@ final public class PTTabBarBigLottieContent: PTTabBarItemContent {
                 lottieView.animation = await LottieAnimation.loadedFrom(url: lottieURL)
             }
         } else {
-            lottieView.animation = .named(normal)
+            lottieView.animation = LottieAnimation.named(normal)
         }
+        lottieView.play()
     }
 
     public var view: UIView { lottieView }
@@ -138,11 +139,13 @@ final public class PTTabBarItemView: UIControl {
     private var content: PTTabBarItemContent!
 
     public class func itemImageSize() -> CGFloat {
-        var safeAreaHeight:CGFloat = 0
+        var safeAreaHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? PTAppBaseConfig.share.tab26BottomSpacing : 0
+        var barHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? CGFloat.kTabbarHeight_Total : CGFloat.kTabbarHeight
         if #available(iOS 26.0, *) {
             safeAreaHeight = PTAppBaseConfig.share.tab26BottomSpacing
+            barHeight = CGFloat.kTabbarHeight_Total
         }
-        let imageSize = CGFloat.kTabbarHeight_Total - safeAreaHeight - PTAppBaseConfig.share.tabTopSpacing - PTAppBaseConfig.share.tabContentSpacing - (PTAppBaseConfig.share.tabSelectedFont.pointSize + 2)
+        let imageSize = barHeight - safeAreaHeight - PTAppBaseConfig.share.tabTopSpacing - PTAppBaseConfig.share.tabContentSpacing - (PTAppBaseConfig.share.tabSelectedFont.pointSize + 2)
         return imageSize
     }
     
@@ -239,6 +242,7 @@ final public class PTTabBarView: UIView {
         setupGlassEffect()
         setupStackView()
         setupShadow()
+        setupCenterButton()
     }
 
     private func setupGlassEffect() {
@@ -249,7 +253,7 @@ final public class PTTabBarView: UIView {
             tabContainerHeight = CGFloat.kTabbarHeight_Total - 15
         } else {
             glassBackgroundView.effect = UIBlurEffect(style: .systemMaterial)
-            tabContainerHeight = CGFloat.kTabbarHeight_Total
+            tabContainerHeight = CGFloat.kTabbarHeight_Total - (PTAppBaseConfig.share.tab26Mode ? 15 : 0)
         }
 
         glassBackgroundView.clipsToBounds = true
@@ -260,13 +264,21 @@ final public class PTTabBarView: UIView {
             if #available(iOS 26.0, *) {
                 $0.left.right.equalToSuperview().inset(self.bar26LRSpacing)
             } else {
-                $0.left.right.equalToSuperview()
+                if PTAppBaseConfig.share.tab26Mode {
+                    $0.left.right.equalToSuperview().inset(self.bar26LRSpacing)
+                } else {
+                    $0.left.right.equalToSuperview()
+                }
             }
             $0.height.equalTo(tabContainerHeight)
         }
 
         if #available(iOS 26.0, *) {
             glassBackgroundView.layer.cornerRadius = tabContainerHeight / 2
+        } else {
+            if PTAppBaseConfig.share.tab26Mode {
+                glassBackgroundView.layer.cornerRadius = tabContainerHeight / 2
+            }
         }
         glassBackgroundView.layer.cornerCurve = .continuous
 
@@ -285,6 +297,10 @@ final public class PTTabBarView: UIView {
         highlightLayer.endPoint = CGPoint(x: 0.5, y: 1)
         if #available(iOS 26.0, *) {
             highlightLayer.cornerRadius = tabContainerHeight / 2
+        } else {
+            if PTAppBaseConfig.share.tab26Mode {
+                highlightLayer.cornerRadius = tabContainerHeight / 2
+            }
         }
 
         glassBackgroundView.layer.addSublayer(highlightLayer)
@@ -303,9 +319,21 @@ final public class PTTabBarView: UIView {
 
         addSubview(centerButton)
 
-        centerButton.layer.cornerCurve = .continuous
-        centerButton.layer.cornerRadius = centerButtonSize / 2
-        centerButton.backgroundColor = .white
+        let effectView = UIVisualEffectView()
+        if #available(iOS 26.0, *) {
+            effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        } else {
+            effectView.effect = UIBlurEffect(style: .systemMaterial)
+        }
+
+        effectView.clipsToBounds = true
+        centerButton.addSubview(effectView)
+        effectView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        effectView.layer.cornerRadius = centerButtonSize / 2
+        effectView.layer.cornerCurve = .continuous
 
         centerButton.layer.shadowColor = UIColor.black.cgColor
         centerButton.layer.shadowOpacity = 0.2
@@ -354,9 +382,11 @@ final public class PTTabBarView: UIView {
             normalCaseStack(configs: configs)
         case .centerRaised:
             if let findBig = centerContent?.view {
-                centerButton = findBig
-                setupCenterButton()
                 centerButton.isHidden = false
+                centerButton.addSubviews([findBig])
+                findBig.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
 
                 let midIndex = configs.count / 2
 
@@ -384,7 +414,11 @@ final public class PTTabBarView: UIView {
                     if #available(iOS 26.0, *) {
                         $0.bottom.equalToSuperview()
                     } else {
-                        $0.height.equalTo(CGFloat.kTabbarHeight)
+                        if PTAppBaseConfig.share.tab26Mode {
+                            $0.bottom.equalToSuperview()
+                        } else {
+                            $0.height.equalTo(CGFloat.kTabbarHeight)
+                        }
                     }
                     $0.right.equalTo(self.centerButton.snp.left)
                 }
@@ -395,6 +429,12 @@ final public class PTTabBarView: UIView {
                     $0.height.equalTo(self.leftStackView)
                     $0.left.equalTo(self.centerButton.snp.right)
                 }
+                
+#if canImport(Lottie)
+                if let bigLottie = findBig as? LottieAnimationView {
+                    bigLottie.play()
+                }
+#endif
             } else {
                 normalCaseStack(configs: configs)
             }
@@ -419,7 +459,11 @@ final public class PTTabBarView: UIView {
             if #available(iOS 26.0, *) {
                 $0.bottom.equalToSuperview()
             } else {
-                $0.height.equalTo(CGFloat.kTabbarHeight)
+                if PTAppBaseConfig.share.tab26Mode {
+                    $0.bottom.equalToSuperview()
+                } else {
+                    $0.height.equalTo(CGFloat.kTabbarHeight)
+                }
             }
         }
     }
@@ -476,13 +520,21 @@ final public class PTTabBarView: UIView {
             if #available(iOS 26.0, *) {
                 itemWidth = (CGFloat.kSCREEN_WIDTH - self.bar26LRSpacing * 2) / CGFloat(items.count)
             } else {
-                itemWidth = CGFloat.kSCREEN_WIDTH / CGFloat(items.count)
+                if PTAppBaseConfig.share.tab26Mode {
+                    itemWidth = (CGFloat.kSCREEN_WIDTH - self.bar26LRSpacing * 2) / CGFloat(items.count)
+                } else {
+                    itemWidth = CGFloat.kSCREEN_WIDTH / CGFloat(items.count)
+                }
             }
         case .centerRaised:
             if #available(iOS 26.0, *) {
                 itemWidth = (CGFloat.kSCREEN_WIDTH - self.bar26LRSpacing * 2 - centerButtonSize) / CGFloat(items.count)
             } else {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
+                if PTAppBaseConfig.share.tab26Mode {
+                    itemWidth = (CGFloat.kSCREEN_WIDTH - self.bar26LRSpacing * 2 - centerButtonSize) / CGFloat(items.count)
+                } else {
+                    itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
+                }
             }
         }
         
