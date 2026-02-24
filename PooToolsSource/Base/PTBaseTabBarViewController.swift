@@ -7,21 +7,62 @@
 //
 
 import UIKit
+import SnapKit
+import SwifterSwift
+
+public protocol PTTabBarVisibilityProtocol {
+    var pt_prefersTabBarHidden: Bool { get }
+}
+
+
+extension UIViewController: PTTabBarVisibilityProtocol {
+    @objc public var pt_prefersTabBarHidden: Bool { false }
+}
 
 open class PTBaseTabBarViewController: UITabBarController {
 
+    public var ptCustomBar = PTTabBarView()
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
         /*
         //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
         //tabBarController.mode = .tabSidebar
          */
+        setupTabBar()
+        if #available(iOS 26.0, *) {
+            // iOS26新增，向下滚动时，只显示第一个与UISearchTab的图标，中间显示辅助UITabAccessory
+            self.tabBarMinimizeBehavior = .onScrollDown
+        }
     }
     
     // MARK: 设置UIViewController
     public func configViewController(viewController: UIViewController, title: String) -> PTBaseNavControl {
         let navigationController = PTBaseNavControl(rootViewController: viewController)
         return navigationController
+    }
+    
+    private func setupTabBar() {
+        tabBar.isHidden = true
+
+        view.addSubview(ptCustomBar)
+        ptCustomBar.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(CGFloat.kTabbarHeight_Total)
+        }
+    }
+    
+    open func configure(items: [PTTabBarItemConfig]) {
+        let vcs = items.map { item -> UIViewController in
+            if let nav = item.viewController as? UINavigationController {
+                nav.delegate = self
+            } else if let side = item.viewController as? PTSideMenuControl,let findNav = side.contentViewController as? UINavigationController {
+                findNav.delegate = self
+            }
+            return item.viewController
+        }
+        viewControllers = vcs
     }
 }
 
@@ -66,14 +107,15 @@ extension PTBaseTabBarViewController {
 }
 
 // MARK: - 新增代理方法
-@available(iOS 18.0, *)
 extension PTBaseTabBarViewController: UITabBarControllerDelegate {
     // MARK: Tab是否可以选中
+    @available(iOS 18.0, *)
     open func tabBarController(_ tabBarController: UITabBarController, shouldSelectTab tab: UITab) -> Bool {
         return true
     }
 
     // MARK: 选中Tab
+    @available(iOS 18.0, *)
     open func tabBarController(_ tabBarController: UITabBarController, didSelectTab selectedTab: UITab, previousTab: UITab?) {
         PTNSLogConsole(previousTab?.title ?? "", selectedTab.title)
     }
@@ -89,7 +131,35 @@ extension PTBaseTabBarViewController: UITabBarControllerDelegate {
     }
 
     // MARK: UITabGroup中的顺序发生变化
+    @available(iOS 18.0, *)
     open func tabBarController(_ tabBarController: UITabBarController, displayOrderDidChangeFor group: UITabGroup) {
         PTNSLogConsole(#function)
+    }
+}
+
+extension PTBaseTabBarViewController: UINavigationControllerDelegate {
+    public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        let isRoot = navigationController.viewControllers.count == 1
+        setTabBar(hidden: !isRoot, animated: animated)
+    }
+    
+    private func setTabBar(hidden: Bool, animated: Bool) {
+
+        let height = ptCustomBar.currentBarLayoutStyle == .normal ? CGFloat.kTabbarHeight_Total : (CGFloat.kTabbarHeight_Total + ptCustomBar.centerButtonSize / 2)
+
+        let animations = {
+            self.ptCustomBar.transform = hidden
+                ? CGAffineTransform(translationX: 0, y: height)
+                : .identity
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.25,
+                           delay: 0,
+                           options: [.curveEaseInOut],
+                           animations: animations)
+        } else {
+            animations()
+        }
     }
 }

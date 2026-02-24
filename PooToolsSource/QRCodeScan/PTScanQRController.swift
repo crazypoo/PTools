@@ -53,6 +53,8 @@ public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Voi
 
 @objcMembers
 public class PTScanQRController: PTBaseViewController {
+    
+    public override var pt_prefersTabBarHidden: Bool { true }
 
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
     //MARK: 掃描回調

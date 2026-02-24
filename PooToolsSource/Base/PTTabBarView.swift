@@ -218,6 +218,11 @@ final public class PTTabBarView: UIView {
     private let highlightLayer = CAGradientLayer()
     
     private var layoutStyle: PTTabBarLayoutStyle = .normal
+    public var currentBarLayoutStyle : PTTabBarLayoutStyle {
+        get {
+            layoutStyle
+        }
+    }
     public var centerButtonSize: CGFloat = 64
 
     let bar26LRSpacing:CGFloat = 24.adapter

@@ -54,6 +54,8 @@ open class PTNavTitleContainer: UIView {
 @objcMembers
 open class PTBaseViewController: UIViewController {
             
+    override public var pt_prefersTabBarHidden: Bool { false }
+
     deinit {
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
         removeFromSuperStatusBar()

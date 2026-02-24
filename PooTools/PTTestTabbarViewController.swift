@@ -11,12 +11,8 @@ import SafeSFSymbols
 
 class PTTestTabbarViewController: PTBaseTabBarViewController {
 
-    private let customTabBar = PTTabBarView()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupTabBar()
         
         let vc = PTFuncNameViewController()
         let mainNav = PTBaseNavControl(rootViewController: vc)
@@ -32,12 +28,24 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
 
         configure(items: [home,yo])
 
-        customTabBar.select(0)
-        
-        if #available(iOS 26.0, *) {
-            // iOS26新增，向下滚动时，只显示第一个与UISearchTab的图标，中间显示辅助UITabAccessory
-            self.tabBarMinimizeBehavior = .onScrollDown
+        ptCustomBar.willSelectIndex = { index in
+            PTNSLogConsole("\(index)")
         }
+        ptCustomBar.shouldSelectIndex = { index in
+            PTNSLogConsole("should\(index)")
+//            if index == 1 {
+//                return false
+//            }
+            return true
+        }
+        ptCustomBar.didTapCenter = {
+            PTNSLogConsole("123123123123123123123123")
+        }
+        ptCustomBar.didSelectIndex = { [weak self] index in
+            self?.selectedIndex = index
+        }
+
+        ptCustomBar.select(0)
     }
         
     // MARK: 设置UITab
@@ -63,38 +71,10 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         return tab
     }
     
-    private func setupTabBar() {
-        tabBar.isHidden = true
-
-        view.addSubview(customTabBar)
-        customTabBar.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(CGFloat.kTabbarHeight_Total)
-        }
-
-        customTabBar.willSelectIndex = { index in
-            PTNSLogConsole("\(index)")
-        }
-        customTabBar.shouldSelectIndex = { index in
-            PTNSLogConsole("should\(index)")
-//            if index == 1 {
-//                return false
-//            }
-            return true
-        }
-        customTabBar.didTapCenter = {
-            PTNSLogConsole("123123123123123123123123")
-        }
-        customTabBar.didSelectIndex = { [weak self] index in
-            self?.selectedIndex = index
-        }
-    }
-
-    func configure(items: [PTTabBarItemConfig]) {
-        viewControllers = items.map { $0.viewController }
+    override func configure(items: [PTTabBarItemConfig]) {
+        super.configure(items: items)
         let aaaaaa = PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)//PTTabBarBigLottieContent(normal: "camera")
-        customTabBar.setup(configs: items,layoutStyle: .centerRaised,centerContent: aaaaaa)
-        customTabBar.badge(index: 0,badgeValue: 10)
+        ptCustomBar.setup(configs: items,layoutStyle: .centerRaised,centerContent: aaaaaa)
+        ptCustomBar.badge(index: 0,badgeValue: 10)
     }
 }
