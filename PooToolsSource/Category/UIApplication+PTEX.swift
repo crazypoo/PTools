@@ -52,7 +52,8 @@ public extension UIApplication {
     }
     
     var currentWindow: UIWindow? {
-        return self.currentWindows?.first { $0.isKeyWindow } ?? PTWindowSceneDelegate.sceneDelegate()?.window
+        let window = self.currentWindows?.first { $0.isKeyWindow } ?? PTWindowSceneDelegate.sceneDelegate()?.window
+        return window
     }
 }
 
