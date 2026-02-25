@@ -110,7 +110,11 @@ public class PTAppBaseConfig: NSObject {
     public var tabBadgeBorderHeight:CGFloat = 1
     public var tabBadgeBorderColor:UIColor = .white
     public var tabTopSpacing:CGFloat = 5
+    public var tabBottomSpacing:CGFloat = 5
     public var tabContentSpacing:CGFloat = 2
     public var tab26BottomSpacing:CGFloat = 15
-    public var tab26Mode:Bool = true
+    public var tab26Mode:Bool = false
+    public var tabSelectedMetail:Bool = true
+    public var tabSelectedMetailColor:UIColor = .lightGray
+    public var tabSelectedMetailLRSpacing:CGFloat = 5
 }

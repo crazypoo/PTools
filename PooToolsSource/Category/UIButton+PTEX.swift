@@ -145,12 +145,12 @@ public extension UIButton {
                    uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
                    emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    controlState:UIControl.State = .normal) {
-        setImage(emptyImage, for: controlState)
         switch contentData {
         case let contentData as UIImage:
             setImage(contentData, for: controlState)
         case let contentData as String:
             Task {
+                setImage(emptyImage, for: controlState)
                 let result = await PTLoadImageFunction.handleStringContent(contentData, iCloudDocumentName) { receivedSize, totalSize in
                     PTGCDManager.gcdMain {
                         self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)

@@ -24,9 +24,13 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         
         let yoVC = PTTabBarTestOneViewController()
         let yoNav = PTBaseNavControl(rootViewController: yoVC)
-        let yo = PTTabBarItemConfig(title: "11111111", content: PTTabBarLottieContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav)
+        let yo = PTTabBarItemConfig(title: "11111111", content: PTTabBarLottieContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json",selected: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav)
 
-        configure(items: [home,yo])
+        let yoVC1 = PTTabBarTestOneViewController()
+        let yoNav1 = PTBaseNavControl(rootViewController: yoVC1)
+        let yo1 = PTTabBarItemConfig(title: "2222", content: PTTabBarLottieContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav1)
+
+        configure(items: [home,yo,yo1])
 
         ptCustomBar.willSelectIndex = { index in
             PTNSLogConsole("\(index)")

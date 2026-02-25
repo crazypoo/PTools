@@ -11,6 +11,7 @@
 import UIKit
 import Kingfisher
 import ImageIO
+import Photos
 
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
@@ -51,7 +52,29 @@ public extension UIImageView {
                          progressHandle:((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                          loadFinish:(([UIImage]?,UIImage?,TimeInterval) -> Void)? = nil) {
         
-        self.image = emptyImage
+        switch contentData {
+        case let findImage as UIImage:
+            self.image = findImage
+            loadFinish?([findImage], findImage,0)
+            return
+        case let findUrl as String:
+            if findUrl.isURL(),let findURL = URL(string: findUrl) {
+                imageURLCache(findURL: findURL,emptyImage: emptyImage,loadFinish: loadFinish)
+            } else {
+                self.image = emptyImage
+            }
+        case let phasset as PHAsset:
+            Task {
+                let result = await PTLoadImageFunction.handleAssetContent(asset: phasset)
+                self.image = result.firstImage
+                loadFinish?(result.allImages, result.firstImage,result.loadTime)
+                return
+            }
+        case let findURL as URL:
+            imageURLCache(findURL: findURL,emptyImage: emptyImage,loadFinish: loadFinish)
+        default:
+            self.image = emptyImage
+        }
 
         Task {
             let result = await PTLoadImageFunction.loadImage(contentData: contentData,
@@ -94,6 +117,53 @@ public extension UIImageView {
                     loadFinish?(images, result.firstImage,result.loadTime)
                 }
             }
+        }
+    }
+    
+    func imageURLCache(findURL:URL,
+                       emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                       loadFinish:(([UIImage]?,UIImage?,TimeInterval) -> Void)? = nil) {
+        let cacheKey = findURL.cacheKey
+        // 如果有快取就直接取出
+        if ImageCache.default.isCached(forKey: cacheKey) {
+            Task {
+                do {
+                    // 优先从磁盘取原始数据
+                    if let data = try? ImageCache.default.diskStorage.value(forKey: cacheKey),
+                       data.detectImageType() == .GIF {
+                        if let frames = PTLoadImageFunction.imagesAndDurationFromGif(data: data) {
+                            let animatedImage = UIImage.animatedImage(with: frames.images, duration: frames.duration)
+                            PTGCDManager.gcdMain {
+                                self.image = animatedImage
+                                loadFinish?(frames.images, animatedImage,frames.duration)
+                                return
+                            }
+                        }
+                    }
+
+                    // fallback: 从 Kingfisher 解码过的 UIImage 读取
+                    let options = PTAppBaseConfig.share.gobalWebImageLoadOption()
+                    let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
+                    if let image = result.image {
+                        if let frames = image.images, !frames.isEmpty {
+                            let animatedImage = UIImage.animatedImage(with: frames, duration: TimeInterval(frames.count))
+                            self.image = animatedImage
+                            loadFinish?(frames, animatedImage,TimeInterval(frames.count))
+                            return
+                        } else {
+                            self.image = image
+                            loadFinish?([image], image,0)
+                            return
+                        }
+                    } else {
+                        self.image = emptyImage
+                    }
+                } catch {
+                    self.image = emptyImage
+                }
+            }
+        } else {
+            self.image = emptyImage
         }
     }
     
