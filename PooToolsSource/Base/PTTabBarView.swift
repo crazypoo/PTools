@@ -27,6 +27,14 @@ public struct PTTabBarItemConfig {
     let title: String
     let content: PTTabBarItemContent
     let viewController: UIViewController
+    
+    public init(title: String,
+                content: PTTabBarItemContent,
+                viewController: UIViewController) {
+        self.title = title
+        self.content = content
+        self.viewController = viewController
+    }
 }
 
 final public class PTTabBarImageContent: PTTabBarItemContent {
