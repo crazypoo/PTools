@@ -20,15 +20,15 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         let sideContent = PTSideController()
         let homeVC = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
         
-        let home = PTTabBarItemConfig(title: "首页", content: PTTabBarImageContent(normal: UIImage(named: "image_aircondition_gray")!, selected: UIImage(named: "DemoImage")!),viewController: homeVC)
+        let home = PTTabBarItemConfig(title: "首页", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: UIImage(named: "DemoImage")!),viewController: homeVC)
         
         let yoVC = PTTabBarTestOneViewController()
         let yoNav = PTBaseNavControl(rootViewController: yoVC)
-        let yo = PTTabBarItemConfig(title: "11111111", content: PTTabBarLottieContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json",selected: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav)
+        let yo = PTTabBarItemConfig(title: "11111111", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav)
 
         let yoVC1 = PTTabBarTestOneViewController()
         let yoNav1 = PTBaseNavControl(rootViewController: yoVC1)
-        let yo1 = PTTabBarItemConfig(title: "2222", content: PTTabBarLottieContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav1)
+        let yo1 = PTTabBarItemConfig(title: "2222", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav1)
 
         configure(items: [home,yo,yo1])
 
@@ -77,7 +77,7 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
     
     override func configure(items: [PTTabBarItemConfig]) {
         super.configure(items: items)
-        let aaaaaa = PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)//PTTabBarBigLottieContent(normal: "camera")
+        let aaaaaa = PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json")//PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)//PTTabBarBigLottieContent(normal: "camera")
         ptCustomBar.setup(configs: items,layoutStyle: .centerRaised,centerContent: aaaaaa)
         ptCustomBar.badge(index: 0,badgeValue: 10)
     }

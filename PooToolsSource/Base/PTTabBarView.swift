@@ -31,107 +31,100 @@ public struct PTTabBarItemConfig {
 
 final public class PTTabBarImageContent: PTTabBarItemContent {
 
+    private let container = UIView()
     private let imageView = UIImageView()
+#if canImport(Lottie)
+    private let lottieView = LottieAnimationView()
+#endif
+    
+    private let normalImage: Any
+    private let selectedImage: Any?
 
-    private let normalImage: UIImage
-    private let selectedImage: UIImage?
-
-    public init(normal: UIImage, selected: UIImage? = nil) {
+    public init(normal: Any, selected: Any? = nil) {
         self.normalImage = normal
         self.selectedImage = selected
+        container.isUserInteractionEnabled = false
+        imageView.isHidden = true
         imageView.contentMode = .scaleAspectFit
-        imageView.image = normal
-    }
-
-    public var view: UIView { imageView }
-
-    public func setSelected(_ selected: Bool, animated: Bool) {
-        imageView.image = selected ? (selectedImage ?? normalImage) : normalImage
-    }
-}
-
-final public class PTTabBarBigImageContent: PTTabBarItemContent {
-
-    private let imageView = UIImageView()
-
-    private let normalImage: UIImage
-
-    public init(normal: UIImage) {
-        self.normalImage = normal
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = normal
-    }
-
-    public var view: UIView { imageView }
-    
-    public func setSelected(_ selected: Bool, animated: Bool) {}
-}
-
+        
+        var showViews = [UIView]()
 #if canImport(Lottie)
-final public class PTTabBarLottieContent: PTTabBarItemContent {
-
-    private let lottieView = LottieAnimationView()
-    private let normalName: String
-    private let selectedName: String?
-
-    public init(normal: String, selected: String? = nil) {
-        self.normalName = normal
-        self.selectedName = selected
+        showViews = [imageView,lottieView]
+#else
+        showViews = [imageView]
+#endif
+        container.addSubviews(showViews)
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+#if canImport(Lottie)
+        lottieView.isHidden = true
         lottieView.loopMode = .autoReverse
         lottieView.isUserInteractionEnabled = false
-        if let lottieURL = URL(string: normal) {
-            Task { @MainActor in
-                lottieView.animation = await LottieAnimation.loadedFrom(url: lottieURL)
-            }
-        } else {
-            lottieView.animation = .named(normal)
+        lottieView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+#endif
     }
 
-    public var view: UIView { lottieView }
+    public var view: UIView { container }
 
     public func setSelected(_ selected: Bool, animated: Bool) {
-        let name = selected ? (selectedName ?? normalName) : normalName
-        if let lottieURL = URL(string: name) {
-            Task { @MainActor in
-                lottieView.animation = await LottieAnimation.loadedFrom(url: lottieURL)
+        imageSet(media: selected ? (selectedImage ?? normalImage) : normalImage)
+    }
+    
+    private func imageSet(media:Any) {
+        switch media {
+        case let string as String:
+#if canImport(Lottie)
+            if string.lowercased().contains("json") {
+                if string.isURL(),let lottieURL = URL(string: string) {
+                    Task { @MainActor in
+                        let lottieAnimation = await LottieAnimation.loadedFrom(url: lottieURL)
+                        if let findAnimation = lottieAnimation {
+                            lottieAnimationSet(findAnimation: findAnimation)
+                        } else {
+                            imageView.isHidden = true
+                            lottieView.isHidden = false
+                            self.imageSet(media: self.normalImage)
+                        }
+                    }
+                }
+            } else {
+                if let findAnimation = LottieAnimation.named(string) {
+                    lottieAnimationSet(findAnimation: findAnimation)
+                } else {
+                    imageView.isHidden = false
+                    lottieView.isHidden = true
+                    imageView.loadImage(contentData: string)
+                }
             }
-        } else {
-            lottieView.animation = .named(name)
-        }
-
-        if animated && selected {
-            lottieView.play()
-        } else {
-            lottieView.currentProgress = selected ? 1 : 0
+#else
+            imageView.isHidden = false
+            imageView.loadImage(contentData: media)
+#endif
+#if canImport(Lottie)
+        case let animation as LottieAnimation:
+            lottieAnimationSet(findAnimation: animation)
+#endif
+        default:
+            imageView.isHidden = false
+#if canImport(Lottie)
+            lottieView.isHidden = true
+#endif
+            self.imageView.loadImage(contentData: media)
         }
     }
-}
-
-final public class PTTabBarBigLottieContent: PTTabBarItemContent {
-
-    private let lottieView = LottieAnimationView()
-    private let normalName: String
-
-    public init(normal: String) {
-        self.normalName = normal
-        lottieView.loopMode = .autoReverse
-        if let lottieURL = URL(string: normal) {
-            Task { @MainActor in
-                lottieView.animation = await LottieAnimation.loadedFrom(url: lottieURL)
-            }
-        } else {
-            lottieView.animation = LottieAnimation.named(normal)
-        }
+    
+#if canImport(Lottie)
+    private func lottieAnimationSet(findAnimation:LottieAnimation) {
+        imageView.isHidden = true
+        lottieView.isHidden = false
+        lottieView.animation = findAnimation
         lottieView.play()
     }
-
-    public var view: UIView { lottieView }
-
-    public func setSelected(_ selected: Bool, animated: Bool) { }
-}
-
 #endif
+}
 
 final public class PTTabBarItemView: UIControl {
 
@@ -460,11 +453,7 @@ final public class PTTabBarView: UIView {
                     $0.left.equalTo(self.centerButton.snp.right)
                 }
                 
-#if canImport(Lottie)
-                if let bigLottie = findBig as? LottieAnimationView {
-                    bigLottie.play()
-                }
-#endif
+                centerContent?.setSelected(true, animated: true)
             } else {
                 normalCaseStack(configs: configs)
             }
@@ -499,7 +488,9 @@ final public class PTTabBarView: UIView {
 
         // 如果是重复点击
         if index == currentIndex {
-            items[index].isSelectedItem = true
+            for i in items.indices {
+                items[i].isSelectedItem = i == index
+            }
             didSelectIndex?(index)
             return
         }
