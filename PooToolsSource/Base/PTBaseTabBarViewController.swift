@@ -144,7 +144,7 @@ extension PTBaseTabBarViewController: UINavigationControllerDelegate {
     }
     
     private func setTabBar(hidden: Bool, animated: Bool) {
-
+        tabBar.isHidden = true
         let height = ptCustomBar.currentBarLayoutStyle == .normal ? CGFloat.kTabbarHeight_Total : (CGFloat.kTabbarHeight_Total + ptCustomBar.centerButtonSize / 2)
 
         let animations = {

@@ -46,14 +46,27 @@ public extension UIApplication {
     }
     
     var currentWindows:[UIWindow]? {
-        return self.connectedScenes
+        return connectedScenes
             .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
+        // ❗ 不再只限制 foregroundActive
+            .filter { $0.activationState != .background }
+            .first?
+            .windows
     }
     
     var currentWindow: UIWindow? {
-        let window = self.currentWindows?.first { $0.isKeyWindow } ?? PTWindowSceneDelegate.sceneDelegate()?.window
-        return window
+        // 1️⃣ 先按你原逻辑找 keyWindow
+        if let keyWindow = currentWindows?.first(where: { $0.isKeyWindow }) {
+            return keyWindow
+        }
+
+        // 2️⃣ 如果没有 keyWindow，取当前 scene 的第一个 window
+        if let firstWindow = currentWindows?.first {
+            return firstWindow
+        }
+
+        // 3️⃣ 最后 fallback 到你原来的 sceneDelegate 逻辑
+        return PTWindowSceneDelegate.sceneDelegate()?.window
     }
 }
 
