@@ -295,7 +295,9 @@ public class PTLaunchAdMonitor: NSObject {
                 self.player?.player?.pause()
                 sup.removeFromSuperview()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
+                self.loadImageView.removeFromSuperview()
                 self.skipButton.cancelCountdown()
+                self.contentView.removeFromSuperview()
                 self.dismissCallBack?()
             }
         } else {
@@ -304,6 +306,7 @@ public class PTLaunchAdMonitor: NSObject {
             } completion: { finish in
                 self.player?.player?.pause()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
+                self.loadImageView.removeFromSuperview()
                 self.contentView.removeFromSuperview()
                 self.timeUpCallBack?()
             }

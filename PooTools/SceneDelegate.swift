@@ -18,7 +18,7 @@ class SceneDelegate: PTWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
         makeKeyAndVisible(in: scene, viewController: PTTestTabbarViewController(), tint: .white)
-        let _ = LocalConsole.shared
+//        let _ = LocalConsole.shared
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
@@ -34,7 +34,7 @@ class SceneDelegate: PTWindowSceneDelegate {
             
             PTLaunchAdMonitor.share.showAd(adModels: [adModel], onView: window,skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10), timeUp:  {
                 let guideModel = PTGuidePageModel()
-                guideModel.mainView = self.window!
+                guideModel.mainView = window
                 guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
                 guideModel.tapHidden = false
                 guideModel.forwardImage = "DemoImage"

@@ -32,7 +32,7 @@ public extension PTWindowSceneDelegate {
     @objc class func sceneDelegate() -> PTWindowSceneDelegate? {
         return UIApplication.shared.connectedScenes
                 .compactMap { $0 as? UIWindowScene }
-                .first { $0.activationState == .foregroundActive }?
+                .first { $0.activationState != .background }?
                 .delegate as? PTWindowSceneDelegate
     }
 }
