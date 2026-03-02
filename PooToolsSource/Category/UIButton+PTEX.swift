@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import AttributedString
+import Photos
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
 
@@ -169,6 +170,11 @@ public extension UIButton {
             setImage(dataImage, for: controlState)
         case let color as UIColor:
             setImage(color.createImageWithColor(), for: controlState)
+        case let phasset as PHAsset:
+            Task {
+                let result = await PTLoadImageFunction.handleAssetContent(asset: phasset)
+                setImage(result.firstImage, for: controlState)
+            }
         default:
             setImage(emptyImage, for: controlState)
         }
