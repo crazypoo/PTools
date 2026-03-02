@@ -55,7 +55,9 @@ public extension UIImageView {
         switch contentData {
         case let findImage as UIImage:
             self.image = findImage
-            loadFinish?([findImage], findImage,0)
+            PTGCDManager.gcdMain(block: {
+                loadFinish?([findImage], findImage,0)
+            })
             return
         case let findUrl as String:
             if findUrl.isURL(),let findURL = URL(string: findUrl) {
