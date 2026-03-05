@@ -850,23 +850,40 @@ public class PTCollectionView: UIView {
         }
     }
     
-    public func insertSection(_ sections:[PTSection],completion:PTActionTask? = nil) {
+    public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
         PTGCDManager.gcdMain {
-            let startIndex = self.mSections.count
-            self.mSections.append(contentsOf: sections)
-            let indexPaths = IndexSet(startIndex..<startIndex + sections.count)
+
+            guard !sections.isEmpty else {
+                completion?()
+                return
+            }
+
+            var insertIndex = self.mSections.count
+            
+            if let index = afterIndex, index < self.mSections.count {
+                insertIndex = index + 1
+            }
+
+            // 更新数据源
+            self.mSections.insert(contentsOf: sections, at: insertIndex)
+
+            // 生成 section indexSet
+            let indexSet = IndexSet(insertIndex..<insertIndex + sections.count)
+
             self.collectionView.performBatchUpdates {
-                self.collectionView.insertSections(indexPaths)
+                self.collectionView.insertSections(indexSet)
             } completion: { _ in
-                // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                // 瀑布流刷新
+                if self.viewConfig.viewType == .WaterFall,
+                   self.waterFallLayout != nil {
                     self.collectionView.collectionViewLayout.invalidateLayout()
                 }
+
                 completion?()
             }
         }
     }
-    
+
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {

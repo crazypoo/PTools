@@ -97,15 +97,15 @@ public class PTHudView: UIView {
         }
     }
     
-    public func hide(completion:PTActionTask?) {
-        UIView.animate(withDuration: 1) {
+    public func hide(duration:TimeInterval = 0.35,completion:PTActionTask?) {
+        UIView.animate(withDuration: duration) {
             self.centerView.alpha = 0
         } completion: { finish in
             self.removeFromSuperview()
             completion?()
         }
     }
-    
+
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if PTHudConfig.share.masked {
             return super.hitTest(point, with: event)
