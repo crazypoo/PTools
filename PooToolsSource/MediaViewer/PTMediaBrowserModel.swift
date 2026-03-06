@@ -12,4 +12,5 @@ import UIKit
 public class PTMediaBrowserModel: NSObject {
     public var imageInfo:String = ""
     public var imageURL:Any!
+    public var modelEX:String = ""
 }
