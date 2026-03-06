@@ -55,7 +55,9 @@ public extension UIImageView {
         switch contentData {
         case let findImage as UIImage:
             self.image = findImage
-            loadFinish?([findImage], findImage,0)
+            PTGCDManager.gcdMain(block: {
+                loadFinish?([findImage], findImage,0)
+            })
             return
         case let findUrl as String:
             if findUrl.isURL(),let findURL = URL(string: findUrl) {
@@ -65,11 +67,15 @@ public extension UIImageView {
                             if images.count > 1 {
                                 let imageGif = UIImage.animatedImage(with: images, duration: result.loadTime)
                                 self.image = imageGif
-                                loadFinish?(images,result.firstImage,result.loadTime)
+                                PTGCDManager.gcdMain(block: {
+                                    loadFinish?(images,result.firstImage,result.loadTime)
+                                })
                                 return
                             } else {
                                 self.image = result.firstImage
-                                loadFinish?(images,result.firstImage,result.loadTime)
+                                PTGCDManager.gcdMain(block: {
+                                    loadFinish?(images,result.firstImage,result.loadTime)
+                                })
                                 return
                             }
                         } else {
@@ -86,7 +92,9 @@ public extension UIImageView {
             Task {
                 let result = await PTLoadImageFunction.handleAssetContent(asset: phasset)
                 self.image = result.firstImage
-                loadFinish?(result.allImages, result.firstImage,result.loadTime)
+                PTGCDManager.gcdMain(block: {
+                    loadFinish?(result.allImages, result.firstImage,result.loadTime)
+                })
                 return
             }
         case let findURL as URL:
@@ -96,11 +104,15 @@ public extension UIImageView {
                         if images.count > 1 {
                             let imageGif = UIImage.animatedImage(with: images, duration: result.loadTime)
                             self.image = imageGif
-                            loadFinish?(images,result.firstImage,result.loadTime)
+                            PTGCDManager.gcdMain(block: {
+                                loadFinish?(images,result.firstImage,result.loadTime)
+                            })
                             return
                         } else {
                             self.image = result.firstImage
-                            loadFinish?(images,result.firstImage,result.loadTime)
+                            PTGCDManager.gcdMain(block: {
+                                loadFinish?(images,result.firstImage,result.loadTime)
+                            })
                             return
                         }
                     } else {
@@ -113,7 +125,9 @@ public extension UIImageView {
         case let data as Data:
             if let findDataImage = UIImage(data: data) {
                 self.image = findDataImage
-                loadFinish?([findDataImage], findDataImage,0)
+                PTGCDManager.gcdMain(block: {
+                    loadFinish?([findDataImage], findDataImage,0)
+                })
                 return
             } else {
                 self.image = emptyImage
@@ -121,7 +135,9 @@ public extension UIImageView {
         case let color as UIColor:
             let colorImage = color.createImageWithColor()
             self.image = colorImage
-            loadFinish?([colorImage], colorImage,0)
+            PTGCDManager.gcdMain(block: {
+                loadFinish?([colorImage], colorImage,0)
+            })
             return
         default:
             self.image = emptyImage
