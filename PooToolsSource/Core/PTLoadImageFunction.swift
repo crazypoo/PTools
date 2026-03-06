@@ -151,10 +151,8 @@ public class PTLoadImageFunction: NSObject {
             }
         }
     }
-
-    public static func downloadImage(from url: URL,
-                                     _ progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
-        let options = PTAppBaseConfig.share.gobalWebImageLoadOption()
+    
+    public static func cachedImage(from url:URL,options:KingfisherOptionsInfo = PTAppBaseConfig.share.gobalWebImageLoadOption()) async -> PTLoadImageResult? {
         let cacheKey = url.cacheKey
 
         // 如果有快取就直接取出
@@ -177,13 +175,23 @@ public class PTLoadImageFunction: NSObject {
                         return PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0)
                     }
                 } else {
-                    return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
+                    return nil
                 }
             } catch {
-                return PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0)
+                return nil
             }
+        } else {
+            return nil
         }
+    }
 
+    public static func downloadImage(from url: URL,
+                                     _ progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
+        let options = PTAppBaseConfig.share.gobalWebImageLoadOption()
+        if let result = await cachedImage(from: url, options: options) {
+            return result
+        }
+        
         // 沒有快取，下載圖片
         return await withCheckedContinuation { continuation in
             ImageDownloader.default.downloadImage(
@@ -198,7 +206,7 @@ public class PTLoadImageFunction: NSObject {
                     PTGCDManager.gcdMain {
                         switch result {
                         case .success(let value):
-                            ImageCache.default.store(value.image,original: value.originalData, forKey: cacheKey)
+                            ImageCache.default.store(value.image,original: value.originalData, forKey: url.cacheKey)
                             let data = value.originalData
                             if data.detectImageType() == .GIF {
                                 let frames = imagesAndDurationFromGif(data: data)

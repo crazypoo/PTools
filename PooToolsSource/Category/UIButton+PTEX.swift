@@ -152,18 +152,12 @@ public extension UIButton {
         case let contentData as String:
             Task {
                 setImage(emptyImage, for: controlState)
-                let result = await PTLoadImageFunction.handleStringContent(contentData, iCloudDocumentName) { receivedSize, totalSize in
-                    PTGCDManager.gcdMain {
-                        self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
-                    }
-                }
-                if result.allImages?.count ?? 0 > 1 {
-                    self.setImage(UIImage.animatedImage(with: result.allImages!, duration: result.loadTime), for: controlState)
-                } else if result.allImages?.count ?? 0 == 1 {
-                    self.setImage(result.firstImage, for: controlState)
-                } else {
-                    self.setImage(emptyImage, for: controlState)
-                }
+                loadStringImage(urlString: contentData,iCloudDocumentName: iCloudDocumentName,borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont: valueLabelFont,valueLabelColor: valueLabelColor,uniCount: uniCount,emptyImage: emptyImage,controlState: controlState)
+            }
+        case let url as URL:
+            Task {
+                setImage(emptyImage, for: controlState)
+                loadStringImage(urlString: url.absoluteString,iCloudDocumentName: iCloudDocumentName,borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont: valueLabelFont,valueLabelColor: valueLabelColor,uniCount: uniCount,emptyImage: emptyImage,controlState: controlState)
             }
         case let contentData as Data:
             let dataImage = UIImage(data: contentData)
@@ -177,6 +171,34 @@ public extension UIButton {
             }
         default:
             setImage(emptyImage, for: controlState)
+        }
+    }
+    
+    func loadStringImage(urlString:String,
+                         iCloudDocumentName:String = "",
+                         borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
+                         borderColor:UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
+                         showValueLabel:Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
+                         valueLabelFont:UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
+                         valueLabelColor:UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
+                         uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
+                         emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                         controlState:UIControl.State = .normal) {
+        Task {
+            let result = await PTLoadImageFunction.handleStringContent(urlString, iCloudDocumentName) { receivedSize, totalSize in
+                PTGCDManager.gcdMain {
+                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+                }
+            }
+            if let images = result.allImages,!images.isEmpty {
+                if images.count > 1 {
+                    self.setImage(UIImage.animatedImage(with: images, duration: result.loadTime), for: controlState)
+                } else {
+                    self.setImage(result.firstImage, for: controlState)
+                }
+            } else {
+                self.setImage(emptyImage, for: controlState)
+            }
         }
     }
     

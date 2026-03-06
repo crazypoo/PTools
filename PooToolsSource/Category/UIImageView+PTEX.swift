@@ -55,13 +55,30 @@ public extension UIImageView {
         switch contentData {
         case let findImage as UIImage:
             self.image = findImage
-            PTGCDManager.gcdMain(block: {
-                loadFinish?([findImage], findImage,0)
-            })
+            loadFinish?([findImage], findImage,0)
             return
         case let findUrl as String:
             if findUrl.isURL(),let findURL = URL(string: findUrl) {
-                imageURLCache(findURL: findURL,emptyImage: emptyImage,loadFinish: loadFinish)
+                Task {
+                    if let result = await PTLoadImageFunction.cachedImage(from: findURL) {
+                        if let images = result.allImages,!images.isEmpty {
+                            if images.count > 1 {
+                                let imageGif = UIImage.animatedImage(with: images, duration: result.loadTime)
+                                self.image = imageGif
+                                loadFinish?(images,result.firstImage,result.loadTime)
+                                return
+                            } else {
+                                self.image = result.firstImage
+                                loadFinish?(images,result.firstImage,result.loadTime)
+                                return
+                            }
+                        } else {
+                            self.image = emptyImage
+                        }
+                    } else {
+                        self.image = emptyImage
+                    }
+                }
             } else {
                 self.image = emptyImage
             }
@@ -73,7 +90,39 @@ public extension UIImageView {
                 return
             }
         case let findURL as URL:
-            imageURLCache(findURL: findURL,emptyImage: emptyImage,loadFinish: loadFinish)
+            Task {
+                if let result = await PTLoadImageFunction.cachedImage(from: findURL) {
+                    if let images = result.allImages,!images.isEmpty {
+                        if images.count > 1 {
+                            let imageGif = UIImage.animatedImage(with: images, duration: result.loadTime)
+                            self.image = imageGif
+                            loadFinish?(images,result.firstImage,result.loadTime)
+                            return
+                        } else {
+                            self.image = result.firstImage
+                            loadFinish?(images,result.firstImage,result.loadTime)
+                            return
+                        }
+                    } else {
+                        self.image = emptyImage
+                    }
+                } else {
+                    self.image = emptyImage
+                }
+            }
+        case let data as Data:
+            if let findDataImage = UIImage(data: data) {
+                self.image = findDataImage
+                loadFinish?([findDataImage], findDataImage,0)
+                return
+            } else {
+                self.image = emptyImage
+            }
+        case let color as UIColor:
+            let colorImage = color.createImageWithColor()
+            self.image = colorImage
+            loadFinish?([colorImage], colorImage,0)
+            return
         default:
             self.image = emptyImage
         }
@@ -121,54 +170,7 @@ public extension UIImageView {
             }
         }
     }
-    
-    func imageURLCache(findURL:URL,
-                       emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
-                       loadFinish:(([UIImage]?,UIImage?,TimeInterval) -> Void)? = nil) {
-        let cacheKey = findURL.cacheKey
-        // 如果有快取就直接取出
-        if ImageCache.default.isCached(forKey: cacheKey) {
-            Task {
-                do {
-                    // 优先从磁盘取原始数据
-                    if let data = try? ImageCache.default.diskStorage.value(forKey: cacheKey),
-                       data.detectImageType() == .GIF {
-                        if let frames = PTLoadImageFunction.imagesAndDurationFromGif(data: data) {
-                            let animatedImage = UIImage.animatedImage(with: frames.images, duration: frames.duration)
-                            PTGCDManager.gcdMain {
-                                self.image = animatedImage
-                                loadFinish?(frames.images, animatedImage,frames.duration)
-                                return
-                            }
-                        }
-                    }
-
-                    // fallback: 从 Kingfisher 解码过的 UIImage 读取
-                    let options = PTAppBaseConfig.share.gobalWebImageLoadOption()
-                    let result = try await ImageCache.default.retrieveImage(forKey: cacheKey, options: options)
-                    if let image = result.image {
-                        if let frames = image.images, !frames.isEmpty {
-                            let animatedImage = UIImage.animatedImage(with: frames, duration: TimeInterval(frames.count))
-                            self.image = animatedImage
-                            loadFinish?(frames, animatedImage,TimeInterval(frames.count))
-                            return
-                        } else {
-                            self.image = image
-                            loadFinish?([image], image,0)
-                            return
-                        }
-                    } else {
-                        self.image = emptyImage
-                    }
-                } catch {
-                    self.image = emptyImage
-                }
-            }
-        } else {
-            self.image = emptyImage
-        }
-    }
-    
+        
     //MARK: 視頻剪輯
     var frameForImageInImageViewAspectFit: CGRect {
         if let img = self.image {
