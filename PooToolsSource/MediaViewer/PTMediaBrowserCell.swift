@@ -388,23 +388,23 @@ extension PTMediaBrowserCell {
                 let progress = CGFloat(receivedSize / totalSize)
                 self.loading.progress = progress
             }
-        } loadFinish: { images, image,gifTime in
+        } loadFinish: { value in
             PTGCDManager.gcdMain {
-                self.handleImageLoadFinish(images: images, image: image,time: gifTime)
+                self.handleImageLoadFinish(result:value)
             }
         }
     }
 
-    private func handleImageLoadFinish(images: [UIImage]?, image: UIImage?,time:TimeInterval) {
-        if let images = images, images.count > 1 {
+    private func handleImageLoadFinish(result:PTLoadImageResult) {
+        if let images = result.allImages, images.count > 1 {
             currentCellType = .GIF
-            gifImage = image
+            gifImage = UIImage.animatedImage(with: images, duration: result.loadTime)
             if viewConfig.dynamicBackground {
-                backgroundImageView.image = UIImage.animatedImage(with: images, duration: time)
+                backgroundImageView.image = result.firstImage
             }
-        } else if let images = images, images.count == 1 {
+        } else if let images = result.allImages, images.count == 1 {
             currentCellType = .Normal
-            gifImage = image
+            gifImage = result.firstImage
             if viewConfig.dynamicBackground {
                 backgroundImageView.image = images.first
             }

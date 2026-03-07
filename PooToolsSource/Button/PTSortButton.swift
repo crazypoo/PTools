@@ -30,29 +30,29 @@ public class PTSortButton: UIView {
             case .Tres:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
-                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { _, image,_ in
-                        self.downImage.image = image
+                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
+                        self.downImage.image = value.firstImage
                     })
                     titleLabel.textColor = buttonTitleNormalColor
                     titleLabel.font = buttonTitleFont
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
-                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { _, image,_ in
-                        self.downImage.image = image
+                    downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
+                        self.downImage.image = value.firstImage
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
                     titleLabel.font = buttonTitleSelectedFont
                 case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
-                    downImage.loadImage(contentData: downSelectedImage, loadFinish:  { _, image,_ in
-                        self.downImage.image = image
+                    downImage.loadImage(contentData: downSelectedImage, loadFinish:  { value in
+                        self.downImage.image = value.firstImage
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
                     titleLabel.font = buttonTitleSelectedFont
@@ -60,20 +60,20 @@ public class PTSortButton: UIView {
             case .Dos:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                     titleLabel.textColor = buttonTitleNormalColor
                     titleLabel.font = buttonTitleFont
                 case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
                     titleLabel.font = buttonTitleSelectedFont
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                     titleLabel.textColor = buttonTitleSelectedColor
                     titleLabel.font = buttonTitleSelectedFont
@@ -137,31 +137,31 @@ public class PTSortButton: UIView {
             case .Tres:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 }
             case .Dos:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 }
             }
@@ -174,31 +174,31 @@ public class PTSortButton: UIView {
             case .Tres:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Decrease:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 }
             case .Dos:
                 switch sortType {
                 case .Normal:
-                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Decrease:
-                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 case .Increase:
-                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                        self.upImage.image = image
+                    upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                        self.upImage.image = value.firstImage
                     })
                 }
             }
@@ -209,16 +209,16 @@ public class PTSortButton: UIView {
         didSet {
             switch sortType {
             case .Normal:
-                upImage.loadImage(contentData: upNormalImage, loadFinish:  { _, image,_ in
-                    self.upImage.image = image
+                upImage.loadImage(contentData: upNormalImage, loadFinish:  { value in
+                    self.upImage.image = value.firstImage
                 })
             case .Decrease:
-                upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { _, image,_ in
-                    self.upImage.image = image
+                upImage.loadImage(contentData: dosDecreaseImage, loadFinish:  { value in
+                    self.upImage.image = value.firstImage
                 })
             case .Increase:
-                upImage.loadImage(contentData: upSelectedImage, loadFinish:  { _, image,_ in
-                    self.upImage.image = image
+                upImage.loadImage(contentData: upSelectedImage, loadFinish:  { value in
+                    self.upImage.image = value.firstImage
                 })
             }
         }
@@ -228,16 +228,16 @@ public class PTSortButton: UIView {
         didSet {
             switch sortType {
             case .Normal:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { _, image,_ in
-                    self.downImage.image = image
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
+                    self.downImage.image = value.firstImage
                 })
             case .Increase:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { _, image,_ in
-                    self.downImage.image = image
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
+                    self.downImage.image = value.firstImage
                 })
             case .Decrease:
-                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { _, image,_ in
-                    self.downImage.image = image
+                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { value in
+                    self.downImage.image = value.firstImage
                 })
             }
         }
@@ -247,16 +247,16 @@ public class PTSortButton: UIView {
         didSet {
             switch sortType {
             case .Normal:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { _, image,_ in
-                    self.downImage.image = image
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
+                    self.downImage.image = value.firstImage
                 })
             case .Increase:
-                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { _, image,_ in
-                    self.downImage.image = image
+                downImage.loadImage(contentData: dowmNormalImage, loadFinish:  { value in
+                    self.downImage.image = value.firstImage
                 })
             case .Decrease:
-                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { _, image,_ in
-                    self.downImage.image = image
+                downImage.loadImage(contentData: downSelectedImage, loadFinish:  { value in
+                    self.downImage.image = value.firstImage
                 })
             }
         }

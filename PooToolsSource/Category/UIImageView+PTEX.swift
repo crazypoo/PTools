@@ -40,153 +40,125 @@ public extension UIImageView {
         }
     }
     
-    @objc func loadImage(contentData:Any,
-                         iCloudDocumentName:String = "",
-                         borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
-                         borderColor:UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
-                         showValueLabel:Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
-                         valueLabelFont:UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
-                         valueLabelColor:UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
-                         uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
-                         emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
-                         progressHandle:((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
-                         loadFinish:(([UIImage]?,UIImage?,TimeInterval) -> Void)? = nil) {
-        
-        switch contentData {
-        case let findImage as UIImage:
-            self.image = findImage
-            PTGCDManager.gcdMain(block: {
-                loadFinish?([findImage], findImage,0)
-            })
-            return
-        case let findUrl as String:
-            if findUrl.isURL(),let findURL = URL(string: findUrl) {
-                Task {
-                    if let result = await PTLoadImageFunction.cachedImage(from: findURL) {
-                        if let images = result.allImages,!images.isEmpty {
-                            if images.count > 1 {
-                                let imageGif = UIImage.animatedImage(with: images, duration: result.loadTime)
-                                self.image = imageGif
-                                PTGCDManager.gcdMain(block: {
-                                    loadFinish?(images,result.firstImage,result.loadTime)
-                                })
-                                return
-                            } else {
-                                self.image = result.firstImage
-                                PTGCDManager.gcdMain(block: {
-                                    loadFinish?(images,result.firstImage,result.loadTime)
-                                })
-                                return
-                            }
-                        } else {
-                            self.image = emptyImage
-                        }
-                    } else {
-                        self.image = emptyImage
-                    }
+    func loadImage(contentData: Any,
+                   iCloudDocumentName: String = "",
+                   borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
+                   borderColor: UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
+                   showValueLabel: Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
+                   valueLabelFont: UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
+                   valueLabelColor: UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
+                   uniCount: Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
+                   emptyImage: UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                   progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                   loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+
+        func finish(_ result: PTLoadImageResult) {
+            Task { @MainActor in
+                guard let images = result.allImages, !images.isEmpty else {
+                    self.image = emptyImage
+                    loadFinish?(result)
+                    return
                 }
-            } else {
-                self.image = emptyImage
-            }
-        case let phasset as PHAsset:
-            Task {
-                let result = await PTLoadImageFunction.handleAssetContent(asset: phasset)
-                self.image = result.firstImage
-                PTGCDManager.gcdMain(block: {
-                    loadFinish?(result.allImages, result.firstImage,result.loadTime)
-                })
-                return
-            }
-        case let findURL as URL:
-            Task {
-                if let result = await PTLoadImageFunction.cachedImage(from: findURL) {
-                    if let images = result.allImages,!images.isEmpty {
-                        if images.count > 1 {
-                            let imageGif = UIImage.animatedImage(with: images, duration: result.loadTime)
-                            self.image = imageGif
-                            PTGCDManager.gcdMain(block: {
-                                loadFinish?(images,result.firstImage,result.loadTime)
-                            })
-                            return
-                        } else {
-                            self.image = result.firstImage
-                            PTGCDManager.gcdMain(block: {
-                                loadFinish?(images,result.firstImage,result.loadTime)
-                            })
-                            return
+
+                if images.count > 1 {
+                    DispatchQueue.global().async {
+                        let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
+                        DispatchQueue.main.async {
+                            self.image = gif
+                            loadFinish?(result)
                         }
-                    } else {
-                        self.image = emptyImage
                     }
                 } else {
-                    self.image = emptyImage
+                    self.image = result.firstImage
+                    loadFinish?(result)
                 }
             }
+        }
+
+        func showImage(_ image: UIImage) {
+            Task { @MainActor in
+                self.image = image
+                loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
+            }
+        }
+
+        switch contentData {
+
+        case let image as UIImage:
+            showImage(image)
+            return
+
+        case let color as UIColor:
+            showImage(color.createImageWithColor())
+            return
+
         case let data as Data:
-            if let findDataImage = UIImage(data: data) {
-                self.image = findDataImage
-                PTGCDManager.gcdMain(block: {
-                    loadFinish?([findDataImage], findDataImage,0)
-                })
-                return
+            if let image = UIImage(data: data) {
+                showImage(image)
             } else {
                 self.image = emptyImage
             }
-        case let color as UIColor:
-            let colorImage = color.createImageWithColor()
-            self.image = colorImage
-            PTGCDManager.gcdMain(block: {
-                loadFinish?([colorImage], colorImage,0)
-            })
             return
+
+        case let asset as PHAsset:
+            Task {
+                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
+                finish(result)
+            }
+            return
+
+        case let url as URL:
+            loadFromURL(url)
+            return
+
+        case let string as String:
+            if string.isURL(), let url = URL(string: string) {
+                loadFromURL(url)
+            } else {
+                self.image = emptyImage
+            }
+            return
+
         default:
             self.image = emptyImage
         }
 
-        Task {
-            let result = await PTLoadImageFunction.loadImage(contentData: contentData,
-                                                             iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
-                PTGCDManager.gcdMain {
-                    if let handle = progressHandle {
-                        handle(receivedSize, totalSize)
-                    } else {
-                        self.layerProgress(value: CGFloat(receivedSize) / CGFloat(totalSize),
-                                           borderWidth: borderWidth,
-                                           borderColor: borderColor,
-                                           showValueLabel: showValueLabel,
-                                           valueLabelFont: valueLabelFont,
-                                           valueLabelColor: valueLabelColor,
-                                           uniCount: uniCount)
+        func loadFromURL(_ url: URL) {
+
+            Task {
+
+                if let cache = await PTLoadImageFunction.cachedImage(from: url) {
+                    finish(cache)
+                    return
+                }
+
+                let result = await PTLoadImageFunction.loadImage(
+                    contentData: url,
+                    iCloudDocumentName: iCloudDocumentName
+                ) { received, total in
+
+                    Task { @MainActor in
+                        if let handle = progressHandle {
+                            handle(received, total)
+                        } else {
+                            self.layerProgress(
+                                value: CGFloat(received) / CGFloat(total),
+                                borderWidth: borderWidth,
+                                borderColor: borderColor,
+                                showValueLabel: showValueLabel,
+                                valueLabelFont: valueLabelFont,
+                                valueLabelColor: valueLabelColor,
+                                uniCount: uniCount
+                            )
+                        }
                     }
                 }
-            }
 
-            guard let images = result.allImages, !images.isEmpty else {
-                PTGCDManager.gcdMain {
-                    self.image = emptyImage
-                    loadFinish?(result.allImages, result.firstImage,result.loadTime)
-                }
-                return
-            }
-
-            if images.count > 1 {
-                // 多帧：异步创建 GIF
-                PTGCDManager.gcdGobal(block: {
-                    let animatedImage = UIImage.animatedImage(with: images, duration: result.loadTime)
-                    PTGCDManager.gcdMain {
-                        self.image = animatedImage
-                        loadFinish?(images, animatedImage,result.loadTime)
-                    }
-                })
-            } else {
-                PTGCDManager.gcdMain {
-                    self.image = result.firstImage
-                    loadFinish?(images, result.firstImage,result.loadTime)
-                }
+                finish(result)
             }
         }
     }
-        
+    
     //MARK: 視頻剪輯
     var frameForImageInImageViewAspectFit: CGRect {
         if let img = self.image {

@@ -25,7 +25,7 @@ open class PTImageCell: PTBaseNormalCell {
                 effectView.isHidden = true
             }
             
-            imageView.loadImage(contentData: imageData as Any, loadFinish:  { _, _,_ in
+            imageView.loadImage(contentData: imageData as Any, loadFinish:  { _ in
                 if self.showAnimator {
                     PTGCDManager.gcdAfter(time: 0.1, block: {
                         self.removeAnimator()
