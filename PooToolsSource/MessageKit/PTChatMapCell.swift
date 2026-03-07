@@ -66,24 +66,32 @@ public class PTChatMapCell: PTChatBaseCell {
     private func configureMapContent(cellModel: PTChatListModel) {
         guard let _ = cellModel.msgContent else { return }
 
-        var dic:NSDictionary?
-        switch cellModel.msgContent {
-        case let dicContent as NSDictionary:
-            dic = dicContent
-        case let dicString as String:
-            dic = dicString.jsonStringToDic()
-        default:
-            break
+        func setDicTolocation(dic:NSDictionary) {
+            PTGCDManager.gcdMain {
+                let lat = (dic["lat"] as? String) ?? "0"
+                let lng = (dic["lng"] as? String) ?? "0"
+            
+                let location2D = CLLocationCoordinate2D(latitude: lat.double() ?? 0, longitude: lng.double() ?? 0)
+                self.setBaseMapView(location2D: location2D)
+            }
         }
         
-        if dic != nil {
-            let lat = (dic!["lat"] as? String) ?? "0"
-            let lng = (dic!["lng"] as? String) ?? "0"
-        
-            let location2D = CLLocationCoordinate2D(latitude: lat.double() ?? 0, longitude: lng.double() ?? 0)
-            setBaseMapView(location2D: location2D)
+        PTGCDManager.gcdMain {
+            switch cellModel.msgContent {
+            case let dicContent as NSDictionary:
+                setDicTolocation(dic: dicContent)
+            case let dicString as String:
+                if let location = dicString.asCoordinates {
+                    self.setBaseMapView(location2D: location)
+                } else if let dic =  dicString.jsonStringToDic() {
+                    setDicTolocation(dic: dic)
+                } else {
+                    self.setBaseMapView(location2D: .init(latitude: 0, longitude: 0))
+                }
+            default:
+                self.setBaseMapView(location2D: .init(latitude: 0, longitude: 0))
+            }
         }
-
     }
     
     func setBaseMapView(location2D:CLLocationCoordinate2D) {

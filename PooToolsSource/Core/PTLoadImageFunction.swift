@@ -66,7 +66,8 @@ public class PTLoadImageFunction: NSObject {
             options.isSynchronous = false
             options.deliveryMode = .highQualityFormat
             options.resizeMode = .exact
-
+            options.isNetworkAccessAllowed = true
+            
             manager.requestImage(for: asset, targetSize: CGSize(width: 1024, height: 1024),
                                  contentMode: .aspectFill, options: options) { image, _ in
                 DispatchQueue.main.async {

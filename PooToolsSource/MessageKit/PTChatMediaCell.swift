@@ -59,6 +59,13 @@ public class PTChatMediaCell: PTChatBaseCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        if isImage {
+            self.contentImageView.cancelImageLoad()
+        }
+    }
+    
     // 提前设置约束，避免每次都重新设置
     private func setupSubviews() {
         dataContent.addSubviews([contentImageView, mediaPlayImageView])

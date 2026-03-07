@@ -10,6 +10,10 @@ import UIKit
 import Kingfisher
 import AttributedString
 import Photos
+import ObjectiveC
+
+private var ptLoadTaskKey: UInt8 = 0
+private var ptLoadUUIDKey: UInt8 = 0
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
 
@@ -20,6 +24,18 @@ public extension UIButton {
         static var CountdownTimerKey = 997
     }
     
+    // MARK: - Runtime
+
+    private var ptLoadTask: Task<Void, Never>? {
+        get { objc_getAssociatedObject(self, &ptLoadTaskKey) as? Task<Void, Never> }
+        set { objc_setAssociatedObject(self, &ptLoadTaskKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    private var ptLoadUUID: UUID? {
+        get { objc_getAssociatedObject(self, &ptLoadUUIDKey) as? UUID }
+        set { objc_setAssociatedObject(self, &ptLoadUUIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
     private var countdownTimer: DispatchSourceTimer? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.CountdownTimerKey) as? DispatchSourceTimer
@@ -136,6 +152,12 @@ public extension UIButton {
         }
     }
     
+    // 手动取消
+    func cancelImageLoad() {
+        ptLoadTask?.cancel()
+        ptLoadTask = nil
+    }
+
     func loadImage(contentData:Any,
                    iCloudDocumentName:String = "",
                    borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
@@ -146,62 +168,168 @@ public extension UIButton {
                    uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
                    emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    controlState:UIControl.State = .normal) {
-        switch contentData {
-        case let contentData as UIImage:
-            setImage(contentData, for: controlState)
-        case let contentData as String:
-            Task {
-                setImage(emptyImage, for: controlState)
-                loadStringImage(urlString: contentData,iCloudDocumentName: iCloudDocumentName,borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont: valueLabelFont,valueLabelColor: valueLabelColor,uniCount: uniCount,emptyImage: emptyImage,controlState: controlState)
-            }
-        case let url as URL:
-            Task {
-                setImage(emptyImage, for: controlState)
-                loadStringImage(urlString: url.absoluteString,iCloudDocumentName: iCloudDocumentName,borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont: valueLabelFont,valueLabelColor: valueLabelColor,uniCount: uniCount,emptyImage: emptyImage,controlState: controlState)
-            }
-        case let contentData as Data:
-            let dataImage = UIImage(data: contentData)
-            setImage(dataImage, for: controlState)
-        case let color as UIColor:
-            setImage(color.createImageWithColor(), for: controlState)
-        case let phasset as PHAsset:
-            Task {
-                let result = await PTLoadImageFunction.handleAssetContent(asset: phasset)
-                setImage(result.firstImage, for: controlState)
-            }
-        default:
-            setImage(emptyImage, for: controlState)
+        // 取消旧任务
+        cancelImageLoad()
+
+        let loadID = UUID()
+        ptLoadUUID = loadID
+
+        let videoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
+        
+        func isValid() -> Bool {
+            return self.ptLoadUUID == loadID
         }
-    }
-    
-    func loadStringImage(urlString:String,
-                         iCloudDocumentName:String = "",
-                         borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
-                         borderColor:UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
-                         showValueLabel:Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
-                         valueLabelFont:UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
-                         valueLabelColor:UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
-                         uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
-                         emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
-                         controlState:UIControl.State = .normal) {
-        Task {
-            let result = await PTLoadImageFunction.handleStringContent(urlString, iCloudDocumentName) { receivedSize, totalSize in
-                PTGCDManager.gcdMain {
-                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
-                }
-            }
-            if let images = result.allImages,!images.isEmpty {
-                if images.count > 1 {
-                    self.setImage(UIImage.animatedImage(with: images, duration: result.loadTime), for: controlState)
-                } else {
-                    self.setImage(result.firstImage, for: controlState)
-                }
-            } else {
+
+        func setEmpty() {
+            guard isValid() else { return }
+            Task { @MainActor in
                 self.setImage(emptyImage, for: controlState)
             }
         }
+        
+        func showImage(_ image: UIImage) {
+            guard isValid() else { return }
+            Task { @MainActor in
+                guard isValid() else { return }
+                self.setImage(image, for: controlState)
+            }
+        }
+        
+        func finish(_ result: PTLoadImageResult) {
+            guard isValid() else { return }
+            Task { @MainActor in
+                guard isValid() else { return }
+
+                guard let images = result.allImages, !images.isEmpty else {
+                    setEmpty()
+                    return
+                }
+                
+                if images.count > 1 {
+                    let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
+                    guard isValid() else { return }
+                    self.setImage(gif, for: controlState)
+                } else {
+                    self.setImage(result.firstImage, for: controlState)
+                }
+            }
+        }
+        
+        func loadVideo(url: URL) {
+            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
+                guard isValid() else { return }
+                if let image {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+            }
+        }
+        
+        func loadFromURL(_ url: URL) {
+            
+            let ext = url.pathExtension.lowercased()
+            
+            // 视频
+            if videoExts.contains(ext) {
+                loadVideo(url: url)
+                return
+            }
+            
+            ptLoadTask = Task {
+                if Task.isCancelled { return }
+
+                if let cache = await PTLoadImageFunction.cachedImage(from: url) {
+                    if Task.isCancelled { return }
+                    finish(cache)
+                    return
+                }
+                
+                let result = await PTLoadImageFunction.loadImage(
+                    contentData: url,
+                    iCloudDocumentName: iCloudDocumentName
+                ) { received, total in
+                    guard isValid() else { return }
+                    Task { @MainActor in
+                        guard isValid() else { return }
+                        self.layerProgress(
+                            value: CGFloat(received) / CGFloat(total),
+                            borderWidth: borderWidth,
+                            borderColor: borderColor,
+                            showValueLabel: showValueLabel,
+                            valueLabelFont: valueLabelFont,
+                            valueLabelColor: valueLabelColor,
+                            uniCount: uniCount
+                        )
+                    }
+                }
+                if Task.isCancelled { return }
+                finish(result)
+            }
+        }
+        
+        switch contentData {
+            
+        case let image as UIImage:
+            showImage(image)
+            
+        case let color as UIColor:
+            showImage(color.createImageWithColor())
+            
+        case let data as Data:
+            if let image = UIImage(data: data) {
+                showImage(image)
+            } else {
+                setEmpty()
+            }
+            
+        case let asset as PHAsset:
+            ptLoadTask =  Task {
+                if Task.isCancelled { return }
+                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
+                if Task.isCancelled { return }
+                finish(result)
+            }
+            
+        case let avasset as AVAsset:
+            avasset.getVideoFirstImage { image in
+                guard isValid() else { return }
+                if let image {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+            }
+            
+        case let url as URL:
+            loadFromURL(url)
+            
+        case let string as String:
+            
+            // 本地文件
+            if FileManager.default.fileExists(atPath: string) {
+                if let image = UIImage(contentsOfFile: string) {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+                return
+            }
+            
+            // URL
+            if string.isURL(), let url = URL(string: string) {
+                loadFromURL(url)
+            } else if let image = UIImage(named: string) {
+                showImage(image)
+            } else {
+                setEmpty()
+            }
+            
+        default:
+            setEmpty()
+        }
     }
-    
+        
     /// 高度封装的配置方法，支持图片尺寸、subtitle、全方向布局
     func applyConfiguration(image: UIImage? = nil,
                             highlightedImage: UIImage? = nil,

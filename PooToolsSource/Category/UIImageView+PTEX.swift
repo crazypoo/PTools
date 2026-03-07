@@ -12,6 +12,10 @@ import UIKit
 import Kingfisher
 import ImageIO
 import Photos
+import ObjectiveC
+
+private var ptLoadTaskKey: UInt8 = 0
+private var ptLoadUUIDKey: UInt8 = 0
 
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
@@ -40,6 +44,24 @@ public extension UIImageView {
         }
     }
     
+    // MARK: - Runtime
+
+    private var ptLoadTask: Task<Void, Never>? {
+        get { objc_getAssociatedObject(self, &ptLoadTaskKey) as? Task<Void, Never> }
+        set { objc_setAssociatedObject(self, &ptLoadTaskKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    private var ptLoadUUID: UUID? {
+        get { objc_getAssociatedObject(self, &ptLoadUUIDKey) as? UUID }
+        set { objc_setAssociatedObject(self, &ptLoadUUIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    // 手动取消
+    func cancelImageLoad() {
+        ptLoadTask?.cancel()
+        ptLoadTask = nil
+    }
+
     func loadImage(contentData: Any,
                    iCloudDocumentName: String = "",
                    borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
@@ -52,10 +74,31 @@ public extension UIImageView {
                    progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
 
-        func finish(_ result: PTLoadImageResult) {
+        // 取消旧任务
+        cancelImageLoad()
+
+        let loadID = UUID()
+        ptLoadUUID = loadID
+
+        let videoExts: Set<String> = ["mp4","mov","m4v","avi"]
+
+        func isValid() -> Bool {
+            return self.ptLoadUUID == loadID
+        }
+
+        func setEmpty() {
+            guard isValid() else { return }
             Task { @MainActor in
+                self.image = emptyImage
+            }
+        }
+
+        func finish(_ result: PTLoadImageResult) {
+            guard isValid() else { return }
+            Task { @MainActor in
+                guard isValid() else { return }
                 guard let images = result.allImages, !images.isEmpty else {
-                    self.image = emptyImage
+                    setEmpty()
                     loadFinish?(result)
                     return
                 }
@@ -64,6 +107,7 @@ public extension UIImageView {
                     DispatchQueue.global().async {
                         let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
                         DispatchQueue.main.async {
+                            guard isValid() else { return }
                             self.image = gif
                             loadFinish?(result)
                         }
@@ -76,58 +120,39 @@ public extension UIImageView {
         }
 
         func showImage(_ image: UIImage) {
+            guard isValid() else { return }
             Task { @MainActor in
                 self.image = image
                 loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
             }
         }
 
-        switch contentData {
-
-        case let image as UIImage:
-            showImage(image)
-            return
-
-        case let color as UIColor:
-            showImage(color.createImageWithColor())
-            return
-
-        case let data as Data:
-            if let image = UIImage(data: data) {
-                showImage(image)
-            } else {
-                self.image = emptyImage
+        func loadVideo(url: URL) {
+            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
+                guard isValid() else { return }
+                if let image {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
             }
-            return
-
-        case let asset as PHAsset:
-            Task {
-                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
-                finish(result)
-            }
-            return
-
-        case let url as URL:
-            loadFromURL(url)
-            return
-
-        case let string as String:
-            if string.isURL(), let url = URL(string: string) {
-                loadFromURL(url)
-            } else {
-                self.image = emptyImage
-            }
-            return
-
-        default:
-            self.image = emptyImage
         }
 
         func loadFromURL(_ url: URL) {
 
-            Task {
+            let ext = url.pathExtension.lowercased()
+
+            // 视频
+            if videoExts.contains(ext) {
+                loadVideo(url: url)
+                return
+            }
+
+            ptLoadTask =  Task {
+                if Task.isCancelled { return }
 
                 if let cache = await PTLoadImageFunction.cachedImage(from: url) {
+                    if Task.isCancelled { return }
                     finish(cache)
                     return
                 }
@@ -136,10 +161,11 @@ public extension UIImageView {
                     contentData: url,
                     iCloudDocumentName: iCloudDocumentName
                 ) { received, total in
+                    guard isValid() else { return }
 
                     Task { @MainActor in
-                        if let handle = progressHandle {
-                            handle(received, total)
+                        if let progressHandle {
+                            progressHandle(received, total)
                         } else {
                             self.layerProgress(
                                 value: CGFloat(received) / CGFloat(total),
@@ -153,9 +179,70 @@ public extension UIImageView {
                         }
                     }
                 }
-
+                if Task.isCancelled { return }
                 finish(result)
             }
+        }
+
+        switch contentData {
+
+        case let image as UIImage:
+            showImage(image)
+
+        case let color as UIColor:
+            showImage(color.createImageWithColor())
+
+        case let data as Data:
+            if let image = UIImage(data: data) {
+                showImage(image)
+            } else {
+                setEmpty()
+            }
+
+        case let asset as PHAsset:
+            ptLoadTask =  Task {
+                if Task.isCancelled { return }
+                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
+                if Task.isCancelled { return }
+                finish(result)
+            }
+
+        case let avasset as AVAsset:
+            avasset.getVideoFirstImage { image in
+                guard isValid() else { return }
+                if let image {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+            }
+
+        case let url as URL:
+            loadFromURL(url)
+
+        case let string as String:
+
+            // 本地路径
+            if FileManager.default.fileExists(atPath: string) {
+                if let image = UIImage(contentsOfFile: string) {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+                return
+            }
+
+            // URL
+            if string.isURL(), let url = URL(string: string) {
+                loadFromURL(url)
+            } else if let image = UIImage(named: string) {
+                showImage(image)
+            } else {
+                setEmpty()
+            }
+
+        default:
+            setEmpty()
         }
     }
     

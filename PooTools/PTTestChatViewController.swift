@@ -141,7 +141,7 @@ class PTTestChatViewController: PTBaseViewController {
         meSendMapModel.messageTimeStamp = 1710947457
         meSendMapModel.messageType = .Map
         meSendMapModel.creatorId = "46709394"
-        meSendMapModel.msgContent = "{\"lng\":\"112.77437690645458\",\"lat\":\"22.67277058992048\"}"
+        meSendMapModel.msgContent = "22.67277058992048,112.77437690645458"
         meSendMapModel.senderCover = "https://tinhtinhimg.zxkjcn.cn/171143117700603E0FFC28AFB45B1BD21E0BA664E7C4C_image_0.png"
         meSendMapModel.senderName = "自己"
         meSendMapModel.messageStatus = .Error
