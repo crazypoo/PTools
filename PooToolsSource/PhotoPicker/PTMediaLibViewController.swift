@@ -187,8 +187,10 @@ public class PTMediaLibView:UIView {
                         }
                         vc.mediaLibDismissCallback = {
                             self.currentVc.sheetViewController?.setSizes([.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())],animated: true)
-                            PTGCDManager.gcdAfter(time: 0.35) {
-                                self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                            if !PTMediaLibUIConfig.share.shortIsTop {
+                                PTGCDManager.gcdAfter(time: 0.35) {
+                                    self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                                }
                             }
                         }
                         self.currentVc.navigationController?.pushViewController(vc) {
@@ -213,12 +215,10 @@ public class PTMediaLibView:UIView {
                                 } else {
                                     picker.delegate = self
                                 }
+                            } else if let mediaLib = currentVC as? PTMediaLibViewController  {
+                                picker.delegate = mediaLib.sheetViewController?.contentViewController
                             } else {
-                                if let mediaLib = currentVC as? PTMediaLibViewController {
-                                    picker.delegate = mediaLib.sheetViewController?.contentViewController
-                                } else {
-                                    picker.delegate = self
-                                }
+                                picker.delegate = self
                             }
                             picker.allowsEditing = false
                             picker.videoQuality = .typeHigh
@@ -285,9 +285,9 @@ public class PTMediaLibView:UIView {
         return true
     }
     
-    func loadMedia(addImage:Bool? = false,loadFinish:PTCollectionCallback? = nil) {
+    func loadMedia(addImage:Bool = false,loadFinish:PTCollectionCallback? = nil) {
         PTGCDManager.gcdMain {
-            if !addImage! {
+            if !addImage {
                 self.totalModels.removeAll()
                 self.totalModels.append(contentsOf: self.currentAlbum!.models)
             }
