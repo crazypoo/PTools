@@ -182,46 +182,71 @@ public class PTMediaLibConfig:NSObject {
         }
     }
     public var cropVideoAfterSelectThumbnail = true
-    
-    //MARK: NAV
-    public var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
-    public var submitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
-    public var arrowDownImage:UIImage = "🔽".emojiToImage(emojiFont: .appfont(size: 10))
-    public var ablumListBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
-    public var albumSelectedImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 15))
-    public var cameraImage:UIImage = "📸".emojiToImage(emojiFont: .appfont(size: 24))
-    public var albumListNavName:String = "PT Photo picker album list title".localized()
-    public var editImage:UIImage = UIImage(.pencil)
-    public var emptyTitle:String = "PT Alert Opps".localized()
-    public var emptySubDesc:String = "PT Photo picker empty media".localized()
-    public var alertTitle:String = "PT Alert Opps".localized()
-    public var alertDoingTitle:String = "PT Alert Doning".localized()
-    public var mediaCoutError:String = "PT Photo picker select cout more than".localized()
-    public var videoTimeMoreError:String = "PT Photo picker video time more than".localized()
-    public var videoTimeLessError:String = "PT Photo picker video time less than".localized()
-    public var videoSizeMoreError:String = "PT Photo picker video size more than".localized()
-    public var videoSizeLessError:String = "PT Photo picker video size less than".localized()
-    public var downloadTimeOutError:String = "PT Photo picker time out".localized()
-    public var cameraError:String = "PT Photo picker bad".localized()
-    public var takePhotoError:String = "PT Photo picker can not take photo".localized()
-    public var saveImageError:String = "PT Photo picker save image error".localized()
-    public var saveVideoError:String = "PT Photo picker save video error".localized()
-    public var mediaCount:String = "PT Photo picker selected count".localized()
-    public var mediaCountMax:String = "PT Photo picker video select more than max".localized()
-    public var mediaCountMin:String = "PT Photo picker video select less than min".localized()
-    public var selectLibTitleFont:UIFont = .appfont(size: 15)
-    public var selectLibSubTitleFont:UIFont = .appfont(size: 12)
-    public var albumCellTitleFont:UIFont = .appfont(size: 18,bold: true)
-    public var albumCellDescFont:UIFont = .appfont(size: 14)
 }
 
 public class PTMediaLibUIConfig:NSObject {
     public static let share = PTMediaLibUIConfig()
     
-    public var sortAscending = true
+    public var sortAscending = false
     public var style: PTPhotoBrowserStyle = .embedAlbumList
     public var animateSelectBtnWhenSelectInThumbVC = false
     public var showInvalidMask = true
+    public var shortIsTop:Bool = true
+    
+    /*
+     Lib
+     */
+    public var alertTitle:String = "PT Alert Opps".localized()
+    public var alertDoingTitle:String = "PT Alert Doning".localized()
+    public var takePhotoError:String = "PT Photo picker can not take photo".localized()
+    public var cameraError:String = "PT Photo picker bad".localized()
+    public var saveImageError:String = "PT Photo picker save image error".localized()
+    public var saveVideoError:String = "PT Photo picker save video error".localized()
+    public var downloadTimeOutError:String = "PT Photo picker time out".localized()
+    public var mediaCoutError:String = "PT Photo picker select cout more than".localized()
+    public var videoTimeMoreError:String = "PT Photo picker video time more than".localized()
+    public var videoTimeLessError:String = "PT Photo picker video time less than".localized()
+    public var videoSizeMoreError:String = "PT Photo picker video size more than".localized()
+    public var videoSizeLessError:String = "PT Photo picker video size less than".localized()
+    public var mediaCount:String = "PT Photo picker selected count".localized()
+    public var mediaCountMax:String = "PT Photo picker video select more than max".localized()
+    public var mediaCountMin:String = "PT Photo picker video select less than min".localized()
+    public var backImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var submitImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 20))
+    public var arrowDownImage:UIImage = "🔽".emojiToImage(emojiFont: .appfont(size: 10))
+    public var albumListNavName:String = "PT Photo picker album list title".localized()
+    public var selectLibTitleFont:UIFont = .appfont(size: 15)
+    public var selectLibSubTitleFont:UIFont = .appfont(size: 12)
+
+    /*
+     ImageCell
+     */
+    public var cellVideoTimeFont:UIFont = .appfont(size: 14)
+    public var cellVideoImage:UIImage = UIImage(.video)
+    public var cellLivePhotoImage:UIImage = UIImage(.livephoto)
+    public var cellEditImage:UIImage = UIImage(.pencil)
+    public var cellSelectedIndexFont:UIFont = .appfont(size: 12)
+    /*
+     AddImageCell
+     */
+    public var cameraImage:UIImage = "📸".emojiToImage(emojiFont: .appfont(size: 24))
+
+    /*
+     AlbumList
+     */
+    public var ablumListBackImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+    public var albumEmptyImage:UIImage = UIImage(.exclamationmark.triangle)
+    public var albumEmptyTitleFont:UIFont = .appfont(size: 20,bold: true)
+    public var albumEmptyDescFont:UIFont = .appfont(size: 18)
+    public var albumEmptyTitle:String = "PT Alert Opps".localized()
+    public var albumEmptySubDesc:String = "PT Photo picker empty media".localized()
+
+    /*
+     AlbumCell
+     */
+    public var albumSelectedImage:UIImage = "✅".emojiToImage(emojiFont: .appfont(size: 15))
+    public var albumCellTitleFont:UIFont = .appfont(size: 18,bold: true)
+    public var albumCellDescFont:UIFont = .appfont(size: 14)
 }
 
 

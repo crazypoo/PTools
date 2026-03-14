@@ -54,7 +54,7 @@ public class PTMediaLibView:UIView {
             }
         }
     }
-    
+        
     lazy var collectionView : PTCollectionView = {
         
         let configs = PTCollectionViewConfig()
@@ -69,110 +69,112 @@ public class PTMediaLibView:UIView {
         let view = PTCollectionView(viewConfig: configs)
         view.registerClassCells(classs: [PTMediaLibCell.ID:PTMediaLibCell.self,PTCameraCell.ID:PTCameraCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
-
             if let itemRow = sectionModel.rows?[indexPath.row] {
-                if itemRow.ID == PTMediaLibCell.ID,let cellModel = itemRow.dataModel as? PTMediaModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaLibCell {
-                    cell.selectedBlock = { [weak self] isSelected in
-                        guard let `self` = self else { return }
-                        self.cellSelectedFunction(cellModel: cellModel, cell: cell, isSelected: isSelected)
-                    }
-                    
-                    cell.editButton.addActionHandlers { sender in
-                        switch cellModel.type {
-                        case .video:
-                            switch cellModel.asset.exportSession?.status {
-                            case .exporting:
-                                cellModel.asset.calcelExport()
-                                sender.clearProgressLayer()
-                            default:
-#if POOTOOLS_VIDEOEDITOR
-                                cellModel.asset.convertPHAssetToAVAsset { progress in
-                                    sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
-                                } completion: { avAsset in
-                                    if avAsset != nil {
-                                        PTGCDManager.gcdMain {
-                                            let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
-                                            controller.onlyOutput = true
-                                            controller.onEditCompleteHandler = { url in
-                                                let alPlayerItem = AVPlayerItem(url: url)
-                                                for (index, selM) in self.selectedModel.enumerated() {
-                                                    if cellModel == selM {
-                                                        self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
-                                                            if finish {
-                                                                PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
-                                                                    let m = PTMediaModel(asset: asset!)
-                                                                    m.isSelected = true
-                                                                    self.selectedModel[index] = m
-                                                                    config.didSelectAsset?(asset!)
+                let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
+                switch baseCell {
+                case let cell as PTMediaLibCell:
+                    if let cellModel = itemRow.dataModel as? PTMediaModel {
+                        cell.selectedBlock = { [weak self] isSelected in
+                            guard let `self` = self else { return }
+                            self.cellSelectedFunction(cellModel: cellModel, cell: cell, isSelected: isSelected)
+                        }
+                        
+                        cell.editButton.addActionHandlers { sender in
+                            switch cellModel.type {
+                            case .video:
+                                switch cellModel.asset.exportSession?.status {
+                                case .exporting:
+                                    cellModel.asset.calcelExport()
+                                    sender.clearProgressLayer()
+                                default:
+    #if POOTOOLS_VIDEOEDITOR
+                                    cellModel.asset.convertPHAssetToAVAsset { progress in
+                                        sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
+                                    } completion: { avAsset in
+                                        if avAsset != nil {
+                                            PTGCDManager.gcdMain {
+                                                let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
+                                                controller.onlyOutput = true
+                                                controller.onEditCompleteHandler = { url in
+                                                    let alPlayerItem = AVPlayerItem(url: url)
+                                                    for (index, selM) in self.selectedModel.enumerated() {
+                                                        if cellModel == selM {
+                                                            self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
+                                                                if finish {
+                                                                    PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
+                                                                        let m = PTMediaModel(asset: asset!)
+                                                                        m.isSelected = true
+                                                                        self.selectedModel[index] = m
+                                                                        PTMediaLibConfig.share.didSelectAsset?(asset!)
+                                                                    }
                                                                 }
                                                             }
+                                                            break
                                                         }
+                                                    }
+                                                }
+                                                let nav = PTBaseNavControl(rootViewController: controller)
+                                                UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
+                                            }
+                                        } else {
+                                            PTGCDManager.gcdMain {
+                                                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                            }
+                                        }
+                                    }
+    #endif
+                                }
+                            default:
+    #if POOTOOLS_IMAGEEDITOR
+                                PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
+                                    if !isDegraded {
+                                        if let image = image {
+                                            let vc = PTEditImageViewController(readyEditImage: image)
+                                            vc.editFinishBlock = { ei ,editImageModel in
+                                                for (index, selM) in self.selectedModel.enumerated() {
+                                                    if cellModel == selM {
+                                                        cellModel.isSelected = true
+                                                        cellModel.editImage = ei
+                                                        cellModel.editImageModel = editImageModel
+                                                        self.selectedModel[index] = cellModel
+                                                        PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
                                                         break
                                                     }
                                                 }
                                             }
-                                            let nav = PTBaseNavControl(rootViewController: controller)
-                                            UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
-                                        }
-                                    } else {
-                                        PTGCDManager.gcdMain {
-                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                            let nav = PTBaseNavControl(rootViewController: vc)
+                                            UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
                                         }
                                     }
                                 }
-#endif
+    #endif
                             }
-                        default:
-#if POOTOOLS_IMAGEEDITOR
-                            PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
-                                if !isDegraded {
-                                    if let image = image {
-                                        let vc = PTEditImageViewController(readyEditImage: image)
-                                        vc.editFinishBlock = { ei ,editImageModel in
-                                            for (index, selM) in self.selectedModel.enumerated() {
-                                                if cellModel == selM {
-                                                    cellModel.isSelected = true
-                                                    cellModel.editImage = ei
-                                                    cellModel.editImageModel = editImageModel
-                                                    self.selectedModel[index] = cellModel
-                                                    PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
-                                                    break
-                                                }
-                                            }
-                                        }
-                                        let nav = PTBaseNavControl(rootViewController: vc)
-                                        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],dismissPanGes: false)
-                                    }
-                                }
-                            }
-#endif
                         }
+                        
+                        if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
+                            self.setCellIndex(cell, index: index + 1)
+                            cellModel.isSelected = true
+                        } else {
+                            cellModel.isSelected = false
+                            cell.selectButton.normalTitle = ""
+                        }
+                        self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
+                        cell.cellModel = cellModel
                     }
-                    
-                    if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
-                        self.setCellIndex(cell, index: index + 1)
-                        cellModel.isSelected = true
-                    } else {
-                        cellModel.isSelected = false
-                        cell.selectButton.normalTitle = ""
-                    }
-                    self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
-                    cell.cellModel = cellModel
                     return cell
-                } else {
-                    if let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTCameraCell {
-                        return cell
-                    }
+                case let cell as PTCameraCell:
+                    return cell
+                default:
+                    return nil
                 }
             }
             return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row] {
-                if itemRow.ID == PTCameraCell.ID {
-                    let config = PTMediaLibConfig.share
-                    if config.useCustomCamera {
+                switch itemRow.ID {
+                case PTCameraCell.ID:
+                    if PTMediaLibConfig.share.useCustomCamera {
 #if POOTOOLS_FILTERCAMERA
                         PTCameraFilterConfig.share.allowTakePhoto = PTMediaLibConfig.share.allowSelectImage
                         PTCameraFilterConfig.share.allowRecordVideo = PTMediaLibConfig.share.allowSelectVideo
@@ -194,13 +196,13 @@ public class PTMediaLibView:UIView {
 #endif
                     } else {
                         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            PTAlertTipControl.present(title:config.alertTitle,subtitle: config.cameraError, icon:.Error,style: .Normal)
+                            PTAlertTipControl.present(title:PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.cameraError, icon:.Error,style: .Normal)
                         } else if PTMediaLibView.hasCameraAuthority() {
                             let picker = UIImagePickerController()
                             
                             let currentVC = PTUtils.getCurrentVC()
-                            if currentVC is PTSideMenuControl {
-                                let currentVCContent = (currentVC as! PTSideMenuControl).contentViewController
+                            if let sideMenu = currentVC as? PTSideMenuControl {
+                                let currentVCContent = sideMenu.contentViewController
                                 if let presentedVC = currentVCContent?.presentedViewController {
                                     if let pSheet = presentedVC as? PTSheetViewController,let nav = pSheet.childViewController as? PTBaseNavControl,let navRoot = nav.viewControllers.last as? PTMediaLibViewController {
                                         picker.delegate = pSheet.contentViewController
@@ -221,29 +223,31 @@ public class PTMediaLibView:UIView {
                             picker.videoQuality = .typeHigh
                             picker.sourceType = .camera
                             picker.cameraDevice = UIImagePickerController.CameraDevice.rear
-                            if config.cameraConfiguration.showFlashSwitch {
+                            if PTMediaLibConfig.share.cameraConfiguration.showFlashSwitch {
                                 picker.cameraFlashMode = .auto
                             } else {
                                 picker.cameraFlashMode = .off
                             }
                             var mediaTypes:[String] = []
-                            if config.cameraConfiguration.allowTakePhoto {
+                            if PTMediaLibConfig.share.cameraConfiguration.allowTakePhoto {
                                 mediaTypes.append("public.image")
                             }
-                            if config.cameraConfiguration.allowRecordVideo {
+                            if PTMediaLibConfig.share.cameraConfiguration.allowRecordVideo {
                                 mediaTypes.append("public.movie")
                             }
                             picker.mediaTypes = mediaTypes
                             picker.videoMaximumDuration = TimeInterval(PTMediaLibConfig.share.maxRecordDuration)
                             UIViewController.currentPresentToSheet(vc: picker,sizes: [.fullscreen],dismissPanGes: false)
                         } else {
-                            PTAlertTipControl.present(title:config.alertTitle,subtitle: config.takePhotoError, icon:.Error,style: .Normal)
+                            PTAlertTipControl.present(title:PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.takePhotoError, icon:.Error,style: .Normal)
                         }
                     }
-                } else {
+                case PTMediaLibCell.ID:
                     if let cellModel = itemRow.dataModel as? PTMediaModel,let currentCell = collection.cellForItem(at: indexPath) as? PTMediaLibCell {
                         self.cellSelectedFunction(cellModel: cellModel, cell: currentCell)
                     }
+                default:
+                    break
                 }
             }
         }
@@ -263,8 +267,7 @@ public class PTMediaLibView:UIView {
             switch type {
             case .Normal:
                 self.loadMedia()
-            case .Video:
-                break
+            case .Video:break
             }
         }
     }
@@ -290,8 +293,9 @@ public class PTMediaLibView:UIView {
             var rows = self.totalModels.map { PTRows(ID: PTMediaLibCell.ID,dataModel: $0) }
             
             if self.showCameraCell {
+                let insertIndex = PTMediaLibUIConfig.share.shortIsTop ? 0 : rows.count
                 let row = PTRows(ID: PTCameraCell.ID)
-                rows.insert(row, at: rows.count)
+                rows.insert(row, at: insertIndex)
             }
             let section = PTSection(rows: rows)
             self.collectionView.showCollectionDetail(collectionData: [section],finishTask: loadFinish)
@@ -304,7 +308,8 @@ public class PTMediaLibView:UIView {
             
             visibleIndexPaths.forEach { indexPath in
                 if let cell = self.collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell {
-                    let m = self.totalModels[indexPath.row]
+                    let indexOffset = PTMediaLibUIConfig.share.shortIsTop ? 1 : 0
+                    let m = self.totalModels[indexPath.row - indexOffset]
                     
                     var idx = 0
                     var isSelected = false
@@ -366,11 +371,7 @@ public class PTMediaLibView:UIView {
                     if videoCount >= config.maxVideoSelectCount {
                         cell.coverView.backgroundColor = .DevMaskColor
                         cell.coverView.isHidden = !uiConfig.showInvalidMask
-                        if model.type != .video {
-                            cell.enableSelect = true
-                        } else {
-                            cell.enableSelect = false
-                        }
+                        cell.enableSelect = model.type != .video
                     } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
                         cell.coverView.backgroundColor = .DevMaskColor
                         cell.coverView.isHidden = !uiConfig.showInvalidMask
@@ -415,23 +416,23 @@ public class PTMediaLibView:UIView {
     
     fileprivate func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
-            PTAlertTipControl.present(title:"",subtitle: PTMediaLibConfig.share.alertDoingTitle, icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon:.Heart,style: .Normal)
             PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     let model = PTMediaModel(asset: asset)
                     self?.handleDataArray(newModel: model)
                 } else {
-                    PTAlertTipControl.present(title:PTMediaLibConfig.share.alertTitle,subtitle: PTMediaLibConfig.share.saveImageError, icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.saveImageError, icon:.Error,style: .Normal)
                 }
             }
         } else if let videoUrl = videoUrl {
-            PTAlertTipControl.present(title:"",subtitle: PTMediaLibConfig.share.alertDoingTitle, icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon:.Heart,style: .Normal)
             PTMediaLibManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 if suc, let at = asset {
                     let model = PTMediaModel(asset: at)
                     self?.handleDataArray(newModel: model)
                 } else {
-                    PTAlertTipControl.present(title:PTMediaLibConfig.share.alertTitle,subtitle: PTMediaLibConfig.share.saveVideoError, icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.saveVideoError, icon:.Error,style: .Normal)
                 }
             }
         }
@@ -513,8 +514,10 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
                             vc.currentAlbum = self.currentAlbum!
                         }
                         self.currentAlbum = self.currentAlbum!
-                        PTGCDManager.gcdAfter(time: 0.15) {
-                            self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                        if !PTMediaLibUIConfig.share.shortIsTop {
+                            PTGCDManager.gcdAfter(time: 0.15) {
+                                self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                            }
                         }
                     }
                 } else {
@@ -522,8 +525,10 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
                     if let vc = self.parentViewController as? PTMediaLibViewController {
                         vc.currentAlbum = self.currentAlbum!
                     }
-                    PTGCDManager.gcdAfter(time: 0.15) {
-                        self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                    if !PTMediaLibUIConfig.share.shortIsTop {
+                        PTGCDManager.gcdAfter(time: 0.15) {
+                            self.collectionView.contentCollectionView.scrollToBottom(animated: true)
+                        }
                     }
                 }
             }
@@ -614,7 +619,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(PTMediaLibConfig.share.backImage, for: .normal)
+        view.setImage(PTMediaLibUIConfig.share.backImage, for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -626,7 +631,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     private lazy var submitButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(PTMediaLibConfig.share.submitImage, for: .normal)
+        view.setImage(PTMediaLibUIConfig.share.submitImage, for: .normal)
         view.addActionHandlers { sender in
             self.requestSelectPhoto(viewController: self)
         }
@@ -640,11 +645,11 @@ public class PTMediaLibViewController: PTBaseViewController {
         let view = PTLayoutButton()
         view.layoutStyle = .leftTitleRightImage
         view.imageSize = CGSize(width: 10, height: 10)
-        view.normalImage = PTMediaLibConfig.share.arrowDownImage
+        view.normalImage = PTMediaLibUIConfig.share.arrowDownImage
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.normalSubTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.hightlightTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
-        view.normalTitleFont = PTMediaLibConfig.share.selectLibTitleFont
+        view.normalTitleFont = PTMediaLibUIConfig.share.selectLibTitleFont
         view.addActionHandlers { sender in
             
             switch PTPermission.photoLibrary.status {
@@ -663,8 +668,10 @@ public class PTMediaLibViewController: PTBaseViewController {
                         } else {
                             self.mediaListView.currentAlbum = model
                         }
-                        PTGCDManager.gcdAfter(time: 0.05) {
-                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                        if !PTMediaLibUIConfig.share.shortIsTop {
+                            PTGCDManager.gcdAfter(time: 0.05) {
+                                self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                            }
                         }
                     }
                 } else {
@@ -675,8 +682,10 @@ public class PTMediaLibViewController: PTBaseViewController {
                             self.selectLibButton.normalTitle = "\(model.title)"
                             self.resetTitleSelectBounds()
                             self.mediaListView.currentAlbum = model
-                            PTGCDManager.gcdAfter(time: 0.05) {
-                                self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                            if !PTMediaLibUIConfig.share.shortIsTop {
+                                PTGCDManager.gcdAfter(time: 0.05) {
+                                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                                }
                             }
                         }
                     }
@@ -695,8 +704,8 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.currentVc = self
         view.selectedCount = { index in
             if index > 0 {
-                self.selectLibButton.normalSubTitleFont = PTMediaLibConfig.share.selectLibSubTitleFont
-                self.selectLibButton.normalSubTitle = String(format: PTMediaLibConfig.share.mediaCount, "\(index)")
+                self.selectLibButton.normalSubTitleFont = PTMediaLibUIConfig.share.selectLibSubTitleFont
+                self.selectLibButton.normalSubTitle = String(format: PTMediaLibUIConfig.share.mediaCount, "\(index)")
             } else {
                 self.selectLibButton.normalSubTitle = ""
             }
@@ -774,16 +783,20 @@ public class PTMediaLibViewController: PTBaseViewController {
                     PTGCDManager.gcdMain {
                         self.createList()
                         self.mediaListView.currentAlbum = self.currentAlbum
-                        PTGCDManager.gcdAfter(time: 0.05) {
-                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                        if !PTMediaLibUIConfig.share.shortIsTop {
+                            PTGCDManager.gcdAfter(time: 0.05) {
+                                self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                            }
                         }
                     }
                 }
             } else {
                 self.createList()
                 self.mediaListView.currentAlbum = self.currentAlbum
-                PTGCDManager.gcdAfter(time: 0.05) {
-                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                if !PTMediaLibUIConfig.share.shortIsTop {
+                    PTGCDManager.gcdAfter(time: 0.05) {
+                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    }
                 }
             }
         }
@@ -834,22 +847,20 @@ extension PTMediaLibViewController {
             viewController?.dismiss(animated: true, completion: nil)
             return
         }
-        
-        let config = PTMediaLibConfig.share
-        
-        if config.allowMixSelect {
+                
+        if PTMediaLibConfig.share.allowMixSelect {
             let videoCount = selectedModel.filter { $0.type == .video }.count
             
-            if videoCount > config.maxVideoSelectCount {
-                PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.mediaCountMax, "\(config.maxVideoSelectCount)"),icon:.Error,style:.Normal)
+            if videoCount > PTMediaLibConfig.share.maxVideoSelectCount {
+                PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.mediaCountMax, "\(PTMediaLibConfig.share.maxVideoSelectCount)"),icon:.Error,style:.Normal)
                 return
-            } else if videoCount < config.minVideoSelectCount {
-                PTAlertTipControl.present(title: config.alertTitle,subtitle:String(format: config.mediaCountMin, "\(config.minVideoSelectCount)"),icon:.Error,style:.Normal)
+            } else if videoCount < PTMediaLibConfig.share.minVideoSelectCount {
+                PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.mediaCountMin, "\(PTMediaLibConfig.share.minVideoSelectCount)"),icon:.Error,style:.Normal)
                 return
             }
         }
                 
-        let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
+        let isOriginal = PTMediaLibConfig.share.allowSelectOriginal ? isSelectOriginal : PTMediaLibConfig.share.alwaysRequestOriginal
         
         let callback = { [weak self] (sucModels: [PTResultModel], errorAssets: [PHAsset], errorIndexs: [Int]) in
             
@@ -887,7 +898,7 @@ extension PTMediaLibViewController {
                 sucCount += 1
                 
                 if let image = image {
-                    let isEdited = m.editImage != nil && !config.saveNewImageAfterEdit
+                    let isEdited = m.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
 #if POOTOOLS_IMAGEEDITOR
                     let model = PTResultModel(
                         asset: asset ?? m.asset,

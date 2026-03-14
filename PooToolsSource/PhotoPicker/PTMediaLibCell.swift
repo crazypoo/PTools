@@ -67,7 +67,7 @@ class PTMediaLibCell: PTBaseNormalCell {
             switch cellModel.type {
             case .video:
                 mediaTypeImageView.isHidden = false
-                mediaTypeImageView.image = UIImage(.video)
+                mediaTypeImageView.image = PTMediaLibUIConfig.share.cellVideoImage
                 videoTimeLabel.isHidden = false
                 videoTimeLabel.text = cellModel.duration
                 videoTimeLabel.snp.updateConstraints { make in
@@ -75,7 +75,7 @@ class PTMediaLibCell: PTBaseNormalCell {
                 }
             case .livePhoto:
                 mediaTypeImageView.isHidden = false
-                mediaTypeImageView.image = UIImage(.livephoto)
+                mediaTypeImageView.image = PTMediaLibUIConfig.share.cellLivePhotoImage
                 videoTimeLabel.isHidden = true
                 videoTimeLabel.text = ""
             case .gif:
@@ -121,7 +121,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     
     lazy var videoTimeLabel:UILabel = {
         let view = UILabel()
-        view.font = .appfont(size: 14)
+        view.font = PTMediaLibUIConfig.share.cellVideoTimeFont
         view.textColor = .white
         view.viewCorner(radius: 5, borderWidth: 0, borderColor: .clear)
         view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.85)
@@ -131,12 +131,13 @@ class PTMediaLibCell: PTBaseNormalCell {
     
     lazy var editButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(PTMediaLibConfig.share.editImage, for: .normal)
+        view.setImage(PTMediaLibUIConfig.share.cellEditImage, for: .normal)
         return view
     }()
 
     lazy var selectButton:PTLayoutButton = {
         let view = PTLayoutButton()
+        view.normalTitleFont = PTMediaLibUIConfig.share.cellSelectedIndexFont
         view.normalTitleColor = .clear
         view.selectedTitleColor = .white
         view.configBackgroundColor = .clear
@@ -281,8 +282,8 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         didSet {
             let att:ASAttributedString = """
         \(wrap: .embedding("""
-        \(albumModel.title,.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.font(PTMediaLibConfig.share.albumCellTitleFont),.paragraph(.alignment(.left),.lineSpacing(10)))
-        \("\n\(albumModel.count)",.foreground(.lightGray),.font(PTMediaLibConfig.share.albumCellDescFont),.paragraph(.alignment(.left)))
+        \(albumModel.title,.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.font(PTMediaLibUIConfig.share.albumCellTitleFont),.paragraph(.alignment(.left),.lineSpacing(10)))
+        \("\n\(albumModel.count)",.foreground(.lightGray),.font(PTMediaLibUIConfig.share.albumCellDescFont),.paragraph(.alignment(.left)))
         """))
         """
             contentLabel.attributed.text = att
@@ -314,7 +315,7 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
     
     lazy var selectedButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(PTMediaLibConfig.share.albumSelectedImage, for: .selected)
+        view.setImage(PTMediaLibUIConfig.share.albumSelectedImage, for: .selected)
         view.setImage(nil, for: .normal)
         return view
     }()
@@ -355,7 +356,7 @@ class PTCameraCell: PTBaseNormalCell {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
-        view.image = PTMediaLibConfig.share.cameraImage
+        view.image = PTMediaLibUIConfig.share.cameraImage
         return view
     }()
     

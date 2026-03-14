@@ -248,7 +248,7 @@ final public class PTTabBarView: UIView {
     /// Badge removecallback
     public var badgeDragRemoveIndex: ((Int) -> Void)?
 
-    private var items: [PTTabBarItemView] = []
+    public var items: [PTTabBarItemView] = []
     private var currentIndex: Int = 0
     
     private let glassBackgroundView = UIVisualEffectView()
@@ -266,7 +266,7 @@ final public class PTTabBarView: UIView {
     }
     public var centerButtonSize: CGFloat = 64
 
-    let bar26LRSpacing:CGFloat = 24.adapter
+    public static let bar26LRSpacing:CGFloat = 24.adapter
     
     // MARK: - Init
     public override init(frame: CGRect) {
@@ -309,7 +309,7 @@ final public class PTTabBarView: UIView {
         glassBackgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
             if PTAppBaseConfig.share.tab26Mode {
-                $0.left.right.equalToSuperview().inset(self.bar26LRSpacing)
+                $0.left.right.equalToSuperview().inset(PTTabBarView.bar26LRSpacing)
             } else {
                 $0.left.right.equalToSuperview()
             }
@@ -543,13 +543,13 @@ final public class PTTabBarView: UIView {
         switch layoutStyle {
         case .normal:
             if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - self.bar26LRSpacing * 2) / CGFloat(items.count)
+                itemWidth = (CGFloat.kSCREEN_WIDTH - PTTabBarView.bar26LRSpacing * 2) / CGFloat(items.count)
             } else {
                 itemWidth = CGFloat.kSCREEN_WIDTH / CGFloat(items.count)
             }
         case .centerRaised:
             if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - self.bar26LRSpacing * 2 - centerButtonSize) / CGFloat(items.count)
+                itemWidth = (CGFloat.kSCREEN_WIDTH - PTTabBarView.bar26LRSpacing * 2 - centerButtonSize) / CGFloat(items.count)
             } else {
                 itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
             }

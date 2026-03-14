@@ -22,7 +22,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage(PTMediaLibConfig.share.ablumListBackImage, for: .normal)
+        view.setImage(PTMediaLibUIConfig.share.ablumListBackImage, for: .normal)
         view.addActionHandlers { sender in
             self.navigationController?.popViewController(animated: true)
         }
@@ -37,15 +37,15 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         let pickerConfig = PTMediaLibConfig.share
         
         let emptyConfig = PTEmptyDataViewConfig()
-        emptyConfig.image = UIImage(.exclamationmark.triangle)
+        emptyConfig.image = PTMediaLibUIConfig.share.albumEmptyImage
         emptyConfig.mainTitleAtt = """
             \(wrap: .embedding("""
-            \(PTMediaLibConfig.share.emptyTitle,.foreground(pickerConfig.themeColor),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+            \(PTMediaLibUIConfig.share.albumEmptyTitle,.foreground(pickerConfig.themeColor),.font(PTMediaLibUIConfig.share.albumEmptyTitleFont),.paragraph(.alignment(.center)))
             """))
             """
         emptyConfig.secondaryEmptyAtt = """
             \(wrap: .embedding("""
-            \(PTMediaLibConfig.share.emptySubDesc,.foreground(pickerConfig.themeColor),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+            \(PTMediaLibUIConfig.share.albumEmptySubDesc,.foreground(pickerConfig.themeColor),.font(PTMediaLibUIConfig.share.albumEmptyDescFont),.paragraph(.alignment(.center)))
             """))
             """
         
@@ -151,7 +151,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     func fakeNavSet() {
         fakeNav.setLeftButtons([dismissButton])
-        navTitle.text = PTMediaLibConfig.share.albumListNavName
+        navTitle.text = PTMediaLibUIConfig.share.albumListNavName
         fakeNav.titleView = navTitle
     }
     

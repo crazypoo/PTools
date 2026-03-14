@@ -217,8 +217,12 @@ public class PTLoadingHud:UIView {
             }
             self.rotateAngle %= 360
             PTGCDManager.gcdMain {
-                self.transform = CGAffineTransformMakeRotation(self.degressToRadian(angle: CGFloat(self.rotateAngle)))
-                self.setNeedsDisplay()
+                Task { @MainActor in
+                    self.transform = CGAffineTransform(
+                        rotationAngle: self.degressToRadian(angle: CGFloat(self.rotateAngle))
+                    )
+                    self.setNeedsDisplay()
+                }
             }
         }
     }
