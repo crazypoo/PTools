@@ -13,6 +13,7 @@ import Photos
 import Combine
 import AVFoundation
 import SafeSFSymbols
+import AttributedString
 
 public class PTMediaLibView:UIView {
         
@@ -308,9 +309,8 @@ public class PTMediaLibView:UIView {
             
             visibleIndexPaths.forEach { indexPath in
                 if let cell = self.collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell {
-                    let indexOffset = PTMediaLibUIConfig.share.shortIsTop ? 1 : 0
+                    let indexOffset = self.showCameraCell ? (PTMediaLibUIConfig.share.shortIsTop ? 1 : 0) : 0
                     let m = self.totalModels[indexPath.row - indexOffset]
-                    
                     var idx = 0
                     var isSelected = false
                     for (index, selM) in self.selectedModel.enumerated() {
@@ -641,15 +641,13 @@ public class PTMediaLibViewController: PTBaseViewController {
         return view
     }()
     
-    private lazy var selectLibButton:PTLayoutButton = {
-        let view = PTLayoutButton()
+    fileprivate var selectedMediaCount:Int = 0
+    
+    private lazy var selectLibButton:PTActionLayoutButton = {
+        let view = PTActionLayoutButton()
         view.layoutStyle = .leftTitleRightImage
         view.imageSize = CGSize(width: 10, height: 10)
-        view.normalImage = PTMediaLibUIConfig.share.arrowDownImage
-        view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
-        view.normalSubTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
-        view.hightlightTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
-        view.normalTitleFont = PTMediaLibUIConfig.share.selectLibTitleFont
+        view.setImage(PTMediaLibUIConfig.share.arrowDownImage, state: .normal)
         view.addActionHandlers { sender in
             
             switch PTPermission.photoLibrary.status {
@@ -660,14 +658,13 @@ public class PTMediaLibViewController: PTBaseViewController {
                     let vc = PTMediaLibAlbumListViewController(albumList: self.mediaListView.currentAlbum!)
                     self.navigationController?.pushViewController(vc, animated: true)
                     vc.selectedModelHandler = { model in
-                        self.selectLibButton.normalTitle = "\(model.title)"
-                        self.resetTitleSelectBounds()
                         if model.models.isEmpty {
                             model.refetchPhotos()
                             self.mediaListView.currentAlbum = model
                         } else {
                             self.mediaListView.currentAlbum = model
                         }
+                        self.albumTitleSet()
                         if !PTMediaLibUIConfig.share.shortIsTop {
                             PTGCDManager.gcdAfter(time: 0.05) {
                                 self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
@@ -679,9 +676,8 @@ public class PTMediaLibViewController: PTBaseViewController {
                         let vc = PTMediaLibAlbumListViewController(albumList: model)
                         self.navigationController?.pushViewController(vc, animated: true)
                         vc.selectedModelHandler = { model in
-                            self.selectLibButton.normalTitle = "\(model.title)"
-                            self.resetTitleSelectBounds()
                             self.mediaListView.currentAlbum = model
+                            self.albumTitleSet()
                             if !PTMediaLibUIConfig.share.shortIsTop {
                                 PTGCDManager.gcdAfter(time: 0.05) {
                                     self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
@@ -694,25 +690,44 @@ public class PTMediaLibViewController: PTBaseViewController {
                 break
             }
         }
-        view.clearGlass = true
         view.bounds = CGRect(origin: .zero, size: CGSizeMake(100, 34))
         return view
     }()
+    
+    func albumTitleSet() {
+        let titleAtt = titleAtt()
+        selectLibButton.setAtt(titleAtt, state: .normal)
+        selectLibButton.setAtt(titleAtt, state: .highlighted)
+        self.resetTitleSelectBounds()
+    }
+    
+    func titleAtt() -> ASAttributedString {
+        var buttonAtt:ASAttributedString = """
+                    \(wrap: .embedding("""
+                    \(self.mediaListView.currentAlbum!.title,.font(PTMediaLibUIConfig.share.selectLibTitleFont),.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.paragraph(.alignment(.center)))
+                    """))
+                    """
+        if self.selectedMediaCount > 0 {
+            let countString = String(format: PTMediaLibUIConfig.share.mediaCount, "\(self.selectedMediaCount)")
+            let countAtt:ASAttributedString = """
+                        \(wrap: .embedding("""
+                        \("\n\(countString)",.font(PTMediaLibUIConfig.share.selectLibSubTitleFont),.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.paragraph(.alignment(.center)))
+                        """))
+                        """
+            buttonAtt += countAtt
+        }
+        return buttonAtt
+    }
     
     fileprivate lazy var mediaListView : PTMediaLibView = {
         let view = PTMediaLibView(currentModels: self.currentAlbum)
         view.currentVc = self
         view.selectedCount = { index in
-            if index > 0 {
-                self.selectLibButton.normalSubTitleFont = PTMediaLibUIConfig.share.selectLibSubTitleFont
-                self.selectLibButton.normalSubTitle = String(format: PTMediaLibUIConfig.share.mediaCount, "\(index)")
-            } else {
-                self.selectLibButton.normalSubTitle = ""
-            }
+            self.selectedMediaCount = index
+            self.albumTitleSet()
         }
         view.updateTitle = {
-            self.selectLibButton.normalTitle = self.mediaListView.currentAlbum!.title
-            self.resetTitleSelectBounds()
+            self.albumTitleSet()
         }
         view.selectedModelDidUpdate = {
             self.selectedModel = self.mediaListView.selectedModel
@@ -720,7 +735,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         }
         return view
     }()
-    
+        
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
@@ -829,8 +844,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
     
     func resetTitleSelectBounds() {
-        let titleWidth = UIView.sizeFor(string: self.selectLibButton.normalTitle, font: self.selectLibButton.normalTitleFont,height: 34).width + self.selectLibButton.imageSize.width + self.selectLibButton.midSpacing + 15
-        self.selectLibButton.bounds = CGRect(origin: .zero, size: CGSizeMake(titleWidth, 34))
+        self.selectLibButton.bounds = CGRect(origin: .zero, size: CGSizeMake(self.selectLibButton.getKitCurrentDimension(), 34))
         self.fakeNav.titleView = self.selectLibButton
     }
         
