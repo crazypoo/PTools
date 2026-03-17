@@ -348,7 +348,7 @@ public class PTMediaLibView:UIView {
         if isSelected {
             cell.coverView.backgroundColor = .DevMaskColor
             cell.coverView.isHidden = false
-            cell.layer.borderColor = config.selectedBorderColor.cgColor
+            cell.layer.borderColor = uiConfig.selectedBorderColor.cgColor
             cell.layer.borderWidth = 4
             
 #if POOTOOLS_IMAGEEDITOR

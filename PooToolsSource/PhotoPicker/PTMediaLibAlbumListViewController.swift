@@ -33,19 +33,17 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     }()
     
     private lazy var collectionView : PTCollectionView = {
-        
-        let pickerConfig = PTMediaLibConfig.share
-        
+                
         let emptyConfig = PTEmptyDataViewConfig()
         emptyConfig.image = PTMediaLibUIConfig.share.albumEmptyImage
         emptyConfig.mainTitleAtt = """
             \(wrap: .embedding("""
-            \(PTMediaLibUIConfig.share.albumEmptyTitle,.foreground(pickerConfig.themeColor),.font(PTMediaLibUIConfig.share.albumEmptyTitleFont),.paragraph(.alignment(.center)))
+            \(PTMediaLibUIConfig.share.albumEmptyTitle,.foreground(PTMediaLibUIConfig.share.themeColor),.font(PTMediaLibUIConfig.share.albumEmptyTitleFont),.paragraph(.alignment(.center)))
             """))
             """
         emptyConfig.secondaryEmptyAtt = """
             \(wrap: .embedding("""
-            \(PTMediaLibUIConfig.share.albumEmptySubDesc,.foreground(pickerConfig.themeColor),.font(PTMediaLibUIConfig.share.albumEmptyDescFont),.paragraph(.alignment(.center)))
+            \(PTMediaLibUIConfig.share.albumEmptySubDesc,.foreground(PTMediaLibUIConfig.share.themeColor),.font(PTMediaLibUIConfig.share.albumEmptyDescFont),.paragraph(.alignment(.center)))
             """))
             """
         

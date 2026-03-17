@@ -32,11 +32,6 @@ public class PTMediaLibConfig:NSObject {
     
     @PTClampedProperyWrapper(range: 1...5) public var videoDownloadBorderWidth:CGFloat = 1.5
     
-    /// The theme color of framework.
-    /// 框架主题色
-    public var themeColor: UIColor = .purple
-    
-    public var selectedBorderColor:UIColor = UIColor.purple
     /// Whether to callback directly after taking a photo. Defaults to false.
     public var callbackDirectlyAfterTakingPhoto = false
 
@@ -217,7 +212,10 @@ public class PTMediaLibUIConfig:NSObject {
     public var albumListNavName:String = "PT Photo picker album list title".localized()
     public var selectLibTitleFont:UIFont = .appfont(size: 15)
     public var selectLibSubTitleFont:UIFont = .appfont(size: 12)
-
+    /// The theme color of framework.
+    /// 框架主题色
+    public var themeColor: UIColor = .purple
+    public var selectedBorderColor:UIColor = UIColor.purple
     /*
      ImageCell
      */
