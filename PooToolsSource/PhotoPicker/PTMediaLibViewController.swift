@@ -90,7 +90,7 @@ public class PTMediaLibView:UIView {
                                 default:
     #if POOTOOLS_VIDEOEDITOR
                                     cellModel.asset.convertPHAssetToAVAsset { progress in
-                                        sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibConfig.share.themeColor,showValueLabel: false)
+                                        sender.layerProgress(value: CGFloat(progress),borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,borderColor: PTMediaLibUIConfig.share.themeColor,showValueLabel: false)
                                     } completion: { avAsset in
                                         if avAsset != nil {
                                             PTGCDManager.gcdMain {
