@@ -8,31 +8,29 @@
 
 import UIKit
 
-public struct PTSection: Hashable {
-
-    public var identifier: String
-
+public class PTSection: NSObject {
+    
+    public var identifier: String = UUID().uuidString
+    
     public var headerTitle: String?
     public var headerID: String?
     public var footerID: String?
-    public var footerHeight: CGFloat?
-    public var headerHeight: CGFloat?
-
+    public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude
+    public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
     public var rows: [PTRows]?
+    public var headerDataModel: AnyObject?
+    public var footerDataModel: AnyObject?
 
-    public var headerDataModel: AnyHashable?
-    public var footerDataModel: AnyHashable?
-
-    public init(identifier: String = UUID().uuidString,
-                headerTitle: String? = nil,
-                headerID: String? = nil,
-                footerID: String? = nil,
-                footerHeight: CGFloat? = nil,
-                headerHeight: CGFloat? = nil,
-                rows: [PTRows]? = nil,
-                headerDataModel: AnyHashable? = nil,
-                footerDataModel: AnyHashable? = nil) {
-        self.identifier = identifier
+    public init(headerTitle: String? = "",
+                headerID: String? = "",
+                footerID:String? = "",
+                footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
+                headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
+                rows:[PTRows]? = nil,
+                headerDataModel:AnyObject? = nil,
+                footerDataModel:AnyObject? = nil) {
+        super.init()
+        
         self.headerTitle = headerTitle
         self.headerID = headerID
         self.footerID = footerID
@@ -43,13 +41,17 @@ public struct PTSection: Hashable {
         self.footerDataModel = footerDataModel
     }
     
-    public static func == (lhs: PTSection, rhs: PTSection) -> Bool {
-        return lhs.identifier == rhs.identifier
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTSection else { return false }
+        
+        return self.identifier == other.identifier &&
+               self.isContentEqual(to: other)
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
+    public override var hash: Int {
+        return identifier.hashValue
     }
+
 }
 
 extension PTSection {
