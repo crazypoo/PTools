@@ -582,11 +582,15 @@ public class PTCollectionView: UIView {
         return view
     }()
     
+    let topSpacer = UIView()
+    let bottomSpacer = UIView()
+
     fileprivate lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .center
         stack.distribution = .equalSpacing
+        stack.spacing = viewConfig.indexConfig?.itemSpacing ?? 0
         return stack
     }()
     
@@ -1436,23 +1440,31 @@ private extension PTCollectionView {
     private func showIndicator(at index: Int) {
         guard let titles = viewConfig.sideIndexTitles,
               index < titles.count,
-              let targetView = stackView.arrangedSubviews[safe: index] else { return }
+              let config = viewConfig.indexConfig else { return }
         
         bigTextLabel.text = titles[index]
-        // 🟢 转换坐标（关键）
-        let targetFrame = targetView.convert(targetView.bounds, to: self)
-        
-        // 🟢 计算中心点（让 indicator 对齐 index item）
-        let centerY = targetFrame.midY
-        
-        let indicatorX = bounds.width - indicator.bounds.width / 2 - (viewConfig.indexConfig?.itemSize.width ?? 15)
-        
-        UIView.animate(withDuration: 0.15) {
-            self.indicator.center = CGPoint(x: indicatorX, y: centerY)
-        }
-        
-        indicator.alpha = 1
+        setIndicatorCenter(t: index, config: config)
+    }
 
+    func setIndicatorCenter(t index: Int,config:PTCollectionIndexViewConfiguration,alpha:CGFloat = 1) {
+        for case let targetView as PTIndexItemView in stackView.arrangedSubviews {
+            if targetView.index == index {
+                // 🟢 转换坐标（关键）
+                let targetFrame = targetView.convert(targetView.bounds, to: self)
+                
+                // 🟢 计算中心点（让 indicator 对齐 index item）
+                let centerY = targetFrame.midY
+                
+                let indicatorX = bounds.width - indicator.bounds.width / 2 - (config.itemSize.width)
+                
+                UIView.animate(withDuration: 0.15) {
+                    self.indicator.center = CGPoint(x: indicatorX, y: centerY)
+                }
+                
+                indicator.alpha = alpha
+                break
+            }
+        }
     }
     
     private func setupIndexUI() {
@@ -1468,6 +1480,17 @@ private extension PTCollectionView {
         
         stackView.spacing = config.itemSpacing
         
+        topSpacer.backgroundColor = .clear
+        bottomSpacer.backgroundColor = .clear
+
+        topSpacer.setContentHuggingPriority(.defaultLow, for: .vertical)
+        bottomSpacer.setContentHuggingPriority(.defaultLow, for: .vertical)
+
+        topSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        bottomSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+
+        stackView.addArrangedSubview(topSpacer)
+
         for (i, title) in titles.enumerated() {
             let label = PTIndexItemView()
             label.index = i
@@ -1484,18 +1507,9 @@ private extension PTCollectionView {
             stackView.addArrangedSubview(label)
         }
         
-        guard let targetView = stackView.arrangedSubviews[safe: 0] else { return }
-        // 🟢 转换坐标（关键）
-        let targetFrame = targetView.convert(targetView.bounds, to: self)
+        stackView.addArrangedSubview(bottomSpacer)
         
-        // 🟢 计算中心点（让 indicator 对齐 index item）
-        let centerY = targetFrame.midY
-        
-        let indicatorX = indexContainerView.frame.minX - indicator.bounds.width / 2 - 4
-
-        UIView.animate(withDuration: 0.15) {
-            self.indicator.center = CGPoint(x: indicatorX, y: centerY)
-        }
+        setIndicatorCenter(t: 0, config: config,alpha: 0)
     }
     
     func hideIndicator() {
