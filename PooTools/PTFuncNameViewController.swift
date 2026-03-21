@@ -397,7 +397,9 @@ class PTFuncNameViewController: PTBaseViewController {
         cSections().enumerated().forEach { index,value in
             strings.append("\(index)")
         }
-        cConfig.indexConfig = PTCollectionIndexViewConfiguration()
+        let indexConfig = PTCollectionIndexViewConfiguration()
+        indexConfig.indexViewBackgroundColor = .orange
+        cConfig.indexConfig = indexConfig
         cConfig.sideIndexTitles = strings
 
         let emptyConfig = PTEmptyDataViewConfig()

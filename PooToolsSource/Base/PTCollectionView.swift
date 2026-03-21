@@ -277,6 +277,8 @@ public class PTCollectionView: UIView {
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
     
+    private var heightCache: [IndexPath: CGFloat] = [:]
+    
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, environment in
@@ -344,7 +346,20 @@ public class PTCollectionView: UIView {
                     bottomContentSpace: viewConfig.contentBottomSpace,
                     itemSpace: viewConfig.cellLeadingSpace,
                     itemTrailingSpace: viewConfig.cellTrailingSpace,
-                    itemHeight: waterFall
+                    itemHeight: { [weak self] section, model in
+                        guard let self else { return 0 }
+                        
+                        guard let rows = self.mSections[section].rows,
+                              let index = rows.firstIndex(where: { $0.dataModel === model }) else {
+                            return waterFall(section, model)
+                        }
+                        
+                        let indexPath = IndexPath(item: index, section: section)
+                        
+                        return self.cachedHeight(for: indexPath,
+                                                 model: model,
+                                                 calculator: waterFall)
+                    }
                 )
             } else {
                 group = oneSquareGroup()
@@ -624,9 +639,6 @@ public class PTCollectionView: UIView {
     public var viewConfig: PTCollectionViewConfig! {
         didSet {
             if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
-                indicator.removeFromSuperview()
-                indexView.removeFromSuperview()
-                clearTextLayers()
                 if collectionView.superview == nil {
                     addSubview(collectionView)
                     collectionView.snp.makeConstraints { make in
@@ -667,6 +679,8 @@ public class PTCollectionView: UIView {
             
             self.handleScrollUpdate()
         }
+
+        setIndexViews()
 
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
@@ -761,6 +775,9 @@ public class PTCollectionView: UIView {
     }
     
     func setIndexViews() {
+        indicator.removeFromSuperview()
+        indexView.removeFromSuperview()
+        clearTextLayers()
         if (viewConfig.sideIndexTitles?.count ?? 0) > 0 , let indexConfig = viewConfig.indexConfig {
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.setupUI()
@@ -772,6 +789,7 @@ public class PTCollectionView: UIView {
                 make.top.bottom.equalToSuperview()
                 make.width.equalTo(indexConfig.itemSize.width)
             }
+            bringSubviewToFront(indexView)
         }
     }
     
@@ -830,6 +848,7 @@ public class PTCollectionView: UIView {
             guard !oldSections.isEmpty else {
                 self.mSections = newSections
                 self.layoutCache.removeAll()
+                self.heightCache.removeAll()
                 self.collectionView.reloadData {
                     self.setiOS17EmptyDataView()
                     finishTask?(self.collectionView)
@@ -875,7 +894,7 @@ public class PTCollectionView: UIView {
                 
                 // ⚠️ layout cache 必须清
                 self.layoutCache.removeAll()
-                
+                self.heightCache.removeAll()
                 self.setiOS17EmptyDataView()
                 finishTask?(self.collectionView)
             }
@@ -886,6 +905,7 @@ public class PTCollectionView: UIView {
         PTGCDManager.gcdMain {
             self.mSections.removeAll()
             self.layoutCache.removeAll()
+            self.heightCache.removeAll()
             if self.viewConfig.refreshWithoutAnimation {
                 self.collectionView.reloadDataWithOutAnimation {
                     self.setiOS17EmptyDataView()
@@ -918,6 +938,7 @@ public class PTCollectionView: UIView {
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
+            self.heightCache.removeAll()
             // 🟢 1. 在主線程更新數據源
             let startIndex = self.mSections[section].rows?.count ?? 0
             self.mSections[section].rows?.append(contentsOf: rows)
@@ -945,6 +966,7 @@ public class PTCollectionView: UIView {
                 return
             }
             self.layoutCache.removeAll()
+            self.heightCache.removeAll()
             var insertIndex = self.mSections.count
             
             if let index = afterIndex, index < self.mSections.count {
@@ -974,6 +996,7 @@ public class PTCollectionView: UIView {
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
+            self.heightCache.removeAll()
             if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
                 let endIndex = startIndex + rows.count - 1
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
@@ -996,6 +1019,7 @@ public class PTCollectionView: UIView {
     public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
+            self.heightCache.removeAll()
             var indexPaths: [IndexPath] = []
 
             // section 倒序，防止 index 偏移
@@ -1043,6 +1067,7 @@ public class PTCollectionView: UIView {
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
             self.layoutCache.removeAll()
+            self.heightCache.removeAll()
             guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
                 PTNSLogConsole("Error: Can't find the section to delete")
                 return
@@ -1533,5 +1558,22 @@ extension PTCollectionView {
         lastUpdateTime = now
         
         handleScrollUpdate()
+    }
+}
+
+///Waterfall相关
+extension PTCollectionView {
+    private func cachedHeight(for indexPath: IndexPath,
+                              model: AnyObject,
+                              calculator: (Int, AnyObject) -> CGFloat) -> CGFloat {
+        
+        if let cache = heightCache[indexPath] {
+            return cache
+        }
+        
+        let height = calculator(indexPath.section, model)
+        heightCache[indexPath] = height
+        
+        return height
     }
 }
