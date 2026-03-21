@@ -274,7 +274,9 @@ public class PTCollectionView: UIView {
     
     // 使用 NSKeyValueObservation 替代手动 KVO
     private var contentOffsetObservation: NSKeyValueObservation?
-        
+    private var lastUpdateTime: CFTimeInterval = 0
+    private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
+    
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, environment in
@@ -657,13 +659,13 @@ public class PTCollectionView: UIView {
         contentOffsetObservation = collectionView.observe(\.contentOffset, options: [.new]) { [weak self] _, _ in
             guard let self else { return }
             guard isTouched == false else { return }
-            let indexPathArray = self.collectionView.indexPathsForVisibleItems
-            let minIndexPath = indexPathArray.min { one, two in
-                one.section <= two.section
-            }
-            if let temp = minIndexPath?.section {
-                self.updateTextLayers(forSelectedIndex: temp)
-            }
+            let now = CACurrentMediaTime()
+            
+            // 🟢 节流
+            guard now - self.lastUpdateTime > self.scrollThrottleInterval else { return }
+            self.lastUpdateTime = now
+            
+            self.handleScrollUpdate()
         }
 
 #if POOTOOLS_LISTEMPTYDATA
@@ -705,7 +707,7 @@ public class PTCollectionView: UIView {
             }
         }
     }
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -1299,6 +1301,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         collectionViewDidScroll?(scrollView as! UICollectionView)
+        throttleScrollUpdate()
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -1486,5 +1489,49 @@ extension PTCollectionView {
         touchedIndex = touchedLayer.index
         showIndicator(forTextLayer: touchedLayer)
         scrollCollectionView(toTextLayer: touchedLayer, animated: false)
+    }
+}
+
+//MARK: KVO相关
+extension PTCollectionView {
+    private func handleScrollUpdate() {
+        // 🟢 取当前偏移
+        let offsetY = collectionView.contentOffset.y
+        // 🟢 找当前 section（更轻量）
+        guard let section = findCurrentSection(by: offsetY) else { return }
+        updateTextLayers(forSelectedIndex: section)
+    }
+    
+    private func findCurrentSection(by offsetY: CGFloat) -> Int? {
+        
+        let sections = collectionView.numberOfSections
+        
+        for section in 0..<sections {
+            
+            let indexPath = IndexPath(item: 0, section: section)
+            
+            if let attributes = collectionView.layoutAttributesForItem(at: indexPath) {
+                
+                let frame = attributes.frame
+                
+                if offsetY < frame.maxY {
+                    return section
+                }
+            }
+        }
+        
+        return sections > 0 ? sections - 1 : nil
+    }
+
+    private func throttleScrollUpdate() {
+        
+        guard isTouched == false else { return }
+        
+        let now = CACurrentMediaTime()
+        guard now - lastUpdateTime > scrollThrottleInterval else { return }
+        
+        lastUpdateTime = now
+        
+        handleScrollUpdate()
     }
 }
