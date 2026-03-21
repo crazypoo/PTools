@@ -790,25 +790,7 @@ public class PTCollectionView: UIView {
             }
         }
     }
-        
-    func setIndexViews() {
-        indicator.removeFromSuperview()
-        indexContainerView.removeFromSuperview()
-        guard (viewConfig.sideIndexTitles?.count ?? 0) > 0 else { return }
-        
-        addSubviews([indexContainerView,indicator])
-        
-        indexContainerView.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(viewConfig.indexConfig?.indexContainerRightOffset ?? 0)
-            make.top.equalToSuperview().inset(viewConfig.indexConfig?.containerTopOffset ?? 0)
-            make.bottom.equalToSuperview().inset(viewConfig.indexConfig?.containerBottomOffset ?? 0)
-            make.width.equalTo(viewConfig.indexConfig?.itemSize.width ?? 20)
-        }
-        
-        setupIndexUI()
-        addIndexGesture()
-    }
-    
+            
     public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) {
         collectionView.registerSupplementaryView(ids: ids, viewClass: viewClass, kind: kind)
     }
@@ -1397,29 +1379,46 @@ extension PTCollectionView:UICollectionViewDataSourcePrefetching {
 
 //MARK: 索引设置
 private extension PTCollectionView {
-    
-    private func addIndexGesture() {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleIndexPan(_:)))
-        indexContainerView.addGestureRecognizer(pan)
+    func setIndexViews() {
+        indicator.removeFromSuperview()
+        indexContainerView.removeFromSuperview()
+        guard (viewConfig.sideIndexTitles?.count ?? 0) > 0 else { return }
+        
+        addSubviews([indexContainerView,indicator])
+        
+        indexContainerView.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(viewConfig.indexConfig?.indexContainerRightOffset ?? 0)
+            make.top.equalToSuperview().inset(viewConfig.indexConfig?.containerTopOffset ?? 0)
+            make.bottom.equalToSuperview().inset(viewConfig.indexConfig?.containerBottomOffset ?? 0)
+            make.width.equalTo(viewConfig.indexConfig?.itemSize.width ?? 20)
+        }
+        
+        setupIndexUI()
+        addIndexGesture()
     }
-    
-    @objc private func handleIndexPan(_ gesture: UIPanGestureRecognizer) {
+
+    private func addIndexGesture() {
         
-        let point = gesture.location(in: stackView)
-        
-        for case let view as PTIndexItemView in stackView.arrangedSubviews {
-            
-            if view.frame.contains(point) {
-                selectIndex(view.index)
-                break
+        let pan = UIPanGestureRecognizer { sender in
+            if let gesture = sender as? UIPanGestureRecognizer {
+                let point = gesture.location(in: self.stackView)
+                
+                for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
+                    
+                    if view.frame.contains(point) {
+                        self.selectIndex(view.index)
+                        break
+                    }
+                }
+                
+                if gesture.state == .ended || gesture.state == .cancelled {
+                    self.hideIndicator()
+                }
             }
         }
-        
-        if gesture.state == .ended || gesture.state == .cancelled {
-            hideIndicator()
-        }
+        indexContainerView.addGestureRecognizer(pan)
     }
-    
+        
     private func selectIndex(_ index: Int) {
         
         guard let config = viewConfig.indexConfig else { return }
@@ -1489,7 +1488,14 @@ private extension PTCollectionView {
         topSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         bottomSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
 
+//        layoutSubviews()
+//        let spacingHeight:CGFloat = (stackView.frame.size.height - CGFloat(titles.count) * config.itemSize.height -  CGFloat(titles.count + 1) * config.itemSpacing) / 2
+        
         stackView.addArrangedSubview(topSpacer)
+//        topSpacer.snp.makeConstraints { make in
+//            make.width.equalTo(config.itemSize.width)
+//            make.height.equalTo(spacingHeight)
+//        }
 
         for (i, title) in titles.enumerated() {
             let label = PTIndexItemView()
@@ -1497,18 +1503,26 @@ private extension PTCollectionView {
             label.text = title
             label.textAlignment = .center
             label.font = config.indexViewFont
-            label.layer.cornerRadius = config.itemSize.width / 2
+            label.layer.cornerRadius = config.itemSize.height / 2
             label.clipsToBounds = true
-            
+            label.isUserInteractionEnabled = true
             label.snp.makeConstraints { make in
                 make.size.equalTo(config.itemSize)
             }
             
+            let tap = UITapGestureRecognizer { sender in
+                self.selectIndex(label.index)
+            }
+            label.addGestureRecognizer(tap)
             stackView.addArrangedSubview(label)
         }
         
         stackView.addArrangedSubview(bottomSpacer)
-        
+//        bottomSpacer.snp.makeConstraints { make in
+//            make.width.equalTo(config.itemSize.width)
+//            make.height.equalTo(spacingHeight)
+//        }
+
         setIndicatorCenter(t: 0, config: config,alpha: 0)
     }
     
