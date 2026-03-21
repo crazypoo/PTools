@@ -8,29 +8,31 @@
 
 import UIKit
 
-public class PTSection: NSObject {
-    
-    public var identifier: String = UUID().uuidString
-    
+public struct PTSection: Hashable {
+
+    public var identifier: String
+
     public var headerTitle: String?
     public var headerID: String?
     public var footerID: String?
-    public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude
-    public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
-    public var rows: [PTRows]?
-    public var headerDataModel: AnyObject?
-    public var footerDataModel: AnyObject?
+    public var footerHeight: CGFloat?
+    public var headerHeight: CGFloat?
 
-    public init(headerTitle: String? = "",
-                headerID: String? = "",
-                footerID:String? = "",
-                footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
-                headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
-                rows:[PTRows]? = nil,
-                headerDataModel:AnyObject? = nil,
-                footerDataModel:AnyObject? = nil) {
-        super.init()
-        
+    public var rows: [PTRows]?
+
+    public var headerDataModel: AnyHashable?
+    public var footerDataModel: AnyHashable?
+
+    public init(identifier: String = UUID().uuidString,
+                headerTitle: String? = nil,
+                headerID: String? = nil,
+                footerID: String? = nil,
+                footerHeight: CGFloat? = nil,
+                headerHeight: CGFloat? = nil,
+                rows: [PTRows]? = nil,
+                headerDataModel: AnyHashable? = nil,
+                footerDataModel: AnyHashable? = nil) {
+        self.identifier = identifier
         self.headerTitle = headerTitle
         self.headerID = headerID
         self.footerID = footerID
@@ -41,17 +43,13 @@ public class PTSection: NSObject {
         self.footerDataModel = footerDataModel
     }
     
-    public override func isEqual(_ object: Any?) -> Bool {
-        guard let other = object as? PTSection else { return false }
-        
-        return self.identifier == other.identifier &&
-               self.isContentEqual(to: other)
+    public static func == (lhs: PTSection, rhs: PTSection) -> Bool {
+        return lhs.identifier == rhs.identifier
     }
 
-    public override var hash: Int {
-        return identifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
     }
-
 }
 
 extension PTSection {
@@ -85,23 +83,23 @@ public class PTRows: NSObject {
     public var badge:Int = 0
 
     public init(title: String = "",
-                nibName:String? = "",
-                ID: String? = "",
+                nibName:String = "",
+                ID: String = "",
                 dataModel:AnyObject? = nil,
-                badge:Int? = 0) {
+                badge:Int = 0) {
         super.init()
         self.title = title
-        self.ID = ID!
+        self.ID = ID
         self.dataModel = dataModel
-        self.nibName = nibName!
-        self.badge = badge!
+        self.nibName = nibName
+        self.badge = badge
     }
 }
 
 extension UICollectionView {
     
     public static func sectionRows(rowsModel:[PTFusionCellModel]) -> [PTRows] {
-        let rows = rowsModel.map { PTRows(title:$0.name,ID: $0.cellID,dataModel:$0) }
+        let rows = rowsModel.map { PTRows(title:$0.name,ID: $0.cellID ?? "",dataModel:$0) }
         return rows
     }
     

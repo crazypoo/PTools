@@ -345,8 +345,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
 
             var sections = [PTSection]()
-            let rows = self.viewConfig.mediaData.map { PTRows(ID: PTMediaBrowserCell.ID,dataModel: $0) }
-            let cellSection = PTSection(rows: rows)
+            let rows = self.viewConfig.mediaData.compactMap { PTRows(ID: PTMediaBrowserCell.ID,dataModel: $0) }
+            let cellSection = PTSection(rows:rows)
             sections.append(cellSection)
             
             PTGCDManager.gcdMain {

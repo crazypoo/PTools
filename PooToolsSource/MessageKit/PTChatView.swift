@@ -343,7 +343,7 @@ public class PTChatView: UIView {
     public func viewReloadData(loadFinish:PTCollectionCallback? = nil) {
         if !chatDataArr.isEmpty {
             var sections = [PTSection]()
-            let rows: [PTRows] = chatDataArr.compactMap { value in
+            let rows:[PTRows] = chatDataArr.compactMap { value in
                 switch value.messageType {
                 case .SystemMessage:
                     return PTRows(ID: PTChatSystemMessageCell.ID, dataModel: value)

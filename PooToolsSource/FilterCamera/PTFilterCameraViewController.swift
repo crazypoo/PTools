@@ -256,7 +256,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.isUserInteractionEnabled = true
         view.customerLayout = { sectionIndex,sectionModel in
-            return UICollectionView.horizontalLayout(data: sectionModel.rows!,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 78,itemHeight: PTFilterCameraViewController.filterCollectionHeight,topContentSpace: 5,itemLeadingSpace: 10)
+            return UICollectionView.horizontalLayout(data: sectionModel.rows,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 78,itemHeight: PTFilterCameraViewController.filterCollectionHeight,topContentSpace: 5,itemLeadingSpace: 10)
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
