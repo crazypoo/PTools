@@ -158,10 +158,6 @@ public class PTCollectionViewConfig: NSObject {
     open var previewImageSize: CGSize = CGSizeMake(105, 105)
 }
 
-public class PTTextLayer: CATextLayer {
-    open var index: Int = 0
-}
-
 public class PTCollectionIndexViewConfiguration: NSObject {
     ///索引格子大小
     open var itemSize: CGSize = CGSize(width: 15, height: 15)
@@ -187,6 +183,12 @@ public class PTCollectionIndexViewConfiguration: NSObject {
     open var indexViewFont: UIFont = .appfont(size: 12)
     ///放大索引字体,这个属性只会使用字体名字
     open var indexViewHudFont: UIFont = .appfont(size: 18)
+    ///索引顶部偏移
+    open var containerTopOffset:CGFloat = 0
+    ///索引底部偏移
+    open var containerBottomOffset:CGFloat = 0
+    ///索引右边偏移
+    open var indexContainerRightOffset:CGFloat = 0
 }
 
 open class PTBaseCollectionView: UICollectionView {
@@ -203,6 +205,16 @@ open class PTBaseCollectionView: UICollectionView {
     }
 }
 
+final class PTIndexItemView: UILabel {
+    
+    var index: Int = 0
+    
+    func update(selected: Bool, config: PTCollectionIndexViewConfiguration) {
+        backgroundColor = selected ? config.itemSelectedBackgroundColor : config.itemBackgroundColor
+        textColor = selected ? config.itemSelectedTextColor : config.itemTextColor
+    }
+}
+
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
@@ -212,7 +224,6 @@ public class PTCollectionView: UIView {
     var photoAssets: [PHAsset] = []
     
     ///索引
-    fileprivate var textLayerArray = [PTTextLayer]()
     fileprivate lazy var indicator: UIView = {
         let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
         let indicator = UIView()
@@ -565,10 +576,18 @@ public class PTCollectionView: UIView {
         return view
     }()
     
-    fileprivate lazy var indexView: UIView = {
+    fileprivate lazy var indexContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = viewConfig.indexConfig?.indexViewBackgroundColor
         return view
+    }()
+    
+    fileprivate lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
+        return stack
     }()
     
     private(set) lazy var refreshControl:UIRefreshControl = {
@@ -767,30 +786,23 @@ public class PTCollectionView: UIView {
             }
         }
     }
-    
-    func clearTextLayers() {
-        // 仅清理索引相关的图层，避免误删其他 layer
-        textLayerArray.forEach { $0.removeFromSuperlayer() }
-        textLayerArray.removeAll()
-    }
-    
+        
     func setIndexViews() {
         indicator.removeFromSuperview()
-        indexView.removeFromSuperview()
-        clearTextLayers()
-        if (viewConfig.sideIndexTitles?.count ?? 0) > 0 , let indexConfig = viewConfig.indexConfig {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.setupUI()
-            }
-            
-            addSubview(indexView)
-            indexView.snp.makeConstraints { make in
-                make.right.equalToSuperview().inset(7.5)
-                make.top.bottom.equalToSuperview()
-                make.width.equalTo(indexConfig.itemSize.width)
-            }
-            bringSubviewToFront(indexView)
+        indexContainerView.removeFromSuperview()
+        guard (viewConfig.sideIndexTitles?.count ?? 0) > 0 else { return }
+        
+        addSubviews([indexContainerView,indicator])
+        
+        indexContainerView.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(viewConfig.indexConfig?.indexContainerRightOffset ?? 0)
+            make.top.equalToSuperview().inset(viewConfig.indexConfig?.containerTopOffset ?? 0)
+            make.bottom.equalToSuperview().inset(viewConfig.indexConfig?.containerBottomOffset ?? 0)
+            make.width.equalTo(viewConfig.indexConfig?.itemSize.width ?? 20)
         }
+        
+        setupIndexUI()
+        addIndexGesture()
     }
     
     public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) {
@@ -889,7 +901,6 @@ public class PTCollectionView: UIView {
                         }
                     }
                 }
-                
             } completion: { _ in
                 
                 // ⚠️ layout cache 必须清
@@ -1343,6 +1354,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         collectionDidEndDecelerating?(scrollView as! UICollectionView)
+        hideIndicator()
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -1382,74 +1394,113 @@ extension PTCollectionView:UICollectionViewDataSourcePrefetching {
 //MARK: 索引设置
 private extension PTCollectionView {
     
-    func setupUI() {
-        var layerArray = [PTTextLayer]()
-        for i in 0 ..< (viewConfig.sideIndexTitles?.count ?? 0) {
-            guard let title = viewConfig.sideIndexTitles?[i], let indexCfg = viewConfig.indexConfig else { continue }
-            let textLayer = PTTextLayer()
-            textLayer.index = i
-            textLayer.font = CTFontCreateWithName(indexCfg.indexViewFont.fontName as CFString, indexCfg.indexViewFont.pointSize, nil)
-            textLayer.fontSize = indexCfg.indexViewFont.pointSize
-            textLayer.alignmentMode = CATextLayerAlignmentMode.center
-            textLayer.string = title
-            let frame = self.frame(forTextLayer: textLayer)
-            textLayer.frame = frame
-            textLayer.cornerRadius = indexCfg.itemSize.width / 2
-            textLayer.masksToBounds = true
-            textLayer.position = frame.origin
-            self.layer.zPosition = CGFloat.greatestFiniteMagnitude
-            self.layer.insertSublayer(textLayer, above: nil)
-            layerArray.append(textLayer)
-        }
-        self.textLayerArray = layerArray
-        self.updateTextLayers(forSelectedIndex: 0)
+    private func addIndexGesture() {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleIndexPan(_:)))
+        indexContainerView.addGestureRecognizer(pan)
+    }
+    
+    @objc private func handleIndexPan(_ gesture: UIPanGestureRecognizer) {
         
-        self.addSubview(self.indicator)
+        let point = gesture.location(in: stackView)
+        
+        for case let view as PTIndexItemView in stackView.arrangedSubviews {
+            
+            if view.frame.contains(point) {
+                selectIndex(view.index)
+                break
+            }
+        }
+        
+        if gesture.state == .ended || gesture.state == .cancelled {
+            hideIndicator()
+        }
     }
     
-    func frame(forTextLayer textLayer: PTTextLayer) -> CGRect {
-        guard let indexCfg = viewConfig.indexConfig else { return .zero }
-        let width = indexCfg.itemSize.width
-        let height = indexCfg.itemSize.height
-        return CGRect(x: self.bounds.width - width, y: layerTopSpacing + CGFloat(textLayer.index) * height + indexCfg.itemSpacing * CGFloat(textLayer.index), width: width, height: height)
+    private func selectIndex(_ index: Int) {
+        
+        guard let config = viewConfig.indexConfig else { return }
+        
+        for case let view as PTIndexItemView in stackView.arrangedSubviews {
+            view.update(selected: view.index == index, config: config)
+        }
+        
+        showIndicator(at: index)
+        scrollToSection(index)
     }
     
-    func showIndicator(forTextLayer textLayer: PTTextLayer) {
-        guard let indexCfg = viewConfig.indexConfig else { return }
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        indicator.center = CGPoint(x: self.frame.size.width - indicator.frame.size.width / 2 - indexCfg.itemSize.width, y: textLayer.position.y)
-        bigTextLabel.text = textLayer.string as? String
+    private func scrollToSection(_ section: Int) {
+        let indexPath = IndexPath(item: 0, section: section)
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+    }
+    
+    private func showIndicator(at index: Int) {
+        guard let titles = viewConfig.sideIndexTitles,
+              index < titles.count,
+              let targetView = stackView.arrangedSubviews[safe: index] else { return }
+        
+        bigTextLabel.text = titles[index]
+        // 🟢 转换坐标（关键）
+        let targetFrame = targetView.convert(targetView.bounds, to: self)
+        
+        // 🟢 计算中心点（让 indicator 对齐 index item）
+        let centerY = targetFrame.midY
+        
+        let indicatorX = bounds.width - indicator.bounds.width / 2 - (viewConfig.indexConfig?.itemSize.width ?? 15)
+        
+        UIView.animate(withDuration: 0.15) {
+            self.indicator.center = CGPoint(x: indicatorX, y: centerY)
+        }
+        
         indicator.alpha = 1
-        CATransaction.commit()
+
+    }
+    
+    private func setupIndexUI() {
+        
+        guard let titles = viewConfig.sideIndexTitles,
+              let config = viewConfig.indexConfig else { return }
+        
+        indexContainerView.addSubview(stackView)
+        
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        stackView.spacing = config.itemSpacing
+        
+        for (i, title) in titles.enumerated() {
+            let label = PTIndexItemView()
+            label.index = i
+            label.text = title
+            label.textAlignment = .center
+            label.font = config.indexViewFont
+            label.layer.cornerRadius = config.itemSize.width / 2
+            label.clipsToBounds = true
+            
+            label.snp.makeConstraints { make in
+                make.size.equalTo(config.itemSize)
+            }
+            
+            stackView.addArrangedSubview(label)
+        }
+        
+        guard let targetView = stackView.arrangedSubviews[safe: 0] else { return }
+        // 🟢 转换坐标（关键）
+        let targetFrame = targetView.convert(targetView.bounds, to: self)
+        
+        // 🟢 计算中心点（让 indicator 对齐 index item）
+        let centerY = targetFrame.midY
+        
+        let indicatorX = indexContainerView.frame.minX - indicator.bounds.width / 2 - 4
+
+        UIView.animate(withDuration: 0.15) {
+            self.indicator.center = CGPoint(x: indicatorX, y: centerY)
+        }
     }
     
     func hideIndicator() {
-        indicator.alpha = 0
-    }
-    
-    func scrollCollectionView(toTextLayer textLayer: PTTextLayer, animated: Bool) {
-        let indexPath = IndexPath(item: 0, section: textLayer.index)
-        if let attributes = collectionView.layoutAttributesForSupplementaryElement(ofKind: UICollectionView.elementKindSectionHeader, at: indexPath),
-           let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
-            var targetPoint = cellAttributes.frame.origin
-            targetPoint.y = targetPoint.y - attributes.frame.size.height
-            collectionView.setContentOffset(targetPoint, animated: animated)
-        } else {
-            collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
-        }
-    }
-    
-    func updateTextLayers(forSelectedIndex index: Int) {
-        guard let cfg = viewConfig.indexConfig else { return }
-        for textLayer in textLayerArray {
-            if textLayer.index == index {
-                textLayer.backgroundColor = cfg.itemSelectedBackgroundColor.cgColor
-                textLayer.foregroundColor = cfg.itemSelectedTextColor.cgColor
-            } else {
-                textLayer.backgroundColor = cfg.itemBackgroundColor.cgColor
-                textLayer.foregroundColor = cfg.itemTextColor.cgColor
-            }
+        UIView.animate(withDuration: 0.2) {
+            self.indicator.alpha = 0
         }
     }
 }
@@ -1474,47 +1525,6 @@ extension PTCollectionView {
             return view
         }
     }
-    
-    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = true
-        showChanges(forTouches: touches)
-    }
-    
-    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        hideIndicator()
-        isTouched = false
-    }
-    
-    open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouched = true
-        showChanges(forTouches: touches)
-    }
-    
-    open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        hideIndicator()
-        isTouched = false
-    }
-    
-    func textLayer(forTouches touches: Set<UITouch>) -> PTTextLayer? {
-        guard let touch = touches.first else { return nil }
-        let touchPoint = touch.location(in: self)
-        let touchLine = CGRect(x: 0, y: touchPoint.y, width: self.frame.size.width, height: 1)
-        for textLayer in textLayerArray {
-            if touchLine.intersects(textLayer.frame) {
-                return textLayer
-            }
-        }
-        return nil
-    }
-    
-    func showChanges(forTouches touches: Set<UITouch>) {
-        guard let touchedLayer = textLayer(forTouches: touches) else { return }
-        if touchedIndex == touchedLayer.index { return }
-        updateTextLayers(forSelectedIndex: touchedLayer.index)
-        touchedIndex = touchedLayer.index
-        showIndicator(forTextLayer: touchedLayer)
-        scrollCollectionView(toTextLayer: touchedLayer, animated: false)
-    }
 }
 
 //MARK: KVO相关
@@ -1523,8 +1533,11 @@ extension PTCollectionView {
         // 🟢 取当前偏移
         let offsetY = collectionView.contentOffset.y
         // 🟢 找当前 section（更轻量）
-        guard let section = findCurrentSection(by: offsetY) else { return }
-        updateTextLayers(forSelectedIndex: section)
+        guard let section = findCurrentSection(by: offsetY),let config = viewConfig.indexConfig else { return }
+        for case let view as PTIndexItemView in stackView.arrangedSubviews {
+            view.update(selected: view.index == section, config: config)
+        }
+        showIndicator(at: section)
     }
     
     private func findCurrentSection(by offsetY: CGFloat) -> Int? {

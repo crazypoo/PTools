@@ -399,6 +399,8 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         let indexConfig = PTCollectionIndexViewConfiguration()
         indexConfig.indexViewBackgroundColor = .orange
+        indexConfig.containerBottomOffset = CGFloat.kTabbarHeight_Total
+        indexConfig.containerTopOffset = CGFloat.kNavBarHeight_Total
         cConfig.indexConfig = indexConfig
         cConfig.sideIndexTitles = strings
 
