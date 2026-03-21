@@ -10,6 +10,8 @@ import UIKit
 
 public class PTSection: NSObject {
     
+    public var identifier: String = UUID().uuidString
+    
     public var headerTitle: String?
     public var headerID: String?
     public var footerID: String?
@@ -36,10 +38,43 @@ public class PTSection: NSObject {
         self.headerHeight = headerHeight
         self.rows = rows
         self.headerDataModel = headerDataModel
-        self.footerDataModel = headerDataModel
+        self.footerDataModel = footerDataModel
     }
+    
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTSection else { return false }
+        
+        return self.identifier == other.identifier &&
+               self.isContentEqual(to: other)
+    }
+
+    public override var hash: Int {
+        return identifier.hashValue
+    }
+
 }
 
+extension PTSection {
+    
+    func isContentEqual(to other: PTSection) -> Bool {
+        
+        // 基础属性比较
+        if headerTitle != other.headerTitle { return false }
+        if headerID != other.headerID { return false }
+        if footerID != other.footerID { return false }
+        if footerHeight != other.footerHeight { return false }
+        if headerHeight != other.headerHeight { return false }
+        
+        // rows 数量比较（最关键）
+        let lhsCount = rows?.count ?? 0
+        let rhsCount = other.rows?.count ?? 0
+        
+        if lhsCount != rhsCount { return false }
+        
+        // 👉 这里只做“浅比较”（高性能）
+        return true
+    }
+}
 
 public class PTRows: NSObject {
     

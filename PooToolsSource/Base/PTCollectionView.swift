@@ -294,8 +294,9 @@ public class PTCollectionView: UIView {
         return layout
     }
     
-    fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        
+    private var layoutCache: [Int: NSCollectionLayoutSection] = [:]
+    
+    private func buildSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         guard !mSections.isEmpty else {
             return NSCollectionLayoutSection(group: oneSquareGroup())
         }
@@ -418,8 +419,19 @@ public class PTCollectionView: UIView {
         }
         
         laySection.decorationItems = generateDecorationItems(section: section, sectionModel: sectionModel)
-        
         return laySection
+    }
+    
+    fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        
+        if let cache = layoutCache[section] {
+            return cache
+        }
+
+        let sectionLayout = buildSection(section: section, environment: environment)
+
+        layoutCache[section] = sectionLayout
+        return sectionLayout
     }
     
     private func oneSquareGroup() -> NSCollectionLayoutGroup {
@@ -779,20 +791,91 @@ public class PTCollectionView: UIView {
     }
     
     ///加载数据并且刷新界面
+    private func calculateDiff(old: [PTSection],
+                               new: [PTSection]) -> (insert: IndexSet,
+                                                      delete: IndexSet,
+                                                      reload: IndexSet) {
+        
+        var insert = IndexSet()
+        var delete = IndexSet()
+        var reload = IndexSet()
+        
+        let oldCount = old.count
+        let newCount = new.count
+        let maxCount = max(oldCount, newCount)
+        
+        for i in 0..<maxCount {
+            if i >= oldCount {
+                insert.insert(i)
+            } else if i >= newCount {
+                delete.insert(i)
+            } else {
+                // 简单判断：数据是否变化（你可以自定义更精细）
+                if old[i] != new[i] {
+                    reload.insert(i)
+                }
+            }
+        }
+        
+        return (insert, delete, reload)
+    }
+    
     public func showCollectionDetail(collectionData:[PTSection],finishTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdMain {
-            self.mSections.removeAll()
-            self.mSections = collectionData
-            if self.viewConfig.refreshWithoutAnimation {
-                self.collectionView.reloadDataWithOutAnimation {
-                    self.setiOS17EmptyDataView()
-                    finishTask?(self.collectionView)
-                }
-            } else {
+            let oldSections = self.mSections
+            let newSections = collectionData
+            // 🟢 如果是第一次 or 数据为空 → 直接 reload（合理）
+            guard !oldSections.isEmpty else {
+                self.mSections = newSections
+                self.layoutCache.removeAll()
                 self.collectionView.reloadData {
                     self.setiOS17EmptyDataView()
                     finishTask?(self.collectionView)
                 }
+                return
+            }
+            
+            let diff = self.calculateDiff(old: oldSections, new: newSections)
+            
+            self.mSections = newSections
+            
+            self.collectionView.performBatchUpdates {
+                
+                if !diff.delete.isEmpty {
+                    self.collectionView.deleteSections(diff.delete)
+                }
+                
+                if !diff.insert.isEmpty {
+                    self.collectionView.insertSections(diff.insert)
+                }
+                
+                if !diff.reload.isEmpty {
+                    for section in diff.reload {
+                        
+                        let oldRows = oldSections[section].rows ?? []
+                        let newRows = newSections[section].rows ?? []
+                        
+                        if oldRows.count == newRows.count {
+                            // 👉 数量一样 → 刷新 item（更细粒度）
+                            let indexPaths = (0..<newRows.count).map {
+                                IndexPath(item: $0, section: section)
+                            }
+                            self.collectionView.reloadItems(at: indexPaths)
+                            
+                        } else {
+                            // 👉 数量变化 → fallback section reload
+                            self.collectionView.reloadSections(IndexSet(integer: section))
+                        }
+                    }
+                }
+                
+            } completion: { _ in
+                
+                // ⚠️ layout cache 必须清
+                self.layoutCache.removeAll()
+                
+                self.setiOS17EmptyDataView()
+                finishTask?(self.collectionView)
             }
         }
     }
@@ -800,6 +883,7 @@ public class PTCollectionView: UIView {
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdMain {
             self.mSections.removeAll()
+            self.layoutCache.removeAll()
             if self.viewConfig.refreshWithoutAnimation {
                 self.collectionView.reloadDataWithOutAnimation {
                     self.setiOS17EmptyDataView()
@@ -831,6 +915,7 @@ public class PTCollectionView: UIView {
     
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
         PTGCDManager.gcdMain {
+            self.layoutCache.removeAll()
             // 🟢 1. 在主線程更新數據源
             let startIndex = self.mSections[section].rows?.count ?? 0
             self.mSections[section].rows?.append(contentsOf: rows)
@@ -857,7 +942,7 @@ public class PTCollectionView: UIView {
                 completion?()
                 return
             }
-
+            self.layoutCache.removeAll()
             var insertIndex = self.mSections.count
             
             if let index = afterIndex, index < self.mSections.count {
@@ -886,6 +971,7 @@ public class PTCollectionView: UIView {
 
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
+            self.layoutCache.removeAll()
             if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
                 let endIndex = startIndex + rows.count - 1
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
@@ -907,7 +993,7 @@ public class PTCollectionView: UIView {
     
     public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
-
+            self.layoutCache.removeAll()
             var indexPaths: [IndexPath] = []
 
             // section 倒序，防止 index 偏移
@@ -954,6 +1040,7 @@ public class PTCollectionView: UIView {
     
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
         PTGCDManager.gcdGobal {
+            self.layoutCache.removeAll()
             guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
                 PTNSLogConsole("Error: Can't find the section to delete")
                 return
