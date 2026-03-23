@@ -220,6 +220,18 @@ struct LayoutCacheKey: Hashable {
     let width: CGFloat
 }
 
+struct PTDiffUpdates {
+    var sectionDeletes: IndexSet = []
+    var sectionInserts: IndexSet = []
+    var sectionMoves: [(Int, Int)] = []
+    var sectionReloads: IndexSet = []
+    
+    var itemDeletes: [IndexPath] = []
+    var itemInserts: [IndexPath] = []
+    var itemMoves: [(IndexPath, IndexPath)] = []
+    var itemReloads: [IndexPath] = []
+}
+
 struct SectionDiffResult {
     var inserts: IndexSet = []
     var deletes: IndexSet = []
@@ -232,6 +244,26 @@ struct ItemDiffResult {
     var deletes: [IndexPath] = []
     var reloads: [IndexPath] = []
     var moves: [(from: IndexPath, to: IndexPath)] = []
+}
+
+public struct PTDiffSnapshot {
+    
+    public var sections: [PTSection] = []
+    
+    public init(sections: [PTSection]) {
+        self.sections = sections
+    }
+}
+
+public enum PTDiffAnimation {
+    case none
+    case fade
+    case right
+    case left
+    case top
+    case bottom
+    case automatic
+    case `default`
 }
 
 //MARK: 界面展示
@@ -887,11 +919,9 @@ public class PTCollectionView: UIView {
         return result
     }
     
-    func diffItems(
-        old: [PTRows],
-        new: [PTRows],
-        section: Int
-    ) -> ItemDiffResult {
+    func diffItems(old: [PTRows],
+                   new: [PTRows],
+                   section: Int) -> ItemDiffResult {
         
         var result = ItemDiffResult()
         
@@ -939,64 +969,171 @@ public class PTCollectionView: UIView {
         return result
     }
     
-    public func showCollectionDetail(collectionData:[PTSection],finishTask:PTCollectionCallback? = nil) {
-        PTGCDManager.gcdMain {
-            let oldSections = self.mSections
-            let newSections = collectionData
-            // 🟢 如果是第一次 or 数据为空 → 直接 reload（合理）
-            guard !oldSections.isEmpty else {
-                self.mSections = newSections
-                self.layoutCache.removeAll()
-                self.heightCache.removeAll()
-                self.collectionView.reloadData {
-                    self.setiOS17EmptyDataView()
-                    finishTask?(self.collectionView)
-                }
-                return
+    private func buildDiffUpdates(old: [PTSection],
+                                  new: [PTSection]) -> PTDiffUpdates {
+        
+        var updates = PTDiffUpdates()
+        
+        let sectionDiff = diffSections(old: old, new: new)
+        
+        updates.sectionDeletes = sectionDiff.deletes
+        updates.sectionInserts = sectionDiff.inserts
+        updates.sectionMoves = sectionDiff.moves
+        updates.sectionReloads = sectionDiff.reloads
+        
+        for section in 0..<new.count {
+            
+            guard section < old.count else { continue }
+            
+            let oldRows = old[section].rows ?? []
+            let newRows = new[section].rows ?? []
+            
+            let itemDiff = diffItems(old: oldRows, new: newRows, section: section)
+            
+            updates.itemDeletes.append(contentsOf: itemDiff.deletes)
+            updates.itemInserts.append(contentsOf: itemDiff.inserts)
+            updates.itemMoves.append(contentsOf: itemDiff.moves)
+            updates.itemReloads.append(contentsOf: itemDiff.reloads)
+        }
+        
+        return updates
+    }
+    
+    public func applySnapshot(_ snapshot: PTDiffSnapshot,
+                              animated: Bool = true,
+                              animation: PTDiffAnimation = .default,
+                              completion: PTCollectionCallback? = nil) {
+        let oldSections = self.mSections
+        let newSections = snapshot.sections
+        
+        // 🟢 首次加载
+        guard !oldSections.isEmpty else {
+            self.mSections = newSections
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            self.setiOS17EmptyDataView()
+            collectionView.reloadData {
+                completion?(self.collectionView)
+            }
+            return
+        }
+        
+        let updates = buildDiffUpdates(old: oldSections, new: newSections)
+        
+        self.mSections = newSections
+        
+        performSafeBatchUpdates(
+            updates: updates,
+            animated: animated,
+            animation: animation,
+            completion: completion
+        )
+    }
+    
+    private func performSafeBatchUpdates(updates: PTDiffUpdates,
+                                         animated: Bool,
+                                         animation: PTDiffAnimation,
+                                         completion: PTCollectionCallback?) {
+        
+        // 🟢 冲突处理（move & reload）
+        let filteredReloads = updates.itemReloads.filter { reload in
+            !updates.itemMoves.contains(where: { $0.1 == reload })
+        }
+        
+        // 🟢 限制 reload 数量（防卡顿）
+        let finalReloads = filteredReloads.count > 50 ? [] : filteredReloads
+        
+        let updateBlock = {
+            // section
+            self.collectionView.deleteSections(updates.sectionDeletes)
+            self.collectionView.insertSections(updates.sectionInserts)
+            
+            updates.sectionMoves.forEach {
+                self.collectionView.moveSection($0.0, toSection: $0.1)
             }
             
-            let sectionDiff = self.diffSections(old: oldSections, new: newSections)
-
-            self.collectionView.performBatchUpdates {
-                
-                // 1. section 删除
-                self.collectionView.deleteSections(sectionDiff.deletes)
-                
-                // 2. section 插入
-                self.collectionView.insertSections(sectionDiff.inserts)
-                
-                // 3. section move
-                sectionDiff.moves.forEach {
-                    self.collectionView.moveSection($0.from, toSection: $0.to)
-                }
-                
-                // 4. section 内 item diff
-                for section in 0..<newSections.count {
-                    
-                    guard section < oldSections.count else { continue }
-                    
-                    let oldRows = oldSections[section].rows ?? []
-                    let newRows = newSections[section].rows ?? []
-                    
-                    let itemDiff = self.diffItems(old: oldRows, new: newRows, section: section)
-                    
-                    self.collectionView.deleteItems(at: itemDiff.deletes)
-                    self.collectionView.insertItems(at: itemDiff.inserts)
-                    
-                    itemDiff.moves.forEach {
-                        self.collectionView.moveItem(at: $0.from, to: $0.to)
-                    }
-                    
-                    self.collectionView.reloadItems(at: itemDiff.reloads)
-                }
-                
-            } completion: { _ in
+            self.collectionView.reloadSections(updates.sectionReloads)
+            
+            // item
+            self.collectionView.deleteItems(at: updates.itemDeletes)
+            self.collectionView.insertItems(at: updates.itemInserts)
+            
+            updates.itemMoves.forEach {
+                self.collectionView.moveItem(at: $0.0, to: $0.1)
+            }
+            
+            self.collectionView.reloadItems(at: finalReloads)
+        }
+        
+        let applyUpdates = {
+            self.collectionView.performBatchUpdates(updateBlock) { _ in
                 self.layoutCache.removeAll()
                 self.heightCache.removeAll()
                 self.setiOS17EmptyDataView()
-                finishTask?(self.collectionView)
+                completion?(self.collectionView)
             }
         }
+        
+        guard animated else {
+            UIView.performWithoutAnimation {
+                applyUpdates()
+            }
+            return
+        }
+        
+        applyAnimation(animation)
+        applyUpdates()
+    }
+    
+    private func applyAnimation(_ animation: PTDiffAnimation) {
+        
+        switch animation {
+        case .fade:
+            collectionView.layer.add(makeTransition(type: .fade), forKey: nil)
+        case .right:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromRight), forKey: nil)
+        case .left:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromLeft), forKey: nil)
+        case .top:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromTop), forKey: nil)
+        case .bottom:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromBottom), forKey: nil)
+        default:
+            break
+        }
+    }
+
+    private func makeTransition(type: CATransitionType, subtype: CATransitionSubtype? = nil) -> CATransition {
+        let transition = CATransition()
+        transition.type = type
+        transition.subtype = subtype
+        transition.duration = 0.25
+        return transition
+    }
+    
+    private func debugDiff(_ updates: PTDiffUpdates) {
+        #if DEBUG
+        PTNSLogConsole("""
+        ===== DIFF =====
+        section insert: \(updates.sectionInserts)
+        section delete: \(updates.sectionDeletes)
+        section move: \(updates.sectionMoves)
+        
+        item insert: \(updates.itemInserts.count)
+        item delete: \(updates.itemDeletes.count)
+        item move: \(updates.itemMoves.count)
+        item reload: \(updates.itemReloads.count)
+        =================
+        """)
+        #endif
+    }
+    
+    public func showCollectionDetail(collectionData:[PTSection],
+                                     animated: Bool = true,
+                                     animation: PTDiffAnimation = .default,
+                                     finishTask:PTCollectionCallback? = nil) {
+        let snapshot = PTDiffSnapshot(sections: collectionData)
+        applySnapshot(snapshot,animated: animated,animation: animation,completion: finishTask)
     }
     
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
