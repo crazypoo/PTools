@@ -220,6 +220,20 @@ struct LayoutCacheKey: Hashable {
     let width: CGFloat
 }
 
+struct SectionDiffResult {
+    var inserts: IndexSet = []
+    var deletes: IndexSet = []
+    var reloads: IndexSet = []
+    var moves: [(from: Int, to: Int)] = []
+}
+
+struct ItemDiffResult {
+    var inserts: [IndexPath] = []
+    var deletes: [IndexPath] = []
+    var reloads: [IndexPath] = []
+    var moves: [(from: IndexPath, to: IndexPath)] = []
+}
+
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
@@ -836,6 +850,95 @@ public class PTCollectionView: UIView {
         return (insert, delete, reload)
     }
     
+    func diffSections(old: [PTSection], new: [PTSection]) -> SectionDiffResult {
+        
+        var result = SectionDiffResult()
+        
+        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map { ($0.element.identifier, $0.offset) })
+        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map { ($0.element.identifier, $0.offset) })
+        
+        // 删除
+        for (id, oldIndex) in oldMap {
+            if newMap[id] == nil {
+                result.deletes.insert(oldIndex)
+            }
+        }
+        
+        // 插入
+        for (id, newIndex) in newMap {
+            if oldMap[id] == nil {
+                result.inserts.insert(newIndex)
+            }
+        }
+        
+        // move + reload
+        for (id, oldIndex) in oldMap {
+            guard let newIndex = newMap[id] else { continue }
+            
+            if oldIndex != newIndex {
+                result.moves.append((oldIndex, newIndex))
+            }
+            
+            if !old[oldIndex].isContentEqual(to: new[newIndex]) {
+                result.reloads.insert(newIndex)
+            }
+        }
+        
+        return result
+    }
+    
+    func diffItems(
+        old: [PTRows],
+        new: [PTRows],
+        section: Int
+    ) -> ItemDiffResult {
+        
+        var result = ItemDiffResult()
+        
+        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map {
+            ($0.element.diffId, $0.offset)
+        })
+        
+        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map {
+            ($0.element.diffId, $0.offset)
+        })
+        
+        // 删除
+        for (id, oldIndex) in oldMap {
+            if newMap[id] == nil {
+                result.deletes.append(IndexPath(item: oldIndex, section: section))
+            }
+        }
+        
+        // 插入
+        for (id, newIndex) in newMap {
+            if oldMap[id] == nil {
+                result.inserts.append(IndexPath(item: newIndex, section: section))
+            }
+        }
+        
+        // move + reload
+        for (id, oldIndex) in oldMap {
+            guard let newIndex = newMap[id] else { continue }
+            
+            let oldItem = old[oldIndex]
+            let newItem = new[newIndex]
+            
+            if oldIndex != newIndex {
+                result.moves.append((
+                    IndexPath(item: oldIndex, section: section),
+                    IndexPath(item: newIndex, section: section)
+                ))
+            }
+            
+            if !oldItem.isContentEqual(to: newItem) {
+                result.reloads.append(IndexPath(item: newIndex, section: section))
+            }
+        }
+        
+        return result
+    }
+    
     public func showCollectionDetail(collectionData:[PTSection],finishTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdMain {
             let oldSections = self.mSections
@@ -852,42 +955,42 @@ public class PTCollectionView: UIView {
                 return
             }
             
-            let diff = self.calculateDiff(old: oldSections, new: newSections)
-            
-            self.mSections = newSections
-            
+            let sectionDiff = self.diffSections(old: oldSections, new: newSections)
+
             self.collectionView.performBatchUpdates {
                 
-                if !diff.delete.isEmpty {
-                    self.collectionView.deleteSections(diff.delete)
+                // 1. section 删除
+                self.collectionView.deleteSections(sectionDiff.deletes)
+                
+                // 2. section 插入
+                self.collectionView.insertSections(sectionDiff.inserts)
+                
+                // 3. section move
+                sectionDiff.moves.forEach {
+                    self.collectionView.moveSection($0.from, toSection: $0.to)
                 }
                 
-                if !diff.insert.isEmpty {
-                    self.collectionView.insertSections(diff.insert)
-                }
-                
-                if !diff.reload.isEmpty {
-                    for section in diff.reload {
-                        
-                        let oldRows = oldSections[section].rows ?? []
-                        let newRows = newSections[section].rows ?? []
-                        
-                        if oldRows.count == newRows.count {
-                            // 👉 数量一样 → 刷新 item（更细粒度）
-                            let indexPaths = (0..<newRows.count).map {
-                                IndexPath(item: $0, section: section)
-                            }
-                            self.collectionView.reloadItems(at: indexPaths)
-                            
-                        } else {
-                            // 👉 数量变化 → fallback section reload
-                            self.collectionView.reloadSections(IndexSet(integer: section))
-                        }
+                // 4. section 内 item diff
+                for section in 0..<newSections.count {
+                    
+                    guard section < oldSections.count else { continue }
+                    
+                    let oldRows = oldSections[section].rows ?? []
+                    let newRows = newSections[section].rows ?? []
+                    
+                    let itemDiff = self.diffItems(old: oldRows, new: newRows, section: section)
+                    
+                    self.collectionView.deleteItems(at: itemDiff.deletes)
+                    self.collectionView.insertItems(at: itemDiff.inserts)
+                    
+                    itemDiff.moves.forEach {
+                        self.collectionView.moveItem(at: $0.from, to: $0.to)
                     }
+                    
+                    self.collectionView.reloadItems(at: itemDiff.reloads)
                 }
-            } completion: { _ in
                 
-                // ⚠️ layout cache 必须清
+            } completion: { _ in
                 self.layoutCache.removeAll()
                 self.heightCache.removeAll()
                 self.setiOS17EmptyDataView()
