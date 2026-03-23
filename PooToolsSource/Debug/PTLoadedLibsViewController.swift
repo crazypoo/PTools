@@ -48,10 +48,8 @@ class PTLoadedLibsViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
-        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
-        view.registerSupplementaryView(classs: [PTloadedLibHeader.ID:PTloadedLibHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.headerInCollection = { kind,collectionView,model,index in
-            if let headerID = model.headerID,!headerID.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index) as? PTloadedLibHeader {
+            if let headerID = model.headerReuseID,!headerID.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index) as? PTloadedLibHeader {
                 let headerModel = self.libraries[index.section]
                 header.configure(with: headerModel)
                 header.onToggle = { [weak self] in
@@ -67,7 +65,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
             }
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 cell.cellModel = cellModel
                 return cell
             }
@@ -222,7 +220,8 @@ class PTLoadedLibsViewController: PTBaseViewController {
                 rows = value.classes.map {
                     let model = PTFusionCellModel()
                     model.name = $0
-                    let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
+                    let row = PTRows(dataModel: model)
+                    row.cellClass = PTFusionCell.self
                     return row
                 }
             }
@@ -232,7 +231,8 @@ class PTLoadedLibsViewController: PTBaseViewController {
             let descHeight = UIView.sizeFor(string: descString, font: .appfont(size: 14),width: screenWidth).height
             let totalHeight = nameHeight + descHeight + 17
 
-            let section = PTSection(headerID: PTloadedLibHeader.ID,headerHeight: totalHeight,rows: rows)
+            let section = PTSection(headerHeight: totalHeight,rows: rows)
+            section.headerClass = PTloadedLibHeader.self
             return section
         }
         newCollectionView.showCollectionDetail(collectionData: sections)

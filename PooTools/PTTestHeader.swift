@@ -9,9 +9,12 @@
 import UIKit
 import SnapKit
 
-class PTTestHeader: PTBaseCollectionReusableView {
+class PTTestHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     static let ID = "PTTestHeader"
     
+    static public var kind: String { UICollectionView.elementKindSectionFooter }
+    static public var reuseID: String { PTTestHeader.ID }
+
     lazy var headerTitle:UILabel = {
         let view = UILabel()
         view.textAlignment = .left

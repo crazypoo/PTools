@@ -15,9 +15,12 @@ enum DarkMode {
     case dark
 }
 
-class PTDarkModeHeader: PTBaseCollectionReusableView {
+class PTDarkModeHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     static let ID = "PTDarkModeHeader"
     
+    static public var kind: String { UICollectionView.elementKindSectionHeader }
+    static public var reuseID: String { PTDarkModeHeader.ID }
+
     static let contentHeight:CGFloat = 256
     
     var selectModeBlock:((DarkMode) -> Void)?

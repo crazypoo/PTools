@@ -9,9 +9,12 @@
 import UIKit
 import SnapKit
 
-class PTDarkFollowSystemFooter: PTBaseCollectionReusableView {
+class PTDarkFollowSystemFooter: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     static let ID = "PTDarkFollowSystemFooter"
     
+    static public var kind: String { UICollectionView.elementKindSectionFooter }
+    static public var reuseID: String { PTDarkFollowSystemFooter.ID }
+
     static let footerHeight = UIView.sizeFor(string: PTDarkModeOption.footerDesc, font: PTDarkSmartFooter.footerDescFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2).height + 20
     
     lazy var descLabel:UILabel = {

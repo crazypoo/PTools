@@ -10,13 +10,40 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+public protocol PTCellBindable {
+    associatedtype ModelType
+    func bind(model: ModelType)
+}
+
+public protocol PTAnyCellBindable {
+    func pt_bindAny(_ model: Any)
+}
+
+extension PTCellBindable where Self: UICollectionViewCell {
+    
+    func pt_bindAny(_ model: Any) {
+        guard let model = model as? ModelType else {
+            assertionFailure("❌ Model 类型不匹配: \(model)")
+            return
+        }
+        bind(model: model)
+    }
+}
+
 @objcMembers
-open class PTBaseNormalCell: UICollectionViewCell {
+open class PTBaseNormalCell: UICollectionViewCell,PTCellRegisterable {
+    
+    public var isStaticCell:Bool = false {
+        didSet {
+            layer.shouldRasterize = isStaticCell
+        }
+    }
+    
     override public init(frame:CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = true
         contentView.isOpaque = true
-        layer.shouldRasterize = true
+        layer.shouldRasterize = isStaticCell
         layer.rasterizationScale = UIScreen.main.scale
     }
     
@@ -28,10 +55,16 @@ open class PTBaseNormalCell: UICollectionViewCell {
         CGSize(width: 1, height: 1)
     }
     
-    open class func cellIdentifier() -> String {
-        "\(type(of: self))"
+    // ✅ 标准 reuseID（统一入口）
+    open class var reuseID: String {
+        String(describing: self)
     }
-    
+
+    // ✅ 保留你的 API（兼容旧代码）
+    open class func cellIdentifier() -> String {
+        reuseID
+    }
+
     open class func cellSizeByClass() -> NSNumber {
         NSNumber(value: true)
     }

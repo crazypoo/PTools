@@ -11,9 +11,12 @@ import SnapKit
 import AttributedString
 
 @objcMembers
-public class PTFusionHeader: PTBaseCollectionReusableView {
+public class PTFusionHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     public static let ID = "PTFusionHeader"
     
+    static public var kind: String { UICollectionView.elementKindSectionHeader }
+    static public var reuseID: String { PTFusionHeader.ID }
+
     public var switchValueChangeBlock:PTCellSwitchBlock?
     public var moreActionBlock:PTSectionMoreBlock?
     public var switchValue:Bool? {
@@ -70,9 +73,11 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
 }
 
 @objcMembers
-public class PTVersionFooter: PTBaseCollectionReusableView {
+public class PTVersionFooter: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     public static let ID = "PTVersionFooter"
-    
+    static public var kind: String { UICollectionView.elementKindSectionFooter }
+    static public var reuseID: String { PTVersionFooter.ID }
+
     lazy var verionLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0

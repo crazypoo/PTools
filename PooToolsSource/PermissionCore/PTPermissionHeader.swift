@@ -9,10 +9,12 @@
 import UIKit
 import SnapKit
 
-class PTPermissionHeader: PTBaseCollectionReusableView {
+class PTPermissionHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     static let ID = "GPPermissionHeader"
     static let headerTitle = "\(kAppName!)所需权限清单"
     static let headerInfo = "以下是App完全正常工作所需的授权清单"
+    static public var kind: String { UICollectionView.elementKindSectionHeader }
+    static public var reuseID: String { PTPermissionHeader.ID }
 
     open class func cellHeight()->CGFloat {
         let titleHeight = UIView.sizeFor(string: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)

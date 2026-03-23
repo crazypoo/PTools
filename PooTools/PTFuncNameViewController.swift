@@ -172,8 +172,9 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_net.moreLayoutStyle = .leftTitleRightImage
         sectionModel_net.moreDisclosureIndicator = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
-        let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: UICollectionView.sectionRows(rowsModel: netArrs),headerDataModel: sectionModel_net)
-        
+        let netSection = PTSection.init(headerTitle: sectionModel_net.name,footerHeight: 44,headerHeight: 44, rows: UICollectionView.sectionRows(rowsModel: netArrs),headerDataModel: sectionModel_net)
+        netSection.headerClass = PTFusionHeader.self
+        netSection.footerClass = PTTestFooter.self
         /**
             图片
          */
@@ -195,7 +196,8 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var mediaRows = [PTRows]()
         mediaArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,dataModel: value)
+            row.cellClass = PTFusionCell.self
             mediaRows.append(row)
         }
         
@@ -205,8 +207,9 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_media.accessoryType = .Switch
         sectionModel_media.switchControlWidth = 25
 
-        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
-
+        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
+        mediaSection.headerClass = PTFusionHeader.self
+        mediaSection.footerClass = PTTestFooter.self
         /**
             本机
          */
@@ -240,7 +243,8 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var phoneRows = [PTRows]()
         phoneArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,dataModel: value)
+            row.cellClass = PTFusionCell.self
             phoneRows.append(row)
         }
         
@@ -251,8 +255,10 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_phone.disclosureIndicatorImage = disclosureIndicatorImage
         sectionModel_phone.moreLayoutStyle = .leftTitleRightImage
 
-        let phoneSection = PTSection.init(headerTitle: sectionModel_phone.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: phoneRows,headerDataModel: sectionModel_phone)
-        
+        let phoneSection = PTSection.init(headerTitle: sectionModel_phone.name,footerHeight: 44,headerHeight: 44, rows: phoneRows,headerDataModel: sectionModel_phone)
+        phoneSection.headerClass = PTFusionHeader.self
+        phoneSection.footerClass = PTTestFooter.self
+
         /**
             UIKIT
          */
@@ -324,10 +330,12 @@ class PTFuncNameViewController: PTBaseViewController {
         uikitRows = uikitArrs.map {
             switch $0.name {
                 case .swipe:
-                let row = PTRows(title:$0.name,ID: PTFusionSwipeCell.ID,dataModel: $0)
+                let row = PTRows(title:$0.name,dataModel: $0)
+                row.cellClass = PTFusionSwipeCell.self
                 return row
             default:
-                let row = PTRows(title:$0.name,ID: PTFusionCell.ID,dataModel: $0)
+                let row = PTRows(title:$0.name,dataModel: $0)
+                row.cellClass = PTFusionCell.self
                 return row
             }
         }
@@ -339,8 +347,10 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_uikit.disclosureIndicatorImage = disclosureIndicatorImage
         sectionModel_uikit.moreLayoutStyle = .upTitleDownImage
 
-        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
-        
+        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,footerHeight: 44,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
+        uikitSection.headerClass = PTFusionHeader.self
+        uikitSection.footerClass = PTTestFooter.self
+
         /**
             Route
          */
@@ -350,7 +360,8 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var routeRows = [PTRows]()
         routeArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,dataModel: value)
+            row.cellClass = PTFusionCell.self
             routeRows.append(row)
         }
         
@@ -359,8 +370,10 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_route.cellFont = sectionTitleFont
         sectionModel_route.accessoryType = .NoneAccessoryView
 
-        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,headerID: PTFusionHeader.ID,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
-        
+        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,footerHeight: 44,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
+        routeSection.headerClass = PTFusionHeader.self
+        routeSection.footerClass = PTTestFooter.self
+
         /**
             Encryption
          */
@@ -370,7 +383,8 @@ class PTFuncNameViewController: PTBaseViewController {
         
         var encryptionRows = [PTRows]()
         encryptionArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,ID: PTFusionCell.ID,dataModel: value)
+            let row = PTRows(title:value.name,dataModel: value)
+            row.cellClass = PTFusionCell.self
             encryptionRows.append(row)
         }
         
@@ -379,7 +393,9 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_encryption.cellFont = sectionTitleFont
         sectionModel_encryption.accessoryType = .NoneAccessoryView
 
-        let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerID: PTFusionHeader.ID,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
+        let encryptionSection = PTSection(headerTitle: sectionModel_encryption.name,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_encryption)
+        encryptionSection.headerClass = PTFusionHeader.self
+        encryptionSection.footerClass = PTVersionFooter.self
 
         return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
     }
@@ -452,9 +468,8 @@ class PTFuncNameViewController: PTBaseViewController {
     
     lazy var collectionView : PTCollectionView = {
         aaaaaaa = PTCollectionView(viewConfig: self.collectionViewConfig())
-        aaaaaaa.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self,PTFusionSwipeCell.ID:PTFusionSwipeCell.self])
-        aaaaaaa.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
-        aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)
+//        aaaaaaa.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
+//        aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)
         aaaaaaa.layoutSubviews()
         aaaaaaa.decorationInCollectionView = { index,sectionModel in
             let backItemId = YDSWhiteDecorationView.ID
@@ -468,34 +483,47 @@ class PTFuncNameViewController: PTBaseViewController {
             return NSDirectionalEdgeInsets.init(top: (sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude) + topSpace, leading: 12, bottom: 0, trailing: 12)
         }
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
-            let sectionModel = (model.headerDataModel as! PTFusionCellModel)
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
-            header.sectionModel = sectionModel
-            if sectionModel.name == "网络" {
-                header.moreActionBlock = { text,sender in
-                    PTNSLogConsole("点击了More")
-                }
-            } else if sectionModel.name == "多媒体" {
-                header.switchValue = true
-                header.switchValueChangeBlock = { text,sender in
-                    PTNSLogConsole("点击了Switch")
+            if let headerID = model.headerReuseID,let sectionModel = model.headerDataModel as? PTFusionCellModel {
+                let baseHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index)
+                switch baseHeader {
+                case let header as PTFusionHeader:
+                    header.sectionModel = sectionModel
+                    if sectionModel.name == "网络" {
+                        header.moreActionBlock = { text,sender in
+                            PTNSLogConsole("点击了More")
+                        }
+                    } else if sectionModel.name == "多媒体" {
+                        header.switchValue = true
+                        header.switchValueChangeBlock = { text,sender in
+                            PTNSLogConsole("点击了Switch")
+                        }
+                    }
+                    return header
+                default:
+                    return nil
                 }
             }
-            return header
+            return nil
         }
         aaaaaaa.footerInCollection = { kind,collectionView,model,index in
-            if model.footerID == PTVersionFooter.ID {
-                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTVersionFooter
-                return footer
-            } else {
-                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTTestFooter
-                return footer
+            if let footerID = model.footerReuseID {
+                let baseFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerID, for: index)
+                switch baseFooter {
+                case let footer as PTVersionFooter:
+                    return footer
+                case let footer as PTTestFooter:
+                    return footer
+                default:
+                    return nil
+                }
             }
+            return nil
         }
         aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
             if let itemRow = dataModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTFusionCellModel {
-                let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
-                if itemRow.ID == PTFusionCell.ID,let cell = baseCell as? PTFusionCell {
+                let baseCell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
+                switch baseCell {
+                case let cell as PTFusionCell:
                     cell.cellModel = cellModel
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
                     
@@ -506,7 +534,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                     cell.hideBottomLine = (dataModel.rows!.count - 1) == indexPath.row ? true : false
                     return cell
-                } else if itemRow.ID == PTFusionSwipeCell.ID,let cell = baseCell as? PTFusionSwipeCell {
+                case let cell as PTFusionSwipeCell:
                     cell.cellModel = cellModel
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
                     
@@ -517,6 +545,8 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                     cell.hideBottomLine = (dataModel.rows!.count - 1) == indexPath.row ? true : false
                     return cell
+                default:
+                    return nil
                 }
             }
             return nil

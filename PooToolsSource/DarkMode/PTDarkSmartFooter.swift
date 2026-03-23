@@ -11,9 +11,12 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
-public class PTDarkSmartFooter: PTBaseCollectionReusableView {
+public class PTDarkSmartFooter: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
     static let ID = "PTDarkSmartFooter"
     
+    static public var kind: String { UICollectionView.elementKindSectionFooter }
+    static public var reuseID: String { PTDarkSmartFooter.ID }
+
     public static var footerDescFont:UIFont = .appfont(size: 14)
     public static var imageSize:CGSize = CGSizeMake(14, 14)
     public static var imageContentSpace:CGFloat = 5

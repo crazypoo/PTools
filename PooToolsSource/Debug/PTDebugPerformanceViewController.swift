@@ -37,8 +37,6 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
-        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self,PTPerformanceSegmentCell.ID:PTPerformanceSegmentCell.self,PTPerformanceChartCell.ID:PTPerformanceChartCell.self])
-        view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionHeader)
         view.customerLayout = { sectionIndex,sectionModel in
             if sectionModel.headerID == "Floating" || sectionModel.headerID == "Segment" || sectionModel.headerID == "PerformanceValue" {
                 return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)
@@ -71,8 +69,12 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,itemSection,indexPath in
             if let itemRow = itemSection.rows?[indexPath.row] {
-                if itemRow.ID == PTFusionCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
-                    cell.cellModel = cellModel
+                let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
+                switch baseCell {
+                case let cell as PTFusionCell:
+                    if let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                        cell.cellModel = cellModel
+                    }
                     if itemSection.headerID == "Floating" {
                         cell.switchValue = PTDebugPerformanceToolKit.shared.floatingShow
                         cell.switchValueChangeBlock = { title,sender in
@@ -80,7 +82,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                         }
                     }
                     return cell
-                } else if itemRow.ID == PTPerformanceSegmentCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPerformanceSegmentCell {
+                case let cell as PTPerformanceSegmentCell:
                     cell.segmentedControl.selectedSegmentIndex = PerformanceType.allCases.firstIndex(of: self.segmentType) ?? 0
                     cell.segmentTapCallBack = { index in
                         self.segmentType = PerformanceType.allCases[index]
@@ -91,15 +93,17 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                         }
                     }
                     return cell
-                } else if itemRow.ID == PTPerformanceChartCell.ID,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPerformanceChartCell {
+                case let cell as PTPerformanceChartCell:
                     return cell
+                default:
+                    return nil
                 }
             }
             return nil
         }
         view.collectionDidSelect = { collection,model,indexPath in
             if let itemRow = model.rows?[indexPath.row] {
-                if itemRow.ID == PTFusionCell.ID,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+                if itemRow.reuseID == PTFusionCell.ID,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                     if cellModel.name == "Set Memory warning" {
                         UIDevice.pt.impactFeedbackGenerator(style: .heavy)
                         PTDebugPerformanceToolKit.generate()
@@ -156,7 +160,6 @@ class PTDebugPerformanceViewController: PTBaseViewController {
                     cell.cellModel = usageModel
                 }
                 
-                
                 let usageMaxModel = self.baseCellModel(name: "Max CPU Usage", value: String(format: "%.1lf%%", self.toolkit.maxCPU))
                 if let cellMax = self.newCollectionView.contentCollectionView.cellForItem(at: IndexPath(row: 1, section: 2)) as? PTFusionCell {
                     cellMax.cellModel = usageMaxModel
@@ -205,61 +208,73 @@ class PTDebugPerformanceViewController: PTBaseViewController {
     func listDataSet() {
         var sections = [PTSection]()
         
-        let floatingView_row = PTRows(ID: PTFusionCell.ID,dataModel: floatingViewCellModel)
+        let floatingView_row = PTRows(dataModel: floatingViewCellModel)
+        floatingView_row.cellClass = PTFusionCell.self
         let floatingView_section = PTSection(headerID:"Floating",rows: [floatingView_row])
         sections.append(floatingView_section)
         
-        let segment_row = PTRows(ID: PTPerformanceSegmentCell.ID)
+        let segment_row = PTRows()
+        segment_row.cellClass = PTPerformanceSegmentCell.self
         let segment_section = PTSection(headerID:"Segment",rows: [segment_row])
         sections.append(segment_section)
 
         switch segmentType {
         case .CPU:
             let usageModel = self.baseCellModel(name: "CPU Usage", value: "\(toolkit.currentCPU)%")
-            let cpuUsage_row = PTRows(ID: PTFusionCell.ID,dataModel: usageModel)
-            
+            let cpuUsage_row = PTRows(dataModel: usageModel)
+            cpuUsage_row.cellClass = PTFusionCell.self
+
             let usageMaxModel = self.baseCellModel(name: "Max CPU Usage", value: "\(toolkit.maxCPU)%")
-            let cpuUsageMax_row = PTRows(ID: PTFusionCell.ID,dataModel: usageMaxModel)
+            let cpuUsageMax_row = PTRows(dataModel: usageMaxModel)
+            cpuUsageMax_row.cellClass = PTFusionCell.self
 
             let value_section = PTSection(headerID:"PerformanceValue",rows: [cpuUsage_row,cpuUsageMax_row])
             sections.append(value_section)
         case .Memory:
             let usageModel = self.baseCellModel(name: "Memory Usage", value: "\(toolkit.currentMemory)MB")
-            let cpuUsage_row = PTRows(ID: PTFusionCell.ID,dataModel: usageModel)
-            
+            let cpuUsage_row = PTRows(dataModel: usageModel)
+            cpuUsage_row.cellClass = PTFusionCell.self
+
             let usageMaxModel = self.baseCellModel(name: "Max Memory Usage", value: "\(toolkit.maxMemory)MB")
-            let cpuUsageMax_row = PTRows(ID: PTFusionCell.ID,dataModel: usageMaxModel)
+            let cpuUsageMax_row = PTRows(dataModel: usageMaxModel)
+            cpuUsageMax_row.cellClass = PTFusionCell.self
 
             let memoryWarningModel = self.baseCellModel(name: "Set Memory warning", value: "")
-            let memoryWarning_row = PTRows(ID: PTFusionCell.ID,dataModel: memoryWarningModel)
+            let memoryWarning_row = PTRows(dataModel: memoryWarningModel)
+            memoryWarning_row.cellClass = PTFusionCell.self
 
             let value_section = PTSection(headerID:"PerformanceValue",rows: [cpuUsage_row,cpuUsageMax_row,memoryWarning_row])
             sections.append(value_section)
         case .FPS:
             let usageModel = self.baseCellModel(name: "FPS", value: "\(toolkit.currentFPS)")
-            let cpuUsage_row = PTRows(ID: PTFusionCell.ID,dataModel: usageModel)
-            
+            let cpuUsage_row = PTRows(dataModel: usageModel)
+            cpuUsage_row.cellClass = PTFusionCell.self
+
             let usageMaxModel = self.baseCellModel(name: "Min FPS", value: "\(toolkit.minFPS)")
-            let cpuUsageMax_row = PTRows(ID: PTFusionCell.ID,dataModel: usageMaxModel)
+            let cpuUsageMax_row = PTRows(dataModel: usageMaxModel)
+            cpuUsageMax_row.cellClass = PTFusionCell.self
 
             let value_section = PTSection(headerID:"PerformanceValue",rows: [cpuUsage_row,cpuUsageMax_row])
             sections.append(value_section)
         case .Leak:
             let usageModel = self.baseCellModel(name: "All Leak", value: "\(PTPerformanceLeakDetector.leaks.count)")
-            let cpuUsage_row = PTRows(ID: PTFusionCell.ID,dataModel: usageModel)
-            
+            let cpuUsage_row = PTRows(dataModel: usageModel)
+            cpuUsage_row.cellClass = PTFusionCell.self
+
             let createLeakModel = PTFusionCellModel()
             createLeakModel.name = "Create Leak"
             createLeakModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
             
-            let createLeak_row = PTRows(ID: PTFusionCell.ID,dataModel: createLeakModel)
+            let createLeak_row = PTRows(dataModel: createLeakModel)
+            createLeak_row.cellClass = PTFusionCell.self
 
             let showLeakModel = PTFusionCellModel()
             showLeakModel.name = "⚠️show leaks"
             showLeakModel.accessoryType = .DisclosureIndicator
             showLeakModel.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
 
-            let showLeak_row = PTRows(ID: PTFusionCell.ID,dataModel: showLeakModel)
+            let showLeak_row = PTRows(dataModel: showLeakModel)
+            showLeak_row.cellClass = PTFusionCell.self
 
             let value_section = PTSection(headerID:"PerformanceValue",rows: [cpuUsage_row,createLeak_row,showLeak_row])
             sections.append(value_section)
@@ -267,7 +282,8 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         
         switch segmentType {
         case .CPU,.FPS,.Memory:
-            let chart_row = PTRows(ID: PTPerformanceChartCell.ID)
+            let chart_row = PTRows()
+            chart_row.cellClass = PTPerformanceChartCell.self
             let chart_section = PTSection(headerID:"Chart",rows: [chart_row])
             sections.append(chart_section)
         case .Leak:

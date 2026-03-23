@@ -22,10 +22,8 @@ public class PTPermissionSettingViewController: PTBaseViewController {
         cConfig.sectionEdges = NSDirectionalEdgeInsets(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
         
         let view = PTCollectionView(viewConfig: cConfig)
-        view.registerClassCells(classs: [PTPermissionSettingCell.ID:PTPermissionSettingCell.self])
-        view.registerSupplementaryView(classs: [PTPermissionSettingHeader.ID:PTPermissionSettingHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.headerInCollection = { kind,collectionView,model,indexPath in
-            if let headerModel = model.headerDataModel as? PTPermissionModel,let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: indexPath) as? PTPermissionSettingHeader {
+            if let headerModel = model.headerDataModel as? PTPermissionModel,let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerReuseID ?? "", for: indexPath) as? PTPermissionSettingHeader {
                 header.headerModel = headerModel
                 return header
             }
@@ -57,7 +55,7 @@ public class PTPermissionSettingViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTPermissionSettingCell,let cellModel = itemRow.dataModel as? PTPermissionModel {
+            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTPermissionSettingCell,let cellModel = itemRow.dataModel as? PTPermissionModel {
                 cell.cellModel  = cellModel
                 return cell
             }
@@ -95,8 +93,10 @@ public class PTPermissionSettingViewController: PTBaseViewController {
         }
 
         let sections = permissionStatic.permissionModels.map { value in
-            let row = PTRows(ID: PTPermissionSettingCell.ID,dataModel: value)
-            let section = PTSection(headerID: PTPermissionSettingHeader.ID,headerHeight: PTPermissionSettingHeader.headerHeight + 10,rows: [row],headerDataModel: value)
+            let row = PTRows(dataModel: value)
+            row.cellClass = PTPermissionSettingCell.self
+            let section = PTSection(headerHeight: PTPermissionSettingHeader.headerHeight + 10,rows: [row],headerDataModel: value)
+            section.headerClass = PTPermissionSettingHeader.self
             return section
         }
         newCollectionView.showCollectionDetail(collectionData: sections)

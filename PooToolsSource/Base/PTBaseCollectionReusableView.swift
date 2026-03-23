@@ -10,6 +10,7 @@ import UIKit
 
 @objcMembers
 open class PTBaseCollectionReusableView: UICollectionReusableView {
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = true
@@ -24,7 +25,7 @@ open class PTBaseCollectionReusableView: UICollectionReusableView {
     }
 
     open class func cellIdentifier() -> String {
-        "\(type(of: self))"
+        String(describing: Self.self)
     }
     
     open class func cellSizeByClass() -> NSNumber {

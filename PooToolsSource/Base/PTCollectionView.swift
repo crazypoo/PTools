@@ -522,7 +522,7 @@ public class PTCollectionView: UIView {
     private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
         var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
         
-        if !(sectionModel.headerID ?? "").stringIsEmpty() {
+        if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
             let headerSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(screenWidth - viewConfig.headerWidthOffset - sectionWidth),
                 heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude)
@@ -538,7 +538,7 @@ public class PTCollectionView: UIView {
             supplementaryItems.append(headerItem)
         }
         
-        if !(sectionModel.footerID ?? "").stringIsEmpty() {
+        if !(sectionModel.footerReuseID ?? "").stringIsEmpty() {
             let footerSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(screenWidth - viewConfig.footerWidthOffset - sectionWidth),
                 heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude)
@@ -727,6 +727,9 @@ public class PTCollectionView: UIView {
             }
         }
     }
+    
+    private var registeredCells: Set<String> = []
+    private var registeredSupplementary: Set<String> = []
     
     //MARK: 界面展示
     public init(viewConfig: PTCollectionViewConfig!) {
@@ -1005,7 +1008,8 @@ public class PTCollectionView: UIView {
                               completion: PTCollectionCallback? = nil) {
         let oldSections = self.mSections
         let newSections = snapshot.sections
-        
+        autoRegisterIfNeeded(sections: newSections)
+
         // 🟢 首次加载
         guard !oldSections.isEmpty else {
             self.mSections = newSections
@@ -1468,12 +1472,12 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
         if !mSections.isEmpty {
             let itemSec = mSections[indexPath.section]
             if kind == UICollectionView.elementKindSectionHeader,
-               !(itemSec.headerID ?? "").stringIsEmpty(),
+               !(itemSec.headerReuseID ?? "").stringIsEmpty(),
                let headerHeight = itemSec.headerHeight,
                headerHeight != CGFloat.leastNormalMagnitude,
                let headerReusableView = headerInCollection?(kind,collectionView,itemSec,indexPath) {
                 return headerReusableView
-            } else if kind == UICollectionView.elementKindSectionFooter,!(itemSec.footerID ?? "").stringIsEmpty(),let footerHeight = itemSec.footerHeight,footerHeight != CGFloat.leastNormalMagnitude,let footerReusableView = footerInCollection?(kind,collectionView,itemSec,indexPath) {
+            } else if kind == UICollectionView.elementKindSectionFooter,!(itemSec.footerReuseID ?? "").stringIsEmpty(),let footerHeight = itemSec.footerHeight,footerHeight != CGFloat.leastNormalMagnitude,let footerReusableView = footerInCollection?(kind,collectionView,itemSec,indexPath) {
                 return footerReusableView
             }
         }
@@ -1854,5 +1858,55 @@ extension PTCollectionView {
         heightCache[key] = height
         
         return height
+    }
+}
+
+///MARK :Cell 相关
+extension PTCollectionView  {
+    private func autoRegisterIfNeeded(sections: [PTSection]) {
+        
+        for section in sections {
+            
+            // 🟢 header
+            if let headerClass = section.headerClass as? PTSupplementaryRegisterable.Type {
+                registerSupplementaryIfNeeded(headerClass)
+            }
+            
+            // 🟢 footer
+            if let footerClass = section.footerClass as? PTSupplementaryRegisterable.Type {
+                registerSupplementaryIfNeeded(footerClass)
+            }
+            
+            // 🟢 cells
+            section.rows?.forEach { row in
+                if let cellClass = row.cellClass as? PTCellRegisterable.Type {
+                    registerCellIfNeeded(cellClass)
+                }
+            }
+        }
+    }
+    
+    private func registerCellIfNeeded(_ cellClass: PTCellRegisterable.Type) {
+        
+        let reuseID = cellClass.reuseID
+        
+        guard !registeredCells.contains(reuseID) else { return }
+        
+        collectionView.register(cellClass as? UICollectionViewCell.Type, forCellWithReuseIdentifier: reuseID)
+        
+        registeredCells.insert(reuseID)
+    }
+    
+    private func registerSupplementaryIfNeeded(_ viewClass: PTSupplementaryRegisterable.Type) {
+        
+        let reuseID = viewClass.reuseID
+        
+        guard !registeredSupplementary.contains(reuseID) else { return }
+        
+        collectionView.register(viewClass as? UICollectionReusableView.Type,
+                                forSupplementaryViewOfKind: viewClass.kind,
+                                withReuseIdentifier: reuseID)
+        
+        registeredSupplementary.insert(reuseID)
     }
 }

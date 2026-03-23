@@ -53,12 +53,9 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         config.viewType = .Custom
         config.refreshWithoutAnimation = true
         
-        let view = PTCollectionView(viewConfig: config)
-        view.registerClassCells(classs: [PTNetworkWatcherCell.ID:PTNetworkWatcherCell.self,PTNetworkWatcherDetailCell.ID:PTNetworkWatcherDetailCell.self])
-        view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
-        
+        let view = PTCollectionView(viewConfig: config)        
         view.headerInCollection = { kind,collectionView,model,index in
-            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerReuseID ?? "", for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
                 header.sectionModel = headerModel
                 return header
             }
@@ -94,15 +91,19 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         }
         view.cellInCollection = { collection,itemSection,indexPath in
             if let itemRow = itemSection.rows?[indexPath.row],let headerModel = itemSection.headerDataModel as? PTFusionCellModel {
-                if headerModel.name == "Simple info",let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherCell,let cellModel = itemRow.dataModel as? PTHttpModel {
-                    cell.cellModel = cellModel
-                    return cell
-                } else {
-                    if let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTNetworkWatcherDetailCell {
-                        let cellModel = self.currentInfos[indexPath.section - 1]
-                        cell.setup(cellModel.description, self.searchBar.text)
-                        return cell
+                let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
+                switch baseCell {
+                case let cell as PTNetworkWatcherCell:
+                    if let cellModel = itemRow.dataModel as? PTHttpModel {
+                        cell.cellModel = cellModel
                     }
+                    return cell
+                case let cell as PTNetworkWatcherDetailCell:
+                    let cellModel = self.currentInfos[indexPath.section - 1]
+                    cell.setup(cellModel.description, self.searchBar.text)
+                    return cell
+                default:
+                    return nil
                 }
             }
             return nil
@@ -177,18 +178,22 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     func loadListModel() {
         var sections = [PTSection]()
         
-        let simpleData_row = PTRows(ID: PTNetworkWatcherCell.ID, dataModel: viewModel)
+        let simpleData_row = PTRows(dataModel: viewModel)
+        simpleData_row.cellClass = PTNetworkWatcherCell.self
         let headerModel_simple = PTFusionCellModel()
         headerModel_simple.name = "Simple info"
-        let section = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [simpleData_row],headerDataModel: headerModel_simple)
+        let section = PTSection(headerHeight: 34 ,rows: [simpleData_row],headerDataModel: headerModel_simple)
+        section.headerClass = PTFusionHeader.self
         sections.append(section)
         
         if !currentInfos.isEmpty {
             let sectionInfos = currentInfos.map { value in
                 let headerModel = PTFusionCellModel()
                 headerModel.name = value.title
-                let row = PTRows(ID: PTNetworkWatcherDetailCell.ID)
-                let section_detail = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34 ,rows: [row],headerDataModel: headerModel)
+                let row = PTRows()
+                row.cellClass = PTNetworkWatcherDetailCell.self
+                let section_detail = PTSection(headerHeight: 34 ,rows: [row],headerDataModel: headerModel)
+                section_detail.headerClass = PTFusionHeader.self
                 return section_detail
             }
             sections.append(contentsOf: sectionInfos)

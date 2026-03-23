@@ -21,6 +21,9 @@ public class PTSection: NSObject {
     public var headerDataModel: AnyObject?
     public var footerDataModel: AnyObject?
 
+    public var footerClass:UICollectionReusableView.Type?
+    public var headerClass:UICollectionReusableView.Type?
+    
     public init(headerTitle: String? = "",
                 headerID: String? = "",
                 footerID:String? = "",
@@ -47,6 +50,22 @@ public class PTSection: NSObject {
 
     public func isSameIdentity(as other: PTSection) -> Bool {
         return self.identifier == other.identifier
+    }
+    
+    public var headerReuseID: String? {
+        if let headerid = headerID, !headerid.stringIsEmpty() {
+            return headerid
+        } else {
+            return (headerClass as? PTSupplementaryRegisterable.Type)?.reuseID
+        }
+    }
+
+    public var footerReuseID: String? {
+        if let footerid = footerID, !footerid.stringIsEmpty() {
+            return footerid
+        } else {
+            return (footerClass as? PTSupplementaryRegisterable.Type)?.reuseID
+        }
     }
 }
 
@@ -87,6 +106,8 @@ public class PTRows: NSObject {
     public var dataModel: AnyObject?
     public var nibName = ""
     public var badge:Int = 0
+    
+    public var cellClass:UICollectionViewCell.Type?
 
     public init(title: String = "",
                 nibName:String = "",
@@ -103,6 +124,14 @@ public class PTRows: NSObject {
         self.badge = badge
         self.diffId = diffId
         self.diffHash = diffHash
+    }
+    
+    /// 🔥 reuseID（自动生成）
+    public var reuseID: String {
+        if let cls = cellClass as? PTCellRegisterable.Type {
+            return cls.reuseID
+        }
+        return ID
     }
 }
 
@@ -132,6 +161,21 @@ extension PTRows {
             self.init(title: title,nibName: nibName,ID: reuseID,dataModel: model,badge: badge)
         }
     }
+}
+
+public protocol PTCellRegisterable {
+    static var reuseID: String { get }
+}
+
+public extension PTCellRegisterable {
+    static var reuseID: String {
+        String(describing: Self.self)
+    }
+}
+
+public protocol PTSupplementaryRegisterable {
+    static var reuseID: String { get }
+    static var kind: String { get }
 }
 
 extension UICollectionView {

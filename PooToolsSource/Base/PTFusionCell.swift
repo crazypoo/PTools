@@ -1012,7 +1012,7 @@ public class PTFusionCellContent:UIView {
 @objcMembers
 open class PTFusionCell: PTBaseNormalCell {
     public static let ID = "PTFusionCell"
-    
+        
     public var switchValueChangeBlock: PTCellSwitchBlock?
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {

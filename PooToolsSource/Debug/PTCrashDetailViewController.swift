@@ -21,8 +21,6 @@ class PTCrashDetailViewController: PTBaseViewController {
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
-        view.registerClassCells(classs: [PTFusionCell.ID:PTFusionCell.self])
-        view.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
         view.customerLayout = { index,model in
             return UICollectionView.waterFallLayout(data: model.rows,rowCount: 1,itemOriginalX: 0, itemSpace: 0) { subIndex, objc in
                 var baseRowHeight:CGFloat = 44
@@ -37,14 +35,14 @@ class PTCrashDetailViewController: PTBaseViewController {
             }
         }
         view.headerInCollection = { kind,collectionView,model,index in
-            if let headerId = model.headerID,!headerId.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
+            if let headerId = model.headerReuseID,!headerId.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
                 header.sectionModel = headerModel
                 return header
             }
             return nil
         }
         view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 cell.cellModel = cellModel
                 return cell
             }
@@ -138,11 +136,13 @@ class PTCrashDetailViewController: PTBaseViewController {
                 switch PTCrashDetailViewController.Features(rawValue: index) {
                 case .details,.stackTrace:
                     let cellModel = self.normalCellModel(name: cellRealModel?.title ?? "", content: cellRealModel?.detail ?? "")
-                    let row = PTRows(ID: PTFusionCell.ID,dataModel: cellModel)
+                    let row = PTRows(dataModel: cellModel)
+                    row.cellClass = PTFusionCell.self
                     rows.append(row)
                 case .context:
                     let cellModel = self.tapCellModel(name: cellRealModel?.title ?? "")
-                    let row = PTRows(ID: PTFusionCell.ID,dataModel: cellModel)
+                    let row = PTRows(dataModel: cellModel)
+                    row.cellClass = PTFusionCell.self
                     rows.append(row)
                 default:
                     break
@@ -151,7 +151,8 @@ class PTCrashDetailViewController: PTBaseViewController {
             let headerModel = PTFusionCellModel()
             headerModel.name = value.title
             headerModel.cellFont = .appfont(size: 18,bold: true)
-            let section = PTSection(headerID:PTFusionHeader.ID,headerHeight: 34,rows: rows,headerDataModel: headerModel)
+            let section = PTSection(headerHeight: 34,rows: rows,headerDataModel: headerModel)
+            section.headerClass = PTFusionHeader.self
             sections.append(section)
         }
         
