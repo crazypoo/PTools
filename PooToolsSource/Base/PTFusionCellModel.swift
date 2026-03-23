@@ -123,7 +123,22 @@ open class PTFusionCellModel: NSObject {
     public var bottomLineColor:UIColor = DynamicColor(hexString: "E8E8E8") ?? .lightGray
         
     @PTClampedProperyWrapper(range:20...51) public var switchControlWidth: CGFloat = 51
+}
 
+extension PTFusionCellModel: PTDiffableModel {
+
+    public var diffId: String {
+        return cellID ?? UUID().uuidString
+    }
+
+    public var diffHash: Int {
+        var hasher = Hasher()
+        hasher.combine(name)
+        hasher.combine(desc)
+        hasher.combine(content)
+        hasher.combine(cellSelect)
+        return hasher.finalize()
+    }
 }
 
 @objcMembers
@@ -134,4 +149,22 @@ open class PTTagLayoutModel:NSObject {
     public var contentSpace:CGFloat = 4
     public var contentFont:UIFont = .appfont(size: 14)
     public var contentTextColor:UIColor = .black
+}
+
+extension PTTagLayoutModel: PTDiffableModel {
+
+    public var diffId: String {
+        return "\(type(of: self))_\(ObjectIdentifier(self))"
+    }
+
+    public var diffHash: Int {
+        var hasher = Hasher()
+        hasher.combine(name)
+        return hasher.finalize()
+    }
+}
+
+public protocol PTDiffableModel {
+    var diffId: String { get }
+    var diffHash: Int { get }
 }

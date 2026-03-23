@@ -41,17 +41,13 @@ public class PTSection: NSObject {
         self.footerDataModel = footerDataModel
     }
     
-    public override func isEqual(_ object: Any?) -> Bool {
-        guard let other = object as? PTSection else { return false }
-        
-        return self.identifier == other.identifier &&
-               self.isContentEqual(to: other)
-    }
-
     public override var hash: Int {
         return identifier.hashValue
     }
 
+    public func isSameIdentity(as other: PTSection) -> Bool {
+        return self.identifier == other.identifier
+    }
 }
 
 extension PTSection {
@@ -64,20 +60,28 @@ extension PTSection {
         if footerID != other.footerID { return false }
         if footerHeight != other.footerHeight { return false }
         if headerHeight != other.headerHeight { return false }
+
+        let lhs = rows ?? []
+        let rhs = other.rows ?? []
         
-        // rows 数量比较（最关键）
-        let lhsCount = rows?.count ?? 0
-        let rhsCount = other.rows?.count ?? 0
-        
-        if lhsCount != rhsCount { return false }
-        
+        if lhs.count != rhs.count { return false }
+
+        for (l, r) in zip(lhs, rhs) {
+            if !l.isSameIdentity(as: r) { return false }
+            if !l.isContentEqual(to: r) { return false }
+        }
+
         // 👉 这里只做“浅比较”（高性能）
         return true
     }
 }
 
 public class PTRows: NSObject {
-    
+    /// 🔥 identity（唯一标识）
+    public var diffId: String = ""
+    /// 🔥 内容版本（核心）
+    public var diffHash: Int = 0
+
     public var title = ""
     public var ID: String = ""
     public var dataModel: AnyObject?
@@ -87,6 +91,8 @@ public class PTRows: NSObject {
     public init(title: String = "",
                 nibName:String = "",
                 ID: String = "",
+                diffId: String = UUID().uuidString,
+                diffHash:Int = 0,
                 dataModel:AnyObject? = nil,
                 badge:Int = 0) {
         super.init()
@@ -95,6 +101,36 @@ public class PTRows: NSObject {
         self.dataModel = dataModel
         self.nibName = nibName
         self.badge = badge
+        self.diffId = diffId
+        self.diffHash = diffHash
+    }
+}
+
+extension PTRows {
+
+    /// identity（是不是同一个 cell）
+    func isSameIdentity(as other: PTRows) -> Bool {
+        return self.diffId == other.diffId
+    }
+    
+    func isContentEqual(to other: PTRows) -> Bool {
+        return diffHash == other.diffHash
+    }
+}
+
+extension PTRows {
+    
+    convenience init(model: AnyObject,
+                     reuseID: String = "",
+                     title: String = "",
+                     nibName: String = "",
+                     badge:Int = 0) {
+        
+        if let diffModel = model as? PTDiffableModel {
+            self.init(title: title,nibName: nibName,ID: reuseID,diffId: diffModel.diffId,diffHash: diffModel.diffHash,dataModel: model,badge: badge)
+        } else {
+            self.init(title: title,nibName: nibName,ID: reuseID,dataModel: model,badge: badge)
+        }
     }
 }
 

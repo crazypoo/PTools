@@ -215,6 +215,11 @@ final class PTIndexItemView: UILabel {
     }
 }
 
+struct LayoutCacheKey: Hashable {
+    let section: Int
+    let width: CGFloat
+}
+
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
@@ -284,11 +289,10 @@ public class PTCollectionView: UIView {
     }()
     
     // 使用 NSKeyValueObservation 替代手动 KVO
-    private var contentOffsetObservation: NSKeyValueObservation?
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
     
-    private var heightCache: [IndexPath: CGFloat] = [:]
+    private var heightCache: [ObjectIdentifier: CGFloat] = [:]
     
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
@@ -309,7 +313,7 @@ public class PTCollectionView: UIView {
         return layout
     }
     
-    private var layoutCache: [Int: NSCollectionLayoutSection] = [:]
+    private var layoutCache: [LayoutCacheKey: NSCollectionLayoutSection] = [:]
     
     private func buildSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         guard !mSections.isEmpty else {
@@ -452,13 +456,14 @@ public class PTCollectionView: UIView {
     
     fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         
-        if let cache = layoutCache[section] {
+        let key = LayoutCacheKey(section: section, width: environment.container.contentSize.width)
+        if let cache = layoutCache[key] {
             return cache
         }
 
         let sectionLayout = buildSection(section: section, environment: environment)
 
-        layoutCache[section] = sectionLayout
+        layoutCache[key] = sectionLayout
         return sectionLayout
     }
     
@@ -690,19 +695,6 @@ public class PTCollectionView: UIView {
         }
         collectionView.allowsMoveItem()
 
-        // 使用 NSKeyValueObservation 监听 contentOffset
-        contentOffsetObservation = collectionView.observe(\.contentOffset, options: [.new]) { [weak self] _, _ in
-            guard let self else { return }
-            guard isTouched == false else { return }
-            let now = CACurrentMediaTime()
-            
-            // 🟢 节流
-            guard now - self.lastUpdateTime > self.scrollThrottleInterval else { return }
-            self.lastUpdateTime = now
-            
-            self.handleScrollUpdate()
-        }
-
         setIndexViews()
 
 #if POOTOOLS_LISTEMPTYDATA
@@ -750,8 +742,6 @@ public class PTCollectionView: UIView {
     }
     
     deinit {
-        // NSKeyValueObservation 自动释放，无需手动 removeObserver
-        contentOffsetObservation = nil
     }
     
     ///展示界面
@@ -829,7 +819,15 @@ public class PTCollectionView: UIView {
                 delete.insert(i)
             } else {
                 // 简单判断：数据是否变化（你可以自定义更精细）
-                if old[i] != new[i] {
+                let oldSection = old[i]
+                let newSection = new[i]
+
+                if !oldSection.isSameIdentity(as: newSection) {
+                    // 👉 结构变化（删除 + 插入）
+                    delete.insert(i)
+                    insert.insert(i)
+                } else if !oldSection.isContentEqual(to: newSection) {
+                    // 👉 内容变化（reload）
                     reload.insert(i)
                 }
             }
@@ -1588,7 +1586,7 @@ extension PTCollectionView {
         
         return sections > 0 ? sections - 1 : nil
     }
-
+    
     private func throttleScrollUpdate() {
         
         guard isTouched == false else { return }
@@ -1607,13 +1605,13 @@ extension PTCollectionView {
     private func cachedHeight(for indexPath: IndexPath,
                               model: AnyObject,
                               calculator: (Int, AnyObject) -> CGFloat) -> CGFloat {
-        
-        if let cache = heightCache[indexPath] {
+        let key = ObjectIdentifier(model)
+        if let cache = heightCache[key] {
             return cache
         }
         
         let height = calculator(indexPath.section, model)
-        heightCache[indexPath] = height
+        heightCache[key] = height
         
         return height
     }
