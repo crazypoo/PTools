@@ -297,7 +297,11 @@ final public class PTTabBarView: UIView {
         
         if PTAppBaseConfig.share.tab26Mode {
             glassBackgroundView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
-            tabContainerHeight = CGFloat.kTabbarHeight_Total - PTAppBaseConfig.share.tab26BottomSpacing
+            if Gobal_device_info.isFaceIDCapable {
+                tabContainerHeight = CGFloat.kTabbarHeight_Total - PTAppBaseConfig.share.tab26BottomSpacing
+            } else {
+                tabContainerHeight = CGFloat.kTabbarHeight_Total
+            }
         } else {
             glassBackgroundView.effect = UIBlurEffect(style: .systemMaterial)
             tabContainerHeight = CGFloat.kTabbarHeight_Total

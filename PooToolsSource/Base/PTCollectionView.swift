@@ -1070,12 +1070,14 @@ public class PTCollectionView: UIView {
         }
         
         let applyUpdates = {
-            self.collectionView.performBatchUpdates(updateBlock) { _ in
-                self.layoutCache.removeAll()
-                self.heightCache.removeAll()
-                self.setiOS17EmptyDataView()
-                completion?(self.collectionView)
-            }
+            PTGCDManager.gcdMain(block: {
+                self.collectionView.performBatchUpdates(updateBlock) { _ in
+                    self.layoutCache.removeAll()
+                    self.heightCache.removeAll()
+                    self.setiOS17EmptyDataView()
+                    completion?(self.collectionView)
+                }
+            })
         }
         
         guard animated else {
