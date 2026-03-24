@@ -267,6 +267,18 @@ private struct DiffThreshold {
     static let largeItem = 1000     // 直接 reload
 }
 
+private struct WaterfallCache {
+    var columnHeights: [CGFloat] = []
+    var items: [NSCollectionLayoutGroupCustomItem] = []
+    var contentHeight: CGFloat = 0
+}
+
+private struct WaterfallCacheKey: Hashable {
+    let section: Int
+    let width: CGFloat
+    let version: Int
+}
+
 public enum PTDiffAnimation {
     case none
     case fade
@@ -276,6 +288,10 @@ public enum PTDiffAnimation {
     case bottom
     case automatic
     case `default`
+}
+
+public enum CornerPosition {
+    case single, top, middle, bottom
 }
 
 //MARK: 界面展示
@@ -351,247 +367,10 @@ public class PTCollectionView: UIView {
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
     
     private var heightCache: [HeightCacheKey: CGFloat] = [:]
-    
-    fileprivate var mSections = [PTSection]()
-    fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { section, environment in
-            self.generateSection(section: section,environment:environment)
-        }
-        switch viewConfig.decorationItemsType {
-        case .Custom:
-            viewConfig.decorationModel?.forEach { value in
-                layout.register(value.decorationClass, forDecorationViewOfKind: value.decorationID)
-            }
-        case .Corner:
-            layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: PTBaseDecorationView_Corner.ID)
-        case .Normal:
-            layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: PTBaseDecorationView.ID)
-        default:break
-        }
-        return layout
-    }
-    
+    private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
     private var layoutCache: [LayoutCacheKey: NSCollectionLayoutSection] = [:]
-    
-    private func buildSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        guard !mSections.isEmpty else {
-            return NSCollectionLayoutSection(group: oneSquareGroup())
-        }
-        
-        let sectionModel = mSections[section]
-        
-        let screenWidth = frame.size.width
-        let behavior = viewConfig.collectionViewBehavior
-        let group: NSCollectionLayoutGroup
-        
-        switch viewConfig.viewType {
-        case .Gird:
-            group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows,
-                groupWidth: screenWidth,
-                itemHeight: viewConfig.itemHeight,
-                cellRowCount: viewConfig.rowCount,
-                originalX: viewConfig.itemOriginalX,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                cellLeadingSpace: viewConfig.cellLeadingSpace,
-                cellTrailingSpace: viewConfig.cellTrailingSpace
-            )
-        case .Normal:
-            group = UICollectionView.girdCollectionLayout(
-                data: sectionModel.rows,
-                groupWidth: screenWidth,
-                itemHeight: viewConfig.itemHeight,
-                cellRowCount: 1,
-                originalX: viewConfig.itemOriginalX,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                cellTrailingSpace: viewConfig.cellTrailingSpace
-            )
-        case .WaterFall:
-            if let waterFall = waterFallLayout {
-                group = UICollectionView.waterFallLayout(
-                    data: sectionModel.rows,
-                    screenWidth: screenWidth,
-                    rowCount: viewConfig.rowCount,
-                    itemOriginalX: viewConfig.itemOriginalX,
-                    topContentSpace: viewConfig.contentTopSpace,
-                    bottomContentSpace: viewConfig.contentBottomSpace,
-                    itemSpace: viewConfig.cellLeadingSpace,
-                    itemTrailingSpace: viewConfig.cellTrailingSpace,
-                    itemHeight: { [weak self] section, model in
-                        guard let self else { return 0 }
-                        
-                        guard let rows = self.mSections[section].rows,
-                              let index = rows.firstIndex(where: { $0.dataModel === model }) else {
-                            return waterFall(section, model)
-                        }
-                        
-                        let indexPath = IndexPath(item: index, section: section)
-                        
-                        return self.cachedHeight(for: indexPath,
-                                                 model: model,
-                                                 calculator: waterFall)
-                    }
-                )
-            } else {
-                group = oneSquareGroup()
-            }
-        case .Horizontal:
-            group = UICollectionView.horizontalLayout(
-                data: sectionModel.rows,
-                itemOriginalX: viewConfig.itemOriginalX,
-                itemWidth: viewConfig.itemWidth,
-                itemHeight: viewConfig.itemHeight,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                itemLeadingSpace: viewConfig.cellLeadingSpace
-            )
-        case .HorizontalLayoutSystem:
-            group = UICollectionView.horizontalLayoutSystem(
-                data: sectionModel.rows,
-                itemOriginalX: viewConfig.itemOriginalX,
-                itemWidth: viewConfig.itemWidth,
-                itemHeight: viewConfig.itemHeight,
-                topContentSpace: viewConfig.contentTopSpace,
-                bottomContentSpace: viewConfig.contentBottomSpace,
-                itemLeadingSpace: viewConfig.cellLeadingSpace
-            )
-        case .Tag:
-            let tagDatas = sectionModel.rows?.compactMap { $0.dataModel }
-            if let tags = tagDatas as? [PTTagLayoutModel] {
-                group = UICollectionView.tagShowLayout(
-                    data: tags,
-                    screenWidth: self.frame.width,
-                    itemOriginalX: viewConfig.itemOriginalX,
-                    itemHeight: viewConfig.itemHeight,
-                    topContentSpace: viewConfig.contentTopSpace,
-                    bottomContentSpace: viewConfig.contentBottomSpace,
-                    itemLeadingSpace: viewConfig.cellLeadingSpace,
-                    itemTrailingSpace: viewConfig.cellTrailingSpace,
-                    itemContentSpace: viewConfig.tagCellContentSpace
-                )
-            } else {
-                group = oneSquareGroup()
-            }
-        case .Custom:
-            if let customerLayout {
-                group = customerLayout(section, sectionModel)
-            } else {
-                group = oneSquareGroup()
-            }
-        }
-        
-        var sectionInsets = viewConfig.sectionEdges
-        let sectionWidth: CGFloat
-        switch viewConfig.decorationItemsType {
-        case .Normal,.Corner,.NoItems:
-            sectionInsets = NSDirectionalEdgeInsets(top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top, leading: sectionInsets.leading, bottom: viewConfig.contentBottomSpace, trailing: sectionInsets.trailing)
-        default:
-            sectionInsets = decorationCustomLayoutInsetReset?(section, sectionModel) ?? .zero
-        }
-        
-        switch viewConfig.decorationItemsType {
-        case .Normal,.Corner:
-            sectionWidth = viewConfig.decorationItemsEdges.leading + viewConfig.decorationItemsEdges.trailing
-        case .NoItems,.Custom:
-            sectionWidth = 0
-        }
-                
-        let laySection = NSCollectionLayoutSection(group: group)
-        laySection.orthogonalScrollingBehavior = behavior
-        laySection.contentInsets = sectionInsets
-        
-        if viewConfig.customReuseViews,let items = customerReuseViews?(section,sectionModel) {
-            laySection.boundarySupplementaryItems = items
-        } else {
-            laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth)
-        }
-        
-        laySection.decorationItems = generateDecorationItems(section: section, sectionModel: sectionModel)
-        return laySection
-    }
-    
-    fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        
-        let sectionModel = mSections[section]
-        let key = LayoutCacheKey(section: section,
-                                 width: environment.container.contentSize.width,
-                                 version: sectionModel.layoutVersion)
-        if let cache = layoutCache[key] {
-            return cache
-        }
 
-        let sectionLayout = buildSection(section: section, environment: environment)
-
-        layoutCache[key] = sectionLayout
-        return sectionLayout
-    }
-    
-    private func oneSquareGroup() -> NSCollectionLayoutGroup {
-        PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
-        let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
-        return NSCollectionLayoutGroup(layoutSize: size)
-    }
-
-    private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
-        var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
-        
-        if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
-            let headerSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(screenWidth - viewConfig.headerWidthOffset - sectionWidth),
-                heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude)
-            )
-            
-            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: headerSize,
-                elementKind: UICollectionView.elementKindSectionHeader,
-                alignment: .topTrailing,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: viewConfig.decorationItemsEdges.top + (sectionModel.headerHeight ?? .leastNormalMagnitude))
-            )
-            headerItem.contentInsets = .zero
-            supplementaryItems.append(headerItem)
-        }
-        
-        if !(sectionModel.footerReuseID ?? "").stringIsEmpty() {
-            let footerSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(screenWidth - viewConfig.footerWidthOffset - sectionWidth),
-                heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude)
-            )
-
-            let footerItem = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: footerSize,
-                elementKind: UICollectionView.elementKindSectionFooter,
-                alignment: .bottom,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
-            )
-            supplementaryItems.append(footerItem)
-        }
-        
-        return supplementaryItems
-    }
-
-    private func generateDecorationItems(section: NSInteger, sectionModel: PTSection) -> [NSCollectionLayoutDecorationItem] {
-        switch viewConfig.decorationItemsType {
-        case .Custom:
-            guard !mSections.isEmpty else { return [] }
-            if let decorationInCollectionView = decorationInCollectionView?(section, sectionModel) {
-                return decorationInCollectionView
-            } else {
-                return []
-            }
-        case .Normal:
-            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView.ID)
-            backItem.contentInsets = viewConfig.decorationItemsEdges
-            return [backItem]
-        case .Corner:
-            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView_Corner.ID)
-            backItem.contentInsets = viewConfig.decorationItemsEdges
-            return [backItem]
-        default:
-            return []
-        }
-    }
+    fileprivate var mSections = [PTSection]()
 
     fileprivate lazy var collectionView : PTBaseCollectionView = {
         let view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
@@ -817,94 +596,10 @@ public class PTCollectionView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
     }
-    
-    func iOS17EmptyTapCallback() {
-        if #available(iOS 17.0, *) {
-            if self.viewConfig.showEmptyAlert {
-                PTUnavailableFunction.shared.emptyTap = {
-                    PTGCDManager.gcdMain {
-                        self.showEmptyLoading()
-                    }
+}
 
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        self.emptyTap?(nil)
-                    }
-                }
-            }
-        }
-    }
-    
-    func iOS17EmptyDataSet() {
-        if #available(iOS 17.0, *) {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                if let emptyConfig = self.viewConfig.emptyViewConfig {
-                    let share = PTUnavailableFunction.shared
-                    share.emptyViewConfig = emptyConfig
-                    self.showEmptyConfig()
-                }
-            }
-        }
-    }
-            
-    public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) {
-        collectionView.registerSupplementaryView(ids: ids, viewClass: viewClass, kind: kind)
-    }
-    
-    public func registerClassCells(classs:[String:AnyClass]) {
-        collectionView.registerClassCells(classs: classs)
-    }
-    
-    public func registerNibCells(nib:[String:String]) {
-        collectionView.registerNibCells(nib: nib)
-    }
-    
-    public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
-        //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
-        collectionView.registerSupplementaryView(classs: classs, kind: kind)
-    }
-    
-    fileprivate func setiOS17EmptyDataView() {
-        switch self.viewConfig.emptyShowType {
-        case .Auto:
-            if #available(iOS 17.0, *) {
-                self.showEmptyConfig()
-            }
-        case .ThirtyParty:
-            break
-        case .System:
-            if #available(iOS 17.0, *) {
-                self.showEmptyConfig()
-            }
-        }
-    }
-        
-    //MARK: 刷新相关
-    public func endRefresh() {
-#if POOTOOLS_SCROLLREFRESH
-        if viewConfig.footerRefresh {
-            PTGCDManager.gcdMain {
-                self.collectionView.pt_endMJRefresh()
-            }
-        }
-#endif
-        
-        if viewConfig.topRefresh {
-            PTGCDManager.gcdMain {
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
-    
-#if POOTOOLS_SCROLLREFRESH
-    public func footerRefreshNoMore () {
-        collectionView.mj_footer?.endRefreshingWithNoMoreData()
-    }
-    
-    public func footerRefreshReset() {
-        collectionView.mj_footer?.resetNoMoreData()
-    }
-#endif
-    
+//MARK: Get something
+extension PTCollectionView {
 #if POOTOOLS_PAGINGCONTROL
     public func segmentScrolView() -> UIScrollView {
         collectionView
@@ -914,7 +609,10 @@ public class PTCollectionView: UIView {
     public func visibleCells() -> [UICollectionViewCell] {
         collectionView.visibleCells
     }
-    
+}
+
+//MARK: MoveItem
+extension PTCollectionView {
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
         collectionView.scrollToItem(at: indexPath, at: position, animated: true)
     }
@@ -922,83 +620,9 @@ public class PTCollectionView: UIView {
     public func mtSelectItem(indexPath:IndexPath,animated:Bool,scrollPosition:UICollectionView.ScrollPosition) {
         collectionView.selectItem(at: indexPath, animated: animated, scrollPosition: scrollPosition)
     }
-        
-    //MARK: 空白頁
-    @available(iOS 17, *)
-    private func showEmptyConfig() {
-        if viewConfig.showEmptyAlert && (mSections.first?.rows?.count ?? 0) == 0 {
-            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
-                PTUnavailableFunction.shared.showEmptyView(showIn: self)
-            }
-        } else {
-            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
-            }
-        }
-    }
-    
-    @available(iOS 17, *)
-    public func hideEmptyLoading(task: PTActionTask?) {
-        PTUnavailableFunction.shared.hideUnavailableView(showIn: self,task: task)
-    }
-    
-    @available(iOS 17, *)
-    public func showEmptyLoading() {
-        PTUnavailableFunction.shared.showEmptyLoadingView(showIn: self)
-    }
-    
-#if POOTOOLS_LISTEMPTYDATA
-    private func below17EmptyDataSet() {
-        if self.viewConfig.showEmptyAlert {
-            if let empty = self.viewConfig.emptyViewConfig {
-                if let emptyCuston = empty.customerView {
-                    collectionView.emptyDataSetView { view in
-                        view.backgroundColor = empty.backgroundColor
-                        view.customView(emptyCuston)
-                            .verticalOffset(empty.verticalOffSet)
-                            .isTouchAllowed(true)
-                    }
-                } else {
-                    let buttonAtt:ASAttributedString = """
-                                \(wrap: .embedding("""
-                                \(empty.buttonTitle,.font(empty.buttonFont),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(empty.buttonTextColor))
-                                """))
-                                """
-                    
-                    collectionView.emptyDataSetView { view in
-                        view.backgroundColor = empty.backgroundColor
-                        view.titleLabelString(empty.mainTitleAtt?.value)
-                            .detailLabelString(empty.secondaryEmptyAtt?.value)
-                            .image(empty.image)
-                            .buttonTitle(buttonAtt.value, for: .normal)
-                            .verticalOffset(empty.verticalOffSet)
-                            .verticalSpace(empty.imageToTextPadding)
-                            .didTapContentView {
-                                self.emptyTap?(view)
-                            }
-                            .didTapDataButton {
-                                self.emptyButtonTap?(view)
-                            }
-                    }
-                }
-            }
-        }
-    }
-    
-    public func reloadEmptyConfig() {
-        if self.viewConfig.showEmptyAlert {
-            below17EmptyDataSet()
-            collectionView.reloadEmptyDataSet()
-        }
-    }
-#endif
-}
-
-public enum CornerPosition {
-    case single, top, middle, bottom
 }
 
 extension PTCollectionView {
-
     public func cornerPosition(row: Int, count: Int) -> CornerPosition {
         if count == 1 { return .single }
         if row == 0 { return .top }
@@ -1625,6 +1249,7 @@ extension PTCollectionView {
             self.mSections = newSections
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
+            self.waterfallCache.removeAll()
             self.setiOS17EmptyDataView()
             collectionView.reloadData {
                 completion?(self.collectionView)
@@ -1864,15 +1489,15 @@ extension PTCollectionView {
             self.mSections[section].rows?.append(contentsOf: rows)
             let endIndex = (self.mSections[section].rows?.count ?? 0) - 1
             let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-            self.markSectionDirty(section)
             // 🟢 2. 再在主線程執行 UI 更新
             self.collectionView.performBatchUpdates({
                 self.collectionView.insertItems(at: indexPaths)
             }, completion: { _ in
                 // 🟢 3. 插入後可無效化布局（保持原有邏輯）
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    self.clearWaterfallCache(section: section)
                 }
+                self.markSectionDirty(section)
                 completion?()
             })
         }
@@ -1895,7 +1520,6 @@ extension PTCollectionView {
 
             // 更新数据源
             self.mSections.insert(contentsOf: sections, at: insertIndex)
-            self.markSectionDirty(insertIndex)
 
             // 生成 section indexSet
             let indexSet = IndexSet(insertIndex..<insertIndex + sections.count)
@@ -1906,9 +1530,9 @@ extension PTCollectionView {
                 // 瀑布流刷新
                 if self.viewConfig.viewType == .WaterFall,
                    self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    self.clearWaterfallCache(section: insertIndex)
                 }
-
+                self.markSectionDirty(insertIndex)
                 completion?()
             }
         }
@@ -1922,14 +1546,14 @@ extension PTCollectionView {
                 let endIndex = startIndex + rows.count - 1
                 let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
                 self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
-                self.markSectionDirty(section)
                 self.collectionView.performBatchUpdates {
                     self.collectionView.deleteItems(at: indexPaths)
                 } completion: { _ in
                     // 仅在瀑布流且存在动态高度回调时才全局无效化布局
                     if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.collectionView.collectionViewLayout.invalidateLayout()
+                        self.clearWaterfallCache(section: section)
                     }
+                    self.markSectionDirty(section)
                     completion?()
                 }
             } else {
@@ -1997,6 +1621,9 @@ extension PTCollectionView {
             let endIndex = startIndex + sections.count - 1
             let indexSet = IndexSet(startIndex...endIndex)
             indexSet.forEach { value in
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.clearWaterfallCache(section: value)
+                }
                 self.markSectionDirty(value)
             }
             self.mSections.removeSubrange(startIndex...endIndex)
@@ -2004,13 +1631,470 @@ extension PTCollectionView {
                 self.collectionView.performBatchUpdates {
                     self.collectionView.deleteSections(indexSet)
                 } completion: { _ in
-                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.collectionView.collectionViewLayout.invalidateLayout()
-                    }
                     completion?()
                 }
             }
         }
+    }
+}
+
+//MARK: Layout
+extension PTCollectionView {
+    fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { section, environment in
+            self.generateSection(section: section,environment:environment)
+        }
+        switch viewConfig.decorationItemsType {
+        case .Custom:
+            viewConfig.decorationModel?.forEach { value in
+                layout.register(value.decorationClass, forDecorationViewOfKind: value.decorationID)
+            }
+        case .Corner:
+            layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: PTBaseDecorationView_Corner.ID)
+        case .Normal:
+            layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: PTBaseDecorationView.ID)
+        default:break
+        }
+        return layout
+    }
+    
+    private func buildSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        guard !mSections.isEmpty else {
+            return NSCollectionLayoutSection(group: oneSquareGroup())
+        }
+        
+        let sectionModel = mSections[section]
+        
+        let screenWidth = frame.size.width
+        let behavior = viewConfig.collectionViewBehavior
+        let group: NSCollectionLayoutGroup
+        
+        switch viewConfig.viewType {
+        case .Gird:
+            group = UICollectionView.girdCollectionLayout(
+                data: sectionModel.rows,
+                groupWidth: screenWidth,
+                itemHeight: viewConfig.itemHeight,
+                cellRowCount: viewConfig.rowCount,
+                originalX: viewConfig.itemOriginalX,
+                topContentSpace: viewConfig.contentTopSpace,
+                bottomContentSpace: viewConfig.contentBottomSpace,
+                cellLeadingSpace: viewConfig.cellLeadingSpace,
+                cellTrailingSpace: viewConfig.cellTrailingSpace
+            )
+        case .Normal:
+            group = UICollectionView.girdCollectionLayout(
+                data: sectionModel.rows,
+                groupWidth: screenWidth,
+                itemHeight: viewConfig.itemHeight,
+                cellRowCount: 1,
+                originalX: viewConfig.itemOriginalX,
+                topContentSpace: viewConfig.contentTopSpace,
+                bottomContentSpace: viewConfig.contentBottomSpace,
+                cellTrailingSpace: viewConfig.cellTrailingSpace
+            )
+        case .WaterFall:
+            if let waterFall = waterFallLayout {
+                let result = buildWaterfallItems(
+                    section: section,
+                    data: sectionModel.rows?.compactMap { $0.dataModel } ?? [],
+                    width: screenWidth,
+                    config: viewConfig,
+                    version: sectionModel.layoutVersion,
+                    itemHeight: waterFall
+                )
+
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .absolute(screenWidth),
+                    heightDimension: .absolute(result.height)
+                )
+
+                group = NSCollectionLayoutGroup.custom(layoutSize: groupSize) { _ in
+                    result.items
+                }
+            } else {
+                group = oneSquareGroup()
+            }
+        case .Horizontal:
+            group = UICollectionView.horizontalLayout(
+                data: sectionModel.rows,
+                itemOriginalX: viewConfig.itemOriginalX,
+                itemWidth: viewConfig.itemWidth,
+                itemHeight: viewConfig.itemHeight,
+                topContentSpace: viewConfig.contentTopSpace,
+                bottomContentSpace: viewConfig.contentBottomSpace,
+                itemLeadingSpace: viewConfig.cellLeadingSpace
+            )
+        case .HorizontalLayoutSystem:
+            group = UICollectionView.horizontalLayoutSystem(
+                data: sectionModel.rows,
+                itemOriginalX: viewConfig.itemOriginalX,
+                itemWidth: viewConfig.itemWidth,
+                itemHeight: viewConfig.itemHeight,
+                topContentSpace: viewConfig.contentTopSpace,
+                bottomContentSpace: viewConfig.contentBottomSpace,
+                itemLeadingSpace: viewConfig.cellLeadingSpace
+            )
+        case .Tag:
+            let tagDatas = sectionModel.rows?.compactMap { $0.dataModel }
+            if let tags = tagDatas as? [PTTagLayoutModel] {
+                group = UICollectionView.tagShowLayout(
+                    data: tags,
+                    screenWidth: self.frame.width,
+                    itemOriginalX: viewConfig.itemOriginalX,
+                    itemHeight: viewConfig.itemHeight,
+                    topContentSpace: viewConfig.contentTopSpace,
+                    bottomContentSpace: viewConfig.contentBottomSpace,
+                    itemLeadingSpace: viewConfig.cellLeadingSpace,
+                    itemTrailingSpace: viewConfig.cellTrailingSpace,
+                    itemContentSpace: viewConfig.tagCellContentSpace
+                )
+            } else {
+                group = oneSquareGroup()
+            }
+        case .Custom:
+            if let customerLayout {
+                group = customerLayout(section, sectionModel)
+            } else {
+                group = oneSquareGroup()
+            }
+        }
+        
+        var sectionInsets = viewConfig.sectionEdges
+        let sectionWidth: CGFloat
+        switch viewConfig.decorationItemsType {
+        case .Normal,.Corner,.NoItems:
+            sectionInsets = NSDirectionalEdgeInsets(top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top, leading: sectionInsets.leading, bottom: viewConfig.contentBottomSpace, trailing: sectionInsets.trailing)
+        default:
+            sectionInsets = decorationCustomLayoutInsetReset?(section, sectionModel) ?? .zero
+        }
+        
+        switch viewConfig.decorationItemsType {
+        case .Normal,.Corner:
+            sectionWidth = viewConfig.decorationItemsEdges.leading + viewConfig.decorationItemsEdges.trailing
+        case .NoItems,.Custom:
+            sectionWidth = 0
+        }
+                
+        let laySection = NSCollectionLayoutSection(group: group)
+        laySection.orthogonalScrollingBehavior = behavior
+        laySection.contentInsets = sectionInsets
+        
+        if viewConfig.customReuseViews,let items = customerReuseViews?(section,sectionModel) {
+            laySection.boundarySupplementaryItems = items
+        } else {
+            laySection.boundarySupplementaryItems = generateSupplementaryItems(section: section, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth)
+        }
+        
+        laySection.decorationItems = generateDecorationItems(section: section, sectionModel: sectionModel)
+        return laySection
+    }
+    
+    fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        
+        let sectionModel = mSections[section]
+        let key = LayoutCacheKey(section: section,
+                                 width: environment.container.contentSize.width,
+                                 version: sectionModel.layoutVersion)
+        if let cache = layoutCache[key] {
+            return cache
+        }
+
+        let sectionLayout = buildSection(section: section, environment: environment)
+
+        layoutCache[key] = sectionLayout
+        return sectionLayout
+    }
+    
+    private func oneSquareGroup() -> NSCollectionLayoutGroup {
+        PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
+        let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+        return NSCollectionLayoutGroup(layoutSize: size)
+    }
+
+    private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
+        var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
+        
+        if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
+            let headerSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(screenWidth - viewConfig.headerWidthOffset - sectionWidth),
+                heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude)
+            )
+            
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .topTrailing,
+                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: viewConfig.decorationItemsEdges.top + (sectionModel.headerHeight ?? .leastNormalMagnitude))
+            )
+            headerItem.contentInsets = .zero
+            supplementaryItems.append(headerItem)
+        }
+        
+        if !(sectionModel.footerReuseID ?? "").stringIsEmpty() {
+            let footerSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(screenWidth - viewConfig.footerWidthOffset - sectionWidth),
+                heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude)
+            )
+
+            let footerItem = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: footerSize,
+                elementKind: UICollectionView.elementKindSectionFooter,
+                alignment: .bottom,
+                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
+            )
+            supplementaryItems.append(footerItem)
+        }
+        
+        return supplementaryItems
+    }
+
+    private func generateDecorationItems(section: NSInteger, sectionModel: PTSection) -> [NSCollectionLayoutDecorationItem] {
+        switch viewConfig.decorationItemsType {
+        case .Custom:
+            guard !mSections.isEmpty else { return [] }
+            if let decorationInCollectionView = decorationInCollectionView?(section, sectionModel) {
+                return decorationInCollectionView
+            } else {
+                return []
+            }
+        case .Normal:
+            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView.ID)
+            backItem.contentInsets = viewConfig.decorationItemsEdges
+            return [backItem]
+        case .Corner:
+            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView_Corner.ID)
+            backItem.contentInsets = viewConfig.decorationItemsEdges
+            return [backItem]
+        default:
+            return []
+        }
+    }
+
+    func buildWaterfallItems(section: Int,
+                             data: [AnyObject],
+                             width: CGFloat,
+                             config: PTCollectionViewConfig,
+                             version: Int,
+                             itemHeight: (Int, AnyObject) -> CGFloat) -> (items: [NSCollectionLayoutGroupCustomItem], height: CGFloat) {
+        
+        let key = WaterfallCacheKey(section: section, width: width, version: version)
+        
+        // 🟢 1️⃣ 命中缓存（直接返回）
+        if let cache = waterfallCache[key] {
+            return (cache.items, cache.contentHeight)
+        }
+        
+        let rowCount = config.rowCount
+        let itemSpace = config.cellLeadingSpace
+        let itemTrailingSpace = config.cellTrailingSpace
+        
+        let cellWidth = (width - config.itemOriginalX * 2 - CGFloat(rowCount - 1) * itemSpace) / CGFloat(rowCount)
+        
+        var columnHeights = Array(repeating: config.contentTopSpace, count: rowCount)
+        
+        var columnX: [CGFloat] = []
+        for i in 0..<rowCount {
+            columnX.append(config.itemOriginalX + CGFloat(i) * (cellWidth + itemSpace))
+        }
+        
+        var items: [NSCollectionLayoutGroupCustomItem] = []
+        
+        for (index, model) in data.enumerated() {
+            
+            let h = itemHeight(index, model)
+            
+            let minColumn = columnHeights.enumerated().min(by: { $0.element < $1.element })!.offset
+            
+            let frame = CGRect(
+                x: columnX[minColumn],
+                y: columnHeights[minColumn],
+                width: cellWidth,
+                height: h
+            )
+            
+            let item = NSCollectionLayoutGroupCustomItem(frame: frame)
+            items.append(item)
+            
+            columnHeights[minColumn] = frame.maxY + itemTrailingSpace
+        }
+        
+        let maxHeight = (columnHeights.max() ?? 0) - itemTrailingSpace + config.contentBottomSpace
+        
+        // 🟢 2️⃣ 写入缓存
+        waterfallCache[key] = WaterfallCache(
+            columnHeights: columnHeights,
+            items: items,
+            contentHeight: maxHeight
+        )
+        
+        return (items, maxHeight)
+    }
+    
+    private func clearWaterfallCache(section: Int) {
+        waterfallCache = waterfallCache.filter { $0.key.section != section }
+    }
+}
+
+//MARK: EmptyDataView
+extension PTCollectionView {
+    func iOS17EmptyTapCallback() {
+        if #available(iOS 17.0, *) {
+            if self.viewConfig.showEmptyAlert {
+                PTUnavailableFunction.shared.emptyTap = {
+                    PTGCDManager.gcdMain {
+                        self.showEmptyLoading()
+                    }
+
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        self.emptyTap?(nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    func iOS17EmptyDataSet() {
+        if #available(iOS 17.0, *) {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                if let emptyConfig = self.viewConfig.emptyViewConfig {
+                    let share = PTUnavailableFunction.shared
+                    share.emptyViewConfig = emptyConfig
+                    self.showEmptyConfig()
+                }
+            }
+        }
+    }
+            
+    fileprivate func setiOS17EmptyDataView() {
+        switch self.viewConfig.emptyShowType {
+        case .Auto:
+            if #available(iOS 17.0, *) {
+                self.showEmptyConfig()
+            }
+        case .ThirtyParty:
+            break
+        case .System:
+            if #available(iOS 17.0, *) {
+                self.showEmptyConfig()
+            }
+        }
+    }
+    
+    @available(iOS 17, *)
+    private func showEmptyConfig() {
+        if viewConfig.showEmptyAlert && (mSections.first?.rows?.count ?? 0) == 0 {
+            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
+                PTUnavailableFunction.shared.showEmptyView(showIn: self)
+            }
+        } else {
+            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
+            }
+        }
+    }
+    
+    @available(iOS 17, *)
+    public func hideEmptyLoading(task: PTActionTask?) {
+        PTUnavailableFunction.shared.hideUnavailableView(showIn: self,task: task)
+    }
+    
+    @available(iOS 17, *)
+    public func showEmptyLoading() {
+        PTUnavailableFunction.shared.showEmptyLoadingView(showIn: self)
+    }
+    
+#if POOTOOLS_LISTEMPTYDATA
+    private func below17EmptyDataSet() {
+        if self.viewConfig.showEmptyAlert {
+            if let empty = self.viewConfig.emptyViewConfig {
+                if let emptyCuston = empty.customerView {
+                    collectionView.emptyDataSetView { view in
+                        view.backgroundColor = empty.backgroundColor
+                        view.customView(emptyCuston)
+                            .verticalOffset(empty.verticalOffSet)
+                            .isTouchAllowed(true)
+                    }
+                } else {
+                    let buttonAtt:ASAttributedString = """
+                                \(wrap: .embedding("""
+                                \(empty.buttonTitle,.font(empty.buttonFont),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(empty.buttonTextColor))
+                                """))
+                                """
+                    
+                    collectionView.emptyDataSetView { view in
+                        view.backgroundColor = empty.backgroundColor
+                        view.titleLabelString(empty.mainTitleAtt?.value)
+                            .detailLabelString(empty.secondaryEmptyAtt?.value)
+                            .image(empty.image)
+                            .buttonTitle(buttonAtt.value, for: .normal)
+                            .verticalOffset(empty.verticalOffSet)
+                            .verticalSpace(empty.imageToTextPadding)
+                            .didTapContentView {
+                                self.emptyTap?(view)
+                            }
+                            .didTapDataButton {
+                                self.emptyButtonTap?(view)
+                            }
+                    }
+                }
+            }
+        }
+    }
+    
+    public func reloadEmptyConfig() {
+        if self.viewConfig.showEmptyAlert {
+            below17EmptyDataSet()
+            collectionView.reloadEmptyDataSet()
+        }
+    }
+#endif
+}
+
+//MARK: Refresh
+extension PTCollectionView {
+    public func endRefresh() {
+#if POOTOOLS_SCROLLREFRESH
+        if viewConfig.footerRefresh {
+            PTGCDManager.gcdMain {
+                self.collectionView.pt_endMJRefresh()
+            }
+        }
+#endif
+        
+        if viewConfig.topRefresh {
+            PTGCDManager.gcdMain {
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
+    
+#if POOTOOLS_SCROLLREFRESH
+    public func footerRefreshNoMore () {
+        collectionView.mj_footer?.endRefreshingWithNoMoreData()
+    }
+    
+    public func footerRefreshReset() {
+        collectionView.mj_footer?.resetNoMoreData()
+    }
+#endif
+}
+
+//MARK: Register
+extension PTCollectionView {
+    public func registerHeaderIdsNClasss(ids:[String],viewClass:AnyClass,kind:String) {
+        collectionView.registerSupplementaryView(ids: ids, viewClass: viewClass, kind: kind)
+    }
+    
+    public func registerClassCells(classs:[String:AnyClass]) {
+        collectionView.registerClassCells(classs: classs)
+    }
+    
+    public func registerNibCells(nib:[String:String]) {
+        collectionView.registerNibCells(nib: nib)
+    }
+    
+    public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
+        //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
+        collectionView.registerSupplementaryView(classs: classs, kind: kind)
     }
 }
