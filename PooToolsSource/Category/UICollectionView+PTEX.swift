@@ -187,55 +187,66 @@ public extension UICollectionView {
                                      itemSpace:CGFloat,
                                      itemTrailingSpace:CGFloat = 0,
                                      itemHeight:(Int,AnyObject) -> CGFloat) -> NSCollectionLayoutGroup {
-        var bannerGroupSize : NSCollectionLayoutSize
-        var customers = [NSCollectionLayoutGroupCustomItem]()
-        var groupH:CGFloat = 0
-        let itemRightSapce:CGFloat = itemSpace
-        let screenW:CGFloat = screenWidth
-
+        
+        guard let data = data, !data.isEmpty else {
+            let size = NSCollectionLayoutSize(
+                widthDimension: .absolute(screenWidth),
+                heightDimension: .absolute(1)
+            )
+            return NSCollectionLayoutGroup.custom(layoutSize: size) { _ in [] }
+        }
+        
         let cellWidth = (screenWidth - itemOriginalX * 2 - CGFloat(rowCount - 1) * itemSpace) / CGFloat(rowCount)
-        let originalX = itemOriginalX
-        var x:CGFloat = originalX,y:CGFloat = 0 + topContentSpace
-        data?.enumerated().forEach { index, model in
-            let itemH = itemHeight(index, model)
-            var itemX = x
-            var itemY = y
-
-            if index < rowCount {
-                // 第一行：只需排好横向位置
-                x += cellWidth + itemRightSapce
-            } else {
-                // 多行：参考前一行同列 item 的位置计算 y
-                let previousIndex = index - rowCount
-                let previousItem = customers[previousIndex]
-                itemY = previousItem.frame.maxY + itemTrailingSpace
-
-                // 判断是否是换行第一个元素
-                if index % rowCount == 0 {
-                    x = originalX
-                    itemX = x
-                }
-                x += cellWidth + itemRightSapce
+        
+        // 🟢 1️⃣ 每列当前高度缓存（核心）
+        var columnHeights = Array(repeating: topContentSpace, count: rowCount)
+        
+        // 🟢 2️⃣ 每列X位置缓存
+        var columnX: [CGFloat] = []
+        for i in 0..<rowCount {
+            let x = itemOriginalX + CGFloat(i) * (cellWidth + itemSpace)
+            columnX.append(x)
+        }
+        
+        var customItems: [NSCollectionLayoutGroupCustomItem] = []
+        
+        // 🟢 3️⃣ 主循环（O(n)）
+        for (index, model) in data.enumerated() {
+            
+            let height = itemHeight(index, model)
+            
+            // 🟢 找最短列（核心）
+            guard let minColumnIndex = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset else {
+                continue
             }
-
-            // 添加当前 item
-            let customItem = NSCollectionLayoutGroupCustomItem(
-                frame: CGRect(x: itemX, y: itemY, width: cellWidth, height: itemH),
+            
+            let x = columnX[minColumnIndex]
+            let y = columnHeights[minColumnIndex]
+            
+            let frame = CGRect(x: x, y: y, width: cellWidth, height: height)
+            
+            let item = NSCollectionLayoutGroupCustomItem(
+                frame: frame,
                 zIndex: 1000 + index
             )
-            customers.append(customItem)
-
-            // 判断 groupH 最后一项时更新
-            if index == data!.count - 1 {
-                let lastHeight = itemY + itemH + bottomContentSpace
-                let fallbackHeight = customers.last?.frame.maxY ?? 0 + bottomContentSpace
-                groupH = max(lastHeight, fallbackHeight)
-            }
+            
+            customItems.append(item)
+            
+            // 🟢 更新该列高度
+            columnHeights[minColumnIndex] = frame.maxY + itemTrailingSpace
         }
-        bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-            customers
-        })
+        
+        // 🟢 4️⃣ 计算整体高度（取最大列）
+        let maxHeight = (columnHeights.max() ?? 0) - itemTrailingSpace + bottomContentSpace
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(screenWidth),
+            heightDimension: .absolute(maxHeight)
+        )
+        
+        return NSCollectionLayoutGroup.custom(layoutSize: groupSize) { _ in
+            return customItems
+        }
     }
     
     //MARK: 設置CollectionView的TagShowLayout
