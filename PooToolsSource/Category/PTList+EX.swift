@@ -11,7 +11,8 @@ import UIKit
 public class PTSection: NSObject {
     
     public var identifier: String = UUID().uuidString
-    
+    public var layoutVersion: Int = 0   // 👈 新增
+
     public var headerTitle: String?
     public var headerID: String?
     public var footerID: String?

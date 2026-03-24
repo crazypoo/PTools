@@ -56,10 +56,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         config.contentBottomSpace = CGFloat.kTabbarSaveAreaHeight
 
         let view = PTCollectionView(viewConfig: config)
-        view.registerClassCells(classs: [PTMediaLibAlbumCell.ID:PTMediaLibAlbumCell.self])
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
-            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaLibAlbumCell {
+            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaLibAlbumCell {
                 cell.albumModel = cellModel
                 cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum.title)
                 return cell
@@ -159,7 +158,11 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             albumList.removeAll()
             albumList.append(contentsOf: models)
             
-            let rows = models.map { PTRows(ID: PTMediaLibAlbumCell.ID,dataModel: $0) }
+            let rows = models.map {
+                let row = PTRows(dataModel: $0)
+                row.cellClass = PTMediaLibAlbumCell.self
+                return row
+            }
             let section = PTSection(rows:rows)
             collectionView.showCollectionDetail(collectionData: [section])
         }

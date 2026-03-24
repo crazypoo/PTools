@@ -218,6 +218,12 @@ final class PTIndexItemView: UILabel {
 struct LayoutCacheKey: Hashable {
     let section: Int
     let width: CGFloat
+    let version: Int   // 👈 新增
+}
+
+struct HeightCacheKey: Hashable {
+    let id: String
+    let width: CGFloat
 }
 
 struct PTDiffUpdates {
@@ -253,6 +259,12 @@ public struct PTDiffSnapshot {
     public init(sections: [PTSection]) {
         self.sections = sections
     }
+}
+
+private struct DiffThreshold {
+    static let smallItem = 200      // 完整 diff
+    static let mediumItem = 500     // 只 section diff
+    static let largeItem = 1000     // 直接 reload
 }
 
 public enum PTDiffAnimation {
@@ -338,7 +350,7 @@ public class PTCollectionView: UIView {
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
     
-    private var heightCache: [ObjectIdentifier: CGFloat] = [:]
+    private var heightCache: [HeightCacheKey: CGFloat] = [:]
     
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
@@ -502,7 +514,10 @@ public class PTCollectionView: UIView {
     
     fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         
-        let key = LayoutCacheKey(section: section, width: environment.container.contentSize.width)
+        let sectionModel = mSections[section]
+        let key = LayoutCacheKey(section: section,
+                                 width: environment.container.contentSize.width,
+                                 version: sectionModel.layoutVersion)
         if let cache = layoutCache[key] {
             return cache
         }
@@ -584,6 +599,7 @@ public class PTCollectionView: UIView {
         view.dataSource = self
         view.delegate = self
         view.isUserInteractionEnabled = true
+        view.isPrefetchingEnabled = true
         view.contentOffSetZero = self.viewConfig.contentOffSetZero
         switch self.viewConfig.viewType {
         case .Normal,.Gird,.WaterFall,.Tag:
@@ -847,320 +863,6 @@ public class PTCollectionView: UIView {
         collectionView.registerSupplementaryView(classs: classs, kind: kind)
     }
     
-    ///加载数据并且刷新界面
-    private func calculateDiff(old: [PTSection],
-                               new: [PTSection]) -> (insert: IndexSet,
-                                                      delete: IndexSet,
-                                                      reload: IndexSet) {
-        
-        var insert = IndexSet()
-        var delete = IndexSet()
-        var reload = IndexSet()
-        
-        let oldCount = old.count
-        let newCount = new.count
-        let maxCount = max(oldCount, newCount)
-        
-        for i in 0..<maxCount {
-            if i >= oldCount {
-                insert.insert(i)
-            } else if i >= newCount {
-                delete.insert(i)
-            } else {
-                // 简单判断：数据是否变化（你可以自定义更精细）
-                let oldSection = old[i]
-                let newSection = new[i]
-
-                if !oldSection.isSameIdentity(as: newSection) {
-                    // 👉 结构变化（删除 + 插入）
-                    delete.insert(i)
-                    insert.insert(i)
-                } else if !oldSection.isContentEqual(to: newSection) {
-                    // 👉 内容变化（reload）
-                    reload.insert(i)
-                }
-            }
-        }
-        
-        return (insert, delete, reload)
-    }
-    
-    func diffSections(old: [PTSection], new: [PTSection]) -> SectionDiffResult {
-        
-        var result = SectionDiffResult()
-        
-        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map { ($0.element.identifier, $0.offset) })
-        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map { ($0.element.identifier, $0.offset) })
-        
-        // 删除
-        for (id, oldIndex) in oldMap {
-            if newMap[id] == nil {
-                result.deletes.insert(oldIndex)
-            }
-        }
-        
-        // 插入
-        for (id, newIndex) in newMap {
-            if oldMap[id] == nil {
-                result.inserts.insert(newIndex)
-            }
-        }
-        
-        // move + reload
-        for (id, oldIndex) in oldMap {
-            guard let newIndex = newMap[id] else { continue }
-            
-            if oldIndex != newIndex {
-                result.moves.append((oldIndex, newIndex))
-            }
-            
-            if !old[oldIndex].isContentEqual(to: new[newIndex]) {
-                result.reloads.insert(newIndex)
-            }
-        }
-        
-        return result
-    }
-    
-    func diffItems(old: [PTRows],
-                   new: [PTRows],
-                   section: Int) -> ItemDiffResult {
-        
-        var result = ItemDiffResult()
-        
-        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map {
-            ($0.element.diffId, $0.offset)
-        })
-        
-        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map {
-            ($0.element.diffId, $0.offset)
-        })
-        
-        // 删除
-        for (id, oldIndex) in oldMap {
-            if newMap[id] == nil {
-                result.deletes.append(IndexPath(item: oldIndex, section: section))
-            }
-        }
-        
-        // 插入
-        for (id, newIndex) in newMap {
-            if oldMap[id] == nil {
-                result.inserts.append(IndexPath(item: newIndex, section: section))
-            }
-        }
-        
-        // move + reload
-        for (id, oldIndex) in oldMap {
-            guard let newIndex = newMap[id] else { continue }
-            
-            let oldItem = old[oldIndex]
-            let newItem = new[newIndex]
-            
-            if oldIndex != newIndex {
-                result.moves.append((
-                    IndexPath(item: oldIndex, section: section),
-                    IndexPath(item: newIndex, section: section)
-                ))
-            }
-            
-            if !oldItem.isContentEqual(to: newItem) {
-                result.reloads.append(IndexPath(item: newIndex, section: section))
-            }
-        }
-        
-        return result
-    }
-    
-    private func buildDiffUpdates(old: [PTSection],
-                                  new: [PTSection]) -> PTDiffUpdates {
-        
-        var updates = PTDiffUpdates()
-        
-        let sectionDiff = diffSections(old: old, new: new)
-        
-        updates.sectionDeletes = sectionDiff.deletes
-        updates.sectionInserts = sectionDiff.inserts
-        updates.sectionMoves = sectionDiff.moves
-        updates.sectionReloads = sectionDiff.reloads
-        
-        for section in 0..<new.count {
-            
-            guard section < old.count else { continue }
-            
-            let oldRows = old[section].rows ?? []
-            let newRows = new[section].rows ?? []
-            
-            let itemDiff = diffItems(old: oldRows, new: newRows, section: section)
-            
-            updates.itemDeletes.append(contentsOf: itemDiff.deletes)
-            updates.itemInserts.append(contentsOf: itemDiff.inserts)
-            updates.itemMoves.append(contentsOf: itemDiff.moves)
-            updates.itemReloads.append(contentsOf: itemDiff.reloads)
-        }
-        
-        return updates
-    }
-    
-    public func applySnapshot(_ snapshot: PTDiffSnapshot,
-                              animated: Bool = true,
-                              animation: PTDiffAnimation = .default,
-                              completion: PTCollectionCallback? = nil) {
-        let oldSections = self.mSections
-        let newSections = snapshot.sections
-        autoRegisterIfNeeded(sections: newSections)
-
-        // 🟢 首次加载
-        guard !oldSections.isEmpty else {
-            self.mSections = newSections
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            self.setiOS17EmptyDataView()
-            collectionView.reloadData {
-                completion?(self.collectionView)
-            }
-            return
-        }
-        
-        let updates = buildDiffUpdates(old: oldSections, new: newSections)
-        
-        self.mSections = newSections
-        
-        performSafeBatchUpdates(
-            updates: updates,
-            animated: animated,
-            animation: animation,
-            completion: completion
-        )
-    }
-    
-    private func performSafeBatchUpdates(updates: PTDiffUpdates,
-                                         animated: Bool,
-                                         animation: PTDiffAnimation,
-                                         completion: PTCollectionCallback?) {
-        
-        // 🟢 冲突处理（move & reload）
-        let filteredReloads = updates.itemReloads.filter { reload in
-            !updates.itemMoves.contains(where: { $0.1 == reload })
-        }
-        
-        // 🟢 限制 reload 数量（防卡顿）
-        let finalReloads = filteredReloads.count > 50 ? [] : filteredReloads
-        
-        let updateBlock = {
-            // section
-            self.collectionView.deleteSections(updates.sectionDeletes)
-            self.collectionView.insertSections(updates.sectionInserts)
-            
-            updates.sectionMoves.forEach {
-                self.collectionView.moveSection($0.0, toSection: $0.1)
-            }
-            
-            self.collectionView.reloadSections(updates.sectionReloads)
-            
-            // item
-            self.collectionView.deleteItems(at: updates.itemDeletes)
-            self.collectionView.insertItems(at: updates.itemInserts)
-            
-            updates.itemMoves.forEach {
-                self.collectionView.moveItem(at: $0.0, to: $0.1)
-            }
-            
-            self.collectionView.reloadItems(at: finalReloads)
-        }
-        
-        let applyUpdates = {
-            PTGCDManager.gcdMain(block: {
-                self.collectionView.performBatchUpdates(updateBlock) { _ in
-                    self.layoutCache.removeAll()
-                    self.heightCache.removeAll()
-                    self.setiOS17EmptyDataView()
-                    completion?(self.collectionView)
-                }
-            })
-        }
-        
-        guard animated else {
-            UIView.performWithoutAnimation {
-                applyUpdates()
-            }
-            return
-        }
-        
-        applyAnimation(animation)
-        applyUpdates()
-    }
-    
-    private func applyAnimation(_ animation: PTDiffAnimation) {
-        
-        switch animation {
-        case .fade:
-            collectionView.layer.add(makeTransition(type: .fade), forKey: nil)
-        case .right:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromRight), forKey: nil)
-        case .left:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromLeft), forKey: nil)
-        case .top:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromTop), forKey: nil)
-        case .bottom:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromBottom), forKey: nil)
-        default:
-            break
-        }
-    }
-
-    private func makeTransition(type: CATransitionType, subtype: CATransitionSubtype? = nil) -> CATransition {
-        let transition = CATransition()
-        transition.type = type
-        transition.subtype = subtype
-        transition.duration = 0.25
-        return transition
-    }
-    
-    private func debugDiff(_ updates: PTDiffUpdates) {
-        #if DEBUG
-        PTNSLogConsole("""
-        ===== DIFF =====
-        section insert: \(updates.sectionInserts)
-        section delete: \(updates.sectionDeletes)
-        section move: \(updates.sectionMoves)
-        
-        item insert: \(updates.itemInserts.count)
-        item delete: \(updates.itemDeletes.count)
-        item move: \(updates.itemMoves.count)
-        item reload: \(updates.itemReloads.count)
-        =================
-        """)
-        #endif
-    }
-    
-    public func showCollectionDetail(collectionData:[PTSection],
-                                     animated: Bool = true,
-                                     animation: PTDiffAnimation = .default,
-                                     finishTask:PTCollectionCallback? = nil) {
-        let snapshot = PTDiffSnapshot(sections: collectionData)
-        applySnapshot(snapshot,animated: animated,animation: animation,completion: finishTask)
-    }
-    
-    public func clearAllData(finishTask:PTCollectionCallback? = nil) {
-        PTGCDManager.gcdMain {
-            self.mSections.removeAll()
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            if self.viewConfig.refreshWithoutAnimation {
-                self.collectionView.reloadDataWithOutAnimation {
-                    self.setiOS17EmptyDataView()
-                    finishTask?(self.collectionView)
-                }
-            } else {
-                self.collectionView.reloadData {
-                    self.setiOS17EmptyDataView()
-                    finishTask?(self.collectionView)
-                }
-            }
-        }
-    }
-    
     fileprivate func setiOS17EmptyDataView() {
         switch self.viewConfig.emptyShowType {
         case .Auto:
@@ -1175,161 +877,7 @@ public class PTCollectionView: UIView {
             }
         }
     }
-    
-    public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            // 🟢 1. 在主線程更新數據源
-            let startIndex = self.mSections[section].rows?.count ?? 0
-            self.mSections[section].rows?.append(contentsOf: rows)
-            let endIndex = (self.mSections[section].rows?.count ?? 0) - 1
-            let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-
-            // 🟢 2. 再在主線程執行 UI 更新
-            self.collectionView.performBatchUpdates({
-                self.collectionView.insertItems(at: indexPaths)
-            }, completion: { _ in
-                // 🟢 3. 插入後可無效化布局（保持原有邏輯）
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-                completion?()
-            })
-        }
-    }
-    
-    public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
-
-            guard !sections.isEmpty else {
-                completion?()
-                return
-            }
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            var insertIndex = self.mSections.count
-            
-            if let index = afterIndex, index < self.mSections.count {
-                insertIndex = index + 1
-            }
-
-            // 更新数据源
-            self.mSections.insert(contentsOf: sections, at: insertIndex)
-
-            // 生成 section indexSet
-            let indexSet = IndexSet(insertIndex..<insertIndex + sections.count)
-
-            self.collectionView.performBatchUpdates {
-                self.collectionView.insertSections(indexSet)
-            } completion: { _ in
-                // 瀑布流刷新
-                if self.viewConfig.viewType == .WaterFall,
-                   self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-
-                completion?()
-            }
-        }
-    }
-
-    public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
-                let endIndex = startIndex + rows.count - 1
-                let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-                self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
-                self.collectionView.performBatchUpdates {
-                    self.collectionView.deleteItems(at: indexPaths)
-                } completion: { _ in
-                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.collectionView.collectionViewLayout.invalidateLayout()
-                    }
-                    completion?()
-                }
-            } else {
-                PTNSLogConsole("Error: Can't find the row in section \(section)")
-            }
-        }
-    }
-    
-    public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            var indexPaths: [IndexPath] = []
-
-            // section 倒序，防止 index 偏移
-            let sortedSections = rowsMap.keys.sorted(by: >)
-
-            for section in sortedSections {
-
-                guard let rows = rowsMap[section],
-                      let sectionRows = self.mSections[section].rows else { continue }
-
-                // 找出要删除的 row index（倒序）
-                let deleteIndexes = rows.compactMap {
-                    sectionRows.firstIndex(of: $0)
-                }.sorted(by: >)
-
-                guard !deleteIndexes.isEmpty else { continue }
-
-                // 更新数据源（倒序 remove）
-                for index in deleteIndexes {
-                    self.mSections[section].rows?.remove(at: index)
-                    indexPaths.append(IndexPath(item: index, section: section))
-                }
-            }
-
-            guard !indexPaths.isEmpty else {
-                completion?()
-                return
-            }
-
-            self.collectionView.performBatchUpdates {
-                self.collectionView.deleteItems(at: indexPaths)
-            } completion: { _ in
-
-                // 瀑布流布局需要 invalidate
-                if self.viewConfig.viewType == .WaterFall,
-                   self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-
-                completion?()
-            }
-        }
-    }
-    
-    public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
-        PTGCDManager.gcdGobal {
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
-                PTNSLogConsole("Error: Can't find the section to delete")
-                return
-            }
-            let endIndex = startIndex + sections.count - 1
-            let indexSet = IndexSet(startIndex...endIndex)
-            self.mSections.removeSubrange(startIndex...endIndex)
-            PTGCDManager.gcdMain {
-                self.collectionView.performBatchUpdates {
-                    self.collectionView.deleteSections(indexSet)
-                } completion: { _ in
-                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.collectionView.collectionViewLayout.invalidateLayout()
-                    }
-                    completion?()
-                }
-            }
-        }
-    }
-    
+        
     //MARK: 刷新相关
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH
@@ -1731,15 +1279,8 @@ private extension PTCollectionView {
 
         topSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         bottomSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-
-//        layoutSubviews()
-//        let spacingHeight:CGFloat = (stackView.frame.size.height - CGFloat(titles.count) * config.itemSize.height -  CGFloat(titles.count + 1) * config.itemSpacing) / 2
         
         stackView.addArrangedSubview(topSpacer)
-//        topSpacer.snp.makeConstraints { make in
-//            make.width.equalTo(config.itemSize.width)
-//            make.height.equalTo(spacingHeight)
-//        }
 
         for (i, title) in titles.enumerated() {
             let label = PTIndexItemView()
@@ -1762,10 +1303,6 @@ private extension PTCollectionView {
         }
         
         stackView.addArrangedSubview(bottomSpacer)
-//        bottomSpacer.snp.makeConstraints { make in
-//            make.width.equalTo(config.itemSize.width)
-//            make.height.equalTo(spacingHeight)
-//        }
 
         setIndicatorCenter(t: 0, config: config,alpha: 0)
     }
@@ -1802,35 +1339,21 @@ extension PTCollectionView {
 //MARK: KVO相关
 extension PTCollectionView {
     private func handleScrollUpdate() {
-        // 🟢 取当前偏移
-        let offsetY = collectionView.contentOffset.y
-        // 🟢 找当前 section（更轻量）
-        guard let section = findCurrentSection(by: offsetY),let config = viewConfig.indexConfig else { return }
+        guard let section = findCurrentSectionFast(),
+              let config = viewConfig.indexConfig else { return }
+
         for case let view as PTIndexItemView in stackView.arrangedSubviews {
             view.update(selected: view.index == section, config: config)
         }
+        
         showIndicator(at: section)
     }
     
-    private func findCurrentSection(by offsetY: CGFloat) -> Int? {
+    private func findCurrentSectionFast() -> Int? {
+        let indexPaths = collectionView.indexPathsForVisibleItems
+        guard !indexPaths.isEmpty else { return nil }
         
-        let sections = collectionView.numberOfSections
-        
-        for section in 0..<sections {
-            
-            let indexPath = IndexPath(item: 0, section: section)
-            
-            if let attributes = collectionView.layoutAttributesForItem(at: indexPath) {
-                
-                let frame = attributes.frame
-                
-                if offsetY < frame.maxY {
-                    return section
-                }
-            }
-        }
-        
-        return sections > 0 ? sections - 1 : nil
+        return indexPaths.min()?.section
     }
     
     private func throttleScrollUpdate() {
@@ -1846,12 +1369,19 @@ extension PTCollectionView {
     }
 }
 
-///Waterfall相关
+//MARK: Waterfall相关
 extension PTCollectionView {
     private func cachedHeight(for indexPath: IndexPath,
                               model: AnyObject,
                               calculator: (Int, AnyObject) -> CGFloat) -> CGFloat {
-        let key = ObjectIdentifier(model)
+        guard let row = mSections[indexPath.section].rows?[indexPath.item] else {
+            return calculator(indexPath.section, model)
+        }
+        let key = HeightCacheKey(
+            id: row.diffId,                 // 👈 稳定ID
+            width: collectionView.bounds.width
+        )
+        
         if let cache = heightCache[key] {
             return cache
         }
@@ -1863,7 +1393,7 @@ extension PTCollectionView {
     }
 }
 
-///MARK :Cell 相关
+//MARK: Cell 相关
 extension PTCollectionView  {
     private func autoRegisterIfNeeded(sections: [PTSection]) {
         
@@ -1910,5 +1440,577 @@ extension PTCollectionView  {
                                 withReuseIdentifier: reuseID)
         
         registeredSupplementary.insert(reuseID)
+    }
+}
+
+//MARK: DIFF
+extension PTCollectionView {
+    private func totalItemCount(_ sections: [PTSection]) -> Int {
+        sections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
+    }
+    
+    ///加载数据并且刷新界面
+    private func calculateDiff(old: [PTSection],
+                               new: [PTSection]) -> (insert: IndexSet,
+                                                      delete: IndexSet,
+                                                      reload: IndexSet) {
+        
+        var insert = IndexSet()
+        var delete = IndexSet()
+        var reload = IndexSet()
+        
+        let oldCount = old.count
+        let newCount = new.count
+        let maxCount = max(oldCount, newCount)
+        
+        for i in 0..<maxCount {
+            if i >= oldCount {
+                insert.insert(i)
+            } else if i >= newCount {
+                delete.insert(i)
+            } else {
+                // 简单判断：数据是否变化（你可以自定义更精细）
+                let oldSection = old[i]
+                let newSection = new[i]
+
+                if !oldSection.isSameIdentity(as: newSection) {
+                    // 👉 结构变化（删除 + 插入）
+                    delete.insert(i)
+                    insert.insert(i)
+                } else if !oldSection.isContentEqual(to: newSection) {
+                    // 👉 内容变化（reload）
+                    reload.insert(i)
+                }
+            }
+        }
+        
+        return (insert, delete, reload)
+    }
+    
+    func diffSections(old: [PTSection], new: [PTSection]) -> SectionDiffResult {
+        
+        var result = SectionDiffResult()
+        
+        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map { ($0.element.identifier, $0.offset) })
+        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map { ($0.element.identifier, $0.offset) })
+        
+        // 删除
+        for (id, oldIndex) in oldMap {
+            if newMap[id] == nil {
+                result.deletes.insert(oldIndex)
+            }
+        }
+        
+        // 插入
+        for (id, newIndex) in newMap {
+            if oldMap[id] == nil {
+                result.inserts.insert(newIndex)
+            }
+        }
+        
+        // move + reload
+        for (id, oldIndex) in oldMap {
+            guard let newIndex = newMap[id] else { continue }
+            
+            if oldIndex != newIndex {
+                result.moves.append((oldIndex, newIndex))
+            }
+            
+            if !old[oldIndex].isContentEqual(to: new[newIndex]) {
+                result.reloads.insert(newIndex)
+            }
+        }
+        
+        return result
+    }
+    
+    func diffItems(old: [PTRows],
+                   new: [PTRows],
+                   section: Int) -> ItemDiffResult {
+        
+        var result = ItemDiffResult()
+        
+        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map {
+            ($0.element.diffId, $0.offset)
+        })
+        
+        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map {
+            ($0.element.diffId, $0.offset)
+        })
+        
+        // 删除
+        for (id, oldIndex) in oldMap {
+            if newMap[id] == nil {
+                result.deletes.append(IndexPath(item: oldIndex, section: section))
+            }
+        }
+        
+        // 插入
+        for (id, newIndex) in newMap {
+            if oldMap[id] == nil {
+                result.inserts.append(IndexPath(item: newIndex, section: section))
+            }
+        }
+        
+        // move + reload
+        for (id, oldIndex) in oldMap {
+            guard let newIndex = newMap[id] else { continue }
+            
+            let oldItem = old[oldIndex]
+            let newItem = new[newIndex]
+            
+            if oldIndex != newIndex {
+                result.moves.append((
+                    IndexPath(item: oldIndex, section: section),
+                    IndexPath(item: newIndex, section: section)
+                ))
+            }
+            
+            if !oldItem.isContentEqual(to: newItem) {
+                result.reloads.append(IndexPath(item: newIndex, section: section))
+            }
+        }
+        
+        return result
+    }
+    
+    private func buildDiffUpdates(old: [PTSection],
+                                  new: [PTSection]) -> PTDiffUpdates {
+        
+        var updates = PTDiffUpdates()
+        
+        let sectionDiff = diffSections(old: old, new: new)
+        
+        updates.sectionDeletes = sectionDiff.deletes
+        updates.sectionInserts = sectionDiff.inserts
+        updates.sectionMoves = sectionDiff.moves
+        updates.sectionReloads = sectionDiff.reloads
+        
+        for section in 0..<new.count {
+            
+            guard section < old.count else { continue }
+            
+            let oldRows = old[section].rows ?? []
+            let newRows = new[section].rows ?? []
+            
+            let itemDiff = diffItems(old: oldRows, new: newRows, section: section)
+            
+            updates.itemDeletes.append(contentsOf: itemDiff.deletes)
+            updates.itemInserts.append(contentsOf: itemDiff.inserts)
+            updates.itemMoves.append(contentsOf: itemDiff.moves)
+            updates.itemReloads.append(contentsOf: itemDiff.reloads)
+        }
+        
+        return updates
+    }
+    
+    private func markSectionDirty(_ section: Int) {
+        guard section < mSections.count else { return }
+        mSections[section].layoutVersion += 1
+    }
+    
+    public func applySnapshot(_ snapshot: PTDiffSnapshot,
+                              animated: Bool = true,
+                              animation: PTDiffAnimation = .default,
+                              completion: PTCollectionCallback? = nil) {
+        let oldSections = self.mSections
+        let newSections = snapshot.sections
+        autoRegisterIfNeeded(sections: newSections)
+
+        // 🟢 首次加载
+        guard !oldSections.isEmpty else {
+            for i in 0..<newSections.count {
+                newSections[i].layoutVersion += 1
+            }
+            self.mSections = newSections
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            self.setiOS17EmptyDataView()
+            collectionView.reloadData {
+                completion?(self.collectionView)
+            }
+            return
+        }
+        
+        // 🟢 计算数据量
+        let totalItems = totalItemCount(newSections)
+        // 🟢 策略选择
+        if totalItems >= DiffThreshold.largeItem {
+            applyReloadData(newSections, animated: animated, completion: completion)
+            return
+        }
+        
+        if totalItems >= DiffThreshold.mediumItem {
+            applySectionDiff(old: oldSections,
+                             new: newSections,
+                             animated: animated,
+                             animation: animation,
+                             completion: completion)
+            return
+        }
+
+        let updates = buildDiffUpdates(old: oldSections, new: newSections)
+        
+        self.mSections = newSections
+        
+        performSafeBatchUpdates(
+            updates: updates,
+            animated: animated,
+            animation: animation,
+            completion: completion
+        )
+    }
+    
+    private func applyReloadData(_ newSections: [PTSection],
+                                 animated: Bool,
+                                 completion: PTCollectionCallback?) {
+        
+        self.mSections = newSections
+        
+        layoutCache.removeAll()
+        heightCache.removeAll()
+        
+        let reloadBlock = {
+            self.collectionView.reloadData()
+            self.setiOS17EmptyDataView()
+            completion?(self.collectionView)
+        }
+        
+        guard animated else {
+            UIView.performWithoutAnimation(reloadBlock)
+            return
+        }
+        
+        UIView.transition(with: collectionView,
+                          duration: 0.25,
+                          options: .transitionCrossDissolve,
+                          animations: reloadBlock)
+    }
+    
+    private func applySectionDiff(old: [PTSection],
+                                  new: [PTSection],
+                                  animated: Bool,
+                                  animation: PTDiffAnimation,
+                                  completion: PTCollectionCallback?) {
+        
+        let sectionDiff = diffSections(old: old, new: new)
+        
+        self.mSections = new
+        
+        let updateBlock = {
+            self.collectionView.deleteSections(sectionDiff.deletes)
+            self.collectionView.insertSections(sectionDiff.inserts)
+            
+            self.collectionView.reloadSections(sectionDiff.reloads)
+            
+            sectionDiff.moves.forEach {
+                self.collectionView.moveSection($0.from, toSection: $0.to)
+            }
+        }
+        
+        let applyUpdates = {
+            self.collectionView.performBatchUpdates(updateBlock) { _ in
+                self.layoutCache.removeAll()
+                self.heightCache.removeAll()
+                self.setiOS17EmptyDataView()
+                completion?(self.collectionView)
+            }
+        }
+        
+        guard animated else {
+            UIView.performWithoutAnimation {
+                applyUpdates()
+            }
+            return
+        }
+        
+        applyAnimation(animation)
+        applyUpdates()
+    }
+        
+    private func performSafeBatchUpdates(updates: PTDiffUpdates,
+                                         animated: Bool,
+                                         animation: PTDiffAnimation,
+                                         completion: PTCollectionCallback?) {
+        
+        // 🟢 冲突处理（move & reload）
+        let filteredReloads = updates.itemReloads.filter { reload in
+            !updates.itemMoves.contains(where: { $0.1 == reload })
+        }
+        
+        // 🟢 限制 reload 数量（防卡顿）
+        let finalReloads = filteredReloads.count > 50 ? [] : filteredReloads
+        
+        let updateBlock = {
+            // section
+            self.collectionView.deleteSections(updates.sectionDeletes)
+            self.collectionView.insertSections(updates.sectionInserts)
+            
+            updates.sectionMoves.forEach {
+                self.collectionView.moveSection($0.0, toSection: $0.1)
+            }
+            
+            self.collectionView.reloadSections(updates.sectionReloads)
+            
+            // item
+            self.collectionView.deleteItems(at: updates.itemDeletes)
+            self.collectionView.insertItems(at: updates.itemInserts)
+            
+            updates.itemMoves.forEach {
+                self.collectionView.moveItem(at: $0.0, to: $0.1)
+            }
+            
+            self.collectionView.reloadItems(at: finalReloads)
+        }
+        
+        let applyUpdates = {
+            PTGCDManager.gcdMain(block: {
+                self.collectionView.performBatchUpdates(updateBlock) { _ in
+                    self.layoutCache.removeAll()
+                    self.heightCache.removeAll()
+                    self.setiOS17EmptyDataView()
+                    completion?(self.collectionView)
+                }
+            })
+        }
+        
+        guard animated else {
+            UIView.performWithoutAnimation {
+                applyUpdates()
+            }
+            return
+        }
+        
+        applyAnimation(animation)
+        applyUpdates()
+    }
+    
+    private func applyAnimation(_ animation: PTDiffAnimation) {
+        
+        switch animation {
+        case .fade:
+            collectionView.layer.add(makeTransition(type: .fade), forKey: nil)
+        case .right:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromRight), forKey: nil)
+        case .left:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromLeft), forKey: nil)
+        case .top:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromTop), forKey: nil)
+        case .bottom:
+            collectionView.layer.add(makeTransition(type: .push, subtype: .fromBottom), forKey: nil)
+        default:
+            break
+        }
+    }
+
+    private func makeTransition(type: CATransitionType, subtype: CATransitionSubtype? = nil) -> CATransition {
+        let transition = CATransition()
+        transition.type = type
+        transition.subtype = subtype
+        transition.duration = 0.25
+        return transition
+    }
+    
+    private func debugDiff(_ updates: PTDiffUpdates) {
+        #if DEBUG
+        PTNSLogConsole("""
+        ===== DIFF =====
+        section insert: \(updates.sectionInserts)
+        section delete: \(updates.sectionDeletes)
+        section move: \(updates.sectionMoves)
+        
+        item insert: \(updates.itemInserts.count)
+        item delete: \(updates.itemDeletes.count)
+        item move: \(updates.itemMoves.count)
+        item reload: \(updates.itemReloads.count)
+        =================
+        """)
+        #endif
+    }
+    
+    public func showCollectionDetail(collectionData:[PTSection],
+                                     animated: Bool = true,
+                                     animation: PTDiffAnimation = .default,
+                                     finishTask:PTCollectionCallback? = nil) {
+        let snapshot = PTDiffSnapshot(sections: collectionData)
+        applySnapshot(snapshot,animated: animated,animation: animation,completion: finishTask)
+    }
+    
+    public func clearAllData(finishTask:PTCollectionCallback? = nil) {
+        PTGCDManager.gcdMain {
+            self.mSections.removeAll()
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            if self.viewConfig.refreshWithoutAnimation {
+                self.collectionView.reloadDataWithOutAnimation {
+                    self.setiOS17EmptyDataView()
+                    finishTask?(self.collectionView)
+                }
+            } else {
+                self.collectionView.reloadData {
+                    self.setiOS17EmptyDataView()
+                    finishTask?(self.collectionView)
+                }
+            }
+        }
+    }
+
+    public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            // 🟢 1. 在主線程更新數據源
+            let startIndex = self.mSections[section].rows?.count ?? 0
+            self.mSections[section].rows?.append(contentsOf: rows)
+            let endIndex = (self.mSections[section].rows?.count ?? 0) - 1
+            let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
+            self.markSectionDirty(section)
+            // 🟢 2. 再在主線程執行 UI 更新
+            self.collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: indexPaths)
+            }, completion: { _ in
+                // 🟢 3. 插入後可無效化布局（保持原有邏輯）
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+                completion?()
+            })
+        }
+    }
+    
+    public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+
+            guard !sections.isEmpty else {
+                completion?()
+                return
+            }
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            var insertIndex = self.mSections.count
+
+            if let index = afterIndex, index < self.mSections.count {
+                insertIndex = index + 1
+            }
+
+            // 更新数据源
+            self.mSections.insert(contentsOf: sections, at: insertIndex)
+            self.markSectionDirty(insertIndex)
+
+            // 生成 section indexSet
+            let indexSet = IndexSet(insertIndex..<insertIndex + sections.count)
+
+            self.collectionView.performBatchUpdates {
+                self.collectionView.insertSections(indexSet)
+            } completion: { _ in
+                // 瀑布流刷新
+                if self.viewConfig.viewType == .WaterFall,
+                   self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+
+                completion?()
+            }
+        }
+    }
+
+    public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
+                let endIndex = startIndex + rows.count - 1
+                let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
+                self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
+                self.markSectionDirty(section)
+                self.collectionView.performBatchUpdates {
+                    self.collectionView.deleteItems(at: indexPaths)
+                } completion: { _ in
+                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.collectionView.collectionViewLayout.invalidateLayout()
+                    }
+                    completion?()
+                }
+            } else {
+                PTNSLogConsole("Error: Can't find the row in section \(section)")
+            }
+        }
+    }
+    
+    public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            var indexPaths: [IndexPath] = []
+
+            // section 倒序，防止 index 偏移
+            let sortedSections = rowsMap.keys.sorted(by: >)
+
+            for section in sortedSections {
+
+                guard let rows = rowsMap[section],
+                      let sectionRows = self.mSections[section].rows else { continue }
+
+                // 找出要删除的 row index（倒序）
+                let deleteIndexes = rows.compactMap {
+                    sectionRows.firstIndex(of: $0)
+                }.sorted(by: >)
+
+                guard !deleteIndexes.isEmpty else { continue }
+                self.markSectionDirty(section)
+                // 更新数据源（倒序 remove）
+                for index in deleteIndexes {
+                    self.mSections[section].rows?.remove(at: index)
+                    indexPaths.append(IndexPath(item: index, section: section))
+                }
+            }
+
+            guard !indexPaths.isEmpty else {
+                completion?()
+                return
+            }
+
+            self.collectionView.performBatchUpdates {
+                self.collectionView.deleteItems(at: indexPaths)
+            } completion: { _ in
+
+                // 瀑布流布局需要 invalidate
+                if self.viewConfig.viewType == .WaterFall,
+                   self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+
+                completion?()
+            }
+        }
+    }
+    
+    public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
+        PTGCDManager.gcdGobal {
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
+                PTNSLogConsole("Error: Can't find the section to delete")
+                return
+            }
+            let endIndex = startIndex + sections.count - 1
+            let indexSet = IndexSet(startIndex...endIndex)
+            indexSet.forEach { value in
+                self.markSectionDirty(value)
+            }
+            self.mSections.removeSubrange(startIndex...endIndex)
+            PTGCDManager.gcdMain {
+                self.collectionView.performBatchUpdates {
+                    self.collectionView.deleteSections(indexSet)
+                } completion: { _ in
+                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.collectionView.collectionViewLayout.invalidateLayout()
+                    }
+                    completion?()
+                }
+            }
+        }
     }
 }
