@@ -13,23 +13,30 @@ public final class PTAlertManager: NSObject {
 
     // MARK: - Singleton
     public static let shared = PTAlertManager()
-    private override init() {}
+    private override init() {
+        super.init()
+        observeSceneDestroy()
+    }
 
     // MARK: - Thread Safety
     private let queue = DispatchQueue(label: "com.pt.alert.manager")
 
-    // MARK: - Data
-    private var showingWindows: [String: PTAlertWindow] = [:]
-    private var waitQueue: [PTAlertProtocol] = []
-    private var showingControllers: [String: PTAlertProtocol] = [:]
-    
+    // MARK: - Scene Container
+    fileprivate struct SceneContainer {
+        var showingWindows: [String: PTAlertWindow] = [:]
+        var showingControllers: [String: PTAlertProtocol] = [:]
+        var waitQueue: [PTAlertProtocol] = []
+    }
+
+    private var sceneContainers: [UIWindowScene: SceneContainer] = [:]
+
     // MARK: - Window Pool
     private var reusableWindows: [PTAlertWindow] = []
 
     // MARK: - Public API
 
-    /// 显示弹窗
-    public static func show(_ controller: PTAlertProtocol, completion: PTActionTask? = nil) {
+    public static func show(_ controller: PTAlertProtocol,
+                            completion: PTActionTask? = nil) {
         shared.queue.async {
             DispatchQueue.main.async {
                 shared._show(controller, completion: completion)
@@ -37,8 +44,17 @@ public final class PTAlertManager: NSObject {
         }
     }
 
-    /// 关闭指定弹窗
-    public static func dismiss(_ key: String?, completion: PTActionTask? = nil) {
+    /// async/await 支持
+    public static func show(_ controller: PTAlertProtocol) async {
+        await withCheckedContinuation { continuation in
+            show(controller) {
+                continuation.resume()
+            }
+        }
+    }
+
+    public static func dismiss(_ key: String?,
+                               completion: PTActionTask? = nil) {
         guard let key else { return }
         shared.queue.async {
             DispatchQueue.main.async {
@@ -47,7 +63,6 @@ public final class PTAlertManager: NSObject {
         }
     }
 
-    /// 关闭全部
     public static func dismissAll(completion: PTActionTask? = nil) {
         shared.queue.async {
             DispatchQueue.main.async {
@@ -57,191 +72,231 @@ public final class PTAlertManager: NSObject {
     }
 }
 
-// MARK: - Private
+// MARK: - Core
 private extension PTAlertManager {
 
     // MARK: Show
-    @MainActor func _show(_ controller: PTAlertProtocol, completion: PTActionTask?) {
-        cleanInvalidWindows() // ✅ 关键！！！
+    @MainActor
+    func _show(_ controller: PTAlertProtocol, completion: PTActionTask?) {
 
-        // 1. 唯一 & 重复判断
-        if isDuplicate(controller) {
+        guard let scene = resolveScene(for: controller) else {
+            PTNSLogConsole("❌ No Scene Found")
+            return
+        }
+
+        var container = self.container(for: scene)
+
+        cleanInvalidWindows(&container)
+
+        if isDuplicate(controller, container: container) {
             PTNSLogConsole("❌ duplicate blocked")
             return
         }
 
-        // 2. 模式处理
-        handleMode(controller)
+        handleMode(controller, container: &container)
 
-        // 3. queue 模式
         if controller.config.popoverMode == .queue,
-           hasValidShowingWindow() {
-            insertQueue(controller)
+           hasValidShowingWindow(container) {
+
+            insertQueue(controller, container: &container)
+            updateContainer(container, for: scene)
             return
         }
 
-        // 4. 创建 / 复用 window
-        let window = dequeueWindow(for: controller)
-        configWindow(window, controller: controller)
-        
-        showingWindows[controller.key] = window
-        showingControllers[controller.key] = controller
+        let window = dequeueWindow(for: controller, scene: scene)
 
-        // 5. show
+        configWindow(window, controller: controller)
+
+        container.showingWindows[controller.key] = window
+        container.showingControllers[controller.key] = controller
+
+        updateContainer(container, for: scene)
+
         controller.showAnimation(completion: completion)
     }
 
     // MARK: Dismiss
     func _dismiss(_ key: String, completion: PTActionTask?) {
-        guard let window = showingWindows[key],
-              let controller = showingControllers[key] else { return }
 
-        controller.dismissAnimation { [weak self] in
-            guard let self else { return }
+        for (scene, var container) in sceneContainers {
 
-            // 回收 window
-            self.recycle(window)
+            guard let window = container.showingWindows[key],
+                  let controller = container.showingControllers[key] else { continue }
 
-            self.showingWindows.removeValue(forKey: key)
-            self.showingControllers.removeValue(forKey: key)
+            controller.dismissAnimation { [weak self] in
+                guard let self else { return }
 
-            // 恢复主 window
-            self.makeMainWindowKey()
+                self.recycle(window)
 
-            // 显示下一个
-            self.showNextIfNeeded()
+                container.showingWindows.removeValue(forKey: key)
+                container.showingControllers.removeValue(forKey: key)
 
-            completion?()
+                self.updateContainer(container, for: scene)
+
+                self.makeMainWindowKey(in: scene)
+
+                self.showNextIfNeeded(scene: scene)
+
+                completion?()
+            }
         }
     }
 
     // MARK: Dismiss All
-    @MainActor func _dismissAll(completion: PTActionTask?) {
+    @MainActor
+    func _dismissAll(completion: PTActionTask?) {
 
-        showingWindows.values.forEach { recycle($0) }
+        for (scene, var container) in sceneContainers {
 
-        showingWindows.removeAll()
-        waitQueue.removeAll()
-        showingControllers.removeAll()
-        
-        makeMainWindowKey()
+            container.showingWindows.values.forEach { recycle($0) }
+
+            container.showingWindows.removeAll()
+            container.showingControllers.removeAll()
+            container.waitQueue.removeAll()
+
+            updateContainer(container, for: scene)
+
+            makeMainWindowKey(in: scene)
+        }
 
         completion?()
     }
-    
-    func cleanInvalidWindows() {
-        showingWindows = showingWindows.filter { key, window in
-            let isValid = window.rootViewController != nil && !window.isHidden
-            if !isValid {
-                reusableWindows.append(window)
-            }
-            return isValid
-        }
-
-        // 同步清 controller
-        showingControllers = showingControllers.filter { key, _ in
-            showingWindows[key] != nil
-        }
-    }
-    
-    func hasValidShowingWindow() -> Bool {
-        return showingWindows.values.contains {
-            $0.rootViewController != nil && !$0.isHidden
-        }
-    }
 }
 
-// MARK: - Core Logic
+// MARK: - Scene
 private extension PTAlertManager {
 
-    func isDuplicate(_ controller: PTAlertProtocol) -> Bool {
+    func resolveScene(for controller: PTAlertProtocol) -> UIWindowScene? {
 
-        // unique 模式
-        if showingWindows.values.contains(where: {
-            $0.rootPopoverController?.config.popoverMode == .unique
-        }) {
-            return true
-        }
-
-        // identifier 判重
-        if let id = controller.config.identifier {
-            if showingWindows.values.contains(where: {
-                $0.rootPopoverController?.config.identifier == id
-            }) {
-                return true
-            }
-
-            if waitQueue.contains(where: {
-                $0.config.identifier == id
-            }) {
-                return true
-            }
-        }
-
-        return false
-    }
-
-    @MainActor func handleMode(_ controller: PTAlertProtocol) {
-        switch controller.config.popoverMode {
-        case .replace:
-            _dismissAll(completion: nil)
-        case .unique:
-            _dismissAll(completion: nil)
-        default:
-            break
-        }
-    }
-
-    func insertQueue(_ controller: PTAlertProtocol) {
-        waitQueue.append(controller)
-        waitQueue.sort {
-            $0.config.popoverPriority > $1.config.popoverPriority
-        }
-    }
-
-    @MainActor func showNextIfNeeded() {
-        guard showingWindows.isEmpty, !waitQueue.isEmpty else { return }
-
-        let next = waitQueue.removeFirst()
-        _show(next, completion: nil)
-    }
-}
-
-// MARK: - Window
-private extension PTAlertManager {
-
-    func dequeueWindow(for controller: PTAlertProtocol) -> PTAlertWindow {
-
-        // ♻️ 复用优先
-        if let window = reusableWindows.popLast() {
-            return window
-        }
-
-        // 🥇 1. controller 所在 scene（最优）
+        // 🥇 controller 所在
         if let scene = controller.view.window?.windowScene {
-            return PTAlertWindow(windowScene: scene)
+            return scene
         }
 
-        // 🥈 2. keyWindow scene
+        // 🥈 keyWindow
         if let scene = UIApplication.shared
             .connectedScenes
             .compactMap({ $0 as? UIWindowScene })
             .flatMap({ $0.windows })
             .first(where: { $0.isKeyWindow })?
             .windowScene {
-
-            return PTAlertWindow(windowScene: scene)
+            return scene
         }
 
-        // 🥉 3. fallback
-        if let scene = UIApplication.shared.connectedScenes
-            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+        // 🥉 fallback
+        return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first(where: { $0.activationState == .foregroundActive })
+    }
 
-            return PTAlertWindow(windowScene: scene)
+    func container(for scene: UIWindowScene) -> SceneContainer {
+        if let c = sceneContainers[scene] { return c }
+        let new = SceneContainer()
+        sceneContainers[scene] = new
+        return new
+    }
+
+    func updateContainer(_ container: SceneContainer, for scene: UIWindowScene) {
+        sceneContainers[scene] = container
+    }
+}
+
+// MARK: - Queue / Logic
+private extension PTAlertManager {
+
+    func isDuplicate(_ controller: PTAlertProtocol,
+                     container: SceneContainer) -> Bool {
+
+        if container.showingWindows.values.contains(where: {
+            $0.rootPopoverController?.config.popoverMode == .unique
+        }) {
+            return true
         }
 
-        // ❌ 最后兜底
-        return PTAlertWindow(frame: UIScreen.main.bounds)
+        if let id = controller.config.identifier {
+
+            if container.showingWindows.values.contains(where: {
+                $0.rootPopoverController?.config.identifier == id
+            }) { return true }
+
+            if container.waitQueue.contains(where: {
+                $0.config.identifier == id
+            }) { return true }
+        }
+
+        return false
+    }
+
+    @MainActor
+    func handleMode(_ controller: PTAlertProtocol,
+                    container: inout SceneContainer) {
+
+        switch controller.config.popoverMode {
+        case .replace, .unique:
+            container.showingWindows.values.forEach { recycle($0) }
+            container.showingWindows.removeAll()
+            container.showingControllers.removeAll()
+        default:
+            break
+        }
+    }
+
+    func insertQueue(_ controller: PTAlertProtocol,
+                     container: inout SceneContainer) {
+
+        container.waitQueue.append(controller)
+
+        container.waitQueue.sort {
+            $0.config.popoverPriority > $1.config.popoverPriority
+        }
+    }
+
+    func hasValidShowingWindow(_ container: SceneContainer) -> Bool {
+        return container.showingWindows.values.contains {
+            $0.rootViewController != nil && !$0.isHidden
+        }
+    }
+
+    @MainActor
+    func showNextIfNeeded(scene: UIWindowScene) {
+
+        var container = self.container(for: scene)
+
+        guard container.showingWindows.isEmpty,
+              !container.waitQueue.isEmpty else { return }
+
+        let next = container.waitQueue.removeFirst()
+
+        updateContainer(container, for: scene)
+
+        _show(next, completion: nil)
+    }
+
+    func cleanInvalidWindows(_ container: inout SceneContainer) {
+
+        container.showingWindows = container.showingWindows.filter { _, window in
+            let valid = window.rootViewController != nil && !window.isHidden
+            if !valid { reusableWindows.append(window) }
+            return valid
+        }
+
+        container.showingControllers = container.showingControllers.filter {
+            container.showingWindows[$0.key] != nil
+        }
+    }
+}
+
+// MARK: - Window
+private extension PTAlertManager {
+
+    func dequeueWindow(for controller: PTAlertProtocol,
+                       scene: UIWindowScene) -> PTAlertWindow {
+
+        if let window = reusableWindows.popLast() {
+            return window
+        }
+
+        return PTAlertWindow(windowScene: scene)
     }
 
     func recycle(_ window: PTAlertWindow) {
@@ -251,25 +306,43 @@ private extension PTAlertManager {
         reusableWindows.append(window)
     }
 
-    func configWindow(_ window: PTAlertWindow, controller: PTAlertProtocol) {
+    func configWindow(_ window: PTAlertWindow,
+                      controller: PTAlertProtocol) {
+
         window.frame = UIScreen.main.bounds
         window.backgroundColor = .clear
         window.windowLevel = .alert + 50
+
         window.overrideUserInterfaceStyle =
-            UIUserInterfaceStyle(rawValue: controller.config.userInterfaceStyleOverride.rawValue) ?? .light
+        UIUserInterfaceStyle(rawValue:
+            controller.config.userInterfaceStyleOverride.rawValue) ?? .light
 
         window.autoHideWhenPenetrated = controller.config.autoHideWhenPenetrated
         window.allowsEventPenetration = controller.config.allowsEventPenetration
+
         window.rootViewController = controller
         window.makeKeyAndVisible()
     }
 
-    func makeMainWindowKey() {
-        UIApplication.shared
-            .connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first(where: { $0.isKeyWindow })?
+    func makeMainWindowKey(in scene: UIWindowScene) {
+        scene.windows
+            .first(where: { $0.windowLevel == .normal && !$0.isHidden })?
             .makeKey()
+    }
+}
+
+// MARK: - Scene Lifecycle
+private extension PTAlertManager {
+
+    func observeSceneDestroy() {
+        NotificationCenter.default.addObserver(
+            forName: UIScene.didDisconnectNotification,
+            object: nil,
+            queue: .main) { [weak self] notification in
+
+            guard let scene = notification.object as? UIWindowScene else { return }
+
+            self?.sceneContainers.removeValue(forKey: scene)
+        }
     }
 }
