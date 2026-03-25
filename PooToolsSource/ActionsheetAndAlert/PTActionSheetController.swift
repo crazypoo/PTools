@@ -232,6 +232,14 @@ public class PTActionSheetController: PTAlertController {
         alertContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        self.setupCancelButton()
+        if !self.destructiveItems.isEmpty {
+            self.setupDestructiveItems()
+        }
+        self.setupContentScrollerView()
+        self.setupTitleLabel()
+        self.contentSubsSet()        
     }
 
     // 分离取消按钮的设置
@@ -435,19 +443,16 @@ public class PTActionSheetController: PTAlertController {
 
 extension PTActionSheetController {
     public override func showAnimation(completion: PTActionTask?) {
-        alertContent.layoutIfNeeded()
-        alertContent.transform = CGAffineTransform(translationX: 0, y: alertContent.bounds.height)
-        UIView.animate(withDuration: PTAlertConfig.shared.showALertDuration, animations: {
+        view.layoutIfNeeded()
+        let height = alertContent.systemLayoutSizeFitting(
+            UIView.layoutFittingCompressedSize
+        ).height
+        alertContent.transform = CGAffineTransform(translationX: 0, y: height)
+        UIView.animate(withDuration: PTAlertConfig.shared.showALertDuration,
+                       animations: {
             self.view.backgroundColor = UIColor.DevMaskColor
             self.alertContent.transform = .identity
         }, completion: { _ in
-            self.setupCancelButton()
-            if !self.destructiveItems.isEmpty {
-                self.setupDestructiveItems()
-            }
-            self.setupContentScrollerView()
-            self.setupTitleLabel()
-            self.contentSubsSet()
             completion?()
         })
     }
