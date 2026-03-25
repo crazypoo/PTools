@@ -7,6 +7,19 @@
 //
 
 import UIKit
+import SwifterSwift
+
+// MARK: - Debug Snapshot
+public struct PTAlertDebugSnapshot {
+    public let sceneCount: Int
+    public let scenes: [SceneInfo]
+
+    public struct SceneInfo {
+        public let id: String
+        public let showingKeys: [String]
+        public let queueKeys: [String]
+    }
+}
 
 @objcMembers
 public final class PTAlertManager: NSObject {
@@ -344,5 +357,160 @@ private extension PTAlertManager {
 
             self?.sceneContainers.removeValue(forKey: scene)
         }
+    }
+}
+
+extension PTAlertManager {
+    public func debugSnapshot() -> PTAlertDebugSnapshot {
+
+        let scenes = sceneContainers.map { (scene, container) in
+            PTAlertDebugSnapshot.SceneInfo(
+                id: "\(ObjectIdentifier(scene).hashValue)",
+                showingKeys: Array(container.showingControllers.keys),
+                queueKeys: container.waitQueue.map { $0.key }
+            )
+        }
+
+        return PTAlertDebugSnapshot(
+            sceneCount: sceneContainers.count,
+            scenes: scenes
+        )
+    }
+}
+
+final class PTAlertDebugView: UIView {
+
+    private let textView = UITextView()
+    private let refreshBtn = UIButton(type: .system)
+    private let closeBtn = UIButton(type: .system)
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        layer.cornerRadius = 12
+
+        setupUI()
+        setupGesture()
+        refresh()
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    private func setupUI() {
+
+        textView.isEditable = false
+        textView.backgroundColor = .clear
+        textView.textColor = .green
+        textView.font = .systemFont(ofSize: 12)
+
+        refreshBtn.setTitle("刷新", for: .normal)
+        closeBtn.setTitle("关闭", for: .normal)
+
+        refreshBtn.addTarget(self, action: #selector(refresh), for: .touchUpInside)
+        closeBtn.addTarget(self, action: #selector(close), for: .touchUpInside)
+
+        addSubviews([textView,refreshBtn,closeBtn])
+
+        textView.frame = CGRect(x: 8, y: 8, width: 260, height: 200)
+        refreshBtn.frame = CGRect(x: 8, y: 210, width: 60, height: 30)
+        closeBtn.frame = CGRect(x: 200, y: 210, width: 60, height: 30)
+    }
+
+    @objc private func refresh() {
+
+        let snapshot = PTAlertManager.shared.debugSnapshot()
+
+        var text = "📊 Alert Debug\n"
+        text += "Scene Count: \(snapshot.sceneCount)\n\n"
+
+        for scene in snapshot.scenes {
+            text += "🟦 Scene: \(scene.id)\n"
+            text += "Showing:\n"
+            scene.showingKeys.forEach { text += " - \($0)\n" }
+
+            text += "Queue:\n"
+            scene.queueKeys.forEach { text += " - \($0)\n" }
+
+            text += "\n"
+        }
+
+        textView.text = text
+    }
+
+    @objc private func close() {
+        (window as? PTAlertDebugWindow)?.dismiss()
+    }
+}
+
+private extension PTAlertDebugView {
+
+    func setupGesture() {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        addGestureRecognizer(pan)
+    }
+
+    @objc func handlePan(_ pan: UIPanGestureRecognizer) {
+        let translation = pan.translation(in: self.superview)
+        center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
+        pan.setTranslation(.zero, in: self.superview)
+    }
+}
+
+final class PTAlertDebugWindow: UIWindow {
+
+    static let shared = PTAlertDebugWindow()
+
+    private weak var debugView: UIView?
+
+    init() {
+        if let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first {
+
+            super.init(windowScene: scene)
+        } else {
+            super.init(frame: UIScreen.main.bounds)
+        }
+
+        windowLevel = .alert + 1000
+        backgroundColor = .clear
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    func show() {
+        if debugView != nil {
+            isHidden = false
+            return
+        }
+
+        let view = PTAlertDebugView(frame: CGRect(x: 40, y: 100, width: 280, height: 250))
+        addSubview(view)
+        debugView = view
+
+        isHidden = false
+    }
+
+    // ⭐️ 关键：事件穿透
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+
+        guard let debugView else { return nil }
+
+        let pointInDebug = debugView.convert(point, from: self)
+
+        // ✅ 点在 debugView 内 → 正常响应
+        if debugView.bounds.contains(pointInDebug) {
+            return super.hitTest(point, with: event)
+        }
+
+        // ❌ 其它区域 → 直接穿透
+        return nil
+    }
+    
+    func dismiss() {
+        debugView?.removeFromSuperview()
+        debugView = nil
+        isHidden = true
     }
 }
