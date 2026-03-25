@@ -850,6 +850,7 @@ private extension PTCollectionView {
     private func scrollToSection(_ section: Int) {
         let indexPath = IndexPath(item: 0, section: section)
         collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
+        isTouched = false
     }
     
     private func showIndicator(at index: Int) {
@@ -920,6 +921,7 @@ private extension PTCollectionView {
             }
             
             let tap = UITapGestureRecognizer { sender in
+                self.isTouched = true
                 self.selectIndex(label.index)
             }
             label.addGestureRecognizer(tap)
@@ -1252,6 +1254,14 @@ extension PTCollectionView {
             self.waterfallCache.removeAll()
             self.setiOS17EmptyDataView()
             collectionView.reloadData {
+                guard let config = self.viewConfig.indexConfig else {
+                    completion?(self.collectionView)
+                    return
+                }
+                
+                for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
+                    view.update(selected: view.index == 0, config: config)
+                }
                 completion?(self.collectionView)
             }
             return
