@@ -81,7 +81,7 @@ private extension PTAlertManager {
         }
 
         // 4. 创建 / 复用 window
-        let window = dequeueWindow()
+        let window = dequeueWindow(for: controller)
         configWindow(window, controller: controller)
         
         showingWindows[controller.key] = window
@@ -210,17 +210,38 @@ private extension PTAlertManager {
 // MARK: - Window
 private extension PTAlertManager {
 
-    func dequeueWindow() -> PTAlertWindow {
+    func dequeueWindow(for controller: PTAlertProtocol) -> PTAlertWindow {
+
+        // ♻️ 复用优先
         if let window = reusableWindows.popLast() {
             return window
         }
-        guard let scene = UIApplication.shared.connectedScenes
-            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene else {
-            PTNSLogConsole("❌ No active scene")
-            return PTAlertWindow(frame: UIScreen.main.bounds)
+
+        // 🥇 1. controller 所在 scene（最优）
+        if let scene = controller.view.window?.windowScene {
+            return PTAlertWindow(windowScene: scene)
         }
 
-        return PTAlertWindow(windowScene: scene)
+        // 🥈 2. keyWindow scene
+        if let scene = UIApplication.shared
+            .connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })?
+            .windowScene {
+
+            return PTAlertWindow(windowScene: scene)
+        }
+
+        // 🥉 3. fallback
+        if let scene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+
+            return PTAlertWindow(windowScene: scene)
+        }
+
+        // ❌ 最后兜底
+        return PTAlertWindow(frame: UIScreen.main.bounds)
     }
 
     func recycle(_ window: PTAlertWindow) {
@@ -248,7 +269,7 @@ private extension PTAlertManager {
             .connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .flatMap { $0.windows }
-            .first { $0.windowLevel == .normal }?
+            .first(where: { $0.isKeyWindow })?
             .makeKey()
     }
 }

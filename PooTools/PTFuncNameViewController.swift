@@ -747,9 +747,13 @@ class PTFuncNameViewController: PTBaseViewController {
                     UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet"], otherBlock: { sheet,index,title in
                         switch index {
                         case 0:
-                            PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
+                            PTGCDManager.gcdAfter(time: 0.5, block: {
+                                PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
+                            })
                         case 1:
-                            PTAlertTipControl.present(title:"Hola!",subtitle: "Que?",icon:.Error,style: .SupportVisionOS)
+                            PTGCDManager.gcdAfter(time: 0.5, block: {
+                                PTAlertTipControl.present(title:"Hola!",subtitle: "Que?",icon:.Error,style: .SupportVisionOS)
+                            })
                         case 2:
                             UIAlertController.alertSendFeedBack { title, content in
                                 UIAlertController.gobal_drop(title: title,subTitle: content) {
