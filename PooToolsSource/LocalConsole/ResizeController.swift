@@ -49,9 +49,9 @@ class ResizeController {
         let view = UIView()
         LocalConsole.shared.consoleWindow.view.addSubview(view)
         view.snp.makeConstraints { make in
-            make.size.equalTo(CGSizeMake(116, 46))
+            make.size.equalTo(CGSizeMake(116, 20))
             make.centerX.equalTo(self.consoleOutlineView)
-            make.top.equalTo(self.consoleOutlineView.snp.bottom).offset(18)
+            make.top.equalTo(self.consoleOutlineView.snp.bottom).offset(10)
         }
                 
         bottomGrabberPillView.backgroundColor = .randomColor
@@ -83,9 +83,9 @@ class ResizeController {
         let view = UIView()
         LocalConsole.shared.consoleWindow.view.addSubview(view)
         view.snp.makeConstraints { make in
-            make.size.equalTo(CGSizeMake(46, 116))
+            make.size.equalTo(CGSizeMake(20, 116))
             make.centerY.equalTo(self.consoleOutlineView)
-            make.left.equalTo(self.consoleOutlineView.snp.right).offset(18)
+            make.left.equalTo(self.consoleOutlineView.snp.right).offset(10)
         }
         
         rightGrabberPillView.backgroundColor = .randomColor
@@ -129,6 +129,14 @@ class ResizeController {
                 platterView.fontText.text = String(format: "%f", termial.fontSize)
                 platterView.FontSizeBlock = { (fontSize) in
                     LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
+                    PTGCDManager.gcdAfter(time: 0.55, block: {
+                        UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
+                            termial.center = self.consoleCenterPoint
+                            
+                            // Update grabbers (layout constraints)
+                            LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
+                        }.startAnimation()
+                    })
                 }
                 platterView.FontSColorBlock = { color in
                     LocalConsole.shared.setAttFontColor(color: color)
@@ -197,6 +205,7 @@ class ResizeController {
             }
             termial.menuButton.isHidden = isActive
             termial.draggable = !isActive
+            termial.isUserInteractionEnabled = !isActive
         }
     }
     
@@ -528,6 +537,7 @@ class PlatterView: UIView {
         slider.keyboardType = .decimalPad
         slider.delegate = self
         slider.viewCorner(radius: 5,borderWidth: 1, borderColor: .randomColor)
+        slider.tintColor = .random
         return slider
     }()
     
@@ -706,21 +716,23 @@ class PlatterView: UIView {
         default: break
         }
     }
-    
 }
 
 extension PlatterView:UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        if !(textField.text ?? "").stringIsEmpty() {
-            if (textField.text?.cgFloat())! < LocalConsoleFontMin {
+        if let textString = textField.text,!textString.stringIsEmpty(),let textFloat = Double(textString) {
+            if textFloat < LocalConsoleFontMin {
                 textField.text = "\(LocalConsoleFontMin)"
                 FontSizeBlock?(LocalConsoleFontMin)
-            } else if (textField.text?.cgFloat())! > LocalConsoleFontMax {
+            } else if textFloat > LocalConsoleFontMax {
                 textField.text = "\(LocalConsoleFontMax)"
                 FontSizeBlock?(LocalConsoleFontMax)
             } else {
-                FontSizeBlock?((textField.text?.cgFloat())!)
+                FontSizeBlock?(textFloat)
             }
+        } else {
+            textField.text = "\(LocalConsoleFontMin)"
+            FontSizeBlock?(LocalConsoleFontMin)
         }
     }
 }
