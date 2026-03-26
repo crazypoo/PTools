@@ -133,14 +133,62 @@ extension UIImage {
     }
 }
 
-class ConsoleWindow: UIWindow {
-    
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        
-        if let hitView = super.hitTest(point, with: event) {
-            return hitView.isKind(of: ConsoleWindow.self) ? nil : hitView
+final class PTConsoleWindow: UIWindow {
+
+    static let shared = PTConsoleWindow()
+
+    private weak var debugView: UIView?
+
+    private init() {
+        if let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first {
+
+            super.init(windowScene: scene)
+        } else {
+            super.init(frame: UIScreen.main.bounds)
         }
-        return super.hitTest(point, with: event)
+
+        windowLevel = .alert + 200
+        backgroundColor = .clear
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+        
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let rootView = rootViewController?.view else { return nil }
+
+        let hitView = super.hitTest(point, with: event)
+
+        // ✅ 关键：如果点到的是“背景 view”，直接穿透
+        if hitView == rootView {
+            return nil
+        }
+
+        return hitView
+    }
+
+    func show(view:UIView) {
+        if debugView != nil {
+            isHidden = false
+            return
+        }
+
+        addSubview(view)
+        view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        debugView = view
+
+        isHidden = false
+    }
+}
+
+final class PTLocalConsoleViewController:PTBaseViewController {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 }
 
@@ -459,57 +507,78 @@ public class LocalConsole: NSObject {
         terminal!.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
     }
     
-    fileprivate lazy var consoleWindow:PTBaseViewController = {
+    lazy var consoleWindow:PTBaseViewController = {
         let control = PTBaseViewController(hideBaseNavBar: true)
         control.view.backgroundColor = .clear
+        control.view.isUserInteractionEnabled = true
         return control
     }()
 
     public func createSystemLogView() {
-        if terminal == nil {
-            var contentView:Any!
-            AppWindows!.addSubviews([consoleWindow.view])
-            AppWindows?.rootViewController?.addChild(consoleWindow)
-            
-            consoleWindow.view = PTBaseMaskView()
-            consoleWindow.view.frame = AppWindows!.bounds
-            
-            SwizzleTool().swizzleContextMenuReverseOrder()
 
-            SwizzleTool().swizzleDidAddSubview {
-                AppWindows!.bringSubviewToFront(self.consoleWindow.view)
+        guard terminal == nil else { return }
+
+        let window = PTConsoleWindow.shared
+        window.rootViewController = consoleWindow
+        window.isHidden = false
+        let terminal = PTTerminal(
+            view: consoleWindow.view as Any,
+            frame: CGRect(
+                x: 0,
+                y: CGFloat.kNavBarHeight_Total,
+                width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width,
+                height: PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height
+            )
+        )
+        terminal.tag = SystemLogViewTag
+
+        consoleWindow.view.addSubview(terminal)
+
+        SwizzleTool().swizzleContextMenuReverseOrder()
+
+        self.terminal = terminal
+
+        snapToCachedEndpoint()
+
+        setupTerminalActions()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
+    private func setupTerminalActions() {
+
+        terminal?.dragEnd = { [weak self] in
+//            guard let self else { return }
+//
+//            let target = nearestTargetTo(self.terminal!.center,
+//                                         possibleTargets: self.possibleEndpoints)
+//
+//            UIView.animate(withDuration: 0.3) {
+//                self.terminal?.center = target
+//            }
+            // After the PiP is thrown, determine the best corner and re-target it there.
+            let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
+            
+            let projectedPosition = CGPoint(x: self!.terminal!.center.x + project(initialVelocity: self!.terminal!.x, decelerationRate: decelerationRate), y: self!.terminal!.center.y + project(initialVelocity: self!.terminal!.y, decelerationRate: decelerationRate))
+            
+            let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self!.possibleEndpoints)
+            
+            let relativeInitialVelocity = CGVector(dx: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.x, to: nearestTargetPosition.x), dy: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.y, to: nearestTargetPosition.y))
+            
+            let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
+            let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
+            positionAnimator.addAnimations { [self] in
+                self!.terminal!.center = nearestTargetPosition
             }
+            positionAnimator.startAnimation()
+            PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
+            PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
 
-            contentView = consoleWindow.view as Any
-
-            terminal = PTTerminal(view: contentView as Any, frame: CGRect(x: 0, y: CGFloat.kNavBarHeight_Total, width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width, height:PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height))
-            terminal!.tag = SystemLogViewTag
-            snapToCachedEndpoint()
-            terminal!.dragEnd = {
-                // After the PiP is thrown, determine the best corner and re-target it there.
-                let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
-                
-                let projectedPosition = CGPoint(x: self.terminal!.center.x + project(initialVelocity: self.terminal!.x, decelerationRate: decelerationRate), y: self.terminal!.center.y + project(initialVelocity: self.terminal!.y, decelerationRate: decelerationRate))
-                
-                let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self.possibleEndpoints)
-                
-                let relativeInitialVelocity = CGVector(dx: relativeVelocity(forVelocity: self.terminal!.x, from: self.terminal!.center.x, to: nearestTargetPosition.x), dy: relativeVelocity(forVelocity: self.terminal!.x, from: self.terminal!.center.y, to: nearestTargetPosition.y))
-                
-                let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
-                let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
-                positionAnimator.addAnimations { [self] in
-                    self.terminal!.center = nearestTargetPosition
-                }
-                positionAnimator.startAnimation()
-                PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
-                PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
-            }
-            terminal!.menuButton.showsMenuAsPrimaryAction = true
-            terminal!.menuButton.menu = makeMenu()
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         }
+
+        terminal?.menuButton.showsMenuAsPrimaryAction = true
+        terminal?.menuButton.menu = makeMenu()
     }
     
     var hasShortened = false
@@ -1173,7 +1242,6 @@ public class PTTerminal:PFloatingButton {
             make.height.equalTo(40)
             make.right.bottom.equalToSuperview().inset(borderLine)
         }
-
     }
     
     var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!

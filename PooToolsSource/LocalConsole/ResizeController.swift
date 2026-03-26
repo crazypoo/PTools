@@ -18,9 +18,8 @@ class ResizeController {
     
     lazy var platterView = PlatterView(frame: .zero)
     
-    lazy var consoleCenterPoint = CGPoint(x: (UIScreen.main.nativeBounds.width / 2).rounded() / UIScreen.main.scale,
-                                          y: (UIScreen.main.nativeBounds.height / 2).rounded() / UIScreen.main.scale
-                                            + (UIScreen.hasRoundedCorners ? 0 : 24))
+    lazy var consoleCenterPoint = CGPoint(x: PTConsoleWindow.shared.bounds.midX,
+                                          y: PTConsoleWindow.shared.bounds.midY)
         
     @MainActor lazy var consoleOutlineView: UIView = {
         
@@ -48,7 +47,7 @@ class ResizeController {
     
     @MainActor lazy var bottomGrabber: UIView = {
         let view = UIView()
-        AppWindows!.addSubview(view)
+        LocalConsole.shared.consoleWindow.view.addSubview(view)
         view.snp.makeConstraints { make in
             make.size.equalTo(CGSizeMake(116, 46))
             make.centerX.equalTo(self.consoleOutlineView)
@@ -82,7 +81,7 @@ class ResizeController {
     
     @MainActor lazy var rightGrabber: UIView = {
         let view = UIView()
-        AppWindows!.addSubview(view)
+        LocalConsole.shared.consoleWindow.view.addSubview(view)
         view.snp.makeConstraints { make in
             make.size.equalTo(CGSizeMake(46, 116))
             make.centerY.equalTo(self.consoleOutlineView)
@@ -116,47 +115,44 @@ class ResizeController {
         didSet {
             guard isActive != oldValue else { return }
             
-            // Initialize views outside of animation.
-            _ = platterView
-            _ = consoleOutlineView
-            _ = bottomGrabber
-            _ = rightGrabber
-            
-            // Ensure initial autolayout is performed unanimated.
-            
-            AppWindows!.bringSubviewToFront(LocalConsole.shared.terminal!)
-            
-            LocalConsole.shared.terminal!.menuButton.isHidden = isActive
-            
-            platterView.fontText.text = String(format: "%f", LocalConsole.shared.terminal!.fontSize)
-            platterView.FontSizeBlock = { (fontSize) in
-                LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
-            }
-            platterView.FontSColorBlock = { color in
-                LocalConsole.shared.setAttFontColor(color: color)
-            }
+            guard let termial = LocalConsole.shared.terminal else { return }
 
             if isActive {
                 
+                // Initialize views outside of animation.
+                _ = platterView
+                _ = consoleOutlineView
+                _ = bottomGrabber
+                _ = rightGrabber
+                
+                // Ensure initial autolayout is performed unanimated.
+                platterView.fontText.text = String(format: "%f", termial.fontSize)
+                platterView.FontSizeBlock = { (fontSize) in
+                    LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
+                }
+                platterView.FontSColorBlock = { color in
+                    LocalConsole.shared.setAttFontColor(color: color)
+                }
+
+                LocalConsole.shared.consoleWindow.view.bringSubviewToFront(termial)
+
                 UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
-                    
-                    let textView = LocalConsole.shared.terminal!.systemText
-                    
-                    textView!.contentOffset.y = textView!.contentSize.height - textView!.bounds.size.height
+                    guard let textView = termial.systemText else { return }
+                    textView.contentOffset.y = textView.contentSize.height - textView.bounds.size.height
                 }.startAnimation()
                 
                 
-                if LocalConsole.shared.terminal!.traitCollection.userInterfaceStyle == .light {
-                    LocalConsole.shared.terminal!.layer.shadowOpacity = 0.25
+                if termial.traitCollection.userInterfaceStyle == .light {
+                    termial.layer.shadowOpacity = 0.25
                 }
                 // Ensure background color animates in right the first time.
-                AppWindows!.backgroundColor = .clear
+                LocalConsole.shared.consoleWindow.view.backgroundColor = .clear
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                    LocalConsole.shared.terminal!.center = self.consoleCenterPoint
+                    termial.center = self.consoleCenterPoint
                     
                     // Update grabbers (layout constraints)
-                    AppWindows!.backgroundColor = .randomColor
+                    LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
                 }.startAnimation()
                 
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -178,18 +174,18 @@ class ResizeController {
                 consoleOutlineView.isUserInteractionEnabled = true
             } else {
                 
-                LocalConsole.shared.terminal!.layer.shadowOpacity = 0.5
+                termial.layer.shadowOpacity = 0.5
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
                     LocalConsole.shared.snapToCachedEndpoint()
-                    LocalConsole.shared.terminal!.layoutIfNeeded()
+                    termial.layoutIfNeeded()
                     // Update grabbers (layout constraints)
-                    AppWindows!.backgroundColor = .clear
+                    LocalConsole.shared.consoleWindow.view.backgroundColor = .clear
                 }.startAnimation()
                 
                 UIViewPropertyAnimator(duration: 0.2, dampingRatio: 1) { [self] in
                     consoleOutlineView.alpha = 0
-                    
+                    platterView.alpha = 0
                     bottomGrabber.alpha = 0
                     rightGrabber.alpha = 0
                 }.startAnimation()
@@ -197,6 +193,8 @@ class ResizeController {
                 // Deactivate full screen button.
                 consoleOutlineView.isUserInteractionEnabled = false
             }
+            termial.menuButton.isHidden = isActive
+            termial.draggable = !isActive
         }
     }
     
@@ -256,7 +254,7 @@ class ResizeController {
                 
                 // Animate autolayout updates.
                 LocalConsole.shared.terminal!.layoutIfNeeded()
-                AppWindows!.layoutIfNeeded()
+                LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -324,7 +322,7 @@ class ResizeController {
                 
                 // Animate autolayout updates.
                 LocalConsole.shared.terminal!.layoutIfNeeded()
-                AppWindows!.layoutIfNeeded()
+                LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -345,6 +343,7 @@ class PlatterView: UIView,UITextFieldDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        self.isUserInteractionEnabled = true
         self.frame.size = UIScreen.portraitSize
         // Make sure bottom doesn't show on upwards pan.
         self.frame.size.height += 50
@@ -369,8 +368,8 @@ class PlatterView: UIView,UITextFieldDelegate {
         
         addSubview(blurView)
 
-        backgroundColor = .randomColor
-        AppWindows!.addSubview(self)
+        backgroundColor = .clear
+        LocalConsole.shared.consoleWindow.view.addSubview(self)
         
         _ = backgroundButton
         
@@ -452,8 +451,8 @@ class PlatterView: UIView,UITextFieldDelegate {
             self.dismiss()
         }
         backgroundButton.frame.size = CGSize(width: self.frame.size.width, height: possibleEndpoints[0].y + 30)
-        AppWindows!.addSubview(backgroundButton)
-        AppWindows!.sendSubviewToBack(backgroundButton)
+        LocalConsole.shared.consoleWindow.view.addSubview(backgroundButton)
+        LocalConsole.shared.consoleWindow.view.sendSubviewToBack(backgroundButton)
         return backgroundButton
     }()
     
@@ -503,7 +502,7 @@ class PlatterView: UIView,UITextFieldDelegate {
                 LocalConsole.shared.terminal!.fontSize = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = "#FFFFFF"
                 LocalConsole.shared.terminal!.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
-                AppWindows!.layoutIfNeeded()
+                LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
         }
         return button
