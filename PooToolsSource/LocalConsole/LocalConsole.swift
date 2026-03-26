@@ -549,14 +549,6 @@ public class LocalConsole: NSObject {
     private func setupTerminalActions() {
 
         terminal?.dragEnd = { [weak self] in
-//            guard let self else { return }
-//
-//            let target = nearestTargetTo(self.terminal!.center,
-//                                         possibleTargets: self.possibleEndpoints)
-//
-//            UIView.animate(withDuration: 0.3) {
-//                self.terminal?.center = target
-//            }
             // After the PiP is thrown, determine the best corner and re-target it there.
             let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
             
