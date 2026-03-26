@@ -184,11 +184,46 @@ final class PTConsoleWindow: UIWindow {
     }
 }
 
-final class PTLocalConsoleViewController:PTBaseViewController {
+public enum PTLogLevel {
+    case info
+    case warning
+    case error
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    var color: UIColor {
+        switch self {
+        case .info: return .white
+        case .warning: return .systemYellow
+        case .error: return .systemRed
+        }
+    }
+}
+
+public final class PTLogBuffer {
+    public struct LogItem {
+        let text: String
+        let level: PTLogLevel
+    }
+
+    private var logs: [LogItem] = []
+    private let maxCount: Int
+    
+    init(maxCount: Int = 1000) {
+        self.maxCount = maxCount
+    }
+    
+    func append(_ text: String, level: PTLogLevel = .info) {
+        logs.append(LogItem(text: text, level: level))
+        if logs.count > maxCount {
+            logs.removeFirst(logs.count - maxCount)
+        }
+    }
+    
+    func clear() {
+        logs.removeAll()
+    }
+    
+    func all() -> [LogItem] {
+        logs
     }
 }
 
@@ -208,9 +243,21 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 public class LocalConsole: NSObject {
     @MainActor public static let shared = LocalConsole()
             
+    private let logBuffer = PTLogBuffer(maxCount: 50000)
+    private var pendingUpdate = false
+    private let throttleInterval: TimeInterval = 0.05
+    private var dynamicLogs: [String: String] = [:]
+    private var dynamicRange: NSRange?
+
     public var closeAllOutsideFunction:PTActionTask?
     public var leakCallback: ((PTPerformanceLeak) -> Void)?
     public var networkStatus = ""
+
+    public var menu: UIMenuElement? = nil {
+        didSet {
+            terminal!.menuButton.menu = makeMenu()
+        }
+    }
 
     @MainActor public var isVisiable:Bool = PTCoreUserDefultsWrapper.AppDebugMode {
         didSet {
@@ -258,12 +305,10 @@ public class LocalConsole: NSObject {
     public func setAttFontSize(@PTClampedProperyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
         PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = fontSizes
         terminal!.fontSize = fontSizes
-        terminal!.setAttributedText(currentText)
     }
     
     public func setAttFontColor(color:UIColor) {
         terminal!.fontColor = color
-        terminal!.setAttributedText(currentText)
     }
     
     public var terminal:PTTerminal?
@@ -273,21 +318,6 @@ public class LocalConsole: NSObject {
     public var showAllUserDefaultsKeys = false {
         didSet {
             userdefaultShares.showAllUserDefaultsKeys = showAllUserDefaultsKeys
-        }
-    }
-
-    var currentText: String = "" {
-        didSet {
-            DispatchQueue.main.async(execute: {
-                self.setLog()
-                if self.isVisiable {
-                    UIView.performWithoutAnimation {
-                        DispatchQueue.main.async(execute: {
-                            self.commitTextChanges(requestMenuUpdate: oldValue == "" || (oldValue != "" && self.currentText == ""))
-                        })
-                    }
-                }
-            })
         }
     }
     
@@ -377,19 +407,7 @@ public class LocalConsole: NSObject {
         terminal = nil
         closeAllFunction()
     }
-    
-    func setLog() {
-        if terminal!.systemText!.contentOffset.y > (terminal!.systemText!.contentSize.height - terminal!.systemText!.bounds.size.height - 20) {
-            terminal!.systemText?.pendingOffsetChange = true
-        }
-        
-        terminal!.systemText?.text = currentText
-        terminal!.setAttributedText(currentText)
-        PTGCDManager.gcdAfter(time: 0.2) {
-            self.terminal?.systemText?.contentOffset.y = self.terminal?.systemText?.contentSize.height ?? 0
-        }
-    }
-        
+            
     var temporaryKeyboardHeightValueTracker: CGFloat?
     // MARK: Handle keyboard show/hide.
     private var keyboardHeight: CGFloat? = nil {
@@ -578,36 +596,58 @@ public class LocalConsole: NSObject {
     public var isCharacterLimitDisabled = false
     public var isCharacterLimitWarningDisabled = false
 
-    public func print(_ items: Any) {
-        let result: String
-        if currentText == "" {
-            result = "\(items)"
-        } else {
-            result = currentText + "\n\(items)"
-        }
-        let _currentText: String = result
-
-        // Cut down string if it exceeds 50,000 characters to keep text view running smoothly.
-        if _currentText.count > 50000 && !isCharacterLimitDisabled {
-
-            if !hasShortened && !isCharacterLimitWarningDisabled {
-                hasShortened = true
-                PTNSLogConsole("LocalConsole的内容已超过50000个字符。为了保持性能，LocalConsole减少了打印内容的开头部分。要禁用此行为，请将LocalConsole.shared.isCharacterLimitDisabled设置为true。要禁用此警告，请设置localconsole.share.ischaracterlimitwarningdisabled = true。",levelType: .Error,loggerType: .Log)
-            }
-
-            let shortenedString = String(_currentText.suffix(50000))
-            currentText = shortenedString.stringAfterFirstOccurenceOf(delimiter: "\n") ?? shortenedString
-        } else {
-            currentText = _currentText
+    public func print(_ items: Any, level: PTLogLevel = .info) {
+        logBuffer.append("\(items)", level: level)
+        scheduleUIUpdate()
+    }
+    
+    func scheduleUIUpdate() {
+        guard !pendingUpdate else { return }
+        pendingUpdate = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + throttleInterval) { [weak self] in
+            guard let self else { return }
+            self.pendingUpdate = false
+            self.flushUI()
         }
     }
     
-    public var menu: UIMenuElement? = nil {
-        didSet {
-            terminal!.menuButton.menu = makeMenu()
+    @MainActor
+    private func flushUI() {
+        guard let terminal else { return }
+        
+        let logs = logBuffer.all()
+        
+        // 只 append 新内容（关键点🔥）
+        for log in logs.suffix(50) { // 可限制每次最多刷50条
+            terminal.appendLog(log)
+        }
+        
+        commitTextChanges(requestMenuUpdate: false)
+    }
+    
+    var dynamicReportTimer: Timer? {
+        willSet {
+            timerInvalidationCounter = 0
+            dynamicReportTimer?.invalidate()
         }
     }
     
+    var timerInvalidationCounter = 0
+}
+
+extension LocalConsole : UIContextMenuInteractionDelegate {
+    public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in
+            makeMenu() // 返回你之前创建的菜单
+        }
+    }
+}
+
+extension LocalConsole:UITextFieldDelegate {}
+
+//MARK: Menu
+extension LocalConsole {
     func makeMenu() -> UIMenu {
         let result: UIAction
         // Something here causes a crash < iOS 15. Fall back to copy text for iOS 15 and below.
@@ -824,19 +864,46 @@ public class LocalConsole: NSObject {
 
         return UIMenu(title: "", children: menuContent)
     }
-
-    var dynamicReportTimer: Timer? {
-        willSet {
-            timerInvalidationCounter = 0
-            dynamicReportTimer?.invalidate()
+    
+    func rulerAction() {
+        if PTViewRulerPlugin.share.showed {
+            PTViewRulerPlugin.share.hide()
+        } else {
+            PTViewRulerPlugin.share.show()
         }
     }
     
-    var timerInvalidationCounter = 0
-
+    func colorAction() {
+        if PTColorPickPlugin.share.showed {
+            PTColorPickPlugin.share.close()
+        } else {
+            PTColorPickPlugin.share.show()
+        }
+    }
+    
+    func userdefaultAction() {
+        let vc = PTUserDefultsViewController()
+        vc.showAllUserDefaultsKeys = showAllUserDefaultsKeys
+        present(content: vc)
+    }
+    
+    func resizeAction() {
+        PTGCDManager.gcdAfter(time: 0.1) {
+            ResizeController.shared.isActive.toggle()
+            ResizeController.shared.platterView.reveal()
+        }
+    }
+    
+    func shareAction() {
+        let activityViewController = PTActivityViewController(text: terminal!.systemText!.text ?? "")
+        activityViewController.previewNumberOfLines = 10
+        PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
+    }
+    
     /// Clear text in the console view.
     public func clear() {
-        currentText = ""
+        logBuffer.clear()
+        terminal?.systemText?.text = ""
     }
     
     func loadedLibs() {
@@ -983,54 +1050,20 @@ public class LocalConsole: NSObject {
             PTUtils.getCurrentVC()?.present(nav, animated: true)
         }
     }
-        
-    func rulerAction() {
-        if PTViewRulerPlugin.share.showed {
-            PTViewRulerPlugin.share.hide()
-        } else {
-            PTViewRulerPlugin.share.show()
-        }
-    }
-    
-    func colorAction() {
-        if PTColorPickPlugin.share.showed {
-            PTColorPickPlugin.share.close()
-        } else {
-            PTColorPickPlugin.share.show()
-        }
-    }
-    
-    func userdefaultAction() {
-        let vc = PTUserDefultsViewController()
-        vc.showAllUserDefaultsKeys = showAllUserDefaultsKeys
-        present(content: vc)
-    }
-    
-    func resizeAction() {
-        PTGCDManager.gcdAfter(time: 0.1) {
-            ResizeController.shared.isActive.toggle()
-            ResizeController.shared.platterView.reveal()
-        }
-    }
-    
-    func shareAction() {
-        let activityViewController = PTActivityViewController(text: terminal!.systemText!.text ?? "")
-        activityViewController.previewNumberOfLines = 10
-        PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
-    }
-        
+}
+
+//MARK: System report
+extension LocalConsole {
     func systemReport() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-
-            if !self.currentText.stringIsEmpty() {
-                print("\n")
-            }
 
             if self.dynamicReportTimer?.isValid == true {
                 self.dynamicReportTimer?.invalidate()
                 self.dynamicReportTimer = nil
             }
+
+            self.printStaticSystemInfo()
 
             self.dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
                 guard let self else {
@@ -1038,44 +1071,41 @@ public class LocalConsole: NSObject {
                     return
                 }
 
-                guard self.terminal?.systemText?.panGestureRecognizer.numberOfTouches == 0 else {
-                    return
-                }
-
-                var _currentText = self.currentText
-
-                let scanRange: NSRange
-                if _currentText.count <= 2500 {
-                    scanRange = NSMakeRange(0, _currentText.count)
-                } else {
-                    scanRange = NSMakeRange(_currentText.count - 2500, 2500)
-                }
-
-                _currentText = self.replacePattern(in: _currentText, pattern: "ThermalState: .*", replacement: "ThermalState: \(SystemReport.shared.thermalState)", range: scanRange)
-                _currentText = self.replacePattern(in: _currentText, pattern: "SystemUptime: .*", replacement: "SystemUptime: \(ProcessInfo.processInfo.systemUptime.formattedString ?? "")", range: scanRange)
-                _currentText = self.replacePattern(in: _currentText, pattern: "LowPowerMode: .*", replacement: "LowPowerMode: \(ProcessInfo.processInfo.isLowPowerModeEnabled)", range: scanRange)
-
-                if self.currentText != _currentText {
-                    self.currentText = _currentText
-                    self.timerInvalidationCounter = 0
-                } else {
-                    self.timerInvalidationCounter += 1
-                    if self.timerInvalidationCounter >= 2 {
-                        timer.invalidate()
-                        self.dynamicReportTimer = nil
-                    }
+                Task {
+                    await self.updateDynamicSystemInfo()
                 }
             }
-
-            self.printStaticSystemInfo()
         }
     }
 
-    private func replacePattern(in text: String, pattern: String, replacement: String, range: NSRange) -> String {
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else { return text }
-        return regex.stringByReplacingMatches(in: text, options: [], range: range, withTemplate: replacement)
-    }
+    
+    @MainActor private func updateDynamicSystemInfo() {
+        dynamicLogs["ThermalState"] = "ThermalState: \(SystemReport.shared.thermalState)"
+        dynamicLogs["SystemUptime"] = "SystemUptime: \(ProcessInfo.processInfo.systemUptime.formattedString ?? "")"
+        dynamicLogs["LowPowerMode"] = "LowPowerMode: \(ProcessInfo.processInfo.isLowPowerModeEnabled)"
 
+        refreshDynamicSection()
+    }
+    
+    @MainActor
+    private func refreshDynamicSection() {
+        guard let textStorage = terminal?.systemText?.textStorage else { return }
+
+        // 删除旧的
+        if let range = dynamicRange {
+            textStorage.deleteCharacters(in: range)
+        }
+
+        let start = textStorage.length
+
+        let combined = dynamicLogs.values.joined(separator: "\n") + "\n"
+        terminal?.appendLog(PTLogBuffer.LogItem(text: combined, level: .info))
+
+        let end = textStorage.length
+
+        dynamicRange = NSRange(location: start, length: end - start)
+    }
+    
     private func printStaticSystemInfo() {
         // 提取静态信息构造字符串（保持你原来的逻辑）
         // 加入所有 volume、battery 等静态内容的打印
@@ -1143,8 +1173,6 @@ public class LocalConsole: NSObject {
         
         PTGCDManager.gcdMain { [self] in
 
-            if !currentText.stringIsEmpty() { print("\n") }
-            
             let safeAreaInsets = PTUtils.getCurrentVC()?.view.safeAreaInsets ?? .zero
             
             print(
@@ -1168,6 +1196,10 @@ public class LocalConsole: NSObject {
 public class PTTerminal:PFloatingButton {
     public var systemText : PTInvertedTextView?
     public lazy var menuButton = ConsoleMenuButton()
+
+    private lazy var textStorage: NSTextStorage? = {
+        systemText?.textStorage
+    }()
 
     override init(view:Any,frame:CGRect) {
         super.init(view: view, frame: frame)
@@ -1248,6 +1280,37 @@ public class PTTerminal:PFloatingButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private var currentAttributes: [NSAttributedString.Key: Any] {
+        [
+            .font: UIFont.systemFont(ofSize: fontSize, weight: .semibold, design: .monospaced),
+            .foregroundColor: fontColor
+        ]
+    }
+    
+    public func appendLog(_ item: PTLogBuffer.LogItem) {
+        guard let textStorage = systemText?.textStorage else { return }
+        
+        let attr = NSAttributedString(
+            string: item.text + "\n",
+            attributes: currentAttributes
+        )
+        
+        textStorage.beginEditing()
+        textStorage.append(attr)
+        textStorage.endEditing()
+        
+        scrollToBottom()
+    }
+    
+    private func scrollToBottom() {
+        guard let textView = systemText else { return }
+        
+        let offsetY = textView.contentSize.height - textView.bounds.height
+        if offsetY > 0 {
+            textView.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
+        }
+    }
 }
 
 extension String {
@@ -1263,13 +1326,3 @@ extension UIDevice {
         return (AppWindows?.safeAreaInsets.bottom ?? 0) > 0
     }
 }
-
-extension LocalConsole : UIContextMenuInteractionDelegate {
-    public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in
-            makeMenu() // 返回你之前创建的菜单
-        }
-    }
-}
-
-extension LocalConsole:UITextFieldDelegate {}

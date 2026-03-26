@@ -165,7 +165,9 @@ class ResizeController {
                 UIViewPropertyAnimator(duration: 1, dampingRatio: 1) { [self] in
                     bottomGrabber.alpha = 1
                     rightGrabber.alpha = 1
-                    
+                    platterView.alpha = 1
+                    platterView.isHidden = false
+                    platterView.backgroundButton.isHidden = false
                     bottomGrabber.transform = .identity
                     rightGrabber.transform = .identity
                 }.startAnimation(afterDelay: 0.3)
@@ -335,7 +337,7 @@ class ResizeController {
 }
 
 @available(iOSApplicationExtension, unavailable)
-class PlatterView: UIView,UITextFieldDelegate {
+class PlatterView: UIView {
     
     var FontSizeBlock:((_ text:CGFloat)->Void)?
     var FontSColorBlock:LocalConsoleTextColorTask?
@@ -705,6 +707,9 @@ class PlatterView: UIView,UITextFieldDelegate {
         }
     }
     
+}
+
+extension PlatterView:UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         if !(textField.text ?? "").stringIsEmpty() {
             if (textField.text?.cgFloat())! < LocalConsoleFontMin {
