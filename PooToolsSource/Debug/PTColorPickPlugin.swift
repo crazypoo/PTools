@@ -257,7 +257,7 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
     }
     
     private lazy var pickInfoView:PTColorPickInfoView = {
-        let view = PTColorPickInfoView(frame: self.bounds)
+        let view = PTColorPickInfoView()
         view.closeBlock = { sender , pickerInfo in
             NotificationCenter.default.post(name: NSNotification.Name(kPTClosePluginNotification), object: nil, userInfo: nil)
         }
@@ -265,26 +265,26 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
     }()
     
     init() {
-        super.init(frame: CGRect(x: CGFloat.SizeFrom750(x: 30), y: CGFloat.kSCREEN_HEIGHT - CGFloat.SizeFrom750(x: 100) - CGFloat.SizeFrom750(x: 30) - CGFloat.kTabbarSaveAreaHeight, width: CGFloat.kSCREEN_WIDTH - 2 * CGFloat.SizeFrom750(x: 30), height: CGFloat.SizeFrom750(x: 100)))
-        
-        windowLevel = .alert
-        
-        addSubview(pickInfoView)
-        
-        let pan = UIPanGestureRecognizer { sender in
-            if let pans = sender as? UIPanGestureRecognizer {
-                let offsetPoint = pans.translation(in: pans.view)
-                pans.setTranslation(.zero, in: pans.view)
-                let panView = pans.view
-                let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
-                let newY = panView!.frame.origin.y + panView!.frame.size.height / 2 + offsetPoint.y
-                
-                let centerPoint = CGPoint(x: newX, y: newY)
-                panView?.center = centerPoint
-            }
+        if let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first {
+
+            super.init(windowScene: scene)
+        } else {
+            super.init(frame: UIScreen.main.bounds)
         }
-        addGestureRecognizer(pan)
-        
+
+        windowLevel = .alert + 201
+        backgroundColor = .clear
+                
+        addSubview(pickInfoView)
+        pickInfoView.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset( CGFloat.SizeFrom750(x: 30))
+            make.top.equalToSuperview().inset((CGFloat.kSCREEN_HEIGHT - CGFloat.SizeFrom750(x: 100) - CGFloat.SizeFrom750(x: 30) - CGFloat.kTabbarSaveAreaHeight))
+            make.width.equalTo((CGFloat.kSCREEN_WIDTH - 2 * CGFloat.SizeFrom750(x: 30)))
+            make.height.equalTo(CGFloat.SizeFrom750(x: 100))
+        }
+                
         NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
 
     }
@@ -307,116 +307,232 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
 }
 
 //MARK: 吸管窗口
-fileprivate class PTColorPickWindow : UIWindow {
+public class PTColorPickWindow: UIWindow {
+    
     static let share = PTColorPickWindow()
     
-    let kColorPickWindowSize:CGFloat = 150
+    // MARK: - 模式（🔥高级能力）
+    public enum PickMode {
+        case fullScreen   // 精准（默认）
+        case mainWindow   // 高性能
+    }
     
-    private var screenShotImage:UIImage = UIImage()
+    public var pickMode: PickMode = .fullScreen
     
-    private lazy var magnifyLayer:PTColorPickMagnifyLayer = {
+    private var lastCaptureTime: CFTimeInterval = 0
+    private var screenShotImage: UIImage = UIImage()
+    
+    private lazy var magnifyLayer: PTColorPickMagnifyLayer = {
         let layer = PTColorPickMagnifyLayer()
         layer.contentsScale = UIScreen.main.scale
-        return  layer
+        return layer
     }()
     
+    // MARK: - Init
     init() {
-        super.init(frame: CGRectMake(CGFloat.kSCREEN_WIDTH / 2 - kColorPickWindowSize / 2, CGFloat.kSCREEN_HEIGHT / 2 - kColorPickWindowSize / 2, kColorPickWindowSize, kColorPickWindowSize))
+        if let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first {
+            super.init(windowScene: scene)
+        } else {
+            super.init(frame: UIScreen.main.bounds)
+        }
+        
+        windowLevel = .alert + 202
         backgroundColor = .clear
-        windowLevel = .statusBar + 1
         
         magnifyLayer.frame = bounds
-        magnifyLayer.pointColorBlock = { point in
-            self.colorAtPoint(point: point)
+        magnifyLayer.pointColorBlock = { [weak self] point in
+            guard let self else { return "" }
+            return self.colorAtPoint(point: point)
         }
         layer.addSublayer(magnifyLayer)
         
-        let pan = UIPanGestureRecognizer { sender in
-            if let pans = sender as? UIPanGestureRecognizer {
-                if pans.state == .began {
-                    self.updateScreenShotImage()
-                }
-                
-                let offsetPoint = pans.translation(in: pans.view)
-                pans.setTranslation(.zero, in: pans.view)
-                let panView = pans.view
-                let newX = panView!.frame.origin.x + panView!.frame.size.width / 2 + offsetPoint.x
-                let newY = panView!.frame.origin.y + panView!.frame.size.height / 2  + offsetPoint.y
-
-                CATransaction.begin()
-                CATransaction.setDisableActions(true)
-                            
-                let centerPoint = CGPoint(x: newX, y: newY)
-                panView?.center = centerPoint
-                
-                self.magnifyLayer.targetPoint = centerPoint
-                var magnifyFrame = self.magnifyLayer.frame
-                magnifyFrame.origin = CGPoint(x: round(magnifyFrame.origin.x), y: round(magnifyFrame.origin.y))
-                self.magnifyLayer.frame = magnifyFrame
-                self.magnifyLayer.setNeedsDisplay()
-                
-                CATransaction.commit()
-                
-                let hexColor = self.colorAtPoint(point: centerPoint)
-                
-                PTColorPickInfoWindow.share.currentColor = hexColor
-            }
-        }
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         addGestureRecognizer(pan)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(closePlugin),
+                                               name: NSNotification.Name(kPTClosePluginNotification),
+                                               object: nil)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - 手势处理
+private extension PTColorPickWindow {
     
-    func colorAtPoint(point:CGPoint) -> String {
-        self.colorAtPoint(point: point, inImage: screenShotImage)
+    @objc func handlePan(_ pan: UIPanGestureRecognizer) {
+        guard let view = pan.view else { return }
+        
+        if pan.state == .began {
+            updateScreenShotImage()
+        }
+        
+        let offset = pan.translation(in: view)
+        pan.setTranslation(.zero, in: view)
+        
+        let newCenter = CGPoint(
+            x: view.center.x + offset.x,
+            y: view.center.y + offset.y
+        )
+        
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        
+        view.center = newCenter
+        
+        /// ⭐ 统一为屏幕坐标（关键）
+        let screenPoint = convert(newCenter, to: nil)
+        
+        let scale = screenShotImage.scale
+        let pixelPoint = CGPoint(
+            x: screenPoint.x * scale,
+            y: screenPoint.y * scale
+        )
+
+        magnifyLayer.targetPoint = pixelPoint
+        magnifyLayer.setNeedsDisplay()
+        
+        CATransaction.commit()
+        
+        let hex = colorAtPoint(point: screenPoint)
+        PTColorPickInfoWindow.share.currentColor = hex
+    }
+}
+
+// MARK: - 取色（已修复 scale）
+private extension PTColorPickWindow {
+    
+    func colorAtPoint(point: CGPoint) -> String {
+        return colorAtPixelPoint(point)
     }
     
-    func colorAtPoint(point:CGPoint,inImage:UIImage) -> String {
+    func colorAtPixelPoint(_ pixelPoint: CGPoint) -> String {
+        guard let cgImage = screenShotImage.cgImage else { return "" }
         
-        if !CGRectContainsPoint(CGRect(x: 0, y: 0, width: inImage.size.width, height: inImage.size.height), point) {
+        let x = Int(pixelPoint.x)
+        let y = Int(pixelPoint.y)
+        
+        guard x >= 0,
+              y >= 0,
+              x < cgImage.width,
+              y < cgImage.height else {
             return ""
         }
         
-        let pointX = trunc(point.x)
-        let pointY = trunc(point.y)
-        let cgImage = inImage.cgImage
-        let width = inImage.size.width
-        let height = inImage.size.height
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bytesPerPixel:Int = 4
-        let bytesPerRow = bytesPerPixel * 1
-        let bitsPerComponent:Int = 8
-        let pixelData = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
-        let context = CGContext(data: pixelData , width: 1, height: 1, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: (CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue))!
-        context.setBlendMode(.copy)
+        let pixelData = UnsafeMutablePointer<UInt8>.allocate(capacity: 4)
+        defer { pixelData.deallocate() }
         
-        context.translateBy(x: -pointX, y: pointY-height)
-        context.draw(cgImage!, in: CGRect(x: 0, y: 0, width: width, height: height))
+        let context = CGContext(
+            data: pixelData,
+            width: 1,
+            height: 1,
+            bitsPerComponent: 8,
+            bytesPerRow: 4,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        )!
         
-        let hexColor = String(format: "#%02x%02x%02x", pixelData[0],pixelData[1],pixelData[2])
-        return hexColor
+        context.translateBy(x: -CGFloat(x),
+                            y: CGFloat(y - cgImage.height))
+        
+        context.draw(cgImage, in: CGRect(
+            x: 0,
+            y: 0,
+            width: cgImage.width,
+            height: cgImage.height
+        ))
+        
+        return String(format: "#%02x%02x%02x",
+                      pixelData[0],
+                      pixelData[1],
+                      pixelData[2])
     }
+}
+
+// MARK: - 截图核心（🔥最关键优化）
+private extension PTColorPickWindow {
     
-    private func updateScreenShotImage() {
-        UIGraphicsBeginImageContext(UIScreen.main.bounds.size)
-        AppWindows!.layer.render(in: UIGraphicsGetCurrentContext()!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        screenShotImage = image!
+    func updateScreenShotImage() {
+        let now = CACurrentMediaTime()
+        guard now - lastCaptureTime > 0.2 else { return }
+        lastCaptureTime = now
+        
+        guard let scene = windowScene else { return }
+        
+        let size = UIScreen.main.bounds.size
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        
+        switch pickMode {
+            
+        case .fullScreen:
+            /// ⭐ 所有 window（精准）
+            let windows = scene.windows
+                .filter {
+                    $0 != self &&
+                    $0 != PTColorPickInfoWindow.share &&
+                    !$0.isHidden
+                }
+                .sorted { $0.windowLevel < $1.windowLevel }
+            
+            for window in windows {
+                context.saveGState()
+                context.translateBy(x: window.frame.origin.x,
+                                    y: window.frame.origin.y)
+                window.layer.render(in: context)
+                context.restoreGState()
+            }
+            
+        case .mainWindow:
+            /// ⭐ 只主 window（高性能）
+            if let keyWindow = scene.windows.first(where: \.isKeyWindow) {
+                context.saveGState()
+                context.translateBy(x: keyWindow.frame.origin.x,
+                                    y: keyWindow.frame.origin.y)
+                keyWindow.layer.render(in: context)
+                context.restoreGState()
+            }
+        }
+        
+        screenShotImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        UIGraphicsEndImageContext()
     }
+}
+
+// MARK: - 生命周期
+private extension PTColorPickWindow {
     
-    @objc func closePlugin(nofiti:Notification) {
+    @objc func closePlugin() {
         isHidden = true
     }
     
-    public func show() {
+    func show() {
         isHidden = false
     }
     
-    public func hide() {
+    func hide() {
         isHidden = true
+    }
+}
+
+// MARK: - 点击穿透（🔥关键）
+extension PTColorPickWindow {
+    
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        
+        /// 只让自身响应拖动，其余全部穿透
+        if view == self {
+            return self
+        }
+        
+        return nil
     }
 }

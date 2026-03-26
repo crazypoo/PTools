@@ -227,6 +227,52 @@ public final class PTLogBuffer {
     }
 }
 
+public protocol PTDebugPlugin {
+    
+    /// 显示标题
+    var title: String { get }
+    
+    /// 图标
+    var image: UIImage? { get }
+    
+    /// 分组（关键🔥）
+    var group: String { get }
+    
+    /// 排序（组内排序）
+    var priority: Int { get }
+    
+    /// 是否可用（动态控制）
+    var isEnabled: Bool { get }
+    
+    /// 行为
+    var action: UIAction { get }
+}
+
+final class PTDebugPluginManager {
+    
+    static let shared = PTDebugPluginManager()
+    
+    private(set) var plugins: [PTDebugPlugin] = []
+    
+    private init() {}
+    
+    func clearAll() {
+        plugins.removeAll()
+    }
+    
+    func register(_ plugin: PTDebugPlugin) {
+        plugins.append(plugin)
+    }
+    
+    /// 分组后的插件
+    func groupedPlugins() -> [String: [PTDebugPlugin]] {
+        
+        let enabledPlugins = plugins.filter { $0.isEnabled }
+        
+        return Dictionary(grouping: enabledPlugins, by: { $0.group })
+    }
+}
+
 @objc public enum LocalConsoleActionType : Int {
     case CopyLog
     case ShareLog
@@ -379,6 +425,7 @@ public class LocalConsole: NSObject {
     
     @MainActor private func watcherInit() {
         Inspector.sharedInstance.start()
+        PTAlertDebugWindow.shared.show()
         UIView.swizzleMethods()
         UIWindow.db_swizzleMethods()
         URLSessionConfiguration.swizzleMethods()
@@ -623,7 +670,7 @@ public class LocalConsole: NSObject {
             terminal.appendLog(log)
         }
         
-        commitTextChanges(requestMenuUpdate: false)
+        commitTextChanges(requestMenuUpdate: true)
     }
     
     var dynamicReportTimer: Timer? {
@@ -847,7 +894,7 @@ extension LocalConsole {
 
         var menuContent: [UIMenuElement] = []
 
-        if !terminal!.systemText!.text.stringIsEmpty() {
+        if !terminal!.systemText!.pt_fullText.stringIsEmpty() {
             menuContent.append(contentsOf: [UIMenu(title: "", options: .displayInline, children: [share, resize])])
         } else {
             menuContent.append(UIMenu(title: "", options: .displayInline, children: [resize]))
@@ -858,7 +905,7 @@ extension LocalConsole {
             menuContent.append(customMenu)
         }
 
-        if !terminal!.systemText!.text.stringIsEmpty() {
+        if !terminal!.systemText!.pt_isEmpty {
             menuContent.append(UIMenu(title: "", options: .displayInline, children: [clear]))
         }
 
@@ -895,15 +942,15 @@ extension LocalConsole {
     }
     
     func shareAction() {
-        let activityViewController = PTActivityViewController(text: terminal!.systemText!.text ?? "")
+        let activityViewController = PTActivityViewController(text: terminal!.systemText!.pt_fullText)
         activityViewController.previewNumberOfLines = 10
         PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
     }
     
     /// Clear text in the console view.
     public func clear() {
-        logBuffer.clear()
         terminal?.systemText?.text = ""
+        logBuffer.clear()
     }
     
     func loadedLibs() {
@@ -975,7 +1022,7 @@ extension LocalConsole {
         PTCoreUserDefultsWrapper.AppDebbugMark = false
         maskView?.removeFromSuperview()
         maskView = nil
-        
+        PTAlertDebugWindow.shared.dismiss()
         closeAllOutsideFunction?()
     }
 
@@ -985,7 +1032,7 @@ extension LocalConsole {
     }
     
     func copyTextAction() {
-        terminal!.systemText!.text.copyToPasteboard()
+        terminal!.systemText!.pt_fullText.copyToPasteboard()
     }
     
     func respringAction() {
@@ -1066,7 +1113,7 @@ extension LocalConsole {
             self.printStaticSystemInfo()
 
             self.dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-                guard let self else {
+                guard let self,let terminal = terminal?.systemText,!terminal.pt_fullText.stringIsEmpty() else {
                     timer.invalidate()
                     return
                 }
@@ -1324,5 +1371,22 @@ extension String {
 extension UIDevice {
     var hasNotch: Bool {
         return (AppWindows?.safeAreaInsets.bottom ?? 0) > 0
+    }
+}
+
+extension UITextView {
+    
+    var pt_isEmpty: Bool {
+        return self.textStorage.length == 0
+    }
+    
+    var pt_fullText: String {
+        return textStorage.string
+    }
+    
+    var pt_isVisuallyEmpty: Bool {
+        textStorage.string
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .isEmpty
     }
 }

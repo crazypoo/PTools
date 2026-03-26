@@ -23,7 +23,6 @@ class SceneDelegate: PTWindowSceneDelegate {
     
     func sceneDidBecomeActive(_ scene: UIScene) {
         PSecurityStrategy.removeBlurEffect()
-        PTAlertDebugWindow.shared.show()
         //"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         
         if let window = AppWindows {
