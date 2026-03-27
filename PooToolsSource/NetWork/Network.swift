@@ -433,21 +433,17 @@ public class Network: NSObject {
     }
     
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
-        var apiHeader = HTTPHeaders([:])
-        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-        apiHeader["Accept"] = "application/json"
-
-        let model = try await Network.requestApi(needGobal:false,urlStr: url,method: .get,header: apiHeader)
+        let urlStr1 = try await createURLRequest(urlStr: url, needGobal: false)
+        let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
+        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader)
         let ipAddress = String(data: model.resultData!, encoding: .utf8) ?? ""
         return ipAddress
     }
     
     class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel? {
         
-        let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
-        var apiHeader = HTTPHeaders([:])
-        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-        apiHeader["Accept"] = "application/json"
+        let urlStr1 = try await createURLRequest(urlStr: "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)", needGobal: false)
+        let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
         let models = try await Network.requestApi(needGobal: false, urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTIPInfoModel.self)
         if let returnModel = models.customerModel as? PTIPInfoModel {
             return returnModel
@@ -551,6 +547,24 @@ public class Network: NSObject {
         }
     }
     
+    private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool) -> HTTPHeaders {
+        var apiHeader = header ?? HTTPHeaders()
+        if jsonRequest {
+            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+            apiHeader["Accept"] = "application/json"
+        }
+        return addToken(to: apiHeader)
+    }
+
+    private static func createURLRequest(urlStr: URLConvertible, needGobal: Bool) async throws -> String {
+        let gobalUrl = needGobal ? await Network.gobalUrl() : ""
+        let urlStr1 = gobalUrl + (try urlStr.asURL().absoluteString)
+        guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
+            throw AFError.invalidURL(url: urlStr1)
+        }
+        return urlStr1
+    }
+    
     /// - Parameters:
     ///   - needGobal:是否全局使用默认
     ///   - urlStr: url地址
@@ -565,16 +579,7 @@ public class Network: NSObject {
                                      method:HTTPMethod = .post,
                                      modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
         
-        let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
-        let urlStr1 = gobalUrl + (try urlStr.asURL().absoluteString)
-        guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
-            throw AFError.invalidURL(url: "https://www.qq.com")
-        }
-
-        guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
-            Network.cancelAllNetworkRequest()
-            throw AFError.createURLRequestFailed(error: NetWorkNoError)
-        }
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
 
         let newHeader = header ?? ["Content-Type": "text/plain"]
         
@@ -588,6 +593,11 @@ public class Network: NSObject {
         logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
+
+        guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
+            Network.cancelAllNetworkRequest()
+            throw AFError.createURLRequestFailed(error: NetWorkNoError)
+        }
 
         return try await withCheckedThrowingContinuation { continuation in
             AF.upload(body,
@@ -620,26 +630,16 @@ public class Network: NSObject {
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
-        let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
-        let urlStr1 = gobalUrl + (try urlStr.asURL().absoluteString)
-        guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
-            throw AFError.invalidURL(url: "https://www.qq.com")
-        }
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
+        
+        let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
         guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
             Network.cancelAllNetworkRequest()
             throw AFError.createURLRequestFailed(error: NetWorkNoError)
         }
-
-        var apiHeader = addToken(to: header ?? HTTPHeaders())
-        if jsonRequest {
-            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-            apiHeader["Accept"] = "application/json"
-        }
-
-        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
-
-        let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
         return try await withCheckedThrowingContinuation { continuation in
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
@@ -671,25 +671,16 @@ public class Network: NSObject {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
-                    let pathUrl = gobalUrl + (try path.asURL().absoluteString)
-                    guard pathUrl.isURL(), ((try? path.asURL().absoluteString) != nil) else {
-                        throw AFError.invalidURL(url: "https://www.qq.com")
-                    }
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
                     guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
                         Network.cancelAllNetworkRequest()
                         throw AFError.createURLRequestFailed(error: NetWorkNoError)
                     }
 
-                    var apiHeader = addToken(to: header ?? HTTPHeaders())
-                    if jsonRequest {
-                        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                        apiHeader["Accept"] = "application/json"
-                    }
-
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
-                    
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         if let phasset = media as? PHAsset {
                             switch phasset.mediaType {
@@ -848,24 +839,15 @@ public class Network: NSObject {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
-                    let pathUrl = gobalUrl + (try path.asURL().absoluteString)
-                    guard pathUrl.isURL(), ((try? path.asURL().absoluteString) != nil) else {
-                        throw AFError.invalidURL(url: "https://www.qq.com")
-                    }
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
                     guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
                         Network.cancelAllNetworkRequest()
                         throw AFError.createURLRequestFailed(error: NetWorkNoError)
                     }
-
-                    var apiHeader = addToken(to: header ?? HTTPHeaders())
-                    if jsonRequest {
-                        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                        apiHeader["Accept"] = "application/json"
-                    }
-
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
@@ -922,24 +904,15 @@ public class Network: NSObject {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let gobalUrl = (needGobal ? await Network.gobalUrl() : "")
-                    let pathUrl = gobalUrl + (try path.asURL().absoluteString)
-                    guard pathUrl.isURL(), ((try? path.asURL().absoluteString) != nil) else {
-                        throw AFError.invalidURL(url: "https://www.qq.com")
-                    }
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
                     guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
                         Network.cancelAllNetworkRequest()
                         throw AFError.createURLRequestFailed(error: NetWorkNoError)
                     }
-
-                    var apiHeader = addToken(to: header ?? HTTPHeaders())
-                    if jsonRequest {
-                        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                        apiHeader["Accept"] = "application/json"
-                    }
-                    
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
                     Network.manager.upload(multipartFormData: { multipartFormData in
                         multipartFormData.append(fileURL, withName: "file", fileName: "\(fileURL.lastPathComponent).mp4", mimeType: "video/mp4")
