@@ -19,6 +19,27 @@ class SceneDelegate: PTWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         makeKeyAndVisible(in: scene, viewController: PTTestTabbarViewController(), tint: .white)
 //        let _ = LocalConsole.shared
+        
+        PTGCDManager.gcdGroupUtility(label: "com.1.1.1", semaphoreCount: 4, threadCount: 4) { dispatchSemaphore, dispatchGroup, currentIndex in
+            switch currentIndex {
+                case 0:
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>\(currentIndex)")
+                dispatchSemaphore.signal()
+                dispatchGroup.leave()
+            case 1:
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>\(currentIndex)")
+                dispatchSemaphore.signal()
+                dispatchGroup.leave()
+            default:
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>\(currentIndex)")
+                dispatchSemaphore.signal()
+                dispatchGroup.leave()
+            }
+        } allRequestsFinished: {
+            PTNSLogConsole("111111111111111111111111111111111111111")
+        } cancelCompletion: {
+            
+        }
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {

@@ -127,21 +127,24 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
             
             if testDone != nil {
                 PTGCDManager.gcdMain {
-                    PTGCDManager.gcdGroup(label: "ValueDone", threadCount: 2, doSomeThing: { semaphore,group,index in
-                        if index == 0 {
+                    PTGCDManager.gcdGroupUtility(label: "ValueDone", threadCount: 2) { dispatchSemaphore, dispatchGroup, currentIndex in
+                        if currentIndex == 0 {
                             PTGCDManager.gcdAfter(time: 0.35) {
                                 self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
-                                semaphore.signal()
-                                group.leave()
+                                dispatchSemaphore.signal()
+                                dispatchGroup.leave()
                             }
-                        } else if index == 1 {
+                        } else if currentIndex == 1 {
                             PTGCDManager.gcdAfter(time: 0.35) {
                                 self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
-                                semaphore.signal()
-                                group.leave()
+                                dispatchSemaphore.signal()
+                                dispatchGroup.leave()
                             }
+                        } else {
+                            dispatchSemaphore.signal()
+                            dispatchGroup.leave()
                         }
-                    }, jobDoneBlock: {
+                    } allRequestsFinished: {
                         self.testDone!()
                         let historyModel = PTNetworkSpeedHistoriaModel()
                         historyModel.download = String(format: "%.2f", self.downloadValue)
@@ -154,7 +157,10 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
                         PTNSLogConsole(jsonString,levelType: .Notice,loggerType: .Network)
                         self.saveHistory(jsonString: jsonString)
                         self.netSpeedStateType = .Free
-                    })
+
+                    } cancelCompletion: {
+                        
+                    }
                 }
             }
         }

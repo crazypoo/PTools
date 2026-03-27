@@ -540,7 +540,7 @@ public class PTCheckUpdateFunction: NSObject {
                             updateModel.desc = note
                             
                             updateModelCallback(updateModel)
-                        }
+                        } cancelCompletion: {}
                     } else {
                         updateModelCallback(nil)
                     }
