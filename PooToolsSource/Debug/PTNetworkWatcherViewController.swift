@@ -19,6 +19,8 @@ class PTNetworkWatcherViewController: PTBaseViewController {
 
     private let viewModel = PTNetworkViewModel()
     
+    let titleViewContainerWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - 88
+    
     lazy var searchBar:PTSearchBar = {
         let view = PTSearchBar()
         view.delegate = self
@@ -29,7 +31,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         view.searchPlaceholderColor = .gray
         view.searchPlaceholder = "Search"
         view.viewCorner(radius: 17)
-        view.frame = CGRect(origin: .zero, size: CGSizeMake(320, 34))
+        view.frame = CGRect(origin: .zero, size: CGSizeMake(self.titleViewContainerWidth - CGSize.SwitchSize.width - 100, 34))
         return view
     }()
     
@@ -40,7 +42,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
             make.edges.equalToSuperview()
         }
         view.snp.makeConstraints { make in
-            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)
+            make.width.equalTo(self.titleViewContainerWidth)
             make.height.equalTo(32)
         }
         return view

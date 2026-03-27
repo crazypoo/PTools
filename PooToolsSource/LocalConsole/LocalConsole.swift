@@ -137,6 +137,8 @@ final class PTConsoleWindow: UIWindow {
 
     static let shared = PTConsoleWindow()
 
+    static let debugWindowLevel:UIWindow.Level = .alert + 200
+    
     private weak var debugView: UIView?
 
     private init() {
@@ -149,7 +151,7 @@ final class PTConsoleWindow: UIWindow {
             super.init(frame: UIScreen.main.bounds)
         }
 
-        windowLevel = .alert + 200
+        windowLevel = PTConsoleWindow.debugWindowLevel
         backgroundColor = .clear
     }
 
@@ -927,13 +929,7 @@ extension LocalConsole {
             PTColorPickPlugin.share.show()
         }
     }
-    
-    func userdefaultAction() {
-        let vc = PTUserDefultsViewController()
-        vc.showAllUserDefaultsKeys = showAllUserDefaultsKeys
-        present(content: vc)
-    }
-    
+        
     func resizeAction() {
         PTGCDManager.gcdAfter(time: 0.1) {
             ResizeController.shared.isActive.toggle()
@@ -1085,18 +1081,7 @@ extension LocalConsole {
     func documentAction() {
         let vc = PTFileBrowserViewController()
         consoleSheetPresent(vc: vc)
-    }
-    
-    func present(content:UIViewController) {
-        let nav = PTBaseNavControl(rootViewController: content)
-        nav.modalPresentationStyle = .fullScreen
-        
-        if let presentedVC = PTUtils.getCurrentVC()?.presentedViewController {
-            presentedVC.present(nav, animated: true)
-        } else {
-            PTUtils.getCurrentVC()?.present(nav, animated: true)
-        }
-    }
+    }    
 }
 
 //MARK: System report

@@ -112,7 +112,9 @@ class AppDelegate: PTAppWindowsDelegate {
         PTAppBaseConfig.share.defaultPlaceholderImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 44))
         
         sideMenuConfig()
-
+        
+        UIViewController.swizzlePresentOnce
+        
 //        makeKeyAndVisible(createViewControllerHandler: {
 ////            let vc = PTFuncNameViewController()
 ////            let mainNav = PTBaseNavControl(rootViewController: vc)

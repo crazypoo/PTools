@@ -396,26 +396,7 @@ public extension UIViewController {
     }
     
     func pt_present(_ vc:UIViewController,animated:Bool = true,completion:PTActionTask? = nil) {
-        
-#if POOTOOLS_DEBUG
-        present(vc, animated: animated) {
-            completion?()
-            let share = LocalConsole.shared
-            if share.isVisiable {
-                SwizzleTool().swizzleDidAddSubview {
-                    // Configure console window.
-                    if share.maskView != nil {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(share.maskView!)
-                    }
-                    if share.terminal != nil {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
-                    }
-                }
-            }
-        }
-#else
         present(vc, animated: animated, completion:completion)
-#endif
     }
     
     @available(iOS 15.0,*)
@@ -450,14 +431,10 @@ public extension UIViewController {
     
     class func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
         
-        // 确保调试窗口在最前
-        if let debugWindow = getExistingDebugWindow() {
-            debugWindow.windowLevel = .alert + 200  // 提升调试窗口层级
-            debugWindow.makeKeyAndVisible()
-        }
-
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
         sheet.overlayColor = overlayColor
+        // 设置 sheet 的 windowLevel 为低于调试窗口，确保它不会遮挡
+        sheet.view.window?.windowLevel = .normal
         let currentVC = PTUtils.getCurrentVC()
         switch currentVC {
         case let currentVCs as PTSideMenuControl:
@@ -476,13 +453,73 @@ public extension UIViewController {
         }
     }
     
+#if POOTOOLS_DEBUG
     // 获取现有的调试窗口
-    static func getExistingDebugWindow() -> UIWindow? {
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let sceneDelegate = scene.delegate as? SceneDelegate else {
-            return nil
+    static func getExistingDebugWindow() -> [UIWindow]? {
+        UIApplication.shared.windows.compactMap {
+            if $0 is PTConsoleWindow {
+                return $0
+            } else {
+                return $0
+            }
         }
-        return sceneDelegate.window?.subviews.first { $0 is PTConsoleWindow } as? UIWindow
+    }
+#endif
+}
+
+extension UIViewController {
+    
+    static let swizzlePresentOnce: Void = {
+        Swizzle(UIViewController.self) {
+            #selector(present(_:animated:completion:)) <-> #selector(pt_swizzled_present(_:animated:completion:))
+        }
+    }()
+    
+    @objc func pt_swizzled_present(_ vc: UIViewController,
+                                  animated: Bool,
+                                  completion: PTActionTask?) {
+        
+        // ✅ before
+#if POOTOOLS_DEBUG
+        if let debugWindow = UIViewController.getExistingDebugWindow() {
+            debugWindow.forEach { window in
+                window.isHidden = true
+            }
+        }
+#endif
+        
+        // ⚠️ 注意：这里其实调用的是原始 present
+        pt_swizzled_present(vc, animated: animated) {
+            completion?()
+#if POOTOOLS_DEBUG
+            let share = LocalConsole.shared
+            if share.isVisiable {
+                SwizzleTool().swizzleDidAddSubview {
+                    // Configure console window.
+                    if share.maskView != nil {
+                        PTUtils.fetchWindow()?.bringSubviewToFront(share.maskView!)
+                    }
+                    if share.terminal != nil {
+                        PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
+                    }
+                }
+            }
+
+        // 确保调试窗口在最前
+            if let debugWindow = UIViewController.getExistingDebugWindow() {
+                debugWindow.forEach { value in
+                    value.isHidden = false
+                    switch value {
+                    case let window as PTConsoleWindow:
+                        window.windowLevel = PTConsoleWindow.debugWindowLevel
+                    default:
+                        break
+                    }
+                    value.makeKeyAndVisible()
+                }
+            }
+#endif
+        }
     }
 }
 
