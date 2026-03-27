@@ -427,7 +427,7 @@ public class LocalConsole: NSObject {
     
     @MainActor private func watcherInit() {
         Inspector.sharedInstance.start()
-        PTAlertDebugWindow.shared.show()
+//        PTAlertDebugWindow.shared.show()
         UIView.swizzleMethods()
         UIWindow.db_swizzleMethods()
         URLSessionConfiguration.swizzleMethods()
@@ -581,6 +581,11 @@ public class LocalConsole: NSObject {
         return control
     }()
 
+    lazy var scenesDebug:PTAlertDebugView = {
+        let view = PTAlertDebugView(frame: CGRect(x: 40, y: 100, width: 280, height: 250))
+        return view
+    }()
+    
     public func createSystemLogView() {
 
         guard terminal == nil else { return }
@@ -599,7 +604,7 @@ public class LocalConsole: NSObject {
         )
         terminal.tag = SystemLogViewTag
 
-        consoleWindow.view.addSubview(terminal)
+        consoleWindow.view.addSubviews([terminal,scenesDebug])
 
         SwizzleTool().swizzleContextMenuReverseOrder()
 
@@ -1018,7 +1023,7 @@ extension LocalConsole {
         PTCoreUserDefultsWrapper.AppDebbugMark = false
         maskView?.removeFromSuperview()
         maskView = nil
-        PTAlertDebugWindow.shared.dismiss()
+//        PTAlertDebugWindow.shared.dismiss()
         closeAllOutsideFunction?()
     }
 

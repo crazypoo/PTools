@@ -460,7 +460,7 @@ public extension UIViewController {
             if $0 is PTConsoleWindow {
                 return $0
             } else {
-                return $0
+                return nil
             }
         }
     }
@@ -491,21 +491,21 @@ extension UIViewController {
         // ⚠️ 注意：这里其实调用的是原始 present
         pt_swizzled_present(vc, animated: animated) {
             completion?()
-#if POOTOOLS_DEBUG
+        }
+        
+        #if POOTOOLS_DEBUG
+        PTGCDManager.gcdAfter(time: 0.35, block: {
             let share = LocalConsole.shared
             if share.isVisiable {
                 SwizzleTool().swizzleDidAddSubview {
                     // Configure console window.
-                    if share.maskView != nil {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(share.maskView!)
-                    }
-                    if share.terminal != nil {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
+                    if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
+                        currentVC.view.window?.bringSubviewToFront(findMask)
                     }
                 }
             }
 
-        // 确保调试窗口在最前
+            // 确保调试窗口在最前
             if let debugWindow = UIViewController.getExistingDebugWindow() {
                 debugWindow.forEach { value in
                     value.isHidden = false
@@ -518,8 +518,9 @@ extension UIViewController {
                     value.makeKeyAndVisible()
                 }
             }
-#endif
-        }
+        })
+        #endif
+
     }
 }
 

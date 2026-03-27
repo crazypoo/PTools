@@ -439,7 +439,7 @@ final class PTAlertDebugView: UIView {
     }
 
     @objc private func close() {
-        (window as? PTAlertDebugWindow)?.dismiss()
+        self.removeFromSuperview()
     }
 }
 
@@ -454,63 +454,5 @@ private extension PTAlertDebugView {
         let translation = pan.translation(in: self.superview)
         center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
         pan.setTranslation(.zero, in: self.superview)
-    }
-}
-
-final class PTAlertDebugWindow: UIWindow {
-
-    static let shared = PTAlertDebugWindow()
-
-    private weak var debugView: UIView?
-
-    init() {
-        if let scene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first {
-
-            super.init(windowScene: scene)
-        } else {
-            super.init(frame: UIScreen.main.bounds)
-        }
-
-        windowLevel = .alert + 1000
-        backgroundColor = .clear
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
-
-    func show() {
-        if debugView != nil {
-            isHidden = false
-            return
-        }
-
-        let view = PTAlertDebugView(frame: CGRect(x: 40, y: 100, width: 280, height: 250))
-        addSubview(view)
-        debugView = view
-
-        isHidden = false
-    }
-
-    // ⭐️ 关键：事件穿透
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-
-        guard let debugView else { return nil }
-
-        let pointInDebug = debugView.convert(point, from: self)
-
-        // ✅ 点在 debugView 内 → 正常响应
-        if debugView.bounds.contains(pointInDebug) {
-            return super.hitTest(point, with: event)
-        }
-
-        // ❌ 其它区域 → 直接穿透
-        return nil
-    }
-    
-    func dismiss() {
-        debugView?.removeFromSuperview()
-        debugView = nil
-        isHidden = true
     }
 }
