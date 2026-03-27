@@ -29,7 +29,6 @@ open class PTColorPickPlugin : NSObject {
     
     public override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
     }
     
     public func show() {
@@ -39,10 +38,6 @@ open class PTColorPickPlugin : NSObject {
     
     public func close() {
         PTColorPickWindow.share.hide()
-        showed = false
-    }
-    
-    @objc func closePlugin(nofiti:Notification) {
         showed = false
     }
 }
@@ -210,7 +205,7 @@ fileprivate class PTColorPickInfoView : UIView {
         return view
     }()
     
-    private lazy var closeBtn:UIButton = {
+    fileprivate lazy var closeBtn:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
@@ -431,14 +426,11 @@ extension PTColorPickWindow {
         let view = super.hitTest(point, with: event)
         
         /// 只让自身响应拖动，其余全部穿透
-//        if view == self {
-//            return self
-//        }
         if let gestureView = self.gestureRecognizers?.first?.view,
            view == gestureView {
             return view
         } else if let findView = view as? PTColorPickInfoView {
-            return findView
+            return findView.closeBtn
         }
         return self
     }

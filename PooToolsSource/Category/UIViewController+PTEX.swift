@@ -25,12 +25,12 @@ import NotificationBannerSwift
 public extension UIViewController {
     
     /**
-        Indicate if controller is loaded and presented.
+     Indicate if controller is loaded and presented.
      */
     var isVisible: Bool {
         isViewLoaded && view.window != nil
     }
-        
+    
     var systemSafeAreaInsets: UIEdgeInsets {
         UIEdgeInsets(top: view.safeAreaInsets.top - additionalSafeAreaInsets.top,
                      left: view.safeAreaInsets.left - additionalSafeAreaInsets.left,
@@ -51,7 +51,7 @@ public extension UIViewController {
         }
         childController.didMove(toParent: self)
     }
-
+    
     //MARK: 控制器的状态栏唯一键
     /// 控制器的状态栏唯一键
     var statusBarKey: String {
@@ -290,7 +290,7 @@ public extension UIViewController {
             return false
         }
     }
-
+    
     //MARK: 弹出框
     /// - Parameters:
     ///   - title: 标题
@@ -357,8 +357,8 @@ public extension UIViewController {
     @objc func dismissAnimated() {
         dismiss(animated: true, completion: nil)
     }
-
-    #if os(iOS)
+    
+#if os(iOS)
     var closeBarButtonItem: UIBarButtonItem {
         return UIBarButtonItem(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
             self?.dismissAnimated()
@@ -378,8 +378,8 @@ public extension UIViewController {
             }
         }), menu: nil)
     }
-    #endif
-
+#endif
+    
     //MARK: 增加了当点击需要隐藏键盘时观察的手势。应该添加下面的使用视图，如文本字段。
     func dismissKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboardTappedAround(_:)))
@@ -396,7 +396,7 @@ public extension UIViewController {
     }
     
     func pt_present(_ vc:UIViewController,animated:Bool = true,completion:PTActionTask? = nil) {
-
+        
 #if POOTOOLS_DEBUG
         present(vc, animated: animated) {
             completion?()
@@ -449,6 +449,13 @@ public extension UIViewController {
     }
     
     class func currentPresentToSheet(vc:UIViewController,overlayColor:UIColor = UIColor(white: 0, alpha: 0.25), sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,completion:PTActionTask? = nil,dismissPanGes:Bool = true) {
+        
+        // 确保调试窗口在最前
+        if let debugWindow = getExistingDebugWindow() {
+            debugWindow.windowLevel = .alert + 200  // 提升调试窗口层级
+            debugWindow.makeKeyAndVisible()
+        }
+
         let sheet = PTSheetViewController(controller: vc,sizes:sizes,options: options,dismissPanGes: dismissPanGes)
         sheet.overlayColor = overlayColor
         let currentVC = PTUtils.getCurrentVC()
@@ -467,6 +474,15 @@ public extension UIViewController {
                 currentVC?.present(sheet, animated: true,completion: completion)
             }
         }
+    }
+    
+    // 获取现有的调试窗口
+    static func getExistingDebugWindow() -> UIWindow? {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let sceneDelegate = scene.delegate as? SceneDelegate else {
+            return nil
+        }
+        return sceneDelegate.window?.subviews.first { $0 is PTConsoleWindow } as? UIWindow
     }
 }
 
