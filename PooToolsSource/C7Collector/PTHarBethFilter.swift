@@ -39,7 +39,8 @@ public class PTHarBethFilter:NSObject {
     
     static func overTexture() -> MTLTexture? {
         let color = UIColor.green.withAlphaComponent(0.5)
-        guard let texture = try? TextureLoader.emptyTexture(width: Int(PTHarBethFilter.share.texureSize.width), height: Int(PTHarBethFilter.share.texureSize.height)) else {
+        
+        guard let texture = try? TextureLoader.makeTexture(width: Int(PTHarBethFilter.share.texureSize.width), height: Int(PTHarBethFilter.share.texureSize.height)) else {
             return nil
         }
         let filter = C7SolidColor(color: color)
