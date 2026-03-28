@@ -449,6 +449,25 @@ extension URLRequest {
         get { objc_getAssociatedObject(self, &kCacheDataKey) as? Data }
         set { objc_setAssociatedObject(self, &kCacheDataKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
+    
+    var dedupPolicy: PTNetworkDedupPolicy {
+            get {
+                let value = value(forHTTPHeaderField: "dedupPolicy") ?? "auto"
+                
+                switch value {
+                case "none": return .none
+                case "identical": return .identical
+                default:
+                    // 自动策略
+                    switch cachePolicyType {
+                    case .none:
+                        return .none
+                    default:
+                        return .identical
+                    }
+                }
+            }
+        }
 }
 
 public final class PTNetworkCachePlugin: NetworkPlugin {
@@ -505,6 +524,77 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
     }
 }
 
+public enum PTNetworkDedupPolicy {
+    case none                  // 不去重（默认）
+    case identical             // 完全相同才去重（推荐）
+    case custom(String)        // 自定义 key
+    
+    func getOptionName() -> String {
+        switch self {
+        case .none:
+            return "none"
+        case .identical:
+            return "identical"
+        case .custom(let string):
+            return string
+        }
+    }
+}
+
+public struct RequestKey: Hashable {
+    let url: String
+    let method: String
+    let paramsHash: String
+    
+    init(request: URLRequest) {
+        self.url = request.url?.absoluteString ?? ""
+        self.method = request.httpMethod ?? ""
+        self.paramsHash = request.httpBody?.base64EncodedString() ?? ""
+    }
+}
+
+public final class RequestDeduplicator {
+    
+    static let shared = RequestDeduplicator()
+    
+    private var runningTasks: [RequestKey: Task<PTBaseStructModel, Error>] = [:]
+    private let lock = NSLock()
+    
+    func execute(request: URLRequest,
+                 policy: PTNetworkDedupPolicy,
+                 task: @escaping () async throws -> PTBaseStructModel) async throws -> PTBaseStructModel {
+        
+        switch policy {
+        case .none:
+            return try await task()
+        default:
+            let key = RequestKey(request: request)
+            
+            lock.lock()
+            if let existing = runningTasks[key] {
+                lock.unlock()
+                return try await existing.value
+            }
+            
+            let newTask = Task {
+                defer { self.remove(key) }
+                return try await task()
+            }
+            
+            runningTasks[key] = newTask
+            lock.unlock()
+            
+            return try await newTask.value
+        }
+    }
+    
+    private func remove(_ key: RequestKey) {
+        lock.lock()
+        runningTasks.removeValue(forKey: key)
+        lock.unlock()
+    }
+}
+
 @objcMembers
 public class Network: NSObject {
     
@@ -526,6 +616,7 @@ public class Network: NSObject {
     open var retryAPIStatusCode:Int = 502
     open var networkCacheOption:PTNetworkCachePolicy = .cacheOnly
     open var networkCacheEXPTime:String = "600"
+    open var networkDudupOption:PTNetworkDedupPolicy = .custom("auto")
 
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
@@ -740,6 +831,7 @@ public class Network: NSObject {
         }
         apiHeader["cachePolicy"] = self.share.networkCacheOption.rawValue
         apiHeader["cacheExpire"] = self.share.networkCacheEXPTime
+        apiHeader["dedupPolicy"] = self.share.networkDudupOption.getOptionName()
         return addToken(to: apiHeader)
     }
 
@@ -832,29 +924,48 @@ public class Network: NSObject {
             return parsed
         }
 
-        return try await withCheckedThrowingContinuation { continuation in
-            session.request(urlRequest).responseData { data in
-                let result: Result<Data, AFError> = data.result.map { $0 }
-                
-                // 👉 插件回调
-                Network.share.plugins.forEach {
-                    $0.didReceive(result, request: urlRequest, response: data.response)
-                }
+        // 3. ⭐这里决定去重策略
+        let policy: PTNetworkDedupPolicy = {
+            switch urlRequest.cachePolicyType {
+            case .none:
+                return .none
+            default:
+                return .identical
+            }
+        }()
+        
+        let realRequest = {
+            return try await withCheckedThrowingContinuation { continuation in
+                session.request(urlRequest).responseData { data in
+                    let result: Result<Data, AFError> = data.result.map { $0 }
+                    
+                    // 👉 插件回调
+                    Network.share.plugins.forEach {
+                        $0.didReceive(result, request: urlRequest, response: data.response)
+                    }
 
-                switch data.result {
-                case .success:
-                    do {
-                        let parsed = try parser(data.response,data.data)
-                        continuation.resume(returning: parsed)
-                    } catch {
+                    switch data.result {
+                    case .success:
+                        do {
+                            let parsed = try parser(data.response,data.data)
+                            continuation.resume(returning: parsed)
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    case .failure(let error):
+                        logRequestFailure(url: urlStr1, error: error)
                         continuation.resume(throwing: error)
                     }
-                case .failure(let error):
-                    logRequestFailure(url: urlStr1, error: error)
-                    continuation.resume(throwing: error)
                 }
             }
         }
+        
+        let result = try await RequestDeduplicator.shared.execute(request: urlRequest,
+                                                                  policy: policy) {
+            try await realRequest()
+        }
+
+        return result
     }
         
     class public func fileUpload(needGobal: Bool = true,
