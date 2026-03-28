@@ -328,11 +328,22 @@ public enum MimeTypeHelper {
     }
 }
 
+public protocol NetworkPlugin {
+    
+    /// 请求发出前
+    func willSend(_ request: inout URLRequest)
+    
+    /// 收到响应
+    func didReceive(_ result: Result<Data, AFError>, response: HTTPURLResponse?)
+}
+
 @objcMembers
 public class Network: NSObject {
     
     static public let share = Network()
             
+    public var plugins: [NetworkPlugin] = []
+    
     ///网络请求时间
     open var netRequsetTime:TimeInterval = 20
     open var downloadRequsetTime:TimeInterval = 5
@@ -639,8 +650,19 @@ public class Network: NSObject {
         let session = Network.share.makeSession()
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
         urlRequest = try encoder.encode(urlRequest, with: parameters)
+        // 👉 插件前置处理
+        Network.share.plugins.forEach {
+            $0.willSend(&urlRequest)
+        }
         return try await withCheckedThrowingContinuation { continuation in
             session.request(urlRequest).responseData { data in
+                let result: Result<Data, AFError> = data.result.map { $0 }
+                
+                // 👉 插件回调
+                Network.share.plugins.forEach {
+                    $0.didReceive(result, response: data.response)
+                }
+
                 switch data.result {
                 case .success:
                     do {
