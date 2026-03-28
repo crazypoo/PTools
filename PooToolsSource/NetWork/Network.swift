@@ -329,12 +329,180 @@ public enum MimeTypeHelper {
 }
 
 public protocol NetworkPlugin {
-    
     /// 请求发出前
     func willSend(_ request: inout URLRequest)
     
     /// 收到响应
-    func didReceive(_ result: Result<Data, AFError>, response: HTTPURLResponse?)
+    func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?)
+}
+
+public struct CacheObject: Codable {
+    let data: Data
+    let expireTime: TimeInterval
+}
+
+private var kCacheDataKey = 888888888
+
+public enum PTNetworkCachePolicy:String {
+    case none                   // 不缓存
+    case cacheOnly              // 只用缓存
+    case networkOnly            // 只走网络
+    case cacheElseNetwork       // 先缓存再网络（默认推荐）
+    case networkElseCache       // 网络失败再用缓存
+}
+
+public final class NetworkCache {
+    
+    static let shared = NetworkCache()
+    
+    private let memoryCache = NSCache<NSString, NSData>()
+    private let diskPath: String
+    
+    private init() {
+        let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
+        diskPath = path.nsString.appendingPathComponent("PTNetworkCache")
+        try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)
+    }
+    
+    // MARK: - Key
+    private func cacheKey(_ request: URLRequest) -> String {
+        let url = request.url?.absoluteString ?? ""
+        let body = request.httpBody?.base64EncodedString() ?? ""
+        return (url + body).md5
+    }
+    
+    // MARK: - Save
+    func save(data: Data, request: URLRequest, expire: TimeInterval) {
+        let key = cacheKey(request)
+        let obj = CacheObject(
+            data: data,
+            expireTime: Date().timeIntervalSince1970 + expire
+        )
+        
+        guard let encoded = try? JSONEncoder().encode(obj) else { return }
+        
+        memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+        
+        let path = diskPath.nsString.appendingPathComponent(key)
+        try? encoded.write(to: URL(fileURLWithPath: path))
+    }
+    
+    // MARK: - Read
+    func read(request: URLRequest) -> Data? {
+        let key = cacheKey(request)
+        
+        // 内存
+        if let data = memoryCache.object(forKey: key as NSString) as Data?,
+           let obj = try? JSONDecoder().decode(CacheObject.self, from: data),
+           obj.expireTime > Date().timeIntervalSince1970 {
+            return obj.data
+        }
+        
+        // 磁盘
+        let path = (diskPath as NSString).appendingPathComponent(key)
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+           let obj = try? JSONDecoder().decode(CacheObject.self, from: data),
+           obj.expireTime > Date().timeIntervalSince1970 {
+            
+            memoryCache.setObject(data as NSData, forKey: key as NSString)
+            return obj.data
+        }
+        
+        return nil
+    }
+    
+    // MARK: - Clear
+    func clearAll() {
+        memoryCache.removeAllObjects()
+        try? FileManager.default.removeItem(atPath: diskPath)
+    }
+}
+
+extension URLRequest {
+    
+    var cachePolicyType: PTNetworkCachePolicy {
+        get {
+            let value = value(forHTTPHeaderField: "cachePolicy") ?? PTNetworkCachePolicy.cacheElseNetwork.rawValue
+            return PTNetworkCachePolicy(rawValue: value) ?? .cacheElseNetwork
+        }
+        set {
+            setValue(newValue.rawValue, forHTTPHeaderField: "cachePolicy")
+        }
+    }
+    
+    var cacheExpire: TimeInterval {
+        get {
+            let value = value(forHTTPHeaderField: "cacheExpire") ?? "300"
+            return TimeInterval(value) ?? 300
+        }
+        set {
+            setValue("\(newValue)", forHTTPHeaderField: "cacheExpire")
+        }
+    }
+    
+    var isMock: Bool {
+        get { value(forHTTPHeaderField: "mockResponse") == "true" }
+        set { setValue(newValue ? "true" : "false", forHTTPHeaderField: "mockResponse") }
+    }
+    
+    var mockData: Data? {
+        get { objc_getAssociatedObject(self, &kCacheDataKey) as? Data }
+        set { objc_setAssociatedObject(self, &kCacheDataKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+}
+
+public final class PTNetworkCachePlugin: NetworkPlugin {
+    
+    public func willSend(_ request: inout URLRequest) {
+        
+        guard request.httpMethod == "GET" else { return }
+        
+        let policy = request.cachePolicyType
+        
+        switch policy {
+        case .none, .networkOnly:
+            return
+            
+        case .cacheOnly, .cacheElseNetwork:
+            if let cache = NetworkCache.shared.read(request: request) {
+                request.isMock = true
+                request.mockData = cache
+            }
+            
+        case .networkElseCache:
+            return
+        }
+    }
+    
+    public func didReceive(_ result: Result<Data, AFError>,
+                    request: URLRequest,
+                    response: HTTPURLResponse?) {
+        
+        guard case .success(let data) = result else {
+            
+            // 网络失败 → fallback cache
+            if request.cachePolicyType == .networkElseCache,
+               let cache = NetworkCache.shared.read(request: request) {
+                
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("PTNetworkCacheFallback"),
+                    object: cache
+                )
+            }
+            return
+        }
+        
+        guard request.httpMethod == "GET" else { return }
+        guard request.cachePolicyType != .none else { return }
+        
+        let expire = request.cacheExpire
+        
+        NetworkCache.shared.save(
+            data: data,
+            request: request,
+            expire: expire
+        )
+    }
 }
 
 @objcMembers
@@ -342,7 +510,7 @@ public class Network: NSObject {
     
     static public let share = Network()
             
-    public var plugins: [NetworkPlugin] = []
+    public var plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]
     
     ///网络请求时间
     open var netRequsetTime:TimeInterval = 20
@@ -356,7 +524,9 @@ public class Network: NSObject {
     open var retryTimes:Int = 3
     open var retryDelay:TimeInterval = 1.5
     open var retryAPIStatusCode:Int = 502
-    
+    open var networkCacheOption:PTNetworkCachePolicy = .cacheOnly
+    open var networkCacheEXPTime:String = "600"
+
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
     /// manager
@@ -568,6 +738,8 @@ public class Network: NSObject {
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
         }
+        apiHeader["cachePolicy"] = self.share.networkCacheOption.rawValue
+        apiHeader["cacheExpire"] = self.share.networkCacheEXPTime
         return addToken(to: apiHeader)
     }
 
@@ -654,13 +826,19 @@ public class Network: NSObject {
         Network.share.plugins.forEach {
             $0.willSend(&urlRequest)
         }
+        
+        if urlRequest.isMock, let mockData = urlRequest.mockData {
+            let parsed = try parser(nil, mockData)
+            return parsed
+        }
+
         return try await withCheckedThrowingContinuation { continuation in
             session.request(urlRequest).responseData { data in
                 let result: Result<Data, AFError> = data.result.map { $0 }
                 
                 // 👉 插件回调
                 Network.share.plugins.forEach {
-                    $0.didReceive(result, response: data.response)
+                    $0.didReceive(result, request: urlRequest, response: data.response)
                 }
 
                 switch data.result {
@@ -840,122 +1018,7 @@ public class Network: NSObject {
             }
         }
     }
-    
-    /// 图片上传接口
-    class public func imageUpload(needGobal: Bool = true,
-                                  images: [UIImage]?,
-                                  path: URLConvertible,
-                                  method: HTTPMethod = .post,
-                                  fileKey: [String] = ["images"],
-                                  params: [String: String]? = nil,
-                                  header: HTTPHeaders? = nil,
-                                  modelType: Convertible.Type? = nil,
-                                  jsonRequest: Bool = false,
-                                  pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
-                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
-                    
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
-                    let session = Network.share.makeSession()
-
-                    session.upload(multipartFormData: { multipartFormData in
-                        images?.enumerated().forEach { index, image in
-                            let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
-                            guard let imageData = data else { return }
-
-                            let key = fileKey[safe: index] ?? "image"
-                            let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
-                            let mimeType = pngData ? "image/png" : "image/jpeg"
-
-                            multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
-                        }
-
-                        params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) {
-                                multipartFormData.append(data, withName: key)
-                            }
-                        }
-                    }, to: pathUrl, method: method, headers: apiHeader)
-                    .uploadProgress { progress in
-                        continuation.yield((progress, nil))
-                    }
-                    .response { resp in
-                        switch resp.result {
-                        case .success(_):
-                            do {
-                                let parsed = try parser(resp.response,resp.data)
-                                continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                continuation.finish()
-                            } catch {
-                                continuation.finish(throwing: error)
-                            }
-                        case .failure(let error):
-                            logRequestFailure(url: pathUrl, error: error)
-                            continuation.finish(throwing: error)
-                        }
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    class open func videoUpload(needGobal: Bool = true,
-                                fileURL: URL,
-                                path: URLConvertible,
-                                method: HTTPMethod = .post,
-                                fileKey: String = "file",
-                                params: [String: String]? = nil,
-                                header: HTTPHeaders? = nil,
-                                modelType: Convertible.Type? = nil,
-                                jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
-                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
-                    
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
-                    let session = Network.share.makeSession()
-
-                    session.upload(multipartFormData: { multipartFormData in
-                        multipartFormData.append(fileURL, withName: "file", fileName: "\(fileURL.lastPathComponent).mp4", mimeType: "video/mp4")
-
-                        params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) {
-                                multipartFormData.append(data, withName: key)
-                            }
-                        }
-                    }, to: pathUrl, method: method, headers: apiHeader)
-                    .uploadProgress { progress in
-                        continuation.yield((progress, nil))
-                    }
-                    .response { resp in
-                        switch resp.result {
-                        case .success(_):
-                            do {
-                                let parsed = try parser(resp.response,resp.data)
-                                continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                continuation.finish()
-                            } catch {
-                                continuation.finish(throwing: error)
-                            }
-                        case .failure(let error):
-                            logRequestFailure(url: pathUrl, error: error)
-                            continuation.finish(throwing: error)
-                        }
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-
+        
     // 自定义 Session，支持总超时
     private func makeDownloadSession() -> Session {
         let configuration = URLSessionConfiguration.default
@@ -980,11 +1043,12 @@ public class Network: NSObject {
         }
 
         func start(queue: DispatchQueue? = DispatchQueue.main) {
+            let downloadSession = Network.share.makeDownloadSession()
             if let resumeData = self.resumeData {
                 // 断点续传
-                downloadRequest = Network.share.makeDownloadSession().download(resumingWith: resumeData, to: destination)
+                downloadRequest = downloadSession.download(resumingWith: resumeData, to: destination)
             } else {
-                downloadRequest = Network.share.makeDownloadSession().download(url, to: destination)
+                downloadRequest = downloadSession.download(url, to: destination)
             }
 
             downloadRequest?.downloadProgress { [weak self] pro in
