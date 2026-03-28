@@ -635,8 +635,9 @@ public class Network: NSObject {
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
+        let session = Network.share.makeSession()
         return try await withCheckedThrowingContinuation { continuation in
-            Network.share.makeSession().request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
+            session.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success:
                     do {
@@ -669,8 +670,8 @@ public class Network: NSObject {
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
-
-                    Network.share.makeSession().upload(multipartFormData: { multipartFormData in
+                    let session = Network.share.makeSession()
+                    session.upload(multipartFormData: { multipartFormData in
                         if let phasset = media as? PHAsset {
                             switch phasset.mediaType {
                             case .image:
@@ -833,8 +834,9 @@ public class Network: NSObject {
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+                    let session = Network.share.makeSession()
 
-                    Network.share.makeSession().upload(multipartFormData: { multipartFormData in
+                    session.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
                             let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
                             guard let imageData = data else { return }
@@ -893,13 +895,9 @@ public class Network: NSObject {
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+                    let session = Network.share.makeSession()
 
-                    guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
-                        Network.cancelAllNetworkRequest()
-                        throw AFError.createURLRequestFailed(error: NetWorkNoError)
-                    }
-
-                    Network.share.makeSession().upload(multipartFormData: { multipartFormData in
+                    session.upload(multipartFormData: { multipartFormData in
                         multipartFormData.append(fileURL, withName: "file", fileName: "\(fileURL.lastPathComponent).mp4", mimeType: "video/mp4")
 
                         params?.forEach { key, value in
