@@ -561,12 +561,13 @@ public class Network: NSObject {
     }
 
     private static func createURLRequest(urlStr: URLConvertible, needGobal: Bool) async throws -> String {
-        let gobalUrl = needGobal ? await Network.gobalUrl() : ""
-        let urlStr1 = gobalUrl + (try urlStr.asURL().absoluteString)
-        guard urlStr1.isURL(), ((try? urlStr.asURL().absoluteString) != nil) else {
-            throw AFError.invalidURL(url: urlStr1)
+        let original = try urlStr.asURL().absoluteString
+        
+        if original.hasPrefix("http") {
+            return original   // ✅ 已经是完整 URL
         }
-        return urlStr1
+        let gobalUrl = needGobal ? await Network.gobalUrl() : ""
+        return gobalUrl + original
     }
     
     /// - Parameters:
@@ -636,8 +637,10 @@ public class Network: NSObject {
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
         let session = Network.share.makeSession()
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
+        urlRequest = try encoder.encode(urlRequest, with: parameters)
         return try await withCheckedThrowingContinuation { continuation in
-            session.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
+            session.request(urlRequest).responseData { data in
                 switch data.result {
                 case .success:
                     do {
