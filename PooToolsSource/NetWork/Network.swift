@@ -1019,6 +1019,69 @@ public class Network: NSObject {
         }
     }
         
+    /// 图片上传接口
+    class public func imageUpload(needGobal: Bool = true,
+                                  images: [UIImage]?,
+                                  path: URLConvertible,
+                                  method: HTTPMethod = .post,
+                                  fileKey: [String] = ["images"],
+                                  params: [String: String]? = nil,
+                                  header: HTTPHeaders? = nil,
+                                  modelType: Convertible.Type? = nil,
+                                  jsonRequest: Bool = false,
+                                  pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+                    let session = Network.share.makeSession()
+
+                    session.upload(multipartFormData: { multipartFormData in
+                        images?.enumerated().forEach { index, image in
+                            let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
+                            guard let imageData = data else { return }
+
+                            let key = fileKey[safe: index] ?? "image"
+                            let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
+                            let mimeType = pngData ? "image/png" : "image/jpeg"
+
+                            multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
+                        }
+
+                        params?.forEach { key, value in
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
+                            }
+                        }
+                    }, to: pathUrl, method: method, headers: apiHeader)
+                    .uploadProgress { progress in
+                        continuation.yield((progress, nil))
+                    }
+                    .response { resp in
+                        switch resp.result {
+                        case .success(_):
+                            do {
+                                let parsed = try parser(resp.response,resp.data)
+                                continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                continuation.finish()
+                            } catch {
+                                continuation.finish(throwing: error)
+                            }
+                        case .failure(let error):
+                            logRequestFailure(url: pathUrl, error: error)
+                            continuation.finish(throwing: error)
+                        }
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+
     // 自定义 Session，支持总超时
     private func makeDownloadSession() -> Session {
         let configuration = URLSessionConfiguration.default
