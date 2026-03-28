@@ -349,11 +349,15 @@ public class Network: NSObject {
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
     /// manager
-    private static var manager: Session = {
+    private func makeSession() -> Session {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = Network.share.netRequsetTime
-        return Session(configuration: configuration,interceptor: RetryHandler())
-    }()
+        configuration.timeoutIntervalForRequest = netRequsetTime
+        configuration.waitsForConnectivity = true
+        configuration.requestCachePolicy = .useProtocolCachePolicy
+        configuration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024,diskCapacity: 100 * 1024 * 1024)
+        return Session(configuration: configuration,
+                       interceptor: RetryHandler())
+    }
     
     open var hud:PTHudView?
     open var hudConfig : PTHudConfig {
@@ -452,7 +456,7 @@ public class Network: NSObject {
     }
     
     public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {
-        Network.manager.cancelAllRequests(completingOnQueue: queue, completion: completion)
+        Network.share.makeSession().cancelAllRequests(completingOnQueue: queue, completion: completion)
     }
     
     // MARK: 日志
@@ -483,10 +487,10 @@ public class Network: NSObject {
     
     // MARK: 统一解析响应数据
     private static func isJSONResponse(_ response: HTTPURLResponse?, data: Data?) -> Bool {
-        if let contentType = response?.value(forHTTPHeaderField: "Content-Type")?.lowercased(), contentType.contains("application/json") {
+        if response?.mimeType == "application/json" || response?.mimeType == "text/json" {
             return true
         }
-        if let data = data, (try? JSONSerialization.jsonObject(with: data)) != nil {
+        if let contentType = response?.value(forHTTPHeaderField: "Content-Type")?.lowercased(), contentType.contains("application/json") {
             return true
         }
         return false
@@ -594,11 +598,6 @@ public class Network: NSObject {
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
-        guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
-            Network.cancelAllNetworkRequest()
-            throw AFError.createURLRequestFailed(error: NetWorkNoError)
-        }
-
         return try await withCheckedThrowingContinuation { continuation in
             AF.upload(body,
                       to: urlStr1,
@@ -636,13 +635,8 @@ public class Network: NSObject {
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
-        guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
-            Network.cancelAllNetworkRequest()
-            throw AFError.createURLRequestFailed(error: NetWorkNoError)
-        }
-
         return try await withCheckedThrowingContinuation { continuation in
-            Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
+            Network.share.makeSession().request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success:
                     do {
@@ -676,16 +670,12 @@ public class Network: NSObject {
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
-                    guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
-                        Network.cancelAllNetworkRequest()
-                        throw AFError.createURLRequestFailed(error: NetWorkNoError)
-                    }
-
-                    Network.manager.upload(multipartFormData: { multipartFormData in
+                    Network.share.makeSession().upload(multipartFormData: { multipartFormData in
                         if let phasset = media as? PHAsset {
                             switch phasset.mediaType {
                             case .image:
-                                phasset.fetchImage { image in
+                                Task {
+                                    let image = await phasset.asyncImage()
                                     if let findImage = image {
                                         let canPNG = findImage.pngData() != nil
                                         if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
@@ -844,12 +834,7 @@ public class Network: NSObject {
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
 
-                    guard PTNetWorkStatus.shared.reachabilityManager?.isReachable == true else {
-                        Network.cancelAllNetworkRequest()
-                        throw AFError.createURLRequestFailed(error: NetWorkNoError)
-                    }
-
-                    Network.manager.upload(multipartFormData: { multipartFormData in
+                    Network.share.makeSession().upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in
                             let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
                             guard let imageData = data else { return }
@@ -914,7 +899,7 @@ public class Network: NSObject {
                         throw AFError.createURLRequestFailed(error: NetWorkNoError)
                     }
 
-                    Network.manager.upload(multipartFormData: { multipartFormData in
+                    Network.share.makeSession().upload(multipartFormData: { multipartFormData in
                         multipartFormData.append(fileURL, withName: "file", fileName: "\(fileURL.lastPathComponent).mp4", mimeType: "video/mp4")
 
                         params?.forEach { key, value in
@@ -949,12 +934,12 @@ public class Network: NSObject {
     }
 
     // 自定义 Session，支持总超时
-    private static var session: Session = {
+    private func makeDownloadSession() -> Session {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = Network.share.downloadRequsetTime          // 请求超时时间
         configuration.timeoutIntervalForResource = Network.share.downloadEndTime       // 下载资源最大耗时（秒）
         return Session(configuration: configuration)
-    }()
+    }
 
     private class DownloadTask {
         let url: String
@@ -974,9 +959,9 @@ public class Network: NSObject {
         func start(queue: DispatchQueue? = DispatchQueue.main) {
             if let resumeData = self.resumeData {
                 // 断点续传
-                downloadRequest = Network.session.download(resumingWith: resumeData, to: destination)
+                downloadRequest = Network.share.makeDownloadSession().download(resumingWith: resumeData, to: destination)
             } else {
-                downloadRequest = Network.session.download(url, to: destination)
+                downloadRequest = Network.share.makeDownloadSession().download(url, to: destination)
             }
 
             downloadRequest?.downloadProgress { [weak self] pro in
@@ -1027,8 +1012,8 @@ public class Network: NSObject {
     }
 
     private var tasks: [String: DownloadTask] = [:]
-    private let queue = DispatchQueue(label: "pt.downloader.queue")
-
+    private let lock = NSLock()
+    
     // MARK: - 下载入口
     public func download(fileUrl: String,
                          saveFilePath: String,
@@ -1047,24 +1032,26 @@ public class Network: NSObject {
         }
 
         queue?.async {
-            self.queue.async {
-                if let task = self.tasks[fileUrl] {
-                    // 已存在任务，添加闭包
-                    if let p = progress { task.progressClosures.append(p) }
-                    if let s = success { task.successClosures.append(s) }
-                    if let f = fail { task.failClosures.append(f) }
-                    return
-                }
-
-                // 新任务
-                let task = DownloadTask(url: fileUrl, destination: dest)
+            self.lock.lock()
+            if let task = self.tasks[fileUrl] {
+                self.lock.unlock()
+                // 已存在任务，添加闭包
                 if let p = progress { task.progressClosures.append(p) }
                 if let s = success { task.successClosures.append(s) }
                 if let f = fail { task.failClosures.append(f) }
-
-                self.tasks[fileUrl] = task
-                task.start(queue: queue)
+                return
             }
+            self.lock.unlock()
+            // 新任务
+            let task = DownloadTask(url: fileUrl, destination: dest)
+            if let p = progress { task.progressClosures.append(p) }
+            if let s = success { task.successClosures.append(s) }
+            if let f = fail { task.failClosures.append(f) }
+
+            self.lock.lock()
+            self.tasks[fileUrl] = task
+            self.lock.unlock()
+            task.start(queue: queue)
         }
     }
 
@@ -1081,28 +1068,31 @@ public class Network: NSObject {
 
     // MARK: - 暂停 / 恢复 / 取消
     public func suspend(fileUrl: String) {
-        queue.async {
-            self.tasks[fileUrl]?.suspend()
-        }
+        self.lock.lock()
+        let task = self.tasks[fileUrl]
+        self.lock.unlock()
+        task?.suspend()
     }
 
     public func resume(fileUrl: String) {
-        queue.async {
-            self.tasks[fileUrl]?.resume()
-        }
+        self.lock.lock()
+        self.tasks[fileUrl]?.resume()
+        self.lock.unlock()
     }
 
     public func cancel(fileUrl: String) {
-        queue.async {
-            self.tasks[fileUrl]?.cancel()
-            self.tasks[fileUrl] = nil
-        }
+        self.lock.lock()
+        let task = self.tasks[fileUrl]
+        self.tasks[fileUrl] = nil
+        self.lock.unlock()
+        
+        task?.cancel()
     }
     
     public func removeTask(_ url: String) {
-        queue.async {
-            self.tasks[url] = nil
-        }
+        self.lock.lock()
+        self.tasks[url] = nil
+        self.lock.unlock()
     }
 }
 

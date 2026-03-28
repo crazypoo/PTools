@@ -246,6 +246,13 @@ public extension PHAsset {
         }
     }
 
+    func asyncImage() async -> UIImage? {
+        await withCheckedContinuation { continuation in
+            self.fetchImage { image in
+                continuation.resume(returning: image)
+            }
+        }
+    }
 }
 
 public extension PTPOP where Base: PHAsset {
