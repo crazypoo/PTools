@@ -367,8 +367,16 @@ public final class NetworkCache {
     // MARK: - Key
     private func cacheKey(_ request: URLRequest) -> String {
         let url = request.url?.absoluteString ?? ""
-        let body = request.httpBody?.base64EncodedString() ?? ""
-        return (url + body).md5
+        let sortedQuery = request.url?
+            .query?
+            .split(separator: "&")
+            .sorted()
+            .joined(separator: "&") ?? ""
+        
+        let body = request.httpBody?
+            .sortedJSONData() ?? Data()
+
+        return (url + sortedQuery + body.base64EncodedString()).md5
     }
     
     // MARK: - Save
@@ -621,15 +629,18 @@ public class Network: NSObject {
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
     /// manager
-    private func makeSession() -> Session {
+    private lazy var session: Session = {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = netRequsetTime
         configuration.waitsForConnectivity = true
         configuration.requestCachePolicy = .useProtocolCachePolicy
-        configuration.urlCache = URLCache(memoryCapacity: 20 * 1024 * 1024,diskCapacity: 100 * 1024 * 1024)
+        configuration.urlCache = URLCache(
+            memoryCapacity: 20 * 1024 * 1024,
+            diskCapacity: 100 * 1024 * 1024
+        )
         return Session(configuration: configuration,
                        interceptor: RetryHandler())
-    }
+    }()
     
     open var hud:PTHudView?
     open var hudConfig : PTHudConfig {
@@ -728,7 +739,7 @@ public class Network: NSObject {
     }
     
     public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {
-        Network.share.makeSession().cancelAllRequests(completingOnQueue: queue, completion: completion)
+        Network.share.session.cancelAllRequests(completingOnQueue: queue, completion: completion)
     }
     
     // MARK: 日志
@@ -911,7 +922,7 @@ public class Network: NSObject {
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
-        let session = Network.share.makeSession()
+        let session = Network.share.session
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
         urlRequest = try encoder.encode(urlRequest, with: parameters)
         // 👉 插件前置处理
@@ -984,7 +995,7 @@ public class Network: NSObject {
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
-                    let session = Network.share.makeSession()
+                    let session = Network.share.session
                     session.upload(multipartFormData: { multipartFormData in
                         if let phasset = media as? PHAsset {
                             switch phasset.mediaType {
@@ -1148,7 +1159,7 @@ public class Network: NSObject {
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
-                    let session = Network.share.makeSession()
+                    let session = Network.share.session
 
                     session.upload(multipartFormData: { multipartFormData in
                         images?.enumerated().forEach { index, image in

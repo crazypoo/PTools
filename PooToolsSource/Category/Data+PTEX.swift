@@ -122,6 +122,43 @@ public extension Data {
     }
 }
 
+public extension Data {
+    /// 将 JSON Data 转成「key 有序」的稳定 Data（用于 cacheKey / hash）
+    func sortedJSONData() -> Data? {
+        guard let obj = try? JSONSerialization.jsonObject(with: self, options: []),
+              JSONSerialization.isValidJSONObject(obj) else {
+            return self // 不是 JSON，直接返回原始 data
+        }
+        
+        let sortedObj = Self.sortJSONObject(obj)
+        
+        return try? JSONSerialization.data(
+            withJSONObject: sortedObj,
+            options: [] // ⚠️ 不要 prettyPrinted（避免空格影响 hash）
+        )
+    }
+    
+    /// 递归排序 JSON（Dictionary key 排序）
+    private static func sortJSONObject(_ obj: Any) -> Any {
+        if let dict = obj as? [String: Any] {
+            let sortedKeys = dict.keys.sorted()
+            var newDict: [String: Any] = [:]
+            
+            for key in sortedKeys {
+                newDict[key] = sortJSONObject(dict[key]!)
+            }
+            return newDict
+            
+        } else if let array = obj as? [Any] {
+            // ⚠️ 数组不排序（顺序是有意义的）
+            return array.map { sortJSONObject($0) }
+            
+        } else {
+            return obj
+        }
+    }
+}
+
 // MARK: - Methods
 public extension Data {
     //MARK: Data轉String
