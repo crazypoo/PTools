@@ -114,6 +114,25 @@ public var PTSocketURLMode:NetWorkEnvironment {
     return .Distribution
 }
 
+public final class NetworkReachability {
+    
+    public static let shared = NetworkReachability()
+    
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "network.reachability")
+    
+    private(set) var isReachable: Bool = true
+    private(set) var isExpensive: Bool = false
+    
+    private init() {
+        monitor.pathUpdateHandler = { [weak self] path in
+            self?.isReachable = (path.status == .satisfied)
+            self?.isExpensive = path.isExpensive
+        }
+        monitor.start(queue: queue)
+    }
+}
+
 // MARK: - 网络运行状态监听
 @objcMembers
 public class PTNetWorkStatus {
@@ -271,11 +290,16 @@ fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
     }
     
     public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        // 取消/主动停止不重试
+        // ❌ 1. 主动取消不重试
         if let afErr = error as? AFError, afErr.isExplicitlyCancelledError {
             return completion(.doNotRetry)
         }
         
+        // ❌ 2. 无网络直接不重试（🔥关键）
+        if !NetworkReachability.shared.isReachable {
+            return completion(.doNotRetry)
+        }
+
         let statusCode = (request.task?.response as? HTTPURLResponse)?.statusCode
         
         // 临时网络问题判定
@@ -288,20 +312,34 @@ fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
             .cannotConnectToHost,   // -1004
             .networkConnectionLost, // -1005
             .dnsLookupFailed,       // -1006
-            .notConnectedToInternet // -1009
         ]
         let isTemporaryNetworkIssue = isURLErrorDomain && temporaryURLErrors.contains(urlErrorCode)
         
         let canRetryByError = error.isNetworkError || isTemporaryNetworkIssue
         let canRetryByStatus = shouldRetry(statusCode: statusCode)
         
+        // ❌ 3. 超过次数 or 不满足条件
         guard request.retryCount < retryLimitSnapshot, (canRetryByError || canRetryByStatus) else {
             return completion(.doNotRetry)
         }
         
-        // 指数回退 + 抖动
-        let nth = max(1, request.retryCount + 1)
-        let delay = min(baseDelaySnapshot * pow(2.0, Double(nth - 1)) + Double.random(in: 0...jitter), maxDelay)
+        // ⚠️ 4. 弱网策略（优化体验）
+        let isExpensive = NetworkReachability.shared.isExpensive
+
+        let delay: TimeInterval
+        
+        if isExpensive {
+            // 蜂窝网络 → 降低重试频率
+            delay = min(baseDelaySnapshot * 2.0, maxDelay)
+        } else {
+            // WiFi → 正常指数退避
+            let nth = max(1, request.retryCount + 1)
+            delay = min(
+                baseDelaySnapshot * pow(2.0, Double(nth - 1)) +
+                Double.random(in: 0...jitter),
+                maxDelay
+            )
+        }
         completion(.retryWithDelay(delay))
     }
 }
@@ -339,6 +377,7 @@ public protocol NetworkPlugin {
 public struct CacheObject: Codable {
     let data: Data
     let expireTime: TimeInterval
+    var lastAccessTime: TimeInterval   // ⭐ 新增
 }
 
 private var kCacheDataKey = 888888888
@@ -357,7 +396,8 @@ public final class NetworkCache {
     
     private let memoryCache = NSCache<NSString, NSData>()
     private let diskPath: String
-    
+    private var lastCleanTime: TimeInterval = 0
+
     private init() {
         let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
         diskPath = path.nsString.appendingPathComponent("PTNetworkCache")
@@ -382,10 +422,10 @@ public final class NetworkCache {
     // MARK: - Save
     func save(data: Data, request: URLRequest, expire: TimeInterval) {
         let key = cacheKey(request)
-        let obj = CacheObject(
-            data: data,
-            expireTime: Date().timeIntervalSince1970 + expire
-        )
+        let now = Date().timeIntervalSince1970
+        let obj = CacheObject(data: data,
+                              expireTime: now + expire,
+                              lastAccessTime: now)
         
         guard let encoded = try? JSONEncoder().encode(obj) else { return }
         
@@ -398,20 +438,25 @@ public final class NetworkCache {
     // MARK: - Read
     func read(request: URLRequest) -> Data? {
         let key = cacheKey(request)
-        
+        let now = Date().timeIntervalSince1970
+
         // 内存
         if let data = memoryCache.object(forKey: key as NSString) as Data?,
-           let obj = try? JSONDecoder().decode(CacheObject.self, from: data),
-           obj.expireTime > Date().timeIntervalSince1970 {
+           var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
+           obj.expireTime > now {
+            obj.lastAccessTime = now
+            save(data: obj.data, request: request, expire: obj.expireTime - now)
             return obj.data
         }
         
         // 磁盘
         let path = (diskPath as NSString).appendingPathComponent(key)
         if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-           let obj = try? JSONDecoder().decode(CacheObject.self, from: data),
-           obj.expireTime > Date().timeIntervalSince1970 {
-            
+           var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
+           obj.expireTime > now {
+            obj.lastAccessTime = now
+            save(data: obj.data, request: request, expire: obj.expireTime - now)
+
             memoryCache.setObject(data as NSData, forKey: key as NSString)
             return obj.data
         }
@@ -424,6 +469,67 @@ public final class NetworkCache {
         memoryCache.removeAllObjects()
         try? FileManager.default.removeItem(atPath: diskPath)
     }
+    
+    public func cleanIfNeeded() {
+        let now = Date().timeIntervalSince1970
+        guard now - lastCleanTime > Network.share.cleanCachePreSec else { return } // 1分钟最多一次
+        
+        lastCleanTime = now
+        
+        DispatchQueue.global(qos: .background).async {
+            self._cleanDisk()
+        }
+    }
+    
+    private func _cleanDisk() {
+        let fm = FileManager.default
+        guard let files = try? fm.contentsOfDirectory(
+            at: URL(fileURLWithPath: diskPath),
+            includingPropertiesForKeys: [.fileSizeKey, .contentModificationDateKey],
+            options: .skipsHiddenFiles
+        ) else { return }
+
+        var totalSize: Int64 = 0
+        var cacheFiles: [(url: URL, size: Int64, lastAccess: TimeInterval)] = []
+
+        let now = Date().timeIntervalSince1970
+
+        for fileURL in files {
+            guard let data = try? Data(contentsOf: fileURL),
+                  let obj = try? JSONDecoder().decode(CacheObject.self, from: data) else {
+                continue
+            }
+
+            // ❌ 1. 先删过期
+            if obj.expireTime < now {
+                try? fm.removeItem(at: fileURL)
+                continue
+            }
+
+            let size = (try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
+            totalSize += Int64(size)
+
+            cacheFiles.append((fileURL, Int64(size), obj.lastAccessTime))
+        }
+
+        // ✅ 不超限直接返回
+        if totalSize <= Network.share.maxDiskSize { return }
+
+        // ❗ LRU：按最后访问时间排序（最旧优先删）
+        cacheFiles.sort { $0.lastAccess < $1.lastAccess }
+
+        let targetSize = Int64(Double(Network.share.maxDiskSize) * Network.share.cleanThreshold)
+
+        for file in cacheFiles {
+            try? fm.removeItem(at: file.url)
+            totalSize -= file.size
+
+            if totalSize <= targetSize {
+                break
+            }
+        }
+    }
+
 }
 
 extension URLRequest {
@@ -625,6 +731,9 @@ public class Network: NSObject {
     open var networkCacheOption:PTNetworkCachePolicy = .cacheOnly
     open var networkCacheEXPTime:String = "600"
     open var networkDudupOption:PTNetworkDedupPolicy = .custom("auto")
+    open var maxDiskSize: Int64 = 100 * 1024 * 1024   // 100MB
+    open var cleanThreshold: Double = 0.7             // 清到70%
+    open var cleanCachePreSec: TimeInterval = 60             // x分钟内不可以多次
 
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
 
