@@ -147,7 +147,7 @@ public class PTBannerView: UIView {
         return view
     }()
     
-    init(viewConfig:PTBannerConfiguration = PTBannerConfiguration()) {
+    public init(viewConfig:PTBannerConfiguration = PTBannerConfiguration()) {
         self.viewConfig = viewConfig
         super.init(frame: .zero)
         addSubviews([collectionView,titleBackgroundView])
