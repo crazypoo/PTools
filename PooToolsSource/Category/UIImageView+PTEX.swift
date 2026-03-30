@@ -123,6 +123,13 @@ public extension UIImageView {
             guard isValid() else { return }
             Task { @MainActor in
                 self.image = image
+                self.layerProgress(value: 1,
+                                   borderWidth: borderWidth,
+                                   borderColor: borderColor,
+                                   showValueLabel: showValueLabel,
+                                   valueLabelFont: valueLabelFont,
+                                   valueLabelColor: valueLabelColor,
+                                   uniCount: uniCount)
                 loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
             }
         }
