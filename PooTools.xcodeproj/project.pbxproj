@@ -879,6 +879,10 @@
 		55F299912BEE1D5B00CC970A /* PTImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299902BEE1D5B00CC970A /* PTImageCell.swift */; };
 		55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299922BEE205600CC970A /* PTImageListViewController.swift */; };
 		55F3A9D02E3B140F001A0571 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F3A9CF2E3B140F001A0571 /* HealthKit.framework */; };
+		55F3C27C2F7A0CC00062D864 /* PTBannerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3C27B2F7A0CC00062D864 /* PTBannerModel.swift */; };
+		55F3C27E2F7A0EAA0062D864 /* PTBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3C27D2F7A0EAA0062D864 /* PTBannerCell.swift */; };
+		55F3C2802F7A0EFC0062D864 /* PTBannerMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3C27F2F7A0EFC0062D864 /* PTBannerMediaManager.swift */; };
+		55F3C2822F7A105B0062D864 /* PTBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F3C2812F7A105B0062D864 /* PTBannerView.swift */; };
 		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
 		55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */; };
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
@@ -1845,6 +1849,10 @@
 		55F299902BEE1D5B00CC970A /* PTImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageCell.swift; sourceTree = "<group>"; };
 		55F299922BEE205600CC970A /* PTImageListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageListViewController.swift; sourceTree = "<group>"; };
 		55F3A9CF2E3B140F001A0571 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		55F3C27B2F7A0CC00062D864 /* PTBannerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBannerModel.swift; sourceTree = "<group>"; };
+		55F3C27D2F7A0EAA0062D864 /* PTBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBannerCell.swift; sourceTree = "<group>"; };
+		55F3C27F2F7A0EFC0062D864 /* PTBannerMediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBannerMediaManager.swift; sourceTree = "<group>"; };
+		55F3C2812F7A105B0062D864 /* PTBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBannerView.swift; sourceTree = "<group>"; };
 		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
 		55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+PTEX.swift"; sourceTree = "<group>"; };
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
@@ -3729,6 +3737,10 @@
 			children = (
 				9A14E97F28616B4000D7E8EF /* PTCycleScrollView.swift */,
 				9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */,
+				55F3C27B2F7A0CC00062D864 /* PTBannerModel.swift */,
+				55F3C27D2F7A0EAA0062D864 /* PTBannerCell.swift */,
+				55F3C27F2F7A0EFC0062D864 /* PTBannerMediaManager.swift */,
+				55F3C2812F7A105B0062D864 /* PTBannerView.swift */,
 			);
 			path = ScrollBanner;
 			sourceTree = "<group>";
@@ -4084,7 +4096,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4094,9 +4107,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4111,9 +4128,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4732,9 +4753,12 @@
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				55BCB97D2B1732030016A4C2 /* PTMediaLibManager.swift in Sources */,
 				55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */,
+				55F3C27C2F7A0CC00062D864 /* PTBannerModel.swift in Sources */,
+				55F3C2822F7A105B0062D864 /* PTBannerView.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				55DD93712B938C9B00F65872 /* UIView+Container.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
+				55F3C27E2F7A0EAA0062D864 /* PTBannerCell.swift in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				557E3A882C043F06002466A0 /* UIWindow+PTDebugEx.swift in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
@@ -5024,6 +5048,7 @@
 				557E3AA22C046EE0002466A0 /* PTHttpDatasource.swift in Sources */,
 				55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
+				55F3C2802F7A0EFC0062D864 /* PTBannerMediaManager.swift in Sources */,
 				553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */,
 				556CA4C02B29535900A5B189 /* NSLayoutConstraint+PTEX.swift in Sources */,
 				557E3A6C2C036CCD002466A0 /* PTDebugPerformanceViewController.swift in Sources */,

@@ -613,6 +613,24 @@ class PTFuncDetailViewController: PTBaseViewController {
                     """
             banner.titles = [att1,att1,att1]
             banner.imagePaths = ["https://cloud.video.taobao.com/play/u/2218025106300/p/1/e/6/t/1/475055174931.mp4","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg","http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg".urlToUnicodeURLString()!]
+            
+            
+            let newBannerModel = banner.imagePaths.map { value in
+                let model = PTBannerModel()
+                model.media = value
+                model.att = att1
+                return model
+            }
+            
+            let config = PTBannerConfiguration()
+            let banner1 = PTBannerView(viewConfig: config)
+            view.addSubviews([banner1])
+            banner1.snp.makeConstraints { make in
+                make.left.right.height.equalTo(banner)
+                make.top.equalTo(banner.snp.bottom).offset(20)
+            }
+            banner1.bannerModel = newBannerModel
+            banner1.viewCorner(radius: 8)
         case String.CollectionTag:
             
             let tagValue = ["1123123","1","123123123123123","22222","1233"]

@@ -937,7 +937,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 } else {
                     var sheetSize = [PTSheetSize]()
-                    if itemRow.title == .StepperList || itemRow.title == .LivePhoto  || itemRow.title == .LivePhotoDisassemble {
+                    if itemRow.title == .StepperList || itemRow.title == .LivePhoto  || itemRow.title == .LivePhotoDisassemble || itemRow.title == .CycleBanner {
                         sheetSize = [.percent(0.9)]
                     } else {
                         sheetSize = [.percent(0.5)]
