@@ -35,11 +35,11 @@ class PTBannerVideoManager {
     }
 }
 
-final class PTBannerPlayerManager {
+public final class PTBannerPlayerManager {
 
-    static let shared = PTBannerPlayerManager()
+    public static let shared = PTBannerPlayerManager()
 
-    private var player: AVPlayer?
+    public var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
     private weak var currentContainer: UIView?
 
@@ -75,7 +75,6 @@ final class PTBannerPlayerManager {
 
         player.play()
         player.isMuted = true
-
         // 播放结束
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(replay),
@@ -108,7 +107,7 @@ final class PTBannerPlayerManager {
 
 extension PTBannerPlayerManager {
 
-    func startPiP() {
+    public func startPiP() {
         guard let layer = playerLayer else { return }
 
         if AVPictureInPictureController.isPictureInPictureSupported() {
@@ -117,11 +116,11 @@ extension PTBannerPlayerManager {
         }
     }
     
-    func pause() {
+    public func pause() {
         player?.pause()
     }
 
-    func resume() {
+    public func resume() {
         player?.play()
     }
 }
