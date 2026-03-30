@@ -40,7 +40,7 @@ public final class PTBannerPlayerManager {
     public static let shared = PTBannerPlayerManager()
 
     public var player: AVPlayer?
-    private var playerLayer: AVPlayerLayer?
+    public var playerLayer: AVPlayerLayer?
     private weak var currentContainer: UIView?
 
     private var currentURL: String?
