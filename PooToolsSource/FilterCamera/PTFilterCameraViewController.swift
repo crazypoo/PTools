@@ -89,11 +89,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 self.takePhotoView?.reviewHandle = {
                     let browserModel = PTMediaBrowserModel()
                     browserModel.imageURL = image
-                    
-                    let browserConfig = PTMediaBrowserConfig()
-                    browserConfig.mediaData = [browserModel]
-                    
-                    let review = PTMediaBrowserController(viewConfig: browserConfig)
+                                        
+                    let review = PTMediaBrowserController(mediaData: [browserModel])
                     review.modalPresentationStyle = .fullScreen
                     self.pt_present(review)
                 }

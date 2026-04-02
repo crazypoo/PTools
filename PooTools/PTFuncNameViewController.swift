@@ -585,14 +585,13 @@ class PTFuncNameViewController: PTBaseViewController {
                     model4.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
                     model4.imageInfo = "GIF"
                     
-                    let mediaConfig = PTMediaBrowserConfig()
+                    let mediaConfig = PTMediaBrowserConfig.share
                     mediaConfig.dismissY = 200
                     mediaConfig.actionType = .All
                     mediaConfig.pageControlOption = .snake
-                    mediaConfig.mediaData = [model3,model1,model2,model4]
                     mediaConfig.imageLongTapAction = true
                     mediaConfig.dynamicBackground = true
-                    let browser = PTMediaBrowserController(viewConfig: mediaConfig)
+                    let browser = PTMediaBrowserController(mediaData: [model3,model1,model2,model4])
                     browser.mediasShow()
 //                    let nav = PTBaseNavControl(rootViewController: browser)
 //                    self.navigationController?.present(nav, animated: true)

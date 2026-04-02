@@ -35,8 +35,6 @@ public class PTMediaBrowserConfig: NSObject {
     public static let share = PTMediaBrowserConfig()
     ///默认到哪一页,默认0
     public var defultIndex:Int = 0
-    ///数据源
-    public var mediaData:[PTMediaBrowserModel]!
     ///内容的文字颜色
     public var titleColor:UIColor = UIColor.white
     ///标题字体

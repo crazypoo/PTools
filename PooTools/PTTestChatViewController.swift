@@ -58,12 +58,11 @@ class PTTestChatViewController: PTBaseViewController {
                 let mediaModel = PTMediaBrowserModel()
                 mediaModel.imageURL = cellModel.msgContent
                 
-                let mediaBroswer = PTMediaBrowserConfig()
-                mediaBroswer.mediaData = [mediaModel]
+                let mediaBroswer = PTMediaBrowserConfig.share
                 mediaBroswer.actionType = .Save
                 mediaBroswer.dynamicBackground = true
                 
-                let vc = PTMediaBrowserController(viewConfig: mediaBroswer)
+                let vc = PTMediaBrowserController(mediaData:[mediaModel])
                 vc.viewSaveImageBlock = { finish in
                     if finish {
                         PTAlertTipControl.present(title:"",subtitle: "ok",icon:.Done,style: .Normal)

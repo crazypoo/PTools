@@ -23,7 +23,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     public var viewDismissBlock:PTActionTask?
 
     ///界面配置
-    fileprivate var viewConfig:PTMediaBrowserConfig!
+    fileprivate let viewConfig = PTMediaBrowserConfig.share
     
     ///更多按钮操作
     public var viewMoreActionBlock:PTViewerEXIndexBlock?
@@ -83,7 +83,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             case .system:
                 if let pageControl = view.pageControlView as? UIPageControl {
                     pageControl.addPageControlHandlers { sender in
-                        let cellModel = self.viewConfig.mediaData[sender.currentPage]
+                        let cellModel = self.mediaData[sender.currentPage]
                         self.updateBottom(models: cellModel)
                         self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
                     }
@@ -110,8 +110,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         collectionView.registerClassCells(classs: [PTMediaBrowserCell.ID:PTMediaBrowserCell.self])
         collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
             if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaBrowserCell {
-                let cellModel = self.viewConfig.mediaData[indexPath.row]
-                cell.viewConfig = self.viewConfig
+                let cellModel = self.mediaData[indexPath.row]
                 cell.dataModel = cellModel
                 cell.viewerDismissBlock = {
                     self.returnFrontVC {
@@ -167,7 +166,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
             if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell,let currentIndex = collectionView.indexPath(for: currentCell) {
                 if let itemRow = sectionModel.rows?[currentIndex.row],let endCell = cell as? PTMediaBrowserCell {
-                    let cellModel = self.viewConfig.mediaData[currentIndex.row]
+                    let cellModel = self.mediaData[currentIndex.row]
                     switch endCell.currentCellType {
                     case .GIF:
                         endCell.imageView.stopAnimating()
@@ -181,7 +180,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     self.currentIndex = currentIndex.row
                     
                     if !self.navControl.titleLabel.isHidden {
-                        self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
+                        self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.mediaData.count)"
                     }
                     self.updateBottom(models: cellModel)
                 }
@@ -194,7 +193,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             self.currentIndex = indexPath.row
 
             if let itemRow = sectionModel.rows?[indexPath.row],let endCell = cell as? PTMediaBrowserCell {
-                let cellModel = self.viewConfig.mediaData[indexPath.row]
+                let cellModel = self.mediaData[indexPath.row]
                 switch endCell.currentCellType {
                 case .GIF:
                     endCell.imageView.startAnimating()
@@ -202,7 +201,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     break
                 }
                 if !self.navControl.titleLabel.isHidden {
-                    self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.viewConfig.mediaData.count)"
+                    self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.mediaData.count)"
                 }
                 self.updateBottom(models: cellModel)
                 
@@ -212,12 +211,11 @@ public class PTMediaBrowserController: PTBaseViewController {
         collectionView.collectionViewDidScroll = { collectionViewScrol in
             let currentPageControlValue = self.getPageControlCurrentValue()
             
-            let cellModel = self.viewConfig.mediaData[currentPageControlValue]
+            let cellModel = self.mediaData[currentPageControlValue]
             if let currentCell = collectionView.visibleCells().first as? PTMediaBrowserCell {
                 if abs(collectionViewScrol.contentOffset.y) > 0 {
                     currentCell.contentScrolView.isUserInteractionEnabled = false
                     currentCell.contentScrolView.isScrollEnabled = false
-                    currentCell.prepareForHide()
                     var delt = 1 - abs(collectionViewScrol.contentOffset.y ) / currentCell.contentView.frame.size.height
                     delt = max(delt, 0)
                     let s = max(delt, 0.5)
@@ -238,8 +236,11 @@ public class PTMediaBrowserController: PTBaseViewController {
         return collectionView
     }()
     
-    public init(viewConfig: PTMediaBrowserConfig!) {
-        self.viewConfig = viewConfig
+    ///数据源
+    fileprivate var mediaData:[PTMediaBrowserModel] = []
+    
+    public init(mediaData: [PTMediaBrowserModel]) {
+        self.mediaData = mediaData
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -301,14 +302,14 @@ public class PTMediaBrowserController: PTBaseViewController {
                 
         PTGCDManager.gcdAfter(time: 0.35) {
             var loadSome = 0
-            if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
-                loadSome = self.viewConfig.mediaData.count - 1
+            if self.viewConfig.defultIndex > self.mediaData.count {
+                loadSome = self.mediaData.count - 1
             } else {
                 loadSome = self.viewConfig.defultIndex
             }
             self.currentIndex = loadSome
 
-            let cellModel = self.viewConfig.mediaData[loadSome]
+            let cellModel = self.mediaData[loadSome]
             self.updateBottom(models: cellModel)
         }
         self.showCollectionViewData()
@@ -318,7 +319,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     func showCollectionViewData(loadedTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdGobal {
             
-            if self.viewConfig.mediaData.count > 1 {
+            if self.mediaData.count > 1 {
                 self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
                 if self.viewConfig.pageControlShow {
                     self.setPageControlValue(0)
@@ -345,20 +346,20 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
 
             var sections = [PTSection]()
-            let rows = self.viewConfig.mediaData.compactMap { PTRows(ID: PTMediaBrowserCell.ID,dataModel: $0) }
+            let rows = self.mediaData.compactMap { PTRows(ID: PTMediaBrowserCell.ID,dataModel: $0) }
             let cellSection = PTSection(rows:rows)
             sections.append(cellSection)
             
             PTGCDManager.gcdMain {
                 self.navControl.titleLabel.isHidden = false
-                self.navControl.titleLabel.text = "1/\(self.viewConfig.mediaData.count)"
+                self.navControl.titleLabel.text = "1/\(self.mediaData.count)"
 
                 self.newCollectionView.showCollectionDetail(collectionData: sections) { collectionView in
                     if !self.firstLoad {
                         self.firstLoad = true
                         var loadSome = 0
-                        if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
-                            loadSome = self.viewConfig.mediaData.count - 1
+                        if self.viewConfig.defultIndex > self.mediaData.count {
+                            loadSome = self.mediaData.count - 1
                         } else {
                             loadSome = self.viewConfig.defultIndex
                         }
@@ -397,8 +398,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         PTUtils.getCurrentVC()?.pt_present(self)
     }
     
-    public func reloadConfig(mediaConfig:PTMediaBrowserConfig) {
-        viewConfig = mediaConfig
+    public func reloadConfig(mediaData:[PTMediaBrowserModel]) {
+        self.mediaData = mediaData
         if viewConfig.dynamicBackground {
             view.backgroundColor = viewConfig.viewerContentBackgroundColor
         } else {
@@ -417,14 +418,14 @@ public class PTMediaBrowserController: PTBaseViewController {
         newCollectionView.clearAllData(finishTask: { _ in
             PTGCDManager.gcdAfter(time: 0.35) {
                 var loadSome = 0
-                if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
-                    loadSome = self.viewConfig.mediaData.count - 1
+                if self.viewConfig.defultIndex > self.mediaData.count {
+                    loadSome = self.mediaData.count - 1
                 } else {
                     loadSome = self.viewConfig.defultIndex
                 }
                 self.currentIndex = loadSome
 
-                let cellModel = self.viewConfig.mediaData[loadSome]
+                let cellModel = self.mediaData[loadSome]
                 self.updateBottom(models: cellModel)
             }
             self.showCollectionViewData()
@@ -492,7 +493,7 @@ fileprivate extension PTMediaBrowserController {
     
     func setPageControlValue(_ value: Int) {
         guard let control = bottomControl.pageControlView as? PTPageControllable else { return }
-        control.update(currentPage: value, totalPages: viewConfig.mediaData.count)
+        control.update(currentPage: value, totalPages: mediaData.count)
     }
 }
 
@@ -502,7 +503,7 @@ fileprivate extension PTMediaBrowserController {
         
         let currentPageControlValue = self.getPageControlCurrentValue()
 
-        let model = viewConfig.mediaData[currentPageControlValue]
+        let model = mediaData[currentPageControlValue]
         
         if let currentView = newCollectionView.visibleCells().first as? PTMediaBrowserCell {
             switch currentView.currentCellType {
@@ -573,7 +574,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func deleteImage() {
-        if viewConfig.mediaData.count == 1 {
+        if mediaData.count == 1 {
             viewDeleteImageBlock?(0)
             viewMoreActionDismiss()
         } else {
@@ -588,20 +589,20 @@ fileprivate extension PTMediaBrowserController {
                 }
                 if let findIndexRow = self.newCollectionView.collectionSectionDatas.first?.rows?[currentPageControlValue] {
                     self.newCollectionView.deleteRows([findIndexRow], from: 0)
-                    self.viewConfig.mediaData.remove(at: currentPageControlValue)
+                    self.mediaData.remove(at: currentPageControlValue)
                     
                     PTGCDManager.gcdAfter(time: 0.35) {
                         let newCurrentPageControlValue = self.getPageControlCurrentValue()
-                        self.navControl.titleLabel.text = "\(newCurrentPageControlValue + 1)/\(self.viewConfig.mediaData.count)"
+                        self.navControl.titleLabel.text = "\(newCurrentPageControlValue + 1)/\(self.mediaData.count)"
 
-                        if self.viewConfig.mediaData.count > 1 {
+                        if self.mediaData.count > 1 {
                             self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
                             self.setPageControlValue(newCurrentPageControlValue)
                         } else {
                             self.bottomControl.pageControlView.isHidden = true
                         }
                         
-                        let models = self.viewConfig.mediaData[newCurrentPageControlValue]
+                        let models = self.mediaData[newCurrentPageControlValue]
                         self.updateBottom(models: models)
                     }
                     self.viewDeleteImageBlock?(currentPageControlValue)
