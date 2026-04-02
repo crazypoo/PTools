@@ -18,7 +18,6 @@ import PhotosUI
 import KTVHTTPCache
 #endif
 
-
 class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
     
@@ -124,6 +123,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
         let view = UIButton(type: .custom)
+        view.setImage( viewConfig.playButtonImage, for: .normal)
         view.imageView?.contentMode = .scaleAspectFill
         return view
     }()
@@ -162,7 +162,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         
         playBtn.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.size.equalTo(CGSize(width: 60, height: 60))
+            $0.size.equalTo(viewConfig.playButtonImageSize)
         }
 
         loading.snp.makeConstraints {
@@ -458,6 +458,7 @@ extension PTMediaBrowserCell {
         imageView.image = UIImage()
         gifImage = nil
         reloadButton.isHidden = true
+        reloadButton.isUserInteractionEnabled = false
         playBtn.isHidden = true
         playBtn.isUserInteractionEnabled = false
         handleVideoLoading(videoUrl: url)
@@ -503,6 +504,7 @@ extension PTMediaBrowserCell {
         }
         
         reloadButton.isHidden = true
+        reloadButton.isUserInteractionEnabled = false
         playBtn.addActionHandlers { sender in
             let videoController = PTPlayerViewController()
             if let url = URL(string: videoUrl) {
@@ -625,6 +627,7 @@ extension PTMediaBrowserCell {
     
     func createReloadButton() {
         reloadButton.isHidden = false
+        reloadButton.isUserInteractionEnabled = true
         bringSubviewToFront(reloadButton)
         playBtn.isHidden = true
         

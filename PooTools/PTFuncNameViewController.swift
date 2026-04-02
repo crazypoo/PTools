@@ -578,7 +578,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     model2.imageInfo = "123"
 
                     let model3 = PTMediaBrowserModel()
-                    model3.imageURL = "http://ss.esatr.com/storage/upload/video/20251010/758c757da75652cc6767eb0187050053b95c73f8.mp4"
+                    model3.imageURL = "https://imgservice.appsmartnet.com/bab1688/after/1770799498649A9178A4122E547D39B72A55A6950BE84_mmexport1749953776009 2.mp4"
                     model3.imageInfo = "MP4"
 
                     let model4 = PTMediaBrowserModel()
