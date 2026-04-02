@@ -67,7 +67,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     }()
     
     fileprivate lazy var bottomControl:PTMediaBrowserBottom = {
-        let view = PTMediaBrowserBottom(viewConfig: self.viewConfig)
+        let view = PTMediaBrowserBottom()
         switch self.viewConfig.actionType {
         case .Empty:
             view.moreActionButton.isHidden = true
@@ -88,8 +88,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                         self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
                     }
                 }
-            default:
-                break
+            default: break
             }
         }
         view.pageControlView.isHidden = !viewConfig.pageControlShow
@@ -107,9 +106,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         cConfig.collectionViewBehavior = .paging
         
         let collectionView = PTCollectionView(viewConfig: cConfig)
-        collectionView.registerClassCells(classs: [PTMediaBrowserCell.ID:PTMediaBrowserCell.self])
         collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTMediaBrowserCell {
+            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaBrowserCell {
                 let cellModel = self.mediaData[indexPath.row]
                 cell.dataModel = cellModel
                 cell.viewerDismissBlock = {
@@ -170,8 +168,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     switch endCell.currentCellType {
                     case .GIF:
                         endCell.imageView.stopAnimating()
-                    default:
-                        break
+                    default: break
                     }
                     
                     if self.viewConfig.pageControlShow {
@@ -197,8 +194,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                 switch endCell.currentCellType {
                 case .GIF:
                     endCell.imageView.startAnimating()
-                default:
-                    break
+                default: break
                 }
                 if !self.navControl.titleLabel.isHidden {
                     self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.mediaData.count)"
@@ -295,9 +291,10 @@ public class PTMediaBrowserController: PTBaseViewController {
             make.height.equalTo(CGFloat.kNavBarHeight_Total)
         }
         
+        let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
         bottomControl.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
+            make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing + BottomMoreHeight)
         }
                 
         PTGCDManager.gcdAfter(time: 0.35) {
@@ -346,7 +343,11 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
 
             var sections = [PTSection]()
-            let rows = self.mediaData.compactMap { PTRows(ID: PTMediaBrowserCell.ID,dataModel: $0) }
+            let rows = self.mediaData.compactMap {
+                let row = PTRows(dataModel: $0)
+                row.cellClass = PTMediaBrowserCell.self
+                return row
+            }
             let cellSection = PTSection(rows:rows)
             sections.append(cellSection)
             
@@ -379,8 +380,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             switch endCell.currentCellType {
             case .GIF:
                 endCell.imageView.stopAnimating()
-            default:
-                break
+            default: break
             }
             returnFrontVC()
         }
@@ -562,15 +562,8 @@ fileprivate extension PTMediaBrowserController {
     }
     
     @objc func save(image:UIImage, didFinishSavingWithError:NSError?,contextInfo:AnyObject) {
-            
-        var saveImageBool:Bool? = false
-        if didFinishSavingWithError != nil {
-            saveImageBool = false
-        } else {
-            saveImageBool = true
-        }
-        
-        viewSaveImageBlock?(saveImageBool!)
+        let saveImageBool:Bool = !(didFinishSavingWithError != nil)
+        viewSaveImageBlock?(saveImageBool)
     }
     
     func deleteImage() {
@@ -584,8 +577,7 @@ fileprivate extension PTMediaBrowserController {
                 switch currentImages.currentCellType {
                 case .GIF:
                     currentImages.imageView.stopAnimating()
-                default:
-                    break
+                default: break
                 }
                 if let findIndexRow = self.newCollectionView.collectionSectionDatas.first?.rows?[currentPageControlValue] {
                     self.newCollectionView.deleteRows([findIndexRow], from: 0)
@@ -642,9 +634,11 @@ fileprivate extension PTMediaBrowserController {
                     make.bottom.equalTo(self.bottomControl.snp.top)
                 }
         
+                let pageControlHeight = self.viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
+
                 self.bottomControl.snp.updateConstraints { make in
                     make.left.right.bottom.equalToSuperview()
-                    make.height.equalTo(self.heightForString(models.imageInfo) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10)
+                    make.height.equalTo(self.heightForString(models.imageInfo) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing)
                 }
         })
         """))
@@ -654,18 +648,18 @@ fileprivate extension PTMediaBrowserController {
     
     func updateBottom(models:PTMediaBrowserModel) {
               
-        var bottomH:CGFloat = 0
+        let pageControlHeight = self.viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
+        var bottomH:CGFloat = CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
         if models.imageInfo.stringIsEmpty() {
             bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
             switch viewConfig.actionType {
-            case .Empty:
-                bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+            case .Empty:break
             default:
-                bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10
+                bottomH += BottomMoreHeight
             }
         } else {
             if numberOfLines(models.imageInfo) > numberOfVisibleLines {
-                bottomH = heightForString(truncatedText(fullText:models.imageInfo) + viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+                bottomH = heightForString(truncatedText(fullText:models.imageInfo) + viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
                 bottomControl.setLabelAtt(att: labelMoreAtt(models: models))
             } else {
                 var textH:CGFloat = heightForString(models.imageInfo)
@@ -680,7 +674,7 @@ fileprivate extension PTMediaBrowserController {
                 """
 
                 bottomControl.setLabelAtt(att: atts)
-                bottomH = textH + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+                bottomH = textH + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
             }
         }
         
@@ -696,13 +690,12 @@ fileprivate extension PTMediaBrowserController {
     }
 
     func labelContentWidth() -> CGFloat {
-        var labelW:CGFloat = 0
+        var labelW:CGFloat = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
 
         switch viewConfig.actionType {
-        case .Empty:
-            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        case .Empty:break
         default:
-            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
+            labelW -= (ContentMoreSpacing - BottomMoreHeight)
         }
         return labelW
     }

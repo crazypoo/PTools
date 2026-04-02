@@ -14,6 +14,10 @@ import AttributedString
 let PageControlHeight:CGFloat = 20
 let PageControlBottomSpace:CGFloat = 5
 let MediaBrowserToolBarColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.4)
+let BottomTopSpacing:CGFloat = 10
+let BottomMoreHeight:CGFloat = 34
+let BottomItemSpacing:CGFloat = 5
+let ContentMoreSpacing:CGFloat = 10
 
 class PTMediaBrowserBottom: UIView {
     
@@ -67,11 +71,10 @@ class PTMediaBrowserBottom: UIView {
         return view
     }()
     
-    fileprivate var viewConfig:PTMediaBrowserConfig!
+    fileprivate var viewConfig = PTMediaBrowserConfig.share
     
-    init(viewConfig:PTMediaBrowserConfig) {
-        super.init(frame: .zero)
-        self.viewConfig = viewConfig
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         if #available(iOS 26.0, *) {
             backgroundColor = .clear
@@ -79,33 +82,49 @@ class PTMediaBrowserBottom: UIView {
             backgroundColor = MediaBrowserToolBarColor
         }
 
-        addSubviews([pageControlView, moreActionButton, titleLabel])
-        pageControlView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace)
-            make.height.equalTo(PageControlHeight)
+        var subs = [UIView]()
+        if viewConfig.pageControlShow {
+            subs = [pageControlView, moreActionButton, titleLabel]
+        } else {
+            subs = [moreActionButton, titleLabel]
+        }
+        addSubviews(subs)
+        if viewConfig.pageControlShow {
+            pageControlView.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace)
+                make.height.equalTo(PageControlHeight)
+            }
         }
         
         moreActionButton.snp.makeConstraints { make in
-            make.width.height.equalTo(34)
+            make.width.height.equalTo(BottomMoreHeight)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(10)
+            make.top.equalToSuperview().inset(BottomTopSpacing)
         }
         switch viewConfig.actionType {
         case .Empty:
             moreActionButton.isHidden = true
             titleLabel.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.bottom.equalTo(self.pageControlView.snp.top).offset(5)
+                if self.viewConfig.pageControlShow{
+                    make.bottom.equalTo(self.pageControlView.snp.top).offset(-BottomItemSpacing)
+                } else {
+                    make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+                }
                 make.top.equalTo(self.moreActionButton)
             }
         default:
             moreActionButton.isHidden = false
             titleLabel.snp.makeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.bottom.equalTo(self.pageControlView.snp.top).offset(5)
+                if self.viewConfig.pageControlShow{
+                    make.bottom.equalTo(self.pageControlView.snp.top).offset(-BottomItemSpacing)
+                } else {
+                    make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+                }
                 make.top.equalTo(self.moreActionButton)
-                make.right.equalTo(self.moreActionButton.snp.left).offset(-10)
+                make.right.equalTo(self.moreActionButton.snp.left).offset(-ContentMoreSpacing)
             }
         }
     }

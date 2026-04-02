@@ -591,6 +591,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     mediaConfig.pageControlOption = .snake
                     mediaConfig.imageLongTapAction = true
                     mediaConfig.dynamicBackground = true
+                    mediaConfig.pageControlShow = true
                     let browser = PTMediaBrowserController(mediaData: [model3,model1,model2,model4])
                     browser.mediasShow()
 //                    let nav = PTBaseNavControl(rootViewController: browser)
