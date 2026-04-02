@@ -436,7 +436,7 @@ public class PTCycleScrollView: UIView {
             return
         }
         let imagePath = self.imagePaths[currentIndex()]
-        if let videoPath = imagePath as? String, ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()),let player = cell.player {
+        if let videoPath = imagePath as? String, GlobalVideoExts.contains(videoPath.pathExtension.lowercased()),let player = cell.player {
             if player.rate != 0 {
                 floatingCallback(cell.playerLayer)
             } else {
@@ -794,7 +794,7 @@ extension PTCycleScrollView {
         let imagePath = imagePaths[itemIndex]
 
         if let videoPath = imagePath as? String,
-           ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()) {
+           GlobalVideoExts.contains(videoPath.pathExtension.lowercased()) {
             getVideoFrame(for: videoPath) { [weak self] image in
                 guard self != nil else { return }
                 cell.imageView.image = image ?? self?.defaultPlaceholderImage
@@ -827,7 +827,7 @@ extension PTCycleScrollView {
             return
         }
         let imagePath = self.imagePaths[currentIndex()]
-        if let videoPath = imagePath as? String, ["mp4", "mov"].contains(videoPath.pathExtension.lowercased()),let url = URL(string: cell.videoLink) {
+        if let videoPath = imagePath as? String, GlobalVideoExts.contains(videoPath.pathExtension.lowercased()),let url = URL(string: cell.videoLink) {
             cell.setPlayer(videoQ: url,playCallback: playCallback)
         } else {
             playCallback?(false)

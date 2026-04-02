@@ -21,7 +21,7 @@ import KTVHTTPCache
 class PTMediaBrowserCell: PTBaseNormalCell {
     static let ID = "PTMediaBrowserCell"
     
-    let videoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
+    private var loadIdentifier = UUID()
 
     var viewerDismissBlock:PTActionTask?
     var zoomTask:PTBoolTask?
@@ -33,6 +33,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
+    fileprivate var videoOriginalItem:Any?
     fileprivate var videoCacheURL:URL?
     
     private var hasSetupGesture = false
@@ -123,8 +124,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage( viewConfig.playButtonImage, for: .normal)
+        view.setImage(viewConfig.playButtonImage, for: .normal)
         view.imageView?.contentMode = .scaleAspectFill
+        view.addActionHandlers { sender in
+            self.videoPlay()
+        }
         return view
     }()
     
@@ -301,6 +305,10 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     func cellLoadData() {
         PTGCDManager.gcdMain {
+            let currentID = UUID()
+            self.loadIdentifier = currentID
+            guard self.loadIdentifier == currentID else { return }
+            
             self.showLoading()
             
             switch self.dataModel.imageURL {
@@ -309,9 +317,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             case let url as URL:
                 self.loadDataUrl(loadUrl: url.absoluteString.urlToUnicodeURLString() ?? "")
             case let avItem as AVPlayerItem:
+                self.videoOriginalItem = avItem
                 self.videoAVItem(avItem: avItem)
             case let avAsset as AVAsset:
                 let avPlayerItem = AVPlayerItem(asset: avAsset)
+                self.videoOriginalItem = avPlayerItem
                 self.videoAVItem(avItem: avPlayerItem)
             case let livePhotoTarget as PHLivePhoto:
                 self.currentCellType = .LivePhoto
@@ -338,7 +348,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     func loadDataUrl(loadUrl:String) {
         if !loadUrl.isEmpty {
-            if videoExts.contains(loadUrl.pathExtension.lowercased()) {
+            if GlobalVideoExts.contains(loadUrl.pathExtension.lowercased()) {
                 self.videoUrlLoad(url: loadUrl)
             } else {
                 if !loadUrl.stringIsEmpty() {
@@ -455,6 +465,7 @@ extension PTMediaBrowserCell {
 //MARK: Video handling logic
 extension PTMediaBrowserCell {
     func videoUrlLoad(url:String) {
+        self.videoOriginalItem = url
         imageView.image = UIImage()
         gifImage = nil
         reloadButton.isHidden = true
@@ -505,29 +516,38 @@ extension PTMediaBrowserCell {
         
         reloadButton.isHidden = true
         reloadButton.isUserInteractionEnabled = false
-        playBtn.addActionHandlers { sender in
-            let videoController = PTPlayerViewController()
-            if let url = URL(string: videoUrl) {
-                if let findLocal = self.videoCacheURL {
-                    videoController.videoPlayer = AVPlayer(url: findLocal)
+    }
+    
+    func videoPlay() {
+        let videoController = PTPlayerViewController()
+        switch self.videoOriginalItem {
+        case let videoURL as String:
+            if let findLocal = self.videoCacheURL {
+                videoController.videoPlayer = AVPlayer(url: findLocal)
+                self.videoPlayHandler?(videoController)
+            } else {
+                if let url = URL(string: videoURL) {
+#if POOTOOLS_VIDEOCACHE
+                if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
+                    let playerItem = AVPlayerItem(url: proxyURL)
+                    let player = AVPlayer(playerItem: playerItem)
+                    videoController.videoPlayer = player
                     self.videoPlayHandler?(videoController)
                 } else {
-#if POOTOOLS_VIDEOCACHE
-                    if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
-                        let playerItem = AVPlayerItem(url: proxyURL)
-                        let player = AVPlayer(playerItem: playerItem)
-                        videoController.videoPlayer = player
-                        self.videoPlayHandler?(videoController)
-                    } else {
-                        self.prepareVideoFunction(url: url, videoController: videoController)
-                    }
-#else
                     self.prepareVideoFunction(url: url, videoController: videoController)
-#endif
                 }
-            } else {
-                PTNSLogConsole("Video url error")
+#else
+                self.prepareVideoFunction(url: url, videoController: videoController)
+#endif
+                } else {
+                    PTNSLogConsole("Video url error")
+                }
             }
+        case let avItem as AVPlayerItem:
+            videoController.videoPlayer = AVPlayer(playerItem: avItem)
+            self.videoPlayHandler?(videoController)
+        default:
+            PTNSLogConsole("Video item error")
         }
     }
     
@@ -571,11 +591,8 @@ extension PTMediaBrowserCell {
                     if self.viewConfig.dynamicBackground {
                         self.backgroundImageView.image = image
                     }
-                    self.playBtn.addActionHandlers { sender in
-                        let videoController = PTPlayerViewController()
-                        videoController.videoPlayer = AVPlayer(playerItem: avItem)
-                        self.videoPlayHandler?(videoController)
-                    }
+                    self.playBtn.isHidden = false
+                    self.playBtn.isUserInteractionEnabled = true
                 } else {
                     self.playBtn.isHidden = true
                     self.playBtn.isUserInteractionEnabled = false

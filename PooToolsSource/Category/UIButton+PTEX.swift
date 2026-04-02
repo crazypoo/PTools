@@ -173,8 +173,6 @@ public extension UIButton {
 
         let loadID = UUID()
         ptLoadUUID = loadID
-
-        let videoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
         
         func isValid() -> Bool {
             return self.ptLoadUUID == loadID
@@ -231,7 +229,7 @@ public extension UIButton {
             let ext = url.pathExtension.lowercased()
             
             // 视频
-            if videoExts.contains(ext) {
+            if GlobalVideoExts.contains(ext) {
                 loadVideo(url: url)
                 return
             }

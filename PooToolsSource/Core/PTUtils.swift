@@ -47,6 +47,8 @@ import SwifterSwift
  pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
  */
 
+let GlobalVideoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
+
 @inline(__always) private func isIPhoneXSeries() -> Bool {
     var iPhoneXSeries = false
     if UIDevice.current.userInterfaceIdiom != .phone {

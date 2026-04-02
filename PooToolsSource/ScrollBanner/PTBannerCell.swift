@@ -45,12 +45,11 @@ public class PTBannerCell: PTBaseNormalCell {
     }
 
     public func configure(_ data: PTBannerModel) {
-        let videoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
         imageView.contentMode = data.imageViewContentMode
         if let url = data.media as? String,let urlString = url.urlToUnicodeURLString(),let mediaURL = URL(string: urlString) {
             let mediaReal = mediaURL.absoluteString
             let mediaEX =  mediaReal.pathExtension.lowercased()
-            if videoExts.contains(mediaEX) {
+            if GlobalVideoExts.contains(mediaEX) {
                 videoURL = mediaReal
                 playButton.isHidden = false
                 playButton.isUserInteractionEnabled = true

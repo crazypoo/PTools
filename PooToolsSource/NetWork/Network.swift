@@ -87,7 +87,7 @@ public enum NetWorkEnvironment : Int {
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
-public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>) -> ()
+public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<URL?>) -> ()
 public typealias FileDownloadFail = (_ error:Error?) -> ()
 
 public var PTBaseURLMode:NetWorkEnvironment {
@@ -1314,86 +1314,97 @@ public class Network: NSObject {
     }
 
     // 自定义 Session，支持总超时
-    private func makeDownloadSession() -> Session {
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = Network.share.downloadRequsetTime          // 请求超时时间
-        configuration.timeoutIntervalForResource = Network.share.downloadEndTime       // 下载资源最大耗时（秒）
-        return Session(configuration: configuration)
-    }
+    private lazy var downloadSession: Session = {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = Network.share.downloadRequsetTime
+        config.timeoutIntervalForResource = Network.share.downloadEndTime
+        config.httpMaximumConnectionsPerHost = 6   // 控制并发
+        return Session(configuration: config)
+    }()
+        
+    actor DownloadStore {
+        var tasks: [String: DownloadTask] = [:]
 
-    private class DownloadTask {
+        public func get(_ url: String) -> DownloadTask? {
+            tasks[url]
+        }
+
+        func set(_ url: String, task: DownloadTask) {
+            tasks[url] = task
+        }
+
+        func remove(_ url: String) {
+            tasks[url] = nil
+        }
+    }
+    private let store = DownloadStore()
+
+    final class DownloadTask {
         let url: String
         let destination: (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
-        var downloadRequest: DownloadRequest?
+
+        var request: DownloadRequest?
         var resumeData: Data?
 
-        var progressClosures: [FileDownloadProgress] = []
-        var successClosures: [FileDownloadSuccess] = []
-        var failClosures: [FileDownloadFail] = []
+        var progressHandlers: [FileDownloadProgress] = []
+        var successHandlers: [FileDownloadSuccess] = []
+        var failHandlers: [FileDownloadFail] = []
 
-        init(url: String, destination: @escaping (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
+        private var lastProgressTime: CFTimeInterval = 0
+
+        init(url: String,
+             destination: @escaping (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
             self.url = url
             self.destination = destination
         }
 
-        func start(queue: DispatchQueue? = DispatchQueue.main) {
-            let downloadSession = Network.share.makeDownloadSession()
-            if let resumeData = self.resumeData {
-                // 断点续传
-                downloadRequest = downloadSession.download(resumingWith: resumeData, to: destination)
+        func start(session: Session) {
+
+            if let data = resumeData {
+                request = session.download(resumingWith: data, to: destination)
             } else {
-                downloadRequest = downloadSession.download(url, to: destination)
+                request = session.download(url, to: destination)
             }
 
-            downloadRequest?.downloadProgress { [weak self] pro in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    for closure in self.progressClosures {
-                        closure(pro.completedUnitCount, pro.totalUnitCount, pro.fractionCompleted)
-                    }
+            // ✅ 降频 progress（防卡顿关键）
+            request?.downloadProgress { [weak self] p in
+                guard let self else { return }
+
+                let now = CACurrentMediaTime()
+                guard now - self.lastProgressTime > 0.1 else { return }
+                self.lastProgressTime = now
+
+                for cb in self.progressHandlers {
+                    cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted)
                 }
             }
 
-            downloadRequest?.responseData(queue: queue!, completionHandler: { [weak self] response in
-                guard let self = self else { return }
+            // ✅ 不用 responseData（避免大文件卡死）
+            request?.response { [weak self] resp in
+                guard let self else { return }
 
-                // 清理 resumeData
                 self.resumeData = nil
 
-                switch response.result {
-                case .success( _):
-                    DispatchQueue.main.async {
-                        for closure in self.successClosures { closure(response) }
-                    }
-                    Network.share.removeTask(self.url)
-                case .failure(let error):
-                    // 保存 resumeData
-                    self.resumeData = response.resumeData
-                    DispatchQueue.main.async {
-                        for closure in self.failClosures { closure(error) }
-                    }
+                if let error = resp.error {
+                    self.resumeData = resp.resumeData
+                    self.failHandlers.forEach { $0(error) }
+                } else {
+                    self.successHandlers.forEach { $0(resp) }
                 }
-            })
-        }
-        
-        func suspend() {
-            downloadRequest?.cancel { [weak self] data in
-                self?.resumeData = data
-                self?.downloadRequest = nil
             }
         }
 
-        func resume() {
-            start()
+        func suspend() {
+            request?.cancel { [weak self] data in
+                self?.resumeData = data
+                self?.request = nil
+            }
         }
 
         func cancel() {
-            downloadRequest?.cancel()
+            request?.cancel()
         }
     }
-
-    private var tasks: [String: DownloadTask] = [:]
-    private let lock = NSLock()
     
     // MARK: - 下载入口
     public func download(fileUrl: String,
@@ -1412,27 +1423,23 @@ public class Network: NSObject {
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories])
         }
 
-        queue?.async {
-            self.lock.lock()
-            if let task = self.tasks[fileUrl] {
-                self.lock.unlock()
-                // 已存在任务，添加闭包
-                if let p = progress { task.progressClosures.append(p) }
-                if let s = success { task.successClosures.append(s) }
-                if let f = fail { task.failClosures.append(f) }
+        Task {
+            if let existing = await store.get(fileUrl) {
+                if let p = progress { existing.progressHandlers.append(p) }
+                if let s = success { existing.successHandlers.append(s) }
+                if let f = fail { existing.failHandlers.append(f) }
                 return
             }
-            self.lock.unlock()
-            // 新任务
-            let task = DownloadTask(url: fileUrl, destination: dest)
-            if let p = progress { task.progressClosures.append(p) }
-            if let s = success { task.successClosures.append(s) }
-            if let f = fail { task.failClosures.append(f) }
 
-            self.lock.lock()
-            self.tasks[fileUrl] = task
-            self.lock.unlock()
-            task.start(queue: queue)
+            let task = DownloadTask(url: fileUrl, destination: dest)
+
+            if let p = progress { task.progressHandlers.append(p) }
+            if let s = success { task.successHandlers.append(s) }
+            if let f = fail { task.failHandlers.append(f) }
+
+            await store.set(fileUrl, task: task)
+
+            task.start(session: downloadSession)
         }
     }
 
@@ -1449,31 +1456,25 @@ public class Network: NSObject {
 
     // MARK: - 暂停 / 恢复 / 取消
     public func suspend(fileUrl: String) {
-        self.lock.lock()
-        let task = self.tasks[fileUrl]
-        self.lock.unlock()
-        task?.suspend()
+        Task {
+            await store.get(fileUrl)?.suspend()
+        }
     }
 
     public func resume(fileUrl: String) {
-        self.lock.lock()
-        self.tasks[fileUrl]?.resume()
-        self.lock.unlock()
+        Task {
+            if let task = await store.get(fileUrl) {
+                task.start(session: session)
+            }
+        }
     }
 
     public func cancel(fileUrl: String) {
-        self.lock.lock()
-        let task = self.tasks[fileUrl]
-        self.tasks[fileUrl] = nil
-        self.lock.unlock()
-        
-        task?.cancel()
-    }
-    
-    public func removeTask(_ url: String) {
-        self.lock.lock()
-        self.tasks[url] = nil
-        self.lock.unlock()
+        Task {
+            let task = await store.get(fileUrl)
+            await store.remove(fileUrl)
+            task?.cancel()
+        }
     }
 }
 
