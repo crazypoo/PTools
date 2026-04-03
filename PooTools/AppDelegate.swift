@@ -104,6 +104,9 @@ class AppDelegate: PTAppWindowsDelegate {
 
         IQKeyboardToolbarManager.shared.isEnabled = true
         
+        PTAppBaseConfig.share.tabSelectedMetail = false
+        PTAppBaseConfig.share.tabSelectedMetailColor = .clear
+        
         registerRotation()
 
 #if POOTOOLS_ROUTER

@@ -20,7 +20,7 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         let sideContent = PTSideController()
         let homeVC = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
         
-        let home = PTTabBarItemConfig(title: "首页", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: UIImage(named: "DemoImage")!),viewController: homeVC)
+        let home = PTTabBarItemConfig(title: "", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: UIImage(named: "DemoImage")!),viewController: homeVC)
         
         let yoVC = PTTabBarTestOneViewController()
         let yoNav = PTBaseNavControl(rootViewController: yoVC)

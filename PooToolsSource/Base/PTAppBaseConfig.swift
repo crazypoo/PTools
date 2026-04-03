@@ -117,4 +117,5 @@ public class PTAppBaseConfig: NSObject {
     public var tabSelectedMetail:Bool = true
     public var tabSelectedMetailColor:UIColor = .lightGray
     public var tabSelectedMetailLRSpacing:CGFloat = 5
+    public var tabbarMetailMode:Bool = false
 }
