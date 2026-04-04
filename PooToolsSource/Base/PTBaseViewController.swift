@@ -86,9 +86,7 @@ open class PTBaseViewController: UIViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-        applyNavigationBarStyle()
         setOtherToControlBar()
-        navViewSet()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -369,13 +367,29 @@ open class PTBaseViewController: UIViewController {
             setupCustomNavigationBar(nav, isGradient: true, type: type, gradientColors: colors,fontColor: .white)
             changeStatusBar(type: .Dark)
         case .solid(let color):
-            setupCustomNavigationBar(nav, isGradient: false, barColor: color,fontColor: .black)
+            setupCustomNavigationBar(nav, isGradient: false, barColor: color,fontColor: PTAppBaseConfig.share.navTitleTextColor)
             changeStatusBar(type: .Auto)
         case .transparent:
-            setupCustomNavigationBar(nav, isGradient: false, barColor: .clear,fontColor: .black)
+            setupCustomNavigationBar(nav, isGradient: false, barColor: .clear,fontColor: PTAppBaseConfig.share.navTitleTextColor)
             changeStatusBar(type: .Auto)
         case .custom(let config):
             config(nav.navigationBar)
+        }
+        
+        if nav.viewControllers.firstIndex(of: self) ?? 0 > 0 {
+            // 子类可以在 preferredNavigationBarStyle 控制颜色，这里只决定使用哪个 back image
+            var imageName:UIImage
+            switch preferredNavigationBarStyle() {
+            case .gradient(_, _):
+                if #available(iOS 26.0, *) {
+                    imageName = PTAppBaseConfig.share.navGradientBack26Image
+                } else {
+                    imageName = PTAppBaseConfig.share.navGradientBackImage
+                }
+            default:
+                imageName = (PTDarkModeOption.isLight ? PTAppBaseConfig.share.viewControllerBackItemImage : PTAppBaseConfig.share.viewControllerBackDarkItemImage)
+            }
+            setCustomBackButton(image: imageName)
         }
     }
 
@@ -469,7 +483,7 @@ open class PTBaseViewController: UIViewController {
                 setNavTitleFont(nav,color: .white)
             default:
                 imageName = (PTDarkModeOption.isLight ? PTAppBaseConfig.share.viewControllerBackItemImage : PTAppBaseConfig.share.viewControllerBackDarkItemImage)
-                setNavTitleFont(nav,color: .black)
+                setNavTitleFont(nav,color: PTAppBaseConfig.share.navTitleTextColor)
             }
             setCustomBackButton(image: imageName)
         }

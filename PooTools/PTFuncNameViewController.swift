@@ -91,6 +91,10 @@ class YDSWhiteDecorationView: UICollectionReusableView {
 
 class PTFuncNameViewController: PTBaseViewController {
 
+    open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.random)
+    }
+
     var cacheSize = ""
     
     lazy var currentSelectedLanguage : String = {
