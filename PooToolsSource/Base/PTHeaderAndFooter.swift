@@ -22,7 +22,7 @@ public class PTFusionHeader: PTBaseCollectionReusableView,PTSupplementaryRegiste
     public var switchValue:Bool? {
         didSet {
             if let findValue = switchValue {
-                switch dataContent.switchView {
+                switch dataContent.activeSwitch {
                 case let valueView as PTSwitch:
                     valueView.isOn = findValue
                 case let valueView as UISwitch:

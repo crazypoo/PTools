@@ -42,7 +42,13 @@ public final class PTFusionContentView: UIView {
     private let rightIcon = UIImageView()
     private let titleLabel = UILabel()
     private let contentLabel = UILabel()
-    public lazy var switchView = UIControl()
+    private lazy var systemSwitch = UISwitch()
+    private let customSwitch = PTSwitch()
+    public var activeSwitch: UIControl? {
+        if !systemSwitch.isHidden { return systemSwitch }
+        if !customSwitch.isHidden { return customSwitch }
+        return nil
+    }
     public let moreButton = PTActionLayoutButton()
     private let disclosure = UIImageView()
     
@@ -119,7 +125,7 @@ private extension PTFusionContentView {
     
     func setupUI() {
         
-        addSubviews([leftSpacingView, rightSpacingView, topLineView, bottomLineView,topImaginaryLineView, bottomImaginaryLineView, leftIcon, rightIcon, titleLabel, contentLabel, switchView, moreButton, disclosure])
+        addSubviews([leftSpacingView, rightSpacingView, topLineView, bottomLineView,topImaginaryLineView, bottomImaginaryLineView, leftIcon, rightIcon, titleLabel, contentLabel, systemSwitch,customSwitch, moreButton, disclosure])
         
         titleLabel.numberOfLines = 0
         contentLabel.numberOfLines = 0
@@ -187,7 +193,12 @@ private extension PTFusionContentView {
         }
         
         // switch
-        switchView.snp.makeConstraints {
+        systemSwitch.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalToSuperview().inset(16)
+        }
+        
+        customSwitch.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.right.equalToSuperview().inset(16)
             $0.size.equalTo(CGSize.SwitchSize)
@@ -213,7 +224,7 @@ extension PTFusionContentView {
     public func configure(model: PTFusionCellModel) {
         
         let config = makeLayoutConfig(model)
-        
+        applySwitch(model)
         applyLayout(config,cellModel: model)
         applyData(model)
     }
@@ -237,48 +248,35 @@ extension PTFusionContentView {
     }
     
     private func applyLayout(_ config: PTFusionLayoutConfig,cellModel:PTFusionCellModel) {
-        
+        layoutIfNeeded()
         // 显示控制（不再 remove）
         leftIcon.isHidden = !config.showLeftIcon
         rightIcon.isHidden = !config.showRightIcon
         titleLabel.isHidden = !config.showTitle
         contentLabel.isHidden = !config.showContent
-        switchView.removeFromSuperview()
-        var cellType = PTFusionShowAccessoryType.SwitchType.System
         switch cellModel.accessoryType {
         case .Switch(let value):
-            cellType = value
-        default:
-            cellType = .System
-        }
-        switchView = cellSwitchSet(cellModel, switchType: cellType)
-        addSubview(switchView)
-        switchView.snp.makeConstraints {
-            $0.right.equalToSuperview().inset(cellModel.rightSpace)
-            $0.centerY.equalToSuperview()
-            switch cellType {
+            switch value {
             case .Framework:
-                $0.size.equalTo(CGSize(width: cellModel.switchControlWidth, height: CGSize.SwitchSize.height))
-            case .System:
-                $0.size.equalTo(CGSize.SwitchSize)
+                customSwitch.snp.updateConstraints {
+                    $0.right.equalToSuperview().inset(cellModel.rightSpace)
+                    $0.size.equalTo(CGSize(width: cellModel.switchControlWidth, height: CGSize.SwitchSize.height))
+                }
+            default:break
             }
+        default:break
         }
-
         switch config.accessory {
         case .Switch:
-            switchView.isHidden = false
             disclosure.isHidden = true
             moreButton.isHidden = true
         case .DisclosureIndicator:
-            switchView.isHidden = true
             disclosure.isHidden = false
             moreButton.isHidden = true
         case .More:
-            switchView.isHidden = true
             disclosure.isHidden = true
             moreButton.isHidden = false
         case .NoneAccessoryView:
-            switchView.isHidden = true
             disclosure.isHidden = true
             moreButton.isHidden = true
         }
@@ -291,7 +289,6 @@ extension PTFusionContentView {
         moreButton.setTitle(cellModel.moreString, state: .normal)
         moreButton.setImage(cellModel.moreDisclosureIndicator, state: .normal)
         
-        layoutSubviews()
         var moreWith:CGFloat = 0
         switch cellModel.moreLayoutStyle {
         case .leftImageRightTitle,.leftTitleRightImage:
@@ -327,7 +324,13 @@ extension PTFusionContentView {
         // 动态右边约束目标
         let targetView: UIView = {
             switch config.accessory {
-            case .Switch: return switchView
+            case .Switch(let value):
+                switch value {
+                case .Framework:
+                    return customSwitch
+                case .System:
+                    return systemSwitch
+                }
             case .DisclosureIndicator: return disclosure
             case .More: return moreButton
             case .NoneAccessoryView: return rightSpacingView
@@ -391,7 +394,13 @@ extension PTFusionContentView {
                 return rightIcon
             } else {
                 switch config.accessory {
-                case .Switch: return switchView
+                case .Switch(let value):
+                    switch value {
+                    case .Framework:
+                        return customSwitch
+                    case .System:
+                        return systemSwitch
+                    }
                 case .DisclosureIndicator: return disclosure
                 case .More: return moreButton
                 case .NoneAccessoryView: return rightSpacingView
@@ -399,7 +408,7 @@ extension PTFusionContentView {
             }
         }()
         
-        contentLabel.snp.makeConstraints {
+        contentLabel.snp.remakeConstraints {
             $0.left.equalTo(titleLabel.snp.right).offset(8)
             $0.top.bottom.equalToSuperview()
             $0.right.lessThanOrEqualTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
@@ -455,6 +464,40 @@ extension PTFusionContentView {
         leftIcon.loadImage(contentData: model.leftImage as Any,iCloudDocumentName: model.iCloudDocument)
         rightIcon.loadImage(contentData: model.contentIcon as Any,iCloudDocumentName: model.iCloudDocument)
         disclosure.loadImage(contentData: model.disclosureIndicatorImage as Any,iCloudDocumentName: model.iCloudDocument)
+    }
+    
+    private func applySwitch(_ model: PTFusionCellModel) {
+        
+        // 默认隐藏
+        systemSwitch.isHidden = true
+        customSwitch.isHidden = true
+        
+        guard case let .Switch(type) = model.accessoryType else {
+            return
+        }
+                
+        switch type {
+        case .System:
+            systemSwitch.onTintColor = model.switchOnTinColor
+            systemSwitch.thumbTintColor = model.switchThumbTintColor
+            systemSwitch.tintColor = model.switchTintColor
+            systemSwitch.backgroundColor = model.switchBackgroundColor
+            systemSwitch.addSwitchAction(handler: { sender in
+                self.switchValueChangeBlock?(model.name,sender)
+            })
+            customSwitch.isHidden = true
+            systemSwitch.isHidden = false
+        case .Framework:
+            customSwitch.onTintColor = model.switchOnTinColor
+            customSwitch.thumbColor = model.switchThumbTintColor
+            customSwitch.switchTintColor = model.switchTintColor
+            customSwitch.backgroundColor = model.switchBackgroundColor
+            customSwitch.valueChangeCallBack = { value in
+                self.switchValueChangeBlock?(model.name,self.customSwitch)
+            }
+            systemSwitch.isHidden = true
+            customSwitch.isHidden = false
+        }
     }
     
     private func titleLabelAtt(_ model: PTFusionCellModel) -> ASAttributedString {
@@ -520,7 +563,7 @@ open class PTFusionCell: PTBaseNormalCell {
     open var switchValue: Bool? {
         didSet {
             if let findValue = switchValue {
-                switch dataContent.switchView {
+                switch dataContent.activeSwitch {
                 case let valueView as PTSwitch:
                     valueView.isOn = findValue
                 case let valueView as UISwitch:
@@ -575,7 +618,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     open var switchValue: Bool? {
         didSet {
             if let findValue = switchValue {
-                switch dataContent.switchView {
+                switch dataContent.activeSwitch {
                 case let valueView as PTSwitch:
                     valueView.isOn = findValue
                 case let valueView as UISwitch:
