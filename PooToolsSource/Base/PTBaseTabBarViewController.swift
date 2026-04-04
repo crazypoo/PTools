@@ -152,6 +152,11 @@ extension PTBaseTabBarViewController: UINavigationControllerDelegate {
             if context.isCancelled {
                 guard let fromVC = context.viewController(forKey: .from) else { return }
                 self.updateTabBar(for: navigationController, to: fromVC, animated: false)
+            } else {
+                // ✅ 最终状态（关键，解决 popToRoot）
+                if let toVC = context.viewController(forKey: .to) {
+                    self.updateTabBar(for: navigationController, to: toVC, animated: false)
+                }
             }
         })
     }
@@ -160,8 +165,8 @@ extension PTBaseTabBarViewController: UINavigationControllerDelegate {
                               to viewController: UIViewController,
                               animated: Bool) {
         
-        let isRoot = navigationController.viewControllers.first == viewController
-        setTabBar(hidden: !isRoot, animated: animated)
+        let hidden = viewController.pt_prefersTabBarHidden
+        setTabBar(hidden: hidden, animated: animated)
     }
     
     private func setTabBar(hidden: Bool, animated: Bool) {
