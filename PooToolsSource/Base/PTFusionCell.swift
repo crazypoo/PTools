@@ -12,7 +12,7 @@ import AttributedString
 import SwifterSwift
 
 public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UIControl) -> Void
-public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:UIButton) -> Void
+public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:PTActionLayoutButton) -> Void
 
 fileprivate extension UIView {
     /// 绘制简单横线
@@ -24,987 +24,489 @@ fileprivate extension UIView {
     }
 }
 
-@objcMembers
-public class PTFusionCellContent:UIView {
-    public static let ContentIconHeight:CGFloat = CGFloat.ScaleW(w: 64)
+public struct PTFusionLayoutConfig {
+    let showLeftIcon: Bool
+    let showRightIcon: Bool
+    let showTitle: Bool
+    let showContent: Bool
+    let accessory: PTFusionShowAccessoryType
+}
+
+public final class PTFusionContentView: UIView {
+    
     public var switchValueChangeBlock:PTCellSwitchBlock?
 
-    enum PTFusionContentCellType {
-        case Name
-        case NameContent
-        case Content
-        case None
-    }
+    // MARK: - View Pool（一次创建）
     
-    enum PTFusionCellImageType {
-        case OnlyLeftImage
-        case OnlyRightImage
-        case BothImage(type:PTFusionContentCellType)
-        case LeftImageContent(type:PTFusionContentCellType)
-        case RightImageContent(type:PTFusionContentCellType)
-        case None(type:PTFusionContentCellType)
-    }
+    private let leftIcon = UIImageView()
+    private let rightIcon = UIImageView()
+    private let titleLabel = UILabel()
+    private let contentLabel = UILabel()
+    public lazy var switchView = UIControl()
+    public let moreButton = PTActionLayoutButton()
+    private let disclosure = UIImageView()
     
-    enum PTFusionCellAccessoryView {
-        case Switch(type:PTFusionCellImageType)
-        case DisclosureIndicator(type:PTFusionCellImageType)
-        case NoneAccessoryView(type:PTFusionCellImageType)
-        case More(type:PTFusionCellImageType)
-        case Error
-    }
-    
-    public var cellModel:PTFusionCellModel? {
-        didSet {
-            if let model = cellModel {
-                self.loadCellData(cellModel: model)
-            } else {
-                self.removeSubviews()
-            }
-        }
-    }
-    
-    func loadCellData(cellModel:PTFusionCellModel) {
-        switch cellModel.accessoryType {
-        case .Switch:
-            if let _ = self.accessV {
-                self.accessV?.removeFromSuperview()
-                self.accessV = nil
-            }
-            if let _ = self.sectionMore {
-                self.sectionMore?.removeFromSuperview()
-                self.sectionMore = nil
-            }
-            let switchHeight = cellModel.switchControlWidth * (31 / 51)
-            let rightSpacing:CGFloat = cellModel.rightSpace
-            
-            if let valueSwitch = self.valueSwitch {
-                switchDataSet(switchControl: valueSwitch)
-                valueSwitch.snp.remakeConstraints { make in
-                    if #available(iOS 26.0, *) {} else {
-                        make.width.equalTo(cellModel.switchControlWidth)
-                        make.height.equalTo(switchHeight)
-                    }
-                    make.centerY.equalToSuperview()
-                    make.right.equalToSuperview().inset(rightSpacing)
-                }
-            } else {
-                valueSwitch = setValueSwitch()
-                switchDataSet(switchControl: valueSwitch!)
-                if let ptSwitch = valueSwitch as? PTSwitch {
-                    ptSwitch.valueChangeCallBack = { value in
-                        self.switchValueChangeBlock?(cellModel.name,ptSwitch)
-                    }
-                } else if let normal = valueSwitch as? UISwitch {
-                    normal.addSwitchAction { sender in
-                        self.switchValueChangeBlock?(cellModel.name,sender)
-                    }
-                }                
-                addSubview(valueSwitch!)
-                valueSwitch!.snp.makeConstraints { (make) in
-                    if #available(iOS 26.0, *) {} else {
-                        make.width.equalTo(cellModel.switchControlWidth)
-                        make.height.equalTo(switchHeight)
-                    }
-                    make.centerY.equalToSuperview()
-                    make.right.equalToSuperview().inset(rightSpacing)
-                }
-            }
-        case .DisclosureIndicator:
-            if let _ = self.valueSwitch {
-                valueSwitch?.removeFromSuperview()
-                valueSwitch = nil
-            }
-            if let _ = self.sectionMore {
-                self.sectionMore?.removeFromSuperview()
-                self.sectionMore = nil
-            }
-            
-            if let access = self.accessV {
-                access.loadImage(contentData: cellModel.disclosureIndicatorImage as Any,iCloudDocumentName: cellModel.iCloudDocument)
-                access.snp.remakeConstraints { make in
-                    make.size.equalTo(cellModel.moreDisclosureIndicatorSize)
-                    make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    make.centerY.equalToSuperview()
-                }
-            } else {
-                accessV = setAccessV()
-                addSubview(accessV!)
-                accessV!.snp.makeConstraints { make in
-                    make.size.equalTo(cellModel.moreDisclosureIndicatorSize)
-                    make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    make.centerY.equalToSuperview()
-                }
-                accessV!.loadImage(contentData: cellModel.disclosureIndicatorImage as Any,iCloudDocumentName: cellModel.iCloudDocument)
-            }
-        case .More:
-            if let _ = self.accessV {
-                self.accessV?.removeFromSuperview()
-                self.accessV = nil
-            }
-            if let _ = self.valueSwitch {
-                valueSwitch?.removeFromSuperview()
-                valueSwitch = nil
-            }
-            
-            if let _ = self.sectionMore {
-            } else {
-                sectionMore = setSectionMore()
-                addSubview(sectionMore!)
-            }
-            
-            var moreWith:CGFloat = 0
-            let moreStringWidth = UIView.sizeFor(string: cellModel.moreString, font: cellModel.moreFont, height: height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)).width
-            if let moreDis = cellModel.moreDisclosureIndicator,!cellModel.moreDisclosureIndicator.isNullOrEmpty() && !cellModel.moreString.stringIsEmpty() {
-                //两个都有
-                Task {
-                    let result = await PTLoadImageFunction.loadImage(contentData: moreDis,iCloudDocumentName: cellModel.iCloudDocument)
-                    self.sectionMore!.normalTitleFont = cellModel.moreFont
-                    self.sectionMore!.normalTitle = cellModel.moreString
-                    self.sectionMore!.normalTitleColor = cellModel.moreColor
-                    self.sectionMore!.midSpacing = cellModel.moreDisclosureIndicatorSpace
-                    self.sectionMore!.imageSize = cellModel.moreDisclosureIndicatorSize
-                    self.sectionMore!.layoutStyle = cellModel.moreLayoutStyle
-                    if (result.allImages?.count ?? 0) > 1 {
-                        self.sectionMore!.normalImage = UIImage.animatedImage(with: result.allImages!, duration: result.loadTime)
-                    } else if (result.allImages?.count ?? 0) == 1 {
-                        self.sectionMore!.normalImage = result.firstImage
-                    }
-                    
-                    switch cellModel.moreLayoutStyle {
-                    case .leftImageRightTitle,.leftTitleRightImage:
-                        moreWith = cellModel.moreDisclosureIndicatorSize.width + cellModel.moreDisclosureIndicatorSpace + moreStringWidth + 5
-                    case .upImageDownTitle,.upTitleDownImage:
-                        if moreStringWidth > cellModel.moreDisclosureIndicatorSize.width {
-                            moreWith = moreStringWidth + 5
-                        } else {
-                            moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
-                        }
-                    case .title:
-                        moreWith = moreStringWidth + 5
-                    case .image:
-                        moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
-                    }
-                    self.sectionMore!.snp.makeConstraints { make in
-                        make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                        make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                        make.right.equalToSuperview().inset(cellModel.rightSpace)
-                        make.centerY.equalToSuperview()
-                        make.width.equalTo(moreWith)
-                    }
-                }
-            } else if cellModel.moreDisclosureIndicator.isNullOrEmpty() && !cellModel.moreString.stringIsEmpty() {
-                //没图片
-                sectionMore!.normalTitleFont = cellModel.moreFont
-                sectionMore!.normalTitle = cellModel.moreString
-                sectionMore!.normalTitleColor = cellModel.moreColor
-                sectionMore!.midSpacing = 0
-                sectionMore!.imageSize = .zero
-                sectionMore!.layoutStyle = cellModel.moreLayoutStyle
-                moreWith = moreStringWidth + 5
-                sectionMore!.snp.makeConstraints { make in
-                    make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                    make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                    make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    make.centerY.equalToSuperview()
-                    make.width.equalTo(moreWith)
-                }
-            } else if let moreDis = cellModel.moreDisclosureIndicator,!cellModel.moreDisclosureIndicator.isNullOrEmpty(), cellModel.moreString.stringIsEmpty() {
-                //没字
-                Task {
-                    let result = await PTLoadImageFunction.loadImage(contentData: moreDis,iCloudDocumentName: cellModel.iCloudDocument)
-                    self.sectionMore!.midSpacing = 0
-                    self.sectionMore!.imageSize = cellModel.moreDisclosureIndicatorSize
-                    self.sectionMore!.layoutStyle = cellModel.moreLayoutStyle
-                    if (result.allImages?.count ?? 0) > 1 {
-                        self.sectionMore!.normalImage = UIImage.animatedImage(with: result.allImages!, duration: result.loadTime)
-                    } else if (result.allImages?.count ?? 0) == 1 {
-                        self.sectionMore!.normalImage = result.firstImage
-                    }
-                    moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
-                    self.sectionMore!.snp.makeConstraints { make in
-                        make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                        make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                        make.right.equalToSuperview().inset(cellModel.rightSpace)
-                        make.centerY.equalToSuperview()
-                        make.width.equalTo(moreWith)
-                    }
-                }
-            }
+    private let leftSpacingView = UIView()
+    private let rightSpacingView = UIView()
 
-        case .NoneAccessoryView:
-            if let _ = self.accessV {
-                self.accessV?.removeFromSuperview()
-                self.accessV = nil
-            }
-            if let _ = self.valueSwitch {
-                valueSwitch?.removeFromSuperview()
-                valueSwitch = nil
-            }
-            if let _ = self.sectionMore {
-                self.sectionMore?.removeFromSuperview()
-                self.sectionMore = nil
-            }
-        }
-        
-        accessoryViewType(type: cellModel.accessoryType) { cellType in
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.setLeftIconView(cellType: cellType,cellModel:cellModel)
-                self.setRightIconView(cellType: cellType,cellModel:cellModel)
-                self.setTitleLabel(cellType: cellType,cellModel:cellModel)
-                self.setRightContent(cellType: cellType,cellModel:cellModel)
-                self.setLine(cellType: cellType,cellModel:cellModel)
-                
-                PTGCDManager.gcdMain {
-                    if cellModel.conrner != [] {
-                        self.viewCornerRectCorner(cornerRadii: cellModel.cellCorner, corner: cellModel.conrner)
-                    } else {
-                        self.viewCornerRectCorner(cornerRadii: 0, corner: [.allCorners])
-                    }
-                }
-            }
-        }
-    }
-    
-    fileprivate var nameTitle: UILabel?
-    fileprivate func setNameTitle() -> UILabel {
-        let view = UILabel()
-        view.numberOfLines = 0
-        return view
-    }
-    
-    fileprivate var accessV: UIImageView?
-    fileprivate func setAccessV() -> UIImageView {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        return view
-    }
-    
-    public var valueSwitch: UIControl?
-    fileprivate func setValueSwitch() -> UIControl {
-        if #available(iOS 26.0, *) {
-            let switchV = UISwitch()
-            return switchV
-        } else {
-            let switchV = PTSwitch()
-            return switchV
-        }
-    }
-    
-    fileprivate func switchDataSet(switchControl:UIControl) {
-        if let currentCellModel = cellModel {
-            if let ptSwitch = switchControl as? PTSwitch {
-                ptSwitch.onTintColor = currentCellModel.switchOnTinColor
-                ptSwitch.thumbColor = currentCellModel.switchThumbTintColor
-                ptSwitch.switchTintColor = currentCellModel.switchTintColor
-                ptSwitch.backgroundColor = currentCellModel.switchBackgroundColor
-            } else if let iOSSwitch = switchControl as? UISwitch {
-                iOSSwitch.onTintColor = currentCellModel.switchOnTinColor
-                iOSSwitch.thumbTintColor = currentCellModel.switchThumbTintColor
-                iOSSwitch.tintColor = currentCellModel.switchTintColor
-                iOSSwitch.backgroundColor = currentCellModel.switchBackgroundColor
-            }
-        }
-    }
-    
-    var contentLabel: UILabel?
-    fileprivate func setContentLabel() -> UILabel {
-        let view = UILabel()
-        view.numberOfLines = 0
-        return view
-    }
-    
-    var cellIcon: UIImageView?
-    fileprivate func setCellIcon() -> UIImageView {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        return view
-    }
-    
-    public var sectionMore:PTLayoutButton?
-    fileprivate func setSectionMore() -> PTLayoutButton {
-        let view = PTLayoutButton()
-        view.isUserInteractionEnabled = true
-        return view
-    }
-    
-    fileprivate var contentButtonLabel: PTLayoutButton?
-    fileprivate func setContentButtonLabel() -> PTLayoutButton {
-        let view = PTLayoutButton()
-        view.titleLabel?.numberOfLines = 0
-        view.layoutStyle = .leftImageRightTitle
-        view.isUserInteractionEnabled = false
-        return view
-    }
-        
     public lazy var topLineView: UIView = {
         let view = drawLine()
-        view.backgroundColor = self.cellModel!.topLineColor
+        view.isHidden = true
         return view
     }()
-    public lazy var lineView: UIView = {
+    public lazy var bottomLineView: UIView = {
         let view = drawLine()
-        view.backgroundColor = self.cellModel!.bottomLineColor
+        view.isHidden = true
         return view
     }()
     
     public lazy var topImaginaryLineView: PTImaginaryLineView = {
         let view = PTImaginaryLineView()
-        view.lineColor = self.cellModel!.topLineColor
+        view.isHidden = true
         return view
     }()
-    public lazy var imaginaryLineView: PTImaginaryLineView = {
+    public lazy var bottomImaginaryLineView: PTImaginaryLineView = {
         let view = PTImaginaryLineView()
-        view.lineColor = self.cellModel!.bottomLineColor
+        view.isHidden = true
         return view
     }()
+
+    // MARK: - Constraints（缓存）
     
-    fileprivate var cellContentIcon: UIImageView?
-    fileprivate func setCellContentIcon() -> UIImageView {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        return view
-    }
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        isUserInteractionEnabled = true
-    }
+    private var rightAnchorConstraint: Constraint?
         
+    // MARK: - Init
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError()
+    }
+}
+
+private extension PTFusionContentView {
+    
+    func cellSwitchSet(_ cellModel:PTFusionCellModel,switchType:PTFusionShowAccessoryType.SwitchType) -> UIControl {
+        switch switchType {
+        case .Framework:
+            let view = PTSwitch()
+            view.onTintColor = cellModel.switchOnTinColor
+            view.thumbColor = cellModel.switchThumbTintColor
+            view.switchTintColor = cellModel.switchTintColor
+            view.backgroundColor = cellModel.switchBackgroundColor
+            return view
+        case .System:
+            if #available(iOS 26.0, *) {
+                let view = UISwitch()
+                view.onTintColor = cellModel.switchOnTinColor
+                view.thumbTintColor = cellModel.switchThumbTintColor
+                view.tintColor = cellModel.switchTintColor
+                view.backgroundColor = cellModel.switchBackgroundColor
+                return view
+            } else {
+                let view = PTSwitch()
+                view.onTintColor = cellModel.switchOnTinColor
+                view.thumbColor = cellModel.switchThumbTintColor
+                view.switchTintColor = cellModel.switchTintColor
+                view.backgroundColor = cellModel.switchBackgroundColor
+                return view
+            }
+        }
     }
     
-    func accessoryViewType(type: PTFusionShowAccessoryType, finish: (PTFusionCellAccessoryView) -> Void) {
-        let hasLeftImage = cellModel?.leftImage != nil
-        let hasContentIcon = cellModel?.contentIcon != nil
-        let hasNameOrDescOrAttr = !(cellModel?.name.stringIsEmpty() ?? true) || !(cellModel?.desc.stringIsEmpty() ?? true) || cellModel?.nameAttr != nil
-        let hasContentOrAttr = !(cellModel?.content.stringIsEmpty() ?? true) || cellModel?.contentAttr != nil
+    func setupUI() {
+        
+        addSubviews([leftSpacingView, rightSpacingView, topLineView, bottomLineView,topImaginaryLineView, bottomImaginaryLineView, leftIcon, rightIcon, titleLabel, contentLabel, switchView, moreButton, disclosure])
+        
+        titleLabel.numberOfLines = 0
+        contentLabel.numberOfLines = 0
+        
+        leftSpacingView.snp.makeConstraints { make in
+            make.left.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(0)
+        }
+        
+        rightSpacingView.snp.makeConstraints { make in
+            make.right.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(0)
+        }
+        
+        topLineView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.left.equalToSuperview().inset(0)
+            make.right.equalToSuperview().inset(0)
+            make.height.equalTo(0)
+        }
+        
+        bottomLineView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(0)
+            make.right.equalToSuperview().inset(0)
+            make.height.equalTo(0)
+        }
+        
+        topImaginaryLineView.snp.makeConstraints { make in
+            make.edges.equalTo(self.topLineView)
+        }
+        
+        bottomImaginaryLineView.snp.makeConstraints { make in
+            make.edges.equalTo(self.bottomLineView)
+        }
+        // 左图
+        leftIcon.snp.makeConstraints {
+            $0.left.equalToSuperview().inset(0)
+            $0.top.equalToSuperview().inset(0)
+            $0.bottom.equalToSuperview().inset(0)
+            $0.width.equalTo(leftIcon.snp.height)
+        }
+        
+        // 右图
+        rightIcon.snp.makeConstraints {
+            rightAnchorConstraint = $0.right.equalToSuperview().offset(-16).constraint
+            $0.top.equalToSuperview().inset(0)
+            $0.bottom.equalToSuperview().inset(0)
+            $0.width.equalTo(rightIcon.snp.height)
+        }
+        
+        // title
+        titleLabel.snp.makeConstraints {
+            $0.left.equalTo(leftIcon.snp.right).offset(12)
+            $0.centerY.equalToSuperview()
+        }
+        
+        // content
+        contentLabel.snp.makeConstraints {
+            $0.left.equalTo(titleLabel.snp.right).offset(8)
+            $0.top.bottom.equalToSuperview()
+            $0.right.lessThanOrEqualTo(rightIcon.snp.left).offset(-8)
+        }
+        
+        // switch
+        switchView.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalToSuperview().inset(16)
+            $0.size.equalTo(CGSize.SwitchSize)
+        }
+        
+        // more
+        moreButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalToSuperview().offset(-16)
+        }
+        
+        // disclosure
+        disclosure.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.right.equalToSuperview().offset(-16)
+            $0.size.equalTo(16)
+        }
+    }
+}
 
-        let viewType: PTFusionCellImageType
-
-        switch (hasLeftImage, hasNameOrDescOrAttr, hasContentOrAttr, hasContentIcon) {
-        case (true, true, false, false):
-            viewType = .LeftImageContent(type: .Name)
-        case (true, true, true, false):
-            viewType = .LeftImageContent(type: .NameContent)
-        case (true, true, false, true):
-            viewType = .BothImage(type: .Name)
-        case (true, false, true, true):
-            viewType = .BothImage(type: .Content)
-        case (true, true, true, true):
-            viewType = .BothImage(type: .NameContent)
-        case (true, false, true, false):
-            viewType = .LeftImageContent(type: .Content)
-        case (true, false, false, false):
-            viewType = .OnlyLeftImage
-        case (false, false, false, true):
-            viewType = .OnlyRightImage
-        case (false, true, false, true):
-            viewType = .RightImageContent(type: .Name)
-        case (false, true, true, true):
-            viewType = .RightImageContent(type: .NameContent)
-        case (false, false, true, true):
-            viewType = .RightImageContent(type: .Content)
-        case (false, true, true, false):
-            viewType = .None(type: .NameContent)
-        case (true, false, false, true):
-            viewType = .BothImage(type: .None)
-        case (false, true, false, false):
-            viewType = .None(type: .Name)
-        case (false, false, true, false):
-            viewType = .None(type: .Content)
+extension PTFusionContentView {
+    
+    public func configure(model: PTFusionCellModel) {
+        
+        let config = makeLayoutConfig(model)
+        
+        applyLayout(config,cellModel: model)
+        applyData(model)
+    }
+    
+    private func makeLayoutConfig(_ model: PTFusionCellModel) -> PTFusionLayoutConfig {
+        
+        return PTFusionLayoutConfig(
+            showLeftIcon: model.leftImage != nil,
+            showRightIcon: model.contentIcon != nil,
+            showTitle: !model.name.isEmpty || model.nameAttr != nil,
+            showContent: !model.content.isEmpty || model.contentAttr != nil,
+            accessory: {
+                switch model.accessoryType {
+                case .Switch: return model.accessoryType
+                case .DisclosureIndicator: return .DisclosureIndicator
+                case .More: return .More
+                default: return .NoneAccessoryView
+                }
+            }()
+        )
+    }
+    
+    private func applyLayout(_ config: PTFusionLayoutConfig,cellModel:PTFusionCellModel) {
+        
+        // 显示控制（不再 remove）
+        leftIcon.isHidden = !config.showLeftIcon
+        rightIcon.isHidden = !config.showRightIcon
+        titleLabel.isHidden = !config.showTitle
+        contentLabel.isHidden = !config.showContent
+        switchView.removeFromSuperview()
+        var cellType = PTFusionShowAccessoryType.SwitchType.System
+        switch cellModel.accessoryType {
+        case .Switch(let value):
+            cellType = value
         default:
-            finish(.Error)
-            return
+            cellType = .System
+        }
+        switchView = cellSwitchSet(cellModel, switchType: cellType)
+        addSubview(switchView)
+        switchView.snp.makeConstraints {
+            $0.right.equalToSuperview().inset(cellModel.rightSpace)
+            $0.centerY.equalToSuperview()
+            switch cellType {
+            case .Framework:
+                $0.size.equalTo(CGSize(width: cellModel.switchControlWidth, height: CGSize.SwitchSize.height))
+            case .System:
+                $0.size.equalTo(CGSize.SwitchSize)
+            }
         }
 
-        let accessoryView: PTFusionCellAccessoryView
-
-        switch type {
+        switch config.accessory {
         case .Switch:
-            accessoryView = .Switch(type: viewType)
+            switchView.isHidden = false
+            disclosure.isHidden = true
+            moreButton.isHidden = true
         case .DisclosureIndicator:
-            accessoryView = .DisclosureIndicator(type: viewType)
-        case .NoneAccessoryView:
-            accessoryView = .NoneAccessoryView(type: viewType)
+            switchView.isHidden = true
+            disclosure.isHidden = false
+            moreButton.isHidden = true
         case .More:
-            accessoryView = .More(type: viewType)
+            switchView.isHidden = true
+            disclosure.isHidden = true
+            moreButton.isHidden = false
+        case .NoneAccessoryView:
+            switchView.isHidden = true
+            disclosure.isHidden = true
+            moreButton.isHidden = true
         }
-
-        finish(accessoryView)
-    }
-    
-    //MARK: 设置左图标
-    func setLeftIconView(cellType: PTFusionCellAccessoryView,cellModel:PTFusionCellModel) {
-        let isLeftIconNeeded: Bool
-
-        switch cellType {
-        case .Switch(let type), .DisclosureIndicator(let type), .NoneAccessoryView(let type), .More(let type):
-            switch type {
-            case .OnlyLeftImage, .BothImage, .LeftImageContent:
-                isLeftIconNeeded = true
-            default:
-                isLeftIconNeeded = false
-            }
-        default:
-            isLeftIconNeeded = false
-        }
-
-        if isLeftIconNeeded {
-            if let icon = cellIcon {
-                icon.snp.remakeConstraints { make in
-                    make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                    make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                    make.left.equalToSuperview().inset(cellModel.leftSpace)
-                    make.width.equalTo(icon.snp.height)
-                }
-            } else {
-                cellIcon = setCellIcon()
-                addSubview(cellIcon!)
-                cellIcon!.snp.makeConstraints { make in
-                    make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                    make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                    make.left.equalToSuperview().inset(cellModel.leftSpace)
-                    make.width.equalTo(cellIcon!.snp.height)
-                }
-            }
-
-            if cellModel.iconRound {
-                PTGCDManager.gcdMain {
-                    self.cellIcon!.viewCorner(radius: (self.frame.size.height - cellModel.imageTopOffset - cellModel.imageBottomOffset) / 2)
-                }
-            }
-            cellIcon!.loadImage(contentData: cellModel.leftImage as Any, iCloudDocumentName: cellModel.iCloudDocument)
-        } else {
-            if let _ = cellIcon {
-                cellIcon?.removeFromSuperview()
-                cellIcon = nil
-            }
-        }
-    }
-    
-    //MARK: 设置右图标
-    func setRightIconView(cellType: PTFusionCellAccessoryView,cellModel:PTFusionCellModel) {
-        let shouldShowIcon: Bool
-        let rightConstraintView: UIView?
-
-        switch cellType {
-        case .Switch(type: .OnlyRightImage),
-             .Switch(type: .BothImage),
-             .Switch(type: .RightImageContent):
-            shouldShowIcon = true
-            rightConstraintView = valueSwitch
-            
-        case .DisclosureIndicator(type: .OnlyRightImage),
-             .DisclosureIndicator(type: .BothImage),
-             .DisclosureIndicator(type: .RightImageContent):
-            shouldShowIcon = true
-            rightConstraintView = accessV
-
-        case .NoneAccessoryView(type: .OnlyRightImage),
-             .NoneAccessoryView(type: .BothImage),
-             .NoneAccessoryView(type: .RightImageContent):
-            shouldShowIcon = true
-            rightConstraintView = nil
-            
-        case .More(type: .OnlyRightImage),
-             .More(type: .BothImage),
-             .More(type: .RightImageContent):
-            shouldShowIcon = true
-            rightConstraintView = sectionMore
-            
-        default:
-            shouldShowIcon = false
-            rightConstraintView = nil
-        }
-
-        if shouldShowIcon {
-            if let cellContentIcon = self.cellContentIcon {
-                cellContentIcon.snp.remakeConstraints { make in
-                    make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                    make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                    if let rightView = rightConstraintView {
-                        make.right.equalTo(rightView.snp.left).offset(-cellModel.contentRightSpace)
-                    } else {
-                        make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    }
-                    make.width.equalTo(cellContentIcon.snp.height)
-                }
-            } else {
-                cellContentIcon = setCellContentIcon()
-                addSubview(cellContentIcon!)
-                cellContentIcon!.snp.makeConstraints { make in
-                    make.top.equalToSuperview().inset(cellModel.imageTopOffset)
-                    make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-                    if let rightView = rightConstraintView {
-                        make.right.equalTo(rightView.snp.left).offset(-cellModel.contentRightSpace)
-                    } else {
-                        make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    }
-                    make.width.equalTo(self.cellContentIcon!.snp.height)
-                }
-
-            }
-            cellContentIcon!.loadImage(contentData: cellModel.contentIcon as Any, iCloudDocumentName: cellModel.iCloudDocument)
-        } else {
-            if let _ = cellContentIcon {
-                cellContentIcon?.removeFromSuperview()
-                cellContentIcon = nil
-            }
-        }
-    }
-    
-    //MARK: 设置主文本
-    func setTitleLabel(cellType:PTFusionCellAccessoryView,cellModel:PTFusionCellModel) {
-        switch cellType {
-        case .Switch(type: .LeftImageContent(type: .Name)),
-                .Switch(type: .LeftImageContent(type: .NameContent)),
-                .Switch(type: .BothImage(type: .Name)),
-                .Switch(type: .BothImage(type: .NameContent)),
-                .Switch(type: .None(type: .Name)),
-                .Switch(type: .None(type: .NameContent)),
-                .Switch(type: .RightImageContent(type: .Name)),
-                .Switch(type: .RightImageContent(type: .NameContent)),
-                .DisclosureIndicator(type: .LeftImageContent(type: .Name)),
-                .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
-                .DisclosureIndicator(type: .BothImage(type: .Name)),
-                .DisclosureIndicator(type: .BothImage(type: .NameContent)),
-                .DisclosureIndicator(type: .None(type: .Name)),
-                .DisclosureIndicator(type: .None(type: .NameContent)),
-                .DisclosureIndicator(type: .RightImageContent(type: .Name)),
-                .DisclosureIndicator(type: .RightImageContent(type: .NameContent)),
-                .NoneAccessoryView(type: .RightImageContent(type: .Name)),
-                .NoneAccessoryView(type: .RightImageContent(type: .NameContent)),
-                .NoneAccessoryView(type: .None(type: .Name)),
-                .NoneAccessoryView(type: .None(type: .NameContent)),
-                .NoneAccessoryView(type: .LeftImageContent(type: .Name)),
-                .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
-                .NoneAccessoryView(type: .BothImage(type: .Name)),
-                .NoneAccessoryView(type: .BothImage(type: .NameContent)),
-                .More(type: .RightImageContent(type: .Name)),
-                .More(type: .RightImageContent(type: .NameContent)),
-                .More(type: .None(type: .Name)),
-                .More(type: .None(type: .NameContent)),
-                .More(type: .LeftImageContent(type: .Name)),
-                .More(type: .LeftImageContent(type: .NameContent)),
-                .More(type: .BothImage(type: .Name)),
-                .More(type: .BothImage(type: .NameContent)):
-            
-            var atts:ASAttributedString = ASAttributedString(string: "")
-            if let cellAtt = cellModel.nameAttr {
-                atts = cellAtt
-            } else {
-                if !cellModel.name.stringIsEmpty() && cellModel.desc.stringIsEmpty() {
-                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel.name)",.paragraph(.alignment(.left),.lineSpacing(cellModel.labelLineSpace)),.font(cellModel.cellFont),.foreground(cellModel.nameColor))
-                    atts = nameAtts
-                } else if cellModel.name.stringIsEmpty() && !cellModel.desc.stringIsEmpty() {
-                    let descAtts:ASAttributedString =  ASAttributedString("\(cellModel.desc)",.paragraph(.alignment(.left),.lineSpacing(cellModel.labelLineSpace)),.font(cellModel.cellDescFont),.foreground(cellModel.descColor))
-                    atts = descAtts
-                } else if !cellModel.name.stringIsEmpty() && !cellModel.desc.stringIsEmpty() {
-                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel.name)",.paragraph(.alignment(.left),.lineSpacing(cellModel.labelLineSpace)),.font(cellModel.cellFont),.foreground(cellModel.nameColor))
-                    let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel.desc)",.paragraph(.alignment(.left),.lineSpacing(cellModel.labelLineSpace)),.font(cellModel.cellDescFont),.foreground(cellModel.descColor))
-                    atts = nameAtts + descAtts
-                }
-            }
-            if let nameT = nameTitle {
-                nameT.attributed.text = atts
-                self.nameTitle!.snp.remakeConstraints { make in
-                    make.top.bottom.lessThanOrEqualToSuperview().inset(5)
-                    make.centerY.equalToSuperview()
-                    switch cellType {
-                    case .Switch(type: .None(type: .Name)),
-                            .Switch(type: .None(type: .NameContent)),
-                            .Switch(type: .RightImageContent(type: .NameContent)),
-                            .Switch(type: .RightImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .NameContent)),
-                            .DisclosureIndicator(type: .RightImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .RightImageContent(type: .NameContent)),
-                            .NoneAccessoryView(type: .None(type: .Name)),
-                            .NoneAccessoryView(type: .None(type: .NameContent)),
-                            .NoneAccessoryView(type: .RightImageContent(type: .Name)),
-                            .NoneAccessoryView(type: .RightImageContent(type: .NameContent)),
-                            .More(type: .None(type: .Name)),
-                            .More(type: .None(type: .NameContent)),
-                            .More(type: .RightImageContent(type: .Name)),
-                            .More(type: .RightImageContent(type: .NameContent)):
-                        make.left.equalToSuperview().inset(cellModel.leftSpace)
-                    case .Switch(type: .LeftImageContent(type: .Name)),
-                            .Switch(type: .LeftImageContent(type: .NameContent)),
-                            .Switch(type: .BothImage(type: .Name)),
-                            .Switch(type: .BothImage(type: .NameContent)),
-                            .DisclosureIndicator(type: .LeftImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
-                            .DisclosureIndicator(type: .BothImage(type: .Name)),
-                            .DisclosureIndicator(type: .BothImage(type: .NameContent)),
-                            .NoneAccessoryView(type: .LeftImageContent(type: .Name)),
-                            .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
-                            .NoneAccessoryView(type: .BothImage(type: .Name)),
-                            .NoneAccessoryView(type: .BothImage(type: .NameContent)),
-                            .More(type: .LeftImageContent(type: .Name)),
-                            .More(type: .LeftImageContent(type: .NameContent)),
-                            .More(type: .BothImage(type: .Name)),
-                            .More(type: .BothImage(type: .NameContent)):
-                        make.left.equalTo(self.cellIcon!.snp.right).offset(cellModel.contentLeftSpace)
-                    default:
-                        make.left.equalToSuperview().inset(cellModel.leftSpace + cellModel.contentLeftSpace + (self.frame.size.height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)))
-                    }
-                    
-                    switch cellType {
-                    case .Switch(type: .BothImage(type: .Name)),
-                            .DisclosureIndicator(type: .BothImage(type: .Name)),
-                            .NoneAccessoryView(type: .BothImage(type: .Name)),
-                            .More(type: .BothImage(type: .Name)):
-                        make.right.equalTo(self.cellContentIcon!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .Switch(type: .None(type: .Name)):
-                        make.right.equalTo(self.valueSwitch!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .DisclosureIndicator(type: .None(type: .Name)):
-                        make.right.equalToSuperview().inset(cellModel.contentRightSpace)
-                    case .More(type: .None(type: .Name)):
-                        make.right.equalTo(self.sectionMore!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .Switch(type: .BothImage(type: .NameContent)),
-                            .DisclosureIndicator(type: .BothImage(type: .NameContent)),
-                            .More(type: .BothImage(type: .NameContent)),
-                            .Switch(type: .None(type: .Content)),
-                            .DisclosureIndicator(type: .None(type: .Content)),
-                            .More(type: .None(type: .Content)):
-                        var titleWidth = UIView.sizeFor(string: atts.value.string, font: .appfont(size: atts.value.largestFontSize()),height: self.height).width + 5
-                        let maxWidth = (self.width - 10  - cellModel.leftSpace - cellModel.contentLeftSpace - cellModel.contentRightSpace - cellModel.rightSpace) / 2
-                        if titleWidth > maxWidth {
-                            titleWidth = maxWidth
-                        } else if titleWidth < 1 {
-                            titleWidth = maxWidth
-                        }
-                        make.width.equalTo(titleWidth)
-                    case .Switch(type: .LeftImageContent(type: .Name)):
-                        make.right.equalTo(self.valueSwitch!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .DisclosureIndicator(type: .None(type: .NameContent)),
-                            .NoneAccessoryView(type: .None(type: .NameContent)),
-                            .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)):
-                        var titleWidth = UIView.sizeFor(string: atts.value.string, font: .appfont(size: atts.value.largestFontSize()),height: self.height).width + 5
-                        let maxWidth = (self.width - 10  - cellModel.leftSpace - cellModel.contentLeftSpace - cellModel.contentRightSpace - cellModel.rightSpace) / 2
-                        if titleWidth > maxWidth {
-                            titleWidth = maxWidth
-                        } else if titleWidth < 1 {
-                            titleWidth = maxWidth
-                        }
-                        make.width.equalTo(titleWidth)
-                    default:
-                        make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    }
-                }
-            } else {
-                nameTitle = setNameTitle()
-                nameTitle!.attributed.text = atts
-                addSubview(nameTitle!)
-                self.nameTitle!.snp.makeConstraints { make in
-                    make.top.bottom.lessThanOrEqualToSuperview().inset(5)
-                    make.centerY.equalToSuperview()
-                    switch cellType {
-                    case .Switch(type: .None(type: .Name)),
-                            .Switch(type: .None(type: .NameContent)),
-                            .Switch(type: .RightImageContent(type: .NameContent)),
-                            .Switch(type: .RightImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .NameContent)),
-                            .DisclosureIndicator(type: .RightImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .RightImageContent(type: .NameContent)),
-                            .NoneAccessoryView(type: .None(type: .Name)),
-                            .NoneAccessoryView(type: .None(type: .NameContent)),
-                            .NoneAccessoryView(type: .RightImageContent(type: .Name)),
-                            .NoneAccessoryView(type: .RightImageContent(type: .NameContent)),
-                            .More(type: .None(type: .Name)),
-                            .More(type: .None(type: .NameContent)),
-                            .More(type: .RightImageContent(type: .Name)),
-                            .More(type: .RightImageContent(type: .NameContent)):
-                        make.left.equalToSuperview().inset(cellModel.leftSpace)
-                    case .Switch(type: .LeftImageContent(type: .Name)),
-                            .Switch(type: .LeftImageContent(type: .NameContent)),
-                            .Switch(type: .BothImage(type: .Name)),
-                            .Switch(type: .BothImage(type: .NameContent)),
-                            .DisclosureIndicator(type: .LeftImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
-                            .DisclosureIndicator(type: .BothImage(type: .Name)),
-                            .DisclosureIndicator(type: .BothImage(type: .NameContent)),
-                            .NoneAccessoryView(type: .LeftImageContent(type: .Name)),
-                            .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
-                            .NoneAccessoryView(type: .BothImage(type: .Name)),
-                            .NoneAccessoryView(type: .BothImage(type: .NameContent)),
-                            .More(type: .LeftImageContent(type: .Name)),
-                            .More(type: .LeftImageContent(type: .NameContent)),
-                            .More(type: .BothImage(type: .Name)),
-                            .More(type: .BothImage(type: .NameContent)):
-                        make.left.equalTo(self.cellIcon!.snp.right).offset(cellModel.contentLeftSpace)
-                    default:
-                        make.left.equalToSuperview().inset(cellModel.leftSpace + cellModel.contentLeftSpace + (self.frame.size.height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)))
-                    }
-                    
-                    switch cellType {
-                    case .Switch(type: .BothImage(type: .Name)),
-                            .DisclosureIndicator(type: .BothImage(type: .Name)),
-                            .NoneAccessoryView(type: .BothImage(type: .Name)),
-                            .More(type: .BothImage(type: .Name)):
-                        make.right.equalTo(self.cellContentIcon!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .Switch(type: .None(type: .Name)):
-                        make.right.equalTo(self.valueSwitch!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .DisclosureIndicator(type: .None(type: .Name)):
-                        make.right.equalToSuperview().inset(cellModel.contentRightSpace)
-                    case .More(type: .None(type: .Name)):
-                        make.right.equalTo(self.sectionMore!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .Switch(type: .BothImage(type: .NameContent)),
-                            .DisclosureIndicator(type: .BothImage(type: .NameContent)),
-                            .More(type: .BothImage(type: .NameContent)),
-                            .Switch(type: .None(type: .Content)),
-                            .DisclosureIndicator(type: .None(type: .Content)),
-                            .More(type: .None(type: .Content)):
-                        var titleWidth = UIView.sizeFor(string: atts.value.string, font: .appfont(size: atts.value.largestFontSize()),height: self.height).width + 5
-                        let maxWidth = (self.width - 10  - cellModel.leftSpace - cellModel.contentLeftSpace - cellModel.contentRightSpace - cellModel.rightSpace) / 2
-                        if titleWidth > maxWidth {
-                            titleWidth = maxWidth
-                        } else if titleWidth < 1 {
-                            titleWidth = maxWidth
-                        }
-                        make.width.equalTo(titleWidth)
-                    case .Switch(type: .LeftImageContent(type: .Name)):
-                        make.right.equalTo(self.valueSwitch!.snp.left).offset(-cellModel.contentRightSpace)
-                    case .DisclosureIndicator(type: .None(type: .NameContent)),
-                            .NoneAccessoryView(type: .None(type: .NameContent)),
-                            .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)):
-                        var titleWidth = UIView.sizeFor(string: atts.value.string, font: .appfont(size: atts.value.largestFontSize()),height: self.height).width + 5
-                        let maxWidth = (self.width - 10  - cellModel.leftSpace - self.cellModel!.contentLeftSpace - cellModel.contentRightSpace - cellModel.rightSpace) / 2
-                        if titleWidth > maxWidth {
-                            titleWidth = maxWidth
-                        } else if titleWidth < 1 {
-                            titleWidth = maxWidth
-                        }
-                        make.width.equalTo(titleWidth)
-                    default:
-                        make.right.equalToSuperview().inset(cellModel.rightSpace)
-                    }
-                }
-            }
-        default:
-            if let _ = nameTitle {
-                nameTitle?.removeFromSuperview()
-                nameTitle = nil
-            }
-        }
-    }
-    
-    //MARK: 设置右文本
-    func setRightContent(cellType:PTFusionCellAccessoryView,cellModel:PTFusionCellModel) {
-        switch cellType {
-        case .Switch(let type),.DisclosureIndicator(let type),.NoneAccessoryView(let type),.More(let type):
-            switch type {
-            case .BothImage(let subType),.LeftImageContent(let subType),.RightImageContent(let subType),.None(let subType):
-                switch subType {
-                case .NameContent,.Content:
                 
-                    if let contentL = contentLabel {
-                        contentL.snp.remakeConstraints { make in
-                            make.top.bottom.equalToSuperview()
-                                                
-                            switch cellType {
-                            case .Switch(type: .None(type: .Content)),
-                                    .DisclosureIndicator(type: .None(type: .Content)),
-                                    .More(type: .None(type: .Content)):
-                                make.left.equalToSuperview().inset(cellModel.leftSpace)
-                            case .Switch(type: .LeftImageContent(type: .Content)),
-                                    .DisclosureIndicator(type: .LeftImageContent(type: .Content)),
-                                    .More(type: .LeftImageContent(type: .Content)),
-                                    .Switch(type: .BothImage(type: .Content)),
-                                    .DisclosureIndicator(type: .BothImage(type: .Content)),
-                                    .More(type: .BothImage(type: .Content)):
-                                make.left.equalTo(self.cellIcon!.snp.right).offset(cellModel.contentLeftSpace)
-                            case .NoneAccessoryView(type: .None(type: .Content)):
-                                make.left.equalToSuperview().inset(cellModel.contentLeftSpace)
-                            default:
-                                make.left.equalTo(self.nameTitle!.snp.right).offset(10)
-                            }
-                            
-                            switch cellType {
-                            case .Switch(type: .None(type: .Content)),
-                                    .Switch(type: .LeftImageContent(type: .Content)),
-                                    .Switch(type: .LeftImageContent(type: .NameContent)),
-                                    .Switch(type: .None(type: .NameContent)):
-                                make.right.equalTo(self.valueSwitch!.snp.left).offset(-cellModel.contentRightSpace)
-                            case .DisclosureIndicator(type: .None(type: .Content)),
-                                    .DisclosureIndicator(type: .LeftImageContent(type: .Content)),
-                                    .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
-                                    .DisclosureIndicator(type: .None(type: .NameContent)):
-                                make.right.equalTo(self.accessV!.snp.left).offset(-self.cellModel!.contentRightSpace)
-                            case .More(type: .None(type: .Content)),
-                                    .More(type: .LeftImageContent(type: .Content)),
-                                    .More(type: .LeftImageContent(type: .NameContent)),
-                                    .More(type: .None(type: .NameContent)):
-                                make.right.equalTo(self.sectionMore!.snp.left).offset(-cellModel.contentRightSpace)
-                            case .NoneAccessoryView(type: .BothImage(type: .Content)),
-                                    .NoneAccessoryView(type: .BothImage(type: .NameContent)),
-                                    .NoneAccessoryView(type: .LeftImageContent(type: .Content)),
-                                    .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
-                                    .NoneAccessoryView(type: .None(type: .Content)),
-                                    .NoneAccessoryView(type: .None(type: .NameContent)),
-                                    .NoneAccessoryView(type: .RightImageContent(type: .Content)),
-                                    .NoneAccessoryView(type: .RightImageContent(type: .NameContent)):
-                                make.right.equalToSuperview().inset(cellModel.contentRightSpace)
-                            default:
-                                make.right.equalTo(self.cellContentIcon!.snp.left).offset(-cellModel.contentRightSpace)
-                            }
-                        }
-
-                    } else {
-                        contentLabel = setContentLabel()
-                        addSubview(contentLabel!)
-                        contentLabel!.snp.makeConstraints { make in
-                            make.top.bottom.equalToSuperview()
-                                                
-                            switch cellType {
-                            case .Switch(type: .None(type: .Content)),
-                                    .DisclosureIndicator(type: .None(type: .Content)),
-                                    .More(type: .None(type: .Content)):
-                                make.left.equalToSuperview().inset(cellModel.leftSpace)
-                            case .Switch(type: .LeftImageContent(type: .Content)),
-                                    .DisclosureIndicator(type: .LeftImageContent(type: .Content)),
-                                    .More(type: .LeftImageContent(type: .Content)),
-                                    .Switch(type: .BothImage(type: .Content)),
-                                    .DisclosureIndicator(type: .BothImage(type: .Content)),
-                                    .More(type: .BothImage(type: .Content)):
-                                make.left.equalTo(self.cellIcon!.snp.right).offset(cellModel.contentLeftSpace)
-                            case .NoneAccessoryView(type: .None(type: .Content)):
-                                make.left.equalToSuperview().inset(cellModel.contentLeftSpace)
-                            default:
-                                make.left.equalTo(self.nameTitle!.snp.right).offset(10)
-                            }
-                            
-                            switch cellType {
-                            case .Switch(type: .None(type: .Content)),
-                                    .Switch(type: .LeftImageContent(type: .Content)),
-                                    .Switch(type: .LeftImageContent(type: .NameContent)),
-                                    .Switch(type: .None(type: .NameContent)):
-                                make.right.equalTo(self.valueSwitch!.snp.left).offset(-cellModel.contentRightSpace)
-                            case .DisclosureIndicator(type: .None(type: .Content)),
-                                    .DisclosureIndicator(type: .LeftImageContent(type: .Content)),
-                                    .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
-                                    .DisclosureIndicator(type: .None(type: .NameContent)):
-                                make.right.equalTo(self.accessV!.snp.left).offset(-cellModel.contentRightSpace)
-                            case .More(type: .None(type: .Content)),
-                                    .More(type: .LeftImageContent(type: .Content)),
-                                    .More(type: .LeftImageContent(type: .NameContent)),
-                                    .More(type: .None(type: .NameContent)):
-                                make.right.equalTo(self.sectionMore!.snp.left).offset(-cellModel.contentRightSpace)
-                            case .NoneAccessoryView(type: .BothImage(type: .Content)),
-                                    .NoneAccessoryView(type: .BothImage(type: .NameContent)),
-                                    .NoneAccessoryView(type: .LeftImageContent(type: .Content)),
-                                    .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
-                                    .NoneAccessoryView(type: .None(type: .Content)),
-                                    .NoneAccessoryView(type: .None(type: .NameContent)),
-                                    .NoneAccessoryView(type: .RightImageContent(type: .Content)),
-                                    .NoneAccessoryView(type: .RightImageContent(type: .NameContent)):
-                                make.right.equalToSuperview().inset(cellModel.contentRightSpace)
-                            default:
-                                make.right.equalTo(self.cellContentIcon!.snp.left).offset(-cellModel.contentRightSpace)
-                            }
-                        }
-                    }
-                    
-                    if cellModel.contentAttr != nil && cellModel.content.stringIsEmpty() {
-                        contentLabel!.attributed.text = cellModel.contentAttr
-                    } else if cellModel.contentAttr == nil && !cellModel.content.stringIsEmpty() {
-                        contentLabel?.numberOfLines = cellModel.contentNumberOfLines
-                        let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel.content)",.paragraph(.alignment(.right),.lineSpacing(cellModel.labelLineSpace),.lineBreakMode(cellModel.contentLineBreakMode)),.font(cellModel.contentFont),.foreground(cellModel.contentTextColor))
-                        contentLabel!.attributed.text = contentAtts
-                    }
-                default:
-                    if let _ = contentLabel {
-                        contentLabel?.removeFromSuperview()
-                        contentLabel = nil
-                    }
-                }
-            default:
-                if let _ = contentLabel {
-                    contentLabel?.removeFromSuperview()
-                    contentLabel = nil
-                }
+        moreButton.layoutStyle = cellModel.moreLayoutStyle
+        moreButton.midSpacing = cellModel.moreDisclosureIndicatorSpace
+        moreButton.imageSize = cellModel.moreDisclosureIndicatorSize
+        moreButton.setTitleFont(cellModel.moreFont, state: .normal)
+        moreButton.setTitleColor(cellModel.moreColor, state: .normal)
+        moreButton.setTitle(cellModel.moreString, state: .normal)
+        moreButton.setImage(cellModel.moreDisclosureIndicator, state: .normal)
+        
+        layoutSubviews()
+        var moreWith:CGFloat = 0
+        switch cellModel.moreLayoutStyle {
+        case .leftImageRightTitle,.leftTitleRightImage:
+            moreWith = moreButton.getKitCurrentDimension()
+        case .upImageDownTitle,.upTitleDownImage:
+            let moreStringWidth = UIView.sizeFor(string: cellModel.moreString, font: cellModel.moreFont, height: height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)).width
+            if moreStringWidth > cellModel.moreDisclosureIndicatorSize.width {
+                moreWith = moreStringWidth + 5
+            } else {
+                moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
             }
-        case .Error:
-            if let _ = contentLabel {
-                contentLabel?.removeFromSuperview()
-                contentLabel = nil
+        case .title:
+            let moreStringWidth = UIView.sizeFor(string: cellModel.moreString, font: cellModel.moreFont, height: height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)).width
+            moreWith = moreStringWidth + 5
+        case .image:
+            moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
+        }
+        moreButton.snp.remakeConstraints {
+            $0.right.equalToSuperview().inset(cellModel.rightSpace)
+            $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
+            $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
+            $0.width.equalTo(moreWith)
+        }
+                
+        disclosure.snp.updateConstraints {
+            $0.right.equalToSuperview().inset(cellModel.rightSpace)
+        }
+
+        disclosure.snp.updateConstraints {
+            $0.right.equalToSuperview().inset(cellModel.rightSpace)
+        }
+
+        // 动态右边约束目标
+        let targetView: UIView = {
+            switch config.accessory {
+            case .Switch: return switchView
+            case .DisclosureIndicator: return disclosure
+            case .More: return moreButton
+            case .NoneAccessoryView: return rightSpacingView
+            }
+        }()
+        
+        leftIcon.snp.updateConstraints { make in
+            make.left.equalToSuperview().inset(cellModel.leftSpace)
+            make.top.equalToSuperview().inset(cellModel.imageTopOffset)
+            make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
+        }
+        
+        leftSpacingView.snp.updateConstraints { make in
+            make.width.equalTo(cellModel.leftSpace)
+        }
+        
+        rightSpacingView.snp.updateConstraints { make in
+            make.width.equalTo(cellModel.rightSpace)
+        }
+
+        let leftTargetView: UIView = {
+            if config.showLeftIcon {
+                return leftIcon
+            } else {
+                return leftSpacingView
+            }
+        }()
+        
+        let leftTargetSpacing:CGFloat = config.showLeftIcon ? cellModel.contentLeftSpace : 0
+        
+        titleLabel.snp.remakeConstraints {
+            $0.left.equalTo(leftTargetView.snp.right).offset(leftTargetSpacing)
+            $0.top.bottom.equalToSuperview()
+        }
+
+        rightIcon.snp.remakeConstraints { // 这里只允许一个 remake（固定结构）
+            $0.right.equalTo(targetView.snp.left).offset(-cellModel.contentRightSpace)
+            $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
+            $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
+            $0.width.equalTo(rightIcon.snp.height)
+        }
+        
+        disclosure.snp.updateConstraints {
+            $0.size.equalTo(cellModel.moreDisclosureIndicatorSize)
+        }
+        
+        var rightTargetSpacing:CGFloat = 0
+        if config.showRightIcon {
+            rightTargetSpacing = cellModel.contentToRightImageSpacing
+        } else {
+            switch config.accessory {
+            case .NoneAccessoryView:
+                rightTargetSpacing = 0
+            default:
+                rightTargetSpacing = cellModel.contentRightSpace
             }
         }
-    }
-    
-    //MARK: 设置上下线
-    func setLine(cellType:PTFusionCellAccessoryView,cellModel:PTFusionCellModel) {
+        
+        let contentRightTarget: UIView = {
+            if config.showRightIcon {
+                return rightIcon
+            } else {
+                switch config.accessory {
+                case .Switch: return switchView
+                case .DisclosureIndicator: return disclosure
+                case .More: return moreButton
+                case .NoneAccessoryView: return rightSpacingView
+                }
+            }
+        }()
+        
+        contentLabel.snp.makeConstraints {
+            $0.left.equalTo(titleLabel.snp.right).offset(8)
+            $0.top.bottom.equalToSuperview()
+            $0.right.lessThanOrEqualTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
+        }
+        
         switch cellModel.haveLine {
-        case .Normal:
-            lineView.isHidden = false
-            imaginaryLineView.isHidden = true
-        case .Imaginary:
-            lineView.isHidden = true
-            imaginaryLineView.isHidden = false
         case .NO:
-            lineView.isHidden = true
-            imaginaryLineView.isHidden = true
-        default:
-            lineView.isHidden = true
-            imaginaryLineView.isHidden = true
+            bottomLineView.isHidden = true
+            bottomImaginaryLineView.isHidden = true
+        case .Normal:
+            bottomLineView.isHidden = false
+            bottomImaginaryLineView.isHidden = true
+        case .Imaginary:
+            bottomLineView.isHidden = true
+            bottomImaginaryLineView.isHidden = false
         }
         
         switch cellModel.haveTopLine {
+        case .NO:
+            topLineView.isHidden = true
+            topImaginaryLineView.isHidden = true
         case .Normal:
             topLineView.isHidden = false
             topImaginaryLineView.isHidden = true
         case .Imaginary:
             topLineView.isHidden = true
             topImaginaryLineView.isHidden = false
-        case .NO:
-            topLineView.isHidden = true
-            topImaginaryLineView.isHidden = true
-        default:
-            topLineView.isHidden = true
-            topImaginaryLineView.isHidden = true
         }
-        
-        addSubviews([lineView, topLineView,imaginaryLineView,topImaginaryLineView])
-        lineView.snp.makeConstraints { make in
+        topLineView.backgroundColor = cellModel.topLineColor
+        topLineView.snp.updateConstraints { make in
+            make.height.equalTo(cellModel.topLineHeight)
+            make.left.equalToSuperview().inset(cellModel.leftSpace)
             make.right.equalToSuperview().inset(cellModel.rightSpace)
-            make.bottom.equalToSuperview()
+        }
+        topImaginaryLineView.lineColor = cellModel.topLineColor
+        
+        bottomLineView.backgroundColor = cellModel.bottomLineColor
+        bottomLineView.snp.updateConstraints { make in
             make.height.equalTo(cellModel.bottomLineHeight)
-            
-            switch cellType {
-            case .Switch(let type),.DisclosureIndicator(let type),.NoneAccessoryView(let type),.More(let type):
-                switch type {
-                case .BothImage(let subType),.LeftImageContent(let subType),.RightImageContent(let subType),.None(let subType):
-                    switch subType {
-                    case .Name,.NameContent:
-                        make.left.equalTo(self.nameTitle!)
-                    default:
-                        make.left.equalToSuperview().inset(cellModel.leftSpace)
-                    }
-                case .OnlyLeftImage:
-                    make.left.equalTo(self.cellIcon!.snp.right).offset(cellModel.contentLeftSpace)
-                default:
-                    make.left.equalToSuperview().inset(cellModel.leftSpace)
-                }
-            case .Error:
-                break
+            make.left.equalToSuperview().inset(cellModel.leftSpace)
+            make.right.equalToSuperview().inset(cellModel.rightSpace)
+        }
+        bottomImaginaryLineView.lineColor = cellModel.bottomLineColor
+    }
+    
+    private func applyData(_ model: PTFusionCellModel) {
+        
+        titleLabel.attributed.text = titleLabelAtt(model)
+        
+        contentLabel.numberOfLines = model.contentNumberOfLines
+        contentLabel.attributed.text = contentLabelAtt(model)
+        
+        leftIcon.loadImage(contentData: model.leftImage as Any,iCloudDocumentName: model.iCloudDocument)
+        rightIcon.loadImage(contentData: model.contentIcon as Any,iCloudDocumentName: model.iCloudDocument)
+        disclosure.loadImage(contentData: model.disclosureIndicatorImage as Any,iCloudDocumentName: model.iCloudDocument)
+    }
+    
+    private func titleLabelAtt(_ model: PTFusionCellModel) -> ASAttributedString {
+        if let findModel = model.nameAttr {
+            return findModel
+        } else {
+            if !model.name.stringIsEmpty() && !model.desc.stringIsEmpty() {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(model.name,.font(model.cellFont),.foreground(model.nameColor))
+                            \(model.desc,.font(model.cellDescFont),.foreground(model.descColor))
+                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
+                            """
+                return att
+            } else if !model.name.stringIsEmpty() && model.desc.stringIsEmpty() {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(model.name,.font(model.cellFont),.foreground(model.nameColor))
+                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
+                            """
+                return att
+            } else if model.name.stringIsEmpty() && !model.desc.stringIsEmpty() {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(model.desc,.font(model.cellDescFont),.foreground(model.descColor))
+                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
+                            """
+                return att
+            } else {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
+                            """
+                return att
             }
         }
-        
-        imaginaryLineView.snp.makeConstraints { make in
-            make.edges.equalTo(self.lineView)
-        }
-        
-        topLineView.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(cellModel.rightSpace)
-            make.top.equalToSuperview()
-            make.height.equalTo(cellModel.topLineHeight)
-            make.left.equalTo(self.lineView)
-        }
-        
-        topImaginaryLineView.snp.makeConstraints { make in
-            make.edges.equalTo(self.topLineView)
+    }
+    
+    private func contentLabelAtt(_ model: PTFusionCellModel) -> ASAttributedString {
+        if let findModel = model.contentAttr {
+            return findModel
+        } else {
+            if !model.content.stringIsEmpty() {
+                let contentAtts:ASAttributedString =  ASAttributedString("\(model.content)",.paragraph(.alignment(.right),.lineSpacing(model.labelLineSpace),.lineBreakMode(model.contentLineBreakMode)),.font(model.contentFont),.foreground(model.contentTextColor))
+                return contentAtts
+            } else {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
+                            """
+                return att
+            }
         }
     }
 }
@@ -1017,11 +519,13 @@ open class PTFusionCell: PTBaseNormalCell {
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {
         didSet {
-            if let valueSwitch = dataContent.valueSwitch,let findValue = switchValue {
-                if let ptSwitch = valueSwitch as? PTSwitch {
-                    ptSwitch.isOn = findValue
-                } else if let iosSwitch = valueSwitch as? UISwitch {
-                    iosSwitch.isOn = findValue
+            if let findValue = switchValue {
+                switch dataContent.switchView {
+                case let valueView as PTSwitch:
+                    valueView.isOn = findValue
+                case let valueView as UISwitch:
+                    valueView.isOn = findValue
+                default:break
                 }
             }
         }
@@ -1029,66 +533,19 @@ open class PTFusionCell: PTBaseNormalCell {
 
     open var cellModel: PTFusionCellModel? {
         didSet {
-            dataContent.cellModel = cellModel
-        }
-    }
-    
-    //MARK: 需要在cellModel配置了之後設置
-    open var hideTopLine: Bool! = true {
-        didSet {
-            if cellModel == nil {
-                dataContent.topLineView.isHidden = true
-                dataContent.topImaginaryLineView.isHidden = true
-            } else {
-                switch cellModel!.haveTopLine {
-                case .Normal:
-                    dataContent.topLineView.isHidden = hideTopLine
-                    dataContent.topImaginaryLineView.isHidden = true
-                case .Imaginary:
-                    dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = hideTopLine
-                case .NO:
-                    dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = true
-                default:
-                    dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = true
-                }
+            if let cellModel = cellModel {
+                dataContent.configure(model: cellModel)
             }
         }
     }
-    
-    open var hideBottomLine: Bool! = true {
-        didSet {
-            if cellModel == nil {
-                dataContent.lineView.isHidden = true
-                dataContent.imaginaryLineView.isHidden = true
-            } else {
-                switch cellModel!.haveLine {
-                case .Normal:
-                    dataContent.lineView.isHidden = hideBottomLine
-                    dataContent.imaginaryLineView.isHidden = true
-                case .Imaginary:
-                    dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = hideBottomLine
-                case .NO:
-                    dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = true
-                default:
-                    dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = true
-                }
-            }
-        }
-    }
-    
-    fileprivate lazy var dataContent: PTFusionCellContent = {
-        let view = PTFusionCellContent()
+        
+    fileprivate lazy var dataContent: PTFusionContentView = {
+        let view = PTFusionContentView()
         view.switchValueChangeBlock = { name,view in
             self.switchValueChangeBlock?(name,view)
         }
-        if let sectionModel = view.sectionMore,let findCellModel = self.cellModel {
-            sectionModel.addActionHandlers { sender in
+        view.moreButton.addActionHandlers { sender in
+            if let findCellModel = self.cellModel {
                 self.moreActionBlock?(findCellModel.name,sender)
             }
         }
@@ -1117,11 +574,13 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {
         didSet {
-            if let valueSwitch = dataContent.valueSwitch,let findValue = switchValue {
-                if let ptSwitch = valueSwitch as? PTSwitch {
-                    ptSwitch.isOn = findValue
-                } else if let iosSwitch = valueSwitch as? UISwitch {
-                    iosSwitch.isOn = findValue
+            if let findValue = switchValue {
+                switch dataContent.switchView {
+                case let valueView as PTSwitch:
+                    valueView.isOn = findValue
+                case let valueView as UISwitch:
+                    valueView.isOn = findValue
+                default:break
                 }
             }
         }
@@ -1129,65 +588,19 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
 
     open var cellModel: PTFusionCellModel? {
         didSet {
-            self.dataContent.cellModel = self.cellModel
-        }
-    }
-    
-    open var hideTopLine: Bool! {
-        didSet {
-            if cellModel == nil {
-                dataContent.topLineView.isHidden = true
-                dataContent.topImaginaryLineView.isHidden = true
-            } else {
-                switch cellModel!.haveLine {
-                case .Normal:
-                    dataContent.topLineView.isHidden = hideTopLine
-                    dataContent.topImaginaryLineView.isHidden = true
-                case .Imaginary:
-                    dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = hideTopLine
-                case .NO:
-                    dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = true
-                default:
-                    dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = true
-                }
+            if let cellModel = cellModel {
+                dataContent.configure(model: cellModel)
             }
         }
     }
     
-    open var hideBottomLine: Bool! {
-        didSet {
-            if cellModel == nil {
-                dataContent.lineView.isHidden = true
-                dataContent.imaginaryLineView.isHidden = true
-            } else {
-                switch cellModel!.haveLine {
-                case .Normal:
-                    dataContent.lineView.isHidden = hideBottomLine
-                    dataContent.imaginaryLineView.isHidden = true
-                case .Imaginary:
-                    dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = hideBottomLine
-                case .NO:
-                    dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = true
-                default:
-                    dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = true
-                }
-            }
-        }
-    }
-
-    fileprivate lazy var dataContent: PTFusionCellContent = {
-        let view = PTFusionCellContent()
+    fileprivate lazy var dataContent: PTFusionContentView = {
+        let view = PTFusionContentView()
         view.switchValueChangeBlock = { name,view in
             self.switchValueChangeBlock?(name,view)
         }
-        if let sectionModel = view.sectionMore,let findCellModel = self.cellModel {
-            sectionModel.addActionHandlers { sender in
+        view.moreButton.addActionHandlers { sender in
+            if let findCellModel = self.cellModel {
                 self.moreActionBlock?(findCellModel.name,sender)
             }
         }

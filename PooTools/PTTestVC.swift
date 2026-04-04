@@ -40,12 +40,6 @@ class PTTestVC: PTBaseViewController {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
                 cell.cellModel = cellModel
                 cell.contentView.backgroundColor = .random
-                if dataModel.rows!.count == 1 {
-                    cell.hideTopLine = true
-                } else {
-                    cell.hideTopLine = indexPath.row == 0 ? true : false
-                }
-                cell.hideBottomLine = (dataModel.rows!.count - 1) == indexPath.row ? true : false
                 return cell
             }
             return nil

@@ -25,7 +25,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
     var floatingViewCellModel:PTFusionCellModel {
         get {
             let model = PTFusionCellModel()
-            model.accessoryType = .Switch
+            model.accessoryType = .Switch(type: .Framework)
             model.name = "FloatingView"
             return model
         }

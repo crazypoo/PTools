@@ -204,8 +204,8 @@ class PTFuncNameViewController: PTBaseViewController {
         let sectionModel_media = PTFusionCellModel()
         sectionModel_media.name = "多媒体"
         sectionModel_media.cellFont = sectionTitleFont
-        sectionModel_media.accessoryType = .Switch
-        sectionModel_media.switchControlWidth = 25
+        sectionModel_media.accessoryType = .Switch(type: .Framework)
+        sectionModel_media.switchControlWidth = 88
 
         let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
         mediaSection.headerClass = PTFusionHeader.self
@@ -526,24 +526,10 @@ class PTFuncNameViewController: PTBaseViewController {
                 case let cell as PTFusionCell:
                     cell.cellModel = cellModel
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
-                    
-                    if dataModel.rows!.count == 1 {
-                        cell.hideTopLine = true
-                    } else {
-                        cell.hideTopLine = indexPath.row == 0 ? true : false
-                    }
-                    cell.hideBottomLine = (dataModel.rows!.count - 1) == indexPath.row ? true : false
                     return cell
                 case let cell as PTFusionSwipeCell:
                     cell.cellModel = cellModel
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
-                    
-                    if dataModel.rows!.count == 1 {
-                        cell.hideTopLine = true
-                    } else {
-                        cell.hideTopLine = indexPath.row == 0 ? true : false
-                    }
-                    cell.hideBottomLine = (dataModel.rows!.count - 1) == indexPath.row ? true : false
                     return cell
                 default:
                     return nil

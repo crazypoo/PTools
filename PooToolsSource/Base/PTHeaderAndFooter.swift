@@ -21,11 +21,13 @@ public class PTFusionHeader: PTBaseCollectionReusableView,PTSupplementaryRegiste
     public var moreActionBlock:PTSectionMoreBlock?
     public var switchValue:Bool? {
         didSet {
-            if let valueSwitch = dataContent.valueSwitch {
-                if let ptSwitch = valueSwitch as? PTSwitch {
-                    ptSwitch.isOn = switchValue!
-                } else if let iosSwitch = valueSwitch as? UISwitch {
-                    iosSwitch.isOn = switchValue!
+            if let findValue = switchValue {
+                switch dataContent.switchView {
+                case let valueView as PTSwitch:
+                    valueView.isOn = findValue
+                case let valueView as UISwitch:
+                    valueView.isOn = findValue
+                default:break
                 }
             }
         }
@@ -33,26 +35,20 @@ public class PTFusionHeader: PTBaseCollectionReusableView,PTSupplementaryRegiste
     
     public var sectionModel:PTFusionCellModel? {
         didSet {
-            dataContent.cellModel = sectionModel
+            if let cellModel = sectionModel {
+                dataContent.configure(model: cellModel)
+            }
         }
     }
     
-    fileprivate lazy var dataContent:PTFusionCellContent = {
-        let view = PTFusionCellContent()
-        if let valueSwitch = view.valueSwitch,let section = self.sectionModel {
-            if let ptSwitch = valueSwitch as? PTSwitch {
-                ptSwitch.valueChangeCallBack = { _ in
-                    self.switchValueChangeBlock?(section.name,valueSwitch)
-                }
-            } else if let iOSSwitch = valueSwitch as? UISwitch {
-                iOSSwitch.addSwitchAction { sender in
-                    self.switchValueChangeBlock?(section.name,sender)
-                }
-            }
+    fileprivate lazy var dataContent:PTFusionContentView = {
+        let view = PTFusionContentView()
+        view.switchValueChangeBlock = { name,view in
+            self.switchValueChangeBlock?(name,view)
         }
-        if let sectionMore = view.sectionMore,let section = self.sectionModel {
-            sectionMore.addActionHandlers { sender in
-                self.moreActionBlock?(section.name,sender)
+        view.moreButton.addActionHandlers { sender in
+            if let findCellModel = self.sectionModel {
+                self.moreActionBlock?(findCellModel.name,sender)
             }
         }
         return view

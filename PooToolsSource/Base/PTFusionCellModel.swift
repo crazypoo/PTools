@@ -9,11 +9,16 @@
 import UIKit
 import AttributedString
 
-@objc public enum PTFusionShowAccessoryType:Int {
-    case Switch
+public enum PTFusionShowAccessoryType {
+    case Switch(type:SwitchType)
     case DisclosureIndicator
     case More
     case NoneAccessoryView
+    
+    public enum SwitchType:Int {
+        case System
+        case Framework
+    }
 }
 
 @objc public enum PTFusionLineType:Int {
@@ -83,6 +88,7 @@ open class PTFusionCellModel: NSObject {
     public var rightSpace:CGFloat = 10
     ///右內容的間距
     public var contentRightSpace:CGFloat = 10
+    public var contentToRightImageSpacing:CGFloat = 0
     ///Cell的左間隔
     public var leftSpace:CGFloat = 10
     ///左內容的間距(有圖片的時候用)
@@ -122,7 +128,7 @@ open class PTFusionCellModel: NSObject {
     ///BottomLineColor
     public var bottomLineColor:UIColor = DynamicColor(hexString: "E8E8E8") ?? .lightGray
         
-    @PTClampedProperyWrapper(range:20...51) public var switchControlWidth: CGFloat = 51
+    @PTClampedProperyWrapper(range:20...88) public var switchControlWidth: CGFloat = 88
 }
 
 extension PTFusionCellModel: PTDiffableModel {

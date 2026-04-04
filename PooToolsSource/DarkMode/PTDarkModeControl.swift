@@ -24,7 +24,7 @@ public class PTDarkModeControl: PTBaseViewController {
         smart.switchTintColor = PTDarkModeOption.switchTintColor
         smart.switchThumbTintColor = PTDarkModeOption.switchThumbTintColor
         smart.switchOnTinColor = PTDarkModeOption.switchOnTinColor
-        smart.accessoryType = .Switch
+        smart.accessoryType = .Switch(type: .Framework)
         smart.cellFont = PTDarkModeOption.cellFont
         
         let followSystem = PTFusionCellModel()
@@ -33,7 +33,7 @@ public class PTDarkModeControl: PTBaseViewController {
         followSystem.switchTintColor = PTDarkModeOption.switchTintColor
         followSystem.switchThumbTintColor = PTDarkModeOption.switchThumbTintColor
         followSystem.switchOnTinColor = PTDarkModeOption.switchOnTinColor
-        followSystem.accessoryType = .Switch
+        followSystem.accessoryType = .Switch(type: .Framework)
         followSystem.cellFont = PTDarkModeOption.cellFont
 
         return [[smart],[followSystem]]
@@ -124,8 +124,6 @@ public class PTDarkModeControl: PTBaseViewController {
                 switch baseCell {
                 case let cell as PTFusionCell:
                     cell.cellModel = cellModel
-                    cell.hideBottomLine = indexPath.row == (dataModel.rows!.count - 1) ? true : false
-                    cell.hideTopLine = true
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
                     if cellModel.name == PTDarkModeOption.smartCellName {
                         cell.switchValue = PTDarkModeOption.isSmartPeeling

@@ -74,7 +74,7 @@ public class PTDebugViewController: PTBaseViewController {
 
         let cell_debug = PTFusionCellModel()
         cell_debug.name = .DebugMode
-        cell_debug.accessoryType = .Switch
+        cell_debug.accessoryType = .Switch(type: .Framework)
 
         return [cell_mode, cell_input, cell_mode_socket, cell_input_socket, cell_debug]
     }
