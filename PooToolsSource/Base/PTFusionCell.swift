@@ -88,6 +88,16 @@ public final class PTFusionContentView: UIView {
     private var titleLeftToIcon: Constraint!
     private var titleLeftToSpacing: Constraint!
 
+    private var moreWidthConstraint: Constraint!
+    private var moreTopConstraint: Constraint!
+    private var moreBottomConstraint: Constraint!
+    private var moreRightConstraint: Constraint!
+    
+    private var contentRightConstraint: Constraint!
+    
+    private var leftSpacingWidthConstraint: Constraint!
+    private var rightSpacingWidthConstraint: Constraint!
+
     // MARK: - Init
     
     override init(frame: CGRect) {
@@ -112,13 +122,13 @@ private extension PTFusionContentView {
         leftSpacingView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.top.bottom.equalToSuperview()
-            make.width.equalTo(0)
+            leftSpacingWidthConstraint = make.width.equalTo(0).constraint
         }
         
         rightSpacingView.snp.makeConstraints { make in
             make.right.equalToSuperview()
             make.top.bottom.equalToSuperview()
-            make.width.equalTo(0)
+            rightSpacingWidthConstraint = make.width.equalTo(0).constraint
         }
         
         topLineView.snp.makeConstraints { make in
@@ -188,14 +198,10 @@ private extension PTFusionContentView {
         
         // more
         moreButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().inset(16)
-            
-            $0.right.equalToSuperview().inset(cellModel.rightSpace)
-            $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
-            $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-            $0.width.equalTo(cellModel.cachedMoreWidth)
-
+            moreRightConstraint = $0.right.equalToSuperview().inset(16).constraint
+            moreTopConstraint = $0.top.equalToSuperview().inset(0).constraint
+            moreBottomConstraint = $0.bottom.equalToSuperview().inset(0).constraint
+            moreWidthConstraint = $0.width.equalTo(0).constraint
         }
         
         // disclosure
@@ -263,14 +269,11 @@ extension PTFusionContentView {
         moreButton.setTitleColor(cellModel.moreColor, state: .normal)
         moreButton.setTitle(cellModel.moreString, state: .normal)
         moreButton.setImage(cellModel.moreDisclosureIndicator, state: .normal)
+        moreRightConstraint.update(inset: cellModel.rightSpace)
+        moreTopConstraint.update(inset: cellModel.imageTopOffset)
+        moreBottomConstraint.update(inset: cellModel.imageBottomOffset)
+        moreWidthConstraint.update(offset: cellModel.cachedMoreWidth)
         
-        moreButton.snp.remakeConstraints {
-            $0.right.equalToSuperview().inset(cellModel.rightSpace)
-            $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
-            $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-            $0.width.equalTo(cellModel.cachedMoreWidth)
-        }
-                
         disclosure.snp.updateConstraints {
             $0.right.equalToSuperview().inset(cellModel.rightSpace)
             $0.size.equalTo(cellModel.moreDisclosureIndicatorSize)
@@ -298,13 +301,8 @@ extension PTFusionContentView {
             make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
         }
         
-        leftSpacingView.snp.updateConstraints { make in
-            make.width.equalTo(cellModel.leftSpace)
-        }
-        
-        rightSpacingView.snp.updateConstraints { make in
-            make.width.equalTo(cellModel.rightSpace)
-        }
+        leftSpacingWidthConstraint.update(offset: cellModel.leftSpace)
+        rightSpacingWidthConstraint.update(offset: cellModel.rightSpace)
         
         if cellModel.layoutState.showLeftIcon {
             titleLeftToSpacing.deactivate()
@@ -440,54 +438,80 @@ extension PTFusionContentView {
     }
 }
 
+protocol PTFusionCellProtocol: AnyObject {
+    var switchValueChangeBlock: PTCellSwitchBlock? { get set }
+    var moreActionBlock: PTSectionMoreBlock? { get set }
+    var cellModel: PTFusionCellModel? { get set }
+    var switchValue: Bool? { get set }
+    
+    var dataContent: PTFusionContentView { get }
+    
+    func setupFusionUI(in view: UIView)
+}
+
+extension PTFusionCellProtocol {
+
+    func setupFusionUI(in view: UIView) {
+        view.addSubview(dataContent)
+        dataContent.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        bindEvents()
+    }
+    
+    private func bindEvents() {
+        dataContent.switchValueChangeBlock = { [weak self] name, sender in
+            self?.switchValueChangeBlock?(name, sender)
+        }
+        
+        dataContent.moreButton.addActionHandlers { [weak self] sender in
+            guard let self, let model = self.cellModel else { return }
+            self.moreActionBlock?(model.name, sender)
+        }
+    }
+    
+    func updateSwitch(_ value: Bool?) {
+        guard let value else { return }
+        
+        switch dataContent.activeSwitch {
+        case let v as PTSwitch:
+            v.isOn = value
+        case let v as UISwitch:
+            v.isOn = value
+        default:
+            break
+        }
+    }
+    
+    func updateModel(_ model: PTFusionCellModel?) {
+        guard let model else { return }
+        dataContent.configure(model: model)
+    }
+}
+
 @objcMembers
-open class PTFusionCell: PTBaseNormalCell {
+open class PTFusionCell: PTBaseNormalCell,PTFusionCellProtocol {
     public static let ID = "PTFusionCell"
         
     public var switchValueChangeBlock: PTCellSwitchBlock?
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {
-        didSet {
-            if let findValue = switchValue {
-                switch dataContent.activeSwitch {
-                case let valueView as PTSwitch:
-                    valueView.isOn = findValue
-                case let valueView as UISwitch:
-                    valueView.isOn = findValue
-                default:break
-                }
-            }
-        }
+        didSet { updateSwitch(switchValue) }
     }
 
     open var cellModel: PTFusionCellModel? {
-        didSet {
-            if let cellModel = cellModel {
-                dataContent.configure(model: cellModel)
-            }
-        }
+        didSet { updateModel(cellModel) }
     }
         
-    fileprivate lazy var dataContent: PTFusionContentView = {
-        let view = PTFusionContentView()
-        view.switchValueChangeBlock = { name,view in
-            self.switchValueChangeBlock?(name,view)
-        }
-        view.moreButton.addActionHandlers { sender in
-            if let findCellModel = self.cellModel {
-                self.moreActionBlock?(findCellModel.name,sender)
-            }
-        }
-        return view
+    public lazy var dataContent: PTFusionContentView = {
+        PTFusionContentView()
     }()
-    
+
     public override init(frame:CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(dataContent)
-        dataContent.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        setupFusionUI(in: contentView)
     }
         
     required public init?(coder aDecoder: NSCoder) {
@@ -496,55 +520,29 @@ open class PTFusionCell: PTBaseNormalCell {
 }
 
 @objcMembers
-open class PTFusionSwipeCell: PTBaseSwipeCell {
+open class PTFusionSwipeCell: PTBaseSwipeCell,PTFusionCellProtocol {
     public static let ID = "PTFusionSwipeCell"
     
     public var switchValueChangeBlock: PTCellSwitchBlock?
     public var moreActionBlock: PTSectionMoreBlock?
     open var switchValue: Bool? {
-        didSet {
-            if let findValue = switchValue {
-                switch dataContent.activeSwitch {
-                case let valueView as PTSwitch:
-                    valueView.isOn = findValue
-                case let valueView as UISwitch:
-                    valueView.isOn = findValue
-                default:break
-                }
-            }
-        }
+        didSet { updateSwitch(switchValue) }
     }
 
     open var cellModel: PTFusionCellModel? {
-        didSet {
-            if let cellModel = cellModel {
-                dataContent.configure(model: cellModel)
-            }
-        }
+        didSet { updateModel(cellModel) }
     }
-    
-    fileprivate lazy var dataContent: PTFusionContentView = {
-        let view = PTFusionContentView()
-        view.switchValueChangeBlock = { name,view in
-            self.switchValueChangeBlock?(name,view)
-        }
-        view.moreButton.addActionHandlers { sender in
-            if let findCellModel = self.cellModel {
-                self.moreActionBlock?(findCellModel.name,sender)
-            }
-        }
-        return view
+        
+    public lazy var dataContent: PTFusionContentView = {
+        PTFusionContentView()
     }()
-    
+
     public override init(frame:CGRect) {
         super.init(frame: frame)
         
-        contentContainer.addSubview(dataContent)
-        dataContent.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        setupFusionUI(in: contentView)
     }
-        
+
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
