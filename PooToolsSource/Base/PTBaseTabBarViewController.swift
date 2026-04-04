@@ -165,8 +165,8 @@ extension PTBaseTabBarViewController: UINavigationControllerDelegate {
                               to viewController: UIViewController,
                               animated: Bool) {
         
-        let hidden = viewController.pt_prefersTabBarHidden
-        setTabBar(hidden: hidden, animated: animated)
+        let isRoot = navigationController.viewControllers.first == viewController
+        setTabBar(hidden: !isRoot, animated: animated)
     }
     
     private func setTabBar(hidden: Bool, animated: Bool) {
