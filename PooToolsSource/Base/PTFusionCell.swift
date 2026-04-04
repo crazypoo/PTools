@@ -24,26 +24,31 @@ fileprivate extension UIView {
     }
 }
 
-public struct PTFusionLayoutConfig {
-    let showLeftIcon: Bool
-    let showRightIcon: Bool
-    let showTitle: Bool
-    let showContent: Bool
-    let accessory: PTFusionShowAccessoryType
-}
-
 public final class PTFusionContentView: UIView {
     
     public var switchValueChangeBlock:PTCellSwitchBlock?
 
     // MARK: - View Pool（一次创建）
-    
+    private var cellModel = PTFusionCellModel()
+    private var currentLayoutState: PTFusionLayoutConfig?
     private let leftIcon = UIImageView()
     private let rightIcon = UIImageView()
     private let titleLabel = UILabel()
     private let contentLabel = UILabel()
-    private lazy var systemSwitch = UISwitch()
-    private let customSwitch = PTSwitch()
+    private lazy var systemSwitch:UISwitch = {
+        let view = UISwitch()
+        view.addSwitchAction(handler: { sender in
+            self.switchValueChangeBlock?(self.cellModel.name,sender)
+        })
+        return view
+    }()
+    private lazy var customSwitch:PTSwitch = {
+        let view = PTSwitch()
+        view.valueChangeCallBack = { value in
+            self.switchValueChangeBlock?(self.cellModel.name,self.customSwitch)
+        }
+        return view
+    }()
     public var activeSwitch: UIControl? {
         if !systemSwitch.isHidden { return systemSwitch }
         if !customSwitch.isHidden { return customSwitch }
@@ -80,7 +85,9 @@ public final class PTFusionContentView: UIView {
     // MARK: - Constraints（缓存）
     
     private var rightAnchorConstraint: Constraint?
-        
+    private var titleLeftToIcon: Constraint!
+    private var titleLeftToSpacing: Constraint!
+
     // MARK: - Init
     
     override init(frame: CGRect) {
@@ -94,35 +101,7 @@ public final class PTFusionContentView: UIView {
 }
 
 private extension PTFusionContentView {
-    
-    func cellSwitchSet(_ cellModel:PTFusionCellModel,switchType:PTFusionShowAccessoryType.SwitchType) -> UIControl {
-        switch switchType {
-        case .Framework:
-            let view = PTSwitch()
-            view.onTintColor = cellModel.switchOnTinColor
-            view.thumbColor = cellModel.switchThumbTintColor
-            view.switchTintColor = cellModel.switchTintColor
-            view.backgroundColor = cellModel.switchBackgroundColor
-            return view
-        case .System:
-            if #available(iOS 26.0, *) {
-                let view = UISwitch()
-                view.onTintColor = cellModel.switchOnTinColor
-                view.thumbTintColor = cellModel.switchThumbTintColor
-                view.tintColor = cellModel.switchTintColor
-                view.backgroundColor = cellModel.switchBackgroundColor
-                return view
-            } else {
-                let view = PTSwitch()
-                view.onTintColor = cellModel.switchOnTinColor
-                view.thumbColor = cellModel.switchThumbTintColor
-                view.switchTintColor = cellModel.switchTintColor
-                view.backgroundColor = cellModel.switchBackgroundColor
-                return view
-            }
-        }
-    }
-    
+        
     func setupUI() {
         
         addSubviews([leftSpacingView, rightSpacingView, topLineView, bottomLineView,topImaginaryLineView, bottomImaginaryLineView, leftIcon, rightIcon, titleLabel, contentLabel, systemSwitch,customSwitch, moreButton, disclosure])
@@ -181,10 +160,13 @@ private extension PTFusionContentView {
         
         // title
         titleLabel.snp.makeConstraints {
-            $0.left.equalTo(leftIcon.snp.right).offset(12)
-            $0.centerY.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
+            titleLeftToIcon = $0.left.equalTo(leftIcon.snp.right).offset(12).constraint
+            titleLeftToSpacing = $0.left.equalTo(leftSpacingView.snp.right).constraint
         }
-        
+        titleLeftToSpacing.deactivate()
+        titleLeftToIcon.activate()
+
         // content
         contentLabel.snp.makeConstraints {
             $0.left.equalTo(titleLabel.snp.right).offset(8)
@@ -207,7 +189,13 @@ private extension PTFusionContentView {
         // more
         moreButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().offset(-16)
+            $0.right.equalToSuperview().inset(16)
+            
+            $0.right.equalToSuperview().inset(cellModel.rightSpace)
+            $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
+            $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
+            $0.width.equalTo(cellModel.cachedMoreWidth)
+
         }
         
         // disclosure
@@ -222,38 +210,25 @@ private extension PTFusionContentView {
 extension PTFusionContentView {
     
     public func configure(model: PTFusionCellModel) {
+        cellModel = model
+        let newState = model.layoutState
         
-        let config = makeLayoutConfig(model)
+        // ✅ 1. 只有结构变化才更新 layout
+        if currentLayoutState != newState {
+            applyLayout(cellModel: model)
+            currentLayoutState = newState
+        }
+
         applySwitch(model)
-        applyLayout(config,cellModel: model)
         applyData(model)
     }
-    
-    private func makeLayoutConfig(_ model: PTFusionCellModel) -> PTFusionLayoutConfig {
         
-        return PTFusionLayoutConfig(
-            showLeftIcon: model.leftImage != nil,
-            showRightIcon: model.contentIcon != nil,
-            showTitle: !model.name.isEmpty || model.nameAttr != nil,
-            showContent: !model.content.isEmpty || model.contentAttr != nil,
-            accessory: {
-                switch model.accessoryType {
-                case .Switch: return model.accessoryType
-                case .DisclosureIndicator: return .DisclosureIndicator
-                case .More: return .More
-                default: return .NoneAccessoryView
-                }
-            }()
-        )
-    }
-    
-    private func applyLayout(_ config: PTFusionLayoutConfig,cellModel:PTFusionCellModel) {
-        layoutIfNeeded()
+    private func applyLayout(cellModel:PTFusionCellModel) {
         // 显示控制（不再 remove）
-        leftIcon.isHidden = !config.showLeftIcon
-        rightIcon.isHidden = !config.showRightIcon
-        titleLabel.isHidden = !config.showTitle
-        contentLabel.isHidden = !config.showContent
+        leftIcon.isHidden = !cellModel.layoutState.showLeftIcon
+        rightIcon.isHidden = !cellModel.layoutState.showRightIcon
+        titleLabel.isHidden = !cellModel.layoutState.showTitle
+        contentLabel.isHidden = !cellModel.layoutState.showContent
         switch cellModel.accessoryType {
         case .Switch(let value):
             switch value {
@@ -266,7 +241,7 @@ extension PTFusionContentView {
             }
         default:break
         }
-        switch config.accessory {
+        switch cellModel.layoutState.accessory {
         case .Switch:
             disclosure.isHidden = true
             moreButton.isHidden = true
@@ -289,41 +264,21 @@ extension PTFusionContentView {
         moreButton.setTitle(cellModel.moreString, state: .normal)
         moreButton.setImage(cellModel.moreDisclosureIndicator, state: .normal)
         
-        var moreWith:CGFloat = 0
-        switch cellModel.moreLayoutStyle {
-        case .leftImageRightTitle,.leftTitleRightImage:
-            moreWith = moreButton.getKitCurrentDimension()
-        case .upImageDownTitle,.upTitleDownImage:
-            let moreStringWidth = UIView.sizeFor(string: cellModel.moreString, font: cellModel.moreFont, height: height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)).width
-            if moreStringWidth > cellModel.moreDisclosureIndicatorSize.width {
-                moreWith = moreStringWidth + 5
-            } else {
-                moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
-            }
-        case .title:
-            let moreStringWidth = UIView.sizeFor(string: cellModel.moreString, font: cellModel.moreFont, height: height - (cellModel.imageTopOffset + cellModel.imageBottomOffset)).width
-            moreWith = moreStringWidth + 5
-        case .image:
-            moreWith = cellModel.moreDisclosureIndicatorSize.width + 5
-        }
         moreButton.snp.remakeConstraints {
             $0.right.equalToSuperview().inset(cellModel.rightSpace)
             $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
             $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-            $0.width.equalTo(moreWith)
+            $0.width.equalTo(cellModel.cachedMoreWidth)
         }
                 
         disclosure.snp.updateConstraints {
             $0.right.equalToSuperview().inset(cellModel.rightSpace)
-        }
-
-        disclosure.snp.updateConstraints {
-            $0.right.equalToSuperview().inset(cellModel.rightSpace)
+            $0.size.equalTo(cellModel.moreDisclosureIndicatorSize)
         }
 
         // 动态右边约束目标
         let targetView: UIView = {
-            switch config.accessory {
+            switch cellModel.layoutState.accessory {
             case .Switch(let value):
                 switch value {
                 case .Framework:
@@ -350,38 +305,28 @@ extension PTFusionContentView {
         rightSpacingView.snp.updateConstraints { make in
             make.width.equalTo(cellModel.rightSpace)
         }
-
-        let leftTargetView: UIView = {
-            if config.showLeftIcon {
-                return leftIcon
-            } else {
-                return leftSpacingView
-            }
-        }()
         
-        let leftTargetSpacing:CGFloat = config.showLeftIcon ? cellModel.contentLeftSpace : 0
-        
-        titleLabel.snp.remakeConstraints {
-            $0.left.equalTo(leftTargetView.snp.right).offset(leftTargetSpacing)
-            $0.top.bottom.equalToSuperview()
+        if cellModel.layoutState.showLeftIcon {
+            titleLeftToSpacing.deactivate()
+            titleLeftToIcon.activate()
+            titleLeftToIcon.update(offset: cellModel.contentLeftSpace)
+        } else {
+            titleLeftToIcon.deactivate()
+            titleLeftToSpacing.activate()
         }
-
+        
         rightIcon.snp.remakeConstraints { // 这里只允许一个 remake（固定结构）
             $0.right.equalTo(targetView.snp.left).offset(-cellModel.contentRightSpace)
             $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
             $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
             $0.width.equalTo(rightIcon.snp.height)
         }
-        
-        disclosure.snp.updateConstraints {
-            $0.size.equalTo(cellModel.moreDisclosureIndicatorSize)
-        }
-        
+                
         var rightTargetSpacing:CGFloat = 0
-        if config.showRightIcon {
+        if cellModel.layoutState.showRightIcon {
             rightTargetSpacing = cellModel.contentToRightImageSpacing
         } else {
-            switch config.accessory {
+            switch cellModel.layoutState.accessory {
             case .NoneAccessoryView:
                 rightTargetSpacing = 0
             default:
@@ -390,10 +335,10 @@ extension PTFusionContentView {
         }
         
         let contentRightTarget: UIView = {
-            if config.showRightIcon {
+            if cellModel.layoutState.showRightIcon {
                 return rightIcon
             } else {
-                switch config.accessory {
+                switch cellModel.layoutState.accessory {
                 case .Switch(let value):
                     switch value {
                     case .Framework:
@@ -456,10 +401,10 @@ extension PTFusionContentView {
     
     private func applyData(_ model: PTFusionCellModel) {
         
-        titleLabel.attributed.text = titleLabelAtt(model)
+        titleLabel.attributed.text = model.cachedTitleAttr
         
         contentLabel.numberOfLines = model.contentNumberOfLines
-        contentLabel.attributed.text = contentLabelAtt(model)
+        contentLabel.attributed.text = model.cachedContentAttr
         
         leftIcon.loadImage(contentData: model.leftImage as Any,iCloudDocumentName: model.iCloudDocument)
         rightIcon.loadImage(contentData: model.contentIcon as Any,iCloudDocumentName: model.iCloudDocument)
@@ -482,9 +427,6 @@ extension PTFusionContentView {
             systemSwitch.thumbTintColor = model.switchThumbTintColor
             systemSwitch.tintColor = model.switchTintColor
             systemSwitch.backgroundColor = model.switchBackgroundColor
-            systemSwitch.addSwitchAction(handler: { sender in
-                self.switchValueChangeBlock?(model.name,sender)
-            })
             customSwitch.isHidden = true
             systemSwitch.isHidden = false
         case .Framework:
@@ -492,64 +434,8 @@ extension PTFusionContentView {
             customSwitch.thumbColor = model.switchThumbTintColor
             customSwitch.switchTintColor = model.switchTintColor
             customSwitch.backgroundColor = model.switchBackgroundColor
-            customSwitch.valueChangeCallBack = { value in
-                self.switchValueChangeBlock?(model.name,self.customSwitch)
-            }
             systemSwitch.isHidden = true
             customSwitch.isHidden = false
-        }
-    }
-    
-    private func titleLabelAtt(_ model: PTFusionCellModel) -> ASAttributedString {
-        if let findModel = model.nameAttr {
-            return findModel
-        } else {
-            if !model.name.stringIsEmpty() && !model.desc.stringIsEmpty() {
-                let att:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            \(model.name,.font(model.cellFont),.foreground(model.nameColor))
-                            \(model.desc,.font(model.cellDescFont),.foreground(model.descColor))
-                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
-                            """
-                return att
-            } else if !model.name.stringIsEmpty() && model.desc.stringIsEmpty() {
-                let att:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            \(model.name,.font(model.cellFont),.foreground(model.nameColor))
-                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
-                            """
-                return att
-            } else if model.name.stringIsEmpty() && !model.desc.stringIsEmpty() {
-                let att:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            \(model.desc,.font(model.cellDescFont),.foreground(model.descColor))
-                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
-                            """
-                return att
-            } else {
-                let att:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
-                            """
-                return att
-            }
-        }
-    }
-    
-    private func contentLabelAtt(_ model: PTFusionCellModel) -> ASAttributedString {
-        if let findModel = model.contentAttr {
-            return findModel
-        } else {
-            if !model.content.stringIsEmpty() {
-                let contentAtts:ASAttributedString =  ASAttributedString("\(model.content)",.paragraph(.alignment(.right),.lineSpacing(model.labelLineSpace),.lineBreakMode(model.contentLineBreakMode)),.font(model.contentFont),.foreground(model.contentTextColor))
-                return contentAtts
-            } else {
-                let att:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            """),.paragraph(.alignment(.left),.lineSpacing(model.labelLineSpace)))
-                            """
-                return att
-            }
         }
     }
 }

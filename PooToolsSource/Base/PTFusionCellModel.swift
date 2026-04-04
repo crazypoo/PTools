@@ -9,13 +9,13 @@
 import UIKit
 import AttributedString
 
-public enum PTFusionShowAccessoryType {
+public enum PTFusionShowAccessoryType:Equatable {
     case Switch(type:SwitchType)
     case DisclosureIndicator
     case More
     case NoneAccessoryView
     
-    public enum SwitchType:Int {
+    public enum SwitchType:Equatable {
         case System
         case Framework
     }
@@ -25,6 +25,14 @@ public enum PTFusionShowAccessoryType {
     case Normal
     case Imaginary
     case NO
+}
+
+public struct PTFusionLayoutConfig:Equatable {
+    let showLeftIcon: Bool
+    let showRightIcon: Bool
+    let showTitle: Bool
+    let showContent: Bool
+    let accessory: PTFusionShowAccessoryType
 }
 
 @objcMembers
@@ -129,6 +137,105 @@ open class PTFusionCellModel: NSObject {
     public var bottomLineColor:UIColor = DynamicColor(hexString: "E8E8E8") ?? .lightGray
         
     @PTClampedProperyWrapper(range:20...88) public var switchControlWidth: CGFloat = 88
+    
+    // ✅ 缓存
+    lazy var cachedTitleAttr: ASAttributedString = {
+        // 只算一次
+        return titleLabelAtt()
+    }()
+
+    private func titleLabelAtt() -> ASAttributedString {
+        if let findModel = nameAttr {
+            return findModel
+        } else {
+            if !name.stringIsEmpty() && !desc.stringIsEmpty() {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(name,.font(cellFont),.foreground(nameColor))
+                            \(desc,.font(cellDescFont),.foreground(descColor))
+                            """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
+                            """
+                return att
+            } else if !name.stringIsEmpty() && desc.stringIsEmpty() {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(name,.font(cellFont),.foreground(nameColor))
+                            """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
+                            """
+                return att
+            } else if name.stringIsEmpty() && !desc.stringIsEmpty() {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            \(desc,.font(cellDescFont),.foreground(descColor))
+                            """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
+                            """
+                return att
+            } else {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
+                            """
+                return att
+            }
+        }
+    }
+    
+    lazy var cachedContentAttr: ASAttributedString = {
+        return contentLabelAtt()
+    }()
+
+    private func contentLabelAtt() -> ASAttributedString {
+        if let findModel = contentAttr {
+            return findModel
+        } else {
+            if !content.stringIsEmpty() {
+                let contentAtts:ASAttributedString =  ASAttributedString("\(content)",.paragraph(.alignment(.right),.lineSpacing(labelLineSpace),.lineBreakMode(contentLineBreakMode)),.font(contentFont),.foreground(contentTextColor))
+                return contentAtts
+            } else {
+                let att:ASAttributedString = """
+                            \(wrap: .embedding("""
+                            """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
+                            """
+                return att
+            }
+        }
+    }
+    
+    lazy var cachedMoreWidth: CGFloat = {
+        // 只算一次
+        return calculateMoreWidth()
+    }()
+    
+    private func calculateMoreWidth() -> CGFloat {
+        var moreWith:CGFloat = 0
+        switch moreLayoutStyle {
+        case .leftImageRightTitle,.leftTitleRightImage:
+            moreWith = UIView.sizeFor(string: moreString, font: moreFont,height: 34).width + moreDisclosureIndicatorSize.width + moreDisclosureIndicatorSpace
+        case .upImageDownTitle,.upTitleDownImage:
+            let moreStringWidth = UIView.sizeFor(string: moreString, font: moreFont,height: 34).width
+            if moreStringWidth > moreDisclosureIndicatorSize.width {
+                moreWith = moreStringWidth + 5
+            } else {
+                moreWith = moreDisclosureIndicatorSize.width + 5
+            }
+        case .title:
+            let moreStringWidth = UIView.sizeFor(string: moreString, font: moreFont,height: 34).width
+            moreWith = moreStringWidth + 5
+        case .image:
+            moreWith = moreDisclosureIndicatorSize.width + 5
+        }
+        return moreWith
+    }
+    
+    lazy var layoutState: PTFusionLayoutConfig = {
+        return PTFusionLayoutConfig(
+            showLeftIcon: leftImage != nil,
+            showRightIcon: contentIcon != nil,
+            showTitle: !name.isEmpty || nameAttr != nil,
+            showContent: !content.isEmpty || contentAttr != nil,
+            accessory: accessoryType
+        )
+    }()
 }
 
 extension PTFusionCellModel: PTDiffableModel {
