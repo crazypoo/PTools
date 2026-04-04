@@ -1235,10 +1235,10 @@ extension PTCollectionView {
         mSections[section].layoutVersion += 1
     }
     
-    public func applySnapshot(_ snapshot: PTDiffSnapshot,
-                              animated: Bool = true,
-                              animation: PTDiffAnimation = .default,
-                              completion: PTCollectionCallback? = nil) {
+    @MainActor public func applySnapshot(_ snapshot: PTDiffSnapshot,
+                                         animated: Bool = true,
+                                         animation: PTDiffAnimation = .default,
+                                         completion: PTCollectionCallback? = nil) {
         let oldSections = self.mSections
         let newSections = snapshot.sections
         autoRegisterIfNeeded(sections: newSections)
@@ -1463,10 +1463,10 @@ extension PTCollectionView {
         #endif
     }
     
-    public func showCollectionDetail(collectionData:[PTSection],
-                                     animated: Bool = true,
-                                     animation: PTDiffAnimation = .default,
-                                     finishTask:PTCollectionCallback? = nil) {
+    @MainActor public func showCollectionDetail(collectionData:[PTSection],
+                                                animated: Bool = true,
+                                                animation: PTDiffAnimation = .default,
+                                                finishTask:PTCollectionCallback? = nil) {
         let snapshot = PTDiffSnapshot(sections: collectionData)
         applySnapshot(snapshot,animated: animated,animation: animation,completion: finishTask)
     }
@@ -1930,7 +1930,7 @@ extension PTCollectionView {
         }
         
         let maxHeight = (columnHeights.max() ?? 0) - itemTrailingSpace + config.contentBottomSpace
-        
+                
         // 🟢 2️⃣ 写入缓存
         waterfallCache[key] = WaterfallCache(
             columnHeights: columnHeights,

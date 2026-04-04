@@ -350,7 +350,7 @@ public extension UIView {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
 
-    @objc func swizzled_layoutSubviews() {
+    @MainActor @objc func swizzled_layoutSubviews() {
         swizzled_layoutSubviews()
         
         let tracker = BorderManager(view: self)

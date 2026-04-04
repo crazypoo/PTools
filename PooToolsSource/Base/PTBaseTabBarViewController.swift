@@ -139,7 +139,28 @@ extension PTBaseTabBarViewController: UITabBarControllerDelegate {
 
 extension PTBaseTabBarViewController: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        let isRoot = navigationController.viewControllers.count == 1
+        guard let coordinator = navigationController.transitionCoordinator else {
+            updateTabBar(for: navigationController, to: viewController, animated: animated)
+            return
+        }
+
+        // 动画过程中
+        coordinator.animate(alongsideTransition: { _ in
+            self.updateTabBar(for: navigationController, to: viewController, animated: animated)
+        }, completion: { context in
+            // ❗关键：如果取消了，需要恢复状态
+            if context.isCancelled {
+                guard let fromVC = context.viewController(forKey: .from) else { return }
+                self.updateTabBar(for: navigationController, to: fromVC, animated: false)
+            }
+        })
+    }
+        
+    private func updateTabBar(for navigationController: UINavigationController,
+                              to viewController: UIViewController,
+                              animated: Bool) {
+        
+        let isRoot = navigationController.viewControllers.first == viewController
         setTabBar(hidden: !isRoot, animated: animated)
     }
     
