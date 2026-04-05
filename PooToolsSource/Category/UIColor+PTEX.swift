@@ -8,6 +8,13 @@
 
 import UIKit
 
+public enum PTColorTone {
+    case light   // 接近白
+    case dark    // 接近黑
+    case normal  // 中间
+    case clear   // ✅ 新增
+}
+
 public extension UIColor {
             
     /**
@@ -211,5 +218,32 @@ public extension UIColor {
     
     @objc var hsbaColorAValue:CGFloat {
         hsbaValueModel().alphaFloat
+    }
+    
+    func pt_colorTone(threshold: CGFloat = 0.8) -> PTColorTone {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        
+        guard self.getRed(&r, green: &g, blue: &b, alpha: &a) else {
+            return .normal
+        }
+        
+        // ✅ 先判断透明（优先级最高）
+        if a <= 0.01 {
+            return .clear
+        }
+        
+        // 亮度计算
+        let luminance = 0.299 * r + 0.587 * g + 0.114 * b
+        
+        if luminance >= threshold {
+            return .light
+        } else if luminance <= (1 - threshold) {
+            return .dark
+        } else {
+            return .normal
+        }
     }
 }

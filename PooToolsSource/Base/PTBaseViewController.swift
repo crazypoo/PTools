@@ -39,7 +39,7 @@ public enum PTNavigationBarStyle:Equatable {
 
 open class PTNavTitleContainer: UIView {
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
 
@@ -73,7 +73,7 @@ public final class PTNavigationBarContainer: UIView {
     
     let titleContainer = UIView()
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubviews([backgroundView,contentView])
@@ -90,9 +90,9 @@ public final class PTNavigationBarContainer: UIView {
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    required init?(coder: NSCoder) { fatalError() }
+    public required init?(coder: NSCoder) { fatalError() }
     
-    func apply(style: PTNavigationBarStyle) {
+    public func apply(style: PTNavigationBarStyle) {
         switch style {
         case .gradient(let type, let colors):
             backgroundView.backgroundGradient(type: type, colors: colors)
@@ -108,20 +108,20 @@ public final class PTNavigationBarContainer: UIView {
     }
 }
 
-final class PTNavBarItem {
-    var isConfigured = false   // ✅ 新增
-    var leftView: [UIView] = []
-    var leftItemSpacing:CGFloat = 0
-    var rightViews: [UIView] = []
-    var rightItemSpacing:CGFloat = 0
-    var titleView: UIView?
-    var navTitle:String = ""
-    var barColorStyle:PTNavigationBarStyle = .transparent
+public final class PTNavBarItem {
+    public var isConfigured = false   // ✅ 新增
+    public var leftView: [UIView] = []
+    public var leftItemSpacing:CGFloat = 0
+    public var rightViews: [UIView] = []
+    public var rightItemSpacing:CGFloat = 0
+    public var titleView: UIView?
+    public var navTitle:String = ""
+    public var barColorStyle:PTNavigationBarStyle = .transparent
 }
 
 public final class PTNavigationBarManager:NSObject {
     
-    static let shared = PTNavigationBarManager()
+    public static let shared = PTNavigationBarManager()
     
     private override init() {}
     
@@ -135,7 +135,7 @@ public final class PTNavigationBarManager:NSObject {
     
     private weak var currentVC: UIViewController?
     private weak var currentNav: UINavigationController?
-    func installIfNeeded(in nav: UINavigationController) {
+    public func installIfNeeded(in nav: UINavigationController) {
         if containerMap.object(forKey: nav) != nil { return }
 
         let navBar = nav.navigationBar
@@ -164,7 +164,7 @@ public final class PTNavigationBarManager:NSObject {
         containerMap.setObject(container, forKey: nav)
     }
     
-    func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
+    public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
         installIfNeeded(in: nav)
         currentNav = nav
         guard lastStyle != style else { return }
@@ -187,17 +187,17 @@ public final class PTNavigationBarManager:NSObject {
         nav.navigationBar.compactAppearance = appearance
     }
         
-    func setAlpha(_ alpha: CGFloat) {
+    public func setAlpha(_ alpha: CGFloat) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.backgroundView.alpha = alpha
     }
     
-    func bind(to nav: UINavigationController) {
+    public func bind(to nav: UINavigationController) {
         nav.delegate = self
     }
     
-    func item(for vc: UIViewController) -> PTNavBarItem {
+    public func item(for vc: UIViewController) -> PTNavBarItem {
         if let item = itemCache.object(forKey: vc) {
             return item
         }
@@ -206,7 +206,7 @@ public final class PTNavigationBarManager:NSObject {
         return newItem
     }
 
-    func update(item: PTNavBarItem, for vc: UIViewController) {
+    public func update(item: PTNavBarItem, for vc: UIViewController) {
         item.isConfigured = true
         itemCache.setObject(item, forKey: vc)
         
@@ -233,6 +233,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         
         // ✅ 应用对应 VC 的 NavBar
         if let item = itemCache.object(forKey: viewController) {
+            apply(style: item.barColorStyle, in: navigationController) // ✅ 顺便补上
             apply(item: item)
         } else {
             clear()
@@ -266,7 +267,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         setTitleView(nil)
     }
     
-    func restoreIfNeeded(for vc: UIViewController) {
+    public func restoreIfNeeded(for vc: UIViewController) {
         // ❗关键：只处理有 navigationController 的 VC
         let realVC = PTUtils.getCurrentVC(from: vc)
         guard let nav = realVC.navigationController else { return }
@@ -282,7 +283,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
 
 extension PTNavigationBarManager {
     
-    func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
+    public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.leftContainer.spacing = spacing
@@ -313,7 +314,7 @@ extension PTNavigationBarManager {
         }
     }
     
-    func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
+    public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.rightContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
@@ -343,7 +344,7 @@ extension PTNavigationBarManager {
         }
     }
     
-    func setTitleView(_ view: UIView?) {
+    public func setTitleView(_ view: UIView?) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
@@ -399,13 +400,15 @@ open class PTBaseViewController: UIViewController {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
         applyNavigationBar()
+        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+        let style = self.preferredNavigationBarStyle()
+        self.updateStatusBar(style)
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
@@ -415,6 +418,9 @@ open class PTBaseViewController: UIViewController {
     
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        if let presenting = presentingViewController {
+            PTNavigationBarManager.shared.restoreIfNeeded(for: presenting)
+        }
     }
         
     open override func viewDidLoad() {
@@ -453,34 +459,53 @@ open class PTBaseViewController: UIViewController {
         item.barColorStyle = style
         PTNavigationBarManager.shared.update(item: item, for: self)
         if self.navigationController?.viewControllers.first != self {
-            let backBtn = UIButton(type: .custom)
-            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 34, height: 34)
+            let backBtn = baseBackButton()
             backBtn.addActionHandlers { seder in
                 self.viewDismiss()
             }
             setCustomBackButtonView(backBtn)
         }
         if let _ = self.presentingViewController {
-            let backBtn = UIButton(type: .custom)
-            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 34, height: 34)
+            let backBtn = baseBackButton()
             backBtn.addActionHandlers { seder in
                 self.viewDismiss()
             }
             setCustomBackButtonView(backBtn)
         }
+        
         updateStatusBar(style)
     }
 
+    private func baseBackButton() -> UIButton {
+        let backBtn = UIButton(type: .custom)
+        backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
+        backBtn.bounds = CGRect.init(x: 0, y: 0, width: 34, height: 34)
+        return backBtn
+    }
+    
     private func updateStatusBar(_ style: PTNavigationBarStyle) {
         switch style {
         case .gradient:
-            StatusBarManager.shared.style = .lightContent
-        default:
-            StatusBarManager.shared.style = .darkContent
+            changeStatusBar(type: .Dark)
+        case .solid(let color):
+            setStatusBarStyle(color: color)
+        case .transparent:
+            setStatusBarStyle(color: (self.view.backgroundColor ?? PTAppBaseConfig.share.viewControllerBaseBackgroundColor))
         }
         setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    private func setStatusBarStyle(color:UIColor) {
+        switch color.pt_colorTone() {
+        case .dark:
+            changeStatusBar(type: .Light)
+        case .light:
+            changeStatusBar(type: .Dark)
+        case .normal:
+            changeStatusBar(type: .Dark)
+        case .clear:
+            changeStatusBar(type: .Light)
+        }
     }
 
     open func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {}
