@@ -776,12 +776,16 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 PTNSLogConsole("創建失敗", levelType: .Error,loggerType: .Media)
             }
         }
-        guard let nav = navigationController else { return }
-        PTBaseNavControl.GobalNavControl(nav: nav)
-        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        setCustomBackButtonView(dismissButtonItem)
-        setCustomRightButtons(buttons: [doneButtonItem])
+//        guard let nav = navigationController else { return }
+//        PTBaseNavControl.GobalNavControl(nav: nav)
+        self.dismissButtonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        self.doneButtonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        self.setCustomBackButtonView(self.dismissButtonItem)
+        self.setCustomRightButtons(buttons: [self.doneButtonItem])
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     public init(asset:PHAsset,avAsset:AVAsset) {
@@ -796,7 +800,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
         imageContent.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)

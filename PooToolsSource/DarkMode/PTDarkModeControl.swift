@@ -172,8 +172,8 @@ public class PTDarkModeControl: PTBaseViewController {
         return view
     }()
 
-    public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-        return .solid(.clear)
+    open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(PTAppBaseConfig.share.viewControllerBaseBackgroundColor)
     }
 
     public override func viewWillAppear(_ animated: Bool) {

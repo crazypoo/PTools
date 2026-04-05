@@ -355,8 +355,13 @@ public extension UIViewController {
         }
     }
     
-    @objc func dismissAnimated() {
-        dismiss(animated: true, completion: nil)
+    @objc func dismissAnimated(finish:PTActionTask? = nil) {
+        if let presentingVC = self.presentingViewController {
+            dismiss(animated: true, completion: {
+                PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
+                finish?()
+            })
+        }
     }
     
 #if os(iOS)

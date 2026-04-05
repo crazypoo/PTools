@@ -125,19 +125,19 @@ public final class PTNavigationBarManager:NSObject {
     
     private override init() {}
     
-    private weak var container: PTNavigationBarContainer?
     private var lastStyle: PTNavigationBarStyle?
     
     private var titleLabel:Bool = false
     
     // ❗ 核心：按 VC 存储
     private var itemCache = NSMapTable<UIViewController, PTNavBarItem>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var containerMap = NSMapTable<UINavigationController, PTNavigationBarContainer>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     private weak var currentVC: UIViewController?
-
+    private weak var currentNav: UINavigationController?
     func installIfNeeded(in nav: UINavigationController) {
-        guard container == nil else { return }
-        
+        if containerMap.object(forKey: nav) != nil { return }
+
         let navBar = nav.navigationBar
         
         // ✅ 获取 statusBar 高度（正确方式）
@@ -161,15 +161,15 @@ public final class PTNavigationBarManager:NSObject {
         
         navBar.addSubview(container)
         navBar.sendSubviewToBack(container)
-        self.container = container
+        containerMap.setObject(container, forKey: nav)
     }
     
     func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
         installIfNeeded(in: nav)
-        
+        currentNav = nav
         guard lastStyle != style else { return }
         lastStyle = style
-        
+        let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
         
         // 同步 appearance（避免 push 闪）
@@ -188,7 +188,9 @@ public final class PTNavigationBarManager:NSObject {
     }
         
     func setAlpha(_ alpha: CGFloat) {
-        container?.backgroundView.alpha = alpha
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav) else { return }
+        container.backgroundView.alpha = alpha
     }
     
     func bind(to nav: UINavigationController) {
@@ -273,15 +275,16 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                   item.isConfigured else {
             return
         }
-        apply(item: item)
         apply(style: item.barColorStyle, in: nav)
+        apply(item: item)
     }
 }
 
 extension PTNavigationBarManager {
     
     func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
-        guard let container = container else { return }
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav) else { return }
         container.leftContainer.spacing = spacing
         container.leftContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.leftContainer.isHidden = true
@@ -311,7 +314,8 @@ extension PTNavigationBarManager {
     }
     
     func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
-        guard let container = container else { return }
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav) else { return }
         container.rightContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.rightContainer.isHidden = true
         container.rightContainer.snp.remakeConstraints { make in
@@ -340,7 +344,8 @@ extension PTNavigationBarManager {
     }
     
     func setTitleView(_ view: UIView?) {
-        guard let container = container else { return }
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav) else { return }
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
         container.titleContainer.isHidden = true
         guard let view else { return }
@@ -456,7 +461,15 @@ open class PTBaseViewController: UIViewController {
             }
             setCustomBackButtonView(backBtn)
         }
-
+        if let _ = self.presentingViewController {
+            let backBtn = UIButton(type: .custom)
+            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
+            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 34, height: 34)
+            backBtn.addActionHandlers { seder in
+                self.viewDismiss()
+            }
+            setCustomBackButtonView(backBtn)
+        }
         updateStatusBar(style)
     }
 

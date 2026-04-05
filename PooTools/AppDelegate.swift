@@ -106,7 +106,9 @@ class AppDelegate: PTAppWindowsDelegate {
         
         PTAppBaseConfig.share.tabSelectedMetail = false
         PTAppBaseConfig.share.tabSelectedMetailColor = .clear
-        
+        PTAppBaseConfig.share.navTitleFont = .appfont(size: 18)
+        PTAppBaseConfig.share.navTitleTextColor = .random
+
         registerRotation()
 
 #if POOTOOLS_ROUTER
