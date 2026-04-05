@@ -238,6 +238,8 @@ public final class PTNavigationBarManager:NSObject {
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
+        appearance.backgroundImage = UIImage()
+        appearance.shadowImage = UIImage()
         // 设置标题属性
         appearance.titleTextAttributes = [
             .font: PTAppBaseConfig.share.navTitleFont,
