@@ -25,6 +25,23 @@ public enum PTScreenShotActionType {
     case Dark,Light,Auto
 }
 
+extension UIColor {
+    func interpolate(to: UIColor, progress: CGFloat) -> UIColor {
+        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
+        
+        self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+        to.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+        
+        return UIColor(
+            red: r1 + (r2 - r1) * progress,
+            green: g1 + (g2 - g1) * progress,
+            blue: b1 + (b2 - b1) * progress,
+            alpha: a1 + (a2 - a1) * progress
+        )
+    }
+}
+
 // MARK: - 导航栏样式枚举
 public enum PTNavigationBarStyle:Equatable {
     case gradient(type: Imagegradien = .LeftToRight, colors: [DynamicColor])
@@ -52,6 +69,9 @@ open class PTNavTitleContainer: UIView {
 
 public final class PTNavigationBarContainer: UIView {
     
+    private var fromStyle: PTNavigationBarStyle?
+    private var toStyle: PTNavigationBarStyle?
+
     let backgroundView = UIView()
     let contentView = UIView()
         
@@ -108,6 +128,37 @@ public final class PTNavigationBarContainer: UIView {
     }
 }
 
+extension PTNavigationBarContainer {
+    func prepareTransition(from: PTNavigationBarStyle, to: PTNavigationBarStyle) {
+        self.fromStyle = from
+        self.toStyle = to
+        
+        // 先应用 from
+        apply(style: from)
+    }
+
+    /// 核心：根据 progress 渐变
+    func updateTransition(progress: CGFloat) {
+        guard let from = fromStyle, let to = toStyle else { return }
+        
+        switch (from, to) {
+            
+        case (.solid(let c1), .solid(let c2)):
+            backgroundView.backgroundColor = c1.interpolate(to: c2, progress: progress)
+            
+        case (.transparent, .solid(let c)):
+            backgroundView.backgroundColor = c.withAlphaComponent(progress)
+            
+        case (.solid(let c), .transparent):
+            backgroundView.backgroundColor = c.withAlphaComponent(1 - progress)
+            
+        default:
+            // gradient 你可以后面扩展（先支持 solid 最稳）
+            break
+        }
+    }
+}
+
 public final class PTNavBarItem {
     public var isConfigured = false   // ✅ 新增
     public var leftView: [UIView] = []
@@ -135,6 +186,14 @@ public final class PTNavigationBarManager:NSObject {
     
     private weak var currentVC: UIViewController?
     private weak var currentNav: UINavigationController?
+    
+    private var displayLink: CADisplayLink?
+    private weak var transitionCoordinatorRef: UIViewControllerTransitionCoordinator?
+    private weak var transitionContainer: PTNavigationBarContainer?
+
+    private var fromStyle: PTNavigationBarStyle = .transparent
+    private var toStyle: PTNavigationBarStyle = .transparent
+    
     public func installIfNeeded(in nav: UINavigationController) {
         if containerMap.object(forKey: nav) != nil { return }
 
@@ -221,11 +280,55 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,
                               animated: Bool) {
-        // ❗如果这个 VC 不是 nav 栈里的（理论上不会，但防御）
-        guard viewController.navigationController === navigationController else {
-            return
-        }
+        currentNav = navigationController
+        currentVC = viewController
         
+        // ❗如果这个 VC 不是 nav 栈里的（理论上不会，但防御）
+        guard let container = containerMap.object(forKey: navigationController) else { return }
+
+        let toItem = itemCache.object(forKey: viewController)
+        let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from)
+        let fromItem = fromVC.flatMap { itemCache.object(forKey: $0) }
+        
+        let fromStyle = fromItem?.barColorStyle ?? .transparent
+        let toStyle = toItem?.barColorStyle ?? .transparent
+
+        // 👉 保存状态
+        self.fromStyle = fromStyle
+        self.toStyle = toStyle
+        self.transitionContainer = container
+
+        // ✅ 准备过渡
+        container.prepareTransition(from: fromStyle, to: toStyle)
+        
+        // 👉 绑定系统动画
+        if let coordinator = navigationController.transitionCoordinator {
+            
+            transitionCoordinatorRef = coordinator
+            startDisplayLink()
+            
+            coordinator.animate(alongsideTransition: { _ in
+                container.updateTransition(progress: 1)
+            }, completion: { context in
+                self.stopDisplayLink()
+                
+                if context.isCancelled {
+                    container.apply(style: fromStyle)
+                } else {
+                    container.apply(style: toStyle)
+                }
+            })
+            
+            // 👉 手势取消/完成处理
+            coordinator.notifyWhenInteractionChanges { context in
+                if context.isCancelled {
+                    container.apply(style: fromStyle)
+                } else {
+                    container.apply(style: toStyle)
+                }
+            }
+        }
+
         viewController.navigationItem.hidesBackButton = true
         viewController.title = nil
         viewController.navigationItem.titleView = nil
@@ -282,6 +385,28 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
 }
 
 extension PTNavigationBarManager {
+    private func startDisplayLink() {
+        stopDisplayLink()
+        displayLink = CADisplayLink(target: self, selector: #selector(handleDisplayLink))
+        displayLink?.add(to: .main, forMode: .common)
+    }
+
+    private func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+    
+    @objc private func handleDisplayLink() {
+        guard let coordinator = transitionCoordinatorRef,
+              let container = transitionContainer else { return }
+        
+        let progress = coordinator.percentComplete
+        
+        container.updateTransition(progress: progress)
+    }
+}
+
+extension PTNavigationBarManager {
     
     public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
         guard let nav = currentNav,
@@ -300,9 +425,8 @@ extension PTNavigationBarManager {
         var containerWidth:CGFloat = 0
         views.forEach { value in
             container.leftContainer.addArrangedSubview(value)
-            value.snp.makeConstraints { make in
-                make.size.equalTo(value.bounds.size)
-            }
+            value.setContentHuggingPriority(.required, for: .horizontal)
+            value.setContentCompressionResistancePriority(.required, for: .horizontal)
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
@@ -330,9 +454,8 @@ extension PTNavigationBarManager {
         var containerWidth:CGFloat = 0
         views.forEach { value in
             container.rightContainer.addArrangedSubview(value)
-            value.snp.makeConstraints { make in
-                make.size.equalTo(value.bounds.size)
-            }
+            value.setContentHuggingPriority(.required, for: .horizontal)
+            value.setContentCompressionResistancePriority(.required, for: .horizontal)
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
@@ -577,6 +700,17 @@ open class PTBaseViewController: UIViewController {
         let item = PTNavigationBarManager.shared.item(for: self)
         item.leftView = [container]
         
+        PTNavigationBarManager.shared.update(item: item, for: self)
+    }
+    
+    open func setLeftButtons(views:[UIView], buttonSpacing: CGFloat = 10) {
+        guard !views.isEmpty else {
+            navigationItem.rightBarButtonItem = nil
+            return
+        }
+        let item = PTNavigationBarManager.shared.item(for: self)
+        item.leftView = views
+        item.leftItemSpacing = buttonSpacing
         PTNavigationBarManager.shared.update(item: item, for: self)
     }
 
