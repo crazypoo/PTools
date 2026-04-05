@@ -432,8 +432,9 @@ extension PTNavigationBarManager {
         var containerWidth:CGFloat = 0
         views.forEach { value in
             container.leftContainer.addArrangedSubview(value)
-            value.setContentHuggingPriority(.required, for: .horizontal)
-            value.setContentCompressionResistancePriority(.required, for: .horizontal)
+            value.snp.makeConstraints { make in
+                make.size.equalTo(value.bounds.size)
+            }
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
@@ -461,8 +462,9 @@ extension PTNavigationBarManager {
         var containerWidth:CGFloat = 0
         views.forEach { value in
             container.rightContainer.addArrangedSubview(value)
-            value.setContentHuggingPriority(.required, for: .horizontal)
-            value.setContentCompressionResistancePriority(.required, for: .horizontal)
+            value.snp.makeConstraints { make in
+                make.size.equalTo(value.bounds.size)
+            }
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
