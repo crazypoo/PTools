@@ -131,7 +131,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
         setCustomTitleView(titleViewContailer)
-        setCustomRightButtons(buttons: [exportButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [exportButton])
     }
     
     override func viewDidLoad() {

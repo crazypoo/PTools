@@ -245,7 +245,7 @@ class PTCutViewController: PTBaseViewController {
         doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
 
         setCustomBackButtonView(cancelBtn)
-        setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
+        setCustomRightButtons(buttons: [doneBtn])
     }
         
     override func viewDidDisappear(_ animated: Bool) {
@@ -338,9 +338,6 @@ class PTCutViewController: PTBaseViewController {
         }
         changeStatusBar(type: .Dark)
         
-        PTGCDManager.gcdMain {
-            self.applyNavigationBarStyle()
-        }
         
         PTGCDManager.gcdAfter(time: 0.35, block: {
             self.changeStatusBar(type: .Dark)

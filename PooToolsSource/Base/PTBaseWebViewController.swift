@@ -146,7 +146,7 @@ extension PTBaseWebViewController: WKNavigationDelegate,WKUIDelegate,UIScrollVie
     /// 页面加载完成
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         PTNSLogConsole("页面加载完成>>>>>>\(webView)")
-        self.title = webView.title ?? ""
+        self.pt_Title = webView.title ?? ""
     }
     
     /// 提交发生错误

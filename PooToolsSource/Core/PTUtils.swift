@@ -229,7 +229,11 @@ public extension PTUtils {
         switch rootVC {
         case let tabBar as UITabBarController:
             return getCurrentVC(from: tabBar.selectedViewController ?? tabBar)
+        case let tabbar as PTBaseTabBarViewController:
+            return getCurrentVC(from: tabbar.viewControllers?[tabbar.selectedIndex] ?? tabbar)
         case let nav as UINavigationController:
+            return getCurrentVC(from: nav.visibleViewController ?? nav)
+        case let nav as PTBaseNavControl:
             return getCurrentVC(from: nav.visibleViewController ?? nav)
         case let presentedVC where presentedVC.presentedViewController != nil:
             if let vc = presentedVC.presentedViewController as? PTSheetViewController {
@@ -255,7 +259,7 @@ public extension PTUtils {
                     return pSheet.childViewController
                 }
             } else {
-                return sideMenu.contentViewController
+                return getCurrentVC(from: sideMenu.contentViewController)
             }
         default:
             return rootVC

@@ -142,7 +142,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
         setCustomTitleView(titleViewContailer)
-        setCustomRightButtons(buttons: [shareButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [shareButton])
     }
 
     init(viewModel: PTHttpModel!) {

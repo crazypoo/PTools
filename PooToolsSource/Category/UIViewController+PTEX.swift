@@ -142,8 +142,9 @@ public extension UIViewController {
     //MARK: ViewController退出
     ///ViewController退出
     func viewDismiss(dismissBolck:PTActionTask? = nil) {
-        if presentingViewController != nil {
+        if let presentingVC = self.presentingViewController {
             dismiss(animated: true) {
+                PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
                 dismissBolck?()
             }
         } else {

@@ -1035,7 +1035,7 @@ class PTFuncNameViewController: PTBaseViewController {
             self.sideMenuController?.revealMenu()
         })
         
-        setCustomRightButtons(buttons: [more], rightPadding: 0)
+        setCustomRightButtons(buttons: [more])
         
         more.badgeCenterOffset = CGPointMake(-25, -5)
         more.badgeBorderLine = 1

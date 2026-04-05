@@ -59,17 +59,17 @@ open class PTBaseNavControl: UINavigationController {
     /// 修改导航栏返回按钮
     open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         
-        if viewControllers.count > 0 {
-            let backBtn = UIButton(type: .custom)
-            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 24, height: 24)
-            backBtn.addActionHandlers { seder in
-                self.back()
-            }
-            let leftItem = UIBarButtonItem(customView: backBtn)
-            viewController.navigationItem.leftBarButtonItem = leftItem
-            viewController.hidesBottomBarWhenPushed = true
-        }
+//        if viewControllers.count > 0 {
+//            let backBtn = UIButton(type: .custom)
+//            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
+//            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 24, height: 24)
+//            backBtn.addActionHandlers { seder in
+//                self.back()
+//            }
+//            let leftItem = UIBarButtonItem(customView: backBtn)
+//            viewController.navigationItem.leftBarButtonItem = leftItem
+//            viewController.hidesBottomBarWhenPushed = true
+//        }
         topViewController?.addSubStatusBar(for: viewController)
         super.pushViewController(viewController, animated: animated)
     }

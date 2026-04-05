@@ -781,7 +781,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         setCustomBackButtonView(dismissButtonItem)
-        setCustomRightButtons(buttons: [doneButtonItem], rightPadding: 0)
+        setCustomRightButtons(buttons: [doneButtonItem])
     }
     
     public init(asset:PHAsset,avAsset:AVAsset) {

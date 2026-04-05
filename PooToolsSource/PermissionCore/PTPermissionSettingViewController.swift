@@ -84,7 +84,7 @@ public class PTPermissionSettingViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "PT Permission Authorize title".localized()
+        self.pt_Title = "PT Permission Authorize title".localized()
         
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in

@@ -65,7 +65,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         backBtn.frame = CGRectMake(0, 0, 34, 34)
         cleanBtn.frame = CGRectMake(0, 0, 34, 34)
         setCustomBackButtonView(backBtn)
-        setCustomRightButtons(buttons: [cleanBtn], rightPadding: 0)
+        setCustomRightButtons(buttons: [cleanBtn])
     }
 
     override func viewDidLoad() {

@@ -550,16 +550,12 @@ public class PTEditImageViewController: PTBaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(dismissButton)
-        setCustomRightButtons(buttons: [doneButton,redoButton,undoButton], rightPadding: 0)
+        setCustomRightButtons(buttons: [doneButton,redoButton,undoButton])
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        PTGCDManager.gcdMain {
-            self.applyNavigationBarStyle()
-        }
-        
+                
         var size = drawingImageView.frame.size
         if shouldSwapSize {
             swap(&size.width, &size.height)

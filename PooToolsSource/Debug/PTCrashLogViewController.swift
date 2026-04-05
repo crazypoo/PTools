@@ -74,7 +74,7 @@ class PTCrashLogViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
-        setCustomRightButtons(buttons: [crashButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [crashButton])
     }
 
     override func viewDidLoad() {

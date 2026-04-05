@@ -94,7 +94,7 @@ class PTLeakListViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
-        setCustomRightButtons(buttons: [deleteButton,shareButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [deleteButton,shareButton])
         setCustomTitleView(titleViewContailer)
     }
 

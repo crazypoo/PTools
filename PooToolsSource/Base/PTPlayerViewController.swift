@@ -51,12 +51,10 @@ open class PTPlayerViewController: PTBaseViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
-        applyNavigationBarStyle()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        applyNavigationBarStyle()
         changeStatusBar(type: .Dark)
     }
     

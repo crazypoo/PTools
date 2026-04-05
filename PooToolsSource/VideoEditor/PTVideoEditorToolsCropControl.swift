@@ -69,12 +69,11 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         setCustomBackButtonView(dismissButtonItem)
-        setCustomRightButtons(buttons: [doneButtonItem], rightPadding: 0)
+        setCustomRightButtons(buttons: [doneButtonItem])
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        applyNavigationBarStyle()
         changeStatusBar(type: .Dark)
     }
     

@@ -68,7 +68,7 @@ class PTLogConsoleViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
-        setCustomRightButtons(buttons: [valueSwitch,refreshButton,clearButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [valueSwitch,refreshButton,clearButton])
     }
 
     override func viewDidLoad() {

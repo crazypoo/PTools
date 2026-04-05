@@ -185,7 +185,7 @@ public class PTDarkModeControl: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = PTDarkModeOption.titleSting
+        pt_Title = PTDarkModeOption.titleSting
         
         // Do any additional setup after loading the view.
         let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight

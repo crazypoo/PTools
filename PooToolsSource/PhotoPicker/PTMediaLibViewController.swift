@@ -858,7 +858,11 @@ extension PTMediaLibViewController {
     public func requestSelectPhoto(viewController: UIViewController? = nil) {
         guard !selectedModel.isEmpty else {
             selectImageBlock?([], isSelectOriginal)
-            viewController?.dismiss(animated: true, completion: nil)
+            viewController?.dismiss(animated: true, completion: {
+                if let presentingVC = viewController?.presentingViewController {
+                    PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
+                }
+            })
             return
         }
                 
@@ -887,8 +891,11 @@ extension PTMediaLibViewController {
             }
             
             if let vc = viewController {
-                vc.dismiss(animated: true) {
-                    call()
+                if let presentingVC = vc.presentingViewController {
+                    vc.dismiss(animated: true) {
+                        PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
+                        call()
+                    }
                 }
             } else {
                 call()

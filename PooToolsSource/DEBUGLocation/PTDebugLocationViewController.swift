@@ -76,7 +76,7 @@ class PTDebugLocationViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
-        setCustomRightButtons(buttons: [valueSwitch], rightPadding: 10)
+        setCustomRightButtons(buttons: [valueSwitch])
     }
     
     override func viewDidLoad() {

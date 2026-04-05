@@ -743,14 +743,11 @@ class PTEditInputViewController: PTBaseViewController {
             PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
         }
         setCustomBackButtonView(cancelBtn)
-        setCustomRightButtons(buttons: [doneBtn], rightPadding: 0)
+        setCustomRightButtons(buttons: [doneBtn])
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTGCDManager.gcdMain {
-            self.applyNavigationBarStyle()
-        }
         PTGCDManager.gcdAfter(time: 0.35, block: {
             self.changeStatusBar(type: .Dark)
         })

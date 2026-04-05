@@ -44,7 +44,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
-        setCustomRightButtons(buttons: [doneButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [doneButton])
     }
 
     // Handle back button press

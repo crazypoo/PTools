@@ -207,6 +207,7 @@ class PTTestChatViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        pt_Title = "123123123123123123"
         let customerTag = PTMessageTextCustomAttTagModel()
         customerTag.tag = "\\标签\\b"
         

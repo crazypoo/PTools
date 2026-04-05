@@ -179,7 +179,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setCustomRightButtons(buttons: [closeBtn], rightPadding: 0)
+        setCustomRightButtons(buttons: [closeBtn])
     }
     
     public override func viewDidLoad() {

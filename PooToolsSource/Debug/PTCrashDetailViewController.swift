@@ -92,7 +92,7 @@ class PTCrashDetailViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
-        setCustomRightButtons(buttons: [shareButton], rightPadding: 10)
+        setCustomRightButtons(buttons: [shareButton])
     }
     
     init(viewModel: PTCrashDetailModel!) {
