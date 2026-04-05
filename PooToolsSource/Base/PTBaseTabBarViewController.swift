@@ -10,21 +10,39 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+private var kPTTabBarHiddenKey: Void?
+
 public protocol PTTabBarVisibilityProtocol {
-    var pt_prefersTabBarHidden: Bool { get }
+    var pt_prefersTabBarHidden: Bool { get set }
 }
 
-
 extension UIViewController: PTTabBarVisibilityProtocol {
-    @objc public var pt_prefersTabBarHidden: Bool { false }
+    public var pt_prefersTabBarHidden: Bool {
+        get {
+            return (objc_getAssociatedObject(self, &kPTTabBarHiddenKey) as? Bool) ?? false
+        }
+        set {
+            objc_setAssociatedObject(self, &kPTTabBarHiddenKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
 }
 
 open class PTBaseTabBarViewController: UITabBarController {
 
     public var ptCustomBar = PTTabBarView()
     
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        syncInitialTabBarState()
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
+        
+        PTNavigationBarManager.shared.tabBarHandler = { [weak self] nav, toVC, animated, coordinator in
+            self?.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
+        }
+
         /*
         //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
         //tabBarController.mode = .tabSidebar
@@ -36,6 +54,13 @@ open class PTBaseTabBarViewController: UITabBarController {
         }
     }
     
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        tabBar.isHidden = true   // ✅ 重新加回来（但只做隐藏，不参与动画）
+        tabBar.frame = .zero   // ❗彻底干掉系统 tabBar
+    }
+    
     // MARK: 设置UIViewController
     public func configViewController(viewController: UIViewController, title: String) -> PTBaseNavControl {
         let navigationController = PTBaseNavControl(rootViewController: viewController)
@@ -43,7 +68,20 @@ open class PTBaseTabBarViewController: UITabBarController {
     }
     
     private func setupTabBar() {
-        tabBar.isHidden = true
+        tabBar.isHidden = false
+        tabBar.backgroundImage = UIImage()
+        tabBar.shadowImage = UIImage()
+        tabBar.isTranslucent = true
+        tabBar.alpha = 0
+        
+        if #available(iOS 15.0, *) {
+            let appearance = UITabBarAppearance()
+            appearance.configureWithTransparentBackground()
+            appearance.backgroundColor = .clear
+            
+            tabBar.standardAppearance = appearance
+            tabBar.scrollEdgeAppearance = appearance
+        }
 
         view.addSubview(ptCustomBar)
         ptCustomBar.snp.makeConstraints {
@@ -55,14 +93,49 @@ open class PTBaseTabBarViewController: UITabBarController {
     
     open func configure(items: [PTTabBarItemConfig]) {
         let vcs = items.map { item -> UIViewController in
-            if let nav = item.viewController as? UINavigationController {
-                nav.delegate = self
-            } else if let side = item.viewController as? PTSideMenuControl,let findNav = side.contentViewController as? UINavigationController {
-                findNav.delegate = self
-            }
             return item.viewController
         }
         viewControllers = vcs
+        DispatchQueue.main.async {
+            self.syncInitialTabBarState()
+        }
+    }
+    
+    private func handleTabBar(nav: UINavigationController,
+                              to viewController: UIViewController,
+                              animated: Bool,
+                              coordinator: UIViewControllerTransitionCoordinator?) {
+        
+        // 👉 fallback（无动画）
+        guard let coordinator else {
+            updateTabBar(for: nav, to: viewController, animated: animated)
+            return
+        }
+
+        // 👉 动画同步（push / pop）
+        coordinator.animate(alongsideTransition: { _ in
+            self.updateTabBar(for: nav, to: viewController, animated: animated)
+        }, completion: { context in
+            
+            // ❗取消手势
+            if context.isCancelled {
+                if let fromVC = context.viewController(forKey: .from) {
+                    self.updateTabBar(for: nav, to: fromVC, animated: false)
+                }
+            } else {
+                // ✅ 最终状态（popToRoot 关键）
+                if let toVC = context.viewController(forKey: .to) {
+                    self.updateTabBar(for: nav, to: toVC, animated: false)
+                }
+            }
+        })
+    }
+    
+    private func syncInitialTabBarState() {
+        guard let nav = selectedViewController as? UINavigationController,
+              let topVC = nav.topViewController else { return }
+        
+        updateTabBar(for: nav, to: topVC, animated: false)
     }
 }
 
@@ -137,55 +210,39 @@ extension PTBaseTabBarViewController: UITabBarControllerDelegate {
     }
 }
 
-extension PTBaseTabBarViewController: UINavigationControllerDelegate {
-    public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        guard let coordinator = navigationController.transitionCoordinator else {
-            updateTabBar(for: navigationController, to: viewController, animated: animated)
-            return
-        }
-
-        // 动画过程中
-        coordinator.animate(alongsideTransition: { _ in
-            self.updateTabBar(for: navigationController, to: viewController, animated: animated)
-        }, completion: { context in
-            // ❗关键：如果取消了，需要恢复状态
-            if context.isCancelled {
-                guard let fromVC = context.viewController(forKey: .from) else { return }
-                self.updateTabBar(for: navigationController, to: fromVC, animated: false)
-            } else {
-                // ✅ 最终状态（关键，解决 popToRoot）
-                if let toVC = context.viewController(forKey: .to) {
-                    self.updateTabBar(for: navigationController, to: toVC, animated: false)
-                }
-            }
-        })
-    }
-        
+extension PTBaseTabBarViewController {
     private func updateTabBar(for navigationController: UINavigationController,
                               to viewController: UIViewController,
                               animated: Bool) {
         
-        let isRoot = navigationController.viewControllers.first == viewController
-        setTabBar(hidden: !isRoot, animated: animated)
+        let hidden = viewController.pt_prefersTabBarHidden
+        setTabBar(hidden: hidden, animated: animated)
     }
     
     private func setTabBar(hidden: Bool, animated: Bool) {
         tabBar.isHidden = true
-        let height = ptCustomBar.currentBarLayoutStyle == .normal ? CGFloat.kTabbarHeight_Total : (CGFloat.kTabbarHeight_Total + ptCustomBar.centerButtonSize / 2)
+        let height = ptCustomBar.currentBarLayoutStyle == .normal
+        ? CGFloat.kTabbarHeight_Total
+        : (CGFloat.kTabbarHeight_Total + ptCustomBar.centerButtonSize / 2)
 
-        let animations = {
-            self.ptCustomBar.transform = hidden
-                ? CGAffineTransform(translationX: 0, y: height)
-                : .identity
+        let transform = hidden
+            ? CGAffineTransform(translationX: 0, y: height)
+            : .identity
+
+        let updateHiddenState = {
+            self.tabBar.isHidden = false   // ❗始终 false（靠 transform 控制）
         }
 
         if animated {
             UIView.animate(withDuration: 0.25,
                            delay: 0,
-                           options: [.curveEaseInOut],
-                           animations: animations)
+                           options: [.curveEaseInOut]) {
+                updateHiddenState()
+                self.ptCustomBar.transform = transform
+            }
         } else {
-            animations()
+            updateHiddenState()
+            self.ptCustomBar.transform = transform
         }
     }
 }

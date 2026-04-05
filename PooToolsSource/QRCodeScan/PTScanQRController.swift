@@ -54,8 +54,6 @@ public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Voi
 @objcMembers
 public class PTScanQRController: PTBaseViewController {
     
-    public override var pt_prefersTabBarHidden: Bool { true }
-
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
     //MARK: 掃描回調
     ///掃描回調
@@ -189,6 +187,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 生命週期
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        pt_prefersTabBarHidden = true
         configureNavigationBar(hidden: true)
     }
     

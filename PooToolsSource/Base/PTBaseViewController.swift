@@ -194,6 +194,8 @@ public final class PTNavigationBarManager:NSObject {
     private var fromStyle: PTNavigationBarStyle = .transparent
     private var toStyle: PTNavigationBarStyle = .transparent
     
+    public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?
+    
     public func installIfNeeded(in nav: UINavigationController) {
         if containerMap.object(forKey: nav) != nil { return }
 
@@ -328,6 +330,9 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                 }
             }
         }
+
+        // 🔥🔥🔥 关键：驱动 TabBar（这里替代 delegate）
+        tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
 
         viewController.navigationItem.hidesBackButton = true
         viewController.title = nil
@@ -507,8 +512,6 @@ open class PTBaseViewController: UIViewController {
         }
     }
 
-    override public var pt_prefersTabBarHidden: Bool { false }
-
     deinit {
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
         removeFromSuperStatusBar()
@@ -587,8 +590,10 @@ open class PTBaseViewController: UIViewController {
                 self.viewDismiss()
             }
             setCustomBackButtonView(backBtn)
+            pt_prefersTabBarHidden = true
         }
         if let _ = self.presentingViewController {
+            pt_prefersTabBarHidden = true
             let backBtn = baseBackButton()
             backBtn.addActionHandlers { seder in
                 self.viewDismiss()
