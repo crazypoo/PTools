@@ -233,23 +233,30 @@ public final class PTNavigationBarManager:NSObject {
         let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
         
-        // 同步 appearance（避免 push 闪）
+        resetSystemNavBarAppearance(nav)
+    }
+    
+    private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
         appearance.backgroundImage = UIImage()
         appearance.shadowImage = UIImage()
-        // 设置标题属性
+        
         appearance.titleTextAttributes = [
             .font: PTAppBaseConfig.share.navTitleFont,
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
+        
         nav.navigationBar.standardAppearance = appearance
         nav.navigationBar.scrollEdgeAppearance = appearance
         nav.navigationBar.compactAppearance = appearance
-    }
         
+        // 🔥 关键：关闭系统 blur
+        nav.navigationBar.isTranslucent = true
+    }
+    
     public func setAlpha(_ alpha: CGFloat) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
@@ -286,6 +293,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                               animated: Bool) {
         currentNav = navigationController
         currentVC = viewController
+        resetSystemNavBarAppearance(navigationController)
         
         // ❗如果这个 VC 不是 nav 栈里的（理论上不会，但防御）
         guard let container = containerMap.object(forKey: navigationController) else { return }
