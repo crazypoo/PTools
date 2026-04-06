@@ -124,7 +124,7 @@ open class PTBaseWebViewController: PTBaseViewController {
     }
 }
 
-extension PTBaseWebViewController: WKNavigationDelegate,WKUIDelegate,UIScrollViewDelegate {
+extension PTBaseWebViewController: WKNavigationDelegate,WKUIDelegate {
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
         return .allow

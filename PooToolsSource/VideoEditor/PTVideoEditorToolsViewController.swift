@@ -1161,7 +1161,7 @@ fileprivate extension PTVideoEditorToolsViewController {
 }
 
 //MARK: ScrollView Delegate
-extension PTVideoEditorToolsViewController: UIScrollViewDelegate {
+extension PTVideoEditorToolsViewController {
     func updateScrollViewContentOffset(fractionCompleted: Double) {
         let x = timeLineScroll.contentSize.width * CGFloat(fractionCompleted) - (timeLineScroll.contentSize.width / 2)
         let point = CGPoint(x: x, y: 0)
@@ -1182,7 +1182,8 @@ extension PTVideoEditorToolsViewController: UIScrollViewDelegate {
         }
     }
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        super.scrollViewDidScroll(scrollView)
         let presentValue = Double((scrollView.contentOffset.x + (scrollView.contentSize.width / 2)) / scrollView.contentSize.width)
         let current = Float64(videoTime * presentValue)
         let cmTime = CMTimeMakeWithSeconds(current, preferredTimescale: Int32(NSEC_PER_SEC))

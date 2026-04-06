@@ -11,6 +11,10 @@ import MapKit
 
 class PTTestChatViewController: PTBaseViewController {
         
+    override func prefersLargeTitle() -> Bool {
+        return true
+    }
+    
     fileprivate var pageNumber:Int = 0
     fileprivate var olderChatTimeSteam:String = ""
 
@@ -227,6 +231,9 @@ class PTTestChatViewController: PTBaseViewController {
                 cView.scrollToBottom(animated: true)
             }
         }
+        
+        bindScrollView(chatContent.listCollection.contentCollectionView)
+        
         
         PTGCDManager.gcdAfter(time: 5) {
             self.chatContent.chatDataArr.removeAll(where: { $0.messageType == .Typing })

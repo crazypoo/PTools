@@ -955,7 +955,7 @@ extension PTCutViewController {
     }
 }
 
-extension PTCutViewController: UIScrollViewDelegate {
+extension PTCutViewController {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         containerView
     }

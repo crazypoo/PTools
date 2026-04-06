@@ -1420,7 +1420,7 @@ extension PTEditImageViewController {
 }
 
 //MARK: UIScrollViewDelegate
-extension PTEditImageViewController:UIScrollViewDelegate {
+extension PTEditImageViewController {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         containerView
     }
@@ -1435,7 +1435,8 @@ extension PTEditImageViewController:UIScrollViewDelegate {
         isScrolling = false
     }
     
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        super.scrollViewDidScroll(scrollView)
         guard scrollView == mainScrollView else {
             return
         }

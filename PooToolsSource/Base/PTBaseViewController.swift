@@ -76,14 +76,14 @@ public final class PTNavigationBarContainer: UIView {
     let contentView = UIView()
         
     // ✅ 新增三块区域
-    lazy var leftContainer:UIStackView = {
+    fileprivate lazy var leftContainer:UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .center
         view.distribution = .fillProportionally
         return view
     }()
-    let rightContainer:UIStackView = {
+    fileprivate let rightContainer:UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .center
@@ -91,14 +91,30 @@ public final class PTNavigationBarContainer: UIView {
         return view
     }()
     
-    let titleContainer = UIView()
+    fileprivate let titleContainer = UIView()
+    
+    let topBarContainer = UIView()   // ← 放 left/right/title
+    let largeTitleContainer = UIView() // ← 单独一层
+    fileprivate let largeTitleLabel = UILabel()
+    fileprivate var largeTitleHeight: CGFloat = 52
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubviews([backgroundView,contentView])
+        contentView.addSubviews([topBarContainer, largeTitleContainer])
+        topBarContainer.addSubviews([leftContainer, rightContainer, titleContainer])
+        largeTitleContainer.addSubview(largeTitleLabel)
+        topBarContainer.snp.makeConstraints { make in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(CGFloat.statusBarHeight() + CGFloat.kNavBarHeight)
+        }
         
-        contentView.addSubviews([leftContainer,rightContainer,titleContainer])
+        largeTitleContainer.snp.makeConstraints { make in
+            make.top.equalTo(topBarContainer.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(52) // LargeTitle 高度
+        }
         leftContainer.isHidden = true
         rightContainer.isHidden = true
         titleContainer.isHidden = true
@@ -108,6 +124,16 @@ public final class PTNavigationBarContainer: UIView {
         
         backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        largeTitleLabel.font = PTAppBaseConfig.share.navLargeTitleFont
+        largeTitleLabel.textColor = PTAppBaseConfig.share.navTitleTextColor
+        largeTitleLabel.numberOfLines = 0
+        largeTitleLabel.lineBreakMode = .byTruncatingTail
+        largeTitleLabel.alpha = 0
+        largeTitleLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview()
+        }
     }
     
     public required init?(coder: NSCoder) { fatalError() }
@@ -116,15 +142,35 @@ public final class PTNavigationBarContainer: UIView {
         switch style {
         case .gradient(let type, let colors):
             backgroundView.backgroundGradient(type: type, colors: colors)
+            largeTitleContainer.backgroundGradient(type: type, colors: colors)
         case .solid(let color):
             backgroundView.backgroundColor = color
+            largeTitleContainer.backgroundColor = color
         case .transparent:
             backgroundView.backgroundColor = .clear
+            largeTitleContainer.backgroundColor = .clear
         }
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+    }
+}
+
+extension PTNavigationBarContainer {
+    func updateLargeTitle(progress: CGFloat) {
+        let p = min(1, max(0, progress))
+        // 大标题高度收缩
+        let maxHeight: CGFloat = 52
+        let height = maxHeight * (1 - p)
+        
+        largeTitleContainer.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+        
+        // 渐变
+        largeTitleLabel.alpha = 1 - p
+        titleContainer.alpha = p
     }
 }
 
@@ -200,12 +246,7 @@ public final class PTNavigationBarManager:NSObject {
         if containerMap.object(forKey: nav) != nil { return }
 
         let navBar = nav.navigationBar
-        
-        navBar.subviews.forEach {
-            if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {
-                $0.alpha = 0
-            }
-        }
+        resetSystemNavBarAppearance(nav)
         
         // ✅ 获取 statusBar 高度（正确方式）
         let statusBarHeight = nav.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
@@ -221,11 +262,7 @@ public final class PTNavigationBarManager:NSObject {
         )
         
         container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        navBar.setBackgroundImage(UIImage(), for: .default)
-        navBar.shadowImage = UIImage()
-        navBar.isTranslucent = true
-        
+                
         navBar.addSubview(container)
         navBar.sendSubviewToBack(container)
         containerMap.setObject(container, forKey: nav)
@@ -245,6 +282,7 @@ public final class PTNavigationBarManager:NSObject {
     private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = nil   // ❗关键（去 blur）
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
         appearance.backgroundImage = UIImage()
@@ -255,12 +293,24 @@ public final class PTNavigationBarManager:NSObject {
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
         
+        if #available(iOS 15.0, *) {
+            nav.navigationBar.compactScrollEdgeAppearance = appearance
+        }
+
         nav.navigationBar.standardAppearance = appearance
         nav.navigationBar.scrollEdgeAppearance = appearance
         nav.navigationBar.compactAppearance = appearance
         
         // 🔥 关键：关闭系统 blur
         nav.navigationBar.isTranslucent = true
+        
+        nav.navigationBar.subviews.forEach {
+            if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {
+                $0.isHidden = true
+                $0.isUserInteractionEnabled = false
+                $0.alpha = 0
+            }
+        }
     }
     
     public func setAlpha(_ alpha: CGFloat) {
@@ -290,6 +340,32 @@ public final class PTNavigationBarManager:NSObject {
         if vc === currentVC {
             apply(item: item)
         }
+    }
+}
+
+extension PTNavigationBarManager {
+    func updateScrollProgress(_ progress: CGFloat) {
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav) else { return }
+        container.updateLargeTitle(progress: progress)
+    }
+    
+    public func currentNavLargeTitleBarHeight() -> CGFloat {
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav) else { return 0 }
+        
+        let largeTitle: CGFloat = container.largeTitleContainer.isHidden ? 0 : 52
+        
+        return largeTitle
+    }
+    
+    public func currentNavBarHeight() -> CGFloat {
+        guard let nav = currentNav else { return 0 }
+        
+        let status = CGFloat.statusBarHeight()
+        let navBar: CGFloat = CGFloat.kNavBarHeight
+        
+        return status + navBar + currentNavLargeTitleBarHeight()
     }
 }
 
@@ -365,7 +441,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             apply(style: item.barColorStyle, in: navigationController) // ✅ 顺便补上
             apply(item: item)
         } else {
-            clear()
+//            clear()
         }
     }
     
@@ -388,6 +464,36 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             titleLabel = false
             setTitleView(nil)
         }
+        
+        // ===== LargeTitle 逻辑（🔥重点）=====
+        guard let nav = currentNav,
+              let container = containerMap.object(forKey: nav),
+              let vc = currentVC as? PTBaseViewController else { return }
+
+        let isLarge = vc.prefersLargeTitle()
+        let hasTitle = !item.navTitle.stringIsEmpty()
+
+        if isLarge && hasTitle {
+            container.largeTitleLabel.text = item.navTitle
+            container.largeTitleLabel.isHidden = false
+            
+            // ✅ 初始状态（顶部）
+            container.largeTitleLabel.alpha = 1
+            container.largeTitleLabel.transform = .identity
+            
+            // ❗小标题默认隐藏（等 scroll 再出现）
+            container.titleContainer.alpha = 0
+        } else {
+            // ❗彻底 reset（防残留）
+            container.largeTitleLabel.text = nil
+            container.largeTitleLabel.isHidden = true
+            container.largeTitleLabel.alpha = 0
+            container.largeTitleLabel.transform = .identity
+            
+            // 小标题恢复正常
+            container.titleContainer.alpha = 1
+        }
+
     }
 
     private func clear() {
@@ -405,6 +511,17 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                   item.isConfigured else {
             return
         }
+        apply(style: item.barColorStyle, in: nav)
+        apply(item: item)
+    }
+    
+    public func refreshCurrentNavBar() {
+        guard let vc = currentVC,
+              let nav = currentNav else { return }
+        
+        guard let item = itemCache.object(forKey: vc),
+              item.isConfigured else { return }
+        
         apply(style: item.barColorStyle, in: nav)
         apply(item: item)
     }
@@ -527,6 +644,10 @@ extension PTNavigationBarManager {
 @objcMembers
 open class PTBaseViewController: UIViewController {
                    
+    open func prefersLargeTitle() -> Bool {
+        return false
+    }
+    
     open func allowControlNavBar() -> Bool {
         return true
     }
@@ -800,6 +921,27 @@ open class PTBaseViewController: UIViewController {
     
     @objc func backButtonTapped() {
         self.returnFrontVC()
+    }
+}
+
+extension PTBaseViewController: UIScrollViewDelegate {
+    open func bindScrollView(_ scrollView: UIScrollView) {
+        
+        self.view.layoutIfNeeded()
+        scrollView.delegate = self
+        let topHeight = scrollView.frame.origin.y + PTNavigationBarManager.shared.currentNavLargeTitleBarHeight()
+        
+        scrollView.contentInset.top = topHeight
+        scrollView.verticalScrollIndicatorInsets.top = topHeight
+        scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.y
+        let insetTop = scrollView.contentInset.top
+        
+        let progress = (offset + insetTop) / PTAppBaseConfig.share.navLargeTitleProgress
+        PTNavigationBarManager.shared.updateScrollProgress(progress)
     }
 }
 

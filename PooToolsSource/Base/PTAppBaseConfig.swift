@@ -46,6 +46,8 @@ public class PTAppBaseConfig: NSObject {
     public var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
     public var viewControllerBackDarkItemImage:UIImage = UIImage(.chevron.left)
     public var navTitleFont:UIFont = .appfont(size: 24)
+    public var navLargeTitleFont:UIFont = .appfont(size: 34)
+    public var navLargeTitleProgress:CGFloat = 120
     public var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
     public var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
     public var hidesBarsOnSwipe:Bool = false
