@@ -297,6 +297,11 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,
                               animated: Bool) {
+        if let baseVC = viewController as? PTBaseViewController,
+           !baseVC.allowControlNavBar() {
+            return
+        }
+        
         currentNav = navigationController
         currentVC = viewController
         resetSystemNavBarAppearance(navigationController)
@@ -522,6 +527,10 @@ extension PTNavigationBarManager {
 @objcMembers
 open class PTBaseViewController: UIViewController {
                    
+    open func allowControlNavBar() -> Bool {
+        return true
+    }
+    
     open var pt_Title:String? {
         didSet {
             let item = PTNavigationBarManager.shared.item(for: self)
