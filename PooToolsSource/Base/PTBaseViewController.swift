@@ -96,7 +96,7 @@ public final class PTNavigationBarContainer: UIView {
     let topBarContainer = UIView()   // ← 放 left/right/title
     let largeTitleContainer = UIView() // ← 单独一层
     fileprivate let largeTitleLabel = UILabel()
-    fileprivate var largeTitleHeight: CGFloat = 52
+    fileprivate var largeTitleHeight: CGFloat = PTAppBaseConfig.share.navLargeTitleBarHeight
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -162,7 +162,7 @@ extension PTNavigationBarContainer {
     func updateLargeTitle(progress: CGFloat) {
         let p = min(1, max(0, progress))
         // 大标题高度收缩
-        let maxHeight: CGFloat = 52
+        let maxHeight: CGFloat = largeTitleHeight
         // ===== 1. Stretch（下拉放大）=====
         if p < 0 {
             let stretch = abs(p)
@@ -388,6 +388,7 @@ extension PTNavigationBarManager {
     public func currentNavLargeTitleBarHeight() -> CGFloat {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return 0 }
+        container.layoutIfNeeded()
         return container.largeTitleContainer.frame.height
     }
     
@@ -509,7 +510,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             container.largeTitleContainer.isHidden = false
             
             container.largeTitleContainer.snp.updateConstraints { make in
-                make.height.equalTo(52)
+                make.height.equalTo(container.largeTitleHeight)
             }
             
             container.largeTitleLabel.text = item.navTitle
@@ -972,35 +973,40 @@ extension PTBaseViewController: UIScrollViewDelegate {
         
         self.view.layoutIfNeeded()
         scrollView.delegate = self
-        let topHeight = scrollView.frame.origin.y + PTNavigationBarManager.shared.currentNavLargeTitleBarHeight()
-        
-        scrollView.contentInset.top = topHeight
-        scrollView.verticalScrollIndicatorInsets.top = topHeight
-        scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        if prefersLargeTitle() {
+            let topHeight = scrollView.frame.origin.y + PTAppBaseConfig.share.navLargeTitleBarHeight
+            
+            scrollView.contentInset.top = topHeight
+            scrollView.verticalScrollIndicatorInsets.top = topHeight
+            scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        }
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offset = scrollView.contentOffset.y
-        let insetTop = scrollView.contentInset.top
-        
-        let progress = (offset + insetTop) / PTAppBaseConfig.share.navLargeTitleProgress
-        PTNavigationBarManager.shared.updateScrollProgress(progress)
+        if prefersLargeTitle() {
+            let offset = scrollView.contentOffset.y
+            let insetTop = scrollView.contentInset.top
+            
+            let progress = (offset + insetTop) / PTAppBaseConfig.share.navLargeTitleProgress
+            PTNavigationBarManager.shared.updateScrollProgress(progress)
+        }
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        
-        guard scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
-        
-        UIView.animate(withDuration: 0.25,
-                       delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0.5,
-                       options: [.curveEaseOut]) {
+        if prefersLargeTitle() {
+            guard scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
             
-            scrollView.setContentOffset(
-                CGPoint(x: 0, y: -scrollView.contentInset.top),
-                animated: false
-            )
+            UIView.animate(withDuration: 0.25,
+                           delay: 0,
+                           usingSpringWithDamping: 0.8,
+                           initialSpringVelocity: 0.5,
+                           options: [.curveEaseOut]) {
+                
+                scrollView.setContentOffset(
+                    CGPoint(x: 0, y: -scrollView.contentInset.top),
+                    animated: false
+                )
+            }
         }
     }
 }

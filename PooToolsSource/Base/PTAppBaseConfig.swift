@@ -48,6 +48,7 @@ public class PTAppBaseConfig: NSObject {
     public var navTitleFont:UIFont = .appfont(size: 24)
     public var navLargeTitleFont:UIFont = .appfont(size: 34)
     public var navLargeTitleProgress:CGFloat = 120
+    public var navLargeTitleBarHeight:CGFloat = 52
     public var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
     public var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
     public var hidesBarsOnSwipe:Bool = false
