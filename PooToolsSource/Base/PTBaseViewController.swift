@@ -201,6 +201,12 @@ public final class PTNavigationBarManager:NSObject {
 
         let navBar = nav.navigationBar
         
+        navBar.subviews.forEach {
+            if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {
+                $0.alpha = 0
+            }
+        }
+        
         // ✅ 获取 statusBar 高度（正确方式）
         let statusBarHeight = nav.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         
@@ -539,6 +545,10 @@ open class PTBaseViewController: UIViewController {
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
         applyNavigationBar()
         PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+        // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
+        if let nav = navigationController {
+            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+        }
     }
     
     open override func viewDidAppear(_ animated: Bool) {
