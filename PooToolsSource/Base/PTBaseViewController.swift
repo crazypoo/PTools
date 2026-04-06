@@ -113,8 +113,9 @@ public final class PTNavigationBarContainer: UIView {
         largeTitleContainer.snp.makeConstraints { make in
             make.top.equalTo(topBarContainer.snp.bottom)
             make.left.right.equalToSuperview()
-            make.height.equalTo(52) // LargeTitle 高度
+            make.height.equalTo(0) // LargeTitle 高度
         }
+        largeTitleContainer.isHidden = true
         leftContainer.isHidden = true
         rightContainer.isHidden = true
         titleContainer.isHidden = true
@@ -132,7 +133,7 @@ public final class PTNavigationBarContainer: UIView {
         largeTitleLabel.alpha = 0
         largeTitleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview()
+            make.bottom.top.equalToSuperview()
         }
     }
     
@@ -162,15 +163,49 @@ extension PTNavigationBarContainer {
         let p = min(1, max(0, progress))
         // 大标题高度收缩
         let maxHeight: CGFloat = 52
+        // ===== 1. Stretch（下拉放大）=====
+        if p < 0 {
+            let stretch = abs(p)
+            let height = maxHeight + stretch * 40   // 拉伸幅度
+            
+            largeTitleContainer.snp.updateConstraints { make in
+                make.height.equalTo(height)
+            }
+            
+            // 字体轻微放大（系统类似效果）
+            let scale = 1 + stretch * 0.08
+            largeTitleLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+            
+            // 始终显示大标题
+            largeTitleLabel.alpha = 1
+            titleContainer.alpha = 0
+            
+            return
+        }
+        
+        // ===== 2. 正常收缩 =====
         let height = maxHeight * (1 - p)
         
         largeTitleContainer.snp.updateConstraints { make in
             make.height.equalTo(height)
         }
         
-        // 渐变
+        // ===== 3. alpha 渐变 =====
         largeTitleLabel.alpha = 1 - p
         titleContainer.alpha = p
+        
+        // ===== 4. scale（系统 subtle 动画）=====
+        let scale = 1 - 0.05 * p
+        largeTitleLabel.transform = CGAffineTransform(scaleX: scale, y: scale)
+        
+        // ===== 5. 字重动态变化（🔥重点）=====
+        let baseFont = PTAppBaseConfig.share.navLargeTitleFont
+        let fontSize = baseFont.pointSize
+        
+        let weight: UIFont.Weight = p > 0.5 ? .semibold : .bold
+        
+        largeTitleLabel.font = UIFont.systemFont(ofSize: fontSize, weight: weight)
+
     }
 }
 
@@ -353,14 +388,11 @@ extension PTNavigationBarManager {
     public func currentNavLargeTitleBarHeight() -> CGFloat {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return 0 }
-        
-        let largeTitle: CGFloat = container.largeTitleContainer.isHidden ? 0 : 52
-        
-        return largeTitle
+        return container.largeTitleContainer.frame.height
     }
     
     public func currentNavBarHeight() -> CGFloat {
-        guard let nav = currentNav else { return 0 }
+        guard let _ = currentNav else { return 0 }
         
         let status = CGFloat.statusBarHeight()
         let navBar: CGFloat = CGFloat.kNavBarHeight
@@ -474,24 +506,35 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         let hasTitle = !item.navTitle.stringIsEmpty()
 
         if isLarge && hasTitle {
+            container.largeTitleContainer.isHidden = false
+            
+            container.largeTitleContainer.snp.updateConstraints { make in
+                make.height.equalTo(52)
+            }
+            
             container.largeTitleLabel.text = item.navTitle
             container.largeTitleLabel.isHidden = false
             
-            // ✅ 初始状态（顶部）
             container.largeTitleLabel.alpha = 1
             container.largeTitleLabel.transform = .identity
             
-            // ❗小标题默认隐藏（等 scroll 再出现）
             container.titleContainer.alpha = 0
+
         } else {
-            // ❗彻底 reset（防残留）
+            // ❗关键：彻底关闭 largeTitle            
+            container.largeTitleContainer.isHidden = true
+            
+            container.largeTitleContainer.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
+            
             container.largeTitleLabel.text = nil
             container.largeTitleLabel.isHidden = true
             container.largeTitleLabel.alpha = 0
             container.largeTitleLabel.transform = .identity
             
-            // 小标题恢复正常
             container.titleContainer.alpha = 1
+
         }
 
     }
@@ -942,6 +985,23 @@ extension PTBaseViewController: UIScrollViewDelegate {
         
         let progress = (offset + insetTop) / PTAppBaseConfig.share.navLargeTitleProgress
         PTNavigationBarManager.shared.updateScrollProgress(progress)
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+        guard scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
+        
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.5,
+                       options: [.curveEaseOut]) {
+            
+            scrollView.setContentOffset(
+                CGPoint(x: 0, y: -scrollView.contentInset.top),
+                animated: false
+            )
+        }
     }
 }
 

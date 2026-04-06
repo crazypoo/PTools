@@ -1176,7 +1176,8 @@ extension PTVideoEditorToolsViewController {
         isSeeking = false
     }
 
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
         if !decelerate {
             isSeeking = false
         }

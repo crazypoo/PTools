@@ -1443,7 +1443,8 @@ extension PTEditImageViewController {
         isScrolling = true
     }
     
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
         guard scrollView == mainScrollView else {
             return
         }
