@@ -390,7 +390,7 @@ public enum PTNetworkCachePolicy:String {
     case networkElseCache       // 网络失败再用缓存
 }
 
-public final class NetworkCache {
+public final class NetworkCache : @unchecked Sendable {
     
     static let shared = NetworkCache()
     
@@ -398,6 +398,9 @@ public final class NetworkCache {
     private let diskPath: String
     private var lastCleanTime: TimeInterval = 0
 
+    // 💡 新增：用于保护磁盘 IO 的专用队列，防止多线程同时读写同一个文件
+    private let ioQueue = DispatchQueue(label: "pt.network.cache.io", attributes: .concurrent)
+    
     private init() {
         let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
         diskPath = path.nsString.appendingPathComponent("PTNetworkCache")
@@ -431,8 +434,12 @@ public final class NetworkCache {
         
         memoryCache.setObject(encoded as NSData, forKey: key as NSString)
         
-        let path = diskPath.nsString.appendingPathComponent(key)
-        try? encoded.write(to: URL(fileURLWithPath: path))
+        // 💡 优化：磁盘写入使用 barrier 异步操作，保证数据一致性
+        ioQueue.async(flags: .barrier) { [weak self] in
+            guard let self = self else { return }
+            let path = self.diskPath.nsString.appendingPathComponent(key)
+            try? encoded.write(to: URL(fileURLWithPath: path))
+        }
     }
     
     // MARK: - Read
@@ -445,23 +452,30 @@ public final class NetworkCache {
            var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
            obj.expireTime > now {
             obj.lastAccessTime = now
+            // 更新访问时间
             save(data: obj.data, request: request, expire: obj.expireTime - now)
             return obj.data
         }
         
-        // 磁盘
-        let path = (diskPath as NSString).appendingPathComponent(key)
-        if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-           var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
-           obj.expireTime > now {
-            obj.lastAccessTime = now
-            save(data: obj.data, request: request, expire: obj.expireTime - now)
-
-            memoryCache.setObject(data as NSData, forKey: key as NSString)
-            return obj.data
+        // 💡 优化：磁盘读取使用同步 IO 队列
+        var resultData: Data? = nil
+        ioQueue.sync {
+            let path = (self.diskPath as NSString).appendingPathComponent(key)
+            if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+               var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
+               obj.expireTime > now {
+                
+                obj.lastAccessTime = now
+                // 更新时间并同步到内存
+                DispatchQueue.global().async {
+                    self.save(data: obj.data, request: request, expire: obj.expireTime - now)
+                }
+                
+                self.memoryCache.setObject(data as NSData, forKey: key as NSString)
+                resultData = obj.data
+            }
         }
-        
-        return nil
+        return resultData
     }
     
     // MARK: - Clear
@@ -667,16 +681,18 @@ public struct RequestKey: Hashable {
     }
 }
 
-public final class RequestDeduplicator {
+public actor RequestDeduplicator {
     
-    static let shared = RequestDeduplicator()
+    public static let shared = RequestDeduplicator()
     
     private var runningTasks: [RequestKey: Task<PTBaseStructModel, Error>] = [:]
-    private let lock = NSLock()
     
-    func execute(request: URLRequest,
-                 policy: PTNetworkDedupPolicy,
-                 task: @escaping () async throws -> PTBaseStructModel) async throws -> PTBaseStructModel {
+    // 初始化方法私有化，保证单例
+    private init() {}
+    
+    public func execute(request: URLRequest,
+                        policy: PTNetworkDedupPolicy,
+                        task: @escaping @Sendable () async throws -> PTBaseStructModel) async throws -> PTBaseStructModel {
         
         switch policy {
         case .none:
@@ -684,28 +700,28 @@ public final class RequestDeduplicator {
         default:
             let key = RequestKey(request: request)
             
-            lock.lock()
-            if let existing = runningTasks[key] {
-                lock.unlock()
-                return try await existing.value
+            // 1. 如果已有相同请求在执行，直接等待它的结果
+            if let existingTask = runningTasks[key] {
+                return try await existingTask.value
             }
             
+            // 2. 创建新任务
             let newTask = Task {
-                defer { self.remove(key) }
+                // 执行网络请求
                 return try await task()
             }
             
+            // 3. 将任务保存到字典中
             runningTasks[key] = newTask
-            lock.unlock()
+            
+            // 4. 等待任务完成
+            defer {
+                // 确保无论成功失败，任务完成后都从字典中移除
+                runningTasks.removeValue(forKey: key)
+            }
             
             return try await newTask.value
         }
-    }
-    
-    private func remove(_ key: RequestKey) {
-        lock.lock()
-        runningTasks.removeValue(forKey: key)
-        lock.unlock()
     }
 }
 
@@ -1250,7 +1266,7 @@ public class Network: NSObject {
         }
     }
         
-    /// 图片上传接口
+    /// 图片上传接口 (优化版)
     class public func imageUpload(needGobal: Bool = true,
                                   images: [UIImage]?,
                                   path: URLConvertible,
@@ -1261,6 +1277,7 @@ public class Network: NSObject {
                                   modelType: Convertible.Type? = nil,
                                   jsonRequest: Bool = false,
                                   pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        
         AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -1271,15 +1288,18 @@ public class Network: NSObject {
                     let session = Network.share.session
 
                     session.upload(multipartFormData: { multipartFormData in
+                        // 使用枚举配合 autoreleasepool 防止大图片同时驻留内存导致 OOM
                         images?.enumerated().forEach { index, image in
-                            let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
-                            guard let imageData = data else { return }
+                            autoreleasepool {
+                                let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
+                                guard let imageData = data else { return }
 
-                            let key = fileKey[safe: index] ?? "image"
-                            let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
-                            let mimeType = pngData ? "image/png" : "image/jpeg"
+                                let key = fileKey[safe: index] ?? "image"
+                                let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
+                                let mimeType = pngData ? "image/png" : "image/jpeg"
 
-                            multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
+                                multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
+                            }
                         }
 
                         params?.forEach { key, value in
@@ -1341,7 +1361,7 @@ public class Network: NSObject {
 
     final class DownloadTask {
         let url: String
-        let destination: (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
+        let destination: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
 
         var request: DownloadRequest?
         var resumeData: Data?
@@ -1353,7 +1373,7 @@ public class Network: NSObject {
         private var lastProgressTime: CFTimeInterval = 0
 
         init(url: String,
-             destination: @escaping (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
+             destination: @escaping @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
             self.url = url
             self.destination = destination
         }
@@ -1418,7 +1438,7 @@ public class Network: NSObject {
             return
         }
 
-        let dest: (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options) = { _, _ in
+        let dest: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options) = { _, _ in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories])
         }
