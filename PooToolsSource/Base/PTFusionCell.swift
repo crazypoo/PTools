@@ -404,8 +404,11 @@ extension PTFusionContentView {
         contentLabel.numberOfLines = model.contentNumberOfLines
         contentLabel.attributed.text = model.cachedContentAttr
         
+        leftIcon.contentMode = .scaleAspectFit
         leftIcon.loadImage(contentData: model.leftImage as Any,iCloudDocumentName: model.iCloudDocument)
+        rightIcon.contentMode = .scaleAspectFit
         rightIcon.loadImage(contentData: model.contentIcon as Any,iCloudDocumentName: model.iCloudDocument)
+        disclosure.contentMode = .scaleAspectFit
         disclosure.loadImage(contentData: model.disclosureIndicatorImage as Any,iCloudDocumentName: model.iCloudDocument)
     }
     
