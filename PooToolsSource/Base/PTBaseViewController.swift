@@ -638,6 +638,8 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
+        container.leftContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        container.leftContainer.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
@@ -668,6 +670,8 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
+        container.rightContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        container.rightContainer.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     public func setTitleView(_ view: UIView?) {
@@ -679,17 +683,16 @@ extension PTNavigationBarManager {
         container.titleContainer.isHidden = false
         container.titleContainer.addSubview(view)
         container.titleContainer.snp.remakeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+
             if self.titleLabel {
-                make.left.lessThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-                make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
-                make.bottom.equalToSuperview()
+                make.left.lessThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing).priority(750)
+                make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing).priority(750)
                 make.centerX.equalToSuperview()
             } else {
                 make.left.equalTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
                 make.right.equalTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
-                make.bottom.equalToSuperview()
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             }
         }
         
