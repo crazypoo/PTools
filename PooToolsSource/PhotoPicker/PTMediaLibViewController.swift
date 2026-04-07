@@ -657,7 +657,7 @@ extension PTMediaLibView {
                 result?(url, true)
             } else {
                 // 如果失败，打印日志或处理错误
-                print("Video cache export failed: \(String(describing: error))")
+                PTNSLogConsole("Video cache export failed: \(String(describing: error))")
                 result?(nil, false)
             }
         }
@@ -674,147 +674,103 @@ extension PTMediaLibView {
 
 public class PTMediaLibViewController: PTBaseViewController {
 
-    ///用於點擊導航欄的確定後,顯示等待HUD的囘調
+    // MARK: - Callbacks
     public var selectedHudStatusBlock: PTBoolTask?
-    ///選擇沒以後的囘調
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
-    /// Callback for photos that failed to parse
-    /// block params
-    ///  - params1: failed assets.
-    ///  - params2: index for asset
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
 
-    private lazy var fetchImageQueue = OperationQueue()
+    // MARK: - Queue（限制并发）
+    private lazy var fetchImageQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "com.pt.media.fetch"
+        queue.maxConcurrentOperationCount = 3
+        queue.qualityOfService = .userInitiated
+        return queue
+    }()
 
-    var currentAlbum:PTMediaLibListModel!
-    var totalModels = [PTMediaModel]()
+    // MARK: - Data
+    var currentAlbum: PTMediaLibListModel!
+    var totalModels: [PTMediaModel] = []
     var selectedModel: [PTMediaModel] = []
 
     private var isSelectOriginal = false
-    private lazy var fakeNav:PTNavBar = {
-        let view = PTNavBar()
-        return view
-    }()
-    
-    private lazy var dismissButton:UIButton = {
+    fileprivate var selectedMediaCount: Int = 0
+
+    // MARK: - UI
+    private lazy var fakeNav: PTNavBar = PTNavBar()
+
+    private lazy var dismissButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.backImage, for: .normal)
-        view.addActionHandlers { sender in
-            self.returnFrontVC()
+        view.addActionHandlers { [weak self] _ in
+            self?.returnFrontVC()
         }
         if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
+            view.configuration = .clearGlass()
         }
         return view
     }()
-    
-    private lazy var submitButton:UIButton = {
+
+    private lazy var submitButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.submitImage, for: .normal)
-        view.addActionHandlers { sender in
-            self.requestSelectPhoto(viewController: self)
+        view.addActionHandlers { [weak self] _ in
+            self?.requestSelectPhoto(viewController: self)
         }
         if #available(iOS 26.0, *) {
-            view.configuration = UIButton.Configuration.clearGlass()
+            view.configuration = .clearGlass()
         }
         return view
     }()
-    
-    fileprivate var selectedMediaCount:Int = 0
-    
-    private lazy var selectLibButton:PTActionLayoutButton = {
+
+    private lazy var selectLibButton: PTActionLayoutButton = {
         let view = PTActionLayoutButton()
         view.layoutStyle = .leftTitleRightImage
         view.imageSize = CGSize(width: 10, height: 10)
         view.setImage(PTMediaLibUIConfig.share.arrowDownImage, state: .normal)
-        view.addActionHandlers { sender in
-            
-            switch PTPermission.photoLibrary.status {
-            case .authorized:
-                let config = PTMediaLibConfig.share
-                
-                if self.mediaListView.currentAlbum != nil {
-                    let vc = PTMediaLibAlbumListViewController(albumList: self.mediaListView.currentAlbum!)
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    vc.selectedModelHandler = { model in
-                        if model.models.isEmpty {
-                            model.refetchPhotos()
-                            self.mediaListView.currentAlbum = model
-                        } else {
-                            self.mediaListView.currentAlbum = model
-                        }
-                        self.albumTitleSet()
-                        if !PTMediaLibUIConfig.share.shortIsTop {
-                            PTGCDManager.gcdAfter(time: 0.05) {
-                                self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
-                            }
-                        }
-                    }
-                } else {
-                    PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage*/) { model in
-                        let vc = PTMediaLibAlbumListViewController(albumList: model)
-                        self.navigationController?.pushViewController(vc, animated: true)
-                        vc.selectedModelHandler = { model in
-                            self.mediaListView.currentAlbum = model
-                            self.albumTitleSet()
-                            if !PTMediaLibUIConfig.share.shortIsTop {
-                                PTGCDManager.gcdAfter(time: 0.05) {
-                                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
-                                }
-                            }
-                        }
-                    }
-                }
-            default:
-                break
-            }
+
+        view.addActionHandlers { [weak self] _ in
+            self?.handleAlbumClick()
         }
-        view.bounds = CGRect(origin: .zero, size: CGSizeMake(100, 34))
+
+        view.bounds = CGRect(x: 0, y: 0, width: 100, height: 34)
         return view
     }()
-    
-    func albumTitleSet() {
-        let titleAtt = titleAtt()
-        selectLibButton.setAtt(titleAtt, state: .normal)
-        selectLibButton.setAtt(titleAtt, state: .highlighted)
-        self.resetTitleSelectBounds()
-    }
-    
-    func titleAtt() -> ASAttributedString {
-        var buttonAtt:ASAttributedString = """
-                    \(wrap: .embedding("""
-                    \(self.mediaListView.currentAlbum!.title,.font(PTMediaLibUIConfig.share.selectLibTitleFont),.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.paragraph(.alignment(.center)))
-                    """))
-                    """
-        if self.selectedMediaCount > 0 {
-            let countString = String(format: PTMediaLibUIConfig.share.mediaCount, "\(self.selectedMediaCount)")
-            let countAtt:ASAttributedString = """
-                        \(wrap: .embedding("""
-                        \("\n\(countString)",.font(PTMediaLibUIConfig.share.selectLibSubTitleFont),.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.paragraph(.alignment(.center)))
-                        """))
-                        """
-            buttonAtt += countAtt
-        }
-        return buttonAtt
-    }
-    
-    fileprivate lazy var mediaListView : PTMediaLibView = {
+
+    fileprivate lazy var mediaListView: PTMediaLibView = {
         let view = PTMediaLibView(currentModels: self.currentAlbum)
         view.currentVc = self
-        view.selectedCount = { index in
-            self.selectedMediaCount = index
-            self.albumTitleSet()
+
+        view.selectedCount = { [weak self] count in
+            self?.selectedMediaCount = count
+            self?.scheduleTitleUpdate()
         }
-        view.updateTitle = {
-            self.albumTitleSet()
+
+        view.updateTitle = { [weak self] in
+            self?.scheduleTitleUpdate()
         }
-        view.selectedModelDidUpdate = {
+
+        view.selectedModelDidUpdate = { [weak self] in
+            guard let self else { return }
             self.selectedModel = self.mediaListView.selectedModel
             self.totalModels = self.mediaListView.totalModels
         }
+
         return view
     }()
-        
+
+    // MARK: - Lifecycle
+
+    deinit {
+        fetchImageQueue.cancelAllOperations()
+    }
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        checkPermissionAndLoad()
+    }
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
@@ -826,120 +782,255 @@ public class PTMediaLibViewController: PTBaseViewController {
             self.changeStatusBar(type: .Dark)
         })
     }
-    
+
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.changeStatusBar(type: .Auto)
+        changeStatusBar(type: .Auto)
     }
-    
-    public override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-    }
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.addSubviews([fakeNav])
-        fakeNav.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-            make.height.equalTo(CGFloat.kNavBarHeight)
-        }
-        
-        createNavSubs()
-        
-        PTGCDManager.gcdMain {
-            switch PTPermission.photoLibrary.status {
-            case .authorized:
-                self.loadImageData()
-            case .notDetermined:
-                PTPermission.photoLibrary.request {
-                    switch PTPermission.photoLibrary.status {
-                    case .authorized:
-                        self.loadImageData()
-                    default:
-                        break
-                    }
-                }
-            default:
-                break
-            }
-        }
-    }
-        
-    func loadImageData() {
-        let config = PTMediaLibConfig.share
-        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo,allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto/*,allowSelectRegularImageOnly: config.allowOnlySelectRegularImage*/) { model in
-            self.currentAlbum = model
-            if self.currentAlbum.models.isEmpty {
-                PTGCDManager.gcdGobal {
-                    self.currentAlbum.refetchPhotos()
-                    PTGCDManager.gcdMain {
-                        self.createList()
-                        self.mediaListView.currentAlbum = self.currentAlbum
-                        if !PTMediaLibUIConfig.share.shortIsTop {
-                            PTGCDManager.gcdAfter(time: 0.05) {
-                                self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
-                            }
-                        }
-                    }
-                }
-            } else {
-                self.createList()
-                self.mediaListView.currentAlbum = self.currentAlbum
-                if !PTMediaLibUIConfig.share.shortIsTop {
-                    PTGCDManager.gcdAfter(time: 0.05) {
-                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
-                    }
-                }
-            }
-        }
-    }
-    
-    func createList() {
-        
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
-        let collectionInset_Bottom:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        
-        mediaListView.collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        mediaListView.collectionView.contentCollectionView.contentInset.top = collectionInset_Top
-        mediaListView.collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
-        mediaListView.collectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset_Bottom
 
-        view.addSubviews([mediaListView])
-        mediaListView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-            make.bottom.equalToSuperview()
+    // MARK: - UI
+
+    private func setupUI() {
+        view.addSubview(fakeNav)
+
+        fakeNav.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            $0.height.equalTo(CGFloat.kNavBarHeight)
         }
-        view.insertSubview(mediaListView, at: 0)
-    }
-    
-    func createNavSubs() {
+
         fakeNav.titleViewMode = .auto
-        resetTitleSelectBounds()
         fakeNav.setLeftButtons([dismissButton])
         fakeNav.setRightButtons([submitButton])
+
+        resetTitleSelectBounds()
+    }
+
+    private func createList() {
+        guard mediaListView.superview == nil else { return }
+
+        let topInset = CGFloat.kNavBarHeight
+        let bottomInset = CGFloat.kTabbarSaveAreaHeight
+
+        let cv = mediaListView.collectionView.contentCollectionView
+        cv.contentInsetAdjustmentBehavior = .never
+        cv.contentInset.top = topInset
+        cv.contentInset.bottom = bottomInset
+        cv.verticalScrollIndicatorInsets.bottom = bottomInset
+
+        view.addSubview(mediaListView)
+        view.sendSubviewToBack(mediaListView)
+
+        mediaListView.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            $0.bottom.equalToSuperview()
+        }
+    }
+
+    // MARK: - Album
+
+    private func handleAlbumClick() {
+        guard PTPermission.photoLibrary.status == .authorized else { return }
+
+        let config = PTMediaLibConfig.share
+
+        let pushAlbum: (PTMediaLibListModel) -> Void = { [weak self] album in
+            guard let self else { return }
+
+            let vc = PTMediaLibAlbumListViewController(albumList: album)
+            self.navigationController?.pushViewController(vc, animated: true)
+
+            vc.selectedModelHandler = { [weak self] model in
+                guard let self else { return }
+
+                if model.models.isEmpty {
+                    model.refetchPhotos()
+                }
+
+                self.mediaListView.currentAlbum = model
+                self.albumTitleSet()
+
+                if !PTMediaLibUIConfig.share.shortIsTop {
+                    PTGCDManager.gcdAfter(time: 0.05, block: {
+                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    })
+                }
+            }
+        }
+
+        if let current = mediaListView.currentAlbum {
+            pushAlbum(current)
+        } else {
+            PTMediaLibManager.getCameraRollAlbum(
+                allowSelectImage: config.allowSelectImage,
+                allowSelectVideo: config.allowSelectVideo,
+                allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto
+            ) { model in
+                pushAlbum(model)
+            }
+        }
+    }
+
+    // MARK: - Title（节流）
+
+    private var pendingTitleUpdate = false
+
+    private func scheduleTitleUpdate() {
+        guard !pendingTitleUpdate else { return }
+        pendingTitleUpdate = true
+
+        PTGCDManager.gcdAfter(time: 0.05, block: {
+            self.pendingTitleUpdate = false
+            self.albumTitleSet()
+        })
+    }
+
+    func albumTitleSet() {
+        let att = titleAtt()
+        selectLibButton.setAtt(att, state: .normal)
+        selectLibButton.setAtt(att, state: .highlighted)
+        resetTitleSelectBounds()
+    }
+
+    func titleAtt() -> ASAttributedString {
+        guard let album = mediaListView.currentAlbum else { return "" }
+
+        var buttonAtt: ASAttributedString = """
+        \(album.title,
+          .font(PTMediaLibUIConfig.share.selectLibTitleFont),
+          .foreground(PTAppBaseConfig.share.viewDefaultTextColor),
+          .paragraph(.alignment(.center)))
+        """
+
+        if selectedMediaCount > 0 {
+            let count = String(format: PTMediaLibUIConfig.share.mediaCount, "\(selectedMediaCount)")
+            buttonAtt += """
+            \("\n\(count)",
+              .font(PTMediaLibUIConfig.share.selectLibSubTitleFont),
+              .foreground(PTAppBaseConfig.share.viewDefaultTextColor),
+              .paragraph(.alignment(.center)))
+            """
+        }
+
+        return buttonAtt
+    }
+
+    func resetTitleSelectBounds() {
+        selectLibButton.bounds = CGRect(
+            origin: .zero,
+            size: CGSize(width: selectLibButton.getKitCurrentDimension(), height: 34)
+        )
+        fakeNav.titleView = selectLibButton
+    }
+
+    // MARK: - Load
+
+    private func checkPermissionAndLoad() {
+        switch PTPermission.photoLibrary.status {
+        case .authorized:
+            loadImageData()
+        case .notDetermined:
+            PTPermission.photoLibrary.request { [weak self] in
+                if PTPermission.photoLibrary.status == .authorized {
+                    self?.loadImageData()
+                }
+            }
+        default:
+            break
+        }
+    }
+
+    func loadImageData() {
+        let config = PTMediaLibConfig.share
+
+        PTMediaLibManager.getCameraRollAlbum(
+            allowSelectImage: config.allowSelectImage,
+            allowSelectVideo: config.allowSelectVideo,
+            allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto
+        ) { [weak self] model in
+            guard let self else { return }
+
+            self.currentAlbum = model
+
+            let setup = {
+                self.createList()
+                self.mediaListView.currentAlbum = model
+            }
+
+            if model.models.isEmpty {
+                DispatchQueue.global().async {
+                    model.refetchPhotos()
+                    DispatchQueue.main.async { setup() }
+                }
+            } else {
+                setup()
+            }
+        }
     }
     
-    func resetTitleSelectBounds() {
-        self.selectLibButton.bounds = CGRect(origin: .zero, size: CGSizeMake(self.selectLibButton.getKitCurrentDimension(), 34))
-        self.fakeNav.titleView = self.selectLibButton
-    }
-        
     public func mediaLibShow() {
         let nav = PTBaseNavControl(rootViewController: self)
         self.currentPresentToSheet(vc: nav,sizes: [.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())])
     }
 }
 
+final class ResultCollector {
+
+    private let lock = NSLock()
+
+    private(set) var results: [PTResultModel?]
+    private(set) var errorAssets: [PHAsset] = []
+    private(set) var errorIndices: [Int] = []
+
+    private var finishedCount = 0
+    private let totalCount: Int
+    private var isCompleted = false
+
+    let completion: ([PTResultModel], [PHAsset], [Int]) -> Void
+
+    init(totalCount: Int,
+         completion: @escaping ([PTResultModel], [PHAsset], [Int]) -> Void) {
+        self.totalCount = totalCount
+        self.results = Array(repeating: nil, count: totalCount)
+        self.completion = completion
+    }
+
+    func collect(index: Int, result: PTResultModel?, asset: PHAsset?) {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard !isCompleted else { return }
+
+        finishedCount += 1
+
+        if let r = result {
+            results[index] = r
+        } else if let a = asset {
+            errorAssets.append(a)
+            errorIndices.append(index)
+        }
+
+        if finishedCount == totalCount {
+            isCompleted = true
+            let final = results.compactMap { $0 }
+
+            DispatchQueue.main.async {
+                self.completion(final, self.errorAssets, self.errorIndices)
+            }
+        }
+    }
+}
+
 extension PTMediaLibViewController {
     public func requestSelectPhoto(viewController: UIViewController? = nil) {
-        // 1. 基础校验：检查是否为空
+        // 1. 空数据
         guard !selectedModel.isEmpty else {
             let emptyOriginal = isSelectOriginal
+
             viewController?.dismiss(animated: true) { [weak self] in
                 self?.selectImageBlock?([], emptyOriginal)
+
                 if let presentingVC = viewController?.presentingViewController {
                     PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
                 }
@@ -947,16 +1038,30 @@ extension PTMediaLibViewController {
             return
         }
 
-        // 2. 混合选择逻辑校验
+        // 2. 混合校验
         let config = PTMediaLibConfig.share
         let uiConfig = PTMediaLibUIConfig.share
+
         if config.allowMixSelect {
-            let videoCount = selectedModel.filter { $0.type == .video }.count
+            let videoCount = selectedModel.lazy.filter { $0.type == .video }.count
+
             if videoCount > config.maxVideoSelectCount {
-                PTAlertTipControl.present(title: uiConfig.alertTitle, subtitle: String(format: uiConfig.mediaCountMax, "\(config.maxVideoSelectCount)"), icon: .Error, style: .Normal)
+                PTAlertTipControl.present(
+                    title: uiConfig.alertTitle,
+                    subtitle: String(format: uiConfig.mediaCountMax, "\(config.maxVideoSelectCount)"),
+                    icon: .Error,
+                    style: .Normal
+                )
                 return
-            } else if videoCount < config.minVideoSelectCount {
-                PTAlertTipControl.present(title: uiConfig.alertTitle, subtitle: String(format: uiConfig.mediaCountMin, "\(config.minVideoSelectCount)"), icon: .Error, style: .Normal)
+            }
+
+            if videoCount < config.minVideoSelectCount {
+                PTAlertTipControl.present(
+                    title: uiConfig.alertTitle,
+                    subtitle: String(format: uiConfig.mediaCountMin, "\(config.minVideoSelectCount)"),
+                    icon: .Error,
+                    style: .Normal
+                )
                 return
             }
         }
@@ -964,87 +1069,52 @@ extension PTMediaLibViewController {
         let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
         selectedHudStatusBlock?(true)
 
-        // 💡 Swift 6 优化：创建一个内部管理类，确保数据收集在 MainActor 线程安全执行
-        @MainActor
-        final class ResultCollector {
-            var results: [PTResultModel?]
-            var errorAssets: [PHAsset] = []
-            var errorIndices: [Int] = []
-            var finishedCount = 0
-            let totalCount: Int
-            let completion: @Sendable ([PTResultModel], [PHAsset], [Int]) -> Void
-
-            init(totalCount: Int, completion: @escaping @Sendable ([PTResultModel], [PHAsset], [Int]) -> Void) {
-                self.totalCount = totalCount
-                self.results = Array(repeating: nil, count: totalCount)
-                self.completion = completion
-            }
-
-            func collect(index: Int, result: PTResultModel?, asset: PHAsset?) {
-                finishedCount += 1
-                if let res = result {
-                    results[index] = res
-                } else if let asset = asset {
-                    errorAssets.append(asset)
-                    errorIndices.append(index)
-                }
-
-                if finishedCount >= totalCount {
-                    let finalResults = results.compactMap { $0 }
-                    completion(finalResults, errorAssets, errorIndices)
-                }
-            }
-        }
-
-        // 初始化收集器
+        // ⭐️ Collector（线程安全）
         let collector = ResultCollector(totalCount: selectedModel.count) { [weak self] sucModels, errAssets, errIndices in
-            // 执行最终回调
-            Task { @MainActor in
-                self?.handleFetchCompletion(
-                    viewController: viewController,
-                    sucModels: sucModels,
-                    errAssets: errAssets,
-                    errIndices: errIndices,
-                    isOriginal: isOriginal
-                )
-            }
+            self?.handleFetchCompletion(
+                viewController: viewController,
+                sucModels: sucModels,
+                errAssets: errAssets,
+                errIndices: errIndices,
+                isOriginal: isOriginal
+            )
         }
 
-        // 3. 循环发起任务
+        // 3. 并发任务
         for (i, m) in selectedModel.enumerated() {
-            let operation = PTFetchImageOperation(model: m, isOriginal: isOriginal) { @Sendable image, asset in
-                // 💡 异步回调回来后，切回 MainActor 安全地增加计数和存入结果
-                Task { @MainActor in
-                    if let image = image {
-                        let isEdited = m.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
-                        
-#if POOTOOLS_IMAGEEDITOR
-                        let model = PTResultModel(
-                            asset: asset ?? m.asset,
-                            image: image,
-                            isEdited: isEdited,
-                            editModel: isEdited ? m.editImageModel : nil,
-                            avEditorOutputItem: m.avEditorOutputItem,
-                            index: i
-                        )
-                        collector.collect(index: i, result: model, asset: nil)
-#else
-                        let model = PTResultModel(
-                            asset: asset ?? m.asset,
-                            image: image,
-                            isEdited: isEdited,
-                            avEditorOutputItem: m.avEditorOutputItem,
-                            index: i
-                        )
-                        collector.collect(index: i, result: model, asset: nil)
-#endif
-                        PTNSLogConsole("PTPhotoBrowser: suc request \(i)", levelType: PTLogMode, loggerType: .Media)
-                    } else {
-                        collector.collect(index: i, result: nil, asset: m.asset)
-                        PTNSLogConsole("PTPhotoBrowser: failed request \(i)", levelType: PTLogMode, loggerType: .Media)
-                    }
+
+            let operation = PTFetchImageOperation(model: m, isOriginal: isOriginal) { image, asset in
+
+                // ❗ 不再切 MainActor
+                if let image = image {
+
+                    let isEdited = m.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
+
+    #if POOTOOLS_IMAGEEDITOR
+                    let model = PTResultModel(
+                        asset: asset ?? m.asset,
+                        image: image,
+                        isEdited: isEdited,
+                        editModel: isEdited ? m.editImageModel : nil,
+                        avEditorOutputItem: m.avEditorOutputItem,
+                        index: i
+                    )
+    #else
+                    let model = PTResultModel(
+                        asset: asset ?? m.asset,
+                        image: image,
+                        isEdited: isEdited,
+                        avEditorOutputItem: m.avEditorOutputItem,
+                        index: i
+                    )
+    #endif
+                    collector.collect(index: i, result: model, asset: nil)
+
+                } else {
+                    collector.collect(index: i, result: nil, asset: m.asset)
                 }
             }
+
             fetchImageQueue.addOperation(operation)
         }
     }
@@ -1067,15 +1137,18 @@ extension PTMediaLibViewController {
             self?.totalModels.removeAll()
         }
 
-        if let vc = viewController {
-            let presentingVC = vc.presentingViewController
-            vc.dismiss(animated: true) {
-                if let pVC = presentingVC {
-                    PTNavigationBarManager.shared.restoreIfNeeded(for: pVC)
-                }
-                call()
+        guard let vc = viewController,
+              vc.presentingViewController != nil else {
+            call()
+            return
+        }
+
+        let presentingVC = vc.presentingViewController
+
+        vc.dismiss(animated: true) {
+            if let pVC = presentingVC {
+                PTNavigationBarManager.shared.restoreIfNeeded(for: pVC)
             }
-        } else {
             call()
         }
     }
