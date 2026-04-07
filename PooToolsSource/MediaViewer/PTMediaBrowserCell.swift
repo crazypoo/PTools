@@ -189,24 +189,34 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         hasSetupGesture = true
 
         imageView.removeGestureRecognizers()
-        let doubleTap = UITapGestureRecognizer { sender in
-            if let ges = sender as? UITapGestureRecognizer {
-                if self.contentScrolView.zoomScale > 1 {
-                    self.contentScrolView.setZoomScale(1, animated: true)
-                    self.zoomTask?(false)
-                } else {
-                    let point = ges.location(in: self.imageView)
-                    let rect = CGRect(x: point.x, y: point.y, width: 10, height: 10)
-                    self.contentScrolView.zoom(to: rect, animated: true)
-                    self.zoomTask?(true)
-                }
+        
+        let doubleTap = UITapGestureRecognizer { [weak self] sender in
+            guard let self = self, let ges = sender as? UITapGestureRecognizer else { return }
+            
+            if self.contentScrolView.zoomScale > 1 {
+                self.contentScrolView.setZoomScale(1, animated: true)
+                self.zoomTask?(false)
+            } else {
+                // MARK: - 1. 计算更平滑的双击放大矩形，以点击点为中心
+                let zoomView = self.currentCellType == .LivePhoto ? self.livePhoto : self.imageView
+                let point = ges.location(in: zoomView)
+                let scale = self.maxZoomSale
+                
+                let width = self.contentScrolView.bounds.width / scale
+                let height = self.contentScrolView.bounds.height / scale
+                let x = point.x - (width / 2.0)
+                let y = point.y - (height / 2.0)
+                
+                let zoomRect = CGRect(x: x, y: y, width: width, height: height)
+                self.contentScrolView.zoom(to: zoomRect, animated: true)
+                self.zoomTask?(true)
             }
         }
         doubleTap.numberOfTapsRequired = 2
 
-        let singleTap = UITapGestureRecognizer { sender in
+        let singleTap = UITapGestureRecognizer { [weak self] sender in
             if let _ = sender as? UITapGestureRecognizer {
-                self.tapTask?()
+                self?.tapTask?()
             }
         }
         singleTap.numberOfTapsRequired = 1
@@ -215,7 +225,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
 
         if viewConfig.imageLongTapAction {
-            let longTap = UILongPressGestureRecognizer { sender in
+            let longTap = UILongPressGestureRecognizer { [weak self] sender in
+                guard let self = self else { return }
                 if let _ = sender as? UILongPressGestureRecognizer {
                     if !self.imageLongTaped {
                         self.longTapWakeUp?()
@@ -229,8 +240,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         }
         imageView.addGestureRecognizers(imageActions)
         
-        let longPress = UILongPressGestureRecognizer { sender in
-            self.livePhoto.startPlayback(with: .hint)
+        let longPress = UILongPressGestureRecognizer { [weak self] sender in
+            self?.livePhoto.startPlayback(with: .hint)
         }
         longPress.minimumPressDuration = 1
         livePhoto.addGestureRecognizer(longPress)
@@ -239,9 +250,15 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        // MARK: - 2. 彻底清理状态，取消正在进行的任务防止卡顿和错乱
+        loadIdentifier = UUID()
+        imageView.kf.cancelDownloadTask() // 假设底层下载使用了 Kingfisher，取消未完成的网络请求
+        livePhoto.stopPlayback() // 滑出屏幕时停止 LivePhoto 播放
+        
         currentCellType = .None
         gifImage = nil
         videoCacheURL = nil
+        videoOriginalItem = nil // 确保清理视频源
         imageLongTaped = false
 
         imageView.image = nil
@@ -610,7 +627,8 @@ extension PTMediaBrowserCell {
 
 extension PTMediaBrowserCell:UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        imageView
+        // MARK: - 3. 动态返回需要缩放的 View，支持 LivePhoto
+        return currentCellType == .LivePhoto ? livePhoto : imageView
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
@@ -623,7 +641,13 @@ extension PTMediaBrowserCell:UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        imageView.center = PTMediaBrowserCell.centerOfScrollVIewContent(scrollView: scrollView)
+        // MARK: - 4. 确保缩放时，图片或 LivePhoto 都能正确居中
+        let centerPoint = PTMediaBrowserCell.centerOfScrollVIewContent(scrollView: scrollView)
+        if currentCellType == .LivePhoto {
+            livePhoto.center = centerPoint
+        } else {
+            imageView.center = centerPoint
+        }
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {

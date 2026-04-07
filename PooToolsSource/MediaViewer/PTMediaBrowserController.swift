@@ -46,20 +46,22 @@ public class PTMediaBrowserController: PTBaseViewController {
         view.titleLabel.font = self.viewConfig.titleFont
         view.titleLabel.textColor = self.viewConfig.titleColor
         view.closeButton.setImage(self.viewConfig.closeViewerImage, for: .normal)
+        // MARK: -  修复循环引用，避免 Controller 无法释放
         view.closeButton.addActionHandlers { [weak self] _ in
-            if let sheet = self?.sheetViewController {
-                if self?.navigationController?.viewControllers.first == self {
-                    self?.returnFrontVC {
-                        self?.viewDismissBlock?()
+            guard let self = self else { return }
+            if let sheet = self.sheetViewController {
+                if self.navigationController?.viewControllers.first == self {
+                    self.returnFrontVC {
+                        self.viewDismissBlock?()
                     }
                 } else {
-                    self?.navigationController?.popViewController() {
-                        self?.viewDismissBlock?()
+                    self.navigationController?.popViewController(animated: true) {
+                        self.viewDismissBlock?()
                     }
                 }
             } else {
-                self?.returnFrontVC {
-                    self?.viewDismissBlock?()
+                self.returnFrontVC {
+                    self.viewDismissBlock?()
                 }
             }
         }
@@ -82,7 +84,10 @@ public class PTMediaBrowserController: PTBaseViewController {
             switch viewConfig.pageControlOption {
             case .system:
                 if let pageControl = view.pageControlView as? UIPageControl {
-                    pageControl.addPageControlHandlers { sender in
+                    pageControl.addPageControlHandlers { [weak self] sender in
+                        guard let self = self else { return }
+                        // MARK: -  加入安全边界检查，防止越界崩溃
+                        guard sender.currentPage < self.mediaData.count else { return }
                         let cellModel = self.mediaData[sender.currentPage]
                         self.updateBottom(models: cellModel)
                         self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
@@ -92,7 +97,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
         }
         view.pageControlView.isHidden = !viewConfig.pageControlShow
-        view.moreActionButton.addActionHandlers(handler: { sender in
+        view.moreActionButton.addActionHandlers(handler: { [weak self] sender in
+            guard let self = self else { return }
             self.moreAction(sender: self.bottomControl.moreActionButton)
         })
         return view
@@ -106,29 +112,38 @@ public class PTMediaBrowserController: PTBaseViewController {
         cConfig.collectionViewBehavior = .paging
         
         let collectionView = PTCollectionView(viewConfig: cConfig)
-        collectionView.cellInCollection = { collectionView ,dataModel,indexPath in
-            if let itemRow = dataModel.rows?[indexPath.row],let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaBrowserCell {
+        
+        // MARK: -  所有闭包引入 [weak self]，防止严重的内存泄漏
+        collectionView.cellInCollection = { [weak self] collectionView, dataModel, indexPath in
+            guard let self = self else { return nil }
+            if let itemRow = dataModel.rows?[indexPath.row], let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaBrowserCell {
+                
+                // MARK: -  防止滑动过快导致的数据越界
+                guard indexPath.row < self.mediaData.count else { return cell }
+                
                 let cellModel = self.mediaData[indexPath.row]
                 cell.dataModel = cellModel
-                cell.viewerDismissBlock = {
-                    self.returnFrontVC {
-                        self.viewDismissBlock?()
+                cell.viewerDismissBlock = { [weak self] in
+                    self?.returnFrontVC {
+                        self?.viewDismissBlock?()
                     }
                 }
-                cell.zoomTask = { boolValue in
-                    self.toolBarControl(boolValue: boolValue)
+                cell.zoomTask = { [weak self] boolValue in
+                    self?.toolBarControl(hide: boolValue)
                 }
-                cell.tapTask = {
-                    self.toolBarControl(boolValue: !self.navControl.isHidden)
+                cell.tapTask = { [weak self] in
+                    guard let self = self else { return }
+                    self.toolBarControl(hide: !self.navControl.isHidden)
                 }
-                cell.longTapWakeUp = {
-                    self.toolBarControl(boolValue: false)
+                cell.longTapWakeUp = { [weak self] in
+                    guard let self = self else { return }
+                    self.toolBarControl(hide: true)
                     self.moreAction(sender: self.bottomControl.moreActionButton)
                     PTGCDManager.gcdAfter(time: 0.5) {
                         cell.imageLongTaped = false
                     }
                 }
-                cell.videoPlayHandler = { videoController in
+                cell.videoPlayHandler = { [weak self] videoController in
                     videoController.modalPresentationStyle = .fullScreen
                     videoController.onCloseTapped = {
                         let current = PTUtils.getCurrentVC()
@@ -149,7 +164,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                             videoController.sheetViewController?.setSizes([.fullscreen])
                         })
                     } else {
-                        self.present(videoController, animated: true) {
+                        self?.present(videoController, animated: true) {
                             videoController.videoPlayer?.play()
                         }
                     }
@@ -158,12 +173,17 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
             return nil
         }
-        collectionView.customerLayout = { sectionIndex,sectionModel in
-            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows,itemOriginalX: 0,itemWidth: cellWidth,itemHeight: cellHeight,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 0)
+        
+        collectionView.customerLayout = { sectionIndex, sectionModel in
+            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows, itemOriginalX: 0, itemWidth: cellWidth, itemHeight: cellHeight, topContentSpace: 0, bottomContentSpace: 0, itemLeadingSpace: 0)
         }
-        collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
-            if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell,let currentIndex = collectionView.indexPath(for: currentCell) {
-                if let itemRow = sectionModel.rows?[currentIndex.row],let endCell = cell as? PTMediaBrowserCell {
+        
+        collectionView.collectionDidEndDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
+            guard let self = self else { return }
+            if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell, let currentIndex = collectionView.indexPath(for: currentCell) {
+                if let _ = sectionModel.rows?[currentIndex.row], let endCell = cell as? PTMediaBrowserCell {
+                    
+                    guard currentIndex.row < self.mediaData.count else { return }
                     let cellModel = self.mediaData[currentIndex.row]
                     switch endCell.currentCellType {
                     case .GIF:
@@ -172,7 +192,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                     
                     if self.viewConfig.pageControlShow {
-                        self.pageControlProgressSet(indexPath: indexPath)
+                        self.pageControlProgressSet(indexPath: currentIndex)
                     }
                     self.currentIndex = currentIndex.row
                     
@@ -183,13 +203,16 @@ public class PTMediaBrowserController: PTBaseViewController {
                 }
             }
         }
-        collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
+        
+        collectionView.collectionWillDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
+            guard let self = self else { return }
             if self.viewConfig.pageControlShow {
                 self.pageControlProgressSet(indexPath: indexPath)
             }
             self.currentIndex = indexPath.row
 
-            if let itemRow = sectionModel.rows?[indexPath.row],let endCell = cell as? PTMediaBrowserCell {
+            if let _ = sectionModel.rows?[indexPath.row], let endCell = cell as? PTMediaBrowserCell {
+                guard indexPath.row < self.mediaData.count else { return }
                 let cellModel = self.mediaData[indexPath.row]
                 switch endCell.currentCellType {
                 case .GIF:
@@ -204,11 +227,13 @@ public class PTMediaBrowserController: PTBaseViewController {
                 self.browserCurrentDataBlock?(indexPath.row)
             }
         }
-        collectionView.collectionViewDidScroll = { collectionViewScrol in
+        
+        collectionView.collectionViewDidScroll = { [weak self] collectionViewScrol in
+            guard let self = self else { return }
             let currentPageControlValue = self.getPageControlCurrentValue()
+            guard currentPageControlValue < self.mediaData.count else { return }
             
-            let cellModel = self.mediaData[currentPageControlValue]
-            if let currentCell = collectionView.visibleCells().first as? PTMediaBrowserCell {
+            if let currentCell = collectionViewScrol.visibleCells.first as? PTMediaBrowserCell {
                 if abs(collectionViewScrol.contentOffset.y) > 0 {
                     currentCell.contentScrolView.isUserInteractionEnabled = false
                     currentCell.contentScrolView.isScrollEnabled = false
@@ -253,14 +278,18 @@ public class PTMediaBrowserController: PTBaseViewController {
         super.viewDidAppear(animated)
         self.becomeFirstResponder()
         self.view.window?.makeKeyAndVisible()
-        PTGCDManager.gcdAfter(time: 0.35, block: {
+        
+        // MARK: -  动画包裹 StatusBar 变更，防止闪烁
+        UIView.animate(withDuration: 0.3) {
             self.changeStatusBar(type: .Dark)
-        })
+        }
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.changeStatusBar(type: .Auto)
+        UIView.animate(withDuration: 0.3) {
+            self.changeStatusBar(type: .Auto)
+        }
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
@@ -278,12 +307,11 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.backgroundColor = .DevMaskColor
         }
         
-        view.backgroundColor = .DevMaskColor
         view.addSubviews([newCollectionView,navControl,bottomControl])
 
+        // MARK: -  统一约束布局
         newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         navControl.snp.makeConstraints { make in
@@ -297,32 +325,29 @@ public class PTMediaBrowserController: PTBaseViewController {
             make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing + BottomMoreHeight)
         }
                 
-        PTGCDManager.gcdAfter(time: 0.35) {
-            var loadSome = 0
-            if self.viewConfig.defultIndex > self.mediaData.count {
-                loadSome = self.mediaData.count - 1
-            } else {
-                loadSome = self.viewConfig.defultIndex
-            }
-            self.currentIndex = loadSome
-
-            let cellModel = self.mediaData[loadSome]
-            self.updateBottom(models: cellModel)
+        // MARK: -  取消不必要的硬编码延时，提早设置初始状态
+        currentIndex = min(viewConfig.defultIndex, max(0, mediaData.count - 1))
+        if !mediaData.isEmpty {
+            updateBottom(models: mediaData[currentIndex])
         }
+        
         self.showCollectionViewData()
-
     }
     
     func showCollectionViewData(loadedTask:PTCollectionCallback? = nil) {
         PTGCDManager.gcdGobal {
             
             if self.mediaData.count > 1 {
-                self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
-                if self.viewConfig.pageControlShow {
-                    self.setPageControlValue(0)
+                PTGCDManager.gcdMain {
+                    self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
+                    if self.viewConfig.pageControlShow {
+                        self.setPageControlValue(0)
+                    }
                 }
             } else {
-                self.bottomControl.pageControlView.isHidden = true
+                PTGCDManager.gcdMain {
+                    self.bottomControl.pageControlView.isHidden = true
+                }
             }
 
             self.actionSheetTitle.removeAll()
@@ -355,15 +380,11 @@ public class PTMediaBrowserController: PTBaseViewController {
                 self.navControl.titleLabel.isHidden = false
                 self.navControl.titleLabel.text = "1/\(self.mediaData.count)"
 
-                self.newCollectionView.showCollectionDetail(collectionData: sections) { collectionView in
+                self.newCollectionView.showCollectionDetail(collectionData: sections) { [weak self] collectionView in
+                    guard let self = self else { return }
                     if !self.firstLoad {
                         self.firstLoad = true
-                        var loadSome = 0
-                        if self.viewConfig.defultIndex > self.mediaData.count {
-                            loadSome = self.mediaData.count - 1
-                        } else {
-                            loadSome = self.viewConfig.defultIndex
-                        }
+                        let loadSome = min(self.viewConfig.defultIndex, max(0, self.mediaData.count - 1))
                         self.currentIndex = loadSome
                         collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: false)
                     } else {
@@ -386,11 +407,29 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
     }
     
-    func toolBarControl(boolValue:Bool) {
-        navControl.isHidden = boolValue
-        bottomControl.moreActionButton.isHidden = navControl.isHidden
-        bottomControl.titleLabel.isHidden = navControl.isHidden
-        bottomControl.backgroundColor = navControl.isHidden ? .clear : MediaBrowserToolBarColor
+    // MARK: -  丝滑的工具栏显示隐藏动画
+    func toolBarControl(hide: Bool) {
+        if hide {
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+                self.navControl.alpha = 0
+                self.bottomControl.alpha = 0
+            }) { _ in
+                self.navControl.isHidden = true
+                self.bottomControl.moreActionButton.isHidden = true
+                self.bottomControl.titleLabel.isHidden = true
+                self.bottomControl.backgroundColor = .clear
+            }
+        } else {
+            self.navControl.isHidden = false
+            self.bottomControl.moreActionButton.isHidden = false
+            self.bottomControl.titleLabel.isHidden = false
+            self.bottomControl.backgroundColor = MediaBrowserToolBarColor
+            
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
+                self.navControl.alpha = 1
+                self.bottomControl.alpha = 1
+            }, completion: nil)
+        }
     }
         
     public func mediasShow() {
@@ -415,18 +454,15 @@ public class PTMediaBrowserController: PTBaseViewController {
             bottomControl.moreActionButton.isUserInteractionEnabled = true
         }
 
-        newCollectionView.clearAllData(finishTask: { _ in
+        newCollectionView.clearAllData(finishTask: { [weak self] _ in
+            guard let self = self else { return }
             PTGCDManager.gcdAfter(time: 0.35) {
-                var loadSome = 0
-                if self.viewConfig.defultIndex > self.mediaData.count {
-                    loadSome = self.mediaData.count - 1
-                } else {
-                    loadSome = self.viewConfig.defultIndex
-                }
+                let loadSome = min(self.viewConfig.defultIndex, max(0, self.mediaData.count - 1))
                 self.currentIndex = loadSome
-
-                let cellModel = self.mediaData[loadSome]
-                self.updateBottom(models: cellModel)
+                if loadSome < self.mediaData.count {
+                    let cellModel = self.mediaData[loadSome]
+                    self.updateBottom(models: cellModel)
+                }
             }
             self.showCollectionViewData()
         })
@@ -439,7 +475,9 @@ fileprivate extension PTMediaBrowserController {
     func moreAction(sender:ConsoleMenuButton) {
         var actions = [PTEditMenuAction]()
         self.actionSheetTitle.enumerated().forEach { index,value in
-            let action = PTEditMenuAction(title: value) {
+            // MARK: -  修复 Action 闭包里的内存泄漏
+            let action = PTEditMenuAction(title: value) { [weak self] in
+                guard let self = self else { return }
                 guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
                 self.handleAction(at: index, gifImage: cell.gifImage)
             }
@@ -500,9 +538,9 @@ fileprivate extension PTMediaBrowserController {
 //MARK: Media action
 fileprivate extension PTMediaBrowserController {
     func saveImage() {
-        
         let currentPageControlValue = self.getPageControlCurrentValue()
-
+        guard currentPageControlValue < mediaData.count else { return }
+        
         let model = mediaData[currentPageControlValue]
         
         if let currentView = newCollectionView.visibleCells().first as? PTMediaBrowserCell {
@@ -530,12 +568,12 @@ fileprivate extension PTMediaBrowserController {
             } else {
                 PTVideoFileCache.shared.prepareVideo(url: urlReal) { bytesRead, totalBytesRead, progress in
                     loadingView.progress = progress
-                } completion: { localURL in
+                } completion: { [weak self] localURL in
                     loadingView.hudHide()
                     if let findLocal = localURL {
-                        self.saveVideo(videoPath: findLocal.path,videoOrURL: url)
+                        self?.saveVideo(videoPath: findLocal.path,videoOrURL: url)
                     } else {
-                        self.viewSaveImageBlock?(false)
+                        self?.viewSaveImageBlock?(false)
                     }
                 }
             }
@@ -567,7 +605,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func deleteImage() {
-        if mediaData.count == 1 {
+        if mediaData.count <= 1 {
             viewDeleteImageBlock?(0)
             viewMoreActionDismiss()
         } else {
@@ -579,11 +617,15 @@ fileprivate extension PTMediaBrowserController {
                     currentImages.imageView.stopAnimating()
                 default: break
                 }
+                
+                guard currentPageControlValue < self.newCollectionView.collectionSectionDatas.first?.rows?.count ?? 0 else { return }
+                
                 if let findIndexRow = self.newCollectionView.collectionSectionDatas.first?.rows?[currentPageControlValue] {
                     self.newCollectionView.deleteRows([findIndexRow], from: 0)
                     self.mediaData.remove(at: currentPageControlValue)
                     
-                    PTGCDManager.gcdAfter(time: 0.35) {
+                    PTGCDManager.gcdAfter(time: 0.35) { [weak self] in
+                        guard let self = self else { return }
                         let newCurrentPageControlValue = self.getPageControlCurrentValue()
                         self.navControl.titleLabel.text = "\(newCurrentPageControlValue + 1)/\(self.mediaData.count)"
 
@@ -594,8 +636,10 @@ fileprivate extension PTMediaBrowserController {
                             self.bottomControl.pageControlView.isHidden = true
                         }
                         
-                        let models = self.mediaData[newCurrentPageControlValue]
-                        self.updateBottom(models: models)
+                        if newCurrentPageControlValue < self.mediaData.count {
+                            let models = self.mediaData[newCurrentPageControlValue]
+                            self.updateBottom(models: models)
+                        }
                     }
                     self.viewDeleteImageBlock?(currentPageControlValue)
                 }
@@ -609,7 +653,8 @@ fileprivate extension PTMediaBrowserController {
     func labelMoreAtt(models:PTMediaBrowserModel) -> ASAttributedString {
         let atts:ASAttributedString = """
         \(wrap: .embedding("""
-        \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {
+        \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)),.action { [weak self] in
+                guard let self = self else { return }
                 PTGCDManager.gcdAfter(time: 0.1) {
                     let fullAtts:ASAttributedString = """
                     \(wrap: .embedding("""
@@ -623,9 +668,9 @@ fileprivate extension PTMediaBrowserController {
                 maskView.backgroundColor = .DevMaskColor
                 self.view.addSubview(maskView)
         
-                let tapGes = UITapGestureRecognizer { sender in
+                let tapGes = UITapGestureRecognizer { [weak self] sender in
                     maskView.removeFromSuperview()
-                    self.updateBottom(models: models)
+                    self?.updateBottom(models: models)
                 }
                 maskView.addGestureRecognizer(tapGes)
                 maskView.snp.makeConstraints { make in
@@ -647,7 +692,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func updateBottom(models:PTMediaBrowserModel) {
-              
+                
         let pageControlHeight = self.viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
         var bottomH:CGFloat = CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
         if models.imageInfo.stringIsEmpty() {
