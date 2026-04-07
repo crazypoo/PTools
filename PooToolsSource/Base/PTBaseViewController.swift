@@ -742,7 +742,6 @@ open class PTBaseViewController: UIViewController {
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
