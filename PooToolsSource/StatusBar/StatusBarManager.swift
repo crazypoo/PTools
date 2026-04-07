@@ -190,4 +190,18 @@ public class StatusBarManager {
         PTNSLogConsole("\(method): \(deep) - state=\(state)", levelType: PTLogMode, loggerType: .StatusBar)
         state.subStates.forEach { printAllStatesInTree($0, deep: deep + 1, method: method) }
     }
+    
+    // 在你的 StatusBarManager 或者类似的单例中
+    public func update(with style: PTNavigationBarStyle) {
+        switch style {
+        case .gradient:
+            self.style = .lightContent
+        case .solid(let color):
+            // 这里的 pt_colorTone 是你现有的逻辑
+            self.style = color.pt_colorTone() == .dark ? .lightContent : .darkContent
+        case .transparent:
+            // 透明时可以根据业务逻辑，通常跟随背景色或默认 Dark
+            self.style = .darkContent
+        }
+    }
 }

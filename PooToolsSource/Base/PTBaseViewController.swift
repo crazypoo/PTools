@@ -417,47 +417,62 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         
         // ❗如果这个 VC 不是 nav 栈里的（理论上不会，但防御）
         guard let container = containerMap.object(forKey: navigationController) else { return }
+        // 2. 关键修改：直接从 VC 获取样式，不要只依赖 itemCache
+        let toStyle: PTNavigationBarStyle
+        if let baseVC = viewController as? PTBaseViewController {
+            toStyle = baseVC.preferredNavigationBarStyle()
+            // 同步更新一下 item 里的样式，防止后续逻辑冲突
+            let item = self.item(for: viewController)
+            item.barColorStyle = toStyle
+        } else {
+            toStyle = .default
+        }
 
-        let toItem = itemCache.object(forKey: viewController)
-        let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from)
-        let fromItem = fromVC.flatMap { itemCache.object(forKey: $0) }
+        StatusBarManager.shared.update(with: toStyle)
         
-        let fromStyle = fromItem?.barColorStyle ?? .transparent
-        let toStyle = toItem?.barColorStyle ?? .transparent
+        let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from)
+        let fromStyle = (fromVC as? PTBaseViewController)?.preferredNavigationBarStyle() ?? .transparent
 
-        // 👉 保存状态
         self.fromStyle = fromStyle
         self.toStyle = toStyle
         self.transitionContainer = container
 
-        // ✅ 准备过渡
+        // 3. 立即准备过渡：这会消除颜色闪烁
         container.prepareTransition(from: fromStyle, to: toStyle)
         
-        // 👉 绑定系统动画
         if let coordinator = navigationController.transitionCoordinator {
-            
-            transitionCoordinatorRef = coordinator
             startDisplayLink()
-            
             coordinator.animate(alongsideTransition: { _ in
+                // 动画过程中，系统会自动处理 alpha 或 这里的 progress
                 container.updateTransition(progress: 1)
             }, completion: { context in
                 self.stopDisplayLink()
-                
                 if context.isCancelled {
+                    StatusBarManager.shared.update(with: fromStyle)
+                    fromVC?.setNeedsStatusBarAppearanceUpdate()
                     container.apply(style: fromStyle)
                 } else {
                     container.apply(style: toStyle)
+                    StatusBarManager.shared.update(with: toStyle)
+                    if let vc = viewController as? PTBaseViewController {
+                        vc.setNeedsStatusBarAppearanceUpdate()
+                        navigationController.setNeedsStatusBarAppearanceUpdate() // 触发 Nav 重新询问 child
+                    }
                 }
             })
             
-            // 👉 手势取消/完成处理
             coordinator.notifyWhenInteractionChanges { context in
                 if context.isCancelled {
+                    StatusBarManager.shared.update(with: fromStyle)
+                    fromVC?.setNeedsStatusBarAppearanceUpdate()
                     container.apply(style: fromStyle)
-                } else {
-                    container.apply(style: toStyle)
                 }
+            }
+        } else {
+            // 非动画转场，直接应用目标样式
+            container.apply(style: toStyle)
+            if let vc = viewController as? PTBaseViewController {
+                vc.setNeedsStatusBarAppearanceUpdate()
             }
         }
 
@@ -467,14 +482,10 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         viewController.navigationItem.hidesBackButton = true
         viewController.title = nil
         viewController.navigationItem.titleView = nil
-        currentVC = viewController
-        
-        // ✅ 应用对应 VC 的 NavBar
+
+        // 处理 Item 内容（左/右/标题按钮）
         if let item = itemCache.object(forKey: viewController) {
-            apply(style: item.barColorStyle, in: navigationController) // ✅ 顺便补上
             apply(item: item)
-        } else {
-//            clear()
         }
     }
     
@@ -535,9 +546,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             container.largeTitleLabel.transform = .identity
             
             container.titleContainer.alpha = 1
-
         }
-
     }
 
     private func clear() {
@@ -557,6 +566,11 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
         apply(style: item.barColorStyle, in: nav)
         apply(item: item)
+        
+        // 3. 🔥 关键：同步更新状态栏单例并通知系统刷新
+        StatusBarManager.shared.update(with: item.barColorStyle)
+        realVC.setNeedsStatusBarAppearanceUpdate()
+        nav.setNeedsStatusBarAppearanceUpdate()
     }
     
     public func refreshCurrentNavBar() {
@@ -727,22 +741,20 @@ open class PTBaseViewController: UIViewController {
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setNeedsStatusBarAppearanceUpdate()
         PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-        let style = self.preferredNavigationBarStyle()
-        self.updateStatusBar(style)
+        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
         super.viewWillDisappear(animated)
         PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+        if let presenting = presentingViewController {
+            PTNavigationBarManager.shared.restoreIfNeeded(for: presenting)
+        }
     }
     
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if let presenting = presentingViewController {
-            PTNavigationBarManager.shared.restoreIfNeeded(for: presenting)
-        }
     }
         
     open override func viewDidLoad() {
@@ -768,15 +780,13 @@ open class PTBaseViewController: UIViewController {
             UIViewController：viewWillLayoutSubviews()、viewDidLayoutSubviews()、updateViewConstraints()、updateContentUnavailableConfiguration()。
              */
             baseTraitCollectionDidChange(style:traitCollection.userInterfaceStyle)
-            setNeedsStatusBarAppearanceUpdate()
         }
     }
     
     private func applyNavigationBar() {
-        guard let nav = navigationController else { return }
+        guard let _ = navigationController else { return }
         
         let style = preferredNavigationBarStyle()
-        PTNavigationBarManager.shared.apply(style: style, in: nav)
         let item = PTNavigationBarManager.shared.item(for: self)
         item.barColorStyle = style
         PTNavigationBarManager.shared.update(item: item, for: self)
@@ -796,8 +806,6 @@ open class PTBaseViewController: UIViewController {
             }
             setCustomBackButtonView(backBtn)
         }
-        
-        updateStatusBar(style)
     }
 
     private func baseBackButton() -> UIButton {
@@ -807,7 +815,7 @@ open class PTBaseViewController: UIViewController {
         return backBtn
     }
     
-    private func updateStatusBar(_ style: PTNavigationBarStyle) {
+    fileprivate func updateStatusBar(_ style: PTNavigationBarStyle) {
         switch style {
         case .gradient:
             changeStatusBar(type: .Dark)
@@ -956,7 +964,6 @@ open class PTBaseViewController: UIViewController {
         navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
-                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
                 self.baseTraitCollectionDidChange(style:previousTraitCollection.userInterfaceStyle)
                 self.setNeedsStatusBarAppearanceUpdate()
             }
@@ -1053,15 +1060,13 @@ extension PTBaseViewController {
     open func changeStatusBar(type:VCStatusBarChangeStatusType) {
         switch type {
         case .Auto:
-            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
-            setNeedsStatusBarAppearanceUpdate()
+            StatusBarManager.shared.update(with: preferredNavigationBarStyle())
         case .Dark:
-            StatusBarManager.shared.style = .lightContent
-            setNeedsStatusBarAppearanceUpdate()
+            StatusBarManager.shared.update(with: .gradient(colors: [UIColor.clear,UIColor.clear]))
         case .Light:
-            StatusBarManager.shared.style = .darkContent
-            setNeedsStatusBarAppearanceUpdate()
+            StatusBarManager.shared.update(with: .transparent)
         }
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     open func switchOrientation(isFullScreen:Bool) {
@@ -1087,7 +1092,6 @@ extension PTBaseViewController {
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
             baseTraitCollectionDidChange(style: UITraitCollection.current.userInterfaceStyle)
             setNeedsStatusBarAppearanceUpdate()
         }

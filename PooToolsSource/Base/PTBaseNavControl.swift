@@ -58,18 +58,6 @@ open class PTBaseNavControl: UINavigationController {
     
     /// 修改导航栏返回按钮
     open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        
-//        if viewControllers.count > 0 {
-//            let backBtn = UIButton(type: .custom)
-//            backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
-//            backBtn.bounds = CGRect.init(x: 0, y: 0, width: 24, height: 24)
-//            backBtn.addActionHandlers { seder in
-//                self.back()
-//            }
-//            let leftItem = UIBarButtonItem(customView: backBtn)
-//            viewController.navigationItem.leftBarButtonItem = leftItem
-//            viewController.hidesBottomBarWhenPushed = true
-//        }
         topViewController?.addSubStatusBar(for: viewController)
         super.pushViewController(viewController, animated: animated)
     }
@@ -100,6 +88,10 @@ open class PTBaseNavControl: UINavigationController {
          */
         topViewController
     }
+    
+    open override var childForStatusBarHidden: UIViewController? {
+        topViewController
+    }
 }
 
 extension PTBaseNavControl: UINavigationControllerDelegate {}
@@ -109,9 +101,9 @@ extension PTBaseNavControl {
     open override var prefersStatusBarHidden: Bool {
         StatusBarManager.shared.isHidden
     }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        StatusBarManager.shared.style
-    }
+//    open override var preferredStatusBarStyle: UIStatusBarStyle {
+//        StatusBarManager.shared.style
+//    }
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         StatusBarManager.shared.animation
     }
@@ -120,7 +112,6 @@ extension PTBaseNavControl {
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
             baseTraitCollectionDidChange(style:UITraitCollection.current.userInterfaceStyle)
             setNeedsStatusBarAppearanceUpdate()
         }
