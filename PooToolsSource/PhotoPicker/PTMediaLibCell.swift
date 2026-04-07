@@ -13,175 +13,236 @@ import Photos
 import AttributedString
 import SafeSFSymbols
 
-//MARK: 图片CELL
+// MARK: - 图片/视频展示 Cell
+@MainActor
 class PTMediaLibCell: PTBaseNormalCell {
     static let ID = "PTMediaLibCell"
     
-    var selectedBlock: ((@escaping PTBoolTask) -> Void)?
+    // 💡 优化：使用 Task 句柄管理异步任务，Swift 6 标准做法
+    private var smallImageTask: Task<Void, Never>?
+    private var bigImageTask: Task<Void, Never>?
+    private var imageIdentifier: String = ""
+
+    var selectedBlock: (@Sendable (@escaping PTBoolTask) -> Void)?
+    
     var cellSelectedIndex = 0 {
         didSet {
             selectButton.normalTitle = "\(cellSelectedIndex)"
             selectButton.selectedTitle = "\(cellSelectedIndex)"
         }
     }
+    
     var enableSelect = true {
         didSet {
             containerView.alpha = enableSelect ? 1 : 0.2
         }
     }
     
-    private var imageIdentifier = ""
-    private var smallImageRequestID: PHImageRequestID = PHInvalidImageRequestID
-    private var bigImageReqeustID: PHImageRequestID = PHInvalidImageRequestID
-    var cellModel:PTMediaModel! {
+    var cellModel: PTMediaModel! {
         didSet {
-            let mediaLibConfig = PTMediaLibConfig.share
-            
-            if cellModel.isSelected {
-                fetchBigImage()
-            } else {
-                cancelFetchBigImage()
-            }
-            
-            if let editImage = cellModel.editImage {
-                imageView.image = editImage
-            } else {
-                fetchSmallImage()
-            }
-            
-            let showSelectButton:Bool
-            if mediaLibConfig.maxSelectCount > 1 {
-                if !mediaLibConfig.allowMixSelect {
-                    showSelectButton = cellModel.type.rawValue < PTMediaModel.MediaType.video.rawValue
-                } else {
-                    showSelectButton = true
-                }
-            } else {
-                showSelectButton = mediaLibConfig.showSelectBtnWhenSingleSelect
-            }
-            
-            selectButton.isHidden = !showSelectButton
-            selectButton.isUserInteractionEnabled = showSelectButton
-            selectButton.isSelected = cellModel.isSelected
-            
-            switch cellModel.type {
-            case .video:
-                mediaTypeImageView.isHidden = false
-                mediaTypeImageView.image = PTMediaLibUIConfig.share.cellVideoImage
-                videoTimeLabel.isHidden = false
-                videoTimeLabel.text = cellModel.duration
-                videoTimeLabel.snp.updateConstraints { make in
-                    make.width.equalTo(self.videoTimeLabel.sizeFor(height: 25).width + 5)
-                }
-            case .livePhoto:
-                mediaTypeImageView.isHidden = false
-                mediaTypeImageView.image = PTMediaLibUIConfig.share.cellLivePhotoImage
-                videoTimeLabel.isHidden = true
-                videoTimeLabel.text = ""
-            case .gif:
-                mediaTypeImageView.isHidden = true
-                mediaTypeImageView.image = nil
-                videoTimeLabel.isHidden = false
-                videoTimeLabel.text = "GIF"
-                videoTimeLabel.snp.updateConstraints { make in
-                    make.width.equalTo(self.videoTimeLabel.sizeFor(height: 25).width + 5)
-                }
-            default:
-                mediaTypeImageView.isHidden = true
-                videoTimeLabel.isHidden = true
-                videoTimeLabel.text = ""
-            }
+            updateCellContent()
         }
     }
     
-    private lazy var imageView : UIImageView = {
+    // MARK: - 生命周期与重用
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // 💡 彻底取消任务，防止滑动时图片错位或流量浪费
+        smallImageTask?.cancel()
+        bigImageTask?.cancel()
+        smallImageTask = nil
+        bigImageTask = nil
+        
+        imageIdentifier = ""
+        imageView.image = nil
+        imageView.alpha = 1
+        videoTimeLabel.text = ""
+        mediaTypeImageView.image = nil
+    }
+
+    private func updateCellContent() {
+        let mediaLibConfig = PTMediaLibConfig.share
+        imageIdentifier = cellModel.ident
+        
+        // 1. 处理选中状态的大图预加载/缓存逻辑
+        if cellModel.isSelected {
+            fetchBigImage()
+        } else {
+            cancelFetchBigImage()
+        }
+        
+        // 2. 图像显示优先级：编辑后的图 > 相册原图
+        if let editImage = cellModel.editImage {
+            imageView.image = editImage
+        } else {
+            fetchSmallImage()
+        }
+        
+        // 3. 选择按钮显示逻辑控制
+        let isSingleSelect = mediaLibConfig.maxSelectCount <= 1
+        let canShowBtn = isSingleSelect ? mediaLibConfig.showSelectBtnWhenSingleSelect : (mediaLibConfig.allowMixSelect || cellModel.type != .video)
+        
+        selectButton.isHidden = !canShowBtn
+        selectButton.isUserInteractionEnabled = canShowBtn
+        selectButton.isSelected = cellModel.isSelected
+        
+        // 4. 媒体类型 UI 适配
+        configureMediaType()
+    }
+    
+    private func configureMediaType() {
+        switch cellModel.type {
+        case .video:
+            mediaTypeImageView.isHidden = false
+            mediaTypeImageView.image = PTMediaLibUIConfig.share.cellVideoImage
+            videoTimeLabel.isHidden = false
+            videoTimeLabel.text = cellModel.duration
+        case .livePhoto:
+            mediaTypeImageView.isHidden = false
+            mediaTypeImageView.image = PTMediaLibUIConfig.share.cellLivePhotoImage
+            videoTimeLabel.isHidden = true
+        case .gif:
+            mediaTypeImageView.isHidden = true
+            videoTimeLabel.isHidden = false
+            videoTimeLabel.text = "GIF"
+        default:
+            mediaTypeImageView.isHidden = true
+            videoTimeLabel.isHidden = true
+        }
+        
+        // 💡 只有在显示时才更新约束，减少 Layout Engine 负担
+        if !videoTimeLabel.isHidden {
+            let width = videoTimeLabel.sizeFor(height: 15).width + 8
+            videoTimeLabel.snp.updateConstraints { make in
+                make.width.equalTo(width)
+            }
+        }
+    }
+
+    // MARK: - 异步加载逻辑
+    private func fetchSmallImage() {
+        smallImageTask?.cancel()
+        
+        let asset = cellModel.asset
+        let ident = cellModel.ident
+        let scale = UIScreen.main.scale
+        let targetWidth = bounds.width * scale
+        
+        let size: CGSize
+        if cellModel.whRatio > 1 {
+            size = CGSize(width: targetWidth * cellModel.whRatio, height: targetWidth)
+        } else {
+            size = CGSize(width: targetWidth, height: targetWidth / cellModel.whRatio)
+        }
+
+        smallImageTask = Task {
+            PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self] image, isDegraded in
+                guard let self = self, self.imageIdentifier == ident else { return }
+                self.imageView.image = image
+            }
+        }
+    }
+
+    func fetchBigImage() {
+        cancelFetchBigImage()
+        let asset = cellModel.asset
+        
+        bigImageTask = Task {
+            PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self] progress, _, _, _ in
+                Task { @MainActor in
+                    guard let self = self, self.cellModel.isSelected else { return }
+                    self.imageView.alpha = 0.5
+                    if progress >= 1 { self.resetProgressViewStatus() }
+                }
+            }, completion: { [weak self] _, _, _ in
+                Task { @MainActor in self?.resetProgressViewStatus() }
+            })
+        }
+    }
+
+    func cancelFetchBigImage() {
+        bigImageTask?.cancel()
+        bigImageTask = nil
+        resetProgressViewStatus()
+    }
+    
+    private func resetProgressViewStatus() {
+        imageView.alpha = 1
+    }
+
+    // MARK: - UI Components
+    private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.backgroundColor = .secondarySystemBackground
         return view
     }()
     
-    private lazy var containerView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private lazy var containerView = UIView()
     
     lazy var coverView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
         view.isHidden = true
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.3)
         return view
     }()
     
-    lazy var mediaTypeImageView:UIImageView = {
+    lazy var mediaTypeImageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = . scaleAspectFit
+        view.contentMode = .scaleAspectFit
         return view
     }()
     
-    lazy var videoTimeLabel:UILabel = {
+    lazy var videoTimeLabel: UILabel = {
         let view = UILabel()
         view.font = PTMediaLibUIConfig.share.cellVideoTimeFont
         view.textColor = .white
-        view.viewCorner(radius: 5, borderWidth: 0, borderColor: .clear)
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.85)
+        view.layer.cornerRadius = 4
+        view.layer.masksToBounds = true
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
         view.textAlignment = .center
         return view
     }()
     
-    lazy var editButton:UIButton = {
+    lazy var editButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.cellEditImage, for: .normal)
+        view.isHidden = true
         return view
     }()
 
-    lazy var selectButton:PTLayoutButton = {
+    lazy var selectButton: PTLayoutButton = {
         let view = PTLayoutButton()
         view.normalTitleFont = PTMediaLibUIConfig.share.cellSelectedIndexFont
         view.normalTitleColor = .clear
         view.selectedTitleColor = .white
-        view.configBackgroundColor = .clear
         view.configBackgroundSelectedColor = .systemBlue
-        view.addActionHandlers { sender in
-            if self.enableSelect {
-                self.selectedBlock?({ isSelected in
-                    PTGCDManager.gcdMain {
-                        sender.isSelected = isSelected
-                        sender.layer.removeAllAnimations()
-                    }
-                    
-                    if isSelected {
-                        self.fetchBigImage()
-                    } else {
-                        self.cancelFetchBigImage()
-                    }
-                })
+        view.addActionHandlers { [weak self] sender in
+            guard let self = self, self.enableSelect else { return }
+            self.selectedBlock? { isSelected in
+                Task { @MainActor in
+                    sender.isSelected = isSelected
+                    if isSelected { self.fetchBigImage() } else { self.cancelFetchBigImage() }
+                }
             }
         }
-        view.cornerStyle = .small
         view.cornerRadius = 12.5
-        view.borderWidth = 2
+        view.borderWidth = 1.5
         view.borderColor = .white
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.addSubviews([imageView, coverView, containerView, videoTimeLabel])
+        containerView.addSubviews([selectButton, mediaTypeImageView, editButton])
         
-        contentView.addSubviews([imageView,coverView,containerView,videoTimeLabel])
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        coverView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        containerView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
-        coverView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        containerView.addSubviews([selectButton,mediaTypeImageView,editButton])
         selectButton.snp.makeConstraints { make in
             make.size.equalTo(25)
             make.top.right.equalToSuperview().inset(7.5)
@@ -194,7 +255,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         
         videoTimeLabel.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(7.5)
-            make.centerY.equalTo(self.mediaTypeImageView)
+            make.centerY.equalTo(mediaTypeImageView)
             make.height.equalTo(15)
             make.width.equalTo(0)
         }
@@ -203,127 +264,82 @@ class PTMediaLibCell: PTBaseNormalCell {
             make.size.equalTo(25)
             make.top.left.equalToSuperview().inset(7.5)
         }
-        editButton.isHidden = true
     }
     
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func fetchSmallImage() {
-        let size: CGSize
-        let maxSideLength = bounds.width * 2
-        if cellModel.whRatio > 1 {
-            let w = maxSideLength * cellModel.whRatio
-            size = CGSize(width: w, height: maxSideLength)
-        } else {
-            let h = maxSideLength / cellModel.whRatio
-            size = CGSize(width: maxSideLength, height: h)
-        }
-        
-        if smallImageRequestID > PHInvalidImageRequestID {
-            PHImageManager.default().cancelImageRequest(smallImageRequestID)
-        }
-        
-        imageIdentifier = cellModel.ident
-        imageView.image = nil
-        smallImageRequestID = PTMediaLibManager.fetchImage(for: cellModel.asset, size: size, completion: { [weak self] image, isDegraded in
-            if self?.imageIdentifier == self?.cellModel.ident {
-                self?.imageView.image = image
-            }
-            if !isDegraded {
-                self?.smallImageRequestID = PHInvalidImageRequestID
-            }
-        })
-    }
-    
-    func fetchBigImage() {
-        cancelFetchBigImage()
-        bigImageReqeustID = PTMediaLibManager.fetchOriginalImageData(for: cellModel.asset, progress: { [weak self] progress, _, _, _ in
-            if self?.cellModel.isSelected == true {
-//                self?.progressView.isHidden = false
-//                self?.progressView.progress = max(0.1, progress)
-                PTGCDManager.gcdMain {
-                    self?.imageView.alpha = 0.5
-                    if progress >= 1 {
-                        self?.resetProgressViewStatus()
-                    }
-                }
-            } else {
-                self?.cancelFetchBigImage()
-            }
-        }, completion: { [weak self] _, _, _ in
-            self?.resetProgressViewStatus()
-        })
-    }
-
-    func cancelFetchBigImage() {
-        if bigImageReqeustID > PHInvalidImageRequestID {
-            PHImageManager.default().cancelImageRequest(bigImageReqeustID)
-        }
-        resetProgressViewStatus()
-    }
-    
-    private func resetProgressViewStatus() {
-//        progressView.isHidden = true
-        PTGCDManager.gcdMain {
-            self.imageView.alpha = 1
-        }
-    }
+    required init?(coder: NSCoder) { fatalError() }
 }
 
-//MARK: 相册CELL
+// MARK: - 相册列表 Cell
+@MainActor
 class PTMediaLibAlbumCell: PTBaseNormalCell {
     static let ID = "PTMediaLibAlbumCell"
-        
+    private var fetchTask: Task<Void, Never>?
     private var imageIdentifier: String?
 
-    var albumModel:PTMediaLibListModel! {
+    var albumModel: PTMediaLibListModel! {
         didSet {
-            let att:ASAttributedString = """
+            updateAlbumUI()
+        }
+    }
+    
+    private func updateAlbumUI() {
+        let att: ASAttributedString = """
         \(wrap: .embedding("""
-        \(albumModel.title,.foreground(PTAppBaseConfig.share.viewDefaultTextColor),.font(PTMediaLibUIConfig.share.albumCellTitleFont),.paragraph(.alignment(.left),.lineSpacing(10)))
-        \("\n\(albumModel.count)",.foreground(.lightGray),.font(PTMediaLibUIConfig.share.albumCellDescFont),.paragraph(.alignment(.left)))
+        \(albumModel.title, .foreground(PTAppBaseConfig.share.viewDefaultTextColor), .font(PTMediaLibUIConfig.share.albumCellTitleFont))
+        \("\n\(albumModel.count)", .foreground(.secondaryLabel), .font(PTMediaLibUIConfig.share.albumCellDescFont))
         """))
         """
-            contentLabel.attributed.text = att
+        contentLabel.attributed.text = att
+        
+        imageIdentifier = albumModel.headImageAsset?.localIdentifier
+        imageView.image = PTAppBaseConfig.share.defaultEmptyImage
+        fetchTask?.cancel()
+        
+        if let asset = albumModel.headImageAsset {
+            let ident = asset.localIdentifier
+            let side = bounds.height * UIScreen.main.scale
             
-            imageIdentifier = albumModel.headImageAsset?.localIdentifier
-            if let asset = albumModel.headImageAsset {
-                let w = bounds.height * 2.5
-                PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: w, height: w)) { [weak self] image, _ in
-                    if self?.imageIdentifier == self?.albumModel.headImageAsset?.localIdentifier {
-                        self?.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
-                    }
+            fetchTask = Task {
+                PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: side, height: side)) { [weak self] image, _ in
+                    guard let self = self, self.imageIdentifier == ident else { return }
+                    self.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
                 }
             }
         }
     }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        fetchTask?.cancel()
+        fetchTask = nil
+        imageView.image = nil
+        imageIdentifier = nil
+    }
     
-    lazy var imageView:UIImageView = {
+    lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.layer.cornerRadius = 4
         return view
     }()
     
-    lazy var contentLabel:UILabel = {
+    lazy var contentLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }()
     
-    lazy var selectedButton:UIButton = {
+    lazy var selectedButton: UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.albumSelectedImage, for: .selected)
-        view.setImage(nil, for: .normal)
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.addSubviews([imageView, selectedButton, contentLabel])
         
-        contentView.addSubviews([imageView,selectedButton,contentLabel])
         imageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -337,24 +353,23 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         }
         
         contentLabel.snp.makeConstraints { make in
-            make.left.equalTo(self.imageView.snp.right).offset(10)
-            make.top.bottom.equalTo(self.imageView)
-            make.right.equalTo(self.selectedButton.snp.left).offset(-10)
+            make.left.equalTo(imageView.snp.right).offset(10)
+            make.top.bottom.equalTo(imageView)
+            make.right.equalTo(selectedButton.snp.left).offset(-10)
         }
     }
     
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError() }
 }
 
-//MARK: Camera Cell
+// MARK: - 相机入口 Cell
+@MainActor
 class PTCameraCell: PTBaseNormalCell {
     static let ID = "PTFilterImageCell"
     
     lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .center
         view.clipsToBounds = true
         view.image = PTMediaLibUIConfig.share.cameraImage
         return view
@@ -362,17 +377,10 @@ class PTCameraCell: PTBaseNormalCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.backgroundColor = .white
-        contentView.addSubviews([imageView])
-        imageView.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-            make.size.equalTo(44)
-        }
+        contentView.backgroundColor = .secondarySystemBackground
+        contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError() }
 }

@@ -15,7 +15,8 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
         return
     }
     
-    var selIds: [String: Bool] = [:]
+    // 💡 优化：使用 Set 提升查找性能
+    var selIds = Set<String>()
     var selEditImage: [String: UIImage] = [:]
 #if POOTOOLS_IMAGEEDITOR
     var selEditModel: [String: PTEditModel] = [:]
@@ -23,22 +24,29 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
     var selIdAndIndex: [String: Int] = [:]
     
     for (index, m) in selected.enumerated() {
-        selIds[m.ident] = true
-        selEditImage[m.ident] = m.editImage
+        selIds.insert(m.ident)
+        if let editImage = m.editImage {
+            selEditImage[m.ident] = editImage
+        }
 #if POOTOOLS_IMAGEEDITOR
-        selEditModel[m.ident] = m.editImageModel
+        if let editModel = m.editImageModel {
+            selEditModel[m.ident] = editModel
+        }
 #endif
         selIdAndIndex[m.ident] = index
     }
     
     source.forEach { m in
-        if selIds[m.ident] == true {
+        if selIds.contains(m.ident) {
             m.isSelected = true
             m.editImage = selEditImage[m.ident]
 #if POOTOOLS_IMAGEEDITOR
             m.editImageModel = selEditModel[m.ident]
 #endif
-            selected[selIdAndIndex[m.ident]!] = m
+            // 💡 修复：安全防御，防止越界崩溃
+            if let targetIndex = selIdAndIndex[m.ident], targetIndex < selected.count {
+                selected[targetIndex] = m
+            }
         } else {
             m.isSelected = false
         }
@@ -52,7 +60,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
         
     if currentSelectCount >= PTMediaLibConfig.share.maxSelectCount {
         if showAlert {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(PTMediaLibConfig.share.maxSelectCount)"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(PTMediaLibConfig.share.maxSelectCount)"), icon: .Error, style: .Normal)
         }
         return false
     }
@@ -69,14 +77,14 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     
     if model.second > PTMediaLibConfig.share.maxSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(PTMediaLibConfig.share.maxSelectVideoDuration)"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(PTMediaLibConfig.share.maxSelectVideoDuration)"), icon: .Error, style: .Normal)
         }
         return false
     }
     
     if model.second < PTMediaLibConfig.share.minSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(PTMediaLibConfig.share.minSelectVideoDuration)"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(PTMediaLibConfig.share.minSelectVideoDuration)"), icon: .Error, style: .Normal)
         }
         return false
     }
@@ -89,7 +97,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size > PTMediaLibConfig.share.maxSelectVideoDataSize {
         if showAlert {
             let value = Int(round(PTMediaLibConfig.share.maxSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.videoSizeMoreError, "\(String(value))"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoSizeMoreError, "\(String(value))"), icon: .Error, style: .Normal)
         }
         return false
     }
@@ -97,7 +105,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size < PTMediaLibConfig.share.minSelectVideoDataSize {
         if showAlert {
             let value = Int(round(PTMediaLibConfig.share.minSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,subtitle:String(format: PTMediaLibUIConfig.share.videoSizeLessError, "\(String(value))"),icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoSizeLessError, "\(String(value))"), icon: .Error, style: .Normal)
         }
         return false
     }
@@ -105,7 +113,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     return true
 }
 
-@MainActor func downloadAssetIfNeed(alertTitle:String = PTMediaLibUIConfig.share.alertTitle,subTitle:String = PTMediaLibUIConfig.share.downloadTimeOutError,model: PTMediaModel, sender: UIViewController?, completion: @escaping PTActionTask) {
+@MainActor func downloadAssetIfNeed(alertTitle: String = PTMediaLibUIConfig.share.alertTitle, subTitle: String = PTMediaLibUIConfig.share.downloadTimeOutError, model: PTMediaModel, sender: UIViewController?, completion: @escaping PTActionTask) {
     let config = PTMediaLibConfig.share
     guard model.type == .video,
           model.asset.pt.isInCloud,
@@ -113,32 +121,47 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
         completion()
         return
     }
-
-    var requestAssetID: PHImageRequestID?
+    
+    // 💡 Swift 6 优化：将其声明为绑定在 MainActor 的 final class
+    // 因为受主线程保护，Swift 6 会自动赋予它隐式的 @Sendable 能力，再也不会报错了
+    @MainActor final class RequestContainer {
+        var id: PHImageRequestID?
+    }
+    let container = RequestContainer()
+    
+    // 💡 Swift 6 优化：废弃 Timer，使用现代的 Task 机制处理超时
+    let timeoutTask = Task { @MainActor in
+        // 将超时时间转换为纳秒 (nanoseconds)
+        let nanoseconds = UInt64(Network.share.netRequsetTime * 1_000_000_000)
+        try? await Task.sleep(nanoseconds: nanoseconds)
         
-    let timer = Timer.scheduledTimer(timeInterval: Network.share.netRequsetTime, repeats: false) { timer in
-        PTAlertTipControl.present(title: alertTitle,subtitle:subTitle,icon:.Error,style:.Normal)
-
-        if let requestAssetID = requestAssetID {
+        // 醒来后检查任务是否已经被取消，如果取消了说明网络请求已经成功，直接退出
+        guard !Task.isCancelled else { return }
+        
+        // 执行超时逻辑
+        PTAlertTipControl.present(title: alertTitle, subtitle: subTitle, icon: .Error, style: .Normal)
+        
+        if let requestAssetID = container.id {
             PHImageManager.default().cancelImageRequest(requestAssetID)
         }
-        
-        timer.invalidate()
     }
     
-    requestAssetID = PTMediaLibManager.fetchVideo(for: model.asset, completion: { _, _, isDegraded in
-        timer.invalidate()
+    // 给容器内的属性赋值
+    container.id = PTMediaLibManager.fetchVideo(for: model.asset, completion: { _, _, isDegraded in
+        // 网络请求一回来，马上取消超时任务
+        timeoutTask.cancel()
         if !isDegraded {
             completion()
         }
     })
 }
 
-public class PTMediaLibManager:NSObject {    
+public class PTMediaLibManager: NSObject {
     /// Save video to album.
     public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
+        // 💡 提示：这里天然兼容了 iOS 14 的 .limited 权限状态，因为有限权限不是 .denied 也不是 .restricted
         if status == .denied || status == .restricted {
             completion?(false, nil)
             return
@@ -221,27 +244,35 @@ public class PTMediaLibManager:NSObject {
         var count = 1
         
         result.enumerateObjects(options: option) { asset, _, stop in
-            let m = PTMediaModel(asset: asset)
-            
-            if m.type == .image, !allowSelectImage {
-                return
+            // 💡 优化：包裹 autoreleasepool，控制遍历时的内存峰值
+            autoreleasepool {
+                let m = PTMediaModel(asset: asset)
+                
+                var shouldAdd = true
+                if m.type == .image && !allowSelectImage {
+                    shouldAdd = false
+                }
+                if m.type == .video && !allowSelectVideo {
+                    shouldAdd = false
+                }
+                
+                if shouldAdd {
+                    models.append(m)
+                    if count == limitCount {
+                        stop.pointee = true
+                    }
+                    count += 1
+                }
             }
-            if m.type == .video, !allowSelectVideo {
-                return
-            }
-            if count == limitCount {
-                stop.pointee = true
-            }
-            
-            models.append(m)
-            count += 1
         }
         
         return models
     }
     
-    class func predicatesGet(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/) -> [NSPredicate] {
-        var predicates : [NSPredicate] = []
+    // 💡 修复：补齐被注释掉的仅选择普通照片功能
+    class func predicatesGet(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false) -> [NSPredicate] {
+        var predicates: [NSPredicate] = []
+        
         // 如果允许选择视频
         if allowSelectVideo {
             predicates.append(NSPredicate(format: "mediaType == %ld", PHAssetMediaType.video.rawValue))
@@ -254,23 +285,21 @@ public class PTMediaLibManager:NSObject {
             if allowSelectLivePhotoOnly {
                 // 如果只允许选择 Live Photo
                 predicates.append(NSPredicate(format: "mediaType == %ld AND (mediaSubtypes & %ld) != 0", PHAssetMediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue))
+            } else if allowSelectRegularImageOnly {
+                // 如果只允许选择普通图片，不包括 Live Photo
+                let imagePredicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
+                let nonLivePhotoPredicate = NSPredicate(format: "(mediaSubtypes & %ld) == 0", PHAssetMediaSubtype.photoLive.rawValue)
+                let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, nonLivePhotoPredicate])
+                predicates.append(compoundPredicate)
             }
-            
-//            if allowSelectRegularImageOnly {
-//                // 如果只允许选择普通图片，不包括 Live Photo
-//                let imagePredicate = NSPredicate(format: "mediaType == %ld", PHAssetMediaType.image.rawValue)
-//                let nonLivePhotoPredicate = NSPredicate(format: "(mediaSubtypes & %ld) == 0", PHAssetMediaSubtype.photoLive.rawValue)
-//                let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, nonLivePhotoPredicate])
-//                predicates.append(compoundPredicate)
-//            }
         }
         return predicates
     }
     
-    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/,handler: @escaping (PTMediaLibListModel) -> Void) {
+    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, handler: @escaping (PTMediaLibListModel) -> Void) {
         PTGCDManager.gcdGobal {
             let option = PHFetchOptions()
-            let predicates : [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly/*, allowSelectRegularImageOnly: allowSelectRegularImageOnly*/)
+            let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
 
             // 组合多个条件（如果有）
             if !predicates.isEmpty {
@@ -292,21 +321,23 @@ public class PTMediaLibManager:NSObject {
     }
     
     /// Fetch all album list.
-    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool/*, allowSelectRegularImageOnly: Bool*/, completion: ([PTMediaLibListModel]) -> Void) {
+    public class func getPhotoAlbumList(ascending: Bool, allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, completion: ([PTMediaLibListModel]) -> Void) {
         let option = PHFetchOptions()
-        let predicates : [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly/*, allowSelectRegularImageOnly: allowSelectRegularImageOnly*/)
+        let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
 
         // 组合多个条件（如果有）
         if !predicates.isEmpty {
             option.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
         }
         
-        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil) as! PHFetchResult<PHCollection>
-        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as! PHFetchResult<PHCollection>
-        let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as! PHFetchResult<PHCollection>
-        let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as! PHFetchResult<PHCollection>
-        let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil) as! PHFetchResult<PHCollection>
-        let arr = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums]
+        // 💡 修复：安全转换以防止奔溃，使用 as? 而不是 as!
+        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil) as? PHFetchResult<PHCollection>
+        let albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil) as? PHFetchResult<PHCollection>
+        let streamAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil) as? PHFetchResult<PHCollection>
+        let syncedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil) as? PHFetchResult<PHCollection>
+        let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil) as? PHFetchResult<PHCollection>
+        
+        let arr: [PHFetchResult<PHCollection>] = [smartAlbums, albums, streamAlbums, syncedAlbums, sharedAlbums].compactMap { $0 }
         
         var albumList: [PTMediaLibListModel] = []
         arr.forEach { album in

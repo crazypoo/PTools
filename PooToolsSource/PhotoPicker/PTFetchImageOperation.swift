@@ -9,152 +9,165 @@
 import UIKit
 import Photos
 import Kingfisher
-import UIKit
 
-class PTFetchImageOperation: Operation,@unchecked Sendable {
+// 通过将 Operation 的执行逻辑约束在 @MainActor，
+// 或者确保闭包捕获是 Sendable 的，来满足并发安全。
+final class PTFetchImageOperation: Operation, @unchecked Sendable {
     private let model: PTMediaModel
-    
     private let isOriginal: Bool
-    
-    private let progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)?
-    
-    private let completion: (UIImage?, PHAsset?) -> Void
-    
-    private var pri_isExecuting = false {
-        willSet {
-            self.willChangeValue(forKey: "isExecuting")
-        }
-        didSet {
-            self.didChangeValue(forKey: "isExecuting")
-        }
-    }
-    
+    private let progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)?
+    private let completion: @Sendable (UIImage?, PHAsset?) -> Void
+
+    // 💡 使用 Atomic 或 MainActor 保护 ID，防止 cancel 和 start 在不同线程竞争
+    private var requestImageID: PHImageRequestID = PHInvalidImageRequestID
+    private let idLock = NSLock()
+
+    // MARK: - 状态管理
+    // Operation 的状态属性必须是线程安全的。在 Swift 6 中，我们手动触发 KVO。
+    private var _isExecuting: Bool = false
     override var isExecuting: Bool {
-        pri_isExecuting
-    }
-    
-    private var pri_isFinished = false {
-        willSet {
-            self.willChangeValue(forKey: "isFinished")
-        }
-        didSet {
-            self.didChangeValue(forKey: "isFinished")
+        get { _isExecuting }
+        set {
+            willChangeValue(forKey: "isExecuting")
+            _isExecuting = newValue
+            didChangeValue(forKey: "isExecuting")
         }
     }
-    
+
+    private var _isFinished: Bool = false
     override var isFinished: Bool {
-        pri_isFinished
-    }
-    
-    private var pri_isCancelled = false {
-        willSet {
-            willChangeValue(forKey: "isCancelled")
-        }
-        didSet {
-            didChangeValue(forKey: "isCancelled")
+        get { _isFinished }
+        set {
+            willChangeValue(forKey: "isFinished")
+            _isFinished = newValue
+            didChangeValue(forKey: "isFinished")
         }
     }
-    
-    private var requestImageID = PHInvalidImageRequestID
-    
-    override var isCancelled: Bool {
-        pri_isCancelled
-    }
-    
-    init(model: PTMediaModel, isOriginal: Bool, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, PHAsset?) -> Void) {
+
+    // MARK: - Init
+    init(model: PTMediaModel,
+         isOriginal: Bool,
+         progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+         completion: @escaping @Sendable (UIImage?, PHAsset?) -> Void) {
         self.model = model
         self.isOriginal = isOriginal
         self.progress = progress
         self.completion = completion
         super.init()
     }
-    
+
+    // MARK: - Execution
     override func start() {
+        // 1. 检查取消状态
         if isCancelled {
             fetchFinish()
             return
         }
-        PTNSLogConsole("---- start fetch",levelType: PTLogMode,loggerType: .Media)
-        pri_isExecuting = true
-        
-        // 存在编辑的图片
-        if let editImage = model.editImage {
-            if PTMediaLibConfig.share.saveNewImageAfterEdit {
-                PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self] _, asset in
-                    self?.completion(editImage, asset)
-                    self?.fetchFinish()
-                }
-            } else {
-                PTGCDManager.gcdMain {
+
+        PTNSLogConsole("---- start fetch", levelType: PTLogMode, loggerType: .Media)
+        isExecuting = true
+
+        // 2. 处理编辑过的图片
+        // 💡 映射到 MainActor 以便安全访问 model 属性
+        Task { @MainActor in
+            if let editImage = model.editImage {
+                if PTMediaLibConfig.share.saveNewImageAfterEdit {
+                    PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self] _, asset in
+                        self?.completion(editImage, asset)
+                        self?.fetchFinish()
+                    }
+                } else {
                     self.completion(editImage, nil)
                     self.fetchFinish()
                 }
+                return
             }
-            return
-        }
-        
-        if PTMediaLibConfig.share.allowSelectGif, model.type == .gif {
-            requestImageID = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self] data, _, isDegraded in
-                if !isDegraded {
-                    let image = UIImage.pt.animateGifImage(data: data)
-                    self?.completion(image, nil)
-                    self?.fetchFinish()
+
+            // 3. 处理 GIF
+            if PTMediaLibConfig.share.allowSelectGif, model.type == .gif {
+                let id = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self] data, _, isDegraded in
+                    if !isDegraded {
+                        let image = UIImage.pt.animateGifImage(data: data)
+                        self?.completion(image, nil)
+                        self?.fetchFinish()
+                    }
                 }
+                self.updateRequestID(id)
+                return
             }
-            return
-        }
-        
-        if isOriginal {
-            requestImageID = PTMediaLibManager.fetchOriginalImage(for: model.asset, progress: progress) { [weak self] image, isDegraded in
-                if !isDegraded {
-                    PTNSLogConsole("原图加载完成 \(String(describing: self?.isCancelled))",levelType: PTLogMode,loggerType: .Media)
-                    self?.completion(image?.pt.fixOrientation(), nil)
-                    self?.fetchFinish()
-                }
+
+            // 4. 处理普通照片
+            let size = model.previewSize
+            let asset = model.asset
+            
+            let resultHandler: @Sendable (UIImage?, Bool) -> Void = { [weak self] image, isDegraded in
+                guard let self = self, !isDegraded else { return }
+                
+                let fixedImage = image?.pt.fixOrientation()
+                let finalImage = self.isOriginal ? fixedImage : self.scaleImage(fixedImage)
+                
+                PTNSLogConsole("加载完成, 原图: \(self.isOriginal)", levelType: PTLogMode, loggerType: .Media)
+                self.completion(finalImage, nil)
+                self.fetchFinish()
             }
-        } else {
-            requestImageID = PTMediaLibManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
-                if !isDegraded {
-                    PTNSLogConsole("加载完成 isCancelled: \(String(describing: self?.isCancelled))",levelType: PTLogMode,loggerType: .Media)
-                    self?.completion(self?.scaleImage(image?.pt.fixOrientation()), nil)
-                    self?.fetchFinish()
-                }
+
+            let id: PHImageRequestID
+            if isOriginal {
+                id = PTMediaLibManager.fetchOriginalImage(for: asset, progress: progress, completion: resultHandler)
+            } else {
+                id = PTMediaLibManager.fetchImage(for: asset, size: size, progress: progress, completion: resultHandler)
             }
+            self.updateRequestID(id)
         }
     }
-    
+
     override func cancel() {
         super.cancel()
-        PTNSLogConsole("cancel \(isExecuting) \(requestImageID)",levelType: PTLogMode,loggerType: .Media)
-        PHImageManager.default().cancelImageRequest(requestImageID)
-        pri_isCancelled = true
+        
+        idLock.lock()
+        let idToCancel = requestImageID
+        requestImageID = PHInvalidImageRequestID
+        idLock.unlock()
+
+        if idToCancel != PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(idToCancel)
+        }
+
         if isExecuting {
             fetchFinish()
         }
     }
-    
-    private func scaleImage(_ image: UIImage?) -> UIImage? {
-        guard let i = image else {
-            return nil
-        }
-        guard let data = i.jpegData(compressionQuality: 1) else {
-            return i
-        }
-        let mUnit: CGFloat = 1024 * 1024
-        
-        if data.count < Int(0.2 * mUnit) {
-            return i
-        }
-        let scale: CGFloat = (data.count > Int(mUnit) ? 0.6 : 0.8)
-        
-        guard let d = i.jpegData(compressionQuality: scale) else {
-            return i
-        }
-        return UIImage(data: d)
+
+    // MARK: - Helpers
+    private func updateRequestID(_ id: PHImageRequestID) {
+        idLock.lock()
+        requestImageID = id
+        idLock.unlock()
     }
-    
+
     private func fetchFinish() {
-        pri_isExecuting = false
-        pri_isFinished = true
+        // 确保状态变更连贯
+        if isExecuting {
+            isExecuting = false
+        }
+        if !isFinished {
+            isFinished = true
+        }
+    }
+
+    private func scaleImage(_ image: UIImage?) -> UIImage? {
+        guard let i = image else { return nil }
+        
+        // 💡 优化性能：只有当图片确实很大时才进行 Data 转码
+        guard let data = i.jpegData(compressionQuality: 1) else { return i }
+        let mUnit = 1024.0 * 1024.0
+        
+        if CGFloat(data.count) < 0.2 * mUnit {
+            return i
+        }
+        
+        let scale: CGFloat = (CGFloat(data.count) > mUnit ? 0.6 : 0.8)
+        guard let d = i.jpegData(compressionQuality: scale) else { return i }
+        return UIImage(data: d)
     }
 }
