@@ -680,14 +680,14 @@ extension PTNavigationBarManager {
         container.titleContainer.addSubview(view)
         container.titleContainer.snp.remakeConstraints { make in
             if self.titleLabel {
-                make.left.lessThanOrEqualTo(container.leftContainer.snp.right)
-                make.right.lessThanOrEqualTo(container.rightContainer.snp.left)
+                make.left.lessThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
+                make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                 make.bottom.equalToSuperview()
                 make.centerX.equalToSuperview()
             } else {
-                make.left.equalTo(container.leftContainer.snp.right)
-                make.right.equalTo(container.rightContainer.snp.left)
+                make.left.equalTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
+                make.right.equalTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
                 make.bottom.equalToSuperview()
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             }
