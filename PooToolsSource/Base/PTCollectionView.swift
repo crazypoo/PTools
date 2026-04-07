@@ -350,12 +350,13 @@ public class PTCollectionView: UIView {
     fileprivate var touchedIndex: Int = 0 {
         didSet {
             if touchedIndex != oldValue {
+                impactFeedbackGenerator.prepare() // 👈 预先唤醒硬件
                 impactFeedbackGenerator.impactOccurred()
             }
         }
     }
     
-    // 懒加载震动反馈（替换原 Any? 强转的做法）
+    // 懒加载震动反馈
     fileprivate lazy var impactFeedbackGenerator : UIImpactFeedbackGenerator = {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.prepare()
@@ -540,6 +541,9 @@ public class PTCollectionView: UIView {
         collectionView.allowsMoveItem()
 
         setIndexViews()
+        
+        // 👈 内存警告通知监听，防止 OOM 崩溃
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
 
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
@@ -586,6 +590,16 @@ public class PTCollectionView: UIView {
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func didReceiveMemoryWarning() {
+        PTGCDManager.gcdMain {
+            // 清理缓存以释放内存
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            self.waterfallCache.removeAll()
+        }
     }
     
     ///展示界面
@@ -734,37 +748,45 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
             
     public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        collectionWillBeginDecelerating?(scrollView as! UICollectionView)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionWillBeginDecelerating?(cv)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        collectionViewDidScroll?(scrollView as! UICollectionView)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionViewDidScroll?(cv)
         throttleScrollUpdate()
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        collectionWillBeginDragging?(scrollView as! UICollectionView)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionWillBeginDragging?(cv)
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        collectionDidEndDragging?(scrollView as! UICollectionView,decelerate)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionDidEndDragging?(cv,decelerate)
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        collectionWillEndDraging?(scrollView as! UICollectionView,velocity,targetContentOffset)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionWillEndDraging?(cv,velocity,targetContentOffset)
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        collectionDidEndDecelerating?(scrollView as! UICollectionView)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionDidEndDecelerating?(cv)
         hideIndicator()
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        collectionDidEndScrollingAnimation?(scrollView as! UICollectionView)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionDidEndScrollingAnimation?(cv)
     }
     
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        collectionDidScrolltoTop?(scrollView as! UICollectionView)
+        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        collectionDidScrolltoTop?(cv)
     }
 }
 
@@ -814,22 +836,21 @@ private extension PTCollectionView {
     }
 
     private func addIndexGesture() {
-        
-        let pan = UIPanGestureRecognizer { sender in
-            if let gesture = sender as? UIPanGestureRecognizer {
-                let point = gesture.location(in: self.stackView)
+        // 👈 添加 [weak self] 防止内存泄漏
+        let pan = UIPanGestureRecognizer { [weak self] sender in
+            guard let self = self, let gesture = sender as? UIPanGestureRecognizer else { return }
+            let point = gesture.location(in: self.stackView)
+            
+            for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
                 
-                for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
-                    
-                    if view.frame.contains(point) {
-                        self.selectIndex(view.index)
-                        break
-                    }
+                if view.frame.contains(point) {
+                    self.selectIndex(view.index)
+                    break
                 }
-                
-                if gesture.state == .ended || gesture.state == .cancelled {
-                    self.hideIndicator()
-                }
+            }
+            
+            if gesture.state == .ended || gesture.state == .cancelled {
+                self.hideIndicator()
             }
         }
         indexContainerView.addGestureRecognizer(pan)
@@ -920,7 +941,9 @@ private extension PTCollectionView {
                 make.size.equalTo(config.itemSize)
             }
             
-            let tap = UITapGestureRecognizer { sender in
+            // 👈 添加 [weak self] 防止内存泄漏
+            let tap = UITapGestureRecognizer { [weak self] sender in
+                guard let self = self else { return }
                 self.isTouched = true
                 self.selectIndex(label.index)
             }
@@ -1078,8 +1101,8 @@ extension PTCollectionView {
     ///加载数据并且刷新界面
     private func calculateDiff(old: [PTSection],
                                new: [PTSection]) -> (insert: IndexSet,
-                                                      delete: IndexSet,
-                                                      reload: IndexSet) {
+                                                     delete: IndexSet,
+                                                     reload: IndexSet) {
         
         var insert = IndexSet()
         var delete = IndexSet()
@@ -1269,31 +1292,37 @@ extension PTCollectionView {
         
         // 🟢 计算数据量
         let totalItems = totalItemCount(newSections)
+        
         // 🟢 策略选择
         if totalItems >= DiffThreshold.largeItem {
             applyReloadData(newSections, animated: animated, completion: completion)
             return
         }
         
-        if totalItems >= DiffThreshold.mediumItem {
-            applySectionDiff(old: oldSections,
-                             new: newSections,
-                             animated: animated,
-                             animation: animation,
-                             completion: completion)
-            return
-        }
+        // 🚀 性能优化：将计算耗时的 Diff 移至后台执行
+        PTGCDManager.gcdGobal { [weak self] in
+            guard let self = self else { return }
+            
+            if totalItems >= DiffThreshold.mediumItem {
+                let sectionDiff = self.diffSections(old: oldSections, new: newSections)
+                PTGCDManager.gcdMain {
+                    self.applySectionDiffWithResult(sectionDiff, new: newSections, animated: animated, animation: animation, completion: completion)
+                }
+                return
+            }
 
-        let updates = buildDiffUpdates(old: oldSections, new: newSections)
-        
-        self.mSections = newSections
-        
-        performSafeBatchUpdates(
-            updates: updates,
-            animated: animated,
-            animation: animation,
-            completion: completion
-        )
+            let updates = self.buildDiffUpdates(old: oldSections, new: newSections)
+            
+            PTGCDManager.gcdMain {
+                self.mSections = newSections
+                self.performSafeBatchUpdates(
+                    updates: updates,
+                    animated: animated,
+                    animation: animation,
+                    completion: completion
+                )
+            }
+        }
     }
     
     private func applyReloadData(_ newSections: [PTSection],
@@ -1322,20 +1351,18 @@ extension PTCollectionView {
                           animations: reloadBlock)
     }
     
-    private func applySectionDiff(old: [PTSection],
-                                  new: [PTSection],
-                                  animated: Bool,
-                                  animation: PTDiffAnimation,
-                                  completion: PTCollectionCallback?) {
-        
-        let sectionDiff = diffSections(old: old, new: new)
+    // 👈 配合后台异步 Diff，将其拆分处理返回的 Result
+    private func applySectionDiffWithResult(_ sectionDiff: SectionDiffResult,
+                                            new: [PTSection],
+                                            animated: Bool,
+                                            animation: PTDiffAnimation,
+                                            completion: PTCollectionCallback?) {
         
         self.mSections = new
         
         let updateBlock = {
             self.collectionView.deleteSections(sectionDiff.deletes)
             self.collectionView.insertSections(sectionDiff.inserts)
-            
             self.collectionView.reloadSections(sectionDiff.reloads)
             
             sectionDiff.moves.forEach {
