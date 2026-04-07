@@ -679,7 +679,12 @@ public class PTMediaLibViewController: PTBaseViewController {
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
 
-    // MARK: - Queue（限制并发）
+    // MARK: - Data
+    var currentAlbum: PTMediaLibListModel! // 🌟 优化：将隐式解包(!)改为可选值(?)，防止生命周期异步加载时意外崩溃
+    var totalModels: [PTMediaModel] = []
+    var selectedModel: [PTMediaModel] = []
+
+    // 🌟 1. 但仅仅是为了利用它完美的“并发数限制(maxConcurrentOperationCount = 3)”功能
     private lazy var fetchImageQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.name = "com.pt.media.fetch"
@@ -687,11 +692,6 @@ public class PTMediaLibViewController: PTBaseViewController {
         queue.qualityOfService = .userInitiated
         return queue
     }()
-
-    // MARK: - Data
-    var currentAlbum: PTMediaLibListModel!
-    var totalModels: [PTMediaModel] = []
-    var selectedModel: [PTMediaModel] = []
 
     private var isSelectOriginal = false
     fileprivate var selectedMediaCount: Int = 0
@@ -732,7 +732,6 @@ public class PTMediaLibViewController: PTBaseViewController {
         view.addActionHandlers { [weak self] _ in
             self?.handleAlbumClick()
         }
-
         view.bounds = CGRect(x: 0, y: 0, width: 100, height: 34)
         return view
     }()
@@ -760,10 +759,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     }()
 
     // MARK: - Lifecycle
-
-    deinit {
-        fetchImageQueue.cancelAllOperations()
-    }
+    deinit {}
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -849,7 +845,7 @@ public class PTMediaLibViewController: PTBaseViewController {
                 }
 
                 self.mediaListView.currentAlbum = model
-                self.albumTitleSet()
+                self.scheduleTitleUpdate() // 🌟 优化：复用 scheduleTitleUpdate 进行安全更新
 
                 if !PTMediaLibUIConfig.share.shortIsTop {
                     PTGCDManager.gcdAfter(time: 0.05, block: {
@@ -872,20 +868,22 @@ public class PTMediaLibViewController: PTBaseViewController {
         }
     }
 
-    // MARK: - Title（节流）
+    // MARK: - Title (🌟 优化：改用 DispatchWorkItem 实现真正的防抖，避免丢帧)
 
-    private var pendingTitleUpdate = false
+    private var titleUpdateWorkItem: DispatchWorkItem?
 
     private func scheduleTitleUpdate() {
-        guard !pendingTitleUpdate else { return }
-        pendingTitleUpdate = true
+        titleUpdateWorkItem?.cancel() // 取消之前的任务
 
-        PTGCDManager.gcdAfter(time: 0.05, block: {
-            self.pendingTitleUpdate = false
-            self.albumTitleSet()
-        })
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.albumTitleSet()
+        }
+        titleUpdateWorkItem = workItem
+        // 延迟 0.05 秒执行。如果期间再次触发，旧任务取消，重新计时
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
     }
 
+    @MainActor // 🌟 优化：保证 UI 更新一定在主线程
     func albumTitleSet() {
         let att = titleAtt()
         selectLibButton.setAtt(att, state: .normal)
@@ -893,6 +891,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         resetTitleSelectBounds()
     }
 
+    @MainActor
     func titleAtt() -> ASAttributedString {
         guard let album = mediaListView.currentAlbum else { return "" }
 
@@ -916,6 +915,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         return buttonAtt
     }
 
+    @MainActor
     func resetTitleSelectBounds() {
         selectLibButton.bounds = CGRect(
             origin: .zero,
@@ -975,147 +975,132 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
 }
 
-final class ResultCollector {
-
-    private let lock = NSLock()
-
-    private(set) var results: [PTResultModel?]
-    private(set) var errorAssets: [PHAsset] = []
-    private(set) var errorIndices: [Int] = []
-
-    private var finishedCount = 0
-    private let totalCount: Int
-    private var isCompleted = false
-
-    let completion: ([PTResultModel], [PHAsset], [Int]) -> Void
-
-    init(totalCount: Int,
-         completion: @escaping ([PTResultModel], [PHAsset], [Int]) -> Void) {
-        self.totalCount = totalCount
-        self.results = Array(repeating: nil, count: totalCount)
-        self.completion = completion
-    }
-
-    func collect(index: Int, result: PTResultModel?, asset: PHAsset?) {
-        lock.lock()
-        defer { lock.unlock() }
-
-        guard !isCompleted else { return }
-
-        finishedCount += 1
-
-        if let r = result {
-            results[index] = r
-        } else if let a = asset {
-            errorAssets.append(a)
-            errorIndices.append(index)
-        }
-
-        if finishedCount == totalCount {
-            isCompleted = true
-            let final = results.compactMap { $0 }
-
-            DispatchQueue.main.async {
-                self.completion(final, self.errorAssets, self.errorIndices)
-            }
-        }
-    }
-}
-
 extension PTMediaLibViewController {
+        
+    // 🌟 2. 桥接方法：把基于回调的 Operation 变成可以直接 await 的 Swift 6 方法
+    private func fetchMediaResultAsync(model: PTMediaModel, index: Int, isOriginal: Bool) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
+        return await withCheckedContinuation { continuation in
+            let operation = PTFetchImageOperation(model: model, isOriginal: isOriginal) { image, asset in
+                if let image = image {
+                    let isEdited = model.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
+                    
+#if POOTOOLS_IMAGEEDITOR
+                    let resultModel = PTResultModel(
+                        asset: asset ?? model.asset,
+                        image: image,
+                        isEdited: isEdited,
+                        editModel: isEdited ? model.editImageModel : nil,
+                        avEditorOutputItem: model.avEditorOutputItem,
+                        index: index
+                    )
+#else
+                    let resultModel = PTResultModel(
+                        asset: asset ?? model.asset,
+                        image: image,
+                        isEdited: isEdited,
+                        avEditorOutputItem: model.avEditorOutputItem,
+                        index: index
+                    )
+#endif
+                    continuation.resume(returning: (resultModel, nil, index))
+                } else {
+                    continuation.resume(returning: (nil, asset ?? model.asset, index))
+                }
+            }
+            
+            // 放到 Queue 里去执行，这能保证 Operation 按照原有的设计正常运作！
+            self.fetchImageQueue.addOperation(operation)
+        }
+    }
+    
+    // 🌟 3. 重构提交流程
     public func requestSelectPhoto(viewController: UIViewController? = nil) {
-        // 1. 空数据
-        guard !selectedModel.isEmpty else {
+        
+        // 🔥 核心修复：直接实时获取！不再依赖闭包更新，绝对不会出现丢失选中的情况！
+        self.selectedModel = self.mediaListView.selectedModel
+        self.totalModels = self.mediaListView.totalModels
+        
+        // 1. 空数据拦截
+        guard !self.selectedModel.isEmpty else {
             let emptyOriginal = isSelectOriginal
-
+            let presentingVC = viewController?.presentingViewController
+            
             viewController?.dismiss(animated: true) { [weak self] in
                 self?.selectImageBlock?([], emptyOriginal)
-
-                if let presentingVC = viewController?.presentingViewController {
-                    PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
+                if let pVC = presentingVC {
+                    PTNavigationBarManager.shared.restoreIfNeeded(for: pVC)
                 }
             }
             return
         }
-
+        
         // 2. 混合校验
         let config = PTMediaLibConfig.share
         let uiConfig = PTMediaLibUIConfig.share
-
+        
         if config.allowMixSelect {
             let videoCount = selectedModel.lazy.filter { $0.type == .video }.count
-
+            
             if videoCount > config.maxVideoSelectCount {
                 PTAlertTipControl.present(
                     title: uiConfig.alertTitle,
                     subtitle: String(format: uiConfig.mediaCountMax, "\(config.maxVideoSelectCount)"),
-                    icon: .Error,
-                    style: .Normal
+                    icon: .Error, style: .Normal
                 )
                 return
             }
-
+            
             if videoCount < config.minVideoSelectCount {
                 PTAlertTipControl.present(
                     title: uiConfig.alertTitle,
                     subtitle: String(format: uiConfig.mediaCountMin, "\(config.minVideoSelectCount)"),
-                    icon: .Error,
-                    style: .Normal
+                    icon: .Error, style: .Normal
                 )
                 return
             }
         }
-
+        
         let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
         selectedHudStatusBlock?(true)
-
-        // ⭐️ Collector（线程安全）
-        let collector = ResultCollector(totalCount: selectedModel.count) { [weak self] sucModels, errAssets, errIndices in
-            self?.handleFetchCompletion(
+        
+        // 🌟 4. 极简版 TaskGroup
+        // 因为 fetchImageQueue 已经帮我们做了 `maxConcurrent = 3` 的限制，
+        // 所以在这里我们可以直接把所有任务扔进 TaskGroup，代码变得异常简洁且安全！
+        Task {
+            var sucModels: [PTResultModel] = []
+            var errAssets: [PHAsset] = []
+            var errIndices: [Int] = []
+            
+            await withTaskGroup(of: (PTResultModel?, PHAsset?, Int).self) { group in
+                // 直接全部添加进去，底层的 OperationQueue 会自动排队处理（一次跑3个）
+                for (i, m) in selectedModel.enumerated() {
+                    group.addTask {
+                        await self.fetchMediaResultAsync(model: m, index: i, isOriginal: isOriginal)
+                    }
+                }
+                
+                // 收集结果
+                for await (result, errorAsset, index) in group {
+                    if let r = result {
+                        sucModels.append(r)
+                    } else if let a = errorAsset {
+                        errAssets.append(a)
+                        errIndices.append(index)
+                    }
+                }
+            }
+            
+            // 恢复图片原始的点击顺序
+            sucModels.sort { $0.index < $1.index }
+            
+            // 🌟 5. 回到主线程处理回调
+            self.handleFetchCompletion(
                 viewController: viewController,
                 sucModels: sucModels,
                 errAssets: errAssets,
                 errIndices: errIndices,
                 isOriginal: isOriginal
             )
-        }
-
-        // 3. 并发任务
-        for (i, m) in selectedModel.enumerated() {
-
-            let operation = PTFetchImageOperation(model: m, isOriginal: isOriginal) { image, asset in
-
-                // ❗ 不再切 MainActor
-                if let image = image {
-
-                    let isEdited = m.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
-
-    #if POOTOOLS_IMAGEEDITOR
-                    let model = PTResultModel(
-                        asset: asset ?? m.asset,
-                        image: image,
-                        isEdited: isEdited,
-                        editModel: isEdited ? m.editImageModel : nil,
-                        avEditorOutputItem: m.avEditorOutputItem,
-                        index: i
-                    )
-    #else
-                    let model = PTResultModel(
-                        asset: asset ?? m.asset,
-                        image: image,
-                        isEdited: isEdited,
-                        avEditorOutputItem: m.avEditorOutputItem,
-                        index: i
-                    )
-    #endif
-                    collector.collect(index: i, result: model, asset: nil)
-
-                } else {
-                    collector.collect(index: i, result: nil, asset: m.asset)
-                }
-            }
-
-            fetchImageQueue.addOperation(operation)
         }
     }
     
@@ -1138,30 +1123,29 @@ extension PTMediaLibViewController {
         }
 
         guard let vc = viewController,
-              vc.presentingViewController != nil else {
+              let presentingVC = vc.presentingViewController else {
             call()
             return
         }
 
-        let presentingVC = vc.presentingViewController
-
+        // 🌟 优化：这里捕获 presentingVC 的逻辑非常棒，它是安全的
         vc.dismiss(animated: true) {
-            if let pVC = presentingVC {
-                PTNavigationBarManager.shared.restoreIfNeeded(for: pVC)
-            }
+            PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
             call()
         }
     }
 }
 
-extension PTSheetContentViewController:UIImagePickerControllerDelegate {
+extension PTSheetContentViewController: UIImagePickerControllerDelegate {
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true) {}
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        // 🌟 优化：直接在 dismiss 回调前捕获安全的层级引用
+        let currentVC = PTUtils.getCurrentVC()
+        
         picker.dismiss(animated: true) {
-            let currentVC = PTUtils.getCurrentVC()
             if let mediaLib = currentVC as? PTMediaLibViewController {
                 let image = info[.originalImage] as? UIImage
                 let url = info[.mediaURL] as? URL

@@ -73,7 +73,8 @@ extension PTMediaLibListModel {
 }
 
 //MARK: MediaModel
-public class PTMediaModel:NSObject {
+// 🌟 优化：添加 final 关键字和 @unchecked Sendable 协议
+public final class PTMediaModel:NSObject,@unchecked Sendable {
     public let ident: String
     
     public let asset: PHAsset
