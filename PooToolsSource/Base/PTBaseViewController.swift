@@ -104,6 +104,8 @@ public final class PTNavigationBarContainer: UIView {
         addSubviews([backgroundView,contentView])
         contentView.addSubviews([topBarContainer, largeTitleContainer])
         topBarContainer.addSubviews([leftContainer, rightContainer, titleContainer])
+        leftContainer.translatesAutoresizingMaskIntoConstraints = false
+        rightContainer.translatesAutoresizingMaskIntoConstraints = false
         largeTitleContainer.addSubview(largeTitleLabel)
         topBarContainer.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
@@ -638,7 +640,8 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
-        container.leftContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        let highPriority = UILayoutPriority(999)
+        container.leftContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
         container.leftContainer.setContentHuggingPriority(.required, for: .horizontal)
     }
     
@@ -670,7 +673,8 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
-        container.rightContainer.setContentCompressionResistancePriority(.required, for: .horizontal)
+        let highPriority = UILayoutPriority(999)
+        container.rightContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
         container.rightContainer.setContentHuggingPriority(.required, for: .horizontal)
     }
     
