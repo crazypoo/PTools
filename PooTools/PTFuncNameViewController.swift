@@ -1228,10 +1228,7 @@ class PTFuncNameViewController: PTBaseViewController {
         ]
         
         let buttonSize = CGSize.init(width: 60, height: 60)
-        let points = CGPoint(x: PTAppBaseConfig.share.defaultViewSpace, y: 100)
-        let framess = CGRect.init(origin: points, size: buttonSize)
-        
-        let buttonView = PTMenuSheetButtonView(frame: framess, direction: .right, items: items)
+        let buttonView = PTMenuSheetButtonView(baseSize: buttonSize, direction: .right, items: items)
         buttonView.backgroundColor = .randomColor
         buttonView.arrowWidth = 2
         buttonView.separatorWidth = 2
@@ -1239,6 +1236,10 @@ class PTFuncNameViewController: PTBaseViewController {
         buttonView.layer.cornerRadius = 30
         buttonView.accessibilityIdentifier = "expandableButton"
         view.addSubview(buttonView)
+        buttonView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(20) // 固定左侧
+            make.centerY.equalToSuperview()
+        }
     }
     
     func flashAd(notifi:Notification) {
