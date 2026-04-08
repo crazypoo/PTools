@@ -593,14 +593,11 @@ public class LocalConsole: NSObject {
         let window = PTConsoleWindow.shared
         window.rootViewController = consoleWindow
         window.isHidden = false
-        let terminal = PTTerminal(
-            view: consoleWindow.view as Any,
-            frame: CGRect(
-                x: 0,
-                y: CGFloat.kNavBarHeight_Total,
-                width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width,
-                height: PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height
-            )
+        let terminal = PTTerminal(inView: consoleWindow.view ,
+                                  frame: CGRect(x: 0,
+                                                y: CGFloat.kNavBarHeight_Total,
+                                                width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width,
+                                                height: PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height)
         )
         terminal.tag = SystemLogViewTag
 
@@ -1237,9 +1234,9 @@ public class PTTerminal:PFloatingButton {
     private lazy var textStorage: NSTextStorage? = {
         systemText?.textStorage
     }()
-
-    override init(view:Any,frame:CGRect) {
-        super.init(view: view, frame: frame)
+    
+    public override init(inView superview: UIView?, frame: CGRect) {
+        super.init(inView: superview, frame: frame)
         backgroundColor = .black
         draggable = true
         layer.shadowRadius = 16

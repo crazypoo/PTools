@@ -48,7 +48,7 @@ final class PTNetworkHelper {
         isNetworkEnable = false
         PTCustomHTTPProtocol.stop()
         if let floatingView = floatingView {
-            floatingView.removeFromSuperView()
+            floatingView.removeFromSuperview()
             self.floatingView = nil
         }
         measurementsTimer?.invalidate()
@@ -58,7 +58,7 @@ final class PTNetworkHelper {
     private func floatingButtonCreate() {
         if floatingView == nil {
             
-            floatingView = PFloatingButton(view: PTConsoleWindow.shared as Any, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
+            floatingView = PFloatingButton(inView: PTConsoleWindow.shared, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
             floatingView?.tag = PTNetworkFloatingTap
             floatingView?.autoDocking = false
             floatingView?.addSubview(speedLabel)

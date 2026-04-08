@@ -131,7 +131,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
                 if count > 10 {
                     timers.invalidate()
                     if let floatingView = self.floatingView {
-                        floatingView.removeFromSuperView()
+                        floatingView.removeFromSuperview()
                         self.floatingView = nil
                     }
                     networkSpeedMonitor.stopMonitoring()
@@ -215,7 +215,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     
     private func floatingButtonCreate() {
         if floatingView == nil {
-            floatingView = PFloatingButton(view: AppWindows as Any, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
+            floatingView = PFloatingButton(inView: AppWindows, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
             floatingView?.tag = PTNetworkTestFloatingTap
             floatingView?.autoDocking = false
             floatingView?.addSubview(speedLabel)
