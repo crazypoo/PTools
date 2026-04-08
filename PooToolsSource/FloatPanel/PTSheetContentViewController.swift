@@ -115,6 +115,7 @@ public class PTSheetContentViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         UIView.performWithoutAnimation {
             self.view.layoutIfNeeded()
         }
@@ -201,7 +202,8 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.addChild(self.childViewController)
         self.childContainerView.addSubview(self.childViewController.view)
         self.childViewController.view.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview().inset(0)
         }
         if self.options.shouldExtendBackground, self.options.pullBarHeight > 0 {

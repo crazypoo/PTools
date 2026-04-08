@@ -912,6 +912,7 @@ open class PTBaseViewController: UIViewController {
                 action()
             }
         }
+        
         let item = PTNavigationBarManager.shared.item(for: self)
         item.leftView = [container]
         
