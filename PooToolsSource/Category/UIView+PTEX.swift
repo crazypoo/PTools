@@ -109,6 +109,7 @@ public extension UIView {
         static var layoutShapeLayerCallback = 996
         static var layoutShapeLayerProgressLabelCallback = 995
         static var viewCapturing = 997
+        static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
     }
 
     private var viewShapeLayer:CAShapeLayer? {
@@ -159,6 +160,8 @@ public extension UIView {
         viewShapeLayer?.strokeColor = borderColor.cgColor
         viewShapeLayer?.lineWidth = borderWidth
         viewShapeLayer?.lineCap = .round
+        // 初始化时不绘制完整路径，等待更新
+        viewShapeLayer?.strokeEnd = 0
         layer.addSublayer(viewShapeLayer!)
     }
 
@@ -178,86 +181,27 @@ public extension UIView {
     }
     
     func updateLayerProgress(progress:CGFloat,
-                             uniCount:Int? = 0) {
-        if let viewShapeLayer = viewShapeLayer {
-            let widthAndHeightTotal = (bounds.height + bounds.width)
-            if progress >= 1 {
-                clearProgressLayer()
-            } else {
-                let progressPath = UIBezierPath(rect: .zero)
-
-                if progress <= 0.5 {
-                    let progressScale = progress / 0.5
-                    let currentValue = widthAndHeightTotal * progressScale
-                    if currentValue > bounds.width {
-                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
-                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
-                        
-                        let heightValue = currentValue - bounds.width
-
-                        progressPath.move(to: CGPoint(x: bounds.width, y:  heightValue))
-                        progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
-                    } else {
-                        progressPath.move(to: CGPoint(x: currentValue, y: 0))
-                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
-                    }
-                } else {
-                    let newProgress = (progress - 0.5)
-                    
-                    let progressScale = newProgress / 0.5
-
-                    let currentValue = widthAndHeightTotal * progressScale
-                    if currentValue > bounds.width {
-                        
-                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
-                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
-                        
-                        progressPath.move(to: CGPoint(x: bounds.width, y:  bounds.height))
-                        progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
-
-                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
-                        progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
-                        
-                        progressPath.move(to: CGPoint(x: bounds.width, y: bounds.height))
-                        progressPath.addLine(to: CGPoint(x: 0, y: bounds.height))
-
-                        let heightValue = bounds.height - (currentValue - bounds.width)
-
-                        progressPath.move(to: CGPoint(x: 0, y:  heightValue))
-                        progressPath.addLine(to: CGPoint(x: 0, y: bounds.height))
-                    } else {
-                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
-                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
-                        
-                        progressPath.move(to: CGPoint(x: bounds.width, y:  bounds.height))
-                        progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
-
-                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
-                        progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
-                                        
-                        let widthValue = bounds.width - currentValue
-
-                        progressPath.move(to: CGPoint(x: widthValue, y: bounds.height))
-                        progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
-                    }
-                }
-                viewShapeLayer.path = progressPath.cgPath
+                             uniCount:Int = 0) {
+        guard let viewShapeLayer = viewShapeLayer else { return }
+                
+        if progress >= 1.0 {
+            clearProgressLayer()
+        } else {
+            // 利用 UIBezierPath 和 CAShapeLayer 的 strokeEnd 实现进度
+            let progressPath = UIBezierPath(rect: bounds)
+            viewShapeLayer.path = progressPath.cgPath
+            viewShapeLayer.strokeEnd = progress
             
-                viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount!)f%%", (100 * progress))
-            }
+            viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount)f%%", (100 * progress))
         }
     }
     
     func clearProgressLayer() {
-        if viewShapeLayer != nil {
-            viewShapeLayer!.removeFromSuperlayer()
-            viewShapeLayer = nil
-        }
-        
-        if viewShapeLayerProgressLabel != nil {
-            viewShapeLayerProgressLabel?.removeFromSuperview()
-            viewShapeLayerProgressLabel = nil
-        }
+        viewShapeLayer?.removeFromSuperlayer()
+        viewShapeLayer = nil
+
+        viewShapeLayerProgressLabel?.removeFromSuperview()
+        viewShapeLayerProgressLabel = nil
     }
     
     @objc func viewCorner(radius:CGFloat = 0,
@@ -353,21 +297,23 @@ public extension UIView {
     @MainActor @objc func swizzled_layoutSubviews() {
         swizzled_layoutSubviews()
         
-        let tracker = BorderManager(view: self)
-        GLOBAL_BORDER_TRACKERS.append(tracker)
+        var tracker = objc_getAssociatedObject(self, &AssociatedKeys.borderTracker) as? BorderManager
+        if tracker == nil {
+            tracker = BorderManager(view: self)
+            objc_setAssociatedObject(self, &AssociatedKeys.borderTracker, tracker, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
 #if POOTOOLS_DEBUG
         if LocalConsole.shared.debugBordersEnabled {
-            tracker.activate()
+            tracker?.activate()
         } else {
-            tracker.deactivate()
+            tracker?.deactivate()
         }
 #else
-        tracker.deactivate()
+        tracker?.deactivate()
 #endif
     }
     
     //MARK: View的背景渐变
-    ///View的背景渐变
     func backgroundGradient(type:Imagegradien,
                             colors:[UIColor],
                             radius:CGFloat = 0,
@@ -391,12 +337,8 @@ public extension UIView {
             shapeLayer.path = maskPath.cgPath
 
             let maskLayer = CAGradientLayer()
-            var cgColors = [CGColor]()
-            colors.forEach { value in
-                cgColors.append(value.cgColor)
-            }
-
-            maskLayer.colors = cgColors
+            maskLayer.colors = colors.map { $0.cgColor }
+            
             switch type {
             case .LeftToRight:
                 maskLayer.startPoint = CGPoint(x: 0, y: 0)
@@ -437,14 +379,9 @@ public extension UIView {
                         borderWidth:CGFloat = 1,
                         corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
-            var cgColorsss = [CGColor]()
-            colors.enumerated().forEach { (index,value) in
-                cgColorsss.append(value.cgColor)
-            }
-
             let gradientLayer = CAGradientLayer()
             gradientLayer.frame = self.bounds
-            gradientLayer.colors = cgColorsss
+            gradientLayer.colors = colors.map { $0.cgColor }
             switch type {
             case .LeftToRight:
                 gradientLayer.startPoint = CGPoint(x: 0, y: 0)
@@ -494,9 +431,7 @@ public extension UIView {
         }
         
         for subView in subviews {
-            if subView.isRolling() {
-                return true
-            }
+            if subView.isRolling() { return true }
         }
         return false
     }
@@ -601,12 +536,8 @@ public extension UIView {
          Wrapper for layer property `masksToBounds`.
      */
     var masksToBounds: Bool {
-        get {
-            layer.masksToBounds
-        }
-        set {
-            layer.masksToBounds = newValue
-        }
+        get { layer.masksToBounds }
+        set { layer.masksToBounds = newValue }
     }
     
     /**
@@ -674,7 +605,6 @@ public extension UIView {
     
     /**
         Hide view with fade out animation.
-     
      - parameter duration: Duration of animation.
      - parameter completion: Completion when animation ended.
      */
@@ -943,15 +873,7 @@ public extension UIView {
     
     /** 是否正在截屏*/
     var isCapturing: Bool {
-        get {
-            guard let value = objc_getAssociatedObject(self, &AssociatedKeys.viewCapturing) else {
-                return false
-            }
-            guard let boolValue = value as? Bool else {
-                return false
-            }
-            return boolValue
-        }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.viewCapturing) as? Bool) ?? false }
         set { objc_setAssociatedObject(self, &AssociatedKeys.viewCapturing, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
@@ -975,21 +897,20 @@ public extension UIView {
     /// - Parameter completion: 回调
     func captureCurrent(_ completion: captureCompletion) {
         self.isCapturing = true
-        let captureFrame = self.bounds
         
-        UIGraphicsBeginImageContextWithOptions(captureFrame.size, true, UIScreen.main.scale)
-        let context = UIGraphicsGetCurrentContext()
-        context?.saveGState()
-        context?.translateBy(x: -self.pt.jx_x, y: -self.pt.jx_y)
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = false
+        format.scale = UIScreen.main.scale
         
-        if self.isContainWKWebView() {
-            self.drawHierarchy(in: bounds, afterScreenUpdates: true)
-        } else {
-            self.layer.render(in: context!)
+        let renderer = UIGraphicsImageRenderer(bounds: self.bounds, format: format)
+        let image = renderer.image { context in
+            if self.isContainWKWebView() {
+                self.drawHierarchy(in: bounds, afterScreenUpdates: true)
+            } else {
+                self.layer.render(in: context.cgContext)
+            }
         }
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        context?.restoreGState()
-        UIGraphicsEndImageContext()
+        
         self.isCapturing = false
         completion(image)
     }
@@ -1005,13 +926,14 @@ public extension UIView {
     ///   - scale: 缩放清晰度
     /// - Returns: 截图
     func generateBoundsScreenshot(_ opaque: Bool = false, scale: CGFloat = 0) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, opaque, scale)
-        if let context = UIGraphicsGetCurrentContext() {
-            self.layer.render(in: context)
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = opaque
+        format.scale = scale == 0 ? UIScreen.main.scale : scale
+        
+        let renderer = UIGraphicsImageRenderer(bounds: self.bounds, format: format)
+        return renderer.image { ctx in
+            self.layer.render(in: ctx.cgContext)
         }
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image ?? UIImage()
     }
     
     /// 生成视图的截图 - frame
@@ -1058,63 +980,6 @@ public extension UIView {
         return renderer.image { ctx in
             self.layer.render(in: ctx.cgContext)
         }
-    }
-}
-
-public extension UILabel {
-    @objc func getLabelSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                            height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        if let currentText = text,!currentText.stringIsEmpty() {
-            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
-        } else {
-            return .zero
-        }
-    }
-    
-    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
-        getLabelSize(height: height).width
-    }
-    
-    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
-        getLabelSize(width: width).height
-    }
-}
-
-public extension UIButton {
-    @objc func getButtonSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                             height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        if let currentText = titleLabel?.text,!currentText.stringIsEmpty() {
-            return UIView.sizeFor(string: currentText, font: titleLabel!.font!, height: height, width: width)
-        } else {
-            return .zero
-        }
-    }
-    
-    @objc func getButtonWidth(height:CGFloat) -> CGFloat {
-        getButtonSize(height: height).width
-    }
-    
-    @objc func getButtonHeight(width:CGFloat) -> CGFloat {
-        getButtonSize(width: width).height
-    }
-}
-
-public extension UITextView {
-    @objc func getTextViewSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                               height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        if let currentText = text,!currentText.stringIsEmpty() {
-            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
-        } else {
-            return .zero
-        }
-    }
-    
-    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
-        getTextViewSize(height: height).width
-    }
-    
-    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
-        getTextViewSize(width: width).height
     }
 }
 

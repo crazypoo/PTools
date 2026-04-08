@@ -416,6 +416,23 @@ public extension UIButton {
         // 更新布局
         self.layoutIfNeeded()
     }
+    
+    @objc func getButtonSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+                             height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        if let currentText = titleLabel?.text,!currentText.stringIsEmpty() {
+            return UIView.sizeFor(string: currentText, font: titleLabel!.font!, height: height, width: width)
+        } else {
+            return .zero
+        }
+    }
+    
+    @objc func getButtonWidth(height:CGFloat) -> CGFloat {
+        getButtonSize(height: height).width
+    }
+    
+    @objc func getButtonHeight(width:CGFloat) -> CGFloat {
+        getButtonSize(width: width).height
+    }
 }
 
 /// Custom button that pauses console window swizzling to allow the console menu's presenting view controller to remain the top view controller.

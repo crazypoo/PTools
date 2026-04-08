@@ -232,4 +232,21 @@ public extension UITextView {
             frame.setWidth(width)
         }
     }
+    
+    @objc func getTextViewSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+                               height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        if let currentText = text,!currentText.stringIsEmpty() {
+            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
+        } else {
+            return .zero
+        }
+    }
+    
+    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
+        getTextViewSize(height: height).width
+    }
+    
+    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
+        getTextViewSize(width: width).height
+    }
 }

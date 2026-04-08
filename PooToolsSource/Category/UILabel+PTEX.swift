@@ -229,6 +229,23 @@ public extension UILabel {
         longPressGesture.minimumPressDuration = TimeInterval(pressDuration)
         self.addGestureRecognizer(longPressGesture)
     }
+    
+    @objc func getLabelSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+                            height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        if let currentText = text,!currentText.stringIsEmpty() {
+            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
+        } else {
+            return .zero
+        }
+    }
+    
+    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
+        getLabelSize(height: height).width
+    }
+    
+    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
+        getLabelSize(width: width).height
+    }
 }
 
 //MARK: 其他的基本扩展
