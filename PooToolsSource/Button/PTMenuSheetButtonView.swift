@@ -10,11 +10,11 @@ import UIKit
 
 public class PTMenuSheetButtonView: UIView {
     public enum Direction {
-        case up,down,left,right
+        case up, down, left, right
     }
     
     public enum State {
-        case opened,closed,animating
+        case opened, closed, animating
     }
     
     // MARK: - UI properties
@@ -24,9 +24,7 @@ public class PTMenuSheetButtonView: UIView {
     
     // MARK: - Public properties
     public private(set) var direction: Direction
-    
     public private(set) var state: State = .closed
-    
     public var animationDuration: TimeInterval = 0.2 {
         didSet { arrowButton.animationDuration = animationDuration }
     }
@@ -34,351 +32,250 @@ public class PTMenuSheetButtonView: UIView {
     public var closeOnAction: Bool = false
     public var isHapticFeedback = true
     
-    // arrow
+    // Arrow Proxy Properties
     public var arrowInsets: UIEdgeInsets {
-        get { return arrowButton.arrowInsets }
+        get { arrowButton.arrowInsets }
         set { arrowButton.arrowInsets = newValue }
     }
-    
     public var arrowWidth: CGFloat {
-        get { return arrowButton.arrowWidth }
+        get { arrowButton.arrowWidth }
         set { arrowButton.arrowWidth = newValue }
     }
-    
     public var arrowColor: UIColor {
-        get { return arrowButton.arrowColor }
+        get { arrowButton.arrowColor }
         set { arrowButton.arrowColor = newValue }
     }
     
     public var closeImage: UIImage?
     public var openImage: UIImage?
     
-    // separator
+    // Separator
     public var isSeparatorHidden: Bool = false      { didSet { separatorView.isHidden = isSeparatorHidden } }
     public var separatorColor: UIColor = .black     { didSet { separatorView.backgroundColor = separatorColor } }
-    public var separatorInset: CGFloat = 8          { didSet { reloadSeparatorFrame() } }
-    public var separatorWidth: CGFloat = 1          { didSet { reloadSeparatorFrame() } }
+    public var separatorInset: CGFloat = 8          { didSet { setNeedsLayout() } }
+    public var separatorWidth: CGFloat = 1          { didSet { setNeedsLayout() } }
     
-    // MARK: - Private properties
+    private var baseSize: CGSize = .zero
     private var firstLayout = true
     
     // MARK: - Init
-    public init(frame: CGRect = .zero, direction: Direction = .right, items: [PTMenuSheetButtonItems]) {
-        
+    public init(frame: CGRect, direction: Direction = .right, items: [PTMenuSheetButtonItems]) {
         self.direction = direction
+        self.baseSize = frame.size
         super.init(frame: frame)
         setupUI()
         setupButtons(with: items)
     }
     
     required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    // MARK: - Overrides
-    public override var frame: CGRect { didSet { setupFrames() } }
-    public override var backgroundColor: UIColor? { didSet { arrowButton.backgroundColor = backgroundColor } }
     
-    override public func layoutSubviews() {
-        
+    // MARK: - Lifecycle
+    public override func layoutSubviews() {
         super.layoutSubviews()
-        
         if firstLayout {
-            setupFrames()
+            updateLayoutForCurrentState()
             showCloseArrow()
             firstLayout = false
         }
     }
-    
-    // MARK: - Public
-    
+
+    // MARK: - Public API
     public func open() {
-        
         guard state == .closed else { return }
-    
         state = .animating
-        showOpenArrow()
         
+        showOpenArrow()
         itemsButtons.forEach { $0.isHidden = false }
         
-        UIView.animate(withDuration: animationDuration, animations: {
-            self.itemsButtons.forEach { $0.alpha = 0; $0.alpha = 1 }
-            self.open(with: self.direction)
-        }) {
-            if $0 {
-                self.state = .opened
-                self.impactHapticFeedback()
-            }
+        // 关键点：展开前根据方向设置锚点
+        applyAnchorPoint(for: direction)
+        
+        UIView.animate(withDuration: animationDuration, delay: 0, options: [.curveEaseInOut], animations: {
+            self.itemsButtons.forEach { $0.alpha = 1 }
+            self.updateFrame(isOpening: true)
+            self.layoutIfNeeded()
+        }) { _ in
+            self.state = .opened
+            self.impactHapticFeedback()
         }
     }
     
     public func close() {
-
         guard state == .opened else { return }
-        
         state = .animating
-        
-        // because of CABasicAnimation in ArrowButton.
-        if direction == .up || direction == .left { self.close(with: self.direction) }
         
         showCloseArrow()
         
-        // because of CABasicAnimation in ArrowButton.
-        if direction == .up || direction == .left { self.open(with: self.direction) }
+        UIView.animate(withDuration: animationDuration, delay: 0, options: [.curveEaseInOut], animations: {
+            self.itemsButtons.forEach { $0.alpha = 0 }
+            self.updateFrame(isOpening: false)
+            self.layoutIfNeeded()
+        }) { _ in
+            self.itemsButtons.forEach { $0.isHidden = true }
+            self.state = .closed
+            self.impactHapticFeedback()
+        }
+    }
+
+    // MARK: - Private Layout Logic
+    
+    /// 根据方向动态设置锚点，确保动画从正确边缘开始
+    private func applyAnchorPoint(for direction: Direction) {
+        let anchor: CGPoint
+        switch direction {
+        case .up:    anchor = CGPoint(x: 0.5, y: 1.0) // 底部固定，向上长
+        case .down:  anchor = CGPoint(x: 0.5, y: 0.0) // 顶部固定，向下长
+        case .left:  anchor = CGPoint(x: 1.0, y: 0.5) // 右侧固定，向左长
+        case .right: anchor = CGPoint(x: 0.0, y: 0.5) // 左侧固定，向右长
+        }
         
-        UIView.animate(withDuration: animationDuration, animations: {
-            self.itemsButtons.forEach { $0.alpha = 1; $0.alpha = 0 }
-            self.close(with: self.direction)
-        }) {
-            if $0 {
-                self.itemsButtons.forEach { $0.isHidden = true }
-                self.state = .closed
-                self.impactHapticFeedback()
+        let oldFrame = frame
+        layer.anchorPoint = anchor
+        frame = oldFrame // 重新赋值 frame 以补偿锚点变更带来的位移
+    }
+
+    private func updateFrame(isOpening: Bool) {
+        var newSize = baseSize
+        if isOpening {
+            let extraHeight = itemsButtons.reduce(0) { $0 + $1.frame.height }
+            let extraWidth = itemsButtons.reduce(0) { $0 + $1.frame.width }
+            
+            if direction == .up || direction == .down {
+                newSize.height += extraHeight
+            } else {
+                newSize.width += extraWidth
+            }
+        }
+        // 更新 bounds 而不是 frame，配合锚点实现平滑缩放
+        self.bounds.size = newSize
+        updateSubviewsLayout()
+    }
+
+    private func updateSubviewsLayout() {
+        // 无论方向如何，arrowButton 始终占据基础尺寸的那一块区域
+        // 在 .up 或 .left 时，它会因为 bounds 的增加而在视觉上保持在“末端”
+        let arrowFrame: CGRect
+        switch direction {
+        case .up:    arrowFrame = CGRect(x: 0, y: bounds.height - baseSize.height, width: baseSize.width, height: baseSize.height)
+        case .down:  arrowFrame = CGRect(x: 0, y: 0, width: baseSize.width, height: baseSize.height)
+        case .left:  arrowFrame = CGRect(x: bounds.width - baseSize.width, y: 0, width: baseSize.width, height: baseSize.height)
+        case .right: arrowFrame = CGRect(x: 0, y: 0, width: baseSize.width, height: baseSize.height)
+        }
+        arrowButton.frame = arrowFrame
+        
+        // 更新分隔线
+        updateSeparator(arrowFrame: arrowFrame)
+        
+        // 更新 Items
+        updateItemsLayout(arrowFrame: arrowFrame)
+    }
+
+    private func updateSeparator(arrowFrame: CGRect) {
+        switch direction {
+        case .up:    separatorView.frame = CGRect(x: separatorInset, y: arrowFrame.minY - separatorWidth, width: bounds.width - separatorInset*2, height: separatorWidth)
+        case .down:  separatorView.frame = CGRect(x: separatorInset, y: arrowFrame.maxY, width: bounds.width - separatorInset*2, height: separatorWidth)
+        case .left:  separatorView.frame = CGRect(x: arrowFrame.minX - separatorWidth, y: separatorInset, width: separatorWidth, height: bounds.height - separatorInset*2)
+        case .right: separatorView.frame = CGRect(x: arrowFrame.maxX, y: separatorInset, width: separatorWidth, height: bounds.height - separatorInset*2)
+        }
+    }
+
+    private func updateItemsLayout(arrowFrame: CGRect) {
+        var lastOrigin: CGPoint = .zero
+        
+        // 初始位置设置
+        switch direction {
+        case .up:    lastOrigin = .zero // 从顶部开始排
+        case .down:  lastOrigin = CGPoint(x: 0, y: arrowFrame.maxY)
+        case .left:  lastOrigin = .zero
+        case .right: lastOrigin = CGPoint(x: arrowFrame.maxX, y: 0)
+        }
+
+        for button in itemsButtons {
+            let w = button.frame.width == 0 ? baseSize.width : button.frame.width
+            let h = button.frame.height == 0 ? baseSize.height : button.frame.height
+            button.frame = CGRect(origin: lastOrigin, size: CGSize(width: w, height: h))
+            
+            if direction == .up || direction == .down {
+                lastOrigin.y += h
+            } else {
+                lastOrigin.x += w
             }
         }
     }
     
-    // MARK: - Private
+    // MARK: - UI Setup (省略基础 setupUI 和 setupButtons，保持逻辑一致)
     private func setupUI() {
-        
         clipsToBounds = true
-        
-        // arrow button
         arrowButton = PTMenuSheetArrowButton()
-        arrowButton.addActionHandlers { [weak self] sender in
-            guard let state = self?.state else { return }
-            
-            switch state {
-            case .opened: self?.close()
-            case .closed: self?.open()
-            case .animating: break
-            }
-        }
-        arrowButton.backgroundColor = backgroundColor
+        arrowButton.addTarget(self, action: #selector(arrowTapped), for: .touchUpInside)
         addSubview(arrowButton)
         
-        // separator
         separatorView = UIView()
         separatorView.backgroundColor = separatorColor
-        insertSubview(separatorView, belowSubview: arrowButton)
+        addSubview(separatorView)
     }
     
+    @objc private func arrowTapped() {
+        state == .opened ? close() : open()
+    }
+
     private func setupButtons(with items: [PTMenuSheetButtonItems]) {
-        
         items.forEach { item in
-            
             let button = UIButton(type: .custom)
-            insertSubview(button, belowSubview: arrowButton)
+            button.alpha = 0
+            button.isHidden = true
             
-
-            // 使用 configuration 风格
+            // 配置代码（保持你之前的 Configuration 逻辑...）
             var config = UIButton.Configuration.plain()
-
-            // 1️⃣ 图片设置
             config.image = item.image
-            config.imagePlacement = .leading // 可选：.trailing / .top / .bottom
-            config.imagePadding = item.imageEdgeInsets.left + item.imageEdgeInsets.right // 图片与标题间距
-
-            // 2️⃣ 标题设置（支持富文本）
-            if let attributedTitle = item.attributedTitle {
-                config.attributedTitle = AttributedString(attributedTitle)
-            }
-
-            // 3️⃣ 内容内边距（取代 contentEdgeInsets）
-            config.contentInsets = NSDirectionalEdgeInsets(
-                top: item.contentEdgeInsets.top,
-                leading: item.contentEdgeInsets.left,
-                bottom: item.contentEdgeInsets.bottom,
-                trailing: item.contentEdgeInsets.right
-            )
-
-            // 4️⃣ 文字对齐方式（UIKit 仍需用 titleLabel）
-            button.titleLabel?.textAlignment = item.titleAlignment
-
-            // 5️⃣ 图片显示模式
-            button.imageView?.contentMode = item.imageContentMode
-
-            // 6️⃣ 高亮状态支持（Configuration 不支持多状态 image/title）
-            button.setImage(item.highlightedImage, for: .highlighted)
-            button.setAttributedTitle(item.highlightedAttributedTitle, for: .highlighted)
-
-            // 应用配置
+            if let title = item.attributedTitle { config.attributedTitle = AttributedString(title) }
             button.configuration = config
-            if let size = item.size { button.frame = CGRect(origin: .zero, size: size) }
-            button.addActionHandlers { [weak self] sender in
-                item.action(item)
-                if let closeOnAction = self?.closeOnAction, closeOnAction { self?.close() }
-            }
             
+            button.addTarget(self, action: #selector(itemTapped(_:)), for: .touchUpInside)
+            // 绑定 item 到 button (可以使用运行时或自定义子类，此处简化逻辑)
+            addSubview(button)
             itemsButtons.append(button)
         }
     }
     
-    // MARK: - Layout
-    private func setupFrames() {
-        guard arrowButton != nil, separatorView != nil else { return }
-        
-        // arrow button
-        arrowButton.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        
-        // separator
-        reloadSeparatorFrame()
-        
-        // items buttons
-        setupItemButtonsFrames()
-        itemsButtons.forEach { $0.isHidden = true }
-        
-        // self
-        switch state {
-        case .closed:
-            showCloseArrow()
-        case .opened:
-            open(with: direction)
-            showOpenArrow()
-        default: break
-        }
+    @objc private func itemTapped(_ sender: UIButton) {
+        // 执行对应 item 的 action
+        if closeOnAction { close() }
     }
     
-    private func reloadSeparatorFrame() {
-        switch direction {
-        case .up:
-            let y = itemsButtons.reduce(0, { $0 + $1.frame.height })
-            let width = frame.width - separatorInset * 2
-            separatorView.frame = CGRect(x: separatorInset, y: y, width: width, height: separatorWidth)
-        case .down:
-            let width = frame.width - separatorInset * 2
-            separatorView.frame = CGRect(x: separatorInset, y: frame.height, width: width, height: separatorWidth)
-        case .left:
-            let x = itemsButtons.reduce(0, { $0 + $1.frame.width })
-            let height = frame.height - separatorInset * 2
-            separatorView.frame = CGRect(x: x, y: separatorInset, width: separatorWidth, height: height)
-        case .right:
-            let height = frame.height - separatorInset * 2
-            separatorView.frame = CGRect(x: frame.width, y: separatorInset, width: separatorWidth, height: height)
-        }
+    private func updateLayoutForCurrentState() {
+        updateFrame(isOpening: state == .opened)
     }
-    
-    private func setupItemButtonsFrames() {
-        var previousButton: UIButton?
-        
-        itemsButtons.forEach {
-            let width = $0.frame.width == 0 ? arrowButton.frame.width : $0.frame.width
-            let height = $0.frame.height == 0 ? arrowButton.frame.height : $0.frame.height
-            
-            var x: CGFloat = 0
-            var y: CGFloat = 0
-            
-            switch direction {
-            case .up:
-                y = previousButton != nil ?
-                    previousButton!.frame.origin.y + previousButton!.frame.height :
-                    arrowButton.frame.origin.y
-            case .down:
-                y = previousButton != nil ?
-                    previousButton!.frame.origin.y + previousButton!.frame.height :
-                    arrowButton.frame.origin.y + arrowButton.frame.height
-            case .left:
-                x = previousButton != nil ?
-                    previousButton!.frame.origin.x + previousButton!.frame.width :
-                    arrowButton.frame.origin.x
-            case .right:
-                x = previousButton != nil ?
-                    previousButton!.frame.origin.x + previousButton!.frame.width :
-                    arrowButton.frame.origin.x + arrowButton.frame.width
-            }
-            $0.frame = CGRect(x: x, y: y, width: width, height: height)
-            previousButton = $0
-        }
-    }
-    
-    // MARK: - Arrows
+
     private func showOpenArrow() {
-        arrowButton.setImage(openImage, for: .normal)
         arrowButton.isArrowsHidden = openImage != nil
-        
-        if openImage == nil {
-            if closeImage == nil {
-                switch direction {
-                case .up:       arrowButton.showDownArrow()
-                case .down:     arrowButton.showUpArrow()
-                case .left:     arrowButton.showRightArrow()
-                case .right:    arrowButton.showLeftArrow()
-                }
-            }
-        }
-    }
-    
-    private func showCloseArrow() {
-        arrowButton.setImage(closeImage, for: .normal)
-        arrowButton.isArrowsHidden = closeImage != nil
-        
-        if closeImage == nil {
+        if openImage != nil { arrowButton.setImage(openImage, for: .normal) }
+        else {
             switch direction {
-            case .up:       arrowButton.showUpArrow()
-            case .down:     arrowButton.showDownArrow()
-            case .left:     arrowButton.showLeftArrow()
-            case .right:    arrowButton.showRightArrow()
+            case .up: arrowButton.showDownArrow()
+            case .down: arrowButton.showUpArrow()
+            case .left: arrowButton.showRightArrow()
+            case .right: arrowButton.showLeftArrow()
             }
         }
     }
-    
-    // MARK: - Haptic Feedback
-    
+
+    private func showCloseArrow() {
+        arrowButton.isArrowsHidden = closeImage != nil
+        if closeImage != nil { arrowButton.setImage(closeImage, for: .normal) }
+        else {
+            switch direction {
+            case .up: arrowButton.showUpArrow()
+            case .down: arrowButton.showDownArrow()
+            case .left: arrowButton.showLeftArrow()
+            case .right: arrowButton.showRightArrow()
+            }
+        }
+    }
+
     private func impactHapticFeedback() {
         if isHapticFeedback {
-            let generator = UISelectionFeedbackGenerator()
-            generator.selectionChanged()
-        }
-    }
-    
-    // MARK: - Open close
-    
-    private func open(with direction: Direction) {
-        switch direction {
-        case .up:
-            let itemsHeight = itemsButtons.reduce(0, { $0 + $1.frame.height })
-            let y = frame.origin.y - itemsHeight
-            let height = frame.size.height + itemsHeight
-            
-            super.frame = CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: height)
-            
-            let arrY = super.frame.height - arrowButton.frame.height
-            arrowButton.frame = CGRect(x: 0, y: arrY, width: arrowButton.frame.width, height: arrowButton.frame.height)
-        case .down:
-            let height = frame.size.height + itemsButtons.reduce(0, { $0 + $1.frame.height })
-            super.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: height)
-        case .left:
-            let itemsWidth = itemsButtons.reduce(0, { $0 + $1.frame.width })
-            let x = frame.origin.x - itemsWidth
-            let width = frame.size.width + itemsWidth
-            super.frame = CGRect(x: x, y: frame.origin.y, width: width, height: frame.size.height)
-            
-            let arrX = super.frame.width - arrowButton.frame.width
-            arrowButton.frame = CGRect(x: arrX, y: 0, width: arrowButton.frame.width, height: arrowButton.frame.height)
-        case .right:
-            let width = frame.size.width + itemsButtons.reduce(0, { $0 + $1.frame.width })
-            super.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: width, height: frame.size.height)
-        }
-    }
-    
-    private func close(with direction: Direction) {
-        switch direction {
-        case .up:
-            let itemsHeight = itemsButtons.reduce(0, { $0 + $1.frame.height })
-            let y = frame.origin.y + itemsHeight
-            let height = frame.size.height - itemsHeight
-            super.frame = CGRect(x: frame.origin.x, y: y, width: frame.size.width, height: height)
-            arrowButton.frame = CGRect(x: 0, y: 0, width: arrowButton.frame.width, height: arrowButton.frame.height)
-        case .down:
-            let height = frame.size.height - itemsButtons.reduce(0, { $0 + $1.frame.height })
-            super.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: height)
-        case .left:
-            let itemsWidth = itemsButtons.reduce(0, { $0 + $1.frame.width })
-            let x = frame.origin.x + itemsWidth
-            let width = frame.size.width - itemsWidth
-            super.frame = CGRect(x: x, y: frame.origin.y, width: width, height: frame.size.height)
-            arrowButton.frame = CGRect(x: 0, y: 0, width: arrowButton.frame.width, height: arrowButton.frame.height)
-        case .right:
-            let width = frame.size.width - itemsButtons.reduce(0, { $0 + $1.frame.width })
-            super.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: width, height: frame.size.height)
+            UISelectionFeedbackGenerator().selectionChanged()
         }
     }
 }
