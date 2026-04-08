@@ -406,7 +406,7 @@ public extension UIViewController {
     }
     
     @available(iOS 15.0,*)
-    func restApiSheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask? = nil) {
+    func restApiSheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedPropertyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask? = nil) {
         if let sheet = modalViewController.sheetPresentationController {
             // 支持的自定义显示大小
             switch type {

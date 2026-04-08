@@ -73,15 +73,15 @@ open class PTStepperListModel:PTBaseModel {
     ///圈圈是否填充颜色
     public var circleFillColor:Bool = true
     ///圈圈大小min15max64
-    @PTClampedProperyWrapper(range:10...64) public var stopCircleWidth: CGFloat = 44
+    @PTClampedPropertyWrapper(range:10...64) public var stopCircleWidth: CGFloat = 44
     ///圈圈线宽度min1max8
-    @PTClampedProperyWrapper(range:0...8) public var borderWidth: CGFloat = 0
+    @PTClampedPropertyWrapper(range:0...8) public var borderWidth: CGFloat = 0
     ///普通颜色
     public var stopNormalColor = DynamicColor.lightGray
     ///已经完成颜色
     public var stopSelectedColor = DynamicColor.cyan
     ///线宽度
-    @PTClampedProperyWrapper(range:1...5) public var stopLineHeight: CGFloat = 1
+    @PTClampedPropertyWrapper(range:1...5) public var stopLineHeight: CGFloat = 1
     ///是否已经完成
     public var stopFinish:Bool = true
     ///圈圈展示类型

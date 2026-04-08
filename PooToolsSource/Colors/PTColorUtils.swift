@@ -48,8 +48,7 @@ internal func roundDecimal(_ x: CGFloat, precision: CGFloat = 10000.0) -> CGFloa
 }
 
 internal func roundToHex(_ x: CGFloat) -> UInt32 {
-    guard x > 0 else { return 0 }
-    let rounded: CGFloat = round(x * 255.0)
-    
-    return UInt32(rounded)
+    // 使用你的 clip 工具将输入安全地限制在 0.0...1.0 之间
+    let safeX = clip(x, 0.0, 1.0)
+    return UInt32(round(safeX * 255.0))
 }

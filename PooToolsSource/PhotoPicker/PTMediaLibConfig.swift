@@ -30,7 +30,7 @@ public class PTMediaLibConfig:NSObject {
         
     public typealias KBUnit = CGFloat
     
-    @PTClampedProperyWrapper(range: 1...5) public var videoDownloadBorderWidth:CGFloat = 1.5
+    @PTClampedPropertyWrapper(range: 1...5) public var videoDownloadBorderWidth:CGFloat = 1.5
     
     /// Whether to callback directly after taking a photo. Defaults to false.
     public var callbackDirectlyAfterTakingPhoto = false

@@ -140,11 +140,11 @@ public class PTActionSheetViewConfig:NSObject {
     fileprivate var cornerRadii:CGFloat = 0
     fileprivate var dismissWithTapBG:Bool = true
     
-    public init(@PTClampedProperyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
-                @PTClampedProperyWrapper(range:44...74) rowHeight: CGFloat = 54,
-                @PTClampedProperyWrapper(range:1...10) separatorHeight: CGFloat = 5,
-                @PTClampedProperyWrapper(range:10...50) viewSpace: CGFloat = 10,
-                @PTClampedProperyWrapper(range:0...15) cornerRadii: CGFloat = 15,
+    public init(@PTClampedPropertyWrapper(range:0.1...0.5) lineHeight: CGFloat = 0.5,
+                @PTClampedPropertyWrapper(range:44...74) rowHeight: CGFloat = 54,
+                @PTClampedPropertyWrapper(range:1...10) separatorHeight: CGFloat = 5,
+                @PTClampedPropertyWrapper(range:10...50) viewSpace: CGFloat = 10,
+                @PTClampedPropertyWrapper(range:0...15) cornerRadii: CGFloat = 15,
                 dismissWithTapBG: Bool = true) {
         self.lineHeight = lineHeight
         self.rowHeight = rowHeight
@@ -178,7 +178,7 @@ public class PTActionSheetController: PTAlertController {
         }
     }()
     
-    fileprivate func setDestructiveCount(@PTClampedProperyWrapper(range:0...5) counts:Int = 0) {
+    fileprivate func setDestructiveCount(@PTClampedPropertyWrapper(range:0...5) counts:Int = 0) {
         destructiveCount = counts
     }
     fileprivate var destructiveCount:Int = 0

@@ -28,29 +28,28 @@ internal struct HSL {
     // MARK: - Initializing HSL Colors
 
     /**
-    Initializes and creates a HSL color from the hue, saturation, lightness and alpha components.
+     Initializes and creates a HSL color from the hue, saturation, lightness and alpha components.
 
-    - parameter h: The hue component of the color object, specified as a value between 0.0 and 360.0 degree.
-    - parameter s: The saturation component of the color object, specified as a value between 0.0 and 1.0.
-    - parameter l: The lightness component of the color object, specified as a value between 0.0 and 1.0.
-    - parameter a: The opacity component of the color object, specified as a value between 0.0 and 1.0.
-    */
-    init(hue: CGFloat, saturation: CGFloat, lightness: CGFloat, alpha: CGFloat = 1.0) {
-        h = hue.truncatingRemainder(dividingBy: 360.0) / 360.0
+     - parameter h: The hue component of the color object, specified as a value between 0.0 and 360.0 degree.
+     - parameter s: The saturation component of the color object, specified as a value between 0.0 and 1.0.
+     - parameter l: The lightness component of the color object, specified as a value between 0.0 and 1.0.
+     - parameter a: The opacity component of the color object, specified as a value between 0.0 and 1.0.
+     */
+    public init(hue: CGFloat, saturation: CGFloat, lightness: CGFloat, alpha: CGFloat = 1.0) {
+        // 🚨 修复负数角度 Bug：使用绝对取模 moda，确保 hue 永远转换为正数角度
+        h = moda(hue, m: 360.0) / 360.0
         s = clip(saturation, 0.0, 1.0)
         l = clip(lightness, 0.0, 1.0)
         a = clip(alpha, 0.0, 1.0)
     }
 
     /**
-    Initializes and creates a HSL (hue, saturation, lightness) color from a DynamicColor object.
-    
-    - parameter color: A DynamicColor object.
-    */
-    init(color: DynamicColor) {
+     Initializes and creates a HSL (hue, saturation, lightness) color from a DynamicColor object.
+     */
+    public init(color: DynamicColor) {
         let rgba = color.colorToRGBA()
 
-        let maximum   = max(rgba.r, max(rgba.g, rgba.b))
+        let maximum = max(rgba.r, max(rgba.g, rgba.b))
         let minimum = min(rgba.r, min(rgba.g, rgba.b))
 
         let delta = maximum - minimum
@@ -60,22 +59,19 @@ internal struct HSL {
         l = (maximum + minimum) / 2.0
 
         if delta != 0.0 {
-          if l < 0.5 {
-            s = delta / (maximum + minimum)
-          }
-          else {
-            s = delta / (2.0 - maximum - minimum)
-          }
+            if l < 0.5 {
+                s = delta / (maximum + minimum)
+            } else {
+                s = delta / (2.0 - maximum - minimum)
+            }
 
-          if rgba.r == maximum {
-            h = ((rgba.g - rgba.b) / delta) + (rgba.g < rgba.b ? 6.0 : 0.0)
-          }
-          else if rgba.g == maximum {
-            h = ((rgba.b - rgba.r) / delta) + 2.0
-          }
-          else if rgba.b == maximum {
-            h = ((rgba.r - rgba.g) / delta) + 4.0
-          }
+            if rgba.r == maximum {
+                h = ((rgba.g - rgba.b) / delta) + (rgba.g < rgba.b ? 6.0 : 0.0)
+            } else if rgba.g == maximum {
+                h = ((rgba.b - rgba.r) / delta) + 2.0
+            } else if rgba.b == maximum {
+                h = ((rgba.r - rgba.g) / delta) + 4.0
+            }
         }
 
         h /= 6.0
@@ -85,17 +81,14 @@ internal struct HSL {
     // MARK: - Transforming HSL Color
 
     /**
-    Returns the DynamicColor representation from the current HSV color.
-    
-    - returns: A DynamicColor object corresponding to the current HSV color.
-    */
+     Returns the DynamicColor representation from the current HSL color.
+     */
     func toDynamicColor() -> DynamicColor {
-        let  (r, g, b, a) = rgbaComponents()
-
+        let (r, g, b, a) = rgbaComponents()
         return DynamicColor(red: r, green: g, blue: b, alpha: a)
     }
 
-    /// Returns the RGBA components  from the current HSV color.
+    /// Returns the RGBA components from the current HSL color.
     func rgbaComponents() -> (CGFloat, CGFloat, CGFloat, CGFloat) {
         let m2 = l <= 0.5 ? l * (s + 1.0) : (l + s) - (l * s)
         let m1 = (l * 2.0) - m2
@@ -109,15 +102,13 @@ internal struct HSL {
 
     /// Hue to RGB helper function
     private func hueToRGB(m1: CGFloat, m2: CGFloat, h: CGFloat) -> CGFloat {
-        let hue = moda(h, m: 1)
+        let hue = moda(h, m: 1.0)
 
-        if hue * 6 < 1.0 {
+        if hue * 6.0 < 1.0 {
             return m1 + ((m2 - m1) * hue * 6.0)
-        }
-        else if hue * 2.0 < 1.0 {
+        } else if hue * 2.0 < 1.0 {
             return m2
-        }
-        else if hue * 3.0 < 1.9999 {
+        } else if hue * 3.0 < 2.0 { // 🚀 优化：移除 1.9999 魔法值，恢复标准公式 < 2.0
             return m1 + ((m2 - m1) * ((2.0 / 3.0) - hue) * 6.0)
         }
 
@@ -127,53 +118,40 @@ internal struct HSL {
     // MARK: - Deriving the Color
 
     /**
-    Returns a color with the hue rotated along the color wheel by the given amount.
-
-    - parameter amount: A float representing the number of degrees as ratio (usually between -360.0 degree and 360.0 degree).
-    - returns: A HSL color with the hue changed.
-    */
-    func adjustedHue(@PTClampedProperyWrapper(range:-360...360) amount: CGFloat) -> HSL {
+     Returns a color with the hue rotated along the color wheel by the given amount.
+     */
+    func adjustedHue(@PTClampedPropertyWrapper(range: -360...360) amount: CGFloat) -> HSL {
         return HSL(hue: (h * 360.0) + amount, saturation: s, lightness: l, alpha: a)
     }
 
     /**
-    Returns a color with the lightness increased by the given amount.
-
-    - parameter amount: CGFloat between 0.0 and 1.0.
-    - returns: A lighter HSL color.
-    */
-    func lighter(@PTClampedProperyWrapper(range:0...1) amount: CGFloat) -> HSL {
+     Returns a color with the lightness increased by the given amount.
+     */
+    public func lighter(@PTClampedPropertyWrapper(range: 0...1) amount: CGFloat) -> HSL {
         return HSL(hue: h * 360.0, saturation: s, lightness: l + amount, alpha: a)
     }
 
     /**
-    Returns a color with the lightness decreased by the given amount.
-
-    - parameter amount: CGFloat between 0.0 and 1.0.
-    - returns: A darker HSL color.
-    */
-    func darkened(@PTClampedProperyWrapper(range:0...1) amount: CGFloat) -> HSL {
-        return lighter(amount: amount * -1.0)
+     Returns a color with the lightness decreased by the given amount.
+     */
+    public func darkened(@PTClampedPropertyWrapper(range: 0...1) amount: CGFloat) -> HSL {
+        // 🚨 修复属性包装器导致的 Bug：直接运算，不再通过 lighter 绕路
+        return HSL(hue: h * 360.0, saturation: s, lightness: l - amount, alpha: a)
     }
 
     /**
-    Returns a color with the saturation increased by the given amount.
-
-    - parameter amount: CGFloat between 0.0 and 1.0.
-    - returns: A HSL color more saturated.
-    */
-    func saturated(@PTClampedProperyWrapper(range:0...1) amount: CGFloat) -> HSL {
+     Returns a color with the saturation increased by the given amount.
+     */
+    public func saturated(@PTClampedPropertyWrapper(range: 0...1) amount: CGFloat) -> HSL {
         return HSL(hue: h * 360.0, saturation: s + amount, lightness: l, alpha: a)
     }
 
     /**
-    Returns a color with the saturation decreased by the given amount.
-
-    - parameter amount: CGFloat between 0.0 and 1.0.
-    - returns: A HSL color less saturated.
-    */
-    func desaturated(@PTClampedProperyWrapper(range:0...1) amount: CGFloat) -> HSL {
-        return saturated(amount: amount * -1.0)
+     Returns a color with the saturation decreased by the given amount.
+     */
+    public func desaturated(@PTClampedPropertyWrapper(range: 0...1) amount: CGFloat) -> HSL {
+        // 🚨 修复属性包装器导致的 Bug：直接运算，不再通过 saturated 绕路
+        return HSL(hue: h * 360.0, saturation: s - amount, lightness: l, alpha: a)
     }
 }
 

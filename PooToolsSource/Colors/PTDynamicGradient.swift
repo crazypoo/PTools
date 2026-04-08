@@ -11,11 +11,13 @@ import UIKit
 #elseif os(OSX)
 import AppKit
 #endif
+
 /**
  Object representing a gradient object. It allows you to manipulate colors inside different gradients and color spaces.
  */
-final public class PTDynamicGradient {
-    let colors: [DynamicColor]
+// 🚀 优化 1：改为 public struct，利用值类型提升性能
+public struct PTDynamicGradient {
+    public let colors: [DynamicColor]
 
     /**
      Initializes and creates a gradient from a color array.
@@ -28,60 +30,51 @@ final public class PTDynamicGradient {
 
     /**
      Returns the color palette of `amount` elements by grabbing equidistant colors.
-
-     - Parameter amount: An amount of colors to return. 2 by default.
-     - Parameter colorspace: The color space used to mix the colors. By default it uses the RBG color space.
-     - Returns: An array of DynamicColor objects with equi-distant space in the gradient.
      */
-    public func colorPalette(@PTClampedProperyWrapper(range:2...UInt.max) amount: UInt = 2, inColorSpace colorspace: DynamicColorSpace = .rgb) -> [DynamicColor] {
-        
-        guard amount > 0 && colors.count > 0 else {
-            return []
-        }
-
+    public func colorPalette(@PTClampedPropertyWrapper(range: 2...UInt.max) amount: UInt = 2, inColorSpace colorspace: DynamicColorSpace = .rgb) -> [DynamicColor] {
+        // 🚀 优化 2：移除 amount > 0 的冗余判断，因为包装器保证了最小为 2
+        guard !colors.isEmpty else { return [] }
         guard colors.count > 1 else {
             return (0 ..< amount).map { _ in colors[0] }
         }
 
         let increment = 1.0 / CGFloat(amount - 1)
-
         return (0 ..< amount).map { pickColorAt(scale: CGFloat($0) * increment, inColorSpace: colorspace) }
     }
 
     /**
      Picks up and returns the color at the given scale by interpolating the colors.
-
-     For example, given this color array `[red, green, blue]` and a scale of `0.25` you will get a kaki color.
-
-     - Parameter scale: A float value between 0.0 and 1.0.
-     - Parameter colorspace: The color space used to mix the colors. By default it uses the RBG color space.
-     - Returns: A DynamicColor object corresponding to the color at the given scale.
      */
-    public func pickColorAt(@PTClampedProperyWrapper(range:0...1) scale: CGFloat, inColorSpace colorspace: DynamicColorSpace = .rgb) -> DynamicColor {
+    public func pickColorAt(@PTClampedPropertyWrapper(range: 0...1) scale: CGFloat, inColorSpace colorspace: DynamicColorSpace = .rgb) -> DynamicColor {
         guard colors.count > 1 else {
             return colors.first ?? .black
         }
 
-        let clippedScale = clip(scale, 0.0, 1.0)
-        let positions    = (0 ..< colors.count).map { CGFloat($0) / CGFloat(colors.count - 1) }
+        // 极限值直接返回，提升速度
+        if scale <= 0.0 { return colors.first! }
+        if scale >= 1.0 { return colors.last! }
 
-        var color: DynamicColor = .black
-
-        for (index, position) in positions.enumerated() {
-            guard clippedScale <= position else { continue }
-
-            guard clippedScale != 0.0 && clippedScale != 1.0 else {
-              return colors[index]
-            }
-
-            let previousPosition = positions[index - 1]
-            let weight           = (clippedScale - previousPosition) / (position - previousPosition)
-
-            color = colors[index - 1].mixed(withColor: colors[index], weight: weight, inColorSpace: colorspace)
-
-            break
+        // 🚀 优化 3：O(1) 纯数学映射，彻底取代原来的 map 创建数组 + for 循环
+        // 1. 计算总的分段数
+        let segmentCount = CGFloat(colors.count - 1)
+        
+        // 2. 将 0...1 的比例映射到 0...segmentCount 之间
+        let scaledIndex = scale * segmentCount
+        
+        // 3. 取整得到左边颜色的 index
+        let leftIndex = Int(scaledIndex)
+        
+        // 安全保护：防止浮点数精度导致的越界
+        guard leftIndex < colors.count - 1 else {
+            return colors.last!
         }
+        
+        let rightIndex = leftIndex + 1
+        
+        // 4. 小数部分就是混合的权重 (weight)
+        let weight = scaledIndex - CGFloat(leftIndex)
 
-        return color
+        // 5. 直接调用之前优化好的 mixed 方法
+        return colors[leftIndex].mixed(withColor: colors[rightIndex], weight: weight, inColorSpace: colorspace)
     }
 }

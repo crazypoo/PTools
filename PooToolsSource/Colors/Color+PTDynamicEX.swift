@@ -297,7 +297,7 @@ public extension DynamicColor {
     }
 #endif
 
-    func cielabColorArray()->[NSNumber] {
+    func cielabColorArray() -> (l: CGFloat, a: CGFloat, b: CGFloat, alpha: CGFloat) {
         var R = colorToRGBA().r
         var G = colorToRGBA().g
         var B = colorToRGBA().b
@@ -327,10 +327,7 @@ public extension DynamicColor {
         Y = deltaF(Y)
         Z = deltaF(Z)
         
-        let L:NSNumber = NSNumber(floatLiteral: (116 * Y - 16))
-        let A:NSNumber = NSNumber(floatLiteral: (500 * (X - Y)))
-        let b:NSNumber = NSNumber(floatLiteral: (200 * (Y - Z)))
-        return [L,A,b,NSNumber(floatLiteral: colorAValue)]
+        return (l: (116 * Y - 16), a: (500 * (X - Y)), b: (200 * (Y - Z)), alpha: colorAValue)
     }
     
     //MARK: Color from LAB Array
@@ -405,13 +402,13 @@ public extension DynamicColor {
         let lab1 = cielabColorArray()
         let lab2 = color.cielabColorArray()
         
-        let L1:CGFloat = CGFloat(lab1[0].floatValue)
-        let A1:CGFloat = CGFloat(lab1[1].floatValue)
-        let B1:CGFloat = CGFloat(lab1[2].floatValue)
+        let L1:CGFloat = lab1.l
+        let A1:CGFloat = lab1.a
+        let B1:CGFloat = lab1.b
 
-        let L2:CGFloat = CGFloat(lab2[0].floatValue)
-        let A2:CGFloat = CGFloat(lab2[1].floatValue)
-        let B2:CGFloat = CGFloat(lab2[2].floatValue)
+        let L2:CGFloat = lab2.l
+        let A2:CGFloat = lab2.a
+        let B2:CGFloat = lab2.b
 
         if type == .CIE76 {
             let distance:CGFloat = CGFloat(sqrtf(Float(pow((L1 - L2), 2.0) + pow((A1 - A2), 2.0) + pow((B1 - B2), 2.0))))
@@ -429,8 +426,8 @@ public extension DynamicColor {
         let deltaC = C1 - C2
         let deltaH = sqrt(pow((A1 - A2), 2) + pow((B1 - B2), 2.0) - pow(deltaC, 2.0))
         var sL:CGFloat = 1
-        var sC:CGFloat = 1 + k1 * (sqrt((A1 * A1) + (B1 * B1)))
-        var sH:CGFloat = 1 + k2 * (sqrt((A1 * A1) + (B1 * B1)))
+        var sC:CGFloat = 1 + k1 * C1
+        var sH:CGFloat = 1 + k2 * C1
         
         if type == .CIE94 {
             let distance:CGFloat = sqrt(pow((deltaL / (kL * sL)), 2.0) + pow((deltaC / (kC * sC)), 2.0) + pow((deltaH / (kH * sH)), 2.0))
@@ -440,8 +437,8 @@ public extension DynamicColor {
         let deltaLPrime:CGFloat = L2 - L1
         let meanL:CGFloat = (L1 + L2) / 2
         let meanC:CGFloat = (C1 + C2) / 2
-        let aPrime1:CGFloat = A1 + A1 / 2 * (1 - sqrt(pow(meanC, 7.0) / pow(meanC, 7.0) + pow(25.0, 7.0)))
-        let aPrime2:CGFloat = A2 + A2 / 2 * (1 - sqrt(pow(meanC, 7.0) / pow(meanC, 7.0) + pow(25.0, 7.0)))
+        let aPrime1:CGFloat = A1 + A1 / 2 * (1 - sqrt(pow(meanC, 7.0) / (pow(meanC, 7.0) + pow(25.0, 7.0))))
+        let aPrime2:CGFloat = A2 + A2 / 2 * (1 - sqrt(pow(meanC, 7.0) / (pow(meanC, 7.0) + pow(25.0, 7.0))))
         let cPrime1:CGFloat = sqrt((aPrime1 * aPrime1) + (B1 * B1))
         let cPrime2:CGFloat = sqrt((aPrime2 * aPrime2) + (B2 * B2))
         let cMeanPrime:CGFloat = (cPrime1 + cPrime2) / 2
@@ -457,7 +454,7 @@ public extension DynamicColor {
             deltahPrime = hPrime2 <= hPrime1 ? (hPrime2 - hPrime1 + RAD(degree: 360)) : (hPrime2 - hPrime1 - RAD(degree: 360))
         }
         let deltaHPrime:CGFloat = 2 * sqrt(cPrime1 * cPrime2) * sin(deltahPrime / 2)
-        let meanHPrime = (abs(hPrime1 - hPrime2) <= RAD(degree: 180)) ? ((hPrime1 + hPrime2) / 2) : (hPrime1 + hPrime2 + RAD(degree: 360) / 2)
+        let meanHPrime = (abs(hPrime1 - hPrime2) <= RAD(degree: 180)) ? ((hPrime1 + hPrime2) / 2) : ((hPrime1 + hPrime2 + RAD(degree: 360)) / 2)
         let T:CGFloat = 1 - 0.17 * cos(meanHPrime - RAD(degree: 30)) + 0.24 * cos(2 * meanHPrime) + 0.32 * cos(3 * meanHPrime + RAD(degree: 6)) - 0.2 * cos(4 * meanHPrime - RAD(degree: 63))
         sL = 1 + 0.015 * pow(meanL - 50, 2) / sqrt(20 + pow(meanL - 50, 2))
         sC = 1 + 0.045 * cMeanPrime
@@ -468,14 +465,18 @@ public extension DynamicColor {
     
     //MARK: 返回随机颜色
     ///返回随机颜色
-    @objc class var randomColor:DynamicColor{
+    @objc class var randomColor:DynamicColor {
         get {
             DynamicColor.randomColorWithAlpha(alpha: 1)
         }
     }
     
-    @objc class func randomColorWithAlpha(alpha:CGFloat)->DynamicColor {
-        DynamicColor(r: CGFloat(arc4random() % 256), g: CGFloat(arc4random() % 256), b: CGFloat(arc4random() % 256), a: alpha)
+    @objc class func randomColorWithAlpha(alpha:CGFloat) -> DynamicColor {
+        return DynamicColor(red: CGFloat.random(in: 0...1),
+                            green: CGFloat.random(in: 0...1),
+                            blue: CGFloat.random(in: 0...1),
+                            alpha: alpha
+        )
     }
     
     @objc class var DevMaskColor:DynamicColor {
@@ -485,15 +486,16 @@ public extension DynamicColor {
 #if os(iOS)
     //MARK: 顏色轉圖片
     ///顏色轉圖片
-    @objc func createImageWithColor()->UIImage {
+    @objc func createImageWithColor() -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
-        let ccontext = UIGraphicsGetCurrentContext()
-        ccontext?.setFillColor(cgColor)
-        ccontext!.fill(rect)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image!
+        defer { UIGraphicsEndImageContext() } // 确保无论如何都会关闭 Context
+        
+        guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
+        context.setFillColor(cgColor)
+        context.fill(rect)
+        
+        return UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
     }
 #endif
 }

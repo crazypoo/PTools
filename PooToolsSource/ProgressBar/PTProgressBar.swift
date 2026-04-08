@@ -105,11 +105,11 @@ public class PTProgressBar: UIView {
     
     // MARK: - Public Methods
     
-    public func animationProgress(duration: CGFloat, @PTClampedProperyWrapper(range: 0...1) value: CGFloat) {
+    public func animationProgress(duration: CGFloat, @PTClampedPropertyWrapper(range: 0...1) value: CGFloat) {
         startAnimation(type: .Normal, duration: duration, value: value)
     }
 
-    public func startAnimation(type: PTProgressBarAnimationType, duration: CGFloat, @PTClampedProperyWrapper(range: 0...1) value: CGFloat) {
+    public func startAnimation(type: PTProgressBarAnimationType, duration: CGFloat, @PTClampedPropertyWrapper(range: 0...1) value: CGFloat) {
         guard !isAnimating else { return }
         
         isAnimating = true

@@ -14,14 +14,14 @@ public typealias UIColor = NSColor
 import UIKit
 #endif
 import Foundation
-import Darwin
 
+// 🚀 优化 1：移除强制解包，改为安全的常量 (let)
 public struct UIImageColors {
-    public var background: UIColor!
-    public var primary: UIColor!
-    public var secondary: UIColor!
-    public var detail: UIColor!
-  
+    public let background: UIColor
+    public let primary: UIColor
+    public let secondary: UIColor
+    public let detail: UIColor
+    
     public init(background: UIColor, primary: UIColor, secondary: UIColor, detail: UIColor) {
         self.background = background
         self.primary = primary
@@ -38,179 +38,119 @@ public enum UIImageColorsQuality: CGFloat {
 }
 
 fileprivate struct UIImageColorsCounter {
-    let color: Double
+    let color: UInt32 // 🚀 改为 UInt32
     let count: Int
-    init(color: Double, count: Int) {
-        self.color = color
-        self.count = count
-    }
 }
 
-/*
-    Extension on double that replicates UIColor methods. We DO NOT want these
-    exposed outside of the library because they don't make sense outside of the
-    context of UIImageColors.
-*/
-fileprivate extension Double {
+// 🚀 优化 2：彻底抛弃 Double 魔法，改为极速的 UInt32 位运算
+fileprivate extension UInt32 {
     
-    private var r: Double {
-        return fmod(Darwin.floor(self/1000000),1000000)
-    }
-    
-    private var g: Double {
-        return fmod(Darwin.floor(self/1000),1000)
-    }
-    
-    private var b: Double {
-        return fmod(self,1000)
-    }
+    var r: Double { return Double((self >> 16) & 0xFF) }
+    var g: Double { return Double((self >> 8) & 0xFF) }
+    var b: Double { return Double(self & 0xFF) }
     
     var isDarkColor: Bool {
-        return (r*0.2126) + (g*0.7152) + (b*0.0722) < 127.5
+        return (r * 0.2126) + (g * 0.7152) + (b * 0.0722) < 127.5
     }
     
     var isBlackOrWhite: Bool {
         return (r > 232 && g > 232 && b > 232) || (r < 23 && g < 23 && b < 23)
     }
     
-    func isDistinct(_ other: Double) -> Bool {
-        let _r = self.r
-        let _g = self.g
-        let _b = self.b
-        let o_r = other.r
-        let o_g = other.g
-        let o_b = other.b
+    func isDistinct(_ other: UInt32) -> Bool {
+        let _r = self.r, _g = self.g, _b = self.b
+        let o_r = other.r, o_g = other.g, o_b = other.b
 
-        return (fabs(_r-o_r) > 63.75 || fabs(_g-o_g) > 63.75 || fabs(_b-o_b) > 63.75)
-            && !(fabs(_r-_g) < 7.65 && fabs(_r-_b) < 7.65 && fabs(o_r-o_g) < 7.65 && fabs(o_r-o_b) < 7.65)
+        return (fabs(_r - o_r) > 63.75 || fabs(_g - o_g) > 63.75 || fabs(_b - o_b) > 63.75)
+            && !(fabs(_r - _g) < 7.65 && fabs(_r - _b) < 7.65 && fabs(o_r - o_g) < 7.65 && fabs(o_r - o_b) < 7.65)
     }
     
-    func with(minSaturation: Double) -> Double {
-        // Ref: https://en.wikipedia.org/wiki/HSL_and_HSV
+    func with(minSaturation: Double) -> UInt32 {
+        let _r = r / 255.0
+        let _g = g / 255.0
+        let _b = b / 255.0
+        var H: Double = 0
+        var S: Double = 0
+        let V = fmax(_r, fmax(_g, _b))
+        var C = V - fmin(_r, fmin(_g, _b))
         
-        // Convert RGB to HSV
-
-        let _r = r/255
-        let _g = g/255
-        let _b = b/255
-        var H, S, V: Double
-        let M = fmax(_r,fmax(_g, _b))
-        var C = M-fmin(_r,fmin(_g, _b))
+        S = V == 0 ? 0 : C / V
         
-        V = M
-        S = V == 0 ? 0:C/V
-        
-        if minSaturation <= S {
-            return self
-        }
+        if minSaturation <= S { return self }
         
         if C == 0 {
             H = 0
-        } else if _r == M {
-            H = fmod((_g-_b)/C, 6)
-        } else if _g == M {
-            H = 2+((_b-_r)/C)
+        } else if _r == V {
+            H = fmod((_g - _b) / C, 6.0)
+        } else if _g == V {
+            H = 2.0 + ((_b - _r) / C)
         } else {
-            H = 4+((_r-_g)/C)
+            H = 4.0 + ((_r - _g) / C)
         }
         
-        if H < 0 {
-            H += 6
-        }
+        if H < 0 { H += 6.0 }
         
-        // Back to RGB
-        
-        C = V*minSaturation
-        let X = C*(1-fabs(fmod(H,2)-1))
-        var R, G, B: Double
+        C = V * minSaturation
+        let X = C * (1.0 - fabs(fmod(H, 2.0) - 1.0))
+        var R: Double = 0, G: Double = 0, B: Double = 0
         
         switch H {
-        case 0...1:
-            R = C
-            G = X
-            B = 0
-        case 1...2:
-            R = X
-            G = C
-            B = 0
-        case 2...3:
-            R = 0
-            G = C
-            B = X
-        case 3...4:
-            R = 0
-            G = X
-            B = C
-        case 4...5:
-            R = X
-            G = 0
-            B = C
-        case 5..<6:
-            R = C
-            G = 0
-            B = X
-        default:
-            R = 0
-            G = 0
-            B = 0
+        case 0...1: R = C; G = X; B = 0
+        case 1...2: R = X; G = C; B = 0
+        case 2...3: R = 0; G = C; B = X
+        case 3...4: R = 0; G = X; B = C
+        case 4...5: R = X; G = 0; B = C
+        case 5..<6: R = C; G = 0; B = X
+        default: break
         }
         
-        let m = V-C
+        let m = V - C
+        let finalR = UInt32((R + m) * 255.0)
+        let finalG = UInt32((G + m) * 255.0)
+        let finalB = UInt32((B + m) * 255.0)
         
-        return (Darwin.floor((R + m)*255)*1000000)+(Darwin.floor((G + m)*255)*1000)+Darwin.floor((B + m)*255)
+        return (finalR << 16) | (finalG << 8) | finalB
     }
     
-    func isContrasting(_ color: Double) -> Bool {
-        let bgLum = (0.2126*r)+(0.7152*g)+(0.0722*b)+12.75
-        let fgLum = (0.2126*color.r)+(0.7152*color.g)+(0.0722*color.b)+12.75
+    func isContrasting(_ color: UInt32) -> Bool {
+        let bgLum = (0.2126 * r) + (0.7152 * g) + (0.0722 * b) + 12.75
+        let fgLum = (0.2126 * color.r) + (0.7152 * color.g) + (0.0722 * color.b) + 12.75
         if bgLum > fgLum {
-            return 1.6 < bgLum/fgLum
+            return 1.6 < bgLum / fgLum
         } else {
-            return 1.6 < fgLum/bgLum
+            return 1.6 < fgLum / bgLum
         }
     }
     
     var uicolor: UIColor {
-        return UIColor(red: CGFloat(r)/255, green: CGFloat(g)/255, blue: CGFloat(b)/255, alpha: 1)
-    }
-    
-    var pretty: String {
-        return "\(Int(self.r)), \(Int(self.g)), \(Int(self.b))"
+        return UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: 1)
     }
 }
 
 extension UIImage {
+    
     #if os(OSX)
-        private func resizeForUIImageColors(newSize: CGSize) -> UIImage? {
-            let frame = CGRect(origin: .zero, size: newSize)
-            guard let representation = bestRepresentation(for: frame, context: nil, hints: nil) else {
-                return nil
-            }
-            let result = NSImage(size: newSize, flipped: false, drawingHandler: { (_) -> Bool in
-                return representation.draw(in: frame)
-            })
-
-            return result
-        }
+    private func resizeForUIImageColors(newSize: CGSize) -> UIImage? {
+        let frame = CGRect(origin: .zero, size: newSize)
+        guard let representation = bestRepresentation(for: frame, context: nil, hints: nil) else { return nil }
+        return NSImage(size: newSize, flipped: false, drawingHandler: { (_) -> Bool in
+            return representation.draw(in: frame)
+        })
+    }
     #else
-        private func resizeForUIImageColors(newSize: CGSize) -> UIImage? {
-            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
-            defer {
-                UIGraphicsEndImageContext()
-            }
-            self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-            guard let result = UIGraphicsGetImageFromCurrentImageContext() else {
-                fatalError("UIImageColors.resizeForUIImageColors failed: UIGraphicsGetImageFromCurrentImageContext returned nil.")
-            }
-
-            return result
-        }
+    private func resizeForUIImageColors(newSize: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+        defer { UIGraphicsEndImageContext() }
+        self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
     #endif
 
     public func getColors(quality: UIImageColorsQuality = .high, _ completion: @escaping (UIImageColors?) -> Void) {
-        PTGCDManager.gcdGobal {
+        // 使用标准的 GCD 全局队列替代自定义封装，如果有必要你可以换回你的 PTGCDManager
+        DispatchQueue.global(qos: .userInitiated).async {
             let result = self.getColors(quality: quality)
-            PTGCDManager.gcdMain {
+            DispatchQueue.main.async {
                 completion(result)
             }
         }
@@ -220,76 +160,75 @@ extension UIImage {
         var scaleDownSize: CGSize = self.size
         if quality != .highest {
             if self.size.width < self.size.height {
-                let ratio = self.size.height/self.size.width
-                scaleDownSize = CGSize(width: quality.rawValue/ratio, height: quality.rawValue)
+                let ratio = self.size.height / self.size.width
+                scaleDownSize = CGSize(width: quality.rawValue / ratio, height: quality.rawValue)
             } else {
-                let ratio = self.size.width/self.size.height
-                scaleDownSize = CGSize(width: quality.rawValue, height: quality.rawValue/ratio)
+                let ratio = self.size.width / self.size.height
+                scaleDownSize = CGSize(width: quality.rawValue, height: quality.rawValue / ratio)
             }
         }
         
         guard let resizedImage = self.resizeForUIImageColors(newSize: scaleDownSize) else { return nil }
 
         #if os(OSX)
-            guard let cgImage = resizedImage.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+        guard let cgImage = resizedImage.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
         #else
-            guard let cgImage = resizedImage.cgImage else { return nil }
+        guard let cgImage = resizedImage.cgImage else { return nil }
         #endif
         
-        let width: Int = cgImage.width
-        let height: Int = cgImage.height
+        let width = cgImage.width
+        let height = cgImage.height
         
-        let threshold = Int(CGFloat(height)*0.01)
-        var proposed: [Double] = [-1,-1,-1,-1]
+        // 🚀 安全渲染：强行将图片绘制到标准的 32-bit RGBA 缓冲区中，避免因图片源格式不同导致的解析错乱崩溃
+        let bytesPerPixel = 4
+        let bytesPerRow = bytesPerPixel * width
+        let bitsPerComponent = 8
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        var rawData = [UInt8](repeating: 0, count: height * bytesPerRow)
         
-        guard let data = CFDataGetBytePtr(cgImage.dataProvider!.data) else {
-            fatalError("UIImageColors.getColors failed: could not get cgImage data.")
+        guard let context = CGContext(data: &rawData, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue) else {
+            return nil
         }
         
-        let imageColors = NSCountedSet(capacity: width*height)
-        for x in 0..<width {
-            for y in 0..<height {
-                let pixel: Int = (y * cgImage.bytesPerRow) + (x * 4)
-                if 127 <= data[pixel+3] {
-                    imageColors.add((Double(data[pixel+2])*1000000)+(Double(data[pixel+1])*1000)+(Double(data[pixel])))
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        // 🚀 优化 3：原生 Swift 字典替代 NSCountedSet，性能呈指数级飞跃
+        var imageColors = [UInt32: Int]()
+        imageColors.reserveCapacity(width * height)
+        
+        for y in 0..<height {
+            for x in 0..<width {
+                let pixelIndex = (y * bytesPerRow) + (x * bytesPerPixel)
+                let alpha = rawData[pixelIndex + 3]
+                
+                // 忽略透明度过低的像素
+                if alpha >= 127 {
+                    let r = UInt32(rawData[pixelIndex])
+                    let g = UInt32(rawData[pixelIndex + 1])
+                    let b = UInt32(rawData[pixelIndex + 2])
+                    let colorKey = (r << 16) | (g << 8) | b
+                    
+                    imageColors[colorKey, default: 0] += 1
                 }
             }
         }
 
-        let sortedColorComparator: Comparator = { (main, other) -> ComparisonResult in
-            let m = main as! UIImageColorsCounter, o = other as! UIImageColorsCounter
-            if m.count < o.count {
-                return .orderedDescending
-            } else if m.count == o.count {
-                return .orderedSame
-            } else {
-                return .orderedAscending
-            }
-        }
+        let threshold = Int(CGFloat(height) * 0.01)
         
-        var enumerator = imageColors.objectEnumerator()
-        var sortedColors = NSMutableArray(capacity: imageColors.count)
-        while let K = enumerator.nextObject() as? Double {
-            let C = imageColors.count(for: K)
-            if threshold < C {
-                sortedColors.add(UIImageColorsCounter(color: K, count: C))
-            }
-        }
-        sortedColors.sort(comparator: sortedColorComparator)
-
-        var proposedEdgeColor: UIImageColorsCounter
-        if 0 < sortedColors.count {
-            proposedEdgeColor = sortedColors.object(at: 0) as! UIImageColorsCounter
-        } else {
-            proposedEdgeColor = UIImageColorsCounter(color: 0, count: 1)
-        }
+        // 过滤并排序
+        var sortedColors = imageColors
+            .filter { $0.value > threshold }
+            .map { UIImageColorsCounter(color: $0.key, count: $0.value) }
+            .sorted { $0.count > $1.count }
         
-        if proposedEdgeColor.color.isBlackOrWhite && 0 < sortedColors.count {
+        var proposedEdgeColor: UIImageColorsCounter = sortedColors.first ?? UIImageColorsCounter(color: 0, count: 1)
+        
+        if proposedEdgeColor.color.isBlackOrWhite && sortedColors.count > 0 {
             for i in 1..<sortedColors.count {
-                let nextProposedEdgeColor = sortedColors.object(at: i) as! UIImageColorsCounter
-                if Double(nextProposedEdgeColor.count)/Double(proposedEdgeColor.count) > 0.3 {
-                    if !nextProposedEdgeColor.color.isBlackOrWhite {
-                        proposedEdgeColor = nextProposedEdgeColor
+                let nextColor = sortedColors[i]
+                if Double(nextColor.count) / Double(proposedEdgeColor.count) > 0.3 {
+                    if !nextColor.color.isBlackOrWhite {
+                        proposedEdgeColor = nextColor
                         break
                     }
                 } else {
@@ -297,56 +236,45 @@ extension UIImage {
                 }
             }
         }
-        proposed[0] = proposedEdgeColor.color
-
-        enumerator = imageColors.objectEnumerator()
-        sortedColors.removeAllObjects()
-        sortedColors = NSMutableArray(capacity: imageColors.count)
-        let findDarkTextColor = !proposed[0].isDarkColor
         
-        while var K = enumerator.nextObject() as? Double {
-            K = K.with(minSaturation: 0.15)
-            if K.isDarkColor == findDarkTextColor {
-                let C = imageColors.count(for: K)
-                sortedColors.add(UIImageColorsCounter(color: K, count: C))
-            }
-        }
-        sortedColors.sort(comparator: sortedColorComparator)
+        var proposed: [UInt32?] = [proposedEdgeColor.color, nil, nil, nil]
+        let findDarkTextColor = !proposed[0]!.isDarkColor
         
-        for color in sortedColors {
-            let color = (color as! UIImageColorsCounter).color
+        // 重新过滤并排序颜色（应用饱和度调整）
+        sortedColors = imageColors
+            .map { UIImageColorsCounter(color: $0.key.with(minSaturation: 0.15), count: $0.value) }
+            .filter { $0.color.isDarkColor == findDarkTextColor }
+            .sorted { $0.count > $1.count }
+        
+        for counter in sortedColors {
+            let color = counter.color
             
-            if proposed[1] == -1 {
-                if color.isContrasting(proposed[0]) {
+            if proposed[1] == nil {
+                if color.isContrasting(proposed[0]!) {
                     proposed[1] = color
                 }
-            } else if proposed[2] == -1 {
-                if !color.isContrasting(proposed[0]) || !proposed[1].isDistinct(color) {
-                    continue
-                }
+            } else if proposed[2] == nil {
+                if !color.isContrasting(proposed[0]!) || !proposed[1]!.isDistinct(color) { continue }
                 proposed[2] = color
-            } else if proposed[3] == -1 {
-                if !color.isContrasting(proposed[0]) || !proposed[2].isDistinct(color) || !proposed[1].isDistinct(color) {
-                    continue
-                }
+            } else if proposed[3] == nil {
+                if !color.isContrasting(proposed[0]!) || !proposed[2]!.isDistinct(color) || !proposed[1]!.isDistinct(color) { continue }
                 proposed[3] = color
                 break
             }
         }
         
-        let isDarkBackground = proposed[0].isDarkColor
+        let isDarkBackground = proposed[0]!.isDarkColor
+        let fallbackColor: UInt32 = isDarkBackground ? 0xFFFFFF : 0x000000 // 白或黑
+        
         for i in 1...3 {
-            if proposed[i] == -1 {
-                proposed[i] = isDarkBackground ? 255255255:0
-            }
+            if proposed[i] == nil { proposed[i] = fallbackColor }
         }
         
         return UIImageColors(
-            background: proposed[0].uicolor,
-            primary: proposed[1].uicolor,
-            secondary: proposed[2].uicolor,
-            detail: proposed[3].uicolor
+            background: proposed[0]!.uicolor,
+            primary: proposed[1]!.uicolor,
+            secondary: proposed[2]!.uicolor,
+            detail: proposed[3]!.uicolor
         )
     }
 }
-

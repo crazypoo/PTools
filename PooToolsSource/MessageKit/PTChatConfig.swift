@@ -34,7 +34,7 @@ public class PTChatConfig: NSObject {
     public static let ChatContentShowMaxWidth = CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset
     ///設置持有人ID
     public var imOwnerId:String = ""
-    @PTClampedProperyWrapper(range:10...120) public var messageExpTime: Int = 60
+    @PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60
 
     class public func timeExp(expTime:Date) -> Bool {
         
@@ -57,7 +57,7 @@ public class PTChatConfig: NSObject {
     ///系統時間字體顏色
     public var chatTimeColor:UIColor = UIColor(hexString: "919191")!
     ///系統时间的左右间距
-    @PTClampedProperyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5
+    @PTClampedPropertyWrapper(range:5...20) public var chatTimeContentFixel:CGFloat = 5
     ///系統時間背景颜色
     public var chatTimeBackgroundColor:UIColor = UIColor(hexString: "cacaca")!
     ///系統內容字體大小
@@ -72,7 +72,7 @@ public class PTChatConfig: NSObject {
 
     //MARK: Message base
     ///消息頭像大小
-    @PTClampedProperyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44
+    @PTClampedPropertyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44
     ///是否顯示時間
     public var showTimeLabel:Bool = true
     ///是否顯示用戶名
@@ -90,11 +90,11 @@ public class PTChatConfig: NSObject {
     ///自己消息的聊天氣泡
     public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///自己消息的聊天Hightlight氣泡
-    public var chatMeHighlightedBubbleImage:UIImage = UIColor.white.lighter(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///別人消息的聊天氣泡
     public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///別人消息的聊天Hightlight氣泡
-    public var chatOtherHighlightedBubbleImage:UIImage = UIColor.systemBlue.lighter(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///等待消息的圖片
     public var chatWaitImage:UIImage = "📀".emojiToImage(emojiFont: .appfont(size: 20))
     ///異常消息的圖片
@@ -108,7 +108,7 @@ public class PTChatConfig: NSObject {
     public var readStatusName:String = "Read"
     public var unreadStatusName:String = "unread"
     ///时间到顶的距离,默认5最大100
-    @PTClampedProperyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5
+    @PTClampedPropertyWrapper(range:5...100) open var timeTopSpace: CGFloat = 5
 
     //MARK: Text message
     ///自己文本顏色
@@ -126,7 +126,7 @@ public class PTChatConfig: NSObject {
     ///文本字體間隔
     public var textLineSpace:CGFloat = 2
     ///設置聊天內容框最小Height
-    @PTClampedProperyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38
+    @PTClampedPropertyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38
     ///#井号话题颜色
     public var hashtagColor:DynamicColor = .systemBlue
     public var hashtagSelectedColor:DynamicColor = .systemBlue
@@ -144,15 +144,15 @@ public class PTChatConfig: NSObject {
     
     //MARK: Media message
     ///Media的Width大小
-    @PTClampedProperyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200
+    @PTClampedPropertyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200
     ///Media的Height大小
-    @PTClampedProperyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200
+    @PTClampedPropertyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200
     ///Media的Coner大小
-    @PTClampedProperyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5
+    @PTClampedPropertyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5
     ///Media的Width大小
-    @PTClampedProperyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200
+    @PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoWidth: CGFloat = 200
     ///Media的Height大小
-    @PTClampedProperyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200
+    @PTClampedPropertyWrapper(range:88...200) public var mediaMessageVideoHeight: CGFloat = 200
     public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40))
     public var mediaDownloadImage:UIImage = "⏬️".emojiToImage(emojiFont: .appfont(size: 40))
     public var mediaDownloadPauseImage:UIImage = "🔁".emojiToImage(emojiFont: .appfont(size: 40))
@@ -160,11 +160,11 @@ public class PTChatConfig: NSObject {
 
     //MARK: Map message
     ///地圖Width大小
-    @PTClampedProperyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200
+    @PTClampedPropertyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200
     ///地圖Height大小
-    @PTClampedProperyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200
+    @PTClampedPropertyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200
     ///地圖Coner大小
-    @PTClampedProperyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5
+    @PTClampedPropertyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5
     ///是否顯示建築
     public var showBuilding:Bool = true
     ///地圖的圖片縮放
@@ -176,7 +176,7 @@ public class PTChatConfig: NSObject {
     
     //MARK: Voice message
     ///音頻Width大小
-    @PTClampedProperyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 250
+    @PTClampedPropertyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 250
     ///播放按鈕
     public var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue)
     ///暫停按鈕
@@ -196,7 +196,7 @@ public class PTChatConfig: NSObject {
     public var fileNameColor:UIColor = .black
     public var fileSizeFont:UIFont = .appfont(size: 13)
     public var fileSizeColor:UIColor = .lightGray
-    @PTClampedProperyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2
+    @PTClampedPropertyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2
     public var fileImage:UIImage = "📁".emojiToImage(emojiFont: .appfont(size: 40))
     public var yesterDayName:String = "昨天"
 }

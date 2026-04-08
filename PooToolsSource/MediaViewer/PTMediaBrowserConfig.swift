@@ -87,5 +87,5 @@ public class PTMediaBrowserConfig: NSObject {
         case scrolling
     }
     
-    @PTClampedProperyWrapper(range: 50...200) public var dismissY:CGFloat = 200
+    @PTClampedPropertyWrapper(range: 50...200) public var dismissY:CGFloat = 200
 }

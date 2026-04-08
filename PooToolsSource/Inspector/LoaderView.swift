@@ -78,8 +78,8 @@ final class LoaderView: LayerViewComponent {
         backgroundColor = colorScheme.value(for: self)
 
         highlightView.borderWidth = .zero
-        highlightView.borderColor = backgroundColor?.lighter(amount: 0.07)
-
+        highlightView.borderColor = HSL(color: colorScheme.value(for: self)).lighter(amount: 0.07).toDynamicColor()
+        
         layer.cornerRadius = frame.height / .pi
     }
 

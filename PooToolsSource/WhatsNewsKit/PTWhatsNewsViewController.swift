@@ -241,7 +241,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     public var privacyTapHandler:PTActionTask?
     public var iKnowTapHandler:PTActionTask?
 
-    public func setContentLRSpace(@PTClampedProperyWrapper(range:0...100) values:CGFloat = 48) {
+    public func setContentLRSpace(@PTClampedPropertyWrapper(range:0...100) values:CGFloat = 48) {
         contentViewSpace = values
     }
     private var contentViewSpace:CGFloat = 48
@@ -350,7 +350,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         iKnowButton.normalTitleFont = iKnowItem.titleFont
         iKnowButton.hightlightTitleFont = iKnowButton.normalTitleFont
         iKnowButton.configBackgroundColor = iKnowItem.backgroundColor
-        iKnowButton.configBackgroundHightlightColor = iKnowButton.configBackgroundColor.lighter(amount: 0.5)
+        iKnowButton.configBackgroundHightlightColor = HSL(color: iKnowButton.configBackgroundColor).lighter(amount: 0.5).toDynamicColor()
 
         if iKnowItem.image != nil {
             iKnowButton.imageSize = CGSize(width: 44, height: 44)

@@ -374,7 +374,7 @@ public class PTCycleScrollView: UIView {
 
     /// 总数量
     fileprivate var totalItemsCount: NSInteger! = 1
-    func setTotalItemsMinItems(@PTClampedProperyWrapper(range:1...(.max)) count:NSInteger) {
+    func setTotalItemsMinItems(@PTClampedPropertyWrapper(range:1...(.max)) count:NSInteger) {
         totalItemsCount = count
     }
     

@@ -35,7 +35,7 @@ public class PTHudConfig:NSObject {
     open var backgroundColor:UIColor = .clear
     
     fileprivate var conterViewSize:CGFloat = 100
-    public func conterViewSizeSet(@PTClampedProperyWrapper(range: 100...CGFloat.kSCREEN_WIDTH) size:CGFloat) {
+    public func conterViewSizeSet(@PTClampedPropertyWrapper(range: 100...CGFloat.kSCREEN_WIDTH) size:CGFloat) {
         conterViewSize = size
     }
 }

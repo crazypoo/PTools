@@ -350,7 +350,7 @@ public class LocalConsole: NSObject {
         }
     }
     
-    public func setAttFontSize(@PTClampedProperyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
+    public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
         PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = fontSizes
         terminal!.fontSize = fontSizes
     }

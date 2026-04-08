@@ -9,7 +9,7 @@
 import UIKit
 
 //MARK: 此方法用于设定范围,且不会小于和多于相关数值
-@propertyWrapper public struct PTClampedProperyWrapper<T: Comparable> {
+@propertyWrapper public struct PTClampedPropertyWrapper<T: Comparable> {
     private var value: T
     private let range: ClosedRange<T>
     

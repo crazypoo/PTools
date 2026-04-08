@@ -40,7 +40,7 @@ public class PTCustomerAlertController: PTAlertController {
         return view
     }()
     
-    @PTClampedProperyWrapper(range:0...15) fileprivate var cornerSize:CGFloat = 15
+    @PTClampedPropertyWrapper(range:0...15) fileprivate var cornerSize:CGFloat = 15
     
     fileprivate lazy var titleMessage:UILabel = {
         let view = UILabel()
@@ -67,7 +67,7 @@ public class PTCustomerAlertController: PTAlertController {
     fileprivate var buttonsFont:UIFont = .appfont(size: 15)
 
     fileprivate var titleHeight:CGFloat = 0
-    @PTClampedProperyWrapper(range:25...100) fileprivate var contentSpace:CGFloat = 25
+    @PTClampedPropertyWrapper(range:25...100) fileprivate var contentSpace:CGFloat = 25
     let titleSpace:CGFloat = 10
     fileprivate var contentWidth:CGFloat = CGFloat.kSCREEN_WIDTH
     

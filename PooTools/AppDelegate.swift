@@ -273,7 +273,7 @@ class AppDelegate: PTAppWindowsDelegate {
         PTSideMenuControl.preferences.basic.defaultCacheKey = "0"
     }
     
-    func minCount(@PTClampedProperyWrapper(range:1...10) counts:Int) ->Int {
+    func minCount(@PTClampedPropertyWrapper(range:1...10) counts:Int) ->Int {
         counts
     }
     

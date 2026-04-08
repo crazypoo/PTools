@@ -1281,7 +1281,7 @@ class PTFuncNameViewController: PTBaseViewController {
         }
     }
     
-    func inputValueSample(@PTClampedProperyWrapper(range:1...10) value:Int = 1) {
+    func inputValueSample(@PTClampedPropertyWrapper(range:1...10) value:Int = 1) {
         PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>\(value)")
     }
 }
