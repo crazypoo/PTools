@@ -13,26 +13,28 @@ import Kingfisher
 import ImageIO
 import Photos
 import ObjectiveC
+import AVFoundation // 补充导入以支持 AVAsset
 
 private var ptLoadTaskKey: UInt8 = 0
 private var ptLoadUUIDKey: UInt8 = 0
 
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
-    ///獲取圖片的某像素點的顏色
     @objc func getImagePointColor(point:CGPoint) -> UIColor {
         if let currentImage = image {
             let thumbSize = CGSize(width: image!.size.width, height: currentImage.size.height)
 
-            // 当前点在图片中的相对位置
-            let pInImage = CGPointMake(point.x * thumbSize.width / self.bounds.size.width,
-                                       point.y * thumbSize.height / self.bounds.size.height)
+            // 当前点在图片中的相对位置 (优化：移除 CGPointMake，使用原生 CGPoint)
+            let pInImage = CGPoint(x: point.x * thumbSize.width / self.bounds.width,
+                                   y: point.y * thumbSize.height / self.bounds.height)
+            //TODO: 此处假设 getImgePointColor 是 UIImage 的自定义扩展，拼写可能存在错别字，建议同步检查 UIImage 扩展中的命名
             return currentImage.getImgePointColor(point: pInImage)
         } else {
             return .clear
         }
     }
     
+    //TODO: 由于内部使用的是 Kingfisher，此方法名带有 SDWebImage 可能会引起误解，建议未来重命名
     @objc func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,loadedHandler:PTImageLoadHandler? = nil) {
         kf.setImage(with: URL(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
             switch result {
@@ -272,21 +274,8 @@ public extension UIImageView {
     }
     
     var imageFrame: CGRect {
-        let imageViewSize = self.frame.size
-        guard let imageSize = self.image?.size else { return CGRect.zero }
-        let imageRatio = imageSize.width / imageSize.height
-        let imageViewRatio = imageViewSize.width / imageViewSize.height
-        if imageRatio < imageViewRatio {
-            let scaleFactor = imageViewSize.height / imageSize.height
-            let width = imageSize.width * scaleFactor
-            let topLeftX = (imageViewSize.width - width) * 0.5
-            return CGRect(x: topLeftX, y: 0, width: width, height: imageViewSize.height)
-        } else {
-            let scalFactor = imageViewSize.width / imageSize.width
-            let height = imageSize.height * scalFactor
-            let topLeftY = (imageViewSize.height - height) * 0.5
-            return CGRect(x: 0, y: topLeftY, width: imageViewSize.width, height: height)
-        }
+        // 与 frameForImageInImageViewAspectFit 逻辑一致，保留以作兼容
+        return frameForImageInImageViewAspectFit
     }
     
     @available(iOS 17.0, *)
@@ -296,14 +285,13 @@ public extension UIImageView {
 }
 
 /*
- GIF
+ GIF 播放逻辑
  */
 public typealias PTGIFImageTask = (UIImageView) -> Void
 public typealias PTGIFImageFailTask = (UIImageView,URL,Error?) -> Void
 
 public extension UIImageView {
     /// Set an image and a manager to an existing UIImageView. If the image is not an GIF image, set it in normal way and remove self form PTGifManager
-    ///
     /// WARNING : this overwrite any previous gif.
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
@@ -321,9 +309,7 @@ public extension UIImageView {
 public extension UIImageView {
     
     // MARK: - Inits
-    
     /// Convenience initializer. Creates a gif holder (defaulted to infinite loop).
-    ///
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
     convenience init(gifImage: UIImage, manager: PTGifManager = .defaultManager, loopCount: Int = -1) {
@@ -341,7 +327,6 @@ public extension UIImageView {
     }
     
     /// Set a gif image and a manager to an existing UIImageView.
-    ///
     /// WARNING : this overwrite any previous gif.
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
@@ -376,7 +361,6 @@ public extension UIImageView {
 public extension UIImageView {
     
     /// Download gif image and sets it.
-    ///
     /// - Parameters:
     ///     - url: The URL pointing to the gif data
     ///     - manager: The manager to handle the gif display
@@ -417,30 +401,19 @@ public extension UIImageView {
         }
         
         task.resume()
-        
         return task
     }
     
+    // 优化：使用 Anchor API 代替老式的 NSLayoutConstraint 初始化
     private func createLoader(from view: UIView? = nil) -> UIView {
         let loader = view ?? UIActivityIndicatorView()
         addSubview(loader)
         loader.translatesAutoresizingMaskIntoConstraints = false
         
-        addConstraint(NSLayoutConstraint(item: loader,
-                                         attribute: .centerX,
-                                         relatedBy: .equal,
-                                         toItem: self,
-                                         attribute: .centerX,
-                                         multiplier: 1,
-                                         constant: 0))
-        
-        addConstraint(NSLayoutConstraint(item: loader,
-                                         attribute: .centerY,
-                                         relatedBy: .equal,
-                                         toItem: self,
-                                         attribute: .centerY,
-                                         multiplier: 1,
-                                         constant: 0))
+        NSLayoutConstraint.activate([
+            loader.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            loader.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        ])
         
         (loader as? UIActivityIndicatorView)?.startAnimating()
         
@@ -475,7 +448,6 @@ public extension UIImageView {
 }
 
 // MARK: - Logic
-
 public extension UIImageView {
     
     /// Start displaying the gif for this UIImageView.
@@ -491,24 +463,16 @@ public extension UIImageView {
     }
     
     /// Start displaying the gif for this UIImageView.
-    func startAnimatingGif() {
-        isPlaying = true
-    }
+    func startAnimatingGif() { isPlaying = true }
     
     /// Stop displaying the gif for this UIImageView.
-    func stopAnimatingGif() {
-        isPlaying = false
-    }
+    func stopAnimatingGif() { isPlaying = false }
     
     /// Check if this imageView is currently playing a gif
-    ///
     /// - Returns wether the gif is currently playing
-    func isAnimatingGif() -> Bool{
-        return isPlaying
-    }
+    func isAnimatingGif() -> Bool { return isPlaying }
     
     /// Show a specific frame based on a delta from current frame
-    ///
     /// - Parameter delta: The delsta from current frame we want
     func showFrameForIndexDelta(_ delta: Int) {
         guard let gifImage = gifImage else { return }
@@ -526,7 +490,6 @@ public extension UIImageView {
     }
     
     /// Show a specific frame
-    ///
     /// - Parameter index: The index of frame to show
     func showFrameAtIndex(_ index: Int) {
         displayOrderIndex = index
@@ -576,9 +539,7 @@ public extension UIImageView {
     }
     
     /// Get current frame index
-    func currentFrameIndex() -> Int {
-        return displayOrderIndex
-    }
+    func currentFrameIndex() -> Int { return displayOrderIndex }
     
     /// Get frame at specific index
     func frameAtIndex(index: Int) -> UIImage {
@@ -615,10 +576,7 @@ public extension UIImageView {
     }
     
     func clear() {
-        if let gifImage = gifImage {
-            gifImage.clear()
-        }
-        
+        gifImage?.clear()
         gifImage = nil
         currentImage = nil
         cache?.removeAllObjects()
@@ -656,7 +614,6 @@ public extension UIImageView {
     /// Prepare the cache by adding every images of the gif to an NSCache object.
     private func prepareCache() {
         guard let cache = self.cache else { return }
-        
         cache.removeAllObjects()
         
         guard let gif = self.gifImage,
@@ -665,7 +622,6 @@ public extension UIImageView {
         
         for (i, order) in displayOrder.enumerated() {
             guard let cgImage = CGImageSourceCreateImageAtIndex(imageSource, order, nil) else { continue }
-            
             cache.setObject(UIImage(cgImage: cgImage), forKey: i as AnyObject)
         }
     }
@@ -673,121 +629,103 @@ public extension UIImageView {
 
 // MARK: - Dynamic properties
 public extension UIImageView {
+    // 优化：彻底移除了极度危险的 malloc(4)，改用 Swift 标准的安全指针绑定方式
     private struct AssociatedKeys {
-        static var UIImageViewGIFDidStartKey = malloc(4)
-        static var UIImageViewGIFDidLoopKey = malloc(4)
-        static var UIImageViewGIFDidStopKey = malloc(4)
-        static var UIImageViewGIFURLDidFinishKey = malloc(4)
-        static var UIImageViewGIFURLDidFailKey = malloc(4)
-        static var UIImageViewGIFImageKey = malloc(4)
-        static var UIImageViewGIFCacheKey = malloc(4)
-        static var UIImageViewGIFCurrentImageKey = malloc(4)
-        static var UIImageViewGIFDisplayOrderIndexKey = malloc(4)
-        static var UIImageViewGIFSyncFactorKey = malloc(4)
-        static var UIImageViewGIFHaveCacheKey = malloc(4)
-        static var UIImageViewGIFLoopCountKey = malloc(4)
-        static var UIImageViewGIFDisplayingKey = malloc(4)
-        static var UIImageViewGIFIsPlayingKey = malloc(4)
-        static var UIImageViewGIFAnimationManagerKey = malloc(4)
+        static var gifDidStart: UInt8 = 0
+        static var gifDidLoop: UInt8 = 0
+        static var gifDidStop: UInt8 = 0
+        static var gifURLDidFinish: UInt8 = 0
+        static var gifURLDidFail: UInt8 = 0
+        static var gifImage: UInt8 = 0
+        static var cache: UInt8 = 0
+        static var currentImage: UInt8 = 0
+        static var displayOrderIndex: UInt8 = 0
+        static var syncFactor: UInt8 = 0
+        static var haveCache: UInt8 = 0
+        static var loopCount: UInt8 = 0
+        static var displaying: UInt8 = 0
+        static var isPlaying: UInt8 = 0
+        static var animationManager: UInt8 = 0
     }
     
     var gifImage: UIImage? {
-        get { return possiblyNil(AssociatedKeys.UIImageViewGIFImageKey) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFImageKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { objc_getAssociatedObject(self, &AssociatedKeys.gifImage) as? UIImage }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.gifImage, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     var currentImage: UIImage? {
-        get { return possiblyNil(AssociatedKeys.UIImageViewGIFCurrentImageKey) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFCurrentImageKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { objc_getAssociatedObject(self, &AssociatedKeys.currentImage) as? UIImage }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.currentImage, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     private var displayOrderIndex: Int {
-        get { return value(AssociatedKeys.UIImageViewGIFDisplayOrderIndexKey, 0) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFDisplayOrderIndexKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.displayOrderIndex) as? Int) ?? 0 }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.displayOrderIndex, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     private var syncFactor: Int {
-        get { return value(AssociatedKeys.UIImageViewGIFSyncFactorKey, 0) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFSyncFactorKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.syncFactor) as? Int) ?? 0 }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.syncFactor, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     var loopCount: Int {
-        get { return value(AssociatedKeys.UIImageViewGIFLoopCountKey, 0) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFLoopCountKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.loopCount) as? Int) ?? 0 }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.loopCount, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-    
+
     var animationManager: PTGifManager? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFAnimationManagerKey!) as? PTGifManager) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFAnimationManagerKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { objc_getAssociatedObject(self, &AssociatedKeys.animationManager) as? PTGifManager }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.animationManager, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-        
+
     private var haveCache: Bool {
-        get { return value(AssociatedKeys.UIImageViewGIFHaveCacheKey, false) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFHaveCacheKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.haveCache) as? Bool) ?? false }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.haveCache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     var displaying: Bool {
-        get { return value(AssociatedKeys.UIImageViewGIFDisplayingKey, false) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFDisplayingKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.displaying) as? Bool) ?? false }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.displaying, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var gifDidStart:PTGIFImageTask? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFDidStartKey!) as? PTGIFImageTask) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFDidStartKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)}
+    var gifDidStart: PTGIFImageTask? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.gifDidStart) as? PTGIFImageTask }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.gifDidStart, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var gifDidLoop:PTGIFImageTask? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFDidLoopKey!) as? PTGIFImageTask) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFDidLoopKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)}
+    var gifDidLoop: PTGIFImageTask? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.gifDidLoop) as? PTGIFImageTask }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.gifDidLoop, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var gifDidStop:PTGIFImageTask? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFDidStopKey!) as? PTGIFImageTask) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFDidStopKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)}
+    var gifDidStop: PTGIFImageTask? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.gifDidStop) as? PTGIFImageTask }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.gifDidStop, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var gifURLDidFinish:PTGIFImageTask? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFURLDidFinishKey!) as? PTGIFImageTask) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFURLDidFinishKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)}
+    var gifURLDidFinish: PTGIFImageTask? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.gifURLDidFinish) as? PTGIFImageTask }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.gifURLDidFinish, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var gifURLDidFail:PTGIFImageFailTask? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFURLDidFailKey!) as? PTGIFImageFailTask) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFURLDidFailKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)}
+    var gifURLDidFail: PTGIFImageFailTask? {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.gifURLDidFail) as? PTGIFImageFailTask }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.gifURLDidFail, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     private var isPlaying: Bool {
-        get {
-            return value(AssociatedKeys.UIImageViewGIFIsPlayingKey, false)
-        }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.isPlaying) as? Bool) ?? false }
         set {
-            objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFIsPlayingKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            
+            objc_setAssociatedObject(self, &AssociatedKeys.isPlaying, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             if newValue {
-                if gifDidStart != nil {
-                    gifDidStart!(self)
-                }
+                gifDidStart?(self)
             }
         }
     }
     
     private var cache: NSCache<AnyObject, AnyObject>? {
-        get { return (objc_getAssociatedObject(self, AssociatedKeys.UIImageViewGIFCacheKey!) as? NSCache) }
-        set { objc_setAssociatedObject(self, AssociatedKeys.UIImageViewGIFCacheKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
-    private func value<T>(_ key:UnsafeMutableRawPointer?, _ defaultValue:T) -> T {
-        return (objc_getAssociatedObject(self, key!) as? T) ?? defaultValue
-    }
-    
-    private func possiblyNil<T>(_ key:UnsafeMutableRawPointer?) -> T? {
-        let result = objc_getAssociatedObject(self, key!)
-        
-        if result == nil {
-            return nil
-        }
-        
-        return (result as? T)
+        get { objc_getAssociatedObject(self, &AssociatedKeys.cache) as? NSCache }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.cache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 }
 
