@@ -10,123 +10,47 @@ import UIKit
 
 extension UIBarButtonItem:PTBadgeProtocol {
     
-    fileprivate func getActualBadgeSuperView() -> UIView {
-        return self.value(forKey: "_view") as! UIView
+    // MARK: - Private View Finder
+    
+    /// 获取真正用于承载角标的底层 UIView
+    private var actualBadgeSuperView: UIView? {
+        // 使用 as? 替代 as!，彻底杜绝潜在的崩溃风险
+        return self.value(forKey: "_view") as? UIView
     }
+    
+    // MARK: - Protocol Properties Forwarding
     
     public var badge: UILabel? {
-        get {
-            self.getActualBadgeSuperView().badge
-        }
-        set {
-            self.getActualBadgeSuperView().badge = newValue
-        }
+        get { actualBadgeSuperView?.badge }
+        set { actualBadgeSuperView?.badge = newValue }
     }
     
-    public var badgeFont: UIFont {
-        get {
-            self.getActualBadgeSuperView().badgeFont
-        }
-        set {
-            self.getActualBadgeSuperView().badgeFont = newValue
-        }
+    /// 统一转发配置对象
+    public var badgeConfig: PTBadgeConfiguration {
+        get { actualBadgeSuperView?.badgeConfig ?? PTBadgeConfiguration() }
+        set { actualBadgeSuperView?.badgeConfig = newValue }
     }
     
-    public var badgeBgColor: UIColor {
-        get {
-            self.getActualBadgeSuperView().badgeBgColor
-        }
-        set {
-            self.getActualBadgeSuperView().badgeBgColor = newValue
-        }
+    public var badgeRemoveCallback: (() -> Void)? {
+        get { actualBadgeSuperView?.badgeRemoveCallback }
+        set { actualBadgeSuperView?.badgeRemoveCallback = newValue }
     }
     
-    public var badgeTextColor: UIColor {
-        get {
-            self.getActualBadgeSuperView().badgeTextColor
-        }
-        set {
-            self.getActualBadgeSuperView().badgeTextColor = newValue
-        }
-    }
+    // MARK: - Protocol Methods Forwarding
     
-    public var badgeFrame: CGRect {
-        get {
-            self.getActualBadgeSuperView().badgeFrame
-        }
-        set {
-            self.getActualBadgeSuperView().badgeFrame = newValue
-        }
-    }
-    
-    public var badgeCenterOffset: CGPoint {
-        get {
-            self.getActualBadgeSuperView().badgeCenterOffset
-        }
-        set {
-            self.getActualBadgeSuperView().badgeCenterOffset = newValue
-        }
-    }
-    
-    public var aniType: PTBadgeAnimType {
-        get {
-            self.getActualBadgeSuperView().aniType
-        }
-        set {
-            self.getActualBadgeSuperView().aniType = newValue
-        }
-    }
-    
-    public var badgeMaximumBadgeNumber: Int {
-        get {
-            self.getActualBadgeSuperView().badgeMaximumBadgeNumber
-        }
-        set {
-            self.getActualBadgeSuperView().badgeMaximumBadgeNumber = newValue
-        }
-    }
-    
-    public var badgeRadius: CGFloat {
-        get {
-            self.getActualBadgeSuperView().badgeRadius
-        }
-        set {
-            self.getActualBadgeSuperView().badgeRadius = newValue
-        }
-    }
-    
-    public var badgeBorderColor: UIColor {
-        get {
-            self.getActualBadgeSuperView().badgeBorderColor
-        }
-        set {
-            self.getActualBadgeSuperView().badgeBorderColor = newValue
-        }
-    }
-    
-    public var badgeBorderLine: CGFloat {
-        get {
-            self.getActualBadgeSuperView().badgeBorderLine
-
-        }
-        set {
-            self.getActualBadgeSuperView().badgeBorderLine = newValue
-        }
-    }
-
     public func showBadge() {
-        self.getActualBadgeSuperView().showBadge()
+        actualBadgeSuperView?.showBadge()
     }
     
     public func showBadge(style: PTBadgeStyle, value: Any, aniType: PTBadgeAnimType) {
-        self.getActualBadgeSuperView().showBadge(style: style, value: value, aniType: aniType)
+        actualBadgeSuperView?.showBadge(style: style, value: value, aniType: aniType)
     }
     
     public func clearBadge() {
-        self.getActualBadgeSuperView().clearBadge()
+        actualBadgeSuperView?.clearBadge()
     }
     
     public func resumeBadge() {
-        self.getActualBadgeSuperView().resumeBadge()
+        actualBadgeSuperView?.resumeBadge()
     }
 }

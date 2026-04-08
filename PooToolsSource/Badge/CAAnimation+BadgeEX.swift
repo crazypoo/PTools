@@ -8,40 +8,58 @@
 
 import UIKit
 
-public enum PTAxisType:Int {
-    case AxisX,AxisY,AxisZ
+// MARK: - Enums
+
+/// 旋转轴类型
+public enum PTAxisType {
+    case x, y, z
+    
+    // 直接绑定 keyPath，避免数组越界的风险
+    var keyPath: String {
+        switch self {
+        case .x: return "transform.rotation.x"
+        case .y: return "transform.rotation.y"
+        case .z: return "transform.rotation.z"
+        }
+    }
 }
 
+// MARK: - CAAnimation Extension
+
 extension CAAnimation {
-    public class func opacityForeverAnimation(time:CFTimeInterval) -> CABasicAnimation {
+    
+    /// 永久透明度动画 (呼吸/闪烁)
+    public class func opacityForeverAnimation(time: CFTimeInterval) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "opacity")
-        animation.fromValue = 1
+        animation.fromValue = 1.0
         animation.toValue = 0.1
         animation.autoreverses = true
         animation.duration = time
-        animation.repeatCount = Float.greatestFiniteMagnitude
+        animation.repeatCount = .infinity // 使用更语义化的 .infinity
         animation.isRemovedOnCompletion = false
-        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
         animation.fillMode = .forwards
         return animation
     }
     
-    public class func opacityTimesAnimation(repeatTimes:Float,time:CFTimeInterval) -> CABasicAnimation {
+    /// 指定次数的透明度动画
+    public class func opacityTimesAnimation(repeatTimes: Float, time: CFTimeInterval) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "opacity")
-        animation.fromValue = 1
+        animation.fromValue = 1.0
         animation.toValue = 0.4
         animation.repeatCount = repeatTimes
         animation.duration = time
         animation.isRemovedOnCompletion = false
-        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
+        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
         animation.fillMode = .forwards
         animation.autoreverses = true
         return animation
     }
     
-    public class func rotation(duration:CFTimeInterval,degree:Float,direction:PTAxisType,repeatCount:Float) -> CABasicAnimation {
-        let axisArr = ["transform.rotation.x","transform.rotation.y","transform.rotation.z"]
-        let animation = CABasicAnimation(keyPath: axisArr[direction.rawValue])
+    /// 旋转动画
+    public class func rotation(duration: CFTimeInterval, degree: Float, direction: PTAxisType, repeatCount: Float) -> CABasicAnimation {
+        // 直接使用枚举的 keyPath
+        let animation = CABasicAnimation(keyPath: direction.keyPath)
         animation.fromValue = 0
         animation.toValue = degree
         animation.duration = duration
@@ -53,7 +71,8 @@ extension CAAnimation {
         return animation
     }
     
-    public class func scale(fromScale:Float,toScale:Float,duration:CFTimeInterval,repeatCount:Float) -> CABasicAnimation {
+    /// 缩放动画
+    public class func scale(fromScale: Float, toScale: Float, duration: CFTimeInterval, repeatCount: Float) -> CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "transform.scale")
         animation.fromValue = fromScale
         animation.toValue = toScale
@@ -65,26 +84,30 @@ extension CAAnimation {
         return animation
     }
     
-    public class func shakeAnimation(repeatTimes:Float,duration:CFTimeInterval,forObj:CALayer) -> CAKeyframeAnimation {
-        let originPos:CGPoint = forObj.position
-        let originSize:CGSize = forObj.bounds.size
-        let hOffset = originSize.width / 4
-        let anim = CAKeyframeAnimation(keyPath: "position")
-        anim.values = [NSValue(cgPoint: originPos),NSValue(cgPoint: CGPoint(x: originPos.x - hOffset, y: originPos.y)),NSValue(cgPoint: originPos),NSValue(cgPoint: CGPoint(x: originPos.x + hOffset, y: originPos.y)),NSValue(cgPoint: originPos)]
+    /// 左右抖动动画 (优化版：不再依赖 CALayer 的绝对位置)
+    /// - Parameters:
+    ///   - offset: 抖动的偏移量(像素)
+    public class func shakeAnimation(repeatTimes: Float, duration: CFTimeInterval, offset: CGFloat = 5.0) -> CAKeyframeAnimation {
+        // 使用 transform.translation.x 进行相对位移，兼容 AutoLayout
+        let anim = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        anim.values = [0, -offset, 0, offset, 0]
         anim.repeatCount = repeatTimes
         anim.duration = duration
+        anim.isRemovedOnCompletion = false
         anim.fillMode = .forwards
         return anim
     }
     
-    public class func bounceAnimation(repeatTimes:Float,duration:CFTimeInterval,forObj:CALayer) -> CAKeyframeAnimation {
-        let originPos:CGPoint = forObj.position
-        let originSize:CGSize = forObj.bounds.size
-        let hOffset = originSize.height / 4
-        let anim = CAKeyframeAnimation(keyPath: "position")
-        anim.values = [NSValue(cgPoint: originPos),NSValue(cgPoint: CGPoint(x: originPos.x, y: originPos.y - hOffset)),NSValue(cgPoint: originPos),NSValue(cgPoint: CGPoint(x: originPos.x, y: originPos.y + hOffset)),NSValue(cgPoint: originPos)]
+    /// 上下跳动动画 (优化版：不再依赖 CALayer 的绝对位置)
+    /// - Parameters:
+    ///   - offset: 跳动的偏移高度(像素)
+    public class func bounceAnimation(repeatTimes: Float, duration: CFTimeInterval, offset: CGFloat = 5.0) -> CAKeyframeAnimation {
+        // 使用 transform.translation.y 进行相对位移，兼容 AutoLayout
+        let anim = CAKeyframeAnimation(keyPath: "transform.translation.y")
+        anim.values = [0, -offset, 0, offset, 0]
         anim.repeatCount = repeatTimes
         anim.duration = duration
+        anim.isRemovedOnCompletion = false
         anim.fillMode = .forwards
         return anim
     }

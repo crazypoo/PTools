@@ -580,7 +580,7 @@ final public class PTTabBarView: UIView {
         return item
     }
     
-    public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .Number,anumationType:PTBadgeAnimType = .None) {
+    public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none) {
         let item = items[index]
         var itemWidth:CGFloat = 0
         switch layoutStyle {
@@ -597,11 +597,9 @@ final public class PTTabBarView: UIView {
                 itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
             }
         }
-        
-        item.badgeCenterOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize() / 2, 7)
-        item.badgeBorderLine = PTAppBaseConfig.share.tabBadgeBorderHeight
-        item.badgeBorderColor = PTAppBaseConfig.share.tabBadgeBorderColor
-        item.badgeFont = PTAppBaseConfig.share.tabBadgeFont
+        var config = PTBadgeConfiguration()
+        config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize() / 2, 7)
+        item.badgeConfig = config
         item.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
         item.badgeRemoveCallback = {
             self.badgeDragRemoveIndex?(index)

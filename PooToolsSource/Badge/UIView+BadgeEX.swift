@@ -10,454 +10,242 @@ import UIKit
 import QuartzCore
 import SwifterSwift
 
+// MARK: - Associated Keys
+private struct PTBadgeKeys {
+    static var badge: UInt8 = 0
+    static var config: UInt8 = 0
+    static var removeCallback: UInt8 = 0
+}
+
 extension UIView: PTBadgeProtocol {
     
-    fileprivate var initialSubviewCenter: CGPoint! {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterKey)
-            guard let label = obj as? CGPoint else {
-                return CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
-            }
-            return label
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    fileprivate var initialChangeCenter: CGPoint? {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterChangeKey)
-            guard let label = obj as? CGPoint else {
-                return badgeCenterOffset
-            }
-            return label
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterChangeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    fileprivate func badgeLabelInit() {
-        if self.badge == nil {
-            self.badge = createBadgeLabel()
-            badgeGestureSet()
-        }
-    }
-    
-    fileprivate func createBadgeLabel() -> UILabel {
-        initialSubviewCenter = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
-        let redotWidth = kPTBAdgeDefaultRedDotRadius * 2
-        let newLabel = UILabel(frame: CGRectMake(CGRectGetWidth(self.frame), -redotWidth, redotWidth, redotWidth))
-        newLabel.textAlignment = .center
-        newLabel.center = initialSubviewCenter
-        newLabel.backgroundColor = self.badgeBgColor
-        newLabel.textColor = self.badgeTextColor
-        newLabel.text = ""
-        newLabel.tag = PTBadgeStyle.RedDot.rawValue
-        newLabel.isHidden = false
-        newLabel.isUserInteractionEnabled = true
-        self.addSubview(newLabel)
-        self.bringSubviewToFront(newLabel)
-        newLabel.viewCorner(radius: CGRectGetHeight(newLabel.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
-        return newLabel
-    }
-    
-    fileprivate func badgeGestureSet() {
-        badge?.removeGestureRecognizers()
-        if canDragToDelete {
-            if badge != nil {
-                let panGes = UIPanGestureRecognizer { sender in
-                    if let pan = sender as? UIPanGestureRecognizer {
-                        let location = pan.translation(in: self)
-                        
-                        switch pan.state {
-                        case .began:
-                            // 记录起始触摸点
-                            self.initialChangeCenter = location
-                        case .changed:
-                            // 计算拖动偏移量
-                            let offsetX = location.x - self.initialChangeCenter!.x
-                            let offsetY = location.y - self.initialChangeCenter!.y
-                            // 更新视图位置
-                            self.badge!.center = CGPoint(x: self.badge!.center.x + offsetX, y: self.badge!.center.y + offsetY)
-                            // 更新起始触摸点
-                            self.initialChangeCenter = location
-                        case .ended, .cancelled:
-                            // 拖动结束，清除起始触摸点
-                            self.initialChangeCenter = nil
-                            // 检查视图位置是否超出父视图范围
-                            let badgeFrameInSelf = self.badge!.convert(self.badge!.bounds, to: self)
-                            if self.bounds.intersects(badgeFrameInSelf) {
-                                self.badge!.center = self.badgeCenterOffset
-                            } else {
-                                self.badgeRemoveCallback?()
-                                self.badge!.removeFromSuperview()
-                            }
-                        default:
-                            break
-                        }
-                    }
-                }
-                self.badge!.addGestureRecognizer(panGes)
-            }
-        }
-    }
-    
-    public var canDragToDeleteDuration: TimeInterval {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteLongPressTimeKey)
-            guard let value = obj as? TimeInterval else {
-                return 1
-            }
-            return value
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteLongPressTimeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    public var canDragToDelete: Bool {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteKey)
-            guard let value = obj as? Bool else {
-                return true
-            }
-            return value
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            badgeGestureSet()
-        }
-    }
+    // MARK: - Protocol Properties
     
     public var badge: UILabel? {
+        get { objc_getAssociatedObject(self, &PTBadgeKeys.badge) as? UILabel }
+        set { objc_setAssociatedObject(self, &PTBadgeKeys.badge, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    
+    /// 统一的配置入口。修改配置后，调用展示方法即可生效。
+    public var badgeConfig: PTBadgeConfiguration {
         get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeLabelKey)
-            guard let label = obj as? UILabel else {
-                return nil
+            if let config = objc_getAssociatedObject(self, &PTBadgeKeys.config) as? PTBadgeConfiguration {
+                return config
             }
-            return label
+            let defaultConfig = PTBadgeConfiguration()
+            self.badgeConfig = defaultConfig
+            return defaultConfig
         }
         set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &PTBadgeKeys.config, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            updateBadgeAppearance() // 配置改变时，刷新 UI
         }
     }
     
-    public var badgeFont: UIFont {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeFontKey)
-            guard let font = obj as? UIFont else {
-                return .appfont(size: 9)
-            }
-            return font
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeFontKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            self.badge!.font = newValue
+    public var badgeRemoveCallback: (() -> Void)? {
+        get { objc_getAssociatedObject(self, &PTBadgeKeys.removeCallback) as? (() -> Void) }
+        set { objc_setAssociatedObject(self, &PTBadgeKeys.removeCallback, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    
+    // MARK: - Initialization & Setup
+    
+    private func badgeLabelInit() {
+        if self.badge == nil {
+            let label = UILabel()
+            label.textAlignment = .center
+            label.isUserInteractionEnabled = true
+            label.isHidden = false
+            self.addSubview(label)
+            self.bringSubviewToFront(label)
+            self.badge = label
+            
+            updateBadgeAppearance()
+            setupBadgeGesture()
         }
     }
     
-    public var badgeBgColor: UIColor {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeBgColorKey)
-            guard let color = obj as? UIColor else {
-                return .systemRed
-            }
-            return color
-        }
-        set {
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            self.badge!.backgroundColor = newValue
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeBgColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    private func updateBadgeAppearance() {
+        guard let badge = self.badge else { return }
+        badge.backgroundColor = badgeConfig.bgColor
+        badge.textColor = badgeConfig.textColor
+        badge.font = badgeConfig.font
+        // 如果有自定义的边框和圆角方法，可以在这里统一调用
+        // 2. 边框设置 (补齐原有的逻辑)
+        if badgeConfig.borderWidth > 0 {
+            badge.layer.borderWidth = badgeConfig.borderWidth
+            badge.layer.borderColor = badgeConfig.borderColor.cgColor
+        } else {
+            badge.layer.borderWidth = 0
         }
     }
     
-    public var badgeTextColor: UIColor {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeTextColorKey)
-            guard let color = obj as? UIColor else {
-                return .white
-            }
-            return color
-        }
-        set {
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            self.badge!.textColor = newValue
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeTextColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
+    // MARK: - Gesture Handling (Optimized)
+    
+    private func setupBadgeGesture() {
+        badge?.gestureRecognizers?.removeAll()
+        
+        guard badgeConfig.canDragToDelete, let badge = self.badge else { return }
+        
+        let panGes = UIPanGestureRecognizer(target: self, action: #selector(handleBadgePan(_:)))
+        badge.addGestureRecognizer(panGes)
     }
     
-    public var aniType: PTBadgeAnimType {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeAniTypeKey)
-            guard let type = obj as? PTBadgeAnimType else {
-                return .None
-            }
-            return type
-        }
-        set {
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeAniTypeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            removeAnimation()
-            beginAnimation()
-        }
-    }
-    
-    public var badgeFrame: CGRect {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeFrameKey)
-            guard let frame = obj as? CGRect else {
-                return .zero
-            }
-            return frame
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeFrameKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            self.badge!.frame = newValue
-        }
-    }
-    
-    public var badgeCenterOffset: CGPoint {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterOffsetKey)
-            guard let point = obj as? CGPoint else {
-                return .zero
-            }
-            return point
-        }
-        set {
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCenterOffsetKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            self.badge!.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + newValue.x, y: newValue.y)
-        }
-    }
-    
-    public var badgeRadius: CGFloat {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeRadiusKey)
-            guard let radius = obj as? CGFloat else {
-                return 0
-            }
-            return radius
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeRadiusKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-            self.resetBadgeForRedDot()
-        }
-    }
-    
-    public var badgeMaximumBadgeNumber: Int {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeMaximumBadgeNumberKey)
-            guard let radius = obj as? Int else {
-                return kPTBAdgeDefaultMaximumBadgeNumber
-            }
-            return radius
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeMaximumBadgeNumberKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            if self.badge == nil {
-                self.badgeLabelInit()
-            }
-        }
-    }
-
-    public var badgeRemoveCallback: PTActionTask? {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteCallbackKey)
-            guard let callback = obj as? PTActionTask else {
-                return nil
-            }
-            return callback
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeCanDragToDeleteCallbackKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    public var badgeBorderColor:UIColor {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeBorderLineColorKey)
-            guard let callback = obj as? UIColor else {
-                return .clear
-            }
-            return callback
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeBorderLineColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            if self.badge == nil {
-                self.badgeLabelInit()
+    @objc private func handleBadgePan(_ pan: UIPanGestureRecognizer) {
+        guard let badge = self.badge else { return }
+        
+        let translation = pan.translation(in: self)
+        
+        switch pan.state {
+        case .changed:
+            // 实时拖拽：相对位移
+            badge.center = CGPoint(x: badge.center.x + translation.x, y: badge.center.y + translation.y)
+            pan.setTranslation(.zero, in: self) // 重置 translation，防止偏移量累加
+            
+        case .ended, .cancelled:
+            // 检查是否拖出了父视图边界
+            let badgeFrameInSelf = badge.convert(badge.bounds, to: self)
+            if self.bounds.intersects(badgeFrameInSelf) {
+                // 没拖出去：弹回原位
+                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5) {
+                    self.resetBadgeCenter()
+                }
             } else {
-                PTGCDManager.gcdMain {
-                    self.badge!.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine, borderColor: self.badgeBorderColor)
+                // 拖出去了：消除角标
+                UIView.animate(withDuration: 0.2, animations: {
+                    badge.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                    badge.alpha = 0
+                }) { _ in
+                    badge.removeFromSuperview()
+                    self.badge = nil
+                    self.badgeRemoveCallback?()
                 }
             }
+        default:
+            break
         }
     }
     
-    public var badgeBorderLine:CGFloat {
-        get {
-            let obj = objc_getAssociatedObject(self, &PTBadgeAssociatedKeys.badgeBorderLineKey)
-            guard let callback = obj as? CGFloat else {
-                return 0
-            }
-            return callback
-        }
-        set {
-            objc_setAssociatedObject(self, &PTBadgeAssociatedKeys.badgeBorderLineKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            if self.badge == nil {
-                self.badgeLabelInit()
-            } else {
-                PTGCDManager.gcdMain {
-                    self.badge!.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine, borderColor: self.badgeBorderColor)
-                }
-            }
-        }
+    private func resetBadgeCenter() {
+        let offsetX = self.bounds.width + 2 + badgeConfig.centerOffset.x
+        let offsetY = badgeConfig.centerOffset.y
+        self.badge?.center = CGPoint(x: offsetX, y: offsetY)
     }
+    
+    // MARK: - Public API
     
     public func showBadge() {
-        self.showBadge(style: .RedDot, value: 0, aniType: .None)
-    }
-    
-    public func showNumberBadge(value: Int, animationType: PTBadgeAnimType) {
-        self.aniType = animationType
-        self.showNumberBadge(value: value)
-        if animationType != .None {
-            self.beginAnimation()
-        }
+        self.showBadge(style: .redDot, value: 0, aniType: .none)
     }
     
     public func showBadge(style: PTBadgeStyle, value: Any, aniType: PTBadgeAnimType) {
-        self.aniType = aniType
+        if self.badge == nil { badgeLabelInit() }
+        
+        badgeConfig.animType = aniType
+        
         switch style {
-        case .RedDot:
-            self.showRedDotBadge()
-        case .Number:
-            var newValue = 0
-            if value is Int {
-                newValue = value as! Int
-            } else {
-                newValue = 0
-            }
-            self.showNumberBadge(value: newValue)
-        case .New:
-            var newValue = ""
-            if value is String {
-                newValue = value as! String
-            } else {
-                newValue = "new"
-            }
-            self.showNewBadge(newValue: newValue)
-        }
-    }
-    
-    public func showRedDotBadge() {
-        if self.badge?.tag != PTBadgeStyle.RedDot.rawValue {
-            self.badge?.text = ""
-            self.badge?.tag = PTBadgeStyle.RedDot.rawValue
-            self.resetBadgeForRedDot()
-            PTGCDManager.gcdMain {
-                self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor,capsule: true)
-            }
-        }
-        self.badge?.isHidden = false
-    }
-    
-    public func resetBadgeForRedDot() {
-        if self.badgeRadius > 0 {
-            self.badge?.frame = CGRectMake(self.badge?.center.x ?? 0 - self.badgeRadius, self.badge?.center.y ?? 0 + self.badgeRadius, self.badgeRadius * 2, self.badgeRadius * 2)
-        }
-    }
-    
-    public func showNewBadge(newValue: String = "new") {
-        if self.badge?.tag != PTBadgeStyle.New.rawValue {
-            self.badge?.text = newValue
-            self.badge?.tag = PTBadgeStyle.New.rawValue
-            self.badge?.font = badgeFont
-            self.adjustLabelWidth(label: self.badge!)
-            var frame = self.badge!.frame
-            frame.size.width += 8
-            frame.size.height = self.badge!.font.pointSize + 6
-            self.badge?.frame = frame
-            self.badge?.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
-            PTGCDManager.gcdMain {
-                self.badge?.viewCorner(radius: CGRectGetHeight(self.badge?.frame ?? .zero) / 3,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
-            }
-        }
-        self.badge?.isHidden = false
-    }
-    
-    public func showNumberBadge(value: Int) {
-        if value < 0 {
-            return
+        case .redDot:
+            showRedDotBadge()
+        case .number:
+            let val = (value as? Int) ?? 0
+            showNumberBadge(value: val)
+        case .new:
+            let str = (value as? String) ?? "new"
+            showNewBadge(newValue: str)
         }
         
-        self.badge?.isHidden = value == 0
-        self.badge?.tag = PTBadgeStyle.Number.rawValue
-        self.badge?.font = self.badgeFont
-        self.badge?.text = value > self.badgeMaximumBadgeNumber ? "\(self.badgeMaximumBadgeNumber)+" : "\(value)"
-        self.adjustLabelWidth(label: self.badge!)
-        var frame = self.badge!.frame
-        frame.size.width += 8
-        frame.size.height = self.badge!.font.pointSize + 6
-        self.badge?.frame = frame
-        self.badge?.center = CGPoint(x: CGRectGetWidth(self.frame) + 2 + self.badgeCenterOffset.x, y: self.badgeCenterOffset.y)
-        PTGCDManager.gcdMain {
-            self.badge?.viewCorner(radius: CGRectGetHeight(self.badge!.frame) / 2,borderWidth: self.badgeBorderLine,borderColor: self.badgeBorderColor)
-        }
+        // 渲染完成后添加动画
+        applyAnimation()
     }
     
     public func clearBadge() {
         self.badge?.isHidden = true
+        removeAnimation()
     }
     
     public func resumeBadge() {
         if self.badge?.isHidden == true {
             self.badge?.isHidden = false
+            applyAnimation()
         }
     }
     
-    func adjustLabelWidth(label: UILabel) {
-        label.numberOfLines = 0
-        var frame = label.frame
-        frame.size.width = label.sizeFor(height: CGRectGetHeight(label.frame)).width
-        label.frame = frame
+    // MARK: - Private Layout Methods
+    
+    private func showRedDotBadge() {
+        guard let badge = self.badge else { return }
+        badge.text = ""
+        badge.tag = PTBadgeStyle.redDot.rawValue
+        
+        let diameter = badgeConfig.radius * 2
+        badge.frame.size = CGSize(width: diameter, height: diameter)
+        resetBadgeCenter()
+        badge.layer.cornerRadius = badgeConfig.radius
+        badge.layer.masksToBounds = true
+        badge.isHidden = false
     }
     
-    func removeAnimation() {
+    private func showNumberBadge(value: Int) {
+        guard value >= 0, let badge = self.badge else { return }
+        
+        if value == 0 {
+            clearBadge()
+            return
+        }
+        
+        badge.isHidden = false
+        badge.tag = PTBadgeStyle.number.rawValue
+        badge.text = value > badgeConfig.maximumNumber ? "\(badgeConfig.maximumNumber)+" : "\(value)"
+        adjustLabelSize(badge)
+    }
+    
+    private func showNewBadge(newValue: String) {
+        guard let badge = self.badge else { return }
+        badge.isHidden = false
+        badge.tag = PTBadgeStyle.new.rawValue
+        badge.text = newValue
+        adjustLabelSize(badge)
+    }
+    
+    private func adjustLabelSize(_ label: UILabel) {
+        label.sizeToFit()
+        var frame = label.frame
+        frame.size.width += 8
+        frame.size.height = badgeConfig.font.pointSize + 6
+        // 保证最小是一个圆
+        if frame.size.width < frame.size.height {
+            frame.size.width = frame.size.height
+        }
+        label.frame = frame
+        resetBadgeCenter()
+        label.layer.cornerRadius = frame.size.height / 2
+        label.layer.masksToBounds = true
+    }
+    
+    // MARK: - Animations
+    
+    private func removeAnimation() {
         self.badge?.layer.removeAllAnimations()
     }
     
-    func beginAnimation() {
-        switch aniType {
-        case .None:
+    private func applyAnimation() {
+        guard let layer = self.badge?.layer else { return }
+        removeAnimation()
+        
+        let animType = badgeConfig.animType
+        let key = animType.animationKey
+        
+        switch animType {
+        case .none:
             break
-        case .Scale:
-            badge?.layer.add(CAAnimation.scale(fromScale: 1.4, toScale: 0.6, duration: 1, repeatCount: MAXFLOAT), forKey: kBadgeScaleAniKey)
-        case .Shake:
-            badge?.layer.add(CAAnimation.shakeAnimation(repeatTimes: MAXFLOAT, duration: 1, forObj: self.badge!.layer), forKey: kBadgeShakeAniKey)
-        case .Bounce:
-            badge?.layer.add(CAAnimation.bounceAnimation(repeatTimes: MAXFLOAT, duration: 1, forObj: self.badge!.layer), forKey: kBadgeBounceAniKey)
-        case .Breathe:
-            badge?.layer.add(CAAnimation.bounceAnimation(repeatTimes: MAXFLOAT, duration: 1, forObj: self.badge!.layer), forKey: kBadgeBounceAniKey)
+        case .scale:
+            layer.add(CAAnimation.scale(fromScale: 1.4, toScale: 0.6, duration: 1.0, repeatCount: .infinity), forKey: key)
+        case .shake:
+            layer.add(CAAnimation.shakeAnimation(repeatTimes: .infinity, duration: 1.0, offset: 5.0), forKey: key)
+        case .bounce:
+            layer.add(CAAnimation.bounceAnimation(repeatTimes: .infinity, duration: 1.0, offset: 5.0), forKey: key)
+        case .breathe:
+            // 修复了原来 Breathe 错调成 bounce 的 Bug，改用我们新写的 opacityForeverAnimation
+            layer.add(CAAnimation.opacityForeverAnimation(time: 1.0), forKey: key)
         }
     }
 }

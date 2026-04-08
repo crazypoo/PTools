@@ -31,29 +31,59 @@ extension Selector {
  }
  */
 public struct Swizzle {
+    
     @resultBuilder
-    public struct SwizzleFunctionBuilder{
+    public struct SwizzleFunctionBuilder {
         public static func buildBlock(_ swizzlePairs:SwizzlePair...) -> [SwizzlePair] {
             Array(swizzlePairs)
         }
     }
     
+    /// 初始化并执行 Swizzling
+    /// - Parameters:
+    ///   - type: 要交换方法的类
+    ///   - isClassMethod: 是否为类方法（默认为 false，即实例方法）
+    ///   - makeSwizzlePairs: ResultBuilder 闭包
     @discardableResult
-    public init(_ type:AnyObject.Type,@SwizzleFunctionBuilder _ makeSwizzlePairs:()->[SwizzlePair]) {
+    public init(_ type: AnyClass, isClassMethod: Bool = false, @SwizzleFunctionBuilder _ makeSwizzlePairs: () -> [SwizzlePair]) {
         let swizzlePairs = makeSwizzlePairs()
-        swizzle(type: type, pairs: swizzlePairs)
+        executeSwizzling(on: type, pairs: swizzlePairs, isClassMethod: isClassMethod)
     }
     
     @discardableResult
-    public init(_ type:AnyObject.Type,@SwizzleFunctionBuilder _ makeSwizzlePairs:()->SwizzlePair) {
-        let swizzlePairs = makeSwizzlePairs()
-        swizzle(type: type, pairs: [swizzlePairs])
+    public init(_ type: AnyClass, isClassMethod: Bool = false, @SwizzleFunctionBuilder _ makeSwizzlePairs: () -> SwizzlePair) {
+        executeSwizzling(on: type, pairs: [makeSwizzlePairs()], isClassMethod: isClassMethod)
     }
     
-    private func swizzle(type:AnyObject.Type,pairs:[SwizzlePair]) {
-        pairs.forEach { swizzlePair in
-            guard let originalMethod = class_getInstanceMethod(type, swizzlePair.original),let swizzledMethod = class_getInstanceMethod(type, swizzlePair.swizzled) else { return }
-            method_exchangeImplementations(originalMethod, swizzledMethod)
+    private func executeSwizzling(on targetClass: AnyClass, pairs: [SwizzlePair], isClassMethod: Bool) {
+        // 如果是类方法，需要获取元类 (Meta Class)
+        let cls: AnyClass = isClassMethod ? object_getClass(targetClass) ?? targetClass : targetClass
+        
+        for pair in pairs {
+            guard let originalMethod = class_getInstanceMethod(cls, pair.original),
+                  let swizzledMethod = class_getInstanceMethod(cls, pair.swizzled) else {
+                PTNSLogConsole("⚠️ Swizzle 失败: 找不到方法 \(pair.original) 或 \(pair.swizzled)")
+                continue
+            }
+            
+            // 1. 尝试向类添加原方法名，但指向新方法的实现(IMP)
+            // 这样做是为了防止直接修改父类的实现
+            let didAddMethod = class_addMethod(cls,
+                                               pair.original,
+                                               method_getImplementation(swizzledMethod),
+                                               method_getTypeEncoding(swizzledMethod))
+            
+            if didAddMethod {
+                // 2. 如果添加成功，说明原方法是在父类中。
+                // 此时原方法名已经指向新实现，我们只需将新方法名指向原实现即可。
+                class_replaceMethod(cls,
+                                    pair.swizzled,
+                                    method_getImplementation(originalMethod),
+                                    method_getTypeEncoding(originalMethod))
+            } else {
+                // 3. 如果添加失败，说明当前类已经有了该方法的实现，直接交换即可
+                method_exchangeImplementations(originalMethod, swizzledMethod)
+            }
         }
     }
 }

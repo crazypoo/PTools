@@ -448,8 +448,8 @@ public class PTSegmentView: UIView {
     public func setSegBadge(indexView:Int,
                             badgePosition:PooSegmentBadgePosition? = .TopRight,
                             badgeBGColor:UIColor? = UIColor.red,
-                            badgeShowType:PTBadgeStyle? = .RedDot,
-                            badgeAnimation:PTBadgeAnimType? = .Breathe,
+                            badgeShowType:PTBadgeStyle? = .redDot,
+                            badgeAnimation:PTBadgeAnimType? = .breathe,
                             badgeValue:Int? = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
             guard indexView < self.subViewArr.count,
@@ -476,8 +476,13 @@ public class PTSegmentView: UIView {
                 }
             }()
 
-            subView.badgeCenterOffset = badgePoint
-            subView.badgeBgColor = badgeBGColor
+            var config = PTBadgeConfiguration()
+            config.centerOffset = badgePoint
+            config.borderWidth = PTAppBaseConfig.share.tabBadgeBorderHeight
+            config.borderColor = PTAppBaseConfig.share.tabBadgeBorderColor
+            config.font = PTAppBaseConfig.share.tabBadgeFont
+            config.bgColor = badgeBGColor
+            subView.badgeConfig = config
             subView.showBadge(style: badgeShowType, value: badgeValue, aniType: badgeAnimation)
         }
     }

@@ -39,6 +39,8 @@ public struct PTLoadImageResult {
     }
 }
 
+extension PTLoadImageResult: @unchecked Sendable {}
+
 @objcMembers
 public class PTLoadImageFunction: NSObject {
 

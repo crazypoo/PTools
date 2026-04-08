@@ -1037,11 +1037,11 @@ class PTFuncNameViewController: PTBaseViewController {
         
         setCustomRightButtons(buttons: [more])
         
-        more.badgeCenterOffset = CGPointMake(-25, -5)
-        more.badgeBorderLine = 1
-        more.badgeBorderColor = .random
-        more.showBadge(style: .New, value: "我愛你", aniType: .None)
-        
+        var config = PTBadgeConfiguration()
+        config.centerOffset = CGPointMake(-25, -5)
+        config.bgColor = .random
+        more.badgeConfig = config
+        more.showBadge(style: .new, value: "我愛你", aniType: .none)
         
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
