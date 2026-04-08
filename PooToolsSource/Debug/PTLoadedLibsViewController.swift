@@ -42,37 +42,48 @@ enum FileSharingManager {
 
 class PTLoadedLibsViewController: PTBaseViewController {
     
-    lazy var newCollectionView:PTCollectionView = {
+    lazy var newCollectionView: PTCollectionView = {
         let config = PTCollectionViewConfig()
         config.viewType = .Custom
         config.refreshWithoutAnimation = true
         
         let view = PTCollectionView(viewConfig: config)
-        view.headerInCollection = { kind,collectionView,model,index in
-            if let headerID = model.headerReuseID,!headerID.stringIsEmpty(),let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index) as? PTloadedLibHeader {
-                let headerModel = self.libraries[index.section]
+        view.registerHeaderIdsNClasss(ids: [PTloadedLibHeader.ID], viewClass: PTloadedLibHeader.self, kind: UICollectionView.elementKindSectionHeader)
+        view.headerInCollection = { [weak self] kind, collectionView, model, index in
+            guard let self = self else { return nil }
+            if let headerID = model.headerReuseID, !headerID.stringIsEmpty(),
+               let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index) as? PTloadedLibHeader {
+                
+                // 修复 1：使用 viewModel.filteredLibraries 作为数据源
+                let headerModel = self.viewModel.filteredLibraries[index.section]
                 header.configure(with: headerModel)
                 header.onToggle = { [weak self] in
                     self?.viewModel.toggleLibraryExpansion(at: index.section)
+                    // 展开/收起由于没有异步网络请求，本地直接刷新即可
+                    self?.setDataList()
                 }
                 return header
             }
             return nil
         }
-        view.customerLayout = { sectionIndex,sectionModel in
-            return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount: 1, itemSpace: 8) { index, obj in
+        view.customerLayout = { sectionIndex, sectionModel in
+            return UICollectionView.waterFallLayout(data: sectionModel.rows, rowCount: 1, itemSpace: 8) { index, obj in
                 return 44
             }
         }
-        view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
+        view.cellInCollection = { collection, itemSection, indexPath in
+            if let itemRow = itemSection.rows?[indexPath.row],
+               let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTFusionCell,
+               let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 cell.cellModel = cellModel
                 return cell
             }
             return nil
         }
-        view.collectionDidSelect = { collection,itemSection,indexPath in
-            let library = self.libraries[indexPath.section]
+        view.collectionDidSelect = { [weak self] collection, itemSection, indexPath in
+            guard let self = self else { return }
+            // 修复 1：使用 viewModel.filteredLibraries 作为数据源
+            let library = self.viewModel.filteredLibraries[indexPath.section]
             let className = library.classes[indexPath.row]
             
             let classExplorer = PTClassExplorerViewController(libraryName: library.name, className: className)
@@ -89,7 +100,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         return control
     }()
     
-    private lazy var titleViewContailer:PTNavTitleContainer = {
+    private lazy var titleViewContailer: PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
         searchBar.snp.makeConstraints { make in
@@ -102,30 +113,31 @@ class PTLoadedLibsViewController: PTBaseViewController {
         return view
     }()
     
-    private lazy var searchBar:PTSearchBar = {
+    private lazy var searchBar: PTSearchBar = {
         let view = PTSearchBar()
         view.delegate = self
         return view
     }()
     
-    lazy var exportButton:UIButton = {
+    lazy var exportButton: UIButton = {
         let view = baseButtonCreate(image: UIImage(.square.andArrowUp))
-        view.addActionHandlers(handler: { sender in
-            self.exportLibraries()
+        view.addActionHandlers(handler: { [weak self] sender in
+            self?.exportLibraries()
         })
         return view
     }()
 
-    lazy var backButton:UIButton = {
+    lazy var backButton: UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
-        button.addActionHandlers { sender in
-            self.dismissAnimated()
+        button.addActionHandlers { [weak self] sender in
+            self?.dismissAnimated()
         }
         return button
     }()
 
     private let viewModel = PTLoadedLibrariesViewModel()
-    private var libraries: [PTLoadedLibrary] = []
+    
+    // 修复 1：删除了多余的 private var libraries: [PTLoadedLibrary] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -137,9 +149,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
-        view.addSubviews([segmentedControl,newCollectionView])
+        view.addSubviews([segmentedControl, newCollectionView])
         segmentedControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(44)
@@ -151,41 +161,18 @@ class PTLoadedLibsViewController: PTBaseViewController {
         }
         
         bindViewModel()
+        
+        // 修复 2：加载库后，必须调用一次 setDataList 以渲染初始 UI
         viewModel.loadLibraries()
+        setDataList()
     }
     
     private func bindViewModel() {
+        // 清理了无用的注释代码，保留必要的异步加载回调
         viewModel.onLoadingStateChanged = { [weak self] index in
-            self!.setDataList()
+            guard let self = self else { return }
+            self.setDataList()
         }
-//        viewModel.onStateChanged = { [weak self] libraries in
-//            self?.libraries = libraries
-//            DispatchQueue.main.async {
-//                self?.setDataList()
-//            }
-//        }
-//
-//        viewModel.onLibraryUpdated = { [weak self] updatedPath in
-//            guard let self = self else { return }
-//            if let row = self.libraries.firstIndex(where: { $0.path == updatedPath }) {
-//                DispatchQueue.main.async {
-//                    if self.libraries[row].classes.count > 0 {
-//                        if self.libraries[row].isExpanded {
-//                            let rows = self.newCollectionView.collectionSectionDatas[row].rows ?? []
-//                            self.newCollectionView.deleteRows(rows, from: row)
-//                        } else {
-//                            let rows = self.libraries[row].classes.map {
-//                                let model = PTFusionCellModel()
-//                                model.name = $0
-//                                let row = PTRows(ID: PTFusionCell.ID,dataModel: model)
-//                                return row
-//                            }
-//                            self.newCollectionView.insertRows(rows, section: row)
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
     
     @objc private func filterChanged() {
@@ -197,8 +184,8 @@ class PTLoadedLibsViewController: PTBaseViewController {
         default: filter = .all
         }
         viewModel.filterLibraries(by: filter)
-        newCollectionView.clearAllData { cView in
-            self.setDataList()
+        newCollectionView.clearAllData { [weak self] cView in
+            self?.setDataList()
         }
     }
     
@@ -226,12 +213,12 @@ class PTLoadedLibsViewController: PTBaseViewController {
                 }
             }
             
-            let nameHeight = UIView.sizeFor(string: value.name, font: .appfont(size: 18),width: screenWidth).height
+            let nameHeight = UIView.sizeFor(string: value.name, font: .appfont(size: 18), width: screenWidth).height
             let descString = value.path + "\nSize: " + value.size + " Address: " + value.address
-            let descHeight = UIView.sizeFor(string: descString, font: .appfont(size: 14),width: screenWidth).height
+            let descHeight = UIView.sizeFor(string: descString, font: .appfont(size: 14), width: screenWidth).height
             let totalHeight = nameHeight + descHeight + 17
 
-            let section = PTSection(headerHeight: totalHeight,rows: rows)
+            let section = PTSection(headerID: PTloadedLibHeader.ID,headerHeight: totalHeight, rows: rows)
             section.headerClass = PTloadedLibHeader.self
             return section
         }
@@ -243,8 +230,16 @@ extension PTLoadedLibsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.textField?.resignFirstResponder()
         self.viewModel.searchLibraries(with: searchBar.textField?.text ?? "")
-        newCollectionView.clearAllData { cView in
-            self.setDataList()
+        newCollectionView.clearAllData { [weak self] cView in
+            self?.setDataList()
+        }
+    }
+    
+    // 优化 4：实现边打字边过滤的实时搜索体验
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.viewModel.searchLibraries(with: searchText)
+        newCollectionView.clearAllData { [weak self] cView in
+            self?.setDataList()
         }
     }
 }
@@ -255,7 +250,9 @@ class PTClassExplorerViewController: PTBaseViewController {
     
     var libraryName: String = ""
     var classNames: String = ""
-    var viewModel: PTClassExplorerViewModel = PTClassExplorerViewModel(className: "")
+    var viewModel: PTClassExplorerViewModel
+    
+    private let cellIdentifier = "ClassExplorerCell" // 优化 5：规范化重用标识符
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -264,15 +261,15 @@ class PTClassExplorerViewController: PTBaseViewController {
         tableView.separatorColor = .darkGray
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: .cell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         return tableView
     }()
     
     private lazy var createInstanceButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(.plus), for: .normal)
-        button.addActionHandlers(handler: { sender in
-            self.createInstanceTapped()
+        button.addActionHandlers(handler: { [weak self] sender in
+            self?.createInstanceTapped()
         })
         return button
     }()
@@ -281,6 +278,7 @@ class PTClassExplorerViewController: PTBaseViewController {
         let view = UILabel()
         view.font = PTAppBaseConfig.share.navTitleFont
         view.textAlignment = .center
+        view.textColor = .white // 确保在深色背景下可见
         return view
     }()
     
@@ -307,6 +305,7 @@ class PTClassExplorerViewController: PTBaseViewController {
         super.viewDidLoad()
         setup()
         viewModel.loadClassInfo()
+        tableView.reloadData() // 确保数据加载后刷新表格
     }
     
     // MARK: - Setup
@@ -316,28 +315,34 @@ class PTClassExplorerViewController: PTBaseViewController {
         
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        button.addActionHandlers { sender in
-            self.navigationController?.popViewController()
+        button.addActionHandlers { [weak self] sender in
+            self?.navigationController?.popViewController()
         }
-        view.addSubviews([button,titleLabel,tableView,createInstanceButton])
+        view.addSubviews([button, titleLabel, tableView, createInstanceButton])
         
         button.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            // 根据你的项目配置保留了这个顶部高度逻辑
             make.top.equalToSuperview().inset((self.sheetViewController?.options.pullBarHeight ?? 0) + 10)
         }
+        
+        // 修复 3：添加水平方向约束，防止文字乱飘或越界
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(button)
-        }
-        
-        tableView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(button.snp.bottom).offset(5)
+            make.centerX.equalToSuperview()
+            make.left.greaterThanOrEqualTo(button.snp.right).offset(10)
+            make.right.lessThanOrEqualTo(createInstanceButton.snp.left).offset(-10)
         }
         
         createInstanceButton.snp.makeConstraints { make in
             make.size.top.equalTo(button)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+
+        tableView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(button.snp.bottom).offset(5)
         }
 
         createInstanceButton.isHidden = !viewModel.canCreateInstance
@@ -376,7 +381,7 @@ extension PTClassExplorerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: .cell, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
         guard let sectionType = PTClassExplorerViewModel.Section(rawValue: indexPath.section) else {
             return cell

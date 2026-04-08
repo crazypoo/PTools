@@ -32,7 +32,7 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
     // MARK: - Public Types
     
     enum LibraryFilter {
-        case all,`public`,`private`
+        case all, `public`, `private`
     }
     
     // MARK: - Properties
@@ -177,27 +177,22 @@ final class PTLoadedLibrariesViewModel: @unchecked Sendable {
         return libraries.sorted { $0.name < $1.name }
     }
     
+    // 🌟 优化点：使用 objc_copyClassNamesForImage 大幅提升性能，并修复内存泄漏
     private func fetchClasses(from libraryPath: String) -> [String] {
         var classes: [String] = []
-        
-        guard let handle = dlopen(libraryPath, RTLD_LAZY) else { return classes }
-        defer { dlclose(handle) }
-        
-        // Get all classes registered with the Objective-C runtime
         var classCount: UInt32 = 0
-        guard let classList = objc_copyClassList(&classCount) else { return classes }
-        // AutoreleasingUnsafeMutablePointer is automatically managed by ARC
         
-        // Convert to buffer pointer for safe iteration
-        let buffer = UnsafeBufferPointer(start: classList, count: Int(classCount))
+        guard let classNames = objc_copyClassNamesForImage(libraryPath, &classCount) else {
+            return classes
+        }
         
-        for cls in buffer {
-            // Check if class belongs to this library
-            if let imageName = class_getImageName(cls),
-               String(cString: imageName) == libraryPath {
-                let className = String(cString: class_getName(cls))
-                classes.append(className)
-            }
+        // 这里的 classNames 是普通的 UnsafeMutablePointer，需要释放
+        defer { free(classNames) }
+        
+        for i in 0..<Int(classCount) {
+            // 修复：classNames[i] 是确定的指针类型，并非 Optional，直接转为 String
+            let className = String(cString: classNames[i])
+            classes.append(className)
         }
         
         return classes.sorted()
@@ -439,7 +434,8 @@ final class PTClassExplorerViewModel {
         // Protocols
         var protocolCount: UInt32 = 0
         if let protocols = class_copyProtocolList(cls, &protocolCount) {
-            // AutoreleasingUnsafeMutablePointer is automatically managed by ARC
+            // 修复：撤销对 protocols 的手动 free()
+            // 在 Swift 中该 API 返回 AutoreleasingUnsafeMutablePointer，生命周期由 Swift 编译器自动管理
             
             var protocolNames: [String] = []
             for i in 0..<Int(protocolCount) {
