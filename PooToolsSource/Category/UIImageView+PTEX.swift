@@ -15,9 +15,6 @@ import Photos
 import ObjectiveC
 import AVFoundation // 补充导入以支持 AVAsset
 
-private var ptLoadTaskKey: UInt8 = 0
-private var ptLoadUUIDKey: UInt8 = 0
-
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
     @objc func getImagePointColor(point:CGPoint) -> UIColor {
@@ -47,23 +44,6 @@ public extension UIImageView {
     }
     
     // MARK: - Runtime
-
-    private var ptLoadTask: Task<Void, Never>? {
-        get { objc_getAssociatedObject(self, &ptLoadTaskKey) as? Task<Void, Never> }
-        set { objc_setAssociatedObject(self, &ptLoadTaskKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-
-    private var ptLoadUUID: UUID? {
-        get { objc_getAssociatedObject(self, &ptLoadUUIDKey) as? UUID }
-        set { objc_setAssociatedObject(self, &ptLoadUUIDKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-
-    // 手动取消
-    func cancelImageLoad() {
-        ptLoadTask?.cancel()
-        ptLoadTask = nil
-    }
-
     func loadImage(contentData: Any,
                    iCloudDocumentName: String = "",
                    borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
@@ -75,182 +55,23 @@ public extension UIImageView {
                    emptyImage: UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
-
-        // 取消旧任务
-        cancelImageLoad()
-
-        let loadID = UUID()
-        ptLoadUUID = loadID
-
-        func isValid() -> Bool {
-            return self.ptLoadUUID == loadID
-        }
-
-        func setEmpty() {
-            guard isValid() else { return }
-            Task { @MainActor in
-                self.image = emptyImage
-            }
-        }
-
-        func finish(_ result: PTLoadImageResult) {
-            guard isValid() else { return }
-            Task { @MainActor in
-                guard isValid() else { return }
-                guard let images = result.allImages, !images.isEmpty else {
-                    setEmpty()
-                    loadFinish?(result)
-                    return
-                }
-
-                if images.count > 1 {
-                    DispatchQueue.global().async {
-                        let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
-                        DispatchQueue.main.async {
-                            guard isValid() else { return }
-                            self.image = gif
-                            loadFinish?(result)
-                        }
-                    }
-                } else {
-                    self.image = result.firstImage
-                    loadFinish?(result)
-                }
-            }
-        }
-
-        func showImage(_ image: UIImage) {
-            guard isValid() else { return }
-            Task { @MainActor in
-                self.image = image
-                self.layerProgress(value: 1,
-                                   borderWidth: borderWidth,
-                                   borderColor: borderColor,
-                                   showValueLabel: showValueLabel,
-                                   valueLabelFont: valueLabelFont,
-                                   valueLabelColor: valueLabelColor,
-                                   uniCount: uniCount)
-                loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
-            }
-        }
-
-        func loadVideo(url: URL) {
-            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
-                guard isValid() else { return }
-                if let image {
-                    showImage(image)
-                } else {
-                    setEmpty()
-                }
-            }
-        }
-
-        func loadFromURL(_ url: URL) {
-
-            let ext = url.pathExtension.lowercased()
-
-            // 视频
-            if GlobalVideoExts.contains(ext) {
-                loadVideo(url: url)
-                return
-            }
-
-            ptLoadTask =  Task {
-                if Task.isCancelled { return }
-
-                if let cache = await PTLoadImageFunction.cachedImage(from: url) {
-                    if Task.isCancelled { return }
-                    finish(cache)
-                    return
-                }
-
-                let result = await PTLoadImageFunction.loadImage(
-                    contentData: url,
-                    iCloudDocumentName: iCloudDocumentName
-                ) { received, total in
-                    guard isValid() else { return }
-
-                    Task { @MainActor in
-                        if let progressHandle {
-                            progressHandle(received, total)
-                        } else {
-                            self.layerProgress(
-                                value: CGFloat(received) / CGFloat(total),
-                                borderWidth: borderWidth,
-                                borderColor: borderColor,
-                                showValueLabel: showValueLabel,
-                                valueLabelFont: valueLabelFont,
-                                valueLabelColor: valueLabelColor,
-                                uniCount: uniCount
-                            )
-                        }
-                    }
-                }
-                if Task.isCancelled { return }
-                finish(result)
-            }
-        }
-
-        switch contentData {
-
-        case let image as UIImage:
-            showImage(image)
-
-        case let color as UIColor:
-            showImage(color.createImageWithColor())
-
-        case let data as Data:
-            if let image = UIImage(data: data) {
-                showImage(image)
-            } else {
-                setEmpty()
-            }
-
-        case let asset as PHAsset:
-            ptLoadTask =  Task {
-                if Task.isCancelled { return }
-                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
-                if Task.isCancelled { return }
-                finish(result)
-            }
-
-        case let avasset as AVAsset:
-            avasset.getVideoFirstImage { image in
-                guard isValid() else { return }
-                if let image {
-                    showImage(image)
-                } else {
-                    setEmpty()
-                }
-            }
-
-        case let url as URL:
-            loadFromURL(url)
-
-        case let string as String:
-
-            // 本地路径
-            if FileManager.default.fileExists(atPath: string) {
-                if let image = UIImage(contentsOfFile: string) {
-                    showImage(image)
-                } else {
-                    setEmpty()
-                }
-                return
-            }
-
-            // URL
-            if string.isURL(), let url = URL(string: string) {
-                loadFromURL(url)
-            } else if let image = UIImage(named: string) {
-                showImage(image)
-            } else {
-                setEmpty()
-            }
-
-        default:
-            setEmpty()
-        }
+        // 直接调用父类 UIView 封装好的核心逻辑
+        pt_loadCoreImage(
+            contentData: contentData,
+            iCloudDocumentName: iCloudDocumentName,
+            borderWidth: borderWidth,
+            borderColor: borderColor,
+            showValueLabel: showValueLabel,
+            valueLabelFont: valueLabelFont,
+            valueLabelColor: valueLabelColor,
+            uniCount: uniCount,
+            emptyImage: emptyImage,
+            progressHandle: progressHandle,
+            setImageBlock: { [weak self] image in
+                self?.image = image // UIImageView 特有的渲染方式
+            },
+            loadFinish: loadFinish
+        )
     }
     
     //MARK: 視頻剪輯

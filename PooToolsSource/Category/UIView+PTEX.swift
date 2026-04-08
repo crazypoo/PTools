@@ -10,6 +10,8 @@
 import UIKit
 import SnapKit
 import WebKit
+import Photos
+import AVFoundation
 
 @objc public enum Imagegradien:Int {
     case LeftToRight
@@ -110,6 +112,22 @@ public extension UIView {
         static var layoutShapeLayerProgressLabelCallback = 995
         static var viewCapturing = 997
         static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
+    }
+
+    private struct PTImageLoadKeys {
+        static var ptLoadTask: UInt8 = 0
+        static var ptLoadUUID: UInt8 = 0
+    }
+
+    // 1. 统一的异步任务管理
+    var ptLoadTask: Task<Void, Never>? {
+        get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadTask) as? Task<Void, Never> }
+        set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadTask, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    var ptLoadUUID: UUID? {
+        get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID) as? UUID }
+        set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 
     private var viewShapeLayer:CAShapeLayer? {
@@ -649,6 +667,197 @@ public extension UIView {
     
     var tabBarCtrl: UITabBarController? {
         return self.findController(with: UITabBarController.self)
+    }
+}
+
+//MARK: Load image core
+public extension UIView {
+    // 2. 手动取消
+    func cancelImageLoad() {
+        ptLoadTask?.cancel()
+        ptLoadTask = nil
+    }
+    
+    // 3. 核心大一统方法
+    func pt_loadCoreImage(contentData: Any,
+                          iCloudDocumentName: String = "",
+                          borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
+                          borderColor: UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
+                          showValueLabel: Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
+                          valueLabelFont: UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
+                          valueLabelColor: UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
+                          uniCount: Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
+                          emptyImage: UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                          progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                          setImageBlock: @escaping @MainActor (UIImage?) -> Void, // <--- 关键点：交还给具体类的渲染闭包
+                          loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+        // 取消旧任务
+        cancelImageLoad()
+
+        let loadID = UUID()
+        ptLoadUUID = loadID
+
+        func isValid() -> Bool {
+            return self.ptLoadUUID == loadID
+        }
+
+        func setEmpty() {
+            guard isValid() else { return }
+            Task { @MainActor in
+                guard isValid() else { return }
+                setImageBlock(emptyImage)
+            }
+        }
+
+        func showImage(_ image: UIImage) {
+            guard isValid() else { return }
+            Task { @MainActor in
+                guard isValid() else { return }
+                setImageBlock(image)
+                self.layerProgress(value: 1,
+                                   borderWidth: borderWidth,
+                                   borderColor: borderColor,
+                                   showValueLabel: showValueLabel,
+                                   valueLabelFont: valueLabelFont,
+                                   valueLabelColor: valueLabelColor,
+                                   uniCount: uniCount)
+                // 构造一个虚拟的 Result 用于本地图片/颜色等的回调
+                // 假设 PTLoadImageResult 有个对应的构造器，如果没有请按照你的实际 struct 进行初始化
+                // loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
+            }
+        }
+
+        func finish(_ result: PTLoadImageResult) {
+            guard isValid() else { return }
+            Task { @MainActor in
+                guard isValid() else { return }
+                guard let images = result.allImages, !images.isEmpty else {
+                    setEmpty()
+                    loadFinish?(result)
+                    return
+                }
+
+                if images.count > 1 {
+                    DispatchQueue.global().async {
+                        let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
+                        DispatchQueue.main.async {
+                            guard isValid() else { return }
+                            setImageBlock(gif)
+                            loadFinish?(result)
+                        }
+                    }
+                } else {
+                    setImageBlock(result.firstImage)
+                    loadFinish?(result)
+                }
+            }
+        }
+
+        func loadVideo(url: URL) {
+            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
+                guard isValid() else { return }
+                if let image {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+            }
+        }
+
+        func loadFromURL(_ url: URL) {
+            let ext = url.pathExtension.lowercased()
+
+            // 视频
+            if GlobalVideoExts.contains(ext) {
+                loadVideo(url: url)
+                return
+            }
+
+            ptLoadTask = Task {
+                if Task.isCancelled { return }
+
+                if let cache = await PTLoadImageFunction.cachedImage(from: url) {
+                    if Task.isCancelled { return }
+                    finish(cache)
+                    return
+                }
+
+                let result = await PTLoadImageFunction.loadImage(
+                    contentData: url,
+                    iCloudDocumentName: iCloudDocumentName
+                ) { received, total in
+                    guard isValid() else { return }
+
+                    Task { @MainActor in
+                        guard isValid() else { return }
+                        if let progressHandle {
+                            progressHandle(received, total)
+                        } else {
+                            self.layerProgress(
+                                value: CGFloat(received) / CGFloat(total),
+                                borderWidth: borderWidth,
+                                borderColor: borderColor,
+                                showValueLabel: showValueLabel,
+                                valueLabelFont: valueLabelFont,
+                                valueLabelColor: valueLabelColor,
+                                uniCount: uniCount
+                            )
+                        }
+                    }
+                }
+                if Task.isCancelled { return }
+                finish(result)
+            }
+        }
+
+        switch contentData {
+        case let image as UIImage:
+            showImage(image)
+        case let color as UIColor:
+            showImage(color.createImageWithColor())
+        case let data as Data:
+            if let image = UIImage(data: data) {
+                showImage(image)
+            } else {
+                setEmpty()
+            }
+        case let asset as PHAsset:
+            ptLoadTask = Task {
+                if Task.isCancelled { return }
+                let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
+                if Task.isCancelled { return }
+                finish(result)
+            }
+        case let avasset as AVAsset:
+            avasset.getVideoFirstImage { image in
+                guard isValid() else { return }
+                if let image {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+            }
+        case let url as URL:
+            loadFromURL(url)
+        case let string as String:
+            if FileManager.default.fileExists(atPath: string) {
+                if let image = UIImage(contentsOfFile: string) {
+                    showImage(image)
+                } else {
+                    setEmpty()
+                }
+                return
+            }
+            if string.isURL(), let url = URL(string: string) {
+                loadFromURL(url)
+            } else if let image = UIImage(named: string) {
+                showImage(image)
+            } else {
+                setEmpty()
+            }
+        default:
+            setEmpty()
+        }
     }
 }
 
