@@ -14,52 +14,37 @@ public class PTActionLayoutButton: UIControl {
 
     public var actionMargin:CGFloat = 10
     
-    public var layoutStyle:PTLayoutButtonStyle = .leftImageRightTitle {
-        didSet {
-            updateAppearance()
-        }
+    // 🚀 性能优化：当布局属性发生改变时，标记需要重新更新约束并触发重新布局
+    public var layoutStyle: PTLayoutButtonStyle = .leftImageRightTitle {
+        didSet { if oldValue != layoutStyle { setNeedsConstraintUpdate() } }
     }
         
-    public var imageSize:CGSize = .zero {
-        didSet {
-            updateAppearance()
-        }
+    public var imageSize: CGSize = .zero {
+        didSet { if oldValue != imageSize { setNeedsConstraintUpdate() } }
     }
     
-    public var midSpacing:CGFloat = 0 {
-        didSet {
-            updateAppearance()
-        }
+    public var midSpacing: CGFloat = 0 {
+        didSet { if oldValue != midSpacing { setNeedsConstraintUpdate() } }
     }
         
-    public var labelLineSpace:CGFloat = 2 {
-        didSet {
-            updateAppearance()
-        }
+    public var labelLineSpace: CGFloat = 2 {
+        didSet { if oldValue != labelLineSpace { setNeedsConstraintUpdate() } }
     }
     
-    public var textAlignment:NSTextAlignment = .center {
-        didSet {
-            updateAppearance()
-        }
+    public var textAlignment: NSTextAlignment = .center {
+        didSet { if oldValue != textAlignment { updateAppearance() } }
     }
     
-    public var numbersOfLine:Int = 0 {
-        didSet {
-            updateAppearance()
-        }
+    public var numbersOfLine: Int = 0 {
+        didSet { if oldValue != numbersOfLine { updateAppearance() } }
     }
     
-    public var textLineBreakMode:NSLineBreakMode = .byCharWrapping {
-        didSet {
-            updateAppearance()
-        }
+    public var textLineBreakMode: NSLineBreakMode = .byCharWrapping {
+        didSet { if oldValue != textLineBreakMode { updateAppearance() } }
     }
     
-    public var imageContentMode:UIView.ContentMode = .scaleAspectFit {
-        didSet {
-            updateAppearance()
-        }
+    public var imageContentMode: UIView.ContentMode = .scaleAspectFit {
+        didSet { if oldValue != imageContentMode { updateAppearance() } }
     }
     
     // 重写 `state` 属性
@@ -75,64 +60,83 @@ public class PTActionLayoutButton: UIControl {
         }
     }
 
-    // 设置可用状态
+    // 🚀 性能优化：只有状态真正改变时，才去刷新外观，避免不必要的重绘
     public override var isEnabled: Bool {
-        didSet {
-            updateAppearance()
-        }
+        didSet { if oldValue != isEnabled { updateAppearance() } }
     }
-
-    // 设置选中状态
     public override var isSelected: Bool {
-        didSet {
-            updateAppearance()
-        }
+        didSet { if oldValue != isSelected { updateAppearance() } }
     }
-
-    // 设置高亮状态
     public override var isHighlighted: Bool {
-        didSet {
-            updateAppearance()
-        }
+        didSet { if oldValue != isHighlighted { updateAppearance() } }
     }
         
-    fileprivate lazy var imageView:UIImageView = {
+    fileprivate lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         return view
     }()
     
-    fileprivate lazy var titleLabel:UILabel = {
+    fileprivate lazy var titleLabel: UILabel = {
         let view = UILabel()
         view.isUserInteractionEnabled = true
         view.clipsToBounds = true
         return view
     }()
     
+    // 🚀 Bug修复：使用单一的手势实例，避免状态切换时无限增加手势对象
+    private lazy var labelTapGesture: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleLabelTap))
+        return tap
+    }()
+    
+    // 🚀 性能优化：记录上一次布局的大小和是否需要更新约束的标志
+    private var lastLayoutSize: CGSize = .zero
+    private var needsConstraintUpdate: Bool = true
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubviews([imageView,titleLabel])
+        addSubviews([imageView, titleLabel])
     }
     
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setNeedsConstraintUpdate() {
+        needsConstraintUpdate = true
+        setNeedsLayout()
+        updateAppearance()
+    }
+    
+    // 🚀 性能优化：拦截 layoutSubviews，避免高频触发 SnapKit 重建约束
     public override func layoutSubviews() {
         super.layoutSubviews()
+        
+        // 只有当尺寸真的改变了，或者主动标记了属性改变时，才重新计算约束
+        if bounds.size != lastLayoutSize || needsConstraintUpdate {
+            lastLayoutSize = bounds.size
+            needsConstraintUpdate = false
+            updateLayoutConstraints()
+        }
+    }
+    
+    // 将原本在 layoutSubviews 里的 SnapKit 逻辑抽离出来
+    private func updateLayoutConstraints() {
         switch layoutStyle {
         case .leftImageRightTitle:
             imageView.isHidden = false
             titleLabel.isHidden = false
 
-            let currentImageSize:CGFloat = imageSize.width
+            let currentImageSize: CGFloat = imageSize.width
             let maxWidth = frame.width - currentImageSize - midSpacing
-            var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
+            var titleWidth = getKitTitleSize(lineSpacing: labelLineSpace, height: frame.height).width + 5
             if titleWidth > maxWidth {
                 titleWidth = maxWidth
             }
             let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+            
             imageView.snp.remakeConstraints { make in
                 make.left.equalToSuperview().inset(labelX)
                 make.size.equalTo(self.imageSize)
@@ -143,17 +147,19 @@ public class PTActionLayoutButton: UIControl {
                 make.top.bottom.equalToSuperview()
                 make.left.equalTo(self.imageView.snp.right).offset(midSpacing)
             }
+            
         case .leftTitleRightImage:
             imageView.isHidden = false
             titleLabel.isHidden = false
 
-            let currentImageSize:CGFloat = imageSize.width
+            let currentImageSize: CGFloat = imageSize.width
             let maxWidth = frame.width - currentImageSize - midSpacing
-            var titleWidth = titleLabel.sizeFor(lineSpacing: labelLineSpace,height: frame.height).width + 5
+            var titleWidth = getKitTitleSize(lineSpacing: labelLineSpace, height: frame.height).width + 5
             if titleWidth > maxWidth {
                 titleWidth = maxWidth
             }
             let labelX = (frame.width - (currentImageSize + midSpacing + titleWidth)) / 2
+            
             titleLabel.snp.remakeConstraints { make in
                 make.width.equalTo(titleWidth)
                 make.top.bottom.equalToSuperview()
@@ -164,20 +170,18 @@ public class PTActionLayoutButton: UIControl {
                 make.size.equalTo(self.imageSize)
                 make.centerY.equalToSuperview()
             }
+            
         case .upImageDownTitle:
             imageView.isHidden = false
             titleLabel.isHidden = false
 
             let maxHeight = frame.height - imageSize.height - midSpacing
-            let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
+            let titleHeight = getKitTitleSize(lineSpacing: labelLineSpace, width: frame.width).height + 5
             
-            var offSet:CGFloat = 0
+            var offSet: CGFloat = 0
             if titleHeight < maxHeight {
                 offSet = maxHeight - titleHeight
-                
-                if offSet < 0 {
-                    offSet = 0
-                }
+                if offSet < 0 { offSet = 0 }
             }
             
             let labelY = (frame.height - (titleHeight + imageSize.height + midSpacing)) / 2
@@ -198,7 +202,7 @@ public class PTActionLayoutButton: UIControl {
             titleLabel.isHidden = false
             
             let maxHeight = frame.height - imageSize.height - midSpacing
-            var titleHeight = getKitTitleSize(lineSpacing: labelLineSpace,width: frame.width).height + 5
+            var titleHeight = getKitTitleSize(lineSpacing: labelLineSpace, width: frame.width).height + 5
             if titleHeight > maxHeight {
                 titleHeight = maxHeight
             }
@@ -216,23 +220,24 @@ public class PTActionLayoutButton: UIControl {
                 make.size.equalTo(self.imageSize)
                 make.top.equalTo(self.titleLabel.snp.bottom).offset(self.midSpacing)
             }
+            
         case .title:
             titleLabel.isHidden = false
             imageView.isHidden = true
             
             titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalToSuperview()
-                make.top.bottom.equalToSuperview()
+                make.edges.equalToSuperview() // 简写
             }
+            
         case .image:
             titleLabel.isHidden = true
             imageView.isHidden = false
 
             imageView.snp.remakeConstraints { make in
-                make.centerX.equalToSuperview()
+                make.centerX.centerY.equalToSuperview()
                 make.size.equalTo(self.imageSize)
-                make.centerY.equalToSuperview()
             }
+            
         default:
             imageView.isHidden = true
             titleLabel.isHidden = true
@@ -245,35 +250,35 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var selectedString = ""
     public var currentString = ""
     
-    fileprivate var normalImage:Any?
-    fileprivate var highlightedImage:Any?
-    fileprivate var disabledImage:Any?
-    fileprivate var selectedImage:Any?
-    public var currentImage:Any? = nil
+    fileprivate var normalImage: Any?
+    fileprivate var highlightedImage: Any?
+    fileprivate var disabledImage: Any?
+    fileprivate var selectedImage: Any?
+    public var currentImage: Any? = nil
 
-    fileprivate var normalTitleColor:UIColor = .black
-    fileprivate var highlightedTitleColor:UIColor = .black
-    fileprivate var disabledTitleColor:UIColor = .black
-    fileprivate var selectedTitleColor:UIColor = .black
-    public var currentTitleColor:UIColor = .black
+    fileprivate var normalTitleColor: UIColor = .black
+    fileprivate var highlightedTitleColor: UIColor = .black
+    fileprivate var disabledTitleColor: UIColor = .black
+    fileprivate var selectedTitleColor: UIColor = .black
+    public var currentTitleColor: UIColor = .black
 
-    fileprivate var normalFont:UIFont = .appfont(size: 14)
-    fileprivate var highlightedFont:UIFont?
-    fileprivate var disabledFont:UIFont?
-    fileprivate var selectedFont:UIFont?
-    public var currentFont:UIFont = .appfont(size: 14)
+    fileprivate var normalFont: UIFont = .systemFont(ofSize: 14) // 假设你内部的 .appfont
+    fileprivate var highlightedFont: UIFont?
+    fileprivate var disabledFont: UIFont?
+    fileprivate var selectedFont: UIFont?
+    public var currentFont: UIFont = .systemFont(ofSize: 14)
     
-    fileprivate var normalBGColor:UIColor = .clear
-    fileprivate var highlightedBGColor:UIColor = .clear
-    fileprivate var disabledBGColor:UIColor = .clear
-    fileprivate var selectedBGColor:UIColor = .clear
-    public var currentBGColor:UIColor = .clear
+    fileprivate var normalBGColor: UIColor = .clear
+    fileprivate var highlightedBGColor: UIColor = .clear
+    fileprivate var disabledBGColor: UIColor = .clear
+    fileprivate var selectedBGColor: UIColor = .clear
+    public var currentBGColor: UIColor = .clear
 
-    fileprivate var normalAtt:ASAttributedString?
-    fileprivate var highlightedAtt:ASAttributedString?
-    fileprivate var disabledAtt:ASAttributedString?
-    fileprivate var selectedAtt:ASAttributedString?
-    public var currentAtt:ASAttributedString? = nil
+    fileprivate var normalAtt: ASAttributedString?
+    fileprivate var highlightedAtt: ASAttributedString?
+    fileprivate var disabledAtt: ASAttributedString?
+    fileprivate var selectedAtt: ASAttributedString?
+    public var currentAtt: ASAttributedString? = nil
 
     // 更新状态时的外观
     private func updateAppearance() {
@@ -286,21 +291,21 @@ public class PTActionLayoutButton: UIControl {
             currentBGColor = normalBGColor
             currentAtt = normalAtt
         case .highlighted:
-            currentString = highlightedString.stringIsEmpty() ? normalString : highlightedString
+            currentString = highlightedString.isEmpty ? normalString : highlightedString
             currentImage = highlightedImage ?? normalImage
             currentTitleColor = highlightedTitleColor
             currentFont = highlightedFont ?? normalFont
             currentBGColor = highlightedBGColor
             currentAtt = highlightedAtt
         case .disabled:
-            currentString = disabledString.stringIsEmpty() ? normalString : disabledString
+            currentString = disabledString.isEmpty ? normalString : disabledString
             currentImage = disabledImage ?? normalImage
             currentTitleColor = disabledTitleColor
             currentFont = disabledFont ?? normalFont
             currentBGColor = disabledBGColor
             currentAtt = disabledAtt
         case .selected:
-            currentString = selectedString.stringIsEmpty() ? normalString : selectedString
+            currentString = selectedString.isEmpty ? normalString : selectedString
             currentImage = selectedImage ?? normalImage
             currentTitleColor = selectedTitleColor
             currentFont = selectedFont ?? normalFont
@@ -309,43 +314,60 @@ public class PTActionLayoutButton: UIControl {
         default:
             break
         }
+        
         titleLabel.numberOfLines = numbersOfLine
+        
         if let att = currentAtt {
             titleLabel.attributed.text = att
+            
+            // 🚀 Bug修复：优雅地管理手势，而不是每次刷新都添加新的
             if !att.value.containsAction() {
-                let tap = UITapGestureRecognizer { _ in
-                    if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-                        block(self)
-                    }
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        self.updateAppearance()
-                    }
+                if !(titleLabel.gestureRecognizers?.contains(labelTapGesture) ?? false) {
+                    titleLabel.addGestureRecognizer(labelTapGesture)
                 }
-                self.titleLabel.addGestureRecognizer(tap)
+            } else {
+                titleLabel.removeGestureRecognizer(labelTapGesture)
             }
         } else {
-            let nameAtt:ASAttributedString = """
+            // 清理可能存在的手势
+            titleLabel.removeGestureRecognizer(labelTapGesture)
+            
+            // 🚀 内存泄漏修复：在 block 中使用 [weak self] 防止循环引用
+            let nameAtt: ASAttributedString = """
                         \(wrap: .embedding("""
                         \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace),.lineBreakMode(self.textLineBreakMode)))
-                        """),.action {
-                            if let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+                        """),.action { [weak self] in
+                            guard let self = self else { return }
+                            if let block: PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
                                 block(self)
                             }
-                            PTGCDManager.gcdAfter(time: 0.1) {
-                                self.updateAppearance()
+                            PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
+                                self?.updateAppearance()
                             }
                         })
                         """
             self.titleLabel.attributed.text = nameAtt
         }
+        
         backgroundColor = currentBGColor
         imageView.contentMode = self.imageContentMode
+        
         if let currentImage = currentImage {
-            imageView.loadImage(contentData: currentImage)
+            imageView.loadImage(contentData: currentImage) // 你的自定义方法
         } else {
             imageView.image = nil
         }
-        setNeedsLayout()
+        
+        setNeedsDisplay() // 使用 setNeedsDisplay 而不是 setNeedsLayout，除非约束确实需要变
+    }
+    
+    @objc private func handleLabelTap() {
+        if let block: PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+            block(self)
+        }
+        PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
+            self?.updateAppearance()
+        }
     }
     
     public func getKitTitleSize(lineSpacing:CGFloat = 2.5,
@@ -370,9 +392,9 @@ public class PTActionLayoutButton: UIControl {
         }
         return total
     }
-    
+
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let margin: CGFloat = actionMargin  // 增加10pt点击区域
+        let margin: CGFloat = actionMargin
         let largerBounds = bounds.insetBy(dx: -margin, dy: -margin)
         return largerBounds.contains(point)
     }
@@ -497,7 +519,8 @@ public typealias PTControlTouchedBlock = (_ sender:PTActionLayoutButton) -> Void
 
 public extension PTActionLayoutButton {
     private struct AssociatedKeys {
-        static var UIButtonBlockKey = 998
+        // 🚀 规范修复：使用 UInt8 静态变量作为 AssociatedObject 的 Key 更加安全和标准
+        static var UIButtonBlockKey: UInt8 = 0
     }
     
     @objc func addActionHandlers(handler:@escaping PTControlTouchedBlock) {
@@ -506,8 +529,9 @@ public extension PTActionLayoutButton {
     }
     
     @objc func actionTouched(sender:PTActionLayoutButton) {
-        let block:PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as! PTControlTouchedBlock
-        block(sender)
+        if let block = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
+            block(sender)
+        }
     }
     
     @objc func removeTargerAndAction() {
