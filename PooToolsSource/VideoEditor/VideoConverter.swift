@@ -156,7 +156,7 @@ open class VideoConverter {
                 let conver = try await convert(option)
                 handler(conver.0,conver.1)
             } catch {
-                PTNSLogConsole(error.localizedDescription, levelType: .Error,loggerType: .Media)
+                PTNSLogConsole(error.localizedDescription, levelType: .error,loggerType: .media)
             }
         }
     }

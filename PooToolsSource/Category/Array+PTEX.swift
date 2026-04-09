@@ -111,7 +111,7 @@ public extension Array {
     ///數組轉字典
     func toJSON(prettyPrinted:Bool = false) -> String? {
         guard JSONSerialization.isValidJSONObject(self) else {
-            PTNSLogConsole("无法解析出JSONString", levelType: .Error, loggerType: .Array)
+            PTNSLogConsole("无法解析出JSONString", levelType: .error, loggerType: .array)
             return nil
         }
         do {
@@ -119,7 +119,7 @@ public extension Array {
             let data = try JSONSerialization.data(withJSONObject: self, options: options)
             return String(data: data, encoding: .utf8)
         } catch {
-            PTNSLogConsole("JSON 序列化失败: \(error)", levelType: .Error, loggerType: .Array)
+            PTNSLogConsole("JSON 序列化失败: \(error)", levelType: .error, loggerType: .array)
             return nil
         }
     }

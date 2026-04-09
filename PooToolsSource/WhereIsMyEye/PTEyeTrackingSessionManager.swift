@@ -27,7 +27,7 @@ internal class PTEyeTrackingSessionManager: NSObject {
     internal func run() {
         session.delegate = self
         guard ARFaceTrackingConfiguration.isSupported else {
-            PTNSLogConsole(Constants.ERR_MESSAGE_NOT_SUPPORTED, levelType: .Error,loggerType: .Debug)
+            PTNSLogConsole(Constants.ERR_MESSAGE_NOT_SUPPORTED, levelType: .error,loggerType: .debug)
             return
         }
         
@@ -53,6 +53,6 @@ extension PTEyeTrackingSessionManager: ARSessionDelegate {
     }
     
     internal func session(_ session: ARSession, didFailWithError error: Error) {
-        PTNSLogConsole(error.localizedDescription, levelType: .Error,loggerType: .Debug)
+        PTNSLogConsole(error.localizedDescription, levelType: .error,loggerType: .debug)
     }
 }

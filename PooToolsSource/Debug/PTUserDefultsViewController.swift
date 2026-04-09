@@ -76,7 +76,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
         let dic = UserDefaults.standard.dictionaryRepresentation()
-        PTNSLogConsole(dic,levelType: PTLogMode,loggerType: .UserDefaults)
+        PTNSLogConsole(dic,levelType: PTLogMode,loggerType: .userDefaults)
         
         view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in

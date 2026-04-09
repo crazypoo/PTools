@@ -55,13 +55,13 @@ public extension URL {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             // 错误处理
             if let error = error {
-                PTNSLogConsole("Error: \(error.localizedDescription)", levelType: .Error, loggerType: .URL)
+                PTNSLogConsole("Error: \(error.localizedDescription)", levelType: .error, loggerType: .url)
                 completion(0)
                 return
             }
 
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                PTNSLogConsole("Failed: Invalid response or status code.", levelType: .Error, loggerType: .URL)
+                PTNSLogConsole("Failed: Invalid response or status code.", levelType: .error, loggerType: .url)
                 completion(0)
                 return
             }
@@ -71,7 +71,7 @@ public extension URL {
                let contentLength = UInt64(contentLengthString) {
                 completion(contentLength)
             } else {
-                PTNSLogConsole("Failed to retrieve file size.", levelType: .Error, loggerType: .URL)
+                PTNSLogConsole("Failed to retrieve file size.", levelType: .error, loggerType: .url)
                 completion(0)
             }
         }

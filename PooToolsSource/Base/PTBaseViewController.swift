@@ -764,7 +764,7 @@ open class PTBaseViewController: UIViewController {
     }
 
     deinit {
-        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
+        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .viewCycle)
         removeFromSuperStatusBar()
     }
     
@@ -775,7 +775,7 @@ open class PTBaseViewController: UIViewController {
 
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
         applyNavigationBar()
         
         if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController,let findCurrent = PTUtils.getCurrentVC(),let findNavFirst = nav.viewControllers.first,findCurrent == findNavFirst {
@@ -796,7 +796,7 @@ open class PTBaseViewController: UIViewController {
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+        PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
         // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
         if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
             PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
@@ -809,7 +809,7 @@ open class PTBaseViewController: UIViewController {
     
     open override func viewWillDisappear(_ animated:Bool) {
         super.viewWillDisappear(animated)
-        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
         if let presenting = presentingViewController {
             PTNavigationBarManager.shared.restoreIfNeeded(for: presenting)
         }
@@ -1150,7 +1150,7 @@ extension PTBaseViewController {
             let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
             let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
             scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
-                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)",levelType: PTLogMode,loggerType: .ViewCycle)
+                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)",levelType: PTLogMode,loggerType: .viewCycle)
             }
         } else {
             let oriention:UIDeviceOrientation = isFullScreen ? .landscapeRight : .portrait

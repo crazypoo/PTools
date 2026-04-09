@@ -29,7 +29,7 @@ public extension UIColor {
         var hexValue: UInt64 = 0
         
         guard Scanner(string: hexString).scanHexInt64(&hexValue), [3, 4, 6, 8].contains(length) else {
-            PTNSLogConsole("UIColorExtension - Invalid RGB string or scan error", levelType: .Error, loggerType: .Color)
+            PTNSLogConsole("UIColorExtension - Invalid RGB string or scan error", levelType: .error, loggerType: .color)
             return (0, 0, 0, alpha)
         }
         
@@ -65,7 +65,7 @@ public extension UIColor {
                 alpha: alpha / divisor
             )
         default:
-            PTNSLogConsole("UIColorExtension - Invalid RGB string length", levelType: .Error, loggerType: .Color)
+            PTNSLogConsole("UIColorExtension - Invalid RGB string length", levelType: .error, loggerType: .color)
             return (0, 0, 0, alpha)
         }
     }

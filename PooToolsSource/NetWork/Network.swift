@@ -205,7 +205,7 @@ public class PTNetWorkStatus {
     ///监听网络运行状态
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetWorkStatus,NetWorkEnvironment) -> Void)?) {
         detectNetWork { (status, environment)  in
-            PTNSLogConsole(String(format: "PT App current mode".localized(), NetWorkStatus.valueName(type: status),NetWorkEnvironment.valueName(type: environment)),levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole(String(format: "PT App current mode".localized(), NetWorkStatus.valueName(type: status),NetWorkEnvironment.valueName(type: environment)),levelType: PTLogMode,loggerType: .network)
             handle?(status,environment)
         }
     }
@@ -801,7 +801,7 @@ public class Network: NSObject {
     public class func gobalUrl() async -> String {
         let environment = UIApplication.shared.inferredEnvironment
         if environment != .appStore {
-            PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTBaseURLMode {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
@@ -825,7 +825,7 @@ public class Network: NSObject {
     public class func socketGobalUrl() async -> String {
         let environment = UIApplication.shared.inferredEnvironment
         if environment != .appStore {
-            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTSocketURLMode {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
@@ -871,15 +871,15 @@ public class Network: NSObject {
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
         let paramsStr = parameters?.jsonString() ?? "没有参数"
         let headerStr = headers.dictionary.jsonString() ?? ""
-        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(headerStr)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .Network)
+        PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(headerStr)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
     }
 
     private static func logRequestSuccess(url: String, jsonStr: String) {
-        PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .Network)
+        PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .network)
     }
 
     private static func logRequestFailure(url: String, error: AFError) {
-        PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error, loggerType: .Network)
+        PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .error, loggerType: .network)
     }
 
     // 封装 token 添加逻辑

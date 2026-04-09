@@ -57,7 +57,7 @@ class PTAPIFunctionCheck: NSObject {
                 let model = try await Network.requestApi(needGobal:false,urlStr: apiUrl,method: method,header: header,parameters: parameters,modelType: modelType)
                 success(model.customerModel)
             } catch {
-                PTNSLogConsole("\(error.localizedDescription)",levelType: .Notice,loggerType: .Network)
+                PTNSLogConsole("\(error.localizedDescription)",levelType: .notice,loggerType: .network)
                 fail(error.localizedDescription)
             }
         }

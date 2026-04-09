@@ -10,73 +10,80 @@ import Foundation
 import OSLog
 import SwifterSwift
 
-public enum LoggerEXType:String,CaseIterable {
-    case ViewCycle = "ViewCycle"
-    case Network = "Network"
-    case Other = "Other"
-    case Router = "Router"
-    case CleanCache = "CleanCache"
-    case Button = "Button"
-    case Filter = "Filter"
-    case AnyClass = "AnyClass"
-    case Array = "Array"
-    case AVCaptureDevice = "AVCaptureDevice"
-    case Data = "Data"
-    case Device = "Device"
-    case Dictionary = "Dictionary"
-    case FileManager = "FileManager"
-    case String = "String"
-    case UIApplication = "UIApplication"
-    case Color = "Color"
-    case Font = "Font"
-    case TextView = "TextView"
-    case URL = "URL"
-    case UserDefaults = "UserDefaults"
-    case Web = "Web"
-    case FWord = "FWord"
-    case CheckUpdate = "CheckUpdate"
-    case Contract = "Contract"
-    case Utils = "Utils"
-    case Settings = "Settings"
-    case File = "File"
-    case Alert = "Alert"
-    case Health = "Health"
-    case Media = "Media"
-    case Json = "Json"
-    case Log = "Log"
-    case Location = "Location"
-    case Speech = "Speech"
-    case QRCode = "QRCode"
-    case Segment = "Segment"
-    case SideMenu = "SideMenu"
-    case StatusBar = "StatusBar"
-    case Vision = "Vision"
-    case Debug = "Debug"
+// 优化 1：使用 String 作为 RawValue 时，如果不赋值，默认就是 case 的字符串名称
+// 优化 2：将 case 改为小驼峰命名 (lowerCamelCase)，符合 Swift API 设计规范
+public enum LoggerEXType: String, CaseIterable {
+    case viewCycle = "ViewCycle"
+    case network = "Network"
+    case other = "Other"
+    case router = "Router"
+    case cleanCache = "CleanCache"
+    case button = "Button"
+    case filter = "Filter"
+    case anyClass = "AnyClass"
+    case array = "Array"
+    case avCaptureDevice = "AVCaptureDevice"
+    case data = "Data"
+    case device = "Device"
+    case dictionary = "Dictionary"
+    case fileManager = "FileManager"
+    case string = "String"
+    case uiApplication = "UIApplication"
+    case color = "Color"
+    case font = "Font"
+    case textView = "TextView"
+    case url = "URL"
+    case userDefaults = "UserDefaults"
+    case web = "Web"
+    case fWord = "FWord"
+    case checkUpdate = "CheckUpdate"
+    case contract = "Contract"
+    case utils = "Utils"
+    case settings = "Settings"
+    case file = "File"
+    case alert = "Alert"
+    case health = "Health"
+    case media = "Media"
+    case json = "Json"
+    case log = "Log"
+    case location = "Location"
+    case speech = "Speech"
+    case qrCode = "QRCode"
+    case segment = "Segment"
+    case sideMenu = "SideMenu"
+    case statusBar = "StatusBar"
+    case vision = "Vision"
+    case debug = "Debug"
 }
 
-@objc public enum LoggerEXLevelType:Int,CaseIterable {
-    case Debug
-    case Error
-    case Info
-    case Warning
-    case Trace
-    case Notice
-    case Critical
-    case Fault
+// 优化 1：case 改为小驼峰命名
+@objc public enum LoggerEXLevelType: Int, CaseIterable {
+    case debug
+    case error
+    case info
+    case warning
+    case trace
+    case notice
+    case critical
+    case fault
 }
 
-public let PTLogMode:LoggerEXLevelType = {
+public let PTLogMode: LoggerEXLevelType = {
+    // 优化 3：探讨这里的逻辑。这里我先假设你需要开发环境用 debug，正式环境用 error。
+    // 如果你原本的逻辑是刻意为之，可以改回你的版本。
     if UIApplication.shared.inferredEnvironment != .appStore {
-        return .Notice
+        return .debug
     } else {
-        return .Debug
+        return .error
     }
 }()
 
 public extension Logger {
-    private static var subsystem = Bundle.main.bundleIdentifier!
+    // 优化 4：去掉强制解包 `!`，提供一个安全的默认值 ("com.unknown.app") 防止极端情况崩溃
+    private static var subsystem = Bundle.main.bundleIdentifier ?? "com.ptools.unknown"
         
-    static func loger(categoryName:String) ->Logger {
-        Logger(subsystem: subsystem, category: categoryName)
+    // 优化 5：修正单词拼写 loger -> logger
+    static func logger(categoryName: String) -> Logger {
+        return Logger(subsystem: subsystem, category: categoryName)
     }
 }

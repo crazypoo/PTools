@@ -37,7 +37,7 @@ public class PCleanCache: NSObject {
             do {
                 return try await Int64(ImageCache.default.diskStorageSize)
             } catch {
-                PTNSLogConsole("Kingfisher Size Error: \(error)", levelType: .Error, loggerType: .CleanCache)
+                PTNSLogConsole("Kingfisher Size Error: \(error)", levelType: .error, loggerType: .cleanCache)
                 return Int64(0)
             }
         }.value
@@ -141,11 +141,11 @@ public class PCleanCache: NSObject {
                         try FileManager.default.removeItem(at: fileURL)
                         flag = true
                     } catch {
-                        PTNSLogConsole("Remove Error: \(error.localizedDescription)", levelType: .Error, loggerType: .CleanCache)
+                        PTNSLogConsole("Remove Error: \(error.localizedDescription)", levelType: .error, loggerType: .cleanCache)
                     }
                 }
             } catch {
-                PTNSLogConsole("Read Directory Error: \(error.localizedDescription)", levelType: .Error, loggerType: .CleanCache)
+                PTNSLogConsole("Read Directory Error: \(error.localizedDescription)", levelType: .error, loggerType: .cleanCache)
             }
             return flag
         }.value

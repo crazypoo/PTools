@@ -35,7 +35,7 @@ public class PTRouterManager: NSObject {
         
         PTRouter.globalOpenFailedHandler { (info) in
             guard let matchFailedKey = info[PTRouter.matchFailedKey] as? String else { return }
-            PTNSLogConsole(matchFailedKey,levelType: PTLogMode,loggerType: .Router)
+            PTNSLogConsole(matchFailedKey,levelType: PTLogMode,loggerType: .router)
             PTRouter.shareInstance.logcat?("PTRouter: globalOpenFailedHandler", .logError, "\(matchFailedKey)")
         }
         

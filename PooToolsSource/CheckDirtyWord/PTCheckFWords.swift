@@ -36,7 +36,7 @@ public class PTCheckFWords: NSObject {
                 }
             }
         } catch {
-            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .FWord)
+            PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .fWord)
         }
     }
     

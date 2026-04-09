@@ -127,7 +127,7 @@ public class StatusBarManager {
     }
     
     public func printAllStates(_ method: String = #function) {
-        PTNSLogConsole("\(method): currentState = \(currentState.key)", levelType: PTLogMode, loggerType: .StatusBar)
+        PTNSLogConsole("\(method): currentState = \(currentState.key)", levelType: PTLogMode, loggerType: .statusBar)
         printAllStatesInTree(rootState, deep: 0, method: method)
     }
     
@@ -187,7 +187,7 @@ public class StatusBarManager {
     }
     
     fileprivate func printAllStatesInTree(_ state: StatusBarState, deep: Int = 0, method: String) {
-        PTNSLogConsole("\(method): \(deep) - state=\(state)", levelType: PTLogMode, loggerType: .StatusBar)
+        PTNSLogConsole("\(method): \(deep) - state=\(state)", levelType: PTLogMode, loggerType: .statusBar)
         state.subStates.forEach { printAllStatesInTree($0, deep: deep + 1, method: method) }
     }
     

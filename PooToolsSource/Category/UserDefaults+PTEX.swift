@@ -100,7 +100,7 @@ public extension PTPOP where Base: UserDefaults {
         }
         let decoder = JSONDecoder()
         guard let object = try? decoder.decode(type, from: data) else {
-            PTNSLogConsole("Couldnt find key",levelType: .Error,loggerType: .UserDefaults)
+            PTNSLogConsole("Couldnt find key",levelType: .error,loggerType: .userDefaults)
             return nil
         }
         return object
@@ -117,7 +117,7 @@ public extension PTPOP where Base: UserDefaults {
             Base.standard.synchronize()
             return true
         } catch {
-            PTNSLogConsole(error,levelType: .Error,loggerType: .UserDefaults)
+            PTNSLogConsole(error,levelType: .error,loggerType: .userDefaults)
         }
         return false
     }
@@ -130,7 +130,7 @@ public extension PTPOP where Base: UserDefaults {
         do {
             return try JSONDecoder().decode([T].self, from: data)
         } catch {
-            PTNSLogConsole(error,levelType: .Error,loggerType: .UserDefaults)
+            PTNSLogConsole(error,levelType: .error,loggerType: .userDefaults)
         }
         return []
     }

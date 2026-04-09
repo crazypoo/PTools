@@ -773,7 +773,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         if !FileManager.pt.judgeFileOrFolderExists(filePath: OutputFilePath) {
             let result = FileManager.pt.createFolder(folderPath: OutputFilePath)
             if !result.isSuccess {
-                PTNSLogConsole("創建失敗", levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("創建失敗", levelType: .error,loggerType: .media)
             }
         }
 //        guard let nav = navigationController else { return }

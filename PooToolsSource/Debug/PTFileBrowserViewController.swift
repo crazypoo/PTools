@@ -92,7 +92,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                                 if result.isSuccess {
                                     self.loadData()
                                 } else {
-                                    PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
+                                    PTNSLogConsole(result.error,levelType: .error,loggerType: .file)
                                 }
                             case 2:
                                 guard let filePath = self.operateFilePath else { return }
@@ -101,7 +101,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                                 if result.isSuccess {
                                     self.loadData()
                                 } else {
-                                    PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
+                                    PTNSLogConsole(result.error,levelType: .error,loggerType: .file)
                                 }
                             case 3:
                                 guard let filePath = self.operateFilePath else { return }
@@ -109,7 +109,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                                 if result.isSuccess {
                                     self.loadData()
                                 } else {
-                                    PTNSLogConsole(result.error,levelType: .Error,loggerType: .File)
+                                    PTNSLogConsole(result.error,levelType: .error,loggerType: .file)
                                 }
                             default:
                                 guard let filePath = self.operateFilePath else { return }
@@ -119,7 +119,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
 
                                     hashValue = "MD5: \n" + data.pt.hashString(hashType: .md5) + "\n\n" + "SHA1: \n" + data.pt.hashString(hashType: .sha1) + "\n\n" + "SHA256: \n" + data.pt.hashString(hashType: .sha256) + "\n\n" + "SHA384: \n" + data.pt.hashString(hashType: .sha384) + "\n\n" + "SHA512: \n" + data.pt.hashString(hashType: .sha512)
                                 } catch  {
-                                    PTNSLogConsole(error,levelType: .Error,loggerType: .File)
+                                    PTNSLogConsole(error,levelType: .error,loggerType: .file)
                                     hashValue = error.localizedDescription
                                 }
                                 

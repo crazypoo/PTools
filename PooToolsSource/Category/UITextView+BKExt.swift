@@ -164,7 +164,7 @@ public extension UITextView {
 
         if currentText.count > maxCount {
             self.text = String(currentText.prefix(maxCount))
-            PTNSLogConsole("已经超过限制的字数了！（已截断）", levelType: PTLogMode, loggerType: .TextView)
+            PTNSLogConsole("已经超过限制的字数了！（已截断）", levelType: PTLogMode, loggerType: .textView)
         }
     }
         

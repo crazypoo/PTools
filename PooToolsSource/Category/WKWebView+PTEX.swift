@@ -79,7 +79,7 @@ public extension PTPOP where Base: WKWebView {
               let urlStr = urlString.removingPercentEncoding as String?,
               let url = URL(string: urlStr) as URL?
         else {
-            PTNSLogConsole("链接错误",levelType: .Error,loggerType: .Web)
+            PTNSLogConsole("链接错误",levelType: .error,loggerType: .web)
             return
         }
         let cookieSource: String = "document.cookie = 'user=\("userValue")';"

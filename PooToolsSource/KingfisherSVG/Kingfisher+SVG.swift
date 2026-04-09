@@ -77,7 +77,7 @@ public extension UIImageView {
                     self.image = value.image
                 }
             case .failure(let error):
-                PTNSLogConsole("Image download fail:\(error.localizedDescription)",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("Image download fail:\(error.localizedDescription)",levelType: .error,loggerType: .media)
             }
         }
     }
@@ -107,7 +107,7 @@ public extension UIButton {
                     self.setImage(value.image, for: state)
                 }
             case .failure(let error):
-                PTNSLogConsole("Image download fail:\(error.localizedDescription)",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("Image download fail:\(error.localizedDescription)",levelType: .error,loggerType: .media)
             }
         }
     }

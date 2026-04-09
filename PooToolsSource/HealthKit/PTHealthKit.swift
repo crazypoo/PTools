@@ -40,12 +40,12 @@ public class PTHealthKit: NSObject {
             
             healthStore.requestAuthorization(toShare: nil, read: types) { success, error in
                 if !success {
-                    PTNSLogConsole("You didn't allow HealthKit to access these read data types. In your app, try to handle this error gracefully when a user decides not to provide access. The error was: \(String(describing: error)). If you're using a simulator, try it on a device.",levelType: .Error,loggerType: .Health)
+                    PTNSLogConsole("You didn't allow HealthKit to access these read data types. In your app, try to handle this error gracefully when a user decides not to provide access. The error was: \(String(describing: error)). If you're using a simulator, try it on a device.",levelType: .error,loggerType: .health)
                     return
                 }
             }
         } else {
-            PTNSLogConsole("HKHealthStore is not available",levelType: .Error,loggerType: .Health)
+            PTNSLogConsole("HKHealthStore is not available",levelType: .error,loggerType: .health)
         }
         
         stepAll()
@@ -62,7 +62,7 @@ public class PTHealthKit: NSObject {
         let query = HKStatisticsCollectionQuery(quantityType: quantityType!, quantitySamplePredicate: nil,options: .cumulativeSum, anchorDate: anchorDate!, intervalComponents: interval)
         query.initialResultsHandler = { querys, results, error in
             if error != nil {
-                PTNSLogConsole("*** An error occurred while calculating the statistics: \(error!.localizedDescription) ***",levelType: .Error,loggerType: .Health)
+                PTNSLogConsole("*** An error occurred while calculating the statistics: \(error!.localizedDescription) ***",levelType: .error,loggerType: .health)
             }
                         
             let todayDate = String.currentDate().toDate()!.date

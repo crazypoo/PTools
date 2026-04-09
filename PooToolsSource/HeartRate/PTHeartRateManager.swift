@@ -91,11 +91,11 @@ public class PTHeartRateManager: NSObject {
     
     public func startCapture() {
 #if POOTOOLS_DEBUG
-        PTNSLogConsole(#function + "\(classForCoder)/",levelType: PTLogMode,loggerType: .Health)
+        PTNSLogConsole(#function + "\(classForCoder)/",levelType: PTLogMode,loggerType: .health)
 #endif
         if captureSession.isRunning {
 #if POOTOOLS_DEBUG
-            PTNSLogConsole("Capture Session is already running 🏃‍♂️.",levelType: PTLogMode,loggerType: .Health)
+            PTNSLogConsole("Capture Session is already running 🏃‍♂️.",levelType: PTLogMode,loggerType: .health)
 #endif
             return
         }
@@ -104,11 +104,11 @@ public class PTHeartRateManager: NSObject {
     
     public func stopCapture() {
 #if POOTOOLS_DEBUG
-        PTNSLogConsole("\(classForCoder)/",levelType: PTLogMode,loggerType: .Health)
+        PTNSLogConsole("\(classForCoder)/",levelType: PTLogMode,loggerType: .health)
 #endif
         if !captureSession.isRunning {
 #if POOTOOLS_DEBUG
-            PTNSLogConsole("Capture Session has already stopped 🛑.",levelType: PTLogMode,loggerType: .Health)
+            PTNSLogConsole("Capture Session has already stopped 🛑.",levelType: PTLogMode,loggerType: .health)
 #endif
             return
         }

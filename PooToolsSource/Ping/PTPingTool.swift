@@ -183,14 +183,14 @@ private extension PTPingTool {
 
     @objc func _didEnterBackground() {
         if debugLog {
-            PTNSLogConsole("didEnterBackground: stop ping",levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("didEnterBackground: stop ping",levelType: PTLogMode,loggerType: .network)
         }
         pingStop()
     }
 
     @objc func _didBecomeActive() {
         if debugLog {
-            PTNSLogConsole("didBecomeActive: ping resume",levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("didBecomeActive: ping resume",levelType: PTLogMode,loggerType: .network)
         }
         start(pingType: pinger.addressStyle, interval: pingInterval, complete: complete)
     }
@@ -246,7 +246,7 @@ extension PTPingTool: SimplePingDelegate {
     public func simplePing(_ pinger: SimplePing, didStart address: Data) {
         pingAddressIP = displayAddressForAddress(address: NSData(data: address))
         if debugLog {
-            PTNSLogConsole("ping: ", pingAddressIP,levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("ping: ", pingAddressIP,levelType: PTLogMode,loggerType: .network)
         }
         //发送一次ping
         sendPingData()
@@ -254,7 +254,7 @@ extension PTPingTool: SimplePingDelegate {
 
     public func simplePing(_ pinger: SimplePing, didFail error: Error) {
         if debugLog {
-            PTNSLogConsole("ping failed: ", shortErrorFromError(error: error as NSError),levelType: .Error,loggerType: .Network)
+            PTNSLogConsole("ping failed: ", shortErrorFromError(error: error as NSError),levelType: .error,loggerType: .network)
         }
         PTPingActivityIndicator.shared.update(time: 460)
         if let complete = complete {
@@ -270,7 +270,7 @@ extension PTPingTool: SimplePingDelegate {
 
     public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
         if debugLog {
-            PTNSLogConsole("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)",levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)",levelType: PTLogMode,loggerType: .network)
         }
         isPing = true
         lastSendItem = PTPingItem(sendTime: Date(), sequence: sequenceNumber)
@@ -300,7 +300,7 @@ extension PTPingTool: SimplePingDelegate {
 
     public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
         if debugLog {
-            PTNSLogConsole("ping send error: ", sequenceNumber, shortErrorFromError(error: error as NSError),levelType: .Error,loggerType: .Network)
+            PTNSLogConsole("ping send error: ", sequenceNumber, shortErrorFromError(error: error as NSError),levelType: .error,loggerType: .network)
         }
         PTPingActivityIndicator.shared.update(time: 460)
         if let complete = complete {
@@ -318,7 +318,7 @@ extension PTPingTool: SimplePingDelegate {
         if let sendPingItem = lastSendItem {
             let time = Date().timeIntervalSince(sendPingItem.sendTime).truncatingRemainder(dividingBy: 1) * 1000
             if debugLog {
-                PTNSLogConsole("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms",levelType: PTLogMode,loggerType: .Network)
+                PTNSLogConsole("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms",levelType: PTLogMode,loggerType: .network)
             }
             PTPingActivityIndicator.shared.update(time: Int(time))
             if let complete = complete {
@@ -333,7 +333,7 @@ extension PTPingTool: SimplePingDelegate {
 
     public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
         if debugLog {
-            PTNSLogConsole("unexpected receive packet, size=\(packet.count)",levelType: PTLogMode,loggerType: .Network)
+            PTNSLogConsole("unexpected receive packet, size=\(packet.count)",levelType: PTLogMode,loggerType: .network)
         }
         //标记完成
         pingComplete()

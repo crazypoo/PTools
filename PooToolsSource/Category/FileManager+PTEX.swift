@@ -806,7 +806,7 @@ public extension PTPOP where Base: FileManager {
             let img = UIImage(cgImage: cgImg)
             return img
         } else {
-            PTNSLogConsole("获取缩略图失败",levelType: .Error,loggerType: .FileManager)
+            PTNSLogConsole("获取缩略图失败",levelType: .error,loggerType: .fileManager)
             return nil
         }
     }

@@ -135,7 +135,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
                     let textAtt:ASAttributedString = ASAttributedString("\(myItemModel.title!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont),.foreground(myItemModel.titleCurrentColor))
                     self.titleLabel.attributed.text = imageAtt + textAtt
                 case .failure(let error):
-                    PTNSLogConsole(error,levelType: .Error,loggerType: .Segment)
+                    PTNSLogConsole(error,levelType: .error,loggerType: .segment)
                 }
             }
         case .OnlyTitle:

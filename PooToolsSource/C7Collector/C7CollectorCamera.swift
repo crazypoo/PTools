@@ -196,7 +196,7 @@ public final class C7CollectorCamera: C7Collector {
         
         guard captureSession.outputs.contains(videoOutput) else {
             //MARK: 相机不能用
-            PTNSLogConsole("相机不能用",levelType: .Error,loggerType: .Filter)
+            PTNSLogConsole("相机不能用",levelType: .error,loggerType: .filter)
             return
         }
         
@@ -360,7 +360,7 @@ public final class C7CollectorCamera: C7Collector {
                 deviceInput!.device.torchMode = .off
                 deviceInput!.device.unlockForConfiguration()
             } catch {
-                PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Filter)
+                PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .filter)
             }
         }
     }
@@ -372,7 +372,7 @@ public final class C7CollectorCamera: C7Collector {
                 deviceInput!.device.torchMode = .on
                 deviceInput!.device.unlockForConfiguration()
             } catch {
-                PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Filter)
+                PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .filter)
             }
         }
     }

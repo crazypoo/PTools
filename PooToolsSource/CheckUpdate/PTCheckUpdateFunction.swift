@@ -236,14 +236,14 @@ public class PTCheckUpdateFunction: NSObject {
                     if url != nil {
                         PTAppStoreFunction.jumpLink(url: url!)
                     } else {
-                        PTNSLogConsole("非法url",levelType: .Error,loggerType: .CheckUpdate)
+                        PTNSLogConsole("非法url",levelType: .error,loggerType: .checkUpdate)
                     }
                 }
             case 1:
                 if url != nil {
                     PTAppStoreFunction.jumpLink(url: url!)
                 } else {
-                    PTNSLogConsole("非法url",levelType: .Error,loggerType: .CheckUpdate)
+                    PTNSLogConsole("非法url",levelType: .error,loggerType: .checkUpdate)
                 }
             default:
                 break
@@ -325,11 +325,11 @@ public class PTCheckUpdateFunction: NSObject {
                             self.updateAlert(force: force, appid: appid, version: versionStr, note: versionModel.releaseNotes, alertType: alertType)
                         }
                     } catch {
-                        PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .CheckUpdate)
+                        PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .checkUpdate)
                     }
                 }
             } else {
-                PTNSLogConsole("没有检测到APPID",levelType: .Error,loggerType: .CheckUpdate)
+                PTNSLogConsole("没有检测到APPID",levelType: .error,loggerType: .checkUpdate)
             }
         }
     }
@@ -463,7 +463,7 @@ public class PTCheckUpdateFunction: NSObject {
                 if showHud {
                     toggleHud(show: false)
                 }
-                PTNSLogConsole("\(error.localizedDescription)",levelType: .Notice,loggerType: .Network)
+                PTNSLogConsole("\(error.localizedDescription)",levelType: .notice,loggerType: .network)
                 
                 let nsError = error as NSError
                 fail(nsError)

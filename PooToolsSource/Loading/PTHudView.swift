@@ -74,7 +74,7 @@ public class PTHudView: UIView {
     
     public func hudShow() {
         if PTHudConfig.share.hudColors.count < 2 {
-            PTNSLogConsole("不可以小于两个颜色",levelType: .Error,loggerType: .Alert)
+            PTNSLogConsole("不可以小于两个颜色",levelType: .error,loggerType: .alert)
             return
         }
         backgroundColor = PTHudConfig.share.backgroundColor

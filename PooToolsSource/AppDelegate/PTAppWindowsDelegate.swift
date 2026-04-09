@@ -81,7 +81,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         }
         PTRouterManager.registerServices(excludeCocoapods: true)
         PTRouter.logcat { url, logType, errorMsg in
-            PTNSLogConsole("PTRouter: logMsg- \(url) \(logType.rawValue) \(errorMsg)",levelType: .Notice,loggerType: .Router)
+            PTNSLogConsole("PTRouter: logMsg- \(url) \(logType.rawValue) \(errorMsg)",levelType: .notice,loggerType: .router)
         }
     }
 #endif

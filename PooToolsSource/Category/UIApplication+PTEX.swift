@@ -15,7 +15,7 @@ public extension UIApplication {
     @objc func clearLaunchScreenCache() {
         let result = FileManager.pt.removefolder(folderPath: FileManager.pt.homeDirectory() + "/Library/SplashBoard")
         if !result.isSuccess {
-            PTNSLogConsole("Failed to delete launch screen cache: \(result.error)",levelType: .Error,loggerType: .UIApplication)
+            PTNSLogConsole("Failed to delete launch screen cache: \(result.error)",levelType: .error,loggerType: .uiApplication)
         }
     }
     
@@ -88,9 +88,9 @@ public extension PTPOP where Base: UIApplication {
     ///iOS更换App图标
     static func changeAppIcon(with name:String? = nil) {
         if UIApplication.shared.supportsAlternateIcons {
-            PTNSLogConsole("you can change this app's icon",levelType: PTLogMode,loggerType: .UIApplication)
+            PTNSLogConsole("you can change this app's icon",levelType: PTLogMode,loggerType: .uiApplication)
         } else {
-            PTNSLogConsole("you can not change this app's icon",levelType: PTLogMode,loggerType: .UIApplication)
+            PTNSLogConsole("you can not change this app's icon",levelType: PTLogMode,loggerType: .uiApplication)
             return
         }
         
@@ -99,7 +99,7 @@ public extension PTPOP where Base: UIApplication {
                 UIViewController.gobal_drop(title: error.debugDescription)
 
             }
-            PTNSLogConsole("The alternate icon's name is \(String(describing: name))",levelType: PTLogMode,loggerType: .UIApplication)
+            PTNSLogConsole("The alternate icon's name is \(String(describing: name))",levelType: PTLogMode,loggerType: .uiApplication)
         }
     }
     

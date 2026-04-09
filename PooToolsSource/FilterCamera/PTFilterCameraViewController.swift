@@ -183,7 +183,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                         }
                         self.camera.deviceInput!.device.unlockForConfiguration()
                     } catch {
-                        PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Filter)
+                        PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .filter)
                     }
                 }
             }
@@ -686,7 +686,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             
             device.unlockForConfiguration()
         } catch {
-            PTNSLogConsole("相机聚焦设置失败 \(error.localizedDescription)",levelType: .Error,loggerType: .Filter)
+            PTNSLogConsole("相机聚焦设置失败 \(error.localizedDescription)",levelType: .error,loggerType: .filter)
         }
     }
 

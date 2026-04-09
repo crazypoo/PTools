@@ -64,7 +64,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             return
         }
 
-        PTNSLogConsole("---- start fetch", levelType: PTLogMode, loggerType: .Media)
+        PTNSLogConsole("---- start fetch", levelType: PTLogMode, loggerType: .media)
         isExecuting = true
 
         // 2. 处理编辑过的图片
@@ -106,7 +106,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
                 let fixedImage = image?.pt.fixOrientation()
                 let finalImage = self.isOriginal ? fixedImage : self.scaleImage(fixedImage)
                 
-                PTNSLogConsole("加载完成, 原图: \(self.isOriginal)", levelType: PTLogMode, loggerType: .Media)
+                PTNSLogConsole("加载完成, 原图: \(self.isOriginal)", levelType: PTLogMode, loggerType: .media)
                 self.completion(finalImage, nil)
                 self.fetchFinish()
             }

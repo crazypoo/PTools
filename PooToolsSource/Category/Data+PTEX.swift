@@ -179,7 +179,7 @@ public extension Data {
         do{
             return try JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String: Any]
         } catch {
-            PTNSLogConsole(error.localizedDescription,levelType: .Error,loggerType: .Data)
+            PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .data)
             return nil
         }
     }
@@ -196,7 +196,7 @@ public extension Data {
         do {
             return try JSONDecoder().decode(type, from: self)
         } catch  {
-            PTNSLogConsole("data to model error",levelType: .Error,loggerType: .Data)
+            PTNSLogConsole("data to model error",levelType: .error,loggerType: .data)
             return nil
         }
     }

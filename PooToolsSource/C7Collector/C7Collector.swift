@@ -52,7 +52,7 @@ public class C7Collector: NSObject, Cacheable {
     deinit {
         delegate = nil
         deferTextureCache()
-        PTNSLogConsole("C7Collector is deinit.",levelType: PTLogMode,loggerType: .ViewCycle)
+        PTNSLogConsole("C7Collector is deinit.",levelType: PTLogMode,loggerType: .viewCycle)
     }
     
     open func setupInit() {

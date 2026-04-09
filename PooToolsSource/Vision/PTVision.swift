@@ -74,10 +74,10 @@ public class PTVision: NSObject {
         PTGCDManager.gcdGobal {
             let textDetectionRequest = VNRecognizeTextRequest { request, error in
                 if let error = error {
-                    PTNSLogConsole(error.localizedDescription, levelType: .Error, loggerType: .Vision)
+                    PTNSLogConsole(error.localizedDescription, levelType: .error, loggerType: .vision)
                 } else {
                     guard let observations = request.results as? [VNRecognizedTextObservation] else {
-                        PTNSLogConsole("No results found", levelType: .Error, loggerType: .Vision)
+                        PTNSLogConsole("No results found", levelType: .error, loggerType: .vision)
                         return
                     }
 
@@ -89,7 +89,7 @@ public class PTVision: NSObject {
                     }
 
                     PTGCDManager.gcdMain {
-                        PTNSLogConsole(resultText, levelType: PTLogMode, loggerType: .Vision)
+                        PTNSLogConsole(resultText, levelType: PTLogMode, loggerType: .vision)
                         resultBlock?(resultText, observations)
                     }
                 }
@@ -101,7 +101,7 @@ public class PTVision: NSObject {
 
             PTGCDManager.gcdMain {
                 guard let cgImage = image.cgImage else {
-                    PTNSLogConsole("Invalid image for OCR detection", levelType: .Error, loggerType: .Vision)
+                    PTNSLogConsole("Invalid image for OCR detection", levelType: .error, loggerType: .vision)
                     return
                 }
 
@@ -109,7 +109,7 @@ public class PTVision: NSObject {
                 do {
                     try handler.perform([textDetectionRequest])
                 } catch {
-                    PTNSLogConsole("Failed to perform text detection request: \(error)", levelType: .Error, loggerType: .Vision)
+                    PTNSLogConsole("Failed to perform text detection request: \(error)", levelType: .error, loggerType: .vision)
                 }
             }
         }
@@ -138,7 +138,7 @@ public class PTVision: NSObject {
         imageView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 
         guard let image = imageView.image else {
-            PTNSLogConsole("ImageView does not contain an image", levelType: .Error, loggerType: .Vision)
+            PTNSLogConsole("ImageView does not contain an image", levelType: .error, loggerType: .vision)
             return
         }
 

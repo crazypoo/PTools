@@ -47,15 +47,15 @@ public enum PTImagePicker {
         public func outPutLog(){
             switch self {
             case .NullParentViewController:
-                PTNSLogConsole("沒有Controller",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("沒有Controller",levelType: .error,loggerType: .media)
             case .ObjFetchFaild:
-                PTNSLogConsole("找不到對象",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("找不到對象",levelType: .error,loggerType: .media)
             case let .ObjConvertFaild(error):
-                PTNSLogConsole("對象轉換失敗:\(String(describing: error))",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("對象轉換失敗:\(String(describing: error))",levelType: .error,loggerType: .media)
             case let .Other(error):
-                PTNSLogConsole("其他錯誤:\(String(describing: error))",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("其他錯誤:\(String(describing: error))",levelType: .error,loggerType: .media)
             case .UserCancel:
-                PTNSLogConsole("用戶取消了",levelType: .Error,loggerType: .Media)
+                PTNSLogConsole("用戶取消了",levelType: .error,loggerType: .media)
             }
         }
     }
@@ -71,7 +71,7 @@ extension PTImagePicker {
         private var completion:PTImagePicker.Completion<T>? = nil
         
         deinit {
-            PTNSLogConsole("PTImagePicker.controller deinit",levelType: PTLogMode,loggerType: .ViewCycle)
+            PTNSLogConsole("PTImagePicker.controller deinit",levelType: PTLogMode,loggerType: .viewCycle)
         }
         
         public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

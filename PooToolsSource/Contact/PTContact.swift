@@ -124,7 +124,7 @@ public class PTContact: NSObject {
                     indexModel.contractModel = contractModels
                     handle(indexModel)
                 } else {
-                    PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts",levelType: .Error,loggerType: .Contract)
+                    PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts",levelType: .error,loggerType: .contract)
                     handle(nil)
                 }
             }            

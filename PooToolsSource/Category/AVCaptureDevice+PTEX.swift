@@ -68,7 +68,7 @@ public extension AVCaptureDevice {
         } else {
             selectedFormat = formatWithHighestResolution(availableFormats)
         }
-        PTNSLogConsole("selected format: \(String(describing: selectedFormat))",levelType: PTLogMode,loggerType: .AVCaptureDevice)
+        PTNSLogConsole("selected format: \(String(describing: selectedFormat))",levelType: PTLogMode,loggerType: .avCaptureDevice)
         
         if let selectedFormat = selectedFormat {
             do {
@@ -89,7 +89,7 @@ public extension AVCaptureDevice {
     
     func toggleTorch(on: Bool) {
         guard hasTorch, isTorchAvailable else {
-            PTNSLogConsole("Torch is not available",levelType: .Error,loggerType: .AVCaptureDevice)
+            PTNSLogConsole("Torch is not available",levelType: .error,loggerType: .avCaptureDevice)
             return
         }
         do {
@@ -97,7 +97,7 @@ public extension AVCaptureDevice {
             torchMode = on ? .on : .off
             unlockForConfiguration()
         } catch {
-            PTNSLogConsole("Torch could not be used \(error)",levelType: .Error,loggerType: .AVCaptureDevice)
+            PTNSLogConsole("Torch could not be used \(error)",levelType: .error,loggerType: .avCaptureDevice)
         }
     }
 }
