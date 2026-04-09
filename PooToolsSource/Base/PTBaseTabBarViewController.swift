@@ -40,7 +40,13 @@ open class PTBaseTabBarViewController: UITabBarController {
         super.viewDidLoad()
         
         PTNavigationBarManager.shared.tabBarHandler = { [weak self] nav, toVC, animated, coordinator in
-            self?.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
+            guard let self = self else { return }
+            // 🌟 修复点 1：只拦截属于当前 TabBarController 的导航栈
+            // 这样可以防止 present 出来的新 NavigationController 误触发 TabBar 的显示逻辑
+            guard let vcs = self.viewControllers, vcs.contains(nav) else {
+                return
+            }
+            self.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
         }
         
         /*
@@ -230,7 +236,8 @@ extension PTBaseTabBarViewController {
             : .identity
 
         let updateHiddenState = {
-            self.tabBar.isHidden = false   // ❗始终 false（靠 transform 控制）
+            self.tabBar.isHidden = true   // ❗始终 false（靠 transform 控制）
+            self.ptCustomBar.isHidden = false
         }
 
         if animated {

@@ -757,11 +757,7 @@ open class PTBaseViewController: UIViewController {
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
-        
-        if let _ = self.presentationController,let currentTabbarVC = self.tabBarController as? PTBaseTabBarViewController {
-            currentTabbarVC.setTabBar(hidden: true, animated: animated)
-        }
+        PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)        
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
