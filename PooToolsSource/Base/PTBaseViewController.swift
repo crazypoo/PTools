@@ -109,12 +109,16 @@ public final class PTNavigationBarContainer: UIView {
         largeTitleContainer.addSubview(largeTitleLabel)
         topBarContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController/*,let contentNav = sheet.contentViewController.navigationController,contentNav.viewControllers.first != findCurrent*/ {
-                make.top.equalToSuperview().offset(-CGFloat.statusBarHeight())
+            var offsetHeight:CGFloat = 0
+            if let findCurrent = PTUtils.getCurrentVC(),let sheet = findCurrent.sheetViewController {
+                let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() : sheet.options.pullBarHeight
+                make.top.equalToSuperview().offset(-offset)
+                offsetHeight = offset
             } else {
                 make.top.equalToSuperview()
+                offsetHeight = CGFloat.statusBarHeight()
             }
-            make.height.equalTo(CGFloat.statusBarHeight() + CGFloat.kNavBarHeight)
+            make.height.equalTo(offsetHeight + CGFloat.kNavBarHeight)
         }
         
         largeTitleContainer.snp.makeConstraints { make in
