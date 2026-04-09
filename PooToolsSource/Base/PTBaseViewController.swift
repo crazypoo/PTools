@@ -754,8 +754,8 @@ open class PTBaseViewController: UIViewController {
             PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
         }
         
-        if let sheet = sheetViewController {
-            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: sheet.contentViewController.childViewController.navigationController)
+        if let sheet = sheetViewController,let nav = sheet.contentViewController.childViewController.navigationController {
+            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
         }
     }
     
