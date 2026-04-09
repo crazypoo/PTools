@@ -42,7 +42,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         PTNavigationBarManager.shared.tabBarHandler = { [weak self] nav, toVC, animated, coordinator in
             self?.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
         }
-
+        
         /*
         //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
         //tabBarController.mode = .tabSidebar
@@ -219,7 +219,7 @@ extension PTBaseTabBarViewController {
         setTabBar(hidden: hidden, animated: animated)
     }
     
-    private func setTabBar(hidden: Bool, animated: Bool) {
+    public func setTabBar(hidden: Bool, animated: Bool) {
         tabBar.isHidden = true
         let height = ptCustomBar.currentBarLayoutStyle == .normal
         ? CGFloat.kTabbarHeight_Total
