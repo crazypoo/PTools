@@ -26,9 +26,7 @@ open class PTBaseNavControl: UINavigationController {
     }
     
     open override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.navigationBar.isTranslucent = true
+        super.viewDidLoad()        
         pushStatusBars(for: viewControllers)
         interactivePopGestureRecognizer?.delegate = self
         delegate = self
