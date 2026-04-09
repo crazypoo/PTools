@@ -139,6 +139,10 @@ class PTLoadedLibsViewController: PTBaseViewController {
     
     // 修复 1：删除了多余的 private var libraries: [PTLoadedLibrary] = []
     
+    open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }

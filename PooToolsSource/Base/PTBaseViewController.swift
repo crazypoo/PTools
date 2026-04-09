@@ -111,7 +111,7 @@ public final class PTNavigationBarContainer: UIView {
             make.left.right.equalToSuperview()
             var offsetHeight:CGFloat = 0
             if let findCurrent = PTUtils.getCurrentVC(),let sheet = findCurrent.sheetViewController {
-                let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() : sheet.options.pullBarHeight
+                let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() * 2 : sheet.options.pullBarHeight
                 make.top.equalToSuperview().offset(-offset)
                 offsetHeight = offset
             } else {
@@ -628,7 +628,13 @@ extension PTNavigationBarManager {
         container.leftContainer.isHidden = true
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            var offsetHeight:CGFloat = 0
+            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
+                offsetHeight = CGFloat.statusBarHeight()
+            } else {
+                offsetHeight = 0
+            }
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
             make.width.equalTo(0)
         }
@@ -645,7 +651,13 @@ extension PTNavigationBarManager {
         containerWidth += CGFloat(views.count - 1) * spacing
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            var offsetHeight:CGFloat = 0
+            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
+                offsetHeight = CGFloat.statusBarHeight()
+            } else {
+                offsetHeight = 0
+            }
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -661,7 +673,13 @@ extension PTNavigationBarManager {
         container.rightContainer.isHidden = true
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            var offsetHeight:CGFloat = 0
+            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
+                offsetHeight = CGFloat.statusBarHeight()
+            } else {
+                offsetHeight = 0
+            }
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
             make.width.equalTo(0)
         }
@@ -678,7 +696,13 @@ extension PTNavigationBarManager {
         containerWidth += CGFloat(views.count - 1) * spacing
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            var offsetHeight:CGFloat = 0
+            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
+                offsetHeight = CGFloat.statusBarHeight()
+            } else {
+                offsetHeight = 0
+            }
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -697,8 +721,13 @@ extension PTNavigationBarManager {
         container.titleContainer.addSubview(view)
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
-
+            var offsetHeight:CGFloat = 0
+            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
+                offsetHeight = CGFloat.statusBarHeight()
+            } else {
+                offsetHeight = 0
+            }
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             if self.titleLabel {
                 make.left.lessThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing).priority(750)
                 make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing).priority(750)
@@ -748,20 +777,34 @@ open class PTBaseViewController: UIViewController {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
         applyNavigationBar()
-        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
-        // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
-        if let nav = navigationController {
-            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
-        }
         
-        if let sheet = sheetViewController,let nav = sheet.contentViewController.childViewController.navigationController {
+        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController,let findCurrent = PTUtils.getCurrentVC(),let findNavFirst = nav.viewControllers.first,findCurrent == findNavFirst {
+            PTNavigationBarManager.shared.restoreIfNeeded(for: findCurrent)
+        } else {
+            PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+        }
+
+        // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
+        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
             PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+        } else {
+            if let nav = navigationController {
+                PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+            }
         }
     }
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)        
+        PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
+        // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
+        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
+            PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
+        } else {
+            if let nav = self.navigationController {
+                PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
+            }
+        }
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
@@ -779,8 +822,12 @@ open class PTBaseViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         setupBaseConfigs()
-        if let nav = navigationController {
+        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
             PTNavigationBarManager.shared.bind(to: nav)
+        } else {
+            if let nav = navigationController {
+                PTNavigationBarManager.shared.bind(to: nav)
+            }
         }
 
         PTRotationManager.shared.orientationMaskDidChange = { orientationMask in

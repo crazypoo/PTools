@@ -984,8 +984,8 @@ extension LocalConsole {
     func consoleSheetPresent(vc:PTBaseViewController) {
         let nav = PTBaseNavControl(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
-//        PTUtils.getCurrentVC()?.present(nav, animated: true)
-        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen])
+        var options = PTSheetOptions()
+        UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],options: options)
     }
     
     func maskOpenFunction() {

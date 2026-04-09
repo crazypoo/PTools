@@ -122,7 +122,6 @@ public class PTSheetContentViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         UIView.performWithoutAnimation {
             self.view.layoutIfNeeded()
         }
