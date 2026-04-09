@@ -741,7 +741,7 @@ open class PTBaseViewController: UIViewController {
     
     // MARK: - 子类 override 以决定样式
     open func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-        return .solid(.white)
+        return .solid(.clear)
     }
 
     open override func viewWillAppear(_ animated: Bool) {
