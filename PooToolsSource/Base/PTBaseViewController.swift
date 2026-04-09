@@ -637,18 +637,19 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
+            // 🛠️ 修复：当没有视图时，强制宽度为 0，防止影响 Title 的边界计算
+            if views.isEmpty {
+                make.width.equalTo(0)
+            }
         }
         guard !views.isEmpty else { return }
         container.leftContainer.isHidden = false
-//        var containerWidth:CGFloat = 0
         views.forEach { value in
             container.leftContainer.addArrangedSubview(value)
             value.snp.remakeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
-//            containerWidth += value.bounds.size.width
         }
-//        containerWidth += CGFloat(views.count - 1) * spacing
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -659,7 +660,6 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-//            make.width.equalTo(containerWidth)
         }
         let highPriority = UILayoutPriority(999)
         container.leftContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
@@ -682,19 +682,19 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-//            make.width.equalTo(0)
+            // 🛠️ 修复：当没有视图时，强制宽度为 0，防止影响 Title 的边界计算
+            if views.isEmpty {
+                make.width.equalTo(0)
+            }
         }
         guard !views.isEmpty else { return }
         container.rightContainer.isHidden = false
-//        var containerWidth:CGFloat = 0
         views.forEach { value in
             container.rightContainer.addArrangedSubview(value)
             value.snp.makeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
-//            containerWidth += value.bounds.size.width
         }
-//        containerWidth += CGFloat(views.count - 1) * spacing
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -705,7 +705,6 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-//            make.width.equalTo(containerWidth)
         }
         let highPriority = UILayoutPriority(999)
         container.rightContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
@@ -718,8 +717,16 @@ extension PTNavigationBarManager {
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
         container.titleContainer.isHidden = true
         guard let view else { return }
+        // 🛠️ 终极防遮挡核心 1：物理裁剪，不允许超长文字渲染到容器外部
+        container.titleContainer.clipsToBounds = true
         container.titleContainer.isHidden = false
         container.titleContainer.addSubview(view)
+        
+        // 🛠️ 终极防遮挡核心 2：Z-Index 层级提升
+        // 确保左右按钮始终在标题视图的上层。这样即便是发生极限挤压，按钮也绝不会失去点击响应！
+        container.topBarContainer.bringSubviewToFront(container.leftContainer)
+        container.topBarContainer.bringSubviewToFront(container.rightContainer)
+
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
             var offsetHeight:CGFloat = 0
