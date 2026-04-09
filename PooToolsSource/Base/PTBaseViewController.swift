@@ -511,7 +511,8 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             let titleLabel = UILabel()
             titleLabel.font = PTAppBaseConfig.share.navTitleFont
             titleLabel.textColor = PTAppBaseConfig.share.navTitleTextColor
-            titleLabel.numberOfLines = 0
+            titleLabel.numberOfLines = 1
+            titleLabel.lineBreakMode = .byTruncatingTail // 👈 增加这句，确保过长显示为 ...
             titleLabel.text = item.navTitle
             titleLabel.textAlignment = .center
             setTitleView(titleLabel)
@@ -636,19 +637,18 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-            make.width.equalTo(0)
         }
         guard !views.isEmpty else { return }
         container.leftContainer.isHidden = false
-        var containerWidth:CGFloat = 0
+//        var containerWidth:CGFloat = 0
         views.forEach { value in
             container.leftContainer.addArrangedSubview(value)
-            value.snp.makeConstraints { make in
+            value.snp.remakeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
-            containerWidth += value.bounds.size.width
+//            containerWidth += value.bounds.size.width
         }
-        containerWidth += CGFloat(views.count - 1) * spacing
+//        containerWidth += CGFloat(views.count - 1) * spacing
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -659,7 +659,7 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-            make.width.equalTo(containerWidth)
+//            make.width.equalTo(containerWidth)
         }
         let highPriority = UILayoutPriority(999)
         container.leftContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
@@ -669,6 +669,7 @@ extension PTNavigationBarManager {
     public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
+        container.rightContainer.spacing = spacing
         container.rightContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.rightContainer.isHidden = true
         container.rightContainer.snp.remakeConstraints { make in
@@ -681,19 +682,19 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-            make.width.equalTo(0)
+//            make.width.equalTo(0)
         }
         guard !views.isEmpty else { return }
         container.rightContainer.isHidden = false
-        var containerWidth:CGFloat = 0
+//        var containerWidth:CGFloat = 0
         views.forEach { value in
             container.rightContainer.addArrangedSubview(value)
             value.snp.makeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
-            containerWidth += value.bounds.size.width
+//            containerWidth += value.bounds.size.width
         }
-        containerWidth += CGFloat(views.count - 1) * spacing
+//        containerWidth += CGFloat(views.count - 1) * spacing
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -704,7 +705,7 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-            make.width.equalTo(containerWidth)
+//            make.width.equalTo(containerWidth)
         }
         let highPriority = UILayoutPriority(999)
         container.rightContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
@@ -729,7 +730,7 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             if self.titleLabel {
-                make.left.lessThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing).priority(750)
+                make.left.greaterThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing).priority(750)
                 make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing).priority(750)
                 make.centerX.equalToSuperview()
             } else {
