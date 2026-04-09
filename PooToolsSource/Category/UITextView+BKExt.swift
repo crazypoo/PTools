@@ -9,185 +9,192 @@
 import UIKit
 import SnapKit
 
-// MARK: - 扩展 UITextView，添加 placeholder 和 字数限制功能。
-/*
- 1、使用 SnapKit 进行布局。
- 2、使用 objc/runtime 动态添加了 pt_placeholderLabel 等属性
- */
-
+// MARK: - 扩展 UITextView，添加 placeholder 和 字数限制功能
 public extension UITextView {
+    
     private struct AssociatedKeys {
         static var pt_placeholderLabelKey = 999
         static var pt_placeholderKey = 998
         static var pt_attributedTextKey = 997
         static var pt_wordCountLabelKey = 996
         static var pt_maxWordCountKey = 995
-        static var pt_textCountPositionKey = 994
+        static var pt_kvoTokensKey = 994 // 新增：用于存储 KVO Token，实现自动释放
     }
 
-    /// 移除监听
-    func pt_removeAllObservers() -> () {
-        
-        NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: nil)
-        removeObserver(self, forKeyPath: "text")
+    // MARK: - 1. KVO 生命周期管理 (自动释放机制)
+    /// 存储 KVO 的 Token，伴随 UITextView 释放而自动释放，无需手动 removeObserver
+    private var pt_kvoTokens: [NSKeyValueObservation] {
+        get {
+            return (objc_getAssociatedObject(self, &AssociatedKeys.pt_kvoTokensKey) as? [NSKeyValueObservation]) ?? []
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.pt_kvoTokensKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
-        
-    //MARK: 設置TextView的Placeholder Label
-    ///設置TextView的Placeholder Label
+
+    // MARK: - 2. Placeholder Label 逻辑
     @objc var pt_placeholderLabel: UILabel? {
-        set{
+        set {
             objc_setAssociatedObject(self, &AssociatedKeys.pt_placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        } get {
-            let obj =  objc_getAssociatedObject(self, &AssociatedKeys.pt_placeholderLabelKey)
-            guard let placeholderLabel = obj as? UILabel else {
-                let label = UILabel()
-                label.textAlignment = .left
-                label.numberOfLines = 0
-                label.font = font
-                label.textColor = UIColor.lightGray
-                label.isUserInteractionEnabled = false
-                label.translatesAutoresizingMaskIntoConstraints = false
-                addSubview(label)
-                // 添加约束。要约束宽，否则可能导致label不换行。如果需要設置偏移,則需要先設置本體文字的偏移,再加載Placeholder
-                label.snp.makeConstraints { make in
-                    make.left.equalToSuperview().inset(self.textContainerInset.left)
-                    make.top.equalToSuperview().inset(self.textContainerInset.top)
-                    make.right.equalToSuperview().inset(self.textContainerInset.right)
-                }
-                // 设置pt_placeholderLabel，自动调用set方法
-                
-                addObserver(self, forKeyPath: "bounds", options: [.new], context: nil)
-                addObserver(self, forKeyPath: "text", options: [.new], context: nil)
-                NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidChangeNotification, object: nil)
-                NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidBeginEditingNotification, object: nil)
-                
-                self.pt_placeholderLabel = label
+        }
+        get {
+            if let label = objc_getAssociatedObject(self, &AssociatedKeys.pt_placeholderLabelKey) as? UILabel {
                 return label
             }
-            return placeholderLabel
+            
+            // 初始化 Label
+            let label = UILabel()
+            label.textAlignment = .left
+            label.numberOfLines = 0
+            // 安全解包，避免 font 为 nil 时崩溃
+            label.font = self.font ?? UIFont.systemFont(ofSize: 14)
+            label.textColor = UIColor.lightGray
+            label.isUserInteractionEnabled = false
+            label.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(label)
+            
+            // 约束：跟随 textContainerInset 变化
+            label.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(self.textContainerInset.left + 5) // +5 稍微对齐光标
+                make.top.equalToSuperview().inset(self.textContainerInset.top)
+                make.width.equalToSuperview().offset(-(self.textContainerInset.left + self.textContainerInset.right + 10))
+            }
+            
+            // 设置属性并添加监听
+            self.pt_placeholderLabel = label
+            pt_setupObservers()
+            
+            return label
         }
     }
     
-    //MARK: 設置TextView的Placeholder
-    ///設置TextView的Placeholder
     @objc var pt_placeholder: String? {
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.pt_placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            guard let placeholder = newValue else { return }
-            pt_placeholderLabel?.text = placeholder
-        } get {
-            objc_getAssociatedObject(self, &AssociatedKeys.pt_placeholderKey) as? String
+            pt_placeholderLabel?.text = newValue
+            pt_textDidChange() // 赋值后刷新状态
+        }
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.pt_placeholderKey) as? String
         }
     }
     
-    //MARK: 設置TextView的Placeholder的富文本
-    ///設置TextView的Placeholder的富文本
     @objc var pt_placeholderAttributedText: NSAttributedString? {
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.pt_attributedTextKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            guard let attr = newValue else { return }
-            pt_placeholderLabel?.attributedText = attr
-        } get {
-            objc_getAssociatedObject(self, &AssociatedKeys.pt_attributedTextKey) as? NSAttributedString
+            pt_placeholderLabel?.attributedText = newValue
+            pt_textDidChange() // 赋值后刷新状态
+        }
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.pt_attributedTextKey) as? NSAttributedString
         }
     }
     
-    //MARK: 設置TextView的字數限制Label
-    ///設置TextView的字數限制Label
+    // MARK: - 3. 字数统计 Label 逻辑 (完美封装)
     @objc var pt_wordCountLabel: UILabel? {
-        set{
-            // 调用 setter 的时候会执行此处代码，将自定义的label通过runtime保存起来
+        set {
             objc_setAssociatedObject(self, &AssociatedKeys.pt_wordCountLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        } get{
-            let obj =  objc_getAssociatedObject(self, &AssociatedKeys.pt_wordCountLabelKey) as? UILabel
-            guard let wordCountLabel = obj else {
-                let label = UILabel()
-                label.textAlignment = .right
-                label.font = font
-                label.textColor = UIColor.lightGray
-                label.isUserInteractionEnabled = false
-                
-                // 添加到视图中
-                if let grandfatherView = superview {
-                    // 这里添加到 self.superview。如果添加到self，发现自动布局效果不理想。
-                    grandfatherView.addSubview(label)
-                    label.translatesAutoresizingMaskIntoConstraints = false
-                    label.snp.makeConstraints { make in
-                        make.right.equalTo(self).offset(-self.textContainerInset.right)
-                        make.bottom.equalTo(self).offset(-self.textContainerInset.right)
-                    }
-                } else {
-                    // 关键：延迟到下一轮 RunLoop
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self, let containerView = self.superview else { return }
-                        containerView.addSubview(label)
-                        label.snp.makeConstraints { make in
-                            make.right.equalTo(self).offset(-self.textContainerInset.right)
-                            make.bottom.equalTo(self).offset(-self.textContainerInset.right)
-                        }
-                    }
-                }
-                
-                self.pt_wordCountLabel = label
-                // 调用setter
-                NotificationCenter.default.addObserver(self, selector: #selector(pt_maxWordCountAction), name: UITextView.textDidChangeNotification, object: self)
-                
+        }
+        get {
+            if let label = objc_getAssociatedObject(self, &AssociatedKeys.pt_wordCountLabelKey) as? UILabel {
                 return label
             }
-            return wordCountLabel
+            
+            let label = UILabel()
+            label.textAlignment = .right
+            label.font = self.font ?? UIFont.systemFont(ofSize: 12)
+            label.textColor = UIColor.lightGray
+            label.isUserInteractionEnabled = false
+            
+            // ⭐️ 核心优化：直接添加到 UITextView 内部，不依赖外部视图！
+            addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            
+            label.snp.makeConstraints { make in
+                // 使用 frameLayoutGuide 让它悬浮在右下角，不会随着文本滚动而消失
+                make.right.equalTo(self.frameLayoutGuide).offset(-self.textContainerInset.right - 5)
+                make.bottom.equalTo(self.frameLayoutGuide).offset(-self.textContainerInset.bottom - 5)
+            }
+            
+            self.pt_wordCountLabel = label
+            pt_setupObservers()
+            
+            return label
         }
     }
     
-    //MARK: 設置TextView的字數限制
-    ///設置TextView的字數限制
     @objc var pt_maxWordCount: NSNumber? {
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.pt_maxWordCountKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            guard let count = newValue else { return }
-            guard let label = pt_wordCountLabel else { return }
-            label.text = "\(text.count)/\(count)"
-        } get {
-            let num = objc_getAssociatedObject(self, &AssociatedKeys.pt_maxWordCountKey) as? NSNumber
-            return num
+            pt_textDidChange() // 赋值后立刻刷新显示
+        }
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.pt_maxWordCountKey) as? NSNumber
         }
     }
+    
+    // MARK: - 4. 监听与更新逻辑
+    /// 统一设置通知和原生的 Block KVO 监听
+    private func pt_setupObservers() {
+        // 防止重复添加
+        guard pt_kvoTokens.isEmpty else { return }
         
-    @objc private func pt_maxWordCountAction() -> () {
-        guard let maxCount = pt_maxWordCount?.intValue, maxCount > 0 else { return }
-        guard let currentText = self.text else { return }
-
-        // 只有未組字狀態才強制截斷（防止輸入中被打斷）
-        if let markedTextRange = self.markedTextRange,
-           self.position(from: markedTextRange.start, offset: 0) != nil {
-            return
+        // 监听系统输入通知
+        NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidChangeNotification, object: self)
+        NotificationCenter.default.addObserver(self, selector: #selector(pt_textDidChange), name: UITextView.textDidBeginEditingNotification, object: self)
+        
+        // 监听 text 属性的直接赋值 (代码赋值)
+        let textObserver = observe(\.text, options: [.new]) { [weak self] _, _ in
+            self?.pt_textDidChange()
         }
-
-        if currentText.count > maxCount {
-            self.text = String(currentText.prefix(maxCount))
-            PTNSLogConsole("已经超过限制的字数了！（已截断）", levelType: PTLogMode, loggerType: .textView)
+        
+        // 监听 bounds 变化刷新 Placeholder 宽度
+        let boundsObserver = observe(\.bounds, options: [.new]) { [weak self] _, _ in
+            self?.pt_updatePlaceholderPreferredWidth()
         }
+        
+        // 存储 Token，UITextView 释放时自动取消监听
+        pt_kvoTokens = [textObserver, boundsObserver]
     }
+    
+    /// 当文本发生变化时的核心处理逻辑
+    @objc private func pt_textDidChange() {
+        // 1. 处理 Placeholder 隐藏/显示
+        let hasText = !(self.text?.isEmpty ?? true)
+        pt_placeholderLabel?.isHidden = hasText
         
-    /// text 长度发生了变化
-    @objc private func pt_textDidChange() -> () {
-        
-        pt_placeholderLabel?.isHidden = !text.isEmpty
-
-        if let wordCountLabel = pt_wordCountLabel,
-           let count = pt_maxWordCount {
-            let currentCount = text.count
-            let safeCount = min(currentCount, count.intValue)
-            wordCountLabel.text = "\(safeCount)/\(count)"
+        // 2. 处理字数限制和截断
+        if let maxCount = pt_maxWordCount?.intValue, maxCount > 0 {
+            let currentText = self.text ?? ""
+            
+            // 只有未组字状态才强制截断（防止原生输入法拼音输入中被打断）
+            if let markedTextRange = self.markedTextRange,
+               self.position(from: markedTextRange.start, offset: 0) != nil {
+                // 正在拼音组字中，只更新字数，不截断
+                let currentCount = currentText.count
+                pt_wordCountLabel?.text = "\(currentCount)/\(maxCount)"
+                return
+            }
+            
+            // 超过字数进行截断
+            if currentText.count > maxCount {
+                self.text = String(currentText.prefix(maxCount))
+                // 假设 PTNSLogConsole 是你项目内的日志工具
+                // PTNSLogConsole("已经超过限制的字数了！（已截断）", levelType: PTLogMode, loggerType: .textView)
+            }
+            
+            // 3. 更新统计文本
+            let safeCount = min(self.text.count, maxCount)
+            pt_wordCountLabel?.text = "\(safeCount)/\(maxCount)"
         }
     }
     
     private func pt_updatePlaceholderPreferredWidth() {
         guard let label = pt_placeholderLabel else { return }
-
         let maxWidth = bounds.width - textContainerInset.left - textContainerInset.right - textContainer.lineFragmentPadding * 2
-
+        
         guard maxWidth > 0 else { return }
-
+        
         if label.preferredMaxLayoutWidth != maxWidth {
             label.preferredMaxLayoutWidth = maxWidth
             label.setNeedsLayout()
@@ -195,58 +202,40 @@ public extension UITextView {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?,
-                               of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        
-        if let lbl = object as? UITextView {
-            if lbl === self && keyPath == "text" {
-                if lbl.text == " " {
-                    text = ""
-                }
-                pt_textDidChange()
-            } else if lbl === self && keyPath == "bounds" {
-                pt_updatePlaceholderPreferredWidth()
-            }
-        }
-    }
-    
+    // MARK: - 5. 动态计算高度相关方法
     func layoutDynamicHeight(width: CGFloat) {
-        // Requerid for dynamic height.
         if isScrollEnabled { isScrollEnabled = false }
-        
-        frame.setWidth(width)
+        frame.size.width = width
         sizeToFit()
         if frame.width != width {
-            frame.setWidth(width)
+            frame.size.width = width
         }
     }
     
     func layoutDynamicHeight(x: CGFloat, y: CGFloat, width: CGFloat) {
-        // Requerid for dynamic height.
         if isScrollEnabled { isScrollEnabled = false }
-        
         frame = CGRect(x: x, y: y, width: width, height: frame.height)
         sizeToFit()
         if frame.width != width {
-            frame.setWidth(width)
+            frame.size.width = width
         }
     }
     
-    @objc func getTextViewSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
-                               height:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        if let currentText = text,!currentText.stringIsEmpty() {
-            return UIView.sizeFor(string: currentText, font: font!, height: height, width: width)
-        } else {
+    @objc func getTextViewSize(width: CGFloat = CGFloat.greatestFiniteMagnitude,
+                               height: CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        // 移除自定义 stringIsEmpty 依赖，使用标准 swift 语法
+        guard let currentText = text, !currentText.isEmpty, let currentFont = font else {
             return .zero
         }
+        // 假设这是你项目中扩展的方法，保留它
+        return UIView.sizeFor(string: currentText, font: currentFont, height: height, width: width)
     }
     
-    @objc func getLabelWidth(height:CGFloat) -> CGFloat {
-        getTextViewSize(height: height).width
+    @objc func getLabelWidth(height: CGFloat) -> CGFloat {
+        return getTextViewSize(height: height).width
     }
     
-    @objc func getLabelHeight(width:CGFloat) -> CGFloat {
-        getTextViewSize(width: width).height
+    @objc func getLabelHeight(width: CGFloat) -> CGFloat {
+        return getTextViewSize(width: width).height
     }
 }
