@@ -741,7 +741,7 @@ open class PTBaseViewController: UIViewController {
     
     // MARK: - 子类 override 以决定样式
     open func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-        return .solid(.clear)
+        return .solid(.white)
     }
 
     open override func viewWillAppear(_ animated: Bool) {
@@ -752,6 +752,10 @@ open class PTBaseViewController: UIViewController {
         // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
         if let nav = navigationController {
             PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+        }
+        
+        if let sheet = sheetViewController {
+            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: sheet.contentViewController.childViewController.navigationController)
         }
     }
     
