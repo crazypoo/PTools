@@ -141,6 +141,10 @@ class PTLoadedLibsViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         setCustomBackButtonView(backButton)
         setCustomTitleView(titleViewContailer)
         setCustomRightButtons(buttons: [exportButton])
@@ -271,21 +275,22 @@ class PTClassExplorerViewController: PTBaseViewController {
         button.addActionHandlers(handler: { [weak self] sender in
             self?.createInstanceTapped()
         })
+        button.bounds = CGRectMake(0, 0, 34, 34)
         return button
     }()
     
-    private lazy var titleLabel: UILabel = {
-        let view = UILabel()
-        view.font = PTAppBaseConfig.share.navTitleFont
-        view.textAlignment = .center
-        view.textColor = .white // 确保在深色背景下可见
-        return view
+    private lazy var backButton:UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
+        button.addActionHandlers { [weak self] sender in
+//            self?.navigationController?.popViewController()
+        }
+        return button
     }()
-    
+        
     // MARK: - Initialization
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
     }
 
     init(libraryName: String, className: String) {
@@ -301,6 +306,12 @@ class PTClassExplorerViewController: PTBaseViewController {
     
     // MARK: - Lifecycle
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setCustomBackButtonView(backButton)
+        setCustomRightButtons(buttons: [createInstanceButton], buttonSpacing: 0)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -311,38 +322,13 @@ class PTClassExplorerViewController: PTBaseViewController {
     // MARK: - Setup
     
     private func setup() {
-        titleLabel.text = classNames
         
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
-        button.addActionHandlers { [weak self] sender in
-            self?.navigationController?.popViewController()
-        }
-        view.addSubviews([button, titleLabel, tableView, createInstanceButton])
-        
-        button.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            // 根据你的项目配置保留了这个顶部高度逻辑
-            make.top.equalToSuperview().inset((self.sheetViewController?.options.pullBarHeight ?? 0) + 10)
-        }
-        
-        // 修复 3：添加水平方向约束，防止文字乱飘或越界
-        titleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(button)
-            make.centerX.equalToSuperview()
-            make.left.greaterThanOrEqualTo(button.snp.right).offset(10)
-            make.right.lessThanOrEqualTo(createInstanceButton.snp.left).offset(-10)
-        }
-        
-        createInstanceButton.snp.makeConstraints { make in
-            make.size.top.equalTo(button)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-        }
+        pt_Title = classNames
+        view.addSubviews([tableView])
 
         tableView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(button.snp.bottom).offset(5)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
 
         createInstanceButton.isHidden = !viewModel.canCreateInstance

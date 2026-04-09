@@ -23,11 +23,10 @@ public class PTSheetContentViewController: PTBaseViewController {
         set { self.childContainerView.backgroundColor = newValue }
     }
 
+    // iOS 13+ 引入的平滑圆角特性
     private var _cornerCurve: Any? = nil
-    
     public var cornerCurve: CALayerCornerCurve {
-        get {
-            return _cornerCurve as? CALayerCornerCurve ?? CALayerCornerCurve.circular }
+        get { (_cornerCurve as? CALayerCornerCurve) ?? .circular }
         set {
             _cornerCurve = newValue
             self.updateCornerCurve()
@@ -35,9 +34,7 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     public var cornerRadius: CGFloat = 0 {
-        didSet {
-            self.updateCornerRadius()
-        }
+        didSet { self.updateCornerRadius() }
     }
     
     public var gripSize: CGSize = CGSize(width: 50, height: 6) {
@@ -50,14 +47,15 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     public var gripColor: UIColor? {
-        get { return self.gripView.backgroundColor }
+        get { self.gripView.backgroundColor }
         set { self.gripView.backgroundColor = newValue }
     }
     
     public var pullBarBackgroundColor: UIColor? {
-        get { return self.pullBarView.backgroundColor }
+        get { self.pullBarView.backgroundColor }
         set { self.pullBarView.backgroundColor = newValue }
     }
+    
     public var treatPullBarAsClear: Bool = PTSheetViewController.treatPullBarAsClear {
         didSet {
             if self.isViewLoaded {
@@ -66,21 +64,27 @@ public class PTSheetContentViewController: PTBaseViewController {
         }
     }
     
-    var sheetContentViewPreferredHeightChanged:((_ oldHeight:CGFloat,_ newSize:CGFloat) -> Void)?
-    var pullBarTappedAction:PTActionTask?
+    // [优化] 移除了多余的参数标签，使闭包类型声明更符合 Swift 规范
+    var sheetContentViewPreferredHeightChanged: ((CGFloat, CGFloat) -> Void)?
+    var pullBarTappedAction: PTActionTask?
     
     public var contentWrapperView = UIView()
     public var contentView = UIView()
     public var childContainerView = UIView()
-    public lazy var pullBarView:UIView = {
+    
+    public lazy var pullBarView: UIView = {
         let view = UIView()
         return view
     }()
-    public lazy var gripView:UIView = {
+    
+    public lazy var gripView: UIView = {
         let view = UIView()
         return view
     }()
+    
     private let overflowView = UIView()
+    
+    // MARK: - Initialization
     
     public init(childViewController: UIViewController, options: PTSheetOptions) {
         self.options = options
@@ -97,6 +101,8 @@ public class PTSheetContentViewController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -105,6 +111,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.setupChildContainerView()
         self.setupPullBarView()
         self.setupChildViewController()
+        
         self.updatePreferredHeight()
         self.updateCornerCurve()
         self.updateCornerRadius()
@@ -115,7 +122,6 @@ public class PTSheetContentViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         UIView.performWithoutAnimation {
             self.view.layoutIfNeeded()
         }
@@ -131,6 +137,8 @@ public class PTSheetContentViewController: PTBaseViewController {
         super.viewDidLayoutSubviews()
         self.updateAfterLayout()
     }
+    
+    // MARK: - Methods
     
     func updateAfterLayout() {
         self.size = self.childViewController.view.bounds.height
@@ -151,44 +159,50 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     private func setupOverflowView() {
-        switch (self.options.transitionOverflowType) {
-            case .view(view: let view):
-                overflowView.backgroundColor = .clear
-                overflowView.addSubview(view) 
-            view.snp.makeConstraints({ make in
+        // [优化] 去掉 switch 条件的多余括号
+        switch self.options.transitionOverflowType {
+        case .view(let view):
+            overflowView.backgroundColor = .clear
+            overflowView.addSubview(view)
+            view.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
-            })
-            case .automatic:
-                overflowView.backgroundColor = self.childViewController.view.backgroundColor
-            case .color(color: let color):
-                overflowView.backgroundColor = color
-            case .none:
-                overflowView.backgroundColor = .clear
+            }
+        case .automatic:
+            overflowView.backgroundColor = self.childViewController.view.backgroundColor
+        case .color(let color):
+            overflowView.backgroundColor = color
+        case .none:
+            overflowView.backgroundColor = .clear
         }
     }
     
     private func updateNavigationControllerHeight() {
+        // [注意⚠️] 这里的逻辑是空的！原代码在 guard 之后直接结束了。
         // UINavigationControllers don't set intrinsic size, this is a workaround to fix that
-        guard self.options.setIntrinsicHeightOnNavigationControllers, let _ = self.childViewController as? UINavigationController else { return }
+        guard self.options.setIntrinsicHeightOnNavigationControllers,
+              self.childViewController is UINavigationController else { return }
+        
+        // TODO: 这里缺少了针对 NavigationController 高度修复的具体逻辑，请检查是否遗漏！
     }
     
     func updatePreferredHeight() {
         self.updateNavigationControllerHeight()
         let width = self.view.bounds.width > 0 ? self.view.bounds.width : UIScreen.main.bounds.width
         let oldPreferredHeight = self.preferredHeight
-        var fittingSize = UIView.layoutFittingCompressedSize;
-        fittingSize.width = width;
+        var fittingSize = UIView.layoutFittingCompressedSize
+        fittingSize.width = width
         
         UIView.performWithoutAnimation {
             self.contentView.layoutSubviews()
         }
         
         self.preferredHeight = self.contentView.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow).height
+        
         UIView.performWithoutAnimation {
             self.contentView.layoutSubviews()
         }
         
-        sheetContentViewPreferredHeightChanged?(oldPreferredHeight,self.preferredHeight)
+        sheetContentViewPreferredHeightChanged?(oldPreferredHeight, self.preferredHeight)
     }
     
     private func updateChildViewControllerBottomConstraint(adjustment: CGFloat) {
@@ -201,11 +215,12 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.childViewController.willMove(toParent: self)
         self.addChild(self.childViewController)
         self.childContainerView.addSubview(self.childViewController.view)
+        
         self.childViewController.view.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview()
+            make.left.right.top.equalToSuperview()
             make.bottom.equalToSuperview().inset(0)
         }
+        
         if self.options.shouldExtendBackground, self.options.pullBarHeight > 0 {
             self.childViewController.compatibleAdditionalSafeAreaInsets = UIEdgeInsets(top: self.options.pullBarHeight, left: 0, bottom: 0, right: 0)
         }
@@ -219,17 +234,18 @@ public class PTSheetContentViewController: PTBaseViewController {
     private func setupContentView() {
         self.view.addSubview(self.contentView)
         self.contentView.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalToSuperview()
-        }
-        self.contentView.addSubview(self.contentWrapperView)
-        self.contentWrapperView.snp.makeConstraints({ make in
             make.edges.equalToSuperview()
-        })
+        }
+        
+        self.contentView.addSubview(self.contentWrapperView)
+        self.contentWrapperView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         self.contentWrapperView.layer.masksToBounds = true
         self.contentWrapperView.layer.compatibleMaskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
                 
-        self.contentView.addSubview(overflowView) 
+        self.contentView.addSubview(overflowView)
         overflowView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(self.contentView.snp.bottom).offset(1)
@@ -250,11 +266,12 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
     
     private func setupPullBarView() {
-        // If they didn't specify pull bar options, they don't want a pull bar
         guard self.options.pullBarHeight > 0 else { return }
+        
         self.pullBarView.isUserInteractionEnabled = true
         self.pullBarView.backgroundColor = self.pullBarBackgroundColor
         self.contentWrapperView.addSubview(self.pullBarView)
+        
         self.pullBarView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(self.options.pullBarHeight)
@@ -264,19 +281,20 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.gripView.layer.cornerRadius = self.gripSize.height / 2
         self.gripView.layer.masksToBounds = true
         pullBarView.addSubview(self.gripView)
+        
         self.gripView.snp.makeConstraints { make in
-            make.centerY.centerX.equalToSuperview()
+            make.center.equalToSuperview()
             make.size.equalTo(self.gripSize)
         }
         
         self.pullBarView.isAccessibilityElement = true
         self.pullBarView.accessibilityIdentifier = "pull-bar"
-        // This will be overriden whenever the sizes property is changed on SheetViewController
         self.pullBarView.accessibilityLabel = "Tap to Dismiss Presentation."
         self.pullBarView.accessibilityTraits = [.button]
         
-        let tapGestureRecognizer = UITapGestureRecognizer.init { sender in
-            self.pullBarTappedAction?()
+        // [修复核心漏洞] 必须使用 [weak self] 防止强引用循环！
+        let tapGestureRecognizer = UITapGestureRecognizer { [weak self] _ in
+            self?.pullBarTappedAction?()
         }
         self.pullBarView.addGestureRecognizer(tapGestureRecognizer)
     }
@@ -286,6 +304,7 @@ public class PTSheetContentViewController: PTBaseViewController {
     }
 }
 
+// MARK: - UINavigationControllerDelegate
 extension PTSheetContentViewController: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         navigationController.view.endEditing(true)
@@ -296,4 +315,4 @@ extension PTSheetContentViewController: UINavigationControllerDelegate {
     }
 }
 
-#endif
+#endif // os(iOS) || os(tvOS) || os(watchOS)

@@ -108,7 +108,12 @@ public final class PTNavigationBarContainer: UIView {
         rightContainer.translatesAutoresizingMaskIntoConstraints = false
         largeTitleContainer.addSubview(largeTitleLabel)
         topBarContainer.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview()
+            make.left.right.equalToSuperview()
+            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController/*,let contentNav = sheet.contentViewController.navigationController,contentNav.viewControllers.first != findCurrent*/ {
+                make.top.equalToSuperview().offset(-CGFloat.statusBarHeight())
+            } else {
+                make.top.equalToSuperview()
+            }
             make.height.equalTo(CGFloat.statusBarHeight() + CGFloat.kNavBarHeight)
         }
         
@@ -797,21 +802,25 @@ open class PTBaseViewController: UIViewController {
         item.barColorStyle = style
         PTNavigationBarManager.shared.update(item: item, for: self)
         if self.navigationController?.viewControllers.first != self {
-            let backBtn = baseBackButton()
-            backBtn.addActionHandlers { seder in
-                self.viewDismiss()
-            }
-            setCustomBackButtonView(backBtn)
+            self.setBaseBackButton()
             pt_prefersTabBarHidden = true
         }
         if let _ = self.presentingViewController {
             pt_prefersTabBarHidden = true
-            let backBtn = baseBackButton()
-            backBtn.addActionHandlers { seder in
+            self.setBaseBackButton()
+        }
+    }
+    
+    private func setBaseBackButton() {
+        let backBtn = baseBackButton()
+        backBtn.addActionHandlers { seder in
+            if self.navigationController?.viewControllers.first != self,let findFirst = self.navigationController?.viewControllers.first,let _ = findFirst.sheetViewController {
+                self.navigationController?.popViewController(animated: true)
+            } else {
                 self.viewDismiss()
             }
-            setCustomBackButtonView(backBtn)
         }
+        setCustomBackButtonView(backBtn)
     }
 
     private func baseBackButton() -> UIButton {

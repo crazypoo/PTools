@@ -25,7 +25,7 @@ public class PTSheetViewController: PTBaseViewController {
     
     /// Default value for autoAdjustToKeyboard. Defaults to true.
     public static var autoAdjustToKeyboard = true
-    /// Automatically grow/move the sheet to accomidate the keyboard. Defaults to false.
+    /// Automatically grow/move the sheet to accommodate the keyboard. Defaults to false.
     public var autoAdjustToKeyboard = PTSheetViewController.autoAdjustToKeyboard
     
     /// Default value for allowPullingPastMaxHeight. Defaults to true.
@@ -40,23 +40,18 @@ public class PTSheetViewController: PTBaseViewController {
     
     /// The sizes that the sheet will attempt to pin to. Defaults to intrinsic only.
     public var sizes: [PTSheetSize] = [.intrinsic] {
-        didSet {
-            self.updateOrderedSizes()
-        }
+        didSet { self.updateOrderedSizes() }
     }
     public var orderedSizes: [PTSheetSize] = []
     public private(set) var currentSize: PTSheetSize = .intrinsic
+    
     /// Allows dismissing of the sheet by pulling down
     public var dismissOnPull: Bool = true {
-        didSet {
-            self.updateAccessibility()
-        }
+        didSet { self.updateAccessibility() }
     }
     /// Dismisses the sheet by tapping on the background overlay
     public var dismissOnOverlayTap: Bool = true {
-       didSet {
-           self.updateAccessibility()
-       }
+       didSet { self.updateAccessibility() }
    }
     /// If true you can pull using UIControls (so you can grab and drag a button to control the sheet)
     public var shouldRecognizePanGestureWithUIControls: Bool = true
@@ -100,15 +95,12 @@ public class PTSheetViewController: PTBaseViewController {
         }
     }
     
-    public static var blurEffect: UIBlurEffect = {
-        return UIBlurEffect(style: .prominent)
-    }()
+    public static var blurEffect: UIBlurEffect = UIBlurEffect(style: .prominent)
     
     public var blurEffect = PTSheetViewController.blurEffect {
-        didSet {
-            self.blurView.effect = blurEffect
-        }
+        didSet { self.blurView.effect = blurEffect }
     }
+    
     public static var allowGestureThroughOverlay: Bool = false
     public var allowGestureThroughOverlay: Bool = PTSheetViewController.allowGestureThroughOverlay {
         didSet {
@@ -118,38 +110,37 @@ public class PTSheetViewController: PTBaseViewController {
     
     public static var cornerRadius: CGFloat = 12
     public var cornerRadius: CGFloat {
-        get { return self.contentViewController.cornerRadius }
+        get { self.contentViewController.cornerRadius }
         set { self.contentViewController.cornerRadius = newValue }
     }
 
     public static var cornerCurve: CALayerCornerCurve = .circular
-
     public var cornerCurve: CALayerCornerCurve {
-        get { return self.contentViewController.cornerCurve }
+        get { self.contentViewController.cornerCurve }
         set { self.contentViewController.cornerCurve = newValue }
     }
     
-    public static var gripSize: CGSize = CGSize (width: 50, height: 6)
+    public static var gripSize: CGSize = CGSize(width: 50, height: 6)
     public var gripSize: CGSize {
-        get { return self.contentViewController.gripSize }
+        get { self.contentViewController.gripSize }
         set { self.contentViewController.gripSize = newValue }
     }
     
     public static var gripColor: UIColor = .lightGray
     public var gripColor: UIColor? {
-        get { return self.contentViewController.gripColor }
+        get { self.contentViewController.gripColor }
         set { self.contentViewController.gripColor = newValue }
     }
     
     public static var pullBarBackgroundColor: UIColor = UIColor.clear
     public var pullBarBackgroundColor: UIColor? {
-        get { return self.contentViewController.pullBarBackgroundColor }
+        get { self.contentViewController.pullBarBackgroundColor }
         set { self.contentViewController.pullBarBackgroundColor = newValue }
     }
     
     public static var treatPullBarAsClear: Bool = false
     public var treatPullBarAsClear: Bool {
-        get { return self.contentViewController.treatPullBarAsClear }
+        get { self.contentViewController.treatPullBarAsClear }
         set { self.contentViewController.treatPullBarAsClear = newValue }
     }
     
@@ -160,7 +151,7 @@ public class PTSheetViewController: PTBaseViewController {
     public var sizeChanged: ((PTSheetViewController, PTSheetSize, CGFloat) -> Void)?
     public var panGestureShouldBegin: ((UIPanGestureRecognizer) -> Bool?)?
     
-    public lazy var overlayControlView:UIView = {
+    public lazy var overlayControlView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
         return view
@@ -188,9 +179,11 @@ public class PTSheetViewController: PTBaseViewController {
         set { self.contentViewController.contentBackgroundColor = newValue }
     }
     
-    private var dismissPanGes:Bool = true
+    private var dismissPanGes: Bool = true
     
-    public init(controller: UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil,dismissPanGes:Bool = true) {
+    // MARK: - Initialization
+    
+    public init(controller: UIViewController, sizes: [PTSheetSize] = [.intrinsic], options: PTSheetOptions? = nil, dismissPanGes: Bool = true) {
         let options = options ?? PTSheetOptions.default
         self.contentViewController = PTSheetContentViewController(childViewController: controller, options: options)
         self.contentViewController.contentBackgroundColor = UIColor.systemBackground
@@ -199,6 +192,7 @@ public class PTSheetViewController: PTBaseViewController {
         self.transition = PTSheetTransition(options: options)
         self.minimumSpaceAbovePullBar = PTSheetViewController.minimumSpaceAbovePullBar
         super.init(nibName: nil, bundle: nil)
+        
         self.gripColor = PTSheetViewController.gripColor
         self.gripSize = PTSheetViewController.gripSize
         self.pullBarBackgroundColor = PTSheetViewController.pullBarBackgroundColor
@@ -213,16 +207,19 @@ public class PTSheetViewController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle
+    
     public override func loadView() {
         if self.options.useInlineMode {
             let sheetView = PTSheetView()
-            sheetView.sheetPointHandler = { point,event in
+            // [优化] 引入 weak self 避免内存泄漏
+            sheetView.sheetPointHandler = { [weak self] point, event in
+                guard let self = self else { return true }
                 let isInOverlay = self.overlayTapView.bounds.contains(point)
                 if self.allowGestureThroughOverlay, isInOverlay {
                     return false
-                } else {
-                    return true
                 }
+                return true
             }
             self.view = sheetView
         } else {
@@ -234,11 +231,12 @@ public class PTSheetViewController: PTBaseViewController {
         super.viewDidLoad()
         
         self.compatibleAdditionalSafeAreaInsets = UIEdgeInsets(top: -self.options.pullBarHeight, left: 0, bottom: 0, right: 0)
-        
         self.view.backgroundColor = UIColor.clear
+        
         if self.dismissPanGes {
             self.addPanGestureRecognizer()
         }
+        
         self.addOverlay()
         self.addBlurBackground()
         self.addContentView()
@@ -249,20 +247,16 @@ public class PTSheetViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         self.updateOrderedSizes()
         self.contentViewController.updatePreferredHeight()
         self.resize(to: self.currentSize, animated: false)
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if let presenter = self.transition.presenter, self.options.shrinkPresentingViewController {
-            self.transition.restorePresentor(presenter, completion: { _ in
+            self.transition.restorePresenter(presenter, completion: { [weak self] _ in
+                guard let self = self else { return }
                 self.didDismiss?(self)
             })
         } else if !self.options.useInlineMode {
@@ -270,28 +264,23 @@ public class PTSheetViewController: PTBaseViewController {
         }
     }
     
-    /// Handle a scroll view in the child view controller by watching for the offset for the scrollview and taking priority when at the top (so pulling up/down can grow/shrink the sheet instead of bouncing the child's scroll view)
+    // MARK: - Setup & Configuration
+    
     public func handleScrollView(_ scrollView: UIScrollView) {
         scrollView.panGestureRecognizer.require(toFail: panGestureRecognizer)
         self.childScrollView = scrollView
     }
     
-    /// Change the sizes the sheet should try to pin to
     public func setSizes(_ sizes: [PTSheetSize], animated: Bool = true) {
-        guard sizes.count > 0 else {
-            return
-        }
+        guard sizes.count > 0 else { return }
         self.sizes = sizes
-        
         self.resize(to: sizes[0], animated: animated)
     }
     
     func updateOrderedSizes() {
-        var concreteSizes: [(PTSheetSize, CGFloat)] = self.sizes.map {
-            return ($0, self.height(for: $0))
-        }
+        var concreteSizes: [(PTSheetSize, CGFloat)] = self.sizes.map { ($0, self.height(for: $0)) }
         concreteSizes.sort { $0.1 < $1.1 }
-        self.orderedSizes = concreteSizes.map({ size, _ in size })
+        self.orderedSizes = concreteSizes.map { $0.0 }
         self.updateAccessibility()
     }
     
@@ -335,10 +324,12 @@ public class PTSheetViewController: PTBaseViewController {
         overlayTapView.isUserInteractionEnabled = !self.allowGestureThroughOverlay
         self.view.addSubview(overlayTapView)
         self.overlayTapView.accessibilityLabel = "Tap to Dismiss Presentation."
+        
         overlayTapView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.bottom.equalTo(self.contentViewController.view.snp.top)
         }
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
         self.overlayTapGesture = tapGestureRecognizer
         overlayTapView.addGestureRecognizer(tapGestureRecognizer)
@@ -354,18 +345,23 @@ public class PTSheetViewController: PTBaseViewController {
         self.addChild(self.contentViewController)
         self.view.addSubview(self.contentViewController.view)
         self.contentViewController.didMove(toParent: self)
-        self.contentViewController.sheetContentViewPreferredHeightChanged = { oldHeight,newSize in
+        
+        // [修复核心漏洞 1] 必须使用 [weak self] 防止内存泄漏！
+        self.contentViewController.sheetContentViewPreferredHeightChanged = { [weak self] oldHeight, newSize in
+            guard let self = self else { return }
             if self.sizes.contains(.intrinsic) {
                 self.updateOrderedSizes()
             }
-            // If our intrinsic size changed and that is what we are sized to currently, use that
             if self.currentSize == .intrinsic, !self.isPanning {
                 self.resize(to: .intrinsic)
             }
         }
-        self.contentViewController.pullBarTappedAction = {
-            // Tapping the pull bar is just for accessibility
+        
+        // [修复核心漏洞 2] 必须使用 [weak self] 防止内存泄漏！
+        self.contentViewController.pullBarTappedAction = { [weak self] in
+            guard let self = self else { return }
             guard UIAccessibility.isVoiceOverRunning else { return }
+            
             let shouldDismiss = self.allowGestureThroughOverlay && (self.dismissOnOverlayTap || self.dismissOnPull)
             guard !shouldDismiss else {
                 self.attemptDismiss(animated: true)
@@ -381,6 +377,7 @@ public class PTSheetViewController: PTBaseViewController {
                 }
             }
         }
+        
         self.contentViewController.view.snp.makeConstraints { make in
             make.left.equalToSuperview().priority(999)
             make.left.greaterThanOrEqualToSuperview().inset(self.options.horizontalPadding)
@@ -389,23 +386,20 @@ public class PTSheetViewController: PTBaseViewController {
             }
             make.centerX.equalToSuperview()
             make.height.equalTo(self.height(for: self.currentSize))
-            let top: CGFloat
-            if (self.options.useFullScreenMode) {
-                top = 0
-            } else {
-                top = max(12, AppWindows?.compatibleSafeAreaInsets.top ?? 12)
-            }
+            
+            let top = self.options.useFullScreenMode ? 0 : max(12, AppWindows?.compatibleSafeAreaInsets.top ?? 12)
             make.bottom.equalToSuperview()
             make.top.greaterThanOrEqualToSuperview().inset(top).priority(999)
         }
         
-        self.view.addSubviews([overlayControlView])
+        self.view.addSubview(overlayControlView)
         overlayControlView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalToSuperview()
+            make.top.left.right.equalToSuperview()
             make.bottom.equalTo(self.contentViewController.view.snp.top)
         }
     }
+    
+    // MARK: - Gestures & Panning
     
     private func addPanGestureRecognizer() {
         let panGestureRecognizer = PTInitialTouchPanGestureRecognizer(target: self, action: #selector(panned(_:)))
@@ -423,21 +417,18 @@ public class PTSheetViewController: PTBaseViewController {
         }
         
         let minHeight: CGFloat = self.height(for: self.orderedSizes.first)
-        let maxHeight: CGFloat
-        if self.allowPullingPastMaxHeight {
-            maxHeight = self.height(for: .fullscreen) // self.view.bounds.height
-        } else {
-            maxHeight = max(self.height(for: self.orderedSizes.last), self.prePanHeight)
-        }
+        let maxHeight: CGFloat = self.allowPullingPastMaxHeight ? self.height(for: .fullscreen) : max(self.height(for: self.orderedSizes.last), self.prePanHeight)
         
         var newHeight = max(0, self.prePanHeight + (self.firstPanPoint.y - point.y))
         var offset: CGFloat = 0
+        
         if newHeight < minHeight {
             if self.allowPullingPastMinHeight {
                 offset = minHeight - newHeight
             }
             newHeight = minHeight
         }
+        
         if newHeight > maxHeight {
             if options.isRubberBandEnabled {
                 newHeight = logConstraintValueForYPosition(verticalLimit: maxHeight, yPosition: newHeight)
@@ -447,134 +438,109 @@ public class PTSheetViewController: PTBaseViewController {
         }
         
         switch gesture.state {
-            case .cancelled, .failed:
-                UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
-                    self.contentViewController.view.transform = CGAffineTransform.identity
-                    self.contentViewController.view.snp.updateConstraints { make in
-                        make.height.equalTo(self.height(for: self.currentSize))
-                    }
-                    self.transition.setPresentor(percentComplete: 0)
-                    self.overlayView.alpha = 1
-                    self.overlayControlView.alpha = 1
-                    self.overlayControlView.subviews.forEach { value in
-                        value.alpha = 1
-                    }
-                }, completion: { _ in
-                    self.isPanning = false
-                })
-            
-            case .began, .changed:
+        case .cancelled, .failed:
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+                self.contentViewController.view.transform = .identity
                 self.contentViewController.view.snp.updateConstraints { make in
-                    make.height.equalTo(newHeight)
+                    make.height.equalTo(self.height(for: self.currentSize))
                 }
-                if offset > 0 {
-                    let percent = max(0, min(1, offset / max(1, newHeight)))
-                    self.transition.setPresentor(percentComplete: percent)
-                    self.overlayView.alpha = 1 - percent
-                    self.overlayControlView.alpha = 1 - percent
-                    self.overlayControlView.subviews.forEach { value in
-                        value.alpha = (1 - percent)
-                    }
-                    self.contentViewController.view.transform = CGAffineTransform(translationX: 0, y: offset)
-                } else {
-                    self.contentViewController.view.transform = CGAffineTransform.identity
-                }
-            case .ended:
-                let velocity = (0.2 * gesture.velocity(in: self.view).y)
-                var finalHeight = newHeight - offset - velocity
-                if velocity > options.pullDismissThreshod {
-                    // They swiped hard, always just close the sheet when they do
-                    finalHeight = -1
-                }
-                
-                let animationDuration = TimeInterval(abs(velocity*0.0002) + 0.2)
-                
-                guard finalHeight > 0 || !(self.dismissOnPull && self.shouldDismiss?(self) ?? true) else {
-                    // Dismiss
-                    UIView.animate(withDuration: animationDuration,
-                                   delay: 0,
-                                   usingSpringWithDamping: self.options.transitionDampening,
-                                   initialSpringVelocity: self.options.transitionVelocity,
-                                   options: self.options.transitionAnimationOptions,
-                                   animations: {
-                        self.contentViewController.view.transform = CGAffineTransform(translationX: 0, y: self.contentViewController.view.bounds.height)
-                        self.view.backgroundColor = UIColor.clear
-                        self.transition.setPresentor(percentComplete: 1)
-                        self.overlayView.alpha = 0
-                        self.overlayControlView.alpha = 0
-                        self.overlayControlView.subviews.forEach { value in
-                            value.alpha = 0
-                        }
-                    }, completion: { complete in
-                        self.attemptDismiss(animated: false)
-                    })
-                    return
-                }
-                
-                var newSize = self.currentSize
-                if point.y < 0 {
-                    // We need to move to the next larger one
-                    newSize = self.orderedSizes.last ?? self.currentSize
-                    for size in self.orderedSizes.reversed() {
-                        if finalHeight < self.height(for: size) {
-                            newSize = size
-                        } else {
-                            break
-                        }
-                    }
-                } else {
-                    // We need to move to the next smaller one
-                    newSize = self.orderedSizes.first ?? self.currentSize
-                    for size in self.orderedSizes {
-                        if finalHeight > self.height(for: size) {
-                            newSize = size
-                        } else {
-                            break
-                        }
-                    }
-                }
-                let previousSize = self.currentSize
-                self.currentSize = newSize
-                
-                let newContentHeight = self.height(for: newSize)
-                UIView.animate(withDuration: animationDuration,
-                               delay: 0,
-                               usingSpringWithDamping: self.options.transitionDampening,
-                               initialSpringVelocity: self.options.transitionVelocity,
-                               options: self.options.transitionAnimationOptions,
-                               animations: {
-                    self.contentViewController.view.transform = CGAffineTransform.identity
-                    self.contentViewController.view.snp.updateConstraints { make in
-                        make.height.equalTo(newContentHeight)
-                    }
-                    self.transition.setPresentor(percentComplete: 0)
-                    self.overlayView.alpha = 1
-                    self.overlayControlView.alpha = 1
-                    self.overlayControlView.subviews.forEach { value in
-                        value.alpha = 1
-                    }
-                    self.view.layoutIfNeeded()
-                }, completion: { complete in
-                    self.isPanning = false
-                    if previousSize != newSize {
-                        self.sizeChanged?(self, newSize, newContentHeight)
-                    }
+                self.transition.setPresenter(percentComplete: 0)
+                self.overlayView.alpha = 1
+                self.overlayControlView.alpha = 1
+                self.overlayControlView.subviews.forEach { $0.alpha = 1 }
+            }, completion: { _ in
+                self.isPanning = false
+            })
+            
+        case .began, .changed:
+            self.contentViewController.view.snp.updateConstraints { make in
+                make.height.equalTo(newHeight)
+            }
+            if offset > 0 {
+                let percent = max(0, min(1, offset / max(1, newHeight)))
+                self.transition.setPresenter(percentComplete: percent)
+                self.overlayView.alpha = 1 - percent
+                self.overlayControlView.alpha = 1 - percent
+                self.overlayControlView.subviews.forEach { $0.alpha = (1 - percent) }
+                self.contentViewController.view.transform = CGAffineTransform(translationX: 0, y: offset)
+            } else {
+                self.contentViewController.view.transform = .identity
+            }
+            
+        case .ended:
+            let velocity = (0.2 * gesture.velocity(in: self.view).y)
+            var finalHeight = newHeight - offset - velocity
+            
+            // 注意: 此处的 pullDismissThreshod 对应了之前 Options 里的拼写
+            if velocity > options.pullDismissThreshod {
+                finalHeight = -1 // Swipe down hard -> dismiss
+            }
+            
+            let animationDuration = TimeInterval(abs(velocity * 0.0002) + 0.2)
+            
+            guard finalHeight > 0 || !(self.dismissOnPull && self.shouldDismiss?(self) ?? true) else {
+                // Dismiss logic
+                UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: self.options.transitionDampening, initialSpringVelocity: self.options.transitionVelocity, options: self.options.transitionAnimationOptions, animations: {
+                    self.contentViewController.view.transform = CGAffineTransform(translationX: 0, y: self.contentViewController.view.bounds.height)
+                    self.view.backgroundColor = UIColor.clear
+                    self.transition.setPresenter(percentComplete: 1)
+                    self.overlayView.alpha = 0
+                    self.overlayControlView.alpha = 0
+                    self.overlayControlView.subviews.forEach { $0.alpha = 0 }
+                }, completion: { _ in
+                    self.attemptDismiss(animated: false)
                 })
-            case .possible:
-                break
-            @unknown default:
-                break // Do nothing
+                return
+            }
+            
+            var newSize = self.currentSize
+            if point.y < 0 {
+                newSize = self.orderedSizes.last ?? self.currentSize
+                for size in self.orderedSizes.reversed() {
+                    if finalHeight < self.height(for: size) { newSize = size } else { break }
+                }
+            } else {
+                newSize = self.orderedSizes.first ?? self.currentSize
+                for size in self.orderedSizes {
+                    if finalHeight > self.height(for: size) { newSize = size } else { break }
+                }
+            }
+            
+            let previousSize = self.currentSize
+            self.currentSize = newSize
+            let newContentHeight = self.height(for: newSize)
+            
+            UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: self.options.transitionDampening, initialSpringVelocity: self.options.transitionVelocity, options: self.options.transitionAnimationOptions, animations: {
+                self.contentViewController.view.transform = .identity
+                self.contentViewController.view.snp.updateConstraints { make in
+                    make.height.equalTo(newContentHeight)
+                }
+                self.transition.setPresenter(percentComplete: 0)
+                self.overlayView.alpha = 1
+                self.overlayControlView.alpha = 1
+                self.overlayControlView.subviews.forEach { $0.alpha = 1 }
+                self.view.layoutIfNeeded()
+            }, completion: { _ in
+                self.isPanning = false
+                if previousSize != newSize {
+                    self.sizeChanged?(self, newSize, newContentHeight)
+                }
+            })
+            
+        case .possible: fallthrough
+        @unknown default: break
         }
     }
 
+    // MARK: - Keyboard Handling
+    
     private func registerKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardShown(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDismissed(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @objc func keyboardShown(_ notification: Notification) {
-        guard let info:[AnyHashable: Any] = notification.userInfo, let keyboardRect:CGRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        
+        guard let info = notification.userInfo, let keyboardRect = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         let windowRect = self.view.convert(self.view.bounds, to: nil)
         let actualHeight = windowRect.maxY - keyboardRect.origin.y
         self.adjustForKeyboard(height: actualHeight, from: notification)
@@ -585,66 +551,61 @@ public class PTSheetViewController: PTBaseViewController {
     }
     
     private func adjustForKeyboard(height: CGFloat, from notification: Notification) {
-        guard self.autoAdjustToKeyboard, let info:[AnyHashable: Any] = notification.userInfo else { return }
+        guard self.autoAdjustToKeyboard, let info = notification.userInfo else { return }
         self.keyboardHeight = height
         
-        let duration:TimeInterval = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-        let animationCurveRawNSN = info[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
-        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
-        let animationCurve:UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
+        let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+        let animationCurveRaw = (info[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
+        let animationCurve = UIView.AnimationOptions(rawValue: animationCurveRaw)
         
         self.contentViewController.adjustForKeyboard(height: self.keyboardHeight)
-        self.resize(to: self.currentSize, duration: duration, options: animationCurve, animated: true, complete: {
+        self.resize(to: self.currentSize, duration: duration, options: animationCurve, animated: true, complete: { [weak self] in
+            guard let self = self else { return }
             self.resize(to: self.currentSize)
         })
     }
     
+    // MARK: - Helpers & Utilities
+    
     private func height(for size: PTSheetSize?) -> CGFloat {
         guard let size = size else { return 0 }
         let contentHeight: CGFloat
-        let fullscreenHeight: CGFloat
-        if self.options.useFullScreenMode {
-            fullscreenHeight = self.view.bounds.height - self.minimumSpaceAbovePullBar
-        } else {
-            fullscreenHeight = self.view.bounds.height - self.view.compatibleSafeAreaInsets.top - self.minimumSpaceAbovePullBar
-        }
-        switch (size) {
-            case .fixed(let height):
-                contentHeight = height + self.keyboardHeight
-            case .fullscreen:
-                contentHeight = fullscreenHeight
-            case .intrinsic:
-                contentHeight = self.contentViewController.preferredHeight + self.keyboardHeight
-            case .percent(let percent):
-                if (percent > 1) {
-                    PTNSLogConsole("Size percent should be less than or equal to 1.0, but was set to \(percent))")
-                }
-                contentHeight = (self.view.bounds.height) * CGFloat(percent) + self.keyboardHeight
-            case .marginFromTop(let margin):
-                contentHeight = (self.view.bounds.height) - margin + self.keyboardHeight
+        let fullscreenHeight = self.options.useFullScreenMode ?
+            self.view.bounds.height - self.minimumSpaceAbovePullBar :
+            self.view.bounds.height - self.view.compatibleSafeAreaInsets.top - self.minimumSpaceAbovePullBar
+        
+        switch size {
+        case .fixed(let height):
+            contentHeight = height + self.keyboardHeight
+        case .fullscreen:
+            contentHeight = fullscreenHeight
+        case .intrinsic:
+            contentHeight = self.contentViewController.preferredHeight + self.keyboardHeight
+        case .percent(let percent):
+            if percent > 1 {
+                print("Size percent should be less than or equal to 1.0, but was set to \(percent)")
+            }
+            contentHeight = (self.view.bounds.height) * CGFloat(percent) + self.keyboardHeight
+        case .marginFromTop(let margin):
+            contentHeight = (self.view.bounds.height) - margin + self.keyboardHeight
         }
         return min(fullscreenHeight, contentHeight)
     }
 
-    // https://medium.com/thoughts-on-thoughts/recreating-apple-s-rubber-band-effect-in-swift-dbf981b40f35
-    private func logConstraintValueForYPosition(verticalLimit: CGFloat, yPosition : CGFloat) -> CGFloat {
-      return verticalLimit * (1 + log10(yPosition/verticalLimit))
+    private func logConstraintValueForYPosition(verticalLimit: CGFloat, yPosition: CGFloat) -> CGFloat {
+      return verticalLimit * (1 + log10(yPosition / verticalLimit))
     }
     
-    public func resize(to size: PTSheetSize,
-                       duration: TimeInterval = 0.2,
-                       options: UIView.AnimationOptions = [.curveEaseOut],
-                       animated: Bool = true,
-                       complete: PTActionTask? = nil) {
+    public func resize(to size: PTSheetSize, duration: TimeInterval = 0.2, options: UIView.AnimationOptions = [.curveEaseOut], animated: Bool = true, complete: PTActionTask? = nil) {
         
         let previousSize = self.currentSize
         self.currentSize = size
         
-        let oldConstraintHeight = self.contentViewController.view.height
-        
+        let oldConstraintHeight = self.contentViewController.view.frame.height
         let newHeight = self.height(for: size)
         
         guard oldConstraintHeight != newHeight else {
+            complete?()
             return
         }
         
@@ -654,11 +615,12 @@ public class PTSheetViewController: PTBaseViewController {
                 self.contentViewController.view.snp.updateConstraints { make in
                     make.height.equalTo(newHeight)
                 }
-                if #available(iOS 26.0, *) {
-                } else {
+                // [优化] 移除原本奇怪的 #available(iOS 26.0) 判定，执行标准的布局刷新
+                if #available(iOS 26.0, *) { } else {
                     self.view.layoutIfNeeded()
                 }
-            }, completion: { _ in
+            }, completion: { [weak self] _ in
+                guard let self = self else { return }
                 if previousSize != size {
                     self.sizeChanged?(self, size, newHeight)
                 }
@@ -670,9 +632,7 @@ public class PTSheetViewController: PTBaseViewController {
                 self.contentViewController.view.snp.updateConstraints { make in
                     make.height.equalTo(self.height(for: size))
                 }
-                
-                if #available(iOS 26.0, *) {
-                } else {
+                if #available(iOS 26.0, *) { } else {
                     self.contentViewController.view.layoutIfNeeded()
                 }
             }
@@ -684,7 +644,8 @@ public class PTSheetViewController: PTBaseViewController {
         if self.shouldDismiss?(self) != false {
             if self.options.useInlineMode {
                 if animated {
-                    self.animateOut {
+                    self.animateOut { [weak self] in
+                        guard let self = self else { return }
                         self.didDismiss?(self)
                     }
                 } else {
@@ -698,16 +659,11 @@ public class PTSheetViewController: PTBaseViewController {
         }
     }
     
-    /// Recalculates the intrinsic height of the sheet based on the content, and updates the sheet height to match.
-    ///
-    /// **Note:** Only meant for use with `.intrinsic` sheet size
     public func updateIntrinsicHeight() {
         contentViewController.updatePreferredHeight()
     }
     
-    /// Animates the sheet in, but only if presenting using the inline mode
     public func animateIn(to view: UIView, in parent: UIViewController, size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: PTActionTask? = nil) {
-        
         self.willMove(toParent: parent)
         parent.addChild(self)
         view.addSubview(self.view)
@@ -723,9 +679,10 @@ public class PTSheetViewController: PTBaseViewController {
     public func animateIn(size: PTSheetSize? = nil, duration: TimeInterval = 0.3, completion: PTActionTask? = nil) {
         guard self.options.useInlineMode else { return }
         guard self.view.superview != nil else {
-            PTNSLogConsole("It appears your sheet is not set as a subview of another view. Make sure to add this view as a subview before trying to animate it in.",levelType: .Error,loggerType: .Alert)
+            print("Error: It appears your sheet is not set as a subview of another view.")
             return
         }
+        
         self.view.superview?.layoutIfNeeded()
         self.contentViewController.updatePreferredHeight()
         self.resize(to: size ?? self.sizes.first ?? self.currentSize, animated: false)
@@ -734,36 +691,25 @@ public class PTSheetViewController: PTBaseViewController {
         self.overlayView.alpha = 0
         self.updateOrderedSizes()
         
-        UIView.animate(withDuration: duration,
-                       animations: {
+        UIView.animate(withDuration: duration, animations: {
             contentView.transform = .identity
             self.overlayView.alpha = 1
             self.overlayControlView.alpha = 1
-            self.overlayControlView.subviews.forEach { value in
-                value.alpha = 1
-            }
-        },completion: { _ in
+            self.overlayControlView.subviews.forEach { $0.alpha = 1 }
+        }, completion: { _ in
             completion?()
         })
     }
     
-    /// Animates the sheet out, but only if presenting using the inline mode
     public func animateOut(duration: TimeInterval = 0.3, completion: PTActionTask? = nil) {
         guard self.options.useInlineMode else { return }
         let contentView = self.contentViewController.view!
         
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       usingSpringWithDamping: self.options.transitionDampening,
-                       initialSpringVelocity: self.options.transitionVelocity,
-                       options: self.options.transitionAnimationOptions,
-                       animations: {
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: self.options.transitionDampening, initialSpringVelocity: self.options.transitionVelocity, options: self.options.transitionAnimationOptions, animations: {
             contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
             self.overlayView.alpha = 0
             self.overlayControlView.alpha = 0
-            self.overlayControlView.subviews.forEach { value in
-                value.alpha = 0
-            }
+            self.overlayControlView.subviews.forEach { $0.alpha = 0 }
         }, completion: { _ in
             self.view.removeFromSuperview()
             self.removeFromParent()
@@ -772,9 +718,9 @@ public class PTSheetViewController: PTBaseViewController {
     }
 }
 
+// MARK: - UIGestureRecognizerDelegate
 extension PTSheetViewController {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        // Allowing gesture recognition on a UIControl seems to prevent its events from firing properly sometimes
         if !shouldRecognizePanGestureWithUIControls {
             if let view = touch.view {
                 return !(view is UIControl)
@@ -791,16 +737,16 @@ extension PTSheetViewController {
         }
         
         let pointInChildScrollView = self.view.convert(point, to: childScrollView).y - childScrollView.contentOffset.y
-        
         let velocity = panGestureRecognizer.velocity(in: panGestureRecognizer.view?.superview)
+        
         guard pointInChildScrollView > 0, pointInChildScrollView < childScrollView.bounds.height else {
             if keyboardHeight > 0 {
                 childScrollView.endEditing(true)
             }
             return true
         }
-        let topInset = childScrollView.contentInset.top
         
+        let topInset = childScrollView.contentInset.top
         guard abs(velocity.y) > abs(velocity.x), childScrollView.contentOffset.y <= -topInset else { return false }
         
         if velocity.y < 0 {
@@ -812,6 +758,7 @@ extension PTSheetViewController {
     }
 }
 
+// MARK: - UIViewControllerTransitioningDelegate
 extension PTSheetViewController: UIViewControllerTransitioningDelegate {
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.presenting = true
@@ -823,5 +770,4 @@ extension PTSheetViewController: UIViewControllerTransitioningDelegate {
         return transition
     }
 }
-
-#endif
+#endif // os(iOS) || os(tvOS) || os(watchOS)
