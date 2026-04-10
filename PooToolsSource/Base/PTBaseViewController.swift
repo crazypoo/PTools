@@ -117,6 +117,7 @@ public final class PTNavigationBarContainer: UIView {
                 let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() * 2 : sheet.options.pullBarHeight
                 make.top.equalToSuperview().offset(-offset)
                 offsetHeight = offset
+                PTNSLogConsole("1231231231231231231231")
             } else {
                 make.top.equalToSuperview()
                 offsetHeight = CGFloat.statusBarHeight()
@@ -625,6 +626,11 @@ extension PTNavigationBarManager {
 
 extension PTNavigationBarManager {
     
+    fileprivate func navOffset() -> CGFloat {
+        let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
+        return offsetHeight
+    }
+    
     public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
@@ -637,8 +643,7 @@ extension PTNavigationBarManager {
             container.leftContainerWidth = 0 // 👈 记录宽度为 0
             container.leftContainer.snp.remakeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
                 make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
@@ -659,8 +664,7 @@ extension PTNavigationBarManager {
         
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -678,8 +682,7 @@ extension PTNavigationBarManager {
             container.rightContainerWidth = 0 // 👈 记录宽度为 0
             container.rightContainer.snp.remakeConstraints { make in
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
                 make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
@@ -700,8 +703,7 @@ extension PTNavigationBarManager {
         
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -725,8 +727,7 @@ extension PTNavigationBarManager {
 
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
-            let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
             // 🔥 直接抛弃那些复杂的 lessThan/greaterThan 和 优先级
             // 因为左右 inset 强制相等，这个 Box 在数学上已经被死死钉在屏幕正中心了！
             make.left.equalToSuperview().inset(symmetricalMargin)

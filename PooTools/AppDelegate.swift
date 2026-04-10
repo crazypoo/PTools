@@ -108,7 +108,7 @@ class AppDelegate: PTAppWindowsDelegate {
         PTAppBaseConfig.share.tabSelectedMetailColor = .clear
         PTAppBaseConfig.share.navTitleFont = .appfont(size: 18)
         PTAppBaseConfig.share.navTitleTextColor = .random
-        PTAppBaseConfig.share.viewControllerBaseBackgroundColor = .random
+//        PTAppBaseConfig.share.viewControllerBaseBackgroundColor = .random
         registerRotation()
 
 #if POOTOOLS_ROUTER

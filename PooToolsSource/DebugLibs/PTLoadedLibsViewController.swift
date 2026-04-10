@@ -287,16 +287,11 @@ class PTClassExplorerViewController: PTBaseViewController {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(.arrow.uturnLeftCircle), for: .normal)
         button.addActionHandlers { [weak self] sender in
-//            self?.navigationController?.popViewController()
+            self?.navigationController?.popViewController()
         }
         return button
     }()
         
-    // MARK: - Initialization
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
     init(libraryName: String, className: String) {
         self.libraryName = libraryName
         self.classNames = className
@@ -309,11 +304,16 @@ class PTClassExplorerViewController: PTBaseViewController {
     }
     
     // MARK: - Lifecycle
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        
+    // MARK: - Initialization
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
         setCustomRightButtons(buttons: [createInstanceButton], buttonSpacing: 0)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     override func viewDidLoad() {

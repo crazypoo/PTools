@@ -2022,6 +2022,8 @@
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				55024DF029F370DB00244E44 /* Debug */,
+				55E601CC2F889987004840AB /* DebugCrash */,
+				55E601CD2F88A5F3004840AB /* DebugFile */,
 				55E601CB2F889684004840AB /* DebugLibs */,
 				55C409972C097014009C0FB6 /* DEBUGLocation */,
 				555A8B4228C2E7A700692501 /* DevMask */,
@@ -2402,16 +2404,7 @@
 				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
 				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
-				557E3A8B2C0440FD002466A0 /* PTCallStackParser.swift */,
 				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
-				557E3AB72C047E64002466A0 /* PTCrashDetailModel.swift */,
-				557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */,
-				557E3A7B2C0437DC002466A0 /* PTCrashHandler.swift */,
-				557E3A932C044CCE002466A0 /* PTCrashLogViewController.swift */,
-				557E3A7F2C04388E002466A0 /* PTCrashManager.swift */,
-				557E3A7D2C043842002466A0 /* PTCrashModel.swift */,
-				557E3A912C0446AB002466A0 /* PTCrashViewModel.swift */,
-				557E3A792C042F7D002466A0 /* PTCreateLeakViewController.swift */,
 				557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */,
 				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
 				557E3A6D2C036D72002466A0 /* PTDebugPerformanceToolKit.swift */,
@@ -2422,9 +2415,6 @@
 				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 				557E3AA52C046F51002466A0 /* PTErrorHelper.swift */,
-				55E3BBC42ABE193200858348 /* PTFileBrowser.swift */,
-				55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */,
-				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
 				557E3A6F2C036DE3002466A0 /* PTFPSTool.swift */,
 				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
 				557E3AA32C046F10002466A0 /* PTHttpModel.swift */,
@@ -2446,7 +2436,6 @@
 				557E3AB12C04752F002466A0 /* StderrCapture.swift */,
 				557E3AAF2C047517002466A0 /* StdoutCapture.swift */,
 				557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */,
-				557E3A892C044082002466A0 /* Thread+PTDebugEx.swift */,
 				557E3A952C046472002466A0 /* UIView+PTSwizzle.swift */,
 				557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */,
 				557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */,
@@ -3773,6 +3762,33 @@
 			path = DebugLibs;
 			sourceTree = "<group>";
 		};
+		55E601CC2F889987004840AB /* DebugCrash */ = {
+			isa = PBXGroup;
+			children = (
+				557E3A8B2C0440FD002466A0 /* PTCallStackParser.swift */,
+				557E3AB72C047E64002466A0 /* PTCrashDetailModel.swift */,
+				557E3AB92C047EC6002466A0 /* PTCrashDetailViewController.swift */,
+				557E3A7B2C0437DC002466A0 /* PTCrashHandler.swift */,
+				557E3A932C044CCE002466A0 /* PTCrashLogViewController.swift */,
+				557E3A7F2C04388E002466A0 /* PTCrashManager.swift */,
+				557E3A7D2C043842002466A0 /* PTCrashModel.swift */,
+				557E3A912C0446AB002466A0 /* PTCrashViewModel.swift */,
+				557E3A792C042F7D002466A0 /* PTCreateLeakViewController.swift */,
+				557E3A892C044082002466A0 /* Thread+PTDebugEx.swift */,
+			);
+			path = DebugCrash;
+			sourceTree = "<group>";
+		};
+		55E601CD2F88A5F3004840AB /* DebugFile */ = {
+			isa = PBXGroup;
+			children = (
+				55E3BBC42ABE193200858348 /* PTFileBrowser.swift */,
+				55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */,
+				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
+			);
+			path = DebugFile;
+			sourceTree = "<group>";
+		};
 		55E96E2F2B08896E00AB8ADE /* iOS17Tips */ = {
 			isa = PBXGroup;
 			children = (
@@ -4104,8 +4120,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4115,13 +4130,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4136,13 +4147,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
