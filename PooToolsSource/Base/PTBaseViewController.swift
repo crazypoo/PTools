@@ -720,18 +720,29 @@ extension PTNavigationBarManager {
         container.titleContainer.isHidden = false
         container.titleContainer.addSubview(view)
 
-        // 🌟🌟🌟 核心逻辑：计算对称的最大边距 🌟🌟🌟
-        // 公式：屏幕边缘边距 + 左右容器中最宽的那一个的值 + 组件间距
-        let maxSideWidth = max(container.leftContainerWidth, container.rightContainerWidth)
-        let symmetricalMargin = PTAppBaseConfig.share.defaultViewSpace + maxSideWidth + PTAppBaseConfig.share.navContainerSpacing
+        // 🌟🌟🌟 核心逻辑：分别计算真实的左右物理边界 🌟🌟🌟
+        // 如果该边有按钮：边界 = 基础边距 + 按钮总宽度 + 标题间距
+        // 如果该边没按钮：边界 = 仅仅保留基础的安全边距（不浪费一丝多余空间）
+        let leftSpace = container.leftContainerWidth > 0
+            ? (PTAppBaseConfig.share.defaultViewSpace + container.leftContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
+            : PTAppBaseConfig.share.defaultViewSpace
+        
+        let rightSpace = container.rightContainerWidth > 0
+            ? (PTAppBaseConfig.share.defaultViewSpace + container.rightContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
+            : PTAppBaseConfig.share.defaultViewSpace
 
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
+            // 注意：这里保留了你代码里的 self.navOffset()
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
-            // 🔥 直接抛弃那些复杂的 lessThan/greaterThan 和 优先级
-            // 因为左右 inset 强制相等，这个 Box 在数学上已经被死死钉在屏幕正中心了！
-            make.left.equalToSuperview().inset(symmetricalMargin)
-            make.right.equalToSuperview().inset(symmetricalMargin)
+            
+            // 🔥 魔法 1：尽最大努力在【整个屏幕】保持绝对居中 (优先级 900)
+            make.centerX.equalToSuperview().priority(900)
+            
+            // 🔥 魔法 2：极限防御边界 (默认优先级 1000)
+            // 只要不越过真实的物理边界，你想怎么伸展就怎么伸展！
+            make.left.greaterThanOrEqualToSuperview().offset(leftSpace)
+            make.right.lessThanOrEqualToSuperview().offset(-rightSpace)
         }
         
         view.snp.makeConstraints { make in
