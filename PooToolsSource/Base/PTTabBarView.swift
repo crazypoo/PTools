@@ -164,6 +164,9 @@ final public class PTTabBarItemView: UIControl {
                 metailView.backgroundColor = isSelectedItem ? PTAppBaseConfig.share.tabSelectedMetailColor : .clear
                 glassBackgroundView.isHidden = !isSelectedItem
                 self.layoutMetailView()
+            } else {
+                metailView.removeFromSuperview()
+                glassBackgroundView.removeFromSuperview()
             }
         }
     }
