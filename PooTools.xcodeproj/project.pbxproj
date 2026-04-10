@@ -2022,6 +2022,7 @@
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				55024DF029F370DB00244E44 /* Debug */,
+				55E601CB2F889684004840AB /* DebugLibs */,
 				55C409972C097014009C0FB6 /* DEBUGLocation */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				55B4FA202AE1005E006D35F3 /* FaceIDPermission */,
@@ -2428,11 +2429,6 @@
 				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
 				557E3AA32C046F10002466A0 /* PTHttpModel.swift */,
 				557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */,
-				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
-				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
-				55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */,
-				55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */,
-				55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */,
 				5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */,
 				557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */,
 				55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */,
@@ -3765,6 +3761,18 @@
 			path = Ping;
 			sourceTree = "<group>";
 		};
+		55E601CB2F889684004840AB /* DebugLibs */ = {
+			isa = PBXGroup;
+			children = (
+				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
+				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
+				55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */,
+				55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */,
+				55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */,
+			);
+			path = DebugLibs;
+			sourceTree = "<group>";
+		};
 		55E96E2F2B08896E00AB8ADE /* iOS17Tips */ = {
 			isa = PBXGroup;
 			children = (
@@ -4096,7 +4104,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4106,9 +4115,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4123,9 +4136,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
