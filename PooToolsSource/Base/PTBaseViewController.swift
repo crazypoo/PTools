@@ -515,6 +515,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             titleLabel.lineBreakMode = .byTruncatingTail // 👈 增加这句，确保过长显示为 ...
             titleLabel.text = item.navTitle
             titleLabel.textAlignment = .center
+            titleLabel.clipsToBounds = true
             setTitleView(titleLabel)
         } else {
             titleLabel = false
