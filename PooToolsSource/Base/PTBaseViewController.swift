@@ -75,6 +75,9 @@ public final class PTNavigationBarContainer: UIView {
     let backgroundView = UIView()
     let contentView = UIView()
         
+    public var leftContainerWidth: CGFloat = 0
+    public var rightContainerWidth: CGFloat = 0
+    
     // ✅ 新增三块区域
     fileprivate lazy var leftContainer:UIStackView = {
         let view = UIStackView()
@@ -654,7 +657,7 @@ extension PTNavigationBarManager {
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
-        
+        container.leftContainerWidth = containerWidth // 👈 记录真实宽度
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -705,6 +708,7 @@ extension PTNavigationBarManager {
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
+        container.rightContainerWidth = containerWidth // 👈 记录真实宽度
         
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -734,29 +738,21 @@ extension PTNavigationBarManager {
         container.titleContainer.clipsToBounds = true
         container.titleContainer.isHidden = false
         container.titleContainer.addSubview(view)
-        
-        // 🛠️ 终极防遮挡核心 2：Z-Index 层级提升
-        // 确保左右按钮始终在标题视图的上层。这样即便是发生极限挤压，按钮也绝不会失去点击响应！
-        container.topBarContainer.bringSubviewToFront(container.leftContainer)
-        container.topBarContainer.bringSubviewToFront(container.rightContainer)
+
+        // 🌟🌟🌟 核心逻辑：计算对称的最大边距 🌟🌟🌟
+        // 公式：屏幕边缘边距 + 左右容器中最宽的那一个的值 + 组件间距
+        let maxSideWidth = max(container.leftContainerWidth, container.rightContainerWidth)
+        let symmetricalMargin = PTAppBaseConfig.share.defaultViewSpace + maxSideWidth + PTAppBaseConfig.share.navContainerSpacing
 
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
-            var offsetHeight:CGFloat = 0
-            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
-                offsetHeight = CGFloat.statusBarHeight()
-            } else {
-                offsetHeight = 0
-            }
+            let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
+
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
-            if self.titleLabel {
-                make.left.greaterThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing).priority(750)
-                make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing).priority(750)
-                make.centerX.equalToSuperview().priority(900)
-            } else {
-                make.left.equalTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-                make.right.equalTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
-            }
+            // 🔥 直接抛弃那些复杂的 lessThan/greaterThan 和 优先级
+            // 因为左右 inset 强制相等，这个 Box 在数学上已经被死死钉在屏幕正中心了！
+            make.left.equalToSuperview().inset(symmetricalMargin)
+            make.right.equalToSuperview().inset(symmetricalMargin)
         }
         
         view.snp.makeConstraints { make in
