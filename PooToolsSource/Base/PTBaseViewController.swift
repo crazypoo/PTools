@@ -645,12 +645,16 @@ extension PTNavigationBarManager {
         }
         guard !views.isEmpty else { return }
         container.leftContainer.isHidden = false
+        var containerWidth: CGFloat = 0
         views.forEach { value in
             container.leftContainer.addArrangedSubview(value)
             value.snp.remakeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
+            containerWidth += value.bounds.size.width
         }
+        containerWidth += CGFloat(views.count - 1) * spacing
+        
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -661,6 +665,8 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
+            // 🌟 实体墙：恢复绝对宽度约束，绝对不让标题把它压扁！
+            make.width.equalTo(containerWidth)
         }
         let highPriority = UILayoutPriority(999)
         container.leftContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
@@ -690,12 +696,16 @@ extension PTNavigationBarManager {
         }
         guard !views.isEmpty else { return }
         container.rightContainer.isHidden = false
+        var containerWidth: CGFloat = 0
         views.forEach { value in
             container.rightContainer.addArrangedSubview(value)
             value.snp.makeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
+            containerWidth += value.bounds.size.width
         }
+        containerWidth += CGFloat(views.count - 1) * spacing
+        
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             var offsetHeight:CGFloat = 0
@@ -706,6 +716,8 @@ extension PTNavigationBarManager {
             }
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
+            // 🌟 实体墙：恢复绝对宽度约束！(解决遮挡核心)
+            make.width.equalTo(containerWidth)
         }
         let highPriority = UILayoutPriority(999)
         container.rightContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
