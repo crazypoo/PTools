@@ -64,10 +64,10 @@ class ResizeController {
             make.centerX.centerY.equalToSuperview()
         }
         
-        let verticalPanGestureRecognizer = UIPanGestureRecognizer { sender in
-            if let ges = sender as? UIPanGestureRecognizer {
-                self.verticalPanner(recognizer: ges)
-            }
+        // 🔴 修复内存泄漏：加入 [weak self]
+        let verticalPanGestureRecognizer = UIPanGestureRecognizer { [weak self] sender in
+            guard let self = self, let ges = sender as? UIPanGestureRecognizer else { return }
+            self.verticalPanner(recognizer: ges)
         }
         verticalPanGestureRecognizer.maximumNumberOfTouches = 1
         view.addGestureRecognizer(verticalPanGestureRecognizer)
@@ -98,10 +98,10 @@ class ResizeController {
             make.centerX.centerY.equalToSuperview()
         }
 
-        let horizontalPanGestureRecognizer = UIPanGestureRecognizer { sender in
-            if let ges = sender as? UIPanGestureRecognizer {
-                self.horizontalPanner(recognizer: ges)
-            }
+        // 🔴 修复内存泄漏：加入 [weak self]
+        let horizontalPanGestureRecognizer = UIPanGestureRecognizer { [weak self] sender in
+            guard let self = self, let ges = sender as? UIPanGestureRecognizer else { return }
+            self.horizontalPanner(recognizer: ges)
         }
         horizontalPanGestureRecognizer.maximumNumberOfTouches = 1
         view.addGestureRecognizer(horizontalPanGestureRecognizer)
@@ -125,15 +125,14 @@ class ResizeController {
                 _ = bottomGrabber
                 _ = rightGrabber
                 
-                // Ensure initial autolayout is performed unanimated.
                 platterView.fontText.text = String(format: "%f", termial.fontSize)
-                platterView.FontSizeBlock = { (fontSize) in
+                // 🔴 修复闭包循环引用
+                platterView.FontSizeBlock = { [weak self, weak termial] (fontSize) in
+                    guard let self = self, let termial = termial else { return }
                     LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
                     PTGCDManager.gcdAfter(time: 0.55, block: {
                         UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
                             termial.center = self.consoleCenterPoint
-                            
-                            // Update grabbers (layout constraints)
                             LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
                         }.startAnimation()
                     })
@@ -209,12 +208,26 @@ class ResizeController {
         }
     }
     
+    // 🔴 抽取纯数学公式，极致提高性能
+    @inline(__always)
+    private func applyRubberBand(estimate: CGFloat, minVal: CGFloat, maxVal: CGFloat) -> CGFloat {
+        if estimate > maxVal {
+            let excess = estimate - maxVal
+            return maxVal + 25 * log(1/25 * excess + 1)
+        } else if estimate < minVal {
+            let excess = minVal - estimate
+            return minVal - 7 * log(1/7 * excess + 1)
+        }
+        return estimate
+    }
+
     var initialHeight = CGFloat.zero
     
     static let kMinConsoleHeight: CGFloat = systemLog_base_height
     static let kMaxConsoleHeight: CGFloat = 346
     
     @MainActor @objc func verticalPanner(recognizer: UIPanGestureRecognizer) {
+        guard let terminal = LocalConsole.shared.terminal else { return } // 🔴 安全解包
         
         let translation = recognizer.translation(in: bottomGrabber.superview)
         
@@ -230,48 +243,27 @@ class ResizeController {
             }.startAnimation()
             
         case .changed:
-            
-            let resolvedHeight: CGFloat = {
-                let initialEstimate = initialHeight + 2 * translation.y
-                if initialEstimate <= maxHeight && initialEstimate > minHeight {
-                    return initialEstimate
-                } else if initialEstimate > maxHeight {
-                    
-                    var excess = initialEstimate - maxHeight
-                    excess = 25 * log(1/25 * excess + 1)
-                    
-                    return maxHeight + excess
-                } else {
-                    var excess = minHeight - initialEstimate
-                    excess = 7 * log(1/7 * excess + 1)
-                    
-                    return minHeight - excess
-                }
-            }()
+            let initialEstimate = initialHeight + 2 * translation.y
+            let resolvedHeight = applyRubberBand(estimate: initialEstimate, minVal: Self.kMinConsoleHeight, maxVal: Self.kMaxConsoleHeight)
             
             LocalConsole.shared.consoleSize.height = resolvedHeight
-            LocalConsole.shared.terminal!.center.y = consoleCenterPoint.y
+            terminal.center.y = consoleCenterPoint.y // 🔴 直接使用局部变量
 
         case .ended, .cancelled:
-            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
-                if LocalConsole.shared.consoleSize.height > maxHeight {
-                    LocalConsole.shared.consoleSize.height = maxHeight
-                }
-                if LocalConsole.shared.consoleSize.height < minHeight {
-                    LocalConsole.shared.consoleSize.height = minHeight
-                }
+            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) { [weak self] in
+                guard let self = self else { return }
+                // 将尺寸修正回安全边界
+                LocalConsole.shared.consoleSize.height = max(Self.kMinConsoleHeight, min(Self.kMaxConsoleHeight, LocalConsole.shared.consoleSize.height))
                 
-                LocalConsole.shared.terminal!.center.y = self.consoleCenterPoint.y
-                
-                // Animate autolayout updates.
-                LocalConsole.shared.terminal!.layoutIfNeeded()
+                terminal.center.y = self.consoleCenterPoint.y
+                terminal.layoutIfNeeded()
                 LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
             
-            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
-                bottomGrabberPillView.alpha = 0.3
+            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [weak self] in
+                self?.bottomGrabberPillView.alpha = 0.3
             }.startAnimation()
-            
+
         default: break
         }
     }
@@ -282,7 +274,7 @@ class ResizeController {
     static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
     
     @MainActor @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
-        
+        guard let terminal = LocalConsole.shared.terminal else { return } // 🔴 安全解包
         let translation = recognizer.translation(in: bottomGrabber.superview)
         
         let minWidth = Self.kMinConsoleWidth
@@ -295,51 +287,26 @@ class ResizeController {
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                 rightGrabberPillView.alpha = 0.6
             }.startAnimation()
-            
         case .changed:
-            
-            let resolvedWidth: CGFloat = {
-                let initialEstimate = initialWidth + 2 * translation.x
-                if initialEstimate <= maxWidth && initialEstimate > minWidth {
-                    return initialEstimate
-                } else if initialEstimate > maxWidth {
-                    
-                    var excess = initialEstimate - maxWidth
-                    excess = 25 * log(1/25 * excess + 1)
-                    
-                    return maxWidth + excess
-                } else {
-                    var excess = minWidth - initialEstimate
-                    excess = 7 * log(1/7 * excess + 1)
-                    
-                    return minWidth - excess
-                }
-            }()
+            let initialEstimate = initialWidth + 2 * translation.x
+            let resolvedWidth = applyRubberBand(estimate: initialEstimate, minVal: Self.kMinConsoleWidth, maxVal: Self.kMaxConsoleWidth)
             
             LocalConsole.shared.consoleSize.width = resolvedWidth
-            LocalConsole.shared.terminal!.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
-
+            terminal.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
         case .ended, .cancelled:
-            
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
-                if LocalConsole.shared.consoleSize.width > maxWidth {
-                    LocalConsole.shared.consoleSize.width = maxWidth
-                }
-                if LocalConsole.shared.consoleSize.width < minWidth {
-                    LocalConsole.shared.consoleSize.width = minWidth
-                }
+                // 将尺寸修正回安全边界
+                LocalConsole.shared.consoleSize.width = max(Self.kMinConsoleWidth, min(Self.kMaxConsoleWidth, LocalConsole.shared.consoleSize.width))
                 
-                LocalConsole.shared.terminal!.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
-                
-                // Animate autolayout updates.
-                LocalConsole.shared.terminal!.layoutIfNeeded()
+                terminal.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+                terminal.layoutIfNeeded()
                 LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
             
-            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
-                rightGrabberPillView.alpha = 0.3
+            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [weak self] in
+                self?.rightGrabberPillView.alpha = 0.3
             }.startAnimation()
-            
+
         default: break
         }
     }
@@ -457,9 +424,10 @@ class PlatterView: UIView {
     
     lazy var backgroundButton: UIButton = {
         let backgroundButton = UIButton.init(type: .custom)
-        backgroundButton.addActionHandlers { sender in
+        // 🔴 修复内存泄漏
+        backgroundButton.addActionHandlers { [weak self] sender in
             ResizeController.shared.isActive = false
-            self.dismiss()
+            self?.dismiss()
         }
         backgroundButton.frame.size = CGSize(width: self.frame.size.width, height: possibleEndpoints[0].y + 30)
         LocalConsole.shared.consoleWindow.view.addSubview(backgroundButton)
@@ -474,13 +442,12 @@ class PlatterView: UIView {
         button.frame.size = CGSize(width: 116, height: 52)
         button.layer.cornerRadius = 20
         button.layer.cornerCurve = .continuous
-
-        button.addActionHandlers { sender in
-            self.fontText.resignFirstResponder()
+        // 🔴 修复内存泄漏
+        button.addActionHandlers { [weak self] sender in
+            self?.fontText.resignFirstResponder()
             ResizeController.shared.isActive = false
-            self.dismiss()
+            self?.dismiss()
         }
-
         return button
     }()
     
@@ -493,26 +460,27 @@ class PlatterView: UIView {
                 return UIColor(white: 0, alpha: 0.1)
             }
         })
-
         button.setImage("🔄".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
         button.frame.size = CGSize(width: 116, height: 52)
         button.layer.cornerRadius = 20
         button.layer.cornerCurve = .continuous
-
-        button.addActionHandlers { sender in
-            self.fontText.resignFirstResponder()
-            // Resolves a text view frame animation bug that occurs when *decreasing* text view width.
+        button.addActionHandlers { [weak self] sender in
+            self?.fontText.resignFirstResponder()
+            guard let terminal = LocalConsole.shared.terminal else { return }
+            
             if LocalConsole.shared.consoleSize.width > systemLog_base_width {
-                LocalConsole.shared.terminal!.systemText!.frame.size.width = systemLog_base_width - borderLine * 4
+                terminal.systemText?.frame.size.width = systemLog_base_width - borderLine * 4
             }
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
                 LocalConsole.shared.consoleSize = CGSize(width: systemLog_base_width, height: systemLog_base_height)
-                LocalConsole.shared.terminal!.center = ResizeController.shared.consoleCenterPoint
+                terminal.center = ResizeController.shared.consoleCenterPoint
+                
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = 7.5
-                LocalConsole.shared.terminal!.fontSize = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
+                terminal.fontSize = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
+                
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = "#FFFFFF"
-                LocalConsole.shared.terminal!.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
+                terminal.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor) ?? .white
                 LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
         }
@@ -545,14 +513,15 @@ class PlatterView: UIView {
         let image = "🎨".emojiToImage(emojiFont: .appfont(size: 17))
         let view = UIButton(type: .custom)
         view.setImage(image, for: .normal)
-        view.addActionHandlers() { sender in
+        view.addActionHandlers() { [weak self] sender in
             ResizeController.shared.isActive = false
             let colorPicker = PTColorPickerContainerViewController()
             colorPicker.backButton.setImage(image, for: .normal)
             colorPicker.picker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor) ?? .white
-            colorPicker.selectedColorCallback = { color in
+            
+            colorPicker.selectedColorCallback = { [weak self] color in
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = color.hexString
-                self.FontSColorBlock?(color)
+                self?.FontSColorBlock?(color)
                 PTGCDManager.gcdAfter(time: 0.1) {
                     ResizeController.shared.isActive.toggle()
                     ResizeController.shared.platterView.reveal()

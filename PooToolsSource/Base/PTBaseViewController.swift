@@ -631,24 +631,21 @@ extension PTNavigationBarManager {
         container.leftContainer.spacing = spacing
         container.leftContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.leftContainer.isHidden = true
-        container.leftContainer.snp.remakeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            var offsetHeight:CGFloat = 0
-            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
-                offsetHeight = CGFloat.statusBarHeight()
-            } else {
-                offsetHeight = 0
-            }
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
-            make.bottom.equalToSuperview()
-            // 🛠️ 修复：当没有视图时，强制宽度为 0，防止影响 Title 的边界计算
-            if views.isEmpty {
+        var containerWidth: CGFloat = 0
+
+        guard !views.isEmpty else {
+            container.leftContainerWidth = 0 // 👈 记录宽度为 0
+            container.leftContainer.snp.remakeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+                make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
+            return
         }
-        guard !views.isEmpty else { return }
+        
         container.leftContainer.isHidden = false
-        var containerWidth: CGFloat = 0
         views.forEach { value in
             container.leftContainer.addArrangedSubview(value)
             value.snp.remakeConstraints { make in
@@ -657,23 +654,16 @@ extension PTNavigationBarManager {
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
+        
         container.leftContainerWidth = containerWidth // 👈 记录真实宽度
+        
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            var offsetHeight:CGFloat = 0
-            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
-                offsetHeight = CGFloat.statusBarHeight()
-            } else {
-                offsetHeight = 0
-            }
+            let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-            // 🌟 实体墙：恢复绝对宽度约束，绝对不让标题把它压扁！
             make.width.equalTo(containerWidth)
         }
-        let highPriority = UILayoutPriority(999)
-        container.leftContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
-        container.leftContainer.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
@@ -682,50 +672,39 @@ extension PTNavigationBarManager {
         container.rightContainer.spacing = spacing
         container.rightContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
         container.rightContainer.isHidden = true
-        container.rightContainer.snp.remakeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            var offsetHeight:CGFloat = 0
-            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
-                offsetHeight = CGFloat.statusBarHeight()
-            } else {
-                offsetHeight = 0
-            }
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
-            make.bottom.equalToSuperview()
-            // 🛠️ 修复：当没有视图时，强制宽度为 0，防止影响 Title 的边界计算
-            if views.isEmpty {
+        var containerWidth: CGFloat = 0
+                
+        guard !views.isEmpty else {
+            container.rightContainerWidth = 0 // 👈 记录宽度为 0
+            container.rightContainer.snp.remakeConstraints { make in
+                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+                make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
+            return
         }
-        guard !views.isEmpty else { return }
+        
         container.rightContainer.isHidden = false
-        var containerWidth: CGFloat = 0
         views.forEach { value in
             container.rightContainer.addArrangedSubview(value)
-            value.snp.makeConstraints { make in
+            value.snp.remakeConstraints { make in
                 make.size.equalTo(value.bounds.size)
             }
             containerWidth += value.bounds.size.width
         }
         containerWidth += CGFloat(views.count - 1) * spacing
+        
         container.rightContainerWidth = containerWidth // 👈 记录真实宽度
         
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            var offsetHeight:CGFloat = 0
-            if let findCurrent = PTUtils.getCurrentVC(),let _ = findCurrent.sheetViewController {
-                offsetHeight = CGFloat.statusBarHeight()
-            } else {
-                offsetHeight = 0
-            }
+            let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             make.bottom.equalToSuperview()
-            // 🌟 实体墙：恢复绝对宽度约束！(解决遮挡核心)
             make.width.equalTo(containerWidth)
         }
-        let highPriority = UILayoutPriority(999)
-        container.rightContainer.setContentCompressionResistancePriority(highPriority, for: .horizontal)
-        container.rightContainer.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     public func setTitleView(_ view: UIView?) {
@@ -747,7 +726,6 @@ extension PTNavigationBarManager {
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
             let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
             // 🔥 直接抛弃那些复杂的 lessThan/greaterThan 和 优先级
             // 因为左右 inset 强制相等，这个 Box 在数学上已经被死死钉在屏幕正中心了！

@@ -291,6 +291,9 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 public class LocalConsole: NSObject {
     @MainActor public static let shared = LocalConsole()
             
+    // 新增一个游标，记录已经渲染到 UI 的日志索引
+    private var lastFlushedIndex: Int = 0
+    
     private let logBuffer = PTLogBuffer(maxCount: 50000)
     private var pendingUpdate = false
     private let throttleInterval: TimeInterval = 0.05
@@ -667,12 +670,26 @@ public class LocalConsole: NSObject {
     private func flushUI() {
         guard let terminal else { return }
         
-        let logs = logBuffer.all()
+        let allLogs = logBuffer.all()
+        let totalCount = allLogs.count
         
-        // 只 append 新内容（关键点🔥）
-        for log in logs.suffix(50) { // 可限制每次最多刷50条
-            terminal.appendLog(log)
-        }
+        // 如果没有新日志，直接返回
+        guard lastFlushedIndex < totalCount else { return }
+        
+        // 1. 只获取真正的新日志（避免重复拼接）
+        let newLogs = allLogs[lastFlushedIndex..<totalCount]
+        
+        // 2. 将所有新日志在内存中合并为一整块，而不是多次操作 UI
+        let combinedText = newLogs.map { $0.text }.joined(separator: "\n") + "\n"
+        
+        // 取第一条的 Level 颜色作为基准（或者你可以改造 appendLogs 支持多颜色块）
+        let item = PTLogBuffer.LogItem(text: combinedText, level: newLogs.last?.level ?? .info)
+        
+        // 3. 一次性送给 Terminal 渲染
+        terminal.appendLog(item)
+        
+        // 4. 更新游标
+        lastFlushedIndex = totalCount
         
         commitTextChanges(requestMenuUpdate: true)
     }
@@ -949,6 +966,7 @@ extension LocalConsole {
     public func clear() {
         terminal?.systemText?.text = ""
         logBuffer.clear()
+        lastFlushedIndex = 0 // 清空时重置游标
     }
     
     func loadedLibs() {
@@ -984,7 +1002,7 @@ extension LocalConsole {
     func consoleSheetPresent(vc:PTBaseViewController) {
         let nav = PTBaseNavControl(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
-        var options = PTSheetOptions()
+        let options = PTSheetOptions()
         UIViewController.currentPresentToSheet(vc: nav,sizes: [.fullscreen],options: options)
     }
     
@@ -1127,19 +1145,28 @@ extension LocalConsole {
     private func refreshDynamicSection() {
         guard let textStorage = terminal?.systemText?.textStorage else { return }
 
-        // 删除旧的
-        if let range = dynamicRange {
+        textStorage.beginEditing()
+        
+        // 增加安全校验，防止多线程插入导致的 Range 越界 Crash
+        if let range = dynamicRange, range.location + range.length <= textStorage.length {
             textStorage.deleteCharacters(in: range)
         }
 
         let start = textStorage.length
-
-        let combined = dynamicLogs.values.joined(separator: "\n") + "\n"
-        terminal?.appendLog(PTLogBuffer.LogItem(text: combined, level: .info))
-
+        let combined = "\n--- System Monitor ---\n" + dynamicLogs.values.joined(separator: "\n") + "\n"
+        
+        let attr = NSAttributedString(string: combined, attributes: [
+            .font: UIFont.systemFont(ofSize: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize, weight: .bold, design: .monospaced),
+            .foregroundColor: UIColor.systemGreen // 动态数据给个绿色方便区分
+        ])
+        
+        textStorage.append(attr)
         let end = textStorage.length
-
+        
         dynamicRange = NSRange(location: start, length: end - start)
+        
+        textStorage.endEditing()
+        // 动态刷新时不强制 scrollToBottom，以免打断用户翻看历史日志
     }
     
     private func printStaticSystemInfo() {
@@ -1304,6 +1331,21 @@ public class PTTerminal:PFloatingButton {
         }
     }
     
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // 给系统一个明确的形状，杜绝离屏渲染！
+        layer.shadowPath = UIBezierPath(
+            roundedRect: bounds,
+            cornerRadius: layer.cornerRadius
+        ).cgPath
+        
+        // 你原来的布局代码
+        systemText?.snp.makeConstraints { (make) in
+            make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
+        }
+    }
+    
     var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
     var fontSize: CGFloat = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
 
@@ -1328,12 +1370,23 @@ public class PTTerminal:PFloatingButton {
         guard let textStorage = systemText?.textStorage else { return }
         
         let attr = NSAttributedString(
-            string: item.text + "\n",
+            string: item.text,
             attributes: currentAttributes
         )
         
+        // 使用 beginEditing 和 endEditing 将多次重绘合并为一次
         textStorage.beginEditing()
         textStorage.append(attr)
+        
+        // 🔴 关键性能保护：防止 TextView 内存无限暴涨！
+        // 即使 Buffer 限制了 50000 条，UITextView 的渲染层如果超过几万行一样会卡死
+        let maxCharacterCount = 100_000
+        if textStorage.length > maxCharacterCount {
+            let overage = textStorage.length - maxCharacterCount
+            // 截断头部最旧的日志
+            textStorage.deleteCharacters(in: NSRange(location: 0, length: overage))
+        }
+        
         textStorage.endEditing()
         
         scrollToBottom()
