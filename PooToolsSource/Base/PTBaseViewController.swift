@@ -1067,7 +1067,7 @@ extension PTBaseViewController: UIScrollViewDelegate {
         }
     }
     
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if prefersLargeTitle() {
             let offset = scrollView.contentOffset.y
             let insetTop = scrollView.contentInset.top
@@ -1077,7 +1077,7 @@ extension PTBaseViewController: UIScrollViewDelegate {
         }
     }
     
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if prefersLargeTitle() {
             guard scrollView.contentOffset.y < -scrollView.contentInset.top else { return }
             
