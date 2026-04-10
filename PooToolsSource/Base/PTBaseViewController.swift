@@ -739,7 +739,7 @@ extension PTNavigationBarManager {
             if self.titleLabel {
                 make.left.greaterThanOrEqualTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing).priority(750)
                 make.right.lessThanOrEqualTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing).priority(750)
-                make.centerX.equalToSuperview()
+                make.centerX.equalToSuperview().priority(900)
             } else {
                 make.left.equalTo(container.leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
                 make.right.equalTo(container.rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
