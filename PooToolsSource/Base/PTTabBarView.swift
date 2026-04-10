@@ -107,6 +107,7 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
     }
     
     private func lottieAnimationSet(findAnimation:LottieAnimation) {
+        lottieView.contentMode = .scaleAspectFit
         imageView.isHidden = true
         lottieView.isHidden = false
         lottieView.animation = findAnimation
@@ -253,7 +254,7 @@ final public class PTTabBarView: UIView {
     private let glassBackgroundView = UIVisualEffectView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()
-    private var centerButton = UIView()
+    public var centerButton = UIView()
     private var centerContent:PTTabBarItemContent?
     private let highlightLayer = CAGradientLayer()
     
@@ -385,11 +386,11 @@ final public class PTTabBarView: UIView {
             effectView.layer.cornerCurve = .continuous
         }
 
+        centerButton.viewCorner(radius: centerButtonSize / 2)
         centerButton.layer.shadowColor = UIColor.black.cgColor
         centerButton.layer.shadowOpacity = 0.2
         centerButton.layer.shadowRadius = 20
         centerButton.layer.shadowOffset = CGSize(width: 0, height: 10)
-
         let tap = UITapGestureRecognizer { sender in
             self.didTapCenter?()
         }
@@ -578,7 +579,7 @@ final public class PTTabBarView: UIView {
             }
         }
         var config = PTBadgeConfiguration()
-        config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize() / 2, 7)
+        config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize(), 7)
         item.badgeConfig = config
         item.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
         item.badgeRemoveCallback = {
