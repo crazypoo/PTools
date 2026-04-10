@@ -392,6 +392,33 @@ extension PTBannerView {
     private func scrollNext() {
         guard let index = currentIndex() else { return }
         let next = index + 1
+        
+        // 🛡️ 越界保护检查
+        if next >= totalItemsCount {
+            if viewConfig.infiniteLoop {
+                // 1. 获取当前展示的真实数据索引 (比如 0, 1, 2)
+                let realIdx = realIndex(index)
+                
+                // 2. 计算出靠近 CollectionView 中间段的起始位置
+                let middleBase = totalItemsCount / 2
+                let resetIndex = middleBase - (middleBase % bannerModel.count) + realIdx
+                
+                // 3. 无动画静默跳回中间位置 (用户视觉上无感知)
+                collectionView.scrollToItem(at: IndexPath(item: resetIndex, section: 0), at: .centeredHorizontally, animated: false)
+                
+                // 4. 紧接着带动画滚动到下一页
+                let adjustedNext = resetIndex + 1
+                if adjustedNext < totalItemsCount { // 确保重置后加 1 不会越界（理论上肯定不会）
+                    collectionView.scrollToItem(at: IndexPath(item: adjustedNext, section: 0), at: .centeredHorizontally, animated: true)
+                }
+            } else {
+                // 非无限循环模式：已经到底了，移除定时器停止滚动
+                PTBannerScheduler.shared.remove(self)
+            }
+            return
+        }
+
+        // 正常情况：带动画滚向下一页
         collectionView.scrollToItem(at: IndexPath(item: next, section: 0), at: .centeredHorizontally, animated: true)
     }
 
