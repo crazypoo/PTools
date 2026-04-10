@@ -92,6 +92,9 @@ public final class PTBannerPlayerManager {
     }
 
     func stop() {
+        // 移除播放结束的通知，防止单例导致的通知堆积
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
+        
         player?.pause()
         player = nil
         playerLayer?.removeFromSuperlayer()

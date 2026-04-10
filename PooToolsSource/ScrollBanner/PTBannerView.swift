@@ -26,6 +26,12 @@ public final class PTBannerScheduler {
 
     func remove(_ banner: PTBannerView) {
         banners.remove(banner)
+        
+        // ✨ 新增：当没有 banner 存在时，销毁定时器节省资源
+        if banners.allObjects.isEmpty {
+            timer?.cancel()
+            timer = nil
+        }
     }
 
     private func startIfNeeded() {
@@ -413,6 +419,10 @@ extension PTBannerView {
 extension PTBannerView {
     func setupPageControl() {
         
+        // ✨ 新增：移除旧的视图，防止重复叠加
+        customPageControl.removeFromSuperview()
+        descTitleView.removeFromSuperview()
+
         if bannerModel.count <= 1 {
             customPageControl.isHidden = true
             return
@@ -540,5 +550,9 @@ extension PTBannerView {
         if let control = customPageControl as? PTPageControllable {
             control.setCurrentPage(index: realProgress)
         }
+        
+        // ✨ 新增：滑动时实时更新对应的标题内容和容器高度
+        setDescView(index: realProgress)
+        setDescViewHeight(index: realProgress)
     }
 }
