@@ -7,9 +7,7 @@
 //
 
 import UIKit
-#if canImport(Lottie)
 import Lottie
-#endif
 import SnapKit
 import SwifterSwift
 
@@ -41,10 +39,8 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
 
     private let container = UIView()
     private let imageView = UIImageView()
-#if canImport(Lottie)
     private let lottieView = LottieAnimationView()
-#endif
-    
+
     private let normalImage: Any
     private let selectedImage: Any?
 
@@ -56,23 +52,18 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
         imageView.contentMode = .scaleAspectFit
         
         var showViews = [UIView]()
-#if canImport(Lottie)
         showViews = [imageView,lottieView]
-#else
-        showViews = [imageView]
-#endif
         container.addSubviews(showViews)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-#if canImport(Lottie)
+        
         lottieView.isHidden = true
         lottieView.loopMode = .autoReverse
         lottieView.isUserInteractionEnabled = false
         lottieView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-#endif
     }
 
     public var view: UIView { container }
@@ -84,7 +75,6 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
     private func imageSet(media:Any) {
         switch media {
         case let string as String:
-#if canImport(Lottie)
             if string.lowercased().contains("json") {
                 if string.isURL(),let lottieURL = URL(string: string) {
                     Task { @MainActor in
@@ -107,31 +97,21 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
                     imageView.loadImage(contentData: string)
                 }
             }
-#else
-            imageView.isHidden = false
-            imageView.loadImage(contentData: media)
-#endif
-#if canImport(Lottie)
         case let animation as LottieAnimation:
             lottieAnimationSet(findAnimation: animation)
-#endif
         default:
             imageView.isHidden = false
-#if canImport(Lottie)
             lottieView.isHidden = true
-#endif
             self.imageView.loadImage(contentData: media)
         }
     }
     
-#if canImport(Lottie)
     private func lottieAnimationSet(findAnimation:LottieAnimation) {
         imageView.isHidden = true
         lottieView.isHidden = false
         lottieView.animation = findAnimation
         lottieView.play()
     }
-#endif
 }
 
 final public class PTTabBarItemView: UIControl {
