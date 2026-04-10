@@ -117,7 +117,7 @@ public class PTAppBaseConfig: NSObject {
     public var tabContentSpacing:CGFloat = 2
     public var tab26BottomSpacing:CGFloat = 15
     public var tab26Mode:Bool = false
-    public var tabSelectedMetail:Bool = true
+    public var tabSelectedMetail:Bool = false
     public var tabSelectedMetailColor:UIColor = .lightGray
     public var tabSelectedMetailLRSpacing:CGFloat = 5
     public var tabbarMetailMode:Bool = false
