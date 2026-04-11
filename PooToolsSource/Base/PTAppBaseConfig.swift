@@ -121,4 +121,6 @@ public class PTAppBaseConfig: NSObject {
     public var tabSelectedMetailColor:UIColor = .lightGray
     public var tabSelectedMetailLRSpacing:CGFloat = 5
     public var tabbarMetailMode:Bool = false
+    public var tabbarCenterMetail:Bool = false
+    public var tabbarCenterBGColor:UIColor = .clear
 }

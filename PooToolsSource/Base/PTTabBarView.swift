@@ -254,7 +254,7 @@ final public class PTTabBarView: UIView {
     private let glassBackgroundView = UIVisualEffectView()
     private let leftStackView = UIStackView()
     private let rightStackView = UIStackView()
-    public var centerButton = UIView()
+    private var centerButton = UIView()
     private var centerContent:PTTabBarItemContent?
     private let highlightLayer = CAGradientLayer()
     
@@ -365,17 +365,17 @@ final public class PTTabBarView: UIView {
     private func setupCenterButton() {
 
         addSubview(centerButton)
-
+        centerButton.backgroundColor = PTAppBaseConfig.share.tabbarCenterBGColor
         let effectView = UIVisualEffectView()
         if PTAppBaseConfig.share.tab26Mode {
             effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
         } else {
-            if PTAppBaseConfig.share.tabbarMetailMode {
+            if PTAppBaseConfig.share.tabbarCenterMetail {
                 effectView.effect = UIBlurEffect(style: .systemMaterial)
             }
         }
 
-        if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+        if PTAppBaseConfig.share.tab26Mode && PTAppBaseConfig.share.tabbarCenterMetail {
             effectView.clipsToBounds = true
             centerButton.addSubview(effectView)
             effectView.snp.makeConstraints { make in
