@@ -123,4 +123,5 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarMetailMode:Bool = false
     public var tabbarCenterMetail:Bool = false
     public var tabbarCenterBGColor:UIColor = .clear
+    public var tabbarCenterInsideOffset:CGFloat = 0
 }

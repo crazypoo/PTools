@@ -79,6 +79,7 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         super.configure(items: items)
         let aaaaaa = PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json")//PTTabBarBigImageContent(normal: UIImage(named: "image_aircondition_gray")!)//PTTabBarBigLottieContent(normal: "camera")
         ptCustomBar.setup(configs: items,layoutStyle: .centerRaised,centerContent: aaaaaa)
-        ptCustomBar.badge(index: 0,badgeValue: 10)
+        ptCustomBar.badge(index: 0,badgeValue: "10")
+        ptCustomBar.badge(index: 1,badgeValue: "10",badgeStyle: .redDot)
     }
 }

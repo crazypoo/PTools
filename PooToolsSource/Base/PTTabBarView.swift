@@ -440,7 +440,7 @@ final public class PTTabBarView: UIView {
                 centerButton.isHidden = false
                 centerButton.addSubviews([findBig])
                 findBig.snp.remakeConstraints { make in
-                    make.edges.equalToSuperview()
+                    make.edges.equalToSuperview().inset(PTAppBaseConfig.share.tabbarCenterInsideOffset)
                 }
 
                 let midIndex = configs.count / 2
@@ -457,16 +457,6 @@ final public class PTTabBarView: UIView {
                     }
                 }
 
-                centerButton.snp.remakeConstraints {
-                    $0.centerX.equalToSuperview()
-                    if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
-                        $0.centerY.equalTo(glassBackgroundView.snp.top)
-                    } else {
-                        $0.centerY.equalTo(self.snp.top)
-                    }
-                    $0.size.equalTo(centerButtonSize)
-                }
-
                 leftStackView.snp.remakeConstraints {
                     $0.left.equalToSuperview()
                     $0.top.equalToSuperview().inset(PTAppBaseConfig.share.tabTopSpacing)
@@ -475,7 +465,17 @@ final public class PTTabBarView: UIView {
                     } else {
                         $0.height.equalTo(CGFloat.kTabbarHeight)
                     }
-                    $0.right.equalTo(self.centerButton.snp.left)
+                    $0.width.equalTo(self.barItemWidth() * CGFloat(self.leftStackView.arrangedSubviews.count))
+                }
+
+                centerButton.snp.remakeConstraints {
+                    $0.left.equalTo(self.leftStackView.snp.right)
+                    if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
+                        $0.centerY.equalTo(glassBackgroundView.snp.top)
+                    } else {
+                        $0.centerY.equalTo(self.snp.top)
+                    }
+                    $0.size.equalTo(centerButtonSize)
                 }
 
                 rightStackView.snp.remakeConstraints {
@@ -561,8 +561,7 @@ final public class PTTabBarView: UIView {
         return item
     }
     
-    public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none) {
-        let item = items[index]
+    private func barItemWidth() -> CGFloat {
         var itemWidth:CGFloat = 0
         switch layoutStyle {
         case .normal:
@@ -578,6 +577,12 @@ final public class PTTabBarView: UIView {
                 itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
             }
         }
+        return itemWidth
+    }
+    
+    public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none) {
+        let item = items[index]
+        let itemWidth:CGFloat = barItemWidth()
         var config = PTBadgeConfiguration()
         config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize(), 7)
         item.badgeConfig = config

@@ -126,7 +126,7 @@ extension UIView: PTBadgeProtocol {
     }
     
     private func resetBadgeCenter() {
-        let offsetX = self.bounds.width + 2 + badgeConfig.centerOffset.x
+        let offsetX = badgeConfig.centerOffset.x
         let offsetY = badgeConfig.centerOffset.y
         self.badge?.center = CGPoint(x: offsetX, y: offsetY)
     }
@@ -146,8 +146,18 @@ extension UIView: PTBadgeProtocol {
         case .redDot:
             showRedDotBadge()
         case .number:
-            let val = (value as? Int) ?? 0
-            showNumberBadge(value: val)
+            switch value {
+            case let val as Int:
+                showNumberBadge(value: val)
+            case let val as String:
+                if let intVal = val.int {
+                    showNumberBadge(value: intVal)
+                } else {
+                    showNumberBadge(value: 0)
+                }
+            default:
+                showNumberBadge(value: 0)
+            }
         case .new:
             let str = (value as? String) ?? "new"
             showNewBadge(newValue: str)
