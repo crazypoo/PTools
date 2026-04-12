@@ -257,6 +257,16 @@ final public class PTTabBarView: UIView {
     private var centerButton = UIView()
     private var centerContent:PTTabBarItemContent?
     private let highlightLayer = CAGradientLayer()
+    private lazy var centerNameLabel:UILabel = {
+        let view = UILabel()
+        view.font = PTAppBaseConfig.share.tabbarCenterNameFont
+        view.textColor = PTAppBaseConfig.share.tabbarCenterNameColor
+        view.textAlignment = .center
+        view.numberOfLines = 1
+        view.isHidden = PTAppBaseConfig.share.tabbarCenterName.stringIsEmpty()
+        view.text = PTAppBaseConfig.share.tabbarCenterName
+        return view
+    }()
     
     private var layoutStyle: PTTabBarLayoutStyle = .normal
     public var currentBarLayoutStyle : PTTabBarLayoutStyle {
@@ -364,7 +374,7 @@ final public class PTTabBarView: UIView {
 
     private func setupCenterButton() {
 
-        addSubview(centerButton)
+        addSubviews([centerButton,centerNameLabel])
         centerButton.backgroundColor = PTAppBaseConfig.share.tabbarCenterBGColor
         let effectView = UIVisualEffectView()
         if PTAppBaseConfig.share.tab26Mode {
@@ -478,6 +488,12 @@ final public class PTTabBarView: UIView {
                     $0.size.equalTo(centerButtonSize)
                 }
 
+                centerNameLabel.snp.remakeConstraints { make in
+                    make.left.right.equalTo(self.centerButton)
+                    make.top.equalTo(self.centerButton.snp.bottom).offset(PTAppBaseConfig.share.tabbarCenterNameContentSpacing)
+                    make.bottom.greaterThanOrEqualTo(self.rightStackView)
+                }
+                
                 rightStackView.snp.remakeConstraints {
                     $0.right.equalToSuperview()
                     $0.top.equalTo(self.leftStackView)
@@ -584,7 +600,7 @@ final public class PTTabBarView: UIView {
         let item = items[index]
         let itemWidth:CGFloat = barItemWidth()
         var config = PTBadgeConfiguration()
-        config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize(), 7)
+        config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize() / 2, 7)
         item.badgeConfig = config
         item.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
         item.badgeRemoveCallback = {

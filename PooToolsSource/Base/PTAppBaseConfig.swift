@@ -124,4 +124,8 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarCenterMetail:Bool = false
     public var tabbarCenterBGColor:UIColor = .clear
     public var tabbarCenterInsideOffset:CGFloat = 0
+    public var tabbarCenterName:String = ""
+    public var tabbarCenterNameFont:UIFont = .appfont(size: 10)
+    public var tabbarCenterNameColor:UIColor = .black
+    public var tabbarCenterNameContentSpacing:CGFloat = 2
 }
