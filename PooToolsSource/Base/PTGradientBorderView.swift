@@ -10,58 +10,75 @@ import UIKit
 
 open class PTGradientBorderView: UIView {
     
-    // 属性定义
+    // MARK: - 属性定义
+    
     open var cornerRadius: CGFloat = 8 {
         didSet {
-            setup()
+            // 只需要标记需要重新布局，系统会在下一次绘制周期自动调用 layoutSubviews
+            setNeedsLayout()
         }
     }
     
     open var lineWidth: CGFloat = 5 {
         didSet {
-            setup()
+            setNeedsLayout()
         }
     }
     
     open var gradientColors: [UIColor] = [UIColor.red, UIColor.blue] {
         didSet {
-            setup()
+            // 颜色变化不影响布局，直接更新现有 Layer 的属性，性能极高
+            updateGradientColors()
         }
     }
     
+    // 注意：假设 Imagegradien 是你在其他地方定义的枚举
     open var gradientDirection: Imagegradien = .LeftToRight {
         didSet {
-            setup()
+            updateGradientDirection()
         }
     }
-        
+    
+    // MARK: - 图层重用 (提升性能的核心)
+    // 只创建一次 Layer，后续只更新它们的属性，避免重复初始化
+    private let gradientLayer = CAGradientLayer()
+    private let borderMaskLayer = CAShapeLayer()
+    
+    // MARK: - 初始化
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        initialSetup()
     }
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
-        setup()
+        initialSetup()
     }
     
-    private func setup() {
-        // 设置视图的圆角
-        self.layer.cornerRadius = cornerRadius
-        self.layer.masksToBounds = true
-
-        // 创建一个CAShapeLayer来绘制圆角矩形路径
-        let shapeLayer = CAShapeLayer()
-        let path = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius)
-        shapeLayer.path = path.cgPath
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.lineWidth = lineWidth
+    // MARK: - 核心方法
+    
+    private func initialSetup() {
+        // 配置蒙版层 (Mask Layer)
+        borderMaskLayer.fillColor = UIColor.clear.cgColor
+        borderMaskLayer.strokeColor = UIColor.black.cgColor // 颜色不重要，Mask 只看透明度
         
-        // 创建一个渐变图层
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.bounds
+        // 配置渐变层并设置蒙版
+        gradientLayer.mask = borderMaskLayer
+        
+        // 将渐变层添加到视图最底层，确保不会遮挡你未来可能添加的子视图
+        self.layer.insertSublayer(gradientLayer, at: 0)
+        
+        // 初始化颜色和方向
+        updateGradientColors()
+        updateGradientDirection()
+    }
+    
+    private func updateGradientColors() {
         gradientLayer.colors = gradientColors.map { $0.cgColor }
-        
+    }
+    
+    private func updateGradientDirection() {
         switch gradientDirection {
         case .LeftToRight:
             gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
@@ -76,23 +93,29 @@ open class PTGradientBorderView: UIView {
             gradientLayer.startPoint = CGPoint(x: 1, y: 0.5)
             gradientLayer.endPoint = CGPoint(x: 0, y: 0.5)
         }
-        
-        // 创建一个用渐变图层填充的图层蒙版
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = path.cgPath
-        maskLayer.fillColor = UIColor.clear.cgColor
-        maskLayer.strokeColor = UIColor.black.cgColor
-        maskLayer.lineWidth = shapeLayer.lineWidth
-        gradientLayer.mask = maskLayer
-        
-        // 清除现有图层，添加新的图层
-        self.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-        self.layer.addSublayer(gradientLayer)
     }
     
+    // 系统在视图 Frame 改变时会自动调用此方法
     open override func layoutSubviews() {
         super.layoutSubviews()
-        // 更新路径和渐变图层框架，以确保在视图大小变化时正确显示
-        setup()
+        
+        // 设置自身的圆角属性
+        self.layer.cornerRadius = cornerRadius
+        self.layer.masksToBounds = true
+        
+        // 关键修复：计算向内缩进的路径，防止一半的边框被 masksToBounds 裁剪
+        let inset = lineWidth / 2.0
+        let pathRect = self.bounds.insetBy(dx: inset, dy: inset)
+        
+        // 调整圆角大小以适应缩进后的路径，防止负数产生异常
+        let adjustedCornerRadius = max(cornerRadius - inset, 0)
+        
+        // 更新路径
+        let path = UIBezierPath(roundedRect: pathRect, cornerRadius: adjustedCornerRadius)
+        borderMaskLayer.path = path.cgPath
+        borderMaskLayer.lineWidth = lineWidth
+        
+        // 更新渐变层大小
+        gradientLayer.frame = self.bounds
     }
 }

@@ -99,9 +99,11 @@ extension PTBaseNavControl {
     open override var prefersStatusBarHidden: Bool {
         StatusBarManager.shared.isHidden
     }
-//    open override var preferredStatusBarStyle: UIStatusBarStyle {
-//        StatusBarManager.shared.style
-//    }
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        StatusBarManager.shared.style
+    }
+    
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         StatusBarManager.shared.animation
     }

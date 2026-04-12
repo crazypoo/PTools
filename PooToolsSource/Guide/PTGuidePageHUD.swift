@@ -14,10 +14,10 @@ import Kingfisher
 
 public enum PTGuidePageControlSelection {
     case none
-    case pageControl(type:PTGuidePageControlOption)
+    case pageControl(type: PTGuidePageControlOption)
     
     public enum PTGuidePageControlOption {
-        case system,fill,pill,snake,image,scrolling
+        case system, fill, pill, snake, image, scrolling
     }
 }
 
@@ -26,33 +26,33 @@ public enum PTGuidePageControlSelection {
  */
 @objcMembers
 public class PTGuidePageModel: NSObject {
-    ///是否显示开始体验
-    public var tapHidden:Bool = false
-    ///图片s
-    public var imageArrays:[Any] = []
-    ///展示在X
-    public var mainView:UIView = UIView()
-    ///是否显示Pagecontrol
-    public var pageControl:PTGuidePageControlSelection = .pageControl(type: .system)
-    ///是否显示跳过按钮
-    public var skipShow:Bool = false
-    ///上一张按钮图片
-    public var forwardImage:Any?
-    ///下一张按钮图片
-    public var backImage:Any?
-    ///开始体验按钮背景
-    public var startBackgroundImage:UIImage = UIColor.randomColor.createImageWithColor()
-    ///开始体验按钮字体颜色
-    public var startTextColor:UIColor = UIColor.randomColor
-    ///iCloud文件夹名字
-    public var iCloudDocumentName:String = ""
-        /// 未选中颜色
+    /// 是否显示开始体验
+    public var tapHidden: Bool = false
+    /// 图片数组
+    public var imageArrays: [Any] = []
+    /// 展示在哪个View上
+    public var mainView: UIView = UIView()
+    /// 是否显示Pagecontrol
+    public var pageControl: PTGuidePageControlSelection = .pageControl(type: .system)
+    /// 是否显示跳过按钮
+    public var skipShow: Bool = false
+    /// 上一张按钮图片
+    public var forwardImage: Any?
+    /// 下一张按钮图片
+    public var backImage: Any?
+    /// 开始体验按钮背景
+    public var startBackgroundImage: UIImage = UIColor.randomColor.createImageWithColor()
+    /// 开始体验按钮字体颜色
+    public var startTextColor: UIColor = UIColor.randomColor
+    /// iCloud文件夹名字
+    public var iCloudDocumentName: String = ""
+    /// 未选中颜色
     public var pageControlTintColor: UIColor = UIColor.lightGray
     /// 选中颜色
     public var pageControlCurrentPageColor: UIColor = UIColor.white
-    ///  圆角(.fill,.snake)
+    /// 圆角(.fill, .snake)
     public var fillPageControlIndicatorRadius: CGFloat = 4
-    /// 选中颜色(.pill,.snake)
+    /// 选中颜色(.pill, .snake)
     public var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3)
     /// 普通图片(.system)
     public var pageControlActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
@@ -63,24 +63,26 @@ public class PTGuidePageModel: NSObject {
     /// 自定义Pagecontrol点阵边距
     public var customPageControlIndicatorPadding: CGFloat = 8
     
-    public var skipName:String = "PT Button skip".localized()
-    public var skipFont:UIFont = .appfont(size: 14)
-    public var startString:String = "PT Guide start".localized()
-    public var startFont:UIFont = .appfont(size: 21)
+    public var skipName: String = "PT Button skip".localized()
+    public var skipFont: UIFont = .appfont(size: 14)
+    public var startString: String = "PT Guide start".localized()
+    public var startFont: UIFont = .appfont(size: 21)
 }
 
 @objcMembers
 public class PTGuidePageHUD: UIView {
-    fileprivate var imageArray : [Any]?
-    fileprivate var imagePageControl : UIView?
-    fileprivate var slideIntoNumber : Int = 0
+    fileprivate var imageArray: [Any]?
+    fileprivate var imagePageControl: UIView?
     fileprivate var player = AVPlayerViewController()
     
-    public var slideInto : Bool? = false
-    public var animationTime : CGFloat = 3.0
-    public var adHadRemove:PTActionTask?
+    // 记录右滑跳过的状态
+    fileprivate var isSlidingOut: Bool = false
+    
+    public var slideInto: Bool = false // 优化：去除可选类型，提供默认值 false
+    public var animationTime: CGFloat = 3.0
+    public var adHadRemove: PTActionTask?
         
-    lazy var forwardButton:UIButton = {
+    lazy var forwardButton: UIButton = {
         let btn = UIButton(type: .custom)
         if #available(iOS 26.0, *) {
             btn.configuration = UIButton.Configuration.clearGlass()
@@ -88,7 +90,7 @@ public class PTGuidePageHUD: UIView {
         return btn
     }()
     
-    lazy var nextButton:UIButton = {
+    lazy var nextButton: UIButton = {
         let btn = UIButton(type: .custom)
         if #available(iOS 26.0, *) {
             btn.configuration = UIButton.Configuration.clearGlass()
@@ -98,17 +100,17 @@ public class PTGuidePageHUD: UIView {
     
     fileprivate var viewModel = PTGuidePageModel()
     
-    lazy var guidePageView:UIScrollView = {
+    lazy var guidePageView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .lightGray
-        view.bounces = false
+        view.bounces = true // 优化：为了实现滑出效果，需要允许 bounce
         view.isPagingEnabled = true
         view.showsHorizontalScrollIndicator = false
         view.delegate = self
         return view
     }()
     
-    lazy var skipButton:UIButton = {
+    lazy var skipButton: UIButton = {
         let view = UIButton(type: .custom)
         if #available(iOS 26.0, *) {
             view.configuration = UIButton.Configuration.clearGlass()
@@ -116,60 +118,129 @@ public class PTGuidePageHUD: UIView {
             view.backgroundColor = .gray
         }
         view.setTitleColor(.white, for: .normal)
-        view.addActionHandlers { sender in
-            self.buttonClick(sender: sender)
+        view.addActionHandlers { [weak self] sender in // 修复：弱引用 self
+            self?.buttonClick(sender: sender)
         }
         return view
     }()
     
-    public init(viewModel:PTGuidePageModel) {
+    public init(viewModel: PTGuidePageModel) {
         super.init(frame: viewModel.mainView.frame)
         self.viewModel = viewModel
+        
         if viewModel.tapHidden {
+            imageArray = viewModel.imageArrays
+        } else {
             imageArray = viewModel.imageArrays
         }
         
+        setupViews()
+    }
+    
+    public init(mainView: UIView, videlURL: URL) {
+        super.init(frame: mainView.frame)
+        setupVideoView(videlURL: videlURL)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Setup UI
+fileprivate extension PTGuidePageHUD {
+    
+    func setupViews() {
         guidePageView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: CGFloat.kSCREEN_HEIGHT)
-        addSubviews([guidePageView,skipButton])
+        addSubviews([guidePageView, skipButton])
+        
         guidePageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
+        setupSkipButton()
+        setupPageControl()
+        setupContentImages()
+        setupBottomButtons()
+    }
+    
+    func setupVideoView(videlURL: URL) {
+        player.player = AVPlayer(url: videlURL)
+        player.showsPlaybackControls = false
+        player.entersFullScreenWhenPlaybackBegins = true
+        addSubview(player.view)
+        
+        player.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        player.player?.play()
+        
+        let movieStartButton = UIButton(type: .custom)
+        movieStartButton.layer.borderWidth = 1
+        movieStartButton.layer.cornerRadius = 20
+        movieStartButton.layer.borderColor = UIColor.white.cgColor
+        movieStartButton.setTitle(viewModel.startString, for: .normal)
+        movieStartButton.titleLabel?.font = viewModel.startFont
+        movieStartButton.alpha = 0
+        
+        player.view.addSubview(movieStartButton)
+        movieStartButton.addActionHandlers { [weak self] sender in // 修复：弱引用 self
+            self?.buttonClick(sender: sender)
+        }
+        
+        UIView.animate(withDuration: animationTime) {
+            movieStartButton.alpha = 1
+        }
+        
+        movieStartButton.snp.makeConstraints { make in
+            make.width.equalTo(movieStartButton.sizeFor(height: 50).width + 10)
+            make.height.equalTo(50)
+            make.centerX.equalTo(self.player.view)
+            make.bottom.equalTo(self.player.view).inset(CGFloat.kTabbarSaveAreaHeight + 20)
+        }
+    }
+    
+    func setupSkipButton() {
         skipButton.setTitle(viewModel.skipName, for: .normal)
         skipButton.titleLabel?.font = viewModel.skipFont
-        var skioButtonWidthOffset:CGFloat = 0
-        if #available(iOS 26.0, *) {
-            skioButtonWidthOffset = 15
-        } else {
-            skioButtonWidthOffset = 5
+        
+        var skipButtonWidthOffset: CGFloat = 5
+        if #available(iOS 15.0, *) {
+            skipButtonWidthOffset = 15
         }
-        let skioButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont,height: 44).width + 10 + skioButtonWidthOffset
+        
+        let skipButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 10 + skipButtonWidthOffset
         
         skipButton.snp.makeConstraints { make in
-            make.width.equalTo(skioButtonWidth)
+            make.width.equalTo(skipButtonWidth)
             make.height.equalTo(44)
             make.right.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 10)
         }
-        skipButton.isHidden = viewModel.skipShow ? false : true
+        
+        skipButton.isHidden = !viewModel.skipShow
         skipButton.isUserInteractionEnabled = viewModel.skipShow
         skipButton.viewCorner(radius: 22)
-        
+    }
+    
+    func setupPageControl() {
         switch viewModel.pageControl {
         case .none: break
         case .pageControl(let type):
             imagePageControl = setPageControlView(type: type)
             if let control = imagePageControl as? UIPageControl {
-                control.addPageControlHandlers { sender in
-                    if viewModel.imageArrays.count == (sender.currentPage + 1) {
+                control.addPageControlHandlers { [weak self] sender in // 修复：弱引用 self
+                    guard let self = self else { return }
+                    if self.viewModel.imageArrays.count == (sender.currentPage + 1) {
                         self.buttonClick(sender: nil)
                     } else {
-                        self.guidePageView.contentOffset.x = self.guidePageView.contentOffset.x + self.guidePageView.frame.size.width
+                        let targetX = CGFloat(sender.currentPage) * self.guidePageView.frame.size.width
+                        self.guidePageView.setContentOffset(CGPoint(x: targetX, y: 0), animated: true)
                     }
                 }
             }
         }
-
+        
         var pageViews = [UIView]()
         if let control = imagePageControl {
             switch viewModel.pageControl {
@@ -178,12 +249,12 @@ public class PTGuidePageHUD: UIView {
             default:
                 control.isHidden = false
             }
-            pageViews = [forwardButton,nextButton,control]
+            pageViews = [forwardButton, nextButton, control]
         } else {
-            pageViews = [forwardButton,nextButton]
+            pageViews = [forwardButton, nextButton]
         }
         addSubviews(pageViews)
-
+        
         forwardButton.snp.makeConstraints { make in
             make.width.height.equalTo(44)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
@@ -203,14 +274,15 @@ public class PTGuidePageHUD: UIView {
                 make.centerY.equalTo(self.forwardButton)
             }
         }
-
-        viewModel.imageArrays.enumerated().forEach { (index,value) in
-            let contentData = value
-
+    }
+    
+    func setupContentImages() {
+        viewModel.imageArrays.enumerated().forEach { (index, value) in
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
-            imageView.loadImage(contentData: contentData,iCloudDocumentName: viewModel.iCloudDocumentName)
+            imageView.loadImage(contentData: value, iCloudDocumentName: viewModel.iCloudDocumentName)
             guidePageView.addSubview(imageView)
+            
             imageView.snp.makeConstraints { make in
                 make.width.equalTo(CGFloat.kSCREEN_WIDTH)
                 make.height.equalTo(CGFloat.kSCREEN_HEIGHT)
@@ -225,69 +297,66 @@ public class PTGuidePageHUD: UIView {
                 startButton.setTitleColor(viewModel.startTextColor, for: .normal)
                 startButton.titleLabel?.font = viewModel.startFont
                 startButton.setBackgroundImage(viewModel.startBackgroundImage, for: .normal)
-                startButton.addActionHandlers { sender in
-                    self.buttonClick(sender: sender)
+                startButton.addActionHandlers { [weak self] sender in // 修复：弱引用 self
+                    self?.buttonClick(sender: sender)
                 }
+                
                 imageView.addSubview(startButton)
                 startButton.snp.makeConstraints { make in
                     make.width.equalTo(startButton.sizeFor(height: 44).width + 10)
                     make.height.equalTo(44)
                     make.centerX.equalTo(imageView)
-                    switch viewModel.pageControl {
-                    case .none:
+                    
+                    if let control = self.imagePageControl, case .pageControl = viewModel.pageControl {
+                        make.bottom.equalTo(control.snp.top).offset(-10)
+                    } else {
                         make.centerY.equalTo(self.forwardButton)
-                    default:
-                        if let control = self.imagePageControl {
-                            make.bottom.equalTo(control.snp.top).offset(-10)
-                        } else {
-                            make.centerY.equalTo(self.forwardButton)
-                        }
                     }
                 }
             }
         }
-
+    }
+    
+    func setupBottomButtons() {
         forwardButton.isHidden = true
         forwardButton.isUserInteractionEnabled = false
-        forwardButton.addActionHandlers { seder in
-            switch viewModel.pageControl {
-            case .none:
-                break
-            case .pageControl( _):
-                let currentCount = self.getPageControlCurrentValue() - 1
+        forwardButton.addActionHandlers { [weak self] _ in // 修复：弱引用 self
+            guard let self = self else { return }
+            if case .pageControl = self.viewModel.pageControl {
+                let currentCount = max(self.getPageControlCurrentValue() - 1, 0)
                 self.pageControlProgressSet(currentIndex: currentCount)
-            }
-
-            self.guidePageView.contentOffset.x = self.guidePageView.contentOffset.x - self.guidePageView.frame.size.width
-        }
-        
-        nextButton.addActionHandlers { seder in
-            switch viewModel.pageControl {
-            case .none:
-                break
-            case .pageControl( _):
-                let currentCount = self.getPageControlCurrentValue() + 1
-                
-                if viewModel.imageArrays.count == currentCount {
-                    self.buttonClick(sender: seder)
-                } else {
-                    self.pageControlProgressSet(currentIndex: currentCount)
-                    self.guidePageView.contentOffset.x = self.guidePageView.contentOffset.x + self.guidePageView.frame.size.width
+                if currentCount == 0 {
+                    forwardButton.isHidden = true
+                    forwardButton.isUserInteractionEnabled = false
                 }
             }
+            let targetX = max(self.guidePageView.contentOffset.x - self.guidePageView.frame.size.width, 0)
+            self.guidePageView.setContentOffset(CGPoint(x: targetX, y: 0), animated: true)
         }
         
-        if let forwardImage = viewModel.forwardImage,let backImage = viewModel.backImage {
-            if viewModel.imageArrays.count > 1 {
-                nextButton.isHidden = false
-                nextButton.isUserInteractionEnabled = true
-            } else {
-                nextButton.isHidden = true
-                nextButton.isUserInteractionEnabled = false
+        nextButton.addActionHandlers { [weak self] sender in // 修复：弱引用 self
+            guard let self = self else { return }
+            if case .pageControl = self.viewModel.pageControl {
+                let currentCount = self.getPageControlCurrentValue() + 1
+                if self.viewModel.imageArrays.count == currentCount {
+                    self.buttonClick(sender: sender)
+                } else {
+                    self.pageControlProgressSet(currentIndex: currentCount)
+                    let targetX = self.guidePageView.contentOffset.x + self.guidePageView.frame.size.width
+                    self.guidePageView.setContentOffset(CGPoint(x: targetX, y: 0), animated: true)
+                }
+                self.forwardButton.isHidden = false
+                self.forwardButton.isUserInteractionEnabled = true
             }
+        }
+        
+        if let forwardImage = viewModel.forwardImage, let backImage = viewModel.backImage {
+            let isMultiPage = viewModel.imageArrays.count > 1
+            nextButton.isHidden = !isMultiPage
+            nextButton.isUserInteractionEnabled = isMultiPage
             
-            nextButton.loadImage(contentData: backImage,iCloudDocumentName: viewModel.iCloudDocumentName)
-            forwardButton.loadImage(contentData: forwardImage,iCloudDocumentName: viewModel.iCloudDocumentName)
+            nextButton.loadImage(contentData: backImage, iCloudDocumentName: viewModel.iCloudDocumentName)
+            forwardButton.loadImage(contentData: forwardImage, iCloudDocumentName: viewModel.iCloudDocumentName)
         } else {
             nextButton.isHidden = true
             nextButton.isUserInteractionEnabled = false
@@ -295,51 +364,15 @@ public class PTGuidePageHUD: UIView {
             forwardButton.isUserInteractionEnabled = false
         }
     }
-    
-    public init(mainView:UIView,
-                videlURL:URL) {
-        super.init(frame: mainView.frame)
-        player.player = AVPlayer(url: videlURL)
-        player.showsPlaybackControls = false
-        player.entersFullScreenWhenPlaybackBegins = true
-        addSubview(player.view)
-        player.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        player.player?.play()
-        
-        let movieStartButton = UIButton(type: .custom)
-        movieStartButton.layer.borderWidth = 1
-        movieStartButton.layer.cornerRadius = 20
-        movieStartButton.layer.borderColor = UIColor.white.cgColor
-        movieStartButton.setTitle(viewModel.startString, for: .normal)
-        movieStartButton.titleLabel?.font = viewModel.startFont
-        movieStartButton.alpha = 0
-        player.view.addSubview(movieStartButton)
-        movieStartButton.addActionHandlers { sender in
-            self.buttonClick(sender: sender)
-        }
-        UIView.animate(withDuration: animationTime) {
-            movieStartButton.alpha = 1
-        }
-        movieStartButton.snp.makeConstraints { make in
-            make.width.equalTo(movieStartButton.sizeFor(height: 50).width + 10)
-            make.height.equalTo(50)
-            make.centerX.equalTo(self.player.view)
-            make.bottom.equalTo(self.player.view).inset(CGFloat.kTabbarSaveAreaHeight + 20)
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func buttonClick(sender:UIButton?) {
+}
+
+// MARK: - Actions & Public Methods
+extension PTGuidePageHUD {
+    func buttonClick(sender: UIButton?) {
         UIView.animate(withDuration: animationTime) {
             self.alpha = 0
-            PTGCDManager.gcdAfter(time: self.animationTime) {
-                self.removeGuidePageHUD()
-            }
+        } completion: { [weak self] _ in // 优化：使用 UIView.animate completion 回调替代 GCD
+            self?.removeGuidePageHUD()
         }
     }
     
@@ -354,41 +387,27 @@ public class PTGuidePageHUD: UIView {
             make.edges.equalToSuperview()
         }
         
-#if POOTOOLS_DEBUG
+        #if POOTOOLS_DEBUG
         if let windows = viewModel.mainView as? UIWindow {
             let share = LocalConsole.shared
             if share.isVisiable {
                 windows.bringSubviewToFront(share.terminal!)
             }
         }
-#endif
+        #endif
     }
     
-    fileprivate func pageControlAction(page:Int) {
-        if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto! {
-            buttonClick(sender: nil)
+    fileprivate func pageControlAction(page: Int) {
+        guard let images = imageArray else { return }
+        
+        if images.count > 0 && page == (images.count - 1) && !slideInto {
+            // 到达最后一页，但不支持滑动进入，通常不直接 dismiss，由按钮控制
         }
         
-        if (imageArray?.count ?? 0 > 0) && page < (imageArray!.count - 1) && slideInto! {
-            slideIntoNumber = 1
-        }
-        
-        if (imageArray?.count ?? 0 > 0) && page == (imageArray!.count - 1) && slideInto! {
-            let swipeGestureRecognizer = UISwipeGestureRecognizer(target: nil, action: nil)
-            if swipeGestureRecognizer.direction == .right {
-                slideIntoNumber += 1
-                if slideIntoNumber == 3 {
-                    buttonClick(sender: nil)
-                }
-            }
-        }
-        
-        switch viewModel.pageControl {
-        case .none:
-            break
-        case .pageControl( _):
+        if case .pageControl = viewModel.pageControl {
             self.pageControlProgressSet(currentIndex: page)
         }
+        
         if page >= 1 {
             forwardButton.isHidden = false
             forwardButton.isUserInteractionEnabled = true
@@ -399,22 +418,38 @@ public class PTGuidePageHUD: UIView {
     }
 }
 
-extension PTGuidePageHUD : UIScrollViewDelegate {
+// MARK: - UIScrollViewDelegate
+extension PTGuidePageHUD: UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+        let page: Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControlAction(page: page)
+    }
+    
+    // 优化：在此处监听滑动偏移量，修复 slideInto 滑动消失的功能
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard slideInto, let images = imageArray, images.count > 0 else { return }
+        
+        let maxOffsetX = CGFloat(images.count - 1) * scrollView.frame.size.width
+        // 当用户在最后一页继续向右滑动超过一个阈值（例如 30 像素）时，触发跳过
+        if scrollView.contentOffset.x > maxOffsetX + 30 {
+            if !isSlidingOut {
+                isSlidingOut = true
+                buttonClick(sender: nil)
+            }
+        }
     }
 }
 
-//MAKR: PageControl
+// MAKR: - PageControl
 fileprivate extension PTGuidePageHUD {
-    func setPageControlView(type:PTGuidePageControlSelection.PTGuidePageControlOption) -> UIView {
+    func setPageControlView(type: PTGuidePageControlSelection.PTGuidePageControlOption) -> UIView {
         switch type {
         case .system:
             let view = UIPageControl()
             view.pageIndicatorTintColor = viewModel.pageControlTintColor
             view.currentPageIndicatorTintColor = viewModel.pageControlCurrentPageColor
-            view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
+            view.numberOfPages = viewModel.imageArrays.count // 修正：原生 UIPageControl 是 numberOfPages
+            view.currentPage = 0
             return view
         case .fill:
             let view = PTFilledPageControl(frame: CGRect.zero)
@@ -453,17 +488,32 @@ fileprivate extension PTGuidePageHUD {
         }
     }
     
-    func pageControlProgressSet(currentIndex:Int) {
-        guard let controllable = imagePageControl as? PTPageControllable else { return }
+    func pageControlProgressSet(currentIndex: Int) {
+        guard let controllable = imagePageControl as? PTPageControllable else {
+            // 处理原生的 UIPageControl
+            if let sysPageControl = imagePageControl as? UIPageControl {
+                sysPageControl.currentPage = currentIndex
+            }
+            return
+        }
         controllable.setCurrentPage(index: currentIndex)
     }
     
     func getPageControlCurrentValue() -> Int {
-        return (imagePageControl as? PTPageControllable)?.currentPage ?? 0
+        if let controllable = imagePageControl as? PTPageControllable {
+            return controllable.currentPage
+        }
+        if let sysPageControl = imagePageControl as? UIPageControl {
+            return sysPageControl.currentPage
+        }
+        return 0
     }
     
     func setPageControlValue(_ value: Int) {
-        guard let control = imagePageControl as? PTPageControllable else { return }
-        control.update(currentPage: value, totalPages: self.viewModel.imageArrays.count)
+        if let control = imagePageControl as? PTPageControllable {
+            control.update(currentPage: value, totalPages: self.viewModel.imageArrays.count)
+        } else if let sysPageControl = imagePageControl as? UIPageControl {
+            sysPageControl.currentPage = value
+        }
     }
 }

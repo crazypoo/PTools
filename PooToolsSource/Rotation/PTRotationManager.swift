@@ -7,33 +7,28 @@
 //
 
 import UIKit
+import Combine
 
+// MARK: - 扩展通知名称，更规范的写法
+public extension Notification.Name {
+    static let PTRotationOrientationDidChange = Notification.Name("PTRotationOrientationDidChangeNotification")
+    static let PTRotationLockOrientationDidChange = Notification.Name("PTRotationLockOrientationDidChangeNotification")
+    static let PTRotationLockLandscapeDidChange = Notification.Name("PTRotationLockLandscapeDidChangeNotification")
+}
+
+// 必须限定在主线程运行，防止 UI 刷新引发 Crash
+@MainActor
 public final class PTRotationManager {
-    // MARK: - 构造器
-    init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive),
-                                               name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive),
-                                               name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationDidChange),
-                                               name: UIDevice.orientationDidChangeNotification, object: nil)
-        
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
     
     // MARK: - 可旋转的屏幕方向【枚举】
     public enum Orientation: CaseIterable {
-        case portrait       // 竖屏 手机头在上边
-        case landscapeLeft  // 横屏 手机头在左边
-        case landscapeRight // 横屏 手机头在右边
+        case orientationPortrait       // 竖屏 手机头在上边
+        case orientationLandscapeLeft  // 横屏 手机头在左边
+        case orientationLandscapeRight // 横屏 手机头在右边
     }
     
     // MARK: - 属性
-    /// 单例
+    /// 单例（严谨的单例模式：禁止外部初始化）
     public static let shared = PTRotationManager()
     
     /// 可否旋转
@@ -47,8 +42,7 @@ public final class PTRotationManager {
         }
     }
     
-    /// 是否锁定屏幕方向（当控制中心禁止了竖屏锁定，为`true`则不会【随手机摆动自动改变】屏幕方向）
-    /// - Note: 即便锁定了（`true`）也能通过该类去旋转屏幕方向
+    /// 是否锁定屏幕方向
     public var isLockOrientationWhenDeviceOrientationDidChange = true {
         didSet {
             guard isLockOrientationWhenDeviceOrientationDidChange != oldValue else { return }
@@ -56,8 +50,7 @@ public final class PTRotationManager {
         }
     }
     
-    /// 是否锁定横屏方向（当控制中心禁止了竖屏锁定，为`true`则【仅限横屏的两个方向会随手机摆动自动改变】屏幕方向）
-    /// - Note: 即便锁定了（`true`）也能通过该类去旋转屏幕方向
+    /// 是否锁定横屏方向
     public var isLockLandscapeWhenDeviceOrientationDidChange = false {
         didSet {
             guard isLockLandscapeWhenDeviceOrientationDidChange != oldValue else { return }
@@ -72,133 +65,81 @@ public final class PTRotationManager {
     public var orientation: Orientation {
         switch orientationMask {
         case .landscapeLeft:
-            return .landscapeRight
+            return .orientationLandscapeRight
         case .landscapeRight:
-            return .landscapeLeft
+            return .orientationLandscapeLeft
         case .landscape:
             let deviceOrientation = UIDevice.current.orientation
-            switch deviceOrientation {
-            case .landscapeLeft:
-                return .landscapeLeft
-            case .landscapeRight:
-                return .landscapeRight
-            default:
-                return .portrait
-            }
+            return deviceOrientation == .landscapeRight ? .orientationLandscapeRight : .orientationLandscapeLeft
         default:
-            return .portrait
+            return .orientationPortrait
         }
     }
     
-    // MARK: - 状态发生改变的【通知】
-    /// <屏幕方向>发生改变的通知
-    /// - Parameters:
-    /// - object: `orientationMask`（UIInterfaceOrientationMask）
-    public static let orientationDidChangeNotification = Notification.Name("ScreenRotatorOrientationDidChangeNotification")
-    
-    /// <是否锁定屏幕方向>发生改变的通知
-    /// - Parameters:
-    /// - object: `isLockOrientationWhenDeviceOrientationDidChange`（Bool）
-    public static let lockOrientationWhenDeviceOrientationDidChangeNotification = Notification.Name("ScreenRotatorLockOrientationWhenDeviceOrientationDidChangeNotification")
-    
-    /// <是否锁定横屏方向>发生改变的通知
-    /// - Parameters:
-    /// - object: `isLockLandscapeWhenDeviceOrientationDidChange`（Bool）
-    public static let lockLandscapeWhenDeviceOrientationDidChangeNotification = Notification.Name("ScreenRotatorLockLandscapeWhenDeviceOrientationDidChangeNotification")
-    
     // MARK: - 状态发生改变的【回调闭包】
-    /// <屏幕方向>发生改变的回调闭包
-    public var orientationMaskDidChange: ((_ orientationMask: UIInterfaceOrientationMask) -> ())?
+    public var orientationMaskDidChange: ((_ orientationMask: UIInterfaceOrientationMask) -> Void)?
+    public var lockOrientationWhenDeviceOrientationDidChange: ((_ isLock: Bool) -> Void)?
+    public var lockLandscapeWhenDeviceOrientationDidChange: ((_ isLock: Bool) -> Void)?
     
-    /// <是否锁定屏幕方向>发生改变的回调闭包
-    public var lockOrientationWhenDeviceOrientationDidChange: ((_ isLock: Bool) -> ())?
+    // MARK: - 构造器
+    private init() { // 私有化 init，确保纯正的单例
+        setupNotifications()
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+    }
     
-    /// <是否锁定横屏方向>发生改变的回调闭包
-    public var lockLandscapeWhenDeviceOrientationDidChange: ((_ isLock: Bool) -> ())?
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive),
+                                               name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationDidChange),
+                                               name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
 }
 
 // MARK: - 私有API
 private extension PTRotationManager {
+    
     static func convertInterfaceOrientationMaskToDeviceOrientation(_ orientationMask: UIInterfaceOrientationMask) -> UIDeviceOrientation {
         switch orientationMask {
-        case .landscapeLeft:
-            return .landscapeRight
-        case .landscapeRight:
-            return .landscapeLeft
-        case .landscape:
-            return .landscapeLeft
-        default:
-            return .portrait
+        case .landscapeLeft: return .landscapeRight
+        case .landscapeRight: return .landscapeLeft
+        case .landscape: return .landscapeLeft
+        default: return .portrait
         }
     }
 
     static func convertDeviceOrientationToInterfaceOrientationMask(_ orientation: UIDeviceOrientation) -> UIInterfaceOrientationMask {
         switch orientation {
-        case .landscapeLeft:
-            return .landscapeRight
-        case .landscapeRight:
-            return .landscapeLeft
-        default:
-            return .portrait
-        }
-    }
-    
-    static func setNeedsUpdateOfSupportedInterfaceOrientations(_ currentVC: UIViewController, _ presentedVC: UIViewController?) {
-        if #available(iOS 16.0, *) { currentVC.setNeedsUpdateOfSupportedInterfaceOrientations() }
-        
-        let currentPresentedVC = currentVC.presentedViewController
-        
-        if let currentPresentedVC, currentPresentedVC != presentedVC {
-            setNeedsUpdateOfSupportedInterfaceOrientations(currentPresentedVC, nil)
-        }
-        
-        for childVC in currentVC.children {
-            setNeedsUpdateOfSupportedInterfaceOrientations(childVC, currentPresentedVC)
+        case .landscapeLeft: return .landscapeRight
+        case .landscapeRight: return .landscapeLeft
+        default: return .portrait
         }
     }
     
     func rotation(to orientationMask: UIInterfaceOrientationMask) {
-        guard isEnabled else { return }
-        guard self.orientationMask != orientationMask else { return }
+        guard isEnabled, self.orientationMask != orientationMask else { return }
         
         // 更新并广播屏幕方向
         self.orientationMask = orientationMask
         
         // 控制横竖屏
         if #available(iOS 16.0, *) {
-            // `iOS16`由于不能再设置`UIDevice.orientation`来控制横竖屏了，所以`UIDeviceOrientationDidChangeNotification`将由系统自动发出，
-            // 即手机的摆动就会自动收到通知，不能自己控制，因此不能监听该通知来适配UI，
-            // 重写`UIViewController`的`-viewWillTransitionToSize:withTransitionCoordinator:`方法来监听屏幕的旋转并适配UI。
             let geometryPreferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientationMask)
-            for scene in UIApplication.shared.connectedScenes {
-                guard let windowScene = scene as? UIWindowScene else { continue }
-                // 一般来说app只有一个`windowScene`，而`windowScene`内可能有多个`window`，
-                // 例如Demo中至少有两个`window`：第一个是app主体的`window`，第二个则是`FunnyButton`所在的`window`，
-                // 所以需要遍历全部`window`进行旋转，保证全部`window`都能保持一致的屏幕方向。
-                
-                // `iOS16`之后`attemptRotationToDeviceOrientation`建议不再使用（虽然还起效），
-                // 而是调用`setNeedsUpdateOfSupportedInterfaceOrientations`进行屏幕旋转。
+            
+            // 优化：使用 compactMap 安全解包并过滤
+            let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            
+            for windowScene in windowScenes {
                 for window in windowScene.windows {
-                    guard let rootViewController = window.rootViewController else { continue }
-                    // 由于Demo中只用到`rootViewController`控制屏幕方向，所以只对`rootViewController`调用即可。
-                    rootViewController.setNeedsUpdateOfSupportedInterfaceOrientations()
-                    // 若需要全部控制器都执行`setNeedsUpdateOfSupportedInterfaceOrientations`，可调用该函数：
-                    // Self.setNeedsUpdateOfSupportedInterfaceOrientations(rootViewController, nil)
+                    window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
                 }
-                
-                //【注意】要在全部`window`调用`requestGeometryUpdate`之前，先对`vc`调用`attemptRotationToDeviceOrientation`，
-                // 否则会报错（虽然对屏幕旋转没影响）。
-                for window in windowScene.windows {
-                    window.windowScene?.requestGeometryUpdate(geometryPreferences)
-                }
+                // 请求更新
+                windowScene.requestGeometryUpdate(geometryPreferences)
             }
         } else {
-            // `iOS16`之前调用`attemptRotationToDeviceOrientation`屏幕才会旋转。
-            //【注意】要在确定改变的方向【设置之后】才调用，否则会旋转到【设置之前】的方向
             UIViewController.attemptRotationToDeviceOrientation()
             
-            // `iOS16`之前修改"orientation"后会直接影响`UIDevice.currentDevice.orientation`；
-            // `iOS16`之后不能再通过设置`UIDevice.orientation`来控制横竖屏了，修改"orientation"无效。
             let currentDevice = UIDevice.current
             let deviceOrientation = Self.convertInterfaceOrientationMaskToDeviceOrientation(orientationMask)
             currentDevice.setValue(NSNumber(value: deviceOrientation.rawValue), forKeyPath: "orientation")
@@ -206,150 +147,119 @@ private extension PTRotationManager {
     }
 }
 
-// MARK: 监听通知
+// MARK: - 监听与广播通知
 private extension PTRotationManager {
-    // 不活跃了，也就是进后台了
-    @objc func willResignActive() {
-        isEnabled = false
-    }
+    @objc func willResignActive() { isEnabled = false }
     
-    // 活跃了，也就是从后台回来了
-    @objc func didBecomeActive() {
-        isEnabled = true
-    }
+    @objc func didBecomeActive() { isEnabled = true }
     
-    // 设备方向发生改变
     @objc func deviceOrientationDidChange() {
-        guard isEnabled else { return }
-        guard !isLockOrientationWhenDeviceOrientationDidChange else { return }
+        guard isEnabled, !isLockOrientationWhenDeviceOrientationDidChange else { return }
         
         let deviceOrientation = UIDevice.current.orientation
-        switch deviceOrientation {
-        case .unknown, .portraitUpsideDown, .faceUp, .faceDown:
-            return
-        default:
-            break
-        }
+        guard deviceOrientation.isValidInterfaceOrientation else { return }
         
         if isLockLandscapeWhenDeviceOrientationDidChange, !deviceOrientation.isLandscape {
             return
         }
         
-        let orientationMask = Self.convertDeviceOrientationToInterfaceOrientationMask(deviceOrientation)
-        rotation(to: orientationMask)
+        let targetMask = Self.convertDeviceOrientationToInterfaceOrientationMask(deviceOrientation)
+        rotation(to: targetMask)
     }
-}
-
-// MARK: 广播通知
-private extension PTRotationManager {
+    
     func publishOrientationMaskDidChange() {
         orientationMaskDidChange?(orientationMask)
-        NotificationCenter.default.post(name: Self.orientationDidChangeNotification, object: orientationMask)
+        NotificationCenter.default.post(name: .PTRotationOrientationDidChange, object: orientationMask)
     }
     
     func publishLockOrientationWhenDeviceOrientationDidChange() {
         lockOrientationWhenDeviceOrientationDidChange?(isLockOrientationWhenDeviceOrientationDidChange)
-        NotificationCenter.default.post(name: Self.lockOrientationWhenDeviceOrientationDidChangeNotification,
+        NotificationCenter.default.post(name: .PTRotationLockOrientationDidChange,
                                         object: isLockOrientationWhenDeviceOrientationDidChange)
     }
     
     func publishLockLandscapeWhenDeviceOrientationDidChange() {
         lockLandscapeWhenDeviceOrientationDidChange?(isLockLandscapeWhenDeviceOrientationDidChange)
-        NotificationCenter.default.post(name: Self.lockLandscapeWhenDeviceOrientationDidChangeNotification,
+        NotificationCenter.default.post(name: .PTRotationLockLandscapeDidChange,
                                         object: isLockLandscapeWhenDeviceOrientationDidChange)
     }
 }
 
 // MARK: - 公开API
 public extension PTRotationManager {
-    /// 旋转至目标方向
-    /// - Parameters:
-    ///   - orientation: 目标方向（ScreenRotator.Orientation）
     func rotation(to orientation: Orientation) {
-        guard isEnabled else { return }
-        let orientationMask: UIInterfaceOrientationMask
+        let mask: UIInterfaceOrientationMask
         switch orientation {
-        case .landscapeLeft:
-            orientationMask = .landscapeRight
-        case .landscapeRight:
-            orientationMask = .landscapeLeft
-        default:
-            orientationMask = .portrait
+        case .orientationLandscapeLeft: mask = .landscapeRight
+        case .orientationLandscapeRight: mask = .landscapeLeft
+        default: mask = .portrait
         }
-        rotation(to: orientationMask)
+        rotation(to: mask)
     }
     
-    /// 旋转至竖屏
-    func rotationToPortrait() {
-        rotation(to: UIInterfaceOrientationMask.portrait)
-    }
+    func rotationToPortrait() { rotation(to: .orientationPortrait) }
     
-    /// 旋转至横屏（如果锁定了屏幕，则转向手机头在左边）
     func rotationToLandscape() {
         guard isEnabled else { return }
-        var orientationMask = Self.convertDeviceOrientationToInterfaceOrientationMask(UIDevice.current.orientation)
-        if orientationMask == .portrait {
-            orientationMask = .landscapeRight
-        }
-        rotation(to: orientationMask)
+        let currentMask = Self.convertDeviceOrientationToInterfaceOrientationMask(UIDevice.current.orientation)
+        rotation(to: currentMask == .portrait ? .landscapeRight : currentMask)
     }
     
-    /// 旋转至横屏（手机头在左边）
-    func rotationToLandscapeLeft() {
-        rotation(to: UIInterfaceOrientationMask.landscapeRight)
-    }
+    func rotationToLandscapeLeft() { rotation(to: .orientationLandscapeRight) }
+    func rotationToLandscapeRight() { rotation(to: .orientationLandscapeLeft) }
     
-    /// 旋转至横屏（手机头在右边）
-    func rotationToLandscapeRight() {
-        rotation(to: UIInterfaceOrientationMask.landscapeLeft)
-    }
-    
-    /// 横竖屏切换
     func toggleOrientation() {
         guard isEnabled else { return }
-        var orientationMask = Self.convertDeviceOrientationToInterfaceOrientationMask(UIDevice.current.orientation)
-        if orientationMask == self.orientationMask {
-            orientationMask = self.orientationMask == .portrait ? .landscapeRight : .portrait
-        }
-        rotation(to: orientationMask)
+        let targetMask: UIInterfaceOrientationMask = orientationMask == .portrait ? .landscapeRight : .portrait
+        rotation(to: targetMask)
     }
 }
 
+// MARK: - SwiftUI 状态管理
+@MainActor
 public class PTRotationManagerState: ObservableObject {
     @Published public var orientation: PTRotationManager.Orientation = PTRotationManager.shared.orientation {
-        didSet { PTRotationManager.shared.rotation(to: orientation) }
+        didSet {
+            // 【重要修复】拦截内部触发的改变，防止与通知引起状态更新死循环
+            guard orientation != PTRotationManager.shared.orientation else { return }
+            PTRotationManager.shared.rotation(to: orientation)
+        }
     }
     
     @Published public var isLockOrientation: Bool = PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange {
-        didSet { PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange = isLockOrientation }
+        didSet {
+            guard isLockOrientation != PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange else { return }
+            PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange = isLockOrientation
+        }
     }
     
     @Published public var isLockLandscape: Bool = PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange {
-        didSet { PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange = isLockLandscape }
+        didSet {
+            guard isLockLandscape != PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange else { return }
+            PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange = isLockLandscape
+        }
     }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     public init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange),
-                                               name: PTRotationManager.orientationDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(lockOrientationWhenDeviceOrientationDidChange),
-                                               name: PTRotationManager.lockOrientationWhenDeviceOrientationDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(lockLandscapeWhenDeviceOrientationDidChange),
-                                               name: PTRotationManager.lockLandscapeWhenDeviceOrientationDidChangeNotification, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc private func orientationDidChange() {
-        orientation = PTRotationManager.shared.orientation
-    }
-    
-    @objc private func lockOrientationWhenDeviceOrientationDidChange() {
-        isLockOrientation = PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange
-    }
-    
-    @objc private func lockLandscapeWhenDeviceOrientationDidChange() {
-        isLockLandscape = PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange
+        // 使用 Combine 监听通知，比 #selector 更优雅，无需关心手动 removeObserver
+        NotificationCenter.default.publisher(for: .PTRotationOrientationDidChange)
+            .sink { [weak self] _ in
+                self?.orientation = PTRotationManager.shared.orientation
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .PTRotationLockOrientationDidChange)
+            .sink { [weak self] _ in
+                self?.isLockOrientation = PTRotationManager.shared.isLockOrientationWhenDeviceOrientationDidChange
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .PTRotationLockLandscapeDidChange)
+            .sink { [weak self] _ in
+                self?.isLockLandscape = PTRotationManager.shared.isLockLandscapeWhenDeviceOrientationDidChange
+            }
+            .store(in: &cancellables)
     }
 }
