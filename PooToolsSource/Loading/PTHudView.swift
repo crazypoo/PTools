@@ -10,32 +10,39 @@ import UIKit
 import Foundation
 import SnapKit
 
-let maxLength:CGFloat = 200
-let minLength:CGFloat = 2
-let framePerSecond:CGFloat = 60
-let maxWaitingFrame:CGFloat = 30
-let lengthIteration:CGFloat = 8
-let rotateIteration:CGFloat = 4
-let loadingHudSpace:CGFloat = 5
+let maxLength: CGFloat = 200
+let minLength: CGFloat = 2
+let framePerSecond: CGFloat = 60
+let maxWaitingFrame: CGFloat = 30
+let lengthIteration: CGFloat = 8
+let rotateIteration: CGFloat = 4
+let loadingHudSpace: CGFloat = 5
 
-@objc public enum PTHudStatus:Int {
+@objc public enum PTHudStatus: Int {
     case Decrease
     case Increase
     case Waiting
 }
 
 @objcMembers
-public class PTHudConfig:NSObject {
+public class PTHudConfig: NSObject {
     public static let share = PTHudConfig()
     
-    open var lineWidth:CGFloat = 2
-    open var length:CGFloat = maxLength
-    open var hudColors:[UIColor] = [UIColor(hexString: "#F05783")!,UIColor(hexString: "#FCB644")!,UIColor(hexString: "#88BD33")!,UIColor(hexString: "#E5512D")!,UIColor(hexString: "#3ABCAB")!]
-    open var masked:Bool = true
-    open var backgroundColor:UIColor = .clear
+    open var lineWidth: CGFloat = 2
+    open var length: CGFloat = maxLength
+    // 建议：确保 hexString 扩展在解析失败时有默认颜色，避免强制解包 (!) 导致崩溃
+    open var hudColors: [UIColor] = [
+        UIColor(hexString: "#F05783") ?? .red,
+        UIColor(hexString: "#FCB644") ?? .orange,
+        UIColor(hexString: "#88BD33") ?? .green,
+        UIColor(hexString: "#E5512D") ?? .brown,
+        UIColor(hexString: "#3ABCAB") ?? .cyan
+    ]
+    open var masked: Bool = true
+    open var backgroundColor: UIColor = .clear
     
-    fileprivate var conterViewSize:CGFloat = 100
-    public func conterViewSizeSet(@PTClampedPropertyWrapper(range: 100...CGFloat.kSCREEN_WIDTH) size:CGFloat) {
+    fileprivate var conterViewSize: CGFloat = 100
+    public func conterViewSizeSet(@PTClampedPropertyWrapper(range: 100...CGFloat.kSCREEN_WIDTH) size: CGFloat) {
         conterViewSize = size
     }
 }
@@ -45,14 +52,14 @@ public class PTHudView: UIView {
     
     fileprivate let hudShare = PTHudConfig.share
     
-    lazy var centerView:UIView = {
+    lazy var centerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .DevMaskColor
+        view.backgroundColor = .DevMaskColor // 你的自定义扩展颜色
         return view
     }()
     
-    lazy var hudView:PTLoadingHud = {
-        let views = PTLoadingHud(frame: CGRect(x: loadingHudSpace, y: loadingHudSpace, width: hudShare.conterViewSize - loadingHudSpace * 2, height: hudShare.conterViewSize - loadingHudSpace * 2))
+    lazy var hudView: PTLoadingHud = {
+        let views = PTLoadingHud(frame: .zero)
         return views
     }()
     
@@ -65,7 +72,11 @@ public class PTHudView: UIView {
             make.width.height.equalTo(hudShare.conterViewSize)
         }
         centerView.viewCorner(radius: hudShare.conterViewSize * 0.1)
+        
         centerView.addSubview(hudView)
+        hudView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(loadingHudSpace)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -74,7 +85,8 @@ public class PTHudView: UIView {
     
     public func hudShow() {
         if PTHudConfig.share.hudColors.count < 2 {
-            PTNSLogConsole("不可以小于两个颜色",levelType: .error,loggerType: .alert)
+            // 保留你的自定义日志
+            PTNSLogConsole("不可以小于两个颜色", levelType: .error, loggerType: .alert)
             return
         }
         backgroundColor = PTHudConfig.share.backgroundColor
@@ -83,13 +95,13 @@ public class PTHudView: UIView {
             make.edges.equalToSuperview()
         }
         
-        centerView.transform = CGAffineTransformScale(.identity, 0.001, 0.001)
-        UIView.animate(withDuration: 0.3 / 1.5) {
-            self.centerView.transform = CGAffineTransformScale(.identity, 1.1, 1.1)
-        } completion: { finish in
-            UIView.animate(withDuration: 0.3 / 2) {
-                self.centerView.transform = CGAffineTransformScale(.identity, 0.9, 0.9)
-            } completion: { finish in
+        centerView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+        UIView.animate(withDuration: 0.3 / 1.5, animations: {
+            self.centerView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        }) { _ in
+            UIView.animate(withDuration: 0.3 / 2, animations: {
+                self.centerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            }) { _ in
                 UIView.animate(withDuration: 0.3 / 2) {
                     self.centerView.transform = .identity
                 }
@@ -97,10 +109,10 @@ public class PTHudView: UIView {
         }
     }
     
-    public func hide(duration:TimeInterval = 0.35,completion:PTActionTask?) {
-        UIView.animate(withDuration: duration) {
+    public func hide(duration: TimeInterval = 0.35, completion: PTActionTask?) {
+        UIView.animate(withDuration: duration, animations: {
             self.centerView.alpha = 0
-        } completion: { finish in
+        }) { _ in
             self.removeFromSuperview()
             completion?()
         }
@@ -111,7 +123,7 @@ public class PTHudView: UIView {
             return super.hitTest(point, with: event)
         } else {
             for view in subviews {
-                if let responder : UIView = view.hitTest(view.convert(point, from: self), with: event) {
+                if let responder = view.hitTest(view.convert(point, from: self), with: event) {
                     return responder
                 }
             }
@@ -121,125 +133,138 @@ public class PTHudView: UIView {
 }
 
 @objcMembers
-public class PTLoadingHud:UIView {
+public class PTLoadingHud: UIView {
     open var hudConfig = PTHudConfig.share
-    open var length:CGFloat = maxLength
-    open var gradualColor:UIColor = .randomColor
-    open var finalColor:UIColor = .randomColor
-    open var prevColor:UIColor = .randomColor
-    open var rotateAngle:NSInteger = NSInteger(arc4random()%360)
-    open var colorIndex:NSInteger = 0
-    open var waitingFrameCount:NSInteger = 0
-    open var status:PTHudStatus = .Decrease
-    open var circleCenter:CGPoint = .zero
-    open var circleRadius:CGFloat = 0
+    open var length: CGFloat = maxLength
+    open var gradualColor: UIColor = .randomColor
+    open var finalColor: UIColor = .randomColor
+    open var prevColor: UIColor = .randomColor
+    open var rotateAngle: NSInteger = NSInteger(arc4random() % 360)
+    open var colorIndex: NSInteger = 0
+    open var waitingFrameCount: NSInteger = 0
+    open var status: PTHudStatus = .Decrease
+    
+    // 引入 CADisplayLink 来驱动动画
+    private var displayLink: CADisplayLink?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
         backgroundColor = .clear
-        circleCenter = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-        circleRadius = frame.size.width / 3
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func degressToRadian(angle:CGFloat)->CGFloat {
-        Double.pi * angle / 180
+    func degressToRadian(angle: CGFloat) -> CGFloat {
+        return CGFloat.pi * angle / 180.0
     }
     
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
-        let context = UIGraphicsGetCurrentContext()
-        context?.setLineCap(.round)
-        context?.setLineWidth(hudConfig.lineWidth)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         
+        context.setLineCap(.round)
+        context.setLineWidth(hudConfig.lineWidth)
+        
+        // 动态计算圆心和半径，适应 AutoLayout 的变化
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) / 3
+        
+        // 直接使用 .cgColor 进行设置，性能更好且代码更简洁
         if status == .Waiting && length == minLength {
-            context?.setStrokeColor(red: gradualColor.rgbaValueModel().redFloat, green: gradualColor.rgbaValueModel().greenFloat, blue: gradualColor.rgbaValueModel().blueFloat, alpha: gradualColor.rgbaValueModel().alphaFloat)
+            context.setStrokeColor(gradualColor.cgColor)
         } else {
-            context?.setStrokeColor(red: finalColor.rgbaValueModel().redFloat, green: finalColor.rgbaValueModel().greenFloat, blue: finalColor.rgbaValueModel().blueFloat, alpha: finalColor.rgbaValueModel().alphaFloat)
+            context.setStrokeColor(finalColor.cgColor)
         }
         
-        let deltaLength = sin(Double(length) / 360 * (Double.pi / 2)) * 360
+        let deltaLength = sin(Double(length) / 360.0 * (Double.pi / 2.0)) * 360.0
         let startAngle = degressToRadian(angle: CGFloat(-deltaLength))
-        context?.addArc(center: circleCenter, radius: circleRadius, startAngle: startAngle, endAngle: 0, clockwise: false)
         
-        context?.strokePath()
-        self.perform(#selector(refreshCricle), with: nil, afterDelay: 1 / framePerSecond)
+        context.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: 0, clockwise: false)
+        context.strokePath()
+        
+        // 注意：这里删除了之前使用的 self.perform() 方法
     }
     
-    func refreshCricle() {
-        PTGCDManager.gcdMain {
-            switch self.status {
-            case .Decrease:
-                self.length -= lengthIteration
-                self.rotateAngle += Int(rotateIteration)
-                
-                if self.length <= minLength {
-                    self.length = minLength
-                    self.status = .Waiting
-                    self.colorIndex += 1
-                    self.colorIndex %= self.hudConfig.hudColors.count
-                    self.prevColor = self.finalColor
-                    self.finalColor = self.hudConfig.hudColors[self.colorIndex]
-                }
-            case .Increase:
-                self.length += lengthIteration
-                let deltaLength = sin(lengthIteration / 360 * (Double.pi / 2)) * 360
-                self.rotateAngle += Int((rotateIteration + deltaLength))
-                
-                if self.length >= maxLength {
-                    self.length = maxLength
-                    self.status = .Waiting
-                }
-            case .Waiting:
-                self.waitingFrameCount += 1
-                self.rotateAngle += Int(rotateIteration)
-                
-                if self.length == minLength {
-                    let colorAPercent:CGFloat = CGFloat(self.waitingFrameCount) / maxWaitingFrame
-                    let colorBPercent = 1 - colorAPercent
-                    let transparentColorA = UIColor(red: self.finalColor.rgbaValueModel().redFloat, green: self.finalColor.rgbaValueModel().greenFloat, blue: self.finalColor.rgbaValueModel().blueFloat, alpha: colorAPercent)
-                    let transparentColorB = UIColor(red: self.prevColor.rgbaValueModel().redFloat, green: self.prevColor.rgbaValueModel().greenFloat, blue: self.prevColor.rgbaValueModel().blueFloat, alpha: colorBPercent)
-                    self.gradualColor = transparentColorA.mixed(withColor: transparentColorB)
-                }
-                
-                if self.waitingFrameCount == Int(maxWaitingFrame) {
-                    self.waitingFrameCount = 0
-                    if self.length == minLength {
-                        self.status = .Increase
-                    } else {
-                        self.status = .Decrease
-                    }
-                }
+    @objc func refreshCricle() {
+        // CADisplayLink 默认在主线程回调，因此直接更新逻辑即可
+        switch self.status {
+        case .Decrease:
+            self.length -= lengthIteration
+            self.rotateAngle += Int(rotateIteration)
+            
+            if self.length <= minLength {
+                self.length = minLength
+                self.status = .Waiting
+                self.colorIndex += 1
+                self.colorIndex %= self.hudConfig.hudColors.count
+                self.prevColor = self.finalColor
+                self.finalColor = self.hudConfig.hudColors[self.colorIndex]
             }
-            self.rotateAngle %= 360
-            PTGCDManager.gcdMain {
-                Task { @MainActor in
-                    self.transform = CGAffineTransform(
-                        rotationAngle: self.degressToRadian(angle: CGFloat(self.rotateAngle))
-                    )
-                    self.setNeedsDisplay()
+        case .Increase:
+            self.length += lengthIteration
+            let deltaLength = sin(lengthIteration / 360 * (Double.pi / 2)) * 360
+            self.rotateAngle += Int((rotateIteration + deltaLength))
+            
+            if self.length >= maxLength {
+                self.length = maxLength
+                self.status = .Waiting
+            }
+        case .Waiting:
+            self.waitingFrameCount += 1
+            self.rotateAngle += Int(rotateIteration)
+            
+            if self.length == minLength {
+                let colorAPercent: CGFloat = CGFloat(self.waitingFrameCount) / maxWaitingFrame
+                let colorBPercent = 1 - colorAPercent
+                
+                // 保留你原本获取渐变色的逻辑，如果 mixed(withColor:) 是你的扩展
+                let transparentColorA = finalColor.withAlphaComponent(colorAPercent)
+                let transparentColorB = prevColor.withAlphaComponent(colorBPercent)
+                self.gradualColor = transparentColorA.mixed(withColor: transparentColorB)
+            }
+            
+            if self.waitingFrameCount == Int(maxWaitingFrame) {
+                self.waitingFrameCount = 0
+                if self.length == minLength {
+                    self.status = .Increase
+                } else {
+                    self.status = .Decrease
                 }
             }
         }
+        self.rotateAngle %= 360
+        
+        // 移除多余的 GCD 和 Task 切换，直接在当前(主)线程更新 UI
+        self.transform = CGAffineTransform(rotationAngle: self.degressToRadian(angle: CGFloat(self.rotateAngle)))
+        self.setNeedsDisplay()
     }
     
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    // MARK: - 生命周期与定时器管理
+    private func setupDisplayLink() {
+        if displayLink == nil {
+            displayLink = CADisplayLink(target: self, selector: #selector(refreshCricle))
+            // preferredFramesPerSecond 可以控制帧率，这里保持你原有的逻辑，默认为最高刷新率
+            displayLink?.add(to: .main, forMode: .common)
+        }
+    }
+    
+    private func invalidateDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
     }
 }
 
 extension PTLoadingHud {
     public override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
         if newSuperview != nil {
             colorIndex = Int(arc4random()) % hudConfig.hudColors.count
             finalColor = hudConfig.hudColors[colorIndex]
+            setupDisplayLink() // 添加到视图时开启定时器
         } else {
-            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(refreshCricle), object: nil)
+            invalidateDisplayLink() // 移除视图时销毁定时器，防止内存泄漏
         }
     }
 }
-

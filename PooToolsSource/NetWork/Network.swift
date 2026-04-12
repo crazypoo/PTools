@@ -1013,25 +1013,24 @@ public class Network: NSObject {
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
-        return try await withCheckedThrowingContinuation { continuation in
-            AF.upload(body,
-                      to: urlStr1,
-                      method: method,
-                      headers: newHeader)
-            .response { resp in
-                switch resp.result {
-                case .success(_):
-                    do {
-                        let parsed = try parser(resp.response,resp.data)
-                        continuation.resume(returning: parsed)
-                    } catch {
-                        continuation.resume(throwing: error)
-                    }
-                case .failure(let error):
-                    logRequestFailure(url: urlStr1, error: error)
-                    continuation.resume(throwing: error)
-                }
-            }
+        // ⭐ 优化：直接使用 Alamofire 提供的原生 async/await 接口
+        // 这样写天然支持 Swift 的 Task Cancellation，外部取消时内部请求也会安全终止
+        let dataTask = AF.upload(body,
+                                 to: urlStr1,
+                                 method: method,
+                                 headers: newHeader).serializingData()
+        
+        // 等待响应结果
+        let response = await dataTask.response
+        
+        switch response.result {
+        case .success(let data):
+            // 解析成功的数据
+            return try parser(response.response, data)
+        case .failure(let error):
+            // 打印错误并抛出
+            logRequestFailure(url: urlStr1, error: error)
+            throw error
         }
     }
     
@@ -1073,40 +1072,16 @@ public class Network: NSObject {
             }
         }()
         
-//        let realRequest = {
-//            return try await withCheckedThrowingContinuation { continuation in
-//                session.request(urlRequest).responseData { data in
-//                    let result: Result<Data, AFError> = data.result.map { $0 }
-//                    
-//                    // 👉 插件回调
-//                    Network.share.plugins.forEach {
-//                        $0.didReceive(result, request: urlRequest, response: data.response)
-//                    }
-//
-//                    switch data.result {
-//                    case .success:
-//                        do {
-//                            let parsed = try parser(data.response,data.data)
-//                            continuation.resume(returning: parsed)
-//                        } catch {
-//                            continuation.resume(throwing: error)
-//                        }
-//                    case .failure(let error):
-//                        logRequestFailure(url: urlStr1, error: error)
-//                        continuation.resume(throwing: error)
-//                    }
-//                }
-//            }
-//        }
         // 极致优雅且原生支持 Cancellation 的写法：
+        let finalRequest = urlRequest
         let realRequest: @Sendable () async throws -> PTBaseStructModel = {
-            let dataTask = session.request(urlRequest).serializingData()
+            let dataTask = session.request(finalRequest).serializingData()
             
             // 拦截插件响应
             let response = await dataTask.response
             let result = response.result
             Network.share.plugins.forEach {
-                $0.didReceive(result, request: urlRequest, response: response.response)
+                $0.didReceive(result, request: finalRequest, response: response.response)
             }
             
             switch result {

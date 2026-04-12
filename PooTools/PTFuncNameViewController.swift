@@ -993,7 +993,9 @@ class PTFuncNameViewController: PTBaseViewController {
         let view = PTNavTitleContainer()
         view.addSubview(searchBar)
         searchBar.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.height.equalTo(32)
+            make.centerY.equalToSuperview()
         }
         view.frame = CGRect(origin: .zero, size: .init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
         view.snp.makeConstraints { make in
