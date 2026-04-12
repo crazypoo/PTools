@@ -262,7 +262,8 @@ final public class PTTabBarView: UIView {
         view.font = PTAppBaseConfig.share.tabbarCenterNameFont
         view.textColor = PTAppBaseConfig.share.tabbarCenterNameColor
         view.textAlignment = .center
-        view.numberOfLines = 1
+        view.numberOfLines = 0
+        view.lineBreakMode = .byTruncatingTail
         view.isHidden = PTAppBaseConfig.share.tabbarCenterName.stringIsEmpty()
         view.text = PTAppBaseConfig.share.tabbarCenterName
         return view
