@@ -509,21 +509,23 @@ public final class NetworkCache : @unchecked Sendable {
         let now = Date().timeIntervalSince1970
 
         for fileURL in files {
-            guard let data = try? Data(contentsOf: fileURL),
-                  let obj = try? JSONDecoder().decode(CacheObject.self, from: data) else {
-                continue
+            autoreleasepool { // 加入自动释放池，防止内存暴涨
+                guard let data = try? Data(contentsOf: fileURL),
+                      let obj = try? JSONDecoder().decode(CacheObject.self, from: data) else {
+                    return
+                }
+
+                // ❌ 1. 先删过期
+                if obj.expireTime < now {
+                    try? fm.removeItem(at: fileURL)
+                    return
+                }
+
+                let size = (try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
+                totalSize += Int64(size)
+
+                cacheFiles.append((fileURL, Int64(size), obj.lastAccessTime))
             }
-
-            // ❌ 1. 先删过期
-            if obj.expireTime < now {
-                try? fm.removeItem(at: fileURL)
-                continue
-            }
-
-            let size = (try? fileURL.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
-            totalSize += Int64(size)
-
-            cacheFiles.append((fileURL, Int64(size), obj.lastAccessTime))
         }
 
         // ✅ 不超限直接返回
@@ -672,12 +674,13 @@ public enum PTNetworkDedupPolicy {
 public struct RequestKey: Hashable {
     let url: String
     let method: String
-    let paramsHash: String
+    let paramsHash: Int // 改为 Int
     
     init(request: URLRequest) {
         self.url = request.url?.absoluteString ?? ""
         self.method = request.httpMethod ?? ""
-        self.paramsHash = request.httpBody?.base64EncodedString() ?? ""
+        // 直接使用 Data 自身的 hashValue，速度极快，不需要 Base64 和 MD5
+        self.paramsHash = request.httpBody?.hashValue ?? 0
     }
 }
 
@@ -787,8 +790,8 @@ public class Network: NSObject {
     
     @MainActor func hudHide(completion:PTActionTask? = nil) {
         if let hud = self.hud {
-            hud.hide {
-                self.hud = nil
+            hud.hide { [weak self] in
+                self?.hud = nil
                 completion?()
             }
         } else {
@@ -938,7 +941,7 @@ public class Network: NSObject {
         }
         
         // JSON 情况
-        let jsonString = data.toDict()?.toJSON() ?? ""
+        let jsonString = String(data: data, encoding: .utf8) ?? ""
         result.originalString = jsonString
         logRequestSuccess(url: url, jsonStr: jsonString)
         if let modelType {
@@ -1070,29 +1073,48 @@ public class Network: NSObject {
             }
         }()
         
-        let realRequest = {
-            return try await withCheckedThrowingContinuation { continuation in
-                session.request(urlRequest).responseData { data in
-                    let result: Result<Data, AFError> = data.result.map { $0 }
-                    
-                    // 👉 插件回调
-                    Network.share.plugins.forEach {
-                        $0.didReceive(result, request: urlRequest, response: data.response)
-                    }
-
-                    switch data.result {
-                    case .success:
-                        do {
-                            let parsed = try parser(data.response,data.data)
-                            continuation.resume(returning: parsed)
-                        } catch {
-                            continuation.resume(throwing: error)
-                        }
-                    case .failure(let error):
-                        logRequestFailure(url: urlStr1, error: error)
-                        continuation.resume(throwing: error)
-                    }
-                }
+//        let realRequest = {
+//            return try await withCheckedThrowingContinuation { continuation in
+//                session.request(urlRequest).responseData { data in
+//                    let result: Result<Data, AFError> = data.result.map { $0 }
+//                    
+//                    // 👉 插件回调
+//                    Network.share.plugins.forEach {
+//                        $0.didReceive(result, request: urlRequest, response: data.response)
+//                    }
+//
+//                    switch data.result {
+//                    case .success:
+//                        do {
+//                            let parsed = try parser(data.response,data.data)
+//                            continuation.resume(returning: parsed)
+//                        } catch {
+//                            continuation.resume(throwing: error)
+//                        }
+//                    case .failure(let error):
+//                        logRequestFailure(url: urlStr1, error: error)
+//                        continuation.resume(throwing: error)
+//                    }
+//                }
+//            }
+//        }
+        // 极致优雅且原生支持 Cancellation 的写法：
+        let realRequest: @Sendable () async throws -> PTBaseStructModel = {
+            let dataTask = session.request(urlRequest).serializingData()
+            
+            // 拦截插件响应
+            let response = await dataTask.response
+            let result = response.result
+            Network.share.plugins.forEach {
+                $0.didReceive(result, request: urlRequest, response: response.response)
+            }
+            
+            switch result {
+            case .success(let data):
+                return try parser(response.response, data)
+            case .failure(let error):
+                logRequestFailure(url: urlStr1, error: error)
+                throw error
             }
         }
         
@@ -1387,7 +1409,7 @@ public class Network: NSObject {
             }
 
             // ✅ 降频 progress（防卡顿关键）
-            request?.downloadProgress { [weak self] p in
+            request?.downloadProgress(queue: .main) { [weak self] p in
                 guard let self else { return }
 
                 let now = CACurrentMediaTime()
