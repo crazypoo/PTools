@@ -71,7 +71,7 @@ public enum LoggerEXType: String, CaseIterable {
 public let PTLogMode: LoggerEXLevelType = {
     // 优化 3：探讨这里的逻辑。这里我先假设你需要开发环境用 debug，正式环境用 error。
     // 如果你原本的逻辑是刻意为之，可以改回你的版本。
-    if UIApplication.shared.inferredEnvironment != .appStore {
+    if UIApplication.shared.inferredEnvironment_PT != .appStore {
         return .debug
     } else {
         return .error

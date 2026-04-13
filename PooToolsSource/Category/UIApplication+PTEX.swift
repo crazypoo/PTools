@@ -12,6 +12,7 @@ import SwifterSwift
 extension UIApplication: PTProtocolCompatible { }
 
 public extension UIApplication {
+    
     @objc func clearLaunchScreenCache() {
         let result = FileManager.pt.removefolder(folderPath: FileManager.pt.homeDirectory() + "/Library/SplashBoard")
         if !result.isSuccess {
@@ -22,14 +23,14 @@ public extension UIApplication {
     //MARK: 獲取軟件的開髮狀態
     ///獲取軟件的開髮狀態
     class func applicationEnvironment() -> Environment {
-        UIApplication.shared.inferredEnvironment
+        UIApplication.shared.inferredEnvironment_PT
     }
     
     class func applicationEnvironmentAsync() async -> Environment {
         // 在主線程異步更新 environment
         return await withCheckedContinuation { continuation in
             PTGCDManager.gcdMain {
-                let environment = UIApplication.shared.inferredEnvironment
+                let environment = UIApplication.shared.inferredEnvironment_PT
                 continuation.resume(returning: environment)
             }
         }
@@ -67,6 +68,68 @@ public extension UIApplication {
 
         // 3️⃣ 最后 fallback 到你原来的 sceneDelegate 逻辑
         return PTWindowSceneDelegate.sceneDelegate()?.window
+    }
+        
+    // MARK: - 内部缓存机制 (核心优化部分)
+    /// 使用私有结构体和静态常量来缓存应用信息，确保高开销的 I/O 操作只执行一次
+    private struct AppInfoCache {
+        
+        static let inferredEnvironment: Environment = {
+            #if DEBUG
+            return .debug
+            #elseif targetEnvironment(simulator)
+            return .debug
+            #else
+            // 检查是否包含内嵌的 provision 文件 (TestFlight)
+            if Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") != nil {
+                return .testFlight
+            }
+
+            guard let appStoreReceiptUrl = Bundle.main.appStoreReceiptURL else {
+                return .debug
+            }
+
+            let receiptPath = appStoreReceiptUrl.lastPathComponent.lowercased()
+            if receiptPath == "sandboxreceipt" {
+                return .testFlight
+            }
+
+            if appStoreReceiptUrl.path.lowercased().contains("simulator") {
+                return .debug
+            }
+
+            return .appStore
+            #endif
+        }()
+        
+        static let displayName: String? = {
+            return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+        }()
+        
+        static let buildNumber: String? = {
+            return Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as? String
+        }()
+        
+        static let version: String? = {
+            return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        }()
+    }
+
+    // MARK: - 公开属性 (API 保持不变)
+    var inferredEnvironment_PT: Environment {
+        return AppInfoCache.inferredEnvironment
+    }
+
+    var displayName_PT: String? {
+        return AppInfoCache.displayName
+    }
+
+    var buildNumber_PT: String? {
+        return AppInfoCache.buildNumber
+    }
+
+    var version_PT: String? {
+        return AppInfoCache.version
     }
 }
 

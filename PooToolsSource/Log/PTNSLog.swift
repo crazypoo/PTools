@@ -19,8 +19,8 @@ private let PTLogFileQueue = DispatchQueue(label: "com.ptools.log.fileQueue")
 private let currentAppEnvironment: String = {
     // 假设你有同步获取环境的方法，这里做了简化。
     // 如果你之前的 applicationEnvironment() 必须是 async，建议在 App 启动时预先获取并赋值给一个全局变量。
-    let isAppStore = UIApplication.shared.inferredEnvironment == .appStore
-    let isTestFlight = UIApplication.shared.inferredEnvironment == .testFlight
+    let isAppStore = UIApplication.shared.inferredEnvironment_PT == .appStore
+    let isTestFlight = UIApplication.shared.inferredEnvironment_PT == .testFlight
     if isAppStore { return "<<<生產環境>>>" }
     if isTestFlight { return "<<<測試環境>>>" }
     return "<<<DEBUG環境>>>"
@@ -75,7 +75,7 @@ public func PTNSLog(_ msg: Any...,
     let prefix = "\n🔨\(currentAppEnvironment)Empezar🔨 \n⏰現在⏰：\(currentDate)\n📁當前文件完整的路徑是📁：\(file)\n📄當前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函數名🧾：\(fn)\n📝打印內容如下📝：\n\(msgStr)\n❌結論❌\n"
     
     // 控制台输出 & OSLog 处理
-    let environment = UIApplication.shared.inferredEnvironment
+    let environment = UIApplication.shared.inferredEnvironment_PT
     if environment == .appStore {
         DDLogSet(levelType: levelType, prefix: prefix)
     } else {

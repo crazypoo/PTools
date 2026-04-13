@@ -802,7 +802,7 @@ public class Network: NSObject {
     //MARK: 服务器URL
     @MainActor
     public class func gobalUrl() async -> String {
-        let environment = UIApplication.shared.inferredEnvironment
+        let environment = UIApplication.shared.inferredEnvironment_PT
         if environment != .appStore {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTBaseURLMode {
@@ -826,7 +826,7 @@ public class Network: NSObject {
     //MARK: socket服务器URL
     @MainActor
     public class func socketGobalUrl() async -> String {
-        let environment = UIApplication.shared.inferredEnvironment
+        let environment = UIApplication.shared.inferredEnvironment_PT
         if environment != .appStore {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTSocketURLMode {
@@ -929,7 +929,7 @@ public class Network: NSObject {
             }
             // 如果不是 HTML，就当作纯文本成功返回（Debug 打印文本）
             var originalText = ""
-            switch UIApplication.shared.inferredEnvironment {
+            switch UIApplication.shared.inferredEnvironment_PT {
             case .debug:
                 originalText = String(decoding: data, as: UTF8.self)
             default:
