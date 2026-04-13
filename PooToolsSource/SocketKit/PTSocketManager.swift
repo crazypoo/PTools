@@ -123,7 +123,9 @@ public final class PTSocketManager: NSObject,@unchecked Sendable {
         reOpenCount = 0 // 主动断开时，重置重连次数
         socketState = .disconnected
         reconnectWorkItem?.cancel() // 取消任何正在等待的重连任务
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect), object: nil)
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect), object: nil)
+        }
     }
     
     /// 内部方法：只清理底层 socket 和心跳，不修改外层暴露的业务状态
