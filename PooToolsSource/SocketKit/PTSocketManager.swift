@@ -242,11 +242,22 @@ extension PTSocketManager: SRWebSocketDelegate {
         // 可以在这里自动启动心跳
         // startHeartBeat()
 
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidConnect), object: nil)
+        // ✨ 优化：确保在主线程发送状态通知
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidConnect), object: self)
+        }
     }
 
     public func webSocket(_ webSocket: SRWebSocket, didReceiveMessage message: Any) {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidReceiveMessageNotification), object: message)
+        // ✨ 优化：1. 切回主线程 2. 将数据放入 userInfo 字典中
+        DispatchQueue.main.async {
+            let userInfo: [String: Any] = ["data": message]
+            NotificationCenter.default.post(
+                name: NSNotification.Name(rawValue: nWebSocketDidReceiveMessageNotification),
+                object: self,
+                userInfo: userInfo
+            )
+        }
     }
 
     public func webSocket(_ webSocket: SRWebSocket, didFailWithError error: Error) {
@@ -256,17 +267,19 @@ extension PTSocketManager: SRWebSocketDelegate {
 
     public func webSocket(_ webSocket: SRWebSocket, didCloseWithCode code: Int, reason: String?, wasClean: Bool) {
         PTNSLogConsole("🔌 WebSocket Closed. Code: \(code), Reason: \(reason ?? "None")")
-        // 如果不是正常断开（比如被动断开），则尝试重连
         if code != SRStatusCode.codeNormal.rawValue {
             reConnect()
         } else {
             socketState = .disconnected
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect), object: nil)
+            // ✨ 优化：确保在主线程发送断开通知
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: nWebSocketDidDisconnect), object: self)
+            }
         }
     }
     
     // 如果收到服务端的 Pong 回复，可以在这里处理
     public func webSocket(_ webSocket: SRWebSocket, didReceivePong pongPayload: Data?) {
-        // PTNSLogConsole("✅ Received Pong from Server")
+         PTNSLogConsole("✅ Received Pong from Server")
     }
 }

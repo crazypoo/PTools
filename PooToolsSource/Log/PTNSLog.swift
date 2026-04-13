@@ -91,7 +91,7 @@ public func PTNSLog(_ msg: Any...,
         
 #if POOTOOLS_DEBUG
         // 确保 UI 更新在主线程
-        DispatchQueue.main.async {
+        Task { @MainActor in
             if LocalConsole.shared.isVisiable {
                 LocalConsole.shared.print(prefix)
             }
@@ -101,10 +101,19 @@ public func PTNSLog(_ msg: Any...,
     
     // 🚀 优化点 5：异步+串行写入文件，完全不阻塞主线程和其他日志打印
     if isWriteLog {
+        // 1. 获取缓存路径并拼接文件名
         let cachePath = FileManager.pt.CachesDirectory()
         let logURL = URL(fileURLWithPath: cachePath).appendingPathComponent("log.txt")
         
+        // 2. 派发到后台串行队列
         PTLogFileQueue.async {
+            // 3. 安全检查：如果文件不存在，必须先创建文件，否则后续写入会失败
+            let fileManager = FileManager.default
+            if !fileManager.fileExists(atPath: logURL.path) {
+                fileManager.createFile(atPath: logURL.path, contents: nil, attributes: nil)
+            }
+            
+            // 4. 执行写入
             appendText(fileURL: logURL, string: prefix, currentDate: currentDate)
         }
     }
