@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-class PTTimeUtils {
+public class PTTimeUtils {
     // 缓存 DateFormatter，避免重复创建造成的性能消耗
     // 这是一个只在第一次调用时实例化的静态属性
     private static let sharedFormatter: DateFormatter = {
@@ -24,7 +24,7 @@ class PTTimeUtils {
     ///   - formatString: 日期格式，默认为 "yyyy-MM-dd"
     ///   - timeZoneIdentifier: 时区标识符，默认为亚洲/上海 (东八区)
     /// - Returns: 格式化后的时间字符串
-    static func currentDate(formatString: String = "yyyy-MM-dd", timeZoneIdentifier: String = "Asia/Shanghai") -> String {
+    public static func currentDate(formatString: String = "yyyy-MM-dd", timeZoneIdentifier: String = "Asia/Shanghai") -> String {
         
         // 1. 设置日期格式
         sharedFormatter.dateFormat = formatString
