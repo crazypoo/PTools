@@ -10,7 +10,7 @@ import UIKit
 
 public typealias PTConfigureLinkAttribute = (PTActiveType, [NSAttributedString.Key : Any], Bool) -> [NSAttributedString.Key : Any]
 typealias PTElementTuple = (range: NSRange, element: PTActiveElement, type: PTActiveType)
-public typealias PTActiveDidSelectedHandle = (String,PTActiveType) -> ()
+public typealias PTActiveDidSelectedHandle = (String, PTActiveType) -> ()
 public typealias PTActiveStringHandle = (String) -> ()
 public typealias PTActiveURLHandle = (URL) -> ()
 public typealias PTActiveStringBoolCallBack = (String) -> Bool
@@ -266,56 +266,7 @@ public class PTActiveLabel: UILabel {
         let size = layoutManager.usedRect(for: textContainer)
         return CGSize(width: ceil(size.width), height: ceil(size.height))
     }
-    
-    func onTouch(_ touch: UITouch) -> Bool {
-        let location = touch.location(in: self)
-        var avoidSuperCall = false
         
-        switch touch.phase {
-        case .began, .moved, .regionEntered, .regionMoved:
-            if let element = element(location: location) {
-                if element.range.location != selectedElement?.range.location || element.range.length != selectedElement?.range.length {
-                    updateAttributesWhenSelected(false)
-                    selectedElement = element
-                    updateAttributesWhenSelected(true)
-                }
-                avoidSuperCall = true
-            } else {
-                updateAttributesWhenSelected(false)
-                selectedElement = nil
-            }
-        case .ended, .regionExited:
-            guard let selectedElement = selectedElement else { return avoidSuperCall }
-            
-            switch selectedElement.element {
-            case .mention(let userHandle): didTapMention(userHandle)
-            case .hashtag(let hashtag): didTapHashtag(hashtag)
-            case .url(let originalURL, _): didTapStringURL(originalURL)
-            case .custom(let element): didTap(element, for: selectedElement.type)
-            case .email(let element): didTapStringEmail(element)
-            case .chinaCellPhone(let element) :didTapStringChinaCellPhone(element)
-            case .snsId(let element) :didTapStringChinaCellPhone(element)
-            }
-            
-            let when = Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-            
-            PTGCDManager.gcdAfter(time: when) {
-                self.updateAttributesWhenSelected(false)
-                self.selectedElement = nil
-            }
-            avoidSuperCall = true
-        case .cancelled:
-            updateAttributesWhenSelected(false)
-            selectedElement = nil
-        case .stationary:
-            break
-        @unknown default:
-            break
-        }
-        
-        return avoidSuperCall
-    }
-    
     fileprivate var _customizing: Bool = true
     fileprivate var defaultCustomColor: UIColor = .black
     
@@ -388,43 +339,74 @@ public class PTActiveLabel: UILabel {
         return CGPoint(x: rect.origin.x, y: glyphOriginY)
     }
     
+    // MARK: - 优化 3: 提取统一的颜色获取辅助方法，减少重复代码
+    private func getActiveColor(for type: PTActiveType, isSelected: Bool) -> UIColor {
+        switch type {
+        case .mention: return isSelected ? (mentionSelectedColor ?? mentionColor) : mentionColor
+        case .hashtag: return isSelected ? (hashtagSelectedColor ?? hashtagColor) : hashtagColor
+        case .url: return isSelected ? (URLSelectedColor ?? URLColor) : URLColor
+        case .chinaCellPhone: return isSelected ? (chinaCellPhoneSelectedColor ?? chinaCellPhoneColor) : chinaCellPhoneColor
+        case .snsId: return isSelected ? (snsIdSelectedColor ?? snsIdColor) : snsIdColor
+        case .email: return isSelected ? (URLSelectedColor ?? URLColor) : URLColor
+        case .custom:
+            let color = isSelected ? (customSelectedColor[type] ?? customColor[type]) : customColor[type]
+            return color ?? defaultCustomColor
+        }
+    }
+
     /// 添加富文本
     fileprivate func addLinkAttribute(_ mutAttrString: NSMutableAttributedString) {
-        var range = NSRange(location: 0, length: 0)
-        var attributes = mutAttrString.attributes(at: 0, effectiveRange: &range)
+        let textLength = mutAttrString.length
         
-        attributes[NSAttributedString.Key.font] = font!
-        attributes[NSAttributedString.Key.foregroundColor] = textColor
-        mutAttrString.addAttributes(attributes, range: range)
+        // 修复 1：绝对防御，如果文本为空，直接返回，防止 attributes(at: 0) 越界崩溃
+        guard textLength > 0 else { return }
         
-        attributes[NSAttributedString.Key.foregroundColor] = mentionColor
+        // 修复 2：获取基础属性，并确保基础属性覆盖的是【全局完整文本】，而不是原本的有效片段 (effectiveRange)
+        let fullRange = NSRange(location: 0, length: textLength)
+        var baseAttributes = mutAttrString.attributes(at: 0, effectiveRange: nil)
+        
+        if let currentFont = font {
+            baseAttributes[.font] = currentFont
+        }
+        if let currentTextColor = textColor {
+            baseAttributes[.foregroundColor] = currentTextColor
+        }
+        // 使用 addAttributes 而不是覆盖，更安全
+        mutAttrString.addAttributes(baseAttributes, range: fullRange)
         
         for (type, elements) in activeElements {
             
-            switch type {
-            case .mention: attributes[NSAttributedString.Key.foregroundColor] = mentionColor
-            case .hashtag: attributes[NSAttributedString.Key.foregroundColor] = hashtagColor
-            case .url: attributes[NSAttributedString.Key.foregroundColor] = URLColor
-            case .custom: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
-            case .email: attributes[NSAttributedString.Key.foregroundColor] = URLColor
-            case .chinaCellPhone: attributes[NSAttributedString.Key.foregroundColor] = chinaCellPhoneColor
-            case .snsId: attributes[NSAttributedString.Key.foregroundColor] = snsIdColor
-            }
+            // 为每种类型单独配置颜色和字体
+            var typeAttributes: [NSAttributedString.Key: Any] = [:]
+            typeAttributes[.foregroundColor] = getActiveColor(for: type, isSelected: false)
             
             if let highlightFont = hightlightFont {
-                attributes[NSAttributedString.Key.font] = highlightFont
+                typeAttributes[.font] = highlightFont
             }
             
             if let configureLinkAttribute = configureLinkAttribute {
-                attributes = configureLinkAttribute(type, attributes, false)
+                // 将原有的 baseAttributes 传进去以便外部继承
+                typeAttributes = configureLinkAttribute(type, typeAttributes, false)
             }
             
             for element in elements {
-                mutAttrString.setAttributes(attributes, range: element.range)
+                // 修复 3：【核心崩溃点】严格验证元素的 range 是否在安全范围内！
+                let safeLocation = element.range.location
+                let safeLength = element.range.length
+                
+                if safeLocation >= 0 && safeLocation + safeLength <= textLength {
+                    // 使用 addAttributes，防止 setAttributes 把 lineSpacing 等段落样式意外覆盖掉
+                    mutAttrString.addAttributes(typeAttributes, range: element.range)
+                } else {
+                    // 如果发生越界，这里会自动拦截并在开发环境下打印，App 绝不会崩溃
+                    #if DEBUG
+                    PTNSLogConsole("⚠️ [PTActiveLabel] 越界拦截：文本总长度 \(textLength)，试图渲染的 Range(\(safeLocation), \(safeLength))")
+                    #endif
+                }
             }
         }
     }
-    
+
     /// 通过正则表达式去检查所有的连接
     fileprivate func parseTextAndExtractActiveElements(_ attrString: NSAttributedString) -> String {
         var textString = attrString.string
@@ -479,43 +461,16 @@ public class PTActiveLabel: UILabel {
     }
     
     fileprivate func updateAttributesWhenSelected(_ isSelected: Bool) {
-        guard let selectedElement = selectedElement else {
-            return
-        }
+        guard let selectedElement = selectedElement else { return }
         
         var attributes = textStorage.attributes(at: 0, effectiveRange: nil)
         let type = selectedElement.type
         
-        if isSelected {
-            let selectedColor: UIColor
-            switch type {
-            case .mention: selectedColor = mentionSelectedColor ?? mentionColor
-            case .hashtag: selectedColor = hashtagSelectedColor ?? hashtagColor
-            case .url: selectedColor = URLSelectedColor ?? URLColor
-            case .custom:
-                let possibleSelectedColor = customSelectedColor[selectedElement.type] ?? customColor[selectedElement.type]
-                selectedColor = possibleSelectedColor ?? defaultCustomColor
-            case .email: selectedColor = URLSelectedColor ?? URLColor
-            case .chinaCellPhone: selectedColor = chinaCellPhoneSelectedColor ?? chinaCellPhoneColor
-            case .snsId: selectedColor = snsIdSelectedColor ?? snsIdColor
-            }
-            attributes[NSAttributedString.Key.foregroundColor] = selectedColor
-        } else {
-            let unselectedColor: UIColor
-            switch type {
-            case .mention: unselectedColor = mentionColor
-            case .hashtag: unselectedColor = hashtagColor
-            case .url: unselectedColor = URLColor
-            case .custom: unselectedColor = customColor[selectedElement.type] ?? defaultCustomColor
-            case .email: unselectedColor = URLColor
-            case .chinaCellPhone: unselectedColor = chinaCellPhoneColor
-            case .snsId: unselectedColor = snsIdColor
-            }
-            attributes[NSAttributedString.Key.foregroundColor] = unselectedColor
-        }
+        // 使用统一颜色方法
+        attributes[.foregroundColor] = getActiveColor(for: type, isSelected: isSelected)
         
         if let highlightFont = hightlightFont {
-            attributes[NSAttributedString.Key.font] = highlightFont
+            attributes[.font] = highlightFont
         }
         
         if let configureLinkAttribute = configureLinkAttribute {
@@ -523,33 +478,79 @@ public class PTActiveLabel: UILabel {
         }
         
         textStorage.addAttributes(attributes, range: selectedElement.range)
-        
         setNeedsDisplay()
     }
     
+    // MARK: - 优化 2: 修复“幽灵触控”问题
     fileprivate func element(location: CGPoint) -> PTElementTuple? {
-        guard textStorage.length > 0 else {
-            return nil
-        }
-        
+        guard textStorage.length > 0 else { return nil }
+                
         var correctLocation = location
         correctLocation.y -= heightCorrection
         let boundingRect = layoutManager.boundingRect(forGlyphRange: NSRange(location: 0, length: textStorage.length), in: textContainer)
-        guard boundingRect.contains(correctLocation) else {
-            return nil
-        }
+        guard boundingRect.contains(correctLocation) else { return nil }
         
         let index = layoutManager.glyphIndex(for: correctLocation, in: textContainer)
+        
+        // 【关键修复】校验触摸点是否真正落在了该字形的实际矩形区域内，而不是仅仅“离它最近”
+        let glyphRect = layoutManager.boundingRect(forGlyphRange: NSRange(location: index, length: 1), in: textContainer)
+        guard glyphRect.contains(correctLocation) else { return nil }
         
         for element in activeElements.map({ $0.1 }).joined() {
             if index >= element.range.location && index <= element.range.location + element.range.length {
                 return element
             }
         }
-        
         return nil
     }
     
+    func onTouch(_ touch: UITouch) -> Bool {
+        let location = touch.location(in: self)
+        var avoidSuperCall = false
+        
+        switch touch.phase {
+        case .began, .moved, .regionEntered, .regionMoved:
+            if let element = element(location: location) {
+                if element.range.location != selectedElement?.range.location || element.range.length != selectedElement?.range.length {
+                    updateAttributesWhenSelected(false)
+                    selectedElement = element
+                    updateAttributesWhenSelected(true)
+                }
+                avoidSuperCall = true
+            } else {
+                updateAttributesWhenSelected(false)
+                selectedElement = nil
+            }
+        case .ended, .regionExited:
+            guard let selectedElement = selectedElement else { return avoidSuperCall }
+            
+            switch selectedElement.element {
+            case .mention(let userHandle): didTapMention(userHandle)
+            case .hashtag(let hashtag): didTapHashtag(hashtag)
+            case .url(let originalURL, _): didTapStringURL(originalURL)
+            case .custom(let element): didTap(element, for: selectedElement.type)
+            case .email(let element): didTapStringEmail(element)
+            case .chinaCellPhone(let element): didTapStringChinaCellPhone(element)
+            // MARK: - 优化 1: 修复复制粘贴 Bug
+            case .snsId(let element): didTapStringSnsId(element)
+            }
+            
+            // 保持延迟取消高亮的体验
+            let when = Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            PTGCDManager.gcdAfter(time: when) {
+                self.updateAttributesWhenSelected(false)
+                self.selectedElement = nil
+            }
+            avoidSuperCall = true
+        case .cancelled:
+            updateAttributesWhenSelected(false)
+            selectedElement = nil
+        case .stationary: break
+        @unknown default: break
+        }
+        return avoidSuperCall
+    }
+
     //MARK: - Handle UI Responder touches
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }

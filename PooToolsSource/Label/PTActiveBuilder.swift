@@ -15,44 +15,52 @@ struct PTActiveBuilder {
         case .mention, .hashtag:
             return createElementsIgnoringFirstCharacter(text: text, type: type, range: range, filterPredicate: filterPredicate)
         case .url:
+            // 注意：因为原版的 createURLElements 返回元组，这里的调用如果是统一入口，
+            // 建议 URL 不做截断处理，或者另写统一逻辑。这里保持你原有的分支路由。
             return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
         case .custom:
             return createElements(text: text, type: type, range: range, minLength: 1, filterPredicate: filterPredicate)
-        case .email:
-            return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
-        case .chinaCellPhone:
-            return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
-        case .snsId:
+        case .email, .chinaCellPhone, .snsId:
             return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
         }
     }
 
     static func createURLElements(text: String, range: NSRange, maximumLength: Int?) -> ([PTElementTuple], String) {
         let type = PTActiveType.url
-        var text = text
         let matches = PTRegexParser.getElements(from: text, with: type.pattern, range: range)
-        let nsstring = text as NSString
+        
         var elements: [PTElementTuple] = []
+        // 优化 1：使用 NSMutableString 进行安全的局部替换
+        let mutableText = NSMutableString(string: text)
 
-        for match in matches where match.range.length > 2 {
-            let word = nsstring.substring(with: match.range)
-                .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        // ⚠️ 关键修复：倒序遍历！
+        // 因为截断 URL 会改变字符串的长度，如果正向遍历，前面替换后，后面的 NSRange 就会全部错位甚至越界崩溃。
+        for match in matches.reversed() where match.range.length > 2 {
+            let word = mutableText.substring(with: match.range).trimmingCharacters(in: .whitespacesAndNewlines)
 
             guard let maxLength = maximumLength, word.count > maxLength else {
-                let range = maximumLength == nil ? match.range : (text as NSString).range(of: word)
                 let element = PTActiveElement.create(with: type, text: word)
-                elements.append((range, element, type))
+                // 因为是倒序遍历，所以需要插入到数组头部，保证最终返回的元素顺序是从左到右
+                elements.insert((match.range, element, type), at: 0)
                 continue
             }
 
+            // 假设 word 有 trim(to:) 扩展方法
             let trimmedWord = word.trim(to: maxLength)
-            text = text.replacingOccurrences(of: word, with: trimmedWord)
-
-            let newRange = (text as NSString).range(of: trimmedWord)
-            let element = PTActiveElement.url(original: word, trimmed: trimmedWord)
-            elements.append((newRange, element, type))
+            
+            // 在原始匹配范围内，将具体的长 URL 替换为短 URL。避免了 replacingOccurrences 导致的全局误杀
+            let wordRange = mutableText.range(of: word, options: [], range: match.range)
+            if wordRange.location != NSNotFound {
+                mutableText.replaceCharacters(in: wordRange, with: trimmedWord)
+                
+                // 计算替换后新的 Range
+                let newRange = NSRange(location: wordRange.location, length: (trimmedWord as NSString).length)
+                let element = PTActiveElement.url(original: word, trimmed: trimmedWord)
+                elements.insert((newRange, element, type), at: 0)
+            }
         }
-        return (elements, text)
+        
+        return (elements, mutableText as String)
     }
 
     private static func createElements(text: String,
@@ -66,8 +74,8 @@ struct PTActiveBuilder {
         var elements: [PTElementTuple] = []
 
         for match in matches where match.range.length > minLength {
-            let word = nsstring.substring(with: match.range)
-                .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            let word = nsstring.substring(with: match.range).trimmingCharacters(in: .whitespacesAndNewlines)
+            
             if filterPredicate?(word) ?? true {
                 let element = PTActiveElement.create(with: type, text: word)
                 elements.append((match.range, element, type))
@@ -85,19 +93,18 @@ struct PTActiveBuilder {
         var elements: [PTElementTuple] = []
 
         for match in matches where match.range.length > 2 {
-            let range = NSRange(location: match.range.location + 1, length: match.range.length - 1)
-            var word = nsstring.substring(with: range)
-            if word.hasPrefix("@") {
-                word.remove(at: word.startIndex)
-            } else if word.hasPrefix("#") {
-                word.remove(at: word.startIndex)
+            // 优化 2：直接提取，不使用位置 + 1，避免因正则捕获到前导空格/符号导致截断错误
+            var word = nsstring.substring(with: match.range).trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // 安全移除首字符 @ 或 #
+            if word.hasPrefix("@") || word.hasPrefix("#") {
+                word.removeFirst()
             }
 
             if filterPredicate?(word) ?? true {
                 let element = PTActiveElement.create(with: type, text: word)
                 elements.append((match.range, element, type))
             }
-            
         }
         return elements
     }

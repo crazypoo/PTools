@@ -41,7 +41,9 @@ struct PTRegexParser {
     static let chinaCellPhone = "1[3456789]\\d{9}"
     static let snsID = "([a-zA-Z]+\\d*)"
 
+    // 优化 2：添加 NSLock 保证线程安全
     private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
+    private static let cacheLock = NSLock()
 
     static func getElements(from text: String, with pattern: String, range: NSRange) -> [NSTextCheckingResult]{
         guard let elementRegex = regularExpression(for: pattern) else { return [] }
@@ -50,6 +52,10 @@ struct PTRegexParser {
     }
 
     private static func regularExpression(for pattern: String) -> NSRegularExpression? {
+        // 使用锁来保护字典的读写操作
+        cacheLock.lock()
+        defer { cacheLock.unlock() } // 无论以何种方式 return，defer 都会确保锁被释放
+        
         if let regex = cachedRegularExpressions[pattern] {
             return regex
         } else if let createdRegex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) {
@@ -61,7 +67,8 @@ struct PTRegexParser {
     }
 }
 
-public enum PTActiveType {
+// 优化 1：直接声明遵循 Hashable 和 Equatable，无需手写扩展
+public enum PTActiveType: Hashable, Equatable {
     case mention
     case hashtag
     case url
@@ -83,29 +90,6 @@ public enum PTActiveType {
     }
 }
 
-extension PTActiveType: Hashable, Equatable {
-    public func hash(into hasher: inout Hasher) {
-        switch self {
-        case .mention: hasher.combine(-1)
-        case .hashtag: hasher.combine(-2)
-        case .url: hasher.combine(-3)
-        case .email: hasher.combine(-4)
-        case .chinaCellPhone: hasher.combine(-5)
-        case .snsId: hasher.combine(-6)
-        case .custom(let regex): hasher.combine(regex)
-        }
-    }
-}
-
-public func ==(lhs: PTActiveType, rhs: PTActiveType) -> Bool {
-    switch (lhs, rhs) {
-    case (.mention, .mention): return true
-    case (.hashtag, .hashtag): return true
-    case (.url, .url): return true
-    case (.email, .email): return true
-    case (.chinaCellPhone,.chinaCellPhone): return true
-    case (.snsId,.snsId): return true
-    case (.custom(let pattern1), .custom(let pattern2)): return pattern1 == pattern2
-    default: return false
-    }
-}
+// ⚠️ 注意：之前的 extension PTActiveType: Hashable, Equatable { ... }
+// 和 public func ==(lhs: PTActiveType, rhs: PTActiveType) -> Bool { ... }
+// 已经可以安全地全部删除了！

@@ -261,12 +261,15 @@ public class PTCountryCodes: NSObject {
     
     public func codesModels() -> [PTCountryCodeModel] {
         let arr = Array(countryCodeDic.keys).sorted(by: <)
-        var models = [PTCountryCodeModel]()
-        arr.enumerated().forEach { index,value in
-            let model = PTCountryCodeModel()
-            model.countryName = value
-            model.countryCode = self.countryCodeDic[value]!
-            models.append(model)
+        let models = arr.compactMap { value in
+            if let findValue = self.countryCodeDic[value] {
+                let model = PTCountryCodeModel()
+                model.countryName = value
+                model.countryCode = findValue
+                return model
+            } else {
+                return nil
+            }
         }
         return models
     }
