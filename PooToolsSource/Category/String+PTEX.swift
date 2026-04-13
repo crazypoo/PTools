@@ -1397,11 +1397,8 @@ public extension String {
 
     //MARK: 获取当前时间
     ///获取当前时间
-    static func currentDate(dateFormatterString:String? = "yyyy-MM-dd",timeZone:String = "GMT+0800") -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormatterString
-        dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
-        return dateFormatter.string(from: Date())
+    static func currentDate(dateFormatterString:String = "yyyy-MM-dd",timeZone:String = "Asia/Shanghai") -> String {
+        return PTTimeUtils.currentDate(formatString: String = dateFormatterString, timeZoneIdentifier: timeZone)
     }
     
     //MARK: 时间字符串转化为时间戳

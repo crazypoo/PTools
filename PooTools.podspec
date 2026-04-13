@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.94.4'
+    s.version     = '3.94.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -337,7 +337,6 @@ Pod::Spec.new do |s|
         
     s.subspec 'Tabbar' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'ESTabBarController-swift'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_TABBAR POOTOOLS_COCOAPODS"
         }
