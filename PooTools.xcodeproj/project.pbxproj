@@ -2022,10 +2022,13 @@
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				55024DF029F370DB00244E44 /* Debug */,
+				55E602462F8C8E56004840AB /* DebugColor */,
 				55E601CC2F889987004840AB /* DebugCrash */,
 				55E601CD2F88A5F3004840AB /* DebugFile */,
 				55E601CB2F889684004840AB /* DebugLibs */,
 				55C409972C097014009C0FB6 /* DEBUGLocation */,
+				55E602482F8C95F4004840AB /* DebugPerformance */,
+				55E602472F8C941A004840AB /* DebugRuler */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				55B4FA202AE1005E006D35F3 /* FaceIDPermission */,
 				55F162FF2B1977C000320925 /* FilterCamera */,
@@ -2404,18 +2407,13 @@
 				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
 				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
-				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
 				557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */,
 				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
-				557E3A6D2C036D72002466A0 /* PTDebugPerformanceToolKit.swift */,
-				557E3A6B2C036CCD002466A0 /* PTDebugPerformanceViewController.swift */,
 				55C409912C061B8A009C0FB6 /* PTDebugShareManager.swift */,
-				5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */,
 				557E3A812C04396D002466A0 /* PTDebugUserInfo.swift */,
 				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 				557E3AA52C046F51002466A0 /* PTErrorHelper.swift */,
-				557E3A6F2C036DE3002466A0 /* PTFPSTool.swift */,
 				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
 				557E3AA32C046F10002466A0 /* PTHttpModel.swift */,
 				557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */,
@@ -2425,14 +2423,9 @@
 				55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */,
 				55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */,
 				55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */,
-				557E3A752C038E26002466A0 /* PTPerformanceChartCell.swift */,
-				557E3A712C037B94002466A0 /* PTPerformanceChartView.swift */,
-				557E3A772C042938002466A0 /* PTPerformanceLeakDetector.swift */,
-				557E3A732C0386C4002466A0 /* PTPerformanceSegmentCell.swift */,
 				557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */,
 				553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */,
 				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
-				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
 				557E3AB12C04752F002466A0 /* StderrCapture.swift */,
 				557E3AAF2C047517002466A0 /* StdoutCapture.swift */,
 				557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */,
@@ -3753,8 +3746,6 @@
 		55E601CB2F889684004840AB /* DebugLibs */ = {
 			isa = PBXGroup;
 			children = (
-				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
-				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
 				55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */,
 				55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */,
 				55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */,
@@ -3787,6 +3778,39 @@
 				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
 			);
 			path = DebugFile;
+			sourceTree = "<group>";
+		};
+		55E602462F8C8E56004840AB /* DebugColor */ = {
+			isa = PBXGroup;
+			children = (
+				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
+			);
+			path = DebugColor;
+			sourceTree = "<group>";
+		};
+		55E602472F8C941A004840AB /* DebugRuler */ = {
+			isa = PBXGroup;
+			children = (
+				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
+			);
+			path = DebugRuler;
+			sourceTree = "<group>";
+		};
+		55E602482F8C95F4004840AB /* DebugPerformance */ = {
+			isa = PBXGroup;
+			children = (
+				557E3A6D2C036D72002466A0 /* PTDebugPerformanceToolKit.swift */,
+				557E3A6B2C036CCD002466A0 /* PTDebugPerformanceViewController.swift */,
+				55C409892C04DE64009C0FB6 /* PTLeakListViewController.swift */,
+				55C4098B2C04DF4E009C0FB6 /* PTLeakViewModel.swift */,
+				557E3A752C038E26002466A0 /* PTPerformanceChartCell.swift */,
+				557E3A712C037B94002466A0 /* PTPerformanceChartView.swift */,
+				557E3A772C042938002466A0 /* PTPerformanceLeakDetector.swift */,
+				557E3A732C0386C4002466A0 /* PTPerformanceSegmentCell.swift */,
+				557E3A6F2C036DE3002466A0 /* PTFPSTool.swift */,
+				5555B4AF2C048CBA0088A3B0 /* PTDebugSnapshotViewController.swift */,
+			);
+			path = DebugPerformance;
 			sourceTree = "<group>";
 		};
 		55E96E2F2B08896E00AB8ADE /* iOS17Tips */ = {

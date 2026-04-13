@@ -203,11 +203,11 @@ class PTFuncDetailViewController: PTBaseViewController {
             let throughLabel = PTLabel()
             throughLabel.text = "111111111"
             throughLabel.backgroundColor = .random
-            throughLabel.setVerticalAlignment(value: .Middle)
-            throughLabel.setStrikeThroughAlignment(value: .Middle)
+            throughLabel.verticalAlignment = .middle
+            throughLabel.strikeThroughAlignment = .middle
             throughLabel.strikeThroughColor = .random
             PTGCDManager.gcdAfter(time: 2) {
-                throughLabel.setStrikeThroughEnabled(value: true)
+                throughLabel.strikeThroughEnabled = true
             }
             view.addSubview(throughLabel)
             throughLabel.snp.makeConstraints { make in
@@ -225,9 +225,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.centerX.equalToSuperview()
             }
             setBtn.addActionHandlers { sender in
-                throughLabel.setVerticalAlignment(value: PTVerticalAlignment(rawValue: Int(arc4random())%3)!)
-                throughLabel.setStrikeThroughAlignment(value: PTStrikeThroughAlignment(rawValue: Int(arc4random())%3)!)
-                throughLabel.setStrikeThroughEnabled(value: (Int(arc4random())%2 == 1 ? true : false))
+                throughLabel.verticalAlignment = PTVerticalAlignment(rawValue: Int(arc4random())%3)!
+                throughLabel.strikeThroughAlignment = PTStrikeThroughAlignment(rawValue: Int(arc4random())%3)!
+                throughLabel.strikeThroughEnabled = (Int(arc4random())%2 == 1 ? true : false)
             }
         case String.vision:
             

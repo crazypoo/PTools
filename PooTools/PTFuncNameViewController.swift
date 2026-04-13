@@ -1040,7 +1040,7 @@ class PTFuncNameViewController: PTBaseViewController {
         setCustomRightButtons(buttons: [more])
         
         var config = PTBadgeConfiguration()
-        config.centerOffset = CGPointMake(-25, -5)
+        config.centerOffset = CGPointMake(0, 0)
         config.bgColor = .random
         more.badgeConfig = config
         more.showBadge(style: .new, value: "我愛你", aniType: .none)
