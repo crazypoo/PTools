@@ -627,10 +627,18 @@ extension PTCollectionView {
             let snapshot = self.diffableDataSource.snapshot()
             let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
             
-            if kind == UICollectionView.elementKindSectionHeader {
-                return self.headerInCollection?(kind, collectionView, sectionModel, indexPath)
-            } else if kind == UICollectionView.elementKindSectionFooter {
-                return self.footerInCollection?(kind, collectionView, sectionModel, indexPath)
+            if kind == UICollectionView.elementKindSectionHeader,
+               !(sectionModel.headerReuseID ?? "").stringIsEmpty(),
+               let headerHeight = sectionModel.headerHeight,
+               headerHeight != CGFloat.leastNormalMagnitude,
+               let headerReusableView = headerInCollection?(kind,collectionView,sectionModel,indexPath) {
+                return headerReusableView
+            } else if kind == UICollectionView.elementKindSectionFooter,
+                      !(sectionModel.footerReuseID ?? "").stringIsEmpty(),
+                      let footerHeight = sectionModel.footerHeight,
+                      footerHeight != CGFloat.leastNormalMagnitude,
+                      let footerReusableView = footerInCollection?(kind,collectionView,sectionModel,indexPath) {
+                return footerReusableView
             }
             
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
@@ -1790,7 +1798,6 @@ extension PTCollectionView {
     
     public func reloadEmptyConfig() {
         if self.viewConfig.showEmptyAlert {
-//            below17EmptyDataSet()
             collectionView.reloadEmptyDataSet()
         }
     }
