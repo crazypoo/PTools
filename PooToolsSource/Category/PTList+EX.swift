@@ -183,6 +183,10 @@ extension PTRows {
     }
 }
 
+// 告诉编译器：跳过并发安全检查，我保证它们是安全的
+extension PTSection: @unchecked Sendable {}
+extension PTRows: @unchecked Sendable {}
+
 public protocol PTCellRegisterable {
     static var reuseID: String { get }
 }

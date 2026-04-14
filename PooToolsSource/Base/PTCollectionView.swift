@@ -231,41 +231,6 @@ struct HeightCacheKey: Hashable {
     let width: CGFloat
 }
 
-struct PTDiffUpdates {
-    var sectionDeletes: IndexSet = []
-    var sectionInserts: IndexSet = []
-    var sectionMoves: [(Int, Int)] = []
-    var sectionReloads: IndexSet = []
-    
-    var itemDeletes: [IndexPath] = []
-    var itemInserts: [IndexPath] = []
-    var itemMoves: [(IndexPath, IndexPath)] = []
-    var itemReloads: [IndexPath] = []
-}
-
-struct SectionDiffResult {
-    var inserts: IndexSet = []
-    var deletes: IndexSet = []
-    var reloads: IndexSet = []
-    var moves: [(from: Int, to: Int)] = []
-}
-
-struct ItemDiffResult {
-    var inserts: [IndexPath] = []
-    var deletes: [IndexPath] = []
-    var reloads: [IndexPath] = []
-    var moves: [(from: IndexPath, to: IndexPath)] = []
-}
-
-public struct PTDiffSnapshot {
-    
-    public var sections: [PTSection] = []
-    
-    public init(sections: [PTSection]) {
-        self.sections = sections
-    }
-}
-
 private struct DiffThreshold {
     static let smallItem = 200      // 完整 diff
     static let mediumItem = 500     // 只 section diff
@@ -331,13 +296,18 @@ public class PTLRUCache<Key: Hashable, Value: AnyObject> {
     }
 }
 
+// 写在文件顶部或合适的扩展中
+public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>
+public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
+
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
     
     // 声明一个节流任务
     private var scrollDebounceWorkItem: DispatchWorkItem?
-    
+    /// 原生 Diffable 数据源 👈 新增
+    private var diffableDataSource: PTDataSource!
     ///Photos
     let imageManager = PHCachingImageManager()
     var photoAssets: [PHAsset] = []
@@ -416,14 +386,13 @@ public class PTCollectionView: UIView {
     fileprivate lazy var collectionView : PTBaseCollectionView = {
         let view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
-        view.dataSource = self
         view.delegate = self
         view.isUserInteractionEnabled = true
         view.isPrefetchingEnabled = true
-//        // 1. 在初始化 collectionView 时启用 Drag & Drop
-//        view.dragInteractionEnabled = self.viewConfig.canMoveItem
-//        view.dragDelegate = self
-//        view.dropDelegate = self
+        // 1. 在初始化 collectionView 时启用 Drag & Drop
+        view.dragInteractionEnabled = self.viewConfig.canMoveItem
+        view.dragDelegate = self
+        view.dropDelegate = self
         view.contentOffSetZero = self.viewConfig.contentOffSetZero
         switch self.viewConfig.viewType {
         case .Normal,.Gird,.WaterFall,.Tag:
@@ -627,6 +596,8 @@ public class PTCollectionView: UIView {
                 self.iOS17EmptyTapCallback()
             }
         }
+        
+        setupDiffableDataSource()
     }
         
     required init?(coder: NSCoder) {
@@ -653,6 +624,55 @@ public class PTCollectionView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+    }
+}
+
+extension PTCollectionView {
+    
+    private func setupDiffableDataSource() {
+        // 1. 配置 Cell
+        diffableDataSource = PTDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, rowModel) -> UICollectionViewCell? in
+            guard let self = self else { return nil }
+            
+            let snapshot = self.diffableDataSource.snapshot()
+            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
+            
+            // 沿用你写好的自定义回调逻辑
+            if let cell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
+                if let swipeCell = cell as? PTBaseSwipeCell {
+                    if let indexPathSwipe = self.indexPathSwipe {
+                        let swipe = indexPathSwipe(sectionModel, indexPath)
+                        swipeCell.cellCanSwipe = swipe
+                        if swipe {
+                            if let actions = self.swipeRightHandler?(collectionView, sectionModel, indexPath) {
+                                swipeCell.configureRightActions(actions)
+                            } else if let actions = self.swipeLeftHandler?(collectionView, sectionModel, indexPath) {
+                                swipeCell.configureLeftActions(actions)
+                            }
+                        }
+                    }
+                    return swipeCell
+                }
+                return cell
+            }
+            return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+        }
+        
+        // 2. 配置 Header 和 Footer
+        diffableDataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+            guard let self = self else { return nil }
+            
+            let snapshot = self.diffableDataSource.snapshot()
+            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
+            
+            if kind == UICollectionView.elementKindSectionHeader {
+                return self.headerInCollection?(kind, collectionView, sectionModel, indexPath)
+            } else if kind == UICollectionView.elementKindSectionFooter {
+                return self.footerInCollection?(kind, collectionView, sectionModel, indexPath)
+            }
+            
+            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
+        }
     }
 }
 
@@ -689,59 +709,8 @@ extension PTCollectionView {
     }
 }
 
-//MARK: UICollectionViewDelegate && UICollectionViewDataSource
-extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate {
-        
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        mSections.count
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mSections[section].rows?.count ?? 0
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if !mSections.isEmpty {
-            let itemSec = mSections[indexPath.section]
-            if kind == UICollectionView.elementKindSectionHeader,
-               !(itemSec.headerReuseID ?? "").stringIsEmpty(),
-               let headerHeight = itemSec.headerHeight,
-               headerHeight != CGFloat.leastNormalMagnitude,
-               let headerReusableView = headerInCollection?(kind,collectionView,itemSec,indexPath) {
-                return headerReusableView
-            } else if kind == UICollectionView.elementKindSectionFooter,!(itemSec.footerReuseID ?? "").stringIsEmpty(),let footerHeight = itemSec.footerHeight,footerHeight != CGFloat.leastNormalMagnitude,let footerReusableView = footerInCollection?(kind,collectionView,itemSec,indexPath) {
-                return footerReusableView
-            }
-        }
-        let reuseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath) as! PTBaseCollectionReusableView
-        return reuseView
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if !mSections.isEmpty {
-            let itemSec = mSections[indexPath.section]
-            if let cell = cellInCollection?(collectionView,itemSec,indexPath) {
-                if let swipeCell = cell as? PTBaseSwipeCell {
-                    if let indexPathSwipe {
-                        let swipe = indexPathSwipe(itemSec,indexPath)
-                        swipeCell.cellCanSwipe = swipe
-                        if swipe {
-                            if let actions = swipeRightHandler?(collectionView,itemSec,indexPath) {
-                                swipeCell.configureRightActions(actions)
-                            } else if let actions = swipeLeftHandler?(collectionView,itemSec,indexPath) {
-                                swipeCell.configureLeftActions(actions)
-                            }
-                        }
-                    }
-                    return swipeCell
-                } else {
-                    return cell
-                }
-            }
-        }
-        return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-    }
-    
+//MARK: UICollectionViewDelegate
+extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
         collectionDidSelect?(collectionView,itemSec,indexPath)
@@ -767,12 +736,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
             decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
         }
     }
-    
-    // MARK: 能否移动
-    public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return viewConfig.canMoveItem
-    }
-    
+        
     // MARK: 移动cell结束
     public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         itemMoveTo?(collectionView,sourceIndexPath,destinationIndexPath)
@@ -834,65 +798,65 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
 }
 
-//// 2. 实现 Drag 和 Drop 协议
-//extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
-//    
-//    // MARK: - Drag Delegate
-//    public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-//        guard viewConfig.canMoveItem else { return [] }
-//        
-//        // 找到拖拽的数据模型，包装为 UIDragItem
-//        guard let sectionModel = diffableDataSource.snapshot().sectionIdentifiers[safe: indexPath.section],
-//              let rowModel = sectionModel.rows?[indexPath.item] else { return [] }
-//        
-//        // 这里只是一个简单的标记，你可以根据需求提供 NSItemProvider 供跨 App 拖放
-//        let itemProvider = NSItemProvider(object: rowModel.diffId as NSString)
-//        let dragItem = UIDragItem(itemProvider: itemProvider)
-//        dragItem.localObject = rowModel // 将模型存在 localObject 中方便当前 App 内部获取
-//        
-//        return [dragItem]
-//    }
-//    
-//    // MARK: - Drop Delegate
-//    public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-//        guard viewConfig.canMoveItem else {
-//            return UICollectionViewDropProposal(operation: .forbidden)
-//        }
-//        // 如果是 App 内部的拖放，允许移动
-//        if collectionView.hasActiveDrag {
-//            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-//        }
-//        return UICollectionViewDropProposal(operation: .forbidden)
-//    }
-//    
-//    public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-//        guard let destinationIndexPath = coordinator.destinationIndexPath,
-//              let item = coordinator.items.first,
-//              let sourceIndexPath = item.sourceIndexPath else { return }
-//        
-//        // 获取当前快照
-//        var snapshot = diffableDataSource.snapshot()
-//        
-//        guard let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath),
-//              let destItem = diffableDataSource.itemIdentifier(for: destinationIndexPath) else { return }
-//        
-//        // 在快照中移动数据
-//        if destinationIndexPath >= sourceIndexPath {
-//            snapshot.moveItem(sourceItem, afterItem: destItem)
-//        } else {
-//            snapshot.moveItem(sourceItem, beforeItem: destItem)
-//        }
-//        
-//        // 应用动画，并通知外部
-//        diffableDataSource.apply(snapshot, animatingDifferences: true) {
-//            // 抛出回调给外部更新实际的底层数据
-//            self.itemMoveTo?(collectionView, sourceIndexPath, destinationIndexPath)
-//        }
-//        
-//        // 执行系统的放置动画
-//        coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
-//    }
-//}
+// 2. 实现 Drag 和 Drop 协议
+extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+    
+    // MARK: - Drag Delegate
+    public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard viewConfig.canMoveItem else { return [] }
+        
+        // 找到拖拽的数据模型，包装为 UIDragItem
+        guard let sectionModel = diffableDataSource.snapshot().sectionIdentifiers[safe: indexPath.section],
+              let rowModel = sectionModel.rows?[indexPath.item] else { return [] }
+        
+        // 这里只是一个简单的标记，你可以根据需求提供 NSItemProvider 供跨 App 拖放
+        let itemProvider = NSItemProvider(object: rowModel.diffId as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = rowModel // 将模型存在 localObject 中方便当前 App 内部获取
+        
+        return [dragItem]
+    }
+    
+    // MARK: - Drop Delegate
+    public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        guard viewConfig.canMoveItem else {
+            return UICollectionViewDropProposal(operation: .forbidden)
+        }
+        // 如果是 App 内部的拖放，允许移动
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath,
+              let item = coordinator.items.first,
+              let sourceIndexPath = item.sourceIndexPath else { return }
+        
+        // 获取当前快照
+        var snapshot = diffableDataSource.snapshot()
+        
+        guard let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath),
+              let destItem = diffableDataSource.itemIdentifier(for: destinationIndexPath) else { return }
+        
+        // 在快照中移动数据
+        if destinationIndexPath >= sourceIndexPath {
+            snapshot.moveItem(sourceItem, afterItem: destItem)
+        } else {
+            snapshot.moveItem(sourceItem, beforeItem: destItem)
+        }
+        
+        // 应用动画，并通知外部
+        diffableDataSource.apply(snapshot, animatingDifferences: true) {
+            // 抛出回调给外部更新实际的底层数据
+            self.itemMoveTo?(collectionView, sourceIndexPath, destinationIndexPath)
+        }
+        
+        // 执行系统的放置动画
+        coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+    }
+}
 
 //MARK: For Photos
 extension PTCollectionView:UICollectionViewDataSourcePrefetching {
@@ -1205,234 +1169,12 @@ extension PTCollectionView {
     private func totalItemCount(_ sections: [PTSection]) -> Int {
         sections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
     }
-    
-    ///加载数据并且刷新界面
-    private func calculateDiff(old: [PTSection],
-                               new: [PTSection]) -> (insert: IndexSet,
-                                                     delete: IndexSet,
-                                                     reload: IndexSet) {
-        
-        var insert = IndexSet()
-        var delete = IndexSet()
-        var reload = IndexSet()
-        
-        let oldCount = old.count
-        let newCount = new.count
-        let maxCount = max(oldCount, newCount)
-        
-        for i in 0..<maxCount {
-            if i >= oldCount {
-                insert.insert(i)
-            } else if i >= newCount {
-                delete.insert(i)
-            } else {
-                // 简单判断：数据是否变化（你可以自定义更精细）
-                let oldSection = old[i]
-                let newSection = new[i]
 
-                if !oldSection.isSameIdentity(as: newSection) {
-                    // 👉 结构变化（删除 + 插入）
-                    delete.insert(i)
-                    insert.insert(i)
-                } else if !oldSection.isContentEqual(to: newSection) {
-                    // 👉 内容变化（reload）
-                    reload.insert(i)
-                }
-            }
-        }
-        
-        return (insert, delete, reload)
-    }
-    
-    func diffSections(old: [PTSection], new: [PTSection]) -> SectionDiffResult {
-        
-        var result = SectionDiffResult()
-        
-        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map { ($0.element.identifier, $0.offset) })
-        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map { ($0.element.identifier, $0.offset) })
-        
-        // 删除
-        for (id, oldIndex) in oldMap {
-            if newMap[id] == nil {
-                result.deletes.insert(oldIndex)
-            }
-        }
-        
-        // 插入
-        for (id, newIndex) in newMap {
-            if oldMap[id] == nil {
-                result.inserts.insert(newIndex)
-            }
-        }
-        
-        // move + reload
-        for (id, oldIndex) in oldMap {
-            guard let newIndex = newMap[id] else { continue }
-            
-            if oldIndex != newIndex {
-                result.moves.append((oldIndex, newIndex))
-            }
-            
-            if !old[oldIndex].isContentEqual(to: new[newIndex]) {
-                result.reloads.insert(newIndex)
-            }
-        }
-        
-        return result
-    }
-    
-    func diffItems(old: [PTRows],
-                   new: [PTRows],
-                   section: Int) -> ItemDiffResult {
-        
-        var result = ItemDiffResult()
-        
-        let oldMap = Dictionary(uniqueKeysWithValues: old.enumerated().map {
-            ($0.element.diffId, $0.offset)
-        })
-        
-        let newMap = Dictionary(uniqueKeysWithValues: new.enumerated().map {
-            ($0.element.diffId, $0.offset)
-        })
-        
-        // 删除
-        for (id, oldIndex) in oldMap {
-            if newMap[id] == nil {
-                result.deletes.append(IndexPath(item: oldIndex, section: section))
-            }
-        }
-        
-        // 插入
-        for (id, newIndex) in newMap {
-            if oldMap[id] == nil {
-                result.inserts.append(IndexPath(item: newIndex, section: section))
-            }
-        }
-        
-        // move + reload
-        for (id, oldIndex) in oldMap {
-            guard let newIndex = newMap[id] else { continue }
-            
-            let oldItem = old[oldIndex]
-            let newItem = new[newIndex]
-            
-            if oldIndex != newIndex {
-                result.moves.append((
-                    IndexPath(item: oldIndex, section: section),
-                    IndexPath(item: newIndex, section: section)
-                ))
-            }
-            
-            if !oldItem.isContentEqual(to: newItem) {
-                result.reloads.append(IndexPath(item: newIndex, section: section))
-            }
-        }
-        
-        return result
-    }
-    
-    private func buildDiffUpdates(old: [PTSection],
-                                  new: [PTSection]) -> PTDiffUpdates {
-        
-        var updates = PTDiffUpdates()
-        
-        let sectionDiff = diffSections(old: old, new: new)
-        
-        updates.sectionDeletes = sectionDiff.deletes
-        updates.sectionInserts = sectionDiff.inserts
-        updates.sectionMoves = sectionDiff.moves
-        updates.sectionReloads = sectionDiff.reloads
-        
-        for section in 0..<new.count {
-            
-            guard section < old.count else { continue }
-            
-            let oldRows = old[section].rows ?? []
-            let newRows = new[section].rows ?? []
-            
-            let itemDiff = diffItems(old: oldRows, new: newRows, section: section)
-            
-            updates.itemDeletes.append(contentsOf: itemDiff.deletes)
-            updates.itemInserts.append(contentsOf: itemDiff.inserts)
-            updates.itemMoves.append(contentsOf: itemDiff.moves)
-            updates.itemReloads.append(contentsOf: itemDiff.reloads)
-        }
-        
-        return updates
-    }
-    
     private func markSectionDirty(_ section: Int) {
         guard section < mSections.count else { return }
         mSections[section].layoutVersion += 1
     }
-    
-    @MainActor public func applySnapshot(_ snapshot: PTDiffSnapshot,
-                                         animated: Bool = true,
-                                         animation: PTDiffAnimation = .default,
-                                         completion: PTCollectionCallback? = nil) {
-        let oldSections = self.mSections
-        let newSections = snapshot.sections
-        autoRegisterIfNeeded(sections: newSections)
-
-        // 🟢 首次加载
-        guard !oldSections.isEmpty else {
-            for i in 0..<newSections.count {
-                newSections[i].layoutVersion += 1
-            }
-            self.mSections = newSections
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            self.waterfallCache.removeAll()
-            self.setiOS17EmptyDataView()
-            collectionView.reloadData {
-                guard let config = self.viewConfig.indexConfig else {
-                    completion?(self.collectionView)
-                    return
-                }
-                
-                for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
-                    view.update(selected: view.index == 0, config: config)
-                }
-                completion?(self.collectionView)
-            }
-            return
-        }
         
-        // 🟢 计算数据量
-        let totalItems = totalItemCount(newSections)
-        
-        // 🟢 策略选择
-        if totalItems >= DiffThreshold.largeItem {
-            applyReloadData(newSections, animated: animated, completion: completion)
-            return
-        }
-        
-        // 🚀 性能优化：将计算耗时的 Diff 移至后台执行
-        PTGCDManager.gcdGobal { [weak self] in
-            guard let self = self else { return }
-            
-            if totalItems >= DiffThreshold.mediumItem {
-                let sectionDiff = self.diffSections(old: oldSections, new: newSections)
-                PTGCDManager.gcdMain {
-                    self.applySectionDiffWithResult(sectionDiff, new: newSections, animated: animated, animation: animation, completion: completion)
-                }
-                return
-            }
-
-            let updates = self.buildDiffUpdates(old: oldSections, new: newSections)
-            
-            PTGCDManager.gcdMain {
-                self.mSections = newSections
-                self.performSafeBatchUpdates(
-                    updates: updates,
-                    animated: animated,
-                    animation: animation,
-                    completion: completion
-                )
-            }
-        }
-    }
-    
     private func applyReloadData(_ newSections: [PTSection],
                                  animated: Bool,
                                  completion: PTCollectionCallback?) {
@@ -1458,103 +1200,7 @@ extension PTCollectionView {
                           options: .transitionCrossDissolve,
                           animations: reloadBlock)
     }
-    
-    // 👈 配合后台异步 Diff，将其拆分处理返回的 Result
-    private func applySectionDiffWithResult(_ sectionDiff: SectionDiffResult,
-                                            new: [PTSection],
-                                            animated: Bool,
-                                            animation: PTDiffAnimation,
-                                            completion: PTCollectionCallback?) {
         
-        self.mSections = new
-        
-        let updateBlock = {
-            self.collectionView.deleteSections(sectionDiff.deletes)
-            self.collectionView.insertSections(sectionDiff.inserts)
-            self.collectionView.reloadSections(sectionDiff.reloads)
-            
-            sectionDiff.moves.forEach {
-                self.collectionView.moveSection($0.from, toSection: $0.to)
-            }
-        }
-        
-        let applyUpdates = {
-            self.collectionView.performBatchUpdates(updateBlock) { _ in
-                self.layoutCache.removeAll()
-                self.heightCache.removeAll()
-                self.setiOS17EmptyDataView()
-                completion?(self.collectionView)
-            }
-        }
-        
-        guard animated else {
-            UIView.performWithoutAnimation {
-                applyUpdates()
-            }
-            return
-        }
-        
-        applyAnimation(animation)
-        applyUpdates()
-    }
-        
-    private func performSafeBatchUpdates(updates: PTDiffUpdates,
-                                         animated: Bool,
-                                         animation: PTDiffAnimation,
-                                         completion: PTCollectionCallback?) {
-        
-        // 🟢 冲突处理（move & reload）
-        let filteredReloads = updates.itemReloads.filter { reload in
-            !updates.itemMoves.contains(where: { $0.1 == reload })
-        }
-        
-        // 🟢 限制 reload 数量（防卡顿）
-        let finalReloads = filteredReloads.count > 50 ? [] : filteredReloads
-        
-        let updateBlock = {
-            // section
-            self.collectionView.deleteSections(updates.sectionDeletes)
-            self.collectionView.insertSections(updates.sectionInserts)
-            
-            updates.sectionMoves.forEach {
-                self.collectionView.moveSection($0.0, toSection: $0.1)
-            }
-            
-            self.collectionView.reloadSections(updates.sectionReloads)
-            
-            // item
-            self.collectionView.deleteItems(at: updates.itemDeletes)
-            self.collectionView.insertItems(at: updates.itemInserts)
-            
-            updates.itemMoves.forEach {
-                self.collectionView.moveItem(at: $0.0, to: $0.1)
-            }
-            
-            self.collectionView.reloadItems(at: finalReloads)
-        }
-        
-        let applyUpdates = {
-            PTGCDManager.gcdMain(block: {
-                self.collectionView.performBatchUpdates(updateBlock) { _ in
-                    self.layoutCache.removeAll()
-                    self.heightCache.removeAll()
-                    self.setiOS17EmptyDataView()
-                    completion?(self.collectionView)
-                }
-            })
-        }
-        
-        guard animated else {
-            UIView.performWithoutAnimation {
-                applyUpdates()
-            }
-            return
-        }
-        
-        applyAnimation(animation)
-        applyUpdates()
-    }
-    
     private func applyAnimation(_ animation: PTDiffAnimation) {
         
         switch animation {
@@ -1581,47 +1227,49 @@ extension PTCollectionView {
         return transition
     }
     
-    private func debugDiff(_ updates: PTDiffUpdates) {
-        #if DEBUG
-        PTNSLogConsole("""
-        ===== DIFF =====
-        section insert: \(updates.sectionInserts)
-        section delete: \(updates.sectionDeletes)
-        section move: \(updates.sectionMoves)
-        
-        item insert: \(updates.itemInserts.count)
-        item delete: \(updates.itemDeletes.count)
-        item move: \(updates.itemMoves.count)
-        item reload: \(updates.itemReloads.count)
-        =================
-        """)
-        #endif
-    }
-    
     @MainActor public func showCollectionDetail(collectionData:[PTSection],
                                                 animated: Bool = true,
                                                 animation: PTDiffAnimation = .default,
                                                 finishTask:PTCollectionCallback? = nil) {
-        let snapshot = PTDiffSnapshot(sections: collectionData)
-        applySnapshot(snapshot,animated: animated,animation: animation,completion: finishTask)
+        // 1. 自动注册 Cell
+        self.autoRegisterIfNeeded(sections: collectionData)
+        
+        // 2. 备份数据，供你其他的布局业务使用
+        self.mSections = collectionData
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        
+        // 3. 构建全新的 Snapshot
+        var snapshot = PTSnapshot()
+        snapshot.appendSections(collectionData)
+        
+        for section in collectionData {
+            if let rows = section.rows, !rows.isEmpty {
+                snapshot.appendItems(rows, toSection: section)
+            }
+        }
+        
+        // 4. 交给苹果底层去 Diff 和执行动画！✨
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+            guard let self = self else { return }
+            self.setiOS17EmptyDataView()
+            finishTask?(self.collectionView)
+        }
     }
     
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
-        PTGCDManager.gcdMain {
-            self.mSections.removeAll()
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            if self.viewConfig.refreshWithoutAnimation {
-                self.collectionView.reloadDataWithOutAnimation {
-                    self.setiOS17EmptyDataView()
-                    finishTask?(self.collectionView)
-                }
-            } else {
-                self.collectionView.reloadData {
-                    self.setiOS17EmptyDataView()
-                    finishTask?(self.collectionView)
-                }
-            }
+        self.mSections.removeAll()
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        
+        var snapshot = PTSnapshot()
+        snapshot.deleteAllItems() // 一键清空快照
+        
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
+            guard let self = self else { return }
+            self.setiOS17EmptyDataView()
+            finishTask?(self.collectionView)
         }
     }
 
