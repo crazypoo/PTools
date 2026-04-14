@@ -10,6 +10,7 @@ import UIKit
 import Lottie
 import SnapKit
 import SwifterSwift
+import DeviceKit
 
 public enum PTTabBarLayoutStyle {
     case normal
@@ -124,7 +125,8 @@ final public class PTTabBarItemView: UIControl {
     private let glassBackgroundView = UIVisualEffectView()
 
     public class func itemImageSize() -> CGFloat {
-        let safeAreaHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? PTAppBaseConfig.share.tab26BottomSpacing : 0
+        let tab26ModeBottomSpacing = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 0
+        let safeAreaHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? tab26ModeBottomSpacing : 0
         let barHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? CGFloat.kTabbarHeight_Total : CGFloat.kTabbarHeight
         let imageSize = barHeight - safeAreaHeight - PTAppBaseConfig.share.tabTopSpacing - PTAppBaseConfig.share.tabContentSpacing - (PTAppBaseConfig.share.tabSelectedFont.pointSize + 2) - PTAppBaseConfig.share.tabBottomSpacing
         return imageSize
