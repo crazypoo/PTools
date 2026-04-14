@@ -1960,3 +1960,37 @@ extension PTCollectionView {
         }
     }
 }
+
+//MARK: Get Models (Data Query)
+extension PTCollectionView {
+    
+    /// 1. 通过 IndexPath 获取单个 Row 模型 (最常用)
+    public func getRow(at indexPath: IndexPath) -> PTRows? {
+        // 🌟 直接向底层 Diffable 请求，绝对安全，不会有越界崩溃
+        return diffableDataSource.itemIdentifier(for: indexPath)
+    }
+    
+    /// 2. 通过一组 IndexPath 批量获取 Row 模型
+    public func getRows(at indexPaths: [IndexPath]) -> [PTRows] {
+        return indexPaths.compactMap { getRow(at: $0) }
+    }
+    
+    /// 3. 通过数据 ID 查找 Row 模型 (非常适合处理网络回调或通知)
+    public func getRow(by diffId: String) -> PTRows? {
+        let snapshot = diffableDataSource.snapshot()
+        // 从当前屏幕真实展示的数据快照中查找
+        return snapshot.itemIdentifiers.first { $0.diffId == diffId }
+    }
+    
+    /// 4. 获取某个 Section 下的所有 Row 模型
+    public func getAllRows(in section: Int) -> [PTRows] {
+        let snapshot = diffableDataSource.snapshot()
+        let sectionIdentifiers = snapshot.sectionIdentifiers
+        
+        // 防越界保护
+        guard section >= 0 && section < sectionIdentifiers.count else { return [] }
+        
+        let targetSection = sectionIdentifiers[section]
+        return snapshot.itemIdentifiers(inSection: targetSection)
+    }
+}
