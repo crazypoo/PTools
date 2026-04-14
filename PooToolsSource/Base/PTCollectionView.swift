@@ -559,6 +559,7 @@ public class PTCollectionView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         
         setupDiffableDataSource()
+        setiOS17EmptyDataView()
     }
         
     required init?(coder: NSCoder) {
@@ -1700,6 +1701,10 @@ extension PTCollectionView {
         case .Auto:
             if #available(iOS 17.0, *) {
                 self.showEmptyConfig()
+            } else {
+#if POOTOOLS_LISTEMPTYDATA
+                self.below17EmptyDataSet()
+#endif
             }
         case .ThirtyParty:
             break
@@ -1712,8 +1717,9 @@ extension PTCollectionView {
     
     @available(iOS 17, *)
     private func showEmptyConfig() {
-        // 1. 判断是否需要展示空视图
-        let isEmpty = mSections.isEmpty || (mSections.first?.rows?.count ?? 0) == 0
+        // 🌟 修复：精准计算所有 Section 的总 Row 数量，不要只查 first
+        let totalItems = mSections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
+        let isEmpty = totalItems == 0
         if viewConfig.showEmptyAlert && isEmpty {
             // 先隐藏，再展示
             PTUnavailableManager.hideUnavailableView(in: self) {

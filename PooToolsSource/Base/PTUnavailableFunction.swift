@@ -70,8 +70,11 @@ public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态
     
     /// 隐藏所有状态视图
     public static func hideUnavailableView(in view: UIView, task: (() -> Void)? = nil) {
-        view.viewWithTag(emptyViewTag)?.removeFromSuperview()
-        view.viewWithTag(loadingViewTag)?.removeFromSuperview()
+        view.subviews.forEach { subview in
+            if subview.tag == emptyViewTag || subview.tag == loadingViewTag {
+                subview.removeFromSuperview()
+            }
+        }
         task?()
     }
     
