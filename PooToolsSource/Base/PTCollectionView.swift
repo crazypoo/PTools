@@ -1753,7 +1753,9 @@ extension PTCollectionView {
     
 #if POOTOOLS_LISTEMPTYDATA
     private func below17EmptyDataSet() {
-        if self.viewConfig.showEmptyAlert {
+        let totalItems = mSections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
+        let isEmpty = totalItems == 0
+        if self.viewConfig.showEmptyAlert && isEmpty {
             if let empty = self.viewConfig.emptyViewConfig {
                 if let emptyCuston = empty.customerView {
                     collectionView.emptyDataSetView { view in
@@ -1785,7 +1787,10 @@ extension PTCollectionView {
                             }
                     }
                 }
+                collectionView.isEmptyDataSetVisible = true
             }
+        } else {
+            collectionView.isEmptyDataSetVisible = false
         }
     }
     
