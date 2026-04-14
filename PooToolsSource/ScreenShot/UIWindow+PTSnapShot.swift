@@ -9,34 +9,43 @@
 import UIKit
 
 extension UIWindow {
-    override public func takeSnapshotOfVisibleContent() -> UIImage? {
-        return self.takeSnapshotOfFullContent()
+
+    // MARK: - SnapshotKitProtocol 实现 (覆盖 UIView 的默认实现)
+
+    public func windowTakeSnapshotOfVisibleContent(with configuration: SnapshotConfiguration) -> UIImage? {
+        // 对于 UIWindow 来说，可见内容通常就是它的全部边界内容
+        return self.takeSnapshotOfFullContent(with: configuration)
     }
 
-    override public func takeSnapshotOfFullContent() -> UIImage? {
+    public func windowTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration) -> UIImage? {
+        // 使用现代的渲染 API
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = configuration.scale
+        // 优先使用配置的透明度，结合底层性能判断
+        format.opaque = configuration.isOpaque || (self.isOpaque && self.layer.cornerRadius == 0)
+
+        let renderer = UIGraphicsImageRenderer(bounds: self.bounds, format: format)
         let backgroundColor = self.backgroundColor ?? UIColor.white
 
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0)
+        let image = renderer.image { context in
+            // 填充背景色
+            backgroundColor.setFill()
+            context.fill(self.bounds)
 
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
+            // 【核心保留】使用 drawHierarchy 替代 layer.render
+            // 能有效避免 UIWindow 中包含 WKWebView 或 UIVisualEffectView(毛玻璃) 时截取到空白区域的问题
+            self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
         }
-        context.setFillColor(backgroundColor.cgColor)
-        context.setStrokeColor(backgroundColor.cgColor)
-
-        // 使用 layer.render(in: context)的方式生成截图时，在iOS 8.0下，UIWindow展示的是WKWebView时，WKWebView区域的内容是一片空白
-        // 使用 drawHierarchy 则无此问题
-        self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
 
         return image
     }
 
-    override public func asyncTakeSnapshotOfFullContent(_ completion: @escaping ((UIImage?) -> Void)) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-            let image = self.takeSnapshotOfFullContent()
+    public func windowAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping ((UIImage?) -> Void)) {
+        // UIWindow 不需要像长列表那样在后台疯狂拼接图片。
+        // 这里的异步延迟 (0.1s) 主要是为了让 RunLoop 跑完当前周期，
+        // 确保屏幕上所有待处理的视图刷新、隐式动画、转场效果等彻底渲染完成后再截图。
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let image = self.takeSnapshotOfFullContent(with: configuration)
             completion(image)
         }
     }

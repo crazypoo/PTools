@@ -94,6 +94,11 @@ extension PTSection {
         // 👉 这里只做“浅比较”（高性能）
         return true
     }
+    
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTSection else { return false }
+        return self.identifier == other.identifier
+    }
 }
 
 public class PTRows: NSObject {
@@ -138,6 +143,13 @@ public class PTRows: NSObject {
 
 extension PTRows {
 
+    public override var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(diffId)
+        hasher.combine(diffHash) // 👈 关键点：把 diffHash 加入哈希
+        return hasher.finalize()
+    }
+
     /// identity（是不是同一个 cell）
     func isSameIdentity(as other: PTRows) -> Bool {
         return self.diffId == other.diffId
@@ -145,6 +157,13 @@ extension PTRows {
     
     func isContentEqual(to other: PTRows) -> Bool {
         return diffHash == other.diffHash
+    }
+    
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTRows else { return false }
+        // 👈 关键点：ID 相同且 Hash 相同，才认为是完全一样的数据。
+        // 如果外部修改了 model 的数据并更新了 diffHash，DiffableDataSource 会自动帮你刷新这个 Cell！
+        return self.diffId == other.diffId && self.diffHash == other.diffHash
     }
 }
 

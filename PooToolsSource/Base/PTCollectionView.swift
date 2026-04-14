@@ -156,6 +156,11 @@ public class PTCollectionViewConfig: NSObject {
      */
     open var viewForPhoto: Bool = false
     open var previewImageSize: CGSize = CGSizeMake(105, 105)
+    
+    /// 是否固定 Section Header 在屏幕顶部
+    open var pinHeaderToVisibleBounds: Bool = false
+    /// 是否固定 Section Footer 在屏幕底部
+    open var pinFooterToVisibleBounds: Bool = false
 }
 
 public class PTCollectionIndexViewConfiguration: NSObject {
@@ -294,9 +299,44 @@ public enum CornerPosition {
     case single, top, middle, bottom
 }
 
+// 1. 定义一个基于 NSCache 的强类型缓存
+public class PTLRUCache<Key: Hashable, Value: AnyObject> {
+    private let cache = NSCache<WrappedKey, Value>()
+    
+    public init(countLimit: Int = 1000) {
+        cache.countLimit = countLimit // 超过限制时自动淘汰最旧数据
+    }
+    
+    public func set(_ value: Value, forKey key: Key) {
+        cache.setObject(value, forKey: WrappedKey(key))
+    }
+    
+    public func get(forKey key: Key) -> Value? {
+        return cache.object(forKey: WrappedKey(key))
+    }
+    
+    public func removeAll() {
+        cache.removeAllObjects()
+    }
+    
+    // 用于包装 Hashable 的 Key 以适配 NSCache
+    private class WrappedKey: NSObject {
+        let key: Key
+        init(_ key: Key) { self.key = key }
+        override var hash: Int { return key.hashValue }
+        override func isEqual(_ object: Any?) -> Bool {
+            guard let other = object as? WrappedKey else { return false }
+            return key == other.key
+        }
+    }
+}
+
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
+    
+    // 声明一个节流任务
+    private var scrollDebounceWorkItem: DispatchWorkItem?
     
     ///Photos
     let imageManager = PHCachingImageManager()
@@ -367,9 +407,9 @@ public class PTCollectionView: UIView {
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
     
-    private var heightCache: [HeightCacheKey: CGFloat] = [:]
+    private var heightCache = PTLRUCache<HeightCacheKey, NSNumber>(countLimit: 1000)
     private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
-    private var layoutCache: [LayoutCacheKey: NSCollectionLayoutSection] = [:]
+    private var layoutCache =  PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection>(countLimit: 100)
 
     fileprivate var mSections = [PTSection]()
 
@@ -380,6 +420,10 @@ public class PTCollectionView: UIView {
         view.delegate = self
         view.isUserInteractionEnabled = true
         view.isPrefetchingEnabled = true
+//        // 1. 在初始化 collectionView 时启用 Drag & Drop
+//        view.dragInteractionEnabled = self.viewConfig.canMoveItem
+//        view.dragDelegate = self
+//        view.dropDelegate = self
         view.contentOffSetZero = self.viewConfig.contentOffSetZero
         switch self.viewConfig.viewType {
         case .Normal,.Gird,.WaterFall,.Tag:
@@ -790,6 +834,66 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
 }
 
+//// 2. 实现 Drag 和 Drop 协议
+//extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+//    
+//    // MARK: - Drag Delegate
+//    public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+//        guard viewConfig.canMoveItem else { return [] }
+//        
+//        // 找到拖拽的数据模型，包装为 UIDragItem
+//        guard let sectionModel = diffableDataSource.snapshot().sectionIdentifiers[safe: indexPath.section],
+//              let rowModel = sectionModel.rows?[indexPath.item] else { return [] }
+//        
+//        // 这里只是一个简单的标记，你可以根据需求提供 NSItemProvider 供跨 App 拖放
+//        let itemProvider = NSItemProvider(object: rowModel.diffId as NSString)
+//        let dragItem = UIDragItem(itemProvider: itemProvider)
+//        dragItem.localObject = rowModel // 将模型存在 localObject 中方便当前 App 内部获取
+//        
+//        return [dragItem]
+//    }
+//    
+//    // MARK: - Drop Delegate
+//    public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+//        guard viewConfig.canMoveItem else {
+//            return UICollectionViewDropProposal(operation: .forbidden)
+//        }
+//        // 如果是 App 内部的拖放，允许移动
+//        if collectionView.hasActiveDrag {
+//            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+//        }
+//        return UICollectionViewDropProposal(operation: .forbidden)
+//    }
+//    
+//    public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+//        guard let destinationIndexPath = coordinator.destinationIndexPath,
+//              let item = coordinator.items.first,
+//              let sourceIndexPath = item.sourceIndexPath else { return }
+//        
+//        // 获取当前快照
+//        var snapshot = diffableDataSource.snapshot()
+//        
+//        guard let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath),
+//              let destItem = diffableDataSource.itemIdentifier(for: destinationIndexPath) else { return }
+//        
+//        // 在快照中移动数据
+//        if destinationIndexPath >= sourceIndexPath {
+//            snapshot.moveItem(sourceItem, afterItem: destItem)
+//        } else {
+//            snapshot.moveItem(sourceItem, beforeItem: destItem)
+//        }
+//        
+//        // 应用动画，并通知外部
+//        diffableDataSource.apply(snapshot, animatingDifferences: true) {
+//            // 抛出回调给外部更新实际的底层数据
+//            self.itemMoveTo?(collectionView, sourceIndexPath, destinationIndexPath)
+//        }
+//        
+//        // 执行系统的放置动画
+//        coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+//    }
+//}
+
 //MARK: For Photos
 extension PTCollectionView:UICollectionViewDataSourcePrefetching {
     public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
@@ -990,7 +1094,7 @@ extension PTCollectionView {
     private func handleScrollUpdate() {
         guard let section = findCurrentSectionFast(),
               let config = viewConfig.indexConfig else { return }
-
+        
         for case let view as PTIndexItemView in stackView.arrangedSubviews {
             view.update(selected: view.index == section, config: config)
         }
@@ -1006,15 +1110,19 @@ extension PTCollectionView {
     }
     
     private func throttleScrollUpdate() {
-        
         guard isTouched == false else { return }
         
-        let now = CACurrentMediaTime()
-        guard now - lastUpdateTime > scrollThrottleInterval else { return }
+        // 取消上一次还没执行的任务
+        scrollDebounceWorkItem?.cancel()
         
-        lastUpdateTime = now
+        // 创建新任务
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.handleScrollUpdate()
+        }
+        scrollDebounceWorkItem = workItem
         
-        handleScrollUpdate()
+        // 延迟 0.05 秒执行（50ms的防抖，既能跟手，又能极大减少计算频次）
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
     }
 }
 
@@ -1031,13 +1139,13 @@ extension PTCollectionView {
             width: collectionView.bounds.width
         )
         
-        if let cache = heightCache[key] {
-            return cache
+       
+        if let cache = heightCache.get(forKey: key) {
+            return cache.doubleValue
         }
         
         let height = calculator(indexPath.section, model)
-        heightCache[key] = height
-        
+        heightCache.set(NSNumber(floatLiteral: height), forKey: key)
         return height
     }
 }
@@ -1833,13 +1941,12 @@ extension PTCollectionView {
         let key = LayoutCacheKey(section: section,
                                  width: environment.container.contentSize.width,
                                  version: sectionModel.layoutVersion)
-        if let cache = layoutCache[key] {
+        if let cache = layoutCache.get(forKey: key) {
             return cache
         }
 
         let sectionLayout = buildSection(section: section, environment: environment)
-
-        layoutCache[key] = sectionLayout
+        layoutCache.set(sectionLayout, forKey: key)
         return sectionLayout
     }
     
@@ -1865,6 +1972,8 @@ extension PTCollectionView {
                 absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: viewConfig.decorationItemsEdges.top + (sectionModel.headerHeight ?? .leastNormalMagnitude))
             )
             headerItem.contentInsets = .zero
+            // 🌟 新增：开启吸顶效果
+            headerItem.pinToVisibleBounds = viewConfig.pinHeaderToVisibleBounds
             supplementaryItems.append(headerItem)
         }
         
@@ -1880,6 +1989,8 @@ extension PTCollectionView {
                 alignment: .bottom,
                 absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
             )
+            // 🌟 新增：开启吸底效果
+            footerItem.pinToVisibleBounds = viewConfig.pinFooterToVisibleBounds
             supplementaryItems.append(footerItem)
         }
         
