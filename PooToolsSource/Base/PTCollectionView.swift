@@ -2047,4 +2047,22 @@ extension PTCollectionView {
         let targetSection = sectionIdentifiers[section]
         return snapshot.itemIdentifiers(inSection: targetSection)
     }
+    
+    /// 将一组 IndexPath 转换为按 Section 分组的 Rows 字典
+    /// 非常适合配合 `reloadSectionsRows` 或 `deleteSectionsRows` 使用
+    /// - Parameter indexPaths: 需要处理的 IndexPath 数组
+    /// - Returns: 按 Section Index 分组的字典 [Int: [PTRows]]
+    public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] {
+        var rowsMap: [Int: [PTRows]] = [:]
+        
+        for indexPath in indexPaths {
+            // 获取对应的 Row 模型
+            if let row = self.getRow(at: indexPath) {
+                // Swift 字典的优雅写法：如果该 section 还没有数组，就默认创建一个空数组并追加
+                rowsMap[indexPath.section, default: []].append(row)
+            }
+        }
+        
+        return rowsMap
+    }
 }
