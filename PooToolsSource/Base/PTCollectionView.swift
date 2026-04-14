@@ -555,7 +555,7 @@ public class PTCollectionView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         
         setupDiffableDataSource()
-        self.setiOS17EmptyDataView()
+        setiOS17EmptyDataView()
     }
         
     required init?(coder: NSCoder) {
@@ -1228,6 +1228,7 @@ extension PTCollectionView {
         }
     }
     
+    /// 插入 Rows
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
         self.mSections.removeAll()
         self.layoutCache.removeAll()
@@ -1248,155 +1249,177 @@ extension PTCollectionView {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
-            // 🟢 1. 在主線程更新數據源
-            let startIndex = self.mSections[section].rows?.count ?? 0
+            
+            // 1. 同步你的底层数据源 mSections (用于 Layout 和 Cache)
             self.mSections[section].rows?.append(contentsOf: rows)
-            let endIndex = (self.mSections[section].rows?.count ?? 0) - 1
-            let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-            // 🟢 2. 再在主線程執行 UI 更新
-            self.collectionView.performBatchUpdates({
-                self.collectionView.insertItems(at: indexPaths)
-            }, completion: { _ in
-                // 🟢 3. 插入後可無效化布局（保持原有邏輯）
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: section)
-                }
-                self.markSectionDirty(section)
+            
+            // 2. 处理相关缓存和标记
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: section)
+            }
+            self.markSectionDirty(section)
+            
+            // 3. 🌟 Diffable Snapshot 核心更新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            let sectionIdentifier = snapshot.sectionIdentifiers[section] // 获取准确的 Section 标识符
+            snapshot.appendItems(rows, toSection: sectionIdentifier)     // 直接追加 Items
+            
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                self.setiOS17EmptyDataView() // 检查是否需要更新空页面状态
                 completion?()
-            })
+            }
         }
     }
     
+    /// 插入 Section
     public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
         PTGCDManager.gcdMain {
-
             guard !sections.isEmpty else {
                 completion?()
                 return
             }
+            
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
+            
             var insertIndex = self.mSections.count
-
             if let index = afterIndex, index < self.mSections.count {
                 insertIndex = index + 1
             }
 
-            // 更新数据源
+            // 1. 同步底层数据源
             self.mSections.insert(contentsOf: sections, at: insertIndex)
 
-            // 生成 section indexSet
-            let indexSet = IndexSet(insertIndex..<insertIndex + sections.count)
-
-            self.collectionView.performBatchUpdates {
-                self.collectionView.insertSections(indexSet)
-            } completion: { _ in
-                // 瀑布流刷新
-                if self.viewConfig.viewType == .WaterFall,
-                   self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: insertIndex)
+            // 2. 清理插入位置的缓存
+            for i in 0..<sections.count {
+                let targetIndex = insertIndex + i
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.clearWaterfallCache(section: targetIndex)
                 }
-                self.markSectionDirty(insertIndex)
+                self.markSectionDirty(targetIndex)
+            }
+
+            // 3. 🌟 Diffable Snapshot 核心更新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            
+            if let index = afterIndex, index < snapshot.sectionIdentifiers.count {
+                let anchorSection = snapshot.sectionIdentifiers[index]
+                snapshot.insertSections(sections, afterSection: anchorSection)
+            } else {
+                // 如果没有指定 afterIndex，或者超出范围，直接追加到尾部
+                snapshot.appendSections(sections)
+            }
+
+            // 记得把新 section 里面的 rows 也一并装入 Snapshot
+            for section in sections {
+                if let rows = section.rows, !rows.isEmpty {
+                    snapshot.appendItems(rows, toSection: section)
+                }
+            }
+
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                self.setiOS17EmptyDataView()
                 completion?()
             }
         }
     }
 
+    /// 删除 Rows
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
-            if let first = rows.first, let startIndex = self.mSections[section].rows?.firstIndex(of: first) {
-                let endIndex = startIndex + rows.count - 1
-                let indexPaths = (startIndex...endIndex).map { IndexPath(item: $0, section: section) }
-                self.mSections[section].rows?.removeSubrange(startIndex...endIndex)
-                self.collectionView.performBatchUpdates {
-                    self.collectionView.deleteItems(at: indexPaths)
-                } completion: { _ in
-                    // 仅在瀑布流且存在动态高度回调时才全局无效化布局
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.clearWaterfallCache(section: section)
-                    }
-                    self.markSectionDirty(section)
-                    completion?()
-                }
-            } else {
-                PTNSLogConsole("Error: Can't find the row in section \(section)")
+            
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: section)
+            }
+            self.markSectionDirty(section)
+            
+            // 1. 同步底层数据源 (更安全地删除指定元素)
+            self.mSections[section].rows?.removeAll(where: { rows.contains($0) })
+
+            // 2. 🌟 Diffable Snapshot 核心更新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.deleteItems(rows) // Diffable 自动处理跨 Index 的删除，无需手动拼装 IndexPath！
+
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                self.setiOS17EmptyDataView()
+                completion?()
             }
         }
     }
     
+    /// 跨 Section 批量删除 Rows
     public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
-            var indexPaths: [IndexPath] = []
+            
+            var allRowsToDelete: [PTRows] = []
 
-            // section 倒序，防止 index 偏移
-            let sortedSections = rowsMap.keys.sorted(by: >)
-
-            for section in sortedSections {
-
-                guard let rows = rowsMap[section],
-                      let sectionRows = self.mSections[section].rows else { continue }
-
-                // 找出要删除的 row index（倒序）
-                let deleteIndexes = rows.compactMap {
-                    sectionRows.firstIndex(of: $0)
-                }.sorted(by: >)
-
-                guard !deleteIndexes.isEmpty else { continue }
+            // 1. 同步底层数据源并收集需要删除的 items
+            for (section, rows) in rowsMap {
                 self.markSectionDirty(section)
-                // 更新数据源（倒序 remove）
-                for index in deleteIndexes {
-                    self.mSections[section].rows?.remove(at: index)
-                    indexPaths.append(IndexPath(item: index, section: section))
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.clearWaterfallCache(section: section)
                 }
+                
+                self.mSections[section].rows?.removeAll(where: { rows.contains($0) })
+                allRowsToDelete.append(contentsOf: rows)
             }
 
-            guard !indexPaths.isEmpty else {
+            guard !allRowsToDelete.isEmpty else {
                 completion?()
                 return
             }
 
-            self.collectionView.performBatchUpdates {
-                self.collectionView.deleteItems(at: indexPaths)
-            } completion: { _ in
+            // 2. 🌟 Diffable Snapshot 核心更新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.deleteItems(allRowsToDelete) // 一次性删除所有收集到的 items
 
-                // 瀑布流布局需要 invalidate
-                if self.viewConfig.viewType == .WaterFall,
-                   self.waterFallLayout != nil {
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.collectionView.collectionViewLayout.invalidateLayout()
                 }
-
+                self.setiOS17EmptyDataView()
                 completion?()
             }
         }
     }
     
+    /// 删除 Sections
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
-        PTGCDManager.gcdGobal {
+        // 注意：这里我们统一使用 gcdMain。因为 Snapshot 的获取和 Apply 必须在主线程执行！
+        // 之前在后台线程(gcdGobal)操作很容易引发数据竞争和崩溃。
+        PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
-            guard let startIndex = self.mSections.firstIndex(of: sections.first!) else {
-                PTNSLogConsole("Error: Can't find the section to delete")
-                return
-            }
-            let endIndex = startIndex + sections.count - 1
-            let indexSet = IndexSet(startIndex...endIndex)
-            indexSet.forEach { value in
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: value)
+            
+            // 1. 处理缓存标记
+            for section in sections {
+                if let index = self.mSections.firstIndex(of: section) {
+                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                        self.clearWaterfallCache(section: index)
+                    }
+                    self.markSectionDirty(index)
                 }
-                self.markSectionDirty(value)
             }
-            self.mSections.removeSubrange(startIndex...endIndex)
-            PTGCDManager.gcdMain {
-                self.collectionView.performBatchUpdates {
-                    self.collectionView.deleteSections(indexSet)
-                } completion: { _ in
-                    completion?()
-                }
+            
+            // 2. 同步底层数据源
+            self.mSections.removeAll(where: { sections.contains($0) })
+            
+            // 3. 🌟 Diffable Snapshot 核心更新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.deleteSections(sections)
+            
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                self.setiOS17EmptyDataView()
+                completion?()
             }
         }
     }
