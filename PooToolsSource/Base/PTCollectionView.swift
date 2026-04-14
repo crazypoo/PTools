@@ -555,11 +555,7 @@ public class PTCollectionView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         
         setupDiffableDataSource()
-        // 🌟 修复核心：延迟一帧触发空数据视图检测。
-        // 等 SnapKit 的 makeConstraints 生效，获取到真实 bounds 之后再展示 EmptyView
-        DispatchQueue.main.async {
-            self.setiOS17EmptyDataView()
-        }
+        self.setiOS17EmptyDataView()
     }
         
     required init?(coder: NSCoder) {
@@ -1803,6 +1799,8 @@ extension PTCollectionView {
                                 }
                         }
                     }
+                    // 🌟 新增：配置完成后，强制让第三方库立即刷新并展示！
+                    self.collectionView.reloadEmptyDataSet()
                 }
             } else {
                 self.reloadEmptyConfig()

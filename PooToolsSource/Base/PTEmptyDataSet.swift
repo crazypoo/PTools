@@ -23,7 +23,7 @@ class WeakObjectContainer: NSObject {
 }
 
 @MainActor // 🌟 保证 UI 操作绝对在主线程
-extension UIScrollView: UIGestureRecognizerDelegate {
+extension UIScrollView: @retroactive UIGestureRecognizerDelegate {
     
     public var configureEmptyDataSetView: ((PTEmptyDataSetView) -> Void)? {
         get {
@@ -164,9 +164,12 @@ extension UIScrollView: UIGestureRecognizerDelegate {
                 view.fadeInOnDisplay = shouldFadeIn
                 
                 if view.superview == nil {
-                    if (self is UITableView) || (self is UICollectionView) || (subviews.count > 1) {
-                        insertSubview(view, at: 0)
+                    if let cv = self as? UICollectionView {
+                        cv.backgroundView = view // 👈 让 CollectionView 原生接管
+                    } else if let tv = self as? UITableView {
+                        tv.backgroundView = view // 👈 让 TableView 原生接管
                     } else {
+                        // 普通的 UIScrollView 才使用 addSubview
                         addSubview(view)
                     }
                 }
