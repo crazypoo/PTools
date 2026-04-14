@@ -1707,7 +1707,9 @@ extension PTCollectionView {
 #endif
             }
         case .ThirtyParty:
-            break
+#if POOTOOLS_LISTEMPTYDATA
+                self.below17EmptyDataSet()
+#endif
         case .System:
             if #available(iOS 17.0, *) {
                 self.showEmptyConfig()
