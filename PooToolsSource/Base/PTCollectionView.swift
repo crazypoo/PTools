@@ -1959,6 +1959,60 @@ extension PTCollectionView {
             }
         }
     }
+    
+    /// 跨 Section 批量刷新 Rows
+    /// - Parameters:
+    ///   - rowsMap: 字典形式传入，Key 为 Section Index，Value 为该 Section 下需要刷新的 Row 模型数组
+    public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            
+            var allRowsToReload: [PTRows] = []
+            
+            // 1. 遍历字典，精准清理受影响的 Section 缓存，并收集所有的 Rows
+            for (section, rows) in rowsMap {
+                // 清理对应的瀑布流缓存
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.clearWaterfallCache(section: section)
+                }
+                // 标记该 Section 布局失效
+                self.markSectionDirty(section)
+                
+                // 把这个 Section 里的需要刷新的 rows 装进大集合里
+                allRowsToReload.append(contentsOf: rows)
+            }
+            
+            guard !allRowsToReload.isEmpty else {
+                completion?()
+                return
+            }
+            
+            // 2. 🌟 Diffable Snapshot 核心刷新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            
+            // 安全过滤：防止外部传入了已经被删除的脏数据
+            let existingRows = allRowsToReload.filter { snapshot.indexOfItem($0) != nil }
+            
+            guard !existingRows.isEmpty else {
+                completion?()
+                return
+            }
+            
+            // ✨ 重点：把所有跨 Section 的 Row 一次性丢给底层！
+            snapshot.reloadItems(existingRows)
+            
+            // 3. 应用变更
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                // 如果是瀑布流，跨 section 刷新可能导致整体高度变化，这里做一次全局 layout 刷新
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+                completion?()
+            }
+        }
+    }
 }
 
 //MARK: Get Models (Data Query)
