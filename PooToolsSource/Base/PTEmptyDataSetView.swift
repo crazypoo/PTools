@@ -128,11 +128,11 @@ public class PTEmptyDataSetView: UIView {
     
     // 🌟 修复原来在 didMoveToSuperview 里强制覆盖 frame 的错误做法，改用自动布局约束边缘
     override public func didMoveToSuperview() {
-        guard let superview = superview else { return }
+        guard superview != nil else { return }
         
-        self.snp.remakeConstraints { make in
-            make.edges.equalTo(superview)
-        }
+        // 注意：千万不要在这里写 self.snp.remakeConstraints 了！
+        // 因为在 UIScrollView extension 里你已经设置了 view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        // 或者当你赋值给 backgroundView 时，UICollectionView 会自动为你管理它的 Frame。
         
         if fadeInOnDisplay {
             UIView.animate(withDuration: 0.25) {
@@ -142,7 +142,7 @@ public class PTEmptyDataSetView: UIView {
             contentView.alpha = 1
         }
     }
-    
+
     // MARK: - Lifecycle
     
     internal func prepareForReuse() {
