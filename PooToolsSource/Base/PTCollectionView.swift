@@ -557,45 +557,6 @@ public class PTCollectionView: UIView {
         
         // 👈 内存警告通知监听，防止 OOM 崩溃
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
-
-#if POOTOOLS_LISTEMPTYDATA
-        if self.viewConfig.showEmptyAlert {
-            switch viewConfig.emptyShowType {
-            case .Auto:
-                if #unavailable(iOS 17.0) {
-                    self.below17EmptyDataSet()
-                } else {
-                    self.iOS17EmptyDataSet()
-                }
-            case .ThirtyParty:
-                self.below17EmptyDataSet()
-            case .System:
-                self.iOS17EmptyDataSet()
-            }
-        }
-#else
-        if self.viewConfig.showEmptyAlert {
-            switch viewConfig.emptyShowType {
-            case .Auto:
-                self.iOS17EmptyDataSet()
-            case .ThirtyParty:
-                break
-            case .System:
-                self.iOS17EmptyDataSet()
-            }
-        }
-#endif
-        
-        if self.viewConfig.showEmptyAlert {
-            switch viewConfig.emptyShowType {
-            case .Auto:
-                self.iOS17EmptyTapCallback()
-            case .ThirtyParty:
-                break
-            case .System:
-                self.iOS17EmptyTapCallback()
-            }
-        }
         
         setupDiffableDataSource()
     }
@@ -1734,34 +1695,6 @@ extension PTCollectionView {
 
 //MARK: EmptyDataView
 extension PTCollectionView {
-    func iOS17EmptyTapCallback() {
-        if #available(iOS 17.0, *) {
-            if self.viewConfig.showEmptyAlert {
-                PTUnavailableFunction.shared.emptyTap = {
-                    PTGCDManager.gcdMain {
-                        self.showEmptyLoading()
-                    }
-
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        self.emptyTap?(nil)
-                    }
-                }
-            }
-        }
-    }
-    
-    func iOS17EmptyDataSet() {
-        if #available(iOS 17.0, *) {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                if let emptyConfig = self.viewConfig.emptyViewConfig {
-                    let share = PTUnavailableFunction.shared
-                    share.emptyViewConfig = emptyConfig
-                    self.showEmptyConfig()
-                }
-            }
-        }
-    }
-            
     fileprivate func setiOS17EmptyDataView() {
         switch self.viewConfig.emptyShowType {
         case .Auto:
@@ -1779,24 +1712,35 @@ extension PTCollectionView {
     
     @available(iOS 17, *)
     private func showEmptyConfig() {
-        if viewConfig.showEmptyAlert && (mSections.first?.rows?.count ?? 0) == 0 {
-            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
-                PTUnavailableFunction.shared.showEmptyView(showIn: self)
+        // 1. 判断是否需要展示空视图
+        let isEmpty = mSections.isEmpty || (mSections.first?.rows?.count ?? 0) == 0
+        if viewConfig.showEmptyAlert && isEmpty {
+            // 先隐藏，再展示
+            PTUnavailableManager.hideUnavailableView(in: self) {
+                if let config = self.viewConfig.emptyViewConfig {
+                    PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self] in
+                        // 处理按钮点击事件
+                        self?.showEmptyLoading()
+                        // 延迟触发外部回调
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self?.emptyTap?(nil)
+                        }
+                    }
+                }
             }
         } else {
-            PTUnavailableFunction.shared.hideUnavailableView(showIn: self) {
-            }
+            PTUnavailableManager.hideUnavailableView(in: self)
         }
     }
     
     @available(iOS 17, *)
     public func hideEmptyLoading(task: PTActionTask?) {
-        PTUnavailableFunction.shared.hideUnavailableView(showIn: self,task: task)
+        PTUnavailableManager.hideUnavailableView(in: self, task: task)
     }
     
     @available(iOS 17, *)
     public func showEmptyLoading() {
-        PTUnavailableFunction.shared.showEmptyLoadingView(showIn: self)
+        PTUnavailableManager.showEmptyLoadingView(in: self)
     }
     
 #if POOTOOLS_LISTEMPTYDATA
