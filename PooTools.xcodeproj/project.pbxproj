@@ -348,6 +348,10 @@
 		5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */; };
 		5590CE2F2F2731FF003DD740 /* PTVideoCoverCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */; };
 		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
+		5593A2D22F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593A2D12F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift */; };
+		5593A2D42F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593A2D32F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift */; };
+		5593A2D62F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593A2D52F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift */; };
+		5593A2D82F8E0C150005BFA3 /* PTEmptyDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593A2D72F8E0C150005BFA3 /* PTEmptyDataSet.swift */; };
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
@@ -1311,6 +1315,10 @@
 		5590CB992F1F335C003DD740 /* PTTabBarTestOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTabBarTestOneViewController.swift; sourceTree = "<group>"; };
 		5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoCoverCache.swift; sourceTree = "<group>"; };
 		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
+		5593A2D12F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEmptyDataSetDelegate.swift; sourceTree = "<group>"; };
+		5593A2D32F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEmptyDataSetSource.swift; sourceTree = "<group>"; };
+		5593A2D52F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEmptyDataSetView.swift; sourceTree = "<group>"; };
+		5593A2D72F8E0C150005BFA3 /* PTEmptyDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEmptyDataSet.swift; sourceTree = "<group>"; };
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
@@ -3696,6 +3704,10 @@
 				5590CB972F1F2F3A003DD740 /* PTTabBarView.swift */,
 				5590CE2E2F2731FF003DD740 /* PTVideoCoverCache.swift */,
 				55557DC52F28568D008EB4B2 /* PTAudioCache.swift */,
+				5593A2D12F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift */,
+				5593A2D32F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift */,
+				5593A2D52F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift */,
+				5593A2D72F8E0C150005BFA3 /* PTEmptyDataSet.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -4348,6 +4360,7 @@
 				55BA8FC22D29A7D70065FBD0 /* HierarchyInspectorActionTableViewCell.swift in Sources */,
 				55BA8FC32D29A7D70065FBD0 /* LayerCommandProtocol.swift in Sources */,
 				55BA8FC42D29A7D70065FBD0 /* UIKeyboardType+InspectorEX.swift in Sources */,
+				5593A2D42F8E0AB60005BFA3 /* PTEmptyDataSetSource.swift in Sources */,
 				55BA8FC52D29A7D70065FBD0 /* ElementChildrenPanelViewController+UITableViewDataSource.swift in Sources */,
 				55BA8FC62D29A7D70065FBD0 /* ElementInspectorFormPanelViewController+InspectorElementSectionViewControllerDelegate.swift in Sources */,
 				55BA8FC72D29A7D70065FBD0 /* Manager.swift in Sources */,
@@ -4425,6 +4438,7 @@
 				55BA900F2D29A7D70065FBD0 /* InspectorViewController+UITableViewDelegate.swift in Sources */,
 				55BA90102D29A7D70065FBD0 /* ViewAttributesSectionDataSource.swift in Sources */,
 				55BA90112D29A7D70065FBD0 /* Manager+KeyCommandPresentable.swift in Sources */,
+				5593A2D82F8E0C150005BFA3 /* PTEmptyDataSet.swift in Sources */,
 				55BA90122D29A7D70065FBD0 /* InspectorUI.swift in Sources */,
 				55BA90132D29A7D70065FBD0 /* HierarchyInspectorViewModel.swift in Sources */,
 				55BA90142D29A7D70065FBD0 /* ViewHierarchySnapshot.swift in Sources */,
@@ -4443,6 +4457,7 @@
 				55BA90212D29A7D70065FBD0 /* CommandGroupsViewModel.swift in Sources */,
 				55BA90222D29A7D70065FBD0 /* ContextMenuPresenter.swift in Sources */,
 				55BA90232D29A7D70065FBD0 /* CustomImageConvertible.swift in Sources */,
+				5593A2D22F8E0A5B0005BFA3 /* PTEmptyDataSetDelegate.swift in Sources */,
 				55BA90242D29A7D70065FBD0 /* UITableView+InspectorEX.swift in Sources */,
 				55BA90252D29A7D70065FBD0 /* HierarchyIdentitySectionDataSource.swift in Sources */,
 				55BA90262D29A7D70065FBD0 /* ElementChildrenPanelViewCode.swift in Sources */,
@@ -4739,6 +4754,7 @@
 				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
 				558B77C22BBC52B300BD7AB0 /* PTChatTypingIndicatorCell.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
+				5593A2D62F8E0AFD0005BFA3 /* PTEmptyDataSetView.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				5585F5842C500D620033E1D1 /* PTGradientBorderView.swift in Sources */,

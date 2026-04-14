@@ -1702,14 +1702,10 @@ extension PTCollectionView {
             if #available(iOS 17.0, *) {
                 self.showEmptyConfig()
             } else {
-#if POOTOOLS_LISTEMPTYDATA
                 self.below17EmptyDataSet()
-#endif
             }
         case .ThirtyParty:
-#if POOTOOLS_LISTEMPTYDATA
-                self.below17EmptyDataSet()
-#endif
+            self.below17EmptyDataSet()
         case .System:
             if #available(iOS 17.0, *) {
                 self.showEmptyConfig()
@@ -1751,7 +1747,6 @@ extension PTCollectionView {
         PTUnavailableManager.showEmptyLoadingView(in: self)
     }
     
-#if POOTOOLS_LISTEMPTYDATA
     private func below17EmptyDataSet() {
         let totalItems = mSections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
         let isEmpty = totalItems == 0
@@ -1787,20 +1782,18 @@ extension PTCollectionView {
                             }
                     }
                 }
-                collectionView.isEmptyDataSetVisible = true
             }
         } else {
-            collectionView.isEmptyDataSetVisible = false
+            self.reloadEmptyConfig()
         }
     }
     
     public func reloadEmptyConfig() {
         if self.viewConfig.showEmptyAlert {
-            below17EmptyDataSet()
+//            below17EmptyDataSet()
             collectionView.reloadEmptyDataSet()
         }
     }
-#endif
 }
 
 //MARK: Refresh
