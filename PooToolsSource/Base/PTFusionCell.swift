@@ -354,7 +354,7 @@ extension PTFusionContentView {
         contentLabel.snp.remakeConstraints {
             $0.left.equalTo(titleLabel.snp.right).offset(8)
             $0.top.bottom.equalToSuperview()
-            $0.right.lessThanOrEqualTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
+            $0.right.equalTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
         }
         
         switch cellModel.haveLine {

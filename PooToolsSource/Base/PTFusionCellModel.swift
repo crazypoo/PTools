@@ -194,7 +194,7 @@ open class PTFusionCellModel: NSObject {
             } else {
                 let att:ASAttributedString = """
                             \(wrap: .embedding("""
-                            """),.paragraph(.alignment(.left),.lineSpacing(labelLineSpace)))
+                            """),.paragraph(.alignment(.right),.lineSpacing(labelLineSpace)))
                             """
                 return att
             }
