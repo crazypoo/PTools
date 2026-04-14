@@ -12,10 +12,6 @@ import AttributedString
 #if POOTOOLS_SCROLLREFRESH
 import MJRefresh
 #endif
-
-#if POOTOOLS_LISTEMPTYDATA
-import EmptyDataSet_Swift
-#endif
 import Photos
 
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
@@ -559,7 +555,11 @@ public class PTCollectionView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         
         setupDiffableDataSource()
-        setiOS17EmptyDataView()
+        // 🌟 修复核心：延迟一帧触发空数据视图检测。
+        // 等 SnapKit 的 makeConstraints 生效，获取到真实 bounds 之后再展示 EmptyView
+        DispatchQueue.main.async {
+            self.setiOS17EmptyDataView()
+        }
     }
         
     required init?(coder: NSCoder) {
@@ -643,6 +643,11 @@ extension PTCollectionView {
             
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
         }
+        
+        // 🌟 新增：初始化时给 DataSource 应用一个空数据的 Snapshot
+        // 这会让 UICollectionView 知道当前数据是干净的，并且能激活相关代理和空状态
+        let initialSnapshot = PTSnapshot()
+        diffableDataSource.apply(initialSnapshot, animatingDifferences: false)
     }
 }
 
@@ -1428,7 +1433,10 @@ extension PTCollectionView {
         
         let sectionModel = mSections[section]
         
-        let screenWidth = frame.size.width
+        // 🌟 修复核心 1：千万不要用 frame.size.width！
+        // DiffableDataSource 提前计算布局时，frame 可能为 0。使用 environment 获取真实的可用宽度。
+        let screenWidth = environment.container.contentSize.width
+
         let behavior = viewConfig.collectionViewBehavior
         let group: NSCollectionLayoutGroup
         
@@ -1726,19 +1734,23 @@ extension PTCollectionView {
         // 🌟 修复：精准计算所有 Section 的总 Row 数量，不要只查 first
         let totalItems = mSections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
         let isEmpty = totalItems == 0
-        if viewConfig.showEmptyAlert && isEmpty {
-            // 先隐藏，再展示
-            PTUnavailableManager.hideUnavailableView(in: self) {
-                if let config = self.viewConfig.emptyViewConfig {
-                    PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self] in
-                        // 处理按钮点击事件
-                        self?.showEmptyLoading()
-                        // 延迟触发外部回调
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self?.emptyTap?(nil)
+        if viewConfig.showEmptyAlert {
+            if isEmpty {
+                // 先隐藏，再展示
+                PTUnavailableManager.hideUnavailableView(in: self) {
+                    if let config = self.viewConfig.emptyViewConfig {
+                        PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self] in
+                            // 处理按钮点击事件
+                            self?.showEmptyLoading()
+                            // 延迟触发外部回调
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                self?.emptyTap?(nil)
+                            }
                         }
                     }
                 }
+            } else {
+                PTUnavailableManager.hideUnavailableView(in: self)
             }
         } else {
             PTUnavailableManager.hideUnavailableView(in: self)
@@ -1758,38 +1770,42 @@ extension PTCollectionView {
     private func below17EmptyDataSet() {
         let totalItems = mSections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
         let isEmpty = totalItems == 0
-        if self.viewConfig.showEmptyAlert && isEmpty {
-            if let empty = self.viewConfig.emptyViewConfig {
-                if let emptyCuston = empty.customerView {
-                    collectionView.emptyDataSetView { view in
-                        view.backgroundColor = empty.backgroundColor
-                        view.customView(emptyCuston)
-                            .verticalOffset(empty.verticalOffSet)
-                            .isTouchAllowed(true)
-                    }
-                } else {
-                    let buttonAtt:ASAttributedString = """
-                                \(wrap: .embedding("""
-                                \(empty.buttonTitle,.font(empty.buttonFont),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(empty.buttonTextColor))
-                                """))
-                                """
-                    
-                    collectionView.emptyDataSetView { view in
-                        view.backgroundColor = empty.backgroundColor
-                        view.titleLabelString(empty.mainTitleAtt?.value)
-                            .detailLabelString(empty.secondaryEmptyAtt?.value)
-                            .image(empty.image)
-                            .buttonTitle(buttonAtt.value, for: .normal)
-                            .verticalOffset(empty.verticalOffSet)
-                            .verticalSpace(empty.imageToTextPadding)
-                            .didTapContentView {
-                                self.emptyTap?(view)
-                            }
-                            .didTapDataButton {
-                                self.emptyButtonTap?(view)
-                            }
+        if self.viewConfig.showEmptyAlert {
+            if isEmpty {
+                if let empty = self.viewConfig.emptyViewConfig {
+                    if let emptyCuston = empty.customerView {
+                        collectionView.emptyDataSetView { view in
+                            view.backgroundColor = empty.backgroundColor
+                            view.customView(emptyCuston)
+                                .verticalOffset(empty.verticalOffSet)
+                                .isTouchAllowed(true)
+                        }
+                    } else {
+                        let buttonAtt:ASAttributedString = """
+                                    \(wrap: .embedding("""
+                                    \(empty.buttonTitle,.font(empty.buttonFont),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(empty.buttonTextColor))
+                                    """))
+                                    """
+                        
+                        collectionView.emptyDataSetView { view in
+                            view.backgroundColor = empty.backgroundColor
+                            view.titleLabelString(empty.mainTitleAtt?.value)
+                                .detailLabelString(empty.secondaryEmptyAtt?.value)
+                                .image(empty.image)
+                                .buttonTitle(buttonAtt.value, for: .normal)
+                                .verticalOffset(empty.verticalOffSet)
+                                .verticalSpace(empty.imageToTextPadding)
+                                .didTapContentView {
+                                    self.emptyTap?(view)
+                                }
+                                .didTapDataButton {
+                                    self.emptyButtonTap?(view)
+                                }
+                        }
                     }
                 }
+            } else {
+                self.reloadEmptyConfig()
             }
         } else {
             self.reloadEmptyConfig()
