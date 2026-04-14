@@ -262,6 +262,8 @@ public final class PTNavBarItem {
     public var rightViews: [UIView] = []
     public var rightItemSpacing:CGFloat = 0
     public var titleView: UIView?
+    // ✅ 新增：控制自定义 titleView 是否拉伸填满左右空间，默认开启
+    public var titleViewFillSpace: Bool = true
     public var navTitle:String = ""
     public var barColorStyle:PTNavigationBarStyle = .transparent
 }
@@ -509,7 +511,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         setRightViews(item.rightViews,spacing: item.rightItemSpacing)
         if let findTitleView = item.titleView {
             titleLabel = false
-            setTitleView(findTitleView)
+            setTitleView(findTitleView,fillSpace: item.titleViewFillSpace)
         } else if !item.navTitle.stringIsEmpty() {
             titleLabel = true
             let titleLabel = UILabel()
@@ -520,7 +522,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             titleLabel.text = item.navTitle
             titleLabel.textAlignment = .center
             titleLabel.clipsToBounds = true
-            setTitleView(titleLabel)
+            setTitleView(titleLabel,fillSpace: false)
         } else {
             titleLabel = false
             setTitleView(nil)
@@ -709,7 +711,7 @@ extension PTNavigationBarManager {
         }
     }
     
-    public func setTitleView(_ view: UIView?) {
+    public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
@@ -735,16 +737,17 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             // 注意：这里保留了你代码里的 self.navOffset()
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
-            
-            if self.titleLabel {
-                // 🔥 魔法 1：尽最大努力在【整个屏幕】保持绝对居中 (优先级 900)
+            // ✅ 根据模式应用不同的约束策略
+            if fillSpace {
+                // 🔥 填满模式：直接等于左右物理边界，强制拉伸（非常适合搜索框等自定义 View）
+                make.left.equalToSuperview().offset(leftSpace)
+                make.right.equalToSuperview().offset(-rightSpace)
+            } else {
+                // 📝 文本居中模式：保持绝对居中，仅在超长时用 greaterThanOrEqualTo 限制（适合普通文字标题）
                 make.centerX.equalToSuperview().priority(900)
+                make.left.greaterThanOrEqualToSuperview().offset(leftSpace)
+                make.right.lessThanOrEqualToSuperview().offset(-rightSpace)
             }
-            
-            // 🔥 魔法 2：极限防御边界 (默认优先级 1000)
-            // 只要不越过真实的物理边界，你想怎么伸展就怎么伸展！
-            make.left.greaterThanOrEqualToSuperview().offset(leftSpace)
-            make.right.lessThanOrEqualToSuperview().offset(-rightSpace)
         }
         
         view.snp.makeConstraints { make in
@@ -1016,9 +1019,10 @@ open class PTBaseViewController: UIViewController {
         PTNavigationBarManager.shared.update(item: item, for: self)
     }
 
-    open func setCustomTitleView(_ view: UIView? = nil) {
+    open func setCustomTitleView(_ view: UIView? = nil, fillSpace: Bool = true) {
         let item = PTNavigationBarManager.shared.item(for: self)
         item.titleView = view
+        item.titleViewFillSpace = fillSpace // 记录填满状态
         PTNavigationBarManager.shared.update(item: item, for: self)
     }
 
