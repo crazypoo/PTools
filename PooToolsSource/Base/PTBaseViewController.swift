@@ -736,8 +736,10 @@ extension PTNavigationBarManager {
             // 注意：这里保留了你代码里的 self.navOffset()
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
             
-            // 🔥 魔法 1：尽最大努力在【整个屏幕】保持绝对居中 (优先级 900)
-            make.centerX.equalToSuperview().priority(900)
+            if self.titleLabel {
+                // 🔥 魔法 1：尽最大努力在【整个屏幕】保持绝对居中 (优先级 900)
+                make.centerX.equalToSuperview().priority(900)
+            }
             
             // 🔥 魔法 2：极限防御边界 (默认优先级 1000)
             // 只要不越过真实的物理边界，你想怎么伸展就怎么伸展！
