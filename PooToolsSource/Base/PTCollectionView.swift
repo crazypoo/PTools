@@ -1888,3 +1888,75 @@ extension PTCollectionView {
         collectionView.registerSupplementaryView(classs: classs, kind: kind)
     }
 }
+
+extension PTCollectionView {
+    /// 刷新指定的 Sections (通过 Index)
+    public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            // 1. 过滤出有效的 Section 模型
+            let validSections = indexes.compactMap { index -> PTSection? in
+                guard index >= 0 && index < self.mSections.count else { return nil }
+                return self.mSections[index]
+            }
+            
+            guard !validSections.isEmpty else {
+                completion?()
+                return
+            }
+            
+            // 2. 清理受影响的布局缓存
+            for index in indexes {
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.clearWaterfallCache(section: index)
+                }
+                self.markSectionDirty(index)
+            }
+            
+            // 3. 🌟 Diffable Snapshot 核心刷新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            snapshot.reloadSections(validSections)
+            
+            // 4. 应用变更
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                completion?()
+            }
+        }
+    }
+    
+    /// 刷新指定的 Rows
+    /// - Parameters:
+    ///   - rows: 需要刷新的 Row 模型数组
+    ///   - section: 这些 Row 所在的 Section Index (用于清理相关的布局缓存)
+    public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            // 1. 清理布局缓存 (因为 reload 可能会改变 cell 的高度或内容)
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: section)
+            }
+            self.markSectionDirty(section)
+            
+            // 2. 🌟 Diffable Snapshot 核心刷新逻辑
+            var snapshot = self.diffableDataSource.snapshot()
+            
+            // 安全校验：确保这些 row 真的存在于当前的 snapshot 中，避免传入脏数据导致异常
+            let existingRows = rows.filter { snapshot.indexOfItem($0) != nil }
+            
+            guard !existingRows.isEmpty else {
+                completion?()
+                return
+            }
+            
+            // 直接告诉 Snapshot 重新加载这些 items
+            snapshot.reloadItems(existingRows)
+            
+            // 3. 应用变更
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                completion?()
+            }
+        }
+    }
+}
