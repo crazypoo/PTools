@@ -859,6 +859,7 @@
 		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
 		55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */; };
 		55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */; };
+		55ECA5EF2F8FD0280057E46B /* PTiCloudFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECA5EE2F8FD0280057E46B /* PTiCloudFileManager.swift */; };
 		55ECD8452C99D8B300B45EDE /* PTBaseTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
@@ -1834,6 +1835,7 @@
 		55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_placeholder.png; sourceTree = "<group>"; };
 		55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScrollingPageControl.swift; sourceTree = "<group>"; };
 		55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestNewModel.swift; sourceTree = "<group>"; };
+		55ECA5EE2F8FD0280057E46B /* PTiCloudFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTiCloudFileManager.swift; sourceTree = "<group>"; };
 		55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseTabBarViewController.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
@@ -2650,6 +2652,7 @@
 			isa = PBXGroup;
 			children = (
 				55571B372D58EF52004134B8 /* PTiCloudKeychainService.swift */,
+				55ECA5EE2F8FD0280057E46B /* PTiCloudFileManager.swift */,
 			);
 			path = iCloud;
 			sourceTree = "<group>";
@@ -4159,7 +4162,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4169,9 +4173,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4186,9 +4194,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -5047,6 +5059,7 @@
 				55DD93792B94C1EE00F65872 /* PTSideController.swift in Sources */,
 				55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */,
 				558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */,
+				55ECA5EF2F8FD0280057E46B /* PTiCloudFileManager.swift in Sources */,
 				551DBDD52F8CB39C00CD40B4 /* PTTimeUtils.swift in Sources */,
 				55C409A12C097760009C0FB6 /* PTDebugLocationModel.swift in Sources */,
 				55B13D542B1AEDE800C67EDA /* PTEditModel.swift in Sources */,
