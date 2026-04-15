@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.96.14'
+    s.version     = '3.96.15'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -785,7 +785,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'ImageEditor' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/FilterCamera'
         subspec.source_files = 'PooToolsSource/ImageEditor/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
