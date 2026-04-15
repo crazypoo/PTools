@@ -331,70 +331,13 @@ extension UIViewController {
     }
 
     private static let lvcdActuallySwizzleLifecycleMethods: Void = {
-        let originalVdaMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(viewDidLoad)
-        )
-        let swizzledVdaMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(lvcdViewDidLoad)
-        )
-        method_exchangeImplementations(
-            originalVdaMethod!,
-            swizzledVdaMethod!
-        )
-
-        let originalVddMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(viewDidDisappear(_:))
-        )
-        let swizzledVddMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(lvcdViewDidDisappear(_:))
-        )
-        method_exchangeImplementations(
-            originalVddMethod!,
-            swizzledVddMethod!
-        )
-
-        let originalRfpMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(removeFromParent)
-        )
-        let swizzledRfpMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(lvcdRemoveFromParent)
-        )
-        method_exchangeImplementations(
-            originalRfpMethod!,
-            swizzledRfpMethod!
-        )
-
-        let originalSdvcMethod = class_getInstanceMethod(
-            UISplitViewController.self,
-            #selector(showDetailViewController(_:sender:))
-        )
-        let swizzledSdvcMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(lvcdShowDetailViewController(_:sender:))
-        )
-        method_exchangeImplementations(
-            originalSdvcMethod!,
-            swizzledSdvcMethod!
-        )
-
-        let originalSvMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(setter: view)
-        )
-        let swizzledSvMethod = class_getInstanceMethod(
-            UIViewController.self,
-            #selector(lvcdSetView(_:))
-        )
-        method_exchangeImplementations(
-            originalSvMethod!,
-            swizzledSvMethod!
-        )
+        Swizzle(UIViewController.self) {
+            #selector(viewDidLoad) <-> #selector(lvcdViewDidLoad)
+            #selector(viewDidDisappear(_:)) <-> #selector(lvcdViewDidDisappear(_:))
+            #selector(removeFromParent) <-> #selector(lvcdRemoveFromParent)
+            #selector(showDetailViewController(_:sender:)) <-> #selector(lvcdShowDetailViewController(_:sender:))
+            #selector(setter: view) <-> #selector(lvcdSetView(_:))
+        }        
     }()
 
     private func lvcdShouldIgnore() -> Bool {

@@ -81,14 +81,11 @@ public extension PTPOP where Base: FileManager {
     ///获取Documnets的完整路径名
     /// - Returns: Documnets的完整路径名
     static func DocumnetsDirectory() -> String {
-        //获取程序的documentPaths目录
-        //方法1
-        // let documentPaths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-        // let documnetPath = documentPaths[0]
-        
-        //方法2
-        let ducumentPath = NSHomeDirectory() + "/Documents"
-        return ducumentPath
+        // 推荐使用系统 API 获取，如果获取失败再降级使用硬拼接
+        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return NSHomeDirectory() + "/Documents"
+        }
+        return url.path
     }
     
     //MARK: 获取Library的完整路径名
@@ -100,14 +97,10 @@ public extension PTPOP where Base: FileManager {
     ///获取Library的完整路径名
     /// - Returns: Library的完整路径名
     static func LibraryDirectory() -> String {
-        //获取程序的documentPaths目录
-        //Library目录－方法1
-        // let libraryPaths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.libraryDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-        // let libraryPath = libraryPaths[0]
-        //
-        // Library目录－方法2
-        let libraryPath = NSHomeDirectory() + "/Library"
-        return libraryPath
+        guard let url = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first else {
+            return NSHomeDirectory() + "/Library"
+        }
+        return url.path
     }
     
     //MARK: 获取/Library/Caches的完整路径名
@@ -278,12 +271,12 @@ public extension PTPOP where Base: FileManager {
     /// - Returns: 文件内容
     @discardableResult
     static func readfile(filePath: String) -> String? {
-        guard judgeFileOrFolderExists(filePath: filePath) else {
-            // 不存在的文件路径就不需要要移除
+        guard judgeFileOrFolderExists(filePath: filePath),
+              let data = fileManager.contents(atPath: filePath) else {
+            // 使用可选绑定，避免 data 为 nil 时崩溃
             return nil
         }
-        let data = fileManager.contents(atPath: filePath)
-        return String(data: data!, encoding: String.Encoding.utf8)
+        return String(data: data, encoding: String.Encoding.utf8)
     }
     
     //MARK: 把文字，图片，数组，字典写入文件
@@ -570,14 +563,32 @@ public extension PTPOP where Base: FileManager {
     /// - Returns: 单个文件或文件夹的大小
     static func fileOrDirectorySingleSize(filePath: String) -> UInt64 {
         // 1、先判断文件路径是否存在
-        guard judgeFileOrFolderExists(filePath: filePath) else {
-            return 0
+        guard judgeFileOrFolderExists(filePath: filePath) else { return 0 }
+        // 判断是否为文件夹
+        var totalSize: UInt64 = 0
+        var isDirectory: ObjCBool = false
+        if fileManager.fileExists(atPath: filePath, isDirectory: &isDirectory) {
+            if isDirectory.boolValue {
+                // 如果是文件夹，使用 enumerator 高效遍历其下所有内容（包括子文件夹中的文件）
+                guard let enumerator = fileManager.enumerator(atPath: filePath) else { return 0 }
+                for file in enumerator {
+                    if let fileName = file as? String {
+                        let fullPath = (filePath as NSString).appendingPathComponent(fileName)
+                        if let fileAttributes = try? fileManager.attributesOfItem(atPath: fullPath),
+                           let fileSize = fileAttributes[.size] as? UInt64 {
+                            totalSize += fileSize
+                        }
+                    }
+                }
+            } else {
+                // 如果只是单文件
+                if let fileAttributes = try? fileManager.attributesOfItem(atPath: filePath),
+                   let fileSize = fileAttributes[.size] as? UInt64 {
+                    totalSize += fileSize
+                }
+            }
         }
-        // 2、读取文件大小
-        guard let fileAttributes = try? fileManager.attributesOfItem(atPath: filePath), let fileSizeValue = fileAttributes[FileAttributeKey.size] as? UInt64 else {
-            return 0
-        }
-        return fileSizeValue
+        return totalSize
     }
     
     //MARK: 计算 (文件夹/文件) 的大小（转换过的）
@@ -739,6 +750,16 @@ public extension PTPOP where Base: FileManager {
         }
     }
     
+    // MARK: 异步获取网络视频截图 (async/await 扩展)
+    static func getServerVideoImageAsync(videoPath: String, preferredTrackTransform: Bool = true) async -> UIImage? {
+        // 将旧的基于回调的方法包装为现代的 async/await 方法
+        return await withCheckedContinuation { continuation in
+            getServerVideoImage(videoPath: videoPath, videoImage: { image in
+                continuation.resume(returning: image)
+            }, preferredTrackTransform: preferredTrackTransform)
+        }
+    }
+
     //MARK: 通过网络视频文件路径数组获取截图数组
     ///通过网络视频文件路径数组获取截图数组
     /// - Parameters:
@@ -762,7 +783,16 @@ public extension PTPOP where Base: FileManager {
             }
         }
     }
-   
+    
+    // MARK: 异步获取网络视频截图数组 (async/await 扩展)
+    static func getServerVideoImagesAsync(videoPaths: [String], preferredTrackTransform: Bool = true) async -> [UIImage?] {
+        return await withCheckedContinuation { continuation in
+            getServerVideoImages(videoPaths: videoPaths, videoImages: { images in
+                continuation.resume(returning: images)
+            }, preferredTrackTransform: preferredTrackTransform)
+        }
+    }
+
     //MARK: 获取视频缩略图的共有方法
     ///获取视频缩略图的共有方法
     /// - Parameters:
@@ -784,7 +814,12 @@ public extension PTPOP where Base: FileManager {
         if videoUrlSouceType == .local {
             videoURL = URL(fileURLWithPath: path)
         } else {
-            videoURL = URL(string: path)!
+            // 使用可选绑定代替强制解包
+            guard let url = URL(string: path) else {
+                PTNSLogConsole("无效的视频链接: \(path)", levelType: .error, loggerType: .fileManager)
+                return nil
+            }
+            videoURL = url
         }
         
         guard let weakVideoURL = videoURL else {

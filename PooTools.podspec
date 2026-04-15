@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.96.17'
+    s.version     = '3.97.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -454,8 +454,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/SearchBar'
         subspec.dependency 'PooTools/PDF'
-        
-        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/DEBUGLocation/*.{h,m,swift}','PooToolsSource/Inspector/*.{h,m,swift}','PooToolsSource/DebugLibs/*.{h,m,swift}','PooToolsSource/DebugCrash/*.{h,m,swift}','PooToolsSource/DebugFile/*.{h,m,swift}','PooToolsSource/DebugColor/*.{h,m,swift}','PooToolsSource/DebugRuler/*.{h,m,swift}','PooToolsSource/DebugPerformance/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/DEBUGLocation/*.{h,m,swift}','PooToolsSource/Inspector/*.{h,m,swift}','PooToolsSource/DebugLibs/*.{h,m,swift}','PooToolsSource/DebugCrash/*.{h,m,swift}','PooToolsSource/DebugFile/*.{h,m,swift}','PooToolsSource/DebugColor/*.{h,m,swift}','PooToolsSource/DebugRuler/*.{h,m,swift}','PooToolsSource/DebugPerformance/*.{h,m,swift}','PooToolsSource/DebugCategory/*.{h,m,swift}'
     subspec.pod_target_xcconfig = {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
     }
@@ -906,9 +905,18 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'Hud' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Hud/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HUD POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
+        subspec.dependency 'PooTools/Hud'
         subspec.dependency 'PooTools/BankCard'
         subspec.dependency 'PooTools/BilogyID'
         subspec.dependency 'PooTools/Calendar'

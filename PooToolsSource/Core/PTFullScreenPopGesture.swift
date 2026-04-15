@@ -47,13 +47,9 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
     
     // 现代 Swift 的 Method Swizzling (利用 static let 保证只执行一次)
     private static let swizzlePushViewControllerOnce: Void = {
-        let originalSelector = #selector(pushViewController(_:animated:))
-        let swizzledSelector = #selector(swizzled_pushViewController(_:animated:))
-        
-        guard let originalMethod = class_getInstanceMethod(UINavigationController.self, originalSelector),
-              let swizzledMethod = class_getInstanceMethod(UINavigationController.self, swizzledSelector) else { return }
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod)
+        Swizzle(UINavigationController.self) {
+            #selector(pushViewController(_:animated:)) <-> #selector(swizzled_pushViewController(_:animated:))
+        }
     }()
     
     static func enableFullscreenPop() {
@@ -145,13 +141,9 @@ extension UIViewController {
     }
     
     private static let swizzleViewWillAppearOnce: Void = {
-        let originalSelector = #selector(viewWillAppear(_:))
-        let swizzledSelector = #selector(swizzled_viewWillAppear(_:))
-        
-        guard let originalMethod = class_getInstanceMethod(UIViewController.self, originalSelector),
-              let swizzledMethod = class_getInstanceMethod(UIViewController.self, swizzledSelector) else { return }
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod)
+        Swizzle(UIViewController.self) {
+            #selector(viewWillAppear(_:)) <-> #selector(swizzled_viewWillAppear(_:))
+        }
     }()
     
     static func enableSwizzling() {

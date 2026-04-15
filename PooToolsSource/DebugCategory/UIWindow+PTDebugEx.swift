@@ -38,14 +38,9 @@ extension UIWindow {
     // MARK: - Method swizzling
     @objc class func db_swizzleMethods() {
         DispatchQueue.once(token: "pootools.uiwindow.db_swizzleMethods") {
-            let originalSelector = #selector(UIWindow.sendEvent(_:))
-            let swizzledSelector = #selector(UIWindow.db_sendEvent(_:))
-            guard let originalMethod = class_getInstanceMethod(self, originalSelector),
-                  let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
-            else {
-                return
+            Swizzle(UIWindow.self) {
+                #selector(UIWindow.sendEvent(_:)) <-> #selector(UIWindow.db_sendEvent(_:))
             }
-            method_exchangeImplementations(originalMethod, swizzledMethod)
         }
     }
     

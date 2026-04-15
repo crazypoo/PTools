@@ -14,34 +14,44 @@ import AVFoundation
 import Photos
 import MobileCoreServices
 import ImageIO
+import SwifterSwift
 
 extension UIImage : PTProtocolCompatible {}
 extension CIImage : PTProtocolCompatible {}
 
 public extension UIImage {
     
-    convenience init(color: UIColor, size: CGSize) {
-        UIGraphicsBeginImageContextWithOptions(size, false, 1)
-        defer {
-            UIGraphicsEndImageContext()
+    // MARK: - 1. 基础初始化与主题支持
+    
+    convenience init?(color: UIColor, size: CGSize) {
+        let rect = CGRect(origin: .zero, size: size)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1 // 根据需要调整缩放
+        let renderer = UIGraphicsImageRenderer(bounds: rect, format: format)
+        
+        let image = renderer.image { context in
+            color.setFill()
+            context.fill(rect)
         }
-        color.setFill()
-        UIRectFill(CGRect(origin: .zero, size: size))
-        guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
-            self.init()
-            return
-        }
-        self.init(cgImage: aCgImage)
+        
+        guard let cgImage = image.cgImage else { return nil }
+        self.init(cgImage: cgImage)
     }
     
+    /// 动态支持暗黑模式的图片
     static func darkModeImage(light: UIImage, dark: UIImage) -> UIImage {
-        if UITraitCollection.current.userInterfaceStyle == .dark {
-            return dark
-        } else {
-            return light
-        }
-   }
+        let imageAsset = UIImageAsset()
+        // 注册浅色模式图片
+        let lightTrait = UITraitCollection(userInterfaceStyle: .light)
+        imageAsset.register(light, with: lightTrait)
+        // 注册深色模式图片
+        let darkTrait = UITraitCollection(userInterfaceStyle: .dark)
+        imageAsset.register(dark, with: darkTrait)
+        
+        return imageAsset.image(with: UITraitCollection.current)
+    }
 
+    // MARK: - 2. SF Symbols (系统图标)
     static func system(_ name: String) -> UIImage {
         UIImage(systemName: name) ?? UIImage()
     }
@@ -56,10 +66,12 @@ public extension UIImage {
         return UIImage(systemName: name, withConfiguration: configuration) ?? UIImage()
     }
 
+    // MARK: - 3. 尺寸与压缩处理
     var bytesSize: Int { jpegData(compressionQuality: 1)?.count ?? .zero }
-    var kilobytesSize: Int { (jpegData(compressionQuality: 1)?.count ?? .zero) / 1024 }
+    var kilobytesSize: Double { Double(bytesSize) / 1024.0 }
     
-    func compresse(quality: CGFloat) -> UIImage? {
+    /// 修正了命名：compresse -> compressed
+    func compressed(quality: CGFloat) -> UIImage? {
         guard let data = jpegData(compressionQuality: quality) else { return nil }
         return UIImage(data: data)
     }
@@ -99,8 +111,12 @@ public extension UIImage {
         return resize(targetSize: newSize)
     }
     
+    // MARK: - 4. 尺寸裁剪与重绘 (现代化写法)
     fileprivate func resize(targetSize: CGSize) -> UIImage {
-        UIGraphicsImageRenderer(size: targetSize).image { _ in
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = self.scale
+        let renderer = UIGraphicsImageRenderer(size: targetSize, format: format)
+        return renderer.image { _ in
             self.draw(in: CGRect(origin: .zero, size: targetSize))
         }
     }
@@ -287,68 +303,46 @@ public extension UIImage {
                          font:UIFont = UIFont.systemFont(ofSize: 23),
                          color:UIColor? = nil) -> UIImage {
         
-        let imageSize = self.size
-        let viewWidth = imageSize.width
-        let viewHeight = imageSize.height
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = self.scale
+        let renderer = UIGraphicsImageRenderer(size: self.size, format: format)
         
-        let horizontalSpacing: CGFloat = 30
-        let verticalSpacing: CGFloat = 50
-        
-        // 使用指定颜色或主色
-        let textColor = color ?? self.imageMostColor()
-        
-        // 计算对角线长度用于水印覆盖范围
-        let diagonalLength = hypot(viewWidth, viewHeight)
-        
-        // 创建属性字符串属性
+        let textColor = color ?? (self.imageMostColor() ?? .white)
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: textColor
         ]
         
-        // 计算文字尺寸
-        let textSize = (title as NSString).size(withAttributes: attributes)
-        
-        // 准备绘图上下文
-        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
-        defer { UIGraphicsEndImageContext() }
-        
-        // 绘制原始图片
-        self.draw(in: CGRect(origin: .zero, size: imageSize))
-        
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return self
-        }
-        
-        // 保存当前上下文状态
-        context.saveGState()
-        
-        // 旋转整个画布
-        context.translateBy(x: viewWidth / 2, y: viewHeight / 2)
-        context.rotate(by: CGFloat.pi / 3) // 60度
-        context.translateBy(x: -viewWidth / 2, y: -viewHeight / 2)
-        
-        // 计算水印布局起点
-        let startX = -(diagonalLength - viewWidth) / 2
-        let startY = -(diagonalLength - viewHeight) / 2
-        
-        let columns = Int(diagonalLength / (textSize.width + horizontalSpacing)) + 1
-        let rows = Int(diagonalLength / (textSize.height + verticalSpacing)) + 1
-        
-        // 绘制水印文本
-        for row in 0..<rows {
-            for col in 0..<columns {
-                let x = startX + CGFloat(col) * (textSize.width + horizontalSpacing)
-                let y = startY + CGFloat(row) * (textSize.height + verticalSpacing)
-                (title as NSString).draw(in: CGRect(x: x, y: y, width: textSize.width, height: textSize.height), withAttributes: attributes)
+        return renderer.image { context in
+            self.draw(in: CGRect(origin: .zero, size: self.size))
+            
+            // 此处保留了你原本倾斜绘制水印的逻辑
+            let ctx = context.cgContext
+            let viewWidth = self.size.width
+            let viewHeight = self.size.height
+            
+            ctx.saveGState()
+            ctx.translateBy(x: viewWidth / 2, y: viewHeight / 2)
+            ctx.rotate(by: .pi / 3)
+            ctx.translateBy(x: -viewWidth / 2, y: -viewHeight / 2)
+            
+            let textSize = title.nsString.size(withAttributes: attributes)
+            let diagonal = hypot(viewWidth, viewHeight)
+            let startX = -(diagonal - viewWidth) / 2
+            let startY = -(diagonal - viewHeight) / 2
+            
+            let cols = Int(diagonal / (textSize.width + 30)) + 1
+            let rows = Int(diagonal / (textSize.height + 50)) + 1
+            
+            for row in 0..<rows {
+                for col in 0..<cols {
+                    let x = startX + CGFloat(col) * (textSize.width + 30)
+                    let y = startY + CGFloat(row) * (textSize.height + 50)
+                    title.nsString.draw(at: CGPoint(x: x, y: y), withAttributes: attributes)
+                }
             }
+            ctx.restoreGState()
         }
-        
-        // 恢复上下文状态
-        context.restoreGState()
-        
-        // 获取最终图片
-        return UIGraphicsGetImageFromCurrentImageContext() ?? self
     }
     
     func imageScale(scaleSize:CGFloat) -> UIImage {
@@ -381,33 +375,29 @@ public extension UIImage {
     
     //MARK: 獲取圖片中大部分占有的顏色
     ///獲取圖片中大部分占有的顏色
-    @objc func imageMostColor() -> UIColor {
-        let context = getImageContext()
+    @objc func imageMostColor() -> UIColor? {
+        guard let ciImage = CIImage(image: self) ?? self.ciImage else { return nil }
+        guard let filter = CIFilter(name: "CIAreaAverage") else { return nil }
         
-        let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(CIVector(cgRect: ciImage.extent), forKey: kCIInputExtentKey)
         
-        let cls = NSCountedSet(capacity: Int(size.width * size.height))
-        for i in 0...Int(size.width) {
-            for j in 0...Int(size.height) {
-                let offSet = 4 * (i * j)
-                let red = (newImgData + offSet).pointee
-                let green = (newImgData + (offSet + 1)).pointee
-                let blue = (newImgData + (offSet + 2)).pointee
-                let alpha = (newImgData + (offSet + 3)).pointee
-                if alpha > 0 {
-                    if red == 255 && green == 255 && blue == 255 {
-                        
-                    } else {
-                        let clr = [red,green,blue,alpha]
-                        cls.add(clr)
-                    }
-                }
-            }
-        }
+        guard let outputImage = filter.outputImage else { return nil }
         
-        let maxColor = cls.reversed().compactMap { $0 as? NSArray }.first
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext(options: [.workingColorSpace: kCFNull as Any])
         
-        return UIColor(red: maxColor![0] as! CGFloat / 255, green: maxColor![1] as! CGFloat / 255, blue: maxColor![2] as! CGFloat / 255, alpha: maxColor![3] as! CGFloat / 255)
+        context.render(outputImage,
+                       toBitmap: &bitmap,
+                       rowBytes: 4,
+                       bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
+                       format: .RGBA8,
+                       colorSpace: nil)
+        
+        return UIColor(red: CGFloat(bitmap[0]) / 255.0,
+                       green: CGFloat(bitmap[1]) / 255.0,
+                       blue: CGFloat(bitmap[2]) / 255.0,
+                       alpha: CGFloat(bitmap[3]) / 255.0)
     }
     
     //MARK: 獲取圖片中某個像素點的顏色
@@ -446,20 +436,16 @@ public extension UIImage {
     
     //MARK: 把圖片換成圓形
     ///把圖片換成圓形
-    @objc func circularImage() -> UIImage? {
-        let imageSize = CGSize(width: self.size.width, height: self.size.height)
-        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
-        let _ = UIGraphicsGetCurrentContext()!
-
-        let circlePath = UIBezierPath(ovalIn: CGRect(origin: .zero, size: imageSize))
-        circlePath.addClip()
-
-        self.draw(in: CGRect(origin: .zero, size: imageSize))
+    @objc func circularImage() -> UIImage {
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = self.scale
+        let renderer = UIGraphicsImageRenderer(size: self.size, format: format)
         
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage
+        return renderer.image { context in
+            let rect = CGRect(origin: .zero, size: self.size)
+            UIBezierPath(ovalIn: rect).addClip()
+            self.draw(in: rect)
+        }
     }
     
     //MARK: 判斷一個圖片是否大於或者小於某個尺寸
@@ -821,18 +807,17 @@ public extension PTPOP where Base: UIImage {
         guard let ciImage = toCIImage() else {
             return nil
         }
-        let blurFilter = CIFilter(name: "CIGaussianBlur")
-        blurFilter?.setValue(ciImage, forKey: "inputImage")
-        blurFilter?.setValue(level, forKey: "inputRadius")
+        guard let filter = CIFilter(name: "CIGaussianBlur") else { return nil }
+                
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(level, forKey: kCIInputRadiusKey)
         
-        guard let outputImage = blurFilter?.outputImage else {
-            return nil
-        }
-        let context = CIContext()
-        guard let cgImage = context.createCGImage(outputImage, from: ciImage.extent) else {
-            return nil
-        }
-        return UIImage(cgImage: cgImage)
+        guard let outputImage = filter.outputImage else { return nil }
+        
+        let context = CIContext(options: nil)
+        guard let cgImage = context.createCGImage(outputImage, from: ciImage.extent) else { return nil }
+        
+        return UIImage(cgImage: cgImage, scale: base.scale, orientation: base.imageOrientation)
     }
     
     func clipImage(angle: CGFloat, editRect: CGRect, isCircle: Bool) -> UIImage {

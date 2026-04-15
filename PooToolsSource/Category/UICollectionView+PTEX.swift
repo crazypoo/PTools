@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import SwifterSwift
 
 public extension UICollectionView {
     
     // MARK: - 基础功能
-    /**
-     获取 CollectionView 所有 Section 的 Item 总数。
-     */
+    
+    /// 获取 CollectionView 所有 Section 的 Item 总数。
     func numberOfItems() -> Int {
-        return (0..<numberOfSections).reduce(0) { $0 + numberOfItems(inSection: $1) }
+        var count = 0
+        // 性能微调：使用 for 循环代替 reduce，在简单累加场景下略微提升性能并减少闭包开销
+        for section in 0..<numberOfSections {
+            count += numberOfItems(inSection: section)
+        }
+        return count
     }
 
     /// 验证 IndexPath 是否越界，防止直接访问导致 Crash
@@ -38,6 +43,43 @@ public extension UICollectionView {
         }
     }
     
+    // MARK: - 🐛 [补充功能] 安全滚动
+        
+    /// 安全地滚动到指定的 IndexPath，防止因数据源未同步导致的 Crash
+    /// - Parameters:
+    ///   - indexPath: 目标 IndexPath
+    ///   - scrollPosition: 滚动位置
+    ///   - animated: 是否需要动画
+    func safeScrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+        guard isValidIndexPath(indexPath) else {
+            PTNSLogConsole("⚠️ [UICollectionView] 尝试滚动到无效的 IndexPath: \(indexPath)")
+            return
+        }
+        scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+    }
+
+    // MARK: - 🚀 [补充功能] 泛型注册与复用 (超级好用)
+        
+    /// 泛型注册 Cell (纯代码)
+    func register<T: UICollectionViewCell>(cellType: T.Type) {
+        register(cellType, forCellWithReuseIdentifier: String(describing: cellType))
+    }
+    
+    /// 泛型注册 Cell (Xib)
+    func registerNib<T: UICollectionViewCell>(cellType: T.Type) {
+        let nib = UINib(nibName: String(describing: cellType), bundle: nil)
+        register(nib, forCellWithReuseIdentifier: String(describing: cellType))
+    }
+    
+    /// 泛型复用 Cell，无需显式强转 (as!)
+    func dequeueReusableCell<T: UICollectionViewCell>(with type: T.Type, for indexPath: IndexPath) -> T {
+        let identifier = String(describing: type)
+        guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? T else {
+            fatalError("🚨 [UICollectionView] 无法出列类型为 \(identifier) 的 Cell。请确保你已经注册了它！")
+        }
+        return cell
+    }
+
     // MARK: - 撇除動畫重加載
     /// 撇除動畫重加載
     /// 注：修复了原生 reloadData 没有闭包的问题，使用 layoutIfNeeded 确保 UI 刷新完成
@@ -45,7 +87,10 @@ public extension UICollectionView {
         UIView.performWithoutAnimation {
             self.reloadData()
             self.layoutIfNeeded() // 强制触发布局更新
-            completion?()
+            // 优化：将 completion 放入主线程异步队列，确保在布局彻底渲染完成后才执行回调
+            DispatchQueue.main.async {
+                completion?()
+            }
         }
     }
     
@@ -249,6 +294,7 @@ public extension UICollectionView {
         let safeItemHeight = max(0.1, itemHeight)
 
         func calculateCellWidth(for model: PTTagLayoutModel) -> CGFloat {
+            // ⚠️ 性能提示：如果是庞大数据集，建议将此处的 sizeFor(string:) 计算前置到网络请求回调中，避免阻塞主线程布局
             var width = UIView.sizeFor(string: model.name, font: model.contentFont, height: safeItemHeight).width + itemContentSpace
             if model.haveImage {
                 width += model.imageWidth + model.contentSpace

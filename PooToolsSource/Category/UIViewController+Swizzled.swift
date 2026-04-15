@@ -19,8 +19,10 @@ public extension UIViewController {
             return
         }
         
-        swizzling(self)
-        
+        Swizzle(UIViewController.self) {
+            #selector(self.viewDidAppear(_:)) <-> #selector(self.swizzled_viewDidAppear(animated:))
+        }
+
         isSwizzed = true
     }
     
@@ -38,7 +40,9 @@ public extension UIViewController {
             return
         }
         
-        undoSwizzling(self)
+        Swizzle(UIViewController.self) {
+            #selector(self.swizzled_viewDidAppear(animated:)) <-> #selector(self.viewDidAppear(_:))
+        }
         
         isSwizzed = false
     }
@@ -86,28 +90,4 @@ public extension UIViewController {
             logWithLevel(level: UInt(integer!))
         }
     }
-    
-}
-
-// MARK: - Runtime
-private let swizzling: (UIViewController.Type) -> () = { viewController in
-    
-    let originalSelector = #selector(viewController.viewDidAppear(_:))
-    let swizzledSelector = #selector(viewController.swizzled_viewDidAppear(animated:))
-    
-    let originalMethod = class_getInstanceMethod(viewController, originalSelector)
-    let swizzledMethod = class_getInstanceMethod(viewController, swizzledSelector)
-    
-    method_exchangeImplementations(originalMethod!, swizzledMethod!)
-}
-
-private let undoSwizzling: (UIViewController.Type) -> () = { viewController in
-    
-    let originalSelector = #selector(viewController.swizzled_viewDidAppear(animated:))
-    let swizzledSelector = #selector(viewController.viewDidAppear(_:))
-    
-    let originalMethod = class_getInstanceMethod(viewController, originalSelector)
-    let swizzledMethod = class_getInstanceMethod(viewController, swizzledSelector)
-    
-    method_exchangeImplementations(originalMethod!, swizzledMethod!)
 }

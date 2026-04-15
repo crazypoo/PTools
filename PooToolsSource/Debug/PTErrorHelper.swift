@@ -11,7 +11,6 @@ import UIKit
 enum PTErrorHelper {
     static func handle(_ error: Error?, model: PTHttpModel) -> PTHttpModel {
         if error == nil {
-            // https://httpstatuses.com
             switch Int(model.statusCode ?? "") {
             case 100:
                 model.errorDescription = "Error continue description"

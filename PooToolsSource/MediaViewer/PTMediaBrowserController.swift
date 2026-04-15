@@ -299,8 +299,8 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        SwizzleTool().swizzleContextMenuReverseOrder()
-        
+        SwizzleTool.swizzleContextMenuReverseOrder()
+
         if viewConfig.dynamicBackground {
             view.backgroundColor = viewConfig.viewerContentBackgroundColor
         } else {

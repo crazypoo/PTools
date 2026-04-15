@@ -100,15 +100,18 @@ public func PTIVarList(_ className:String) -> [String] {
     var listName = [String]()
     var count : UInt32 = 0
     let list = class_copyIvarList(NSClassFromString(className), &count)
-    for i in 0..<Int(count) {
-        let ivar = list![i]
-        let name = ivar_getName(ivar)
-        let type = ivar_getTypeEncoding(ivar)
-        PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .utils)
-        listName.append(String(cString: name!))
+    if let safeList = list {
+        for i in 0..<Int(count) {
+            let ivar = safeList[i]
+            let name = ivar_getName(ivar)
+            let type = ivar_getTypeEncoding(ivar)
+            PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .utils)
+            listName.append(String(cString: name!))
+        }
+        free(list)
+        return listName
     }
-    free(list)
-    return listName
+    return []
 }
 
 public func PTPropertyList(_ classString: String) -> [String] {
@@ -172,12 +175,8 @@ public class PTUtils: NSObject {
                 
     //MARK: 获取一个输入内最大的一个值
     ///获取一个输入内最大的一个值
-    public class func maxOne<T:Comparable>( _ seq:[T]) -> T {
-
-        assert(seq.count>0)
-        return seq.reduce(seq[0]){
-            max($0, $1)
-        }
+    public class func maxOne<T:Comparable>( _ seq:[T]) -> T? {
+        return seq.max()
     }
                         
     //MARK: 这个方法可以用于UITextField中,检测金额输入
@@ -212,9 +211,10 @@ public class PTUtils: NSObject {
     }
     
     // MARK: - 監聽截圖事件
-    public static func observeScreenshot(_ action: @escaping (Notification) -> Void) {
+    @discardableResult // 允许调用方忽略返回值（如果他们有其他方式管理）
+    public static func observeScreenshot(_ action: @escaping (Notification) -> Void) -> NSObjectProtocol {
         // http://stackoverflow.com/questions/13484516/ios-detection-of-screenshot
-        let _ = NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification, object: nil, queue: .main, using: action)
+        return NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification, object: nil, queue: .main, using: action)
     }
     
     // MARK: - 強制退出 App
@@ -448,7 +448,7 @@ public extension PTUtils {
             nav.modalPresentationStyle = .formSheet
             PTUtils.getCurrentVC()?.present(nav, animated: true, completion: {
                 completion?()
-                SwizzleTool().swizzleDidAddSubview {
+                SwizzleTool.swizzleDidAddSubview {
                     // Configure console window.
                     if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
                         currentVC.view.window?.bringSubviewToFront(findMask)
@@ -489,22 +489,8 @@ public extension PTUtils {
 
 public extension PTUtils {
     static func compareVersionWithServerVersion(_ version: String) -> ComparisonResult {
-        let currentVersion = kAppVersion!
-        let serverArray = version.split(separator: ".").map { Int($0) ?? 0 }
-        let currentArray = currentVersion.split(separator: ".").map { Int($0) ?? 0 }
-        let count = max(serverArray.count, currentArray.count)
-        
-        for i in 0..<count {
-            let server = i < serverArray.count ? serverArray[i] : 0
-            let current = i < currentArray.count ? currentArray[i] : 0
-            
-            if current < server {
-                return .orderedAscending   // 本地版本低
-            } else if current > server {
-                return .orderedDescending  // 本地版本高
-            }
-        }
-        return .orderedSame
+        let currentVersion = kAppVersion ?? "0.0.0"
+        return currentVersion.compare(version,options: .numeric)
     }
 }
 
@@ -515,17 +501,12 @@ public extension PTUtils {
     }
 }
 
-public class SwizzleTool: NSObject {
-    
-    /// Ensure context menus always show in a non reversed order.
-    public func swizzleContextMenuReverseOrder() {
-        guard let originalMethod = class_getInstanceMethod(NSClassFromString("_" + "UI" + "Context" + "Menu" + "List" + "View").self, NSSelectorFromString("reverses" + "Action" + "Order")),
-              let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_reverses_Action_Order))
-        else { PTNSLogConsole("Swizzle Error Occurred"); return }
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-    }
+// MARK: - 1. 目标类的扩展 (存放 Swizzled 方法)
 
+extension UIView {
+    /// 配合 _UIContextMenuListView 的替换方法
+    /// 因为 _UIContextMenuListView 是私有类，它继承自 UIView，
+    /// 将方法写在 UIView 的 extension 中，Runtime 就能顺利通过 class_getInstanceMethod 找到它。
     @objc public func swizzled_reverses_Action_Order() -> Bool {
         if let menu = self.value(forKey: "displayed" + "Menu") as? UIMenu,
            menu.title == "Debug" || menu.title == "User" + "Defaults" {
@@ -538,25 +519,54 @@ public class SwizzleTool: NSObject {
         
         return false
     }
+}
+
+extension UIWindow {
+    /// 配合 UIWindow 的替换方法
+    @MainActor @objc public func swizzled_did_add_subview(_ subview: UIView) {
+        if !SwizzleTool.pauseDidAddSubviewSwizzledClosure {
+            if let closure = SwizzleTool.swizzledDidAddSubviewClosure {
+                closure()
+            }
+        }
+    }
+}
+public class SwizzleTool: NSObject {
     
     public static var swizzledDidAddSubviewClosure: PTActionTask?
     public static var pauseDidAddSubviewSwizzledClosure: Bool = false
-    
-    public func swizzleDidAddSubview(_ closure: @escaping PTActionTask) {
-        guard let originalMethod = class_getInstanceMethod(UIWindow.self, #selector(UIWindow.didAddSubview(_:))),
-              let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_did_add_subview(_:)))
-        else { PTNSLogConsole("Swizzle Error Occurred"); return }
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-        
-        Self.swizzledDidAddSubviewClosure = closure
-    }
 
-    @MainActor @objc public func swizzled_did_add_subview(_ subview: UIView) {
-        guard !Self.pauseDidAddSubviewSwizzledClosure else { return }
-        
-        if let closure = Self.swizzledDidAddSubviewClosure {
-            closure()
+    // 为了防止重复执行 Swizzle，可以使用一个静态标记或 dispatch_once (在 Swift 中通常用静态属性的惰性初始化实现)
+    private static var isContextMenuSwizzled = false
+    private static var isDidAddSubviewSwizzled = false
+
+    /// 确保上下文菜单始终以非反转顺序显示
+    public static func swizzleContextMenuReverseOrder() {
+        // 1. 获取私有类
+        guard let targetClass = NSClassFromString("_" + "UI" + "Context" + "Menu" + "List" + "View") else {
+            PTNSLogConsole("Swizzle Error: 找不到 _UIContextMenuListView 类")
+            return
         }
+        Swizzle(targetClass) {
+            NSSelectorFromString("reverses" + "Action" + "Order") <-> #selector(UIView.swizzled_reverses_Action_Order)
+        }
+        isContextMenuSwizzled = true
+               
+        PTNSLogConsole("✅ ContextMenu Swizzle 成功")
+    }
+    
+    
+    public static func swizzleDidAddSubview(_ closure: @escaping PTActionTask) {
+        // 保存闭包
+        Self.swizzledDidAddSubviewClosure = closure
+        guard !isDidAddSubviewSwizzled else { return }
+        
+        // 使用你的全局 Swizzle 语法
+        Swizzle(UIWindow.self) {
+            #selector(UIWindow.didAddSubview(_:)) <-> #selector(UIWindow.swizzled_did_add_subview(_:))
+        }
+        
+        isDidAddSubviewSwizzled = true
+        PTNSLogConsole("✅ UIWindow didAddSubview Swizzle 成功")
     }
 }

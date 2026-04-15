@@ -384,7 +384,9 @@ public class LocalConsole: NSObject {
     var debugBordersEnabled = false {
         didSet {
             
-            UIView.swizzleDebugBehaviour_UNTRACKABLE_TOGGLE()
+            Swizzle(UIView.self) {
+                #selector(UIView.layoutSubviews) <-> #selector(UIView.swizzled_layoutSubviews)
+            }
             
             guard debugBordersEnabled else {
                 GLOBAL_BORDER_TRACKERS.forEach {
@@ -606,7 +608,7 @@ public class LocalConsole: NSObject {
 
         consoleWindow.view.addSubviews([terminal,scenesDebug])
 
-        SwizzleTool().swizzleContextMenuReverseOrder()
+        SwizzleTool.swizzleContextMenuReverseOrder()
 
         self.terminal = terminal
 

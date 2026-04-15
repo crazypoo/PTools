@@ -860,6 +860,7 @@
 		55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */; };
 		55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */; };
 		55ECA5EF2F8FD0280057E46B /* PTiCloudFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECA5EE2F8FD0280057E46B /* PTiCloudFileManager.swift */; };
+		55ECA6042F8FDBA00057E46B /* PTProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECA6032F8FDBA00057E46B /* PTProgressHUD.swift */; };
 		55ECD8452C99D8B300B45EDE /* PTBaseTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
@@ -1836,6 +1837,7 @@
 		55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScrollingPageControl.swift; sourceTree = "<group>"; };
 		55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestNewModel.swift; sourceTree = "<group>"; };
 		55ECA5EE2F8FD0280057E46B /* PTiCloudFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTiCloudFileManager.swift; sourceTree = "<group>"; };
+		55ECA6032F8FDBA00057E46B /* PTProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTProgressHUD.swift; sourceTree = "<group>"; };
 		55ECD8442C99D8B300B45EDE /* PTBaseTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseTabBarViewController.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
@@ -2034,6 +2036,7 @@
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				55024DF029F370DB00244E44 /* Debug */,
+				55ECA6062F8FF4A20057E46B /* DebugCategory */,
 				55E602462F8C8E56004840AB /* DebugColor */,
 				55E601CC2F889987004840AB /* DebugCrash */,
 				55E601CD2F88A5F3004840AB /* DebugFile */,
@@ -2051,6 +2054,7 @@
 				5507026828F6A8DF00C48239 /* HealthKit */,
 				55B4FA232AE1016A006D35F3 /* HealthPermission */,
 				55ED0D272B11985100391136 /* HeartRate */,
+				55ECA6022F8FDB690057E46B /* Hud */,
 				553FF08D2C670A4000E9EE10 /* IAP */,
 				55571B362D58EEF2004134B8 /* iCloud */,
 				55B13D482B1AE72600C67EDA /* ImageEditor */,
@@ -2413,9 +2417,6 @@
 			isa = PBXGroup;
 			children = (
 				557E3A8D2C044157002466A0 /* CwlDemangle.swift */,
-				557E3AB32C047556002466A0 /* FileHandle+PTDebugEx.swift */,
-				557E3AAD2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift */,
-				557E3AA92C046FF7002466A0 /* InputStream+PTEX.swift */,
 				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
 				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
@@ -2440,11 +2441,6 @@
 				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
 				557E3AB12C04752F002466A0 /* StderrCapture.swift */,
 				557E3AAF2C047517002466A0 /* StdoutCapture.swift */,
-				557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */,
-				557E3A952C046472002466A0 /* UIView+PTSwizzle.swift */,
-				557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */,
-				557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */,
-				557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -3852,6 +3848,29 @@
 			path = PageControl;
 			sourceTree = "<group>";
 		};
+		55ECA6022F8FDB690057E46B /* Hud */ = {
+			isa = PBXGroup;
+			children = (
+				55ECA6032F8FDBA00057E46B /* PTProgressHUD.swift */,
+			);
+			path = Hud;
+			sourceTree = "<group>";
+		};
+		55ECA6062F8FF4A20057E46B /* DebugCategory */ = {
+			isa = PBXGroup;
+			children = (
+				557E3AB32C047556002466A0 /* FileHandle+PTDebugEx.swift */,
+				557E3AAD2C0471F4002466A0 /* HTTPURLResponse+PTEX.swift */,
+				557E3AA92C046FF7002466A0 /* InputStream+PTEX.swift */,
+				557E3A8F2C0441D6002466A0 /* String+PTDebugEx.swift */,
+				557E3A952C046472002466A0 /* UIView+PTSwizzle.swift */,
+				557E3A872C043F06002466A0 /* UIWindow+PTDebugEx.swift */,
+				557E3A9B2C046D85002466A0 /* URLCache+PTDebugEX.swift */,
+				557E3A972C046C8A002466A0 /* URLSessionConfiguration+PTSwizzle.swift */,
+			);
+			path = DebugCategory;
+			sourceTree = "<group>";
+		};
 		55ED0D272B11985100391136 /* HeartRate */ = {
 			isa = PBXGroup;
 			children = (
@@ -4162,8 +4181,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4173,13 +4191,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4194,13 +4208,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4614,6 +4624,7 @@
 				55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				555818C82AFA7BDB0051C0AA /* UINavigationController+PTEX.swift in Sources */,
+				55ECA6042F8FDBA00057E46B /* PTProgressHUD.swift in Sources */,
 				5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */,
 				553BFE722EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift in Sources */,
 				557E3A8C2C0440FD002466A0 /* PTCallStackParser.swift in Sources */,

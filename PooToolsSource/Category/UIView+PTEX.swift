@@ -305,13 +305,6 @@ public extension UIView {
         }
     }
     
-    /// Swizzle UIView to use custom frame system when needed.
-    static func swizzleDebugBehaviour_UNTRACKABLE_TOGGLE() {
-        guard let originalMethod = class_getInstanceMethod(UIView.self, #selector(layoutSubviews)),
-              let swizzledMethod = class_getInstanceMethod(UIView.self, #selector(swizzled_layoutSubviews)) else { return }
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-    }
-
     @MainActor @objc func swizzled_layoutSubviews() {
         swizzled_layoutSubviews()
         
@@ -877,21 +870,8 @@ public extension UIView {
     }
 
     static func swizzle() {
-        let originalSelector = #selector(layoutSubviews)
-        let swizzledSelector = #selector(jx_layoutSubviews)
-
-        guard let originalMethod = class_getInstanceMethod(self, originalSelector),
-              let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
-        else {
-            return
-        }
-
-        let didAddMethod = class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-
-        if didAddMethod {
-            class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
-        } else {
-            method_exchangeImplementations(originalMethod, swizzledMethod)
+        Swizzle(UIView.self) {
+            #selector(layoutSubviews) <-> #selector(jx_layoutSubviews)
         }
     }
 }

@@ -10,89 +10,47 @@ import UIKit
 import CoreGraphics
 
 public class PTViewToPDF: NSObject {
-
-    static func generatePDF(with pages: [UIView]) -> String? {
-        let tempDirectory = FileManager.pt.TmpDirectory()
-        let filepath = tempDirectory.appendingPathComponent("temp.pdf")
-        
-        UIGraphicsBeginPDFContextToFile(filepath, CGRect.zero, nil)
-        
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
-        
-        for page in pages {
-            drawPage(page, withContext: context)
-        }
-        
-        UIGraphicsEndPDFContext()
-        
-        return filepath
-    }
     
-    static func drawPage(_ page: UIView, withContext context: CGContext) {
-        UIGraphicsBeginPDFPageWithInfo(CGRect(x: 0.0, y: 0.0, width: page.bounds.size.width, height: page.bounds.size.height), nil)
+    /// 将 UIView 数组转换为 PDF 文件
+    /// - Parameter pages: 要转换为 PDF 的 UIView 数组（每个 View 代表一页）
+    /// - Returns: 生成的 PDF 文件的本地路径
+    public static func generatePDF(with pages: [UIView]) -> String? {
+        // 确保数组不为空
+        guard !pages.isEmpty else { return nil }
         
-        for subview in allSubViews(for: page) {
-            if let imageView = subview as? UIImageView {
-                imageView.image?.draw(in: imageView.frame)
-            } else if let label = subview as? UILabel {
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.lineBreakMode = label.lineBreakMode
-                paragraphStyle.alignment = label.textAlignment
+        // 1. 设置保存路径 (使用系统标准临时目录，并加上 UUID 防止多次生成时的文件覆盖)
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let fileName = "temp_\(UUID().uuidString).pdf"
+        let fileURL = tempDirectory.appendingPathComponent(fileName)
+        
+        // 2. 初始化 PDF 渲染器 (默认以第一页的大小为准，后续每页可动态调整)
+        let defaultBounds = pages.first?.bounds ?? CGRect(x: 0, y: 0, width: 612, height: 792) // 默认 8.5x11 英寸
+        let pdfRenderer = UIGraphicsPDFRenderer(bounds: defaultBounds)
+        
+        do {
+            // 3. 开启 PDF 绘制上下文
+            try pdfRenderer.writePDF(to: fileURL) { context in
                 
-                let attributes: [NSAttributedString.Key: Any] = [
-                    .font: label.font as Any,
-                    .paragraphStyle: paragraphStyle,
-                    .foregroundColor: label.textColor as Any
-                ]
-                
-                label.text?.draw(in: label.frame, withAttributes: attributes)
-            } else {
-                drawLines(using: subview, withLineThickness: 1.0, in: context, fillView: subview.tag != 0)
-            }
-        }
-    }
-    
-    static func drawLines(using view: UIView, withLineThickness thickness: CGFloat, in context: CGContext, fillView: Bool) {
-        context.saveGState()
-        context.setStrokeColor(view.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
-        context.setFillColor(view.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
-        context.setLineWidth(thickness)
-        
-        if view.frame.size.width > 1 && view.frame.size.height == 1 {
-            context.move(to: CGPoint(x: view.frame.origin.x - 0.5, y: view.frame.origin.y))
-            context.addLine(to: CGPoint(x: view.frame.origin.x + view.frame.size.width - 0.5, y: view.frame.origin.y))
-            context.strokePath()
-        } else if view.frame.size.width == 1 && view.frame.size.height > 1 {
-            context.move(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y - 0.5))
-            context.addLine(to: CGPoint(x: view.frame.origin.x, y: view.frame.origin.y + view.frame.size.height + 0.5))
-            context.strokePath()
-        } else if view.frame.size.width > 1 && view.frame.size.height > 1 {
-            if fillView {
-                context.setFillColor(view.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
-                context.fill(view.frame)
-            }
-            context.stroke(view.frame)
-        }
-        
-        context.restoreGState()
-    }
-    
-    static func allSubViews(for page: UIView) -> [UIView] {
-        var array: [UIView] = [page]
-        
-        for subview in page.subviews {
-            if let label = subview as? UILabel {
-                label.sizeToFit()
-                label.layoutIfNeeded()
+                // 4. 遍历每个 UIView
+                for page in pages {
+                    // 如果传入的 view frame 为 empty，跳过防止崩溃
+                    guard page.bounds.width > 0 && page.bounds.height > 0 else { continue }
+                    
+                    // 开启 PDF 的新一页，尺寸完全匹配当前 View 的尺寸
+                    context.beginPage(withBounds: page.bounds, pageInfo: [:])
+                    
+                    // 5. 核心魔法：直接让 View 的 Core Animation Layer 渲染到 PDF 上下文中
+                    // 这将完美保留所有子视图、文字、图片、背景色、甚至是圆角等属性
+                    page.layer.render(in: context.cgContext)
+                }
             }
             
-            let origin = subview.superview?.convert(subview.frame.origin, to: subview.superview?.superview) ?? .zero
-            subview.frame = CGRect(origin: origin, size: subview.frame.size)
-            array.append(contentsOf: allSubViews(for: subview))
+            // 绘制成功，返回路径
+            return fileURL.path
+            
+        } catch {
+            PTNSLogConsole("PDF 生成失败: \(error.localizedDescription)")
+            return nil
         }
-        
-        return array
     }
 }

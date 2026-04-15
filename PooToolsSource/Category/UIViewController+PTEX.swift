@@ -503,7 +503,7 @@ extension UIViewController {
         PTGCDManager.gcdAfter(time: 0.35, block: {
             let share = LocalConsole.shared
             if share.isVisiable {
-                SwizzleTool().swizzleDidAddSubview {
+                SwizzleTool.swizzleDidAddSubview {
                     // Configure console window.
                     if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
                         currentVC.view.window?.bringSubviewToFront(findMask)

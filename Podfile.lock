@@ -126,37 +126,37 @@ PODS:
   - PhoneNumberKit/UIKit (4.2.9):
     - PhoneNumberKit/PhoneNumberKitCore
   - PocketSVG (2.7.3)
-  - PooTools/Appz (3.95.4):
+  - PooTools/Appz (3.96.17):
     - Appz
     - PooTools/Core
-  - PooTools/BankCard (3.95.4):
+  - PooTools/BankCard (3.96.17):
     - PooTools/Core
-  - PooTools/BilogyID (3.95.4):
+  - PooTools/BilogyID (3.96.17):
     - PooTools/Core
     - PooTools/FaceIDPermission
     - PooTools/KeyChain
-  - PooTools/Calendar (3.95.4):
+  - PooTools/Calendar (3.96.17):
     - PooTools/CalendarPermission
     - PooTools/Core
     - PooTools/RemindersPermission
-  - PooTools/CalendarPermission (3.95.4):
+  - PooTools/CalendarPermission (3.96.17):
     - PooTools/Core
-  - PooTools/CameraPermission (3.95.4):
+  - PooTools/CameraPermission (3.96.17):
     - PooTools/Core
-  - PooTools/CheckBox (3.95.4):
+  - PooTools/CheckBox (3.96.17):
     - PooTools/Core
-  - PooTools/CheckDirtyWord (3.95.4):
+  - PooTools/CheckDirtyWord (3.96.17):
     - PooTools/Core
-  - PooTools/CheckUpdate (3.95.4):
+  - PooTools/CheckUpdate (3.96.17):
     - PooTools/NetWork
     - SwiftJWT
-  - PooTools/ChinesePinyin (3.95.4):
+  - PooTools/ChinesePinyin (3.96.17):
     - PooTools/Core
-  - PooTools/Circle (3.95.4):
+  - PooTools/Circle (3.96.17):
     - PooTools/Core
-  - PooTools/CodeView (3.95.4):
+  - PooTools/CodeView (3.96.17):
     - PooTools/Core
-  - PooTools/Core (3.95.4):
+  - PooTools/Core (3.96.17):
     - AttributedString
     - CocoaLumberjack/Swift
     - DeviceKit
@@ -173,65 +173,66 @@ PODS:
     - SwifterSwift
     - UIColor_Hex_Swift
     - "UIViewController+Swizzled"
-  - PooTools/Country (3.95.4):
+  - PooTools/Country (3.96.17):
     - PooTools/Core
-  - PooTools/CustomerLabel (3.95.4):
+  - PooTools/CustomerLabel (3.96.17):
     - PooTools/Core
-  - PooTools/CustomerNumberKeyboard (3.95.4):
+  - PooTools/CustomerNumberKeyboard (3.96.17):
     - PooTools/Core
-  - PooTools/DataEncrypt (3.95.4):
+  - PooTools/DataEncrypt (3.96.17):
     - CryptoSwift
     - PooTools/Core
-  - PooTools/DEBUG (3.95.4):
+  - PooTools/DEBUG (3.96.17):
     - PooTools/Core
     - PooTools/NetWork
     - PooTools/PDF
     - PooTools/SearchBar
     - PooTools/Share
-  - PooTools/DEBUG_TrackingEyes (3.95.4):
+  - PooTools/DEBUG_TrackingEyes (3.96.17):
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/DEBUG
-  - PooTools/FaceIDPermission (3.95.4):
+  - PooTools/FaceIDPermission (3.96.17):
     - PooTools/Core
-  - PooTools/FilterCamera (3.95.4):
+  - PooTools/FilterCamera (3.96.17):
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/HarbethKit
     - PooTools/MediaViewer
     - PooTools/MicPermission
-  - PooTools/Flag (3.95.4):
+  - PooTools/Flag (3.96.17):
     - FlagKit
     - PooTools/Core
-  - PooTools/FocusFaceImageView (3.95.4):
+  - PooTools/FocusFaceImageView (3.96.17):
     - FaceAware
     - PooTools/Core
-  - PooTools/GCDWebServer (3.95.4):
+  - PooTools/GCDWebServer (3.96.17):
     - GCDWebServer
     - GCDWebServer/WebUploader
     - PooTools/Core
-  - PooTools/Guide (3.95.4):
+  - PooTools/Guide (3.96.17):
     - PooTools/Core
     - PooTools/PageControl
-  - PooTools/HarbethKit (3.95.4):
+  - PooTools/HarbethKit (3.96.17):
     - Harbeth
     - PooTools/CameraPermission
     - PooTools/Core
-  - PooTools/HeartRate (3.95.4):
+  - PooTools/HeartRate (3.96.17):
     - lottie-ios
     - PooTools/CameraPermission
     - PooTools/Core
-  - PooTools/IAP (3.95.4):
+  - PooTools/Hud (3.96.17):
     - PooTools/Core
-  - PooTools/ImageEditor (3.95.4):
+  - PooTools/IAP (3.96.17):
+    - PooTools/Core
+  - PooTools/ImageEditor (3.96.17):
     - PooTools/Core
     - PooTools/FilterCamera
-    - PooTools/HarbethKit
-  - PooTools/Input (3.95.4):
+  - PooTools/Input (3.96.17):
     - PhoneNumberKit
     - PooTools/Core
     - "UITextField+Shake"
-  - PooTools/InputAll (3.95.4):
+  - PooTools/InputAll (3.96.17):
     - PooTools/Appz
     - PooTools/BankCard
     - PooTools/BilogyID
@@ -255,6 +256,7 @@ PODS:
     - PooTools/Guide
     - PooTools/HarbethKit
     - PooTools/HeartRate
+    - PooTools/Hud
     - PooTools/IAP
     - PooTools/ImageEditor
     - PooTools/Input
@@ -301,136 +303,136 @@ PODS:
     - PooTools/Vision
     - PooTools/WhatsNewsKit
     - PooTools/ZipArchive
-  - PooTools/Instructions (3.95.4):
+  - PooTools/Instructions (3.96.17):
     - Instructions
     - PooTools/Core
-  - PooTools/iOS17Tips (3.95.4):
+  - PooTools/iOS17Tips (3.96.17):
     - PooTools/Core
-  - PooTools/KeyChain (3.95.4):
+  - PooTools/KeyChain (3.96.17):
     - PooTools/Core
-  - PooTools/LaunchTimeProfiler (3.95.4):
+  - PooTools/LaunchTimeProfiler (3.96.17):
     - AMKLaunchTimeProfiler
     - PooTools/Core
-  - PooTools/Layout (3.95.4):
+  - PooTools/Layout (3.96.17):
     - CollectionViewPagingLayout
     - PooTools/Core
-  - PooTools/LivePhoto (3.95.4):
+  - PooTools/LivePhoto (3.96.17):
     - PooTools/Core
-  - PooTools/Loading (3.95.4):
+  - PooTools/Loading (3.96.17):
     - PooTools/Core
-  - PooTools/Location (3.95.4):
+  - PooTools/Location (3.96.17):
     - PooTools/Core
     - PooTools/LocationPermission
-  - PooTools/LocationPermission (3.95.4):
+  - PooTools/LocationPermission (3.96.17):
     - PooTools/Core
-  - PooTools/MediaViewer (3.95.4):
+  - PooTools/MediaViewer (3.96.17):
     - PooTools/Core
     - PooTools/LivePhoto
     - PooTools/NetWork
     - PooTools/PageControl
     - PooTools/ProgressBar
-  - PooTools/MessageKit (3.95.4):
+  - PooTools/MessageKit (3.96.17):
     - PooTools/Core
     - PooTools/CustomerLabel
-  - PooTools/MicPermission (3.95.4):
+  - PooTools/MicPermission (3.96.17):
     - PooTools/Core
-  - PooTools/Motion (3.95.4):
+  - PooTools/Motion (3.96.17):
     - PooTools/Core
     - PooTools/MotionPermission
-  - PooTools/MotionPermission (3.95.4):
+  - PooTools/MotionPermission (3.96.17):
     - PooTools/Core
-  - PooTools/NetWork (3.95.4):
+  - PooTools/NetWork (3.96.17):
     - Alamofire
     - PooTools/Core
     - PooTools/Loading
-  - PooTools/NotificationBanner (3.95.4):
+  - PooTools/NotificationBanner (3.96.17):
     - NotificationBannerSwift
     - PooTools/Core
-  - PooTools/OSSKitSpeech (3.95.4):
+  - PooTools/OSSKitSpeech (3.96.17):
     - PooTools/Core
     - PooTools/SpeechRecognizerPermission
-  - PooTools/PageControl (3.95.4):
+  - PooTools/PageControl (3.96.17):
     - PooTools/Core
-  - PooTools/PagingControl (3.95.4):
+  - PooTools/PagingControl (3.96.17):
     - JXPagingView/Paging
     - JXSegmentedView
     - PooTools/Core
-  - PooTools/PDF (3.95.4):
+  - PooTools/PDF (3.96.17):
     - PooTools/Core
-  - PooTools/PhoneInfo (3.95.4):
+  - PooTools/PhoneInfo (3.96.17):
     - PooTools/Core
-  - PooTools/PhotoPicker (3.95.4):
+  - PooTools/PhotoPicker (3.96.17):
     - Kakapos
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/Loading
     - PooTools/NetWork
-  - PooTools/Picker (3.95.4):
+  - PooTools/Picker (3.96.17):
     - BRPickerView
     - PooTools/Core
-  - PooTools/Ping (3.95.4):
+  - PooTools/Ping (3.96.17):
     - PooTools/Core
-  - PooTools/PopoverKit (3.95.4):
+  - PooTools/PopoverKit (3.96.17):
     - PooTools/Core
     - Popovers
-  - PooTools/ProgressBar (3.95.4):
+  - PooTools/ProgressBar (3.96.17):
     - PooTools/Core
-  - PooTools/RateView (3.95.4):
+  - PooTools/RateView (3.96.17):
     - PooTools/Core
-  - PooTools/RemindersPermission (3.95.4):
+  - PooTools/RemindersPermission (3.96.17):
     - PooTools/Core
-  - PooTools/Router (3.95.4):
+  - PooTools/Router (3.96.17):
     - PooTools/Core
-  - PooTools/ScanQRCode (3.95.4):
+  - PooTools/ScanQRCode (3.96.17):
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/PhotoPicker
-  - PooTools/ScrollBanner (3.95.4):
+  - PooTools/ScrollBanner (3.96.17):
     - PooTools/Core
     - PooTools/PageControl
-  - PooTools/ScrollRefresh (3.95.4):
+  - PooTools/ScrollRefresh (3.96.17):
     - MJRefresh
     - PooTools/Core
-  - PooTools/SearchBar (3.95.4):
+  - PooTools/SearchBar (3.96.17):
     - PooTools/Core
-  - PooTools/SecuritySuite (3.95.4):
+  - PooTools/SecuritySuite (3.96.17):
     - IOSSecuritySuite
     - PooTools/Core
-  - PooTools/Segmented (3.95.4):
+  - PooTools/Segmented (3.96.17):
     - PooTools/Core
-  - PooTools/Share (3.95.4):
+  - PooTools/Share (3.96.17):
     - PooTools/CustomerLabel
-  - PooTools/Slider (3.95.4):
+  - PooTools/Slider (3.96.17):
     - PooTools/Core
     - RangeSeekSlider
-  - PooTools/SmartScreenshot (3.95.4):
+  - PooTools/SmartScreenshot (3.96.17):
     - PooTools/Core
-  - PooTools/SocketKit (3.95.4):
+  - PooTools/SocketKit (3.96.17):
     - PooTools/Core
     - SocketRocket
-  - PooTools/SpeechRecognizerPermission (3.95.4):
+  - PooTools/SpeechRecognizerPermission (3.96.17):
     - PooTools/Core
-  - PooTools/Stepper (3.95.4):
+  - PooTools/Stepper (3.96.17):
     - PooTools/Core
-  - PooTools/SVG (3.95.4):
+  - PooTools/SVG (3.96.17):
     - PocketSVG
     - PooTools/Core
     - Protobuf (= 3.22.1)
     - SVGAPlayer
-  - PooTools/Tabbar (3.95.4):
+  - PooTools/Tabbar (3.96.17):
     - PooTools/Core
-  - PooTools/Telephony (3.95.4):
+  - PooTools/Telephony (3.96.17):
     - PooTools/Core
-  - PooTools/VideoEditor (3.95.4):
+  - PooTools/VideoEditor (3.96.17):
     - PooTools/Core
     - PooTools/HarbethKit
     - PooTools/Loading
     - PooTools/ProgressBar
-  - PooTools/Vision (3.95.4):
+  - PooTools/Vision (3.96.17):
     - PooTools/Core
-  - PooTools/WhatsNewsKit (3.95.4):
+  - PooTools/WhatsNewsKit (3.96.17):
     - PooTools/Core
-  - PooTools/ZipArchive (3.95.4):
+  - PooTools/ZipArchive (3.96.17):
     - PooTools/Core
     - SSZipArchive
   - pop (1.0.12)
@@ -509,7 +511,6 @@ DEPENDENCIES:
   - InAppViewDebugger
   - KTVHTTPCache
   - LookinServer
-  - lottie-ios
   - PooTools/InputAll (from `./`)
   - SwiftLint
   - Swinject
@@ -637,7 +638,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: 9b4fdef08b7301e97b475a852a45ea7844009509
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: ce08a2f258bcb9d571e87ff6e3e14d2c239ce253
+  PooTools: d4f605188716491ffebe0636443f078bb755f7e5
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
@@ -658,6 +659,6 @@ SPEC CHECKSUMS:
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 3f3bc4150fddd97d63bbdd95a570e52ce4bfb5e4
+PODFILE CHECKSUM: e0fff4453c648b8f9fbb8cf3060d30e64ac2aca6
 
 COCOAPODS: 1.16.2

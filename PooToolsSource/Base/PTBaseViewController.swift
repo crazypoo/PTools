@@ -1201,7 +1201,7 @@ extension PTBaseViewController {
         }
 #if POOTOOLS_DEBUG
         if UIApplication.shared.inferredEnvironment_PT != .appStore {
-            SwizzleTool().swizzleDidAddSubview {
+            SwizzleTool.swizzleDidAddSubview {
                 // Configure console window.
                 let lcm = LocalConsole.shared
                 if lcm.isVisiable {
