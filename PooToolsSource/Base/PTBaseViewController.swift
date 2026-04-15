@@ -817,6 +817,10 @@ open class PTBaseViewController: UIViewController {
                 PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
             }
         }
+        
+        PTGCDManager.gcdAfter(time: 0.1, block: {
+            self.updateStatusBar(self.preferredNavigationBarStyle())
+        })
     }
     
     open override func viewWillDisappear(_ animated:Bool) {
@@ -906,7 +910,6 @@ open class PTBaseViewController: UIViewController {
         case .transparent:
             setStatusBarStyle(color: (self.view.backgroundColor ?? PTAppBaseConfig.share.viewControllerBaseBackgroundColor))
         }
-        setNeedsStatusBarAppearanceUpdate()
     }
     
     private func setStatusBarStyle(color:UIColor) {
