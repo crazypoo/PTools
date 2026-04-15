@@ -259,6 +259,16 @@ final public class PTTabBarView: UIView {
     private var centerButton = UIView()
     private var centerContent:PTTabBarItemContent?
     private let highlightLayer = CAGradientLayer()
+    
+    public var centerTitle:String {
+        get {
+            PTAppBaseConfig.share.tabbarCenterName
+        }
+        set {
+            centerNameLabel.text = newValue
+        }
+    }
+    
     private lazy var centerNameLabel:UILabel = {
         let view = UILabel()
         view.font = PTAppBaseConfig.share.tabbarCenterNameFont
@@ -267,7 +277,7 @@ final public class PTTabBarView: UIView {
         view.numberOfLines = 0
         view.lineBreakMode = .byTruncatingTail
         view.isHidden = PTAppBaseConfig.share.tabbarCenterName.stringIsEmpty()
-        view.text = PTAppBaseConfig.share.tabbarCenterName
+        view.text = centerTitle
         return view
     }()
     
@@ -379,6 +389,20 @@ final public class PTTabBarView: UIView {
 
         addSubviews([centerButton,centerNameLabel])
         centerButton.backgroundColor = PTAppBaseConfig.share.tabbarCenterBGColor
+        centetButtonEffect()
+
+        centerButton.viewCorner(radius: centerButtonSize / 2)
+        centerButton.layer.shadowColor = UIColor.black.cgColor
+        centerButton.layer.shadowOpacity = 0.2
+        centerButton.layer.shadowRadius = 20
+        centerButton.layer.shadowOffset = CGSize(width: 0, height: 10)
+        let tap = UITapGestureRecognizer { sender in
+            self.didTapCenter?()
+        }
+        centerButton.addGestureRecognizer(tap)
+    }
+    
+    private func centetButtonEffect() {
         let effectView = UIVisualEffectView()
         if PTAppBaseConfig.share.tab26Mode {
             effectView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
@@ -398,16 +422,6 @@ final public class PTTabBarView: UIView {
             effectView.layer.cornerRadius = centerButtonSize / 2
             effectView.layer.cornerCurve = .continuous
         }
-
-        centerButton.viewCorner(radius: centerButtonSize / 2)
-        centerButton.layer.shadowColor = UIColor.black.cgColor
-        centerButton.layer.shadowOpacity = 0.2
-        centerButton.layer.shadowRadius = 20
-        centerButton.layer.shadowOffset = CGSize(width: 0, height: 10)
-        let tap = UITapGestureRecognizer { sender in
-            self.didTapCenter?()
-        }
-        centerButton.addGestureRecognizer(tap)
     }
 
     private func setupShadow() {
@@ -443,6 +457,7 @@ final public class PTTabBarView: UIView {
         items.forEach { $0.removeFromSuperview() }
         leftStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         rightStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        centerButton.subviews.forEach { $0.removeFromSuperview() }
         items.removeAll()
 
         switch layoutStyle {
@@ -450,6 +465,7 @@ final public class PTTabBarView: UIView {
             normalCaseStack(configs: configs)
         case .centerRaised:
             if let findBig = centerContent?.view {
+                centetButtonEffect()
                 centerButton.isHidden = false
                 centerButton.addSubviews([findBig])
                 findBig.snp.remakeConstraints { make in
