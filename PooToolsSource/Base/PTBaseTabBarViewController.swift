@@ -35,7 +35,7 @@ extension UIViewController: PTTabBarVisibilityProtocol {
 }
 
 open class PTBaseTabBarViewController: UITabBarController {
-
+    
     public var ptCustomBar = PTTabBarView()
     
     // 🌟 新增：记录 TabBar 是否因为 Push 到了子页面而被整体隐藏
@@ -43,15 +43,15 @@ open class PTBaseTabBarViewController: UITabBarController {
     // 🌟 新增：记录当前的最小化状态和圆圈尺寸
     private var isTabBarMinimized: Bool = false
     private let minimizedCircleSize: CGFloat = PTAppBaseConfig.share.tabbarMiniSize
-
+    
     // MARK: - ScrollView 监听相关属性
-        
+    
     /// 保存当前 KVO 监听对象，防止被释放
     private var scrollObservation: NSKeyValueObservation?
     
     /// 滑动状态回调：是否已经向下滑动、当前的 Y 轴偏移量
     public var didScrollStateChange: ((_ isScrolled: Bool, _ offsetY: CGFloat) -> Void)?
-
+    
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         syncInitialTabBarState()
@@ -90,8 +90,8 @@ open class PTBaseTabBarViewController: UITabBarController {
         }
         
         /*
-        //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
-        //tabBarController.mode = .tabSidebar
+         //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
+         //tabBarController.mode = .tabSidebar
          */
         setupTabBar()
         
@@ -131,7 +131,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             tabBar.standardAppearance = appearance
             tabBar.scrollEdgeAppearance = appearance
         }
-
+        
         view.addSubview(ptCustomBar)
         ptCustomBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -164,7 +164,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             updateTabBar(for: nav, to: viewController, animated: animated)
             return
         }
-
+        
         // 👉 动画同步（push / pop）
         coordinator.animate(alongsideTransition: { _ in
             self.updateTabBar(for: nav, to: viewController, animated: animated)
@@ -186,7 +186,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     
     private func syncInitialTabBarState() {
         guard let selectedVC = selectedViewController else { return }
-                
+        
         var targetVC: UIViewController = selectedVC
         var targetNav: UINavigationController? = selectedVC.navigationController
         
@@ -210,43 +210,51 @@ open class PTBaseTabBarViewController: UITabBarController {
     
     // 🌟 新增：执行外层容器的形变动画
     private func updateTabBarMinimizeState(shouldMinimize: Bool, animated: Bool = true, force: Bool = false) {
-        // 防止重复执行相同的动画
+        
         if isTabBarGloballyHidden && !force { return }
         
-        guard isTabBarMinimized != shouldMinimize else { return }
+        let stateChanged = (isTabBarMinimized != shouldMinimize)
         isTabBarMinimized = shouldMinimize
-
-        // 1. 通知 TabBarView 切换内部的 UI 状态（隐藏 StackView，仅显示当前 Icon）
-        ptCustomBar.toggleMinimize(isMinimized: shouldMinimize, selectedIndex: selectedIndex)
-
-        // 2. 计算原本状态下的高度
-        let normalHeight = CGFloat.kTabbarHeight_Total
-
-        let layoutBlock = {
-            self.ptCustomBar.snp.remakeConstraints { make in
-                if shouldMinimize {
-                    let safeBottom = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
-                    make.left.equalToSuperview().offset(PTAppBaseConfig.share.defaultViewSpace)
-                    make.bottom.equalToSuperview().offset(-safeBottom)
-                    make.width.height.equalTo(self.minimizedCircleSize)
-                } else {
-                    make.left.right.equalToSuperview()
-                    make.bottom.equalToSuperview()
-                    make.height.equalTo(normalHeight)
+        
+        if force || stateChanged {
+            
+            ptCustomBar.toggleMinimize(isMinimized: shouldMinimize, selectedIndex: selectedIndex)
+            
+            let normalHeight = CGFloat.kTabbarHeight_Total
+            
+            // 🌟 将更新约束的逻辑单独提取出来
+            let updateConstraints = {
+                self.ptCustomBar.snp.remakeConstraints { make in
+                    if shouldMinimize {
+                        let safeBottom = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
+                        make.left.equalToSuperview().offset(20)
+                        make.bottom.equalToSuperview().offset(-safeBottom)
+                        make.width.height.equalTo(self.minimizedCircleSize)
+                    } else {
+                        make.left.right.equalToSuperview()
+                        make.bottom.equalToSuperview()
+                        make.height.equalTo(normalHeight)
+                    }
                 }
             }
-            self.view.layoutIfNeeded()
-            self.ptCustomBar.layoutIfNeeded()
-        }
-        if animated {
-            // 3. 使用带有弹簧效果的优美动画，改变 ptCustomBar 的外层约束
-            UIView.animate(withDuration: 0.4,
-                           delay: 0,
-                           usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 0.5,
-                           options: [.curveEaseInOut, .allowUserInteraction],animations: layoutBlock)
-        } else {
-            layoutBlock()
+            
+            if animated {
+                // 有滑动动画时，先更新约束，再在动画块里强刷布局
+                updateConstraints()
+                UIView.animate(withDuration: 0.4,
+                               delay: 0,
+                               usingSpringWithDamping: 0.8,
+                               initialSpringVelocity: 0.5,
+                               options: [.curveEaseInOut, .beginFromCurrentState, .allowUserInteraction],
+                               animations: {
+                    self.view.layoutIfNeeded()
+                    self.ptCustomBar.layoutIfNeeded()
+                })
+            } else {
+                // 🌟 修复点 2：在无动画（例如 Push 转场）时，只更新约束方程！
+                // 绝不调用 self.view.layoutIfNeeded()，让系统在下一个生命周期自然渲染，防止打断 B 界面的 ScrollView 布局！
+                updateConstraints()
+            }
         }
     }
 }
