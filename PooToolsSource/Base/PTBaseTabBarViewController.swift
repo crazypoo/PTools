@@ -334,7 +334,14 @@ extension PTBaseTabBarViewController {
         setTabBar(hidden: hidden, animated: animated)
         
         // 🌟 新增：更新 TabBar 状态的同时，监听新页面的 ScrollView 滑动状态
-        observeScrollView(in: viewController)
+        if hidden {
+            scrollObservation?.invalidate()
+            scrollObservation = nil
+            PTNSLogConsole("拦截：TabBar 已隐藏，跳过 ScrollView 绑定")
+        } else {
+            // 只有 TabBar 需要显示时，才去绑定监听
+            observeScrollView(in: viewController)
+        }
     }
     
     public func setTabBar(hidden: Bool, animated: Bool) {
