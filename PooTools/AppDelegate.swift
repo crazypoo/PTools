@@ -104,6 +104,7 @@ class AppDelegate: PTAppWindowsDelegate {
 
         IQKeyboardToolbarManager.shared.isEnabled = true
         
+        PTAppBaseConfig.share.tabbarMetailMode = true
         PTAppBaseConfig.share.tabSelectedMetail = true
         PTAppBaseConfig.share.tabSelectedMetailColor = .random
         PTAppBaseConfig.share.navTitleFont = .appfont(size: 18)

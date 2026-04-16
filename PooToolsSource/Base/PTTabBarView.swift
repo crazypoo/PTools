@@ -235,6 +235,19 @@ final public class PTTabBarItemView: UIControl {
             glassBackgroundView.layer.cornerCurve = .continuous
         }
     }
+    
+    // 🌟 新增方法：用于恢复 Icon 的初始布局
+    public func restoreIconLayout() {
+        let hasTitle = !(titleLabel.text?.stringIsEmpty() ?? true)
+        content.view.snp.remakeConstraints {
+            if hasTitle {
+                $0.top.centerX.equalToSuperview()
+            } else {
+                $0.center.equalToSuperview()
+            }
+            $0.size.equalTo(PTTabBarItemView.itemImageSize())
+        }
+    }
 }
 
 final public class PTTabBarView: UIView {
@@ -293,6 +306,22 @@ final public class PTTabBarView: UIView {
 
     public static let bar26LRSpacing:CGFloat = 24.adapter
     
+    // 🌟 新增：用于最小化时展示当前 Icon 的容器
+    private lazy var minimizedCenterView: UIView = {
+        let view = UIView()
+        view.isUserInteractionEnabled = true // 让点击事件穿透
+        // 单击手势
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(handleMinimizedSingleTap))
+        view.addGestureRecognizer(singleTap)
+        
+        // 双击手势（保持和你原有 Item 一致的逻辑）
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleMinimizedDoubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        doubleTap.cancelsTouchesInView = false
+        view.addGestureRecognizer(doubleTap)
+        return view
+    }()
+
     // MARK: - Init
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -655,9 +684,7 @@ final public class PTTabBarView: UIView {
 
     // MARK: - HitTest (支持凸起点击)
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-
-        if layoutStyle == .centerRaised {
-
+        if layoutStyle == .centerRaised && centerButton.alpha > 0.01 && !centerButton.isHidden {
             let centerPoint = convert(point, to: centerButton)
             if centerButton.bounds.contains(centerPoint) {
                 return centerButton
@@ -665,5 +692,82 @@ final public class PTTabBarView: UIView {
         }
 
         return super.hitTest(point, with: event)
+    }
+    
+    // 🌟 新增：处理最小化/正常状态的内部 UI 切换
+    public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) {
+        guard selectedIndex >= 0 && selectedIndex < items.count else { return }
+        let selectedItem = items[selectedIndex]
+        let circleRadius: CGFloat = 28 // 假设收起后的宽高为 56，圆角即为 28
+
+        if isMinimized {
+            // 1. 偷天换日：将当前选中的 Icon 转移到最小化容器中
+            let iconView = selectedItem.imageContent
+            minimizedCenterView.addSubview(iconView)
+            iconView.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.size.equalTo(PTTabBarItemView.itemImageSize())
+            }
+
+            addSubview(minimizedCenterView)
+            minimizedCenterView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+
+            // 2. 隐藏其他普通状态的 UI（使用 alpha 隐藏，防止破坏 StackView 结构）
+            leftStackView.alpha = 0
+            rightStackView.alpha = 0
+            centerButton.alpha = 0
+            centerNameLabel.alpha = 0
+
+            // 3. ✅ 修复点 2：安全校验。只有当配置允许展示毛玻璃且它已在视图树中，才去更新约束
+            if glassBackgroundView.superview != nil {
+                glassBackgroundView.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+                glassBackgroundView.layer.cornerRadius = circleRadius
+                highlightLayer.cornerRadius = circleRadius
+            }
+        } else {
+            // 1. 物归原主：恢复 Icon 到原本的 ItemView 中
+            let iconView = selectedItem.imageContent
+            selectedItem.addSubview(iconView)
+            selectedItem.restoreIconLayout() // 调用我们在步骤 1 写的恢复方法
+
+            minimizedCenterView.removeFromSuperview()
+
+            // 2. 恢复普通 UI 的显示
+            leftStackView.alpha = 1
+            rightStackView.alpha = 1
+            centerButton.alpha = 1
+            centerNameLabel.alpha = 1
+
+            // 3. ✅ 安全校验：恢复毛玻璃背景的正常约束
+            if glassBackgroundView.superview != nil {
+                let tabContainerHeight = PTAppBaseConfig.share.tab26Mode ? (CGFloat.kTabbarHeight_Total - PTAppBaseConfig.share.tab26BottomSpacing) : CGFloat.kTabbarHeight_Total
+                glassBackgroundView.snp.remakeConstraints { make in
+                    make.top.equalToSuperview()
+                    if PTAppBaseConfig.share.tab26Mode {
+                        make.left.right.equalToSuperview().inset(PTTabBarView.bar26LRSpacing)
+                    } else {
+                        make.left.right.equalToSuperview()
+                    }
+                    make.height.equalTo(tabContainerHeight)
+                }
+                let normalRadius = PTAppBaseConfig.share.tab26Mode ? tabContainerHeight / 2 : 0
+                glassBackgroundView.layer.cornerRadius = normalRadius
+                highlightLayer.cornerRadius = normalRadius
+            }
+        }
+    }
+    
+    @objc private func handleMinimizedSingleTap() {
+        // 当点击左下角的小圆圈时，相当于点击了当前选中的 Item
+        select(currentIndex)
+    }
+    
+    @objc private func handleMinimizedDoubleTap() {
+        // 触发外部的双击回调
+        didDoubleTapIndex?(currentIndex)
     }
 }

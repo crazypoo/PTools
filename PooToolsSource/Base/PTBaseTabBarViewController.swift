@@ -14,6 +14,8 @@ private var kPTTabBarHiddenKey: Void?
 
 public protocol PTTabBarVisibilityProtocol {
     var pt_prefersTabBarHidden: Bool { get set }
+    // 🌟 新增：允许控制器主动抛出需要监听的 ScrollView
+    var pt_observedScrollView: UIScrollView? { get }
 }
 
 extension UIViewController: PTTabBarVisibilityProtocol {
@@ -25,12 +27,29 @@ extension UIViewController: PTTabBarVisibilityProtocol {
             objc_setAssociatedObject(self, &kPTTabBarHiddenKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
+    
+    // 🌟 新增默认实现：默认不指定，保证旧代码不报错
+    @objc open var pt_observedScrollView: UIScrollView? {
+        return nil
+    }
 }
 
 open class PTBaseTabBarViewController: UITabBarController {
 
     public var ptCustomBar = PTTabBarView()
     
+    // 🌟 新增：记录当前的最小化状态和圆圈尺寸
+    private var isTabBarMinimized: Bool = false
+    private let minimizedCircleSize: CGFloat = 56.0
+
+    // MARK: - ScrollView 监听相关属性
+        
+    /// 保存当前 KVO 监听对象，防止被释放
+    private var scrollObservation: NSKeyValueObservation?
+    
+    /// 滑动状态回调：是否已经向下滑动、当前的 Y 轴偏移量
+    public var didScrollStateChange: ((_ isScrolled: Bool, _ offsetY: CGFloat) -> Void)?
+
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         syncInitialTabBarState()
@@ -57,6 +76,17 @@ open class PTBaseTabBarViewController: UITabBarController {
         if #available(iOS 26.0, *) {
             // iOS26新增，向下滚动时，只显示第一个与UISearchTab的图标，中间显示辅助UITabAccessory
             self.tabBarMinimizeBehavior = .onScrollDown
+        }
+        
+        ptCustomBar.didSelectIndex = { _ in
+            self.syncInitialTabBarState()
+        }
+        
+        didScrollStateChange = { [weak self] isScrolled,offsetY in
+            guard let self = self else { return }
+            // 增加一点偏移量阈值 (例如 20)，防止用户刚碰一下屏幕就触发
+            let shouldMinimize = isScrolled && offsetY > 20
+            self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
         }
     }
     
@@ -138,10 +168,61 @@ open class PTBaseTabBarViewController: UITabBarController {
     }
     
     private func syncInitialTabBarState() {
-        guard let nav = selectedViewController as? UINavigationController,
-              let topVC = nav.topViewController else { return }
-        
-        updateTabBar(for: nav, to: topVC, animated: false)
+        switch selectedViewController {
+        case let vc as PTSideMenuControl:
+            switch vc.contentViewController {
+            case let nav as UINavigationController:
+                guard let topVC = nav.topViewController else { return }
+                updateTabBar(for: nav, to: topVC, animated: false)
+            default:
+                guard let nav = vc.navigationController else { return }
+                updateTabBar(for: nav, to: vc, animated: false)
+            }
+        default:
+            guard let nav = selectedViewController as? UINavigationController,
+                  let topVC = nav.topViewController else { return }
+            updateTabBar(for: nav, to: topVC, animated: false)
+        }
+    }
+    
+    // 🌟 新增：执行外层容器的形变动画
+    private func updateTabBarMinimizeState(shouldMinimize: Bool) {
+        // 防止重复执行相同的动画
+        guard isTabBarMinimized != shouldMinimize else { return }
+        isTabBarMinimized = shouldMinimize
+
+        // 1. 通知 TabBarView 切换内部的 UI 状态（隐藏 StackView，仅显示当前 Icon）
+        ptCustomBar.toggleMinimize(isMinimized: shouldMinimize, selectedIndex: selectedIndex)
+
+        // 2. 计算原本状态下的高度
+        let normalHeight = CGFloat.kTabbarHeight_Total
+
+        // 3. 使用带有弹簧效果的优美动画，改变 ptCustomBar 的外层约束
+        UIView.animate(withDuration: 0.4,
+                       delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.5,
+                       options: [.curveEaseInOut, .allowUserInteraction]) {
+
+            self.ptCustomBar.snp.remakeConstraints { make in
+                if shouldMinimize {
+                    // 变为圆形并停靠在左下角
+                    let safeBottom = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
+                    make.left.equalToSuperview().offset(PTAppBaseConfig.share.defaultViewSpace)
+                    make.bottom.equalToSuperview().offset(-safeBottom)
+                    make.width.height.equalTo(self.minimizedCircleSize)
+                } else {
+                    // 恢复铺满底部
+                    make.left.right.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                    make.height.equalTo(normalHeight)
+                }
+            }
+
+            // 强制刷新布局以产生过渡动画
+            self.view.layoutIfNeeded()
+            self.ptCustomBar.layoutIfNeeded()
+        }
     }
 }
 
@@ -223,6 +304,9 @@ extension PTBaseTabBarViewController {
         
         let hidden = viewController.pt_prefersTabBarHidden
         setTabBar(hidden: hidden, animated: animated)
+        
+        // 🌟 新增：更新 TabBar 状态的同时，监听新页面的 ScrollView 滑动状态
+        observeScrollView(in: viewController)
     }
     
     public func setTabBar(hidden: Bool, animated: Bool) {
@@ -250,6 +334,59 @@ extension PTBaseTabBarViewController {
         } else {
             updateHiddenState()
             self.ptCustomBar.transform = transform
+        }
+    }
+}
+
+extension PTBaseTabBarViewController {
+    // MARK: - ScrollView 监听逻辑
+        
+    /// 在给定的 View 层级中递归寻找第一个 UIScrollView
+    private func findScrollView(in view: UIView) -> UIScrollView? {
+        if let scrollView = view as? UIScrollView,
+           scrollView.isScrollEnabled,
+           scrollView.contentSize.height > 0 || scrollView.alwaysBounceVertical {
+            return scrollView
+        }
+        
+        for subview in view.subviews {
+            if let found = findScrollView(in: subview) {
+                return found
+            }
+        }
+        return nil
+    }
+    
+    /// 为指定的 ViewController 绑定滑动监听
+    private func observeScrollView(in viewController: UIViewController) {
+        // 先清理旧的
+        scrollObservation?.invalidate()
+        scrollObservation = nil
+        
+        viewController.loadViewIfNeeded()
+        // 🌟 延迟一点点，确保控制器的子视图都已经 addSubView 完毕
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            guard let self = self else { return }
+            // 1. 优先获取 VC 主动指定的 ScrollView
+            let targetScrollView = viewController.pt_observedScrollView ?? self.findScrollView(in: viewController.view)
+                        
+            guard let scrollView = targetScrollView else {
+                // 如果真的没有 ScrollView，说明这是一个纯静态页面
+                PTNSLogConsole("⚠️ 当前页面没有找到可监听的 ScrollView: \(viewController)")
+                // 此时也可以主动抛出一个初始状态给外部，告诉它“没有滑动”
+                self.didScrollStateChange?(false, 0)
+                return
+            }
+            
+            PTNSLogConsole("✅ 成功绑定 ScrollView 监听: \(viewController)")
+
+            
+            self.scrollObservation = scrollView.observe(\.contentOffset, options: [.initial,.new]) { [weak self] scrollView, change in
+                guard let self = self, let offset = change.newValue else { return }
+                
+                let isScrolled = offset.y > -scrollView.adjustedContentInset.top
+                self.didScrollStateChange?(isScrolled, offset.y)
+            }
         }
     }
 }

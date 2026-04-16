@@ -91,6 +91,11 @@ class YDSWhiteDecorationView: UICollectionReusableView {
 
 class PTFuncNameViewController: PTBaseViewController {
 
+    // 🎯 直接告诉 TabBar：这就是你要监听的滑动视图！
+    override var pt_observedScrollView: UIScrollView? {
+        return collectionView.contentCollectionView
+    }
+
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
         return .solid(.random)
     }
