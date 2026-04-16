@@ -49,6 +49,11 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
             self?.selectedIndex = index
         }
 
+        
+        ptCustomBar.didDoubleTapIndex = { index in
+            PTNSLogConsole("222222222")
+        }
+        
         ptCustomBar.select(0)
     }
         

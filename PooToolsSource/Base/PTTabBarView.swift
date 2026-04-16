@@ -245,6 +245,8 @@ final public class PTTabBarView: UIView {
     public var willSelectIndex: ((Int) -> Void)?
     /// 已经选中
     public var didSelectIndex: ((Int) -> Void)?
+    // 🌟 新增：双击 Item 的 Callback
+    public var didDoubleTapIndex: ((Int) -> Void)?
     /// 中间点击
     public var didTapCenter: PTActionTask?
     /// Badge removecallback
@@ -593,9 +595,29 @@ final public class PTTabBarView: UIView {
             self?.select(index)
         }, for: .touchUpInside)
 
+        // 🌟 新增：2. 实例化并配置双击手势
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+        doubleTapGesture.numberOfTapsRequired = 2 // 必须连续点击两次
+        
+        // ⚠️ 关键设置：设为 false 可以让系统不拦截单击事件。
+        // 这保证了用户第一次点击时 Tab 能瞬间切换完毕，而在短时间内发生第二次点击时，触发双击回调。
+        doubleTapGesture.cancelsTouchesInView = false
+        
+        // 3. 将手势添加到 item 视图上
+        item.addGestureRecognizer(doubleTapGesture)
+
         return item
     }
     
+    // 🌟 新增：双击手势的响应方法
+    @objc private func handleDoubleTap(_ gesture: UITapGestureRecognizer) {
+        // 确保手势绑定的 View 是我们的 PTTabBarItemView
+        if let item = gesture.view as? PTTabBarItemView {
+            // 触发 Callback，把保存在 tag 中的 index 传给外部
+            didDoubleTapIndex?(item.tag)
+        }
+    }
+
     private func barItemWidth() -> CGFloat {
         var itemWidth:CGFloat = 0
         switch layoutStyle {
