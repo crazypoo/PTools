@@ -38,6 +38,8 @@ open class PTBaseTabBarViewController: UITabBarController {
 
     public var ptCustomBar = PTTabBarView()
     
+    // 🌟 新增：记录 TabBar 是否因为 Push 到了子页面而被整体隐藏
+    private var isTabBarGloballyHidden: Bool = false
     // 🌟 新增：记录当前的最小化状态和圆圈尺寸
     private var isTabBarMinimized: Bool = false
     private let minimizedCircleSize: CGFloat = 56.0
@@ -73,14 +75,6 @@ open class PTBaseTabBarViewController: UITabBarController {
         //tabBarController.mode = .tabSidebar
          */
         setupTabBar()
-        if #available(iOS 26.0, *) {
-            // iOS26新增，向下滚动时，只显示第一个与UISearchTab的图标，中间显示辅助UITabAccessory
-            self.tabBarMinimizeBehavior = .onScrollDown
-        }
-        
-        ptCustomBar.didSelectIndex = { _ in
-            self.syncInitialTabBarState()
-        }
         
         didScrollStateChange = { [weak self] isScrolled,offsetY in
             guard let self = self else { return }
@@ -124,6 +118,10 @@ open class PTBaseTabBarViewController: UITabBarController {
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(CGFloat.kTabbarHeight_Total)
+        }
+        
+        ptCustomBar.didSelectInsideIndex =  { _ in
+            self.syncInitialTabBarState()
         }
     }
     
@@ -186,8 +184,12 @@ open class PTBaseTabBarViewController: UITabBarController {
     }
     
     // 🌟 新增：执行外层容器的形变动画
-    private func updateTabBarMinimizeState(shouldMinimize: Bool) {
+    private func updateTabBarMinimizeState(shouldMinimize: Bool, animated: Bool = true, force: Bool = false) {
         // 防止重复执行相同的动画
+        if isTabBarGloballyHidden && !force { return }
+        
+//        if !force {
+//        }
         guard isTabBarMinimized != shouldMinimize else { return }
         isTabBarMinimized = shouldMinimize
 
@@ -197,31 +199,31 @@ open class PTBaseTabBarViewController: UITabBarController {
         // 2. 计算原本状态下的高度
         let normalHeight = CGFloat.kTabbarHeight_Total
 
-        // 3. 使用带有弹簧效果的优美动画，改变 ptCustomBar 的外层约束
-        UIView.animate(withDuration: 0.4,
-                       delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0.5,
-                       options: [.curveEaseInOut, .allowUserInteraction]) {
-
+        let layoutBlock = {
             self.ptCustomBar.snp.remakeConstraints { make in
                 if shouldMinimize {
-                    // 变为圆形并停靠在左下角
                     let safeBottom = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
                     make.left.equalToSuperview().offset(PTAppBaseConfig.share.defaultViewSpace)
                     make.bottom.equalToSuperview().offset(-safeBottom)
                     make.width.height.equalTo(self.minimizedCircleSize)
                 } else {
-                    // 恢复铺满底部
                     make.left.right.equalToSuperview()
                     make.bottom.equalToSuperview()
                     make.height.equalTo(normalHeight)
                 }
             }
-
-            // 强制刷新布局以产生过渡动画
             self.view.layoutIfNeeded()
             self.ptCustomBar.layoutIfNeeded()
+        }
+        if animated {
+            // 3. 使用带有弹簧效果的优美动画，改变 ptCustomBar 的外层约束
+            UIView.animate(withDuration: 0.4,
+                           delay: 0,
+                           usingSpringWithDamping: 0.8,
+                           initialSpringVelocity: 0.5,
+                           options: [.curveEaseInOut, .allowUserInteraction],animations: layoutBlock)
+        } else {
+            layoutBlock()
         }
     }
 }
@@ -301,8 +303,11 @@ extension PTBaseTabBarViewController {
     private func updateTabBar(for navigationController: UINavigationController,
                               to viewController: UIViewController,
                               animated: Bool) {
-        
         let hidden = viewController.pt_prefersTabBarHidden
+        // 🌟 1. 第一时间上锁，告诉全局：“我要进入二级页面了，谁也别动 TabBar 的约束！”
+        isTabBarGloballyHidden = hidden
+        // 🌟 修复 1：每次切换页面或 Tab 时，强制重置为展开状态
+        updateTabBarMinimizeState(shouldMinimize: false,animated: false,force: true)
         setTabBar(hidden: hidden, animated: animated)
         
         // 🌟 新增：更新 TabBar 状态的同时，监听新页面的 ScrollView 滑动状态
@@ -311,29 +316,40 @@ extension PTBaseTabBarViewController {
     
     public func setTabBar(hidden: Bool, animated: Bool) {
         tabBar.isHidden = true
-        let height = ptCustomBar.currentBarLayoutStyle == .normal
-        ? CGFloat.kTabbarHeight_Total
-        : (CGFloat.kTabbarHeight_Total + ptCustomBar.centerButtonSize / 2)
+                
+        let height = CGFloat.kTabbarHeight_Total
 
-        let transform = hidden
-            ? CGAffineTransform(translationX: 0, y: height)
-            : .identity
+        let offsetY: CGFloat = hidden ? height : 0
+        let transform = CGAffineTransform(translationX: 0, y: offsetY)
+        
+        // 🌟 修复点 2：双重保险的透明度
+        let targetAlpha: CGFloat = hidden ? 0 : 1
 
-        let updateHiddenState = {
-            self.tabBar.isHidden = true   // ❗始终 false（靠 transform 控制）
+        let updateState = {
+            self.ptCustomBar.transform = transform
+            self.ptCustomBar.alpha = targetAlpha
+        }
+        
+        // 确保显示前，物理隐藏状态是打开的
+        if !hidden {
             self.ptCustomBar.isHidden = false
+            self.ptCustomBar.minimizedCenterView.isHidden = false
         }
 
         if animated {
             UIView.animate(withDuration: 0.25,
                            delay: 0,
-                           options: [.curveEaseInOut]) {
-                updateHiddenState()
-                self.ptCustomBar.transform = transform
-            }
+                           options: [.curveEaseInOut, .beginFromCurrentState],
+                           animations: {
+                updateState()
+            }, completion: { _ in
+                if hidden {
+                    self.ptCustomBar.isHidden = true
+                }
+            })
         } else {
-            updateHiddenState()
-            self.ptCustomBar.transform = transform
+            updateState()
+            self.ptCustomBar.isHidden = hidden
         }
     }
 }
@@ -381,7 +397,7 @@ extension PTBaseTabBarViewController {
             PTNSLogConsole("✅ 成功绑定 ScrollView 监听: \(viewController)")
 
             
-            self.scrollObservation = scrollView.observe(\.contentOffset, options: [.initial,.new]) { [weak self] scrollView, change in
+            self.scrollObservation = scrollView.observe(\.contentOffset, options: [.new]) { [weak self] scrollView, change in
                 guard let self = self, let offset = change.newValue else { return }
                 
                 let isScrolled = offset.y > -scrollView.adjustedContentInset.top

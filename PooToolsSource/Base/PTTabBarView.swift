@@ -258,6 +258,8 @@ final public class PTTabBarView: UIView {
     public var willSelectIndex: ((Int) -> Void)?
     /// 已经选中
     public var didSelectIndex: ((Int) -> Void)?
+    /// 已经选中
+    var didSelectInsideIndex: ((Int) -> Void)?
     // 🌟 新增：双击 Item 的 Callback
     public var didDoubleTapIndex: ((Int) -> Void)?
     /// 中间点击
@@ -307,7 +309,7 @@ final public class PTTabBarView: UIView {
     public static let bar26LRSpacing:CGFloat = 24.adapter
     
     // 🌟 新增：用于最小化时展示当前 Icon 的容器
-    private lazy var minimizedCenterView: UIView = {
+    lazy var minimizedCenterView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true // 让点击事件穿透
         // 单击手势
@@ -590,6 +592,7 @@ final public class PTTabBarView: UIView {
                 items[i].isSelectedItem = i == index
             }
             didSelectIndex?(index)
+            didSelectInsideIndex?(index)
             return
         }
 
@@ -610,6 +613,7 @@ final public class PTTabBarView: UIView {
 
         // 4️⃣ 已选中
         didSelectIndex?(index)
+        didSelectInsideIndex?(index)
     }
     
     private func makeItem(config: PTTabBarItemConfig,

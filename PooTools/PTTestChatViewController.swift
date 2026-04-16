@@ -208,6 +208,10 @@ class PTTestChatViewController: PTBaseViewController {
         return [systemModel,meSendTextModel,othetSendTextModel,othetSendTextErrorModel,meSendImageModel,otherSendImageModel,meSendMapModel,meSendAppleMapModel,meSendVoiceModel,meSendVideoModel,meSendFileModel,meSendAttModel,customAttTag,typingModel]
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
