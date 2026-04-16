@@ -128,4 +128,5 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarCenterNameFont:UIFont = .appfont(size: 10)
     public var tabbarCenterNameColor:UIColor = .black
     public var tabbarCenterNameContentSpacing:CGFloat = 2
+    public var tabbarMiniSize:CGFloat = 56
 }

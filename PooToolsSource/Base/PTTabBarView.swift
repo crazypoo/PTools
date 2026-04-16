@@ -702,7 +702,7 @@ final public class PTTabBarView: UIView {
     public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) {
         guard selectedIndex >= 0 && selectedIndex < items.count else { return }
         let selectedItem = items[selectedIndex]
-        let circleRadius: CGFloat = 28 // 假设收起后的宽高为 56，圆角即为 28
+        let circleRadius: CGFloat = PTAppBaseConfig.share.tabbarMiniSize / 2
 
         if isMinimized {
             // 1. 偷天换日：将当前选中的 Icon 转移到最小化容器中

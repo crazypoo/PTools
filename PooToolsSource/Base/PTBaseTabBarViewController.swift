@@ -42,7 +42,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     private var isTabBarGloballyHidden: Bool = false
     // 🌟 新增：记录当前的最小化状态和圆圈尺寸
     private var isTabBarMinimized: Bool = false
-    private let minimizedCircleSize: CGFloat = 56.0
+    private let minimizedCircleSize: CGFloat = PTAppBaseConfig.share.tabbarMiniSize
 
     // MARK: - ScrollView 监听相关属性
         
@@ -55,6 +55,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         syncInitialTabBarState()
+        
     }
     
     open override func viewDidLoad() {
@@ -62,11 +63,29 @@ open class PTBaseTabBarViewController: UITabBarController {
         
         PTNavigationBarManager.shared.tabBarHandler = { [weak self] nav, toVC, animated, coordinator in
             guard let self = self else { return }
-            // 🌟 修复点 1：只拦截属于当前 TabBarController 的导航栈
-            // 这样可以防止 present 出来的新 NavigationController 误触发 TabBar 的显示逻辑
-            guard let vcs = self.viewControllers, vcs.contains(nav) else {
+            // 🌟 修复点 1：升级拦截逻辑，支持深度查找嵌套的 NavigationController
+            guard let vcs = self.viewControllers else { return }
+            
+            let isOurNav = vcs.contains { vc in
+                // 情况 A：Tab 的根控制器直接就是这个 nav
+                if vc === nav { return true }
+                
+                // 情况 B：Tab 的根控制器是侧边栏，nav 被包裹在里面
+                if let sideMenu = vc as? PTSideMenuControl {
+                    return sideMenu.contentViewController === nav || sideMenu.navigationController === nav
+                }
+                
+                return false
+            }
+            
+            // 双重保险：或者是原生系统层级判定属于我们
+            let belongsToUs = isOurNav || (nav.tabBarController === self)
+            
+            guard belongsToUs else {
+                PTNSLogConsole("拦截：外部的 nav 触发路由，不处理 TabBar")
                 return
             }
+            
             self.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
         }
         
@@ -166,21 +185,27 @@ open class PTBaseTabBarViewController: UITabBarController {
     }
     
     private func syncInitialTabBarState() {
-        switch selectedViewController {
-        case let vc as PTSideMenuControl:
-            switch vc.contentViewController {
-            case let nav as UINavigationController:
-                guard let topVC = nav.topViewController else { return }
-                updateTabBar(for: nav, to: topVC, animated: false)
-            default:
-                guard let nav = vc.navigationController else { return }
-                updateTabBar(for: nav, to: vc, animated: false)
-            }
-        default:
-            guard let nav = selectedViewController as? UINavigationController,
-                  let topVC = nav.topViewController else { return }
-            updateTabBar(for: nav, to: topVC, animated: false)
+        guard let selectedVC = selectedViewController else { return }
+                
+        var targetVC: UIViewController = selectedVC
+        var targetNav: UINavigationController? = selectedVC.navigationController
+        
+        // 1. 如果是侧边栏，剥开第一层洋葱
+        if let sideMenu = selectedVC as? PTSideMenuControl {
+            targetVC = sideMenu.contentViewController ?? sideMenu
+            targetNav = sideMenu.navigationController // 兜底
         }
+        
+        // 2. 如果当前目标是导航控制器，剥开第二层洋葱
+        if let nav = targetVC as? UINavigationController {
+            targetNav = nav
+            if let topVC = nav.topViewController {
+                targetVC = topVC
+            }
+        }
+        
+        // 3. 将最终剥出来的 targetVC 传给同步方法
+        updateTabBar(for: targetNav, to: targetVC, animated: false)
     }
     
     // 🌟 新增：执行外层容器的形变动画
@@ -188,8 +213,6 @@ open class PTBaseTabBarViewController: UITabBarController {
         // 防止重复执行相同的动画
         if isTabBarGloballyHidden && !force { return }
         
-//        if !force {
-//        }
         guard isTabBarMinimized != shouldMinimize else { return }
         isTabBarMinimized = shouldMinimize
 
@@ -300,7 +323,7 @@ extension PTBaseTabBarViewController: UITabBarControllerDelegate {
 }
 
 extension PTBaseTabBarViewController {
-    private func updateTabBar(for navigationController: UINavigationController,
+    private func updateTabBar(for navigationController: UINavigationController?,
                               to viewController: UIViewController,
                               animated: Bool) {
         let hidden = viewController.pt_prefersTabBarHidden
