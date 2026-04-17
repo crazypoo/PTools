@@ -129,4 +129,6 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarCenterNameColor:UIColor = .black
     public var tabbarCenterNameContentSpacing:CGFloat = 2
     public var tabbarMiniSize:CGFloat = 56
+    public var tabbarScrollEnabled:Bool = false
+    public var tabbarScrollOffset:CGFloat = 20
 }

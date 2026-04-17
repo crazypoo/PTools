@@ -97,9 +97,11 @@ open class PTBaseTabBarViewController: UITabBarController {
         
         didScrollStateChange = { [weak self] isScrolled,offsetY in
             guard let self = self else { return }
-            // 增加一点偏移量阈值 (例如 20)，防止用户刚碰一下屏幕就触发
-            let shouldMinimize = isScrolled && offsetY > 20
-            self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
+            if PTAppBaseConfig.share.tabbarScrollEnabled {
+                // 增加一点偏移量阈值 (例如 20)，防止用户刚碰一下屏幕就触发
+                let shouldMinimize = isScrolled && offsetY > PTAppBaseConfig.share.tabbarScrollOffset
+                self.updateTabBarMinimizeState(shouldMinimize: shouldMinimize)
+            }
         }
     }
     
@@ -348,7 +350,13 @@ extension PTBaseTabBarViewController {
             PTNSLogConsole("拦截：TabBar 已隐藏，跳过 ScrollView 绑定")
         } else {
             // 只有 TabBar 需要显示时，才去绑定监听
-            observeScrollView(in: viewController)
+            if PTAppBaseConfig.share.tabbarScrollEnabled {
+                observeScrollView(in: viewController)
+            } else {
+                scrollObservation?.invalidate()
+                scrollObservation = nil
+                PTNSLogConsole("拦截：TabBar 已隐藏，跳过 ScrollView 绑定")
+            }
         }
     }
     
