@@ -327,7 +327,7 @@ extension PTRouterManager {
                 if class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil,
                    class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil,
                    let cls = currentClass as? PTRouterServiceProtocol.Type {
-                    PTRouterServiceManager.default.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
+                    PTRouterServiceManager.shared.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
                 }
             }
         }

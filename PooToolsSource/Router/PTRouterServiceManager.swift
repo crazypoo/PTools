@@ -11,16 +11,39 @@ import Foundation
 public typealias PTServiceCreator = () -> Any
 
 public final class PTRouterServiceManager {
-    public static let `default` = PTRouterServiceManager()
+    public static let shared = PTRouterServiceManager()
     
-    public init() {}
-    
-    ///Service 同步
     private let serviceQueue = DispatchQueue(label: "scheme.PTRouterServiceManager.queue")
-    ///Service构建者
-    public var creatorsMap: [String: PTServiceCreator] = [:]
-    ///Service缓存
-    public var servicesCache: [String: Any] = [:]
+    // 使用 Any 存储闭包，但在存取时强制类型约束
+    private var creatorsMap: [String: () -> Any] = [:]
+    private var servicesCache: [String: Any] = [:]
+    
+    private init() {}
+    
+    // MARK: - 强类型注册与获取
+    public func registerService<Service>(_ serviceType: Service.Type, creator: @escaping () -> Service) {
+        let key = String(describing: serviceType)
+        serviceQueue.async {
+            self.creatorsMap[key] = creator
+        }
+    }
+    
+    public func getService<Service>(_ serviceType: Service.Type) -> Service? {
+        let key = String(describing: serviceType)
+        
+        return serviceQueue.sync {
+            // 1. 查缓存
+            if let cached = servicesCache[key] as? Service {
+                return cached
+            }
+            // 2. 查构造器并缓存
+            if let creator = creatorsMap[key], let instance = creator() as? Service {
+                servicesCache[key] = instance
+                return instance
+            }
+            return nil
+        }
+    }
 }
 
 //MARK: - Service Register & Unregister
@@ -57,16 +80,7 @@ public extension PTRouterServiceManager {
     func registerService(named: String, lazyCreator: @escaping @autoclosure PTServiceCreator) {
         registerService(named: named, creator: lazyCreator)
     }
-    
-    // MARK: - Register With Service Type
-    /// 通过服务接口注册LAServiceCreator
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - creator: 服务构造者
-    func registerService<Service>(_ service: Service.Type, creator: @escaping () -> Service) {
-        registerService(named: PTRouterServiceManager.serviceName(of: service), creator: creator)
-    }
-    
+        
     /// 通过服务接口注册LAServiceCreator
     /// - Parameters:
     ///   - service: 服务接口
@@ -159,12 +173,6 @@ public extension PTRouterServiceManager {
     func getService(named: String) -> Any? {
         createService(named: named)
     }
-    
-    /// 通过服务接口获取服务
-    /// - Parameter service: 服务接口
-    func getService<Service>(_ service: Service.Type) -> Service? {
-        getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
-    }
 }
 
 //MARK: - Service Clean Cache
@@ -185,5 +193,31 @@ public extension PTRouterServiceManager {
     @discardableResult
     func cleanServiceCache<Service>(by service: Service.Type) -> Service? {
         cleanServiceCache(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+    }
+}
+
+public class PTServiceActionMapper {
+    public static let shared = PTServiceActionMapper()
+    
+    // 存储映射关系：[ProtocolName_MethodName : 执行闭包]
+    private var actionMap: [String: (Any?, Any?) -> Any?] = [:]
+    
+    // 注册动态服务闭包
+    public func register(protocolName: String, methodName: String, action: @escaping (Any?, Any?) -> Any?) {
+        let key = "\(protocolName)_\(methodName)"
+        actionMap[key] = action
+    }
+    
+    // 执行动态服务
+    public func execute(protocolName: String, methodName: String, param: Any?, otherParam: Any?) -> Any? {
+        let key = "\(protocolName)_\(methodName)"
+        
+        guard let action = actionMap[key] else {
+            // ⚠️ 如果控制台打印了这句话，说明有人尝试通过 URL 调用服务，但你没注册！
+            PTRouter.shareInstance.logcat?("Service", .logError, "未找到对应的动态服务闭包: \(key)")
+            return nil
+        }
+        
+        return action(param, otherParam)
     }
 }

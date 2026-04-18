@@ -611,40 +611,44 @@ extension PTRouter {
             return routerJump(uriTuple, complateHandler: complateHandler)
         }
     }
-
-    // 路由跳转
+    
+    // 重构你的 routerJump 方法
     public class func routerJump(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) -> Any? {
         
         let response = PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
         let queries = response.queries
-        var resultJumpType: PTJumpType = .push
         
+        // 解析 JumpType
+        var resultJumpType: PTJumpType = .push
         if let typeString = queries[PTJumpTypeKey] as? String,
            let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) {
             resultJumpType = jumpType
-        } else {
-            resultJumpType = .push
         }
         
-        let instanceVC = PTRouterDynamicParamsMapping.shared.routerGetInstance(with: response.pattern?.classString ?? "").instanceObject as? NSObject
-        _ = instanceVC?.setPropertyParameter(queries)
-
-        var resultVC: UIViewController?
+        guard let className = response.pattern?.classString,
+              let vcClass = NSClassFromString(className) as? UIViewController.Type else {
+            shareInstance.logcat?(uriTuple.0 , .logError, "解析类名失败或类不存在")
+            return nil
+        }
         
-        if let vc = instanceVC as? UIViewController {
-            resultVC = vc
-        }
-
-        if let jumpVC = resultVC {
-            jump(jumpType: resultJumpType, vc: jumpVC,queries:queries)
-            let className = NSStringFromClass(type(of: jumpVC))
-            shareInstance.logcat?(uriTuple.0, .logNormal, "resultVC: \(className)")
+        let resultVC: UIViewController
+        
+        // 【核心优化点】：判断是否实现了安全的传参协议
+        if let routableClass = vcClass as? PTRoutableController.Type {
+            // 走现代 Swift 安全初始化方案
+            resultVC = routableClass.init(routerParams: queries) as! UIViewController
+            shareInstance.logcat?(uriTuple.0, .logNormal, "使用 PTRoutableController 协议安全初始化")
         } else {
-            shareInstance.logcat?(uriTuple.0 , .logError, "resultVC: nil")
+            // 降级兜底方案：走原有的旧逻辑 (init() + KVC)
+            resultVC = vcClass.init()
+            _ = resultVC.setPropertyParameter(queries)
+            shareInstance.logcat?(uriTuple.0, .logNormal, "降级使用 KVC 赋值初始化")
         }
+        
+        // 执行跳转
+        jump(jumpType: resultJumpType, vc: resultVC, queries: queries)
         
         complateHandler?(queries, resultVC)
-
         return resultVC
     }
     
@@ -688,10 +692,13 @@ extension PTRouter {
         }
     }
     
-    // 服务调用
+    // 修改 PTRouter.routerService 方法：
+    // 服务调用 (重构版)
     public class func routerService(_ uriTuple: (String, [String: Any])) -> Any? {
         let request = PTRouterRequest(uriTuple.0)
         let queries = request.queries
+        
+        // 1. 校验 protocol 和 method
         guard let protocols = queries["protocol"] as? String,
               let methods = queries["method"] as? String else {
             assert(queries["protocol"] != nil, "The protocol name is empty")
@@ -700,78 +707,53 @@ extension PTRouter {
             return nil
         }
         
-        //为了使用方便，针对1个参数或2个参数，依旧可以按照ivar1，ivar2进行传递，自动匹配。对于没有ivar1参数的,但是方法中必须有参数的，将queries赋值作为ivar1。
-        shareInstance.logcat?(uriTuple.0, .logNormal, "")
+        shareInstance.logcat?(uriTuple.0, .logNormal, "通过 ActionMapper 动态派发服务: \(protocols) -> \(methods)")
         
-        if let functionResultType = uriTuple.1[PTRouterFunctionResultKey] as? Int {
-            if functionResultType == PTRouterFunctionResultType.voidType.rawValue {
-                performTargetVoidType(protocolName: protocols, actionName: methods, param: uriTuple.1[PTRouterIvar1Key], otherParam: uriTuple.1[PTRouterIvar2Key])
-                return nil
-            } else if functionResultType == PTRouterFunctionResultType.valueType.rawValue {
-                let exectueResult = performTarget(protocolName: protocols, actionName: methods, param: uriTuple.1[PTRouterIvar1Key], otherParam: uriTuple.1[PTRouterIvar2Key])
-                return exectueResult?.takeUnretainedValue()
-            } else if functionResultType == PTRouterFunctionResultType.referenceType.rawValue {
-                let exectueResult = performTarget(protocolName: protocols, actionName: methods, param: uriTuple.1[PTRouterIvar1Key], otherParam: uriTuple.1[PTRouterIvar2Key])
-                return exectueResult?.takeRetainedValue()
-            }
-        }
-        return nil
+        // 2. 核心改造：直接把活儿丢给 Mapper 即可！
+        // 不再需要判断 PTRouterFunctionResultType
+        // 不再需要 takeUnretainedValue / takeRetainedValue
+        return PTServiceActionMapper.shared.execute(
+            protocolName: protocols,
+            methodName: methods,
+            param: uriTuple.1[PTRouterIvar1Key],
+            otherParam: uriTuple.1[PTRouterIvar2Key]
+        )
     }
     
-    //实现路由转发协议-值类型与引用类型
+    /// ⚠️ 改造点 1：返回值从 Unmanaged<AnyObject>? 强制改为了 Any?
+    /// 这个修改极其重要！Swift 的闭包会自动管理内存，不再需要手动处理引用计数。
+    @available(*, deprecated, message: "请优先使用 PTRouterServiceManager 直接调用协议。如果必须通过 URL 动态调用，请确保已在 PTServiceActionMapper 中注册")
     public class func performTarget(protocolName: String,
                                     actionName: String,
                                     param: Any? = nil,
                                     otherParam: Any? = nil,
-                                    classMethod: Bool = false) -> Unmanaged<AnyObject>? {
-        if classMethod {
-            let serviceClass = PTRouterServiceManager.default.servicesCache[protocolName] as? AnyObject ?? NSObject()
-            assert(PTRouterServiceManager.default.servicesCache[protocolName] != nil, "No corresponding service found")
-            let selector  = NSSelectorFromString(actionName)
-            guard let _ = class_getClassMethod(serviceClass as? AnyClass, selector) else {
-                assert(class_getClassMethod(serviceClass as? AnyClass, selector) != nil, "No corresponding class method found")
-                shareInstance.logcat?("\(protocolName)->\(actionName)", .logError, "No corresponding class method found")
-                return nil
-            }
-            return serviceClass.perform(selector, with: param, with: otherParam)
-        } else {
-            let serviceClass = PTRouterServiceManager.default.servicesCache[protocolName] as? AnyObject ?? NSObject()
-            let selector = NSSelectorFromString(actionName)
-            guard let _ = class_getInstanceMethod(type(of: serviceClass), selector) else {
-                assert(class_getInstanceMethod(serviceClass as? AnyClass, selector) != nil, "No corresponding instance method found")
-                shareInstance.logcat?("\(protocolName)->\(actionName)", .logError, "No corresponding instance method found")
-                return nil
-            }
-            return serviceClass.perform(selector, with: param, with: otherParam)
-        }
+                                    classMethod: Bool = false) -> Any? {
+        
+        // 核心改造：不再使用 class_getInstanceMethod 和 performSelector
+        // 而是直接把调用请求转发给我们的 ActionMapper
+        return PTServiceActionMapper.shared.execute(
+            protocolName: protocolName,
+            methodName: actionName,
+            param: param,
+            otherParam: otherParam
+        )
     }
     
-    //实现路由转发协议-无返回值类型
+    /// ⚠️ 改造点 2：无返回值的调用
+    @available(*, deprecated, message: "请优先使用 PTRouterServiceManager 直接调用协议。")
     public class func performTargetVoidType(protocolName: String,
                                             actionName: String,
                                             param: Any? = nil,
                                             otherParam: Any? = nil,
                                             classMethod: Bool = false) {
-        if classMethod {
-            let serviceClass = PTRouterServiceManager.default.servicesCache[protocolName] as? AnyObject ?? NSObject()
-            assert(PTRouterServiceManager.default.servicesCache[protocolName] != nil, "No corresponding service found")
-            let selector  = NSSelectorFromString(actionName)
-            guard let _ = class_getClassMethod(serviceClass as? AnyClass, selector) else {
-                assert(class_getClassMethod(serviceClass as? AnyClass, selector) != nil, "No corresponding class method found")
-                shareInstance.logcat?("\(protocolName)->\(actionName)", .logError, "No corresponding class method found")
-                return
-            }
-            _ = serviceClass.perform(selector, with: param, with: otherParam)
-        } else {
-            let serviceClass = PTRouterServiceManager.default.servicesCache[protocolName] as? AnyObject ?? NSObject()
-            let selector = NSSelectorFromString(actionName)
-            guard let _ = class_getInstanceMethod(type(of: serviceClass), selector) else {
-                assert(class_getInstanceMethod(serviceClass as? AnyClass, selector) != nil, "No corresponding instance method found")
-                shareInstance.logcat?("\(protocolName)->\(actionName)", .logError, "No corresponding instance method found")
-                return
-            }
-            _ = serviceClass.perform(selector, with: param, with: otherParam)
-        }
+        
+        // 同样转发给 ActionMapper，并丢弃可能的返回值
+        _ = PTServiceActionMapper.shared.execute(
+            protocolName: protocolName,
+            methodName: actionName,
+            param: param,
+            otherParam: otherParam
+        )
     }
 }
 
@@ -783,7 +765,7 @@ public extension PTRouter {
     ///   - named: 服务名称
     ///   - creator: 服务构造者
     class func registerService(named: String, creator: @escaping PTServiceCreator) {
-        PTRouterServiceManager.default.registerService(named: named, creator: creator)
+        PTRouterServiceManager.shared.registerService(named: named, creator: creator)
     }
     
     /// 通过服务名称(named)注册一个服务实例 (存在缓存中)
@@ -791,7 +773,7 @@ public extension PTRouter {
     ///   - named: 服务名称
     ///   - instance: 服务实例
     class func registerService(named: String, instance: Any) {
-        PTRouterServiceManager.default.registerService(named: named, instance: instance)
+        PTRouterServiceManager.shared.registerService(named: named, instance: instance)
     }
     
     /// 通过服务名称(named)注册LAServiceCreator
@@ -799,7 +781,7 @@ public extension PTRouter {
     ///   - named: 服务名称
     ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
     class func registerService(named: String, lazyCreator: @escaping @autoclosure PTServiceCreator) {
-        PTRouterServiceManager.default.registerService(named: named, lazyCreator: lazyCreator)
+        PTRouterServiceManager.shared.registerService(named: named, lazyCreator: lazyCreator)
     }
     
     // MARK: - Register With Service Type
@@ -808,7 +790,7 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - creator: 服务构造者
     class func registerService<Service>(_ service: Service.Type, creator: @escaping () -> Service) {
-        PTRouterServiceManager.default.registerService(service, creator: creator)
+        PTRouterServiceManager.shared.registerService(service, creator: creator)
     }
     
     /// 通过服务接口注册LAServiceCreator
@@ -816,7 +798,7 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
     class func registerService<Service>(_ service: Service.Type, lazyCreator: @escaping @autoclosure () -> Service) {
-        PTRouterServiceManager.default.registerService(service, lazyCreator: lazyCreator())
+        PTRouterServiceManager.shared.registerService(service, lazyCreator: lazyCreator())
     }
     
     /// 通过服务接口注册一个服务实例 (存在缓存中)
@@ -824,7 +806,7 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - instance: 服务实例
     class func registerService<Service>(_ service: Service.Type, instance: Service) {
-        PTRouterServiceManager.default.registerService(service, instance: instance)
+        PTRouterServiceManager.shared.registerService(service, instance: instance)
     }
 }
 
@@ -836,7 +818,7 @@ public extension PTRouter {
     ///   - shouldCache: 是否需要缓存
     @discardableResult
     class func createService(named: String, shouldCache: Bool = true) -> Any? {
-        PTRouterServiceManager.default.createService(named: named)
+        PTRouterServiceManager.shared.createService(named: named)
     }
     
     /// 根据服务接口创建服务（如果缓存中已有服务实例，则不需要创建）
@@ -845,21 +827,21 @@ public extension PTRouter {
     ///   - shouldCache: 是否需要缓存
     @discardableResult
     class func createService<Service>(_ service: Service.Type, shouldCache: Bool = true) -> Service? {
-        PTRouterServiceManager.default.createService(service)
+        PTRouterServiceManager.shared.createService(service)
     }
     
     /// 通过服务名称获取服务
     /// - Parameter named: 服务名称
     @discardableResult
     class func getService(named: String) -> Any? {
-        PTRouterServiceManager.default.getService(named: named)
+        PTRouterServiceManager.shared.getService(named: named)
     }
     
     /// 通过服务接口获取服务
     /// - Parameter service: 服务接口
     @discardableResult
     class func getService<Service>(_ service: Service.Type) -> Service? {
-        PTRouterServiceManager.default.getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        PTRouterServiceManager.shared.getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 

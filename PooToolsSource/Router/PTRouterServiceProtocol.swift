@@ -14,3 +14,10 @@ public protocol PTRouterServiceProtocol: NSObjectProtocol {
     
     static var seriverName:String { get }
 }
+
+public protocol PTRoutableController {
+    /// 规范化的路由参数初始化方法
+    init(routerParams: [String: Any])
+}
+
+public protocol PTServiceProtocol: AnyObject {}
