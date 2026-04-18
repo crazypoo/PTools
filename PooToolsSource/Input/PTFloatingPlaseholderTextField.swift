@@ -201,9 +201,8 @@ public class PTFloatingPlaseholderTextField: UIView {
         placeholderLabel.attributed.text = cachedNormalAttString
         textField.text = text
 
-        let textIsEmpty = (text ?? "").stringIsEmpty()
-        isFloating = !textIsEmpty
-        setFloating(!textIsEmpty, animated: false)
+        let textIsNotEmpty = !(text ?? "").stringIsEmpty()
+        setFloating(textIsNotEmpty, animated: false)
     }
 
     // MARK: - Events
@@ -212,13 +211,13 @@ public class PTFloatingPlaseholderTextField: UIView {
     }
 
     @objc private func endEdit() {
-        let textIsEmpty = (textField.text ?? "").stringIsEmpty()
-        setFloating(!textIsEmpty, animated: true)
+        let textIsNotEmpty = !(textField.text ?? "").stringIsEmpty()
+        setFloating(textIsNotEmpty, animated: true)
     }
 
     @objc private func textChanged() {
-        let textIsEmpty = (textField.text ?? "").stringIsEmpty()
-        setFloating(!textIsEmpty, animated: true)
+        let textIsNotEmpty = !(textField.text ?? "").stringIsEmpty()
+        setFloating(textIsNotEmpty, animated: true)
     }
 
     // MARK: - Floating

@@ -920,8 +920,10 @@ public class Network: NSObject {
             throw error
         }
         
+        let isMockData = (response == nil)
+        
         // 非 JSON 的情况（可能是 HTML 或纯文本）
-        if !isJSONResponse(response, data: data) {
+        if !isMockData && !isJSONResponse(response, data: data) {
             if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
                 let error = AFError.createURLRequestFailed(error: NSError(domain: html, code: 9999999902))
                 logRequestFailure(url: url, error: error)
