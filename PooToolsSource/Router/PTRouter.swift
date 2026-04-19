@@ -507,34 +507,69 @@ extension CustomRouterInfo {
     }
 }
 
+// MARK: - 解决 Swift 原生不支持解析 Any 的神器
+/// 这是一个递归的类型擦除解析器，专门用来处理下发 JSON 中不可预知的 [String: Any]
+public struct PTAnyDecodable: Decodable {
+    public let value: Any
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        // 按照从精确到宽泛的顺序尝试解析
+        if let bool = try? container.decode(Bool.self) {
+            value = bool
+        } else if let int = try? container.decode(Int.self) {
+            value = int
+        } else if let double = try? container.decode(Double.self) {
+            value = double
+        } else if let string = try? container.decode(String.self) {
+            value = string
+        } else if let array = try? container.decode([PTAnyDecodable].self) {
+            // 如果是数组，递归解包
+            value = array.map { $0.value }
+        } else if let dictionary = try? container.decode([String: PTAnyDecodable].self) {
+            // 如果是字典，递归解包
+            value = dictionary.mapValues { $0.value }
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "PTAnyDecodable 遇到无法解析的类型")
+        }
+    }
+}
+
 public struct PTRouterInfo: Decodable {
-    public init() {}
-    
     public var targetPath: String?
     public var orginPath: String?
-    public var routerType: Int = 0 // 1: 表示替换或者修复客户端代码path错误 2: 新增路由path 3:删除路由 4: 重置路由
-    public var path: String? // 新的路由地址
-    public var className: String? // 路由地址对应的界面
+    public var routerType: Int = 0
+    public var path: String?
+    public var className: String?
+    
+    // ⚠️ 外部依然保持 [String: Any] 的便利性，不需要让业务方知道 PTAnyDecodable 的存在
     public var params: [String: Any]?
     
     enum CodingKeys: String, CodingKey {
         case targetPath
         case orginPath
+        case routerType
         case path
         case className
-        case routerType
         case params
     }
     
+    public init() {}
+    
     public init(from decoder: Decoder) throws {
-        
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        targetPath = try container.decodeIfPresent(String.self, forKey: CodingKeys.targetPath)
-        orginPath = try container.decodeIfPresent(String.self, forKey: CodingKeys.orginPath)
-        routerType = try container.decode(Int.self, forKey: CodingKeys.routerType)
-        path = try container.decodeIfPresent(String.self, forKey: CodingKeys.path)
-        className = try container.decodeIfPresent(String.self, forKey: CodingKeys.className)
-        params = try container.decodeIfPresent(Dictionary<String, Any>.self, forKey: CodingKeys.params)
+        targetPath = try container.decodeIfPresent(String.self, forKey: .targetPath)
+        orginPath = try container.decodeIfPresent(String.self, forKey: .orginPath)
+        routerType = try container.decode(Int.self, forKey: .routerType)
+        path = try container.decodeIfPresent(String.self, forKey: .path)
+        className = try container.decodeIfPresent(String.self, forKey: .className)
+        
+        // 核心改造点：通过 PTAnyDecodable 作为跳板，安全地将 JSON 解析为 [String: Any]
+        if let anyDict = try container.decodeIfPresent([String: PTAnyDecodable].self, forKey: .params) {
+            // 剥去包装，还原本质数据
+            self.params = anyDict.mapValues { $0.value }
+        }
     }
 }
 
