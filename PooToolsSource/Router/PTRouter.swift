@@ -125,7 +125,7 @@ public class PTRouter: PTRouterParser {
     func addRouterItem(_ patternString: String,
                        classString: String,
                        priority: uint = 0) {
-        let pattern = PTRouterPattern(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString, priority: priority)
+        let pattern = PTRouterPattern(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: UInt(priority))
         patterns.append(pattern)
         patterns.sort { $0.priority > $1.priority }
     }
@@ -159,92 +159,87 @@ public class PTRouter: PTRouterParser {
         if urlString.isEmpty {
             return false
         }
-        return await matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces)).pattern != nil
+        return await PTRouter.matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces)).pattern != nil
     }
     
     func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
-        await matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
+        await PTRouter.matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
     // MARK: - Private method
-    private func matchURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
+    private class func matchURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
         
         let request = PTRouterRequest(urlString)
+        // queries 包含了 ? 后面跟随的基础参数 (比如 scheme://user/123?from=home 里的 from=home)
         var queries = request.queries
         var matched: PTRouterPattern?
         var matchUserInfo: [String: Any] = userInfo
-        let relocationMap = reloadRouterMap(PTRouter.shareInstance.reloadRouterMap, url: urlString)
+        
+        // 1. 处理动态重定向 (Relocation)
+        let relocationMap = shareInstance.reloadRouterMap(PTRouter.shareInstance.reloadRouterMap, url: urlString)
         if let relocationMap = relocationMap,
            let url = relocationMap[PTRouter.urlKey] as? String,
-           let firstMatched = patterns.filter({ $0.patternString == url }).first {
-            //relocation
+           let firstMatched = shareInstance.patterns.first(where: { $0.patternString == url }) {
+            // 命中重定向
             matched = firstMatched
-            if let relocationUserInfo =  relocationMap[PTRouter.userInfoKey] as? [String: Any] {
+            if let relocationUserInfo = relocationMap[PTRouter.userInfoKey] as? [String: Any] {
                 matchUserInfo = relocationUserInfo
             }
         } else {
-            var matchedPatterns = [PTRouterPattern]()
+            // 2. 正则引擎核心匹配逻辑
+            let isWebURL = shareInstance.routerWebUrlCheck(urlString)
+            var candidatePatterns = [PTRouterPattern]()
             
-            if routerWebUrlCheck(urlString) {
-                matchedPatterns = patterns.filter{ ($0.patternString == PTRouter.shareInstance.webPath)}
+            if isWebURL {
+                candidatePatterns = shareInstance.patterns.filter { $0.patternString == PTRouter.shareInstance.webPath }
                 assert(PTRouter.shareInstance.webPath != nil, "h5 jump path cannot be empty")
             } else {
-                //filter the scheme and the count of paths not matched
-                matchedPatterns = patterns.filter{ $0.sheme == request.sheme && $0.patternPaths.count == request.paths.count }
+                // 粗略过滤：只保留 scheme 一致的模式，提升后续正则匹配的性能
+                candidatePatterns = shareInstance.patterns.filter { $0.patternString.hasPrefix("\(request.sheme)://") }
             }
             
-            for pattern in matchedPatterns {
-                let result = matchPattern(request, pattern: pattern)
-                if result.matched || routerWebUrlCheck(urlString) {
+            // 遍历尝试正则匹配
+            for pattern in candidatePatterns {
+                if isWebURL {
                     matched = pattern
-                    queries.routerCombine(result.queries)
                     break
+                } else {
+                    // 🌟 调用我们在升级方向三中新写的正则匹配方法
+                    let result = pattern.matchResult(for: urlString)
+                    if result.matched {
+                        matched = pattern
+                        // 将正则提取出的路径参数（如 :id=123 提取出的 ["id": "123"]）合并到 queries 中
+                        queries.merge(result.queries) { current, _ in current }
+                        break
+                    }
                 }
             }
         }
         
+        // 3. 匹配失败处理
         guard let currentPattern = matched else {
-            //not matched
-            var info = [PTRouter.matchFailedKey  : urlString as Any]
-            info.routerCombine(matchUserInfo)
-            globalOpenFailedHandler?(info)
-            logcat?(urlString, .logError, "not matched, please check the router register is all readly")
-            assert(matched != nil, "not matched, please check the router register is all readly")
-            return (nil, [String: Any]())
+            var info: [String: Any] = [PTRouter.matchFailedKey: urlString]
+            info.merge(matchUserInfo) { current, _ in current }
+            shareInstance.globalOpenFailedHandler?(info)
+            shareInstance.logcat?(urlString, .logError, "not matched, please check the router register is all ready")
+            return (nil, [:])
         }
         
+        // 4. 同步拦截器检查 (如果你保留了原有的拦截器逻辑)
+        guard await PTRouter.executeAsyncIntercept(currentPattern.patternString, queries: queries) else {
+            return (nil, [:])
+        }
         
-        guard await PTRouter.executeAsyncIntercept(currentPattern.patternString, queries: queries) else {  return (nil, [String: Any]()) }
-        
-        if routerWebUrlCheck(urlString) {
-            queries.routerCombine(["url" : urlString as Any])
-            queries.routerCombine([PTJumpTypeKey: "\(PTJumpType.push.rawValue)" as Any])
-            queries.routerCombine(matchUserInfo)
+        // 5. 组装最终返回的参数
+        if shareInstance.routerWebUrlCheck(urlString) {
+            queries["url"] = urlString
+            queries[PTJumpTypeKey] = "\(PTJumpType.push.rawValue)"
         } else {
-            queries.routerCombine([PTRouter.requestURLKey  : currentPattern.matchString as Any])
-            queries.routerCombine(matchUserInfo)
+            queries[PTRouter.requestURLKey] = currentPattern.patternString
         }
+        queries.merge(matchUserInfo) { current, _ in current }
         
         return (currentPattern, queries)
-    }
-    
-    private func matchPattern(_ request: PTRouterRequest, pattern: PTRouterPattern) -> MatchResult {
-        
-        var requestPaths = request.paths
-        var pathQuery = [String: Any]()
-        // replace params
-        pattern.paramsMatchDict.forEach({ (name, index) in
-            let requestPathQueryValue = requestPaths[index] as Any
-            pathQuery[name] = requestPathQueryValue
-            requestPaths[index] = PTRouterPattern.PatternPlaceHolder
-        })
-        
-        let matchString = requestPaths.joined(separator: "/")
-        if matchString == pattern.matchString {
-            return (true, pathQuery)
-        } else {
-            return (false, [String: Any]())
-        }
     }
     
     func routerWebUrlCheck(_ urlString: String) -> Bool {
