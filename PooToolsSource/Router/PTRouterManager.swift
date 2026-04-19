@@ -31,7 +31,7 @@ public class PTRouterManager: NSObject {
     public static func addGloableRouter(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
                                         _ userInfo: [String: Any],
-                                        forceCheckEnable: Bool = false) -> Any? {
+                                        forceCheckEnable: Bool = false) async -> Any? {
         
         PTRouter.globalOpenFailedHandler { (info) in
             guard let matchFailedKey = info[PTRouter.matchFailedKey] as? String else { return }
@@ -39,7 +39,7 @@ public class PTRouterManager: NSObject {
             PTRouter.shareInstance.logcat?("PTRouter: globalOpenFailedHandler", .logError, "\(matchFailedKey)")
         }
         
-        return PTRouterManager.registerRouterMap(excludeCocoapods, urlPath, userInfo,forceCheckEnable: forceCheckEnable)
+        return await PTRouterManager.registerRouterMap(excludeCocoapods, urlPath, userInfo,forceCheckEnable: forceCheckEnable)
     }
     
     // MARK: -注册web与服务调用
@@ -59,7 +59,7 @@ extension PTRouterManager {
     public class func registerRouterMap(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
                                         _ userInfo: [String: Any],
-                                        forceCheckEnable: Bool = false) -> Any? {
+                                        forceCheckEnable: Bool = false) async -> Any? {
         let beginRegisterTime = CFAbsoluteTimeGetCurrent()
         if registerRouterList.isEmpty {
             registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
@@ -83,7 +83,7 @@ extension PTRouterManager {
             routerForceRecheck(excludeCocoapods)
 #endif
         }
-        return PTRouter.openURL(urlPath, userInfo: userInfo)
+        return await PTRouter.openURL(urlPath, userInfo: userInfo)
     }
     
     // MARK: - 客户端强制校验，是否匹配

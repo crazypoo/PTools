@@ -8,20 +8,31 @@
 
 import Foundation
 
-public class PTRouterInterceptor: NSObject {
+//public class PTRouterInterceptor: NSObject {
+//    
+//    public typealias InterceptorHandleBlock = ([String: Any]) -> Bool
+//    
+//    var priority: uint
+//    var whiteList: [String]
+//    var handle: InterceptorHandleBlock
+//    
+//    init(_ whiteList: [String],
+//         priority: uint,
+//         handle: @escaping InterceptorHandleBlock) {
+//        
+//        self.whiteList = whiteList
+//        self.priority = priority
+//        self.handle = handle
+//    }
+//}
+
+/// 异步拦截器协议
+public protocol PTRouterAsyncInterceptor {
+    /// 优先级：数字越大越先执行
+    var priority: UInt { get }
+    /// 白名单：哪些路径不需要拦截
+    var whiteList: [String] { get }
     
-    public typealias InterceptorHandleBlock = ([String: Any]) -> Bool
-    
-    var priority: uint
-    var whiteList: [String]
-    var handle: InterceptorHandleBlock
-    
-    init(_ whiteList: [String],
-         priority: uint,
-         handle: @escaping InterceptorHandleBlock) {
-        
-        self.whiteList = whiteList
-        self.priority = priority
-        self.handle = handle
-    }
+    /// 拦截逻辑：返回 true 继续，返回 false 或抛出错误则中断
+    func handle(queries: [String: Any]) async throws -> Bool
 }

@@ -90,13 +90,36 @@ extension PTRouterBuilder {
     }
     
     @discardableResult
-    public func fetchService() -> Any? {
+    public func fetchService() async -> Any? {
         let result = PTRouter.generate(buildResult.0, params: buildResult.1, jumpType: .push)
         PTRouter.shareInstance.logcat?(buildResult.0, .logNormal, "")
-        return PTRouter.openURL(result)
+        return await PTRouter.openURL(result)
     }
     
-    public func navigation(_ handler: ComplateHandler = nil) {
-        PTRouter.openURL(buildResult, complateHandler: handler)
+    public func navigation(_ handler: ComplateHandler = nil) async {
+        await PTRouter.openURL(buildResult, complateHandler: handler)
+    }
+}
+
+public struct PTTypedBuilder<T: PTRoutableStaticController> {
+    private let path: String
+    private var params: T.Params?
+
+    public init(path: String) {
+        self.path = path
+    }
+
+    // 这里是精髓：value 必须是该 VC 预定义的 Params 类型
+    public func with(params: T.Params) -> Self {
+        var copy = self
+        copy.params = params
+        return copy
+    }
+
+    @discardableResult
+    public func navigation() async -> T? {
+        let dict = params?.toDictionary() ?? [:]
+        // 调用底层的 openURL
+        return await PTRouter.openURL(path, userInfo: dict) as? T
     }
 }

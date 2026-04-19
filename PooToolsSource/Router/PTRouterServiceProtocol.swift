@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 @objc
 public protocol PTRouterServiceProtocol: NSObjectProtocol {
@@ -21,3 +22,16 @@ public protocol PTRoutableController {
 }
 
 public protocol PTServiceProtocol: AnyObject {}
+
+/// 路由参数契约
+public protocol PTRoutableParams {
+    /// 该参数对应的目标控制器类型
+    associatedtype Target: UIViewController
+    /// 将结构体转换为字典（用于底层兼容）
+    func toDictionary() -> [String: Any]
+}
+
+/// 让支持强类型的 VC 遵循此协议
+public protocol PTRoutableStaticController: PTRoutableController {
+    associatedtype Params: PTRoutableParams
+}

@@ -94,7 +94,8 @@ public class PTRouter: PTRouterParser {
     public typealias CustomJumpActionClouse = (PTJumpType, UIViewController) -> Void
 
     // MARK: - Private property
-    private var interceptors = [PTRouterInterceptor]()
+    // 存储新的异步拦截器
+    private static var asyncInterceptors = [PTRouterAsyncInterceptor]()
     
     private var globalOpenFailedHandler: FailedHandleBlock?
     
@@ -128,13 +129,10 @@ public class PTRouter: PTRouterParser {
         patterns.append(pattern)
         patterns.sort { $0.priority > $1.priority }
     }
-
-    func addRouterInterceptor(_ whiteList: [String] = [String](),
-                              priority: uint = 0,
-                              handle: @escaping PTRouterInterceptor.InterceptorHandleBlock) {
-        let interceptor = PTRouterInterceptor(whiteList, priority: priority, handle: handle)
-        interceptors.append(interceptor)
-        interceptors.sort { $0.priority > $1.priority }
+    
+    public class func addAsyncInterceptor(_ interceptor: PTRouterAsyncInterceptor) {
+        asyncInterceptors.append(interceptor)
+        asyncInterceptors.sort { $0.priority > $1.priority }
     }
     
     func globalOpenFailedHandler(_ handle: @escaping FailedHandleBlock) {
@@ -157,19 +155,19 @@ public class PTRouter: PTRouterParser {
         patterns = patterns.filter { $0.patternString != patternString }
     }
     
-    func canOpenURL(_ urlString: String) -> Bool {
+    func canOpenURL(_ urlString: String) async -> Bool {
         if urlString.isEmpty {
             return false
         }
-        return matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces)).pattern != nil
+        return await matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces)).pattern != nil
     }
     
-    func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> RouteResponse {
-        matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
+    func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
+        await matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
     // MARK: - Private method
-    private func matchURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> RouteResponse {
+    private func matchURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
         
         let request = PTRouterRequest(urlString)
         var queries = request.queries
@@ -215,9 +213,8 @@ public class PTRouter: PTRouterParser {
             return (nil, [String: Any]())
         }
         
-        guard routerIntercept(currentPattern.patternString, queries: queries) else {
-            return (nil, [String: Any]())
-        }
+        
+        guard await PTRouter.executeAsyncIntercept(currentPattern.patternString, queries: queries) else {  return (nil, [String: Any]()) }
         
         if routerWebUrlCheck(urlString) {
             queries.routerCombine(["url" : urlString as Any])
@@ -260,20 +257,24 @@ public class PTRouter: PTRouterParser {
         }
         return false
     }
-    
-    // Intercep the request and return whether should continue
-    private func routerIntercept(_ matchedPatternString: String, queries: [String: Any]) -> Bool {
         
-        for interceptor in interceptors where !interceptor.whiteList.contains(matchedPatternString) {
-            if !interceptor.handle(queries) {
-                // interceptor handle return true will continue interceptor
-                return false
+    /// 执行异步拦截检查
+    private class func executeAsyncIntercept(_ path: String, queries: [String: Any]) async -> Bool {
+        for interceptor in asyncInterceptors {
+            // 如果不在白名单内，执行拦截
+            if !interceptor.whiteList.contains(path) {
+                do {
+                    let shouldContinue = try await interceptor.handle(queries: queries)
+                    if !shouldContinue { return false }
+                } catch {
+                    shareInstance.logcat?(path, .logError, "拦截器异常中断: \(error)")
+                    return false
+                }
             }
         }
-        
         return true
     }
-    
+
     func routerLoadStatus(_ loadStatus: Bool) {
         routerLoaded = loadStatus
     }
@@ -360,16 +361,6 @@ public extension PTRouter {
     class func addRouterItem(_ patternString: String, classString: String, priority: uint = 0) {
         shareInstance.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), classString: classString, priority: priority)
     }
-
-    /// addRouterItem
-    ///
-    /// - Parameters:
-    ///   - whiteList: whiteList for intercept
-    ///   - priority: match priority, sort by inverse order
-    ///   - handle: block of interception
-    class func addRouterInterceptor(_ whiteList: [String] = [String](), priority: uint = 0, handle: @escaping PTRouterInterceptor.InterceptorHandleBlock) {
-        shareInstance.addRouterInterceptor(whiteList, priority: priority, handle: handle)
-    }
     
     /// addFailedHandel
     class func globalOpenFailedHandler(_ handel: @escaping FailedHandleBlock) {
@@ -402,8 +393,8 @@ public extension PTRouter {
     ///
     /// - Parameter urlString: real request urlstring
     /// - Returns: whether register
-    class func canOpenURL(_ urlString: String) -> Bool {
-        shareInstance.canOpenURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces))
+    class func canOpenURL(_ urlString: String) async -> Bool {
+        await shareInstance.canOpenURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces))
     }
     
     /// request for url
@@ -412,8 +403,8 @@ public extension PTRouter {
     ///   - urlString: real request urlstring
     ///   - userInfo: custom userInfo, could contain Object
     /// - Returns: response for request, contain pattern and queries
-    class func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> RouteResponse {
-        shareInstance.requestURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
+    class func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
+        await shareInstance.requestURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
     // injectRouterServiceConfig
@@ -567,39 +558,50 @@ extension PTRouter {
     }
     
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) -> Any? {
+    @MainActor // 确保 UI 跳转在主线程
+    public class func openURL(_ urlString: String, userInfo: [String: Any] = [:]) async -> Any? {
+        // 1. 执行异步拦截检查
+        let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
+        guard canContinue else { return nil }
+        
+        // 2. 原有的逻辑（调用我们之前重构过的底层逻辑）
+        return await self.openCacheRouter((urlString, userInfo))
+    }
+
+    @discardableResult
+    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async -> Any? {
         if urlString.isEmpty {
             return nil
         }
         if !shareInstance.routerLoaded {
             return shareInstance.lazyRegisterHandleBlock?(urlString, userInfo)
         } else {
-            return openCacheRouter((urlString, userInfo), complateHandler: complateHandler)
+            return await openCacheRouter((urlString, userInfo), complateHandler: complateHandler)
         }
     }
     
     @discardableResult
-    public class func openURL(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) -> Any? {
+    public class func openURL(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
         if !shareInstance.routerLoaded {
             return shareInstance.lazyRegisterHandleBlock?(uriTuple.0, uriTuple.1)
         } else {
-            return openCacheRouter(uriTuple, complateHandler: complateHandler)
+            return await openCacheRouter(uriTuple, complateHandler: complateHandler)
         }
     }
     
     @discardableResult
-    public class func openWebURL(_ uriTuple: (String, [String: Any])) -> Any? {
-        PTRouter.openURL(uriTuple)
+    public class func openWebURL(_ uriTuple: (String, [String: Any])) async -> Any? {
+        await PTRouter.openURL(uriTuple)
     }
     
     @discardableResult
     public class func openWebURL(_ urlString: String,
-                                 userInfo: [String: Any] = [String: Any]()) -> Any? {
-        PTRouter.openURL((urlString, userInfo))
+                                 userInfo: [String: Any] = [String: Any]()) async -> Any? {
+        await PTRouter.openURL((urlString, userInfo))
     }
     
     
-    public class func openCacheRouter(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) -> Any? {
+    public class func openCacheRouter(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
         
         if uriTuple.0.isEmpty {
             return nil
@@ -608,14 +610,14 @@ extension PTRouter {
         if uriTuple.0.contains(shareInstance.serviceHost) {
             return routerService(uriTuple)
         } else {
-            return routerJump(uriTuple, complateHandler: complateHandler)
+            return await routerJump(uriTuple, complateHandler: complateHandler)
         }
     }
     
     // 重构你的 routerJump 方法
-    public class func routerJump(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) -> Any? {
+    public class func routerJump(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
         
-        let response = PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
+        let response = await PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
         let queries = response.queries
         
         // 解析 JumpType
@@ -640,7 +642,7 @@ extension PTRouter {
             shareInstance.logcat?(uriTuple.0, .logNormal, "使用 PTRoutableController 协议安全初始化")
         } else {
             // 降级兜底方案：走原有的旧逻辑 (init() + KVC)
-            resultVC = vcClass.init()
+            resultVC = await vcClass.init()
             _ = resultVC.setPropertyParameter(queries)
             shareInstance.logcat?(uriTuple.0, .logNormal, "降级使用 KVC 赋值初始化")
         }
@@ -846,11 +848,11 @@ public extension PTRouter {
 }
 
 public extension PTRouter {
-    class func routeJump(vcName:String,scheme:String) {
+    class func routeJump(vcName:String,scheme:String) async {
         let relocationMap: NSDictionary = ["routerType": 2 ,"className": vcName, "path": scheme]
         let data = try! JSONSerialization.data(withJSONObject: relocationMap, options: [])
         let routeReMapInfo = try! JSONDecoder().decode(PTRouterInfo.self, from: data)
         PTRouterManager.addRelocationHandle(routerMapList: [routeReMapInfo])
-        PTRouter.openURL(scheme)
+        await PTRouter.openURL(scheme)
     }
 }

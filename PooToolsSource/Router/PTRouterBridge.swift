@@ -11,32 +11,32 @@ import Foundation
 @objcMembers
 public class PTRouterBridge: NSObject {
     
-    public class func canOpenUrl(_ urlString: String) -> Bool {
-      return PTRouter.canOpenURL(urlString)
+    public class func canOpenUrl(_ urlString: String) async -> Bool {
+        return await PTRouter.canOpenURL(urlString)
     }
     
     // 方法1：根据URL字符串打开
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) -> Any? {
-        return PTRouter.openURL(urlString, userInfo: userInfo, complateHandler: complateHandler)
+    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async -> Any? {
+        return await PTRouter.openURL(urlString, userInfo: userInfo, complateHandler: complateHandler)
     }
     
     
     // 方法2：根据URL元组打开
-     @discardableResult
-     public class func openURL(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) -> Any? {
-         return PTRouter.openURL(uriTuple, complateHandler: complateHandler)
-     }
+    @discardableResult
+    public class func openURL(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
+        return await PTRouter.openURL(uriTuple, complateHandler: complateHandler)
+    }
 
-     // 方法3：根据URL元组打开WebURL
-     @discardableResult
-     public class func openWebURL(_ uriTuple: (String, [String: Any])) -> Any? {
-         return PTRouter.openURL(uriTuple)
-     }
+    // 方法3：根据URL元组打开WebURL
+    @discardableResult
+    public class func openWebURL(_ uriTuple: (String, [String: Any])) async -> Any? {
+        return await PTRouter.openURL(uriTuple)
+    }
 
      // 方法4：根据URL字符串打开WebURL
-     @discardableResult
-     public class func openWebURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> Any? {
-         return PTRouter.openURL((urlString, userInfo))
-     }
+    @discardableResult
+    public class func openWebURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> Any? {
+        return await PTRouter.openURL((urlString, userInfo))
+    }
 }

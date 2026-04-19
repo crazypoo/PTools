@@ -720,20 +720,20 @@ class PTFuncNameViewController: PTBaseViewController {
                 } else if itemRow.title == .route {
                     UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"], otherBlock: { sheet,index,title in
                         switch index {
-                        case 0:
-                            PTRouter.routeJump(vcName: NSStringFromClass(PTRouteViewController.self), scheme: PTRouteViewController.patternString.first!)
-                        case 1:
-                            PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
-                            let model = PTRouterExampleModel()
-                            PTRouter.openURL(("scheme://route/route",["model":model]))
-                        case 2:
-                            PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
-                            
-                            let handler = { (value:String) in
-                                UIViewController.gobal_drop(title: value)
-                            }
-                            
-                            PTRouter.openURL(("scheme://route/route",["task":handler]))
+                        case 0:break
+//                            PTRouter.routeJump(vcName: NSStringFromClass(PTRouteViewController.self), scheme: PTRouteViewController.patternString.first!)
+                        case 1:break
+//                            PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
+//                            let model = PTRouterExampleModel()
+//                            PTRouter.openURL(("scheme://route/route",["model":model]))
+                        case 2:break
+//                            PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
+//                            
+//                            let handler = { (value:String) in
+//                                UIViewController.gobal_drop(title: value)
+//                            }
+//                            
+//                            PTRouter.openURL(("scheme://route/route",["task":handler]))
                         default:
                             break
                         }
