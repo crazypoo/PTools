@@ -117,9 +117,19 @@ public struct PTTypedBuilder<T: PTRoutableStaticController> {
     }
 
     @discardableResult
-    public func navigation() async -> T? {
+    // 1. 加上 throws，且返回值从 T? 变成了绝对安全的 T
+    public func navigation() async throws -> T {
         let dict = params?.toDictionary() ?? [:]
-        // 调用底层的 openURL
-        return await PTRouter.openURL(path, userInfo: dict) as? T
+        
+        // 2. 加上 try，调用底层的核心引擎
+        let vc = try await PTRouter.openURLVC(path, userInfo: dict)
+        
+        // 3. 强类型校验：确保底层创建出来的 VC 真的是我们期望的泛型 T
+        guard let targetVC = vc as? T else {
+            // 如果类型不对，主动抛出一个类型异常
+            throw PTRouterError.invalidClass(className: String(describing: T.self))
+        }
+        
+        return targetVC
     }
 }

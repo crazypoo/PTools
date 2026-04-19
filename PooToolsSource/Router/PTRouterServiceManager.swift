@@ -10,189 +10,151 @@ import Foundation
 
 public typealias PTServiceCreator = () -> Any
 
-public final class PTRouterServiceManager {
+// 1. 服务生命周期定义
+public enum PTServiceScope {
+    case singleton  // 单例：全局唯一，强缓存
+    case prototype  // 原型：每次获取都生成新实例，不占用缓存
+}
+
+// 2. 升级为 Actor：天生线程安全，抛弃 DispatchQueue
+public actor PTRouterServiceManager {
     public static let shared = PTRouterServiceManager()
     
-    private let serviceQueue = DispatchQueue(label: "scheme.PTRouterServiceManager.queue")
-    // 使用 Any 存储闭包，但在存取时强制类型约束
-    private var creatorsMap: [String: () -> Any] = [:]
+    // 存储结构优化：同时保存 Scope 和 Creator
+    // ⚠️ 注意：再也没有 serviceQueue 了！
+    private var creatorsMap: [String: (scope: PTServiceScope, creator: PTServiceCreator)] = [:]
     private var servicesCache: [String: Any] = [:]
     
     private init() {}
     
-    // MARK: - 强类型注册与获取
-    public func registerService<Service>(_ serviceType: Service.Type, creator: @escaping () -> Service) {
-        let key = String(describing: serviceType)
-        serviceQueue.async {
-            self.creatorsMap[key] = creator
-        }
+    // MARK: - 基础强类型注册与获取 (核心方法)
+    public func registerService<Service>(_ serviceType: Service.Type, scope: PTServiceScope = .singleton, creator: @escaping () -> Service) {
+        let key = PTRouterServiceManager.serviceName(of: serviceType)
+        creatorsMap[key] = (scope, creator)
     }
     
     public func getService<Service>(_ serviceType: Service.Type) -> Service? {
-        let key = String(describing: serviceType)
+        let key = PTRouterServiceManager.serviceName(of: serviceType)
         
-        return serviceQueue.sync {
-            // 1. 查缓存
-            if let cached = servicesCache[key] as? Service {
-                return cached
-            }
-            // 2. 查构造器并缓存
-            if let creator = creatorsMap[key], let instance = creator() as? Service {
-                servicesCache[key] = instance
-                return instance
-            }
+        // 1. 查单例缓存
+        if let cached = servicesCache[key] as? Service {
+            return cached
+        }
+        // 2. 查构造器
+        guard let config = creatorsMap[key], let instance = config.creator() as? Service else {
             return nil
         }
+        // 3. 决定是否缓存
+        if config.scope == .singleton {
+            servicesCache[key] = instance
+        }
+        return instance
     }
 }
 
-//MARK: - Service Register & Unregister
+// MARK: - 原有扩展平滑升级 (兼容旧 API)
 public extension PTRouterServiceManager {
-    class func serviceName<T>(of value: T) -> String {
+    
+    // 静态方法不受 Actor 实例隔离限制，可以直接用
+    static func serviceName<T>(of value: T) -> String {
         return String(describing: value)
     }
     
     // MARK: - Register With Service Name
-    /// 通过服务名称(named)注册LAServiceCreator
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - creator: 服务构造者
-    func registerService(named: String, creator: @escaping PTServiceCreator) {
-        serviceQueue.async {
-            self.creatorsMap[named] = creator
-        }
+    // ⚠️ 扩展里的方法在 Actor 内部默认是隔离的，直接赋值绝对安全！
+    func registerService(named: String, scope: PTServiceScope = .singleton, creator: @escaping PTServiceCreator) {
+        self.creatorsMap[named] = (scope, creator)
     }
     
-    /// 通过服务名称(named)注册一个服务实例 (存在缓存中)
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - instance: 服务实例
     func registerService(named: String, instance: Any) {
-        serviceQueue.async {
-            self.servicesCache[named] = instance
-        }
+        // 直接传实例的话，强制当做 singleton 存入缓存
+        self.servicesCache[named] = instance
     }
     
-    /// 通过服务名称(named)注册LAServiceCreator
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
-    func registerService(named: String, lazyCreator: @escaping @autoclosure PTServiceCreator) {
-        registerService(named: named, creator: lazyCreator)
-    }
-        
-    /// 通过服务接口注册LAServiceCreator
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
-    func registerService<Service>(_ service: Service.Type, lazyCreator: @escaping @autoclosure () -> Service) {
-        registerService(named: PTRouterServiceManager.serviceName(of: service), creator: lazyCreator)
+    func registerService(named: String, scope: PTServiceScope = .singleton, lazyCreator: @escaping @autoclosure PTServiceCreator) {
+        registerService(named: named, scope: scope, creator: lazyCreator)
     }
     
-    /// 通过服务接口注册一个服务实例 (存在缓存中)
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - instance: 服务实例
+    func registerService<Service>(_ service: Service.Type, scope: PTServiceScope = .singleton, lazyCreator: @escaping @autoclosure () -> Service) {
+        registerService(named: PTRouterServiceManager.serviceName(of: service), scope: scope, creator: lazyCreator)
+    }
+    
     func registerService<Service>(_ service: Service.Type, instance: Service) {
         registerService(named: PTRouterServiceManager.serviceName(of: service), instance: instance)
     }
     
     // MARK: - Unregister Service
-    
-    /// 通过服务名称取消注册服务
-    /// - Parameter named: 服务名称
     @discardableResult
     func unregisterService(named: String) -> Any? {
-        return serviceQueue.sync {
-            self.creatorsMap.removeValue(forKey: named)
-            return self.servicesCache.removeValue(forKey: named)
-        }
+        self.creatorsMap.removeValue(forKey: named)
+        return self.servicesCache.removeValue(forKey: named)
     }
     
-    /// 通过服务接口取消注册服务
-    /// - Parameter service: 服务接口
     @discardableResult
-    func unregisterService<Service>(_ service: Service) -> Service? {
+    func unregisterService<Service>(_ service: Service.Type) -> Service? {
         return unregisterService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 
-//MARK: - Register Batch Services
+// MARK: - Register Batch Services
 public extension PTRouterServiceManager {
     typealias BatchServiceMap = [String: PTServiceCreator]
     typealias ServiceEntry = BatchServiceMap.Element
-    func registerService(_ services: BatchServiceMap) {
-        serviceQueue.async {
-            self.creatorsMap.merge(services, uniquingKeysWith: { _, v2 in v2 })
-        }
+    
+    func registerService(_ services: BatchServiceMap, scope: PTServiceScope = .singleton) {
+        // 字典合并，自动装配上 scope
+        let mappedServices = services.mapValues { (scope, $0) }
+        self.creatorsMap.merge(mappedServices, uniquingKeysWith: { _, v2 in v2 })
     }
     
-    func registerService(entryLiteral entries: ServiceEntry ...) {
-        return registerService(BatchServiceMap(entries, uniquingKeysWith: {_, v2 in v2}))
+    func registerService(scope: PTServiceScope = .singleton, entryLiteral entries: ServiceEntry ...) {
+        registerService(BatchServiceMap(entries, uniquingKeysWith: { _, v2 in v2 }), scope: scope)
     }
 }
 
-//MARK: - Service Create
+// MARK: - Service Create & Fetch (按字符串)
 public extension PTRouterServiceManager {
-    /// 根据服务名称创建服务（如果缓存中已有服务实例，则不需要创建）
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - shouldCache: 是否需要缓存
-    func createService(named: String, shouldCache: Bool = true) -> Any? {
-        // 检查是否有缓存
-        if let service = serviceQueue.sync(execute: { servicesCache[named] }) {
+    func createService(named: String) -> Any? {
+        // 1. 检查是否有缓存
+        if let service = servicesCache[named] {
             return service
         }
-        // 检查是否有构造者
-        guard let creator = serviceQueue.sync(execute: { creatorsMap[named] }) else {
+        
+        // 2. 检查是否有对应的构造配置 (这里才是 Optional 的)
+        guard let config = creatorsMap[named] else {
             return nil
         }
         
-        let service = creator()
-        if shouldCache {
-            serviceQueue.async {
-                self.servicesCache[named] = service
-            }
+        // 3. 直接调用构造器生成实例 (creator 返回的是 Any，不需要 let 解包)
+        let service = config.creator()
+        
+        // 4. 根据生命周期决定是否缓存
+        if config.scope == .singleton {
+            servicesCache[named] = service
         }
+        
         return service
     }
     
-    /// 根据服务接口创建服务（如果缓存中已有服务实例，则不需要创建）
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - shouldCache: 是否需要缓存
-    func createService<Service>(_ service: Service.Type, shouldCache: Bool = true) -> Service? {
-        createService(named: PTRouterServiceManager.serviceName(of: service), shouldCache: shouldCache) as? Service
-    }
-}
-
-//MARK: - Service Fetch
-public extension PTRouterServiceManager {
-    /// 通过服务名称获取服务
-    /// - Parameter named: 服务名称
     func getService(named: String) -> Any? {
-        createService(named: named)
+        return createService(named: named)
     }
 }
 
-//MARK: - Service Clean Cache
+// MARK: - Service Clean Cache
 public extension PTRouterServiceManager {
     func cleanAllServiceCache() {
-        serviceQueue.async {
-            self.servicesCache.removeAll()
-        }
+        self.servicesCache.removeAll()
     }
     
     @discardableResult
     func cleanServiceCache(named: String) -> Any? {
-        serviceQueue.sync {
-            servicesCache.removeValue(forKey: named)
-        }
+        return servicesCache.removeValue(forKey: named)
     }
     
     @discardableResult
     func cleanServiceCache<Service>(by service: Service.Type) -> Service? {
-        cleanServiceCache(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        return cleanServiceCache(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 

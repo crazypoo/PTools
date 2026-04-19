@@ -17,8 +17,16 @@ public class PTRouterBridge: NSObject {
     
     // 方法1：根据URL字符串打开
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async -> Any? {
-        return await PTRouter.openURL(urlString, userInfo: userInfo, complateHandler: complateHandler)
+    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async throws -> Any? {
+        Task {
+            do {
+                let anys = try await PTRouter.openURL(urlString, userInfo: userInfo, complateHandler: complateHandler)
+                return anys
+            } catch {
+                PTNSLogConsole("\(error)")
+                return nil
+            }
+        }
     }
     
     

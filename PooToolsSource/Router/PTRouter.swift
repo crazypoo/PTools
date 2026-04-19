@@ -68,6 +68,22 @@ public let PTRouterDefaultPriority: UInt = 1000
 
 public typealias ComplateHandler = (([String: Any]?, Any?) -> Void)?
 
+public enum PTRouterError: Error, LocalizedError {
+    case notFound(url: String)
+    case interceptorBlocked(reason: String)
+    case invalidClass(className: String)
+    case initializationFailed
+    
+    public var errorDescription: String? {
+        switch self {
+        case .notFound(let url): return "路由未匹配或未注册: \(url)"
+        case .interceptorBlocked(let reason): return "路由被拦截器中断: \(reason)"
+        case .invalidClass(let className): return "无法解析对应的目标类，请检查类名拼写: \(className)"
+        case .initializationFailed: return "控制器初始化失败"
+        }
+    }
+}
+
 // 定义一个封装类来存储和执行接受参数的闭包
 public class PTRouerParamsClosureWrapper: NSObject {
     public var closure: ((Any) -> Void)?
@@ -588,20 +604,69 @@ extension PTRouter {
     }
     
     @discardableResult
+    @MainActor
+    public class func openURLVC(_ urlString: String, userInfo: [String: Any] = [:]) async throws -> UIViewController {
+        
+        // 1. 拦截器检查
+        let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
+        guard canContinue else {
+            // 被拦截器截断，抛出具体异常
+            throw PTRouterError.interceptorBlocked(reason: "匹配到拦截白名单外的规则")
+        }
+        
+        // 2. 匹配 URL
+        let response = await PTRouter.matchURL(urlString, userInfo: userInfo)
+        guard let pattern = response.pattern else {
+            throw PTRouterError.notFound(url: urlString)
+        }
+        
+        let queries = response.queries
+        
+        // 解析 JumpType
+        var resultJumpType: PTJumpType = .push
+        if let typeString = queries[PTJumpTypeKey] as? String,
+           let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) {
+            resultJumpType = jumpType
+        }
+        
+        // 3. 解析类名
+        guard let vcClass = NSClassFromString(pattern.classString) as? UIViewController.Type else {
+            shareInstance.logcat?(urlString, .logError, "解析类名失败: \(pattern.classString)")
+            throw PTRouterError.invalidClass(className: pattern.classString)
+        }
+        
+        // 4. 实例化 VC
+        let resultVC: UIViewController
+        if let routableClass = vcClass as? PTRoutableController.Type {
+            resultVC = routableClass.init(routerParams: queries) as! UIViewController
+        } else {
+            resultVC = vcClass.init()
+            _ = resultVC.setPropertyParameter(queries)
+        }
+        
+        // 5. 执行跳转
+        jump(jumpType: resultJumpType, vc: resultVC, queries: queries)
+        
+        return resultVC
+    }
+
+    @discardableResult
     @MainActor // 确保 UI 跳转在主线程
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [:]) async -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: Any] = [:]) async throws -> Any? {
         // 1. 执行异步拦截检查
         let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
-        guard canContinue else { return nil }
+        guard canContinue else {
+            throw PTRouterError.interceptorBlocked(reason: "匹配到拦截白名单外的规则")
+        }
         
         // 2. 原有的逻辑（调用我们之前重构过的底层逻辑）
         return await self.openCacheRouter((urlString, userInfo))
     }
 
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async throws -> Any? {
         if urlString.isEmpty {
-            return nil
+            throw PTRouterError.notFound(url: urlString)
         }
         if !shareInstance.routerLoaded {
             return shareInstance.lazyRegisterHandleBlock?(urlString, userInfo)
@@ -797,7 +862,9 @@ public extension PTRouter {
     ///   - named: 服务名称
     ///   - creator: 服务构造者
     class func registerService(named: String, creator: @escaping PTServiceCreator) {
-        PTRouterServiceManager.shared.registerService(named: named, creator: creator)
+        Task {
+            await PTRouterServiceManager.shared.registerService(named: named, creator: creator)
+        }
     }
     
     /// 通过服务名称(named)注册一个服务实例 (存在缓存中)
@@ -805,7 +872,9 @@ public extension PTRouter {
     ///   - named: 服务名称
     ///   - instance: 服务实例
     class func registerService(named: String, instance: Any) {
-        PTRouterServiceManager.shared.registerService(named: named, instance: instance)
+        Task {
+            await PTRouterServiceManager.shared.registerService(named: named, instance: instance)
+        }
     }
     
     /// 通过服务名称(named)注册LAServiceCreator
@@ -813,7 +882,9 @@ public extension PTRouter {
     ///   - named: 服务名称
     ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
     class func registerService(named: String, lazyCreator: @escaping @autoclosure PTServiceCreator) {
-        PTRouterServiceManager.shared.registerService(named: named, lazyCreator: lazyCreator)
+        Task {
+            await PTRouterServiceManager.shared.registerService(named: named, lazyCreator: lazyCreator)
+        }
     }
     
     // MARK: - Register With Service Type
@@ -822,7 +893,9 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - creator: 服务构造者
     class func registerService<Service>(_ service: Service.Type, creator: @escaping () -> Service) {
-        PTRouterServiceManager.shared.registerService(service, creator: creator)
+        Task {
+            await PTRouterServiceManager.shared.registerService(service, creator: creator)
+        }
     }
     
     /// 通过服务接口注册LAServiceCreator
@@ -830,7 +903,9 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
     class func registerService<Service>(_ service: Service.Type, lazyCreator: @escaping @autoclosure () -> Service) {
-        PTRouterServiceManager.shared.registerService(service, lazyCreator: lazyCreator())
+        Task {
+            await PTRouterServiceManager.shared.registerService(service, lazyCreator: lazyCreator())
+        }
     }
     
     /// 通过服务接口注册一个服务实例 (存在缓存中)
@@ -838,7 +913,9 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - instance: 服务实例
     class func registerService<Service>(_ service: Service.Type, instance: Service) {
-        PTRouterServiceManager.shared.registerService(service, instance: instance)
+        Task {
+            await PTRouterServiceManager.shared.registerService(service, instance: instance)
+        }
     }
 }
 
@@ -850,7 +927,9 @@ public extension PTRouter {
     ///   - shouldCache: 是否需要缓存
     @discardableResult
     class func createService(named: String, shouldCache: Bool = true) -> Any? {
-        PTRouterServiceManager.shared.createService(named: named)
+        Task {
+            await PTRouterServiceManager.shared.createService(named: named)
+        }
     }
     
     /// 根据服务接口创建服务（如果缓存中已有服务实例，则不需要创建）
@@ -858,22 +937,25 @@ public extension PTRouter {
     ///   - service: 服务接口
     ///   - shouldCache: 是否需要缓存
     @discardableResult
-    class func createService<Service>(_ service: Service.Type, shouldCache: Bool = true) -> Service? {
-        PTRouterServiceManager.shared.createService(service)
+    class func createService<Service>(_ service: Service.Type) async -> Service? {
+        // 直接调用底层 actor 极其安全的强类型泛型方法
+        return await PTRouterServiceManager.shared.getService(service)
     }
-    
+
     /// 通过服务名称获取服务
     /// - Parameter named: 服务名称
     @discardableResult
     class func getService(named: String) -> Any? {
-        PTRouterServiceManager.shared.getService(named: named)
+        Task {
+            await PTRouterServiceManager.shared.getService(named: named)
+        }
     }
     
     /// 通过服务接口获取服务
     /// - Parameter service: 服务接口
     @discardableResult
-    class func getService<Service>(_ service: Service.Type) -> Service? {
-        PTRouterServiceManager.shared.getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+    class func getService<Service>(_ service: Service.Type) async -> Service? {
+        return await PTRouterServiceManager.shared.getService(service)
     }
 }
 
@@ -883,6 +965,12 @@ public extension PTRouter {
         let data = try! JSONSerialization.data(withJSONObject: relocationMap, options: [])
         let routeReMapInfo = try! JSONDecoder().decode(PTRouterInfo.self, from: data)
         PTRouterManager.addRelocationHandle(routerMapList: [routeReMapInfo])
-        await PTRouter.openURL(scheme)
+        Task  {
+            do {
+                let _ = try await PTRouter.openURL(scheme)
+            } catch {
+                PTNSLogConsole("\(error)")
+            }
+        }
     }
 }

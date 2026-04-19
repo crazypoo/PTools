@@ -60,30 +60,38 @@ extension PTRouterManager {
                                         _ urlPath: String,
                                         _ userInfo: [String: Any],
                                         forceCheckEnable: Bool = false) async -> Any? {
-        let beginRegisterTime = CFAbsoluteTimeGetCurrent()
-        if registerRouterList.isEmpty {
-            registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
-        }
-        for item in registerRouterList {
-            var priority: UInt32 = 0
-            if let number = UInt32(item[PTRouterPriority] ?? "0") {
-                priority = number
+        Task {
+            do {
+                let beginRegisterTime = CFAbsoluteTimeGetCurrent()
+                if registerRouterList.isEmpty {
+                    registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
+                }
+                for item in registerRouterList {
+                    var priority: UInt32 = 0
+                    if let number = UInt32(item[PTRouterPriority] ?? "0") {
+                        priority = number
+                    }
+                    PTRouter.addRouterItem(patternString: item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
+                }
+                let endRegisterTime = CFAbsoluteTimeGetCurrent()
+                PTRouter.routerLoadStatus(true)
+                if PTRouterManager.shareInstance.useCache {
+                    PTRouter.shareInstance.logcat?("使用缓存注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
+                } else {
+                    PTRouter.shareInstance.logcat?("未使用缓存注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
+                }
+                if forceCheckEnable {
+        #if DEBUG
+                    routerForceRecheck(excludeCocoapods)
+        #endif
+                }
+                let anys = try await PTRouter.openURL(urlPath, userInfo: userInfo)
+                return anys
+            } catch {
+                PTNSLogConsole("\(error)")
+                return nil
             }
-            PTRouter.addRouterItem(patternString: item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
         }
-        let endRegisterTime = CFAbsoluteTimeGetCurrent()
-        PTRouter.routerLoadStatus(true)
-        if PTRouterManager.shareInstance.useCache {
-            PTRouter.shareInstance.logcat?("使用缓存注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
-        } else {
-            PTRouter.shareInstance.logcat?("未使用缓存注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
-        }
-        if forceCheckEnable {
-#if DEBUG
-            routerForceRecheck(excludeCocoapods)
-#endif
-        }
-        return await PTRouter.openURL(urlPath, userInfo: userInfo)
     }
     
     // MARK: - 客户端强制校验，是否匹配
@@ -327,7 +335,9 @@ extension PTRouterManager {
                 if class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil,
                    class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil,
                    let cls = currentClass as? PTRouterServiceProtocol.Type {
-                    PTRouterServiceManager.shared.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
+                    Task {
+                        await PTRouterServiceManager.shared.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
+                    }
                 }
             }
         }
