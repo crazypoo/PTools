@@ -10,38 +10,103 @@ import Foundation
 import UIKit
 
 /*
- 1.先AppDelegate注册服务
- /// 服务路由
- public let serivceHost = "scheme://services?"
+ 📖 快速上手 (Quick Start)
+ 1. 初始化与注册 (Initialization)
+ 在 App 启动时配置基础路径、注册服务和路由表：
 
- /// web跳转路由
- public let webRouterUrl = "scheme://webview/home"
-
- // 路由懒加载注册
- PTRouter.lazyRegisterRouterHandle { url, userInfo in
-     PTRouterManager.injectRouterServiceConfig(webRouterUrl, serivceHost)
-     return PTRouterManager.addGloableRouter([".XXXXX"], url, userInfo)
- }
-
- // 动态注册服务
- PTRouterManager.registerServices()
-
- // 日志回调，可以监控线上路由运行情况
- PTRouter.logcat { url, logType, errorMsg in
-     PTNSLogConsole("PTRouter: logMsg- \(url) \(logType.rawValue) \(errorMsg)")
- }
-
- 2.然后在VC绑定属性
- extension XXXXXXXXXXXController: PTRouterable {
+ Swift
+ func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
      
-     static var patternString: [String] {
-         ["scheme://router/demo"]
+     // 1. 配置 H5 容器基础路径
+     PTRouter.shareInstance.webPath = "scheme://webview/home"
+     
+     // 2. 注册页面路由 (支持正则动态参数捕获)
+     PTRouter.addRouterItem("scheme://home", classString: "MyApp.HomeViewController")
+     PTRouter.addRouterItem("scheme://goods/:id", classString: "MyApp.GoodsDetailVC")
+     
+     // 3. 注册异步拦截器
+     PTRouter.addAsyncInterceptor(LoginInterceptor())
+     
+     return true
+ }
+ 2. 现代化的页面传参 (Type-Safe Routing)
+ Step A: 定义页面协议与参数
+ 不再需要 @objc 和 KVC，目标控制器主动遵循 PTRoutableStaticController 协议实现安全初始化。
+
+ Swift
+ // 1. 定义专属参数结构体
+ struct GoodsParams: PTRoutableParams {
+     typealias Target = GoodsDetailVC
+     let id: String
+     let source: String
+     func toDictionary() -> [String : Any] { ["id": id, "source": source] }
+ }
+
+ // 2. 控制器实现安全解包
+ class GoodsDetailVC: UIViewController, PTRoutableStaticController {
+     typealias Params = GoodsParams
+     let goodsID: String
+     
+     required init(routerParams: [String: Any]) {
+         self.goodsID = (routerParams["id"] as? String) ?? ""
+         super.init(nibName: nil, bundle: nil)
      }
-          
-     static func registerAction(info: [String : Any]) -> Any {
-         let vc =  XXXXXXXXXXXController()
-         vc.resultLabel.text = info.description
-         return vc
+     // ...
+ }
+ Step B: 发起极度安全的路由跳转
+ 利用强类型 Builder 发起跳转，一旦参数拼错或少传，将无法通过编译！
+
+ Swift
+ func jumpToDetail() {
+     Task {
+         do {
+             // 完美体验：自动补全、类型安全、精确错误捕获
+             let detailVC = try await PTTypedBuilder<GoodsDetailVC>(path: "scheme://goods/10086")
+                 .with(params: GoodsParams(id: "10086", source: "banner"))
+                 .navigation()
+             
+             print("成功拿到目标控制器：\(detailVC.goodsID)")
+             
+         } catch PTRouterError.interceptorBlocked {
+             print("跳转被拦截（如未登录）")
+         } catch {
+             print("路由异常: \(error)")
+         }
+     }
+ }
+ 3. 本地服务治理 (Service Management)
+ 通过 actor 保驾护航的强类型服务治理，拒绝野指针与单例满天飞。
+
+ Swift
+ // 1. 注册服务 (可指定生命周期 scope)
+ Task {
+     await PTRouterServiceManager.shared.registerService(
+         HeavyVideoProcessorProtocol.self,
+         scope: .prototype // 每次获取生成新实例，用完即释放
+     ) {
+         return HeavyVideoProcessorImpl()
+     }
+ }
+
+ // 2. 跨模块获取服务并调用
+ Task {
+     guard let processor = await PTRouter.getService(HeavyVideoProcessorProtocol.self) else { return }
+     processor.startProcess()
+ }
+ 4. 强大的异步拦截器 (Async Interceptors)
+ 同步返回 Bool 已经过时了！现在你可以优雅地在路由中插入挂起任务。
+
+ Swift
+ class LoginInterceptor: PTRouterAsyncInterceptor {
+     var priority: UInt = 100
+     var whiteList: [String] = ["scheme://login"]
+
+     func handle(queries: [String: Any]) async throws -> Bool {
+         if UserManager.shared.isLogin { return true }
+         
+         // 挂起当前路由，等待登录页的返回结果
+         let loginVC = try? await PTRouter.openURL("scheme://login")
+         return loginVC != nil // 登录成功则继续原本的跳转
      }
  }
  */
