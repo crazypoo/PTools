@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FDFullscreenPopGesture
 import SwifterSwift
 import AttributedString
 import Photos

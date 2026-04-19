@@ -946,12 +946,10 @@
 		9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */; };
 		9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */; };
 		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
-		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
 		CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
 		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
-		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
 		CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */; };
 		CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE7811A20BD88D2004E6ADB /* CoreImage.framework */; };
@@ -1973,12 +1971,10 @@
 				CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */,
 				CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */,
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
-				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
 				CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */,
 				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
 				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,
 				CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */,
-				CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				55F3A9D02E3B140F001A0571 /* HealthKit.framework in Frameworks */,
@@ -4181,7 +4177,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4191,9 +4188,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4208,9 +4209,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

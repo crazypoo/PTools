@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - Fullscreen Pop Gesture Configurator
 open class PTFullscreenPopGesture {
-    /// 只需要在 App 启动时（例如 AppDelegate）调用一次此方法
+    /// 只需要在 App 启动时（例如 AppDelegate 的 didFinishLaunchingWithOptions）调用一次此方法
     public static func configure() {
         UINavigationController.enableFullscreenPop()
         UIViewController.enableSwizzling()
@@ -58,7 +58,7 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
     
     @objc private func swizzled_pushViewController(_ viewController: UIViewController, animated: Bool) {
         
-        // 1. 设置系统手势 target 到我们的全屏手势上
+        // 1. 设置系统手势 target 到我们的全屏手势上 (懒加载绑定)
         if fullscreenPopGesture.view == nil {
             interactivePopGestureRecognizer?.view?.addGestureRecognizer(fullscreenPopGesture)
             
@@ -66,43 +66,45 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
                let targetObj = targets.first?.value(forKey: "target") {
                 // 借用系统的私有 API 处理滑动过渡动画
                 fullscreenPopGesture.addTarget(targetObj, action: NSSelectorFromString("handleNavigationTransition:"))
-                // 禁用系统边缘返回手势
+                // 禁用系统自带的边缘返回手势，防止冲突
                 interactivePopGestureRecognizer?.isEnabled = false
             }
         }
         
-        // 2. 注入导航栏隐藏/显示的控制逻辑 (重点修复部分)
-        // 当 VC 即将显示时，这段代码会被触发
-        viewController.willAppearBlockContainer = WillAppearBlockContainer { [weak self] vc, animated in
-            guard let self = self else { return }
-            if self.viewControllerBasedNavBarAppearanceEnabled {
-                self.setNavigationBarHidden(vc.prefersNavigationBarHidden, animated: animated)
-            }
-        }
-        
-        // 3. 调用原生的 push 逻辑 (因为已经交换了方法，这里实际上调用的是原生的 push)
+        // 2. 调用原生的 push 逻辑 (注意：这里已经去掉了之前有 Bug 的 Block 注入逻辑)
         swizzled_pushViewController(viewController, animated: animated)
     }
     
     // MARK: - UIGestureRecognizerDelegate
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        // 如果是根视图，不响应手势
-        guard let top = viewControllers.last, viewControllers.count > 1 else { return false }
-        // 如果当前 VC 禁用了手势，不响应
+        // 1. 如果是根视图，不响应手势
+        guard viewControllers.count > 1, let top = viewControllers.last else { return false }
+        
+        // 2. 如果当前 VC 禁用了手势，不响应
         guard !top.interactivePopDisabled else { return false }
+        
+        // 3. 修复动画过渡期间的崩溃：如果导航栏正在做转场动画，不响应手势
+        if let isTransitioning = value(forKey: "_isTransitioning") as? NSNumber, isTransitioning.boolValue {
+            return false
+        }
+        
         guard let pan = gestureRecognizer as? UIPanGestureRecognizer else { return false }
         
         let location = pan.location(in: pan.view)
         let translation = pan.translation(in: pan.view)
         
-        // 如果设置了最大触发距离，并且触摸起始点超过了该距离，不响应
+        // 4. 如果设置了最大触发距离，并且触摸起始点超过了该距离，不响应
         if top.interactivePopMaxAllowedInitialDistanceToLeftEdge > 0,
            Double(location.x) > top.interactivePopMaxAllowedInitialDistanceToLeftEdge {
             return false
         }
         
-        // 只有向右滑动时才响应 (忽略向左滑动)
-        return translation.x > 0
+        // 5. 只有向右滑动时才响应 (防止向左滑动也触发 pop 动画)
+        if translation.x <= 0 {
+            return false
+        }
+        
+        return true
     }
 }
 
@@ -133,13 +135,7 @@ extension UIViewController {
         get { (objc_getAssociatedObject(self, &AssociatedKeys.maxInitialDistance) as? Double) ?? 0 }
         set { objc_setAssociatedObject(self, &AssociatedKeys.maxInitialDistance, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-    
-    /// 用于存储 viewWillAppear 时需要执行的代码块
-    fileprivate var willAppearBlockContainer: WillAppearBlockContainer? {
-        get { objc_getAssociatedObject(self, &AssociatedKeys.willAppearBlockContainer) as? WillAppearBlockContainer }
-        set { objc_setAssociatedObject(self, &AssociatedKeys.willAppearBlockContainer, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
+        
     private static let swizzleViewWillAppearOnce: Void = {
         Swizzle(UIViewController.self) {
             #selector(viewWillAppear(_:)) <-> #selector(swizzled_viewWillAppear(_:))
@@ -154,16 +150,10 @@ extension UIViewController {
         // 调用原生逻辑
         swizzled_viewWillAppear(animated)
         
-        // 触发在 UINavigationController push 时注入的代码块，控制导航栏外观
-        willAppearBlockContainer?.block(self, animated)
-    }
-}
-
-// MARK: - Helper Container
-/// 使用一个简单的类来包装闭包，以便可以用 Associated Object 保存
-fileprivate class WillAppearBlockContainer {
-    let block: (_ vc: UIViewController, _ animated: Bool) -> Void
-    init(_ block: @escaping (_ vc: UIViewController, _ animated: Bool) -> Void) {
-        self.block = block
+        // 2. 直接在这里控制导航栏的外观！
+        // 这样不仅去掉了复杂的 Block 注入，而且完美解决了 Root VC pop 回来时不触发的问题。
+        if let nav = self.navigationController, nav.viewControllerBasedNavBarAppearanceEnabled {
+            nav.setNavigationBarHidden(self.prefersNavigationBarHidden, animated: animated)
+        }
     }
 }
