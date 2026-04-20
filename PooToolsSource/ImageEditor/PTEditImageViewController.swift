@@ -242,29 +242,30 @@ public class PTEditImageViewController: PTBaseViewController {
                 hasEdit = false
             }
             
-            var resImage = self.originalImage
-            var editModel: PTEditModel?
-            
-            @MainActor func callback() {
-                self.dismiss(animated: self.animate) {
-                    self.editFinishBlock?(resImage!, editModel)
-                }
-            }
-            
             guard hasEdit else {
-                callback()
+                self.dismiss(animated: self.animate) {
+                    self.editFinishBlock?(self.originalImage, nil)
+                }
                 return
             }
+
+            // 2. 弹出提示框
+            PTAlertTipControl.present(title: PTImageEditorConfig.share.doingAlertTitle, icon: .Heart, style: .Normal)
             
-            PTAlertTipControl.present(title:PTImageEditorConfig.share.doingAlertTitle,icon:.Heart,style: .Normal)
-            PTGCDManager.gcdAfter(time: 0.1, block: {
-                resImage = self.buildImage()
-                resImage = resImage!.pt.clipImage(
+            // 3. 🚀 开启现代并发任务进行图片合成
+            Task { @MainActor in
+                // 巧妙的机制：让出当前线程的控制权 (极短暂睡眠)，确保系统的 RunLoop 有时间把上面那句 HUD 渲染到屏幕上
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1秒
+                
+                // 开始合成大图 (buildImage 内部有图层渲染，必须在 MainActor 执行)
+                var resImage = self.buildImage()
+                resImage = resImage.pt.clipImage(
                     angle: self.currentClipStatus.angle,
                     editRect: self.currentClipStatus.editRect,
                     isCircle: self.currentClipStatus.ratio?.isCircle ?? false
-                    )
-                editModel = PTEditModel(
+                )
+                
+                let editModel = PTEditModel(
                     drawPaths: self.drawEngine.drawPaths,
                     mosaicPaths: self.mosaicEngine.mosaicPaths,
                     clipStatus: self.currentClipStatus,
@@ -273,8 +274,12 @@ public class PTEditImageViewController: PTBaseViewController {
                     stickers: stickerStates,
                     actions: self.editorManager.actions
                 )
-                callback()
-            })
+                
+                // 合成完毕，直接 dismiss
+                self.dismiss(animated: self.animate) {
+                    self.editFinishBlock?(resImage, editModel)
+                }
+            }
         }
         view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view
@@ -571,8 +576,10 @@ public class PTEditImageViewController: PTBaseViewController {
 
         rotationImageView()
         if PTImageEditorConfig.share.tools.contains(.filter) {
-            filterEngine.generateFilterThumbnails { [weak self] in
-                self?.filterCollectionView.contentCollectionView.reloadData()
+            Task { @MainActor in
+                // await 会在这里挂起等待，直到后台滤镜全算完，才会执行下一行，而不会卡住屏幕！
+                await filterEngine.generateFilterThumbnails()
+                self.filterCollectionView.contentCollectionView.reloadData()
             }
         }
                 

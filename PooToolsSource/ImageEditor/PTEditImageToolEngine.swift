@@ -9,6 +9,7 @@
 import UIKit
 import Harbeth
 import SwifterSwift
+import CoreImage
 
 /// 主控制器为引擎提供的上下文数据源 (解耦的关键)
 public protocol PTEditImageEngineContext: AnyObject {
@@ -309,6 +310,12 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     
     private weak var context: PTEditImageEngineContext?
     
+    // 🔥 新增：GPU 渲染上下文。复用同一个 Context 能极大提升性能
+    private lazy var ciContext: CIContext = {
+        // 强制使用 GPU (Metal) 渲染，拒绝 CPU 软解
+        return CIContext(options: [.useSoftwareRenderer: false])
+    }()
+    
     /// 手势交互状态改变回调 (传回 true 代表开始交互，VC 需隐藏工具栏；false 则显示)
     public var onInteractStateChanged: ((Bool) -> Void)?
     
@@ -402,68 +409,75 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
         mosaicContainerView.layer.addSublayer(mosaicImageLayer!)
         mosaicImageLayer?.mask = mosaicImageLayerMaskLayer
     }
-
+    
+    /// 极速生成黑白遮罩 (Mask)：黑色代表原图，白色代表马赛克区域
+    private func generateMaskImage(size: CGSize) -> UIImage? {
+        // 对于遮罩，单通道灰度图即可，不需要占用巨大内存的 RGB 画布
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1.0
+        
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        return renderer.image { ctx in
+            // 背景填黑
+            ctx.cgContext.setFillColor(UIColor.black.cgColor)
+            ctx.cgContext.fill(CGRect(origin: .zero, size: size))
+            
+            // 笔刷填白
+            ctx.cgContext.setStrokeColor(UIColor.white.cgColor)
+            ctx.cgContext.setLineCap(.round)
+            ctx.cgContext.setLineJoin(.round)
+            
+            // 快速绘制路径
+            for path in mosaicPaths {
+                ctx.cgContext.beginPath()
+                ctx.cgContext.move(to: path.startPoint)
+                for point in path.linePoints {
+                    ctx.cgContext.addLine(to: point)
+                }
+                ctx.cgContext.setLineWidth(path.path.lineWidth / path.ratio)
+                ctx.cgContext.strokePath()
+            }
+        }
+    }
+    
     /// 核心合成函数：将用户划过的马赛克路径合成到最终图片上
     @discardableResult
     public func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
         guard let context = context else { return nil }
         
-        let originalImage = context.engineOriginalImage
-        let editImage = context.engineCurrentEditImage
+        let originalImage = inputImage ?? context.engineCurrentEditImage
+        let bgMosaicImage = inputMosaicImage ?? self.mosaicImage
         
-        // 【关键】：加入 autoreleasepool 保护内存，防止大图 OOM
+        guard let bgMosaicImage = bgMosaicImage else { return nil }
+        
         return autoreleasepool {
-            let renderRect = CGRect(origin: .zero, size: originalImage.size)
-            
-            var midImage = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
-                format.scale = originalImage.scale
-            } imageActions: { ctx in
-                
-                if inputImage != nil {
-                    inputImage?.draw(in: renderRect)
-                } else {
-                    // 如果外部没有传入源图片，默认拿当前的编辑底图
-                    editImage.draw(in: renderRect)
-                }
-                
-                // 将收集到的所有马赛克路径绘制到上下文
-                mosaicPaths.forEach { path in
-                    ctx.move(to: path.startPoint)
-                    path.linePoints.forEach { point in
-                        ctx.addLine(to: point)
-                    }
-                    ctx.setLineWidth(path.path.lineWidth / path.ratio)
-                    ctx.setLineCap(.round)
-                    ctx.setLineJoin(.round)
-                    ctx.setBlendMode(.clear)
-                    ctx.strokePath()
-                }
+            // 1. 将 UIImage 转为 GPU 友好的 CIImage (几乎不消耗时间，只是创建指针)
+            guard let backgroundCI = CIImage(image: originalImage),
+                  let foregroundCI = CIImage(image: bgMosaicImage),
+                  let maskUIImage = generateMaskImage(size: originalImage.size),
+                  let maskCI = CIImage(image: maskUIImage) else {
+                return nil
             }
             
-            guard let midCgImage = midImage.cgImage else { return nil }
-            midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
+            // 2. 调用硬件级混合滤镜：CIBlendWithMask
+            guard let blendFilter = CIFilter(name: "CIBlendWithMask") else { return nil }
+            blendFilter.setValue(foregroundCI, forKey: kCIInputImageKey) // 前景：全屏马赛克
+            blendFilter.setValue(backgroundCI, forKey: kCIInputBackgroundImageKey) // 背景：清晰原图
+            blendFilter.setValue(maskCI, forKey: kCIInputMaskImageKey) // 遮罩：刚才画的黑白路径
             
-            let temp = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
-                format.scale = originalImage.scale
-            } imageActions: { _ in
-                // 先画原图打底，防止边缘因为抗锯齿出现黑边
-                originalImage.draw(in: renderRect)
-                (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
-                midImage.draw(in: renderRect)
+            // 3. 让 GPU 渲染出结果
+            guard let outputCI = blendFilter.outputImage,
+                  let cgImage = ciContext.createCGImage(outputCI, from: outputCI.extent) else {
+                return nil
             }
             
-            guard let cgi = temp.cgImage else { return nil }
-            let finalImage = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
+            // 4. 转回 UIImage 并更新到屏幕
+            let finalImage = UIImage(cgImage: cgImage, scale: originalImage.scale, orientation: originalImage.imageOrientation)
             
-            if inputImage != nil {
-                return finalImage
+            if inputImage == nil {
+                mosaicImageLayerMaskLayer?.path = nil
+                context.engineUpdateEditImage(finalImage)
             }
-            
-            // 更新内部状态并清理 Mask 路径
-            mosaicImageLayerMaskLayer?.path = nil
-            
-            // 将新生成的带有马赛克的图片更新回主控制器
-            context.engineUpdateEditImage(finalImage)
             
             return finalImage
         }
@@ -918,22 +932,25 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 滤镜业务逻辑
     
     /// 异步生成底部菜单所需的滤镜缩略图
-    public func generateFilterThumbnails(completion: @escaping () -> Void) {
+    public func generateFilterThumbnails() async {
         guard let context = context, let thumbnailImage = context.engineThumbnailImage else { return }
         
-        PTGCDManager.gcdGobal {
-            let filters = PTImageEditorConfig.share.filters
-            var thumbnails: [UIImage] = []
+        let filters = PTImageEditorConfig.share.filters
+        
+        // 1. Task.detached 会将繁重的图片处理任务踢到后台子线程，绝不阻塞主线程 UI
+        let thumbnails = await Task.detached(priority: .userInitiated) {
+            var results: [UIImage] = []
             
-            filters.forEach { filter in
+            for filter in filters {
                 PTHarBethFilter.share.texureSize = thumbnailImage.size
-                thumbnails.append(filter.getCurrentFilterImage(image: thumbnailImage))
+                results.append(filter.getCurrentFilterImage(image: thumbnailImage))
             }
-            
-            PTGCDManager.gcdMain {
-                self.thumbnailFilterImages = thumbnails
-                completion()
-            }
+            return results
+        }.value // .value 会等待后台任务执行完毕并返回结果
+        
+        // 2. 切回主线程 (MainActor) 更新属性，确保 UI 安全
+        await MainActor.run {
+            self.thumbnailFilterImages = thumbnails
         }
     }
     
