@@ -411,85 +411,37 @@ public class PTEditImageViewController: PTBaseViewController {
         imageView.isHidden = true
         return imageView
     }()
+    
     private var editorManager: PTMediaEditManager!
+    
+    /// 记录当前正在使用的工具引擎
+    private var activeEngine: PTEditImageToolEngine?
+    
+    /// 涂鸦引擎
+    private lazy var drawEngine: PTDrawEngine = {
+        let engine = PTDrawEngine(context: self)
+        engine.onInteractStateChanged = { [weak self] isInteracting in
+            self?.viewToolsBar(show: !isInteracting)
+        }
+        return engine
+    }()
+    
+    /// 马赛克引擎
+    private lazy var mosaicEngine: PTMosaicEngine = {
+        let engine = PTMosaicEngine(context: self)
+        engine.onInteractStateChanged = { [weak self] isInteracting in
+            self?.viewToolsBar(show: !isInteracting)
+        }
+        return engine
+    }()
+
     private lazy var panGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer { sender in
             if let pan = sender as? UIPanGestureRecognizer {
-                if self.eraser.isSelected {
-                    self.eraserAction(pan)
-                    return
-                }
-                
-                if self.selectedTool == .draw {
-                    let point = pan.location(in: self.drawingImageView)
-                    if pan.state == .began {
-                        self.viewToolsBar(show: false)
-                        
-                        let originalRatio = min(self.mainScrollView.frame.width / self.originalImage.size.width, self.mainScrollView.frame.height / self.originalImage.size.height)
-                        let ratio = min(
-                            self.mainScrollView.frame.width / self.currentClipStatus.editRect.width,
-                            self.mainScrollView.frame.height / self.currentClipStatus.editRect.height
-                        )
-                        let scale = ratio / originalRatio
-                        // 缩放到最初的size
-                        var size = self.drawingImageView.frame.size
-                        size.width /= scale
-                        size.height /= scale
-                        if self.shouldSwapSize {
-                            swap(&size.width, &size.height)
-                        }
-                        
-                        var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
-                        if self.editImage.size.width / self.editImage.size.height > 1 {
-                            toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
-                        }
-                        
-                        let path = PTDrawPath(pathColor: self.drawColor, pathWidth: self.drawLineWidth / self.mainScrollView.zoomScale, defaultLinePath: self.defaultDrawPathWidth, ratio: ratio / originalRatio / toImageScale, startPoint: point)
-                        self.drawPaths.append(path)
-                    } else if pan.state == .changed {
-                        let path = self.drawPaths.last
-                        path!.addLine(to: point)
-                        self.drawLine()
-                    } else if pan.state == .cancelled || pan.state == .ended {
-                        self.viewToolsBar(show: true)
-
-                        if let path = self.drawPaths.last {
-                            self.editorManager.storeAction(.draw(path))
-                        }
-                    }
-                } else if self.selectedTool == .mosaic {
-                    let point = pan.location(in: self.imageView)
-                    if pan.state == .began {
-                        self.viewToolsBar(show: false)
-
-                        var actualSize = self.currentClipStatus.editRect.size
-                        if self.shouldSwapSize {
-                            swap(&actualSize.width, &actualSize.height)
-                        }
-                        let ratio = min(
-                            self.mainScrollView.frame.width / self.currentClipStatus.editRect.width,
-                            self.mainScrollView.frame.height / self.currentClipStatus.editRect.height
-                        )
-                        
-                        let pathW = self.mosaicLineWidth / self.mainScrollView.zoomScale
-                        let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
-                        
-                        self.mosaicImageLayerMaskLayer?.lineWidth = pathW
-                        self.mosaicImageLayerMaskLayer?.path = path.path.cgPath
-                        self.mosaicPaths.append(path)
-                    } else if pan.state == .changed {
-                        let path = self.mosaicPaths.last
-                        path?.addLine(to: point)
-                        self.mosaicImageLayerMaskLayer?.path = path?.path.cgPath
-                    } else if pan.state == .cancelled || pan.state == .ended {
-                        self.viewToolsBar(show: true)
-                        if let path = self.mosaicPaths.last {
-                            self.editorManager.storeAction(.mosaic(path))
-                        }
-                        
-                        self.generateNewMosaicImage()
-                    }
-                }
+                // 告诉涂鸦引擎，当前是否处于橡皮擦模式
+                self.drawEngine.isEraserMode = self.eraser.isSelected
+                // 🔥 核心魔法：VC 不再关心具体手势计算，直接抛给当前活跃的引擎！
+                self.activeEngine?.handlePanGesture(pan)
             }
         }
         pan.maximumNumberOfTouches = 1
@@ -604,7 +556,7 @@ public class PTEditImageViewController: PTBaseViewController {
             make.top.equalToSuperview()
         }
         mainScrollView.addSubviews([containerView])
-        containerView.addSubviews([imageView,drawingImageView,eraserCircleView,stickersContainer])
+        containerView.addSubviews([imageView,mosaicEngine.canvasView,drawEngine.canvasView,eraserCircleView,stickersContainer])
         
         toolCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -727,9 +679,8 @@ public class PTEditImageViewController: PTBaseViewController {
         let scaleImageOrigin = CGPoint(x: -editRect.origin.x * ratio, y: -editRect.origin.y * ratio)
         let scaleImageSize = CGSize(width: imageSize.width * ratio, height: imageSize.height * ratio)
         imageView.frame = CGRect(origin: scaleImageOrigin, size: scaleImageSize)
-        drawingImageView.frame = imageView.frame
-        mosaicImageLayer?.frame = imageView.bounds
-        mosaicImageLayerMaskLayer?.frame = imageView.bounds
+        drawEngine.canvasView.frame = imageView.frame
+        mosaicEngine.canvasView.frame = imageView.frame
         stickersContainer.frame = imageView.frame
         // 针对于长图的优化
         if (editRect.height / editRect.width) > (view.frame.height / view.frame.width * 1.1) {
@@ -811,11 +762,12 @@ extension PTEditImageViewController {
     private func showHandDrawAction() {
         
         let isSelected = selectedTool != .draw
-        if isSelected {
-            selectedTool = .draw
-        } else {
-            selectedTool = nil
-        }
+        selectedTool = isSelected ? .draw : nil
+
+        // 引擎切换逻辑
+        activeEngine?.toolDidDeactivate()
+        activeEngine = isSelected ? drawEngine : nil
+        activeEngine?.toolDidActivate()
 
         showHandDrawBar(show: isSelected)
         showFilter(show: false)
@@ -849,12 +801,13 @@ extension PTEditImageViewController {
             
     private func mosaicAction() {
         let isSelected = selectedTool != .mosaic
-        if isSelected {
-            selectedTool = .mosaic
-        } else {
-            selectedTool = nil
-        }
+        selectedTool = isSelected ? .mosaic : nil
         
+        // 引擎切换逻辑
+        activeEngine?.toolDidDeactivate()
+        activeEngine = isSelected ? mosaicEngine : nil
+        activeEngine?.toolDidActivate()
+
         generateNewMosaicLayerIfAdjust()
         showHandDrawBar(show: false)
         showFilter(show: false)
@@ -1544,25 +1497,25 @@ extension PTEditImageViewController: PTMediaEditorManagerDelegate {
     }
     
     private func undoDraw(_ path: PTDrawPath) {
-        drawPaths.removeLast()
-        drawLine()
+        drawEngine.drawPaths.removeLast()
+        drawEngine.reloadRenderState() // 通知引擎重绘
     }
     
     private func redoDraw(_ path: PTDrawPath) {
-        drawPaths.append(path)
-        drawLine()
+        drawEngine.drawPaths.append(path)
+        drawEngine.reloadRenderState()
     }
     
     private func undoEraser(_ paths: [PTDrawPath]) {
         paths.forEach { $0.willDelete = false }
-        drawPaths.append(contentsOf: paths)
-        drawPaths = drawPaths.sorted { $0.index < $1.index }
-        drawLine()
+        drawEngine.drawPaths.append(contentsOf: paths)
+        drawEngine.drawPaths.sort { $0.index < $1.index }
+        drawEngine.reloadRenderState()
     }
     
     private func redoEraser(_ paths: [PTDrawPath]) {
-        drawPaths.removeAll { paths.contains($0) }
-        drawLine()
+        drawEngine.drawPaths.removeAll { paths.contains($0) }
+        drawEngine.reloadRenderState()
     }
     
     private func undoOrRedoClip(_ status: PTClipStatus) {
@@ -1571,13 +1524,13 @@ extension PTEditImageViewController: PTMediaEditorManagerDelegate {
     }
     
     private func undoMosaic(_ path: PTMosaicPath) {
-        mosaicPaths.removeLast()
-        generateNewMosaicImage()
+        mosaicEngine.mosaicPaths.removeLast()
+        mosaicEngine.reloadRenderState()
     }
     
     private func redoMosaic(_ path: PTMosaicPath) {
-        mosaicPaths.append(path)
-        generateNewMosaicImage()
+        mosaicEngine.mosaicPaths.append(path)
+        mosaicEngine.reloadRenderState()
     }
     
     private func undoSticker(_ oldState: PTBaseStickertState?, _ newState: PTBaseStickertState?) {
@@ -1746,5 +1699,25 @@ extension PTEditImageViewController: PTStickerViewDelegate {
             let newSize = PTTextStickerView.calculateSize(image: image)
             textSticker.changeSize(to: newSize)
         }
+    }
+}
+
+extension PTEditImageViewController: PTEditImageEngineContext {
+    public var engineScrollView: UIScrollView { mainScrollView }
+    public var engineOriginalImageSize: CGSize { originalImage.size }
+    public var engineEditImageSize: CGSize { editImage.size }
+    public var engineEditRect: CGRect { currentClipStatus.editRect }
+    public var engineShouldSwapSize: Bool { shouldSwapSize }
+    public var engineCurrentAngle: CGFloat { currentClipStatus.angle }
+    public var engineEditorManager: PTMediaEditManager { editorManager }
+    public var engineEraserCircleView: UIImageView { eraserCircleView }
+    
+    public var engineOriginalImage: UIImage { originalImage }
+    public var engineCurrentEditImage: UIImage { editImage }
+    
+    // 接收马赛克引擎烘焙好的新图片
+    public func engineUpdateEditImage(_ newImage: UIImage) {
+        self.editImage = newImage
+        self.imageView.image = newImage
     }
 }

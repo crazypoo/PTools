@@ -231,8 +231,8 @@ class ResizeController {
         
         let translation = recognizer.translation(in: bottomGrabber.superview)
         
-        let minHeight = Self.kMinConsoleHeight
-        let maxHeight = Self.kMaxConsoleHeight
+        let _ = Self.kMinConsoleHeight
+        let _ = Self.kMaxConsoleHeight
         
         switch recognizer.state {
         case .began:
@@ -277,8 +277,8 @@ class ResizeController {
         guard let terminal = LocalConsole.shared.terminal else { return } // 🔴 安全解包
         let translation = recognizer.translation(in: bottomGrabber.superview)
         
-        let minWidth = Self.kMinConsoleWidth
-        let maxWidth = Self.kMaxConsoleWidth
+        let _ = Self.kMinConsoleWidth
+        let _ = Self.kMaxConsoleWidth
         
         switch recognizer.state {
         case .began:

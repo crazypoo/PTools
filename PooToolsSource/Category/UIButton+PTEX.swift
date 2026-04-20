@@ -49,7 +49,7 @@ public extension UIButton {
                              placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,
                              forState:UIControl.State = .normal,
                              loadedHandler:PTImageLoadHandler? = nil) {
-        guard let url = URL(string: imageString) else {
+        guard let _ = URL(string: imageString) else {
             loadedHandler?(nil, nil, nil)
             return
         }

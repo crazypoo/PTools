@@ -115,7 +115,7 @@ private func CrashSignalHandler(signal: Int32, info: UnsafeMutablePointer<__sigi
     ClearSignalRegister()
 
     // 尝试调用崩溃前备份的其他信号处理器（将崩溃信息传递给其他 SDK）
-    if var oldAction = previousSignalHandlers[signal] {
+    if let oldAction = previousSignalHandlers[signal] {
         if oldAction.__sigaction_u.__sa_sigaction != nil {
             oldAction.__sigaction_u.__sa_sigaction(signal, info, context)
         } else if oldAction.__sigaction_u.__sa_handler != nil {

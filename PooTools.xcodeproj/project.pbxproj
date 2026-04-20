@@ -870,6 +870,7 @@
 		55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */; };
 		55ED0D242B11834E00391136 /* AVCaptureDevice+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */; };
 		55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D252B1183E200391136 /* PTHeartRateManager.swift */; };
+		55F0B97D2F95C37F00066311 /* PTEditImageToolEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */; };
 		55F162E42B18E36200320925 /* C7Collector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F162E32B18E36200320925 /* C7Collector.swift */; };
 		55F162E62B18E3C200320925 /* C7CollectorVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F162E52B18E3C200320925 /* C7CollectorVideo.swift */; };
 		55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F162E72B18E3F300320925 /* C7CollectorCamera.swift */; };
@@ -1845,6 +1846,7 @@
 		55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateViewController.swift; sourceTree = "<group>"; };
 		55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+PTEX.swift"; sourceTree = "<group>"; };
 		55ED0D252B1183E200391136 /* PTHeartRateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateManager.swift; sourceTree = "<group>"; };
+		55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditImageToolEngine.swift; sourceTree = "<group>"; };
 		55F162E32B18E36200320925 /* C7Collector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7Collector.swift; sourceTree = "<group>"; };
 		55F162E52B18E3C200320925 /* C7CollectorVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorVideo.swift; sourceTree = "<group>"; };
 		55F162E72B18E3F300320925 /* C7CollectorCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorCamera.swift; sourceTree = "<group>"; };
@@ -2932,6 +2934,7 @@
 				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
+				55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -4663,6 +4666,7 @@
 				55E1B6602DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift in Sources */,
 				552F07902B15C66D00CB47CD /* PHAsset+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
+				55F0B97D2F95C37F00066311 /* PTEditImageToolEngine.swift in Sources */,
 				55F162FC2B1963F700320925 /* PTRouterDebugTool.swift in Sources */,
 				550CE4A42AF12F8B0052539D /* PTActiveBuilder.swift in Sources */,
 				558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */,
