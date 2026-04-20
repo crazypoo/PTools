@@ -96,6 +96,9 @@ public struct Test1Tip: Tip {
 @available(iOS 17, *)
 public class PTTip: NSObject {
     public static let shared = PTTip()
+    // 私有化初始化方法，确保单例纯粹性
+    private override init() {}
+
     // TipUIPopoverViewController
     private var tipUIPopoverViewController: TipUIPopoverViewController?
     
@@ -103,53 +106,57 @@ public class PTTip: NSObject {
      这里只是一个常规使用在AppDelegate上的方法,如果自定义就自己在AppDelegate上编辑
      */
     public func appdelegateTipSet() {
-        try? Tips.configure([
-            // 显示频率
-            .displayFrequency(.immediate),
-            // 数据存储位置
-            .datastoreLocation(.applicationDefault)
-        ])
+        do {
+            try Tips.configure([
+                // 显示频率
+                .displayFrequency(.immediate),
+                // 数据存储位置
+                .datastoreLocation(.applicationDefault)
+            ])
+            PTNSLogConsole("Tip 配置success")
+        } catch {
+            PTNSLogConsole("Tip 配置失败 \(error)")
+        }
     }
     
     @MainActor public func showTip(tips: any Tip,
-                 sender:UIView,
-                 content:PTBaseViewController,
-                 customHandler:PTActionTask? = nil,
-                 actionHandler:((Tip.Action)->Void)? = nil,
-                        tipDismissHandler:PTActionTask? = nil) {
-        customHandler?()
-        // 显隐TipUIPopoverViewController
+                                   sender:UIView,
+                                   content:UIViewController,
+                                   actionHandler: ((Tip.Action) -> Void)? = nil,
+                                   tipDismissHandler: PTActionTask? = nil) {
         Task { @MainActor in
+            // 将弹窗实例作为局部变量管理，避免多个 Tip 冲突
+            var activePopover: TipUIPopoverViewController?
+            
             for await shouldDisplay in tips.shouldDisplayUpdates {
                 if shouldDisplay {
-                    tipUIPopoverViewController = TipUIPopoverViewController(tips, sourceItem: sender,actionHandler: { action in
-                        if actionHandler != nil {
-                            actionHandler!(action)
-                        }
-                    })
-                    content.present(tipUIPopoverViewController!, animated: true)
+                    let popover = TipUIPopoverViewController(tips, sourceItem: sender) { action in
+                        actionHandler?(action)
+                    }
+                    activePopover = popover
+                    content.present(popover, animated: true)
                 } else {
-                    tipUIPopoverViewController?.dismiss(animated: true, completion: tipDismissHandler)
+                    activePopover?.dismiss(animated: true, completion: tipDismissHandler)
+                    activePopover = nil
                 }
             }
         }
     }
     
-    @MainActor public func showTipsInView(tips: any Tip,
-                        arrowEdge: Edge? = nil,
-                        tipUISet:((TipUIView)->Void)? = nil,
-                        content:PTBaseViewController,
-                        closure: @escaping (_ make: ConstraintMaker) -> Void,
-                        customHandler:PTActionTask? = nil,
-                        actionHandler:((Tip.Action)->Void)? = nil,
+    @MainActor
+    public func showTipsInView(tips: any Tip,
+                               arrowEdge: Edge? = nil,
+                               tipUISet: ((TipUIView) -> Void)? = nil,
+                               content:UIViewController,
+                               closure: @escaping (_ make: ConstraintMaker) -> Void,
+                               actionHandler:((Tip.Action)->Void)? = nil,
                                tipDismissHandler:PTActionTask? = nil) {
         let tipUIView = TipUIView(tips, arrowEdge: arrowEdge) { actions in
-            if actionHandler != nil {
-                actionHandler!(actions)
-            }
+            actionHandler?(actions)
         }
-        if tipUISet != nil {
-            tipUISet!(tipUIView)
+        
+        if let setup = tipUISet {
+            setup(tipUIView)
         } else {
             tipUIView.backgroundColor = .black
             tipUIView.tintColor = .red
@@ -157,19 +164,18 @@ public class PTTip: NSObject {
             tipUIView.imageSize = CGSize(width: 40, height: 40)
             tipUIView.translatesAutoresizingMaskIntoConstraints = false
         }
-
-        customHandler?()
-
+        
         Task { @MainActor in
             for await shouldDisplay in tips.shouldDisplayUpdates {
                 if shouldDisplay {
-                    content.view.addSubview(tipUIView)
-                    tipUIView.snp.makeConstraints(closure)
+                    // 防止重复添加
+                    if tipUIView.superview == nil {
+                        content.view.addSubview(tipUIView)
+                        tipUIView.snp.makeConstraints(closure)
+                    }
                 } else {
                     tipUIView.removeFromSuperview()
-                    if tipDismissHandler != nil {
-                        tipDismissHandler!()
-                    }
+                    tipDismissHandler?()
                 }
             }
         }

@@ -27,23 +27,23 @@ fileprivate extension UIEdgeInsets {
     }
 }
 
-/// Enum that specifies the direction of the poptip
+/// 指定气泡提示（PopTip）弹出方向的枚举
 public enum PopTipDirection {
-    /// Up, the poptip will appear above the element, arrow pointing down
+    /// 向上：气泡在元素上方，箭头朝下
     case up
-    /// Down, the poptip will appear below the element, arrow pointing up
+    /// 向下：气泡在元素下方，箭头朝上
     case down
-    /// Left, the poptip will appear on the left of the element, arrow pointing right
+    /// 向左：气泡在元素左侧，箭头朝右
     case left
-    /// Right, the poptip will appear on the right of the element, arrow pointing left
+    /// 向右：气泡在元素右侧，箭头朝左
     case right
-    /// Automatic, the poptip will decide where to pop by checking the available space
+    /// 自动：根据可用空间自动决定弹出位置
     case auto
-    /// Automatic in the horizontal axis, the poptip will decide where to pop by checking the available space left and right
+    /// 水平自动：在左右两侧检查可用空间来决定弹出位置
     case autoHorizontal
-    /// Automatic in the vertical axis, the poptip will decide where to pop by checking the available space top and bottom
+    /// 垂直自动：在上下两侧检查可用空间来决定弹出位置
     case autoVertical
-    /// None, the poptip will appear above the element with no arrow
+    /// 无：气泡显示在元素中心，无箭头
     case none
 
     var isAuto: Bool {
@@ -51,60 +51,41 @@ public enum PopTipDirection {
     }
 }
 
-/** Enum that specifies the type of entrance animation. Entrance animations are performed while showing the poptip.
-
- - `scale`: The poptip scales from 0% to 100%
- - `transitions`: The poptip moves in position from the edge of the screen
- - `fadeIn`: The poptip fade in
- - `custom`: The Animation is provided by the user
- - `none`: No Animation
- */
+/// 指定气泡出现时的入场动画类型
 public enum PopTipEntranceAnimation {
-    /// The poptip scales from 0% to 100%
+    /// 缩放：从 0% 放大到 100%
     case scale
-    /// The poptip moves in position from the edge of the screen
+    /// 平移：从屏幕边缘平移进入
     case transition
-    /// The poptip fades in
+    /// 淡入：透明度渐变出现
     case fadeIn
-    /// The Animation is provided by the user
+    /// 自定义：用户提供动画闭包
     case custom
-    /// No Animation
+    /// 无动画
     case none
 }
 
-/** Enum that specifies the type of entrance animation. Entrance animations are performed while showing the poptip.
-
- - `scale`: The poptip scales from 100% to 0%
- - `fadeOut`: The poptip fade out
- - `custom`: The Animation is provided by the user
- - `none`: No Animation
- */
+/// 指定气泡消失时的退场动画类型
 public enum PopTipExitAnimation {
-    /// The poptip scales from 100% to 0%
+    /// 缩放：从 100% 缩小到 0%
     case scale
-    /// The poptip fades out
+    /// 淡出：透明度渐变消失
     case fadeOut
-    /// The Animation is provided by the user
+    /// 自定义：用户提供动画闭包
     case custom
-    /// No Animation
+    /// 无动画
     case none
 }
 
-/** Enum that specifies the type of action animation. Action animations are performed after the poptip is visible and the entrance animation completed.
-
- - `bounce(offset: CGFloat?)`: The poptip bounces following its direction. The bounce offset can be provided optionally
- - `float(offset: CGFloat?)`: The poptip floats in place. The float offset can be provided optionally
- - `pulse(offset: CGFloat?)`: The poptip pulsates by changing its size. The maximum amount of pulse increase can be provided optionally
- - `none`: No animation
- */
+/// 指定气泡在显示状态下持续执行的动作动画
 public enum PopTipActionAnimation {
-    /// The poptip bounces following its direction. The bounce offset can be provided optionally
+    /// 弹跳动画：顺着箭头方向弹跳。可提供可选的偏移量
     case bounce(CGFloat?)
-    /// The poptip floats in place. The float offset can be provided optionally. Defaults to 8 points
+    /// 漂浮动画：在原地上下/左右漂浮。可提供可选的 X/Y 偏移量 (默认 8pt)
     case float(offsetX: CGFloat?, offsetY: CGFloat?)
-    /// The poptip pulsates by changing its size. The maximum amount of pulse increase can be provided optionally. Defaults to 1.1 (110% of the original size)
+    /// 脉冲动画：大小缩放跳动。可提供最大放大倍数 (默认 1.1倍)
     case pulse(CGFloat?)
-    /// No animation
+    /// 无持续动画
     case none
 }
 
@@ -113,157 +94,143 @@ private let DefaultFloatOffset = CGFloat(8)
 private let DefaultPulseOffset = CGFloat(1.1)
 
 open class PTTipsView: UIView {
-    /// The text displayed by the poptip. Can be updated once the poptip is visible
+    
+    // MARK: - 公开属性 (Public Properties)
+    
+    /// 气泡显示的文本。可见后也能动态更新
     open var text: String? {
         didSet {
             accessibilityLabel = text
             setNeedsLayout()
         }
     }
-    /// The `UIFont` used in the poptip's text
+    /// 文本字体
     open var font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
-    /// The `UIColor` of the text
+    /// 文本颜色
     @objc open dynamic var textColor = UIColor.white
-    /// The `NSTextAlignment` of the text
+    /// 文本对齐方式
     @objc open dynamic var textAlignment = NSTextAlignment.center
-    /// The `UIColor` for the poptip's background. If `bubbleLayer` is specificed, this will be ignored
+    /// 气泡背景颜色。如果指定了 `bubbleLayerGenerator`，此属性将被忽略
     @objc open dynamic var bubbleColor = UIColor.red
-    /// The `CALayer` generator closure for poptip's sublayer 0. If nil, the bubbleColor will be used as solid fill
+    /// 用于生成气泡底层 CALayer 的闭包。如果为空，将使用 bubbleColor 纯色填充
     @objc open dynamic var bubbleLayerGenerator: ((_ path: UIBezierPath) -> CALayer?)?
-    /// The `UIColor` for the poptip's border
+    /// 边框颜色
     @objc open dynamic var borderColor = UIColor.clear
-    /// The width for the poptip's border
+    /// 边框宽度
     @objc open dynamic var borderWidth = CGFloat(0.0)
-    /// The `Double` with the poptip's border radius
+    /// 圆角半径
     @objc open dynamic var cornerRadius = CGFloat(4.0)
-    /// The `BOOL` that determines wether the poptip is rounded. If set to `true` the radius will equal `frame.height / 2`
+    /// 是否为全圆角。如果为 true，圆角半径等于 `frame.height / 2`
     @objc open dynamic var isRounded = false
-    /// The `UIColor` with the poptip's shadow color
+    
+    // 阴影配置
     @objc open dynamic var shadowColor: UIColor = .clear
-    /// The `CGSize` with the poptip's shadow offset
     @objc open dynamic var shadowOffset: CGSize = .zero
-    /// The `Float` with the poptip's shadow radius
     @objc open dynamic var shadowRadius: Float = 0
-    /// The `Float` with the poptip's shadow opacity
     @objc open dynamic var shadowOpacity: Float = 0
-    /// Holds the offset between the poptip and origin
+    
+    /// 气泡和目标视图之间的间距
     @objc open dynamic var offset = CGFloat(0.0)
-    /// Holds the CGFloat with the padding used for the inner text
+    /// 内部文本的通用内边距
     @objc open dynamic var padding = CGFloat(6.0)
-    /// Holds the insets setting for padding different direction
+    /// 不同方向的具体内边距 (优先级高于 padding)
     @objc open dynamic var edgeInsets = UIEdgeInsets.zero
-    /// Holds the CGSize with the width and height of the arrow
+    /// 箭头的宽高
     @objc open dynamic var arrowSize = CGSize(width: 8, height: 8)
-    /// CGfloat value that determines the radius of the vertex for the pointing arrow
+    /// 箭头顶点的圆角半径
     @objc open dynamic var arrowRadius = CGFloat(0.0)
-    /// Holds the NSTimeInterval with the duration of the revealing animation
+    
+    // 动画时间配置
     @objc open dynamic var animationIn: TimeInterval = 0.4
-    /// Holds the NSTimeInterval with the duration of the disappearing animation
     @objc open dynamic var animationOut: TimeInterval = 0.2
-    /// Holds the NSTimeInterval with the delay of the revealing animation
     @objc open dynamic var delayIn: TimeInterval = 0
-    /// Holds the NSTimeInterval with the delay of the disappearing animation
     @objc open dynamic var delayOut: TimeInterval = 0
-    /// Holds the enum with the type of entrance animation (triggered once the poptip is shown)
+    
+    /// 入场动画类型
     open var entranceAnimation = PopTipEntranceAnimation.scale
-    /// Holds the enum with the type of exit animation (triggered once the poptip is dismissed)
+    /// 退场动画类型
     open var exitAnimation = PopTipExitAnimation.scale
-    /// Holds the enum with the type of action animation (triggered once the poptip is shown)
+    /// 持续动作动画类型
     open var actionAnimation = PopTipActionAnimation.none
-    /// Holds the NSTimeInterval with the duration of the action animation
+    
+    // 动作动画时间配置
     @objc open dynamic var actionAnimationIn: TimeInterval = 1.2
-    /// Holds the NSTimeInterval with the duration of the action stop animation
     @objc open dynamic var actionAnimationOut: TimeInterval = 1.0
-    /// Holds the NSTimeInterval with the delay of the action animation
     @objc open dynamic var actionDelayIn: TimeInterval = 0
-    /// Holds the NSTimeInterval with the delay of the action animation stop
     @objc open dynamic var actionDelayOut: TimeInterval = 0
-    /// CGfloat value that determines the leftmost margin from the screen
+    
+    /// 距离屏幕边缘的最短边距
     @objc open dynamic var edgeMargin = CGFloat(0.0)
-    /// Holds the offset between the bubble and origin
+    /// 气泡自身的偏移量（左右移动）
     @objc open dynamic var bubbleOffset = CGFloat(0.0)
-    /// Holds the offset between the center of the bubble and the arrow
+    /// 箭头相对于气泡中心的偏移量
     @objc open dynamic var arrowOffset = CGFloat(0.0)
-    /// Color of the mask that is going to dim the background when the pop up is visible
+    
+    // 背景遮罩配置
+    /// 显示提示时，背景遮罩的颜色
     @objc open dynamic var maskColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
-    /// Flag to enable or disable background mask
+    /// 是否显示背景遮罩
     @objc open dynamic var shouldShowMask = false
-    /// Flag to enable or disable cutout mask
+    /// 是否对目标区域进行镂空显示
     @objc open dynamic var shouldCutoutMask = false
-    /// The path to use for the cutout path when the the pop up is visible
+    /// 镂空区域的路径生成器 (默认在目标视图基础上向外扩展 8pt 并带圆角)
     @objc open dynamic var cutoutPathGenerator: (_ from: CGRect) -> UIBezierPath = { from in
         UIBezierPath(roundedRect: from.insetBy(dx: -8, dy: -8), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 8, height: 8))
     }
-    /// Flag to enable or disable the checks that make sure that the tip does not extend over the container
+    
+    /// 是否限制气泡不超出父视图边界
     @objc open dynamic var constrainInContainerView = true
-    /// Holds the CGrect with the rect the tip is pointing to
+    
+    /// 气泡指向的目标区域 (CGRect)
     open var from = CGRect.zero {
-        didSet {
-            setup()
-        }
+        didSet { setup() }
     }
-    /// Holds the readonly BOOL with the poptip visiblity. The poptip is considered visible as soon as
-    /// the animation is complete, and invisible when the subview is removed from its parent.
+    
+    /// 气泡是否可见（只读）
     open var isVisible: Bool { get { return self.superview != nil } }
-    /// A boolean value that determines whether the poptip is dismissed on tap.
+    
+    // 交互行为配置
+    /// 点击气泡自身时是否使其消失
     @objc open dynamic var shouldDismissOnTap = true
-    /// A boolean value that determines whether to dismiss when tapping outside the poptip.
+    /// 点击气泡外部区域时是否使其消失
     @objc open dynamic var shouldDismissOnTapOutside = true
-    /// A boolean value that determines whether to consider the originating frame as part of the poptip,
-    /// i.e wether to call the `tapHandler` or the `tapOutsideHandler` when the tap occurs in the `from` frame.
+    /// 是否将目标区域(from)视作气泡的一部分 (影响点击事件回调)
     @objc open dynamic var shouldConsiderOriginatingFrameAsPopTip = false
-    /// A boolean value that determines whether to consider the cutout area as separately to outside,
-    /// i.e wether to call the `tapOutsideHandler` or the `tapCutoutHandler` when the tap occurs in the `from` frame.
+    /// 是否将镂空区域的点击作为独立事件回调
     @objc open dynamic var shouldConsiderCutoutTapSeparately = false
-    /// A boolean value that determines whether to dismiss when swiping outside the poptip.
+    /// 滑动气泡外部时是否使其消失
     @objc open dynamic var shouldDismissOnSwipeOutside = false
-    /// A boolean value that determines if the action animation should start automatically when the poptip is shown
+    /// 显示后是否自动开始动作动画
     @objc open dynamic var startActionAnimationOnShow = true
-    /// A direction that determines what swipe direction to dismiss when swiping outside the poptip.
-    /// The default direction is `right`
+    
+    /// 外部滑动消失的手势方向，默认为向右
     open var swipeRemoveGestureDirection = UISwipeGestureRecognizer.Direction.right {
-        didSet {
-            swipeGestureRecognizer?.direction = swipeRemoveGestureDirection
-        }
+        didSet { swipeGestureRecognizer?.direction = swipeRemoveGestureDirection }
     }
-    /// A block that will be fired when the user taps the poptip.
+    
+    // MARK: - 回调闭包 (Handlers)
+    
     open var tapHandler: ((PTTipsView) -> Void)?
-    /// A block that will be fired when the user taps outside the poptip.
     open var tapOutsideHandler: ((PTTipsView) -> Void)?
-    /// A block that will be fired when the user taps the cutout area, only applicable is shouldShowMask and shouldCutoutMask are true.
     open var tapCutoutHandler: ((PTTipsView) -> Void)?
-    /// A block that will be fired when the user swipes outside the poptip.
     open var swipeOutsideHandler: ((PTTipsView) -> Void)?
-    /// A block that will be fired when the poptip appears.
     open var appearHandler: ((PTTipsView) -> Void)?
-    /// A block that will be fired when the poptip is dismissed.
     open var dismissHandler: ((PTTipsView) -> Void)?
-    /// A block that handles the entrance animation of the poptip. Should be provided
-    /// when using a `PopTipActionAnimationCustom` entrance animation type.
-    /// Please note that the poptip will be automatically added as a subview before firing the block
-    /// Remember to call the completion block provided
+    
     open var entranceAnimationHandler: ((@escaping () -> Void) -> Void)?
-    /// A block block that handles the exit animation of the poptip. Should be provided
-    /// when using a `AMPopTipActionAnimationCustom` exit animation type.
-    /// Remember to call the completion block provided
     open var exitAnimationHandler: ((@escaping () -> Void) -> Void)?
-    /// The CGPoint originating the arrow. Read only.
+    
+    // MARK: - 私有 & 只读属性
+    
     open private(set) var arrowPosition = CGPoint.zero
-    /// A read only reference to the view containing the poptip
     open private(set) weak var containerView: UIView?
-    /// The direction from which the poptip is shown. Read only.
     open private(set) var direction = PopTipDirection.none
-    /// Holds the readonly BOOL with the poptip animation state.
     open private(set) var isAnimating: Bool = false
-    /// Holds the readonly BOOL with the state of the poptip exit animation.
     open private(set) var isPerformingExitAnimation: Bool = false
-    /// The view that dims the background (including the button that triggered PopTip.
-    /// The mask by appears with fade in effect only.
     open private(set) var backgroundMask: UIView?
-    /// The tap gesture recognizer. Read-only.
     open private(set) var tapGestureRecognizer: UITapGestureRecognizer?
-    /// The tap remove gesture recognizer. Read-only.
     open private(set) var tapToRemoveGestureRecognizer: UITapGestureRecognizer?
+    
     fileprivate var attributedText: NSAttributedString?
     fileprivate var paragraphStyle = NSMutableParagraphStyle()
     fileprivate var swipeGestureRecognizer: UISwipeGestureRecognizer?
@@ -273,21 +240,31 @@ open class PTTipsView: UIView {
     fileprivate var customView: UIView?
     fileprivate var hostingController: UIViewController?
     fileprivate var isApplicationInBackground: Bool?
+    
     fileprivate var bubbleLayer: CALayer? {
-        willSet {
-            bubbleLayer?.removeFromSuperlayer()
-        }
+        willSet { bubbleLayer?.removeFromSuperlayer() }
     }
+    
     fileprivate var label: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         return label
     }()
+    
     private var shouldBounce = false
 
-    /// Setup a poptip oriented vertically (direction .up or .down). Returns the bubble frame and the arrow position
-    ///
-    /// - Returns: a tuple with the bubble frame and the arrow position
+    // MARK: - 生命周期补充: 暗黑模式适配
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        // 当系统主题颜色改变时，强制重绘以更新颜色
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            setNeedsDisplay()
+        }
+    }
+
+    // MARK: - 布局与计算 (Layout & Math)
+    
+    /// 设置垂直方向（上下）的位置
     internal func setupVertically() -> (CGRect, CGPoint) {
         guard let containerView = containerView else { return (CGRect.zero, CGPoint.zero) }
 
@@ -307,9 +284,11 @@ open class PTTipsView: UIView {
             frame.origin = CGPoint(x: x, y: from.origin.y - frame.height + offset)
         }
 
-        // Constraint the offset in the boundaries of the bubble, maintaining the sign (hence the arrowOffset / arrowOffset)
-        let constrainedArrowOffset = abs(arrowOffset) > (frame.size.width / 2) ? ((arrowOffset / arrowOffset) * (frame.size.width / 2 - cornerRadius * 2)) : arrowOffset
-        // Make sure that the bubble doesn't leave the boundaries of the view
+        // 优化点：修复箭头偏移为0时的 NaN 崩溃问题
+        let arrowOffsetSign: CGFloat = arrowOffset < 0 ? -1 : 1
+        let maxAllowedOffset = frame.size.width / 2 - cornerRadius * 2
+        let constrainedArrowOffset = abs(arrowOffset) > (frame.size.width / 2) ? (arrowOffsetSign * maxAllowedOffset) : arrowOffset
+        
         var arrowPosition = CGPoint(
           x: from.origin.x + from.width / 2 - frame.origin.x - constrainedArrowOffset,
           y: (direction == .up) ? frame.height : from.origin.y + from.height - frame.origin.y + offset
@@ -324,7 +303,6 @@ open class PTTipsView: UIView {
         }
 
         if constrainInContainerView {
-          // Make sure that the bubble doesn't leave the boundaries of the view
           let leftSpace = frame.origin.x - containerView.frame.origin.x
           let rightSpace = containerView.frame.width - leftSpace - frame.width
 
@@ -337,7 +315,6 @@ open class PTTipsView: UIView {
         frame.origin.x += bubbleOffset
         frame.size = CGSize(width: frame.width + borderWidth * 2, height: frame.height + borderWidth * 2)
 
-        // Only when the tip is not constrained, make sure to center the frame if the containerView is smaller than the tip
         if containerView.frame.width < frame.width, !constrainInContainerView {
             frame.origin.x = -frame.width / 2 + containerView.frame.width / 2
             arrowPosition.x += frame.width / 2 - containerView.frame.width / 2
@@ -346,9 +323,7 @@ open class PTTipsView: UIView {
         return (frame, arrowPosition)
     }
 
-    /// Setup a poptip oriented horizontally (direction .left or .right). Returns the bubble frame and the arrow position
-    ///
-    /// - Returns: a tuple with the bubble frame and the arrow position
+    /// 设置水平方向（左右）的位置
     internal func setupHorizontally() -> (CGRect, CGPoint) {
         guard let containerView = containerView else { return (CGRect.zero, CGPoint.zero) }
 
@@ -360,7 +335,7 @@ open class PTTipsView: UIView {
         var y = from.origin.y + from.height / 2 - frame.height / 2
 
         if y < 0 { y = edgeMargin }
-        // Make sure we stay in the view limits except if it has scroll then it must be inside contentview limits not the view
+        
         if let containerScrollView = containerView as? UIScrollView {
             if y + frame.height > containerScrollView.contentSize.height {
                 y = containerScrollView.contentSize.height - frame.height - edgeMargin
@@ -372,9 +347,11 @@ open class PTTipsView: UIView {
         }
         frame.origin = CGPoint(x: x, y: y)
 
-        // Constraint the offset in the boundaries of the bubble, maintaining the sign (hence the arrowOffset / arrowOffset)
-        let constrainedArrowOffset = abs(arrowOffset) > (frame.size.height / 2) ? ((arrowOffset / arrowOffset) * (frame.size.height / 2  - cornerRadius * 2)) : arrowOffset
-        // Make sure that the bubble doesn't leave the boundaries of the view
+        // 优化点：修复箭头偏移为0时的 NaN 崩溃问题
+        let arrowOffsetSign: CGFloat = arrowOffset < 0 ? -1 : 1
+        let maxAllowedOffset = frame.size.height / 2  - cornerRadius * 2
+        let constrainedArrowOffset = abs(arrowOffset) > (frame.size.height / 2) ? (arrowOffsetSign * maxAllowedOffset) : arrowOffset
+        
         let arrowPosition = CGPoint(
           x: direction == .left ? from.origin.x - frame.origin.x + offset : from.origin.x + from.width - frame.origin.x + offset,
           y: from.origin.y + from.height / 2 - frame.origin.y - constrainedArrowOffset
@@ -403,26 +380,17 @@ open class PTTipsView: UIView {
         return (frame, arrowPosition)
     }
 
-    /// Checks if the rect with positioning `.none` is inside the container
     internal func rectContained(rect: CGRect) -> CGRect {
         guard let containerView = containerView, constrainInContainerView else { return rect }
-
         var finalRect = rect
-
-        // The `.none` positioning implies a rect with the origin in the middle of the poptip
-        if (rect.origin.x) < containerView.frame.origin.x {
-            finalRect.origin.x = edgeMargin
-        }
-        if (rect.origin.y) < containerView.frame.origin.y {
-            finalRect.origin.y = edgeMargin
-        }
+        if (rect.origin.x) < containerView.frame.origin.x { finalRect.origin.x = edgeMargin }
+        if (rect.origin.y) < containerView.frame.origin.y { finalRect.origin.y = edgeMargin }
         if (rect.origin.x + rect.width) > (containerView.frame.origin.x + containerView.frame.width) {
             finalRect.origin.x = containerView.frame.origin.x + containerView.frame.width - rect.width - edgeMargin
         }
         if (rect.origin.y + rect.height) > (containerView.frame.origin.y + containerView.frame.height) {
             finalRect.origin.y = containerView.frame.origin.y + containerView.frame.height - rect.height - edgeMargin
         }
-
         return finalRect
     }
 
@@ -447,21 +415,18 @@ open class PTTipsView: UIView {
         var rect = CGRect.zero
         backgroundColor = .clear
 
-        // Decide the direction if not specified
         if direction.isAuto {
             var spaces: [PopTipDirection: CGFloat] = [:]
-
             if direction == .autoHorizontal || direction == .auto {
                 spaces[.left] = from.minX - containerView.frame.minX
                 spaces[.right] = containerView.frame.maxX - from.maxX
             }
-
             if direction == .autoVertical || direction == .auto {
                 spaces[.up] = from.minY - containerView.frame.minY
                 spaces[.down] = containerView.frame.maxY - from.maxY
             }
-
-            direction = spaces.sorted(by: { $0.1 > $1.1 }).first!.key
+            // 优化点：安全解包，防止无空间时崩溃，提供默认值 .up
+            direction = spaces.sorted(by: { $0.1 > $1.1 }).first?.key ?? .up
         }
 
         if direction == .left {
@@ -473,38 +438,39 @@ open class PTTipsView: UIView {
 
         textBounds = textBounds(for: text, attributedText: attributedText, view: customView, with: font, padding: padding, edges: edgeInsets, in: maxWidth)
 
+        // 优化点：防御除以0，防止 anchor 计算导致界面异常
         switch direction {
-        case .auto, .autoHorizontal, .autoVertical: break // The decision will be made at this point
+        case .auto, .autoHorizontal, .autoVertical: break
         case .up:
             let dimensions = setupVertically()
             rect = dimensions.0
             arrowPosition = dimensions.1
-            let anchor = arrowPosition.x / rect.size.width
-            layer.anchorPoint = CGPoint(x: anchor, y: 1)
-            layer.position = CGPoint(x: layer.position.x + rect.width * anchor, y: layer.position.y + rect.height / 2)
+            let anchorX = rect.size.width > 0 ? arrowPosition.x / rect.size.width : 0.5
+            layer.anchorPoint = CGPoint(x: anchorX, y: 1)
+            layer.position = CGPoint(x: layer.position.x + rect.width * anchorX, y: layer.position.y + rect.height / 2)
         case .down:
             let dimensions = setupVertically()
             rect = dimensions.0
             arrowPosition = dimensions.1
-            let anchor = arrowPosition.x / rect.size.width
+            let anchorX = rect.size.width > 0 ? arrowPosition.x / rect.size.width : 0.5
             textBounds.origin = CGPoint(x: textBounds.origin.x, y: textBounds.origin.y + arrowSize.height)
-            layer.anchorPoint = CGPoint(x: anchor, y: 0)
-            layer.position = CGPoint(x: layer.position.x + rect.width * anchor, y: layer.position.y - rect.height / 2)
+            layer.anchorPoint = CGPoint(x: anchorX, y: 0)
+            layer.position = CGPoint(x: layer.position.x + rect.width * anchorX, y: layer.position.y - rect.height / 2)
         case .left:
             let dimensions = setupHorizontally()
             rect = dimensions.0
             arrowPosition = dimensions.1
-            let anchor = arrowPosition.y / rect.height
-            layer.anchorPoint = CGPoint(x: 1, y: anchor)
-            layer.position = CGPoint(x: layer.position.x - rect.width / 2, y: layer.position.y + rect.height * anchor)
+            let anchorY = rect.height > 0 ? arrowPosition.y / rect.height : 0.5
+            layer.anchorPoint = CGPoint(x: 1, y: anchorY)
+            layer.position = CGPoint(x: layer.position.x - rect.width / 2, y: layer.position.y + rect.height * anchorY)
         case .right:
             let dimensions = setupHorizontally()
             rect = dimensions.0
             arrowPosition = dimensions.1
             textBounds.origin = CGPoint(x: textBounds.origin.x + arrowSize.height, y: textBounds.origin.y)
-            let anchor = arrowPosition.y / rect.height
-            layer.anchorPoint = CGPoint(x: 0, y: anchor)
-            layer.position = CGPoint(x: layer.position.x + rect.width / 2, y: layer.position.y + rect.height * anchor)
+            let anchorY = rect.height > 0 ? arrowPosition.y / rect.height : 0.5
+            layer.anchorPoint = CGPoint(x: 0, y: anchorY)
+            layer.position = CGPoint(x: layer.position.x + rect.width / 2, y: layer.position.y + rect.height * anchorY)
         case .none:
             rect.size = CGSize(width: textBounds.width + padding * 2.0 + edgeInsets.horizontal + borderWidth * 2, height: textBounds.height + padding * 2.0 + edgeInsets.vertical + borderWidth * 2)
             rect.origin = CGPoint(x: from.midX - rect.size.width / 2, y: from.midY - rect.height / 2)
@@ -555,9 +521,6 @@ open class PTTipsView: UIView {
         }
     }
 
-    /// Custom draw override
-    ///
-    /// - Parameter rect: the rect occupied by the view
     open override func draw(_ rect: CGRect) {
         if isRounded {
             let showHorizontally = direction == .left || direction == .right
@@ -601,18 +564,10 @@ open class PTTipsView: UIView {
         }
     }
 
-    /// Shows an animated poptip in a given view, from a given rectangle. The property `isVisible` will be `true` as soon as the poptip is added to the given view.
-    ///
-    /// - Parameters:
-    ///   - text: The text to display
-    ///   - direction: The direction of the poptip in relation to the element that generates it
-    ///   - maxWidth: The maximum width of the poptip. If the poptip won't fit in the given space, this will be overridden.
-    ///   - view: The view that will hold the poptip as a subview.
-    ///   - frame: The originating frame. The poptip's arrow will point to the center of this frame.
-    ///   - duration: Optional time interval that determines when the poptip will self-dismiss.
+    // MARK: - 显示接口 (Show Methods)
+
     open func show(text: String, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) {
         resetView()
-
         attributedText = nil
         self.text = text
         accessibilityLabel = text
@@ -622,23 +577,12 @@ open class PTTipsView: UIView {
         customView?.removeFromSuperview()
         customView = nil
         label.isHidden = false
-        from = frame
-
+        self.from = frame
         show(duration: duration)
     }
 
-    /// Shows an animated poptip in a given view, from a given rectangle. The property `isVisible` will be `true` as soon as the poptip is added to the given view.
-    ///
-    /// - Parameters:
-    ///   - attributedText: The attributed string to display
-    ///   - direction: The direction of the poptip in relation to the element that generates it
-    ///   - maxWidth: The maximum width of the poptip. If the poptip won't fit in the given space, this will be overridden.
-    ///   - view: The view that will hold the poptip as a subview.
-    ///   - frame: The originating frame. The poptip's arrow will point to the center of this frame.
-    ///   - duration: Optional time interval that determines when the poptip will self-dismiss.
     open func show(attributedText: NSAttributedString, direction: PopTipDirection, maxWidth: CGFloat, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) {
         resetView()
-
         text = nil
         self.attributedText = attributedText
         accessibilityLabel = attributedText.string
@@ -648,23 +592,12 @@ open class PTTipsView: UIView {
         customView?.removeFromSuperview()
         customView = nil
         label.isHidden = false
-        from = frame
-
+        self.from = frame
         show(duration: duration)
     }
 
-
-    /// Shows an animated poptip in a given view, from a given rectangle. The property `isVisible` will be `true` as soon as the poptip is added to the given view.
-    ///
-    /// - Parameters:
-    ///   - customView: A custom view
-    ///   - direction: The direction of the poptip in relation to the element that generates it
-    ///   - view: The view that will hold the poptip as a subview.
-    ///   - frame: The originating frame. The poptip's arrow will point to the center of this frame.
-    ///   - duration: Optional time interval that determines when the poptip will self-dismiss.
     open func show(customView: UIView, direction: PopTipDirection, in view: UIView, from frame: CGRect, duration: TimeInterval? = nil) {
         resetView()
-
         text = nil
         attributedText = nil
         self.direction = direction
@@ -674,81 +607,61 @@ open class PTTipsView: UIView {
         self.customView = customView
         label.isHidden = true
         addSubview(customView)
-        from = frame
-
+        self.from = frame
         show(duration: duration)
     }
 
-  // #if canImport(SwiftUI) && canImport(Combine)
   #if !(os(iOS) && (arch(i386) || arch(arm)))
-    /// Shows an animated poptip in a given view, from a given rectangle. The property `isVisible` will be `true` as soon as the poptip is added to the given view.
-    ///
-    /// - Parameters:
-    ///   - rootView: A SwiftUI view
-    ///   - direction: The direction of the poptip in relation to the element that generates it
-    ///   - view: The view that will hold the poptip as a subview.
-    ///   - frame: The originating frame. The poptip's arrow will point to the center of this frame.
-    ///   - parent: The controller that holds the view that will hold the poptip. Needed as SwiftUI views have to be embed in a child UIHostingController.
-    ///   - duration: Optional time interval that determines when the poptip will self-dismiss.
     open func show<V: View>(rootView: V, direction: PopTipDirection, in view: UIView, from frame: CGRect, parent: UIViewController, duration: TimeInterval? = nil) {
         resetView()
-
         text = nil
         attributedText = nil
         self.direction = direction
         containerView = view
+        
         let controller = UIHostingController(rootView: rootView)
         controller.view.backgroundColor = .clear
+        
         let maxContentWidth: CGFloat
         if let window = parent.view.window {
             maxContentWidth = window.bounds.width - (self.edgeMargin * 2) - self.edgeInsets.horizontal - (self.padding * 2)
-        }
-        else {
+        } else {
             maxContentWidth = .greatestFiniteMagnitude
         }
         let sizeThatFits = controller.view.sizeThatFits(CGSize(width: maxContentWidth, height: CGFloat.greatestFiniteMagnitude))
         controller.view.frame.size = CGSize(width: min(sizeThatFits.width, maxContentWidth), height: sizeThatFits.height)
         maxWidth = controller.view.frame.size.width
+        
         self.customView?.removeFromSuperview()
         self.customView = controller.view
         parent.addChild(controller)
         addSubview(controller.view)
         controller.didMove(toParent: parent)
         controller.view.layoutIfNeeded()
-        from = frame
+        self.from = frame
         hostingController = controller
 
         show(duration: duration)
     }
   #endif
 
-    /// Update the current text
-    ///
-    /// - Parameter text: the new text
     open func update(text: String) {
         self.text = text
         updateBubble()
     }
 
-    /// Update the current text
-    ///
-    /// - Parameter attributedText: the new attributs string
     open func update(attributedText: NSAttributedString) {
         self.attributedText = attributedText
         updateBubble()
     }
 
-    /// Update the current text
-    ///
-    /// - Parameter customView: the new custom view
     open func update(customView: UIView) {
         self.customView = customView
         updateBubble()
     }
 
-    /// Hides the poptip and removes it from the view. The property `isVisible` will be set to `false` when the animation is complete and the poptip is removed from the parent view.
-    ///
-    /// - Parameter forced: Force the removal, ignoring running animations
+    // MARK: - 隐藏与控制 (Hide & Actions)
+
     @objc open func hide(forced: Bool = false) {
         if !forced && isAnimating {
             return
@@ -791,14 +704,10 @@ open class PTTipsView: UIView {
         }
     }
 
-    /// Makes the poptip perform the action indefinitely. The action animation calls for the user's attention after the poptip is shown
     open func startActionAnimation() {
         performActionAnimation()
     }
 
-    /// Stops the poptip action animation. Does nothing if the poptip wasn't animating in the first place.
-    ///
-    /// - Parameter completion: Optional completion block clled once the animation is completed
     open func stopActionAnimation(_ completion: (() -> Void)? = nil) {
         dismissActionAnimation(completion)
     }
@@ -813,16 +722,15 @@ open class PTTipsView: UIView {
 
     fileprivate func updateBubble() {
         stopActionAnimation {
-          UIView.animate(withDuration: 0.2, delay: 0, options: [.transitionCrossDissolve, .beginFromCurrentState], animations: {
-              self.setup()
+            UIView.animate(withDuration: 0.2, delay: 0, options: [.transitionCrossDissolve, .beginFromCurrentState], animations: {
+                self.setup()
+                let path = PTTipsView.pathWith(rect: self.frame, frame: self.frame, direction: self.direction, arrowSize: self.arrowSize, arrowPosition: self.arrowPosition, arrowRadius: self.arrowRadius, borderWidth: self.borderWidth, radius: self.cornerRadius)
 
-              let path = PTTipsView.pathWith(rect: self.frame, frame: self.frame, direction: self.direction, arrowSize: self.arrowSize, arrowPosition: self.arrowPosition, arrowRadius: self.arrowRadius, borderWidth: self.borderWidth, radius: self.cornerRadius)
-
-              let shadowAnimation = CABasicAnimation(keyPath: "shadowPath")
-              shadowAnimation.duration = 0.2
-              shadowAnimation.toValue = path.cgPath
-              shadowAnimation.isRemovedOnCompletion = true
-              self.layer.add(shadowAnimation, forKey: "shadowAnimation")
+                let shadowAnimation = CABasicAnimation(keyPath: "shadowPath")
+                shadowAnimation.duration = 0.2
+                shadowAnimation.toValue = path.cgPath
+                shadowAnimation.isRemovedOnCompletion = true
+                self.layer.add(shadowAnimation, forKey: "shadowAnimation")
             }) { (_) in
                 self.startActionAnimation()
             }
@@ -838,7 +746,7 @@ open class PTTipsView: UIView {
             guard !self.isPerformingExitAnimation && self.isVisible else {
                 return
             }
-              
+               
             self.customView?.layoutIfNeeded()
 
             if let tapRemoveGesture = self.tapToRemoveGestureRecognizer {
@@ -853,30 +761,26 @@ open class PTTipsView: UIView {
                 self.performActionAnimation()
             }
             self.isAnimating = false
+            
+            // 优化点：使用 Block 方法防止因为 Target-Action 强引用导致 Timer 内存泄漏
             if let duration = duration {
-                self.dismissTimer = Timer.scheduledTimer(timeInterval: duration, target: self, selector: #selector(PTTipsView.hide), userInfo: nil, repeats: false)
+                self.dismissTimer = Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { [weak self] _ in
+                    self?.hide()
+                }
             }
         }
     }
 
     @objc fileprivate func handleTap(_ gesture: UITapGestureRecognizer) {
-        if shouldDismissOnTap {
-            hide()
-        }
+        if shouldDismissOnTap { hide() }
         tapHandler?(self)
     }
 
     @objc fileprivate func handleTapOutside(_ gesture: UITapGestureRecognizer) {
-        if !isVisible {
-            return
-        }
-
-        if shouldDismissOnTapOutside {
-            hide()
-        }
+        if !isVisible { return }
+        if shouldDismissOnTapOutside { hide() }
 
         let gestureLocationInContainer = gesture.location(in: containerView)
-
         if shouldConsiderOriginatingFrameAsPopTip && from.contains(gestureLocationInContainer) {
             tapHandler?(self)
         } else if shouldConsiderCutoutTapSeparately && shouldShowMask && shouldCutoutMask && cutoutPathGenerator(from).contains(gestureLocationInContainer) {
@@ -887,9 +791,7 @@ open class PTTipsView: UIView {
     }
 
     @objc fileprivate func handleSwipeOutside(_ gesture: UITapGestureRecognizer) {
-        if shouldDismissOnSwipeOutside {
-            hide()
-        }
+        if shouldDismissOnSwipeOutside { hide() }
         swipeOutsideHandler?(self)
     }
 
@@ -901,6 +803,8 @@ open class PTTipsView: UIView {
         isApplicationInBackground = true
     }
 
+    // MARK: - 内部动作动画
+    
     fileprivate func performActionAnimation() {
         switch actionAnimation {
         case .bounce(let offset):
@@ -929,15 +833,11 @@ open class PTTipsView: UIView {
         var offsetX = CGFloat(0)
         var offsetY = CGFloat(0)
         switch direction {
-        case .auto, .autoHorizontal, .autoVertical: break // The decision will be made at this point
-        case .up, .none:
-            offsetY = -offset
-        case .left:
-            offsetX = -offset
-        case .right:
-            offsetX = offset
-        case .down:
-            offsetY = offset
+        case .auto, .autoHorizontal, .autoVertical: break
+        case .up, .none: offsetY = -offset
+        case .left: offsetX = -offset
+        case .right: offsetX = offset
+        case .down: offsetY = offset
         }
 
         UIView.animate(withDuration: actionAnimationIn / 10, delay: actionDelayIn, options: [.curveEaseIn, .allowUserInteraction, .beginFromCurrentState], animations: {
@@ -959,10 +859,8 @@ open class PTTipsView: UIView {
         var offsetX = offsetX
         var offsetY = offsetY
         switch direction {
-        case .up, .none:
-            offsetY = -offsetY
-        case .left:
-            offsetX = -offsetX
+        case .up, .none: offsetY = -offsetY
+        case .left: offsetX = -offsetX
         default: break
         }
 
@@ -979,17 +877,18 @@ open class PTTipsView: UIView {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        dismissTimer?.invalidate()
     }
 }
 
-// MARK: - Draw helper
+// MARK: - 贝塞尔曲线辅助方法 (Bezier Path Helpers)
 public extension PTTipsView {
     class func pathWith(rect: CGRect, frame: CGRect, direction: PopTipDirection, arrowSize: CGSize, arrowPosition: CGPoint, arrowRadius: CGFloat, borderWidth: CGFloat = 0, radius: CGFloat = 0) -> UIBezierPath {
         var path = UIBezierPath()
         var baloonFrame = CGRect.zero
         
         switch direction {
-        case .auto, .autoHorizontal, .autoVertical: break // The decision will be made at this point
+        case .auto, .autoHorizontal, .autoVertical: break
         case .none:
             baloonFrame = CGRect(x: borderWidth, y: borderWidth, width: frame.width - borderWidth * 2, height: frame.height - borderWidth * 2)
             path = UIBezierPath(roundedRect: baloonFrame, cornerRadius: radius)
@@ -1000,31 +899,19 @@ public extension PTTipsView {
             let arrowEndPoint = CGPoint(x: arrowPosition.x + arrowSize.width / 2, y: arrowPosition.y + arrowSize.height)
             let arrowVertex = arrowPosition
             
-            // 1: Arrow starting point
             path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            // 2: Arrow vertex arc
             if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            // 3: End drawing arrow
             path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            // 4: Top right line
             path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY))
-            // 5: Top right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            // 6: Right line
             path.addLine(to: CGPoint(x: baloonFrame.width, y: baloonFrame.maxY - radius - borderWidth))
-            // 7: Bottom right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            // 8: Bottom line
             path.addLine(to: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.maxY))
-            // 9: Bottom left arc
             path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-            // 10: Left line
             path.addLine(to: CGPoint(x: borderWidth, y: baloonFrame.minY + radius + borderWidth))
-            // 11: Top left arc
             path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            // 13: Close path
             path.close()
 
         case .up:
@@ -1034,31 +921,19 @@ public extension PTTipsView {
             let arrowEndPoint = CGPoint(x: arrowPosition.x - arrowSize.width / 2, y: arrowPosition.y - arrowSize.height)
             let arrowVertex = arrowPosition
             
-            // 1: Arrow starting point
             path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            // 2: Arrow vertex arc
             if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            // 3: End drawing arrow
             path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            // 4: Bottom left line
             path.addLine(to: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.maxY))
-            // 5: Bottom left arc
             path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-            // 6: Left line
             path.addLine(to: CGPoint(x: borderWidth, y: baloonFrame.minY + radius + borderWidth))
-            // 7: Top left arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            // 8: Top line
             path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY))
-            // 9: Top right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + radius), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            // 10: Right line
             path.addLine(to: CGPoint(x: baloonFrame.width, y: baloonFrame.maxY - radius - borderWidth))
-            // 11: Bottom right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            // 12: Close path
             path.close()
 
         case .left:
@@ -1068,31 +943,19 @@ public extension PTTipsView {
             let arrowEndPoint = CGPoint(x: arrowPosition.x - arrowSize.height, y: arrowPosition.y + arrowSize.width / 2)
             let arrowVertex = arrowPosition
             
-            // 1: Arrow starting point
             path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            // 2: Arrow vertex arc
             if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            // 3: End drawing arrow
             path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            // 4: Right bottom line
             path.addLine(to: CGPoint(x: baloonFrame.width, y: baloonFrame.maxY - radius - borderWidth))
-            // 5: Bottom right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            // 6: Bottom line
             path.addLine(to: CGPoint(x: baloonFrame.minX + radius + borderWidth, y: baloonFrame.maxY))
-            // 7: Bottom left arc
             path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-            // 8: Left line
             path.addLine(to: CGPoint(x: borderWidth, y: baloonFrame.minY + radius + borderWidth))
-            // 9: Top left arc
             path.addArc(withCenter: CGPoint(x: borderWidth + radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            // 10: Top line
             path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + borderWidth))
-            // 11: Top right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            // 12: Close path
             path.close()
 
         case .right:
@@ -1102,29 +965,18 @@ public extension PTTipsView {
             let arrowEndPoint = CGPoint(x: arrowPosition.x + arrowSize.height, y: arrowPosition.y - arrowSize.width / 2)
             let arrowVertex = arrowPosition
             
-            // 1: Arrow starting point
             path.move(to: CGPoint(x: arrowStartPoint.x, y: arrowStartPoint.y))
-            // 2: Arrow vertex arc
             if let cornerPoint = self.roundCornerCircleCenter(start: arrowStartPoint, vertex: arrowVertex, end: arrowEndPoint, radius: arrowRadius) {
                 path.addArc(withCenter: cornerPoint.center, radius: arrowRadius, startAngle: cornerPoint.startAngle, endAngle: cornerPoint.endAngle, clockwise: true)
             }
-            // 3: End drawing arrow
             path.addLine(to: CGPoint(x: arrowEndPoint.x, y: arrowEndPoint.y))
-            // 6: Left top line
             path.addLine(to: CGPoint(x: baloonFrame.minX, y: baloonFrame.minY + radius + borderWidth))
-            // 7: Top left arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.minX + radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi, endAngle: CGFloat.pi * 1.5, clockwise: true)
-            // 8: Top line
             path.addLine(to: CGPoint(x: baloonFrame.width - radius, y: baloonFrame.minY + borderWidth))
-            // 9: Top right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.minY + radius + borderWidth), radius:radius, startAngle: CGFloat.pi * 1.5, endAngle: 0, clockwise:true)
-            // 10: Right line
             path.addLine(to: CGPoint(x: baloonFrame.maxX, y: baloonFrame.maxY - radius))
-            // 11: Bottom right arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.maxX - radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-            // 4: Bottom line
             path.addLine(to: CGPoint(x: baloonFrame.minX + radius, y: baloonFrame.maxY ))
-            // 5: Bottom left arc
             path.addArc(withCenter: CGPoint(x: baloonFrame.minX + radius, y: baloonFrame.maxY - radius), radius:radius, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
             path.close()
           }
@@ -1133,7 +985,6 @@ public extension PTTipsView {
     }
     
     private class func roundCornerCircleCenter(start: CGPoint, vertex: CGPoint, end: CGPoint, radius: CGFloat) -> CornerPoint? {
-        
         let firstLineAngle: CGFloat = atan2(vertex.y - start.y, vertex.x - start.x)
         let secondLineAngle: CGFloat = atan2(end.y - vertex.y, end.x - vertex.x)
         
@@ -1142,21 +993,16 @@ public extension PTTipsView {
         
         let x1 = start.x + firstLineOffset.dx
         let y1 = start.y + firstLineOffset.dy
-        
         let x2 = vertex.x + firstLineOffset.dx
         let y2 = vertex.y + firstLineOffset.dy
-        
         let x3 = vertex.x + secondLineOffset.dx
         let y3 = vertex.y + secondLineOffset.dy
-        
         let x4 = end.x + secondLineOffset.dx
         let y4 = end.y + secondLineOffset.dy
         
         let divisor = ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
         
-        if divisor == 0 {
-            return nil
-        }
+        if divisor == 0 { return nil }
         
         let intersectionX = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / divisor
         let intersectionY = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / divisor
@@ -1167,11 +1013,9 @@ public extension PTTipsView {
     }
 }
 
+// MARK: - 进出场动画执行模块
 public extension PTTipsView {
 
-    /// Triggers the chosen entrance animation
-    ///
-    /// - Parameter completion: the completion handler
     func performEntranceAnimation(completion: @escaping () -> Void) {
         switch entranceAnimation {
         case .scale:
@@ -1181,23 +1025,16 @@ public extension PTTipsView {
         case .fadeIn:
             entranceFadeIn(completion: completion)
         case .custom:
-            if shouldShowMask {
-                addBackgroundMask(to: containerView)
-            }
+            if shouldShowMask { addBackgroundMask(to: containerView) }
             containerView?.addSubview(self)
             entranceAnimationHandler?(completion)
         case .none:
-            if shouldShowMask {
-                addBackgroundMask(to: containerView)
-            }
+            if shouldShowMask { addBackgroundMask(to: containerView) }
             containerView?.addSubview(self)
             completion()
         }
     }
 
-    /// Triggers the chosen exit animation
-    ///
-    /// - Parameter completion: the completion handler
     func performExitAnimation(completion: @escaping () -> Void) {
         switch exitAnimation {
         case .scale:
@@ -1214,19 +1051,13 @@ public extension PTTipsView {
     private func entranceTransition(completion: @escaping () -> Void) {
         transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
         switch direction {
-        case .up:
-            transform = transform.translatedBy(x: 0, y: -from.origin.y)
-        case .down, .none:
-            transform = transform.translatedBy(x: 0, y: (containerView?.frame.height ?? 0) - from.origin.y)
-        case .left:
-            transform = transform.translatedBy(x: from.origin.x, y: 0)
-        case .right:
-            transform = transform.translatedBy(x: (containerView?.frame.width ?? 0) - from.origin.x, y: 0)
-        case .auto, .autoHorizontal, .autoVertical: break // The decision will be made at this point
+        case .up: transform = transform.translatedBy(x: 0, y: -from.origin.y)
+        case .down, .none: transform = transform.translatedBy(x: 0, y: (containerView?.frame.height ?? 0) - from.origin.y)
+        case .left: transform = transform.translatedBy(x: from.origin.x, y: 0)
+        case .right: transform = transform.translatedBy(x: (containerView?.frame.width ?? 0) - from.origin.x, y: 0)
+        case .auto, .autoHorizontal, .autoVertical: break
         }
-        if shouldShowMask {
-            addBackgroundMask(to: containerView)
-        }
+        if shouldShowMask { addBackgroundMask(to: containerView) }
         containerView?.addSubview(self)
 
         UIView.animate(withDuration: animationIn, delay: delayIn, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.5, options: [.curveEaseInOut, .beginFromCurrentState], animations: {
@@ -1239,9 +1070,7 @@ public extension PTTipsView {
 
     private func entranceScale(completion: @escaping () -> Void) {
         transform = CGAffineTransform(scaleX: 0, y: 0)
-        if shouldShowMask {
-            addBackgroundMask(to: containerView)
-        }
+        if shouldShowMask { addBackgroundMask(to: containerView) }
         containerView?.addSubview(self)
 
         UIView.animate(withDuration: animationIn, delay: delayIn, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.5, options: [.curveEaseInOut, .beginFromCurrentState], animations: {
@@ -1253,9 +1082,7 @@ public extension PTTipsView {
     }
 
     private func entranceFadeIn(completion: @escaping () -> Void) {
-        if shouldShowMask {
-            addBackgroundMask(to: containerView)
-        }
+        if shouldShowMask { addBackgroundMask(to: containerView) }
         containerView?.addSubview(self)
 
         alpha = 0
@@ -1290,7 +1117,6 @@ public extension PTTipsView {
     }
       
     private func addBackgroundMask(to targetView: UIView?) {
-
         guard let backgroundMask = backgroundMask, let targetView = targetView else { return }
           
         targetView.addSubview(backgroundMask)

@@ -26,6 +26,15 @@ public class PTDrawPath: NSObject {
     
     var willDelete = false
     
+    public override var hash: Int {
+        return index.hashValue
+    }
+
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTDrawPath else { return false }
+        return self.index == other.index
+    }
+
     init(pathColor: UIColor, pathWidth: CGFloat, defaultLinePath: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
         path = UIBezierPath()

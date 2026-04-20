@@ -290,7 +290,7 @@ public class PTEditImageViewController: PTBaseViewController {
             }
             
             PTAlertTipControl.present(title:PTImageEditorConfig.share.doingAlertTitle,icon:.Heart,style: .Normal)
-            PTGCDManager.gcdMain {
+            PTGCDManager.gcdAfter(time: 0.1, block: {
                 resImage = self.buildImage()
                 resImage = resImage!.pt.clipImage(
                     angle: self.currentClipStatus.angle,
@@ -307,7 +307,7 @@ public class PTEditImageViewController: PTBaseViewController {
                     actions: self.editorManager.actions
                 )
                 callback()
-            }
+            })
         }
         view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view
@@ -357,7 +357,7 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
 
     private var drawPaths: [PTDrawPath] = [PTDrawPath]()
-    private lazy var deleteDrawPaths: [PTDrawPath] = [PTDrawPath]()
+    private lazy var deleteDrawPaths: Set<PTDrawPath> = Set<PTDrawPath>()
     private var mosaicPaths: [PTMosaicPath] = [PTMosaicPath]()
 
     private lazy var drawBar:UIView = {
@@ -776,17 +776,20 @@ public class PTEditImageViewController: PTBaseViewController {
         let image = UIGraphicsImageRenderer.pt.renderImage(size: editImage.size) { format in
             format.scale = self.editImage.scale
         } imageActions: { context in
-            editImage.draw(at: .zero)
-            drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
-            
-            if !stickersContainer.subviews.isEmpty {
-                let scale = imageSize.width / stickersContainer.frame.width
-                stickersContainer.subviews.forEach { view in
-                    (view as? PTStickerViewAdditional)?.resetState()
+            // 【新增】：加入 autoreleasepool 保护内存
+            autoreleasepool {
+                editImage.draw(at: .zero)
+                drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
+                
+                if !stickersContainer.subviews.isEmpty {
+                    let scale = imageSize.width / stickersContainer.frame.width
+                    stickersContainer.subviews.forEach { view in
+                        (view as? PTStickerViewAdditional)?.resetState()
+                    }
+                    context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+                    stickersContainer.layer.render(in: context)
+                    context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
                 }
-                context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
-                stickersContainer.layer.render(in: context)
-                context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
             }
         }
         
@@ -950,7 +953,7 @@ extension PTEditImageViewController {
             for path in drawPaths {
                 if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
                     path.willDelete = true
-                    deleteDrawPaths.append(path)
+                    deleteDrawPaths.insert(path)
                     needDraw = true
                     impactFeedback?.impactOccurred()
                 }
@@ -961,7 +964,7 @@ extension PTEditImageViewController {
         } else {
             eraserCircleView.isHidden = true
             if !deleteDrawPaths.isEmpty {
-                editorManager.storeAction(.eraser(deleteDrawPaths))
+                editorManager.storeAction(.eraser(Array(deleteDrawPaths)))
                 drawPaths.removeAll { deleteDrawPaths.contains($0) }
                 deleteDrawPaths.removeAll()
                 drawLine()
@@ -972,65 +975,67 @@ extension PTEditImageViewController {
     /// 传入inputImage 和 inputMosaicImage则代表仅想要获取新生成的mosaic图片
     @discardableResult
     private func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
-        let renderRect = CGRect(origin: .zero, size: originalImage.size)
-        
-        var midImage = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
-            format.scale = self.originalImage.scale
-        } imageActions: { context in
-            if inputImage != nil {
-                inputImage?.draw(in: renderRect)
-            } else {
-                var drawImage: UIImage?
-                if tools.contains(.filter), let image = filterImages[currentFilter.name] {
-                    drawImage = image
+        return autoreleasepool {
+            let renderRect = CGRect(origin: .zero, size: originalImage.size)
+            
+            var midImage = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
+                format.scale = self.originalImage.scale
+            } imageActions: { context in
+                if inputImage != nil {
+                    inputImage?.draw(in: renderRect)
                 } else {
-                    drawImage = originalImage
+                    var drawImage: UIImage?
+                    if tools.contains(.filter), let image = filterImages[currentFilter.name] {
+                        drawImage = image
+                    } else {
+                        drawImage = originalImage
+                    }
+                    
+                    if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
+                        drawImage = adjustFilterValueSet(filterImage: drawImage) ?? drawImage
+                    }
+                    
+                    drawImage?.draw(in: renderRect)
                 }
                 
-                if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
-                    drawImage = adjustFilterValueSet(filterImage: drawImage) ?? drawImage
+                mosaicPaths.forEach { path in
+                    context.move(to: path.startPoint)
+                    path.linePoints.forEach { point in
+                        context.addLine(to: point)
+                    }
+                    context.setLineWidth(path.path.lineWidth / path.ratio)
+                    context.setLineCap(.round)
+                    context.setLineJoin(.round)
+                    context.setBlendMode(.clear)
+                    context.strokePath()
                 }
-                
-                drawImage?.draw(in: renderRect)
             }
             
-            mosaicPaths.forEach { path in
-                context.move(to: path.startPoint)
-                path.linePoints.forEach { point in
-                    context.addLine(to: point)
-                }
-                context.setLineWidth(path.path.lineWidth / path.ratio)
-                context.setLineCap(.round)
-                context.setLineJoin(.round)
-                context.setBlendMode(.clear)
-                context.strokePath()
+            guard let midCgImage = midImage.cgImage else { return nil }
+            midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
+            
+            let temp = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
+                format.scale = self.originalImage.scale
+            } imageActions: { _ in
+                // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
+                originalImage.draw(in: renderRect)
+                (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
+                midImage.draw(in: renderRect)
             }
-        }
-        
-        guard let midCgImage = midImage.cgImage else { return nil }
-        midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
-        
-        let temp = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
-            format.scale = self.originalImage.scale
-        } imageActions: { _ in
-            // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
-            originalImage.draw(in: renderRect)
-            (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
-            midImage.draw(in: renderRect)
-        }
-        
-        guard let cgi = temp.cgImage else { return nil }
-        let image = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
-        
-        if inputImage != nil {
+            
+            guard let cgi = temp.cgImage else { return nil }
+            let image = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
+            
+            if inputImage != nil {
+                return image
+            }
+            
+            editImage = image
+            imageView.image = image
+            mosaicImageLayerMaskLayer?.path = nil
+            
             return image
         }
-        
-        editImage = image
-        imageView.image = image
-        mosaicImageLayerMaskLayer?.path = nil
-        
-        return image
     }
 }
 
