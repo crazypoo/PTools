@@ -18,9 +18,9 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
     // 💡 优化：使用 Set 提升查找性能
     var selIds = Set<String>()
     var selEditImage: [String: UIImage] = [:]
-#if POOTOOLS_IMAGEEDITOR
+//#if POOTOOLS_IMAGEEDITOR
     var selEditModel: [String: PTEditModel] = [:]
-#endif
+//#endif
     var selIdAndIndex: [String: Int] = [:]
     
     for (index, m) in selected.enumerated() {
@@ -28,11 +28,11 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
         if let editImage = m.editImage {
             selEditImage[m.ident] = editImage
         }
-#if POOTOOLS_IMAGEEDITOR
+//#if POOTOOLS_IMAGEEDITOR
         if let editModel = m.editImageModel {
             selEditModel[m.ident] = editModel
         }
-#endif
+//#endif
         selIdAndIndex[m.ident] = index
     }
     
@@ -40,9 +40,9 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
         if selIds.contains(m.ident) {
             m.isSelected = true
             m.editImage = selEditImage[m.ident]
-#if POOTOOLS_IMAGEEDITOR
+//#if POOTOOLS_IMAGEEDITOR
             m.editImageModel = selEditModel[m.ident]
-#endif
+//#endif
             // 💡 修复：安全防御，防止越界崩溃
             if let targetIndex = selIdAndIndex[m.ident], targetIndex < selected.count {
                 selected[targetIndex] = m

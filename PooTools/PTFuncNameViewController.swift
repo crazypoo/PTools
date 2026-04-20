@@ -911,15 +911,14 @@ class PTFuncNameViewController: PTBaseViewController {
                     let vc = PTImageListViewController()
                     self.navigationController?.pushViewController(vc)
                 } else if itemRow.title == .mediaSelect {
-                    let config = PTMediaLibConfig.share
-                    config.maxSelectCount = 9
-                    config.allowSelectImage = true
-                    config.allowSelectVideo = true
-                    config.allowMixSelect = true
-                    config.maxVideoSelectCount = 1
-                    config.allowEditImage = true
-                    config.allowEditVideo = true
-                    config.useCustomCamera = false
+                    PTMediaLibConfig.share.allowEditImage = true
+                    PTMediaLibConfig.share.maxSelectCount = 9
+                    PTMediaLibConfig.share.allowSelectImage = true
+                    PTMediaLibConfig.share.allowSelectVideo = true
+                    PTMediaLibConfig.share.allowMixSelect = true
+                    PTMediaLibConfig.share.maxVideoSelectCount = 1
+                    PTMediaLibConfig.share.allowEditVideo = true
+                    PTMediaLibConfig.share.useCustomCamera = true
 
                     let vc = PTMediaLibViewController()
                     vc.mediaLibShow()

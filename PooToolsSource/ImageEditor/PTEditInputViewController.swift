@@ -102,7 +102,7 @@ class PTImageStickerView: PTBaseStickerView {
     }
 }
 
-protocol PTStickerViewDelegate: NSObject {
+public protocol PTStickerViewDelegate: NSObject {
     /// Called when scale or rotate or move.
     func stickerBeginOperation(_ sticker: PTBaseStickerView)
     
@@ -128,7 +128,7 @@ protocol PTStickerViewAdditional: NSObject {
     func addScale(_ scale: CGFloat)
 }
 
-class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
+public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     private enum Direction: Int {
         case up = 0
         case right = 90
@@ -245,7 +245,7 @@ class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         guard firstLayout else {
@@ -424,7 +424,7 @@ class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     // MARK: UIGestureRecognizerDelegate
 
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
 }
@@ -489,7 +489,7 @@ extension PTBaseStickerView: PTStickerViewAdditional {
     }
 }
 
-class PTTextStickerView: PTBaseStickerView {
+public class PTTextStickerView: PTBaseStickerView {
     static let fontSize: CGFloat = 32
     
     private static let edgeInset: CGFloat = 10

@@ -19,7 +19,7 @@ public struct PTAdjustStatus {
     }
 }
 
-class PTAdjustSliderView: UIView {
+public class PTAdjustSliderView: UIView {
 
     static let maximumValue: Float = 1
     
@@ -109,7 +109,7 @@ class PTAdjustSliderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         if isVertical {

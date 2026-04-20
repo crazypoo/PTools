@@ -236,6 +236,7 @@ public class PTActionLayoutButton: UIControl {
             imageView.snp.remakeConstraints { make in
                 make.centerX.centerY.equalToSuperview()
                 make.size.equalTo(self.imageSize)
+                make.edges.equalToSuperview().priority(.low)
             }
             
         default:
@@ -395,7 +396,21 @@ public class PTActionLayoutButton: UIControl {
 
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let margin: CGFloat = actionMargin
-        let largerBounds = bounds.insetBy(dx: -margin, dy: -margin)
+        // 以自身 bounds 为基础的可点击区域
+        var largerBounds = bounds.insetBy(dx: -margin, dy: -margin)
+        
+        // 🚀 Bug修复（核心）：主动将子视图的 Frame 纳入可点击范围！
+        // 如果 Button 自身没有被撑开 (bounds = 0)，但图片显示出来了，只要点击在图片上就能响应。
+        if !imageView.isHidden {
+            let imageBounds = imageView.frame.insetBy(dx: -margin, dy: -margin)
+            largerBounds = largerBounds.union(imageBounds)
+        }
+        
+        if !titleLabel.isHidden {
+            let titleBounds = titleLabel.frame.insetBy(dx: -margin, dy: -margin)
+            largerBounds = largerBounds.union(titleBounds)
+        }
+        
         return largerBounds.contains(point)
     }
 }
@@ -531,6 +546,10 @@ public extension PTActionLayoutButton {
     @objc func actionTouched(sender:PTActionLayoutButton) {
         if let block = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
             block(sender)
+        }
+        // 🚀 优化体验：对齐 `handleLabelTap` 的逻辑，点击后也触发 0.1s 的延时刷新
+        PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
+            self?.updateAppearance()
         }
     }
     

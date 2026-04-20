@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Harbeth
 
 /// 主控制器为引擎提供的上下文数据源 (解耦的关键)
 public protocol PTEditImageEngineContext: AnyObject {
@@ -23,6 +24,22 @@ public protocol PTEditImageEngineContext: AnyObject {
     var engineOriginalImage: UIImage { get }
     var engineCurrentEditImage: UIImage { get }
     func engineUpdateEditImage(_ newImage: UIImage)
+    
+    // 👇 新增：贴纸引擎需要的专属支持
+    /// 主控制器的 View (用于计算垃圾桶的相对坐标)
+    var engineMainView: UIView { get }
+    /// 主控制器本身 (用于 push 出文字输入控制器)
+    var engineViewController: UIViewController { get }
+    /// 垃圾桶背景视图
+    var engineAshbinView: UIView { get }
+    /// 垃圾桶图标视图
+    var engineAshbinImgView: UIImageView { get }
+    
+    // 👇 新增：专门给 Adjust 引擎用的桥梁
+    /// 获取不带 Adjust 参数，但包含当前滤镜和马赛克的参考底图
+    func engineRequestAdjustReferenceImage() -> UIImage
+    /// 当前 VC 里面选中的滤镜基础图 (用于 Adjust 叠加)
+    var engineImageWithoutAdjust: UIImage { get }
 }
 
 // 所有交互式编辑工具（涂鸦、马赛克等）的通用协议
@@ -445,5 +462,412 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             
             return finalImage
         }
+    }
+}
+
+public class PTStickerEngine: NSObject, PTEditImageToolEngine {
+    
+    // MARK: - 核心视图与状态
+    
+    public var canvasView: UIView { stickersContainer }
+    
+    private lazy var stickersContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.clipsToBounds = false // 允许贴纸部分拖出边界
+        return view
+    }()
+    
+    private weak var context: PTEditImageEngineContext?
+    private var preStickerState: PTBaseStickertState?
+    
+    /// 交互状态回调 (用于隐藏/显示主工具栏)
+    public var onInteractStateChanged: ((Bool) -> Void)?
+    
+    // MARK: - 生命周期
+    
+    public init(context: PTEditImageEngineContext) {
+        self.context = context
+        super.init()
+    }
+    
+    public func toolDidActivate() {
+        // 贴纸工具其实是一个“触发器”，激活时通常是为了弹出文字输入框或图片选择器
+        // 引擎可以保持挂起，这里什么都不用做，直接由 VC 调用 createTextSticker()
+    }
+    
+    public func toolDidDeactivate() {
+        // 工具失活时，取消所有贴纸的激活状态(隐藏白边框)
+        stickersContainer.subviews.forEach { view in
+            (view as? PTStickerViewAdditional)?.resetState()
+        }
+    }
+    
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
+        // 贴纸自带手势，不需要通过主控制器派发，留空即可
+    }
+    
+    public func reloadRenderState() {
+        // 预留给未来整体刷新贴纸层的接口
+    }
+    
+    // MARK: - 贴纸增删改查
+    
+    public func createTextSticker(text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal) {
+        showInputTextVC(text, textColor: textColor, font: font, style: style) { [weak self] newText, newColor, newFont, image, newStyle in
+            guard let self = self, !newText.isEmpty, let image = image else { return }
+            self.addTextStickersView(newText, textColor: newColor, font: newFont, image: image, style: newStyle)
+        }
+    }
+    
+    private func addTextStickersView(_ text: String, textColor: UIColor, font: UIFont, image: UIImage, style: PTInputTextStyle) {
+        guard let context = context else { return }
+        
+        let scale = context.engineScrollView.zoomScale
+        let size = PTTextStickerView.calculateSize(image: image)
+        let originFrame = getStickerOriginFrame(size)
+        
+        let textSticker = PTTextStickerView(
+            text: text, textColor: textColor, font: font, style: style, image: image,
+            originScale: 1 / scale, originAngle: -context.engineCurrentAngle, originFrame: originFrame
+        )
+        
+        addSticker(textSticker)
+        context.engineEditorManager.storeAction(.sticker(oldState: nil, newState: textSticker.state))
+    }
+    
+    private func addSticker(_ sticker: PTBaseStickerView) {
+        guard let context = context else { return }
+        stickersContainer.addSubview(sticker)
+        sticker.frame = sticker.originFrame
+        
+        sticker.delegate = self
+        // 解决手势冲突
+        context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
+        context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
+    }
+    
+    private func getStickerOriginFrame(_ size: CGSize) -> CGRect {
+        guard let context = context else { return .zero }
+        let scale = context.engineScrollView.zoomScale
+        let scrollView = context.engineScrollView
+        
+        // 计算当前屏幕在图片上的居中显示区域
+        let x = (scrollView.contentOffset.x - stickersContainer.frame.minX) / scale
+        let y = (scrollView.contentOffset.y - stickersContainer.frame.minY) / scale
+        let w = context.engineMainView.frame.width / scale
+        let h = context.engineMainView.frame.height / scale
+        
+        // 转换坐标系并居中
+        let r = context.engineMainView.convert(CGRect(x: x, y: y, width: w, height: h), to: stickersContainer)
+        return CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
+    }
+    
+    // MARK: - Undo & Redo 引擎接口
+    
+    public func undoOrRedoSticker(oldState: PTBaseStickertState?, newState: PTBaseStickertState?, isUndo: Bool) {
+        if isUndo {
+            if let oldState = oldState {
+                removeSticker(id: newState?.id ?? oldState.id)
+                if let sticker = PTBaseStickerView.initWithState(oldState) { addSticker(sticker) }
+            } else {
+                removeSticker(id: newState?.id)
+            }
+        } else {
+            if let newState = newState {
+                removeSticker(id: oldState?.id ?? newState.id)
+                if let sticker = PTBaseStickerView.initWithState(newState) { addSticker(sticker) }
+            } else {
+                removeSticker(id: oldState?.id)
+            }
+        }
+    }
+    
+    private func removeSticker(id: String?) {
+        guard let id = id else { return }
+        for sticker in stickersContainer.subviews.reversed() {
+            guard let stickerView = sticker as? PTBaseStickerView, stickerView.id == id else { continue }
+            stickerView.moveToAshbin()
+            break
+        }
+    }
+    
+    // MARK: - 文字输入控制器调配
+    
+    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void) {
+        guard let context = context else { return }
+        
+        let scrollView = context.engineScrollView
+        var r = scrollView.convert(context.engineMainView.frame, to: stickersContainer)
+        r.origin.x += scrollView.contentOffset.x / scrollView.zoomScale
+        r.origin.y += scrollView.contentOffset.y / scrollView.zoomScale
+        
+        let scale = context.engineOriginalImageSize.width / stickersContainer.frame.width
+        r.origin.x *= scale
+        r.origin.y *= scale
+        r.size.width *= scale
+        r.size.height *= scale
+        
+        // 获取高斯模糊的背景底图
+        let bgImage = context.engineCurrentEditImage.pt.clipImage(angle: 0, editRect: r, isCircle: false)
+        
+        let vc = PTEditInputViewController(image: bgImage, text: text, textColor: textColor, font: font, style: style)
+        vc.endInput = { text, textColor, font, image, style in
+            completion(text, textColor, font, image, style)
+        }
+        
+        context.engineViewController.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: - PTStickerViewDelegate (核心交互与垃圾桶动画)
+extension PTStickerEngine: PTStickerViewDelegate {
+    
+    public func stickerBeginOperation(_ sticker: PTBaseStickerView) {
+        guard let context = context else { return }
+        preStickerState = sticker.state
+        
+        onInteractStateChanged?(true) // 通知 VC 隐藏底部栏
+        
+        let ashbinView = context.engineAshbinView
+        ashbinView.layer.removeAllAnimations()
+        ashbinView.isHidden = false
+        
+        var frame = ashbinView.frame
+        let diff = context.engineMainView.frame.height - frame.minY
+        frame.origin.y += diff
+        ashbinView.frame = frame
+        frame.origin.y -= diff
+        
+        UIView.animate(withDuration: 0.25) {
+            ashbinView.frame = frame
+        }
+        
+        stickersContainer.subviews.forEach { view in
+            if view !== sticker {
+                (view as? PTStickerViewAdditional)?.resetState()
+                (view as? PTStickerViewAdditional)?.gesIsEnabled = false
+            }
+        }
+    }
+    
+    public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
+        guard let context = context else { return }
+        let point = panGes.location(in: context.engineMainView)
+        let ashbinView = context.engineAshbinView
+        let ashbinImgView = context.engineAshbinImgView
+        
+        if ashbinView.frame.contains(point) {
+            ashbinView.backgroundColor = .gray
+            ashbinImgView.isHighlighted = true
+            if sticker.alpha == 1 {
+                sticker.layer.removeAllAnimations()
+                UIView.animate(withDuration: 0.25) { sticker.alpha = 0.5 }
+            }
+        } else {
+            ashbinView.backgroundColor = .systemRed
+            ashbinImgView.isHighlighted = false
+            if sticker.alpha != 1 {
+                sticker.layer.removeAllAnimations()
+                UIView.animate(withDuration: 0.25) { sticker.alpha = 1 }
+            }
+        }
+    }
+    
+    public func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
+        guard let context = context else { return }
+        
+        onInteractStateChanged?(false) // 通知 VC 恢复底部栏
+        
+        let ashbinView = context.engineAshbinView
+        ashbinView.layer.removeAllAnimations()
+        ashbinView.isHidden = true
+        
+        var endState: PTBaseStickertState? = sticker.state
+        let point = panGes.location(in: context.engineMainView)
+        
+        if ashbinView.frame.contains(point) {
+            sticker.moveToAshbin()
+            endState = nil
+        }
+        
+        context.engineEditorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
+        preStickerState = nil
+        
+        stickersContainer.subviews.forEach { view in
+            (view as? PTStickerViewAdditional)?.gesIsEnabled = true
+        }
+    }
+    
+    public func stickerDidTap(_ sticker: PTBaseStickerView) {
+        stickersContainer.subviews.forEach { view in
+            if view !== sticker {
+                (view as? PTStickerViewAdditional)?.resetState()
+            }
+        }
+    }
+    
+    public func sticker(_ textSticker: PTTextStickerView, editText text: String) {
+        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { text, textColor, font, image, style in
+            guard let image = image, !text.isEmpty else {
+                textSticker.moveToAshbin()
+                return
+            }
+            
+            textSticker.startTimer()
+            guard textSticker.text != text || textSticker.textColor != textColor || textSticker.style != style else { return }
+            
+            textSticker.text = text
+            textSticker.textColor = textColor
+            textSticker.font = font
+            textSticker.style = style
+            textSticker.image = image
+            let newSize = PTTextStickerView.calculateSize(image: image)
+            textSticker.changeSize(to: newSize)
+        }
+    }
+}
+
+public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
+    
+    // MARK: - 核心视图与状态
+    
+    /// Adjust 工具没有直接覆盖在图片上的 Canvas，它的 UI 是调节滑块
+    public var canvasView: UIView { UIView() } // 占位空视图即可
+    
+    /// 核心调节滑块
+    public lazy var adjustSlider: PTAdjustSliderView = {
+        let view = PTAdjustSliderView()
+        view.isHidden = true
+        return view
+    }()
+    
+    public var currentAdjustStatus = PTAdjustStatus()
+    public var preAdjustStatus = PTAdjustStatus()
+    public var selectedAdjustTool: PTHarBethFilter.FiltersTool?
+    
+    // 用于实时渲染的参考底图（由 VC 提供）
+    private var editImageAdjustRef: UIImage?
+    private var hasAdjustedImage = false
+    
+    private weak var context: PTEditImageEngineContext?
+    
+    // MARK: - 生命周期
+    
+    public init(context: PTEditImageEngineContext) {
+        self.context = context
+        super.init()
+        setupSliderCallbacks()
+    }
+    
+    private func setupSliderCallbacks() {
+        adjustSlider.beginAdjust = { [weak self] in
+            guard let self = self else { return }
+            self.preAdjustStatus = self.currentAdjustStatus
+        }
+        
+        adjustSlider.valueChanged = { [weak self] value in
+            self?.adjustValueChanged(value)
+        }
+        
+        adjustSlider.endAdjust = { [weak self] in
+            guard let self = self, let context = self.context else { return }
+            context.engineEditorManager.storeAction(
+                .adjust(oldStatus: self.preAdjustStatus, newStatus: self.currentAdjustStatus)
+            )
+            self.hasAdjustedImage = true
+        }
+    }
+    
+    public func toolDidActivate() {
+        adjustSlider.isHidden = false
+        // 🔥 核心：激活时，向 VC 索要最新的参考底图！
+        editImageAdjustRef = context?.engineRequestAdjustReferenceImage()
+    }
+    
+    public func toolDidDeactivate() {
+        adjustSlider.isHidden = true
+    }
+    
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
+        // Adjust 工具的手势由 slider 自己内部消化，这里不需要处理图片上的 Pan 手势
+    }
+    
+    public func reloadRenderState() {
+        // 触发 Undo/Redo 时，重新渲染图片
+        adjustStatusChanged()
+    }
+    
+    // MARK: - 调节业务逻辑
+    
+    public func changeAdjustTool(_ tool: PTHarBethFilter.FiltersTool) {
+        selectedAdjustTool = tool
+        switch tool {
+        case .brightness:
+            adjustSlider.value = currentAdjustStatus.brightness
+        case .contrast:
+            adjustSlider.value = currentAdjustStatus.contrast
+        case .saturation:
+            adjustSlider.value = currentAdjustStatus.saturation
+        default:
+            break
+        }
+    }
+    
+    private func adjustValueChanged(_ value: Float) {
+        guard let selectedAdjustTool = selectedAdjustTool else { return }
+        
+        switch selectedAdjustTool {
+        case .brightness:
+            if currentAdjustStatus.brightness == value { return }
+            currentAdjustStatus.brightness = value
+        case .contrast:
+            if currentAdjustStatus.contrast == value { return }
+            currentAdjustStatus.contrast = value
+        case .saturation:
+            if currentAdjustStatus.saturation == value { return }
+            currentAdjustStatus.saturation = value
+        default:
+            break
+        }
+        
+        adjustStatusChanged()
+    }
+    
+    private func adjustStatusChanged() {
+        guard let context = context else { return }
+        
+        // 使用缓存的参考底图进行渲染，如果没有则降级使用未 adjustment 的图
+        let baseImage = editImageAdjustRef ?? context.engineImageWithoutAdjust
+        
+        if let image = adjustFilterValueSet(filterImage: baseImage) {
+            context.engineUpdateEditImage(image) // 把渲染好的结果还给 VC
+        }
+    }
+    
+    // MARK: - Harbeth 滤镜渲染核心
+    
+    public func adjustFilterValueSet(filterImage: UIImage?) -> UIImage? {
+        guard !currentAdjustStatus.allValueIsZero else { return filterImage }
+        
+        var filters = [C7FilterProtocol]()
+        let filterManager = PTHarBethFilter.share
+        filterManager.tools = PTImageEditorConfig.share.adjust_tools
+        
+        filterManager.getFilterResults().enumerated().forEach { index, value in
+            if value.filter is C7Luminance {
+                let filter = value.callback!(PTHarBethFilter.FiltersTool.brightness.filterValue(currentAdjustStatus.brightness))
+                filters.append(filter)
+            } else if value.filter is C7Contrast {
+                let filter = value.callback!(PTHarBethFilter.FiltersTool.contrast.filterValue(currentAdjustStatus.contrast))
+                filters.append(filter)
+            } else if value.filter is C7Saturation {
+                let filter = value.callback!(PTHarBethFilter.FiltersTool.saturation.filterValue(currentAdjustStatus.saturation))
+                filters.append(filter)
+            }
+        }
+        
+        let dest = HarbethIO(element: filterImage, filters: filters)
+        return try? dest.output()
     }
 }

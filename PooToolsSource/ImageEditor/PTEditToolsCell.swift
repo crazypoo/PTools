@@ -9,20 +9,31 @@
 import UIKit
 import SnapKit
 
+class PTEditImageToolModel:NSObject {
+    var normalImage:UIImage = UIImage()
+    var selectedImage:UIImage?
+    var currentType:PTImageEditorConfig.EditTool = .draw
+    var isSelected:Bool = false
+}
+
 //MARK: 编辑工具
 class PTEditToolsCell: PTBaseNormalCell {
     static let ID = "PTEditToolsCell"
     
-    var toolModel:PTFusionCellModel! {
+    var toolModel:PTEditImageToolModel! {
         didSet {
-            imageView.loadImage(contentData: toolModel.contentIcon as Any,controlState: .normal)
-            imageView.loadImage(contentData: toolModel.disclosureIndicatorImage as Any,controlState: .selected)
+            imageView.setImage(toolModel.normalImage, state: .normal)
+            imageView.setImage(toolModel.selectedImage, state: .selected)
+            imageView.isSelected = toolModel.isSelected
         }
     }
     
-    lazy var imageView : UIButton = {
-        let view = UIButton(type: .custom)
-        view.imageView?.contentMode = .scaleAspectFit
+    lazy var imageView : PTActionLayoutButton = {
+        let view = PTActionLayoutButton()
+        view.layoutStyle = .image
+        view.imageSize = CGSize(width: 33, height: 33)
+        view.imageContentMode = .scaleAspectFit
+        view.isSelected = false
         view.isUserInteractionEnabled = false
         return view
     }()

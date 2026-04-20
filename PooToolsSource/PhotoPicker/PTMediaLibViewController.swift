@@ -189,11 +189,11 @@ private extension PTMediaLibView {
         }
         #endif
         
-        #if POOTOOLS_IMAGEEDITOR
+//        #if POOTOOLS_IMAGEEDITOR
         if model.type == .image {
             handleImageEdit(model: model)
         }
-        #endif
+//        #endif
     }
 }
 
@@ -241,9 +241,9 @@ extension PTMediaLibView {
             cell.layer.borderWidth = 4
             
             // 根据宏定义控制编辑按钮显隐
-            #if POOTOOLS_IMAGEEDITOR
+//            #if POOTOOLS_IMAGEEDITOR
             if model.type == .image { cell.editButton.isHidden = !config.allowEditImage }
-            #endif
+//            #endif
             #if POOTOOLS_VIDEOEDITOR
             if model.type == .video { cell.editButton.isHidden = !config.allowEditVideo }
             #endif
@@ -369,7 +369,7 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
 // MARK: - Editor Integration
 extension PTMediaLibView {
     
-    #if POOTOOLS_IMAGEEDITOR
+//    #if POOTOOLS_IMAGEEDITOR
     func handleImageEdit(model: PTMediaModel) {
         PTMediaLibManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
             guard !isDegraded, let image = image else { return }
@@ -383,7 +383,7 @@ extension PTMediaLibView {
             UIViewController.currentPresentToSheet(vc: nav, sizes: [.fullscreen], dismissPanGes: false)
         }
     }
-    #endif
+//    #endif
     
     #if POOTOOLS_VIDEOEDITOR
     func handleVideoEdit(model: PTMediaModel, sender: UIButton) {
@@ -984,7 +984,7 @@ extension PTMediaLibViewController {
                 if let image = image {
                     let isEdited = model.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
                     
-#if POOTOOLS_IMAGEEDITOR
+//#if POOTOOLS_IMAGEEDITOR
                     let resultModel = PTResultModel(
                         asset: asset ?? model.asset,
                         image: image,
@@ -993,15 +993,15 @@ extension PTMediaLibViewController {
                         avEditorOutputItem: model.avEditorOutputItem,
                         index: index
                     )
-#else
-                    let resultModel = PTResultModel(
-                        asset: asset ?? model.asset,
-                        image: image,
-                        isEdited: isEdited,
-                        avEditorOutputItem: model.avEditorOutputItem,
-                        index: index
-                    )
-#endif
+//#else
+//                    let resultModel = PTResultModel(
+//                        asset: asset ?? model.asset,
+//                        image: image,
+//                        isEdited: isEdited,
+//                        avEditorOutputItem: model.avEditorOutputItem,
+//                        index: index
+//                    )
+//#endif
                     continuation.resume(returning: (resultModel, nil, index))
                 } else {
                     continuation.resume(returning: (nil, asset ?? model.asset, index))
