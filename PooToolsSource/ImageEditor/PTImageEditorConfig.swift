@@ -178,4 +178,6 @@ public class PTImageEditorConfig: NSObject {
     public var adjustSaturationString:String = "PT Photo picker saturation".localized()
     public var adjustContrastString:String = "PT Photo picker contrast".localized()
     
+    public var drawLineWidth:CGFloat = 6
+    public var mosaicLineWidth:CGFloat = 25
 }

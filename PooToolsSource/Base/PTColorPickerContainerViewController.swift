@@ -12,6 +12,10 @@ import SwifterSwift
 
 open class PTColorPickerContainerViewController: PTBaseViewController {
 
+    open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        return .solid(.clear)
+    }
+
     public let picker = UIColorPickerViewController()
 
     public var selectedColorCallback:((UIColor)->Void)?
@@ -32,6 +36,13 @@ open class PTColorPickerContainerViewController: PTBaseViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCustomBackButtonView(backButton)
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PTGCDManager.gcdAfter(time: 0.2) {
+            self.changeStatusBar(type: .Dark)
+        }
     }
     
     open override func viewDidLoad() {

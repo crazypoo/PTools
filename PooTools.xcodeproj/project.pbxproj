@@ -2922,6 +2922,7 @@
 				55BCB9682B1732020016A4C2 /* PTAdjustSliderView.swift */,
 				55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */,
 				55BCB9802B1733620016A4C2 /* PTCutViewController.swift */,
+				55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */,
 				55BCB9812B1733620016A4C2 /* PTEditImageViewController.swift */,
 				55BCB97E2B1733620016A4C2 /* PTEditInputViewController.swift */,
 				55B13D532B1AEDE800C67EDA /* PTEditModel.swift */,
@@ -2934,7 +2935,6 @@
 				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
-				55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -4180,7 +4180,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4190,9 +4191,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4207,9 +4212,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -8,6 +8,7 @@
 
 import UIKit
 import Harbeth
+import SwifterSwift
 
 /// 主控制器为引擎提供的上下文数据源 (解耦的关键)
 public protocol PTEditImageEngineContext: AnyObject {
@@ -40,6 +41,12 @@ public protocol PTEditImageEngineContext: AnyObject {
     func engineRequestAdjustReferenceImage() -> UIImage
     /// 当前 VC 里面选中的滤镜基础图 (用于 Adjust 叠加)
     var engineImageWithoutAdjust: UIImage { get }
+    
+    // 👇 新增：专门给 Filter 引擎用的桥梁
+    /// 用于生成滤镜缩略图的基础小图
+    var engineThumbnailImage: UIImage? { get }
+    /// 当滤镜引擎处理完底图后，通知 VC 更新流水线
+    func engineDidUpdateFilteredBaseImage(_ newBaseImage: UIImage)
 }
 
 // 所有交互式编辑工具（涂鸦、马赛克等）的通用协议
@@ -75,7 +82,6 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     public var deleteDrawPaths: Set<PTDrawPath> = []
     
     public var drawColor: UIColor = .systemRed
-    public var drawLineWidth: CGFloat = 6
     public var defaultDrawPathWidth: CGFloat = 0
     public var isEraserMode: Bool = false
     
@@ -152,7 +158,7 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
             
             let path = PTDrawPath(
                 pathColor: drawColor,
-                pathWidth: drawLineWidth / scrollView.zoomScale,
+                pathWidth: PTImageEditorConfig.share.drawLineWidth / scrollView.zoomScale,
                 defaultLinePath: defaultDrawPathWidth,
                 ratio: ratio / originalRatio / toImageScale,
                 startPoint: point
@@ -294,7 +300,6 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     }()
     
     public var mosaicPaths: [PTMosaicPath] = []
-    public var mosaicLineWidth: CGFloat = 25
     
     private var mosaicImage: UIImage?
     private var mosaicImageLayer: CALayer?
@@ -347,7 +352,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
                 context.engineScrollView.frame.height / context.engineEditRect.height
             )
             
-            let pathW = mosaicLineWidth / context.engineScrollView.zoomScale
+            let pathW = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
             let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
             
             mosaicImageLayerMaskLayer?.lineWidth = pathW
@@ -869,5 +874,87 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
         
         let dest = HarbethIO(element: filterImage, filters: filters)
         return try? dest.output()
+    }
+}
+
+public class PTFilterEngine: NSObject, PTEditImageToolEngine {
+    
+    // MARK: - 核心状态
+    
+    public var canvasView: UIView { UIView() } // 滤镜只有底部菜单，没有覆盖图层
+    
+    public var currentFilter: PTHarBethFilter = .cigaussian
+    public var thumbnailFilterImages: [UIImage] = []
+    
+    private lazy var filterCache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        // 【关键配置】：限制最多在内存中保留 6 张滤镜大图。
+        // 假设一张千万像素的图解压后占 30MB，6张最多 180MB，完全在安全线内。
+        // 当存入第 7 张时，系统会自动把最旧的一张剔除。
+        cache.countLimit = 6
+        return cache
+    }()
+
+    private weak var context: PTEditImageEngineContext?
+    
+    // MARK: - 生命周期
+    
+    public init(context: PTEditImageEngineContext) {
+        self.context = context
+        super.init()
+    }
+    
+    public func toolDidActivate() {
+        // 唤醒时不需要特殊操作，由 VC 去展示 CollectionView
+    }
+    
+    public func toolDidDeactivate() { }
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer) { }
+    
+    public func reloadRenderState() {
+        changeFilter(currentFilter)
+    }
+    
+    // MARK: - 滤镜业务逻辑
+    
+    /// 异步生成底部菜单所需的滤镜缩略图
+    public func generateFilterThumbnails(completion: @escaping () -> Void) {
+        guard let context = context, let thumbnailImage = context.engineThumbnailImage else { return }
+        
+        PTGCDManager.gcdGobal {
+            let filters = PTImageEditorConfig.share.filters
+            var thumbnails: [UIImage] = []
+            
+            filters.forEach { filter in
+                PTHarBethFilter.share.texureSize = thumbnailImage.size
+                thumbnails.append(filter.getCurrentFilterImage(image: thumbnailImage))
+            }
+            
+            PTGCDManager.gcdMain {
+                self.thumbnailFilterImages = thumbnails
+                completion()
+            }
+        }
+    }
+    
+    /// 切换滤镜
+    public func changeFilter(_ filter: PTHarBethFilter) {
+        guard let context = context else { return }
+        currentFilter = filter
+        
+        let resultImage: UIImage
+        let cacheKey = filter.name.nsString // 转换为 NSString 作为 Key
+        // 1. 优先从安全的 NSCache 中读取
+        if let cachedImage = filterCache.object(forKey: cacheKey) {
+            resultImage = cachedImage
+        } else {
+            // 2. 缓存没命中，调用底层算法重新生成
+            resultImage = filter.getCurrentFilterImage(image: context.engineOriginalImage)
+            // 3. 存入 NSCache
+            filterCache.setObject(resultImage, forKey: cacheKey)
+        }
+        
+        // 把应用了滤镜的干净底图，交回给大堂经理 (VC) 去跑流水线！
+        context.engineDidUpdateFilteredBaseImage(resultImage)
     }
 }
