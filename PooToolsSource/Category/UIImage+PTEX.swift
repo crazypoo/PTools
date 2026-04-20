@@ -1051,9 +1051,9 @@ public extension PTPOP where Base: UIImage {
         }
 
         var maxFrameCount = 50
-//        #if POOTOOLS_IMAGEEDITOR
+        #if POOTOOLS_IMAGEEDITOR
         maxFrameCount = PTImageEditorConfig.share.maxFrameCountForGIF
-//        #endif
+        #endif
         
         let ratio = CGFloat(max(frameCount, maxFrameCount)) / CGFloat(maxFrameCount)
         frameCount = min(frameCount, maxFrameCount)

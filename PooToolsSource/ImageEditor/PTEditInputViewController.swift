@@ -204,6 +204,36 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     weak var delegate: PTStickerViewDelegate?
     
+    // MARK: - 单指控制手柄
+        
+        // 记录拖拽开始时的初始状态
+        private var initialDistance: CGFloat = 0
+        private var initialAngle: CGFloat = 0
+        private var preGesScale: CGFloat = 1
+        private var preGesRotation: CGFloat = 0
+        
+    // 右下角控制手柄
+    lazy var scaleRotateHandle: UIImageView = {
+        // 使用一个自带的符号，或者你可以换成你自己的 UIImage
+        let image = UIImage(.arrow.upLeftAndArrowDownRight).withTintColor(.white)
+        let view = UIImageView(image: image)
+        view.tintColor = .black
+        view.backgroundColor = .clear
+        // 给手柄加个圆角和阴影，看起来更精致
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOffset = CGSize(width: 0, height: 1)
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 2
+        view.isUserInteractionEnabled = true
+        
+        // 挂载单指拖拽手势
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handleScaleRotatePan(_:)))
+        view.addGestureRecognizer(pan)
+        return view
+    }()
+
     deinit {
         cleanTimer()
     }
@@ -252,6 +282,10 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         
         addGestureRecognizer(panGes)
         tapGes.require(toFail: panGes)
+        
+        borderView.addSubview(scaleRotateHandle)
+        // 初始状态隐藏手柄
+        scaleRotateHandle.isHidden = true
     }
     
     @available(*, unavailable)
@@ -262,6 +296,13 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
+        let handleSize: CGFloat = 24
+        scaleRotateHandle.frame = CGRect(
+            x: bounds.width - handleSize / 2,
+            y: bounds.height - handleSize / 2,
+            width: handleSize,
+            height: handleSize
+        )
         guard firstLayout else {
             return
         }
@@ -389,6 +430,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             onOperation = true
             cleanTimer()
             borderView.layer.borderColor = UIColor.white.cgColor
+            scaleRotateHandle.isHidden = false // 显示手柄
             superview?.bringSubviewToFront(self)
             delegate?.stickerBeginOperation(self)
         } else if !isOn, onOperation {
@@ -427,6 +469,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     @objc private func hideBorder() {
         borderView.layer.borderColor = UIColor.clear.cgColor
+        scaleRotateHandle.isHidden = true // 隐藏手柄
     }
     
     func startTimer() {
@@ -445,6 +488,49 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
+    }
+    
+    // MARK: - 单指缩放与旋转算法
+    @objc private func handleScaleRotatePan(_ ges: UIPanGestureRecognizer) {
+        guard gesIsEnabled, let superview = self.superview else { return }
+        
+        // 获取手柄在父视图（画布）中的绝对坐标
+        let point = ges.location(in: superview)
+        // 贴纸中心点在父视图中的坐标
+        let center = self.center
+        
+        // 核心数学：计算当前手指距离中心的距离 (用于缩放)
+        let currentDistance = hypot(point.x - center.x, point.y - center.y)
+        // 核心数学：计算当前手指与中心的向量角度 (用于旋转)
+        let currentAngle = atan2(point.y - center.y, point.x - center.x)
+        
+        if ges.state == .began {
+            // 记录下指那一刻的快照
+            initialDistance = currentDistance
+            initialAngle = currentAngle
+            preGesScale = gesScale
+            preGesRotation = gesRotation
+            setOperation(true)
+            cleanTimer() // 拖拽时不要让边框消失
+            
+        } else if ges.state == .changed {
+            // 1. 增量计算缩放
+            if initialDistance > 0 {
+                let scaleDiff = currentDistance / initialDistance
+                // 限制最大缩放比例
+                gesScale = min(maxGesScale, preGesScale * scaleDiff)
+            }
+            
+            // 2. 增量计算旋转
+            let angleDiff = currentAngle - initialAngle
+            gesRotation = preGesRotation + angleDiff
+            
+            // 3. 应用并刷新 UI
+            updateTransform()
+            
+        } else if ges.state == .ended || ges.state == .cancelled {
+            startTimer() // 拖拽结束，重启隐藏边框的定时器
+        }
     }
 }
 
