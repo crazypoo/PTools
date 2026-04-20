@@ -11,6 +11,20 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
+public enum PTInputTextStyle {
+    case normal
+    case bg
+    
+    fileprivate var btnImage: UIImage? {
+        switch self {
+        case .normal:
+            return UIImage(.f.square)
+        case .bg:
+            return UIImage(.f.squareFill)
+        }
+    }
+}
+
 class PTImageStickerView: PTBaseStickerView {
     private let image: UIImage
     
@@ -385,8 +399,10 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     func updateTransform() {
+        // 1. 始终从最原始/上次保存的稳定矩阵开始
         var transform = originTransform
         
+        // 2. 根据初始角度计算当前的拖拽方向，并应用【纯增量】平移
         let direction = direction(for: originAngle)
         if direction == .right {
             transform = transform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
@@ -397,12 +413,15 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         } else {
             transform = transform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
         }
-        // Scale must after translate.
-        transform = transform.scaledBy(x: gesScale, y: gesScale)
-        // Rotate must after scale.
-        transform = transform.rotated(by: gesRotation)
-        self.transform = transform
         
+        // 3. 叠加增量缩放 (Scale 必须在 Translate 之后)
+        transform = transform.scaledBy(x: gesScale, y: gesScale)
+        
+        // 4. 叠加增量旋转 (Rotate 必须在 Scale 之后)
+        transform = transform.rotated(by: gesRotation)
+        
+        // 5. 赋值并通知外界 (驱动垃圾桶动画)
+        self.transform = transform
         delegate?.stickerOnOperation(self, panGes: panGes)
     }
     
@@ -644,6 +663,9 @@ public class PTTextStickerView: PTBaseStickerView {
 class PTEditInputViewController: PTBaseViewController {
     private static let toolViewHeight: CGFloat = 70
     
+    // 用于节流的高频绘制任务
+    private var drawBgWorkItem: DispatchWorkItem?
+
     private let image: UIImage?
     
     private var text: String
@@ -943,112 +965,137 @@ extension PTEditInputViewController {
             return
         }
         
-        let rects = calculateTextRects()
+        // 1. 取消上一次还没来得及画的任务（防手抖节流）
+        drawBgWorkItem?.cancel()
         
-        let path = UIBezierPath()
-        for (index, rect) in rects.enumerated() {
-            if index == 0 {
-                path.move(to: CGPoint(x: rect.minX, y: rect.minY + textLayerRadius))
-                path.addArc(withCenter: CGPoint(x: rect.minX + textLayerRadius, y: rect.minY + textLayerRadius), radius: textLayerRadius, startAngle: .pi, endAngle: .pi * 1.5, clockwise: true)
-                path.addLine(to: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY))
-                path.addArc(withCenter: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY + textLayerRadius), radius: textLayerRadius, startAngle: .pi * 1.5, endAngle: .pi * 2, clockwise: true)
-            } else {
-                let preRect = rects[index - 1]
-                if rect.maxX > preRect.maxX {
-                    path.addLine(to: CGPoint(x: preRect.maxX, y: rect.minY - textLayerRadius))
-                    path.addArc(withCenter: CGPoint(x: preRect.maxX + textLayerRadius, y: rect.minY - textLayerRadius), radius: textLayerRadius, startAngle: -.pi, endAngle: -.pi * 1.5, clockwise: false)
-                    path.addLine(to: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY))
-                    path.addArc(withCenter: CGPoint(x: rect.maxX - textLayerRadius, y: rect.minY + textLayerRadius), radius: textLayerRadius, startAngle: .pi * 1.5, endAngle: .pi * 2, clockwise: true)
-                } else if rect.maxX < preRect.maxX {
-                    path.addLine(to: CGPoint(x: preRect.maxX, y: preRect.maxY - textLayerRadius))
-                    path.addArc(withCenter: CGPoint(x: preRect.maxX - textLayerRadius, y: preRect.maxY - textLayerRadius), radius: textLayerRadius, startAngle: 0, endAngle: .pi / 2, clockwise: true)
-                    path.addLine(to: CGPoint(x: rect.maxX + textLayerRadius, y: preRect.maxY))
-                    path.addArc(withCenter: CGPoint(x: rect.maxX + textLayerRadius, y: preRect.maxY + textLayerRadius), radius: textLayerRadius, startAngle: -.pi / 2, endAngle: -.pi, clockwise: false)
-                } else {
-                    path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY + textLayerRadius))
-                }
-            }
+        // 2. [主线程]：光速获取基础排版数据（UITextView 的数据必须在主线程读）
+        let rawRects = getRawTextRects()
+        guard !rawRects.isEmpty else { return }
+        let currentRadius = textLayerRadius
+        let fillColor = currentColor.cgColor
+        
+        // 3. 创建异步绘制任务
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
             
-            if index == rects.count - 1 {
-                path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - textLayerRadius))
-                path.addArc(withCenter: CGPoint(x: rect.maxX - textLayerRadius, y: rect.maxY - textLayerRadius), radius: textLayerRadius, startAngle: 0, endAngle: .pi / 2, clockwise: true)
-                path.addLine(to: CGPoint(x: rect.minX + textLayerRadius, y: rect.maxY))
-                path.addArc(withCenter: CGPoint(x: rect.minX + textLayerRadius, y: rect.maxY - textLayerRadius), radius: textLayerRadius, startAngle: .pi / 2, endAngle: .pi, clockwise: true)
+            // [子线程]：进行消耗 CPU 的矩形合并与贝塞尔路径计算
+            let optimizedRects = self.optimizeRects(rawRects)
+            let cgPath = self.buildPath(from: optimizedRects, radius: currentRadius)
+            
+            // 如果计算期间用户又打字了，直接丢弃这次计算结果
+            if self.drawBgWorkItem?.isCancelled == true { return }
+            
+            // 4. [切回主线程]：光速赋值渲染
+            DispatchQueue.main.async {
+                // 🔥 绝杀：关闭 Core Animation 的隐式动画，省下巨量 GPU 开销
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
                 
-                let firstRect = rects[0]
-                path.addLine(to: CGPoint(x: firstRect.minX, y: firstRect.minY + textLayerRadius))
-                path.close()
+                self.textLayer.path = cgPath
+                self.textLayer.fillColor = fillColor
+                if self.textLayer.superlayer == nil {
+                    self.textView.layer.insertSublayer(self.textLayer, at: 0)
+                }
+                
+                CATransaction.commit()
             }
         }
         
-        textLayer.path = path.cgPath
-        textLayer.fillColor = currentColor.cgColor
-        if textLayer.superlayer == nil {
-            textView.layer.insertSublayer(textLayer, at: 0)
-        }
+        drawBgWorkItem = workItem
+        // 将高强度数学计算丢入后台高优先级队列
+        DispatchQueue.global(qos: .userInteractive).async(execute: workItem)
     }
     
-    private func calculateTextRects() -> [CGRect] {
+    // 主线程提取原生排版矩形 (极快)
+    private func getRawTextRects() -> [CGRect] {
         let layoutManager = textView.layoutManager
-        
-        // 这里必须用utf16.count 或者 (text as NSString).length，因为用count的话不准，一个emoji表情的count为2或更大
         let range = layoutManager.glyphRange(forCharacterRange: NSMakeRange(0, textView.text.utf16.count), actualCharacterRange: nil)
         let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
         
         var rects: [CGRect] = []
-        
         let insetLeft = textView.textContainerInset.left
         let insetTop = textView.textContainerInset.top
+        
         layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, _, _ in
-            rects.append(CGRect(x: usedRect.minX - 10 + insetLeft, y: usedRect.minY - 8 + insetTop, width: usedRect.width + 20, height: usedRect.height + 16))
+            rects.append(CGRect(x: usedRect.minX - 10 + insetLeft,
+                                y: usedRect.minY - 8 + insetTop,
+                                width: usedRect.width + 20,
+                                height: usedRect.height + 16))
         }
-        
-        guard rects.count > 1 else {
-            return rects
-        }
-        
-        for i in 1..<rects.count {
-            processRects(&rects, index: i, maxIndex: i)
-        }
-        
         return rects
     }
     
-    private func processRects(_ rects: inout [CGRect], index: Int, maxIndex: Int) {
-        guard rects.count > 1, index > 0, index <= maxIndex else {
-            return
+    // 子线程构建复杂的贝塞尔路径 (不堵塞 UI)
+    private func buildPath(from rects: [CGRect], radius: CGFloat) -> CGPath {
+        let path = UIBezierPath()
+        for (index, rect) in rects.enumerated() {
+            if index == 0 {
+                path.move(to: CGPoint(x: rect.minX, y: rect.minY + radius))
+                path.addArc(withCenter: CGPoint(x: rect.minX + radius, y: rect.minY + radius), radius: radius, startAngle: .pi, endAngle: .pi * 1.5, clockwise: true)
+                path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY))
+                path.addArc(withCenter: CGPoint(x: rect.maxX - radius, y: rect.minY + radius), radius: radius, startAngle: .pi * 1.5, endAngle: .pi * 2, clockwise: true)
+            } else {
+                let preRect = rects[index - 1]
+                if rect.maxX > preRect.maxX {
+                    path.addLine(to: CGPoint(x: preRect.maxX, y: rect.minY - radius))
+                    path.addArc(withCenter: CGPoint(x: preRect.maxX + radius, y: rect.minY - radius), radius: radius, startAngle: -.pi, endAngle: -.pi * 1.5, clockwise: false)
+                    path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY))
+                    path.addArc(withCenter: CGPoint(x: rect.maxX - radius, y: rect.minY + radius), radius: radius, startAngle: .pi * 1.5, endAngle: .pi * 2, clockwise: true)
+                } else if rect.maxX < preRect.maxX {
+                    path.addLine(to: CGPoint(x: preRect.maxX, y: preRect.maxY - radius))
+                    path.addArc(withCenter: CGPoint(x: preRect.maxX - radius, y: preRect.maxY - radius), radius: radius, startAngle: 0, endAngle: .pi / 2, clockwise: true)
+                    path.addLine(to: CGPoint(x: rect.maxX + radius, y: preRect.maxY))
+                    path.addArc(withCenter: CGPoint(x: rect.maxX + radius, y: preRect.maxY + radius), radius: radius, startAngle: -.pi / 2, endAngle: -.pi, clockwise: false)
+                } else {
+                    path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY + radius))
+                }
+            }
+            
+            if index == rects.count - 1 {
+                path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - radius))
+                path.addArc(withCenter: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius), radius: radius, startAngle: 0, endAngle: .pi / 2, clockwise: true)
+                path.addLine(to: CGPoint(x: rect.minX + radius, y: rect.maxY))
+                path.addArc(withCenter: CGPoint(x: rect.minX + radius, y: rect.maxY - radius), radius: radius, startAngle: .pi / 2, endAngle: .pi, clockwise: true)
+                
+                let firstRect = rects[0]
+                path.addLine(to: CGPoint(x: firstRect.minX, y: firstRect.minY + radius))
+                path.close()
+            }
+        }
+        return path.cgPath
+    }
+
+    /// 将原本深层递归的算法改为 O(N) 复杂度的迭代平滑算法
+    private func optimizeRects(_ rects: [CGRect]) -> [CGRect] {
+        guard rects.count > 1 else { return rects }
+        var result = rects
+        let threshold = textLayerRadius * 2
+        
+        // 第一遍正向扫描：平滑向下宽度的突变
+        for i in 1..<result.count {
+            let pre = result[i - 1]
+            let curr = result[i]
+            
+            if curr.width > pre.width && (curr.width - pre.width) < threshold {
+                result[i - 1].size.width = curr.width
+            } else if curr.width < pre.width && (pre.width - curr.width) < threshold {
+                result[i].size.width = pre.width
+            }
         }
         
-        var preRect = rects[index - 1]
-        var currRect = rects[index]
-        
-        var preChanged = false
-        var currChanged = false
-        
-        // 当前rect宽度大于上方的rect，但差值小于2倍圆角
-        if currRect.width > preRect.width, currRect.width - preRect.width < 2 * textLayerRadius {
-            var size = preRect.size
-            size.width = currRect.width
-            preRect = CGRect(origin: preRect.origin, size: size)
-            preChanged = true
+        // 第二遍反向扫描：确保突变平滑能向上层传导
+        for i in (1..<result.count).reversed() {
+            let pre = result[i - 1]
+            let curr = result[i]
+            
+            if curr.width > pre.width && (curr.width - pre.width) < threshold {
+                result[i - 1].size.width = curr.width
+            } else if curr.width < pre.width && (pre.width - curr.width) < threshold {
+                result[i].size.width = pre.width
+            }
         }
         
-        if currRect.width < preRect.width, preRect.width - currRect.width < 2 * textLayerRadius {
-            var size = currRect.size
-            size.width = preRect.width
-            currRect = CGRect(origin: currRect.origin, size: size)
-            currChanged = true
-        }
-        
-        if preChanged {
-            rects[index - 1] = preRect
-            processRects(&rects, index: index - 1, maxIndex: maxIndex)
-        }
-        
-        if currChanged {
-            rects[index] = currRect
-            processRects(&rects, index: index + 1, maxIndex: maxIndex)
-        }
+        return result
     }
 }
 
@@ -1082,19 +1129,5 @@ extension PTEditInputViewController: NSLayoutManagerDelegate {
         }
         
         drawTextBackground()
-    }
-}
-
-public enum PTInputTextStyle {
-    case normal
-    case bg
-    
-    fileprivate var btnImage: UIImage? {
-        switch self {
-        case .normal:
-            return UIImage(.f.square)
-        case .bg:
-            return UIImage(.f.squareFill)
-        }
     }
 }

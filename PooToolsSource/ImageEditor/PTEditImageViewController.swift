@@ -657,7 +657,6 @@ public class PTEditImageViewController: PTBaseViewController {
     private func rotationImageView() {
         let transform = CGAffineTransform(rotationAngle: (currentClipStatus.angle / 180 * .pi))
         imageView.transform = transform
-//        drawingImageView.transform = transform
     }
     
     private func buildImage() -> UIImage {
@@ -667,7 +666,6 @@ public class PTEditImageViewController: PTBaseViewController {
             // 【新增】：加入 autoreleasepool 保护内存
             autoreleasepool {
                 editImage.draw(at: .zero)
-//                drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
                 
                 if !stickerEngine.canvasView.subviews.isEmpty {
                     let scale = imageSize.width / stickerEngine.canvasView.frame.width
@@ -700,13 +698,12 @@ extension PTEditImageViewController {
         
         selectedTool = self.toolsModel.first(where: { $0.currentType == .draw } )
         let toolsSelected = selectedTool?.isSelected ?? false
+        // 引擎切换逻辑        
+        activeEngine?.toolDidDeactivate()
         activeEngine = toolsSelected ? drawEngine : nil
-        // 引擎切换逻辑
-        if toolsSelected {
-            activeEngine?.toolDidActivate()
-        } else {
-            activeEngine?.toolDidDeactivate()
-        }
+        activeEngine?.toolDidActivate()
+
+        
         showHandDrawBar(show: toolsSelected)
         showFilter(show: false)
         showAdjust(show:false)
@@ -1146,7 +1143,7 @@ extension PTEditImageViewController: PTEditImageEngineContext {
         ) ?? editImageWithoutAdjust
     }
     
-    public var engineThumbnailImage: UIImage? { thumbnailImage } // 这个是 PTCutViewController 传过来的小图
+    public var engineThumbnailImage: UIImage? { thumbnailImage }
         
     // 当滤镜引擎把图做好了交给我们时：
     public func engineDidUpdateFilteredBaseImage(_ newBaseImage: UIImage) {
