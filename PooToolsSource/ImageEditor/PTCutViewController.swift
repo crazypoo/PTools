@@ -10,20 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-extension PTCutViewController {
-    enum ClipPanEdge {
-        case none
-        case top
-        case bottom
-        case left
-        case right
-        case topLeft
-        case topRight
-        case bottomLeft
-        case bottomRight
-    }
-}
-
 class PTCutViewController: PTBaseViewController {
     static let cutRatioHeight: CGFloat = 108
     
@@ -137,22 +123,7 @@ class PTCutViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTImageCutRatioCell.ID:PTImageCutRatioCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
-            let screenW:CGFloat = 88
-            let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
-            let rows = sectionModel.rows
-            rows?.indices.forEach { index in
-                let x = PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index)
-                let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: x, y: 0, width: screenW, height: cellHeight), zIndex: 1000 + index)
-                customers.append(item)
-                groupW += (cellHeight + 10)
-            }
-            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
+            return UICollectionView.horizontalLayout(data: sectionModel.rows,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 88,itemHeight: PTCutViewController.cutRatioHeight,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 10)
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTImageEditorConfig.share
@@ -182,26 +153,11 @@ class PTCutViewController: PTBaseViewController {
     }()
     
     private var shouldLayout = true
-    
-    private var panEdge: PTCutViewController.ClipPanEdge = .none
-    
-    private var beginPanPoint: CGPoint = .zero
-    
-    private var clipBoxFrame: CGRect = .zero
-    
-    private var clipOriginFrame: CGRect = .zero
-    
+        
     private var isRotating = false
     
     private var angle: CGFloat = 0
-    
-    private var selectedRatio: PTImageClipRatio {
-        didSet {
-            overlayView.isCircle = selectedRatio.isCircle
-            shadowView.isCircle = selectedRatio.isCircle
-        }
-    }
-    
+        
     private var thumbnailImage: UIImage?
     
     private lazy var maxClipFrame = calculateMaxClipFrame()
@@ -225,6 +181,44 @@ class PTCutViewController: PTBaseViewController {
     
     var cancelClipBlock: PTActionTask?
     
+    // MARK: - 🔌 挂载裁剪引擎
+        
+    private lazy var clipEngine: PTClipEngine = {
+        let engine = PTClipEngine(context: self, initialRatio: selectedRatio)
+        
+        // 引擎通知：手势交互状态改变
+        engine.onInteractStateChanged = { [weak self] isInteracting in
+            guard let self = self else { return }
+            if isInteracting {
+                self.startEditing()
+            } else {
+                self.startTimer()
+            }
+        }
+        
+        // 引擎通知：裁剪框尺寸更新了，请 VC 刷新 UI
+        engine.onClipBoxFrameChanged = { [weak self] newFrame in
+            self?.changeClipBoxFrame(newFrame: newFrame)
+        }
+        
+        return engine
+    }()
+    
+    // 修改 selectedRatio 属性，确保同步给引擎
+    private var selectedRatio: PTImageClipRatio {
+        didSet {
+            overlayView.isCircle = selectedRatio.isCircle
+            shadowView.isCircle = selectedRatio.isCircle
+            clipEngine.selectedRatio = selectedRatio // 同步给引擎
+        }
+    }
+    
+    // 同步把 VC 原本管理 clipBoxFrame 的地方交接给引擎
+    private var clipBoxFrame: CGRect {
+        get { clipEngine.clipBoxFrame }
+        set { clipEngine.clipBoxFrame = newValue }
+    }
+
     override var prefersStatusBarHidden: Bool { true }
     
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -524,40 +518,20 @@ class PTCutViewController: PTBaseViewController {
     }
     
     private func changeClipBoxFrame(newFrame: CGRect) {
-        guard clipBoxFrame != newFrame else {
-            return
-        }
-        if newFrame.width < CGFloat.ulpOfOne || newFrame.height < CGFloat.ulpOfOne {
-            return
-        }
-        var frame = newFrame
-        let originX = ceil(maxClipFrame.minX)
-        let diffX = frame.minX - originX
-        frame.origin.x = max(frame.minX, originX)
-        if diffX < -CGFloat.ulpOfOne {
-            frame.size.width += diffX
-        }
-        let originY = ceil(maxClipFrame.minY)
-        let diffY = frame.minY - originY
-        frame.origin.y = max(frame.minY, originY)
-        if diffY < -CGFloat.ulpOfOne {
-            frame.size.height += diffY
-        }
-        let maxW = maxClipFrame.width + maxClipFrame.minX - frame.minX
-        frame.size.width = max(minClipSize.width, min(frame.width, maxW))
+        // 1. 拦截重复相同的渲染
+        guard clipBoxFrame != newFrame else { return }
         
-        let maxH = maxClipFrame.height + maxClipFrame.minY - frame.minY
-        frame.size.height = max(minClipSize.height, min(frame.height, maxH))
+        // 2. 将新值同步给引擎（触发计算属性的 setter）
+        clipBoxFrame = newFrame
         
-        clipBoxFrame = frame
-        shadowView.clearRect = frame
-        overlayView.frame = frame.insetBy(dx: -PTClipOverlayView.cornerLineWidth, dy: -PTClipOverlayView.cornerLineWidth)
+        // 3. 纯粹的 UI 刷新
+        shadowView.clearRect = newFrame
+        overlayView.frame = newFrame.insetBy(dx: -PTClipOverlayView.cornerLineWidth, dy: -PTClipOverlayView.cornerLineWidth)
         
-        mainScrollView.contentInset = UIEdgeInsets(top: frame.minY, left: frame.minX, bottom: mainScrollView.frame.maxY - frame.maxY, right: mainScrollView.frame.maxX - frame.maxX)
+        mainScrollView.contentInset = UIEdgeInsets(top: newFrame.minY, left: newFrame.minX, bottom: mainScrollView.frame.maxY - newFrame.maxY, right: mainScrollView.frame.maxX - newFrame.maxX)
         
-        let scale = max(frame.height / editImage.size.height, frame.width / editImage.size.width)
+        let scale = max(newFrame.height / editImage.size.height, newFrame.width / editImage.size.width)
         mainScrollView.minimumZoomScale = scale
-        
         mainScrollView.zoomScale = mainScrollView.zoomScale
     }
     
@@ -651,184 +625,7 @@ class PTCutViewController: PTBaseViewController {
     }
     
     @objc private func gridGesPanAction(_ pan: UIPanGestureRecognizer) {
-        let point = pan.location(in: view)
-        if pan.state == .began {
-            startEditing()
-            beginPanPoint = point
-            clipOriginFrame = clipBoxFrame
-            panEdge = calculatePanEdge(at: point)
-        } else if pan.state == .changed {
-            guard panEdge != .none else {
-                return
-            }
-            updateClipBoxFrame(point: point)
-        } else if pan.state == .cancelled || pan.state == .ended {
-            panEdge = .none
-            startTimer()
-        }
-    }
-    
-    private func calculatePanEdge(at point: CGPoint) -> PTCutViewController.ClipPanEdge {
-        let frame = clipBoxFrame.insetBy(dx: -30, dy: -30)
-        
-        let cornerSize = CGSize(width: 60, height: 60)
-        let topLeftRect = CGRect(origin: frame.origin, size: cornerSize)
-        if topLeftRect.contains(point) {
-            return .topLeft
-        }
-        
-        let topRightRect = CGRect(origin: CGPoint(x: frame.maxX - cornerSize.width, y: frame.minY), size: cornerSize)
-        if topRightRect.contains(point) {
-            return .topRight
-        }
-        
-        let bottomLeftRect = CGRect(origin: CGPoint(x: frame.minX, y: frame.maxY - cornerSize.height), size: cornerSize)
-        if bottomLeftRect.contains(point) {
-            return .bottomLeft
-        }
-        
-        let bottomRightRect = CGRect(origin: CGPoint(x: frame.maxX - cornerSize.width, y: frame.maxY - cornerSize.height), size: cornerSize)
-        if bottomRightRect.contains(point) {
-            return .bottomRight
-        }
-        
-        let topRect = CGRect(origin: frame.origin, size: CGSize(width: frame.width, height: cornerSize.height))
-        if topRect.contains(point) {
-            return .top
-        }
-        
-        let bottomRect = CGRect(origin: CGPoint(x: frame.minX, y: frame.maxY - cornerSize.height), size: CGSize(width: frame.width, height: cornerSize.height))
-        if bottomRect.contains(point) {
-            return .bottom
-        }
-        
-        let leftRect = CGRect(origin: frame.origin, size: CGSize(width: cornerSize.width, height: frame.height))
-        if leftRect.contains(point) {
-            return .left
-        }
-        
-        let rightRect = CGRect(origin: CGPoint(x: frame.maxX - cornerSize.width, y: frame.minY), size: CGSize(width: cornerSize.width, height: frame.height))
-        if rightRect.contains(point) {
-            return .right
-        }
-        
-        return .none
-    }
-    
-    private func updateClipBoxFrame(point: CGPoint) {
-        var frame = clipBoxFrame
-        let originFrame = clipOriginFrame
-        
-        var newPoint = point
-        newPoint.x = max(maxClipFrame.minX, newPoint.x)
-        newPoint.y = max(maxClipFrame.minY, newPoint.y)
-        
-        let diffX = ceil(newPoint.x - beginPanPoint.x)
-        let diffY = ceil(newPoint.y - beginPanPoint.y)
-        let ratio = selectedRatio.whRatio
-        
-        switch panEdge {
-        case .left:
-            frame.origin.x = originFrame.minX + diffX
-            frame.size.width = originFrame.width - diffX
-            if ratio != 0 {
-                frame.size.height = originFrame.height - diffX / ratio
-            }
-        case .right:
-            frame.size.width = originFrame.width + diffX
-            if ratio != 0 {
-                frame.size.height = originFrame.height + diffX / ratio
-            }
-        case .top:
-            frame.origin.y = originFrame.minY + diffY
-            frame.size.height = originFrame.height - diffY
-            if ratio != 0 {
-                frame.size.width = originFrame.width - diffY * ratio
-            }
-        case .bottom:
-            frame.size.height = originFrame.height + diffY
-            if ratio != 0 {
-                frame.size.width = originFrame.width + diffY * ratio
-            }
-        case .topLeft:
-            if ratio != 0 {
-                frame.origin.x = originFrame.minX + diffX
-                frame.size.width = originFrame.width - diffX
-                frame.origin.y = originFrame.minY + diffX / ratio
-                frame.size.height = originFrame.height - diffX / ratio
-            } else {
-                frame.origin.x = originFrame.minX + diffX
-                frame.size.width = originFrame.width - diffX
-                frame.origin.y = originFrame.minY + diffY
-                frame.size.height = originFrame.height - diffY
-            }
-        case .topRight:
-            if ratio != 0 {
-                frame.size.width = originFrame.width + diffX
-                frame.origin.y = originFrame.minY - diffX / ratio
-                frame.size.height = originFrame.height + diffX / ratio
-            } else {
-                frame.size.width = originFrame.width + diffX
-                frame.origin.y = originFrame.minY + diffY
-                frame.size.height = originFrame.height - diffY
-            }
-        case .bottomLeft:
-            if ratio != 0 {
-                frame.origin.x = originFrame.minX + diffX
-                frame.size.width = originFrame.width - diffX
-                frame.size.height = originFrame.height - diffX / ratio
-            } else {
-                frame.origin.x = originFrame.minX + diffX
-                frame.size.width = originFrame.width - diffX
-                frame.size.height = originFrame.height + diffY
-            }
-        case .bottomRight:
-            if ratio != 0 {
-                frame.size.width = originFrame.width + diffX
-                frame.size.height = originFrame.height + diffX / ratio
-            } else {
-                frame.size.width = originFrame.width + diffX
-                frame.size.height = originFrame.height + diffY
-            }
-        default:
-            break
-        }
-        
-        let minSize: CGSize
-        let maxSize: CGSize
-        let maxClipFrame: CGRect
-        if ratio != 0 {
-            if ratio >= 1 {
-                minSize = CGSize(width: minClipSize.height * ratio, height: minClipSize.height)
-            } else {
-                minSize = CGSize(width: minClipSize.width, height: minClipSize.width / ratio)
-            }
-            if ratio > self.maxClipFrame.width / self.maxClipFrame.height {
-                maxSize = CGSize(width: self.maxClipFrame.width, height: self.maxClipFrame.width / ratio)
-            } else {
-                maxSize = CGSize(width: self.maxClipFrame.height * ratio, height: self.maxClipFrame.height)
-            }
-            maxClipFrame = CGRect(origin: CGPoint(x: self.maxClipFrame.minX + (self.maxClipFrame.width - maxSize.width) / 2, y: self.maxClipFrame.minY + (self.maxClipFrame.height - maxSize.height) / 2), size: maxSize)
-        } else {
-            minSize = minClipSize
-            maxSize = self.maxClipFrame.size
-            maxClipFrame = self.maxClipFrame
-        }
-        
-        frame.size.width = min(maxSize.width, max(minSize.width, frame.size.width))
-        frame.size.height = min(maxSize.height, max(minSize.height, frame.size.height))
-        
-        frame.origin.x = min(maxClipFrame.maxX - minSize.width, max(frame.origin.x, maxClipFrame.minX))
-        frame.origin.y = min(maxClipFrame.maxY - minSize.height, max(frame.origin.y, maxClipFrame.minY))
-        
-        if panEdge == .topLeft || panEdge == .bottomLeft || panEdge == .left, frame.size.width <= minSize.width + CGFloat.ulpOfOne {
-            frame.origin.x = originFrame.maxX - minSize.width
-        }
-        if panEdge == .topLeft || panEdge == .topRight || panEdge == .top, frame.size.height <= minSize.height + CGFloat.ulpOfOne {
-            frame.origin.y = originFrame.maxY - minSize.height
-        }
-        
-        changeClipBoxFrame(newFrame: frame)
+        clipEngine.handlePanGesture(pan, in: view)
     }
     
     private func startEditing() {
@@ -1004,6 +801,11 @@ extension PTCutViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+extension PTCutViewController: PTClipEngineContext {
+    public var engineMaxClipFrame: CGRect { maxClipFrame }
+    public var engineMinClipSize: CGSize { minClipSize }
+}
+
 class PTClipShadowView: UIView {
     var isCircle = false {
         didSet {
@@ -1058,38 +860,66 @@ class PTClipShadowViewLayer: CALayer {
     }
 }
 
-// MARK: 裁剪网格视图
+// MARK: - 裁剪网格视图 (CAShapeLayer GPU 加速版)
 class PTClipOverlayView: UIView {
     static let cornerLineWidth: CGFloat = 3
     
-    private var cornerBoldLines: [UIView] = []
+    // MARK: - 状态属性
     
-    private var velLines: [UIView] = []
-    
-    private var horLines: [UIView] = []
-    
-    var isCircle = false {
+    public var isCircle = false {
         didSet {
-            guard oldValue != isCircle else {
-                return
-            }
-            setNeedsDisplay()
+            guard oldValue != isCircle else { return }
+            // 状态改变时，不再调用 setNeedsDisplay()，而是触发 layout 重新算路径
+            setNeedsLayout()
         }
     }
     
-    var isEditing = false {
+    public var isEditing = false {
         didSet {
-            guard isCircle else {
-                return
-            }
-            setNeedsDisplay()
+            guard isCircle else { return }
+            setNeedsLayout()
         }
     }
+    
+    // MARK: - GPU 图层 (替代 CPU draw 方法)
+    
+    /// 九宫格细线图层
+    private lazy var gridLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.strokeColor = UIColor.white.cgColor
+        layer.fillColor = UIColor.clear.cgColor
+        layer.lineWidth = 1
+        // 还原原代码中的阴影效果，但交由 GPU 处理
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 1, height: 1)
+        layer.shadowOpacity = 0.5
+        layer.shadowRadius = 0
+        return layer
+    }()
+    
+    /// 四角加粗线图层
+    private lazy var cornerLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.strokeColor = UIColor.white.cgColor
+        layer.fillColor = UIColor.clear.cgColor
+        layer.lineWidth = PTClipOverlayView.cornerLineWidth
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 1, height: 1)
+        layer.shadowOpacity = 0.5
+        layer.shadowRadius = 0
+        return layer
+    }()
+    
+    // MARK: - 生命周期
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         clipsToBounds = false
+        
+        // 挂载 GPU 渲染图层
+        layer.addSublayer(gridLayer)
+        layer.addSublayer(cornerLayer)
     }
     
     @available(*, unavailable)
@@ -1097,73 +927,75 @@ class PTClipOverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    // 视图尺寸变化时 (拖拽时疯狂调用)，更新 Path
+    public override func layoutSubviews() {
         super.layoutSubviews()
-        setNeedsDisplay()
+        updatePaths()
     }
     
-    override func draw(_ rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
+    // MARK: - 几何路径计算 (纯数学，零显存分配)
+    
+    private func updatePaths() {
+        let rect = bounds
+        guard rect.width > 0 && rect.height > 0 else { return }
         
-        context?.setStrokeColor(UIColor.white.cgColor)
-        context?.setLineWidth(1)
-        context?.beginPath()
+        // 1. ================= 计算九宫格细线 =================
+        let gridPath = UIBezierPath()
         
         let sqrtValue = 2 * sqrt(2)
         let lValue = 2 * PTClipOverlayView.cornerLineWidth
         let circleDiff: CGFloat = (3 - sqrtValue) * (rect.width - lValue) / 6
         
+        // 垂直线
         var dw: CGFloat = 3
         for i in 0..<4 {
             let isInnerLine = isCircle && 1...2 ~= i
-            context?.move(to: CGPoint(x: rect.origin.x + dw, y: PTClipOverlayView.cornerLineWidth + (isInnerLine ? circleDiff : 0)))
-            context?.addLine(to: CGPoint(x: rect.origin.x + dw, y: rect.height - PTClipOverlayView.cornerLineWidth - (isInnerLine ? circleDiff : 0)))
+            gridPath.move(to: CGPoint(x: rect.origin.x + dw, y: PTClipOverlayView.cornerLineWidth + (isInnerLine ? circleDiff : 0)))
+            gridPath.addLine(to: CGPoint(x: rect.origin.x + dw, y: rect.height - PTClipOverlayView.cornerLineWidth - (isInnerLine ? circleDiff : 0)))
             dw += (rect.size.width - 6) / 3
         }
-
+        
+        // 水平线
         var dh: CGFloat = 3
         for i in 0..<4 {
             let isInnerLine = isCircle && 1...2 ~= i
-            context?.move(to: CGPoint(x: PTClipOverlayView.cornerLineWidth + (isInnerLine ? circleDiff : 0), y: rect.origin.y + dh))
-            context?.addLine(to: CGPoint(x: rect.width - PTClipOverlayView.cornerLineWidth - (isInnerLine ? circleDiff : 0), y: rect.origin.y + dh))
+            gridPath.move(to: CGPoint(x: PTClipOverlayView.cornerLineWidth + (isInnerLine ? circleDiff : 0), y: rect.origin.y + dh))
+            gridPath.addLine(to: CGPoint(x: rect.width - PTClipOverlayView.cornerLineWidth - (isInnerLine ? circleDiff : 0), y: rect.origin.y + dh))
             dh += (rect.size.height - 6) / 3
         }
-
-        context?.strokePath()
-
-        context?.setLineWidth(PTClipOverlayView.cornerLineWidth)
-
+        
+        // 更新九宫格图层路径
+        gridLayer.path = gridPath.cgPath
+        
+        // 2. ================= 计算四角加粗线 =================
+        let cornerPath = UIBezierPath()
         let boldLineLength: CGFloat = 20
+        
         // 左上
-        context?.move(to: CGPoint(x: 0, y: 1.5))
-        context?.addLine(to: CGPoint(x: boldLineLength, y: 1.5))
-
-        context?.move(to: CGPoint(x: 1.5, y: 0))
-        context?.addLine(to: CGPoint(x: 1.5, y: boldLineLength))
-
+        cornerPath.move(to: CGPoint(x: 0, y: 1.5))
+        cornerPath.addLine(to: CGPoint(x: boldLineLength, y: 1.5))
+        cornerPath.move(to: CGPoint(x: 1.5, y: 0))
+        cornerPath.addLine(to: CGPoint(x: 1.5, y: boldLineLength))
+        
         // 右上
-        context?.move(to: CGPoint(x: rect.width - boldLineLength, y: 1.5))
-        context?.addLine(to: CGPoint(x: rect.width, y: 1.5))
-
-        context?.move(to: CGPoint(x: rect.width - 1.5, y: 0))
-        context?.addLine(to: CGPoint(x: rect.width - 1.5, y: boldLineLength))
-
+        cornerPath.move(to: CGPoint(x: rect.width - boldLineLength, y: 1.5))
+        cornerPath.addLine(to: CGPoint(x: rect.width, y: 1.5))
+        cornerPath.move(to: CGPoint(x: rect.width - 1.5, y: 0))
+        cornerPath.addLine(to: CGPoint(x: rect.width - 1.5, y: boldLineLength))
+        
         // 左下
-        context?.move(to: CGPoint(x: 1.5, y: rect.height - boldLineLength))
-        context?.addLine(to: CGPoint(x: 1.5, y: rect.height))
-
-        context?.move(to: CGPoint(x: 0, y: rect.height - 1.5))
-        context?.addLine(to: CGPoint(x: boldLineLength, y: rect.height - 1.5))
-
+        cornerPath.move(to: CGPoint(x: 1.5, y: rect.height - boldLineLength))
+        cornerPath.addLine(to: CGPoint(x: 1.5, y: rect.height))
+        cornerPath.move(to: CGPoint(x: 0, y: rect.height - 1.5))
+        cornerPath.addLine(to: CGPoint(x: boldLineLength, y: rect.height - 1.5))
+        
         // 右下
-        context?.move(to: CGPoint(x: rect.width - boldLineLength, y: rect.height - 1.5))
-        context?.addLine(to: CGPoint(x: rect.width, y: rect.height - 1.5))
-
-        context?.move(to: CGPoint(x: rect.width - 1.5, y: rect.height - boldLineLength))
-        context?.addLine(to: CGPoint(x: rect.width - 1.5, y: rect.height))
-
-        context?.strokePath()
-
-        context?.setShadow(offset: CGSize(width: 1, height: 1), blur: 0)
+        cornerPath.move(to: CGPoint(x: rect.width - boldLineLength, y: rect.height - 1.5))
+        cornerPath.addLine(to: CGPoint(x: rect.width, y: rect.height - 1.5))
+        cornerPath.move(to: CGPoint(x: rect.width - 1.5, y: rect.height - boldLineLength))
+        cornerPath.addLine(to: CGPoint(x: rect.width - 1.5, y: rect.height))
+        
+        // 更新粗角图层路径
+        cornerLayer.path = cornerPath.cgPath
     }
 }

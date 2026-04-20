@@ -11,6 +11,10 @@ import Harbeth
 import SwifterSwift
 import CoreImage
 
+public enum PTClipPanEdge {
+    case none, top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight
+}
+
 /// 主控制器为引擎提供的上下文数据源 (解耦的关键)
 public protocol PTEditImageEngineContext: AnyObject {
     var engineScrollView: UIScrollView { get }
@@ -973,5 +977,199 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
         
         // 把应用了滤镜的干净底图，交回给大堂经理 (VC) 去跑流水线！
         context.engineDidUpdateFilteredBaseImage(resultImage)
+    }
+}
+
+/// 裁剪引擎向 VC 索要环境变量的协议
+public protocol PTClipEngineContext: AnyObject {
+    var engineMaxClipFrame: CGRect { get }
+    var engineMinClipSize: CGSize { get }
+}
+
+public class PTClipEngine: NSObject {
+    
+    // MARK: - 引擎内部状态
+    
+    public var clipBoxFrame: CGRect = .zero
+    public var selectedRatio: PTImageClipRatio
+    
+    private var panEdge: PTClipPanEdge = .none
+    private var beginPanPoint: CGPoint = .zero
+    private var clipOriginFrame: CGRect = .zero
+    
+    private weak var context: PTClipEngineContext?
+    
+    // MARK: - 回调接口 (通知 VC 更新 UI)
+    
+    /// 当拖拽开始或结束时，通知 VC 隐藏/显示底部工具栏
+    public var onInteractStateChanged: ((Bool) -> Void)?
+    
+    /// 当计算出新的裁剪框 Frame 时，通知 VC 刷新遮罩和滚动视图
+    public var onClipBoxFrameChanged: ((CGRect) -> Void)?
+    
+    // MARK: - 生命周期
+    
+    public init(context: PTClipEngineContext, initialRatio: PTImageClipRatio) {
+        self.context = context
+        self.selectedRatio = initialRatio
+        super.init()
+    }
+    
+    // MARK: - 核心拖拽手势处理
+    
+    public func handlePanGesture(_ pan: UIPanGestureRecognizer, in view: UIView) {
+        let point = pan.location(in: view)
+        
+        if pan.state == .began {
+            onInteractStateChanged?(true)
+            beginPanPoint = point
+            clipOriginFrame = clipBoxFrame
+            panEdge = calculatePanEdge(at: point)
+        } else if pan.state == .changed {
+            guard panEdge != .none else { return }
+            updateClipBoxFrame(point: point)
+        } else if pan.state == .cancelled || pan.state == .ended {
+            panEdge = .none
+            onInteractStateChanged?(false)
+        }
+    }
+    
+    // MARK: - 纯数学计算：边缘判定
+    
+    private func calculatePanEdge(at point: CGPoint) -> PTClipPanEdge {
+        let frame = clipBoxFrame.insetBy(dx: -30, dy: -30)
+        let cornerSize = CGSize(width: 60, height: 60)
+        
+        // 四角判定
+        if CGRect(origin: frame.origin, size: cornerSize).contains(point) { return .topLeft }
+        if CGRect(origin: CGPoint(x: frame.maxX - cornerSize.width, y: frame.minY), size: cornerSize).contains(point) { return .topRight }
+        if CGRect(origin: CGPoint(x: frame.minX, y: frame.maxY - cornerSize.height), size: cornerSize).contains(point) { return .bottomLeft }
+        if CGRect(origin: CGPoint(x: frame.maxX - cornerSize.width, y: frame.maxY - cornerSize.height), size: cornerSize).contains(point) { return .bottomRight }
+        
+        // 四边判定
+        if CGRect(origin: frame.origin, size: CGSize(width: frame.width, height: cornerSize.height)).contains(point) { return .top }
+        if CGRect(origin: CGPoint(x: frame.minX, y: frame.maxY - cornerSize.height), size: CGSize(width: frame.width, height: cornerSize.height)).contains(point) { return .bottom }
+        if CGRect(origin: frame.origin, size: CGSize(width: cornerSize.width, height: frame.height)).contains(point) { return .left }
+        if CGRect(origin: CGPoint(x: frame.maxX - cornerSize.width, y: frame.minY), size: CGSize(width: cornerSize.width, height: frame.height)).contains(point) { return .right }
+        
+        return .none
+    }
+    
+    // MARK: - 纯数学计算：边框限制与比例缩放
+    
+    private func updateClipBoxFrame(point: CGPoint) {
+        guard let context = context else { return }
+        
+        var frame = clipBoxFrame
+        let originFrame = clipOriginFrame
+        
+        let maxClipFrame = context.engineMaxClipFrame
+        let minClipSize = context.engineMinClipSize
+        
+        var newPoint = point
+        newPoint.x = max(maxClipFrame.minX, newPoint.x)
+        newPoint.y = max(maxClipFrame.minY, newPoint.y)
+        
+        let diffX = ceil(newPoint.x - beginPanPoint.x)
+        let diffY = ceil(newPoint.y - beginPanPoint.y)
+        let ratio = selectedRatio.whRatio
+        
+        // --- 下面就是你原代码里那 100 行硬核数学运算，现在全被隔离在这里了 ---
+        switch panEdge {
+        case .left:
+            frame.origin.x = originFrame.minX + diffX
+            frame.size.width = originFrame.width - diffX
+            if ratio != 0 { frame.size.height = originFrame.height - diffX / ratio }
+        case .right:
+            frame.size.width = originFrame.width + diffX
+            if ratio != 0 { frame.size.height = originFrame.height + diffX / ratio }
+        case .top:
+            frame.origin.y = originFrame.minY + diffY
+            frame.size.height = originFrame.height - diffY
+            if ratio != 0 { frame.size.width = originFrame.width - diffY * ratio }
+        case .bottom:
+            frame.size.height = originFrame.height + diffY
+            if ratio != 0 { frame.size.width = originFrame.width + diffY * ratio }
+        case .topLeft:
+            if ratio != 0 {
+                frame.origin.x = originFrame.minX + diffX
+                frame.size.width = originFrame.width - diffX
+                frame.origin.y = originFrame.minY + diffX / ratio
+                frame.size.height = originFrame.height - diffX / ratio
+            } else {
+                frame.origin.x = originFrame.minX + diffX
+                frame.size.width = originFrame.width - diffX
+                frame.origin.y = originFrame.minY + diffY
+                frame.size.height = originFrame.height - diffY
+            }
+        case .topRight:
+            if ratio != 0 {
+                frame.size.width = originFrame.width + diffX
+                frame.origin.y = originFrame.minY - diffX / ratio
+                frame.size.height = originFrame.height + diffX / ratio
+            } else {
+                frame.size.width = originFrame.width + diffX
+                frame.origin.y = originFrame.minY + diffY
+                frame.size.height = originFrame.height - diffY
+            }
+        case .bottomLeft:
+            if ratio != 0 {
+                frame.origin.x = originFrame.minX + diffX
+                frame.size.width = originFrame.width - diffX
+                frame.size.height = originFrame.height - diffX / ratio
+            } else {
+                frame.origin.x = originFrame.minX + diffX
+                frame.size.width = originFrame.width - diffX
+                frame.size.height = originFrame.height + diffY
+            }
+        case .bottomRight:
+            if ratio != 0 {
+                frame.size.width = originFrame.width + diffX
+                frame.size.height = originFrame.height + diffX / ratio
+            } else {
+                frame.size.width = originFrame.width + diffX
+                frame.size.height = originFrame.height + diffY
+            }
+        default: break
+        }
+        
+        let minSize: CGSize
+        let maxSize: CGSize
+        let actualMaxClipFrame: CGRect
+        
+        if ratio != 0 {
+            if ratio >= 1 {
+                minSize = CGSize(width: minClipSize.height * ratio, height: minClipSize.height)
+            } else {
+                minSize = CGSize(width: minClipSize.width, height: minClipSize.width / ratio)
+            }
+            if ratio > maxClipFrame.width / maxClipFrame.height {
+                maxSize = CGSize(width: maxClipFrame.width, height: maxClipFrame.width / ratio)
+            } else {
+                maxSize = CGSize(width: maxClipFrame.height * ratio, height: maxClipFrame.height)
+            }
+            actualMaxClipFrame = CGRect(origin: CGPoint(x: maxClipFrame.minX + (maxClipFrame.width - maxSize.width) / 2, y: maxClipFrame.minY + (maxClipFrame.height - maxSize.height) / 2), size: maxSize)
+        } else {
+            minSize = minClipSize
+            maxSize = maxClipFrame.size
+            actualMaxClipFrame = maxClipFrame
+        }
+        
+        frame.size.width = min(maxSize.width, max(minSize.width, frame.size.width))
+        frame.size.height = min(maxSize.height, max(minSize.height, frame.size.height))
+        
+        frame.origin.x = min(actualMaxClipFrame.maxX - minSize.width, max(frame.origin.x, actualMaxClipFrame.minX))
+        frame.origin.y = min(actualMaxClipFrame.maxY - minSize.height, max(frame.origin.y, actualMaxClipFrame.minY))
+        
+        if panEdge == .topLeft || panEdge == .bottomLeft || panEdge == .left, frame.size.width <= minSize.width + CGFloat.ulpOfOne {
+            frame.origin.x = originFrame.maxX - minSize.width
+        }
+        if panEdge == .topLeft || panEdge == .topRight || panEdge == .top, frame.size.height <= minSize.height + CGFloat.ulpOfOne {
+            frame.origin.y = originFrame.maxY - minSize.height
+        }
+        
+        // 计算完毕，更新内部状态并回调给 VC 进行 UI 刷新
+//        clipBoxFrame = frame
+        onClipBoxFrameChanged?(frame)
     }
 }
