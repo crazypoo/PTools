@@ -103,7 +103,6 @@
 		55102AC22AFFB74500E9529D /* minganci.txt in Resources */ = {isa = PBXBuildFile; fileRef = 55102AC12AFFB74500E9529D /* minganci.txt */; };
 		55102AC62AFFB8A100E9529D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 55102AC82AFFB8A100E9529D /* Localizable.strings */; };
 		55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55102AD82AFFD04300E9529D /* IBDesignable+PTEX.swift */; };
-		55102ADB2AFFD22E00E9529D /* PTLocalize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55102ADA2AFFD22E00E9529D /* PTLocalize.swift */; };
 		5512F43E2CACD63F006B3A69 /* PTLivePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5512F43D2CACD63F006B3A69 /* PTLivePhoto.swift */; };
 		5512F4402CAD2CC0006B3A69 /* AVAsset+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5512F43F2CAD2CC0006B3A69 /* AVAsset+PTEX.swift */; };
 		5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */; };
@@ -1067,7 +1066,6 @@
 		55102AD62AFFCEF200E9529D /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		55102AD72AFFCEF200E9529D /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		55102AD82AFFD04300E9529D /* IBDesignable+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IBDesignable+PTEX.swift"; sourceTree = "<group>"; };
-		55102ADA2AFFD22E00E9529D /* PTLocalize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalize.swift; sourceTree = "<group>"; };
 		55102ADC2AFFD34900E9529D /* icon_clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_clear.png; sourceTree = "<group>"; };
 		55102ADD2AFFD39700E9529D /* lldotActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lldotActive.png; sourceTree = "<group>"; };
 		55102ADE2AFFD39700E9529D /* lldotInActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lldotInActive.png; sourceTree = "<group>"; };
@@ -3642,7 +3640,6 @@
 			isa = PBXGroup;
 			children = (
 				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
-				55102ADA2AFFD22E00E9529D /* PTLocalize.swift */,
 			);
 			path = Language;
 			sourceTree = "<group>";
@@ -4904,7 +4901,6 @@
 				555818C62AFA79A50051C0AA /* UIFeedbackGenerator+PTEX.swift in Sources */,
 				55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */,
 				559C3D592B282F9E00EE46BC /* CropPickerView.swift in Sources */,
-				55102ADB2AFFD22E00E9529D /* PTLocalize.swift in Sources */,
 				55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */,
 				557E3A9C2C046D85002466A0 /* URLCache+PTDebugEX.swift in Sources */,
 				55DD936F2B938C6800F65872 /* UIViewController+Container.swift in Sources */,

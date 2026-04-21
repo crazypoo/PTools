@@ -61,7 +61,7 @@ public struct PTCoreUserDefultsWrapper {
      */
     //MARK: App语言环境(默认中文zh-Hans)
     ///App语言环境(默认中文zh-Hans)
-    @PTUserDefault(withKey: "MyAppLanguage", defaultValue: "zh-Hans") public static var AppLanguage:String
+    @PTUserDefault(withKey: "MyAppLanguage", defaultValue: PTDefaultLanguage) public static var AppLanguage:String
     
     /**
         测速
