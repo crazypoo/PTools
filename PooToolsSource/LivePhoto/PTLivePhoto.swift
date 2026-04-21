@@ -11,83 +11,121 @@ import AVFoundation
 import MobileCoreServices
 import Photos
 import CoreMedia
-import UniformTypeIdentifiers // 引入 UTType 支持
+import UniformTypeIdentifiers
+
+// MARK: - 错误定义
+public enum PTLivePhotoError: Error, LocalizedError {
+    case cacheDirectoryFailed
+    case assetGenerationFailed
+    case missingResources
+    case libraryAccessDenied
+    case exportFailed(Error?)
+    
+    public var errorDescription: String? {
+        switch self {
+        case .cacheDirectoryFailed: return "创建缓存文件夹失败"
+        case .assetGenerationFailed: return "资源生成失败"
+        case .missingResources: return "提取 Live Photo 资源失败或文件缺失"
+        case .libraryAccessDenied: return "没有相册访问权限"
+        case .exportFailed(let err): return "导出失败: \(err?.localizedDescription ?? "未知错误")"
+        }
+    }
+}
 
 public class PTLivePhoto {
     public typealias PTLivePhotoResources = (pairedImage: URL, pairedVideo: URL)
-    public typealias PTBoolTask = (Bool) -> Void
     
-    private static let shared = PTLivePhoto()
+    public static let shared = PTLivePhoto()
     private static let queue = DispatchQueue(label: "com.crazypoo.PTLivePhoto.queue", attributes: .concurrent)
     
+    // 优化1：改用 NSTemporaryDirectory，系统会在磁盘空间紧张时自动帮我们清理，更加安全
     fileprivate lazy var cacheDirectory: URL? = {
-        let cacheDirectoryURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        let fullDirectory = cacheDirectoryURL.appendingPathComponent("com.crazypoo.PTLivePhoto")
+        let tempDirectoryURL = FileManager.default.temporaryDirectory
+        let fullDirectory = tempDirectoryURL.appendingPathComponent("com.crazypoo.PTLivePhoto")
         if !FileManager.default.fileExists(atPath: fullDirectory.path) {
             do {
                 try FileManager.default.createDirectory(at: fullDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                PTNSLogConsole("创建缓存文件夹失败: \(error)")
+                PTNSLogConsole("[PTLivePhoto] 创建缓存文件夹失败: \(error)")
                 return nil
             }
         }
         return fullDirectory
     }()
     
-    deinit {
-        clearCache()
-    }
+    // 限制外部实例化，保证单例的唯一性
+    private init() {}
     
     // MARK: - Public API
     
+    /// 主动清理缓存 (单例的 deinit 不会被调用，需手动暴露)
+    public func clearCache() {
+        guard let cacheDirectory = cacheDirectory else { return }
+        do {
+            try FileManager.default.removeItem(at: cacheDirectory)
+        } catch {
+            PTNSLogConsole("[PTLivePhoto] 清除缓存失败: \(error)")
+        }
+    }
+    
     /// 获取 Live Photo 配对的图片和视频资源
-    public class func extractResources(from livePhoto: PHLivePhoto, completion: @escaping (PTLivePhotoResources?) -> Void) {
+    public class func extractResources(from livePhoto: PHLivePhoto, completion: @escaping (Result<PTLivePhotoResources, PTLivePhotoError>) -> Void) {
         queue.async {
             shared.extractResources(from: livePhoto, completion: completion)
         }
     }
     
     /// 将图片和视频合成为 PHLivePhoto
-    public class func generate(from imageURL: URL?, videoURL: URL, progress: @escaping (CGFloat) -> Void, completion: @escaping (PHLivePhoto?, PTLivePhotoResources?) -> Void) {
+    public class func generate(from imageURL: URL?, videoURL: URL, progress: @escaping (CGFloat) -> Void, completion: @escaping (Result<(PHLivePhoto, PTLivePhotoResources), PTLivePhotoError>) -> Void) {
         queue.async {
             shared.generate(from: imageURL, videoURL: videoURL, progress: progress, completion: completion)
         }
     }
     
-    /// 将配对的图文资源保存到相册
-    public class func saveToLibrary(_ resources: PTLivePhotoResources, completion: @escaping PTBoolTask) {
-        PHPhotoLibrary.shared().performChanges({
-            let creationRequest = PHAssetCreationRequest.forAsset()
-            let options = PHAssetResourceCreationOptions()
-            creationRequest.addResource(with: .pairedVideo, fileURL: resources.pairedVideo, options: options)
-            creationRequest.addResource(with: .photo, fileURL: resources.pairedImage, options: options)
-        }, completionHandler: { (success, error) in
-            if let error = error {
-                PTNSLogConsole("保存到相册失败: \(error)")
+    /// 将配词的图文资源保存到相册 (优化2：补充权限检查)
+    public class func saveToLibrary(_ resources: PTLivePhotoResources, completion: @escaping (Result<Bool, PTLivePhotoError>) -> Void) {
+        let saveAction = {
+            PHPhotoLibrary.shared().performChanges({
+                let creationRequest = PHAssetCreationRequest.forAsset()
+                let options = PHAssetResourceCreationOptions()
+                creationRequest.addResource(with: .pairedVideo, fileURL: resources.pairedVideo, options: options)
+                creationRequest.addResource(with: .photo, fileURL: resources.pairedImage, options: options)
+            }, completionHandler: { (success, error) in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        PTNSLogConsole("[PTLivePhoto] 保存到相册失败: \(error)")
+                        completion(.failure(.exportFailed(error)))
+                    } else {
+                        completion(.success(success))
+                    }
+                }
+            })
+        }
+        
+        // 权限检查
+        let status = PHPhotoLibrary.authorizationStatus(for: .addOnly)
+        if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { newStatus in
+                if newStatus == .authorized || newStatus == .limited {
+                    saveAction()
+                } else {
+                    DispatchQueue.main.async { completion(.failure(.libraryAccessDenied)) }
+                }
             }
-            DispatchQueue.main.async {
-                completion(success)
-            }
-        })
+        } else if status == .authorized || status == .limited {
+            saveAction()
+        } else {
+            completion(.failure(.libraryAccessDenied))
+        }
     }
     
     // MARK: - Private Implementations
-    
-    private func clearCache() {
-        guard let cacheDirectory = cacheDirectory else { return }
-        do {
-            try FileManager.default.removeItem(at: cacheDirectory)
-        } catch {
-            PTNSLogConsole("清除缓存失败: \(error)")
-        }
-    }
     
     private func generateKeyPhoto(from videoURL: URL) -> URL? {
         var percent: Float = 0.5
         let videoAsset = AVURLAsset(url: videoURL)
         let duration = Float(videoAsset.duration.value)
         
-        // 修复潜在的除零奔溃
         if let stillImageTime = videoAsset.stillImageTime(), duration > 0 {
             percent = Float(stillImageTime.value) / duration
         }
@@ -102,14 +140,14 @@ public class PTLivePhoto {
             try jpegData.write(to: url)
             return url
         } catch {
-            PTNSLogConsole("写入封面图失败: \(error)")
+            PTNSLogConsole("[PTLivePhoto] 写入封面图失败: \(error)")
             return nil
         }
     }
     
-    private func generate(from imageURL: URL?, videoURL: URL, progress: @escaping (CGFloat) -> Void, completion: @escaping (PHLivePhoto?, PTLivePhotoResources?) -> Void) {
+    private func generate(from imageURL: URL?, videoURL: URL, progress: @escaping (CGFloat) -> Void, completion: @escaping (Result<(PHLivePhoto, PTLivePhotoResources), PTLivePhotoError>) -> Void) {
         guard let cacheDirectory = cacheDirectory else {
-            DispatchQueue.main.async { completion(nil, nil) }
+            DispatchQueue.main.async { completion(.failure(.cacheDirectoryFailed)) }
             return
         }
         
@@ -118,20 +156,24 @@ public class PTLivePhoto {
         
         guard let keyPhotoURL = _keyPhotoURL,
               let pairedImageURL = addAssetID(assetIdentifier, toImage: keyPhotoURL, saveTo: cacheDirectory.appendingPathComponent(assetIdentifier).appendingPathExtension("jpg")) else {
-            DispatchQueue.main.async { completion(nil, nil) }
+            DispatchQueue.main.async { completion(.failure(.assetGenerationFailed)) }
             return
         }
         
         addAssetID(assetIdentifier, toVideo: videoURL, saveTo: cacheDirectory.appendingPathComponent(assetIdentifier).appendingPathExtension("mov"), progress: progress) { (_videoURL) in
             guard let pairedVideoURL = _videoURL else {
-                DispatchQueue.main.async { completion(nil, nil) }
+                DispatchQueue.main.async { completion(.failure(.assetGenerationFailed)) }
                 return
             }
             
             _ = PHLivePhoto.request(withResourceFileURLs: [pairedVideoURL, pairedImageURL], placeholderImage: nil, targetSize: CGSize.zero, contentMode: .aspectFit) { (livePhoto, info) in
                 if let isDegraded = info[PHLivePhotoInfoIsDegradedKey] as? Bool, isDegraded { return }
                 DispatchQueue.main.async {
-                    completion(livePhoto, (pairedImageURL, pairedVideoURL))
+                    if let lp = livePhoto {
+                        completion(.success((lp, (pairedImageURL, pairedVideoURL))))
+                    } else {
+                        completion(.failure(.assetGenerationFailed))
+                    }
                 }
             }
         }
@@ -161,7 +203,7 @@ public class PTLivePhoto {
                         keyPhotoURL = fileURL
                     }
                 } else {
-                    PTNSLogConsole("提取资源失败: \(String(describing: error))")
+                    PTNSLogConsole("[PTLivePhoto] 提取资源失败: \(String(describing: error))")
                 }
                 group.leave()
             }
@@ -176,11 +218,17 @@ public class PTLivePhoto {
         }
     }
     
-    private func extractResources(from livePhoto: PHLivePhoto, completion: @escaping (PTLivePhotoResources?) -> Void) {
+    private func extractResources(from livePhoto: PHLivePhoto, completion: @escaping (Result<PTLivePhotoResources, PTLivePhotoError>) -> Void) {
         if let cacheDirectory = cacheDirectory {
-            extractResources(from: livePhoto, to: cacheDirectory, completion: completion)
+            extractResources(from: livePhoto, to: cacheDirectory) { resources in
+                if let res = resources {
+                    completion(.success(res))
+                } else {
+                    completion(.failure(.missingResources))
+                }
+            }
         } else {
-            completion(nil)
+            completion(.failure(.cacheDirectoryFailed))
         }
     }
     
@@ -194,7 +242,7 @@ public class PTLivePhoto {
             try resourceData.write(to: fileUrl, options: .atomic)
             return fileUrl
         } catch {
-            PTNSLogConsole("保存资源文件失败: \(error)")
+            PTNSLogConsole("[PTLivePhoto] 保存资源文件失败: \(error)")
             return nil
         }
     }
@@ -294,7 +342,7 @@ public class PTLivePhoto {
                     if assetWriter.status == .completed {
                         completion(destinationURL)
                     } else {
-                        PTNSLogConsole("AssetWriter 失败状态: \(String(describing: assetWriter.error))")
+                        PTNSLogConsole("[PTLivePhoto] AssetWriter 失败状态: \(String(describing: assetWriter.error))")
                         completion(nil)
                     }
                 }
@@ -304,31 +352,39 @@ public class PTLivePhoto {
             if videoReader.startReading() {
                 videoWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "pt.livephoto.video")) {
                     while videoWriterInput.isReadyForMoreMediaData {
-                        guard let sample = videoReaderOutput.copyNextSampleBuffer() else {
-                            videoWriterInput.markAsFinished()
+                        // 优化3：加入 autoreleasepool，防止大视频导致内存泄漏 (OOM)
+                        autoreleasepool {
+                            guard let sample = videoReaderOutput.copyNextSampleBuffer() else {
+                                videoWriterInput.markAsFinished()
+                                lock.lock()
+                                writingVideoFinished = true
+                                lock.unlock()
+                                finishIfPossible()
+                                return
+                            }
+                            
                             lock.lock()
-                            writingVideoFinished = true
+                            currentFrame += 1
+                            let frame = currentFrame
                             lock.unlock()
-                            finishIfPossible()
-                            return
-                        }
-                        
-                        lock.lock()
-                        currentFrame += 1
-                        let frame = currentFrame
-                        lock.unlock()
-                        
-                        // 防止 frameCount 为 0 导致除零
-                        let progressValue = frameCount > 0 ? CGFloat(frame) / CGFloat(frameCount) : 0
-                        DispatchQueue.main.async { progress(progressValue) }
-                        
-                        if !videoWriterInput.append(sample) {
-                            videoReader.cancelReading()
-                            lock.lock()
-                            writingVideoFinished = true
-                            lock.unlock()
-                            finishIfPossible()
-                            return
+                            
+                            var lastNotifiedProgress: Int = -1
+                            let progressValue = frameCount > 0 ? CGFloat(frame) / CGFloat(frameCount) : 0
+                            let currentIntProgress = Int(progressValue * 100)
+                            
+                            if currentIntProgress > lastNotifiedProgress {
+                                lastNotifiedProgress = currentIntProgress
+                                DispatchQueue.main.async { progress(progressValue) }
+                            }
+
+                            if !videoWriterInput.append(sample) {
+                                videoReader.cancelReading()
+                                lock.lock()
+                                writingVideoFinished = true
+                                lock.unlock()
+                                finishIfPossible()
+                                return
+                            }
                         }
                     }
                 }
@@ -341,21 +397,24 @@ public class PTLivePhoto {
             if let audioReader = audioReader, audioReader.startReading(), let audioWriterInput = audioWriterInput {
                 audioWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "pt.livephoto.audio")) {
                     while audioWriterInput.isReadyForMoreMediaData {
-                        guard let sample = audioReaderOutput?.copyNextSampleBuffer() else {
-                            audioWriterInput.markAsFinished()
-                            lock.lock()
-                            writingAudioFinished = true
-                            lock.unlock()
-                            finishIfPossible()
-                            return
-                        }
-                        if !audioWriterInput.append(sample) {
-                            audioReader.cancelReading()
-                            lock.lock()
-                            writingAudioFinished = true
-                            lock.unlock()
-                            finishIfPossible()
-                            return
+                        // 优化3：同样加入 autoreleasepool
+                        autoreleasepool {
+                            guard let sample = audioReaderOutput?.copyNextSampleBuffer() else {
+                                audioWriterInput.markAsFinished()
+                                lock.lock()
+                                writingAudioFinished = true
+                                lock.unlock()
+                                finishIfPossible()
+                                return
+                            }
+                            if !audioWriterInput.append(sample) {
+                                audioReader.cancelReading()
+                                lock.lock()
+                                writingAudioFinished = true
+                                lock.unlock()
+                                finishIfPossible()
+                                return
+                            }
                         }
                     }
                 }
@@ -367,7 +426,7 @@ public class PTLivePhoto {
             }
             
         } catch {
-            PTNSLogConsole("生成视频资源出错: \(error)")
+            PTNSLogConsole("[PTLivePhoto] 生成视频资源出错: \(error)")
             completion(nil)
         }
     }
@@ -403,27 +462,38 @@ public class PTLivePhoto {
     }
 }
 
-// MARK: - 功能扩展：Async/Await 支持
+// MARK: - 功能扩展：Async/Await 支持 (优化4：支持抛出真实错误)
 public extension PTLivePhoto {
+    
     /// 异步获取 Live Photo 配对资源 (Async/Await 扩展)
-    class func extractResources(from livePhoto: PHLivePhoto) async -> PTLivePhotoResources? {
-        await withCheckedContinuation { continuation in
+    class func extractResources(from livePhoto: PHLivePhoto) async throws -> PTLivePhotoResources {
+        try await withCheckedThrowingContinuation { continuation in
             extractResources(from: livePhoto) { result in
-                continuation.resume(returning: result)
+                continuation.resume(with: result)
             }
         }
     }
     
     /// 异步保存到相册 (Async/Await 扩展)
-    class func saveToLibrary(_ resources: PTLivePhotoResources) async -> Bool {
-        await withCheckedContinuation { continuation in
-            saveToLibrary(resources) { success in
-                continuation.resume(returning: success)
+    class func saveToLibrary(_ resources: PTLivePhotoResources) async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            saveToLibrary(resources) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+    
+    /// 异步生成 Live Photo
+    class func generate(from imageURL: URL?, videoURL: URL, progress: @escaping (CGFloat) -> Void) async throws -> (PHLivePhoto, PTLivePhotoResources) {
+        try await withCheckedThrowingContinuation { continuation in
+            generate(from: imageURL, videoURL: videoURL, progress: progress) { result in
+                continuation.resume(with: result)
             }
         }
     }
 }
 
+// MARK: - Extension 工具方法
 fileprivate extension AVAsset {
     func countFrames(exact: Bool) -> Int {
         var frameCount = 0
@@ -440,7 +510,10 @@ fileprivate extension AVAsset {
                 videoReader.add(videoReaderOutput)
                 if videoReader.startReading() {
                     while let _ = videoReaderOutput.copyNextSampleBuffer() {
-                        frameCount += 1
+                        // 优化3：防止逐帧遍历时的内存堆积
+                        autoreleasepool {
+                            frameCount += 1
+                        }
                     }
                     videoReader.cancelReading()
                 }
@@ -500,7 +573,7 @@ fileprivate extension AVAsset {
             let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: &actualTime)
             return UIImage(cgImage: imageRef)
         } catch {
-            PTNSLogConsole("生成帧图片失败: \(error)")
+            PTNSLogConsole("[PTLivePhoto] 生成帧图片失败: \(error)")
             return nil
         }
     }

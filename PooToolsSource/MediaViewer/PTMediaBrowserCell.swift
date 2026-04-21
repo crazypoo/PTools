@@ -342,14 +342,13 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 self.videoAVItem(avItem: avPlayerItem)
             case let livePhotoTarget as PHLivePhoto:
                 self.currentCellType = .LivePhoto
-                PTLivePhoto.extractResources(from: livePhotoTarget) { resources in
-                    if let keyPhotoPath = resources?.pairedImage {
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
-                            guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
-                                return
-                            }
-                            self.gifImage = keyPhotoImage
+                Task {
+                    let result = try await PTLivePhoto.extractResources(from: livePhotoTarget)
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: result.pairedImage.path) {
+                        guard let keyPhotoImage = UIImage(contentsOfFile: result.pairedImage.path) else {
+                            return
                         }
+                        self.gifImage = keyPhotoImage
                     }
                     self.livePhoto.livePhoto = livePhotoTarget
                     self.adjustFrame(normal: false) {

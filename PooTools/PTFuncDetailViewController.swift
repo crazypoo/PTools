@@ -928,30 +928,31 @@ class PTFuncDetailViewController: PTBaseViewController {
                             try? data.write(to: photoURL)
                         }
                     }
+                    
                     PTLivePhoto.generate(from: photoURL, videoURL: sourceVideoPath, progress: { (percent) in
                         PTGCDManager.gcdMain {
                             progressView.progress = Float(percent)
                         }
-                    }) { (livePhoto, resources) in
-                        livePhotoView.livePhoto = livePhoto
-                        livePhotoView.startPlayback(with: .hint)
+                    }) { result in
+                        switch result {
+                        case .success((let livePhoto,let resource)):
+                            livePhotoView.livePhoto = livePhoto
+                            livePhotoView.startPlayback(with: .hint)
 
-                        if let resources = resources {
-                            PTLivePhoto.saveToLibrary(resources, completion: { (success) in
-                                if success {
-                                    PTGCDManager.gcdMain {
+                            Task {
+                                do {
+                                    let success = try await PTLivePhoto.saveToLibrary(resource)
+                                    if success {
                                         PTAlertTipControl.present(title:"Live Photo Saved.The live photo was successfully saved to Photos.",icon:.Done,style: .Normal)
-                                    }
-                                } else {
-                                    PTGCDManager.gcdMain {
+                                    } else {
                                         PTAlertTipControl.present(title:"Live Photo Not Saved.The live photo was not saved to Photos.",icon:.Error,style: .Normal)
                                     }
+                                } catch {
+                                    PTAlertTipControl.present(title:error.localizedDescription,icon:.Error,style: .Normal)
                                 }
-                            })
-                        } else {
-                            PTGCDManager.gcdMain {
-                                PTAlertTipControl.present(title:"Live Photo Error........",icon:.Error,style: .Normal)
                             }
+                        case .failure(let error):
+                            PTAlertTipControl.present(title:error.errorDescription,icon:.Error,style: .Normal)
                         }
                     }
                 case String.LivePhotoDisassemble:
@@ -961,10 +962,10 @@ class PTFuncDetailViewController: PTBaseViewController {
                                 if let lPhoto = livePhoto {
                                     livePhotoView.livePhoto = lPhoto
                                     livePhotoView.startPlayback(with: .hint)
-                                    
-                                    PTLivePhoto.extractResources(from: lPhoto, completion: { resources in
-                                        disassembleImageURL = resources?.pairedImage
-                                        pickedVideoURL = resources?.pairedVideo
+                                    Task {
+                                        let result = try await PTLivePhoto.extractResources(from: lPhoto)
+                                        disassembleImageURL = result.pairedImage
+                                        pickedVideoURL = result.pairedVideo
                                         if let keyPhotoPath = disassembleImageURL {
                                             if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
                                                 guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
@@ -981,7 +982,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                                                 }
                                             }
                                         }
-                                    })
+                                    }
                                 }
                             }
                         }
