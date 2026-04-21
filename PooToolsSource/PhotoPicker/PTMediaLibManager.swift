@@ -60,7 +60,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
         
     if currentSelectCount >= PTMediaLibConfig.share.maxSelectCount {
         if showAlert {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(PTMediaLibConfig.share.maxSelectCount)"), icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(PTMediaLibConfig.share.maxSelectCount)"), icon: .Error)
         }
         return false
     }
@@ -77,14 +77,14 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     
     if model.second > PTMediaLibConfig.share.maxSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(PTMediaLibConfig.share.maxSelectVideoDuration)"), icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(PTMediaLibConfig.share.maxSelectVideoDuration)"), icon: .Error)
         }
         return false
     }
     
     if model.second < PTMediaLibConfig.share.minSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(PTMediaLibConfig.share.minSelectVideoDuration)"), icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(PTMediaLibConfig.share.minSelectVideoDuration)"), icon: .Error)
         }
         return false
     }
@@ -97,7 +97,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size > PTMediaLibConfig.share.maxSelectVideoDataSize {
         if showAlert {
             let value = Int(round(PTMediaLibConfig.share.maxSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoSizeMoreError, "\(String(value))"), icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoSizeMoreError, "\(String(value))"), icon: .Error)
         }
         return false
     }
@@ -105,7 +105,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size < PTMediaLibConfig.share.minSelectVideoDataSize {
         if showAlert {
             let value = Int(round(PTMediaLibConfig.share.minSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle, subtitle: String(format: PTMediaLibUIConfig.share.videoSizeLessError, "\(String(value))"), icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoSizeLessError, "\(String(value))"), icon: .Error)
         }
         return false
     }
@@ -139,8 +139,8 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
         guard !Task.isCancelled else { return }
         
         // 执行超时逻辑
-        PTAlertTipControl.present(title: alertTitle, subtitle: subTitle, icon: .Error, style: .Normal)
-        
+        PTAlertTipsViewController.tipsAlertShow(title: alertTitle,subtitle: subTitle, icon: .Error)
+
         if let requestAssetID = container.id {
             PHImageManager.default().cancelImageRequest(requestAssetID)
         }

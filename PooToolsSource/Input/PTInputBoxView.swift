@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public enum PTInputBoxConfigurationType {
     case NumberAlphabet
@@ -14,385 +15,327 @@ public enum PTInputBoxConfigurationType {
     case Alphabet
 }
 
-open class PTInputBoxConfiguration :NSObject {
-        
+// MARK: - Configuration
+open class PTInputBoxConfiguration {
     /// 输入框个数
-    open var inputBoxNumber: Int = 0
-    
+    open var inputBoxNumber: Int = 4
     /// 单个输入框的宽度
-    open var inputBoxWidth: CGFloat = 0.0
-    
+    open var inputBoxWidth: CGFloat = 45.0
     /// 单个输入框的高度
-    open var inputBoxHeight: CGFloat = 0.0
-    
-    /// 单个输入框的边框宽度, Default is 1 pixel
+    open var inputBoxHeight: CGFloat = 45.0
+    /// 单个输入框的边框宽度
     open var inputBoxBorderWidth: CGFloat = 1.0 / UIScreen.main.scale
-    
     /// 单个输入框的边框圆角
-    open var inputBoxCornerRadius: CGFloat = 0.0
+    open var inputBoxCornerRadius: CGFloat = 6.0
+    /// 输入框间距
+    open var inputBoxSpacing: CGFloat = 10.0
     
-    /// 输入框间距, Default is 5
-    open var inputBoxSpacing: CGFloat = 5.0
+    /// 单个输入框的默认边框颜色
+    open var inputBoxColor: UIColor = .lightGray
+    /// 单个输入框输入时的边框高亮颜色
+    open var inputBoxHighlightedColor: UIColor = .systemBlue
+    /// 单个输入框输入完成时的边框颜色 (可选)
+    open var inputBoxFinishColor: UIColor?
     
-    /// 左边距
-    open var leftMargin: CGFloat = 0.0
-    
-    /// 单个输入框的颜色, Default is lightGrayColor
-    open var inputBoxColor: UIColor? = UIColor.lightGray
-    
-    /// 光标颜色, Default is blueColor
-    open var tintColor: UIColor? = UIColor.blue
-    
-    /// 显示 或 隐藏
+    /// 光标颜色
+    open var tintColor: UIColor = .systemBlue
+    /// 是否显示为密文
     open var secureTextEntry: Bool = false
-    
-    /// 字体, Default is UIFont.boldSystemFont(ofSize: 16.0)
-    open var font: UIFont? = UIFont.boldSystemFont(ofSize: 16.0)
-    
-    /// 颜色, Default is blackColor
-    open var textColor: UIColor? = UIColor.black
-    
-    /// 输入类型：数字+字母，数字，字母. Default is '.number_alphabet'
-    open var inputType: PTInputBoxConfigurationType = PTInputBoxConfigurationType.NumberAlphabet
+    /// 字体
+    open var font: UIFont = UIFont.boldSystemFont(ofSize: 20.0)
+    /// 文字颜色
+    open var textColor: UIColor = .black
+    /// 输入类型
+    open var inputType: PTInputBoxConfigurationType = .NumberAlphabet
     
     /// 自动弹出键盘
-    open var autoShowKeyboard: Bool = false
-    
-    /// 默认0.5
-    open var autoShowKeyboardDelay: TimeInterval = 0.5
-    
-    /// 光标闪烁动画, Default is YES
+    open var autoShowKeyboard: Bool = true
+    /// 光标闪烁动画
     open var showFlickerAnimation: Bool = true
     
     /// 显示下划线
     open var showUnderLine: Bool = false
+    /// 下划线高度
+    open var underLineHeight: CGFloat = 2.0
+    /// 下划线默认颜色
+    open var underLineColor: UIColor = .lightGray
+    /// 下划线高亮颜色
+    open var underLineHighlightedColor: UIColor = .systemBlue
     
-    /// 下划线尺寸
-    open var underLineSize: CGSize = CGSize.zero
-    
-    /// 下划线颜色, Default is lightGrayColor
-    open var underLineColor: UIColor = UIColor.lightGray
-    
-    ///自定义的输入占位字符，secureTextEntry = false，有效
+    /// 自定义的输入占位字符 (当 secureTextEntry = false 时有效，比如填入 "●")
     open var customInputHolder: String = ""
+    /// 键盘类型
+    open var keyboardType: UIKeyboardType = .numberPad
+    /// 是否开启触觉震动反馈 (新功能)
+    open var enableHapticFeedback: Bool = true
     
-    /// 设置键盘类型
-    open var keyboardType: UIKeyboardType = UIKeyboardType.default
-    
-    /// 使用系统的密码键盘
-    open var useSystemPasswordKeyboard: Bool = false
-    
-    /// 单个输入框输入时的颜色
-    open var inputBoxHighlightedColor: UIColor? = nil
-    
-    /// 下划线高亮颜色
-    open var underLineHighlightedColor: UIColor? = nil
-    
-    /* 输入完成后，可能根据不同的状态，显示不同的颜色。  */
-    
-    /// 单个输入框输入完成时的颜色
-    open var inputBoxFinishColors: [UIColor] = []
-    
-    /// 下划线高亮颜色
-    open var underLineFinishColors: [UIColor] = []
-    
-    /// 输入完成时字体
-    open var finishFonts: [UIFont] = []
-    
-    /// 输入完成时颜色
-    open var finishTextColors: [UIColor] = []
+    public init() {}
 }
 
+// MARK: - Main View
 public class PTInputBoxView: UIView {
-    public var inputBlock: ((_ code: String) -> Void)? = nil
-    public var finishBlock: ((_ codeView: PTInputBoxView, _ code: String) -> Void)? = nil
     
-    private var config: PTInputBoxConfiguration!
-    private var textField: UITextField = UITextField()
-    private var inputFinish: Bool = false
-    private var inputFinishIndex: Int = 0
-    private var layerArray = [CAShapeLayer]()
-        
-    public init(frame: CGRect, config: PTInputBoxConfiguration) {
+    // 回调闭包
+    public var inputBlock: ((_ code: String) -> Void)?
+    public var finishBlock: ((_ codeView: PTInputBoxView, _ code: String) -> Void)?
+    
+    private var config: PTInputBoxConfiguration
+    
+    // 隐藏的实际输入框，用于拉起键盘和接收字符
+    private lazy var hiddenTextField: UITextField = {
+        let tf = UITextField()
+        tf.isHidden = true
+        tf.keyboardType = config.keyboardType
+        tf.isSecureTextEntry = config.secureTextEntry
+        tf.textContentType = .oneTimeCode // 支持自动填充验证码
+        tf.addTarget(self, action: #selector(textDidChange(_:)), for: .editingChanged)
+        return tf
+    }()
+    
+    // 用于管理多个视觉框的 StackView
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = config.inputBoxSpacing
+        stack.isUserInteractionEnabled = false
+        return stack
+    }()
+    
+    // 存储视觉表现的 Label 数组
+    private var visualLabels: [UILabel] = []
+    // 存储光标 Layer 的数组
+    private var cursorLayers: [CAShapeLayer] = []
+    // 存储下划线的数组
+    private var underLineViews: [UIView] = []
+    
+    // MARK: - Init
+    public init(config: PTInputBoxConfiguration) {
         self.config = config
-        super.init(frame: frame)
-        setupView(frame)
+        super.init(frame: .zero)
+        setupView()
     }
     
     required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+        fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupView(_ frame: CGRect) {
-        guard frame.width > 0, frame.height > 0, config.inputBoxNumber > 0, config.inputBoxWidth <= frame.width else {
-            return
+    // MARK: - Setup
+    private func setupView() {
+        addSubview(hiddenTextField)
+        addSubview(stackView)
+        
+        // 使用 SnapKit 布局 StackView，让其居中并自适应内容
+        stackView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.height.equalTo(config.inputBoxHeight)
         }
         
-        config.leftMargin = max(0, (frame.width - config.inputBoxWidth * CGFloat(config.inputBoxNumber) - config.inputBoxSpacing * CGFloat(config.inputBoxNumber - 1)) / 2)
-        config.inputBoxWidth = max(0, (frame.width - config.inputBoxSpacing * CGFloat(config.inputBoxNumber - 1) - config.leftMargin * 2) / CGFloat(config.inputBoxNumber))
-        config.inputBoxHeight = min(config.inputBoxHeight, frame.height)
-
-        for i in 0..<config.inputBoxNumber {
-            let x = config.leftMargin + (config.inputBoxWidth + config.inputBoxSpacing) * CGFloat(i)
-            let y = (frame.height - config.inputBoxHeight) / 2
-            let textField = createTextField(tag: i, frame: CGRect(x: x, y: y, width: config.inputBoxWidth, height: config.inputBoxHeight))
-            addSubview(textField)
-            let tap = UITapGestureRecognizer { sender in
-                self.tapActioin()
-            }
-            addGestureRecognizer(tap)
-        }
-
-        setupMainTextField(frame)
-        NotificationCenter.default.addObserver(self, selector: #selector(textChange), name: UITextField.textDidChangeNotification, object: textField)
-
-        if config.autoShowKeyboard {
-            DispatchQueue.main.asyncAfter(deadline: .now() + config.autoShowKeyboardDelay) {
-                self.textField.becomeFirstResponder()
-            }
-        }
-    }
-    
-    private func createTextField(tag: Int, frame: CGRect) -> UITextField {
-        let textField = UITextField(frame: frame)
-        textField.tag = tag
-        textField.textAlignment = .center
-        textField.isUserInteractionEnabled = false
-        textField.isSecureTextEntry = config.secureTextEntry
-        
-        PTGCDManager.gcdMain {
-            textField.layer.borderWidth = self.config.inputBoxBorderWidth
-            textField.layer.cornerRadius = self.config.inputBoxCornerRadius
-            textField.layer.borderColor = self.config.inputBoxColor?.cgColor
-        }
-        
-        textField.font = config.font
-        textField.textColor = config.textColor
-        
-        if config.showUnderLine {
-            addUnderline(to: textField)
-        }
-
-        if config.tintColor != nil {
-            addFlickerLayer(to: textField)
-        }
-
-        return textField
-    }
-
-    private func addUnderline(to textField: UITextField) {
-        let underlineFrame = CGRect(x: (textField.frame.width - config.underLineSize.width) / 2,
-                                    y: textField.frame.height - config.underLineSize.height,
-                                    width: config.underLineSize.width,
-                                    height: config.underLineSize.height)
-        let underline = UIView(frame: underlineFrame)
-        underline.tag = 100
-        underline.backgroundColor = config.underLineColor
-        textField.addSubview(underline)
-    }
-
-    private func addFlickerLayer(to textField: UITextField) {
-        let flickerLayerFrame = CGRect(x: (textField.frame.width - 2) / 2,
-                                       y: 4,
-                                       width: 2,
-                                       height: textField.frame.height - 8)
-        let flickerLayer = CAShapeLayer()
-        flickerLayer.path = UIBezierPath(rect: flickerLayerFrame).cgPath
-        flickerLayer.fillColor = config.tintColor?.cgColor
-        flickerLayer.add(alphaAnimation(), forKey: "kFlickerAnimation")
-        flickerLayer.isHidden = textField.tag != 0
-
-        layerArray.append(flickerLayer)
-        textField.layer.addSublayer(flickerLayer)
-    }
-
-    private func setupMainTextField(_ frame: CGRect) {
-        textField.isHidden = true
-        textField.keyboardType = config.keyboardType
-        textField.isSecureTextEntry = config.useSystemPasswordKeyboard
-        textField.frame = CGRect(x: 0, y: frame.height, width: 0, height: 0)
-        textField.textContentType = .oneTimeCode
-        addSubview(textField)
-    }
-    
-    @objc private func tapActioin() {
-        textField.becomeFirstResponder()
-    }
-    
-    @objc private func textChange() {
-        setDefault()
-        
-        let text = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
-        let filteredText = filterText(text)
-
-        textField.text = filteredText
-        inputBlock?(filteredText)
-        
-        setValue(filteredText as NSString)
-        flickerAnimation(filteredText as NSString)
-
-        if inputFinish {
-            finish()
-        }
-    }
-
-    private func filterText(_ text: String) -> String {
-        var filteredText = ""
-        for character in text {
-            switch config.inputType {
-            case .NumberAlphabet where character.isNumber || character.isLetter,
-                 .Number where character.isNumber,
-                 .Alphabet where character.isLetter:
-                filteredText.append(character)
-            default:
-                break
-            }
-        }
-        return String(filteredText.prefix(config.inputBoxNumber))
-    }
-
-    private func setDefault() {
-        for i in 0..<config.inputBoxNumber {
-            let textField = subviews[i] as! UITextField
-            textField.text = ""
-            textField.layer.borderWidth = self.config.inputBoxBorderWidth
-            textField.layer.cornerRadius = self.config.inputBoxCornerRadius
-            textField.layer.borderColor = self.config.inputBoxColor?.cgColor
-            textField.layoutIfNeeded()
-
-            if config.showFlickerAnimation, layerArray.count > i {
-                let layer = layerArray[i]
-                layer.isHidden = true
-                layer.removeAnimation(forKey: "kFlickerAnimation")
+        for _ in 0..<config.inputBoxNumber {
+            let containerView = UIView()
+            
+            // 设置容器的宽高约束
+            containerView.snp.makeConstraints { make in
+                make.width.equalTo(config.inputBoxWidth)
             }
             
+            // 创建显示的 Label
+            let label = UILabel()
+            label.textAlignment = .center
+            label.font = config.font
+            label.textColor = config.textColor
+            label.layer.borderWidth = config.inputBoxBorderWidth
+            label.layer.cornerRadius = config.inputBoxCornerRadius
+            label.layer.borderColor = config.inputBoxColor.cgColor
+            label.clipsToBounds = true
+            
+            containerView.addSubview(label)
+            label.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            visualLabels.append(label)
+            
+            // 创建下划线 (如果需要)
             if config.showUnderLine {
-                let underline = textField.viewWithTag(100)!
-                underline.backgroundColor = config.underLineColor
-            }
-        }
-    }
-    
-    private func flickerAnimation(_ text: NSString) {
-        if config.showFlickerAnimation, text.length < layerArray.count {
-            let layer = layerArray[text.length]
-            layer.isHidden = false
-            layer.add(alphaAnimation(), forKey: "kFlickerAnimation")
-        }
-    }
-    
-    private func alphaAnimation() -> CABasicAnimation {
-        let alpha = CABasicAnimation(keyPath: "opacity")
-        alpha.fromValue = 1.0
-        alpha.toValue = 0.0
-        alpha.duration = 1.0
-        alpha.repeatCount = .greatestFiniteMagnitude
-        alpha.isRemovedOnCompletion = false
-        alpha.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        return alpha
-    }
-    
-    private func setValue(_ text: NSString) {
-        inputFinish = text.length == config.inputBoxNumber
-        
-        for i in 0..<text.length {
-            PTGCDManager.gcdGobal {
-                let char = text.character(at: i)
-                
-                var font = self.config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
-                var color = self.config.textColor ?? .black
-                var inputBoxColor = self.config.inputBoxHighlightedColor
-                var underlineColor = self.config.underLineHighlightedColor
-                
-                if self.inputFinish {
-                    font = self.config.finishFonts[safe: self.inputFinishIndex] ?? font
-                    color = self.config.finishTextColors[safe: self.inputFinishIndex] ?? color
-                    inputBoxColor = self.config.inputBoxFinishColors[safe: self.inputFinishIndex] ?? inputBoxColor
-                    underlineColor = self.config.underLineFinishColors[safe: self.inputFinishIndex] ?? underlineColor
+                let underLine = UIView()
+                underLine.backgroundColor = config.underLineColor
+                containerView.addSubview(underLine)
+                underLine.snp.makeConstraints { make in
+                    make.leading.trailing.bottom.equalToSuperview()
+                    make.height.equalTo(config.underLineHeight)
                 }
-                PTGCDManager.gcdMain {
-                    let textField = self.subviews[i] as! UITextField
-                    textField.text = self.config.customInputHolder.isEmpty ? String(format: "%c", char) : self.config.customInputHolder
-                    textField.font = font
-                    textField.textColor = color
-                    PTGCDManager.gcdAfter(time: 0.01) {
-                        textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                        textField.layer.borderColor = inputBoxColor?.cgColor
-                        if self.config.showUnderLine, let underline = textField.viewWithTag(100) {
-                            underline.backgroundColor = underlineColor
-                        }
-                        textField.layoutIfNeeded()
-                    }
+                underLineViews.append(underLine)
+            }
+            
+            // 创建光标
+            if config.showFlickerAnimation {
+                let cursorPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 2, height: config.inputBoxHeight * 0.6))
+                let cursorLayer = CAShapeLayer()
+                cursorLayer.path = cursorPath.cgPath
+                cursorLayer.fillColor = config.tintColor.cgColor
+                cursorLayer.isHidden = true // 默认隐藏
+                containerView.layer.addSublayer(cursorLayer)
+                cursorLayers.append(cursorLayer)
+                
+                // 让光标居中 (利用 layer 的 position)
+                DispatchQueue.main.async {
+                    cursorLayer.position = CGPoint(x: self.config.inputBoxWidth / 2 - 1,
+                                                   y: self.config.inputBoxHeight * 0.2)
                 }
             }
+            
+            stackView.addArrangedSubview(containerView)
         }
         
-        let lessCount = self.config.inputBoxNumber - text.length
-        if lessCount > 0 {
-            for i in 0..<lessCount {
-                let textField = self.subviews[text.length + i] as! UITextField
-                let font = self.config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
-                let color = self.config.textColor ?? .black
-                let inputBoxColor = self.config.inputBoxColor
-                
-                textField.font = font
-                textField.textColor = color
-                textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                textField.layer.borderColor = inputBoxColor?.cgColor
-                textField.layoutIfNeeded()
+        // 添加点击手势，点击任意区域都拉起键盘
+        let tap = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        self.addGestureRecognizer(tap)
+        
+        // 初始状态更新
+        updateUIState()
+        
+        if config.autoShowKeyboard {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.hiddenTextField.becomeFirstResponder()
             }
         }
-
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
     }
     
-    private func finish() {
-        finishBlock?(self, textField.text!)
-        textField.resignFirstResponder()
+    // MARK: - Actions
+    @objc private func viewTapped() {
+        hiddenTextField.becomeFirstResponder()
+    }
+    
+    @objc private func textDidChange(_ textField: UITextField) {
+        var text = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        text = filterText(text)
+        
+        textField.text = text
+        inputBlock?(text)
+        
+        updateUIState()
+        
+        if text.count == config.inputBoxNumber {
+            handleInputFinish(text: text)
+        }
+    }
+    
+    // MARK: - Logic & UI Update
+    private func filterText(_ text: String) -> String {
+        let filtered = text.filter { character in
+            switch config.inputType {
+            case .NumberAlphabet: return character.isNumber || character.isLetter
+            case .Number: return character.isNumber
+            case .Alphabet: return character.isLetter
+            }
+        }
+        return String(filtered.prefix(config.inputBoxNumber))
+    }
+    
+    private func updateUIState() {
+        let text = hiddenTextField.text ?? ""
+        let textArray = Array(text)
         
         for i in 0..<config.inputBoxNumber {
-            PTGCDManager.gcdMain {
-                let textField = self.subviews[i] as! UITextField
-                let font = self.config.font ?? UIFont.boldSystemFont(ofSize: 16.0)
-                let color = self.config.textColor ?? .black
-                let inputBoxColor = self.config.inputBoxHighlightedColor
+            let label = visualLabels[i]
+            
+            // 1. 设置文字内容
+            if i < textArray.count {
+                let char = textArray[i]
+                if config.secureTextEntry {
+                    label.text = "●"
+                } else {
+                    label.text = config.customInputHolder.isEmpty ? String(char) : config.customInputHolder
+                }
+            } else {
+                label.text = ""
+            }
+            
+            // 2. 设置高亮/默认颜色样式
+            let isCurrentOrFilled = (i <= text.count && text.count != config.inputBoxNumber) || (i < text.count)
+            let isHighlight = i == text.count // 当前正要输入的框
+            
+            UIView.animate(withDuration: 0.2) {
+                // 边框颜色
+                label.layer.borderColor = isCurrentOrFilled ? self.config.inputBoxHighlightedColor.cgColor : self.config.inputBoxColor.cgColor
                 
-                textField.font = font
-                textField.textColor = color
-                textField.layer.borderWidth = self.config.inputBoxBorderWidth
-                textField.layer.borderColor = inputBoxColor?.cgColor
-                textField.layoutIfNeeded()
+                // 下划线颜色
+                if self.config.showUnderLine {
+                    let underLine = self.underLineViews[i]
+                    underLine.backgroundColor = isCurrentOrFilled ? self.config.underLineHighlightedColor : self.config.underLineColor
+                }
+            }
+            
+            // 3. 处理光标动画
+            if config.showFlickerAnimation {
+                let cursor = cursorLayers[i]
+                if isHighlight && hiddenTextField.isFirstResponder {
+                    cursor.isHidden = false
+                    startFlickerAnimation(for: cursor)
+                } else {
+                    cursor.isHidden = true
+                    cursor.removeAnimation(forKey: "flicker")
+                }
             }
         }
     }
     
-    public func clear() {
-        textField.text = ""
-        setDefault()
-        flickerAnimation("")
+    private func handleInputFinish(text: String) {
+        hiddenTextField.resignFirstResponder()
+        
+        // 输入完成时的颜色处理
+        if let finishColor = config.inputBoxFinishColor {
+            for label in visualLabels {
+                label.layer.borderColor = finishColor.cgColor
+            }
+        }
+        
+        // 触觉震动反馈
+        if config.enableHapticFeedback {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+        }
+        
+        finishBlock?(self, text)
     }
-
+    
+    private func startFlickerAnimation(for layer: CAShapeLayer) {
+        guard layer.animation(forKey: "flicker") == nil else { return }
+        let alphaAnimation = CABasicAnimation(keyPath: "opacity")
+        alphaAnimation.fromValue = 1.0
+        alphaAnimation.toValue = 0.0
+        alphaAnimation.duration = 0.8
+        alphaAnimation.repeatCount = .greatestFiniteMagnitude
+        alphaAnimation.isRemovedOnCompletion = false
+        alphaAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        layer.add(alphaAnimation, forKey: "flicker")
+    }
+    
+    // MARK: - Public APIs
+    public func clear() {
+        hiddenTextField.text = ""
+        updateUIState()
+        if config.autoShowKeyboard {
+            hiddenTextField.becomeFirstResponder()
+        }
+    }
+    
     public func showInput() {
-        textField.becomeFirstResponder()
+        hiddenTextField.becomeFirstResponder()
+        updateUIState() // 刷新光标状态
     }
     
     public func hideInput() {
-        textField.resignFirstResponder()
+        hiddenTextField.resignFirstResponder()
+        updateUIState() // 刷新光标状态
     }
     
     public func setCode(_ code: String) {
-        let trimmedCode = String(code.prefix(config.inputBoxNumber))
-        textField.text = trimmedCode
-        setValue(trimmedCode as NSString)
-        flickerAnimation(trimmedCode as NSString)
+        hiddenTextField.text = code
+        textDidChange(hiddenTextField)
     }
     
     public func getCode() -> String? {
-        return textField.text
+        return hiddenTextField.text
     }
 }

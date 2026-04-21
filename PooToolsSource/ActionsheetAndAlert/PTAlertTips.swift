@@ -20,67 +20,7 @@ public enum PTAlertTipsStyle {
     #endif
 }
 
-public enum PTAlertTipControl {
-    public static func present(view: PTAlertTipsProtocol, completion: @escaping PTActionTask) {
-        guard let window = AppWindows else { return }
-        view.present(on: window, completion: completion)
-    }
-    
-    public static func present(title: String? = nil, subtitle: String? = nil, icon: PTAlertTipsIcon? = nil, style: PTAlertTipsStyle, haptic: PTAlertTipsHaptic? = nil,dismiss:PTActionTask? = nil) {
-        switch style {
-        #if os(iOS)
-        case .Normal:
-            guard let window = AppWindows else { return }
-            let view = PTAlertTipsLow(title: title, subtitle: subtitle, icon: icon)
-            view.haptic = haptic
-            view.present(on: window,completion: dismiss)
-        #endif
-        #if os(iOS) || os(visionOS)
-        case .SupportVisionOS:
-            guard let window = AppWindows else { return }
-            let view = PTAlertTipsHight(title: title, subtitle: subtitle, icon: icon)
-            view.haptic = haptic
-            view.present(on: window,completion: dismiss)
-        #endif
-        }
-    }
-    
-    @MainActor public static func dismissAllAlerts(completion: PTActionTask? = nil) {
-        
-        var alertViews: [PTAlertTipsProtocol] = []
-        if let windows = UIApplication.shared.currentWindows {
-            for window in windows {
-                for view in window.subviews {
-                    if let view = view as? PTAlertTipsProtocol {
-                        alertViews.append(view)
-                    }
-                }
-            }
-        }
-        
-        if alertViews.isEmpty {
-            completion?()
-        } else {
-            for (index, view) in alertViews.enumerated() {
-                if index == .zero {
-                    view.dismiss(completion: completion)
-                } else {
-                    view.dismiss(completion: nil)
-                }
-            }
-            alertViews.first?.dismiss {
-                completion?()
-            }
-        }
-    }
-}
-
-public protocol PTAlertTipsProtocol {
-    func present(on view: UIView, completion: PTActionTask?)
-    func dismiss(completion: PTActionTask?)
-}
-
-public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
+public class PTAlertTipsLow: UIView {
     open var dismissByTap: Bool = true
     open var dismissInTime: Bool = true
     open var duration: TimeInterval = 1.5
@@ -326,7 +266,7 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
 }
 
 @available(iOS 13, visionOS 1, *)
-public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
+public class PTAlertTipsHight: UIView {
     
     open var dismissByTap: Bool = true
     open var dismissInTime: Bool = true

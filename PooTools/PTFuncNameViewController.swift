@@ -636,9 +636,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     vc.mediaLibShow()
                     vc.selectedHudStatusBlock = { result in
                         if result {
-                            PTAlertTipControl.present(icon:.Heart,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
                         } else {
-                            PTAlertTipControl.present(icon:.Done,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(icon: .Done)
                         }
                     }
                     vc.selectImageBlock = { result, isOriginal in
@@ -653,18 +653,18 @@ class PTFuncNameViewController: PTBaseViewController {
                                         let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv)
                                         controller.videoEditorShow(vc: self)
                                         controller.onEditCompleteHandler = { url in
-                                            PTAlertTipControl.present(title:"我好了\(url)",icon:.Done,style: .Normal)
+                                            PTAlertTipsViewController.tipsAlertShow(title:"我好了\(url)",icon: .Done)
                                         }
                                     }
                                 } else {
                                     PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon: .Error)
                                     }
                                 }
                             }
                         } else {
                             PTGCDManager.gcdMain {
-                                PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
+                                PTAlertTipsViewController.tipsAlertShow(title:"沒有選擇Video",icon: .Error)
                             }
                         }
                     }
@@ -742,13 +742,11 @@ class PTFuncNameViewController: PTBaseViewController {
                     UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet"], otherBlock: { sheet,index,title in
                         switch index {
                         case 0:
-                            PTGCDManager.gcdAfter(time: 0.5, block: {
-                                PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
-                            })
+                            let tips = PTAlertTipsViewController(title: "Job Done!", subtitle: "WOW", icon: .Done)
+                            PTAlertManager.show(tips)
                         case 1:
-                            PTGCDManager.gcdAfter(time: 0.5, block: {
-                                PTAlertTipControl.present(title:"Hola!",subtitle: "Que?",icon:.Error,style: .SupportVisionOS)
-                            })
+                            let tips = PTAlertTipsViewController(title: "Hola!", subtitle: "Que?", icon: .Error,style: .SupportVisionOS)
+                            PTAlertManager.show(tips)
                         case 2:
                             UIAlertController.alertSendFeedBack { title, content in
                                 UIAlertController.gobal_drop(title: title,subTitle: content) {
@@ -896,7 +894,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     vc.editFinishBlock = { ei ,editImageModel in
                         PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, asset in
                             if !finish {
-                                PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
+                                PTAlertTipsViewController.tipsAlertShow(title:"Opps",subtitle: "保存图片失败",icon: .Error)
                             }
                         }
                     }
@@ -926,7 +924,7 @@ class PTFuncNameViewController: PTBaseViewController {
                         if result.count > 0 {
                             PTNSLogConsole("\(result)")
                         } else {
-                            PTAlertTipControl.present(title:"失败",subtitle:"",icon:.Error,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(title:"失败",subtitle: "",icon: .Error)
                         }
                     }
                 } else {

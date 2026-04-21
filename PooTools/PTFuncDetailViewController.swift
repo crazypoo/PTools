@@ -686,41 +686,42 @@ class PTFuncDetailViewController: PTBaseViewController {
             aaaaaa.configure(placeholder: "123123123123123123")
             
             
-//            let GobalPaymentSmallBoxWidth:CGFloat = (CGFloat.kSCREEN_WIDTH - 48 - 8 * 5) / 6
-//
-//            let inputConfig = PTInputBoxConfiguration()
-//            inputConfig.inputBoxNumber = 6
-//            inputConfig.inputBoxWidth = GobalPaymentSmallBoxWidth
-//            inputConfig.inputBoxHeight = GobalPaymentSmallBoxWidth
-//            inputConfig.inputBoxSpacing = 8
-//            inputConfig.inputBoxBorderWidth = 1
-//            inputConfig.inputBoxCornerRadius = 4
-//            inputConfig.inputBoxColor = DynamicColor(hexString: "cacaca")
-//            inputConfig.inputType = .Number
-//            inputConfig.autoShowKeyboard = true
+            let GobalPaymentSmallBoxWidth:CGFloat = (CGFloat.kSCREEN_WIDTH - 48 - 8 * 5) / 6
+
+            let inputConfig = PTInputBoxConfiguration()
+            inputConfig.inputBoxNumber = 6
+            inputConfig.inputBoxWidth = GobalPaymentSmallBoxWidth
+            inputConfig.inputBoxHeight = GobalPaymentSmallBoxWidth
+            inputConfig.inputBoxSpacing = 8
+            inputConfig.inputBoxBorderWidth = 1
+            inputConfig.inputBoxCornerRadius = 4
+            inputConfig.inputBoxColor = DynamicColor(hexString: "cacaca")!
+            inputConfig.inputType = .Number
+            inputConfig.autoShowKeyboard = true
 //            inputConfig.inputBoxFinishColors = [UIColor.systemRed]
-//            inputConfig.inputBoxHighlightedColor = UIColor.systemRed
+            inputConfig.inputBoxHighlightedColor = UIColor.systemRed
 //            inputConfig.finishTextColors = [UIColor.black]
-//            inputConfig.secureTextEntry = true
-//            inputConfig.keyboardType = .numberPad
-//            inputConfig.textColor = UIColor.black
-//            
-//            let codeInputView = PTInputBoxView.init(frame: CGRectMake(PTAppBaseConfig.share.defaultViewSpace, CGFloat.kNavBarHeight_Total + 110, CGFloat.kSCREEN_WIDTH - 48, GobalPaymentSmallBoxWidth + 2), config: inputConfig)
-//            codeInputView.finishBlock = { (view: PTInputBoxView, code: String) -> () in
-//            }
+            inputConfig.secureTextEntry = true
+            inputConfig.keyboardType = .numberPad
+            inputConfig.textColor = UIColor.black
             
-            view.addSubviews([aaaaaa])
+            let codeInputView = PTInputBoxView(config: inputConfig)
+            codeInputView.finishBlock = { (view: PTInputBoxView, code: String) -> () in
+            }
+            
+            view.addSubviews([aaaaaa,codeInputView])
             aaaaaa.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(56)
                 make.top.equalToSuperview().inset(20)
             }
             
-//            codeInputView.snp.makeConstraints { make in
-//                make.centerX.centerY.equalToSuperview()
-//                make.width.equalTo(CGFloat.kSCREEN_WIDTH - 48)
-//                make.height.equalTo(GobalPaymentSmallBoxWidth + 2)
-//            }
+            codeInputView.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.width.equalTo(CGFloat.kSCREEN_WIDTH - 48)
+                make.height.equalTo(GobalPaymentSmallBoxWidth + 2)
+                make.top.equalTo(aaaaaa.snp.bottom).offset(10)
+            }
         case String.Stepper:
             let stepper = PTStepper()
             stepper.viewShowType = .RTL
@@ -848,22 +849,22 @@ class PTFuncDetailViewController: PTBaseViewController {
                             PHPhotoLibrary.pt.saveImageUrlToAlbum(fileUrl: imageURL) { finish, error in
                                 if finish {
                                     PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"Photo Saved.The photo was successfully saved to Photos.",icon:.Done,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title: "Photo Saved.The photo was successfully saved to Photos.", icon: .Done)
                                     }
                                 } else {
                                     PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"Photo Not Saved",icon:.Error,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title: "Photo Not Saved", icon: .Error)
                                     }
                                 }
                             }
                         } else {
                             PTGCDManager.gcdMain {
-                                PTAlertTipControl.present(title:"Photo cannot be Saved",icon:.Error,style: .Normal)
+                                PTAlertTipsViewController.tipsAlertShow(title: "Photo cannot be Saved", icon: .Error)
                             }
                         }
                     } else {
                         PTGCDManager.gcdMain {
-                            PTAlertTipControl.present(title:"Photo url error",icon:.Error,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(title: "Photo url error", icon: .Error)
                         }
                     }
                 }
@@ -876,22 +877,22 @@ class PTFuncDetailViewController: PTBaseViewController {
                             PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: videoURL) { finish, error in
                                 if finish {
                                     PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"Video Saved.The Video was successfully saved to Video.",icon:.Done,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title: "Video Saved.The Video was successfully saved to Video.", icon: .Done)
                                     }
                                 } else {
                                     PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"Video Not Saved",icon:.Error,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title: "Video Not Saved", icon: .Error)
                                     }
                                 }
                             }
                         } else {
                             PTGCDManager.gcdMain {
-                                PTAlertTipControl.present(title:"Video cannot be Saved",icon:.Error,style: .Normal)
+                                PTAlertTipsViewController.tipsAlertShow(title: "Video cannot be Saved", icon: .Error)
                             }
                         }
                     } else {
                         PTGCDManager.gcdMain {
-                            PTAlertTipControl.present(title:"Video url error",icon:.Error,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(title: "Video url error", icon: .Error)
                         }
                     }
                 }
@@ -916,7 +917,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 case String.LivePhoto:
                     guard let sourceVideoPath = pickedVideoURL else {
                         PTGCDManager.gcdMain {
-                            PTAlertTipControl.present(title:"It seems a video was not selected.Try again.",icon:.Error,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(title: "It seems a video was not selected.Try again.", icon: .Error)
                         }
                         return
                     }
@@ -943,16 +944,16 @@ class PTFuncDetailViewController: PTBaseViewController {
                                 do {
                                     let success = try await PTLivePhoto.saveToLibrary(resource)
                                     if success {
-                                        PTAlertTipControl.present(title:"Live Photo Saved.The live photo was successfully saved to Photos.",icon:.Done,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title: "Live Photo Saved.The live photo was successfully saved to Photos.", icon: .Done)
                                     } else {
-                                        PTAlertTipControl.present(title:"Live Photo Not Saved.The live photo was not saved to Photos.",icon:.Error,style: .Normal)
+                                        PTAlertTipsViewController.tipsAlertShow(title: "Live Photo Not Saved.The live photo was not saved to Photos.", icon: .Error)
                                     }
                                 } catch {
-                                    PTAlertTipControl.present(title:error.localizedDescription,icon:.Error,style: .Normal)
+                                    PTAlertTipsViewController.tipsAlertShow(title: error.localizedDescription, icon: .Error)
                                 }
                             }
                         case .failure(let error):
-                            PTAlertTipControl.present(title:error.errorDescription,icon:.Error,style: .Normal)
+                            PTAlertTipsViewController.tipsAlertShow(title: error.errorDescription, icon: .Error)
                         }
                     }
                 case String.LivePhotoDisassemble:
@@ -1052,9 +1053,9 @@ class PTFuncDetailViewController: PTBaseViewController {
         vc.mediaLibShow()
         vc.selectedHudStatusBlock = { result in
             if result {
-                PTAlertTipControl.present(icon:.Heart,style: .Normal)
+                PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
             } else {
-                PTAlertTipControl.present(icon:.Done,style: .Normal)
+                PTAlertTipsViewController.tipsAlertShow(icon: .Done)
             }
         }
         vc.selectImageBlock = { result, isOriginal in
@@ -1063,7 +1064,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 mediaSelectedCallback(result.first!)
             } else {
                 PTGCDManager.gcdMain {
-                    PTAlertTipControl.present(title:"沒有選擇媒体",icon:.Error,style: .Normal)
+                    PTAlertTipsViewController.tipsAlertShow(title:"沒有選擇媒体",icon: .Error)
                 }
             }
         }

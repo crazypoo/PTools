@@ -60,7 +60,9 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
                     let cgImages = try await self.videoTimeline(for: self.asset, in: bounds, numberOfFrames: count)
                     self.updateVideoTimeline(with: cgImages, assetAspectRatio: ratio)
                 } catch {
-                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+                    Task {
+                        PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: error.localizedDescription, icon: .Error)
+                    }
                 }
             }
         }

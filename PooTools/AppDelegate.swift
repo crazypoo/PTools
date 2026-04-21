@@ -198,7 +198,7 @@ class AppDelegate: PTAppWindowsDelegate {
                 case .authorized:
                     self.sharePlaylist()
                 default:
-                    PTAlertTipControl.present(title:"用戶拒絕了",icon:.Error,style: .Normal)
+                    PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
                 }
             }
         case .authorized:

@@ -69,9 +69,9 @@ class PTTestChatViewController: PTBaseViewController {
                 let vc = PTMediaBrowserController(mediaData:[mediaModel])
                 vc.viewSaveImageBlock = { finish in
                     if finish {
-                        PTAlertTipControl.present(title:"",subtitle: "ok",icon:.Done,style: .Normal)
+                        PTAlertTipsViewController.tipsAlertShow(title:"",subtitle: "ok",icon: .Done)
                     } else {
-                        PTAlertTipControl.present(title:"",subtitle: "error",icon:.Error,style: .Normal)
+                        PTAlertTipsViewController.tipsAlertShow(title:"",subtitle: "error",icon: .Error)
                     }
                 }
                 vc.viewDismissBlock = {

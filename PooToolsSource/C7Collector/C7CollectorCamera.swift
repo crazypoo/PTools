@@ -276,10 +276,7 @@ public final class C7CollectorCamera: C7Collector {
                     self.captureSession.commitConfiguration()
                     await handle?()
                 } catch {
-                    PTAlertTipControl.present(title: "PT Alert Opps".localized(),
-                                              subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)",
-                                              icon: .Error,
-                                              style: .Normal)
+                    await PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)", icon: .Error)
                 }
             }
         }
@@ -386,7 +383,7 @@ public final class C7CollectorCamera: C7Collector {
             device.videoZoomFactor = zoomFactor
             device.unlockForConfiguration()
         } catch {
-            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Camera focus error ".localized() + error.localizedDescription,icon:.Error,style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Camera focus error ".localized() + error.localizedDescription, icon: .Error)
         }
     }
 

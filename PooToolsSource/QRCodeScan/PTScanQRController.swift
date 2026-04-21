@@ -485,7 +485,7 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 根據UIImage來查找QR code
     func findQR(inImage image:UIImage) {
-        PTAlertTipControl.present(title:"",subtitle: viewConfig.loadingTitle,icon: .Heart,style: .SupportVisionOS)
+        PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: viewConfig.loadingTitle, icon: .Heart,style:.SupportVisionOS)
         self.sessionQueue.async {
             self.removeTimer()
         }

@@ -252,7 +252,9 @@ open class VideoConverter {
                 }
             }
         } else {
-            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:result.error,icon:.Error,style: .Normal)
+            Task {
+                await PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle:result.error, icon: .Error)
+            }
         }
     }
 

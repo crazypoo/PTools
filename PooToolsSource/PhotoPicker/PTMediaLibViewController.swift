@@ -277,16 +277,12 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
     /// 调用系统相机
     func openCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,
-                                    subtitle: PTMediaLibUIConfig.share.cameraError,
-                                    icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.cameraError, icon: .Error)
             return
         }
         
         guard PTMediaLibView.hasCameraAuthority() else {
-            PTAlertTipControl.present(title: PTMediaLibUIConfig.share.alertTitle,
-                                    subtitle: PTMediaLibUIConfig.share.takePhotoError,
-                                    icon: .Error, style: .Normal)
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.takePhotoError, icon: .Error)
             return
         }
 
@@ -320,12 +316,12 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
 
     /// 统一保存逻辑
     fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
-        PTAlertTipControl.present(title: "", subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon: .Heart, style: .Normal)
-        
+        PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon: .Heart)
+
         let completion: (Bool, PHAsset?) -> Void = { [weak self] success, asset in
             guard success, let asset = asset else {
                 let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
-                PTAlertTipControl.present(title: "Error", subtitle: errorMsg, icon: .Error, style: .Normal)
+                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
                 return
             }
             self?.handleNewAsset(asset)
@@ -400,7 +396,7 @@ extension PTMediaLibView {
                                borderColor: PTMediaLibUIConfig.share.themeColor)
         }, completion: { [weak self] avAsset in
             guard let avAsset = avAsset else {
-                PTAlertTipControl.present(title: "Error", subtitle: "Video error", icon: .Error,style:.Normal)
+                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Video error", icon: .Error)
                 return
             }
             
@@ -606,14 +602,14 @@ extension PTMediaLibView {
         // 2. 先保存到本地缓存（可选，根据你的 PTMediaLibView.outputURL 逻辑）
         self.saveVideoToCache(playerItem: playerItem) { [weak self] fileURL, finish in
             guard let self = self, finish, let finalURL = fileURL else {
-                PTAlertTipControl.present(title: "Error", subtitle: "Save to cache failed", icon: .Error, style:.Normal)
+                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error)
                 return
             }
             
             // 3. 将缓存文件写入系统相册
             PTMediaLibManager.saveVideoToAlbum(url: finalURL) { isFinish, asset in
                 guard isFinish, let asset = asset else {
-                    PTAlertTipControl.present(title: "Error", subtitle: "Save to album failed", icon: .Error, style:.Normal)
+                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to album failed", icon: .Error)
                     return
                 }
                 
@@ -1042,20 +1038,12 @@ extension PTMediaLibViewController {
             let videoCount = selectedModel.lazy.filter { $0.type == .video }.count
             
             if videoCount > config.maxVideoSelectCount {
-                PTAlertTipControl.present(
-                    title: uiConfig.alertTitle,
-                    subtitle: String(format: uiConfig.mediaCountMax, "\(config.maxVideoSelectCount)"),
-                    icon: .Error, style: .Normal
-                )
+                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMax, "\(config.maxVideoSelectCount)"), icon: .Error)
                 return
             }
             
             if videoCount < config.minVideoSelectCount {
-                PTAlertTipControl.present(
-                    title: uiConfig.alertTitle,
-                    subtitle: String(format: uiConfig.mediaCountMin, "\(config.minVideoSelectCount)"),
-                    icon: .Error, style: .Normal
-                )
+                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMin, "\(config.minVideoSelectCount)"), icon: .Error)
                 return
             }
         }

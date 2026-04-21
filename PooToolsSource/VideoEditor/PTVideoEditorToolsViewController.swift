@@ -139,7 +139,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             self.c7Player.pause()
             
             PTGCDManager.gcdMain {
-                PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleDoing,subtitle:PTVideoEditorConfig.share.alertTitleConvetering,icon:.Heart,style: .Normal)
+                PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleDoing,subtitle: PTVideoEditorConfig.share.alertTitleConvetering, icon: .Heart)
                 if self.loadingProgress == nil {
                     self.loadingProgress = PTMediaBrowserLoadingView(type: .LoopDiagram)
                     AppWindows!.addSubview(self.loadingProgress!)
@@ -155,8 +155,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                             self.returnFrontVC()
                         } else {
                             PTGCDManager.gcdMain {
-                                PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleDoing,subtitle:PTVideoEditorConfig.share.alertTitleOutputing,icon:.Heart,style: .Normal)
-
+                                PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleDoing,subtitle: PTVideoEditorConfig.share.alertTitleOutputing, icon: .Heart)
                                 let hudConfig = PTHudConfig.share
                                 hudConfig.hudColors = [.gray,.gray]
                                 hudConfig.lineWidth = 4
@@ -213,12 +212,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                                 }) { success, error in
                                                     if success {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:"",subtitle:PTVideoEditorConfig.share.alertTitleSaveDone,icon:.Done,style: .Normal)
+                                                            PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTVideoEditorConfig.share.alertTitleSaveDone, icon: .Done)
                                                             self.returnFrontVC()
                                                         }
                                                     } else {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:PTVideoEditorConfig.share.alertTitleSaveError,icon:.Done,style: .Normal)
+                                                            PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps,subtitle: PTVideoEditorConfig.share.alertTitleSaveError, icon: .Done)
                                                         }
                                                     }
                                                     FileManager.pt.removefile(filePath: outputURL.description)
@@ -227,12 +226,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                                 PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
                                                     if error == nil,finish {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:"",subtitle:PTVideoEditorConfig.share.alertTitleSaveDone,icon:.Done,style: .Normal)
+                                                            PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTVideoEditorConfig.share.alertTitleSaveDone, icon: .Done)
                                                             self.returnFrontVC()
                                                         }
                                                     } else {
                                                         PTGCDManager.gcdMain {
-                                                            PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error!.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                                            PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps,subtitle: error?.localizedDescription.localized() ?? "", icon: .Done)
                                                         }
                                                     }
                                                     FileManager.pt.removefile(filePath: outputURL.description)
@@ -243,7 +242,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                                         PTGCDManager.gcdMain {
                                             self.loadingProgress?.removeFromSuperview()
                                             self.loadingProgress = nil
-                                            PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                            PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps,subtitle: error.localizedDescription.localized(), icon: .Done)
                                         }
                                     }
                                 })
@@ -253,7 +252,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     } else {
                         self.loadingProgress?.removeFromSuperview()
                         self.loadingProgress = nil
-                        PTAlertTipControl.present(title:PTVideoEditorConfig.share.alertTitleOpps,subtitle:error?.localizedDescription ?? "",icon: .Error,style: .Normal)
+                        PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps,subtitle:error?.localizedDescription ?? "", icon: .Error)
                     }
                 }
             }
@@ -886,7 +885,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
                 self.reloadAsset()
             } catch {
-                PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+                PTAlertTipsViewController.tipsAlertShow(title: "",subtitle:error.localizedDescription, icon: .Error)
             }
         }
     }
@@ -1055,7 +1054,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
 
                 } catch {
-                    PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+                    PTAlertTipsViewController.tipsAlertShow(title: "",subtitle:error.localizedDescription, icon: .Error)
                 }
             }
         }

@@ -250,8 +250,8 @@ public class PTEditImageViewController: PTBaseViewController {
             }
 
             // 2. 弹出提示框
-            PTAlertTipControl.present(title: PTImageEditorConfig.share.doingAlertTitle, icon: .Heart, style: .Normal)
-            
+            PTAlertTipsViewController.tipsAlertShow(title: PTImageEditorConfig.share.doingAlertTitle, icon: .Heart)
+
             // 3. 🚀 开启现代并发任务进行图片合成
             Task { @MainActor in
                 // 巧妙的机制：让出当前线程的控制权 (极短暂睡眠)，确保系统的 RunLoop 有时间把上面那句 HUD 渲染到屏幕上
