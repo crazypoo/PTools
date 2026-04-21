@@ -206,12 +206,9 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     
     // MARK: - 单指控制手柄
         
-        // 记录拖拽开始时的初始状态
-        private var initialDistance: CGFloat = 0
-        private var initialAngle: CGFloat = 0
-        private var preGesScale: CGFloat = 1
-        private var preGesRotation: CGFloat = 0
-        
+    private var lastFrameDistance: CGFloat = 0
+    private var lastFrameAngle: CGFloat = 0
+    
     // 右下角控制手柄
     lazy var scaleRotateHandle: UIImageView = {
         // 使用一个自带的符号，或者你可以换成你自己的 UIImage
@@ -505,29 +502,37 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         let currentAngle = atan2(point.y - center.y, point.x - center.x)
         
         if ges.state == .began {
-            // 记录下指那一刻的快照
-            initialDistance = currentDistance
-            initialAngle = currentAngle
-            preGesScale = gesScale
-            preGesRotation = gesRotation
+            // 1. 初始化“上一帧”状态为当前状态
+            lastFrameDistance = currentDistance
+            lastFrameAngle = currentAngle
             setOperation(true)
             cleanTimer() // 拖拽时不要让边框消失
             
         } else if ges.state == .changed {
-            // 1. 增量计算缩放
-            if initialDistance > 0 {
-                let scaleDiff = currentDistance / initialDistance
-                // 限制最大缩放比例
-                gesScale = min(maxGesScale, preGesScale * scaleDiff)
-            }
+            // 安全拦截：防止除以0导致的崩溃
+            if lastFrameDistance == 0 { lastFrameDistance = currentDistance }
             
-            // 2. 增量计算旋转
-            let angleDiff = currentAngle - initialAngle
-            gesRotation = preGesRotation + angleDiff
+            // 2. 🔥 【增量计算】核心逻辑：
             
-            // 3. 应用并刷新 UI
+            // 计算当前帧相对于上一帧的缩放比率 (Delta Scale)
+            let scaleDelta = currentDistance / lastFrameDistance
+            // 将增量叠加到总的手势缩放比例中，并应用最大限制
+            let cumulativeScale = gesScale * scaleDelta
+            // 如果超限，调整增量比率，使其刚好达到上限
+            gesScale = min(maxGesScale, cumulativeScale)
+            
+            // 计算当前帧相对于上一帧的角度差 (Delta Angle)
+            let angleDelta = currentAngle - lastFrameAngle
+            // 将增量直接叠加到总的手势旋转角度中
+            gesRotation += angleDelta
+            
+            // 3. 应用并刷新 UI (此时 updateTransform 内部的数据已经是平滑累加的了)
             updateTransform()
             
+            // 4. 🔥 重要：更新“上一帧”状态为当前状态，供下一帧使用
+            lastFrameDistance = currentDistance
+            lastFrameAngle = currentAngle
+
         } else if ges.state == .ended || ges.state == .cancelled {
             startTimer() // 拖拽结束，重启隐藏边框的定时器
         }
@@ -770,6 +775,7 @@ class PTEditInputViewController: PTBaseViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.textBackImage, for: .normal)
         btn.addTarget(self, action: #selector(cancelBtnClick), for: .touchUpInside)
+        btn.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return btn
     }()
     
@@ -847,9 +853,6 @@ class PTEditInputViewController: PTBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let nav = navigationController {
-            PTBaseNavControl.GobalNavControl(nav: nav,navColor: .clear)
-        }
         setCustomBackButtonView(cancelBtn)
         setCustomRightButtons(buttons: [doneBtn])
     }

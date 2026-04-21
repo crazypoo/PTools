@@ -91,6 +91,7 @@ class PTCutViewController: PTBaseViewController {
         btn.addActionHandlers(handler: { _ in
             self.cancelBtnClick()
         })
+        btn.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
         return btn
     }()
     
@@ -106,6 +107,7 @@ class PTCutViewController: PTBaseViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(PTImageEditorConfig.share.cutSubmitImage, for: .normal)
         btn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
+        btn.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
         return btn
     }()
     
@@ -235,8 +237,6 @@ class PTCutViewController: PTBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
 
         setCustomBackButtonView(cancelBtn)
         setCustomRightButtons(buttons: [doneBtn])
@@ -329,9 +329,7 @@ class PTCutViewController: PTBaseViewController {
             mainScrollView.alpha = 1
             overlayView.alpha = 1
             shadowView.alpha = 1
-        }
-        changeStatusBar(type: .Dark)
-        
+        }        
         
         PTGCDManager.gcdAfter(time: 0.35, block: {
             self.changeStatusBar(type: .Dark)
