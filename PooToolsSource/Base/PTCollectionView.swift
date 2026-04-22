@@ -1137,67 +1137,12 @@ extension PTCollectionView  {
 
 //MARK: DIFF
 extension PTCollectionView {
-    private func totalItemCount(_ sections: [PTSection]) -> Int {
-        sections.reduce(0) { $0 + ($1.rows?.count ?? 0) }
-    }
 
     private func markSectionDirty(_ section: Int) {
         guard section < mSections.count else { return }
         mSections[section].layoutVersion += 1
     }
-        
-    private func applyReloadData(_ newSections: [PTSection],
-                                 animated: Bool,
-                                 completion: PTCollectionCallback?) {
-        
-        self.mSections = newSections
-        
-        layoutCache.removeAll()
-        heightCache.removeAll()
-        
-        let reloadBlock = {
-            self.collectionView.reloadData()
-            self.setiOS17EmptyDataView()
-            completion?(self.collectionView)
-        }
-        
-        guard animated else {
-            UIView.performWithoutAnimation(reloadBlock)
-            return
-        }
-        
-        UIView.transition(with: collectionView,
-                          duration: 0.25,
-                          options: .transitionCrossDissolve,
-                          animations: reloadBlock)
-    }
-        
-    private func applyAnimation(_ animation: PTDiffAnimation) {
-        
-        switch animation {
-        case .fade:
-            collectionView.layer.add(makeTransition(type: .fade), forKey: nil)
-        case .right:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromRight), forKey: nil)
-        case .left:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromLeft), forKey: nil)
-        case .top:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromTop), forKey: nil)
-        case .bottom:
-            collectionView.layer.add(makeTransition(type: .push, subtype: .fromBottom), forKey: nil)
-        default:
-            break
-        }
-    }
-
-    private func makeTransition(type: CATransitionType, subtype: CATransitionSubtype? = nil) -> CATransition {
-        let transition = CATransition()
-        transition.type = type
-        transition.subtype = subtype
-        transition.duration = 0.25
-        return transition
-    }
-    
+            
     @MainActor public func showCollectionDetail(collectionData:[PTSection],
                                                 animated: Bool = true,
                                                 animation: PTDiffAnimation = .default,
@@ -1220,10 +1165,10 @@ extension PTCollectionView {
             }
         }
         
+        self.setiOS17EmptyDataView()
         // 4. 交给苹果底层去 Diff 和执行动画！✨
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
-            self.setiOS17EmptyDataView()
             finishTask?(self.collectionView)
         }
     }
