@@ -240,7 +240,6 @@
 		5571F60E2AFD228800DB4420 /* PTAppWindowsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F60D2AFD228800DB4420 /* PTAppWindowsDelegate.swift */; };
 		5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F60F2AFD234B00DB4420 /* PTAppScenesDelegate.swift */; };
 		5571F6122AFD23B000DB4420 /* PTWindowSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F6112AFD23B000DB4420 /* PTWindowSceneDelegate.swift */; };
-		5571F6152AFD304800DB4420 /* PTLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F6142AFD304800DB4420 /* PTLocale.swift */; };
 		5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F6162AFD308300DB4420 /* PTCopying.swift */; };
 		557451202C09ABA70008FCAD /* PTCollectionAnimationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574511F2C09ABA70008FCAD /* PTCollectionAnimationButton.swift */; };
 		557451242C09B0A60008FCAD /* PTMenuSheetArrowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557451232C09B0A60008FCAD /* PTMenuSheetArrowButton.swift */; };
@@ -1208,7 +1207,6 @@
 		5571F60D2AFD228800DB4420 /* PTAppWindowsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppWindowsDelegate.swift; sourceTree = "<group>"; };
 		5571F60F2AFD234B00DB4420 /* PTAppScenesDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppScenesDelegate.swift; sourceTree = "<group>"; };
 		5571F6112AFD23B000DB4420 /* PTWindowSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWindowSceneDelegate.swift; sourceTree = "<group>"; };
-		5571F6142AFD304800DB4420 /* PTLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocale.swift; sourceTree = "<group>"; };
 		5571F6162AFD308300DB4420 /* PTCopying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCopying.swift; sourceTree = "<group>"; };
 		5574511F2C09ABA70008FCAD /* PTCollectionAnimationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionAnimationButton.swift; sourceTree = "<group>"; };
 		557451232C09B0A60008FCAD /* PTMenuSheetArrowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMenuSheetArrowButton.swift; sourceTree = "<group>"; };
@@ -2730,7 +2728,6 @@
 		5571F6132AFD303600DB4420 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				5571F6142AFD304800DB4420 /* PTLocale.swift */,
 				5571F6162AFD308300DB4420 /* PTCopying.swift */,
 			);
 			path = Foundation;
@@ -4971,7 +4968,6 @@
 				55C409962C08AB0B009C0FB6 /* PTInputBoxView.swift in Sources */,
 				55F163032B197C2600320925 /* PTCameraFilterConfig.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */,
-				5571F6152AFD304800DB4420 /* PTLocale.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				556CA4AB2B28F66200A5B189 /* VideoConverter.swift in Sources */,
 				556CA4AE2B28F66200A5B189 /* ConverterOption.swift in Sources */,

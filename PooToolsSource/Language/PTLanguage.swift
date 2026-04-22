@@ -40,6 +40,108 @@ public let LanguageDidChangedKey = Notification.Name("LanguageDidChanged")
 public typealias ChangedBlock = () -> Void
 public let PTBaseBundle = "Base"
 
+public enum PTLocale: String {
+    
+    // MARK: - 亚洲语言
+    case zh_Hans = "zh-Hans"            // Chinese (Simplified) - 简体中文
+    case zh_Hant = "zh-Hant"            // Chinese (Traditional) - 繁体中文
+    case ja = "ja"                      // Japanese - 日语
+    case ko = "ko"                      // Korean - 韩语
+    case th = "th"                      // Thai - 泰语
+    case vi = "vi"                      // Vietnamese - 越南语
+    case id = "id"                      // Indonesian - 印尼语
+    case ms = "ms"                      // Malay - 马来语
+    case fil = "fil"                    // Filipino - 菲律宾语
+    case hi = "hi"                      // Hindi - 印地语
+    case bn = "bn"                      // Bengali - 孟加拉语
+    case pa = "pa"                      // Punjabi - 旁遮普语
+    case ur = "ur"                      // Urdu - 乌尔都语
+    
+    // MARK: - 欧洲语言 (西欧/北欧)
+    case en = "en"                      // English - 英语
+    case fr = "fr"                      // French - 法语
+    case de = "de"                      // German - 德语
+    case es = "es"                      // Spanish - 西班牙语
+    case pt = "pt"                      // Portuguese - 葡萄牙语
+    case it = "it"                      // Italian - 意大利语
+    case nl = "nl"                      // Dutch - 荷兰语
+    case sv = "sv"                      // Swedish - 瑞典语
+    case da = "da"                      // Danish - 丹麦语
+    case no = "no"                      // Norwegian - 挪威语
+    case fi = "fi"                      // Finnish - 芬兰语
+    case gsw = "gsw"                    // Swiss German - 瑞士德语
+    
+    // MARK: - 欧洲语言 (东欧/中欧/俄语区)
+    case ru = "ru"                      // Russian - 俄语
+    case uk = "uk"                      // Ukrainian - 乌克兰语
+    case be = "be"                      // Belarusian - 白俄罗斯语
+    case pl = "pl"                      // Polish - 波兰语
+    case cs = "cs"                      // Czech - 捷克语
+    case sk = "sk"                      // Slovak - 斯洛伐克语
+    case hu = "hu"                      // Hungarian - 匈牙利语
+    case ro = "ro"                      // Romanian - 罗马尼亚语
+    case bg = "bg"                      // Bulgarian - 保加利亚语
+    case sr = "sr"                      // Serbian - 塞尔维亚语
+    case hr = "hr"                      // Croatian - 克罗地亚语
+    case el = "el"                      // Greek - 希腊语
+    
+    // MARK: - 中东及非洲语言
+    case ar = "ar"                      // Arabic - 阿拉伯语
+    case fa = "fa"                      // Persian - 波斯语
+    case tr = "tr"                      // Turkish - 土耳其语
+    case he = "he"                      // Hebrew - 希伯来语
+    case hy = "hy"                      // Armenian - 亚美尼亚语
+    case sw = "sw"                      // Swahili - 斯瓦希里语
+
+    /// 唯一标识符
+    public var identifier: String { rawValue }
+    
+    /// 苹果使用的语言代码
+    public var languageCode: String { rawValue }
+    
+    /// 获取当前 App 或系统的默认语言
+    public static var current: PTLocale {
+        get {
+            // 获取系统偏好语言列表，例如 ["zh-Hans-CN", "en-US"]
+            guard let firstLang = Locale.preferredLanguages.first else {
+                return .en
+            }
+            
+            // 1. 尝试完全匹配
+            if let exactMatch = PTLocale(rawValue: firstLang) {
+                return exactMatch
+            }
+            
+            // 2. 尝试截取匹配 (处理带地区或脚本的代码)
+            let components = firstLang.components(separatedBy: "-")
+            
+            // 优先处理带脚本的语言 (例如 "zh-Hans-CN" 提取出 "zh-Hans")
+            if components.count >= 2 {
+                let langScript = "\(components[0])-\(components[1])"
+                if let scriptMatch = PTLocale(rawValue: langScript) {
+                    return scriptMatch
+                }
+            }
+            
+            // 最后处理基础语言代码 (例如 "en-US" 提取出 "en")
+            if let langMatch = PTLocale(rawValue: components[0]) {
+                return langMatch
+            }
+            
+            // 默认兜底语言
+            return .en
+        }
+    }
+    
+    /// 获取该语言的本地化描述 (例如在当前环境下返回 "English" 或 "英语")
+    @available(iOS 11.0, tvOS 11.0, macOS 10.11, *)
+    public func description(in locale: PTLocale) -> String {
+        let locale = NSLocale(localeIdentifier: locale.languageCode)
+        let text = locale.displayName(forKey: NSLocale.Key.identifier, value: languageCode) ?? .empty
+        return text.capitalized
+    }
+}
+
 // MARK: - 2. 核心语言管理类 (整合 PTLanguage 和 Localize)
 public class PTLanguage: NSObject {
     public static let share = PTLanguage()

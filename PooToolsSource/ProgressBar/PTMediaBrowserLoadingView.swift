@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 @objc public enum PTLoadingViewMode:Int {
     case LoopDiagram
@@ -21,22 +22,37 @@ public class PTMediaBrowserLoadingView: UIView {
     
     public var hubTapCallback:PTActionTask?
     
+    // 记录手势，防止重复添加
+    private var tapGesture: UITapGestureRecognizer?
+
     public var viewCanTap:Bool = false {
         didSet {
             if viewCanTap {
-                let tap = UITapGestureRecognizer { sender in
-                    self.hubTapCallback?()
+                // 防御性编程：如果没有添加过手势才添加
+                if tapGesture == nil {
+                    let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+                    self.addGestureRecognizer(tap)
+                    self.tapGesture = tap
                 }
-                self.addGestureRecognizer(tap)
+            } else {
+                // 如果设为 false，移除现有的手势
+                if let tap = tapGesture {
+                    self.removeGestureRecognizer(tap)
+                    self.tapGesture = nil
+                }
             }
         }
     }
     
     public var progress:CGFloat = 0 {
         didSet {
-            self.setNeedsDisplay()
-            if progress >= 1 {
-                PTGCDManager.gcdMain {
+            // 限制 progress 的范围在 0.0 到 1.0 之间
+            let safeProgress = max(0, min(1, progress))
+            
+            // 确保 UI 刷新和隐藏操作在主线程执行
+            PTGCDManager.gcdMain {
+                self.setNeedsDisplay()
+                if safeProgress >= 1 {
                     self.hudHide()
                 }
             }
@@ -54,10 +70,12 @@ public class PTMediaBrowserLoadingView: UIView {
     public init(type:PTLoadingViewMode) {
         super.init(frame: .zero)
         progressMode = type
+        self.backgroundColor = .clear // 保证视图自身透明
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .clear // 保证视图自身透明
         clipsToBounds = true
     }
     
@@ -66,71 +84,105 @@ public class PTMediaBrowserLoadingView: UIView {
     }
     
     public override func draw(_ rect: CGRect) {
-        let ctx = UIGraphicsGetCurrentContext()
+        super.draw(rect)
+        
+        // 安全解包 Context
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
         
         let xCenter = rect.size.width * 0.5
         let yCenter = rect.size.height * 0.5
         UIColor.white.set()
         
+        // 统一计算圆弧的起点 (12点钟方向)
+        let startAngle: CGFloat = -.pi * 0.5
+        
         switch progressMode {
         case .PieDiagram:
             let radius = min(xCenter, yCenter) - PTLoadingItemSpace
-            let w = radius * 2 - PTLoadingItemSpace
+            let w = radius * 2
             let h = w
-            let x = (rect.size.width - 2) * 0.5
-            let y = (rect.size.height - 2) * 0.5
-            ctx!.addEllipse(in: CGRect.init(x: x, y: y, width: w, height: h))
-            ctx!.fillPath()
             
+            // 修复BUG：正确的居中坐标计算
+            let x = (rect.size.width - w) * 0.5
+            let y = (rect.size.height - h) * 0.5
+            
+            // 画外部白圈边界
+            ctx.addEllipse(in: CGRect(x: x, y: y, width: w, height: h))
+            ctx.fillPath()
+            
+            // 画内部进度扇形
             PTLoadingBackgroundColor.set()
-            ctx!.move(to: CGPoint(x: xCenter, y: yCenter))
-            ctx?.addLine(to: CGPoint(x: xCenter, y: 0))
-            let piFloat :CGFloat = -.pi
-            let to = (piFloat * 0.5 + progress * .pi * 2 + 0.01)
-            ctx!.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: yCenter / 2, startAngle: (piFloat * 0.5), endAngle: to, clockwise: true)
-            ctx!.closePath()
-            ctx!.fillPath()
+            ctx.move(to: CGPoint(x: xCenter, y: yCenter))
+            
+            let endAngle = startAngle + (progress * .pi * 2) + 0.01
+            // 扇形半径稍微比外圈小一点，留出边缘白边
+            let innerRadius = radius - 2
+            
+            ctx.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: innerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+            ctx.closePath()
+            ctx.fillPath()
+            
         case .LoopDiagram:
-            ctx!.setLineWidth(4)
-            ctx!.setLineCap(.round)
-            let piFloat :CGFloat = -.pi
-            let to = (piFloat * 0.5 + progress * .pi * 2 + 0.05)
-            let radius = min(rect.size.width, rect.self.size.height) * 0.5 - PTLoadingItemSpace
-            ctx!.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: radius, startAngle: (piFloat * 0.5), endAngle: to, clockwise: false)
-            ctx!.strokePath()
+            ctx.setLineWidth(4)
+            ctx.setLineCap(.round)
+            
+            let endAngle = startAngle + (progress * .pi * 2) + 0.05
+            let radius = min(rect.size.width, rect.size.height) * 0.5 - PTLoadingItemSpace
+            
+            ctx.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
+            ctx.strokePath()
         }
         
-        viewCorner(radius: rect.size.height * 0.1)
+        // 如果项目中有自定义的 viewCorner 扩展方法，可以保留。
+        // 原生方式为：self.layer.cornerRadius = rect.size.height * 0.1
+        self.layer.cornerRadius = rect.size.height * 0.1
     }
     
+    @objc private func handleTap() {
+        self.hubTapCallback?()
+    }
+
     public func hudShow(hudSize:CGSize = .init(width: 64, height: 64)) {
+        // 防止被重复 show 到屏幕上
+        guard self.superview == nil else { return }
+        
         AppWindows?.addSubview(backgroundView)
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        backgroundView.addSubviews([self])
+        backgroundView.addSubview(self)
         self.snp.makeConstraints { make in
             make.size.equalTo(hudSize)
             make.centerX.centerY.equalToSuperview()
         }
         
-        self.transform = CGAffineTransformScale(.identity, 0.001, 0.001)
-        UIView.animate(withDuration: 0.3 / 1.5) {
-            self.transform = CGAffineTransformScale(.identity, 1.1, 1.1)
-        } completion: { finish in
-            UIView.animate(withDuration: 0.3 / 2) {
-                self.transform = CGAffineTransformScale(.identity, 0.9, 0.9)
-            } completion: { finish in
-                UIView.animate(withDuration: 0.3 / 2) {
-                    self.transform = .identity
-                }
-            }
+        // 优化：使用阻尼弹簧动画 (Spring Animation)，替代原有的多层 completion 嵌套
+        self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        self.backgroundView.alpha = 0
+        
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       usingSpringWithDamping: 0.65,
+                       initialSpringVelocity: 0.5,
+                       options: .curveEaseInOut) {
+            self.transform = .identity
+            self.backgroundView.alpha = 1
         }
     }
     
     public func hudHide() {
-        self.backgroundView.removeFromSuperview()
-        self.removeFromSuperview()
+        // 增加了一个淡出效果，让关闭显得更自然
+        UIView.animate(withDuration: 0.25, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.backgroundView.alpha = 0
+            self.alpha = 0
+        }) { _ in
+            self.backgroundView.removeFromSuperview()
+            self.removeFromSuperview()
+            // 恢复初始状态以便复用
+            self.alpha = 1
+            self.transform = .identity
+        }
     }
 }
