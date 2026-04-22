@@ -14,6 +14,18 @@ class PTTabBarTestOneViewController: PTBaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        pt_Title = "11111111111111111"
+        
+        let buttons = UIButton(type: .custom)
+        buttons.backgroundColor = .random
+        buttons.addActionHandlers { sender in
+            self.pt_Title = "2222222222222"
+        }
+        view.addSubviews([buttons])
+        buttons.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(64)
+        }
     }
     
 

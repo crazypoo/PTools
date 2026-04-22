@@ -914,9 +914,9 @@ open class PTBaseViewController: UIViewController {
     private func setStatusBarStyle(color:UIColor) {
         switch color.pt_colorTone() {
         case .dark:
-            changeStatusBar(type: .Light)
-        case .light:
             changeStatusBar(type: .Dark)
+        case .light:
+            changeStatusBar(type: .Light)
         case .normal:
             changeStatusBar(type: .Dark)
         case .clear:
