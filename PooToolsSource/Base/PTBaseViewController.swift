@@ -644,7 +644,7 @@ extension PTNavigationBarManager {
             container.leftContainerWidth = 0 // 👈 记录宽度为 0
             container.leftContainer.snp.remakeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+                make.top.equalToSuperview().inset(self.navOffset())
                 make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
@@ -665,7 +665,7 @@ extension PTNavigationBarManager {
         
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+            make.top.equalToSuperview().inset(self.navOffset())
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -683,7 +683,7 @@ extension PTNavigationBarManager {
             container.rightContainerWidth = 0 // 👈 记录宽度为 0
             container.rightContainer.snp.remakeConstraints { make in
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+                make.top.equalToSuperview().inset(self.navOffset())
                 make.bottom.equalToSuperview()
                 make.width.equalTo(0)
             }
@@ -704,7 +704,7 @@ extension PTNavigationBarManager {
         
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+            make.top.equalToSuperview().inset(self.navOffset())
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
@@ -735,7 +735,7 @@ extension PTNavigationBarManager {
         container.titleContainer.snp.remakeConstraints { make in
             make.bottom.equalToSuperview()
             // 注意：这里保留了你代码里的 self.navOffset()
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + self.navOffset())
+            make.top.equalToSuperview().inset(self.navOffset())
             // ✅ 根据模式应用不同的约束策略
             if fillSpace {
                 // 🔥 填满模式：直接等于左右物理边界，强制拉伸（非常适合搜索框等自定义 View）
