@@ -1165,7 +1165,6 @@ extension PTCollectionView {
             }
         }
         
-        self.setiOS17EmptyDataView()
         // 4. 交给苹果底层去 Diff 和执行动画！✨
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
