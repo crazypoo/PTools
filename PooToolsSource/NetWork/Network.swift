@@ -295,6 +295,12 @@ fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
             return completion(.doNotRetry)
         }
         
+        // 🚨 新增：拦截底层 URLSession 的取消错误 (-999)
+        // 直接安全转换为 URLError 进行判断，避免与下方的 nsError 变量名冲突
+        if let urlError = error as? URLError, urlError.code == .cancelled {
+            return completion(.doNotRetry)
+        }
+
         // ❌ 2. 无网络直接不重试（🔥关键）
         if !NetworkReachability.shared.isReachable {
             return completion(.doNotRetry)
@@ -380,7 +386,7 @@ public struct CacheObject: Codable {
     var lastAccessTime: TimeInterval   // ⭐ 新增
 }
 
-private var kCacheDataKey = 888888888
+//private var kCacheDataKey = 888888888
 
 public enum PTNetworkCachePolicy:String {
     case none                   // 不缓存
@@ -574,12 +580,7 @@ extension URLRequest {
         get { value(forHTTPHeaderField: "mockResponse") == "true" }
         set { setValue(newValue ? "true" : "false", forHTTPHeaderField: "mockResponse") }
     }
-    
-    var mockData: Data? {
-        get { objc_getAssociatedObject(self, &kCacheDataKey) as? Data }
-        set { objc_setAssociatedObject(self, &kCacheDataKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
+        
     var dedupPolicy: PTNetworkDedupPolicy {
             get {
                 let value = value(forHTTPHeaderField: "dedupPolicy") ?? "auto"
@@ -615,7 +616,6 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
         case .cacheOnly, .cacheElseNetwork:
             if let cache = NetworkCache.shared.read(request: request) {
                 request.isMock = true
-                request.mockData = cache
             }
             
         case .networkElseCache:
@@ -1059,9 +1059,11 @@ public class Network: NSObject {
             $0.willSend(&urlRequest)
         }
         
-        if urlRequest.isMock, let mockData = urlRequest.mockData {
-            let parsed = try parser(nil, mockData)
-            return parsed
+        if urlRequest.isMock {
+            if let mockData = NetworkCache.shared.read(request: urlRequest) {
+                let parsed = try parser(nil, mockData)
+                return parsed
+            }
         }
 
         // 3. ⭐这里决定去重策略
@@ -1369,6 +1371,13 @@ public class Network: NSObject {
         var successHandlers: [FileDownloadSuccess] = []
         var failHandlers: [FileDownloadFail] = []
 
+        // 🚨 新增：清理闭包引用，防止二次触发 Continuation
+        private func clearHandlers() {
+            progressHandlers.removeAll()
+            successHandlers.removeAll()
+            failHandlers.removeAll()
+        }
+
         private var lastProgressTime: CFTimeInterval = 0
 
         init(url: String,
@@ -1406,9 +1415,14 @@ public class Network: NSObject {
 
                 if let error = resp.error {
                     self.resumeData = resp.resumeData
-                    self.failHandlers.forEach { $0(error) }
+                    let currentFails = self.failHandlers
+                    self.clearHandlers()
+                    currentFails.forEach { $0(error) }
                 } else {
-                    self.successHandlers.forEach { $0(resp) }
+                    // 🚨 先将回调拷贝出来，然后立即清空原始数组
+                    let currentSuccesses = self.successHandlers
+                    self.clearHandlers()
+                    currentSuccesses.forEach { $0(resp) }
                 }
             }
         }
