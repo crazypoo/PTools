@@ -12,52 +12,102 @@ import CocoaLumberjack
 import SwifterSwift
 import OSLog
 
-// 🚀 优化点 1：创建一个专属的串行队列，保障文件 I/O 线程安全，防止高并发时崩溃
-private let PTLogFileQueue = DispatchQueue(label: "com.ptools.log.fileQueue")
+// 🚀 优化点 1：现代化并发。使用 Swift Actor 处理文件写入，天生线程安全，完全取代传统的 DispatchQueue。
+public actor PTLogFileManager {
+    public static let shared = PTLogFileManager()
+    private let fileManager = FileManager.default
+    
+    private init() {}
+    
+    /// 异步安全地将日志追加到文件
+    public func append(logText: String) {
+        let cachePath = FileManager.pt.CachesDirectory()
+        let logURL = URL(fileURLWithPath: cachePath).appendingPathComponent("log.txt")
+        
+        guard let data = logText.data(using: .utf8) else { return }
+        
+        do {
+            if !fileManager.fileExists(atPath: logURL.path) {
+                fileManager.createFile(atPath: logURL.path, contents: nil, attributes: nil)
+            }
+            // 使用现代 API 处理文件句柄
+            let fileHandle = try FileHandle(forWritingTo: logURL)
+            defer { try? fileHandle.close() }
+            
+            try fileHandle.seekToEnd()
+            fileHandle.write(data)
+        } catch {
+            PTNSLogConsole("❌ [PTLogFileManager] 写入日志文件失败: \(error)")
+        }
+    }
+}
 
-// 🚀 优化点 2：全局缓存环境状态，避免每次打印都去 await 耗时查询
+// 🚀 优化点 2：全局环境状态缓存保持不变，但命名和格式稍微调整，使其更适配新排版。
 private let currentAppEnvironment: String = {
-    // 假设你有同步获取环境的方法，这里做了简化。
-    // 如果你之前的 applicationEnvironment() 必须是 async，建议在 App 启动时预先获取并赋值给一个全局变量。
     let isAppStore = UIApplication.shared.inferredEnvironment_PT == .appStore
     let isTestFlight = UIApplication.shared.inferredEnvironment_PT == .testFlight
-    if isAppStore { return "<<<生產環境>>>" }
-    if isTestFlight { return "<<<測試環境>>>" }
-    return "<<<DEBUG環境>>>"
+    if isAppStore { return "生產環境 (App Store)" }
+    if isTestFlight { return "測試環境 (TestFlight)" }
+    return "DEBUG 環境"
 }()
 
+// MARK: - 核心解析工具
+// MARK: - 核心解析工具
+private func convertToJSONString(_ elements: [Any]) -> String {
+    return elements.compactMap { element -> String? in
+        // 1. 如果是字符串，尝试判断它是不是一个 JSON 格式的字符串
+        if let stringElement = element as? String {
+            if let data = stringElement.data(using: .utf8),
+               let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+               let prettyStr = prettyJSONString(from: jsonObject) {
+                return prettyStr // 是 JSON 字符串，美化后输出
+            }
+            return stringElement // 只是普通字符串，原样返回
+        }
+        // 2. 如果是字典、数组或其他可以被 JSON 序列化的对象
+        else if let prettyStr = prettyJSONString(from: element) {
+            return prettyStr
+        }
+        
+        // 3. 其他不支持 JSON 格式化的类型，直接走默认打印
+        return "\(element)"
+    }.joined(separator: "\n")
+}
+
+// 🚀 新增：原生 JSON 美化工具
+private func prettyJSONString(from object: Any) -> String? {
+    // 确保对象可以被转换为 JSON
+    guard JSONSerialization.isValidJSONObject(object) else { return nil }
+    
+    do {
+        // 使用 .prettyPrinted 选项来实现多行缩进的美化效果
+        // .withoutEscapingSlashes 可以防止网址中的斜杠 "/" 被转义为 "\/" (iOS 13+ 支持)
+        var options: JSONSerialization.WritingOptions = [.prettyPrinted]
+        if #available(iOS 13.0, *) {
+            options.insert(.withoutEscapingSlashes)
+        }
+        
+        let data = try JSONSerialization.data(withJSONObject: object, options: options)
+        return String(data: data, encoding: .utf8)
+    } catch {
+        return nil
+    }
+}
+
+// MARK: - 快捷控制台打印
 public func PTNSLogConsole(_ any: Any...,
                            isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
                            file: NSString = #file,
                            line: Int = #line,
                            column: Int = #column,
                            fn: String = #function,
-                           levelType: LoggerEXLevelType = .info, // 小驼峰
+                           levelType: LoggerEXLevelType = .info,
                            loggerType: LoggerEXType = .other) {
-    
     let msgStr = convertToJSONString(any)
     PTNSLog(msgStr, isWriteLog: isWriteLog, file: file, line: line, column: column, fn: fn, levelType: levelType, loggerType: loggerType)
 }
 
-private func convertToJSONString(_ elements: [Any]) -> String {
-    // 🚀 优化点 3：使用 map 和 compactMap 替代 `+=`，性能更好且更 Swift-Style
-    return elements.map { element -> String in
-        if let stringElement = element as? String,
-           let jsonString = stringElement.jsonStringToDic()?.convertToJsonString(),
-           !jsonString.stringIsEmpty() {
-            return jsonString
-        } else if let dicElement = element as? NSDictionary {
-            let jsonString = dicElement.convertToJsonString()
-            return jsonString
-        } else if let arrElement = element as? NSArray {
-            let jsonString = arrElement.convertToJsonString()
-            return jsonString
-        }
-        return "\(element)"
-    }.joined(separator: "\n")
-}
-
-// MARK: - 自定义打印
+// MARK: - 自定义打印 (主入口)
 public func PTNSLog(_ msg: Any...,
                     isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
                     file: NSString = #file,
@@ -67,164 +117,119 @@ public func PTNSLog(_ msg: Any...,
                     levelType: LoggerEXLevelType = .info,
                     loggerType: LoggerEXType = .other) {
     
-    // 🚀 优化点 4：使用高效的字符串拼接，避免 for-in 循环
-    let msgStr = msg.map { "\($0)" }.joined(separator: "\n")
+    // 将所有输入转化为格式化良好的字符串
+    let msgStr = convertToJSONString(msg)
     
-    // 格式化输出字符串
     let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:mm:ss")
-    let prefix = "\n🔨\(currentAppEnvironment)Empezar🔨 \n⏰現在⏰：\(currentDate)\n📁當前文件完整的路徑是📁：\(file)\n📄當前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函數名🧾：\(fn)\n📝打印內容如下📝：\n\(msgStr)\n❌結論❌\n"
+    let fileName = file.lastPathComponent
+    
+    // 🚀 优化点 4：重新设计排版！使用分隔符和对齐的方式，极大地提升可读性。
+    let logOutput = """
+    
+    ====================== 🔨 \(currentAppEnvironment) 🔨 ======================
+    ⏰ 時間 : \(currentDate)
+    📁 文件 : \(fileName)
+    📍 位置 : 第 \(line) 行，第 \(column) 列
+    🧾 函數 : \(fn)
+    📝 內容 :
+    \(msgStr)
+    =============================================================================
+    
+    """
     
     // 控制台输出 & OSLog 处理
     let environment = UIApplication.shared.inferredEnvironment_PT
     if environment == .appStore {
-        DDLogSet(levelType: levelType, prefix: prefix)
+        DDLogSet(levelType: levelType, prefix: logOutput)
     } else {
         let logger = Logger.logger(categoryName: loggerType.rawValue)
         switch levelType {
-        case .debug: logger.debug("\(prefix)")
-        case .error: logger.error("\(prefix)")
-        case .info: logger.info("\(prefix)")
-        case .warning: logger.warning("\(prefix)")
+        case .debug: logger.debug("\(logOutput)")
+        case .error: logger.error("\(logOutput)")
+        case .info: logger.info("\(logOutput)")
+        case .warning: logger.warning("\(logOutput)")
         case .trace, .notice, .critical, .fault:
-            logger.notice("\(prefix)") // 简化调用
+            logger.notice("\(logOutput)")
         }
         
 #if POOTOOLS_DEBUG
         // 确保 UI 更新在主线程
         Task { @MainActor in
             if LocalConsole.shared.isVisiable {
-                LocalConsole.shared.print(prefix)
+                LocalConsole.shared.print(logOutput)
             }
         }
 #endif
     }
     
-    // 🚀 优化点 5：异步+串行写入文件，完全不阻塞主线程和其他日志打印
+    // 🚀 优化点 5：使用 Task 结合 Actor，优雅地异步写入文件，绝对不阻塞主线程
     if isWriteLog {
-        // 1. 获取缓存路径并拼接文件名
-        let cachePath = FileManager.pt.CachesDirectory()
-        let logURL = URL(fileURLWithPath: cachePath).appendingPathComponent("log.txt")
-        
-        // 2. 派发到后台串行队列
-        PTLogFileQueue.async {
-            // 3. 安全检查：如果文件不存在，必须先创建文件，否则后续写入会失败
-            let fileManager = FileManager.default
-            if !fileManager.fileExists(atPath: logURL.path) {
-                fileManager.createFile(atPath: logURL.path, contents: nil, attributes: nil)
-            }
-            
-            // 4. 执行写入
-            appendText(fileURL: logURL, string: prefix, currentDate: currentDate)
+        Task {
+            await PTLogFileManager.shared.append(logText: logOutput)
         }
     }
 }
 
-private func formatLogMessage(file: NSString, line: Int, column: Int, fn: String, msgStr: String) async -> (String,String) {
-    let currentAppStatus: String
-    let environment = await UIApplication.applicationEnvironment()
-    switch environment {
-    case .appStore:
-        currentAppStatus = "<<<生產環境>>>"
-    case .testFlight:
-        currentAppStatus = "<<<測試環境>>>"
-    default:
-        currentAppStatus = "<<<DEBUG環境>>>"
-    }
-    
-    let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:mm:ss")
-    let dataString = "\n🔨\(currentAppStatus)Empezar🔨 \n⏰現在⏰：\(currentDate)\n📁當前文件完整的路徑是📁：\(file)\n📄當前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函數名🧾：\(fn)\n📝打印內容如下📝：\n\(msgStr)❌結論❌\n"
-
-    return (currentDate,dataString)
-}
-
-fileprivate func DDLogSet(levelType:LoggerEXLevelType = .info,
-                          prefix:String) {
+// MARK: - 辅助组件
+fileprivate func DDLogSet(levelType: LoggerEXLevelType = .info, prefix: String) {
     DDLog.add(DDOSLogger.sharedInstance)
     switch levelType {
-    case .debug:
-        DDLogDebug(DDLogMessageFormat(stringLiteral: prefix))
-    case .error:
-        DDLogError(DDLogMessageFormat(stringLiteral: prefix))
-    case .info:
-        DDLogInfo(DDLogMessageFormat(stringLiteral: prefix))
-    case .warning:
-        DDLogWarn(DDLogMessageFormat(stringLiteral: prefix))
-    case .trace:
-        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-    case .notice:
-        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-    case .critical:
-        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-    case .fault:
-        DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
+    case .debug: DDLogDebug(DDLogMessageFormat(stringLiteral: prefix))
+    case .error: DDLogError(DDLogMessageFormat(stringLiteral: prefix))
+    case .info: DDLogInfo(DDLogMessageFormat(stringLiteral: prefix))
+    case .warning: DDLogWarn(DDLogMessageFormat(stringLiteral: prefix))
+    default: DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
     }
 }
 
-// 在文件末尾追加新内容
-// 在文件末尾追加新内容 (此函数现在仅在串行队列 PTLogFileQueue 中执行，绝对安全)
-private func appendText(fileURL: URL, string: String, currentDate: String) {
-    let stringToWrite = "\n\(currentDate)：\(string)"
-    guard let data = stringToWrite.data(using: .utf8) else { return }
-    
-    do {
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-            FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
-        }
-        
-        // 使用更安全的 FileHandle API
-        let fileHandle = try FileHandle(forWritingTo: fileURL)
-        defer {
-            try? fileHandle.close() // 🚀 优化点 6：确保在使用完毕后关闭句柄，防止内存和文件句柄泄漏
-        }
-        
-        try fileHandle.seekToEnd()
-        fileHandle.write(data)
-        
-    } catch {
-        // 如果文件写入失败，直接用最低成本的 print 输出，防止循环调用 PTNSLog
-        PTNSLog("写入日志文件失败: \(error)")
-    }
-}
-
+// MARK: - 内存查看工具 (也进行了排版美化)
 public func PTPrintPointer<T>(ptr: UnsafePointer<T>,
                               isWriteLog: Bool = false,
                               file: NSString = #file,
                               line: Int = #line,
                               column: Int = #column,
                               fn: String = #function,
-                              levelType:LoggerEXLevelType = .info,
-                              loggerType:LoggerEXType = .other) {
-    let logString = "内存地址：\(ptr)) --------------"
-    PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
+                              levelType: LoggerEXLevelType = .info,
+                              loggerType: LoggerEXType = .other) {
+    let logString = "【内存地址】: \(ptr)"
+    PTNSLog(logString, isWriteLog: isWriteLog, file: file, line: line, column: column, fn: fn, levelType: levelType, loggerType: loggerType)
 }
 
-// MARK: - 以下内容是：MJ的Mems演变过来
-// MARK: mark 变量的：地址、内存、大小 的打印
 public func PTPrint<T>(val: inout T,
                        isWriteLog: Bool = false,
                        file: NSString = #file,
                        line: Int = #line,
                        column: Int = #column,
                        fn: String = #function,
-                       levelType:LoggerEXLevelType = .info,
-                       loggerType:LoggerEXType = .other) {
-    let logString = "-------------- \(type(of: val)) --------------\n变量的地址:\(PTMems.ptr(ofVal: &val))\n变量的内存:\(PTMems.memStr(ofVal: &val))\n变量的大小:\(PTMems.size(ofVal: &val))\n"
-    PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
+                       levelType: LoggerEXLevelType = .info,
+                       loggerType: LoggerEXType = .other) {
+    let logString = """
+    【变量类型】: \(type(of: val))
+     ├─ 地址 : \(PTMems.ptr(ofVal: &val))
+     ├─ 内存 : \(PTMems.memStr(ofVal: &val))
+     └─ 大小 : \(PTMems.size(ofVal: &val)) bytes
+    """
+    PTNSLog(logString, isWriteLog: isWriteLog, file: file, line: line, column: column, fn: fn, levelType: levelType, loggerType: loggerType)
 }
 
-// MARK: 对象的：地址、内存、大小 的打印
 public func PTPrint<T>(ref: T,
                        isWriteLog: Bool = false,
                        file: NSString = #file,
                        line: Int = #line,
                        column: Int = #column,
                        fn: String = #function,
-                       levelType:LoggerEXLevelType = .info,
-                       loggerType:LoggerEXType = .other) {
-    let logString = "-------------- \(type(of: ref)) --------------\n对象的地址:\(PTMems.ptr(ofRef: ref))\n对象的内存:\(PTMems.memStr(ofRef: ref))\n对象的大小:\(PTMems.size(ofRef: ref))\n"
-    PTNSLog(logString,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn,levelType: levelType,loggerType: loggerType)
+                       levelType: LoggerEXLevelType = .info,
+                       loggerType: LoggerEXType = .other) {
+    let logString = """
+    【对象类型】: \(type(of: ref))
+     ├─ 地址 : \(PTMems.ptr(ofRef: ref))
+     ├─ 内存 : \(PTMems.memStr(ofRef: ref))
+     └─ 大小 : \(PTMems.size(ofRef: ref)) bytes
+    """
+    PTNSLog(logString, isWriteLog: isWriteLog, file: file, line: line, column: column, fn: fn, levelType: levelType, loggerType: loggerType)
 }
 
+// （注意：原有的 PTMems 及后续结构体保持不变，直接接在下方即可，因为那部分是底层内存解析逻辑，非常完美）
 public enum PTMemAlign : Int {
     case one = 1, two = 2, four = 4, eight = 8
 }
