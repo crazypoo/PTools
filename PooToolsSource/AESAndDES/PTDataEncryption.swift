@@ -161,7 +161,7 @@ public class PTDataEncryption {
         defer { dataOut.deallocate() }
 
         var dataOutMoved = 0
-        let cryptStatus = CCCrypt(operation, CCAlgorithm(kCCAlgorithmDES), CCOptions(kCCOptionPKCS7Padding), keyBytes, kCCKeySizeDES, nil, dataIn, cryptData.count, dataOut, dataOutSize, &dataOutMoved)
+        let cryptStatus = CCCrypt(operation, CCAlgorithm(kCCAlgorithmDES), CCOptions(kCCOptionPKCS7Padding), keyBytes, kCCKeySizeDES, keyBytes, dataIn, cryptData.count, dataOut, dataOutSize, &dataOutMoved)
 
         guard cryptStatus == kCCSuccess else {
             throw PTEncryptionError.encryptionFailed("DES crypt failed with status: \(cryptStatus)")
