@@ -75,7 +75,7 @@ private func convertToJSONString(_ elements: [Any]) -> String {
 }
 
 // 🚀 新增：原生 JSON 美化工具
-private func prettyJSONString(from object: Any) -> String? {
+public func prettyJSONString(from object: Any) -> String? {
     // 确保对象可以被转换为 JSON
     guard JSONSerialization.isValidJSONObject(object) else { return nil }
     

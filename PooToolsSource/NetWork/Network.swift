@@ -933,7 +933,7 @@ public class Network: NSObject {
             var originalText = ""
             switch UIApplication.shared.inferredEnvironment_PT {
             case .debug:
-                originalText = String(decoding: data, as: UTF8.self)
+                originalText = prettyJSONString(from: String(decoding: data, as: UTF8.self)) ?? ""
             default:
                 originalText = ""
             }
