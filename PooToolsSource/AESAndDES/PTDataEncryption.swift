@@ -96,7 +96,12 @@ public class PTDataEncryption {
     
     // MARK: - AES 加密 (CBC - CryptoSwift)
     public static func aesEncryption(data: Data, key: String, iv: String) throws -> String {
-        guard let aes = try? AES(key: key, iv: iv).encrypt(data.bytes) else {
+        // 将 key, iv 和 data 显式转换为 [UInt8] 数组，避免 RawSpan 类型冲突
+        let keyBytes = Array(key.utf8)
+        let ivBytes = Array(iv.utf8)
+        let dataBytes = [UInt8](data)
+        
+        guard let aes = try? AES(key: keyBytes, blockMode: CBC(iv: ivBytes), padding: .pkcs7).encrypt(dataBytes) else {
             throw PTEncryptionError.encryptionFailed("AES CBC encryption failed")
         }
         return Data(aes).base64EncodedString()
@@ -104,7 +109,11 @@ public class PTDataEncryption {
     
     // MARK: - AES 解密 (CBC - CryptoSwift)
     public static func aesDecrypt(data: Data, key: String, iv: String) throws -> Data {
-        guard let aes = try? AES(key: key, iv: iv).decrypt(data.bytes) else {
+        let keyBytes = Array(key.utf8)
+        let ivBytes = Array(iv.utf8)
+        let dataBytes = [UInt8](data)
+        
+        guard let aes = try? AES(key: keyBytes, blockMode: CBC(iv: ivBytes), padding: .pkcs7).decrypt(dataBytes) else {
             throw PTEncryptionError.decryptionFailed("AES CBC decryption failed")
         }
         return Data(aes)
@@ -112,7 +121,10 @@ public class PTDataEncryption {
     
     // MARK: - AES 加密 (ECB - CryptoSwift)
     public static func aesECBEncryption(data: Data, key: String) throws -> String {
-        guard let aes = try? AES(key: key.bytes, blockMode: ECB(), padding: .pkcs7).encrypt(data.bytes) else {
+        let keyBytes = Array(key.utf8)
+        let dataBytes = [UInt8](data)
+        
+        guard let aes = try? AES(key: keyBytes, blockMode: ECB(), padding: .pkcs7).encrypt(dataBytes) else {
             throw PTEncryptionError.encryptionFailed("AES ECB encryption failed")
         }
         return Data(aes).base64EncodedString()
@@ -120,7 +132,10 @@ public class PTDataEncryption {
     
     // MARK: - AES 解密 (ECB - CryptoSwift)
     public static func aesECBDecrypt(data: Data, key: String) throws -> Data {
-        guard let aes = try? AES(key: key.bytes, blockMode: ECB(), padding: .pkcs7).decrypt(data.bytes) else {
+        let keyBytes = Array(key.utf8)
+        let dataBytes = [UInt8](data)
+        
+        guard let aes = try? AES(key: keyBytes, blockMode: ECB(), padding: .pkcs7).decrypt(dataBytes) else {
             throw PTEncryptionError.decryptionFailed("AES ECB decryption failed")
         }
         return Data(aes)
