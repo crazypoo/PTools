@@ -204,6 +204,16 @@ public class PTGCDManager: NSObject {
 #endif
     }
     
+    public class func gcdUncheckMain(block: @escaping PTActionUncheckTask) {
+#if swift(>=6.0)
+        Task { @MainActor in
+            block()
+        }
+#else
+        DispatchQueue.main.async(execute: block)
+#endif
+    }
+
     public class func gcdMain(block: @escaping PTActionTask) {
 #if swift(>=6.0)
         Task { @MainActor in
@@ -214,9 +224,26 @@ public class PTGCDManager: NSObject {
 #endif
     }
     
+    public class func gcdUncheckGobal(qosCls: DispatchQoS.QoSClass = .default,
+                               block: @escaping PTActionUncheckTask) {
+        DispatchQueue.global(qos: qosCls).async {
+            Task { @MainActor in
+                block()
+            }
+        }
+    }
+    
     public class func gcdGobal(qosCls: DispatchQoS.QoSClass = .default,
                                block: @escaping PTActionTask) {
         DispatchQueue.global(qos: qosCls).async {
+            Task { @MainActor in
+                block()
+            }
+        }
+    }
+    
+    public class func gcdUncheckGobalNormal(block: @escaping PTActionUncheckTask) {
+        DispatchQueue.global().async {
             Task { @MainActor in
                 block()
             }
