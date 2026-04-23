@@ -310,4 +310,31 @@ extension PTFloatingPlaseholderTextField: UITextFieldDelegate {
     public func textFieldDidEndEditing(_ textField: UITextField) {
         inputedCallback?(textField.text ?? "")
     }
+    
+    // MARK: - Responder Chain & Message Forwarding
+        
+    /// 1. 确保将外层视图的 第一响应者 状态，同步委托给内部真正的 textField
+    public override var isFirstResponder: Bool {
+        return textField.isFirstResponder
+    }
+    
+    @discardableResult
+    public override func becomeFirstResponder() -> Bool {
+        return textField.becomeFirstResponder()
+    }
+    
+    @discardableResult
+    public override func resignFirstResponder() -> Bool {
+        return textField.resignFirstResponder()
+    }
+    
+    /// 2. 核心修复：消息转发机制
+    /// 当系统尝试在当前视图调用不支持的方法（例如 select:, copy:, paste: 等）时触发。
+    /// 我们判断内部的 textField 是否支持该方法，如果支持，就把这个动作安全地“转发”给 textField 执行。
+    public override func forwardingTarget(for aSelector: Selector!) -> Any? {
+        if textField.responds(to: aSelector) {
+            return textField
+        }
+        return super.forwardingTarget(for: aSelector)
+    }
 }
