@@ -199,12 +199,6 @@
 		555818D82AFA81E90051C0AA /* Mirror+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818D72AFA81E90051C0AA /* Mirror+PTEX.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
-		555BE9FB2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BE9FA2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift */; };
-		555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BE9FC2BB2597700E5987B /* UITableView+PTAnimationEX.swift */; };
-		555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */; };
-		555BEA012BB25A7C00E5987B /* PTListAnimationProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */; };
-		555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */; };
-		555BEA072BB2601E00E5987B /* UIView+PTListAnimationEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BEA062BB2601E00E5987B /* UIView+PTListAnimationEX.swift */; };
 		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
 		555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */; };
 		555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */; };
@@ -883,6 +877,7 @@
 		55F175A52DF0364400899D38 /* PTLoadedLibsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */; };
 		55F175A72DF03F5E00899D38 /* PTLoadedLibsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */; };
 		55F175A92DF0423500899D38 /* PTLoadedLibCellCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */; };
+		55F206F42F9BC0FD0099DF25 /* PTListAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F206F32F9BC0FD0099DF25 /* PTListAnimation.swift */; };
 		55F299912BEE1D5B00CC970A /* PTImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299902BEE1D5B00CC970A /* PTImageCell.swift */; };
 		55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299922BEE205600CC970A /* PTImageListViewController.swift */; };
 		55F3A9D02E3B140F001A0571 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F3A9CF2E3B140F001A0571 /* HealthKit.framework */; };
@@ -1166,12 +1161,6 @@
 		555818D72AFA81E90051C0AA /* Mirror+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mirror+PTEX.swift"; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
-		555BE9FA2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+PTAnimationEX.swift"; sourceTree = "<group>"; };
-		555BE9FC2BB2597700E5987B /* UITableView+PTAnimationEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTAnimationEX.swift"; sourceTree = "<group>"; };
-		555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimationEnum.swift; sourceTree = "<group>"; };
-		555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimationProtocols.swift; sourceTree = "<group>"; };
-		555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimationConfig.swift; sourceTree = "<group>"; };
-		555BEA062BB2601E00E5987B /* UIView+PTListAnimationEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTListAnimationEX.swift"; sourceTree = "<group>"; };
 		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
 		555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInspectorWindow.swift; sourceTree = "<group>"; };
 		555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchOverlayView.swift; sourceTree = "<group>"; };
@@ -1858,6 +1847,7 @@
 		55F175A42DF0364400899D38 /* PTLoadedLibsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadedLibsFunction.swift; sourceTree = "<group>"; };
 		55F175A62DF03F5E00899D38 /* PTLoadedLibsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadedLibsViewController.swift; sourceTree = "<group>"; };
 		55F175A82DF0423500899D38 /* PTLoadedLibCellCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadedLibCellCollections.swift; sourceTree = "<group>"; };
+		55F206F32F9BC0FD0099DF25 /* PTListAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimation.swift; sourceTree = "<group>"; };
 		55F299902BEE1D5B00CC970A /* PTImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageCell.swift; sourceTree = "<group>"; };
 		55F299922BEE205600CC970A /* PTImageListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageListViewController.swift; sourceTree = "<group>"; };
 		55F3A9CF2E3B140F001A0571 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -3497,14 +3487,9 @@
 				550CE49D2AEC27410052539D /* PTAnimationFunction.swift */,
 				5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */,
 				55E1B65F2DE6E9B20013A0B4 /* PTGroupBuyAvatarView.swift */,
-				555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */,
-				555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */,
-				555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */,
 				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
 				5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */,
-				555BE9FA2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift */,
-				555BE9FC2BB2597700E5987B /* UITableView+PTAnimationEX.swift */,
-				555BEA062BB2601E00E5987B /* UIView+PTListAnimationEX.swift */,
+				55F206F32F9BC0FD0099DF25 /* PTListAnimation.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -4679,7 +4664,6 @@
 				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
 				55DD93752B938DE300F65872 /* PTSideMenuControl.swift in Sources */,
 				55C409942C06209D009C0FB6 /* PTPDFManager.swift in Sources */,
-				555BEA072BB2601E00E5987B /* UIView+PTListAnimationEX.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55F162EA2B1951E500320925 /* PTVideoEditorConfig.swift in Sources */,
@@ -4722,7 +4706,6 @@
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */,
 				557451262C09B0EE0008FCAD /* PTMenuSheetButtonItems.swift in Sources */,
-				555BE9FB2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift in Sources */,
 				55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */,
 				55DD93582B9169A000F65872 /* PTSortButton.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
@@ -4759,7 +4742,6 @@
 				55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */,
 				557E3A7A2C042F7D002466A0 /* PTCreateLeakViewController.swift in Sources */,
 				55868D4B2CC761D800A2DD25 /* PTFrostedGlassView.swift in Sources */,
-				555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */,
 				557E3A962C046472002466A0 /* UIView+PTSwizzle.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				554EF7AD2DD42B9500A270CD /* PTPageControllable.swift in Sources */,
@@ -4809,7 +4791,6 @@
 				55E1B65E2DE603370013A0B4 /* PTNFCToolKit.swift in Sources */,
 				556CA4F82B295D9600A5B189 /* UIColor+VideoEditorEX.swift in Sources */,
 				556CA4BE2B29500600A5B189 /* Provider.swift in Sources */,
-				555BEA012BB25A7C00E5987B /* PTListAnimationProtocols.swift in Sources */,
 				55FF40742B2B002A00CD3906 /* CALayer+VideoEditorEX.swift in Sources */,
 				555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
@@ -5098,7 +5079,6 @@
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				553BFE6C2EC7055300D6DCB6 /* UIView+PTSnapShot.swift in Sources */,
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
-				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
 				554A67362C8559F800FE1B10 /* UIImageAsset+PTEX.swift in Sources */,
 				557E3A702C036DE3002466A0 /* PTFPSTool.swift in Sources */,
@@ -5108,7 +5088,6 @@
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
-				555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */,
 				556B67062BB503960070C10E /* PTHalfCircleView.swift in Sources */,
 				556CA4B92B29500600A5B189 /* Compositor.swift in Sources */,
 				55F163092B1A29BE00320925 /* PTTakePictureReviewer.swift in Sources */,
@@ -5120,6 +5099,7 @@
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				55C4099D2C0973A8009C0FB6 /* PTDebugLocationKit.swift in Sources */,
 				558B77C12BBC52B300BD7AB0 /* PTChatTypingIndicator.swift in Sources */,
+				55F206F42F9BC0FD0099DF25 /* PTListAnimation.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */,
 				55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */,

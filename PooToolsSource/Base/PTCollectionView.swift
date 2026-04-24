@@ -1165,11 +1165,21 @@ extension PTCollectionView {
             }
         }
         
-        self.setiOS17EmptyDataView()
+        if !mSections.isEmpty {
+            if #available(iOS 17.0, *) {
+                PTUnavailableManager.hideUnavailableView(in: self)
+            } else {
+                // 让第三方库立即感知数据变化并隐藏
+                self.collectionView.reloadEmptyDataSet()
+            }
+        }
         // 4. 交给苹果底层去 Diff 和执行动画！✨
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
             self.setiOS17EmptyDataView()
+            if self.mSections.isEmpty {
+                self.setiOS17EmptyDataView()
+            }
             finishTask?(self.collectionView)
         }
     }
@@ -1183,10 +1193,10 @@ extension PTCollectionView {
         var snapshot = PTSnapshot()
         snapshot.deleteAllItems() // 一键清空快照
         
+        self.setiOS17EmptyDataView()
         let animated = !self.viewConfig.refreshWithoutAnimation
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
-            self.setiOS17EmptyDataView()
             finishTask?(self.collectionView)
         }
     }
