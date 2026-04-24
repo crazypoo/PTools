@@ -95,6 +95,28 @@ public class PTActionLayoutButton: UIControl {
     private var lastLayoutSize: CGSize = .zero
     private var needsConstraintUpdate: Bool = true
     
+    public override var intrinsicContentSize: CGSize {
+        let titleSize = getKitTitleSize(lineSpacing: labelLineSpace)
+        
+        switch layoutStyle {
+        case .image:
+            // 单图模式下，固有尺寸就是图片尺寸
+            return imageSize
+        case .title:
+            return titleSize
+        case .leftImageRightTitle, .leftTitleRightImage:
+            let width = imageSize.width + midSpacing + titleSize.width
+            let height = max(imageSize.height, titleSize.height)
+            return CGSize(width: width, height: height)
+        case .upImageDownTitle, .upTitleDownImage:
+            let width = max(imageSize.width, titleSize.width)
+            let height = imageSize.height + midSpacing + titleSize.height
+            return CGSize(width: width, height: height)
+        default:
+            return super.intrinsicContentSize
+        }
+    }
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews([imageView, titleLabel])
@@ -106,6 +128,7 @@ public class PTActionLayoutButton: UIControl {
     
     private func setNeedsConstraintUpdate() {
         needsConstraintUpdate = true
+        invalidateIntrinsicContentSize()
         setNeedsLayout()
         updateAppearance()
     }
@@ -236,7 +259,7 @@ public class PTActionLayoutButton: UIControl {
             imageView.snp.remakeConstraints { make in
                 make.centerX.centerY.equalToSuperview()
                 make.size.equalTo(self.imageSize)
-                make.edges.equalToSuperview().priority(.low)
+                make.edges.equalToSuperview().priority(.high)
             }
             
         default:
