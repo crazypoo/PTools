@@ -78,52 +78,40 @@ public extension NSDirectionalEdgeInsets {
         )
     }
     
-    func verticalInsets() -> CGFloat {
-        top + bottom
+    // MARK: - Computed Properties
+    
+    /// 垂直方向总间距
+    var verticalInsets: CGFloat { top + bottom }
+    
+    /// 水平方向总间距
+    var horizontalInsets: CGFloat { leading + trailing }
+    
+    /// 转换为 UIEdgeInsets (默认从左到右 LTR)
+    var edgeInsets: UIEdgeInsets {
+        UIEdgeInsets(top: top, left: leading, bottom: bottom, right: trailing)
     }
     
-    func horizontalInsets() -> CGFloat {
-        leading + trailing
+    /// 转换为 UIEdgeInsets (支持从右到左 RTL)
+    var rightToLeftEdgeInsets: UIEdgeInsets {
+        UIEdgeInsets(top: top, left: trailing, bottom: bottom, right: leading)
     }
     
-    func edgeInsets() -> UIEdgeInsets {
-        UIEdgeInsets(
-            top: top,
-            left: leading,
-            bottom: bottom,
-            right: trailing
-        )
-    }
+    // MARK: - Modifiers
     
-    func rightToLeftEdgeInsets() -> UIEdgeInsets {
-        UIEdgeInsets(
-            top: top,
-            left: trailing,
-            bottom: bottom,
-            right: leading
-        )
-    }
-    
+    /// 修改当前 insets (In-place 修改)
     mutating func update(
         top: CGFloat? = nil,
         leading: CGFloat? = nil,
         bottom: CGFloat? = nil,
         trailing: CGFloat? = nil
     ) {
-        if let top = top {
-            self.top = top
-        }
-        if let leading = leading {
-            self.leading = leading
-        }
-        if let bottom = bottom {
-            self.bottom = bottom
-        }
-        if let trailing = trailing {
-            self.trailing = trailing
-        }
+        if let top { self.top = top }
+        if let leading { self.leading = leading }
+        if let bottom { self.bottom = bottom }
+        if let trailing { self.trailing = trailing }
     }
 
+    /// 返回修改后的新 insets (链式调用)
     func with(
         top: CGFloat? = nil,
         leading: CGFloat? = nil,
@@ -131,21 +119,8 @@ public extension NSDirectionalEdgeInsets {
         trailing: CGFloat? = nil
     ) -> NSDirectionalEdgeInsets {
         var copy = self
-
-        if let top = top {
-            copy.top = top
-        }
-        if let leading = leading {
-            copy.leading = leading
-        }
-        if let bottom = bottom {
-            copy.bottom = bottom
-        }
-        if let trailing = trailing {
-            copy.trailing = trailing
-        }
-
+        // 直接复用 update 方法，避免代码重复
+        copy.update(top: top, leading: leading, bottom: bottom, trailing: trailing)
         return copy
     }
-
 }

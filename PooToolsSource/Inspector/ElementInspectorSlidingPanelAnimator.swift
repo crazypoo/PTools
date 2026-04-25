@@ -79,7 +79,7 @@ final class ElementInspectorSlidingPanelAnimator: NSObject, ElementInspectorAppe
     }
 
     private func frameToTheRight(of containerView: UIView) -> CGRect {
-        var frame = containerView.bounds.inset(by: elementInspectorAppearance.directionalInsets.edgeInsets())
+        var frame = containerView.bounds.inset(by: elementInspectorAppearance.directionalInsets.edgeInsets)
         frame.size.width = Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize.width
         frame.size.height = min(frame.size.height, Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelSidePresentationMinimumContainerSize.height)
         frame.origin.x = containerView.bounds.maxX
@@ -88,11 +88,11 @@ final class ElementInspectorSlidingPanelAnimator: NSObject, ElementInspectorAppe
     }
 
     private func topLeftMargins(of containerView: UIView) -> CGRect {
-        var frame = containerView.bounds.inset(by: elementInspectorAppearance.directionalInsets.edgeInsets())
+        var frame = containerView.bounds.inset(by: elementInspectorAppearance.directionalInsets.edgeInsets)
         frame.size.width = Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize.width
         frame.size.height = min(frame.size.height, Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelSidePresentationMinimumContainerSize.height)
         frame.origin.x = containerView.bounds.maxX - frame.width
-        frame = frame.inset(by: elementInspectorAppearance.directionalInsets.edgeInsets())
+        frame = frame.inset(by: elementInspectorAppearance.directionalInsets.edgeInsets)
 
         return frame
     }

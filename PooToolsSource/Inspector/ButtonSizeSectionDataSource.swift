@@ -32,7 +32,7 @@ extension DefaultElementSizeLibrary {
                 switch property {
                 case .contentEdgeInsets:
                     return .edgeInsets(title: property.rawValue, insets: {
-                        button.configuration?.contentInsets.edgeInsets() ?? .zero
+                        button.configuration?.contentInsets.edgeInsets ?? .zero
                     },handler: {
                         if var config = button.configuration {
                             config.contentInsets = $0.directionalEdgeInsets()
@@ -92,7 +92,7 @@ extension DefaultElementSizeLibrary {
                     })
                 case .titleEdgeInsets:
                     return .edgeInsets(title: property.rawValue, insets: {
-                        button.configuration?.contentInsets.edgeInsets() ?? .zero
+                        button.configuration?.contentInsets.edgeInsets ?? .zero
                     }, handler: {
                         if var config = button.configuration {
                             config.contentInsets = $0.directionalEdgeInsets()

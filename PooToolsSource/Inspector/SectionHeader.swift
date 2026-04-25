@@ -138,7 +138,7 @@ final class SectionHeader: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let maxWidth = contentView.bounds.inset(by: contentView.directionalLayoutMargins.edgeInsets()).width
+        let maxWidth = contentView.bounds.inset(by: contentView.directionalLayoutMargins.edgeInsets).width
 
         titleLabel.preferredMaxLayoutWidth = maxWidth
         subtitleLabel.preferredMaxLayoutWidth = maxWidth
