@@ -1995,6 +1995,43 @@ extension PTCollectionView {
             }
         }
     }
+    
+    /// 强制重绘当前所有的 Section 和 Row
+    /// (适用于主题切换、多语言切换、或者强制重绘现有数据的场景)
+    public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) {
+        PTGCDManager.gcdMain {
+            // 1. 既然是全量刷新，先彻底清空所有的布局和高度缓存
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            self.waterfallCache.removeAll() // 👈 瀑布流缓存也要清空
+            
+            // 2. 标记所有 Section 布局失效
+            for i in 0..<self.mSections.count {
+                self.markSectionDirty(i)
+            }
+            
+            // 3. 获取当前屏幕上真实的 Snapshot
+            var snapshot = self.diffableDataSource.snapshot()
+            
+            // 🌟 核心：直接把当前快照里所有的 Items 塞给 reloadItems，底层就会全部重绘
+            let allExistingItems = snapshot.itemIdentifiers
+            guard !allExistingItems.isEmpty else {
+                completion?()
+                return
+            }
+            
+            snapshot.reloadItems(allExistingItems)
+            
+            // 4. 应用变更
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                // 如果是瀑布流，全量刷新可能会导致整体高度改变，强制刷新一下 Layout
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                }
+                completion?()
+            }
+        }
+    }
 }
 
 //MARK: Get Models (Data Query)
