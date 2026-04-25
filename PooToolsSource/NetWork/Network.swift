@@ -614,7 +614,7 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
             return
             
         case .cacheOnly, .cacheElseNetwork:
-            if let cache = NetworkCache.shared.read(request: request) {
+            if let _ = NetworkCache.shared.read(request: request) {
                 request.isMock = true
             }
             

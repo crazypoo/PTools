@@ -250,7 +250,7 @@ public class PTHarBethFilter:NSObject {
             case .sharpen3x3:
                 let filter = C7ConvolutionMatrix3x3(convolutionType: .sharpen(iterations: 1))
                 return (filter, (1, 0, 7), {
-                    filter.updateConvolutionType(.sharpen(iterations: $0))
+                    _ = filter.updateConvolutionType(.sharpen(iterations: $0))
                     return filter
                 })
             case .sepia:

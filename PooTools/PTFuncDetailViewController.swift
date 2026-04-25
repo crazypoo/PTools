@@ -480,7 +480,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     if sender.isOn {
                         Task.init {
                             do {
-                                contentLabel.text = try await PTDataEncryption.desCrypt(operation: CCOperation(kCCEncrypt), key: testKey, dataString: contentLabel.text!)
+                                contentLabel.text = try PTDataEncryption.desCrypt(operation: CCOperation(kCCEncrypt), key: testKey, dataString: contentLabel.text!)
                             } catch {
                                 PTNSLogConsole(error.localizedDescription)
                             }
@@ -488,7 +488,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     } else {
                         Task.init {
                             do {
-                                contentLabel.text = try await PTDataEncryption.desCrypt(operation: CCOperation(kCCDecrypt), key: testKey, dataString: contentLabel.text!)
+                                contentLabel.text = try PTDataEncryption.desCrypt(operation: CCOperation(kCCDecrypt), key: testKey, dataString: contentLabel.text!)
                             } catch {
                                 PTNSLogConsole(error.localizedDescription)
                             }
@@ -504,7 +504,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     if sender.isOn {
                         Task.init {
                             do {
-                                contentLabel.text = try await PTDataEncryption.aesECBEncryption(data: contentLabel.text!.data(using: .utf8)!, key: testKey)
+                                contentLabel.text = try PTDataEncryption.aesECBEncryption(data: contentLabel.text!.data(using: .utf8)!, key: testKey)
                             } catch {
                                 PTNSLogConsole(error.localizedDescription)
                             }
@@ -512,7 +512,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     } else {
                         Task.init {
                             do {
-                                let datas = try await PTDataEncryption.aesECBDecrypt(data: Data(base64Encoded: contentLabel.text!)!, key: testKey)
+                                let datas = try PTDataEncryption.aesECBDecrypt(data: Data(base64Encoded: contentLabel.text!)!, key: testKey)
                                 contentLabel.text = String(data: datas, encoding: .utf8)
                             } catch {
                                 PTNSLogConsole(error.localizedDescription)
@@ -529,7 +529,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     if sender.isOn {
                         Task.init {
                             do {
-                                contentLabel.text = try await PTDataEncryption.aesEncryption(data: contentLabel.text!.data(using: .utf8)!, key: testKey, iv: testIV)
+                                contentLabel.text = try PTDataEncryption.aesEncryption(data: contentLabel.text!.data(using: .utf8)!, key: testKey, iv: testIV)
                             } catch {
                                 PTNSLogConsole(error.localizedDescription)
                             }
@@ -537,7 +537,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     } else {
                         Task.init {
                             do {
-                                let datas = try await PTDataEncryption.aesDecrypt(data: Data(base64Encoded: contentLabel.text!)!, key: testKey, iv: testIV)
+                                let datas = try PTDataEncryption.aesDecrypt(data: Data(base64Encoded: contentLabel.text!)!, key: testKey, iv: testIV)
                                 contentLabel.text = String(data: datas, encoding: .utf8)
                             } catch {
                                 PTNSLogConsole(error.localizedDescription)
