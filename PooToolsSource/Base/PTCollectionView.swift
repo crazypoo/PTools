@@ -1300,6 +1300,15 @@ extension PTCollectionView {
             var snapshot = self.diffableDataSource.snapshot()
             snapshot.deleteItems(rows) // Diffable 自动处理跨 Index 的删除，无需手动拼装 IndexPath！
 
+            // 🌟 【新增逻辑】：检查当前 Section 是否已经空了，如果空了，连同 Section 一起删除
+            let sectionModel = self.mSections[section]
+            if sectionModel.rows?.isEmpty ?? true {
+                // 从快照中干掉空的 Section
+                snapshot.deleteSections([sectionModel])
+                // 同步维护底层 mSections 数据源
+                self.mSections.remove(at: section)
+            }
+
             let animated = !self.viewConfig.refreshWithoutAnimation
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
                 self.setiOS17EmptyDataView()
@@ -1315,7 +1324,8 @@ extension PTCollectionView {
             self.heightCache.removeAll()
             
             var allRowsToDelete: [PTRows] = []
-
+            var sectionsToDelete: [PTSection] = [] // 🌟 【新增】：收集因为删光了 Row 而变成空的 Section
+            
             // 1. 同步底层数据源并收集需要删除的 items
             for (section, rows) in rowsMap {
                 self.markSectionDirty(section)
@@ -1325,6 +1335,11 @@ extension PTCollectionView {
                 
                 self.mSections[section].rows?.removeAll(where: { rows.contains($0) })
                 allRowsToDelete.append(contentsOf: rows)
+                
+                // 🌟 【新增】：如果这个 Section 的 rows 空了，先记录下来
+                if self.mSections[section].rows?.isEmpty ?? true {
+                    sectionsToDelete.append(self.mSections[section])
+                }
             }
 
             guard !allRowsToDelete.isEmpty else {
@@ -1332,9 +1347,20 @@ extension PTCollectionView {
                 return
             }
 
+            // 🌟 【新增】：统一从底层数据源清理掉空的 Sections
+            // 注意：这里用 removeAll(where:) 是最安全的，千万别在 for 循环里根据 index 删除，会导致下标错乱
+            if !sectionsToDelete.isEmpty {
+                self.mSections.removeAll(where: { sectionsToDelete.contains($0) })
+            }
+
             // 2. 🌟 Diffable Snapshot 核心更新逻辑
             var snapshot = self.diffableDataSource.snapshot()
             snapshot.deleteItems(allRowsToDelete) // 一次性删除所有收集到的 items
+
+            // 🌟 【新增】：一次性删除所有空的 Sections
+            if !sectionsToDelete.isEmpty {
+                snapshot.deleteSections(sectionsToDelete)
+            }
 
             let animated = !self.viewConfig.refreshWithoutAnimation
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
