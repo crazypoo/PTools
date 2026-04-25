@@ -325,63 +325,78 @@ public extension UIView {
     }
     
     //MARK: View的背景渐变
-    func backgroundGradient(type:Imagegradien,
-                            colors:[UIColor],
-                            radius:CGFloat = 0,
-                            borderWidth:CGFloat = 0,
-                            borderColor:UIColor = UIColor.clear,
-                            corner:UIRectCorner = .allCorners) {
-        PTGCDManager.gcdMain {
-            // 检查并移除已经存在的渐变背景层，防止重复添加
-            if let existingGradientView = self.viewWithTag(999) {
-                existingGradientView.removeFromSuperview()
-            }
-
-            // 创建背景视图
-            let gradientBackgroundView = UIView(frame: self.bounds)
-            gradientBackgroundView.tag = 999 // 用 tag 标记，便于后续移除
-            gradientBackgroundView.backgroundColor = .clear
-            gradientBackgroundView.isUserInteractionEnabled = false // 确保不干扰用户操作
-
-            let maskPath = UIBezierPath(roundedRect: gradientBackgroundView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
-            let shapeLayer = CAShapeLayer()
-            shapeLayer.path = maskPath.cgPath
-
-            let maskLayer = CAGradientLayer()
-            maskLayer.colors = colors.map { $0.cgColor }
+    func backgroundGradient(type: Imagegradien,
+                                colors: [UIColor],
+                                radius: CGFloat = 0,
+                                borderWidth: CGFloat = 0,
+                                borderColor: UIColor = UIColor.clear,
+                                corner: UIRectCorner = .allCorners) {
+            
+        // 放在主线程异步执行，有助于让当前 RunLoop 中的其他轻量级 UI 操作先完成
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // 🌟 核心适配代码：强制刷新布局 🌟
+            // 确保 SnapKit 的 remakeConstraints/updateConstraints 已经生效
+            // 并将最新的约束转换为真实的 frame/bounds
+            self.superview?.layoutIfNeeded()
+            self.layoutIfNeeded()
+            
+            // 如果布局后尺寸依然为 0，说明视图还未展示或约束有问题，直接 return 避免崩溃或绘制无效层
+            guard self.bounds.width > 0 && self.bounds.height > 0 else { return }
+            
+            // 1. 移除旧的渐变层和边框层（应对 Model 多次更新的情况）
+            self.layer.sublayers?.removeAll(where: { layer in
+                return layer.name == "CustomGradientBackgroundLayer" || layer.name == "CustomBorderLayer"
+            })
+            
+            // 2. 创建渐变层
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.name = "CustomGradientBackgroundLayer"
+            gradientLayer.frame = self.bounds
+            gradientLayer.colors = colors.map { $0.cgColor }
             
             switch type {
             case .LeftToRight:
-                maskLayer.startPoint = CGPoint(x: 0, y: 0)
-                maskLayer.endPoint = CGPoint(x: 1, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 1, y: 0)
             case .TopToBottom:
-                maskLayer.startPoint = CGPoint(x: 0, y: 0)
-                maskLayer.endPoint = CGPoint(x: 0, y: 1)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 1)
             case .RightToLeft:
-                maskLayer.startPoint = CGPoint(x: 1, y: 0)
-                maskLayer.endPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 1, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             case .BottomToTop:
-                maskLayer.startPoint = CGPoint(x: 0, y: 1)
-                maskLayer.endPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 1)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             }
-            maskLayer.frame = gradientBackgroundView.bounds
-            maskLayer.mask = shapeLayer
-            maskLayer.masksToBounds = true
-            maskLayer.borderWidth = borderWidth
-            maskLayer.borderColor = borderColor.cgColor
-
-            gradientBackgroundView.layer.insertSublayer(maskLayer, at: 0)
-            gradientBackgroundView.layer.masksToBounds = true
-
-            // 将 gradientBackgroundView 添加到 UILabel 背后
-            self.insertSubview(gradientBackgroundView, at: 0)
-
-            self.backgroundColor = .clear // 确保 UILabel 背景透明
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
+            
+            // 3. 处理圆角
+            let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            gradientLayer.mask = maskLayer
+            
+            // 4. 插入渐变层
+            self.layer.insertSublayer(gradientLayer, at: 0)
+            
+            // 5. 单独绘制边框
+            if borderWidth > 0 {
+                let borderLayer = CAShapeLayer()
+                borderLayer.name = "CustomBorderLayer"
+                borderLayer.path = path.cgPath
+                borderLayer.fillColor = UIColor.clear.cgColor
+                borderLayer.strokeColor = borderColor.cgColor
+                borderLayer.lineWidth = borderWidth * 2
+                borderLayer.frame = self.bounds
+                
+                self.layer.insertSublayer(borderLayer, above: gradientLayer)
+            }
+            
+            self.backgroundColor = .clear
         }
     }
-    
+
     //MARK: border的背景渐变
     ///border的背景渐变
     func borderGradient(type:Imagegradien,
