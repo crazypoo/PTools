@@ -453,17 +453,21 @@ public final class NetworkCache : @unchecked Sendable {
         let key = cacheKey(request)
         let now = Date().timeIntervalSince1970
 
-        // 内存
+        // 1. 尝试从内存读取 (极速返回路径)
         if let data = memoryCache.object(forKey: key as NSString) as Data?,
            var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
            obj.expireTime > now {
+            
+            // 💡 核心修复 1：命中内存缓存时，绝对不要触发 save() 去全量写入磁盘！
+            // 只需要更新内存中的 lastAccessTime 即可，避免瞬间产生大量的磁盘 barrier 任务
             obj.lastAccessTime = now
-            // 更新访问时间
-            save(data: obj.data, request: request, expire: obj.expireTime - now)
+            if let encoded = try? JSONEncoder().encode(obj) {
+                memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+            }
             return obj.data
         }
         
-        // 💡 优化：磁盘读取使用同步 IO 队列
+        // 2. 尝试从磁盘读取
         var resultData: Data? = nil
         ioQueue.sync {
             let path = (self.diskPath as NSString).appendingPathComponent(key)
@@ -472,18 +476,24 @@ public final class NetworkCache : @unchecked Sendable {
                obj.expireTime > now {
                 
                 obj.lastAccessTime = now
-                // 更新时间并同步到内存
-                DispatchQueue.global().async {
-                    self.save(data: obj.data, request: request, expire: obj.expireTime - now)
-                }
-                
-                self.memoryCache.setObject(data as NSData, forKey: key as NSString)
                 resultData = obj.data
+                
+                // 将带有最新时间的缓存对象同步回内存中
+                if let encoded = try? JSONEncoder().encode(obj) {
+                    self.memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+                    
+                    // 💡 核心修复 2：安全地触发异步磁盘更新
+                    // 不再跨 DispatchQueue.global() 去调用 self.save
+                    // 而是直接在当前 ioQueue 派发异步 barrier 任务，安全、闭环地更新磁盘文件
+                    self.ioQueue.async(flags: .barrier) {
+                        try? encoded.write(to: URL(fileURLWithPath: path))
+                    }
+                }
             }
         }
         return resultData
     }
-    
+
     // MARK: - Clear
     func clearAll() {
         memoryCache.removeAllObjects()
