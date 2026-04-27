@@ -1040,12 +1040,16 @@ public final class Network: @unchecked Sendable {
                                      body:Data,
                                      header:HTTPHeaders? = nil,
                                      method:HTTPMethod = .post,
+                                     cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
                                      modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
         
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
 
-        let newHeader = header ?? ["Content-Type": "text/plain"]
-        
+        var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
+        // 补充默认的 Content-Type
+        if newHeader["Content-Type"] == nil {
+            newHeader["Content-Type"] = "text/plain"
+        }
         var dic:[String:Any] = [:]
         
         if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []),
@@ -1057,25 +1061,64 @@ public final class Network: @unchecked Sendable {
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
 
-        // ⭐ 优化：直接使用 Alamofire 提供的原生 async/await 接口
-        // 这样写天然支持 Swift 的 Task Cancellation，外部取消时内部请求也会安全终止
-        let dataTask = AF.upload(body,
-                                 to: urlStr1,
-                                 method: method,
-                                 headers: newHeader).serializingData()
+        let session = Network.share.session
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
+        // 将外层传入的 body 赋值给 URLRequest
+        urlRequest.httpBody = body
         
-        // 等待响应结果
-        let response = await dataTask.response
-        
-        switch response.result {
-        case .success(let data):
-            // 解析成功的数据
-            return try parser(response.response, data)
-        case .failure(let error):
-            // 打印错误并抛出
-            logRequestFailure(url: urlStr1, error: error)
-            throw error
+        // 👉 🌟 3. 补上插件前置处理
+        for plugin in Network.share.plugins {
+            await plugin.willSend(&urlRequest)
         }
+        
+        // 🌟 4. 补上读取缓存的逻辑（让这个方法也能真正支持缓存拦截）
+        if urlRequest.isMock {
+            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
+                let parsed = try parser(nil, mockData)
+                return parsed
+            }
+        }
+
+        // 去重策略判断
+        let policy: PTNetworkDedupPolicy = {
+            switch urlRequest.cachePolicyType {
+            case .none:
+                return .none
+            default:
+                return .identical
+            }
+        }()
+        
+        // 🌟 5. 极致优雅的执行闭包
+        let finalRequest = urlRequest
+        let realRequest: @Sendable () async throws -> PTBaseStructModel = {
+            // 使用 session.upload 配合 finalRequest 来发起带 body 的请求
+            let dataTask = session.upload(body, with: finalRequest).serializingData()
+            
+            let response = await dataTask.response
+            let result = response.result
+            
+            // 拦截插件响应
+            for plugin in Network.share.plugins {
+                await plugin.didReceive(result, request: finalRequest, response: response.response)
+            }
+
+            switch result {
+            case .success(let data):
+                return try parser(response.response, data)
+            case .failure(let error):
+                logRequestFailure(url: urlStr1, error: error)
+                throw error
+            }
+        }
+        
+        // 🌟 6. 统一使用去重器执行
+        let result = try await RequestDeduplicator.shared.execute(request: urlRequest,
+                                                                  policy: policy) {
+            try await realRequest()
+        }
+
+        return result
     }
     
     /// 项目总接口
