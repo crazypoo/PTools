@@ -759,7 +759,7 @@ public struct PTNetworkConfig: Sendable {
     public var retryDelay: TimeInterval = 1.5
     public var retryAPIStatusCode: Int = 502
     
-    public var networkCacheOption: PTNetworkCachePolicy = .cacheOnly
+    public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork
     public var networkCacheEXPTime: String = "600"
     public var networkDudupOption: PTNetworkDedupPolicy = .custom("auto")
     
