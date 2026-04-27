@@ -449,11 +449,15 @@ public class LocalConsole: NSObject {
         PTPerformanceLeakDetector.delay = 1
         PTPerformanceLeakDetector.callback = leakCallback
         
-        PTNetWorkStatus.shared.netWork { state in
-            Task { @MainActor in
-                LocalConsole.shared.networkStatus = NetWorkStatus.valueName(type: state)
+        Task {
+            // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
+            for await currentStatus in PTNetWorkStatus.shared.statusStream {
+                PTNSLogConsole("当前网络状态发生了改变：\(NetWorkStatus.valueName(type: currentStatus))")
+                Task { @MainActor in
+                    LocalConsole.shared.networkStatus = NetWorkStatus.valueName(type: currentStatus)
+                }
             }
-        }
+        }        
     }
     
     @MainActor public func cleanSystemLogView() {

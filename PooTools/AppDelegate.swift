@@ -173,14 +173,11 @@ class AppDelegate: PTAppWindowsDelegate {
                 
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
         PTGCDManager.gcdMain {
-            let networkShare = PTNetWorkStatus.shared
-            PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
-            networkShare.reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
-            networkShare.obtainDataFromLocalWhenNetworkUnconnected { state,environment in
-                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
-            }
-            networkShare.netWork { state in
-                PTNSLogConsole("network:>>>>>>>>>>>>>>>>>>>>\(state)")
+            Task {
+                // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
+                for await currentStatus in PTNetWorkStatus.shared.statusStream {
+                    PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(currentStatus)")
+                }
             }
         }
         

@@ -14,11 +14,53 @@ import SwifterSwift
 import CoreTelephony
 import Photos
 
-public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
-public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
-public let NetWorkModelExplainError = NSError(domain: "PT Network model fail".localized(), code: 99999999999)
-public let NetWorkDownloadError = NSError(domain: "PT Network download fail".localized(), code: 99999999997)
-public let NetWorkCheckIPError = NSError(domain: "IP address error", code: 99999999995)
+public enum PTNetworkError: Error, LocalizedError, CustomNSError {
+    case noNetwork
+    case checkIPFail
+    case downloadFail
+    case jsonExplainFail
+    case modelExplainFail
+    
+    case dataEmpty
+    case htmlResponse(String)
+    case uploadDataError(String)
+
+    // MARK: - 1. LocalizedError (提供给界面展示的文本提示)
+    public var errorDescription: String? {
+        switch self {
+        case .noNetwork:        return "PT Network no network".localized()
+        case .checkIPFail:      return "IP address error"
+        case .downloadFail:     return "PT Network download fail".localized()
+        case .jsonExplainFail:  return "PT Network json fail".localized()
+        case .modelExplainFail: return "PT Network model fail".localized()
+            
+            // 🌟 新增的描述
+        case .dataEmpty:              return "Data empty"
+        case .htmlResponse(let html): return html
+        case .uploadDataError(let msg): return msg
+        }
+    }
+    
+    // MARK: - 2. CustomNSError (保留原有的自定义错误码，向下兼容)
+    public var errorCode: Int {
+        switch self {
+        case .checkIPFail:      return 99999999995
+        case .noNetwork:        return 99999999996
+        case .downloadFail:     return 99999999997
+        case .jsonExplainFail:  return 99999999998
+        case .modelExplainFail: return 99999999999
+            
+        case .dataEmpty:        return 9999999901
+        case .htmlResponse:     return 9999999902
+        case .uploadDataError:  return 666
+        }
+    }
+    
+    // 统一的错误 Domain，方便在控制台过滤和排查日志
+    public static var errorDomain: String {
+        return "com.pt.network.error"
+    }
+}
 
 public let AppTestMode = "PT App network environment test".localized()
 public let AppCustomMode = "PT App network environment custom".localized()
@@ -134,123 +176,98 @@ public final class NetworkReachability {
 }
 
 // MARK: - 网络运行状态监听
-@objcMembers
-public class PTNetWorkStatus {
+// 🌟 1. 同样移除 @objcMembers，使用 final 提升性能
+public final class PTNetWorkStatus: @unchecked Sendable {
     
     public static let shared = PTNetWorkStatus()
-    /// 当前网络环境状态
-    private var currentNetWorkStatus: NetWorkStatus = .wifi
-    /// 当前运行环境状态
-    private var currentEnvironment: NetWorkEnvironment = .Test
     
-    private let monitor = NWPathMonitor()
-
-    public var reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
-    
+    // 统一只保留一个监听队列，避免重复开销
+    private let queue = DispatchQueue(label: "pt.network.status.monitor")
     private let ctNetworkInfo = CTTelephonyNetworkInfo()
-
-    private func detectNetWork(netWork: @escaping NetWorkStatusBlock) {
-        reachabilityManager?.startListening(onUpdatePerforming: { [weak self] (status) in
-            guard let weakSelf = self else { return }
-            if self?.reachabilityManager?.isReachable ?? false {
-                switch status {
-                case .notReachable:
-                    weakSelf.currentNetWorkStatus = .notReachable
-                case .unknown:
-                    weakSelf.currentNetWorkStatus = .unknown
-                case .reachable(.cellular):
-                    weakSelf.currentNetWorkStatus = NetWorkStatus.wwan(type: weakSelf.getCellularType())
-                case .reachable(.ethernetOrWiFi):
-                    weakSelf.currentNetWorkStatus = .wifi
-                }
-            } else {
-                weakSelf.currentNetWorkStatus = .notReachable
-            }
-            
-            netWork(weakSelf.currentNetWorkStatus, weakSelf.currentEnvironment)
-        })
-    }
     
-    func getCellularType() -> NetworkCellularType {
+    // 私有化初始化
+    private init() {}
+    
+    // 保留你原本判断蜂窝网络类型的逻辑 (这里不变，只是去掉了隐式 self)
+    private func getCellularType() -> NetworkCellularType {
         let radioAccess: String
-        guard let id = self.ctNetworkInfo.dataServiceIdentifier else { return .ALL }
-        guard let ra = self.ctNetworkInfo.serviceCurrentRadioAccessTechnology?[id] else { return .ALL }
+        guard let id = ctNetworkInfo.dataServiceIdentifier else { return .ALL }
+        guard let ra = ctNetworkInfo.serviceCurrentRadioAccessTechnology?[id] else { return .ALL }
         radioAccess = ra
 
-        if radioAccess == CTRadioAccessTechnologyNRNSA
-            || radioAccess == CTRadioAccessTechnologyNR {
+        if radioAccess == CTRadioAccessTechnologyNRNSA || radioAccess == CTRadioAccessTechnologyNR {
             return .Cellular5G
         }
 
         switch radioAccess {
         case CTRadioAccessTechnologyGPRS,
-            CTRadioAccessTechnologyEdge,
-        CTRadioAccessTechnologyCDMA1x:
+             CTRadioAccessTechnologyEdge,
+             CTRadioAccessTechnologyCDMA1x:
             return .Cellular2G
         case CTRadioAccessTechnologyWCDMA,
-            CTRadioAccessTechnologyHSDPA,
-            CTRadioAccessTechnologyHSUPA,
-            CTRadioAccessTechnologyCDMAEVDORev0,
-            CTRadioAccessTechnologyCDMAEVDORevA,
-            CTRadioAccessTechnologyCDMAEVDORevB,
-        CTRadioAccessTechnologyeHRPD:
+             CTRadioAccessTechnologyHSDPA,
+             CTRadioAccessTechnologyHSUPA,
+             CTRadioAccessTechnologyCDMAEVDORev0,
+             CTRadioAccessTechnologyCDMAEVDORevA,
+             CTRadioAccessTechnologyCDMAEVDORevB,
+             CTRadioAccessTechnologyeHRPD:
             return .Cellular3G
         case CTRadioAccessTechnologyLTE:
             return .Cellular4G
         default:
-            return.Cellular4G
+            return .Cellular4G
         }
     }
     
-    ///监听网络运行状态
-    public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetWorkStatus,NetWorkEnvironment) -> Void)?) {
-        detectNetWork { (status, environment)  in
-            PTNSLogConsole(String(format: "PT App current mode".localized(), NetWorkStatus.valueName(type: status),NetWorkEnvironment.valueName(type: environment)),levelType: PTLogMode,loggerType: .network)
-            handle?(status,environment)
-        }
-    }
-    
-    public func netWork(handle: @escaping (_ status:NetWorkStatus) -> Void) {
-        PTGCDManager.gcdMain {
-            self.monitor.pathUpdateHandler = { path in
+    // 🌟 2. 核心大招：使用 AsyncStream 替代闭包回调
+    /// 监听网络状态的异步流
+    public var statusStream: AsyncStream<NetWorkStatus> {
+        AsyncStream { continuation in
+            let monitor = NWPathMonitor()
+            
+            monitor.pathUpdateHandler = { [weak self] path in
+                guard let self = self else { return }
+                
+                let status: NetWorkStatus
                 if path.status == .satisfied {
                     if path.usesInterfaceType(.wifi) {
-                        handle(.wifi)
+                        status = .wifi
                     } else if path.usesInterfaceType(.cellular) {
-                        handle(NetWorkStatus.wwan(type: self.getCellularType()))
+                        status = .wwan(type: self.getCellularType())
                     } else if path.usesInterfaceType(.wiredEthernet) {
-                        handle(.wiredEthernet)
+                        status = .wiredEthernet
                     } else if path.usesInterfaceType(.loopback) {
-                        handle(.loopback)
+                        status = .loopback
                     } else if path.usesInterfaceType(.other) {
-                        handle(.other)
+                        status = .other
                     } else if path.isExpensive {
-                        handle(.checking)
+                        status = .checking
                     } else {
-                        handle(.unknown)
+                        status = .unknown
                     }
                 } else if path.status == .unsatisfied {
-                    handle(.notReachable)
+                    status = .notReachable
                 } else if path.status == .requiresConnection {
-                    handle(.requiresConnection)
+                    status = .requiresConnection
                 } else {
-                    handle(.unknown)
+                    status = .unknown
                 }
+                
+                // 将最新状态发送到流中
+                continuation.yield(status)
             }
-            let queue = DispatchQueue.global(qos:.background)
-            self.monitor.start(queue: queue)
+            
+            // 启动监听
+            monitor.start(queue: self.queue)
+            
+            // 🌟 3. 自动销毁机制：当外部不再监听 (Task 被取消) 时，自动释放 monitor
+            continuation.onTermination = { @Sendable _ in
+                monitor.cancel()
+                PTNSLogConsole("🌐 网络监听已自动销毁", levelType: PTLogMode, loggerType: .network)
+            }
         }
     }
-    
-    public func checkNetworkStatusCancel() {
-        monitor.cancel()
-    }
-    
-    deinit {
-        checkNetworkStatusCancel()
-    }
 }
-
 extension Error {
     var isNetworkError: Bool {
         if let afError = self as? AFError {
@@ -275,9 +292,9 @@ fileprivate class RetryHandler: @unchecked Sendable ,RequestInterceptor {
     private let jitter: TimeInterval = 0.4
     
     init() {
-        retryLimitSnapshot = Network.share.retryTimes
-        baseDelaySnapshot = Network.share.retryDelay
-        statusCodeToRetry = Network.share.retryAPIStatusCode
+        retryLimitSnapshot = Network.share.config.retryTimes
+        baseDelaySnapshot = Network.share.config.retryDelay
+        statusCodeToRetry = Network.share.config.retryAPIStatusCode
     }
     
     private func shouldRetry(statusCode: Int?) -> Bool {
@@ -372,12 +389,12 @@ public enum MimeTypeHelper {
     }
 }
 
-public protocol NetworkPlugin {
+public protocol NetworkPlugin: Sendable {
     /// 请求发出前
-    func willSend(_ request: inout URLRequest)
+    func willSend(_ request: inout URLRequest) async
     
     /// 收到响应
-    func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?)
+    func didReceive(_ result: Result<Data, AFError>, request: URLRequest, response: HTTPURLResponse?) async
 }
 
 public struct CacheObject: Codable {
@@ -388,7 +405,7 @@ public struct CacheObject: Codable {
 
 //private var kCacheDataKey = 888888888
 
-public enum PTNetworkCachePolicy:String {
+public enum PTNetworkCachePolicy:String, Sendable {
     case none                   // 不缓存
     case cacheOnly              // 只用缓存
     case networkOnly            // 只走网络
@@ -396,16 +413,13 @@ public enum PTNetworkCachePolicy:String {
     case networkElseCache       // 网络失败再用缓存
 }
 
-public final class NetworkCache : @unchecked Sendable {
+public actor NetworkCache {
     
     static let shared = NetworkCache()
     
     private let memoryCache = NSCache<NSString, NSData>()
     private let diskPath: String
     private var lastCleanTime: TimeInterval = 0
-
-    // 💡 新增：用于保护磁盘 IO 的专用队列，防止多线程同时读写同一个文件
-    private let ioQueue = DispatchQueue(label: "pt.network.cache.io", attributes: .concurrent)
     
     private init() {
         let path = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
@@ -437,13 +451,11 @@ public final class NetworkCache : @unchecked Sendable {
                               lastAccessTime: now)
         
         guard let encoded = try? JSONEncoder().encode(obj) else { return }
-        
         memoryCache.setObject(encoded as NSData, forKey: key as NSString)
         
-        // 💡 优化：磁盘写入使用 barrier 异步操作，保证数据一致性
-        ioQueue.async(flags: .barrier) { [weak self] in
-            guard let self = self else { return }
-            let path = self.diskPath.nsString.appendingPathComponent(key)
+        let path = self.diskPath.nsString.appendingPathComponent(key)
+        // 💡 异步脱离：让磁盘写入去后台默默执行，绝不阻塞 actor 响应下一个请求
+        Task.detached(priority: .background) {
             try? encoded.write(to: URL(fileURLWithPath: path))
         }
     }
@@ -468,50 +480,43 @@ public final class NetworkCache : @unchecked Sendable {
         }
         
         // 2. 尝试从磁盘读取
-        var resultData: Data? = nil
-        ioQueue.sync {
-            let path = (self.diskPath as NSString).appendingPathComponent(key)
-            if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-               var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
-               obj.expireTime > now {
-                
-                obj.lastAccessTime = now
-                resultData = obj.data
-                
-                // 将带有最新时间的缓存对象同步回内存中
-                if let encoded = try? JSONEncoder().encode(obj) {
-                    self.memoryCache.setObject(encoded as NSData, forKey: key as NSString)
-                    
-                    // 💡 核心修复 2：安全地触发异步磁盘更新
-                    // 不再跨 DispatchQueue.global() 去调用 self.save
-                    // 而是直接在当前 ioQueue 派发异步 barrier 任务，安全、闭环地更新磁盘文件
-                    self.ioQueue.async(flags: .barrier) {
-                        try? encoded.write(to: URL(fileURLWithPath: path))
-                    }
+        let path = (self.diskPath as NSString).appendingPathComponent(key)
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
+           var obj = try? JSONDecoder().decode(CacheObject.self, from: data),
+           obj.expireTime > now {
+            
+            obj.lastAccessTime = now
+            if let encoded = try? JSONEncoder().encode(obj) {
+                // 同步到内存
+                memoryCache.setObject(encoded as NSData, forKey: key as NSString)
+                // 脱离更新磁盘访问时间
+                Task.detached(priority: .background) {
+                    try? encoded.write(to: URL(fileURLWithPath: path))
                 }
             }
+            return obj.data
         }
-        return resultData
+        return nil
     }
 
     // MARK: - Clear
-    func clearAll() {
+    public func clearAll() {
         memoryCache.removeAllObjects()
         try? FileManager.default.removeItem(atPath: diskPath)
     }
     
     public func cleanIfNeeded() {
         let now = Date().timeIntervalSince1970
-        guard now - lastCleanTime > Network.share.cleanCachePreSec else { return } // 1分钟最多一次
-        
+        guard now - lastCleanTime > Network.share.config.cleanCachePreSec else { return } // 1分钟最多一次
         lastCleanTime = now
         
-        DispatchQueue.global(qos: .background).async {
+        // 保持后台清理，不卡主线程和 actor
+        Task.detached(priority: .background) {
             self._cleanDisk()
         }
     }
     
-    private func _cleanDisk() {
+    private nonisolated func _cleanDisk() {
         let fm = FileManager.default
         guard let files = try? fm.contentsOfDirectory(
             at: URL(fileURLWithPath: diskPath),
@@ -545,12 +550,12 @@ public final class NetworkCache : @unchecked Sendable {
         }
 
         // ✅ 不超限直接返回
-        if totalSize <= Network.share.maxDiskSize { return }
+        if totalSize <= Network.share.config.maxDiskSize { return }
 
         // ❗ LRU：按最后访问时间排序（最旧优先删）
         cacheFiles.sort { $0.lastAccess < $1.lastAccess }
 
-        let targetSize = Int64(Double(Network.share.maxDiskSize) * Network.share.cleanThreshold)
+        let targetSize = Int64(Double(Network.share.config.maxDiskSize) * Network.share.config.cleanThreshold)
 
         for file in cacheFiles {
             try? fm.removeItem(at: file.url)
@@ -613,7 +618,7 @@ extension URLRequest {
 
 public final class PTNetworkCachePlugin: NetworkPlugin {
     
-    public func willSend(_ request: inout URLRequest) {
+    public func willSend(_ request: inout URLRequest) async {
         
         guard request.httpMethod == "GET" else { return }
         
@@ -624,7 +629,7 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
             return
             
         case .cacheOnly, .cacheElseNetwork:
-            if let _ = NetworkCache.shared.read(request: request) {
+            if let _ = await NetworkCache.shared.read(request: request) {
                 request.isMock = true
             }
             
@@ -635,13 +640,13 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
     
     public func didReceive(_ result: Result<Data, AFError>,
                     request: URLRequest,
-                    response: HTTPURLResponse?) {
+                    response: HTTPURLResponse?) async {
         
         guard case .success(let data) = result else {
             
             // 网络失败 → fallback cache
             if request.cachePolicyType == .networkElseCache,
-               let cache = NetworkCache.shared.read(request: request) {
+               let cache = await NetworkCache.shared.read(request: request) {
                 
                 NotificationCenter.default.post(
                     name: NSNotification.Name("PTNetworkCacheFallback"),
@@ -656,7 +661,7 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
         
         let expire = request.cacheExpire
         
-        NetworkCache.shared.save(
+        await NetworkCache.shared.save(
             data: data,
             request: request,
             expire: expire
@@ -664,7 +669,7 @@ public final class PTNetworkCachePlugin: NetworkPlugin {
     }
 }
 
-public enum PTNetworkDedupPolicy {
+public enum PTNetworkDedupPolicy : Sendable {
     case none                  // 不去重（默认）
     case identical             // 完全相同才去重（推荐）
     case custom(String)        // 自定义 key
@@ -738,38 +743,63 @@ public actor RequestDeduplicator {
     }
 }
 
-@objcMembers
-public class Network: NSObject {
+// 🌟 1. 抽离所有配置项，放入一个轻量级的 Sendable 结构体中
+public struct PTNetworkConfig: Sendable {
+    public var netRequsetTime: TimeInterval = 20
+    public var downloadRequsetTime: TimeInterval = 5
+    public var downloadEndTime: TimeInterval = 3600
+    
+    public var serverAddress: String = ""
+    public var serverAddress_dev: String = ""
+    public var socketAddress: String = ""
+    public var socketAddress_dev: String = ""
+    
+    public var userToken: String = ""
+    public var retryTimes: Int = 3
+    public var retryDelay: TimeInterval = 1.5
+    public var retryAPIStatusCode: Int = 502
+    
+    public var networkCacheOption: PTNetworkCachePolicy = .cacheOnly
+    public var networkCacheEXPTime: String = "600"
+    public var networkDudupOption: PTNetworkDedupPolicy = .custom("auto")
+    
+    public var maxDiskSize: Int64 = 100 * 1024 * 1024  // 100MB
+    public var cleanThreshold: Double = 0.7            // 清到70%
+    public var cleanCachePreSec: TimeInterval = 60
+    
+    public init() {} // 提供公开的初始化方法
+}
+
+public final class Network: @unchecked Sendable {
     
     static public let share = Network()
             
     public var plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]
     
-    ///网络请求时间
-    open var netRequsetTime:TimeInterval = 20
-    open var downloadRequsetTime:TimeInterval = 5
-    open var downloadEndTime:TimeInterval = 3600
-    open var serverAddress:String = ""
-    open var serverAddress_dev:String = ""
-    open var socketAddress:String = ""
-    open var socketAddress_dev:String = ""
-    open var userToken:String = ""
-    open var retryTimes:Int = 3
-    open var retryDelay:TimeInterval = 1.5
-    open var retryAPIStatusCode:Int = 502
-    open var networkCacheOption:PTNetworkCachePolicy = .cacheOnly
-    open var networkCacheEXPTime:String = "600"
-    open var networkDudupOption:PTNetworkDedupPolicy = .custom("auto")
-    open var maxDiskSize: Int64 = 100 * 1024 * 1024   // 100MB
-    open var cleanThreshold: Double = 0.7             // 清到70%
-    open var cleanCachePreSec: TimeInterval = 60             // x分钟内不可以多次
-
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
+
+    // 🌟 3. 使用锁来保护配置的读写，实现 100% 的线程安全
+    private let configLock = NSLock()
+    private var _config = PTNetworkConfig()
+    
+    /// 统一的线程安全配置入口
+    public var config: PTNetworkConfig {
+        get {
+            configLock.lock()
+            defer { configLock.unlock() }
+            return _config
+        }
+        set {
+            configLock.lock()
+            _config = newValue
+            configLock.unlock()
+        }
+    }
 
     /// manager
     private lazy var session: Session = {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = netRequsetTime
+        configuration.timeoutIntervalForRequest = config.netRequsetTime
         configuration.waitsForConnectivity = true
         configuration.requestCachePolicy = .useProtocolCachePolicy
         configuration.urlCache = URLCache(
@@ -780,15 +810,15 @@ public class Network: NSObject {
                        interceptor: RetryHandler())
     }()
     
-    open var hud:PTHudView?
-    open var hudConfig : PTHudConfig {
+    public var hud:PTHudView?
+    public var hudConfig : PTHudConfig {
         let hudConfig = PTHudConfig.share
         hudConfig.hudColors = [.gray,.gray]
         hudConfig.lineWidth = 4
         return hudConfig
     }
     
-    func hudShow()  {
+    public func hudShow()  {
         PTGCDManager.gcdMain {
             let _ = Network.share.hudConfig
             if self.hud == nil {
@@ -798,7 +828,7 @@ public class Network: NSObject {
         }
     }
     
-    @MainActor func hudHide(completion:PTActionTask? = nil) {
+    @MainActor public func hudHide(completion:PTActionTask? = nil) {
         if let hud = self.hud {
             hud.hide { [weak self] in
                 self?.hud = nil
@@ -819,17 +849,17 @@ public class Network: NSObject {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
                 if url_debug.isEmpty {
-                    return Network.share.serverAddress_dev
+                    return Network.share.config.serverAddress_dev
                 } else {
                     return url_debug
                 }
             case .Test:
-                return Network.share.serverAddress_dev
+                return Network.share.config.serverAddress_dev
             case .Distribution:
-                return Network.share.serverAddress
+                return Network.share.config.serverAddress
             }
         } else {
-            return Network.share.serverAddress
+            return Network.share.config.serverAddress
         }
     }
     
@@ -843,17 +873,17 @@ public class Network: NSObject {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
                 if url_debug.isEmpty {
-                    return Network.share.socketAddress_dev
+                    return Network.share.config.socketAddress_dev
                 } else {
                     return url_debug
                 }
             case .Test:
-                return Network.share.socketAddress_dev
+                return Network.share.config.socketAddress_dev
             case .Distribution:
-                return Network.share.socketAddress
+                return Network.share.config.socketAddress
             }
         } else {
-            return Network.share.socketAddress
+            return Network.share.config.socketAddress
         }
     }
     
@@ -898,7 +928,7 @@ public class Network: NSObject {
     // 封装 token 添加逻辑
     private static func addToken(to headers: HTTPHeaders) -> HTTPHeaders {
         var headers = headers
-        let token = Network.share.userToken
+        let token = Network.share.config.userToken
         if !token.isEmpty {
             headers["token"] = token
             headers["device"] = "iOS"
@@ -925,8 +955,8 @@ public class Network: NSObject {
         result.resultData = data
         
         guard let data = data, !data.isEmpty else {
-            let error = AFError.createURLRequestFailed(error: NSError(domain: "Data empty", code: 9999999901))
-            logRequestFailure(url: url, error: error)
+            let error = PTNetworkError.dataEmpty
+            logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
             throw error
         }
         
@@ -935,8 +965,8 @@ public class Network: NSObject {
         // 非 JSON 的情况（可能是 HTML 或纯文本）
         if !isMockData && !isJSONResponse(response, data: data) {
             if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
-                let error = AFError.createURLRequestFailed(error: NSError(domain: html, code: 9999999902))
-                logRequestFailure(url: url, error: error)
+                let error = PTNetworkError.htmlResponse(html)
+                logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
                 throw error
             }
             // 如果不是 HTML，就当作纯文本成功返回（Debug 打印文本）
@@ -980,9 +1010,9 @@ public class Network: NSObject {
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
         }
-        apiHeader["cachePolicy"] = self.share.networkCacheOption.rawValue
-        apiHeader["cacheExpire"] = self.share.networkCacheEXPTime
-        apiHeader["dedupPolicy"] = self.share.networkDudupOption.getOptionName()
+        apiHeader["cachePolicy"] = Network.share.config.networkCacheOption.rawValue
+        apiHeader["cacheExpire"] = Network.share.config.networkCacheEXPTime
+        apiHeader["dedupPolicy"] = Network.share.config.networkDudupOption.getOptionName()
         return addToken(to: apiHeader)
     }
 
@@ -1065,12 +1095,12 @@ public class Network: NSObject {
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
         urlRequest = try encoder.encode(urlRequest, with: parameters)
         // 👉 插件前置处理
-        Network.share.plugins.forEach {
-            $0.willSend(&urlRequest)
+        for plugin in Network.share.plugins {
+            await plugin.willSend(&urlRequest)
         }
         
         if urlRequest.isMock {
-            if let mockData = NetworkCache.shared.read(request: urlRequest) {
+            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
                 let parsed = try parser(nil, mockData)
                 return parsed
             }
@@ -1094,10 +1124,10 @@ public class Network: NSObject {
             // 拦截插件响应
             let response = await dataTask.response
             let result = response.result
-            Network.share.plugins.forEach {
-                $0.didReceive(result, request: finalRequest, response: response.response)
+            for plugin in Network.share.plugins {
+                await plugin.didReceive(result, request: finalRequest, response: response.response)
             }
-            
+
             switch result {
             case .success(let data):
                 return try parser(response.response, data)
@@ -1148,7 +1178,7 @@ public class Network: NSObject {
                                             let mimeType = MimeTypeHelper.mimeType(for: ext)
                                             multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                                         } else {
-                                            continuation.finish(throwing: NSError(domain: "Image data error", code: 666))
+                                            continuation.finish(throwing: PTNetworkError.uploadDataError("Image data error"))
                                         }
                                     }
                                 }
@@ -1161,7 +1191,7 @@ public class Network: NSObject {
                                         let mimeType: String = MimeTypeHelper.mimeType(for: ext)
                                         multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
                                     } else {
-                                        continuation.finish(throwing: NSError(domain: "Video data error", code: 666))
+                                        continuation.finish(throwing: PTNetworkError.uploadDataError("Video data error"))
                                     }
                                 }
                             case .audio:
@@ -1347,8 +1377,8 @@ public class Network: NSObject {
     // 自定义 Session，支持总超时
     private lazy var downloadSession: Session = {
         let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = Network.share.downloadRequsetTime
-        config.timeoutIntervalForResource = Network.share.downloadEndTime
+        config.timeoutIntervalForRequest = Network.share.config.downloadRequsetTime
+        config.timeoutIntervalForResource = Network.share.config.downloadEndTime
         config.httpMaximumConnectionsPerHost = 6   // 控制并发
         return Session(configuration: config)
     }()

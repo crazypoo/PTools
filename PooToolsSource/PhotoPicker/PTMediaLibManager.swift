@@ -132,7 +132,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     // 💡 Swift 6 优化：废弃 Timer，使用现代的 Task 机制处理超时
     let timeoutTask = Task { @MainActor in
         // 将超时时间转换为纳秒 (nanoseconds)
-        let nanoseconds = UInt64(Network.share.netRequsetTime * 1_000_000_000)
+        let nanoseconds = UInt64(Network.share.config.netRequsetTime * 1_000_000_000)
         try? await Task.sleep(nanoseconds: nanoseconds)
         
         // 醒来后检查任务是否已经被取消，如果取消了说明网络请求已经成功，直接退出

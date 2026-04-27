@@ -48,8 +48,11 @@ class PTFuncDetailViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        PTNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { status,environment in
-            self.appNetWorkStatus = status
+        Task {
+            // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
+            for await currentStatus in PTNetWorkStatus.shared.statusStream {
+                self.appNetWorkStatus = currentStatus
+            }
         }
     }
     

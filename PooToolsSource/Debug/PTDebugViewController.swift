@@ -129,7 +129,7 @@ public class PTDebugViewController: PTBaseViewController {
                         var current = ""
                         let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
                         if url_debug.isEmpty {
-                            current = Network.share.serverAddress_dev
+                            current = Network.share.config.serverAddress_dev
                         } else {
                             current = url_debug
                         }
@@ -169,7 +169,7 @@ public class PTDebugViewController: PTBaseViewController {
                         var current = ""
                         let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
                         if url_debug.isEmpty {
-                            current = Network.share.socketAddress_dev
+                            current = Network.share.config.socketAddress_dev
                         } else {
                             current = url_debug
                         }
