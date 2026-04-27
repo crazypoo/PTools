@@ -1004,13 +1004,15 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool) -> HTTPHeaders {
+    private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool,cachePolicy: PTNetworkCachePolicy? = nil) -> HTTPHeaders {
         var apiHeader = header ?? HTTPHeaders()
         if jsonRequest {
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
         }
-        apiHeader["cachePolicy"] = Network.share.config.networkCacheOption.rawValue
+        // 🌟 核心逻辑：优先使用局部传入的策略，如果没有传，则使用全局共享配置
+        let finalCachePolicy = cachePolicy ?? Network.share.config.networkCacheOption
+        apiHeader["cachePolicy"] = finalCachePolicy.rawValue
         apiHeader["cacheExpire"] = Network.share.config.networkCacheEXPTime
         apiHeader["dedupPolicy"] = Network.share.config.networkDudupOption.getOptionName()
         return addToken(to: apiHeader)
@@ -1082,11 +1084,12 @@ public final class Network: @unchecked Sendable {
                                  method: HTTPMethod = .post,
                                  header:HTTPHeaders? = nil,
                                  parameters: Parameters? = nil,
+                                 cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 新增暴露参数，默认 nil
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest,cachePolicy: cachePolicy)
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
