@@ -1285,6 +1285,11 @@ extension PTCollectionView {
     /// 删除 Rows
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
+            guard section >= 0, section < self.mSections.count else {
+                completion?()
+                return
+            }
+            
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             
@@ -1428,10 +1433,10 @@ extension PTCollectionView {
     }
     
     private func buildSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        guard !mSections.isEmpty else {
+        guard section >= 0, section < mSections.count else {
             return NSCollectionLayoutSection(group: oneSquareGroup())
         }
-        
+
         let sectionModel = mSections[section]
         
         // 🌟 修复核心 1：千万不要用 frame.size.width！
@@ -1564,6 +1569,12 @@ extension PTCollectionView {
     
     fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         
+        // 🌟 核心修复 1：防越界保护！
+        // 防止在执行删除动画时，Layout 请求了已经被我们从 mSections 中删除的旧索引
+        guard section >= 0, section < mSections.count else {
+            return NSCollectionLayoutSection(group: oneSquareGroup())
+        }
+
         let sectionModel = mSections[section]
         let key = LayoutCacheKey(section: section,
                                  width: environment.container.contentSize.width,
