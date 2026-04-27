@@ -1310,10 +1310,10 @@ extension PTCollectionView {
             if sectionModel.rows?.isEmpty ?? true {
                 // 从快照中干掉空的 Section
                 snapshot.deleteSections([sectionModel])
-                // 同步维护底层 mSections 数据源
-                self.mSections.remove(at: section)
             }
 
+            self.mSections = snapshot.sectionIdentifiers
+            
             let animated = !self.viewConfig.refreshWithoutAnimation
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
                 self.setiOS17EmptyDataView()
