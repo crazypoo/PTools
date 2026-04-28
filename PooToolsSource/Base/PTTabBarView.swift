@@ -362,6 +362,8 @@ final public class PTTabBarView: UIView {
             if PTAppBaseConfig.share.tabbarMetailMode {
                 glassBackgroundView.effect = UIBlurEffect(style: .systemMaterial)
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
+            } else {
+                tabContainerHeight = CGFloat.kTabbarHeight_Total
             }
         }
 
