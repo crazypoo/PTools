@@ -233,17 +233,17 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
 
     private func videoUrlLoad(url: String) {
-        PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
+        PTVideoManager.shared.getVideoItem(for: url,autoCacheVideo: true) { item in
             PTGCDManager.gcdMain {
-                self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+                self.contentImageView.image = item.coverImage ?? PTAppBaseConfig.share.defaultEmptyImage
             }
+        } videoReady: { item in
+            if let urlSave = URL(string: url) {
+                self.loadMediaURL = urlSave
+            }
+            self.videoCacheURL = item.localVideoURL
         }
-        
-        if let urlSave = URL(string: url) {
-            loadMediaURL = urlSave
-            self.videoCacheURL = PTVideoFileCache.shared.cachedFileURL(for: urlSave)
-        }
-        
+                
         mediaPlayButtonImageSet()
         
         mediaPlayImageView.addActionHandlers { sender in

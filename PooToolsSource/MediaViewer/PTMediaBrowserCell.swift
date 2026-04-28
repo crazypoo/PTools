@@ -493,22 +493,21 @@ extension PTMediaBrowserCell {
 
     func handleVideoLoading(videoUrl: String) {
         if let url = URL(string: videoUrl) {
-            self.videoCacheURL = PTVideoFileCache.shared.cachedFileURL(for: url)
-            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
-                PTGCDManager.gcdMain {
-                    if let findImage = image {
-                        self.hideLoading()
-                        self.setupVideoView(image: findImage, videoUrl: videoUrl)
-                    } else {
-                        self.handleVideoLoadError()
-                    }
+            PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { item in
+                if let findImage = item.coverImage {
+                    self.hideLoading()
+                    self.setupVideoView(image: findImage, videoUrl: videoUrl)
+                } else {
+                    self.handleVideoLoadError()
                 }
-            }
-            
-            if let _ = self.videoCacheURL {
-            } else {
-                PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
-                    self.videoCacheURL = localURL
+            } videoReady: { item in
+                self.videoCacheURL = item.localVideoURL
+                
+                if let _ = self.videoCacheURL {
+                } else {
+                    PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
+                        self.videoCacheURL = localURL
+                    }
                 }
             }
         } else {
@@ -569,12 +568,14 @@ extension PTMediaBrowserCell {
     
     func prepareVideoFunction(url:URL,videoController:PTPlayerViewController) {
         self.showLoading()
-        PTVideoFileCache.shared.prepareVideo(url: url) { _, _, progress in
+        PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { _, _, progress in
             self.loading.progress = progress
-        } completion: { localURL in
+        } coverReady: { item in
+            
+        } videoReady: { item in
             self.hideLoading()
-            self.videoCacheURL = localURL
-            if let findLocal = localURL {
+            self.videoCacheURL = item.localVideoURL
+            if let findLocal = item.localVideoURL {
                 videoController.videoPlayer = AVPlayer(url: findLocal)
                 self.videoPlayHandler?(videoController)
             } else {

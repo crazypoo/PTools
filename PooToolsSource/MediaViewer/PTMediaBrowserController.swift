@@ -566,11 +566,13 @@ fileprivate extension PTMediaBrowserController {
                 loadingView.removeFromSuperview()
                 self.saveVideo(videoPath: findCurrentLocal.path,videoOrURL: url)
             } else {
-                PTVideoFileCache.shared.prepareVideo(url: urlReal) { bytesRead, totalBytesRead, progress in
+                PTVideoManager.shared.getVideoItem(for: urlReal.absoluteString,autoCacheVideo: true) { _, _, progress in
                     loadingView.progress = progress
-                } completion: { [weak self] localURL in
+                } coverReady: { item in
+                    
+                } videoReady: { [weak self] item in
                     loadingView.hudHide()
-                    if let findLocal = localURL {
+                    if let findLocal = item.localVideoURL {
                         self?.saveVideo(videoPath: findLocal.path,videoOrURL: url)
                     } else {
                         self?.viewSaveImageBlock?(false)

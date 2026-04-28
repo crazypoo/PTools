@@ -773,11 +773,11 @@ public struct PTNetworkConfig: Sendable {
 public final class Network: @unchecked Sendable {
     
     static public let share = Network()
-            
+    
     public var plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]
     
     private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
-
+    
     // 🌟 3. 使用锁来保护配置的读写，实现 100% 的线程安全
     private let configLock = NSLock()
     private var _config = PTNetworkConfig()
@@ -795,7 +795,7 @@ public final class Network: @unchecked Sendable {
             configLock.unlock()
         }
     }
-
+    
     /// manager
     private lazy var session: Session = {
         let configuration = URLSessionConfiguration.default
@@ -838,7 +838,7 @@ public final class Network: @unchecked Sendable {
             completion?()
         }
     }
-        
+    
     //MARK: 服务器URL
     @MainActor
     public class func gobalUrl() async -> String {
@@ -916,15 +916,15 @@ public final class Network: @unchecked Sendable {
         let headerStr = headers.dictionary.jsonString() ?? ""
         PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(headerStr)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
     }
-
+    
     private static func logRequestSuccess(url: String, jsonStr: String) {
         PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .network)
     }
-
+    
     private static func logRequestFailure(url: String, error: AFError) {
         PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .error, loggerType: .network)
     }
-
+    
     // 封装 token 添加逻辑
     private static func addToken(to headers: HTTPHeaders) -> HTTPHeaders {
         var headers = headers
@@ -1017,7 +1017,7 @@ public final class Network: @unchecked Sendable {
         apiHeader["dedupPolicy"] = Network.share.config.networkDudupOption.getOptionName()
         return addToken(to: apiHeader)
     }
-
+    
     private static func createURLRequest(urlStr: URLConvertible, needGobal: Bool) async throws -> String {
         let original = try urlStr.asURL().absoluteString
         
@@ -1044,7 +1044,7 @@ public final class Network: @unchecked Sendable {
                                      modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
         
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-
+        
         var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
         // 补充默认的 Content-Type
         if newHeader["Content-Type"] == nil {
@@ -1060,7 +1060,7 @@ public final class Network: @unchecked Sendable {
         logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
-
+        
         let session = Network.share.session
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
         // 将外层传入的 body 赋值给 URLRequest
@@ -1078,7 +1078,7 @@ public final class Network: @unchecked Sendable {
                 return parsed
             }
         }
-
+        
         // 去重策略判断
         let policy: PTNetworkDedupPolicy = {
             switch urlRequest.cachePolicyType {
@@ -1102,7 +1102,7 @@ public final class Network: @unchecked Sendable {
             for plugin in Network.share.plugins {
                 await plugin.didReceive(result, request: finalRequest, response: response.response)
             }
-
+            
             switch result {
             case .success(let data):
                 return try parser(response.response, data)
@@ -1117,7 +1117,7 @@ public final class Network: @unchecked Sendable {
                                                                   policy: policy) {
             try await realRequest()
         }
-
+        
         return result
     }
     
@@ -1136,7 +1136,7 @@ public final class Network: @unchecked Sendable {
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
         
         let parser = makeResponseParser(url: urlStr1, modelType: modelType)
-
+        
         let session = Network.share.session
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
         urlRequest = try encoder.encode(urlRequest, with: parameters)
@@ -1151,7 +1151,7 @@ public final class Network: @unchecked Sendable {
                 return parsed
             }
         }
-
+        
         // 3. ⭐这里决定去重策略
         let policy: PTNetworkDedupPolicy = {
             switch urlRequest.cachePolicyType {
@@ -1173,7 +1173,7 @@ public final class Network: @unchecked Sendable {
             for plugin in Network.share.plugins {
                 await plugin.didReceive(result, request: finalRequest, response: response.response)
             }
-
+            
             switch result {
             case .success(let data):
                 return try parser(response.response, data)
@@ -1187,10 +1187,10 @@ public final class Network: @unchecked Sendable {
                                                                   policy: policy) {
             try await realRequest()
         }
-
+        
         return result
     }
-        
+    
     class public func fileUpload(needGobal: Bool = true,
                                  media: Any,
                                  path: URLConvertible,
@@ -1247,7 +1247,7 @@ public final class Network: @unchecked Sendable {
                                         let dateString = Int(Date().timeIntervalSince1970)
                                         let fileName = "audio_\(dateString).\(ext)"
                                         let mimeType: String = MimeTypeHelper.mimeType(for: ext)
-
+                                        
                                         multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
                                     }
                                 }
@@ -1270,25 +1270,25 @@ public final class Network: @unchecked Sendable {
                             if findUrl.isFileURL {
                                 // fileProvider / iCloud 需要先复制
                                 let uploadURL: URL
-
+                                
                                 if findUrl.path.contains("File Provider Storage")
                                     || findUrl.path.contains("com.apple.FileProvider") {
-
+                                    
                                     let tmpURL = FileManager.default.temporaryDirectory
                                         .appendingPathComponent(findUrl.lastPathComponent)
-
+                                    
                                     try? FileManager.default.removeItem(at: tmpURL)
                                     try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
-
+                                    
                                     uploadURL = tmpURL
                                 } else {
                                     uploadURL = findUrl
                                 }
-
+                                
                                 let ext = uploadURL.pathExtension.lowercased()
                                 let mimeType = MimeTypeHelper.mimeType(for: ext)
                                 let fileName = uploadURL.lastPathComponent
-
+                                
                                 multipartFormData.append(uploadURL, withName: fileKey, fileName: fileName, mimeType: mimeType)
                             } else {
                                 continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
@@ -1297,25 +1297,25 @@ public final class Network: @unchecked Sendable {
                             if findUrl.isFileURL {
                                 // fileProvider / iCloud 需要先复制
                                 let uploadURL: URL
-
+                                
                                 if findUrl.path.contains("File Provider Storage")
                                     || findUrl.path.contains("com.apple.FileProvider") {
-
+                                    
                                     let tmpURL = FileManager.default.temporaryDirectory
                                         .appendingPathComponent(findUrl.lastPathComponent)
-
+                                    
                                     try? FileManager.default.removeItem(at: tmpURL)
                                     try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
-
+                                    
                                     uploadURL = tmpURL
                                 } else {
                                     uploadURL = findUrl
                                 }
-
+                                
                                 let ext = uploadURL.pathExtension.lowercased()
                                 let mimeType = MimeTypeHelper.mimeType(for: ext)
                                 let fileName = uploadURL.lastPathComponent
-
+                                
                                 multipartFormData.append(uploadURL, withName: fileKey, fileName: fileName, mimeType: mimeType)
                             } else {
                                 continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
@@ -1352,7 +1352,7 @@ public final class Network: @unchecked Sendable {
             }
         }
     }
-        
+    
     /// 图片上传接口 (优化版)
     class public func imageUpload(needGobal: Bool = true,
                                   images: [UIImage]?,
@@ -1373,22 +1373,22 @@ public final class Network: @unchecked Sendable {
                     
                     let parser = makeResponseParser(url: pathUrl, modelType: modelType)
                     let session = Network.share.session
-
+                    
                     session.upload(multipartFormData: { multipartFormData in
                         // 使用枚举配合 autoreleasepool 防止大图片同时驻留内存导致 OOM
                         images?.enumerated().forEach { index, image in
                             autoreleasepool {
                                 let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
                                 guard let imageData = data else { return }
-
+                                
                                 let key = fileKey[safe: index] ?? "image"
                                 let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
                                 let mimeType = pngData ? "image/png" : "image/jpeg"
-
+                                
                                 multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
                             }
                         }
-
+                        
                         params?.forEach { key, value in
                             if let data = value.data(using: .utf8) {
                                 multipartFormData.append(data, withName: key)
@@ -1419,7 +1419,7 @@ public final class Network: @unchecked Sendable {
             }
         }
     }
-
+    
     // 自定义 Session，支持总超时
     private lazy var downloadSession: Session = {
         let config = URLSessionConfiguration.default
@@ -1428,99 +1428,143 @@ public final class Network: @unchecked Sendable {
         config.httpMaximumConnectionsPerHost = 6   // 控制并发
         return Session(configuration: config)
     }()
-        
+    
     actor DownloadStore {
         var tasks: [String: DownloadTask] = [:]
-
+        
         public func get(_ url: String) -> DownloadTask? {
             tasks[url]
         }
-
+        
         func set(_ url: String, task: DownloadTask) {
             tasks[url] = task
         }
-
+        
         func remove(_ url: String) {
             tasks[url] = nil
         }
     }
     private let store = DownloadStore()
-
-    final class DownloadTask {
+    
+    // 🌟 1. 声明为 @unchecked Sendable 并使用 NSLock 保证线程安全
+    final class DownloadTask: @unchecked Sendable {
         let url: String
         let destination: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
-
+        
         var request: DownloadRequest?
         var resumeData: Data?
-
-        var progressHandlers: [FileDownloadProgress] = []
-        var successHandlers: [FileDownloadSuccess] = []
-        var failHandlers: [FileDownloadFail] = []
-
-        // 🚨 新增：清理闭包引用，防止二次触发 Continuation
-        private func clearHandlers() {
-            progressHandlers.removeAll()
-            successHandlers.removeAll()
-            failHandlers.removeAll()
-        }
-
+        
+        private var progressHandlers: [FileDownloadProgress] = []
+        private var successHandlers: [FileDownloadSuccess] = []
+        private var failHandlers: [FileDownloadFail] = []
+        
         private var lastProgressTime: CFTimeInterval = 0
-
+        
+        // 🌟 新增：保证闭包数组操作的线程安全
+        private let lock = NSLock()
+        
+        // 🌟 新增：记录当前任务状态，防止重复启动或漏启动
+        private(set) var isDownloading: Bool = false
+        
         init(url: String,
              destination: @escaping @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)) {
             self.url = url
             self.destination = destination
         }
-
+        
+        func appendHandlers(progress: FileDownloadProgress?, success: FileDownloadSuccess?, fail: FileDownloadFail?) {
+            lock.lock()
+            defer { lock.unlock() }
+            if let p = progress { progressHandlers.append(p) }
+            if let s = success { successHandlers.append(s) }
+            if let f = fail { failHandlers.append(f) }
+        }
+        
+        private func clearHandlers() {
+            // 注意：调用此方法前外层必须加锁
+            progressHandlers.removeAll()
+            successHandlers.removeAll()
+            failHandlers.removeAll()
+        }
+        
         func start(session: Session) {
-
+            lock.lock()
+            if isDownloading {
+                lock.unlock()
+                return // 如果正在下载，直接返回，避免重复发请求
+            }
+            isDownloading = true
+            lock.unlock()
+            
             if let data = resumeData {
                 request = session.download(resumingWith: data, to: destination)
             } else {
                 request = session.download(url, to: destination)
             }
-
+            
             // ✅ 降频 progress（防卡顿关键）
             request?.downloadProgress(queue: .main) { [weak self] p in
-                guard let self else { return }
-
+                guard let self = self else { return }
+                
                 let now = CACurrentMediaTime()
-                guard now - self.lastProgressTime > 0.1 else { return }
-                self.lastProgressTime = now
-
-                for cb in self.progressHandlers {
-                    cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted)
+                if now - self.lastProgressTime > 0.1 || p.isFinished {
+                    self.lastProgressTime = now
+                    
+                    self.lock.lock()
+                    let handlers = self.progressHandlers
+                    self.lock.unlock()
+                    
+                    for cb in handlers {
+                        cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted)
+                    }
                 }
             }
-
+            
             // ✅ 不用 responseData（避免大文件卡死）
             request?.response { [weak self] resp in
-                guard let self else { return }
-
+                guard let self = self else { return }
+                
+                self.lock.lock()
+                self.isDownloading = false
                 self.resumeData = nil
-
+                
+                let currentFails = self.failHandlers
+                let currentSuccesses = self.successHandlers
+                self.clearHandlers()
+                self.lock.unlock()
+                
                 if let error = resp.error {
-                    self.resumeData = resp.resumeData
-                    let currentFails = self.failHandlers
-                    self.clearHandlers()
+                    // 如果是被主动 Cancel/Suspend 的，保存断点数据
+                    if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
+                        self.resumeData = resp.resumeData
+                    } else {
+                        // 🌟 真正发生网络错误时，需要把它从 Store 中彻底移除！
+                        Task { await Network.share.store.remove(self.url) }
+                    }
                     currentFails.forEach { $0(error) }
                 } else {
-                    // 🚨 先将回调拷贝出来，然后立即清空原始数组
-                    let currentSuccesses = self.successHandlers
-                    self.clearHandlers()
+                    // 🌟 下载成功，彻底清理 Store
+                    Task { await Network.share.store.remove(self.url) }
                     currentSuccesses.forEach { $0(resp) }
                 }
             }
         }
-
+        
         func suspend() {
+            lock.lock()
+            isDownloading = false
+            lock.unlock()
+            
             request?.cancel { [weak self] data in
                 self?.resumeData = data
                 self?.request = nil
             }
         }
-
+        
         func cancel() {
+            lock.lock()
+            isDownloading = false
+            lock.unlock()
             request?.cancel()
         }
     }
@@ -1533,66 +1577,75 @@ public final class Network: @unchecked Sendable {
                          success: FileDownloadSuccess? = nil,
                          fail: FileDownloadFail? = nil) {
         guard fileUrl.isURL(), !fileUrl.stringIsEmpty() else {
-            fail?(AFError.invalidURL(url: "https://www.qq.com"))
+            fail?(AFError.invalidURL(url: "PT URL Error"))
             return
         }
-
+        
         let dest: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options) = { _, _ in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories])
         }
-
+        
         Task {
+            let task: DownloadTask
+            
             if let existing = await store.get(fileUrl) {
-                if let p = progress { existing.progressHandlers.append(p) }
-                if let s = success { existing.successHandlers.append(s) }
-                if let f = fail { existing.failHandlers.append(f) }
-                return
+                // 命中已存在的任务
+                task = existing
+                task.appendHandlers(progress: progress, success: success, fail: fail)
+            } else {
+                // 创建新任务
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>\(fileUrl)")
+                task = DownloadTask(url: fileUrl, destination: dest)
+                task.appendHandlers(progress: progress, success: success, fail: fail)
+                await store.set(fileUrl, task: task)
             }
-
-            let task = DownloadTask(url: fileUrl, destination: dest)
-
-            if let p = progress { task.progressHandlers.append(p) }
-            if let s = success { task.successHandlers.append(s) }
-            if let f = fail { task.failHandlers.append(f) }
-
-            await store.set(fileUrl, task: task)
-
-            task.start(session: downloadSession)
+            
+            // 🌟 核心修复：无论是不是新建的任务，只要没有在下载，就立刻启动！
+            if !task.isDownloading {
+                task.start(session: downloadSession)
+            }
         }
     }
-
-    // MARK: - Async/Await
-    public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = DispatchQueue.main, progress: FileDownloadProgress? = nil) async throws -> Data? {
+    
+    // MARK: - Async/Await 封装
+    // 优化：返回值为下载好的本地文件路径 URL，比返回 Data 更有意义
+    public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
         try await withCheckedThrowingContinuation { continuation in
-            self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: queue, progress: progress, success: { data in
-                continuation.resume(returning: data.resumeData ?? nil)
+            self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil, progress: progress, success: { response in
+                if let fileURL = response.fileURL {
+                    continuation.resume(returning: fileURL)
+                } else {
+                    continuation.resume(throwing: PTNetworkError.downloadFail)
+                }
             }, fail: { error in
-                continuation.resume(throwing: error ?? NSError(domain: "PTDownloader", code: -1))
+                continuation.resume(throwing: error ?? PTNetworkError.downloadFail)
             })
         }
     }
-
+    
     // MARK: - 暂停 / 恢复 / 取消
     public func suspend(fileUrl: String) {
         Task {
             await store.get(fileUrl)?.suspend()
         }
     }
-
+    
     public func resume(fileUrl: String) {
         Task {
             if let task = await store.get(fileUrl) {
-                task.start(session: session)
+                // 使用共用的 downloadSession 启动
+                task.start(session: downloadSession)
             }
         }
     }
-
+    
     public func cancel(fileUrl: String) {
         Task {
-            let task = await store.get(fileUrl)
-            await store.remove(fileUrl)
-            task?.cancel()
+            if let task = await store.get(fileUrl) {
+                await store.remove(fileUrl)
+                task.cancel()
+            }
         }
     }
 }

@@ -10,6 +10,74 @@ import UIKit
 import AVFoundation
 import CryptoKit
 
+/// 统一的视频缓存数据对象
+public struct PTVideoCacheItem {
+    /// 原始的远程视频 URL
+    public let originalURLString: String
+    
+    /// 缓存的封面图
+    public var coverImage: UIImage?
+    
+    /// 缓存的本地视频路径（如果还没有下载完，则为 nil）
+    public var localVideoURL: URL?
+    
+    /// 便利属性：是否视频和封面都已经准备好了
+    public var isFullyCached: Bool {
+        return coverImage != nil && localVideoURL != nil
+    }
+}
+
+public final class PTVideoManager {
+    
+    public static let shared = PTVideoManager()
+    private init() {}
+    
+    /// 核心方法：通过 URL 获取视频缓存对象
+    /// - Parameters:
+    ///   - urlString: 视频的原始 URL 字符串
+    ///   - autoCacheVideo: 是否在获取封面的同时，顺便在后台下载视频？(列表滑动时建议传 false，点击查看详情时建议传 true)
+    ///   - completion: 返回组装好的 PTVideoCacheItem
+    public func getVideoItem(for urlString: String,
+                             autoCacheVideo: Bool = false,
+                             progress: FileDownloadProgress? = nil, // 👈 [新增参数]
+                             coverReady: @escaping (PTVideoCacheItem) -> Void, // 🌟 拆分1：封面就绪
+                             videoReady: ((PTVideoCacheItem) -> Void)? = nil) {
+        
+        guard let url = URL(string: urlString) else { return }
+
+        // 初始化我们要返回的对象
+        var item = PTVideoCacheItem(originalURLString: urlString)
+        item.localVideoURL = PTVideoFileCache.shared.cachedFileURL(for: url)
+        
+        PTVideoCoverCache.getVideoFirstImage(videoUrl: urlString) { image in
+            item.coverImage = image
+            DispatchQueue.main.async {
+                coverReady(item)
+            }
+            
+            if autoCacheVideo && item.localVideoURL == nil {
+                PTVideoFileCache.shared.prepareVideo(url: url, progress: progress) { localURL in
+                    if let localURL = localURL {
+                        item.localVideoURL = localURL
+                        // 🌟 视频静默下载完成后，触发第二次回调通知 UI
+                        DispatchQueue.main.async {
+                            videoReady?(item)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            videoReady?(item)
+                        }
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    videoReady?(item)
+                }
+            }
+        }
+    }
+}
+
 public final class PTVideoFileCache {
 
     public static let shared = PTVideoFileCache()
