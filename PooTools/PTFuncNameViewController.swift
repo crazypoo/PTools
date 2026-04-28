@@ -806,7 +806,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     })
 
                 } else if itemRow.title == .loading {
-                    UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading"], otherBlock: { sheet,index,title in
+                    UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading","TextHub","ButtonHud"], otherBlock: { sheet,index,title in
                         switch index {
                         case 0:
                             let hud = PTHudView()
@@ -829,6 +829,14 @@ class PTFuncNameViewController: PTBaseViewController {
                                     cycle.removeFromSuperview()
                                 }
                             }
+                        case 2:
+                            PTGCDManager.gcdAfter(time: 1, block: {
+                                PTProgressHUD.show(text: "12312312312312312312")
+                            })
+                        case 3:
+                            PTGCDManager.gcdAfter(time: 1, block: {
+                                PTProgressHUD.showLogo(text: "123123123123", image: UIImage(named: "DemoImage"))
+                            })
                         default:
                             break
                         }
@@ -1319,3 +1327,53 @@ extension PTFuncNameViewController {
 }
 
 extension PTFuncNameViewController:UITextFieldDelegate {}
+
+extension PTProgressHUD {
+    class func show(text:String) {
+        let hud = PTProgressHUD.showOnWindow()
+        hud?.titleFont = .appfont(size: 14)
+        hud?.title = text
+        hud?.titleColor = .white
+        hud?.mode = .text
+        hud?.dimBackground = false
+        hud?.blurEffectStyle = .dark
+        hud?.bezelColor = .black.withAlphaComponent(0.4)
+        hud?.hide(animated: true, afterDelay: 1.5)
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>123123,,,,\(String(describing: hud))")
+    }
+    
+    class func showLogo(text:String = "",image:UIImage? = nil) {
+        let layoutView = PTLayoutButton()
+        layoutView.layoutStyle = .leftImageRightTitle
+        layoutView.midSpacing = 0
+        var imageSize:CGFloat = 0
+        if let image = image {
+            layoutView.imageSize = CGSize(width: 24, height: 24)
+            layoutView.normalImage = image
+            imageSize = 24
+        }
+        layoutView.normalTitle = text
+        layoutView.normalTitleFont = .appfont(size: 14)
+        layoutView.normalTitleColor = .white
+        var buttonW = UIView.sizeFor(string: text, font: layoutView.normalTitleFont,height: 24).width + imageSize + layoutView.midSpacing + 40
+        let maxWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2)
+        var baseHeight:CGFloat = 56
+        if buttonW >= maxWidth {
+            buttonW = maxWidth
+            let buttonHeight = UIView.sizeFor(string: text, font: layoutView.normalTitleFont,width: maxWidth).height
+            if buttonHeight > 56 {
+                baseHeight = buttonHeight + 32
+            }
+        }
+        
+        layoutView.frame = CGRectMake(0, 0, buttonW, baseHeight)
+        layoutView.isUserInteractionEnabled = false
+        
+        let hud = PTProgressHUD.showOnWindow()
+        hud?.mode = .customView(layoutView)
+        hud?.blurEffectStyle = .dark
+        hud?.bezelColor = .black.withAlphaComponent(0.6)
+        hud?.hide(animated: true, afterDelay: 1.5)
+    }
+
+}
