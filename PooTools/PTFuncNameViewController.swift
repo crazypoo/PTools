@@ -806,7 +806,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     })
 
                 } else if itemRow.title == .loading {
-                    UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading","TextHub","ButtonHud"], otherBlock: { sheet,index,title in
+                    UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading","TextHub","ButtonHud","Progress1","Progress2","Progress3"], otherBlock: { sheet,index,title in
                         switch index {
                         case 0:
                             let hud = PTHudView()
@@ -836,6 +836,18 @@ class PTFuncNameViewController: PTBaseViewController {
                         case 3:
                             PTGCDManager.gcdAfter(time: 1, block: {
                                 PTProgressHUD.showLogo(text: "123123123123", image: UIImage(named: "DemoImage"))
+                            })
+                        case 4:
+                            PTGCDManager.gcdAfter(time: 1, block: {
+                                PTProgressHUD.showProgress(text:"111111111",progressMode: .determinateBar)
+                            })
+                        case 5:
+                            PTGCDManager.gcdAfter(time: 1, block: {
+                                PTProgressHUD.showProgress(text:"2222222222222",progressMode: .determinatePie)
+                            })
+                        case 6:
+                            PTGCDManager.gcdAfter(time: 1, block: {
+                                PTProgressHUD.showProgress(text:"333333333333",progressMode: .determinateRing)
                             })
                         default:
                             break
@@ -1339,7 +1351,6 @@ extension PTProgressHUD {
         hud?.blurEffectStyle = .dark
         hud?.bezelColor = .black.withAlphaComponent(0.4)
         hud?.hide(animated: true, afterDelay: 1.5)
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>123123,,,,\(String(describing: hud))")
     }
     
     class func showLogo(text:String = "",image:UIImage? = nil) {
@@ -1376,4 +1387,18 @@ extension PTProgressHUD {
         hud?.hide(animated: true, afterDelay: 1.5)
     }
 
+    class func showProgress(text:String = "",progressMode:Mode = .determinateBar) {
+        let hud = PTProgressHUD.showOnWindow()
+        hud?.titleFont = .appfont(size: 14)
+        hud?.title = text
+        hud?.titleColor = .white
+        hud?.mode = progressMode
+        hud?.blurEffectStyle = .dark
+        hud?.bezelColor = .black.withAlphaComponent(0.4)
+        hud?.progress = 0.5
+        
+        PTGCDManager.gcdAfter(time: 2.5, block: {
+            hud?.progress = 1
+        })
+    }
 }

@@ -143,6 +143,7 @@
 		553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */; };
 		553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */; };
 		553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */; };
+		553177392FA068D900E53214 /* PTCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553177382FA068D900E53214 /* PTCircularProgressView.swift */; };
 		5531D2632F1095A70094CFFE /* PTEditMenuKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */; };
 		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
@@ -1104,6 +1105,7 @@
 		553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInitialTouchPanGestureRecognizer.swift; sourceTree = "<group>"; };
 		553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetEXCombos.swift; sourceTree = "<group>"; };
 		553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetContentViewController.swift; sourceTree = "<group>"; };
+		553177382FA068D900E53214 /* PTCircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCircularProgressView.swift; sourceTree = "<group>"; };
 		5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuKit.swift; sourceTree = "<group>"; };
 		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
@@ -2644,6 +2646,7 @@
 			children = (
 				5528931E2AE88378009135F9 /* PTMediaBrowserLoadingView.swift */,
 				555818B72AFA4E750051C0AA /* PTProgressBar.swift */,
+				553177382FA068D900E53214 /* PTCircularProgressView.swift */,
 			);
 			path = ProgressBar;
 			sourceTree = "<group>";
@@ -4334,6 +4337,7 @@
 				55BA8FA82D29A7D70065FBD0 /* SnapshotStore.swift in Sources */,
 				55BA8FA92D29A7D70065FBD0 /* ElementChildrenPanelViewController+UITableViewDelegate.swift in Sources */,
 				55BA8FAA2D29A7D70065FBD0 /* InspectorConfiguration.swift in Sources */,
+				553177392FA068D900E53214 /* PTCircularProgressView.swift in Sources */,
 				552CCF4B2E82BA2200646943 /* PTBaseButton.swift in Sources */,
 				55BA8FAB2D29A7D70065FBD0 /* SliderAttributesSectionDataSource.swift in Sources */,
 				55BA8FAC2D29A7D70065FBD0 /* ViewHierarchyInformation.swift in Sources */,

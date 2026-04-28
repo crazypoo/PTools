@@ -13,15 +13,13 @@ public class PTProgressHUD: UIView {
     
     // MARK: - 枚举定义
     
-    public enum Mode {
-        /// 默认的菊花加载样式
-        case indeterminate
-        /// 线性进度条样式
-        case determinate
-        /// 纯文本样式
-        case text
-        /// 自定义视图样式
-        case customView(UIView)
+    public enum Mode: Equatable {
+        case indeterminate        /// 默认的菊花加载样式
+        case determinateBar       /// 水平进度条 (之前的 PTProgressBar)
+        case determinateRing      /// 环形进度条 (LoopDiagram)
+        case determinatePie       /// 饼状图进度条 (PieDiagram)
+        case text                 /// 纯文本样式
+        case customView(UIView)   /// 自定义视图样式
     }
     
     public enum AnimationType {
@@ -47,11 +45,25 @@ public class PTProgressHUD: UIView {
         didSet { detailsLabel.text = details; updateIndicators() }
     }
     
+    /// 是否在进度满 1.0 时自动隐藏，默认为 true
+    public var autoHideWhenProgressCompletes: Bool = true
+
     /// 当前进度 (0.0 到 1.0)
     public var progress: Float = 0.0 {
         didSet {
-            if let progressView = indicatorView as? UIProgressView {
-                progressView.setProgress(progress, animated: true)
+            // 确保进度值在安全范围内
+            let safeProgress = max(0, min(1, progress))
+            
+            if let progressBar = indicatorView as? PTProgressBar {
+                progressBar.animationProgress(duration: 0.1, value: CGFloat(safeProgress))
+            } else if let circularProgress = indicatorView as? PTCircularProgressView {
+                circularProgress.progress = CGFloat(safeProgress)
+            }
+            
+            // 2. 满进度自动隐藏逻辑
+            if safeProgress >= 1.0 && autoHideWhenProgressCompletes {
+                // 加一个 0.2 秒的延迟，让用户肉眼能看清进度条“跑满”的瞬间，体验更顺滑
+                self.hide(animated: true, afterDelay: 0.2)
             }
         }
     }
@@ -100,7 +112,7 @@ public class PTProgressHUD: UIView {
         didSet { detailsLabel.textColor = detailsColor }
     }
     
-    public var indicatorColor: UIColor = .label {
+    public var indicatorColor: UIColor = .white {
         didSet { updateIndicators() }
     }
     
@@ -290,13 +302,37 @@ public class PTProgressHUD: UIView {
             spinner.startAnimating()
             indicatorView = spinner
             
-        case .determinate:
-            let progressView = UIProgressView(progressViewStyle: .default)
-            progressView.tintColor = indicatorColor
-            progressView.translatesAutoresizingMaskIntoConstraints = false
-            progressView.widthAnchor.constraint(equalToConstant: 120).isActive = true
-            indicatorView = progressView
+        case .determinateBar:
+            let progressBar = PTProgressBar(showType: .Horizontal)
+                        
+            // 2. 颜色配置：与 HUD 的主题色保持一致
+            progressBar.barColor = indicatorColor
+            // 轨道颜色可以设置为主题色的透明版，视觉上更和谐
+            progressBar.trackColor = indicatorColor.withAlphaComponent(0.2)
             
+            // 3. 圆角与约束设置
+            progressBar.layer.cornerRadius = 3.0 // 添加一点圆角更精致
+            progressBar.clipsToBounds = true
+            progressBar.translatesAutoresizingMaskIntoConstraints = false
+            
+            // 4. 设定尺寸：你的进度条需要明确的宽和高
+            NSLayoutConstraint.activate([
+                progressBar.widthAnchor.constraint(equalToConstant: 120),
+                progressBar.heightAnchor.constraint(equalToConstant: 6) // 设置进度条的粗细
+            ])
+            
+            indicatorView = progressBar
+        case .determinateRing, .determinatePie: // 新增的环形和饼状图
+            let style: PTCircularProgressStyle = (mode == .determinateRing) ? .loop : .pie
+            let circularView = PTCircularProgressView(style: style)
+            circularView.progressColor = indicatorColor
+            circularView.translatesAutoresizingMaskIntoConstraints = false
+            // 圆形进度条通常需要一个正方形的固定大小
+            NSLayoutConstraint.activate([
+                circularView.widthAnchor.constraint(equalToConstant: 45),
+                circularView.heightAnchor.constraint(equalToConstant: 45)
+            ])
+            indicatorView = circularView
         case .customView(let view):
             indicatorView = view
             

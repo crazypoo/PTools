@@ -59,6 +59,12 @@ public class PTMediaBrowserLoadingView: UIView {
         }
     }
     
+    public var progressColor:UIColor = .white {
+        didSet {
+            circularProgressView.progressColor = progressColor
+        }
+    }
+    
     fileprivate var progressMode:PTLoadingViewMode = .LoopDiagram
     
     lazy var backgroundView:UIView = {
@@ -67,75 +73,42 @@ public class PTMediaBrowserLoadingView: UIView {
         return view
     }()
     
+    private lazy var circularProgressView: PTCircularProgressView = {
+        let style: PTCircularProgressStyle = (progressMode == .LoopDiagram) ? .loop : .pie
+        let view = PTCircularProgressView(style: style)
+        view.progressColor = progressColor
+        return view
+    }()
+
     public init(type:PTLoadingViewMode) {
         super.init(frame: .zero)
         progressMode = type
-        self.backgroundColor = .clear // 保证视图自身透明
+        setupUI()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .clear // 保证视图自身透明
-        clipsToBounds = true
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func draw(_ rect: CGRect) {
-        super.draw(rect)
+    private func setupUI() {
+        self.backgroundColor = .clear // 保证视图自身透明
+        self.clipsToBounds = true
         
-        // 安全解包 Context
-        guard let ctx = UIGraphicsGetCurrentContext() else { return }
+        // 之前是在 self 上通过 layer.cornerRadius 设置圆角
+        // 为了方便，你可以直接在这里统一设置一个稍微柔和的圆角，也可以根据需求去掉
+        self.layer.cornerRadius = 8.0
+        self.backgroundColor = UIColor(white: 0, alpha: 0.6) // 给个半透明底色更好看
         
-        let xCenter = rect.size.width * 0.5
-        let yCenter = rect.size.height * 0.5
-        UIColor.white.set()
-        
-        // 统一计算圆弧的起点 (12点钟方向)
-        let startAngle: CGFloat = -.pi * 0.5
-        
-        switch progressMode {
-        case .PieDiagram:
-            let radius = min(xCenter, yCenter) - PTLoadingItemSpace
-            let w = radius * 2
-            let h = w
-            
-            // 修复BUG：正确的居中坐标计算
-            let x = (rect.size.width - w) * 0.5
-            let y = (rect.size.height - h) * 0.5
-            
-            // 画外部白圈边界
-            ctx.addEllipse(in: CGRect(x: x, y: y, width: w, height: h))
-            ctx.fillPath()
-            
-            // 画内部进度扇形
-            PTLoadingBackgroundColor.set()
-            ctx.move(to: CGPoint(x: xCenter, y: yCenter))
-            
-            let endAngle = startAngle + (progress * .pi * 2) + 0.01
-            // 扇形半径稍微比外圈小一点，留出边缘白边
-            let innerRadius = radius - 2
-            
-            ctx.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: innerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-            ctx.closePath()
-            ctx.fillPath()
-            
-        case .LoopDiagram:
-            ctx.setLineWidth(4)
-            ctx.setLineCap(.round)
-            
-            let endAngle = startAngle + (progress * .pi * 2) + 0.05
-            let radius = min(rect.size.width, rect.size.height) * 0.5 - PTLoadingItemSpace
-            
-            ctx.addArc(center: CGPoint(x: xCenter, y: yCenter), radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
-            ctx.strokePath()
+        // 将绘制组件添加到容器中
+        addSubview(circularProgressView)
+        circularProgressView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(PTLoadingItemSpace / 2) // 留出一点边距
         }
-        
-        // 如果项目中有自定义的 viewCorner 扩展方法，可以保留。
-        // 原生方式为：self.layer.cornerRadius = rect.size.height * 0.1
-        self.layer.cornerRadius = rect.size.height * 0.1
     }
     
     @objc private func handleTap() {
@@ -143,9 +116,8 @@ public class PTMediaBrowserLoadingView: UIView {
     }
 
     public func hudShow(hudSize:CGSize = .init(width: 64, height: 64)) {
-        // 防止被重复 show 到屏幕上
         guard self.superview == nil else { return }
-        
+                
         AppWindows?.addSubview(backgroundView)
         backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -157,7 +129,6 @@ public class PTMediaBrowserLoadingView: UIView {
             make.centerX.centerY.equalToSuperview()
         }
         
-        // 优化：使用阻尼弹簧动画 (Spring Animation)，替代原有的多层 completion 嵌套
         self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         self.backgroundView.alpha = 0
         
