@@ -139,12 +139,12 @@ open class PTFusionCellModel: NSObject {
     @PTClampedPropertyWrapper(range:20...88) public var switchControlWidth: CGFloat = 88
     
     // ✅ 缓存
-    lazy var cachedTitleAttr: ASAttributedString = {
+    public lazy var cachedTitleAttr: ASAttributedString = {
         // 只算一次
         return titleLabelAtt()
     }()
 
-    private func titleLabelAtt() -> ASAttributedString {
+    public func titleLabelAtt() -> ASAttributedString {
         if let findModel = nameAttr {
             return findModel
         } else {
@@ -180,11 +180,11 @@ open class PTFusionCellModel: NSObject {
         }
     }
     
-    lazy var cachedContentAttr: ASAttributedString = {
+    public lazy var cachedContentAttr: ASAttributedString = {
         return contentLabelAtt()
     }()
 
-    private func contentLabelAtt() -> ASAttributedString {
+    public  func contentLabelAtt() -> ASAttributedString {
         if let findModel = contentAttr {
             return findModel
         } else {
