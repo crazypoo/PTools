@@ -14,7 +14,7 @@ public struct PTDummyModel: PTModelProtocol {
     public init() {}
 }
 
-open class PTBaseModel: SmartCodableX {
+open class PTBaseModel: PTModelProtocol {
     required public init() {}
     
     open func didFinishMapping() {}
