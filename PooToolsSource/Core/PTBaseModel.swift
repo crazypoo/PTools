@@ -8,16 +8,25 @@
 
 import UIKit
 import SmartCodable
+import KakaJSON
 
 // 🌟 1. 专门定义一个轻量级的空模型，用来给不需要解析 JSON 的接口占位
 public struct PTDummyModel: PTModelProtocol {
     public init() {}
 }
 
-open class PTBaseModel: PTModelProtocol {
+open class PTBaseModel: Convertible {
     required public init() {}
+            
+    // 实现kj_modelKey方法
+    // 会传入模型的属性`property`作为参数，返回值就是属性对应的key
+    open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
+        property.name
+    }
     
-    open func didFinishMapping() {}
+    open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any? {
+        return jsonValue
+    }
 }
 
 extension PTBaseModel: PTDiffableModel {

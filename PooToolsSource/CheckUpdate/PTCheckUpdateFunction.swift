@@ -10,7 +10,7 @@ import UIKit
 import SwifterSwift
 import SwiftJWT
 import Alamofire
-import SmartCodable
+import KakaJSON
 
 class IpadScreenshotUrls :PTBaseModel {
 
@@ -112,10 +112,13 @@ public class PTTFLinks :PTBaseModel {
     public var related: String = ""
     public var next:String = ""
         
-    enum CodingKeys: String,CodingKey {
-        case currentLink = "self"
-        // 其余字段名和后端完全一致，直接列出来即可
-        case related, next
+    open override func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
+        switch property.name {
+        case "currentLink":
+            return "self"
+        default:
+            return property.name
+        }
     }
 }
 
@@ -446,7 +449,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
 
-    public static func appConnectApiRequest<T: SmartCodableX>(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
+    public static func appConnectApiRequest(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: Convertible.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
         if showHud {
             toggleHud(show: true)
         }

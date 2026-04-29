@@ -7,41 +7,18 @@
 //
 
 import UIKit
-import SmartCodable
-
-//@Codable
-//struct PTTestNewSubModel {
-//    var bkey:String
-//}
-//
-//@Codable
-//struct PTTestNewSub1Model {
-//    var ckey:String
-// }
-//
-//@Codable
-//struct PTTestNewModel {
-//    var msg:[PTTestNewSubModel]
-//    @Default("")
-//    var akey:String
-//    @CodedBy(ValueCoder<Bool>())
-//    var abool:Bool
-//    var dkey:PTTestNewSub1Model
-//    
-//    @CodedAt("hello.b")
-//    var helloB:String
-//}
+import KakaJSON
 
 
 //MARK: Popover
-class LXSwiftBaseModel: SmartCodableX {
+class LXSwiftBaseModel: Convertible {
     var code:String = ""
     var tip:String = ""
     required init() {
     }
 }
 
-class LXHomePopoverModel:SmartCodableX {
+class LXHomePopoverModel:Convertible {
     required init() {
     }
     var image:String = ""

@@ -98,7 +98,7 @@ public class PTBannerConfiguration:NSObject {
 
 public class PTBannerView: UIView {
     
-    public var bannerModel: [PTBannerModel]! {
+    public var bannerModel: [PTBannerModel] = [] {
         didSet {
             if !bannerModel.isEmpty {
                 reloadBanner()

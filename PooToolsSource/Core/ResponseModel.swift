@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import KakaJSON
 
-public struct PTIPInfoModel :PTModelProtocol {
+public class PTIPInfoModel: PTBaseModel {
     public var lon: CGFloat = 0.0
     public var zip: String = ""
     public var query: String = ""
@@ -23,13 +24,14 @@ public struct PTIPInfoModel :PTModelProtocol {
     public var country: String = ""
     public var status: String = ""
     public var regionName: String = ""
-            
-    public init() {}
-    
-    enum CodingKeys: String,CodingKey {
-        case asBaseic = "as"
-        // 其余字段名和后端完全一致，直接列出来即可
-        case lon, zip, query, isp, countryCode, lat, city, region, timezone, org, country, status, regionName
+                
+    public override func kj_modelKey(from property: Property) -> ModelPropertyKey {
+        switch property.name {
+        case "asBaseic":
+            return "as"
+        default:
+            return property.name
+        }
     }
 }
 

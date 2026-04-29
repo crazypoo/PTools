@@ -41,11 +41,7 @@ public class PTFloatingPlaseholderConfig: PTBaseModel {
     public var actionSapcing: CGFloat = 8 // 建议拼写修改为 actionSpacing
     public var textAlignment: NSTextAlignment = .left
     
-    public required init() { super.init() }
-    
-    required init(from decoder: any Decoder) throws {
-        fatalError("init(from:) has not been implemented")
-    }
+    public required init() { super.init() }    
 }
 
 public class PTFloatingPlaseholderTextField: UIView {

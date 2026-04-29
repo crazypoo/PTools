@@ -13,6 +13,7 @@ import SwifterSwift
 import CoreTelephony
 import Photos
 import SmartCodable
+import KakaJSON
 
 public enum PTNetworkError: Error, LocalizedError, CustomNSError {
     case noNetwork
@@ -896,7 +897,7 @@ public final class Network: @unchecked Sendable {
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
         let urlStr1 = try await createURLRequest(urlStr: url, needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
-        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTDummyModel.self)
+        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader)
         let ipAddress = String(data: model.resultData ?? Data(), encoding: .utf8) ?? ""
         return ipAddress
     }
@@ -954,10 +955,10 @@ public final class Network: @unchecked Sendable {
         return false
     }
     
-    private static func parseResponse<T: SmartCodableX>(url: String,
+    private static func parseResponse(url: String,
                                       response: HTTPURLResponse?,
                                       data: Data?,
-                                      modelType: T.Type?) throws -> PTBaseStructModel {
+                                      modelType: Convertible.Type?) throws -> PTBaseStructModel {
         var result = PTBaseStructModel()
         result.resultData = data
         
@@ -1009,7 +1010,7 @@ public final class Network: @unchecked Sendable {
         
         if let modelType = modelType {
             // deserialize 内部已经做好了完善的容错处理
-            if let model = modelType.deserialize(from: jsonString) {
+            if let model = jsonString.kj.model(modelType) {
                 result.customerModel = model
             } else {
                 throw PTNetworkError.modelExplainFail
@@ -1050,13 +1051,13 @@ public final class Network: @unchecked Sendable {
     ///   - header: 請求頭
     ///   - modelType: 是否需要传入接口的数据模型，默认nil
     ///   - body: 最好utf8
-    public class func requestBodyAPI<T: SmartCodableX>(needGobal:Bool = true,
+    public class func requestBodyAPI(needGobal:Bool = true,
                                      urlStr:String,
                                      body:Data,
                                      header:HTTPHeaders? = nil,
                                      method:HTTPMethod = .post,
                                      cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
-                                     modelType: T.Type? = nil) async throws -> PTBaseStructModel {
+                                     modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
         
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         
@@ -1139,13 +1140,13 @@ public final class Network: @unchecked Sendable {
     }
     
     /// 项目总接口
-    class public func requestApi<T: SmartCodableX>(needGobal:Bool = true,
+    class public func requestApi(needGobal:Bool = true,
                                  urlStr:URLConvertible,
                                  method: HTTPMethod = .post,
                                  header:HTTPHeaders? = nil,
                                  parameters: Parameters? = nil,
                                  cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 新增暴露参数，默认 nil
-                                 modelType: T.Type? = nil,
+                                 modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
@@ -1210,14 +1211,14 @@ public final class Network: @unchecked Sendable {
         return result
     }
     
-    class public func fileUpload<T: SmartCodableX>(needGobal: Bool = true,
+    class public func fileUpload(needGobal: Bool = true,
                                  media: Any,
                                  path: URLConvertible,
                                  method: HTTPMethod = .post,
                                  fileKey: String = "",
                                  params: [String: String]? = nil,
                                  header: HTTPHeaders? = nil,
-                                 modelType: T.Type? = nil,
+                                 modelType: Convertible.Type? = nil,
                                  jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
         AsyncThrowingStream { continuation in
             Task {
@@ -1376,14 +1377,14 @@ public final class Network: @unchecked Sendable {
     }
     
     /// 图片上传接口 (优化版)
-    class public func imageUpload<T: SmartCodableX>(needGobal: Bool = true,
+    class public func imageUpload(needGobal: Bool = true,
                                   images: [UIImage]?,
                                   path: URLConvertible,
                                   method: HTTPMethod = .post,
                                   fileKey: [String] = ["images"],
                                   params: [String: String]? = nil,
                                   header: HTTPHeaders? = nil,
-                                  modelType: T.Type? = nil,
+                                  modelType: Convertible.Type? = nil,
                                   jsonRequest: Bool = false,
                                   pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
         
