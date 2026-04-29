@@ -1193,10 +1193,10 @@ extension PTCollectionView {
         var snapshot = PTSnapshot()
         snapshot.deleteAllItems() // 一键清空快照
         
-        self.setiOS17EmptyDataView()
         let animated = !self.viewConfig.refreshWithoutAnimation
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
+            self.setiOS17EmptyDataView()
             finishTask?(self.collectionView)
         }
     }
