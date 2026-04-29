@@ -7,9 +7,7 @@
 //
 
 import UIKit
-//import MetaCodable
-//import HelperCoders
-import KakaJSON
+import SmartCodable
 
 //@Codable
 //struct PTTestNewSubModel {
@@ -36,14 +34,14 @@ import KakaJSON
 
 
 //MARK: Popover
-class LXSwiftBaseModel: Convertible {
+class LXSwiftBaseModel: SmartCodableX {
     var code:String = ""
     var tip:String = ""
     required init() {
     }
 }
 
-class LXHomePopoverModel:Convertible {
+class LXHomePopoverModel:SmartCodableX {
     required init() {
     }
     var image:String = ""

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import KakaJSON
+import SmartCodable
 
 @objc public enum PTNetworkSpeedTestStateType:Int {
     case Download
@@ -153,7 +153,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
                         historyModel.networkType = self.netWorkName
                         historyModel.date = Date().toString()
                         
-                        let jsonString = historyModel.kj.JSONString(prettyPrinted: true)
+                        let jsonString = historyModel.toJSONString(prettyPrint: true) ?? ""
                         PTNSLogConsole(jsonString,levelType: .notice,loggerType: .network)
                         self.saveHistory(jsonString: jsonString)
                         self.netSpeedStateType = .Free

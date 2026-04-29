@@ -304,9 +304,6 @@ final public class PTTabBarView: UIView {
             layoutStyle
         }
     }
-    public var centerButtonSize: CGFloat = 64
-
-    public static let bar26LRSpacing:CGFloat = 24.adapter
     
     // 🌟 新增：用于最小化时展示当前 Icon 的容器
     lazy var minimizedCenterView: UIView = {
@@ -370,11 +367,11 @@ final public class PTTabBarView: UIView {
         if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
             glassBackgroundView.clipsToBounds = true
             addSubview(glassBackgroundView)
-
+            
             glassBackgroundView.snp.makeConstraints {
                 $0.top.equalToSuperview()
                 if PTAppBaseConfig.share.tab26Mode {
-                    $0.left.right.equalToSuperview().inset(PTTabBarView.bar26LRSpacing)
+                    $0.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
                 } else {
                     $0.left.right.equalToSuperview()
                 }
@@ -425,8 +422,8 @@ final public class PTTabBarView: UIView {
         addSubviews([centerButton,centerNameLabel])
         centerButton.backgroundColor = PTAppBaseConfig.share.tabbarCenterBGColor
         centetButtonEffect()
-
-        centerButton.viewCorner(radius: centerButtonSize / 2)
+        
+        centerButton.viewCorner(radius: PTAppBaseConfig.share.tabbarCenterButtonSize / 2)
         centerButton.layer.shadowColor = UIColor.black.cgColor
         centerButton.layer.shadowOpacity = 0.2
         centerButton.layer.shadowRadius = 20
@@ -454,7 +451,7 @@ final public class PTTabBarView: UIView {
                 make.edges.equalToSuperview()
             }
             
-            effectView.layer.cornerRadius = centerButtonSize / 2
+            effectView.layer.cornerRadius = PTAppBaseConfig.share.tabbarCenterButtonSize / 2
             effectView.layer.cornerCurve = .continuous
         }
     }
@@ -539,7 +536,7 @@ final public class PTTabBarView: UIView {
                     } else {
                         $0.centerY.equalTo(self.snp.top)
                     }
-                    $0.size.equalTo(centerButtonSize)
+                    $0.size.equalTo(PTAppBaseConfig.share.tabbarCenterButtonSize)
                 }
 
                 centerNameLabel.snp.remakeConstraints { make in
@@ -658,15 +655,15 @@ final public class PTTabBarView: UIView {
         switch layoutStyle {
         case .normal:
             if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - PTTabBarView.bar26LRSpacing * 2) / CGFloat(items.count)
+                itemWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2) / CGFloat(items.count)
             } else {
                 itemWidth = CGFloat.kSCREEN_WIDTH / CGFloat(items.count)
             }
         case .centerRaised:
             if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - PTTabBarView.bar26LRSpacing * 2 - centerButtonSize) / CGFloat(items.count)
+                itemWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2 - PTAppBaseConfig.share.tabbarCenterButtonSize) / CGFloat(items.count)
             } else {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - centerButtonSize) / CGFloat(items.count)
+                itemWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.tabbarCenterButtonSize) / CGFloat(items.count)
             }
         }
         return itemWidth
@@ -754,7 +751,7 @@ final public class PTTabBarView: UIView {
                 glassBackgroundView.snp.remakeConstraints { make in
                     make.top.equalToSuperview()
                     if PTAppBaseConfig.share.tab26Mode {
-                        make.left.right.equalToSuperview().inset(PTTabBarView.bar26LRSpacing)
+                        make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
                     } else {
                         make.left.right.equalToSuperview()
                     }

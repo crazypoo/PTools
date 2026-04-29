@@ -7,9 +7,6 @@
 //
 
 import UIKit
-import KakaJSON
-//import MetaCodable
-//import HelperCoders
 
 public class PTIPInfoModel :PTBaseModel {
     public var lon: CGFloat = 0.0
@@ -27,13 +24,18 @@ public class PTIPInfoModel :PTBaseModel {
     public var status: String = ""
     public var regionName: String = ""
     
-    public override func kj_modelKey(from property: Property) -> ModelPropertyKey {
-        switch property.name {
-        case "asBaseic":
-            return "as"
-        default:
-            return property.name
-        }
+    required public init() {
+        super.init()
+    }
+    
+    required init(from decoder: any Decoder) throws {
+        fatalError("init(from:) has not been implemented")
+    }
+    
+    enum CodingKeys: String,CodingKey {
+        case asBaseic = "as"
+        // 其余字段名和后端完全一致，直接列出来即可
+        case lon, zip, query, isp, countryCode, lat, city, region, timezone, org, country, status, regionName
     }
 }
 

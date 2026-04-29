@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import KakaJSON
 import SwifterSwift
 import SwiftJWT
 import Alamofire
-import KakaJSON
+import SmartCodable
 
 class IpadScreenshotUrls :PTBaseModel {
 
@@ -112,14 +111,11 @@ public class PTTFLinks :PTBaseModel {
     public var currentLink: String = ""
     public var related: String = ""
     public var next:String = ""
-    
-    open override func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
-        switch property.name {
-        case "currentLink":
-            return "self"
-        default:
-            return property.name
-        }
+        
+    enum CodingKeys: String,CodingKey {
+        case currentLink = "self"
+        // 其余字段名和后端完全一致，直接列出来即可
+        case related, next
     }
 }
 
@@ -317,12 +313,17 @@ public class PTCheckUpdateFunction: NSObject {
                 Task.init {
                     do {
                         let result = try await Network.requestApi(needGobal:false,urlStr: "https://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self)
-                        let responseModel = result.customerModel as! PTCheckUpdateModel
-                        if responseModel.results.count > 0 {
-                            let versionModel = responseModel.results.first!
-                            let versionStr = versionModel.version
-                            
-                            self.updateAlert(force: force, appid: appid, version: versionStr, note: versionModel.releaseNotes, alertType: alertType)
+                        if let responseModel = result.customerModel as? PTCheckUpdateModel {
+                            if !responseModel.results.isEmpty {
+                                let versionModel = responseModel.results.first!
+                                let versionStr = versionModel.version
+                                
+                                self.updateAlert(force: force, appid: appid, version: versionStr, note: versionModel.releaseNotes, alertType: alertType)
+                            } else {
+                                PTNSLogConsole("Data error",levelType: .error,loggerType: .checkUpdate)
+                            }
+                        } else {
+                            PTNSLogConsole("Data error",levelType: .error,loggerType: .checkUpdate)
                         }
                     } catch {
                         PTNSLogConsole(error.localizedDescription,levelType: .error,loggerType: .checkUpdate)
@@ -445,7 +446,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
 
-    public static func appConnectApiRequest(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: Convertible.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
+    public static func appConnectApiRequest<T: SmartCodableX>(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
         if showHud {
             toggleHud(show: true)
         }

@@ -8,11 +8,11 @@
 
 import UIKit
 import Alamofire
-import KakaJSON
 import Network
 import SwifterSwift
 import CoreTelephony
 import Photos
+import SmartCodable
 
 public enum PTNetworkError: Error, LocalizedError, CustomNSError {
     case noNetwork
@@ -24,7 +24,9 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
     case dataEmpty
     case htmlResponse(String)
     case uploadDataError(String)
-
+    // 🌟 新增：业务错误
+    case businessError(code: Int, msg: String)
+    
     // MARK: - 1. LocalizedError (提供给界面展示的文本提示)
     public var errorDescription: String? {
         switch self {
@@ -38,6 +40,8 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
         case .dataEmpty:              return "Data empty"
         case .htmlResponse(let html): return html
         case .uploadDataError(let msg): return msg
+        case .businessError(_, let msg):
+            return msg // 将服务器返回的 msg 直接作为界面的错误提示
         }
     }
     
@@ -53,6 +57,8 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
         case .dataEmpty:        return 9999999901
         case .htmlResponse:     return 9999999902
         case .uploadDataError:  return 666
+        case .businessError(let code, _):
+            return code // 将服务器的 code 映射为底层的 errorCode
         }
     }
     
@@ -890,8 +896,8 @@ public final class Network: @unchecked Sendable {
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
         let urlStr1 = try await createURLRequest(urlStr: url, needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
-        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader)
-        let ipAddress = String(data: model.resultData!, encoding: .utf8) ?? ""
+        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTBaseModel.self)
+        let ipAddress = String(data: model.resultData ?? Data(), encoding: .utf8) ?? ""
         return ipAddress
     }
     
@@ -912,13 +918,14 @@ public final class Network: @unchecked Sendable {
     
     // MARK: 日志
     private static func logRequestStart(url: String, parameters: Parameters?, headers: HTTPHeaders, method: HTTPMethod) {
-        let paramsStr = parameters?.jsonString() ?? "没有参数"
-        let headerStr = headers.dictionary.jsonString() ?? ""
+        let paramsStr = parameters != nil ? String(describing: parameters!) : "没有参数"
+        let headerStr = String(describing: headers.dictionary)
         PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💛2.参数 = \(paramsStr)\n💙3.请求头 = \(headerStr)\n🩷4.请求类型 = \(method.rawValue)🌐", levelType: PTLogMode, loggerType: .network)
     }
     
     private static func logRequestSuccess(url: String, jsonStr: String) {
-        PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(jsonStr.isEmpty ? "没有数据" : jsonStr)🌐", levelType: PTLogMode, loggerType: .network)
+        let printStr = jsonStr.isEmpty ? "数据为空 (或非JSON格式/被非Debug环境拦截)" : jsonStr
+        PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(printStr)🌐", levelType: PTLogMode, loggerType: .network)
     }
     
     private static func logRequestFailure(url: String, error: AFError) {
@@ -947,10 +954,10 @@ public final class Network: @unchecked Sendable {
         return false
     }
     
-    private static func parseResponse(url: String,
+    private static func parseResponse<T: SmartCodableX>(url: String,
                                       response: HTTPURLResponse?,
                                       data: Data?,
-                                      modelType: Convertible.Type?) throws -> PTBaseStructModel {
+                                      modelType: T.Type?) throws -> PTBaseStructModel {
         var result = PTBaseStructModel()
         result.resultData = data
         
@@ -985,25 +992,33 @@ public final class Network: @unchecked Sendable {
         // JSON 情况
         let jsonString = String(data: data, encoding: .utf8) ?? ""
         result.originalString = jsonString
+        
+        if let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            let businessCode = jsonDict["code"] as? Int ?? 200
+            let businessMsg = jsonDict["msg"] as? String ?? "Unknown error"
+            
+            if businessCode == 401 {
+                PTGCDManager.gcdMain {
+                    NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil)
+                }
+                throw PTNetworkError.businessError(code: businessCode, msg: businessMsg)
+            }
+        }
+
         logRequestSuccess(url: url, jsonStr: jsonString)
-        if let modelType {
-            result.customerModel = jsonString.kj.model(type: modelType)
+        
+        if let modelType = modelType {
+            // deserialize 内部已经做好了完善的容错处理
+            if let model = modelType.deserialize(from: jsonString) {
+                result.customerModel = model
+            } else {
+                throw PTNetworkError.modelExplainFail
+            }
         }
         
         return result
     }
-    
-    fileprivate static func makeResponseParser(url: String, modelType: Convertible.Type?) -> (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel {
-        return { response, data in
-            try parseResponse(
-                url: url,
-                response: response,
-                data: data,
-                modelType: modelType
-            )
-        }
-    }
-    
+        
     private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool,cachePolicy: PTNetworkCachePolicy? = nil) -> HTTPHeaders {
         var apiHeader = header ?? HTTPHeaders()
         if jsonRequest {
@@ -1035,13 +1050,13 @@ public final class Network: @unchecked Sendable {
     ///   - header: 請求頭
     ///   - modelType: 是否需要传入接口的数据模型，默认nil
     ///   - body: 最好utf8
-    public class func requestBodyAPI(needGobal:Bool = true,
+    public class func requestBodyAPI<T: SmartCodableX>(needGobal:Bool = true,
                                      urlStr:String,
                                      body:Data,
                                      header:HTTPHeaders? = nil,
                                      method:HTTPMethod = .post,
                                      cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
-                                     modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
+                                     modelType: T.Type? = nil) async throws -> PTBaseStructModel {
         
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         
@@ -1059,7 +1074,9 @@ public final class Network: @unchecked Sendable {
         
         logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
         
-        let parser = makeResponseParser(url: urlStr1, modelType: modelType)
+        let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
+            try parseResponse(url: urlStr1, response: response, data: data, modelType: modelType)
+        }
         
         let session = Network.share.session
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
@@ -1122,20 +1139,22 @@ public final class Network: @unchecked Sendable {
     }
     
     /// 项目总接口
-    class public func requestApi(needGobal:Bool = true,
+    class public func requestApi<T: SmartCodableX>(needGobal:Bool = true,
                                  urlStr:URLConvertible,
                                  method: HTTPMethod = .post,
                                  header:HTTPHeaders? = nil,
                                  parameters: Parameters? = nil,
                                  cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 新增暴露参数，默认 nil
-                                 modelType: Convertible.Type? = nil,
+                                 modelType: T.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest,cachePolicy: cachePolicy)
         logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
         
-        let parser = makeResponseParser(url: urlStr1, modelType: modelType)
+        let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
+            try parseResponse(url: urlStr1, response: response, data: data, modelType: modelType)
+        }
         
         let session = Network.share.session
         var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
@@ -1191,14 +1210,14 @@ public final class Network: @unchecked Sendable {
         return result
     }
     
-    class public func fileUpload(needGobal: Bool = true,
+    class public func fileUpload<T: SmartCodableX>(needGobal: Bool = true,
                                  media: Any,
                                  path: URLConvertible,
                                  method: HTTPMethod = .post,
                                  fileKey: String = "",
                                  params: [String: String]? = nil,
                                  header: HTTPHeaders? = nil,
-                                 modelType: Convertible.Type? = nil,
+                                 modelType: T.Type? = nil,
                                  jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
         AsyncThrowingStream { continuation in
             Task {
@@ -1206,7 +1225,10 @@ public final class Network: @unchecked Sendable {
                     let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+                    let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
+                        try parseResponse(url: pathUrl, response: response, data: data, modelType: modelType)
+                    }
+
                     let session = Network.share.session
                     session.upload(multipartFormData: { multipartFormData in
                         if let phasset = media as? PHAsset {
@@ -1354,14 +1376,14 @@ public final class Network: @unchecked Sendable {
     }
     
     /// 图片上传接口 (优化版)
-    class public func imageUpload(needGobal: Bool = true,
+    class public func imageUpload<T: SmartCodableX>(needGobal: Bool = true,
                                   images: [UIImage]?,
                                   path: URLConvertible,
                                   method: HTTPMethod = .post,
                                   fileKey: [String] = ["images"],
                                   params: [String: String]? = nil,
                                   header: HTTPHeaders? = nil,
-                                  modelType: Convertible.Type? = nil,
+                                  modelType: T.Type? = nil,
                                   jsonRequest: Bool = false,
                                   pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
         
@@ -1371,7 +1393,10 @@ public final class Network: @unchecked Sendable {
                     let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
                     let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
                     
-                    let parser = makeResponseParser(url: pathUrl, modelType: modelType)
+                    let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
+                        try parseResponse(url: pathUrl, response: response, data: data, modelType: modelType)
+                    }
+
                     let session = Network.share.session
                     
                     session.upload(multipartFormData: { multipartFormData in

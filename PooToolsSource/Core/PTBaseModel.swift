@@ -7,20 +7,12 @@
 //
 
 import UIKit
-import KakaJSON
+import SmartCodable
 
-open class PTBaseModel: Convertible {
+open class PTBaseModel: SmartCodableX {
     required public init() {}
-        
-    // 实现kj_modelKey方法
-    // 会传入模型的属性`property`作为参数，返回值就是属性对应的key
-    open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
-        property.name
-    }
     
-    open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any? {
-        return jsonValue
-    }
+    open func didFinishMapping() {}
 }
 
 extension PTBaseModel: PTDiffableModel {

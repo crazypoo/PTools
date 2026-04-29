@@ -131,4 +131,7 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarMiniSize:CGFloat = 56
     public var tabbarScrollEnabled:Bool = false
     public var tabbarScrollOffset:CGFloat = 20
+    public var tabbarCenterButtonSize: CGFloat = 64
+    public var tabbarBar26LRSpacing:CGFloat = 24.adapter
+
 }

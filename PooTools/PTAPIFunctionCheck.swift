@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import KakaJSON
+import SmartCodable
 
 class PTAPIFunctionCheck: NSObject {
     class func checkCode(code:String) ->Bool {
@@ -49,7 +49,7 @@ class PTAPIFunctionCheck: NSObject {
         return HTTPHeaders.init(headerDic)
     }
 
-    class func swiftApiRequest(apiUrl:String,method:HTTPMethod = .post,parameters:[String:String]? = nil,modelType: Convertible.Type,success:@escaping ((Any?) -> Void),fail:@escaping ((String)->Void)) {
+    class func swiftApiRequest<T: SmartCodableX>(apiUrl:String,method:HTTPMethod = .post,parameters:[String:String]? = nil,modelType: T.Type,success:@escaping ((Any?) -> Void),fail:@escaping ((String)->Void)) {
         Task.init {
             do {
                 let header = PTAPIFunctionCheck.apiHeaderSet(parmas: parameters)

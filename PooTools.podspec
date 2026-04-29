@@ -31,10 +31,8 @@ Pod::Spec.new do |s|
         subspec.dependency 'pop'
         subspec.dependency 'Kingfisher'
         subspec.dependency 'SafeSFSymbols'
-        subspec.dependency 'KakaJSON'
+        subspec.dependency 'SmartCodable'
         subspec.dependency 'lottie-ios'
-        #        subspec.dependency 'MetaCodable'
-        #        subspec.dependency 'MetaCodable/HelperCoders'
         subspec.resource_bundles = {
             'PooToolsResource' => ['PooToolsSource/Resource/**/*','PooToolsSource/Resource/PrivacyInfo.xcprivacy','PooToolsSource/Resources/*.lproj']
         }
