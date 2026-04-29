@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PTIPInfoModel :PTBaseModel {
+public struct PTIPInfoModel :PTModelProtocol {
     public var lon: CGFloat = 0.0
     public var zip: String = ""
     public var query: String = ""
@@ -23,14 +23,8 @@ public class PTIPInfoModel :PTBaseModel {
     public var country: String = ""
     public var status: String = ""
     public var regionName: String = ""
-    
-    required public init() {
-        super.init()
-    }
-    
-    required init(from decoder: any Decoder) throws {
-        fatalError("init(from:) has not been implemented")
-    }
+            
+    public init() {}
     
     enum CodingKeys: String,CodingKey {
         case asBaseic = "as"

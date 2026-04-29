@@ -896,7 +896,7 @@ public final class Network: @unchecked Sendable {
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
         let urlStr1 = try await createURLRequest(urlStr: url, needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
-        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTBaseModel.self)
+        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTDummyModel.self)
         let ipAddress = String(data: model.resultData ?? Data(), encoding: .utf8) ?? ""
         return ipAddress
     }
