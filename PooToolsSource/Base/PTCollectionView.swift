@@ -376,7 +376,9 @@ public class PTCollectionView: UIView {
     private var heightCache = PTLRUCache<HeightCacheKey, NSNumber>(countLimit: 1000)
     private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
     private var layoutCache =  PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection>(countLimit: 100)
-
+    
+    private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
+    
     fileprivate var mSections = [PTSection]()
 
     fileprivate lazy var collectionView : PTBaseCollectionView = {
@@ -572,6 +574,7 @@ public class PTCollectionView: UIView {
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             self.waterfallCache.removeAll()
+            self.fallbackLayouts.removeAll() // 👈 新增
         }
     }
     
@@ -593,6 +596,12 @@ extension PTCollectionView {
             guard let self = self else { return nil }
             
             let snapshot = self.diffableDataSource.snapshot()
+            
+            guard indexPath.section < snapshot.sectionIdentifiers.count else {
+                // 越界说明系统正在执行消失动画，直接返回一个基础占位 Cell
+                return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
+            }
+
             let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
             
             // 沿用你写好的自定义回调逻辑
@@ -621,6 +630,11 @@ extension PTCollectionView {
             guard let self = self else { return nil }
             
             let snapshot = self.diffableDataSource.snapshot()
+            
+            guard indexPath.section < snapshot.sectionIdentifiers.count else {
+                // 越界说明 Header/Footer 正在执行消失动画，返回基础占位 View 避免系统拿不到 View 而崩溃
+                return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
+            }
             let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
             
             if kind == UICollectionView.elementKindSectionHeader,
@@ -683,29 +697,27 @@ extension PTCollectionView {
 //MARK: UICollectionViewDelegate
 extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard indexPath.section < mSections.count else { return }
         let itemSec = mSections[indexPath.section]
         collectionDidSelect?(collectionView,itemSec,indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if !mSections.isEmpty {
-            let itemSec = mSections[indexPath.section]
-            collectionDidEndDisplay?(collectionView,cell,itemSec,indexPath)
-        }
+        guard indexPath.section < mSections.count else { return }
+        let itemSec = mSections[indexPath.section]
+        collectionDidEndDisplay?(collectionView, cell, itemSec, indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if !mSections.isEmpty {
-            let itemSec = mSections[indexPath.section]
-            collectionWillDisplay?(collectionView,cell,itemSec,indexPath)
-        }
+        guard indexPath.section < mSections.count else { return }
+        let itemSec = mSections[indexPath.section]
+        collectionWillDisplay?(collectionView, cell, itemSec, indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        if !mSections.isEmpty {
-            let itemSec = mSections[indexPath.section]
-            decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
-        }
+        guard indexPath.section < mSections.count else { return }
+        let itemSec = mSections[indexPath.section]
+        decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
     }
         
     // MARK: 移动cell结束
@@ -1189,6 +1201,7 @@ extension PTCollectionView {
         self.mSections.removeAll()
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
+        self.fallbackLayouts.removeAll() // 👈 新增
         
         var snapshot = PTSnapshot()
         snapshot.deleteAllItems() // 一键清空快照
@@ -1572,6 +1585,9 @@ extension PTCollectionView {
         // 🌟 核心修复 1：防越界保护！
         // 防止在执行删除动画时，Layout 请求了已经被我们从 mSections 中删除的旧索引
         guard section >= 0, section < mSections.count else {
+            if let fallback = fallbackLayouts[section] {
+                return fallback
+            }
             return NSCollectionLayoutSection(group: oneSquareGroup())
         }
 
@@ -1585,6 +1601,9 @@ extension PTCollectionView {
 
         let sectionLayout = buildSection(section: section, environment: environment)
         layoutCache.set(sectionLayout, forKey: key)
+        
+        fallbackLayouts[section] = sectionLayout
+        
         return sectionLayout
     }
     
