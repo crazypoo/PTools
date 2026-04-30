@@ -15,7 +15,7 @@ import SwifterSwift
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
-public class PTLaunchADModel: PTBaseModel {
+public class PTLaunchADModel: NSObject {
     public var image: Any?
     public var time: TimeInterval = 0
     public var tapURL: [AnyHashable: Any]?

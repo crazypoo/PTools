@@ -12,7 +12,7 @@ import Foundation
 import SwifterSwift
 import AttributedString
 
-public class PTFloatingPlaseholderConfig: PTBaseModel {
+public class PTFloatingPlaseholderConfig: NSObject {
     public var containerRadius: CGFloat = 0
     public var borderLayerColor: UIColor = .clear
     public var borderLayerFloatingColor: UIColor = .systemBlue
@@ -39,9 +39,7 @@ public class PTFloatingPlaseholderConfig: PTBaseModel {
     public var actionNormal: Any?
     public var actionSelected: Any?
     public var actionSapcing: CGFloat = 8 // 建议拼写修改为 actionSpacing
-    public var textAlignment: NSTextAlignment = .left
-    
-    public required init() { super.init() }    
+    public var textAlignment: NSTextAlignment = .left    
 }
 
 public class PTFloatingPlaseholderTextField: UIView {

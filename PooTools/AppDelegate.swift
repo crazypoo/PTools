@@ -213,9 +213,10 @@ class AppDelegate: PTAppWindowsDelegate {
 //        let dateString = "你好吗"
 //        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.uppercasePinYinFirstLetter())")
         
-        PTAPIFunctionCheck.swiftApiRequest(apiUrl: "http://ceo.lxceoapp.com/popup/getLatestPopUp",method:.get, modelType: LXHomePopoverMainModel.self) { resultObject in
-            let aaaaaa = resultObject as! LXHomePopoverMainModel
-            PTNSLogConsole("??????????????????????????????????\(aaaaaa.msg?.image ?? "")")
+        PTAPIFunctionCheck.swiftApiRequest(apiUrl: "https://www.drinks912.com/api/advertisement/getAdvertisementList",method:.post, modelType: YDSHomeBannerMainModel.self) { resultObject in
+            if let aaaaaa = resultObject as? YDSHomeBannerMainModel {
+                PTNSLogConsole("??????????????????????????????????\(String(describing: aaaaaa.result?.data.first?.id))")
+            }
         } fail: { error in
             
         }

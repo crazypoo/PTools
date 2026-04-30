@@ -10,38 +10,38 @@ import UIKit
 import SwifterSwift
 import SwiftJWT
 import Alamofire
-import KakaJSON
+import SmartCodable
 
-class IpadScreenshotUrls :PTBaseModel {
-
+class IpadScreenshotUrls :PTModelProtocol {
+    required init() {}
 }
 
-class AppletvScreenshotUrls :PTBaseModel {
-
+class AppletvScreenshotUrls :PTModelProtocol {
+    required init() {}
 }
 
-class Features :PTBaseModel {
-
+class Features :PTModelProtocol {
+    required init() {}
 }
 
-class Results :PTBaseModel {
+class Results :PTModelProtocol {
     var primaryGenreName: String = ""
     var artworkUrl100: String = ""
     var currency: String = ""
     var artworkUrl512: String = ""
-    var ipadScreenshotUrls: [IpadScreenshotUrls]?
+    @SmartAny var ipadScreenshotUrls: [IpadScreenshotUrls] = []
     var fileSizeBytes: String = ""
-    var genres: [String]?
-    var languageCodesISO2A: [String]?
+    @SmartAny var genres: [String] = []
+    @SmartAny var languageCodesISO2A: [String] = []
     var artworkUrl60: String = ""
-    var supportedDevices: [String]?
+    @SmartAny var supportedDevices: [String] = []
     var bundleId: String = ""
     var trackViewUrl: String = ""
     var version: String = ""
     var description: String = ""
     var releaseDate: String = ""
-    var genreIds: [String]?
-    var appletvScreenshotUrls: [AppletvScreenshotUrls]?
+    @SmartAny var genreIds: [String] = []
+    @SmartAny var appletvScreenshotUrls: [AppletvScreenshotUrls] = []
     var wrapperType: String = ""
     var isGameCenterEnabled: Bool = false
     var averageUserRatingForCurrentVersion: Int = 0
@@ -60,75 +60,81 @@ class Results :PTBaseModel {
     var trackCensoredName: String = ""
     var trackName: String = ""
     var kind: String = ""
-    var contentAdvisoryRating: String!
-    var features: [Features]?
-    var screenshotUrls: [String]?
+    var contentAdvisoryRating: String = ""
+    @SmartAny var features: [Features] = []
+    @SmartAny var screenshotUrls: [String] = []
     var releaseNotes: String = ""
     var isVppDeviceBasedLicensingEnabled: Bool = false
     var sellerName: String = ""
     var averageUserRating: Int = 0
-    var advisories: [String]!
+    @SmartAny var advisories: [String] = []
+    
+    required init() {}
 }
 
-class PTCheckUpdateModel:PTBaseModel {
-    var results: [Results]!
+class PTCheckUpdateModel:PTModelProtocol {
+    @SmartAny var results: [Results] = []
     var resultCount: Int = 0
+    required init() {}
 }
 
 /*
  TF Mode
  */
-public class PTTFPaging :PTBaseModel {
+public class PTTFPaging :PTModelProtocol {
     public var total: Int = 0
     public var limit: Int = 0
+    required public init() {}
 }
 
-public class PTTFMeta :PTBaseModel {
-    public var paging: PTTFPaging?
+public class PTTFMeta :PTModelProtocol {
+    @SmartAny public var paging: PTTFPaging?
+    required public init() {}
 }
 
-public class PTTLinkMainModel:PTBaseModel {
-    public var links: PTTFLinks?
+public class PTTLinkMainModel:PTModelProtocol {
+    @SmartAny public var links: PTTFLinks?
+    required public init() {}
 }
 
-public class PTTFRelationships :PTBaseModel {
-    public var app: PTTLinkMainModel?
-    public var builds: PTTLinkMainModel?
-    public var betaAppReviewSubmission:PTTLinkMainModel?
-    public var appStoreVersion:PTTLinkMainModel?
-    public var appEncryptionDeclaration:PTTLinkMainModel?
-    public var individualTesters:PTTLinkMainModel?
-    public var perfPowerMetrics:PTTLinkMainModel?
-    public var betaBuildLocalizations:PTTLinkMainModel?
-    public var betaGroups:PTTLinkMainModel?
-    public var diagnosticSignatures:PTTLinkMainModel?
-    public var preReleaseVersion:PTTLinkMainModel?
-    public var buildBetaDetail:PTTLinkMainModel?
-    public var icons:PTTLinkMainModel?
+public class PTTFRelationships :PTModelProtocol {
+    @SmartAny public var app: PTTLinkMainModel?
+    @SmartAny public var builds: PTTLinkMainModel?
+    @SmartAny public var betaAppReviewSubmission:PTTLinkMainModel?
+    @SmartAny public var appStoreVersion:PTTLinkMainModel?
+    @SmartAny public var appEncryptionDeclaration:PTTLinkMainModel?
+    @SmartAny public var individualTesters:PTTLinkMainModel?
+    @SmartAny public var perfPowerMetrics:PTTLinkMainModel?
+    @SmartAny public var betaBuildLocalizations:PTTLinkMainModel?
+    @SmartAny public var betaGroups:PTTLinkMainModel?
+    @SmartAny public var diagnosticSignatures:PTTLinkMainModel?
+    @SmartAny public var preReleaseVersion:PTTLinkMainModel?
+    @SmartAny public var buildBetaDetail:PTTLinkMainModel?
+    @SmartAny public var icons:PTTLinkMainModel?
+    required public init() {}
 }
 
-public class PTTFLinks :PTBaseModel {
+public class PTTFLinks :PTModelProtocol {
     public var currentLink: String = ""
     public var related: String = ""
     public var next:String = ""
-        
-    open override func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
-        switch property.name {
-        case "currentLink":
-            return "self"
-        default:
-            return property.name
-        }
+    
+    required public init() {}
+
+    public class func mappingForKey() -> [SmartKeyTransformer]? {
+        [ CodingKeys.currentLink <--- "self" ]
     }
 }
 
-public class PTTFIconAssetTokenModle:PTBaseModel {
+public class PTTFIconAssetTokenModle:PTModelProtocol {
     public var width:CGFloat = 0
     public var templateUrl:String = ""
     public var height:CGFloat = 0
+    
+    required public init() {}
 }
 
-public class PTTFAttributes :PTBaseModel {
+public class PTTFAttributes :PTModelProtocol {
     public var version: String = ""
     public var platform: String = ""
     public var minOsVersion:String = ""
@@ -141,12 +147,14 @@ public class PTTFAttributes :PTBaseModel {
     public var expirationDate:String = ""
     public var usesNonExemptEncryption:Bool = false
     public var computedMinVisionOsVersion:String = ""
-    public var iconAssetToken:PTTFIconAssetTokenModle?
+    @SmartAny public var iconAssetToken:PTTFIconAssetTokenModle?
     public var locale:String = ""
     public var whatsNew:String = ""
     public var publicLink:String = ""
     public var name:String = ""
     
+    required public init() {}
+
     public var processingStateBool:Bool {
         switch processingState {
         case "VALID":
@@ -157,23 +165,29 @@ public class PTTFAttributes :PTBaseModel {
     }
 }
 
-public class PTTFVersionData :PTBaseModel {
+public class PTTFVersionData :PTModelProtocol {
     public var id: String = ""
-    public var relationships: PTTFRelationships?
-    public var links: PTTFLinks?
+    @SmartAny public var relationships: PTTFRelationships?
+    @SmartAny public var links: PTTFLinks?
     public var type: String = ""
-    public var attributes: PTTFAttributes?
+    @SmartAny public var attributes: PTTFAttributes?
+    
+    required public init() {}
 }
 
-public class PTTFModelCollection :PTBaseModel {
-    public var meta: PTTFMeta?
-    public var links: PTTFLinks?
-    public var data: [PTTFVersionData]?
+public class PTTFModelCollection :PTModelProtocol {
+    @SmartAny public var meta: PTTFMeta?
+    @SmartAny public var links: PTTFLinks?
+    @SmartAny public var data: [PTTFVersionData]?
+    
+    required public init() {}
 }
 
-public class PTTFNewerBuildVersionModel:PTBaseModel {
-    public var links:PTTFLinks?
-    public var data:PTTFVersionData?
+public class PTTFNewerBuildVersionModel:PTModelProtocol {
+    @SmartAny public var links:PTTFLinks?
+    @SmartAny public var data:PTTFVersionData?
+    
+    required public init() {}
 }
 
 public struct PTAppleClaims: Claims {
@@ -183,10 +197,12 @@ public struct PTAppleClaims: Claims {
     let aud: String
 }
 
-public class PTTFUpdateCustomModel:PTBaseModel {
+public class PTTFUpdateCustomModel:PTModelProtocol {
     var version:String = ""
     var desc:String = ""
     var downloadURL:String = ""
+    
+    required public init() {}
 }
 
 @objcMembers
@@ -315,7 +331,7 @@ public class PTCheckUpdateFunction: NSObject {
             if !appid.isEmpty {
                 Task.init {
                     do {
-                        let result = try await Network.requestApi(needGobal:false,urlStr: "https://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self)
+                        let result = try await Network.requestCodableApi(needGobal:false,urlStr: "https://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self)
                         if let responseModel = result.customerModel as? PTCheckUpdateModel {
                             if !responseModel.results.isEmpty {
                                 let versionModel = responseModel.results.first!
@@ -449,7 +465,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
 
-    public static func appConnectApiRequest(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: Convertible.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
+    public static func appConnectApiRequest<T:SmartCodableX>(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
         if showHud {
             toggleHud(show: true)
         }
@@ -458,7 +474,7 @@ public class PTCheckUpdateFunction: NSObject {
             do {
                 let headerDic = ["Authorization":"Bearer \(token)","Content-Type":"application/json"]
                 let header = HTTPHeaders(headerDic)
-                let model = try await Network.requestApi(needGobal:false,urlStr: apiUrl,method: .get,header: header,parameters: parameters,modelType: modelType,encoder: URLEncoding.default)
+                let model = try await Network.requestCodableApi(needGobal:false,urlStr: apiUrl,method: .get,header: header,parameters: parameters,modelType: modelType,encoder: URLEncoding.default)
                 if showHud {
                     toggleHud(show: false)
                 }

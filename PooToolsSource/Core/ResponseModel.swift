@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import KakaJSON
+import SmartCodable
 
-public class PTIPInfoModel: PTBaseModel {
+public class PTIPInfoModel: PTModelProtocol {
     public var lon: CGFloat = 0.0
     public var zip: String = ""
     public var query: String = ""
@@ -24,14 +24,11 @@ public class PTIPInfoModel: PTBaseModel {
     public var country: String = ""
     public var status: String = ""
     public var regionName: String = ""
-                
-    public override func kj_modelKey(from property: Property) -> ModelPropertyKey {
-        switch property.name {
-        case "asBaseic":
-            return "as"
-        default:
-            return property.name
-        }
+    
+    required public init() {}
+
+    public static func mappingForKey() -> [SmartKeyTransformer]? {
+        [ CodingKeys.asBaseic <--- "as" ]
     }
 }
 

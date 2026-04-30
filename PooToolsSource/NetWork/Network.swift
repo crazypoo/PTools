@@ -573,7 +573,6 @@ public actor NetworkCache {
             }
         }
     }
-
 }
 
 extension URLRequest {
@@ -897,7 +896,7 @@ public final class Network: @unchecked Sendable {
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
         let urlStr1 = try await createURLRequest(urlStr: url, needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
-        let model = try await Network.requestApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader)
+        let model = try await Network.requestCodableApi(needGobal:false,urlStr: urlStr1,method: .get,header: apiHeader, modelType: PTDummyModel.self)
         let ipAddress = String(data: model.resultData ?? Data(), encoding: .utf8) ?? ""
         return ipAddress
     }
@@ -906,7 +905,7 @@ public final class Network: @unchecked Sendable {
         
         let urlStr1 = try await createURLRequest(urlStr: "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)", needGobal: false)
         let apiHeader = prepareRequestHeaders(header: nil, jsonRequest: true)
-        let models = try await Network.requestApi(needGobal: false, urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTIPInfoModel.self)
+        let models = try await Network.requestCodableApi(needGobal: false, urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTIPInfoModel.self)
         if let returnModel = models.customerModel as? PTIPInfoModel {
             return returnModel
         }
@@ -954,72 +953,22 @@ public final class Network: @unchecked Sendable {
         }
         return false
     }
-    
-    private static func parseResponse(url: String,
-                                      response: HTTPURLResponse?,
-                                      data: Data?,
-                                      modelType: Convertible.Type?) throws -> PTBaseStructModel {
-        var result = PTBaseStructModel()
-        result.resultData = data
-        
-        guard let data = data, !data.isEmpty else {
-            let error = PTNetworkError.dataEmpty
-            logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
-            throw error
-        }
-        
-        let isMockData = (response == nil)
-        
-        // 非 JSON 的情况（可能是 HTML 或纯文本）
-        if !isMockData && !isJSONResponse(response, data: data) {
-            if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
-                let error = PTNetworkError.htmlResponse(html)
-                logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
-                throw error
-            }
-            // 如果不是 HTML，就当作纯文本成功返回（Debug 打印文本）
-            var originalText = ""
-            switch UIApplication.shared.inferredEnvironment_PT {
-            case .debug:
-                originalText = prettyJSONString(from: String(decoding: data, as: UTF8.self)) ?? ""
-            default:
-                originalText = ""
-            }
-            logRequestSuccess(url: url, jsonStr: originalText)
-            result.originalString = originalText
-            return result
-        }
-        
-        // JSON 情况
-        let jsonString = String(data: data, encoding: .utf8) ?? ""
-        result.originalString = jsonString
-        
-        if let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-            let businessCode = jsonDict["code"] as? Int ?? 200
-            let businessMsg = jsonDict["msg"] as? String ?? "Unknown error"
             
-            if businessCode == 401 {
-                PTGCDManager.gcdMain {
-                    NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil)
-                }
-                throw PTNetworkError.businessError(code: businessCode, msg: businessMsg)
-            }
-        }
-
-        logRequestSuccess(url: url, jsonStr: jsonString)
-        
-        if let modelType = modelType {
-            // deserialize 内部已经做好了完善的容错处理
-            if let model = jsonString.kj.model(modelType) {
+    private static func parseCodableResponse<T:SmartCodableX>(url: String,
+                                                              response: HTTPURLResponse?,
+                                                              data: Data?,
+                                                              modelType: T.Type?) throws -> PTBaseStructModel {
+        var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data)
+        if !jsonString.isEmpty, let modelType = modelType {
+            if let model = modelType.deserialize(from: jsonString) {
                 result.customerModel = model
             } else {
                 throw PTNetworkError.modelExplainFail
             }
         }
-        
         return result
     }
-        
+
     private static func prepareRequestHeaders(header: HTTPHeaders?, jsonRequest: Bool,cachePolicy: PTNetworkCachePolicy? = nil) -> HTTPHeaders {
         var apiHeader = header ?? HTTPHeaders()
         if jsonRequest {
@@ -1044,6 +993,9 @@ public final class Network: @unchecked Sendable {
         return gobalUrl + original
     }
     
+    // 我们定义一个通用的解析闭包别名，方便传递
+    private typealias ResponseParser = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel
+    private typealias UploadResponseParser = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel
     /// - Parameters:
     ///   - needGobal:是否全局使用默认
     ///   - urlStr: url地址
@@ -1051,398 +1003,60 @@ public final class Network: @unchecked Sendable {
     ///   - header: 請求頭
     ///   - modelType: 是否需要传入接口的数据模型，默认nil
     ///   - body: 最好utf8
-    public class func requestBodyAPI(needGobal:Bool = true,
-                                     urlStr:String,
-                                     body:Data,
-                                     header:HTTPHeaders? = nil,
-                                     method:HTTPMethod = .post,
-                                     cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
-                                     modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
-        
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        
-        var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
-        // 补充默认的 Content-Type
-        if newHeader["Content-Type"] == nil {
-            newHeader["Content-Type"] = "text/plain"
+    public class func requestCodableBodyAPI<T:SmartCodableX>(needGobal:Bool = true,
+                                                             urlStr:String,
+                                                             body:Data,
+                                                             header:HTTPHeaders? = nil,
+                                                             method:HTTPMethod = .post,
+                                                             cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
+                                                             modelType: T.Type? = nil) async throws -> PTBaseStructModel {
+        return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
+            try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
         }
-        var dic:[String:Any] = [:]
-        
-        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []),
-           let dictionary = jsonObject as? [String: Any] {
-            dic = dictionary
-        }
-        
-        logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
-        
-        let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
-            try parseResponse(url: urlStr1, response: response, data: data, modelType: modelType)
-        }
-        
-        let session = Network.share.session
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
-        // 将外层传入的 body 赋值给 URLRequest
-        urlRequest.httpBody = body
-        
-        // 👉 🌟 3. 补上插件前置处理
-        for plugin in Network.share.plugins {
-            await plugin.willSend(&urlRequest)
-        }
-        
-        // 🌟 4. 补上读取缓存的逻辑（让这个方法也能真正支持缓存拦截）
-        if urlRequest.isMock {
-            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
-                let parsed = try parser(nil, mockData)
-                return parsed
-            }
-        }
-        
-        // 去重策略判断
-        let policy: PTNetworkDedupPolicy = {
-            switch urlRequest.cachePolicyType {
-            case .none:
-                return .none
-            default:
-                return .identical
-            }
-        }()
-        
-        // 🌟 5. 极致优雅的执行闭包
-        let finalRequest = urlRequest
-        let realRequest: @Sendable () async throws -> PTBaseStructModel = {
-            // 使用 session.upload 配合 finalRequest 来发起带 body 的请求
-            let dataTask = session.upload(body, with: finalRequest).serializingData()
-            
-            let response = await dataTask.response
-            let result = response.result
-            
-            // 拦截插件响应
-            for plugin in Network.share.plugins {
-                await plugin.didReceive(result, request: finalRequest, response: response.response)
-            }
-            
-            switch result {
-            case .success(let data):
-                return try parser(response.response, data)
-            case .failure(let error):
-                logRequestFailure(url: urlStr1, error: error)
-                throw error
-            }
-        }
-        
-        // 🌟 6. 统一使用去重器执行
-        let result = try await RequestDeduplicator.shared.execute(request: urlRequest,
-                                                                  policy: policy) {
-            try await realRequest()
-        }
-        
-        return result
     }
     
     /// 项目总接口
-    class public func requestApi(needGobal:Bool = true,
-                                 urlStr:URLConvertible,
-                                 method: HTTPMethod = .post,
-                                 header:HTTPHeaders? = nil,
-                                 parameters: Parameters? = nil,
-                                 cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 新增暴露参数，默认 nil
-                                 modelType: Convertible.Type? = nil,
-                                 encoder:ParameterEncoding = URLEncoding.default,
-                                 jsonRequest:Bool = false) async throws -> PTBaseStructModel {
-        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest,cachePolicy: cachePolicy)
-        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
-        
-        let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
-            try parseResponse(url: urlStr1, response: response, data: data, modelType: modelType)
+    class public func requestCodableApi<T:SmartCodableX>(needGobal:Bool = true,
+                                                         urlStr:URLConvertible,
+                                                         method: HTTPMethod = .post,
+                                                         header:HTTPHeaders? = nil,
+                                                         parameters: Parameters? = nil,
+                                                         cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 新增暴露参数，默认 nil
+                                                         modelType: T.Type? = nil,
+                                                         encoder:ParameterEncoding = URLEncoding.default,
+                                                         jsonRequest:Bool = false) async throws -> PTBaseStructModel {
+        return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
+            try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
         }
-        
-        let session = Network.share.session
-        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
-        urlRequest = try encoder.encode(urlRequest, with: parameters)
-        // 👉 插件前置处理
-        for plugin in Network.share.plugins {
-            await plugin.willSend(&urlRequest)
-        }
-        
-        if urlRequest.isMock {
-            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
-                let parsed = try parser(nil, mockData)
-                return parsed
-            }
-        }
-        
-        // 3. ⭐这里决定去重策略
-        let policy: PTNetworkDedupPolicy = {
-            switch urlRequest.cachePolicyType {
-            case .none:
-                return .none
-            default:
-                return .identical
-            }
-        }()
-        
-        // 极致优雅且原生支持 Cancellation 的写法：
-        let finalRequest = urlRequest
-        let realRequest: @Sendable () async throws -> PTBaseStructModel = {
-            let dataTask = session.request(finalRequest).serializingData()
-            
-            // 拦截插件响应
-            let response = await dataTask.response
-            let result = response.result
-            for plugin in Network.share.plugins {
-                await plugin.didReceive(result, request: finalRequest, response: response.response)
-            }
-            
-            switch result {
-            case .success(let data):
-                return try parser(response.response, data)
-            case .failure(let error):
-                logRequestFailure(url: urlStr1, error: error)
-                throw error
-            }
-        }
-        
-        let result = try await RequestDeduplicator.shared.execute(request: urlRequest,
-                                                                  policy: policy) {
-            try await realRequest()
-        }
-        
-        return result
     }
     
-    class public func fileUpload(needGobal: Bool = true,
-                                 media: Any,
-                                 path: URLConvertible,
-                                 method: HTTPMethod = .post,
-                                 fileKey: String = "",
-                                 params: [String: String]? = nil,
-                                 header: HTTPHeaders? = nil,
-                                 modelType: Convertible.Type? = nil,
-                                 jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
-                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
-                    
-                    let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
-                        try parseResponse(url: pathUrl, response: response, data: data, modelType: modelType)
-                    }
-
-                    let session = Network.share.session
-                    session.upload(multipartFormData: { multipartFormData in
-                        if let phasset = media as? PHAsset {
-                            switch phasset.mediaType {
-                            case .image:
-                                Task {
-                                    let image = await phasset.asyncImage()
-                                    if let findImage = image {
-                                        let canPNG = findImage.pngData() != nil
-                                        if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
-                                            let key = fileKey
-                                            let ext = canPNG ? "png" : "jpg"
-                                            let dateString = Int(Date().timeIntervalSince1970)
-                                            let fileName = "image_\(dateString).\(ext)"
-                                            let mimeType = MimeTypeHelper.mimeType(for: ext)
-                                            multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
-                                        } else {
-                                            continuation.finish(throwing: PTNetworkError.uploadDataError("Image data error"))
-                                        }
-                                    }
-                                }
-                            case .video:
-                                phasset.converPHAssetToAVURLAsset { urlAsset in
-                                    if let url = urlAsset?.url {
-                                        let ext = url.pathExtension.lowercased()
-                                        let dateString = Int(Date().timeIntervalSince1970)
-                                        let fileName = "video_\(dateString).\(ext)"
-                                        let mimeType: String = MimeTypeHelper.mimeType(for: ext)
-                                        multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
-                                    } else {
-                                        continuation.finish(throwing: PTNetworkError.uploadDataError("Video data error"))
-                                    }
-                                }
-                            case .audio:
-                                phasset.converPHAssetToAVURLAsset { urlAsset in
-                                    if let url = urlAsset?.url {
-                                        let ext = url.pathExtension.lowercased()
-                                        let dateString = Int(Date().timeIntervalSince1970)
-                                        let fileName = "audio_\(dateString).\(ext)"
-                                        let mimeType: String = MimeTypeHelper.mimeType(for: ext)
-                                        
-                                        multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
-                                    }
-                                }
-                            default:
-                                continuation.finish(throwing: NSError(domain: "Unknow data error", code: 666))
-                            }
-                        } else if let findImage = media as? UIImage {
-                            let canPNG = findImage.pngData() != nil
-                            if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
-                                let key = fileKey
-                                let ext = canPNG ? "png" : "jpg"
-                                let dateString = Int(Date().timeIntervalSince1970)
-                                let fileName = "image_\(dateString).\(ext)"
-                                let mimeType = MimeTypeHelper.mimeType(for: ext)
-                                multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
-                            } else {
-                                continuation.finish(throwing: NSError(domain: "Image data error", code: 666))
-                            }
-                        } else if let findUrl = media as? URL {
-                            if findUrl.isFileURL {
-                                // fileProvider / iCloud 需要先复制
-                                let uploadURL: URL
-                                
-                                if findUrl.path.contains("File Provider Storage")
-                                    || findUrl.path.contains("com.apple.FileProvider") {
-                                    
-                                    let tmpURL = FileManager.default.temporaryDirectory
-                                        .appendingPathComponent(findUrl.lastPathComponent)
-                                    
-                                    try? FileManager.default.removeItem(at: tmpURL)
-                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
-                                    
-                                    uploadURL = tmpURL
-                                } else {
-                                    uploadURL = findUrl
-                                }
-                                
-                                let ext = uploadURL.pathExtension.lowercased()
-                                let mimeType = MimeTypeHelper.mimeType(for: ext)
-                                let fileName = uploadURL.lastPathComponent
-                                
-                                multipartFormData.append(uploadURL, withName: fileKey, fileName: fileName, mimeType: mimeType)
-                            } else {
-                                continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
-                            }
-                        } else if let findString = media as? String,let findUrl = URL(string: findString) {
-                            if findUrl.isFileURL {
-                                // fileProvider / iCloud 需要先复制
-                                let uploadURL: URL
-                                
-                                if findUrl.path.contains("File Provider Storage")
-                                    || findUrl.path.contains("com.apple.FileProvider") {
-                                    
-                                    let tmpURL = FileManager.default.temporaryDirectory
-                                        .appendingPathComponent(findUrl.lastPathComponent)
-                                    
-                                    try? FileManager.default.removeItem(at: tmpURL)
-                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
-                                    
-                                    uploadURL = tmpURL
-                                } else {
-                                    uploadURL = findUrl
-                                }
-                                
-                                let ext = uploadURL.pathExtension.lowercased()
-                                let mimeType = MimeTypeHelper.mimeType(for: ext)
-                                let fileName = uploadURL.lastPathComponent
-                                
-                                multipartFormData.append(uploadURL, withName: fileKey, fileName: fileName, mimeType: mimeType)
-                            } else {
-                                continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
-                            }
-                        }
-                        
-                        params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) {
-                                multipartFormData.append(data, withName: key)
-                            }
-                        }
-                    }, to: pathUrl, method: method, headers: apiHeader)
-                    .uploadProgress { progress in
-                        continuation.yield((progress, nil))
-                    }
-                    .response { resp in
-                        switch resp.result {
-                        case .success(_):
-                            do {
-                                let parsed = try parser(resp.response,resp.data)
-                                continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                continuation.finish()
-                            } catch {
-                                continuation.finish(throwing: error)
-                            }
-                        case .failure(let error):
-                            logRequestFailure(url: pathUrl, error: error)
-                            continuation.finish(throwing: error)
-                        }
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
+    class public func fileCodableUpload<T:SmartCodableX>(needGobal: Bool = true,
+                                                         media: Any,
+                                                         path: URLConvertible,
+                                                         method: HTTPMethod = .post,
+                                                         fileKey: String = "",
+                                                         params: [String: String]? = nil,
+                                                         header: HTTPHeaders? = nil,
+                                                         modelType: T.Type? = nil,
+                                                         jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
+            return try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
         }
     }
     
     /// 图片上传接口 (优化版)
-    class public func imageUpload(needGobal: Bool = true,
-                                  images: [UIImage]?,
-                                  path: URLConvertible,
-                                  method: HTTPMethod = .post,
-                                  fileKey: [String] = ["images"],
-                                  params: [String: String]? = nil,
-                                  header: HTTPHeaders? = nil,
-                                  modelType: Convertible.Type? = nil,
-                                  jsonRequest: Bool = false,
-                                  pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
-        
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
-                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
-                    
-                    let parser: (_ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel = { response, data in
-                        try parseResponse(url: pathUrl, response: response, data: data, modelType: modelType)
-                    }
-
-                    let session = Network.share.session
-                    
-                    session.upload(multipartFormData: { multipartFormData in
-                        // 使用枚举配合 autoreleasepool 防止大图片同时驻留内存导致 OOM
-                        images?.enumerated().forEach { index, image in
-                            autoreleasepool {
-                                let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
-                                guard let imageData = data else { return }
-                                
-                                let key = fileKey[safe: index] ?? "image"
-                                let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
-                                let mimeType = pngData ? "image/png" : "image/jpeg"
-                                
-                                multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
-                            }
-                        }
-                        
-                        params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) {
-                                multipartFormData.append(data, withName: key)
-                            }
-                        }
-                    }, to: pathUrl, method: method, headers: apiHeader)
-                    .uploadProgress { progress in
-                        continuation.yield((progress, nil))
-                    }
-                    .response { resp in
-                        switch resp.result {
-                        case .success(_):
-                            do {
-                                let parsed = try parser(resp.response,resp.data)
-                                continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                continuation.finish()
-                            } catch {
-                                continuation.finish(throwing: error)
-                            }
-                        case .failure(let error):
-                            logRequestFailure(url: pathUrl, error: error)
-                            continuation.finish(throwing: error)
-                        }
-                    }
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
+    class public func imageCodableUpload<T:SmartCodableX>(needGobal: Bool = true,
+                                                          images: [UIImage]?,
+                                                          path: URLConvertible,
+                                                          method: HTTPMethod = .post,
+                                                          fileKey: [String] = ["images"],
+                                                          params: [String: String]? = nil,
+                                                          header: HTTPHeaders? = nil,
+                                                          modelType: T.Type? = nil,
+                                                          jsonRequest: Bool = false,
+                                                          pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
+            return try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
         }
     }
     
@@ -1672,6 +1286,426 @@ public final class Network: @unchecked Sendable {
                 await store.remove(fileUrl)
                 task.cancel()
             }
+        }
+    }
+}
+
+/*
+ 公共方法
+*/
+extension Network {
+    /// 抽取新旧框架共同的：非空校验、HTML校验、业务 Code (401) 拦截逻辑
+    private static func validateAndPreprocessResponse(url: String, response: HTTPURLResponse?, data: Data?) throws -> (PTBaseStructModel, String) {
+        var result = PTBaseStructModel()
+        result.resultData = data
+        
+        guard let data = data, !data.isEmpty else {
+            let error = PTNetworkError.dataEmpty
+            logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
+            throw error
+        }
+        
+        let isMockData = (response == nil)
+        
+        // 非 JSON 的情况（可能是 HTML 或纯文本）
+        if !isMockData && !isJSONResponse(response, data: data) {
+            if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
+                let error = PTNetworkError.htmlResponse(html)
+                logRequestFailure(url: url, error: AFError.createURLRequestFailed(error: error))
+                throw error
+            }
+            var originalText = ""
+            if UIApplication.shared.inferredEnvironment_PT == .debug {
+                originalText = prettyJSONString(from: String(decoding: data, as: UTF8.self)) ?? ""
+            }
+            logRequestSuccess(url: url, jsonStr: originalText)
+            result.originalString = originalText
+            return (result, "") // JSON String为空，代表外部无需继续解析
+        }
+        
+        // JSON 情况
+        let jsonString = String(data: data, encoding: .utf8) ?? ""
+        result.originalString = jsonString
+        
+        if let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            let businessCode = jsonDict["code"] as? Int ?? 200
+            let businessMsg = jsonDict["msg"] as? String ?? "Unknown error"
+            
+            if businessCode == 401 {
+                PTGCDManager.gcdMain {
+                    NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil)
+                }
+                throw PTNetworkError.businessError(code: businessCode, msg: businessMsg)
+            }
+        }
+        
+        logRequestSuccess(url: url, jsonStr: jsonString)
+        return (result, jsonString)
+    }
+    
+    /// 核心常规请求引擎
+    private class func _internalRequestApi(needGobal: Bool,
+                                           urlStr: URLConvertible,
+                                           method: HTTPMethod,
+                                           header: HTTPHeaders?,
+                                           parameters: Parameters?,
+                                           cachePolicy: PTNetworkCachePolicy?,
+                                           encoder: ParameterEncoding,
+                                           jsonRequest: Bool,
+                                           parser: @escaping ResponseParser) async throws -> PTBaseStructModel {
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest, cachePolicy: cachePolicy)
+        logRequestStart(url: urlStr1, parameters: parameters, headers: apiHeader, method: method)
+        
+        let session = Network.share.session
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: apiHeader)
+        urlRequest = try encoder.encode(urlRequest, with: parameters)
+        
+        for plugin in Network.share.plugins { await plugin.willSend(&urlRequest) }
+        
+        if urlRequest.isMock {
+            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
+                return try parser(urlStr1, nil, mockData)
+            }
+        }
+        
+        let policy: PTNetworkDedupPolicy = (urlRequest.cachePolicyType == .none) ? .none : .identical
+        let finalRequest = urlRequest
+        
+        let realRequest: @Sendable () async throws -> PTBaseStructModel = {
+            let dataTask = session.request(finalRequest).serializingData()
+            let response = await dataTask.response
+            for plugin in Network.share.plugins { await plugin.didReceive(response.result, request: finalRequest, response: response.response) }
+            
+            switch response.result {
+            case .success(let data):   return try parser(urlStr1, response.response, data)
+            case .failure(let error):  logRequestFailure(url: urlStr1, error: error); throw error
+            }
+        }
+        return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
+    }
+    
+    /// 核心 Body 请求引擎
+    private class func _internalRequestBodyAPI(needGobal: Bool,
+                                               urlStr: String,
+                                               body: Data,
+                                               header: HTTPHeaders?,
+                                               method: HTTPMethod,
+                                               cachePolicy: PTNetworkCachePolicy?,parser: @escaping ResponseParser) async throws -> PTBaseStructModel {
+        let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
+        var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
+        if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
+        
+        var dic: [String: Any] = [:]
+        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: Any] { dic = dictionary }
+        logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
+        
+        let session = Network.share.session
+        var urlRequest = try URLRequest(url: urlStr1, method: method, headers: newHeader)
+        urlRequest.httpBody = body
+        
+        for plugin in Network.share.plugins { await plugin.willSend(&urlRequest) }
+        
+        if urlRequest.isMock {
+            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
+                return try parser(urlStr1, nil, mockData)
+            }
+        }
+        
+        let policy: PTNetworkDedupPolicy = (urlRequest.cachePolicyType == .none) ? .none : .identical
+        let finalRequest = urlRequest
+        
+        let realRequest: @Sendable () async throws -> PTBaseStructModel = {
+            let dataTask = session.upload(body, with: finalRequest).serializingData()
+            let response = await dataTask.response
+            for plugin in Network.share.plugins { await plugin.didReceive(response.result, request: finalRequest, response: response.response) }
+            
+            switch response.result {
+            case .success(let data):   return try parser(urlStr1, response.response, data)
+            case .failure(let error):  logRequestFailure(url: urlStr1, error: error); throw error
+            }
+        }
+        return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
+    }
+    
+    /// 核心：通用文件上传引擎
+    private class func _internalFileUpload(needGobal: Bool,
+                                           media: Any,
+                                           path: URLConvertible,
+                                           method: HTTPMethod,
+                                           fileKey: String,
+                                           params: [String: String]?,
+                                           header: HTTPHeaders?,
+                                           jsonRequest: Bool,
+                                           parser: @escaping UploadResponseParser) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    let session = Network.share.session
+                    session.upload(multipartFormData: { multipartFormData in
+                        // --- 保持你原本极其健壮的媒体文件处理逻辑不变 ---
+                        if let phasset = media as? PHAsset {
+                            switch phasset.mediaType {
+                            case .image:
+                                Task {
+                                    let image = await phasset.asyncImage()
+                                    if let findImage = image {
+                                        let canPNG = findImage.pngData() != nil
+                                        if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
+                                            let ext = canPNG ? "png" : "jpg"
+                                            let fileName = "image_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                                            multipartFormData.append(imageData, withName: fileKey, fileName: fileName, mimeType: MimeTypeHelper.mimeType(for: ext))
+                                        } else {
+                                            continuation.finish(throwing: PTNetworkError.uploadDataError("Image data error"))
+                                        }
+                                    }
+                                }
+                            case .video:
+                                phasset.converPHAssetToAVURLAsset { urlAsset in
+                                    if let url = urlAsset?.url {
+                                        let ext = url.pathExtension.lowercased()
+                                        let fileName = "video_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                                        multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: MimeTypeHelper.mimeType(for: ext))
+                                    } else {
+                                        continuation.finish(throwing: PTNetworkError.uploadDataError("Video data error"))
+                                    }
+                                }
+                            case .audio:
+                                phasset.converPHAssetToAVURLAsset { urlAsset in
+                                    if let url = urlAsset?.url {
+                                        let ext = url.pathExtension.lowercased()
+                                        let fileName = "audio_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                                        multipartFormData.append(url, withName: fileKey, fileName: fileName, mimeType: MimeTypeHelper.mimeType(for: ext))
+                                    }
+                                }
+                            default:
+                                continuation.finish(throwing: NSError(domain: "Unknow data error", code: 666))
+                            }
+                        } else if let findImage = media as? UIImage {
+                            let canPNG = findImage.pngData() != nil
+                            if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
+                                let ext = canPNG ? "png" : "jpg"
+                                let fileName = "image_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                                multipartFormData.append(imageData, withName: fileKey, fileName: fileName, mimeType: MimeTypeHelper.mimeType(for: ext))
+                            } else {
+                                continuation.finish(throwing: NSError(domain: "Image data error", code: 666))
+                            }
+                        } else if let findUrl = media as? URL {
+                            if findUrl.isFileURL {
+                                let uploadURL: URL
+                                if findUrl.path.contains("File Provider Storage") || findUrl.path.contains("com.apple.FileProvider") {
+                                    let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(findUrl.lastPathComponent)
+                                    try? FileManager.default.removeItem(at: tmpURL)
+                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
+                                    uploadURL = tmpURL
+                                } else {
+                                    uploadURL = findUrl
+                                }
+                                let ext = uploadURL.pathExtension.lowercased()
+                                multipartFormData.append(uploadURL, withName: fileKey, fileName: uploadURL.lastPathComponent, mimeType: MimeTypeHelper.mimeType(for: ext))
+                            } else {
+                                continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
+                            }
+                        } else if let findString = media as? String, let findUrl = URL(string: findString) {
+                            if findUrl.isFileURL {
+                                let uploadURL: URL
+                                if findUrl.path.contains("File Provider Storage") || findUrl.path.contains("com.apple.FileProvider") {
+                                    let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(findUrl.lastPathComponent)
+                                    try? FileManager.default.removeItem(at: tmpURL)
+                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
+                                    uploadURL = tmpURL
+                                } else {
+                                    uploadURL = findUrl
+                                }
+                                let ext = uploadURL.pathExtension.lowercased()
+                                multipartFormData.append(uploadURL, withName: fileKey, fileName: uploadURL.lastPathComponent, mimeType: MimeTypeHelper.mimeType(for: ext))
+                            } else {
+                                continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666))
+                            }
+                        }
+                        
+                        params?.forEach { key, value in
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
+                            }
+                        }
+                    }, to: pathUrl, method: method, headers: apiHeader)
+                    .uploadProgress { progress in
+                        continuation.yield((progress, nil))
+                    }
+                    .response { resp in
+                        switch resp.result {
+                        case .success(_):
+                            do {
+                                // 👉 核心：调用外层传入的解析器
+                                let parsed = try parser(pathUrl, resp.response, resp.data)
+                                continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                continuation.finish()
+                            } catch {
+                                continuation.finish(throwing: error)
+                            }
+                        case .failure(let error):
+                            logRequestFailure(url: pathUrl, error: error)
+                            continuation.finish(throwing: error)
+                        }
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+    
+    /// 核心：通用多图上传引擎
+    private class func _internalImageUpload(needGobal: Bool,
+                                            images: [UIImage]?,
+                                            path: URLConvertible,
+                                            method: HTTPMethod,
+                                            fileKey: [String],
+                                            params: [String: String]?,
+                                            header: HTTPHeaders?,
+                                            jsonRequest: Bool,
+                                            pngData: Bool,
+                                            parser: @escaping UploadResponseParser) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    let session = Network.share.session
+                    session.upload(multipartFormData: { multipartFormData in
+                        images?.enumerated().forEach { index, image in
+                            autoreleasepool {
+                                let data = pngData ? image.pngData() : image.jpegData(compressionQuality: 0.6)
+                                guard let imageData = data else { return }
+                                
+                                let key = fileKey[safe: index] ?? "image"
+                                let fileName = "image_\(index).\(pngData ? "png" : "jpg")"
+                                let mimeType = pngData ? "image/png" : "image/jpeg"
+                                
+                                multipartFormData.append(imageData, withName: key, fileName: fileName, mimeType: mimeType)
+                            }
+                        }
+                        
+                        params?.forEach { key, value in
+                            if let data = value.data(using: .utf8) {
+                                multipartFormData.append(data, withName: key)
+                            }
+                        }
+                    }, to: pathUrl, method: method, headers: apiHeader)
+                    .uploadProgress { progress in
+                        continuation.yield((progress, nil))
+                    }
+                    .response { resp in
+                        switch resp.result {
+                        case .success(_):
+                            do {
+                                // 👉 核心：调用外层传入的解析器
+                                let parsed = try parser(pathUrl, resp.response, resp.data)
+                                continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                continuation.finish()
+                            } catch {
+                                continuation.finish(throwing: error)
+                            }
+                        case .failure(let error):
+                            logRequestFailure(url: pathUrl, error: error)
+                            continuation.finish(throwing: error)
+                        }
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+        }
+    }
+}
+
+/*
+ /// ⚠️ 旧框架：KakaJSON 解析器 (将要废弃)
+ */
+extension Network {
+    private static func parseResponse(url: String,
+                                      response: HTTPURLResponse?,
+                                      data: Data?,
+                                      modelType: Convertible.Type?) throws -> PTBaseStructModel {
+        var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data)
+        if !jsonString.isEmpty, let modelType = modelType {
+            if let model = jsonString.kj.model(modelType) {
+                result.customerModel = model
+            } else {
+                throw PTNetworkError.modelExplainFail
+            }
+        }
+        return result
+    }
+
+    /// - Parameters:
+    ///   - needGobal:是否全局使用默认
+    ///   - urlStr: url地址
+    ///   - method: 方法类型，默认post
+    ///   - header: 請求頭
+    ///   - modelType: 是否需要传入接口的数据模型，默认nil
+    ///   - body: 最好utf8
+    public class func requestBodyAPI(needGobal:Bool = true,
+                                     urlStr:String,
+                                     body:Data,
+                                     header:HTTPHeaders? = nil,
+                                     method:HTTPMethod = .post,
+                                     cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
+                                     modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
+        return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
+            try parseResponse(url: url, response: response, data: data, modelType: modelType)
+        }
+    }
+    
+    /// 项目总接口
+    class public func requestApi(needGobal:Bool = true,
+                                 urlStr:URLConvertible,
+                                 method: HTTPMethod = .post,
+                                 header:HTTPHeaders? = nil,
+                                 parameters: Parameters? = nil,
+                                 cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 新增暴露参数，默认 nil
+                                 modelType: Convertible.Type? = nil,
+                                 encoder:ParameterEncoding = URLEncoding.default,
+                                 jsonRequest:Bool = false) async throws -> PTBaseStructModel {
+        return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
+            try parseResponse(url: url, response: response, data: data, modelType: modelType)
+        }
+    }
+    
+    class public func fileUpload(needGobal: Bool = true,
+                                 media: Any,
+                                 path: URLConvertible,
+                                 method: HTTPMethod = .post,
+                                 fileKey: String = "",
+                                 params: [String: String]? = nil,
+                                 header: HTTPHeaders? = nil,
+                                 modelType: Convertible.Type? = nil,
+                                 jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
+            // 指定使用 KakaJSON 进行解析
+            return try parseResponse(url: url, response: response, data: data, modelType: modelType)
+        }
+    }
+    
+    /// 图片上传接口 (优化版)
+    class public func imageUpload(needGobal: Bool = true,
+                                  images: [UIImage]?,
+                                  path: URLConvertible,
+                                  method: HTTPMethod = .post,
+                                  fileKey: [String] = ["images"],
+                                  params: [String: String]? = nil,
+                                  header: HTTPHeaders? = nil,
+                                  modelType: Convertible.Type? = nil,
+                                  jsonRequest: Bool = false,
+                                  pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
+            // 指定使用 KakaJSON 进行解析
+            return try parseResponse(url: url, response: response, data: data, modelType: modelType)
         }
     }
 }

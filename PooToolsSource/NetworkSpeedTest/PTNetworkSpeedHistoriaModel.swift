@@ -8,10 +8,12 @@
 
 import UIKit
 
-public class PTNetworkSpeedHistoriaModel: PTBaseModel {
+public class PTNetworkSpeedHistoriaModel: PTModelProtocol {
     public var date:String = ""
     public var networkType:String = ""
     public var download:String = ""
     public var upload:String = ""
     public var latency:String = ""
+    
+    public required init() {}
 }

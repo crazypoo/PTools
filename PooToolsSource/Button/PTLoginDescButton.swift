@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-public class PTLoginDescConfig:PTBaseModel {
+public class PTLoginDescConfig:NSObject {
     public var textColor_L:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
     public var textColor_R:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear
     public var textColor_line:DynamicColor = DynamicColor(hexString: "7f7f7f") ?? .clear

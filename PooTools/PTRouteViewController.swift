@@ -8,9 +8,11 @@
 
 import UIKit
 
-class PTRouterExampleModel:PTBaseModel {
+class PTRouterExampleModel:PTModelProtocol {
     var foo:String = "1"
     var poo:String = "2"
+    
+    required init() {}
 }
 
 typealias PTRouteHandler = (_ value:String) -> Void

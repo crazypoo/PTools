@@ -9,6 +9,7 @@ import UIKit
 import MapKit
 import SafeSFSymbols
 import SwiftDate
+import SmartCodable
 
 public extension UIImage {
     @objc func resizeImage() -> UIImage {
@@ -18,11 +19,12 @@ public extension UIImage {
     }
 }
 
-public class PTMessageTextCustomAttTagModel:PTBaseModel {
+public class PTMessageTextCustomAttTagModel:PTModelProtocol {
     ///Example: \\xxxxx\\b
     public var tag:String = ""
-    public var tagColor:DynamicColor = .systemGray
-    public var tagSelectedColor:DynamicColor = .systemGray
+    @SmartAny public var tagColor:DynamicColor = .systemGray
+    @SmartAny public var tagSelectedColor:DynamicColor = .systemGray
+    required public init() {}
 }
 
 @objcMembers

@@ -51,7 +51,7 @@ public enum PTFileType: String {
 }
 
 // MARK: - 文件数据模型
-class PTFileModel: PTBaseModel {
+class PTFileModel: NSObject {
     /// 文件名 (包含后缀)
     var name: String = ""
     

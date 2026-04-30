@@ -53,7 +53,7 @@ public enum PTStepperModelStopType {
     case Custom
 }
 
-open class PTStepperListModel:PTBaseModel {
+open class PTStepperListModel:NSObject {
     ///标题
     public var title:String = ""
     

@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SmartCodable
 
-public enum PTChatMessageType:Int,CaseIterable {
+public enum PTChatMessageType:Int,SmartCaseDefaultable {
     case Text
     case Map
     case Media
@@ -18,19 +19,18 @@ public enum PTChatMessageType:Int,CaseIterable {
     case Typing
 }
 
-public enum PTChatMessageStatus:Int,CaseIterable {
+public enum PTChatMessageStatus:Int,SmartCaseDefaultable {
     case Sending
     case Arrived
     case Error
 }
 
-@objcMembers
-open class PTChatListModel: PTBaseModel {
+open class PTChatListModel: PTModelProtocol {
     ///消息时间戳
     public var messageTimeStamp:TimeInterval = 0
     ///消息ID
     public var msgId:String = ""
-    public  var messageType:PTChatMessageType = .Text
+    public var messageType:PTChatMessageType = .Text
     ///创建者ID
     public var creatorId:String = "" {
         didSet {
@@ -38,7 +38,7 @@ open class PTChatListModel: PTBaseModel {
         }
     }
     ///内容
-    public var msgContent:Any?
+    @SmartAny public var msgContent:Any?
     ///消息人头像
     public var senderCover:String = ""
     ///消息状态
@@ -54,5 +54,7 @@ open class PTChatListModel: PTBaseModel {
     ///是否已讀
     public var isRead:Bool = false
     ///额外扩展字段
-    public var msgExten:Any?
+    @SmartAny public var msgExten:Any?
+    
+    public required init() {}
 }
