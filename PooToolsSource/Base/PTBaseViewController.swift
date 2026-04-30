@@ -751,8 +751,12 @@ extension PTNavigationBarManager {
         
         view.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(view.bounds.size.height)
-            make.centerY.equalToSuperview()
+            if self.titleLabel {
+                make.top.bottom.equalToSuperview()
+            } else {
+                make.height.equalTo(view.bounds.size.height)
+                make.centerY.equalToSuperview()
+            }
         }
     }
 }
