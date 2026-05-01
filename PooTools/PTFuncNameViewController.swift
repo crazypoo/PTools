@@ -216,7 +216,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_media.accessoryType = .Switch(type: .Framework)
         sectionModel_media.switchControlWidth = 88
 
-        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
+        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerID: "1111111",footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
         mediaSection.headerClass = PTFusionHeader.self
         mediaSection.footerClass = PTTestFooter.self
         /**
@@ -477,7 +477,7 @@ class PTFuncNameViewController: PTBaseViewController {
     
     lazy var collectionView : PTCollectionView = {
         aaaaaaa = PTCollectionView(viewConfig: self.collectionViewConfig())
-//        aaaaaaa.registerSupplementaryView(classs: [PTFusionHeader.ID:PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
+        aaaaaaa.registerSupplementaryView(classs: ["1111111":PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
 //        aaaaaaa.registerSupplementaryView(classs: [PTTestFooter.ID:PTTestFooter.self,PTVersionFooter.ID:PTVersionFooter.self], kind: UICollectionView.elementKindSectionFooter)
         aaaaaaa.layoutSubviews()
         aaaaaaa.decorationInCollectionView = { index,sectionModel in
@@ -1264,6 +1264,10 @@ class PTFuncNameViewController: PTBaseViewController {
             make.leading.equalToSuperview().offset(20) // 固定左侧
             make.centerY.equalToSuperview()
         }
+        
+        PTGCDManager.gcdAfter(time: 10, block: {
+            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: self.aaaaaaa.getSectionIndex(byHeaderID: "1111111")))")
+        })
     }
     
     func flashAd(notifi:Notification) {
