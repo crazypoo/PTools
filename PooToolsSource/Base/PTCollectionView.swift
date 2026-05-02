@@ -522,6 +522,19 @@ public class PTCollectionView: UIView {
 
     public var viewConfig: PTCollectionViewConfig! {
         didSet {
+            // 1. 同步滚动条和交互状态
+            collectionView.showsVerticalScrollIndicator = viewConfig.showsVerticalScrollIndicator
+            collectionView.showsHorizontalScrollIndicator = viewConfig.showsHorizontalScrollIndicator
+            collectionView.alwaysBounceHorizontal = viewConfig.alwaysBounceHorizontal
+            collectionView.alwaysBounceVertical = viewConfig.alwaysBounceVertical
+            
+            // 2. 动态开关拖拽功能
+            collectionView.dragInteractionEnabled = viewConfig.canMoveItem
+            if viewConfig.canMoveItem {
+                collectionView.allowsMoveItem()
+            }
+            
+            // 3. 处理右侧索引条
             if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
                 if collectionView.superview == nil {
                     addSubview(collectionView)
@@ -530,10 +543,15 @@ public class PTCollectionView: UIView {
                     }
                 }
                 setIndexViews()
+            } else {
+                // 如果外部清空了索引条数据，应该隐藏它们
+                indicator.removeFromSuperview()
+                indexContainerView.removeFromSuperview()
             }
             
-            if viewConfig.canMoveItem {
-                self.contentCollectionView.allowsMoveItem()
+            // 4. 如果是在初始化之后修改了 ViewType 布局类型，自动让集合视图重新布局！
+            if collectionView.superview != nil {
+                collectionView.collectionViewLayout.invalidateLayout()
             }
         }
     }
@@ -1750,7 +1768,10 @@ extension PTCollectionView {
     }
     
     private func clearWaterfallCache(section: Int) {
-        waterfallCache = waterfallCache.filter { $0.key.section != section }
+        let keysToRemove = waterfallCache.keys.filter { $0.section == section }
+        for key in keysToRemove {
+            waterfallCache.removeValue(forKey: key)
+        }
     }
 }
 
