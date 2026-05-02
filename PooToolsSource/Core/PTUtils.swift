@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import SwiftDate
 import SwifterSwift
+import DeviceKit
 
 /*
  ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
@@ -49,20 +50,6 @@ import SwifterSwift
 
 let GlobalVideoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
 
-@inline(__always) private func isIPhoneXSeries() -> Bool {
-    var iPhoneXSeries = false
-    if UIDevice.current.userInterfaceIdiom != .phone {
-        return iPhoneXSeries
-    }
-
-    let mainWindow:UIView = AppWindows!
-    if (mainWindow.safeAreaInsets.bottom) > 0.0 {
-        iPhoneXSeries = true
-    }
-
-    return iPhoneXSeries
-}
-
 @objc public enum PTUrlStringVideoType:Int {
     case MP4
     case MOV
@@ -91,22 +78,26 @@ let GlobalVideoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
 }
 
 public func deviceSafeAreaInsets() -> UIEdgeInsets {
-    var insets: UIEdgeInsets = .zero
-    insets = AppWindows?.safeAreaInsets ?? .zero
-    return insets
+    return AppWindows?.safeAreaInsets ?? .zero
 }
 
 public func PTIVarList(_ className:String) -> [String] {
     var listName = [String]()
     var count : UInt32 = 0
     let list = class_copyIvarList(NSClassFromString(className), &count)
+    
+    defer { free(list) }
+    
     if let safeList = list {
         for i in 0..<Int(count) {
             let ivar = safeList[i]
             let name = ivar_getName(ivar)
-            let type = ivar_getTypeEncoding(ivar)
-            PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .utils)
-            listName.append(String(cString: name!))
+            if let findName = name {
+                listName.append(String(cString: findName))
+            }
+            if let type = ivar_getTypeEncoding(ivar),let findName = name {
+                PTNSLogConsole("\(String(cString: findName) + "<---->" + String(cString: type))",levelType: PTLogMode,loggerType: .utils)
+            }
         }
         free(list)
         return listName
@@ -121,8 +112,10 @@ public func PTPropertyList(_ classString: String) -> [String] {
     for i in 0..<Int(count) {
         let property: objc_property_t = list![i]
         let name = property_getName(property)
-        let type = property_getAttributes(property)
-        PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type!))",levelType: PTLogMode,loggerType: .utils)
+        
+        if let type = property_getAttributes(property) {
+            PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type))",levelType: PTLogMode,loggerType: .utils)
+        }
         guard let propertyName = NSString(utf8String: name) as String? else {
             PTNSLogConsole("Couldn't unwrap property name for \(property)",levelType: PTLogMode,loggerType: .utils)
             break
@@ -497,7 +490,7 @@ public extension PTUtils {
 //MARK: OC-FUNCTION
 public extension PTUtils {
     class func oc_isiPhoneSeries() -> Bool {
-        isIPhoneXSeries()
+        Gobal_device_info.isFaceIDCapable
     }
 }
 
@@ -531,6 +524,8 @@ extension UIWindow {
         }
     }
 }
+
+@MainActor
 public class SwizzleTool: NSObject {
     
     public static var swizzledDidAddSubviewClosure: PTActionTask?

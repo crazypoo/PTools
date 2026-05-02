@@ -262,8 +262,9 @@ public class PTMediaBrowserController: PTBaseViewController {
     ///数据源
     fileprivate var mediaData:[PTMediaBrowserModel] = []
     
-    public init(mediaData: [PTMediaBrowserModel]) {
+    public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) {
         self.mediaData = mediaData
+        self.defaultIndex = defaultIndex
         super.init(nibName: nil, bundle: nil)
     }
     

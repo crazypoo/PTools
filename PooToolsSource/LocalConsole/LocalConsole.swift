@@ -595,7 +595,7 @@ public class LocalConsole: NSObject {
         return view
     }()
     
-    public func createSystemLogView() {
+    @MainActor public func createSystemLogView() {
 
         guard terminal == nil else { return }
 
