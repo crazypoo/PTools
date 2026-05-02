@@ -72,11 +72,14 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     lazy var tempView:UIImageView = {
         let view = UIImageView()
         
-        let tempImageX:CGFloat = self.imageView.frame.origin.x - self.scrollOffset!.x
-        var tempImageY:CGFloat = self.imageView.frame.origin.y - self.scrollOffset!.y
+        let safeOffset = self.scrollOffset ?? .zero
+        let safeSize = self.zoomImageSize ?? self.frame.size
 
-        let tempImageW = self.zoomImageSize!.width
-        var tempImageH = self.zoomImageSize!.height
+        let tempImageX:CGFloat = self.imageView.frame.origin.x - safeOffset.x
+        var tempImageY:CGFloat = self.imageView.frame.origin.y - safeOffset.y
+
+        let tempImageW = safeSize.width
+        var tempImageH = safeSize.height
         
         let orientation = UIDevice.current.orientation
         if orientation.isLandscape {
@@ -324,15 +327,13 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         PTGCDManager.gcdMain {
             let currentID = UUID()
             self.loadIdentifier = currentID
-            guard self.loadIdentifier == currentID else { return }
-            
             self.showLoading()
             
             switch self.dataModel.imageURL {
             case let urlString as String:
-                self.loadDataUrl(loadUrl: urlString.urlToUnicodeURLString() ?? "")
+                self.loadDataUrl(loadUrl: urlString.urlToUnicodeURLString() ?? "",currentID: currentID)
             case let url as URL:
-                self.loadDataUrl(loadUrl: url.absoluteString.urlToUnicodeURLString() ?? "")
+                self.loadDataUrl(loadUrl: url.absoluteString.urlToUnicodeURLString() ?? "",currentID: currentID)
             case let avItem as AVPlayerItem:
                 self.videoOriginalItem = avItem
                 self.videoAVItem(avItem: avItem)
@@ -357,18 +358,18 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     self.livePhoto.isHidden = false
                 }
             default:
-                self.baseLoadImageData(imageData: self.dataModel.imageURL as Any)
+                self.baseLoadImageData(imageData: self.dataModel.imageURL as Any, currentID: currentID)
             }
         }
     }
     
-    func loadDataUrl(loadUrl:String) {
+    func loadDataUrl(loadUrl:String, currentID: UUID) {
         if !loadUrl.isEmpty {
             if GlobalVideoExts.contains(loadUrl.pathExtension.lowercased()) {
-                self.videoUrlLoad(url: loadUrl)
+                self.videoUrlLoad(url: loadUrl,currentID:currentID)
             } else {
                 if !loadUrl.stringIsEmpty() {
-                    self.setImageTypeView(url:loadUrl)
+                    self.setImageTypeView(url:loadUrl, currentID: currentID)
                 } else {
                     self.currentCellType = .None
                     self.createReloadButton()
@@ -432,18 +433,14 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
 //MARK: Image handling logic
 extension PTMediaBrowserCell {
-    func setImageTypeView(url:String) {
+    func setImageTypeView(url:String, currentID: UUID) {
         clearContentView()
         playBtn.isHidden = true
         playBtn.isUserInteractionEnabled = false
-        loadImageData(url:url)
+        baseLoadImageData(imageData: url, currentID: currentID)
     }
-    
-    private func loadImageData(url:String) {
-        baseLoadImageData(imageData: url)
-     }
-    
-    private func baseLoadImageData(imageData:Any) {
+
+    private func baseLoadImageData(imageData:Any, currentID: UUID) {
         imageView.loadImage(contentData: imageData, iCloudDocumentName: viewConfig.iCloudDocumentName, emptyImage: UIImage()) { receivedSize, totalSize in
             PTGCDManager.gcdMain {
                 let progress = CGFloat(receivedSize / totalSize)
@@ -451,6 +448,7 @@ extension PTMediaBrowserCell {
             }
         } loadFinish: { value in
             PTGCDManager.gcdMain {
+                guard self.loadIdentifier == currentID else { return }
                 self.handleImageLoadFinish(result:value)
             }
         }
@@ -480,7 +478,7 @@ extension PTMediaBrowserCell {
 
 //MARK: Video handling logic
 extension PTMediaBrowserCell {
-    func videoUrlLoad(url:String) {
+    func videoUrlLoad(url:String, currentID: UUID) {
         self.videoOriginalItem = url
         imageView.image = UIImage()
         gifImage = nil
@@ -488,12 +486,13 @@ extension PTMediaBrowserCell {
         reloadButton.isUserInteractionEnabled = false
         playBtn.isHidden = true
         playBtn.isUserInteractionEnabled = false
-        handleVideoLoading(videoUrl: url)
+        handleVideoLoading(videoUrl: url, currentID: currentID)
     }
 
-    func handleVideoLoading(videoUrl: String) {
+    func handleVideoLoading(videoUrl: String, currentID: UUID) {
         if let url = URL(string: videoUrl) {
             PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { item in
+                guard self.loadIdentifier == currentID else { return }
                 if let findImage = item.coverImage {
                     self.hideLoading()
                     self.setupVideoView(image: findImage, videoUrl: videoUrl)
@@ -501,6 +500,7 @@ extension PTMediaBrowserCell {
                     self.handleVideoLoadError()
                 }
             } videoReady: { item in
+                guard self.loadIdentifier == currentID else { return }
                 self.videoCacheURL = item.localVideoURL
                 
                 if let _ = self.videoCacheURL {

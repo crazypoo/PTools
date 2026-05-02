@@ -33,8 +33,6 @@ public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Vo
 @objcMembers
 public class PTMediaBrowserConfig: NSObject {
     public static let share = PTMediaBrowserConfig()
-    ///默认到哪一页,默认0
-    public var defultIndex:Int = 0
     ///内容的文字颜色
     public var titleColor:UIColor = UIColor.white
     ///标题字体

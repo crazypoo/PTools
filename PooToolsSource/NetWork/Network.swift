@@ -1010,8 +1010,9 @@ public final class Network: @unchecked Sendable {
                                                              method:HTTPMethod = .post,
                                                              cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
                                                              modelType: T.Type? = nil) async throws -> PTBaseStructModel {
+        let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
-            try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
+            try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1025,8 +1026,9 @@ public final class Network: @unchecked Sendable {
                                                          modelType: T.Type? = nil,
                                                          encoder:ParameterEncoding = URLEncoding.default,
                                                          jsonRequest:Bool = false) async throws -> PTBaseStructModel {
+        let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
-            try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
+            try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1039,8 +1041,9 @@ public final class Network: @unchecked Sendable {
                                                          header: HTTPHeaders? = nil,
                                                          modelType: T.Type? = nil,
                                                          jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        let typeBox = PTSendableTypeBox(modelType)
         return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
-            return try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
+            return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1055,8 +1058,9 @@ public final class Network: @unchecked Sendable {
                                                           modelType: T.Type? = nil,
                                                           jsonRequest: Bool = false,
                                                           pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        let typeBox = PTSendableTypeBox(modelType)
         return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
-            return try parseCodableResponse(url: url, response: response, data: data, modelType: modelType)
+            return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1288,12 +1292,35 @@ public final class Network: @unchecked Sendable {
             }
         }
     }
+    
+    /// 全新现代化的下载方法，使用 AsyncStream 以支持 await 监听进度
+    public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {
+        AsyncThrowingStream { continuation in
+            self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil) { _, _, progress in
+                continuation.yield((progress, nil))
+            } success: { response in
+                if let fileURL = response.fileURL {
+                    continuation.yield((1.0, fileURL))
+                    continuation.finish()
+                } else {
+                    continuation.finish(throwing: PTNetworkError.downloadFail)
+                }
+            } fail: { error in
+                continuation.finish(throwing: error ?? PTNetworkError.downloadFail)
+            }
+        }
+    }
 }
 
 /*
  公共方法
 */
 extension Network {
+    public struct PTSendableTypeBox<T>: @unchecked Sendable {
+        let type: T?
+        init(_ type: T?) { self.type = type }
+    }
+
     /// 抽取新旧框架共同的：非空校验、HTML校验、业务 Code (401) 拦截逻辑
     private static func validateAndPreprocessResponse(url: String, response: HTTPURLResponse?, data: Data?) throws -> (PTBaseStructModel, String) {
         var result = PTBaseStructModel()
@@ -1339,7 +1366,8 @@ extension Network {
             }
         }
         
-        logRequestSuccess(url: url, jsonStr: jsonString)
+        let printStr = jsonString.count > 3000 ? String(jsonString.prefix(3000)) + "\n...[数据过大已截断]..." : jsonString
+        logRequestSuccess(url: url, jsonStr: printStr)
         return (result, jsonString)
     }
     
@@ -1657,8 +1685,9 @@ extension Network {
                                      method:HTTPMethod = .post,
                                      cachePolicy: PTNetworkCachePolicy? = nil, // 🌟 1. 新增暴露参数
                                      modelType: Convertible.Type? = nil) async throws -> PTBaseStructModel {
+        let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
-            try parseResponse(url: url, response: response, data: data, modelType: modelType)
+            try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1672,8 +1701,9 @@ extension Network {
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool = false) async throws -> PTBaseStructModel {
+        let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
-            try parseResponse(url: url, response: response, data: data, modelType: modelType)
+            try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1686,9 +1716,10 @@ extension Network {
                                  header: HTTPHeaders? = nil,
                                  modelType: Convertible.Type? = nil,
                                  jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        let typeBox = PTSendableTypeBox(modelType)
         return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
             // 指定使用 KakaJSON 进行解析
-            return try parseResponse(url: url, response: response, data: data, modelType: modelType)
+            return try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
@@ -1703,9 +1734,10 @@ extension Network {
                                   modelType: Convertible.Type? = nil,
                                   jsonRequest: Bool = false,
                                   pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel?), Error> {
+        let typeBox = PTSendableTypeBox(modelType)
         return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
             // 指定使用 KakaJSON 进行解析
-            return try parseResponse(url: url, response: response, data: data, modelType: modelType)
+            return try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
 }

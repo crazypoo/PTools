@@ -22,6 +22,8 @@ public class PTMediaBrowserController: PTBaseViewController {
     ///界面消失后回调
     public var viewDismissBlock:PTActionTask?
 
+    public var defaultIndex: Int = 0
+    
     ///界面配置
     fileprivate let viewConfig = PTMediaBrowserConfig.share
     
@@ -326,7 +328,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
                 
         // MARK: -  取消不必要的硬编码延时，提早设置初始状态
-        currentIndex = min(viewConfig.defultIndex, max(0, mediaData.count - 1))
+        currentIndex = min(defaultIndex, max(0, mediaData.count - 1))
         if !mediaData.isEmpty {
             updateBottom(models: mediaData[currentIndex])
         }
@@ -378,15 +380,16 @@ public class PTMediaBrowserController: PTBaseViewController {
             
             PTGCDManager.gcdMain {
                 self.navControl.titleLabel.isHidden = false
-                self.navControl.titleLabel.text = "1/\(self.mediaData.count)"
-
+                let initialIndex = min(self.defaultIndex, max(0, self.mediaData.count - 1))
+                self.navControl.titleLabel.text = "\(initialIndex + 1)/\(self.mediaData.count)"
+                
                 self.newCollectionView.showCollectionDetail(collectionData: sections) { [weak self] collectionView in
                     guard let self = self else { return }
                     if !self.firstLoad {
                         self.firstLoad = true
-                        let loadSome = min(self.viewConfig.defultIndex, max(0, self.mediaData.count - 1))
-                        self.currentIndex = loadSome
-                        collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: false)
+                        self.currentIndex = initialIndex
+                        collectionView.safeScrollToItem(at: IndexPath(row: initialIndex, section: 0), at: .centeredHorizontally, animated: false)
+                        collectionView.layoutIfNeeded()
                     } else {
                         loadedTask?(collectionView)
                     }
@@ -457,7 +460,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         newCollectionView.clearAllData(finishTask: { [weak self] _ in
             guard let self = self else { return }
             PTGCDManager.gcdAfter(time: 0.35) {
-                let loadSome = min(self.viewConfig.defultIndex, max(0, self.mediaData.count - 1))
+                let loadSome = min(self.defaultIndex, max(0, self.mediaData.count - 1))
                 self.currentIndex = loadSome
                 if loadSome < self.mediaData.count {
                     let cellModel = self.mediaData[loadSome]
@@ -628,18 +631,20 @@ fileprivate extension PTMediaBrowserController {
                     
                     PTGCDManager.gcdAfter(time: 0.35) { [weak self] in
                         guard let self = self else { return }
-                        let newCurrentPageControlValue = self.getPageControlCurrentValue()
-                        self.navControl.titleLabel.text = "\(newCurrentPageControlValue + 1)/\(self.mediaData.count)"
-
+                        let rawCurrentPage = self.getPageControlCurrentValue()
+                        let safeCurrentPage = min(rawCurrentPage, self.mediaData.count - 1)
+                        
+                        self.navControl.titleLabel.text = "\(safeCurrentPage + 1)/\(self.mediaData.count)"
+                        
                         if self.mediaData.count > 1 {
                             self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
-                            self.setPageControlValue(newCurrentPageControlValue)
+                            self.setPageControlValue(safeCurrentPage)
                         } else {
                             self.bottomControl.pageControlView.isHidden = true
                         }
                         
-                        if newCurrentPageControlValue < self.mediaData.count {
-                            let models = self.mediaData[newCurrentPageControlValue]
+                        if safeCurrentPage < self.mediaData.count {
+                            let models = self.mediaData[safeCurrentPage]
                             self.updateBottom(models: models)
                         }
                     }
