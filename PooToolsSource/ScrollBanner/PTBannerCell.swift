@@ -72,6 +72,6 @@ public class PTBannerCell: PTBaseNormalCell {
             imageView.loadImage(contentData: data)
         }
         
-        contentView.viewCornerRectCorner(cornerRadii: data.cellCornerRadius,corner: data.corner)
+        contentView.viewCornerRectCorner(radius: data.cellCornerRadius,corner: data.corner)
     }
 }

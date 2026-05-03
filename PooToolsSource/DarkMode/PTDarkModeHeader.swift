@@ -128,7 +128,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable
             make.top.equalToSuperview().inset(10)
         }
         PTGCDManager.gcdMain {
-            self.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
+            self.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
         }
         
         contentView.addSubviews([titlaLabel, whiteImageView, blackImageView, whiteButton, blackButton])

@@ -80,7 +80,7 @@ class YDSWhiteDecorationView: UICollectionReusableView {
         super.init(frame: frame)
         backgroundColor = .random
         PTGCDManager.gcdMain {
-            self.viewCornerRectCorner(cornerRadii: 8,corner: [.allCorners])
+            self.viewCornerRectCorner(radius: 8,corner: [.allCorners])
         }
     }
     

@@ -172,7 +172,7 @@ class PTDarkModePickerView: UIView {
             make.height.equalTo(self.lineViewHeight)
         }
 
-        bgView.viewCornerRectCorner(cornerRadii: PTDarkModeOption.timeRangePickerCornerRadius,corner: [.topLeft,.topRight])
+        bgView.viewCornerRectCorner(topLeft: PTDarkModeOption.timeRangePickerCornerRadius,topRight: PTDarkModeOption.timeRangePickerCornerRadius,corner: [.topLeft,.topRight])
         
         PTAnimationFunction.animationIn(animationView: bgView, animationType: .Bottom, transformValue: CGFloat.kPickerHeight + self.navBarHeight)
     }

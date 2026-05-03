@@ -21,10 +21,11 @@ import AVFoundation
 }
 
 var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
-
 extension UIView: PTProtocolCompatible {}
+public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
 public extension PTPOP where Base:UIView {
+    /// 快捷获取/设置 x 坐标
     var jx_x: CGFloat{
         get {
             base.frame.origin.x
@@ -32,6 +33,8 @@ public extension PTPOP where Base:UIView {
             base.frame.origin.x = newValue
         }
     }
+    
+    /// 快捷获取/设置 y 坐标
     var jx_y: CGFloat{
         get {
             base.frame.origin.y
@@ -39,6 +42,8 @@ public extension PTPOP where Base:UIView {
             base.frame.origin.y = newValue
         }
     }
+    
+    /// 快捷获取/设置 宽度
     var jx_width: CGFloat{
         get {
             base.frame.size.width
@@ -47,6 +52,7 @@ public extension PTPOP where Base:UIView {
         }
     }
     
+    /// 快捷获取/设置 高度
     var jx_height: CGFloat{
         get {
             base.frame.size.height
@@ -55,12 +61,14 @@ public extension PTPOP where Base:UIView {
         }
     }
     
+    /// 获取视图自身的中心点 (相对于自身 bounds)
     var jx_viewCenter: CGPoint{
         get {
             CGPoint(x: jx_width * 0.5, y: jx_height * 0.5)
         }
     }
     
+    /// 快捷获取/设置 centerX
     var jx_centerX: CGFloat{
         get {
             jx_width * 0.5
@@ -69,6 +77,7 @@ public extension PTPOP where Base:UIView {
         }
     }
     
+    /// 快捷获取/设置 centerY
     var jx_centerY: CGFloat{
         get {
             jx_height * 0.5
@@ -77,10 +86,12 @@ public extension PTPOP where Base:UIView {
         }
     }
     
+    /// 在父视图中的 Y 轴中心坐标
     var inSuperViewCenterY: CGFloat{
         jx_y + jx_centerY
     }
     
+    /// 快捷获取/设置 最大 X 值 (MaxX)
     var maxX: CGFloat{
         get {
             jx_x + jx_width
@@ -88,6 +99,8 @@ public extension PTPOP where Base:UIView {
             jx_x = newValue - jx_width
         }
     }
+    
+    /// 快捷获取/设置 最大 Y 值 (MaxY)
     var maxY: CGFloat{
         get{
             jx_y + jx_height
@@ -98,19 +111,104 @@ public extension PTPOP where Base:UIView {
     }
 }
 
-public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
+// MARK: - 核心路径生成器 (复用逻辑)
+public extension UIView {
+    
+    /// 私有辅助方法：生成支持独立圆角和胶囊形态的 UIBezierPath
+    /// - Parameters:
+    ///   - bounds: 视图的边界
+    ///   - radius: 统一基础圆角
+    ///   - topLeft: 独立的左上圆角
+    ///   - topRight: 独立的右上圆角
+    ///   - bottomLeft: 独立的左下圆角
+    ///   - bottomRight: 独立的右下圆角
+    ///   - corner: 需要应用圆角的位置
+    ///   - capsule: 是否为胶囊形态
+    /// - Returns: 计算好的贝塞尔路径
+    private func pt_customCornerPath(bounds: CGRect,
+                                     radius: CGFloat,
+                                     topLeft: CGFloat,
+                                     topRight: CGFloat,
+                                     bottomLeft: CGFloat,
+                                     bottomRight: CGFloat,
+                                     corner: UIRectCorner,
+                                     capsule: Bool) -> UIBezierPath {
+        
+        var finalTL: CGFloat = 0
+        var finalTR: CGFloat = 0
+        var finalBL: CGFloat = 0
+        var finalBR: CGFloat = 0
+        
+        // 1. 计算各个角的最终半径
+        if capsule {
+            let capsuleRadius = min(bounds.width, bounds.height) / 2.0
+            finalTL = capsuleRadius
+            finalTR = capsuleRadius
+            finalBL = capsuleRadius
+            finalBR = capsuleRadius
+        } else if corner == .allCorners {
+            finalTL = radius
+            finalTR = radius
+            finalBL = radius
+            finalBR = radius
+        } else {
+            if corner.contains(.topLeft) { finalTL = topLeft }
+            if corner.contains(.topRight) { finalTR = topRight }
+            if corner.contains(.bottomLeft) { finalBL = bottomLeft }
+            if corner.contains(.bottomRight) { finalBR = bottomRight }
+        }
+        
+        // 2. 纯手工绘制独立圆角路径
+        let path = UIBezierPath()
+        let width = bounds.width
+        let height = bounds.height
+        
+        // 从顶部偏左上角开始，顺时针绘制
+        path.move(to: CGPoint(x: finalTL, y: 0))
+        
+        // 绘制到右上角并画弧
+        path.addLine(to: CGPoint(x: width - finalTR, y: 0))
+        if finalTR > 0 {
+            path.addArc(withCenter: CGPoint(x: width - finalTR, y: finalTR), radius: finalTR, startAngle: -CGFloat.pi / 2, endAngle: 0, clockwise: true)
+        }
+        
+        // 绘制到右下角并画弧
+        path.addLine(to: CGPoint(x: width, y: height - finalBR))
+        if finalBR > 0 {
+            path.addArc(withCenter: CGPoint(x: width - finalBR, y: height - finalBR), radius: finalBR, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
+        }
+        
+        // 绘制到左下角并画弧
+        path.addLine(to: CGPoint(x: finalBL, y: height))
+        if finalBL > 0 {
+            path.addArc(withCenter: CGPoint(x: finalBL, y: height - finalBL), radius: finalBL, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
+        }
+        
+        // 绘制到左上角并画弧
+        path.addLine(to: CGPoint(x: 0, y: finalTL))
+        if finalTL > 0 {
+            path.addArc(withCenter: CGPoint(x: finalTL, y: finalTL), radius: finalTL, startAngle: CGFloat.pi, endAngle: -CGFloat.pi / 2, clockwise: true)
+        }
+        
+        // 闭合路径
+        path.close()
+        
+        return path
+    }
+}
 
 public extension UIView {
               
+    /// 判断当前系统语言布局是否为从右到左 (RTL, 例如阿拉伯语)
     static func isRTL() -> Bool {
         UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
     }
     
     private struct AssociatedKeys {
-        static var layoutSubviewsCallback = 998
-        static var layoutShapeLayerCallback = 996
-        static var layoutShapeLayerProgressLabelCallback = 995
-        static var viewCapturing = 997
+        static var layoutSubviewsCallback: UInt8 = 0
+        static var layoutShapeLayerCallback: UInt8 = 0
+        static var layoutShapeLayerProgressLabelCallback: UInt8 = 0
+        static var viewCapturing: UInt8 = 0
         static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
     }
 
@@ -154,6 +252,13 @@ public extension UIView {
         }
     }
     
+    /// 为视图添加并更新进度条遮罩
+    /// - Parameters:
+    ///   - value: 进度值 (0.0 到 1.0)
+    ///   - borderWidth: 边框宽度
+    ///   - borderColor: 边框颜色
+    ///   - showValueLabel: 是否显示百分比文字
+    ///   - uniCount: 小数点保留位数
     func layerProgress(value: CGFloat,
                        borderWidth: CGFloat = 1,
                        borderColor: UIColor = .systemRed,
@@ -226,60 +331,67 @@ public extension UIView {
                           borderWidth:CGFloat = 0,
                           borderColor:UIColor = UIColor.clear,
                           capsule:Bool = false) {
-        PTGCDManager.gcdMain {
-            if #available(iOS 26.0, *) {
-                let topLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                let topRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                let bottomLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                let bottomRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                self.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
-            } else {
-                self.layer.cornerRadius = radius
-            }
-            self.layer.masksToBounds = true
-            self.layer.borderWidth = borderWidth
-            self.layer.borderColor = borderColor.cgColor
-        }
+        self.viewCornerRectCorner(radius: radius,borderWidth: borderWidth,borderColor: borderColor,corner: .allCorners,capsule: capsule)
     }
         
-    @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,
-                                    borderWidth:CGFloat = 0,
-                                    borderColor:UIColor = UIColor.clear,
-                                    corner:UIRectCorner = .allCorners,
-                                    capsule:Bool = false) {
+    @objc func viewCornerRectCorner(radius: CGFloat = 5, // 统一的圆角值（如果是 allCorners 时使用）
+                                    topLeft: CGFloat = 0, // 独立的左上圆角
+                                    topRight: CGFloat = 0, // 独立的右上圆角
+                                    bottomLeft: CGFloat = 0, // 独立的左下圆角
+                                    bottomRight: CGFloat = 0, // 独立的右下圆角
+                                    borderWidth: CGFloat = 0,
+                                    borderColor: UIColor = UIColor.clear,
+                                    corner: UIRectCorner = .allCorners,
+                                    capsule: Bool = false) {
         PTGCDManager.gcdMain {
+            // 1. iOS 26+ 的新 API 适配
+            // 注意：新 API 使用 UICornerRadius，我们需要计算出对应的值
             if #available(iOS 26.0, *) {
-                var topLeft:UICornerRadius?
-                var topRight:UICornerRadius?
-                var bottomLeft:UICornerRadius?
-                var bottomRight:UICornerRadius?
-                if corner.contains(.topLeft) {
-                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
+                var finalTL: CGFloat = 0
+                var finalTR: CGFloat = 0
+                var finalBL: CGFloat = 0
+                var finalBR: CGFloat = 0
+                
+                if capsule {
+                    let capsuleRadius = min(self.bounds.width, self.bounds.height) / 2.0
+                    finalTL = capsuleRadius; finalTR = capsuleRadius
+                    finalBL = capsuleRadius; finalBR = capsuleRadius
+                } else if corner == .allCorners {
+                    finalTL = radius; finalTR = radius
+                    finalBL = radius; finalBR = radius
+                } else {
+                    if corner.contains(.topLeft) { finalTL = topLeft }
+                    if corner.contains(.topRight) { finalTR = topRight }
+                    if corner.contains(.bottomLeft) { finalBL = bottomLeft }
+                    if corner.contains(.bottomRight) { finalBR = bottomRight }
                 }
-                if corner.contains(.topRight) {
-                    topRight = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner.contains(.bottomLeft) {
-                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner.contains(.bottomRight) {
-                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner == .allCorners {
-                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
-                    topRight = UICornerRadius(floatLiteral: cornerRadii)
-                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
-                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                self.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
+                
+                let tL = (corner == .allCorners || corner.contains(.topLeft) || capsule) ? UICornerRadius(floatLiteral: finalTL) : nil
+                let tR = (corner == .allCorners || corner.contains(.topRight) || capsule) ? UICornerRadius(floatLiteral: finalTR) : nil
+                let bL = (corner == .allCorners || corner.contains(.bottomLeft) || capsule) ? UICornerRadius(floatLiteral: finalBL) : nil
+                let bR = (corner == .allCorners || corner.contains(.bottomRight) || capsule) ? UICornerRadius(floatLiteral: finalBR) : nil
+                
+                self.corner26(tL: tL, tR: tR, bL: bL, bR: bR, capsule: capsule)
+                
             } else {
-                let maskPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: cornerRadii, height: cornerRadii))
+                // 2. iOS 26 以下的老版本适配
+                // 🌟 核心优化：直接调用我们抽离出来的公共路径生成器，告别冗长的手工绘制代码！
+                let path = self.pt_customCornerPath(bounds: self.bounds,
+                                                    radius: radius,
+                                                    topLeft: topLeft,
+                                                    topRight: topRight,
+                                                    bottomLeft: bottomLeft,
+                                                    bottomRight: bottomRight,
+                                                    corner: corner,
+                                                    capsule: capsule)
+                
                 let maskLayer = CAShapeLayer()
                 maskLayer.frame = self.bounds
-                maskLayer.path = maskPath.cgPath
+                maskLayer.path = path.cgPath
                 self.layer.mask = maskLayer
             }
             
+            // 设置边框等其他属性
             self.layer.masksToBounds = true
             self.layer.borderWidth = borderWidth
             self.layer.borderColor = borderColor.cgColor
@@ -326,11 +438,16 @@ public extension UIView {
     
     //MARK: View的背景渐变
     func backgroundGradient(type: Imagegradien,
-                                colors: [UIColor],
-                                radius: CGFloat = 0,
-                                borderWidth: CGFloat = 0,
-                                borderColor: UIColor = UIColor.clear,
-                                corner: UIRectCorner = .allCorners) {
+                            colors: [UIColor],
+                            radius: CGFloat = 0,
+                            topLeft: CGFloat = 0,     // 新增：独立左上圆角
+                            topRight: CGFloat = 0,    // 新增：独立右上圆角
+                            bottomLeft: CGFloat = 0,  // 新增：独立左下圆角
+                            bottomRight: CGFloat = 0, // 新增：独立右下圆角
+                            borderWidth: CGFloat = 0,
+                            borderColor: UIColor = UIColor.clear,
+                            corner: UIRectCorner = .allCorners,
+                            capsule: Bool = false) {
             
         // 放在主线程异步执行，有助于让当前 RunLoop 中的其他轻量级 UI 操作先完成
         DispatchQueue.main.async { [weak self] in
@@ -358,25 +475,22 @@ public extension UIView {
             
             switch type {
             case .LeftToRight:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-                gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 1, y: 0)
             case .TopToBottom:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-                gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 1)
             case .RightToLeft:
-                gradientLayer.startPoint = CGPoint(x: 1, y: 0)
-                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 1, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             case .BottomToTop:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 1)
-                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 1); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             }
             
             // 3. 处理圆角
-            let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
+            let path = self.pt_customCornerPath(bounds: self.bounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
+                        
             let maskLayer = CAShapeLayer()
             maskLayer.path = path.cgPath
             gradientLayer.mask = maskLayer
-            
+
             // 4. 插入渐变层
             self.layer.insertSublayer(gradientLayer, at: 0)
             
@@ -402,29 +516,31 @@ public extension UIView {
     func borderGradient(type:Imagegradien,
                         colors:[UIColor],
                         radius:CGFloat = 0,
+                        topLeft: CGFloat = 0,     // 新增
+                        topRight: CGFloat = 0,    // 新增
+                        bottomLeft: CGFloat = 0,  // 新增
+                        bottomRight: CGFloat = 0, // 新增
                         borderWidth:CGFloat = 1,
-                        corner:UIRectCorner = .allCorners) {
+                        corner:UIRectCorner = .allCorners,
+                        capsule: Bool = false) {
         PTGCDManager.gcdMain {
             let gradientLayer = CAGradientLayer()
             gradientLayer.frame = self.bounds
             gradientLayer.colors = colors.map { $0.cgColor }
             switch type {
             case .LeftToRight:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-                gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 1, y: 0)
             case .TopToBottom:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-                gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 1)
             case .RightToLeft:
-                gradientLayer.startPoint = CGPoint(x: 1, y: 0)
-                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 1, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             case .BottomToTop:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 1)
-                gradientLayer.endPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 1); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
             }
+
+            let borderPath = self.pt_customCornerPath(bounds: self.bounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
             
             let borderShapeLayer = CAShapeLayer()
-            let borderPath = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: radius, height: radius))
             borderShapeLayer.path = borderPath.cgPath
             borderShapeLayer.fillColor = UIColor.clear.cgColor
             borderShapeLayer.strokeColor = UIColor.black.cgColor
@@ -433,6 +549,7 @@ public extension UIView {
 
             self.layer.insertSublayer(gradientLayer, at: 0)
 
+            // 为了让中间镂空，需要再垫一层背景色遮罩
             let bgGradientLayer = CAGradientLayer()
             bgGradientLayer.colors = [self.backgroundColor?.cgColor ?? UIColor.clear.cgColor]
             bgGradientLayer.startPoint = CGPoint(x: 0, y: 0)
@@ -473,25 +590,11 @@ public extension UIView {
                              height:CGFloat = CGFloat.greatestFiniteMagnitude,
                              width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
         guard !string.isEmpty else { return .zero }
-
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = lineSpacing
-
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .paragraphStyle: paragraph
-        ]
-
+        let attributes: [NSAttributedString.Key: Any] = [.font: font, .paragraphStyle: paragraph]
         let constraintSize = CGSize(width: width, height: height)
-
-        let rect = string.boundingRect(
-            with: constraintSize,
-            options: [.usesLineFragmentOrigin, .usesFontLeading],
-            attributes: attributes,
-            context: nil
-        )
-
-        // 使用 ceil 防止 Label 渲染被裁切
+        let rect = string.boundingRect(with: constraintSize, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: attributes, context: nil)
         return CGSize(width: ceil(rect.width), height: ceil(rect.height))
     }
     

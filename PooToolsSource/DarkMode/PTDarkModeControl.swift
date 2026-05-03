@@ -128,12 +128,12 @@ public class PTDarkModeControl: PTBaseViewController {
                     if cellModel.name == PTDarkModeOption.smartCellName {
                         cell.switchValue = PTDarkModeOption.isSmartPeeling
                         PTGCDManager.gcdMain {
-                            cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
+                            cell.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
                         }
                     } else if cellModel.name == PTDarkModeOption.followSystemCellName {
                         cell.switchValue = PTDarkModeOption.isFollowSystem
                         PTGCDManager.gcdMain {
-                            cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.bottomLeft,.bottomRight])
+                            cell.contentView.viewCornerRectCorner(bottomLeft: 5,bottomRight: 5, corner: [.bottomLeft,.bottomRight])
                         }
                     }
                     cell.switchValueChangeBlock = { title,sender in

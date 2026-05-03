@@ -311,9 +311,9 @@ public class PTActionSheetController: PTAlertController {
 
         if withCorner {
             if isTitle {
-                cell.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii, corner: [.topLeft,.topRight])
+                cell.viewCornerRectCorner(topLeft: sheetConfig.cornerRadii,topRight: sheetConfig.cornerRadii, corner: [.topLeft,.topRight])
             } else {
-                cell.viewCornerRectCorner(cornerRadii: sheetConfig.cornerRadii, corner: .allCorners)
+                cell.viewCornerRectCorner(radius: sheetConfig.cornerRadii, corner: .allCorners)
             }
         }
 
@@ -424,14 +424,16 @@ public class PTActionSheetController: PTAlertController {
             // Corner 处理
             if titleItem == nil && index == 0 {
                 button.viewCornerRectCorner(
-                    cornerRadii: sheetConfig.cornerRadii,
+                    topLeft: sheetConfig.cornerRadii,
+                    topRight: sheetConfig.cornerRadii,
                     corner: [.topLeft, .topRight]
                 )
             }
             
             if index == lastIndex {
                 button.viewCornerRectCorner(
-                    cornerRadii: sheetConfig.cornerRadii,
+                    bottomLeft: sheetConfig.cornerRadii,
+                    bottomRight: sheetConfig.cornerRadii,
                     corner: [.bottomLeft, .bottomRight]
                 )
             }
