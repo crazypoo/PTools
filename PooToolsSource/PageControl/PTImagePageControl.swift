@@ -200,7 +200,7 @@ open class PTImagePageControl: UIControl { // 🚀 1. 彻底升级为 UIControl
 }
 
 public extension PTImagePageControl {
-    @objc func addSwitchAction(handler:@escaping ImagePageControlBlock) {
+    @objc func addPageControlAction(handler:@escaping ImagePageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

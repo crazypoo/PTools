@@ -12,7 +12,7 @@ import UIKit
 public typealias PageControlTouchedBlock = (_ sender:UIPageControl) -> Void
 
 public extension UIPageControl {
-    @objc func addPageControlHandlers(handler:@escaping PageControlTouchedBlock) {
+    @objc func addPageControlAction(handler:@escaping PageControlTouchedBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

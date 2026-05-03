@@ -86,7 +86,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             switch viewConfig.pageControlOption {
             case .system:
                 if let pageControl = view.pageControlView as? UIPageControl {
-                    pageControl.addPageControlHandlers { [weak self] sender in
+                    pageControl.addPageControlAction { [weak self] sender in
                         guard let self = self else { return }
                         // MARK: -  加入安全边界检查，防止越界崩溃
                         guard sender.currentPage < self.mediaData.count else { return }

@@ -208,7 +208,7 @@ open class PTFilledPageControl: UIControl { // 🚀 1. 升级为 UIControl
 }
 
 public extension PTFilledPageControl {
-    @objc func addSwitchAction(handler:@escaping FillPageControlBlock) {
+    @objc func addPageControlAction(handler:@escaping FillPageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

@@ -229,7 +229,7 @@ fileprivate extension PTGuidePageHUD {
         case .pageControl(let type):
             imagePageControl = setPageControlView(type: type)
             if let control = imagePageControl as? UIPageControl {
-                control.addPageControlHandlers { [weak self] sender in // 修复：弱引用 self
+                control.addPageControlAction { [weak self] sender in // 修复：弱引用 self
                     guard let self = self else { return }
                     if self.viewModel.imageArrays.count == (sender.currentPage + 1) {
                         self.buttonClick(sender: nil)
@@ -450,6 +450,10 @@ fileprivate extension PTGuidePageHUD {
             view.currentPageIndicatorTintColor = viewModel.pageControlCurrentPageColor
             view.numberOfPages = viewModel.imageArrays.count // 修正：原生 UIPageControl 是 numberOfPages
             view.currentPage = 0
+            view.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlAction(page: sender.currentPage)
+            })
             return view
         case .fill:
             let view = PTFilledPageControl(frame: CGRect.zero)
@@ -457,6 +461,10 @@ fileprivate extension PTGuidePageHUD {
             view.indicatorPadding = viewModel.customPageControlIndicatorPadding
             view.indicatorRadius = viewModel.fillPageControlIndicatorRadius
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
+            view.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlAction(page: sender.currentPage)
+            })
             return view
         case .pill:
             let view = PTPillPageControl(frame: CGRect.zero)
@@ -464,6 +472,10 @@ fileprivate extension PTGuidePageHUD {
             view.activeTint = viewModel.customPageControlTintColor
             view.inactiveTint = viewModel.customPageControlInActiveTintColor
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
+            view.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlAction(page: sender.currentPage)
+            })
             return view
         case .snake:
             let view = PTSnakePageControl(frame: CGRect.zero)
@@ -472,16 +484,28 @@ fileprivate extension PTGuidePageHUD {
             view.indicatorRadius = viewModel.fillPageControlIndicatorRadius
             view.inactiveTint = viewModel.customPageControlInActiveTintColor
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
+            view.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlAction(page: sender.currentPage)
+            })
             return view
         case .image:
             let view = PTImagePageControl()
             view.pageImage = viewModel.pageControlActiveImage
             view.currentPageImage = viewModel.pageControlInActiveImage
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
+            view.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlAction(page: sender.currentPage)
+            })
             return view
         case .scrolling:
             let view = PTScrollingPageControl()
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
+            view.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlAction(page: sender.currentPage)
+            })
             return view
         }
     }
@@ -513,5 +537,18 @@ fileprivate extension PTGuidePageHUD {
         } else if let sysPageControl = imagePageControl as? UIPageControl {
             sysPageControl.currentPage = value
         }
+    }
+    
+    func pageControlTap(currentPage:Int) {
+        let targetX = CGFloat(currentPage) * self.guidePageView.bounds.width
+        self.guidePageView.setContentOffset(CGPoint(x: targetX, y: 0), animated: true)
+        if currentPage >= 1 {
+            self.forwardButton.isHidden = false
+            self.forwardButton.isUserInteractionEnabled = true
+        } else {
+            self.forwardButton.isHidden = true
+            self.forwardButton.isUserInteractionEnabled = false
+        }
+
     }
 }

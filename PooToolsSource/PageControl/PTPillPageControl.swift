@@ -188,7 +188,7 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
 }
 
 public extension PTPillPageControl {
-    @objc func addSwitchAction(handler:@escaping PillPageControlBlock) {
+    @objc func addPageControlAction(handler:@escaping PillPageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

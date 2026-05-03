@@ -199,7 +199,7 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
 }
 
 public extension PTSnakePageControl {
-    @objc func addSwitchAction(handler:@escaping SnakePageControlBlock) {
+    @objc func addPageControlAction(handler:@escaping SnakePageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

@@ -278,7 +278,7 @@ open class PTScrollingPageControl: UIControl {
 }
 
 public extension PTScrollingPageControl {
-    @objc func addSwitchAction(handler:@escaping ScrollingPageControlBlock) {
+    @objc func addPageControlAction(handler:@escaping ScrollingPageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }
