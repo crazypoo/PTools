@@ -18,7 +18,6 @@ public extension UIButton {
     
     // 优化：将 Int 替换为 UInt8 配合指针使用，防止内存异常
     private struct AssociatedKeys {
-        static var UIButtonBlockKey: UInt8 = 0
         static var CountdownTimerKey: UInt8 = 0
     }
     
@@ -29,17 +28,9 @@ public extension UIButton {
     }
 
     @objc func addActionHandlers(handler:@escaping TouchedBlock) {
-        // 优化：使用 COPY_NONATOMIC 保证闭包内存安全
-        objc_setAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        addTarget(self, action: #selector(actionTouched(sender:)), for: .touchUpInside)
+        self.addActionHandler(for: .touchUpInside, handler: handler)
     }
-    
-    @objc func actionTouched(sender:UIButton) {
-        if let block:TouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? TouchedBlock {
-            block(sender)
-        }
-    }
-    
+        
     @objc func removeTargerAndAction() {
         removeTarget(nil, action: nil, for: .allEvents)
     }

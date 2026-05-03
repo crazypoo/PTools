@@ -12,20 +12,10 @@ public typealias SliderBlock = (_ sender:UISlider) -> Void
 
 public extension UISlider {
     
-    private struct AssociatedKeys {
-        static var UISliderBlockKey = 998
-    }
-
     @objc func addSliderAction(handler:@escaping SliderBlock) {
-        objc_setAssociatedObject(self, &AssociatedKeys.UISliderBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        addTarget(self, action: #selector(actionValue(sender:)), for: .valueChanged)
+        self.addActionHandler(for: .valueChanged, handler: handler)
     }
-    
-    @objc func actionValue(sender:UISlider) {
-        let block:SliderBlock = objc_getAssociatedObject(self, &AssociatedKeys.UISliderBlockKey) as! SliderBlock
-        block(sender)
-    }
-    
+        
     @objc func setValue(_ value: Float,
                   animated: Bool = true,
                   duration: TimeInterval,

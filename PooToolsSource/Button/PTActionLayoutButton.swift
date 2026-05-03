@@ -362,12 +362,7 @@ public class PTActionLayoutButton: UIControl {
                         \(self.currentString,.foreground(self.currentTitleColor),.font(self.currentFont),.paragraph(.alignment(self.textAlignment),.lineSpacing(self.labelLineSpace),.lineBreakMode(self.textLineBreakMode)))
                         """),.action { [weak self] in
                             guard let self = self else { return }
-                            if let block: PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-                                block(self)
-                            }
-                            PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
-                                self?.updateAppearance()
-                            }
+                            self.sendActions(for: .touchUpInside)
                         })
                         """
             self.titleLabel.attributed.text = nameAtt
@@ -386,12 +381,7 @@ public class PTActionLayoutButton: UIControl {
     }
     
     @objc private func handleLabelTap() {
-        if let block: PTControlTouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-            block(self)
-        }
-        PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
-            self?.updateAppearance()
-        }
+        self.sendActions(for: .touchUpInside)
     }
     
     public func getKitTitleSize(lineSpacing:CGFloat = 2.5,
@@ -556,26 +546,18 @@ extension NSAttributedString {
 public typealias PTControlTouchedBlock = (_ sender:PTActionLayoutButton) -> Void
 
 public extension PTActionLayoutButton {
-    private struct AssociatedKeys {
-        // 🚀 规范修复：使用 UInt8 静态变量作为 AssociatedObject 的 Key 更加安全和标准
-        static var UIButtonBlockKey: UInt8 = 0
-    }
     
     @objc func addActionHandlers(handler:@escaping PTControlTouchedBlock) {
-        objc_setAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        addTarget(self, action: #selector(actionTouched(sender:)), for: .touchUpInside)
-    }
-    
-    @objc func actionTouched(sender:PTActionLayoutButton) {
-        if let block = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as? PTControlTouchedBlock {
-            block(sender)
-        }
-        // 🚀 优化体验：对齐 `handleLabelTap` 的逻辑，点击后也触发 0.1s 的延时刷新
-        PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
-            self?.updateAppearance()
+        self.addActionHandler(for: .touchUpInside) { [weak self] (sender:PTActionLayoutButton) in
+            handler(sender)
+            
+            // 2. 将原本分散在各处的 0.1s 延迟刷新统一集中到这里
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self?.updateAppearance()
+            }
         }
     }
-    
+        
     @objc func removeTargerAndAction() {
         removeTarget(nil, action: nil, for: .allEvents)
     }

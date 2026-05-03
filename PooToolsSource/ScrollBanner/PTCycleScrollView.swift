@@ -588,8 +588,6 @@ extension PTCycleScrollView {
                 customPageControl?.isHidden = false
             case .image:
                 let control = PTImagePageControl()
-                control.pageIndicatorTintColor = UIColor.clear
-                control.currentPageIndicatorTintColor = UIColor.clear
                 if let activeImage = pageControlActiveImage {
                     control.pageImage = activeImage
                 }
@@ -597,7 +595,7 @@ extension PTCycleScrollView {
                     control.currentPageImage = inActiveImage
                 }
                 control.dotSpacing = dotSpacing
-                control.numberOfPages = imagePaths.count
+                control.pageCount = imagePaths.count
                 customPageControl = control
                 addSubview(customPageControl!)
                 customPageControl?.isHidden = false

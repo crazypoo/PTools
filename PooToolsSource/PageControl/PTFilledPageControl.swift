@@ -8,24 +8,30 @@
 
 import UIKit
 
+public typealias FillPageControlBlock = (_ sender:PTFilledPageControl) -> Void
+
 @objcMembers
-open class PTFilledPageControl: UIView {
+open class PTFilledPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
-    // MARK: - PageControl    
+    // MARK: - PageControl
     open var pageCount: Int = 0 {
         didSet {
             updateNumberOfPages(pageCount)
         }
     }
+    
     open var progress: CGFloat = 0 {
         didSet {
-            updateActivePageIndicatorMasks(forProgress: progress)
+            // 🚀 2. 健壮性提升：增加安全边界保护
+            guard pageCount > 0 else { return }
+            let safeProgress = max(0, min(progress, CGFloat(pageCount - 1)))
+            updateActivePageIndicatorMasks(forProgress: safeProgress)
         }
     }
+    
     open var currentPage: Int {
         Int(round(progress))
     }
-    
     
     // MARK: - Appearance
     
@@ -34,19 +40,24 @@ open class PTFilledPageControl: UIView {
             inactiveLayers.forEach { $0.backgroundColor = tintColor.cgColor }
         }
     }
+    
     open var inactiveRingWidth: CGFloat = 1 {
         didSet {
             updateActivePageIndicatorMasks(forProgress: progress)
         }
     }
+    
     open var indicatorPadding: CGFloat = 8 {
         didSet {
             layoutPageIndicators(inactiveLayers)
+            updateActivePageIndicatorMasks(forProgress: progress)
         }
     }
+    
     open var indicatorRadius: CGFloat = 4 {
         didSet {
             layoutPageIndicators(inactiveLayers)
+            updateActivePageIndicatorMasks(forProgress: progress)
         }
     }
     
@@ -56,8 +67,20 @@ open class PTFilledPageControl: UIView {
     
     fileprivate var inactiveLayers = [CALayer]()
     
+    // MARK: - Init
+    
     override public init(frame: CGRect) {
         super.init(frame: frame)
+        commonInit()
+    }
+    
+    // 🚀 移除 fatalError，使其支持 Interface Builder 实例化
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+    
+    private func commonInit() {
         pageCount = 0
         progress = 0
         inactiveRingWidth = 1
@@ -65,45 +88,42 @@ open class PTFilledPageControl: UIView {
         indicatorRadius = 4
     }
     
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: - State Update
     
     fileprivate func updateNumberOfPages(_ count: Int) {
-        // no need to update
         guard count != inactiveLayers.count else { return }
+        
         // reset current layout
         inactiveLayers.forEach { $0.removeFromSuperlayer() }
-        inactiveLayers = [CALayer]()
+        inactiveLayers.removeAll()
+        
         // add layers for new page count
-        inactiveLayers = stride(from: 0, to:count, by:1).map { _ in
+        inactiveLayers = (0..<count).map { _ in
             let layer = CALayer()
             layer.backgroundColor = tintColor.cgColor
             self.layer.addSublayer(layer)
             return layer
         }
+        
         layoutPageIndicators(inactiveLayers)
         updateActivePageIndicatorMasks(forProgress: progress)
         invalidateIntrinsicContentSize()
     }
     
-    
     // MARK: - Layout
     
-    fileprivate func updateActivePageIndicatorMasks(forProgress progress: CGFloat) {
-        // ignore if progress is outside of page indicators' bounds
-        guard progress >= 0 && progress <= CGFloat(pageCount - 1) else { return }
-
+    fileprivate func updateActivePageIndicatorMasks(forProgress currentProgress: CGFloat) {
+        guard pageCount > 0 else { return }
+        let safeProgress = max(0, min(currentProgress, CGFloat(pageCount - 1)))
+        
         // mask rect w/ default stroke width
         let insetRect = CGRect(x: 0, y: 0, width: indicatorDiameter, height: indicatorDiameter).insetBy(dx: inactiveRingWidth, dy: inactiveRingWidth)
-        let leftPageFloat = trunc(progress)
-        let leftPageInt = Int(progress)
+        let leftPageFloat = trunc(safeProgress)
+        let leftPageInt = Int(safeProgress)
         
         // inset right moving page indicator
         let spaceToMove = insetRect.width / 2
-        let percentPastLeftIndicator = progress - leftPageFloat
+        let percentPastLeftIndicator = safeProgress - leftPageFloat
         let additionalSpaceToInsetRight = spaceToMove * percentPastLeftIndicator
         let closestRightInsetRect = insetRect.insetBy(dx: additionalSpaceToInsetRight, dy: additionalSpaceToInsetRight)
         
@@ -118,6 +138,7 @@ open class PTFilledPageControl: UIView {
             
             let boundsPath = UIBezierPath(rect: layer.bounds)
             let circlePath: UIBezierPath
+            
             if leftPageInt == idx {
                 circlePath = UIBezierPath(ovalIn: closestLeftInsetRect)
             } else if leftPageInt + 1 == idx {
@@ -125,6 +146,7 @@ open class PTFilledPageControl: UIView {
             } else {
                 circlePath = UIBezierPath(ovalIn: insetRect)
             }
+            
             boundsPath.append(circlePath)
             maskLayer.path = boundsPath.cgPath
             layer.mask = maskLayer
@@ -133,7 +155,11 @@ open class PTFilledPageControl: UIView {
     
     fileprivate func layoutPageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
-        var layerFrame = CGRect(x: 0, y: 0, width: layerDiameter, height: layerDiameter)
+        
+        // 🚀 3. 加入 Y 轴垂直居中逻辑
+        let yCenter = max(0, (self.bounds.height - layerDiameter) / 2)
+        var layerFrame = CGRect(x: 0, y: yCenter, width: layerDiameter, height: layerDiameter)
+        
         layers.forEach { layer in
             layer.cornerRadius = indicatorRadius
             layer.frame = layerFrame
@@ -146,8 +172,43 @@ open class PTFilledPageControl: UIView {
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        let layerDiameter = indicatorRadius * 2
-        return CGSize(width: CGFloat(inactiveLayers.count) * layerDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
-                      height: layerDiameter)
+        CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(max(0, inactiveLayers.count - 1)) * indicatorPadding,
+               height: indicatorDiameter)
+    }
+    
+    // 🚀 在 layoutSubviews 中同步更新所有图层状态
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        layoutPageIndicators(inactiveLayers)
+        updateActivePageIndicatorMasks(forProgress: progress)
+    }
+    
+    // MARK: - 🚀 新增功能：支持交互点击 (Tap to Page)
+    
+    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard let touch = touches.first, pageCount > 1 else { return }
+        
+        let location = touch.location(in: self)
+        let unitWidth = indicatorDiameter + indicatorPadding
+        
+        // 根据点击的 X 坐标推算目标页码
+        var targetPage = Int(round(location.x / unitWidth))
+        targetPage = max(0, min(targetPage, pageCount - 1)) // 安全边界
+        
+        if targetPage != currentPage {
+            // 提供轻微震动反馈
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            
+            self.progress = CGFloat(targetPage)
+            self.sendActions(for: .valueChanged)
+        }
+    }
+}
+
+public extension PTFilledPageControl {
+    @objc func addSwitchAction(handler:@escaping FillPageControlBlock) {
+        self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

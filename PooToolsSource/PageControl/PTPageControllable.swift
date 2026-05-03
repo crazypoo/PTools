@@ -25,6 +25,17 @@ extension UIPageControl: PTPageControllable {
     }
 }
 
+extension PTImagePageControl: PTPageControllable {
+    public func setCurrentPage(index: Int) {
+        self.progress = CGFloat(index)
+    }
+    
+    public func update(currentPage: Int, totalPages: Int) {
+        self.progress = CGFloat(currentPage)
+        self.pageCount = totalPages
+    }
+}
+
 extension PTFilledPageControl: PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.progress = CGFloat(index)

@@ -60,7 +60,7 @@ class SceneDelegate: PTWindowSceneDelegate {
                 guideModel.forwardImage = "DemoImage"
                 guideModel.backImage = "DemoImage"
                 guideModel.pageControlTintColor = .gray
-                guideModel.pageControl = .pageControl(type: .system)
+                guideModel.pageControl = .pageControl(type: .snake)
                 guideModel.skipShow = true
                 
                 if self.guideHud == nil {

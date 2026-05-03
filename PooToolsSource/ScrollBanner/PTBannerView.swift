@@ -498,8 +498,6 @@ extension PTBannerView {
             customPageControl.isHidden = false
         case .image:
             let control = PTImagePageControl()
-            control.pageIndicatorTintColor = UIColor.clear
-            control.currentPageIndicatorTintColor = UIColor.clear
             if let activeImage = self.viewConfig.pageControlActiveImage {
                 control.pageImage = activeImage
             }
@@ -507,7 +505,7 @@ extension PTBannerView {
                 control.currentPageImage = inActiveImage
             }
             control.dotSpacing = self.viewConfig.dotSpacing
-            control.numberOfPages = bannerModel.count
+            control.pageCount = bannerModel.count
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false

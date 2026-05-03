@@ -475,8 +475,6 @@ fileprivate extension PTGuidePageHUD {
             return view
         case .image:
             let view = PTImagePageControl()
-            view.pageIndicatorTintColor = UIColor.clear
-            view.currentPageIndicatorTintColor = UIColor.clear
             view.pageImage = viewModel.pageControlActiveImage
             view.currentPageImage = viewModel.pageControlInActiveImage
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
