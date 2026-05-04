@@ -8,29 +8,18 @@
 
 import UIKit
 
-public typealias PillPageControlBlock = (_ sender:PTPillPageControl) -> Void
+public typealias PillPageControlBlock = (_ sender: PTPillPageControl) -> Void
 
 @objcMembers
-open class PTPillPageControl: UIControl {
+open class PTPillPageControl: PTBasePageControl {
     
-    // MARK: - PageControl
+    // MARK: - Internal Visual State
     
-    open var pageCount: Int = 0 {
+    /// 内部用于驱动 UI 绘制的视觉进度
+    private var visualProgress: CGFloat = 0 {
         didSet {
-            updateNumberOfPages(pageCount)
+            layoutActivePageIndicator(visualProgress)
         }
-    }
-    
-    open var progress: CGFloat = 0 {
-        didSet {
-            guard pageCount > 0 else { return }
-            let safeProgress = max(0, min(progress, CGFloat(pageCount - 1)))
-            layoutActivePageIndicator(safeProgress)
-        }
-    }
-    
-    open var currentPage: Int {
-        Int(round(progress))
     }
     
     // MARK: - Appearance
@@ -39,28 +28,7 @@ open class PTPillPageControl: UIControl {
         didSet {
             activeLayer.frame.size = pillSize
             activeLayer.cornerRadius = pillSize.height / 2
-            layoutInactivePageIndicators(inactiveLayers)
-            layoutActivePageIndicator(progress)
-            invalidateIntrinsicContentSize()
-        }
-    }
-    
-    open var activeTint: UIColor = UIColor.white {
-        didSet {
-            activeLayer.backgroundColor = activeTint.cgColor
-        }
-    }
-    
-    open var inactiveTint: UIColor = UIColor(white: 1, alpha: 0.3) {
-        didSet {
-            inactiveLayers.forEach { $0.backgroundColor = inactiveTint.cgColor }
-        }
-    }
-    
-    open var indicatorPadding: CGFloat = 7 {
-        didSet {
-            layoutInactivePageIndicators(inactiveLayers)
-            layoutActivePageIndicator(progress)
+            updateLayout()
             invalidateIntrinsicContentSize()
         }
     }
@@ -72,32 +40,37 @@ open class PTPillPageControl: UIControl {
         layer.frame = CGRect(origin: CGPoint.zero, size: pillSize)
         layer.backgroundColor = activeTint.cgColor
         layer.cornerRadius = pillSize.height / 2
-        layer.actions = [
-            "bounds": NSNull(),
-            "frame": NSNull(),
-            "position": NSNull()]
+        layer.actions = ["bounds": NSNull(), "frame": NSNull(), "position": NSNull()]
         return layer
     }()
     
-    // MARK: - Init
+    // MARK: - Animation Engine
+    private var displayLink: CADisplayLink?
+    private var startProgress: CGFloat = 0
+    private var targetProgress: CGFloat = 0
+    private var progressStartTime: CFTimeInterval = 0
+    private let animDuration: CFTimeInterval = 0.3 // 平滑滑动的时间
+    private var isAnimating: Bool { return displayLink != nil }
     
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
-        pageCount = 0
-        progress = 0
-        indicatorPadding = 7
+    // MARK: - Deinit
+    
+    deinit {
+        stopDisplayLink()
     }
     
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        pageCount = 0
-        progress = 0
-        indicatorPadding = 7
+    // MARK: - 重写基类模板方法
+    
+    override open func commonInit() {
+        indicatorPadding = 7 // 重写基类默认的 8，使用胶囊控件特有的 7
     }
     
-    // MARK: - State Update
+    override open func updateAppearance() {
+        // 响应基类的颜色变化
+        activeLayer.backgroundColor = activeTint.cgColor
+        inactiveLayers.forEach { $0.backgroundColor = inactiveTint.cgColor }
+    }
     
-    fileprivate func updateNumberOfPages(_ count: Int) {
+    override open func updateNumberOfPages(_ count: Int) {
         guard count != inactiveLayers.count else { return }
         
         inactiveLayers.forEach { $0.removeFromSuperlayer() }
@@ -110,39 +83,51 @@ open class PTPillPageControl: UIControl {
             return layer
         }
         
-        layoutInactivePageIndicators(inactiveLayers)
-        
         activeLayer.removeFromSuperlayer()
         layer.addSublayer(activeLayer)
         
-        layoutActivePageIndicator(progress)
+        updateLayout()
         invalidateIntrinsicContentSize()
     }
     
-    // MARK: - Layout
+    override open func updateProgress(_ safeProgress: CGFloat) {
+        // 🚀 数据与视觉分离：外部介入打断时停止内部定时器
+        if isAnimating {
+            if safeProgress != targetProgress {
+                stopDisplayLink()
+                visualProgress = safeProgress
+            }
+        } else {
+            visualProgress = safeProgress
+        }
+    }
+    
+    override open func updateLayout() {
+        layoutInactivePageIndicators(inactiveLayers)
+        layoutActivePageIndicator(visualProgress) // 🚀 使用视觉进度渲染
+    }
+    
+    // MARK: - 内部布局私有方法
     
     fileprivate func layoutActivePageIndicator(_ safeProgress: CGFloat) {
         guard pageCount > 0 else { return }
         
-        // 🚀 1. 计算总宽度与起始居中点 startX
         let totalWidth = CGFloat(pageCount) * pillSize.width + CGFloat(max(0, pageCount - 1)) * indicatorPadding
-        let startX = max(0, (self.bounds.width - totalWidth) / 2)
+        
+        let startX = getStartX(totalWidth: totalWidth)
+        let yCenter = getYCenter(itemHeight: pillSize.height)
         
         let denormalizedProgress = safeProgress * (pillSize.width + indicatorPadding)
-        let yCenter = (self.bounds.height - pillSize.height) / 2
         
-        // 🚀 2. 活跃图层(胶囊)的 X 坐标也要加上 startX
         activeLayer.frame = CGRect(x: startX + denormalizedProgress, y: yCenter, width: pillSize.width, height: pillSize.height)
     }
     
     fileprivate func layoutInactivePageIndicators(_ layers: [CALayer]) {
-        let yCenter = (self.bounds.height - pillSize.height) / 2
-        
-        // 🚀 1. 计算总宽度与起始居中点 startX
         let totalWidth = CGFloat(layers.count) * pillSize.width + CGFloat(max(0, layers.count - 1)) * indicatorPadding
-        let startX = max(0, (self.bounds.width - totalWidth) / 2)
         
-        // 🚀 2. 从 startX 开始排布背景胶囊
+        let startX = getStartX(totalWidth: totalWidth)
+        let yCenter = getYCenter(itemHeight: pillSize.height)
+        
         var layerFrame = CGRect(x: startX, y: yCenter, width: pillSize.width, height: pillSize.height)
         
         layers.forEach { layer in
@@ -161,43 +146,88 @@ open class PTPillPageControl: UIControl {
                height: pillSize.height)
     }
     
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        layoutInactivePageIndicators(inactiveLayers)
-        layoutActivePageIndicator(progress)
-    }
-    
-    // MARK: - 🚀 新增功能：支持交互点击 (Tap to Page)
+    // MARK: - 🚀 交互点击 (Tap to Page)
     
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard let touch = touches.first, pageCount > 1 else { return }
         
-        let location = touch.location(in: self)
+        let totalWidth = CGFloat(pageCount) * pillSize.width + CGFloat(max(0, pageCount - 1)) * indicatorPadding
         let unitWidth = pillSize.width + indicatorPadding
         
-        // 🚀 1. 计算点击偏移量 startX
-        let totalWidth = CGFloat(pageCount) * pillSize.width + CGFloat(max(0, pageCount - 1)) * indicatorPadding
-        let startX = max(0, (bounds.width - totalWidth) / 2)
-        
-        // 🚀 2. 去除左侧空白区域的干扰，获取真实的点击相对 X 坐标
-        let relativeX = location.x - startX
-        
-        var targetPage = Int(round(relativeX / unitWidth))
-        targetPage = max(0, min(targetPage, pageCount - 1))
+        let targetPage = getTargetPage(for: touch.location(in: self), totalWidth: totalWidth, unitWidth: unitWidth)
         
         if targetPage != currentPage {
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
             
-            self.progress = CGFloat(targetPage)
+            // 🚀 触发！启用动画引擎平滑滑到指定页
+            setProgress(CGFloat(targetPage), animated: true)
             self.sendActions(for: .valueChanged)
+        }
+    }
+    
+    // MARK: - 🚀 Animation Engine Methods
+    
+    public func setProgress(_ newProgress: CGFloat, animated: Bool) {
+        guard pageCount > 0 else { return }
+        let safeProgress = max(0, min(newProgress, CGFloat(pageCount - 1)))
+        
+        if animated {
+            startProgress = self.visualProgress
+            targetProgress = safeProgress
+            progressStartTime = CACurrentMediaTime()
+            
+            startDisplayLink()
+            
+            // 对外数据瞬间到位，保证外部回调获取正确的值
+            self.progress = safeProgress
+        } else {
+            stopDisplayLink()
+            self.progress = safeProgress
+        }
+    }
+    
+    private func startDisplayLink() {
+        stopDisplayLink()
+        let proxy = DisplayLinkProxy(target: self)
+        displayLink = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.update))
+        displayLink?.add(to: .main, forMode: .common)
+    }
+    
+    private func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+    
+    @objc fileprivate func updateDisplayLink() {
+        let elapsed = CACurrentMediaTime() - progressStartTime
+        var percent = CGFloat(elapsed / animDuration)
+        
+        if percent >= 1.0 {
+            percent = 1.0
+            stopDisplayLink()
+        }
+        
+        // 缓动函数 (Ease-In-Out)
+        let easePercent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent
+        // 驱动视觉进度，产生平滑移动
+        visualProgress = startProgress + (targetProgress - startProgress) * easePercent
+    }
+    
+    private class DisplayLinkProxy {
+        weak var target: PTPillPageControl?
+        init(target: PTPillPageControl) {
+            self.target = target
+        }
+        @objc func update() {
+            target?.updateDisplayLink()
         }
     }
 }
 
 public extension PTPillPageControl {
-    @objc func addPageControlAction(handler:@escaping PillPageControlBlock) {
+    @objc func addPageControlAction(handler: @escaping PillPageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

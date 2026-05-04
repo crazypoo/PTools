@@ -524,7 +524,7 @@ extension PTBannerView {
             if let inActiveImage = self.viewConfig.pageControlInActiveImage {
                 control.currentPageImage = inActiveImage
             }
-            control.dotSpacing = self.viewConfig.dotSpacing
+            control.indicatorPadding = self.viewConfig.dotSpacing
             control.pageCount = bannerModel.count
             control.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }

@@ -594,7 +594,7 @@ extension PTCycleScrollView {
                 if let inActiveImage = pageControlInActiveImage {
                     control.currentPageImage = inActiveImage
                 }
-                control.dotSpacing = dotSpacing
+                control.indicatorPadding = dotSpacing
                 control.pageCount = imagePaths.count
                 customPageControl = control
                 addSubview(customPageControl!)

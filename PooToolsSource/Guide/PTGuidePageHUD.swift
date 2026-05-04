@@ -490,6 +490,7 @@ fileprivate extension PTGuidePageHUD {
             return view
         case .scrolling:
             let view = PTScrollingPageControl()
+            view.activeTint = .white
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
@@ -545,7 +546,6 @@ fileprivate extension PTGuidePageHUD {
             currentPage = scrol.progress
         default:break
         }
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(currentPage)")
         let targetX = currentPage * self.guidePageView.bounds.width
         self.guidePageView.setContentOffset(CGPoint(x: targetX, y: 0), animated: true)
         if currentPage >= 1 {
