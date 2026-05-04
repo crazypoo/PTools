@@ -155,10 +155,16 @@ open class PTFilledPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     fileprivate func layoutPageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
-        
-        // 🚀 3. 加入 Y 轴垂直居中逻辑
         let yCenter = max(0, (self.bounds.height - layerDiameter) / 2)
-        var layerFrame = CGRect(x: 0, y: yCenter, width: layerDiameter, height: layerDiameter)
+        
+        // 🚀 1. 计算所有圆点加间距的总宽度
+        let totalWidth = CGFloat(layers.count) * layerDiameter + CGFloat(max(0, layers.count - 1)) * indicatorPadding
+        
+        // 🚀 2. 计算水平居中的起始 X 坐标
+        let startX = max(0, (self.bounds.width - totalWidth) / 2)
+        
+        // 🚀 3. 从 startX 开始布局
+        var layerFrame = CGRect(x: startX, y: yCenter, width: layerDiameter, height: layerDiameter)
         
         layers.forEach { layer in
             layer.cornerRadius = indicatorRadius
@@ -192,8 +198,15 @@ open class PTFilledPageControl: UIControl { // 🚀 1. 升级为 UIControl
         let location = touch.location(in: self)
         let unitWidth = indicatorDiameter + indicatorPadding
         
-        // 根据点击的 X 坐标推算目标页码
-        var targetPage = Int(round(location.x / unitWidth))
+        // 🚀 1. 同样计算出起始 X 坐标
+        let totalWidth = CGFloat(pageCount) * indicatorDiameter + CGFloat(max(0, pageCount - 1)) * indicatorPadding
+        let startX = max(0, (bounds.width - totalWidth) / 2)
+        
+        // 🚀 2. 将点击的绝对坐标减去 startX，得到相对于点阵列的偏移量
+        let relativeX = location.x - startX
+        
+        // 根据相对 X 坐标推算目标页码
+        var targetPage = Int(round(relativeX / unitWidth))
         targetPage = max(0, min(targetPage, pageCount - 1)) // 安全边界
         
         if targetPage != currentPage {

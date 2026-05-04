@@ -11,7 +11,7 @@ import UIKit
 public typealias PillPageControlBlock = (_ sender:PTPillPageControl) -> Void
 
 @objcMembers
-open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
+open class PTPillPageControl: UIControl {
     
     // MARK: - PageControl
     
@@ -23,7 +23,6 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     open var progress: CGFloat = 0 {
         didSet {
-            // 🚀 2. 增加边界保护
             guard pageCount > 0 else { return }
             let safeProgress = max(0, min(progress, CGFloat(pageCount - 1)))
             layoutActivePageIndicator(safeProgress)
@@ -38,7 +37,6 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     open var pillSize: CGSize = CGSize(width: 20, height: 2.5) {
         didSet {
-            // 尺寸变化时重新布局
             activeLayer.frame.size = pillSize
             activeLayer.cornerRadius = pillSize.height / 2
             layoutInactivePageIndicators(inactiveLayers)
@@ -71,7 +69,6 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     fileprivate lazy var activeLayer: CALayer = { [unowned self] in
         let layer = CALayer()
-        // y 坐标将在 layout 阶段动态计算以保持垂直居中
         layer.frame = CGRect(origin: CGPoint.zero, size: pillSize)
         layer.backgroundColor = activeTint.cgColor
         layer.cornerRadius = pillSize.height / 2
@@ -103,11 +100,9 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
     fileprivate func updateNumberOfPages(_ count: Int) {
         guard count != inactiveLayers.count else { return }
         
-        // reset current layout
         inactiveLayers.forEach { $0.removeFromSuperlayer() }
         inactiveLayers.removeAll()
         
-        // add layers for new page count
         inactiveLayers = (0..<count).map { _ in
             let layer = CALayer()
             layer.backgroundColor = inactiveTint.cgColor
@@ -117,7 +112,6 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
         
         layoutInactivePageIndicators(inactiveLayers)
         
-        // ensure active page indicator is on top
         activeLayer.removeFromSuperlayer()
         layer.addSublayer(activeLayer)
         
@@ -129,17 +123,27 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     fileprivate func layoutActivePageIndicator(_ safeProgress: CGFloat) {
         guard pageCount > 0 else { return }
-        let denormalizedProgress = safeProgress * (pillSize.width + indicatorPadding)
         
-        // 🚀 3. 垂直居中优化
+        // 🚀 1. 计算总宽度与起始居中点 startX
+        let totalWidth = CGFloat(pageCount) * pillSize.width + CGFloat(max(0, pageCount - 1)) * indicatorPadding
+        let startX = max(0, (self.bounds.width - totalWidth) / 2)
+        
+        let denormalizedProgress = safeProgress * (pillSize.width + indicatorPadding)
         let yCenter = (self.bounds.height - pillSize.height) / 2
-        activeLayer.frame = CGRect(x: denormalizedProgress, y: yCenter, width: pillSize.width, height: pillSize.height)
+        
+        // 🚀 2. 活跃图层(胶囊)的 X 坐标也要加上 startX
+        activeLayer.frame = CGRect(x: startX + denormalizedProgress, y: yCenter, width: pillSize.width, height: pillSize.height)
     }
     
     fileprivate func layoutInactivePageIndicators(_ layers: [CALayer]) {
-        // 🚀 3. 垂直居中优化
         let yCenter = (self.bounds.height - pillSize.height) / 2
-        var layerFrame = CGRect(x: 0, y: yCenter, width: pillSize.width, height: pillSize.height)
+        
+        // 🚀 1. 计算总宽度与起始居中点 startX
+        let totalWidth = CGFloat(layers.count) * pillSize.width + CGFloat(max(0, layers.count - 1)) * indicatorPadding
+        let startX = max(0, (self.bounds.width - totalWidth) / 2)
+        
+        // 🚀 2. 从 startX 开始排布背景胶囊
+        var layerFrame = CGRect(x: startX, y: yCenter, width: pillSize.width, height: pillSize.height)
         
         layers.forEach { layer in
             layer.cornerRadius = pillSize.height / 2
@@ -159,7 +163,6 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     open override func layoutSubviews() {
         super.layoutSubviews()
-        // 确保父视图尺寸改变时，图层能够重新计算 Y 轴居中
         layoutInactivePageIndicators(inactiveLayers)
         layoutActivePageIndicator(progress)
     }
@@ -173,8 +176,14 @@ open class PTPillPageControl: UIControl { // 🚀 1. 升级为 UIControl
         let location = touch.location(in: self)
         let unitWidth = pillSize.width + indicatorPadding
         
-        // 根据点击的 X 坐标推算目标页码
-        var targetPage = Int(round(location.x / unitWidth))
+        // 🚀 1. 计算点击偏移量 startX
+        let totalWidth = CGFloat(pageCount) * pillSize.width + CGFloat(max(0, pageCount - 1)) * indicatorPadding
+        let startX = max(0, (bounds.width - totalWidth) / 2)
+        
+        // 🚀 2. 去除左侧空白区域的干扰，获取真实的点击相对 X 坐标
+        let relativeX = location.x - startX
+        
+        var targetPage = Int(round(relativeX / unitWidth))
         targetPage = max(0, min(targetPage, pageCount - 1))
         
         if targetPage != currentPage {

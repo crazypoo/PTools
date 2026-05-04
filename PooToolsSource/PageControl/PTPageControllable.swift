@@ -60,11 +60,11 @@ extension PTPillPageControl: PTPageControllable {
 
 extension PTSnakePageControl: PTPageControllable {
     public func setCurrentPage(index: Int) {
-        self.progress = CGFloat(index)
+        self.setProgress(CGFloat(index), animated: true)
     }
     
     public func update(currentPage: Int, totalPages: Int) {
-        self.progress = CGFloat(currentPage)
+        self.setProgress(CGFloat(currentPage), animated: true)
         self.pageCount = totalPages
     }
 }

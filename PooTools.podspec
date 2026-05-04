@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.100.19'
+    s.version     = '3.100.20'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -24,7 +24,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'SwifterSwift'
         subspec.dependency 'CocoaLumberjack/Swift'
         subspec.dependency 'DeviceKit'
-        subspec.dependency 'UIColor_Hex_Swift'
         subspec.dependency 'AttributedString'
         subspec.dependency 'IQKeyboardToolbarManager'
         subspec.dependency 'IQKeyboardManagerSwift'
@@ -174,7 +173,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'Input' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'UITextField+Shake'
         subspec.dependency 'PhoneNumberKit'
         subspec.source_files = 'PooToolsSource/Input/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

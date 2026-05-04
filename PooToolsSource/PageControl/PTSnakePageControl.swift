@@ -8,10 +8,10 @@
 
 import UIKit
 
-public typealias SnakePageControlBlock = (_ sender:PTSnakePageControl) -> Void
+public typealias SnakePageControlBlock = (_ sender: PTSnakePageControl) -> Void
 
 @objcMembers
-open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
+open class PTSnakePageControl: UIControl {
     
     // MARK: - PageControl
     
@@ -21,17 +21,36 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
         }
     }
     
+    /// 暴露给外部的真实进度数据
     open var progress: CGFloat = 0 {
         didSet {
-            // 🚀 2. 增加边界保护，防止贪吃蛇动画在极值时拉伸错乱或崩溃
             guard pageCount > 0 else { return }
             let safeProgress = max(0, min(progress, CGFloat(pageCount - 1)))
-            layoutActivePageIndicator(safeProgress)
+            
+            if isAnimating {
+                // 如果外部(如ScrollView)传进来的进度与我们内部目标的进度不一致，
+                // 说明外部接管了动画控制权，我们立刻停止内部定时器
+                if safeProgress != targetProgress {
+                    stopDisplayLink()
+                    visualProgress = safeProgress
+                }
+            } else {
+                visualProgress = safeProgress
+            }
         }
     }
     
     open var currentPage: Int {
         Int(round(progress))
+    }
+    
+    // MARK: - Internal Visual State
+    
+    /// 内部用于驱动 UI 绘制的视觉进度
+    private var visualProgress: CGFloat = 0 {
+        didSet {
+            layoutActivePageIndicator(visualProgress)
+        }
     }
     
     // MARK: - Appearance
@@ -51,14 +70,14 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
     open var indicatorPadding: CGFloat = 10 {
         didSet {
             layoutInactivePageIndicators(inactiveLayers)
-            layoutActivePageIndicator(progress)
+            layoutActivePageIndicator(visualProgress)
         }
     }
     
     open var indicatorRadius: CGFloat = 5 {
         didSet {
             layoutInactivePageIndicators(inactiveLayers)
-            layoutActivePageIndicator(progress)
+            layoutActivePageIndicator(visualProgress)
         }
     }
     
@@ -73,14 +92,19 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
         layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: indicatorDiameter, height: indicatorDiameter))
         layer.backgroundColor = activeTint.cgColor
         layer.cornerRadius = indicatorRadius
-        layer.actions = [
-            "bounds": NSNull(),
-            "frame": NSNull(),
-            "position": NSNull()]
+        layer.actions = ["bounds": NSNull(), "frame": NSNull(), "position": NSNull()]
         return layer
     }()
     
-    // MARK: - Init
+    // MARK: - Animation Engine
+    private var displayLink: CADisplayLink?
+    private var startProgress: CGFloat = 0
+    private var targetProgress: CGFloat = 0
+    private var progressStartTime: CFTimeInterval = 0
+    private let animDuration: CFTimeInterval = 0.3
+    private var isAnimating: Bool { return displayLink != nil }
+
+    // MARK: - Init & Deinit
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -96,16 +120,18 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
         layer.addSublayer(activeLayer)
     }
     
+    deinit {
+        stopDisplayLink()
+    }
+    
     // MARK: - State Update
     
     fileprivate func updateNumberOfPages(_ count: Int) {
         guard count != inactiveLayers.count else { return }
         
-        // 清理旧图层
         inactiveLayers.forEach { $0.removeFromSuperlayer() }
         inactiveLayers.removeAll()
         
-        // 添加新图层
         inactiveLayers = (0..<count).map { _ in
             let layer = CALayer()
             layer.backgroundColor = inactiveTint.cgColor
@@ -115,11 +141,10 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
         
         layoutInactivePageIndicators(inactiveLayers)
         
-        // 确保活动图层始终在最顶层
         activeLayer.removeFromSuperlayer()
         layer.addSublayer(activeLayer)
         
-        layoutActivePageIndicator(progress)
+        layoutActivePageIndicator(visualProgress)
         invalidateIntrinsicContentSize()
     }
     
@@ -128,18 +153,16 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
     fileprivate func layoutActivePageIndicator(_ safeProgress: CGFloat) {
         guard pageCount > 0 else { return }
         
+        let totalWidth = CGFloat(pageCount) * indicatorDiameter + CGFloat(max(0, pageCount - 1)) * indicatorPadding
+        let startX = max(0, (self.bounds.width - totalWidth) / 2)
+        
         let denormalizedProgress = safeProgress * (indicatorDiameter + indicatorPadding)
         let distanceFromPage = abs(round(safeProgress) - safeProgress)
         
-        // 核心贪吃蛇动画逻辑：计算拉伸的宽度
         let stretchWidth = indicatorDiameter + indicatorPadding * (distanceFromPage * 2)
         
         var newFrame = CGRect(x: 0, y: 0, width: stretchWidth, height: indicatorDiameter)
-        
-        // 调整拉伸时的原点（如果是向左拉伸或向右拉伸，视觉中心需要保持平衡）
-        // 原有逻辑中的 denormalizedProgress 作为起点在大部分时候表现良好
-        newFrame.origin.x = denormalizedProgress
-        // 垂直居中对齐（如果你有改变 frame 高度的需求，这里更为安全）
+        newFrame.origin.x = startX + denormalizedProgress
         newFrame.origin.y = (self.bounds.height - indicatorDiameter) / 2
         
         activeLayer.cornerRadius = indicatorRadius
@@ -148,8 +171,12 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
     
     fileprivate func layoutInactivePageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
-        // 垂直居中
-        var layerFrame = CGRect(x: 0, y: (self.bounds.height - layerDiameter) / 2, width: layerDiameter, height: layerDiameter)
+        let yCenter = (self.bounds.height - layerDiameter) / 2
+        
+        let totalWidth = CGFloat(layers.count) * layerDiameter + CGFloat(max(0, layers.count - 1)) * indicatorPadding
+        let startX = max(0, (self.bounds.width - totalWidth) / 2)
+        
+        var layerFrame = CGRect(x: startX, y: yCenter, width: layerDiameter, height: layerDiameter)
         
         layers.forEach { layer in
             layer.cornerRadius = indicatorRadius
@@ -170,10 +197,10 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
     open override func layoutSubviews() {
         super.layoutSubviews()
         layoutInactivePageIndicators(inactiveLayers)
-        layoutActivePageIndicator(progress)
+        layoutActivePageIndicator(visualProgress)
     }
     
-    // MARK: - 🚀 新增功能：支持交互点击 (Tap to Page)
+    // MARK: - Interaction (Tap to Page)
     
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
@@ -182,24 +209,85 @@ open class PTSnakePageControl: UIControl { // 🚀 1. 升级为 UIControl
         let location = touch.location(in: self)
         let unitWidth = indicatorDiameter + indicatorPadding
         
-        // 计算点击区域对应的页码 (稍微增加了一点点击容错判定范围)
-        var targetPage = Int(round(location.x / unitWidth))
-        targetPage = max(0, min(targetPage, pageCount - 1)) // 安全限制
+        let totalWidth = CGFloat(pageCount) * indicatorDiameter + CGFloat(max(0, pageCount - 1)) * indicatorPadding
+        let startX = max(0, (bounds.width - totalWidth) / 2)
+        let relativeX = location.x - startX
+        
+        var targetPage = Int(round(relativeX / unitWidth))
+        targetPage = max(0, min(targetPage, pageCount - 1))
         
         if targetPage != currentPage {
-            // 提供轻微震动反馈
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
             
-            // 触发事件通知外部
-            self.progress = CGFloat(targetPage)
+            // 触发事件通知外部：数据瞬间更新，触发外部回调
+            setProgress(CGFloat(targetPage), animated: true)
             self.sendActions(for: .valueChanged)
+        }
+    }
+    
+    // MARK: - Animation Engine Methods
+    
+    public func setProgress(_ newProgress: CGFloat, animated: Bool) {
+        guard pageCount > 0 else { return }
+        let safeProgress = max(0, min(newProgress, CGFloat(pageCount - 1)))
+        
+        if animated {
+            startProgress = self.visualProgress
+            targetProgress = safeProgress
+            progressStartTime = CACurrentMediaTime()
+            
+            startDisplayLink()
+            
+            // 🚀 数据与视觉分离：立刻修改公共数据，使得外部回调获取的数据100%正确
+            self.progress = safeProgress
+        } else {
+            stopDisplayLink()
+            self.progress = safeProgress
+        }
+    }
+    
+    private func startDisplayLink() {
+        stopDisplayLink()
+        // 🚀 使用 Proxy 打破循环引用，防止内存泄漏
+        let proxy = DisplayLinkProxy(target: self)
+        displayLink = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.update))
+        displayLink?.add(to: .main, forMode: .common)
+    }
+    
+    private func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+    
+    @objc fileprivate func updateDisplayLink() {
+        let elapsed = CACurrentMediaTime() - progressStartTime
+        var percent = CGFloat(elapsed / animDuration)
+        
+        if percent >= 1.0 {
+            percent = 1.0
+            stopDisplayLink()
+        }
+        
+        let easePercent = percent < 0.5 ? 2 * percent * percent : -1 + (4 - 2 * percent) * percent
+        // 🚀 修改的只是视觉属性，不会乱触发外部事件
+        visualProgress = startProgress + (targetProgress - startProgress) * easePercent
+    }
+    
+    // 🚀 防止内存泄漏的弱引用代理类
+    private class DisplayLinkProxy {
+        weak var target: PTSnakePageControl?
+        init(target: PTSnakePageControl) {
+            self.target = target
+        }
+        @objc func update() {
+            target?.updateDisplayLink()
         }
     }
 }
 
 public extension PTSnakePageControl {
-    @objc func addPageControlAction(handler:@escaping SnakePageControlBlock) {
+    @objc func addPageControlAction(handler: @escaping SnakePageControlBlock) {
         self.addActionHandler(for: .valueChanged, handler: handler)
     }
 }

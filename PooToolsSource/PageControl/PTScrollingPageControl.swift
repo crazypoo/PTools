@@ -22,8 +22,8 @@ open class PTScrollingPageControl: UIControl {
     
     open var progress: CGFloat = 0 {
         didSet {
-            // 健壮性修复：限制 progress 边界，防止越界
-            let safeProgress = max(0, min(progress, CGFloat(max(0, pageCount - 1))))
+            guard pageCount > 0 else { return }
+            let safeProgress = max(0, min(progress, CGFloat(pageCount - 1)))
             layoutFor(safeProgress)
         }
     }
@@ -98,14 +98,12 @@ open class PTScrollingPageControl: UIControl {
     fileprivate lazy var inactiveLayerMask: CAShapeLayer = { [unowned self] in
         let layer = CAShapeLayer()
         layer.fillRule = .evenOdd
-        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: ringDiameter, height: ringDiameter))
         layer.actions = ["bounds": NSNull(), "frame": NSNull(), "position": NSNull()]
         return layer
     }()
     
     fileprivate lazy var activeLayerMask: CAShapeLayer = { [unowned self] in
         let layer = CAShapeLayer()
-        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: ringDiameter, height: ringDiameter))
         layer.actions = ["bounds": NSNull(), "frame": NSNull(), "position": NSNull()]
         return layer
     }()
@@ -172,6 +170,7 @@ open class PTScrollingPageControl: UIControl {
     
     // MARK: - Layout
     fileprivate func maskPath(_ size: CGSize, progress: CGFloat, inverted: Bool) -> CGPath {
+        // 这里的 size 永远保证是紧紧贴合 ringDiameter 的，防止遮罩变形
         let offsetFromCenter = progress * (indicatorDiameter + indicatorPadding) - (ringRadius - indicatorRadius)
         let circleRect = CGRect(x: offsetFromCenter, y: 0, width: size.height, height: size.height)
         let circlePath = UIBezierPath(roundedRect: circleRect, cornerRadius: size.height/2)
@@ -190,17 +189,27 @@ open class PTScrollingPageControl: UIControl {
         let safeProgress = max(0, min(progress, CGFloat(pageCount - 1)))
         
         let offsetFromCenter = safeProgress * (indicatorDiameter + indicatorPadding)
-        let containerOffset = bounds.size.width/2 - indicatorRadius - offsetFromCenter
         
-        inactiveLayersContainer.frame.origin.x = containerOffset
-        activeLayersContainer.frame.origin.x = containerOffset
+        // 🚀 1. 计算出让当前活跃圆点绝对水平居中的 X 坐标
+        let xOffset = bounds.size.width/2 - indicatorRadius - offsetFromCenter
+        
+        // 🚀 2. 计算出垂直居中的 Y 坐标
+        let yOffset = max(0, (bounds.size.height - ringDiameter) / 2)
+        
+        // 将传送带容器完美定位在中间
+        inactiveLayersContainer.frame.origin = CGPoint(x: xOffset, y: yOffset)
+        activeLayersContainer.frame.origin = CGPoint(x: xOffset, y: yOffset)
         
         inactiveLayerMask.path = maskPath(inactiveLayerMask.bounds.size, progress: safeProgress, inverted: true)
         activeLayerMask.path = maskPath(activeLayerMask.bounds.size, progress: safeProgress, inverted: false)
     }
     
     fileprivate func center(_ layer: CALayer) {
-        let frame = CGRect(x: (bounds.width - layer.bounds.width)/2, y: (bounds.height - layer.bounds.height)/2, width: layer.bounds.width, height: layer.bounds.width)
+        // 固定中间圆环的位置，绝对居中
+        let frame = CGRect(x: (bounds.width - layer.bounds.width)/2,
+                           y: (bounds.height - layer.bounds.height)/2,
+                           width: layer.bounds.width,
+                           height: layer.bounds.width)
         layer.frame = frame
     }
     
@@ -213,8 +222,10 @@ open class PTScrollingPageControl: UIControl {
             layer.frame = layerFrame
             layerFrame.origin.x += layerDiameter + indicatorPadding
         }
-        layerFrame.origin.x -= indicatorPadding
-        container.frame = CGRect(x: 0, y: 0, width: layerFrame.origin.x, height: ringLayer.bounds.height)
+        layerFrame.origin.x -= indicatorPadding // 计算传送带实际需要的总宽度
+        
+        // 🚀 修正容器大小，其高度必须等于 ringDiameter 才能保证遮罩形状正确
+        container.bounds = CGRect(x: 0, y: 0, width: layerFrame.origin.x, height: ringLayer.bounds.height)
     }
     
     override open var intrinsicContentSize: CGSize {
@@ -222,21 +233,16 @@ open class PTScrollingPageControl: UIControl {
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        // 修正原有尺寸计算逻辑，确立准确的点击和展示区域
         let pageCountWidth = pageCount + (pageCount - 1)
         return CGSize(width: CGFloat(pageCountWidth) * indicatorDiameter + CGFloat(pageCountWidth - 1) * indicatorPadding,
                       height: ringDiameter)
     }
     
-    // 🛠️ 核心修复：同步布局替换异步延迟布局
+    // 🚀 在 layoutSubviews 中同步且精准地更新各层尺寸与位置
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        self.inactiveLayersContainer.frame = self.bounds
-        self.inactiveLayerMask.frame = self.bounds
-        self.activeLayersContainer.frame = self.bounds
-        self.activeLayerMask.frame = self.bounds
-        
+        // 1. 刷新所有容器内部小圆点布局，容器大小会自动更新
         if let layers = self.inactiveLayersContainer.sublayers {
             self.layoutPageIndicators(layers, container: self.inactiveLayersContainer)
         }
@@ -244,33 +250,34 @@ open class PTScrollingPageControl: UIControl {
             self.layoutPageIndicators(layers, container: self.activeLayersContainer)
         }
         
+        // 2. 限制遮罩（Mask）的尺寸与容器一样大，防止被 SnapKit 约束错误拉长
+        self.inactiveLayerMask.frame = self.inactiveLayersContainer.bounds
+        self.activeLayerMask.frame = self.activeLayersContainer.bounds
+        
+        // 3. 将中间静态圆环和底下滚动的圆点对齐到视图中间
         self.center(self.ringLayer)
         self.layoutFor(self.progress)
     }
     
-    // MARK: - 🚀 新增功能：支持交互点击 (Tap to Page)
+    // MARK: - 🚀 交互点击 (Tap to Page)
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard let touch = touches.first, pageCount > 1 else { return }
         
         let location = touch.location(in: self)
         
-        // 由于圆点是存放在会滚动的容器中，我们需要将坐标转换到容器的坐标系来精确判断
+        // 因为传送带左右滚动了，所以通过原生的 convert 函数，把外部视图点击坐标转换为传送带内部相对坐标
         let pointInContainer = self.layer.convert(location, to: inactiveLayersContainer)
         
         let unitWidth = indicatorDiameter + indicatorPadding
-        // 根据 X 坐标计算点击的圆点索引
         var targetPage = Int(round(pointInContainer.x / unitWidth))
         
-        // 边界保护
         targetPage = max(0, min(targetPage, pageCount - 1))
         
         if targetPage != currentPage {
-            // 添加一个轻微的触觉反馈增强体验 (iOS 10+)
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
             
-            // 触发系统标准的 ValueChanged 事件
             self.progress = CGFloat(targetPage)
             self.sendActions(for: .valueChanged)
         }

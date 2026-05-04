@@ -26,7 +26,7 @@ public class PTCircularProgressView: UIView {
     /// 进度值 (0.0 ~ 1.0)
     public var progress: CGFloat = 0 {
         didSet {
-            let safeProgress = max(0, min(1, progress))
+            let _ = max(0, min(1, progress))
             // 确保在主线程刷新 UI
             if Thread.isMainThread {
                 self.setNeedsDisplay()

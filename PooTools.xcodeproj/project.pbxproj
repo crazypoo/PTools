@@ -349,6 +349,7 @@
 		5593BE2D2C9FFEAE004A3656 /* PTStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */; };
 		5593BE2F2CA00CF9004A3656 /* PTStepperCellsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
+		5595F8CE2FA8903400175217 /* UIView+PTEXShake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5595F8CD2FA8903400175217 /* UIView+PTEXShake.swift */; };
 		5597CADA2D8F093E00947B58 /* MetricsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5597CAD92D8F093E00947B58 /* MetricsManager.swift */; };
 		559978362D5BB07C00484FB1 /* PTRouterBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559978322D5BB07C00484FB1 /* PTRouterBridge.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
@@ -945,7 +946,6 @@
 		CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
-		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
 		CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */; };
 		CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE7811A20BD88D2004E6ADB /* CoreImage.framework */; };
@@ -1312,6 +1312,7 @@
 		5593BE2C2C9FFEAE004A3656 /* PTStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperView.swift; sourceTree = "<group>"; };
 		5593BE2E2CA00CF9004A3656 /* PTStepperCellsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepperCellsCollection.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
+		5595F8CD2FA8903400175217 /* UIView+PTEXShake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTEXShake.swift"; sourceTree = "<group>"; };
 		5597CAD92D8F093E00947B58 /* MetricsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsManager.swift; sourceTree = "<group>"; };
 		559978322D5BB07C00484FB1 /* PTRouterBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterBridge.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
@@ -1966,7 +1967,6 @@
 				CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */,
 				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
 				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,
-				CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				55F3A9D02E3B140F001A0571 /* HealthKit.framework in Frameworks */,
@@ -2247,6 +2247,7 @@
 				55F7A73A29D5C80900CF6272 /* PTTextField.swift */,
 				55C409952C08AB0B009C0FB6 /* PTInputBoxView.swift */,
 				555719922EDC37D4005BE548 /* PTFloatingPlaseholderTextField.swift */,
+				5595F8CD2FA8903400175217 /* UIView+PTEXShake.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -4165,7 +4166,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4175,9 +4177,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4192,9 +4198,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4644,6 +4654,7 @@
 				5590CB982F1F2F3A003DD740 /* PTTabBarView.swift in Sources */,
 				55B6D7C62C1D64BF00033309 /* PTAlertManager.swift in Sources */,
 				557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */,
+				5595F8CE2FA8903400175217 /* UIView+PTEXShake.swift in Sources */,
 				55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */,
 				557E3A902C0441D6002466A0 /* String+PTDebugEx.swift in Sources */,
 				557E3A9A2C046CC8002466A0 /* PTCustomHTTPProtocol.swift in Sources */,

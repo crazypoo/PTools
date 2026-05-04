@@ -462,7 +462,7 @@ public extension UIViewController {
 #if POOTOOLS_DEBUG
     // 获取现有的调试窗口
     static func getExistingDebugWindow() -> [UIWindow]? {
-        UIApplication.shared.windows.compactMap {
+        UIApplication.shared.currentWindows?.compactMap {
             if $0 is PTConsoleWindow {
                 return $0
             } else {
