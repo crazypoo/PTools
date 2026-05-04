@@ -469,6 +469,7 @@ extension PTBannerView {
                 guard let self = self else { return }
                 self.pageControlTap(index: sender.currentPage)
             })
+            control.backgroundColor = .clear
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -482,6 +483,7 @@ extension PTBannerView {
                 guard let self = self else { return }
                 self.pageControlTap(index: sender.currentPage)
             })
+            control.backgroundColor = .clear
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -495,6 +497,7 @@ extension PTBannerView {
                 guard let self = self else { return }
                 self.pageControlTap(index: sender.currentPage)
             })
+            control.backgroundColor = .clear
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -509,6 +512,7 @@ extension PTBannerView {
                 guard let self = self else { return }
                 self.pageControlTap(index: sender.currentPage)
             })
+            control.backgroundColor = .clear
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -526,6 +530,7 @@ extension PTBannerView {
                 guard let self = self else { return }
                 self.pageControlTap(index: sender.currentPage)
             })
+            control.backgroundColor = .clear
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -536,6 +541,7 @@ extension PTBannerView {
                 guard let self = self else { return }
                 self.pageControlTap(index: sender.currentPage)
             })
+            control.backgroundColor = .clear
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -561,6 +567,19 @@ extension PTBannerView {
                         make.right.equalToSuperview().inset(trialingContact)
                     default:
                         break
+                    }
+                }
+            } else {
+                self.customPageControl.snp.makeConstraints { make in
+                    make.height.equalTo(self.pageControlHeight)
+                    make.bottom.equalToSuperview().inset(self.viewConfig.pageControlBottom)
+                    switch self.viewConfig.pageControlPosition {
+                    case .left:
+                        make.left.equalToSuperview().inset(trialingContact)
+                    case.right:
+                        make.right.equalToSuperview().inset(trialingContact)
+                    default:
+                        make.left.right.equalToSuperview().inset(trialingContact)
                     }
                 }
             }
