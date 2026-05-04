@@ -21,24 +21,35 @@ let ContentMoreSpacing:CGFloat = 10
 
 class PTMediaBrowserBottom: UIView {
     
+    var pageTabCallback:((_ index:Int)->Void)?
+    
     lazy var pageControlView:UIView = {
         switch viewConfig.pageControlOption {
         case .system:
             let view = UIPageControl()
             view.pageIndicatorTintColor = .lightGray
             view.currentPageIndicatorTintColor = .white
+            view.addPageControlAction { [weak self] sender in
+                self?.pageTabCallback?(sender.currentPage)
+            }
             return view
         case .fill:
             let view = PTFilledPageControl()
             view.tintColor = .lightGray
             view.indicatorPadding = 8
             view.indicatorRadius = 4
+            view.addPageControlAction { [weak self] sender in
+                self?.pageTabCallback?(sender.currentPage)
+            }
             return view
         case .pill:
             let view = PTPillPageControl()
             view.indicatorPadding = 8
             view.activeTint = .lightGray
             view.inactiveTint = .white
+            view.addPageControlAction { [weak self] sender in
+                self?.pageTabCallback?(sender.currentPage)
+            }
             return view
         case .snake:
             let view = PTSnakePageControl()
@@ -46,14 +57,23 @@ class PTMediaBrowserBottom: UIView {
             view.indicatorPadding = 8
             view.indicatorRadius = 4
             view.inactiveTint = .white
+            view.addPageControlAction { [weak self] sender in
+                self?.pageTabCallback?(sender.currentPage)
+            }
             return view
         case .image:
             let view = PTImagePageControl()
+            view.addPageControlAction { [weak self] sender in
+                self?.pageTabCallback?(sender.currentPage)
+            }
             return view
         case .scrolling:
             let view = PTScrollingPageControl()
             view.activeTint = .lightGray
             view.inactiveTint = .white
+            view.addPageControlAction { [weak self] sender in
+                self?.pageTabCallback?(sender.currentPage)
+            }
             return view
         }
     }()

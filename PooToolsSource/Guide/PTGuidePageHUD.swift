@@ -452,7 +452,7 @@ fileprivate extension PTGuidePageHUD {
             view.currentPage = 0
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
-                self.pageControlAction(page: sender.currentPage)
+                self.pageControlTap(currentPage: sender.currentPage)
             })
             return view
         case .fill:
@@ -463,7 +463,7 @@ fileprivate extension PTGuidePageHUD {
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
-                self.pageControlAction(page: sender.currentPage)
+                self.pageControlTap(currentPage: sender.currentPage)
             })
             return view
         case .pill:
@@ -474,7 +474,7 @@ fileprivate extension PTGuidePageHUD {
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
-                self.pageControlAction(page: sender.currentPage)
+                self.pageControlTap(currentPage: sender.currentPage)
             })
             return view
         case .snake:
@@ -486,7 +486,7 @@ fileprivate extension PTGuidePageHUD {
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
-                self.pageControlAction(page: sender.currentPage)
+                self.pageControlTap(currentPage: sender.currentPage)
             })
             return view
         case .image:
@@ -496,7 +496,7 @@ fileprivate extension PTGuidePageHUD {
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
-                self.pageControlAction(page: sender.currentPage)
+                self.pageControlTap(currentPage: sender.currentPage)
             })
             return view
         case .scrolling:
@@ -504,12 +504,12 @@ fileprivate extension PTGuidePageHUD {
             view.update(currentPage: 0, totalPages: viewModel.imageArrays.count)
             view.addPageControlAction(handler: { [weak self] sender in
                 guard let self = self else { return }
-                self.pageControlAction(page: sender.currentPage)
+                self.pageControlTap(currentPage: sender.currentPage)
             })
             return view
         }
     }
-    
+        
     func pageControlProgressSet(currentIndex: Int) {
         guard let controllable = imagePageControl as? PTPageControllable else {
             // 处理原生的 UIPageControl

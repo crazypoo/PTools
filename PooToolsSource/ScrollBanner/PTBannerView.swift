@@ -465,6 +465,10 @@ extension PTBannerView {
             control.pageIndicatorTintColor = self.viewConfig.pageControlTintColor
             control.currentPageIndicatorTintColor = self.viewConfig.pageControlCurrentPageColor
             control.numberOfPages = bannerModel.count
+            control.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlTap(index: sender.currentPage)
+            })
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -474,6 +478,10 @@ extension PTBannerView {
             control.indicatorPadding = self.viewConfig.customPageControlIndicatorPadding
             control.indicatorRadius = self.viewConfig.fillPageControlIndicatorRadius
             control.pageCount = bannerModel.count
+            control.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlTap(index: sender.currentPage)
+            })
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -483,6 +491,10 @@ extension PTBannerView {
             control.activeTint = self.viewConfig.customPageControlTintColor
             control.inactiveTint = self.viewConfig.customPageControlInActiveTintColor
             control.pageCount = bannerModel.count
+            control.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlTap(index: sender.currentPage)
+            })
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -493,6 +505,10 @@ extension PTBannerView {
             control.indicatorRadius = self.viewConfig.fillPageControlIndicatorRadius
             control.inactiveTint = self.viewConfig.customPageControlInActiveTintColor
             control.pageCount = bannerModel.count
+            control.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlTap(index: sender.currentPage)
+            })
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -506,12 +522,20 @@ extension PTBannerView {
             }
             control.dotSpacing = self.viewConfig.dotSpacing
             control.pageCount = bannerModel.count
+            control.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlTap(index: sender.currentPage)
+            })
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
         case .scrolling:
             let control = PTScrollingPageControl()
             control.pageCount = bannerModel.count
+            control.addPageControlAction(handler: { [weak self] sender in
+                guard let self = self else { return }
+                self.pageControlTap(index: sender.currentPage)
+            })
             customPageControl = control
             titleBackgroundView.addSubview(customPageControl)
             customPageControl.isHidden = false
@@ -561,6 +585,16 @@ extension PTBannerView {
             make.bottom.equalTo(self.customPageControl.snp.top).offset(-self.viewConfig.titleNPageControlSpacing)
             make.top.equalToSuperview().inset(self.viewConfig.pageControlBottom)
         }
+    }
+    
+    func pageControlTap(index:Int) {
+        PTBannerScheduler.shared.remove(self)
+        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: true)
+        self.setDescView(index: index)
+        self.setDescViewHeight(index: index)
+        PTGCDManager.gcdAfter(time: 1, block: {
+            PTBannerScheduler.shared.add(self)
+        })
     }
 
     private func updatePageControl() {

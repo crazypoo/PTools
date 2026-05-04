@@ -81,28 +81,19 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.moreActionButton.isHidden = false
             view.moreActionButton.isUserInteractionEnabled = true
         }
-        
-        if viewConfig.pageControlShow {
-            switch viewConfig.pageControlOption {
-            case .system:
-                if let pageControl = view.pageControlView as? UIPageControl {
-                    pageControl.addPageControlAction { [weak self] sender in
-                        guard let self = self else { return }
-                        // MARK: -  加入安全边界检查，防止越界崩溃
-                        guard sender.currentPage < self.mediaData.count else { return }
-                        let cellModel = self.mediaData[sender.currentPage]
-                        self.updateBottom(models: cellModel)
-                        self.newCollectionView.scrolToItem(indexPath: IndexPath(row: sender.currentPage, section: 0), position: .right)
-                    }
-                }
-            default: break
-            }
-        }
         view.pageControlView.isHidden = !viewConfig.pageControlShow
         view.moreActionButton.addActionHandlers(handler: { [weak self] sender in
             guard let self = self else { return }
             self.moreAction(sender: self.bottomControl.moreActionButton)
         })
+        view.pageTabCallback = { [weak self] index in
+            guard let self = self else { return }
+            // MARK: -  加入安全边界检查，防止越界崩溃
+            guard index < self.mediaData.count else { return }
+            let cellModel = self.mediaData[index]
+            self.updateBottom(models: cellModel)
+            self.newCollectionView.scrolToItem(indexPath: IndexPath(row: index, section: 0), position: .right)
+        }
         return view
     }()
     
