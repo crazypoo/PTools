@@ -182,7 +182,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
         
         self.skipButton.layoutIfNeeded()
-        self.skipButton.viewCorner(radius: 22)
+        self.skipButton.viewCorner(radius: 22,capsule: true)
         self.playerLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - self.bottomViewHeight)
     }
     
