@@ -1940,7 +1940,7 @@ extension PTCollectionView {
     public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             var snapshot = self.diffableDataSource.snapshot()
-                    
+            
             // 🌟 换成从 snapshot 里安全提取模型
             let validSections = indexes.compactMap { index -> PTSection? in
                 guard index >= 0 && index < snapshot.sectionIdentifiers.count else { return nil }
@@ -1985,16 +1985,16 @@ extension PTCollectionView {
                 let key = HeightCacheKey(id: row.diffId, width: width)
                 self.heightCache.remove(forKey: key)
             }
-
+            
             let oldLayoutKey = LayoutCacheKey(section: section, width: width, version: sectionModel.layoutVersion)
             self.layoutCache.remove(forKey: oldLayoutKey)
-
+            
             if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                 self.clearWaterfallCache(section: section)
             }
-
+            
             self.markSectionDirty(section)
-                        
+            
             // 安全校验：确保这些 row 真的存在于当前的 snapshot 中，避免传入脏数据导致异常
             let existingRows = rows.filter { snapshot.indexOfItem($0) != nil }
             
@@ -2079,23 +2079,31 @@ extension PTCollectionView {
             // 1. 既然是全量刷新，先彻底清空所有的布局和高度缓存
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
-            self.waterfallCache.removeAll() // 👈 瀑布流缓存也要清空
+            self.waterfallCache.removeAll()
             
             var snapshot = self.diffableDataSource.snapshot()
+            let allSections = snapshot.sectionIdentifiers
             
-            // 🌟 换成根据 snapshot 遍历
-            for i in 0..<snapshot.sectionIdentifiers.count {
-                snapshot.sectionIdentifiers[i].layoutVersion += 1
-            }
-            
-            let allExistingItems = snapshot.itemIdentifiers
-            guard !allExistingItems.isEmpty else {
+            guard !allSections.isEmpty else {
                 completion?()
                 return
             }
             
-            snapshot.reloadItems(allExistingItems)
+            // 2. 标记所有 Section 布局失效
+            for section in allSections {
+                section.layoutVersion += 1
+            }
             
+            // 🌟 3. 核心修复：同时把 Sections 加入重绘队列！这样 Header/Footer 才会更新
+            snapshot.reloadSections(allSections)
+            
+            // 4. 把所有的 Items 也加入重绘队列
+            let allExistingItems = snapshot.itemIdentifiers
+            if !allExistingItems.isEmpty {
+                snapshot.reloadItems(allExistingItems)
+            }
+            
+            // 5. 应用变更
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.collectionView.collectionViewLayout.invalidateLayout()
