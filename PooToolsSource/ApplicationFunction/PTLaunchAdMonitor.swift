@@ -198,6 +198,7 @@ public class PTLaunchAdMonitor: NSObject {
         skipButton.snp.updateConstraints { make in
             make.size.equalTo(buttonWidth)
         }
+        skipButton.layoutIfNeeded()
         skipButton.viewCorner(radius: buttonWidth / 2, capsule: true)
         
         // 💡 优化5：定时器闭包严格使用 [weak self]，确保广告结束后彻底释放资源
