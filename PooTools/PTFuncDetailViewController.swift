@@ -355,25 +355,35 @@ class PTFuncDetailViewController: PTBaseViewController {
             layoutBtn.imageSize = CGSizeMake(30, 30)
             layoutBtn.normalImage = UIImage(named: "DemoImage")!
             layoutBtn.selectedImage = UIImage(named: "image_day_normal_3")!
-            layoutBtn.configBackgroundColor = .AlmondColor
-            layoutBtn.configBackgroundSelectedColor = .systemBlue
+//            layoutBtn.configBackgroundColor = .AlmondColor
+//            layoutBtn.configBackgroundSelectedColor = .systemBlue
             view.addSubview(layoutBtn)
             layoutBtn.snp.makeConstraints { make in
                 make.width.height.equalTo(100)
                 make.centerX.centerY.equalToSuperview()
             }
+            layoutBtn.superGradient(
+                bgType: .TopToBottom,
+                bgColors: [.black, .darkGray],
+                borderType: .LeftToRight,
+                borderColors: [.GoldColor, .white, .GoldColor], // 假设你有自定义颜色
+                borderWidth: 3,
+                radius:50,
+                capsule: false // 胶囊形态
+            )
+
             switch typeString {
             case String.movieCutOutput:
                 PTGCDManager.gcdAfter(time: 1) {
                     var value:CGFloat = 0
                     let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
-                        layoutBtn.layerProgress(value: value,borderWidth: 4)
+                        layoutBtn.layerProgress(value: value,radius: 50,borderWidth: 4)
                         value += 0.1
                         if value >= 1 {
                             timer.invalidate()
-                            PTGCDManager.gcdAfter(time: 0.5, block: {
-                                layoutBtn.clearProgressLayer()
-                            })
+//                            PTGCDManager.gcdAfter(time: 0.5, block: {
+//                                layoutBtn.clearProgressLayer()
+//                            })
                         }
                     }
                     timer.fire()

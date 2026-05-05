@@ -24,15 +24,24 @@ var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 extension UIView: PTProtocolCompatible {}
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
-// 1. 新增一个私有的隐形追踪视图
 private class PTCornerTrackerView: UIView {
-    var layoutAction: ((CGRect) -> Void)?
-    
+    var layoutActions: [String: (CGRect) -> Void] = [:]
+
     override func layoutSubviews() {
         super.layoutSubviews()
         // 确保尺寸有效时才触发重绘
-        guard bounds.width > 0 && bounds.height > 0 else { return }
-        layoutAction?(self.bounds)
+        // 关键：当尺寸变化时，按顺序执行所有注册的任务
+        // 建议先执行背景任务，再执行上层覆盖任务
+        layoutActions["Gradient"]?(self.bounds)
+        layoutActions["Corner"]?(self.bounds)
+        layoutActions["Progress"]?(self.bounds)
+    }
+}
+
+extension CALayer {
+    func bringSublayerToFront(_ layer: CALayer) {
+        layer.removeFromSuperlayer()
+        self.addSublayer(layer)
     }
 }
 
@@ -126,6 +135,21 @@ public extension PTPOP where Base:UIView {
 // MARK: - 核心路径生成器 (复用逻辑)
 public extension UIView {
     
+    // MARK: - 辅助获取/创建 Tracker 的私有方法
+    private func getOrCreateTracker() -> PTCornerTrackerView {
+        if let tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView {
+            return tracker
+        }
+        let newTracker = PTCornerTrackerView()
+        newTracker.isUserInteractionEnabled = false
+        newTracker.backgroundColor = .clear
+        newTracker.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        newTracker.frame = self.bounds
+        // 插入在最底层
+        self.insertSubview(newTracker, at: 0)
+        return newTracker
+    }
+
     /// 私有辅助方法：生成支持独立圆角和胶囊形态的 UIBezierPath
     /// - Parameters:
     ///   - bounds: 视图的边界
@@ -145,99 +169,275 @@ public extension UIView {
                                      bottomRight: CGFloat,
                                      corner: UIRectCorner,
                                      capsule: Bool) -> UIBezierPath {
-        
-        var finalTL: CGFloat = 0
-        var finalTR: CGFloat = 0
-        var finalBL: CGFloat = 0
-        var finalBR: CGFloat = 0
-        
-        // 1. 计算各个角的最终半径
+        var finalTL = radius, finalTR = radius, finalBL = radius, finalBR = radius
         if capsule {
-            let capsuleRadius = min(bounds.width, bounds.height) / 2.0
-            finalTL = capsuleRadius
-            finalTR = capsuleRadius
-            finalBL = capsuleRadius
-            finalBR = capsuleRadius
-        } else if corner == .allCorners {
-            finalTL = radius
-            finalTR = radius
-            finalBL = radius
-            finalBR = radius
-        } else {
-            if corner.contains(.topLeft) { finalTL = topLeft }
-            if corner.contains(.topRight) { finalTR = topRight }
-            if corner.contains(.bottomLeft) { finalBL = bottomLeft }
-            if corner.contains(.bottomRight) { finalBR = bottomRight }
+            let r = min(bounds.width, bounds.height) / 2.0
+            finalTL = r; finalTR = r; finalBL = r; finalBR = r
+        } else if corner != .allCorners {
+            finalTL = corner.contains(.topLeft) ? topLeft : 0
+            finalTR = corner.contains(.topRight) ? topRight : 0
+            finalBL = corner.contains(.bottomLeft) ? bottomLeft : 0
+            finalBR = corner.contains(.bottomRight) ? bottomRight : 0
         }
         
-        // 2. 纯手工绘制独立圆角路径
         let path = UIBezierPath()
-        let width = bounds.width
-        let height = bounds.height
+        // 关键改动：使用 bounds.minX 和 bounds.minY
+        let minX = bounds.minX; let minY = bounds.minY
+        let maxX = bounds.maxX; let maxY = bounds.maxY
         
-        // 从顶部偏左上角开始，顺时针绘制
-        path.move(to: CGPoint(x: finalTL, y: 0))
+        path.move(to: CGPoint(x: minX + finalTL, y: minY))
+        path.addLine(to: CGPoint(x: maxX - finalTR, y: minY))
+        if finalTR > 0 { path.addArc(withCenter: CGPoint(x: maxX - finalTR, y: minY + finalTR), radius: finalTR, startAngle: -CGFloat.pi/2, endAngle: 0, clockwise: true) }
         
-        // 绘制到右上角并画弧
-        path.addLine(to: CGPoint(x: width - finalTR, y: 0))
-        if finalTR > 0 {
-            path.addArc(withCenter: CGPoint(x: width - finalTR, y: finalTR), radius: finalTR, startAngle: -CGFloat.pi / 2, endAngle: 0, clockwise: true)
-        }
+        path.addLine(to: CGPoint(x: maxX, y: maxY - finalBR))
+        if finalBR > 0 { path.addArc(withCenter: CGPoint(x: maxX - finalBR, y: maxY - finalBR), radius: finalBR, startAngle: 0, endAngle: CGFloat.pi/2, clockwise: true) }
         
-        // 绘制到右下角并画弧
-        path.addLine(to: CGPoint(x: width, y: height - finalBR))
-        if finalBR > 0 {
-            path.addArc(withCenter: CGPoint(x: width - finalBR, y: height - finalBR), radius: finalBR, startAngle: 0, endAngle: CGFloat.pi / 2, clockwise: true)
-        }
+        path.addLine(to: CGPoint(x: minX + finalBL, y: maxY))
+        if finalBL > 0 { path.addArc(withCenter: CGPoint(x: minX + finalBL, y: maxY - finalBL), radius: finalBL, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi, clockwise: true) }
         
-        // 绘制到左下角并画弧
-        path.addLine(to: CGPoint(x: finalBL, y: height))
-        if finalBL > 0 {
-            path.addArc(withCenter: CGPoint(x: finalBL, y: height - finalBL), radius: finalBL, startAngle: CGFloat.pi / 2, endAngle: CGFloat.pi, clockwise: true)
-        }
+        path.addLine(to: CGPoint(x: minX, y: minY + finalTL))
+        if finalTL > 0 { path.addArc(withCenter: CGPoint(x: minX + finalTL, y: minY + finalTL), radius: finalTL, startAngle: CGFloat.pi, endAngle: -CGFloat.pi/2, clockwise: true) }
         
-        // 绘制到左上角并画弧
-        path.addLine(to: CGPoint(x: 0, y: finalTL))
-        if finalTL > 0 {
-            path.addArc(withCenter: CGPoint(x: finalTL, y: finalTL), radius: finalTL, startAngle: CGFloat.pi, endAngle: -CGFloat.pi / 2, clockwise: true)
-        }
-        
-        // 闭合路径
         path.close()
-        
         return path
     }
-}
+    
+    @objc func viewCorner(radius:CGFloat = 0,
+                          borderWidth:CGFloat = 0,
+                          borderColor:UIColor = UIColor.clear,
+                          capsule:Bool = false) {
+        self.viewCornerRectCorner(radius: radius,borderWidth: borderWidth,borderColor: borderColor,corner: .allCorners,capsule: capsule)
+    }
+        
+    @objc func viewCornerRectCorner(radius: CGFloat = 5, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, borderWidth: CGFloat = 0, borderColor: UIColor = UIColor.clear, corner: UIRectCorner = .allCorners, capsule: Bool = false) {
+        
+        PTGCDManager.gcdMain {
+            let tracker = self.getOrCreateTracker() // 记得用你抽出来的统一获取 tracker 的方法
+            
+            tracker.layoutActions["PTCornerRectCorner"] = { [weak self] currentBounds in
+                guard let self = self else { return }
+                
+                if #available(iOS 26.0, *) {
+                    var finalTL: CGFloat = 0; var finalTR: CGFloat = 0
+                    var finalBL: CGFloat = 0; var finalBR: CGFloat = 0
+                    
+                    if capsule {
+                        let capsuleRadius = min(currentBounds.width, currentBounds.height) / 2.0
+                        finalTL = capsuleRadius; finalTR = capsuleRadius
+                        finalBL = capsuleRadius; finalBR = capsuleRadius
+                    } else if corner == .allCorners {
+                        finalTL = radius; finalTR = radius
+                        finalBL = radius; finalBR = radius
+                    } else {
+                        if corner.contains(.topLeft) { finalTL = topLeft }
+                        if corner.contains(.topRight) { finalTR = topRight }
+                        if corner.contains(.bottomLeft) { finalBL = bottomLeft }
+                        if corner.contains(.bottomRight) { finalBR = bottomRight }
+                    }
+                    
+                    let tL = (corner == .allCorners || corner.contains(.topLeft) || capsule) ? UICornerRadius(floatLiteral: finalTL) : nil
+                    let tR = (corner == .allCorners || corner.contains(.topRight) || capsule) ? UICornerRadius(floatLiteral: finalTR) : nil
+                    let bL = (corner == .allCorners || corner.contains(.bottomLeft) || capsule) ? UICornerRadius(floatLiteral: finalBL) : nil
+                    let bR = (corner == .allCorners || corner.contains(.bottomRight) || capsule) ? UICornerRadius(floatLiteral: finalBR) : nil
+                    
+                    self.corner26(tL: tL, tR: tR, bL: bL, bR: bR, capsule: capsule)
+                    self.layer.masksToBounds = true
+                    self.layer.borderWidth = borderWidth
+                    self.layer.borderColor = borderColor.cgColor
+                    
+                } else {
+                    let path = self.pt_customCornerPath(bounds: currentBounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
+                    
+                    let maskLayer = CAShapeLayer()
+                    maskLayer.frame = currentBounds
+                    maskLayer.path = path.cgPath
+                    self.layer.mask = maskLayer
+                    self.layer.masksToBounds = true
+                    self.layer.borderWidth = 0
+                    
+                    let borderLayerName = "PTCustomBorderLayer"
+                    var borderLayer = self.layer.sublayers?.first(where: { $0.name == borderLayerName }) as? CAShapeLayer
+                    
+                    if borderWidth > 0 && borderColor != .clear {
+                        if borderLayer == nil {
+                            borderLayer = CAShapeLayer()
+                            borderLayer?.name = borderLayerName
+                            self.layer.addSublayer(borderLayer!)
+                        }
+                        borderLayer?.frame = currentBounds
+                        borderLayer?.path = path.cgPath
+                        borderLayer?.fillColor = UIColor.clear.cgColor
+                        borderLayer?.strokeColor = borderColor.cgColor
+                        borderLayer?.lineWidth = borderWidth * 2
+                    } else {
+                        borderLayer?.removeFromSuperlayer()
+                    }
+                }
+            }
+            if self.bounds.width > 0 && self.bounds.height > 0 { tracker.layoutActions["PTCornerRectCorner"]?(self.bounds) }
+        }
+    }
 
-public extension UIView {
-              
-    /// 判断当前系统语言布局是否为从右到左 (RTL, 例如阿拉伯语)
-    static func isRTL() -> Bool {
-        UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
+    @available(iOS 26.0, *)
+    func corner26(tL:UICornerRadius? = nil,
+                  tR:UICornerRadius? = nil,
+                  bL:UICornerRadius? = nil,
+                  bR:UICornerRadius? = nil,
+                  capsule:Bool = false) {
+        if capsule {
+            self.cornerConfiguration = .capsule()
+        } else {
+            let values = [tL, tR, bL, bR]
+            let isUniform = values.dropFirst().allSatisfy { $0 == values.first }
+            if isUniform {
+                self.cornerConfiguration = .uniformCorners(radius: tL!)
+            } else {
+                self.cornerConfiguration = .corners(topLeftRadius: tL, topRightRadius: tR, bottomLeftRadius: bL, bottomRightRadius: bR)
+            }
+        }
+    }
+
+    //MARK: View的背景渐变
+    //MARK: View的背景渐变 (优化版)
+    func backgroundGradient(type: Imagegradien,
+                            colors: [UIColor],
+                            radius: CGFloat = 0,
+                            topLeft: CGFloat = 0,
+                            topRight: CGFloat = 0,
+                            bottomLeft: CGFloat = 0,
+                            bottomRight: CGFloat = 0,
+                            borderWidth: CGFloat = 0,
+                            borderColor: UIColor = UIColor.clear,
+                            corner: UIRectCorner = .allCorners,
+                            capsule: Bool = false) {
+        self.superGradient(bgType: type,
+                           bgColors: colors,
+                           borderType: .LeftToRight, // 纯色边框什么方向都一样
+                           borderColors: [borderColor, borderColor],
+                           borderWidth: borderWidth,
+                           radius: radius,
+                           topLeft: topLeft,
+                           topRight: topRight,
+                           bottomLeft: bottomLeft,
+                           bottomRight: bottomRight,
+                           corner: corner,
+                           capsule: capsule)
     }
     
-    private struct AssociatedKeys {
-        static var layoutSubviewsCallback: UInt8 = 0
-        static var layoutShapeLayerCallback: UInt8 = 0
-        static var layoutShapeLayerProgressLabelCallback: UInt8 = 0
-        static var viewCapturing: UInt8 = 0
-        static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
+    //MARK: border的背景渐变
+    ///border的背景渐变
+    func borderGradient(type: Imagegradien,
+                        colors: [UIColor],
+                        radius: CGFloat = 0,
+                        topLeft: CGFloat = 0,
+                        topRight: CGFloat = 0,
+                        bottomLeft: CGFloat = 0,
+                        bottomRight: CGFloat = 0,
+                        borderWidth: CGFloat = 1,
+                        corner: UIRectCorner = .allCorners,
+                        capsule: Bool = false) {
+        self.superGradient(bgType: nil,
+                           bgColors: nil,
+                           borderType: type,
+                           borderColors: colors,
+                           borderWidth: borderWidth,
+                           radius: radius,
+                           topLeft: topLeft,
+                           topRight: topRight,
+                           bottomLeft: bottomLeft,
+                           bottomRight: bottomRight,
+                           corner: corner,
+                           capsule: capsule)
+    }
+    
+    // MARK: - 全能混合渐变 (同时支持背景渐变 + 边框渐变)
+    /// - Parameters:
+    ///   - bgType: 背景渐变方向 (传 nil 表示不需要背景渐变)
+    ///   - bgColors: 背景渐变颜色数组
+    ///   - borderType: 边框渐变方向 (传 nil 表示不需要边框渐变)
+    ///   - borderColors: 边框渐变颜色数组
+    // MARK: - 全能混合渐变 (终极合并版)
+    func superGradient(bgType: Imagegradien? = nil,
+                       bgColors: [UIColor]? = nil,
+                       borderType: Imagegradien? = nil,
+                       borderColors: [UIColor]? = nil,
+                       borderWidth: CGFloat = 1,
+                       radius: CGFloat = 0,
+                       topLeft: CGFloat = 0,
+                       topRight: CGFloat = 0,
+                       bottomLeft: CGFloat = 0,
+                       bottomRight: CGFloat = 0,
+                       corner: UIRectCorner = .allCorners,
+                       capsule: Bool = false) {
+        
+        PTGCDManager.gcdMain {
+            let tracker = self.getOrCreateTracker()
+            
+            tracker.layoutActions["Gradient"] = { [weak self] currentBounds in
+                guard let self = self, currentBounds.width > 0, currentBounds.height > 0 else { return }
+                let bgPath = self.pt_customCornerPath(bounds: currentBounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
+                
+                let bgName = "PTSuperBg"
+                var bgLayer = self.layer.sublayers?.first(where: { $0.name == bgName }) as? CAGradientLayer
+                if let bgColors = bgColors, let bgType = bgType {
+                    if bgLayer == nil {
+                        bgLayer = CAGradientLayer(); bgLayer?.name = bgName
+                        self.layer.insertSublayer(bgLayer!, at: 0)
+                    }
+                    bgLayer?.frame = currentBounds
+                    bgLayer?.colors = bgColors.map { $0.cgColor }
+                    self.applyGradientType(bgLayer!, type: bgType)
+                    let mask = CAShapeLayer(); mask.path = bgPath.cgPath // 背景用原路径
+                    bgLayer?.mask = mask
+                } else { bgLayer?.removeFromSuperlayer() }
+                
+                // --- 2. 处理边框层 (关键修复点) ---
+                let brdName = "PTSuperBorder"
+                var brdLayer = self.layer.sublayers?.first(where: { $0.name == brdName }) as? CAGradientLayer
+                if let brdColors = borderColors, let brdType = borderType, borderWidth > 0 {
+                    if brdLayer == nil {
+                        brdLayer = CAGradientLayer(); brdLayer?.name = brdName
+                        self.layer.insertSublayer(brdLayer!, at: (bgLayer != nil ? 1 : 0))
+                    }
+                    brdLayer?.frame = currentBounds
+                    brdLayer?.colors = brdColors.map { $0.cgColor }
+                    self.applyGradientType(brdLayer!, type: brdType)
+                    
+                    // 💡 修复核心：计算向内收缩的 Bounds 和 Radius
+                    let halfW = borderWidth / 2.0
+                    let insetBounds = currentBounds.insetBy(dx: halfW, dy: halfW)
+                    
+                    // 保证圆角减去边框宽度后不会变成负数
+                    let brdRadius = max(0, radius - halfW)
+                    let brdTL = max(0, topLeft - halfW)
+                    let brdTR = max(0, topRight - halfW)
+                    let brdBL = max(0, bottomLeft - halfW)
+                    let brdBR = max(0, bottomRight - halfW)
+                    
+                    // 用收缩后的数据生成边框专用路径
+                    let borderPath = self.pt_customCornerPath(bounds: insetBounds, radius: brdRadius, topLeft: brdTL, topRight: brdTR, bottomLeft: brdBL, bottomRight: brdBR, corner: corner, capsule: capsule)
+                    
+                    let brdMask = CAShapeLayer()
+                    brdMask.path = borderPath.cgPath
+                    brdMask.fillColor = UIColor.clear.cgColor
+                    brdMask.strokeColor = UIColor.black.cgColor
+                    brdMask.lineWidth = borderWidth // 这里不再乘 2，直接使用真实宽度！
+                    brdLayer?.mask = brdMask
+                } else { brdLayer?.removeFromSuperlayer() }
+                
+                self.backgroundColor = .clear
+            }
+            tracker.layoutActions["Gradient"]?(self.bounds)
+        }
     }
 
-    private struct PTImageLoadKeys {
-        static var ptLoadTask: UInt8 = 0
-        static var ptLoadUUID: UInt8 = 0
-    }
-
-    // 1. 统一的异步任务管理
-    var ptLoadTask: Task<Void, Never>? {
-        get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadTask) as? Task<Void, Never> }
-        set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadTask, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-
-    var ptLoadUUID: UUID? {
-        get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID) as? UUID }
-        set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    private func applyGradientType(_ layer: CAGradientLayer, type: Imagegradien) {
+        switch type {
+        case .LeftToRight: layer.startPoint = CGPoint(x: 0, y: 0); layer.endPoint = CGPoint(x: 1, y: 0)
+        case .TopToBottom: layer.startPoint = CGPoint(x: 0, y: 0); layer.endPoint = CGPoint(x: 0, y: 1)
+        case .RightToLeft: layer.startPoint = CGPoint(x: 1, y: 0); layer.endPoint = CGPoint(x: 0, y: 0)
+        case .BottomToTop: layer.startPoint = CGPoint(x: 0, y: 1); layer.endPoint = CGPoint(x: 0, y: 0)
+        }
     }
 
     private var viewShapeLayer:CAShapeLayer? {
@@ -272,62 +472,96 @@ public extension UIView {
     ///   - showValueLabel: 是否显示百分比文字
     ///   - uniCount: 小数点保留位数
     func layerProgress(value: CGFloat,
+                       radius: CGFloat = 0,
+                       topLeft: CGFloat = 0,
+                       topRight: CGFloat = 0,
+                       bottomLeft: CGFloat = 0,
+                       bottomRight: CGFloat = 0,
+                       corner: UIRectCorner = .allCorners,
+                       capsule: Bool = false,
                        borderWidth: CGFloat = 1,
                        borderColor: UIColor = .systemRed,
                        showValueLabel: Bool = true,
                        valueLabelFont: UIFont = .systemFont(ofSize: 16, weight: .bold),
                        valueLabelColor: UIColor = .white,
                        uniCount: Int = 0) {
-        if viewShapeLayer == nil {
-            setupLayer(borderWidth: borderWidth, borderColor: borderColor)
+        PTGCDManager.gcdMain {
+            let tracker = self.getOrCreateTracker() // 确保你保留了之前的 getOrCreateTracker 方法
             
-            if showValueLabel {
-                setupLabel(font: valueLabelFont, textColor: valueLabelColor)
-            }
-        }
-        
-        updateLayerProgress(progress: value, uniCount: uniCount)
-    }
-
-    private func setupLayer(borderWidth: CGFloat, borderColor: UIColor) {
-        viewShapeLayer = CAShapeLayer()
-        viewShapeLayer?.fillColor = UIColor.clear.cgColor
-        viewShapeLayer?.strokeColor = borderColor.cgColor
-        viewShapeLayer?.lineWidth = borderWidth
-        viewShapeLayer?.lineCap = .round
-        // 初始化时不绘制完整路径，等待更新
-        viewShapeLayer?.strokeEnd = 0
-        layer.addSublayer(viewShapeLayer!)
-    }
-
-    private func setupLabel(font: UIFont, textColor: UIColor) {
-        let label = UILabel()
-        label.font = font
-        label.textColor = textColor
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        addSubview(label)
-        label.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(8)
-            make.centerY.equalToSuperview()
-        }
-        viewShapeLayerProgressLabel = label
-    }
-    
-    func updateLayerProgress(progress:CGFloat,
-                             uniCount:Int = 0) {
-        guard let viewShapeLayer = viewShapeLayer else { return }
+            // 1. 初始化 Layer (如果还没有的话)
+            if self.viewShapeLayer == nil {
+                let shape = CAShapeLayer()
+                shape.fillColor = UIColor.clear.cgColor
+                shape.strokeColor = borderColor.cgColor
+                // 注意：因为我们做了向内收缩，这里的线宽就用真实传进来的 borderWidth 即可，不用乘 2
+                shape.lineWidth = borderWidth
+                shape.lineCap = .round
+                self.layer.addSublayer(shape)
+                self.viewShapeLayer = shape
                 
-        if progress >= 1.0 {
-            clearProgressLayer()
-        } else {
-            // 利用 UIBezierPath 和 CAShapeLayer 的 strokeEnd 实现进度
-            let progressPath = UIBezierPath(rect: bounds)
-            viewShapeLayer.path = progressPath.cgPath
-            viewShapeLayer.strokeEnd = progress
+                if showValueLabel && self.viewShapeLayerProgressLabel == nil {
+                    let label = UILabel()
+                    label.font = .systemFont(ofSize: 14, weight: .bold)
+                    label.textColor = .white
+                    label.textAlignment = .center
+                    self.addSubview(label)
+                    label.snp.makeConstraints { $0.center.equalToSuperview() }
+                    self.viewShapeLayerProgressLabel = label
+                }
+            }
             
-            viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount)f%%", (100 * progress))
+            // 2. 🌟 注册响应式任务：处理路径收缩
+            tracker.layoutActions["Progress"] = { [weak self] currentBounds in
+                guard let self = self, let shape = self.viewShapeLayer, currentBounds.width > 0, currentBounds.height > 0 else { return }
+                
+                // 💡 修复核心：计算向内收缩的 Bounds
+                let halfW = borderWidth / 2.0
+                let insetBounds = currentBounds.insetBy(dx: halfW, dy: halfW)
+                
+                // 💡 保证圆角减去边框宽度后不会变成负数
+                let prgRadius = max(0, radius - halfW)
+                let prgTL = max(0, topLeft - halfW)
+                let prgTR = max(0, topRight - halfW)
+                let prgBL = max(0, bottomLeft - halfW)
+                let prgBR = max(0, bottomRight - halfW)
+                
+                // 使用收缩后的尺寸和圆角，生成完美贴合在视图内部的路径
+                let path = self.pt_customCornerPath(bounds: insetBounds,
+                                                    radius: prgRadius,
+                                                    topLeft: prgTL,
+                                                    topRight: prgTR,
+                                                    bottomLeft: prgBL,
+                                                    bottomRight: prgBR,
+                                                    corner: corner,
+                                                    capsule: capsule)
+                
+                shape.path = path.cgPath
+                
+                // 确保进度条始终在最顶层，不被背景渐变盖住
+                self.layer.bringSublayerToFront(shape)
+            }
+            
+            // 3. 立即执行一次布局刷新
+            if self.bounds.width > 0 && self.bounds.height > 0 {
+                tracker.layoutActions["Progress"]?(self.bounds)
+            }
+            
+            // 4. 更新当前的进度值和文案
+            self.viewShapeLayer?.strokeEnd = value
+            self.viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount)f%%", (100 * value))
+            
+            // 5. 进度走完，清理现场
+            if value >= 0.999 {
+                // 延迟 0.2 秒再消失，让用户能看清 "100%"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.viewShapeLayer?.opacity = 0
+                        self.viewShapeLayerProgressLabel?.alpha = 0
+                    }) { _ in
+                        self.clearProgressLayer()
+                    }
+                }
+            }
         }
     }
     
@@ -337,140 +571,43 @@ public extension UIView {
 
         viewShapeLayerProgressLabel?.removeFromSuperview()
         viewShapeLayerProgressLabel = nil
+        
+        // 移除进度条的监听任务，避免后续尺寸变化时还瞎折腾
+        if let tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView {
+            tracker.layoutActions.removeValue(forKey: "Progress")
+        }
+    }
+}
+
+public extension UIView {
+              
+    /// 判断当前系统语言布局是否为从右到左 (RTL, 例如阿拉伯语)
+    static func isRTL() -> Bool {
+        UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
     }
     
-    @objc func viewCorner(radius:CGFloat = 0,
-                          borderWidth:CGFloat = 0,
-                          borderColor:UIColor = UIColor.clear,
-                          capsule:Bool = false) {
-        self.viewCornerRectCorner(radius: radius,borderWidth: borderWidth,borderColor: borderColor,corner: .allCorners,capsule: capsule)
-    }
-        
-    @objc func viewCornerRectCorner(radius: CGFloat = 5,
-                                    topLeft: CGFloat = 0,
-                                    topRight: CGFloat = 0,
-                                    bottomLeft: CGFloat = 0,
-                                    bottomRight: CGFloat = 0,
-                                    borderWidth: CGFloat = 0,
-                                    borderColor: UIColor = UIColor.clear,
-                                    corner: UIRectCorner = .allCorners,
-                                    capsule: Bool = false) {
-        PTGCDManager.gcdMain {
-            // 🌟 1. 寻找或插入 Tracker 视图
-            var tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView
-            if tracker == nil {
-                let newTracker = PTCornerTrackerView()
-                newTracker.isUserInteractionEnabled = false // 绝不拦截事件
-                newTracker.backgroundColor = .clear
-                // 确保 Tracker 始终与父视图尺寸百分百一致
-                newTracker.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                newTracker.frame = self.bounds
-                // 插入到最底层，避免遮挡内容
-                self.insertSubview(newTracker, at: 0)
-                tracker = newTracker
-            }
-            
-            // 🌟 2. 将你的核心绘制逻辑装进闭包，交给 Tracker 触发
-            tracker?.layoutAction = { [weak self] currentBounds in
-                guard let self = self else { return }
-                
-                // ⚠️ 这里非常关键：必须使用传进来的 currentBounds，不能用 self.bounds
-                
-                if #available(iOS 26.0, *) {
-                    var finalTL: CGFloat = 0; var finalTR: CGFloat = 0
-                    var finalBL: CGFloat = 0; var finalBR: CGFloat = 0
-                    
-                    if capsule {
-                        let capsuleRadius = min(currentBounds.width, currentBounds.height) / 2.0
-                        finalTL = capsuleRadius; finalTR = capsuleRadius
-                        finalBL = capsuleRadius; finalBR = capsuleRadius
-                    } else if corner == .allCorners {
-                        finalTL = radius; finalTR = radius
-                        finalBL = radius; finalBR = radius
-                    } else {
-                        if corner.contains(.topLeft) { finalTL = topLeft }
-                        if corner.contains(.topRight) { finalTR = topRight }
-                        if corner.contains(.bottomLeft) { finalBL = bottomLeft }
-                        if corner.contains(.bottomRight) { finalBR = bottomRight }
-                    }
-                    
-                    let tL = (corner == .allCorners || corner.contains(.topLeft) || capsule) ? UICornerRadius(floatLiteral: finalTL) : nil
-                    let tR = (corner == .allCorners || corner.contains(.topRight) || capsule) ? UICornerRadius(floatLiteral: finalTR) : nil
-                    let bL = (corner == .allCorners || corner.contains(.bottomLeft) || capsule) ? UICornerRadius(floatLiteral: finalBL) : nil
-                    let bR = (corner == .allCorners || corner.contains(.bottomRight) || capsule) ? UICornerRadius(floatLiteral: finalBR) : nil
-                    
-                    self.corner26(tL: tL, tR: tR, bL: bL, bR: bR, capsule: capsule)
-                    
-                    self.layer.masksToBounds = true
-                    self.layer.borderWidth = borderWidth
-                    self.layer.borderColor = borderColor.cgColor
-                    
-                } else {
-                    // iOS 26 以下的老版本适配
-                    let path = self.pt_customCornerPath(bounds: currentBounds, // 使用当前的 bounds
-                                                        radius: radius,
-                                                        topLeft: topLeft,
-                                                        topRight: topRight,
-                                                        bottomLeft: bottomLeft,
-                                                        bottomRight: bottomRight,
-                                                        corner: corner,
-                                                        capsule: capsule)
-                    
-                    // --- 遮罩层 (Mask) ---
-                    let maskLayer = CAShapeLayer()
-                    maskLayer.frame = currentBounds // 使用当前的 bounds
-                    maskLayer.path = path.cgPath
-                    self.layer.mask = maskLayer
-                    self.layer.masksToBounds = true
-                    self.layer.borderWidth = 0
-                    
-                    // --- 边框层 (Border) ---
-                    // 优化：重用现有的 Layer 以提升性能，避免重复 addSublayer
-                    let borderLayerName = "PTCustomBorderLayer"
-                    var borderLayer = self.layer.sublayers?.first(where: { $0.name == borderLayerName }) as? CAShapeLayer
-                    
-                    if borderWidth > 0 && borderColor != .clear {
-                        if borderLayer == nil {
-                            borderLayer = CAShapeLayer()
-                            borderLayer?.name = borderLayerName
-                            self.layer.addSublayer(borderLayer!)
-                        }
-                        borderLayer?.frame = currentBounds
-                        borderLayer?.path = path.cgPath
-                        borderLayer?.fillColor = UIColor.clear.cgColor
-                        borderLayer?.strokeColor = borderColor.cgColor
-                        borderLayer?.lineWidth = borderWidth * 2
-                    } else {
-                        // 如果不需要边框，则移除它
-                        borderLayer?.removeFromSuperlayer()
-                    }
-                }
-            }
-            
-            // 🌟 3. 初始化触发：如果当前视图已经有了尺寸，立刻执行一次，避免闪烁
-            if self.bounds.width > 0 && self.bounds.height > 0 {
-                tracker?.layoutAction?(self.bounds)
-            }
-        }
+    private struct AssociatedKeys {
+        static var layoutSubviewsCallback: UInt8 = 0
+        static var layoutShapeLayerCallback: UInt8 = 0
+        static var layoutShapeLayerProgressLabelCallback: UInt8 = 0
+        static var viewCapturing: UInt8 = 0
+        static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
     }
 
-    @available(iOS 26.0, *)
-    func corner26(tL:UICornerRadius? = nil,
-                  tR:UICornerRadius? = nil,
-                  bL:UICornerRadius? = nil,
-                  bR:UICornerRadius? = nil,
-                  capsule:Bool = false) {
-        if capsule {
-            self.cornerConfiguration = .capsule()
-        } else {
-            let values = [tL, tR, bL, bR]
-            let isUniform = values.dropFirst().allSatisfy { $0 == values.first }
-            if isUniform {
-                self.cornerConfiguration = .uniformCorners(radius: tL!)
-            } else {
-                self.cornerConfiguration = .corners(topLeftRadius: tL, topRightRadius: tR, bottomLeftRadius: bL, bottomRightRadius: bR)
-            }
-        }
+    private struct PTImageLoadKeys {
+        static var ptLoadTask: UInt8 = 0
+        static var ptLoadUUID: UInt8 = 0
+    }
+
+    // 1. 统一的异步任务管理
+    var ptLoadTask: Task<Void, Never>? {
+        get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadTask) as? Task<Void, Never> }
+        set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadTask, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    var ptLoadUUID: UUID? {
+        get { objc_getAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID) as? UUID }
+        set { objc_setAssociatedObject(self, &PTImageLoadKeys.ptLoadUUID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     @MainActor @objc func swizzled_layoutSubviews() {
@@ -491,136 +628,7 @@ public extension UIView {
         tracker?.deactivate()
 #endif
     }
-    
-    //MARK: View的背景渐变
-    func backgroundGradient(type: Imagegradien,
-                            colors: [UIColor],
-                            radius: CGFloat = 0,
-                            topLeft: CGFloat = 0,     // 新增：独立左上圆角
-                            topRight: CGFloat = 0,    // 新增：独立右上圆角
-                            bottomLeft: CGFloat = 0,  // 新增：独立左下圆角
-                            bottomRight: CGFloat = 0, // 新增：独立右下圆角
-                            borderWidth: CGFloat = 0,
-                            borderColor: UIColor = UIColor.clear,
-                            corner: UIRectCorner = .allCorners,
-                            capsule: Bool = false) {
-            
-        // 放在主线程异步执行，有助于让当前 RunLoop 中的其他轻量级 UI 操作先完成
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            // 🌟 核心适配代码：强制刷新布局 🌟
-            // 确保 SnapKit 的 remakeConstraints/updateConstraints 已经生效
-            // 并将最新的约束转换为真实的 frame/bounds
-            self.superview?.layoutIfNeeded()
-            self.layoutIfNeeded()
-            
-            // 如果布局后尺寸依然为 0，说明视图还未展示或约束有问题，直接 return 避免崩溃或绘制无效层
-            guard self.bounds.width > 0 && self.bounds.height > 0 else { return }
-            
-            // 1. 移除旧的渐变层和边框层（应对 Model 多次更新的情况）
-            self.layer.sublayers?.removeAll(where: { layer in
-                return layer.name == "CustomGradientBackgroundLayer" || layer.name == "CustomBorderLayer"
-            })
-            
-            // 2. 创建渐变层
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.name = "CustomGradientBackgroundLayer"
-            gradientLayer.frame = self.bounds
-            gradientLayer.colors = colors.map { $0.cgColor }
-            
-            switch type {
-            case .LeftToRight:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-            case .TopToBottom:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 1)
-            case .RightToLeft:
-                gradientLayer.startPoint = CGPoint(x: 1, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
-            case .BottomToTop:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 1); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
-            }
-            
-            // 3. 处理圆角
-            let path = self.pt_customCornerPath(bounds: self.bounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
-                        
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.cgPath
-            gradientLayer.mask = maskLayer
-
-            // 4. 插入渐变层
-            self.layer.insertSublayer(gradientLayer, at: 0)
-            
-            // 5. 单独绘制边框
-            if borderWidth > 0 {
-                let borderLayer = CAShapeLayer()
-                borderLayer.name = "CustomBorderLayer"
-                borderLayer.path = path.cgPath
-                borderLayer.fillColor = UIColor.clear.cgColor
-                borderLayer.strokeColor = borderColor.cgColor
-                borderLayer.lineWidth = borderWidth * 2
-                borderLayer.frame = self.bounds
-                
-                self.layer.insertSublayer(borderLayer, above: gradientLayer)
-            }
-            
-            self.backgroundColor = .clear
-        }
-    }
-
-    //MARK: border的背景渐变
-    ///border的背景渐变
-    func borderGradient(type:Imagegradien,
-                        colors:[UIColor],
-                        radius:CGFloat = 0,
-                        topLeft: CGFloat = 0,     // 新增
-                        topRight: CGFloat = 0,    // 新增
-                        bottomLeft: CGFloat = 0,  // 新增
-                        bottomRight: CGFloat = 0, // 新增
-                        borderWidth:CGFloat = 1,
-                        corner:UIRectCorner = .allCorners,
-                        capsule: Bool = false) {
-        PTGCDManager.gcdMain {
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.frame = self.bounds
-            gradientLayer.colors = colors.map { $0.cgColor }
-            switch type {
-            case .LeftToRight:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-            case .TopToBottom:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 1)
-            case .RightToLeft:
-                gradientLayer.startPoint = CGPoint(x: 1, y: 0); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
-            case .BottomToTop:
-                gradientLayer.startPoint = CGPoint(x: 0, y: 1); gradientLayer.endPoint = CGPoint(x: 0, y: 0)
-            }
-
-            let borderPath = self.pt_customCornerPath(bounds: self.bounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
-            
-            let borderShapeLayer = CAShapeLayer()
-            borderShapeLayer.path = borderPath.cgPath
-            borderShapeLayer.fillColor = UIColor.clear.cgColor
-            borderShapeLayer.strokeColor = UIColor.black.cgColor
-            borderShapeLayer.lineWidth = borderWidth
-            gradientLayer.mask = borderShapeLayer
-
-            self.layer.insertSublayer(gradientLayer, at: 0)
-
-            // 为了让中间镂空，需要再垫一层背景色遮罩
-            let bgGradientLayer = CAGradientLayer()
-            bgGradientLayer.colors = [self.backgroundColor?.cgColor ?? UIColor.clear.cgColor]
-            bgGradientLayer.startPoint = CGPoint(x: 0, y: 0)
-            bgGradientLayer.endPoint = CGPoint(x: 1, y: 0)
-            bgGradientLayer.frame = self.bounds
-            
-            let bgShapeLayer = CAShapeLayer()
-            bgShapeLayer.path = borderPath.cgPath
-            bgGradientLayer.mask = bgShapeLayer
-            self.layer.insertSublayer(bgGradientLayer, at: 0)
-
-            self.setNeedsDisplay()
-        }
-    }
-    
+        
     func isRolling() -> Bool {
         if self is UIScrollView {
             let scrollView = self as! UIScrollView
