@@ -345,7 +345,6 @@ public extension UIView {
                                     capsule: Bool = false) {
         PTGCDManager.gcdMain {
             // 1. iOS 26+ 的新 API 适配
-            // 注意：新 API 使用 UICornerRadius，我们需要计算出对应的值
             if #available(iOS 26.0, *) {
                 var finalTL: CGFloat = 0
                 var finalTR: CGFloat = 0
@@ -373,9 +372,13 @@ public extension UIView {
                 
                 self.corner26(tL: tL, tR: tR, bL: bL, bR: bR, capsule: capsule)
                 
+                // 假设新 API 原生支持不规则圆角的边框绘制
+                self.layer.masksToBounds = true
+                self.layer.borderWidth = borderWidth
+                self.layer.borderColor = borderColor.cgColor
+                
             } else {
                 // 2. iOS 26 以下的老版本适配
-                // 🌟 核心优化：直接调用我们抽离出来的公共路径生成器，告别冗长的手工绘制代码！
                 let path = self.pt_customCornerPath(bounds: self.bounds,
                                                     radius: radius,
                                                     topLeft: topLeft,
@@ -385,16 +388,36 @@ public extension UIView {
                                                     corner: corner,
                                                     capsule: capsule)
                 
+                // --- 遮罩层 (Mask) ---
                 let maskLayer = CAShapeLayer()
                 maskLayer.frame = self.bounds
                 maskLayer.path = path.cgPath
                 self.layer.mask = maskLayer
+                self.layer.masksToBounds = true
+                
+                // 关闭原生自带的边框，防止干扰
+                self.layer.borderWidth = 0
+                
+                // --- 边框层 (Border) ---
+                // 先移除可能已经存在的旧边框层，防止多次调用导致图层无限叠加
+                self.layer.sublayers?.removeAll(where: { $0.name == "PTCustomBorderLayer" })
+                
+                if borderWidth > 0 && borderColor != .clear {
+                    let borderLayer = CAShapeLayer()
+                    borderLayer.name = "PTCustomBorderLayer" // 设置标识符
+                    borderLayer.frame = self.bounds
+                    borderLayer.path = path.cgPath
+                    borderLayer.fillColor = UIColor.clear.cgColor // 内部透明
+                    borderLayer.strokeColor = borderColor.cgColor // 边框颜色
+                    
+                    // ⚠️ 核心细节：由于 layer.mask 会把超出 path 的部分裁掉，
+                    // 而 stroke 默认是以 path 为中心线，一半在内一半在外。
+                    // 外边的一半会被 mask 裁掉！为了保证视觉上边框宽度是你想要的 borderWidth，必须乘以 2。
+                    borderLayer.lineWidth = borderWidth * 2
+                    
+                    self.layer.addSublayer(borderLayer)
+                }
             }
-            
-            // 设置边框等其他属性
-            self.layer.masksToBounds = true
-            self.layer.borderWidth = borderWidth
-            self.layer.borderColor = borderColor.cgColor
         }
     }
     
