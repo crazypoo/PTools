@@ -136,7 +136,7 @@ open class PTFusionCellModel: NSObject {
     ///BottomLineColor
     public var bottomLineColor:UIColor = DynamicColor(hexString: "E8E8E8") ?? .lightGray
         
-    @PTClampedPropertyWrapper(range:20...88) public var switchControlWidth: CGFloat = 88
+    @PTClampedPropertyWrapper(range:20...88) public var switchControlWidth: CGFloat = 51
     
     // ✅ 缓存
     public lazy var cachedTitleAttr: ASAttributedString = {

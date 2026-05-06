@@ -738,67 +738,38 @@ extension PTLayoutButton {
                          uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
                          emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                          controlState:UIControl.State = .normal) {
-        if let image = contentData as? UIImage {
-            switch controlState {
-            case .normal:
-                normalImage = image
-            case .selected:
-                selectedImage = image
-            case .highlighted:
-                hightlightImage = image
-            case .disabled:
-                disabledImage = image
-            default:
-                break
-            }
-        } else if let dataUrlString = contentData as? String {
-            Task {
-                let result = await PTLoadImageFunction.handleStringContent(dataUrlString, iCloudDocumentName) { receivedSize, totalSize in
-                    PTGCDManager.gcdMain {
-                        self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
-                    }
-                }
-                if let image = result.firstImage {
-                    switch controlState {
-                    case .normal:
-                        normalImage = image
-                    case .selected:
-                        selectedImage = image
-                    case .highlighted:
-                        hightlightImage = image
-                    case .disabled:
-                        disabledImage = image
-                    default:
-                        break
-                    }
+        Task {
+            let result = await PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
+                PTGCDManager.gcdMain {
+                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                 }
             }
-        } else if let contentDatas = contentData as? Data {
-            let dataImage = UIImage(data: contentDatas)
-            switch controlState {
-            case .normal:
-                normalImage = dataImage
-            case .selected:
-                selectedImage = dataImage
-            case .highlighted:
-                hightlightImage = dataImage
-            case .disabled:
-                disabledImage = dataImage
-            default:
-                break
-            }
-        } else {
-            switch controlState {
-            case .normal:
-                normalImage = emptyImage
-            case .selected:
-                selectedImage = emptyImage
-            case .highlighted:
-                hightlightImage = emptyImage
-            case .disabled:
-                disabledImage = emptyImage
-            default:
-                break
+            if let findImage = result.firstImage {
+                switch controlState {
+                case .normal:
+                    normalImage = findImage
+                case .selected:
+                    selectedImage = findImage
+                case .highlighted:
+                    hightlightImage = findImage
+                case .disabled:
+                    disabledImage = findImage
+                default:
+                    break
+                }
+            } else {
+                switch controlState {
+                case .normal:
+                    normalImage = emptyImage
+                case .selected:
+                    selectedImage = emptyImage
+                case .highlighted:
+                    hightlightImage = emptyImage
+                case .disabled:
+                    disabledImage = emptyImage
+                default:
+                    break
+                }
             }
         }
     }

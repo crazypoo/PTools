@@ -170,12 +170,14 @@ public class PTActionSheetController: PTAlertController {
     private var canTapBackground: Bool
 
     private lazy var cancelBtn : PTActionCell = {
-        createActionCell(for: cancelSheetItem, withCorner: true) { [weak self] in
+        let cell = createActionCell(for: cancelSheetItem, withCorner: true) { [weak self] in
             self?.dismissAnimation {
                 guard let SELF = self else { return }
                 self?.actionSheetCancelSelectBlock?(SELF)
             }
         }
+        cell.superGradient(radius:sheetConfig.cornerRadii, corner: .allCorners)
+        return cell
     }()
     
     fileprivate func setDestructiveCount(@PTClampedPropertyWrapper(range:0...5) counts:Int = 0) {
@@ -194,6 +196,7 @@ public class PTActionSheetController: PTAlertController {
         guard let item = titleItem else { return nil }
         let view = createActionCell(for: item, withCorner: true, isTitle: true, action: nil)
         view.cellButton.isUserInteractionEnabled = false
+        view.superGradient(topLeft: sheetConfig.cornerRadii,topRight: sheetConfig.cornerRadii, corner: [.topLeft,.topRight])
         return view
     }()
     
@@ -273,6 +276,7 @@ public class PTActionSheetController: PTAlertController {
                 make.height.equalTo(sheetConfig.rowHeight)
                 make.bottom.equalTo(cancelBtn.snp.top).offset(destructiveY)
             }
+            destructiveView.superGradient(radius:sheetConfig.cornerRadii,corner: .allCorners)
         }
     }
 
@@ -384,12 +388,11 @@ public class PTActionSheetController: PTAlertController {
         for index in contentItems.indices {
             let item = contentItems[index]
             
-            // 分隔线（第一行不需要）
+            // --- 分隔线部分保持你的原样 ---
             if index != 0 {
                 let line = UIView()
                 line.backgroundColor = .lightGray
                 contentScrollerView.addSubview(line)
-                
                 line.snp.makeConstraints { make in
                     make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
                     make.centerX.equalToSuperview()
@@ -400,42 +403,53 @@ public class PTActionSheetController: PTAlertController {
                         make.top.equalToSuperview()
                     }
                 }
-                
                 previousView = line
             }
             
-            // 按钮
+            // --- 按钮部分 ---
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
                 self?.dismissAnimation {
                     guard let self else { return }
                     self.actionSheetSelectBlock?(self, index, item.title)
                 }
             }
-            
             contentScrollerView.addSubview(button)
             
+            // --- 约束部分（修复坑3：为最后一个元素封底） ---
             button.snp.makeConstraints { make in
                 make.width.equalTo(CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2)
                 make.centerX.equalToSuperview()
                 make.height.equalTo(sheetConfig.rowHeight)
                 make.top.equalTo(previousView?.snp.bottom ?? contentScrollerView.snp.top)
+                
+                // 🌟 关键：如果是最后一个元素，必须加上 bottom 约束，撑开 ScrollView！
+                if index == lastIndex {
+                    make.bottom.equalToSuperview()
+                }
             }
             
-            // Corner 处理
-            if titleItem == nil && index == 0 {
-                button.viewCornerRectCorner(
-                    topLeft: sheetConfig.cornerRadii,
-                    topRight: sheetConfig.cornerRadii,
-                    corner: [.topLeft, .topRight]
-                )
-            }
+            // --- Corner 处理（修复坑1和坑2） ---
+            let isFirst = (titleItem == nil && index == 0)
+            let isLast = (index == lastIndex)
             
-            if index == lastIndex {
-                button.viewCornerRectCorner(
-                    bottomLeft: sheetConfig.cornerRadii,
-                    bottomRight: sheetConfig.cornerRadii,
-                    corner: [.bottomLeft, .bottomRight]
-                )
+            if isFirst && isLast {
+                // 只有 1 个 Item：四角全部变圆
+                button.viewCornerRectCorner(radius: sheetConfig.cornerRadii, corner: .allCorners)
+            } else if isFirst {
+                // 第 1 个 Item：仅顶部圆角
+                button.viewCornerRectCorner(radius: 0, // 全局设0，独立设值
+                                            topLeft: sheetConfig.cornerRadii,
+                                            topRight: sheetConfig.cornerRadii,
+                                            corner: [.topLeft, .topRight])
+            } else if isLast {
+                // 最后 1 个 Item：仅底部圆角
+                button.viewCornerRectCorner(radius: 0,
+                                            bottomLeft: sheetConfig.cornerRadii,
+                                            bottomRight: sheetConfig.cornerRadii,
+                                            corner: [.bottomLeft, .bottomRight])
+            } else {
+                // 中间的 Item：无圆角，清理一下避免复用问题
+                button.layer.mask = nil
             }
             
             previousView = button

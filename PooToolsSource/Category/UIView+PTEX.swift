@@ -501,8 +501,8 @@ public extension UIView {
                 
                 if showValueLabel && self.viewShapeLayerProgressLabel == nil {
                     let label = UILabel()
-                    label.font = .systemFont(ofSize: 14, weight: .bold)
-                    label.textColor = .white
+                    label.font = valueLabelFont
+                    label.textColor = valueLabelColor
                     label.textAlignment = .center
                     self.addSubview(label)
                     label.snp.makeConstraints { $0.center.equalToSuperview() }

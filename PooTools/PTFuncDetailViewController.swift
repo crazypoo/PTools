@@ -175,6 +175,9 @@ class PTFuncDetailViewController: PTBaseViewController {
             segView.reloadViewData { index in
                 
             }
+            segView.segTapBlock = { index in
+                segView.setSegBadge(indexView: 1, badgePosition: .BottomRight,badgeShowType: .new,badgeValue: "11")
+            }
             
         case String.countLabel:
             let countLabel = PTCountingLabel()

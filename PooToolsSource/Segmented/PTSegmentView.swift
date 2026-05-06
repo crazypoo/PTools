@@ -54,6 +54,7 @@ public class PTSegmentConfig: NSObject {
     public var itemSpace:CGFloat = 0
     ///初始x(左对齐生效)
     public var originalX:CGFloat = 0
+    public var badgeXOffset:CGFloat = 5
 }
 
 @objcMembers
@@ -82,20 +83,19 @@ public class PTSegmentSubView:UIView {
             
     var buttonShowType:PTSegmentButtonShowType = .OnlyTitle
     
-    lazy var imageBtn:PTLayoutButton = {
-        let btn = PTLayoutButton()
-        btn.normalTitleColor = self.viewConfig.normalColor
-        btn.selectedTitleColor = self.viewConfig.selectedColor
+    lazy var imageBtn:PTActionLayoutButton = {
+        let btn = PTActionLayoutButton()
+        btn.setTitleColor(self.viewConfig.normalColor, state: .normal)
+        btn.setTitleColor(self.viewConfig.selectedColor, state: .selected)
         btn.midSpacing = self.viewConfig.imageTitleSpace
         btn.layoutStyle = self.viewConfig.imagePosition
-        btn.selectedTitleFont = viewConfig.selectedFont
-        btn.normalTitleFont = viewConfig.normalFont
+        btn.setTitleFont(viewConfig.normalFont, state: .normal)
+        btn.setTitleFont(viewConfig.selectedFont, state: .selected)
         return btn
     }()
         
     lazy var underLine:UIButton = {
         let label = UIButton(type: .custom)
-        
         label.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
         label.setBackgroundImage(self.viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
         return label
@@ -111,20 +111,21 @@ public class PTSegmentSubView:UIView {
         
         switch showType {
         case .OnlyTitle:
-            imageBtn.normalTitle = subViewModels.titles
+            imageBtn.setTitle(subViewModels.titles, state: .normal)
             imageBtn.midSpacing = 0
             imageBtn.imageSize = .zero
-            imageBtn.layoutStyle = .leftImageRightTitle
+            imageBtn.layoutStyle = .title
         case .OnlyImage:
             imageBtn.midSpacing = 0
-            imageBtn.layoutStyle = .leftImageRightTitle
+            imageBtn.layoutStyle = .image
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             
             setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         case .TitleImage:
             //MARK:两个都有
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
-            imageBtn.normalTitle = subViewModels.titles
+            imageBtn.setTitle(subViewModels.titles, state: .normal)
+            imageBtn.layoutStyle = .leftImageRightTitle
             setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         }
         
@@ -190,8 +191,8 @@ public class PTSegmentSubView:UIView {
         case .Background:
             break
         case .SubBackground:
-            imageBtn.configBackgroundColor = viewConfig.normalColor_BG
-            imageBtn.configBackgroundSelectedColor = viewConfig.selectedColor_BG
+            imageBtn.setBackgroundColor(viewConfig.normalColor_BG, state: .normal)
+            imageBtn.setBackgroundColor(viewConfig.selectedColor_BG, state: .selected)
         default:break
         }
     }
@@ -201,16 +202,15 @@ public class PTSegmentSubView:UIView {
     }
     
     func setBtnImage(subViewModels:PTSegmentModel,placeHolderImage:UIImage) {
-        imageBtn.layoutLoadImage(contentData: subViewModels.imageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument,emptyImage: placeHolderImage)
-        
-        imageBtn.layoutLoadImage(contentData: subViewModels.selectedImageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument,emptyImage: placeHolderImage,controlState: .selected)
+        imageBtn.setImage(subViewModels.imageURL, state: .normal)
+        imageBtn.setImage(subViewModels.selectedImageURL, state: .selected)
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
         switch buttonShowType {
         case .OnlyImage,.TitleImage:
-            imageBtn.imageSize = CGSize(width: frame.size.height - 5, height: frame.size.height - 5)
+            imageBtn.imageSize = CGSize(width: frame.size.height - self.viewConfig.bottomSquare, height: frame.size.height - self.viewConfig.bottomSquare)
         default:
             imageBtn.imageSize = .zero
         }
@@ -447,31 +447,26 @@ public class PTSegmentView: UIView {
     ///设置某个Badge
     public func setSegBadge(indexView:Int,
                             badgePosition:PooSegmentBadgePosition? = .TopRight,
-                            badgeBGColor:UIColor? = UIColor.red,
-                            badgeShowType:PTBadgeStyle? = .redDot,
-                            badgeAnimation:PTBadgeAnimType? = .breathe,
-                            badgeValue:Int? = 1) {
+                            badgeBGColor:UIColor = UIColor.red,
+                            badgeShowType:PTBadgeStyle = .redDot,
+                            badgeAnimation:PTBadgeAnimType = .breathe,
+                            badgeValue:Any = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
             guard indexView < self.subViewArr.count,
-                  let subView = self.subViewArr[indexView] as? PTSegmentSubView,
-                  let badgeBGColor,
-                  let badgeShowType,
-                  let badgeValue,
-                  let badgeAnimation else { return }
+                  let subView = self.subViewArr[indexView] as? PTSegmentSubView else { return }
 
             let width = subView.pt.jx_width
             let height = subView.pt.jx_height
-
             let badgePoint: CGPoint = {
                 switch badgePosition {
-                case .TopLeft:      return CGPoint(x: -width + 5, y: 5)
-                case .TopMiddle:    return CGPoint(x: -width / 2, y: 5)
-                case .TopRight:     return CGPoint(x: 0, y: 5)
-                case .MiddleLeft:   return CGPoint(x: -width + 5, y: height / 2)
-                case .MiddleRigh:   return CGPoint(x: -5, y: height / 2)
-                case .BottomLeft:   return CGPoint(x: -width + 5, y: height - 5)
-                case .BottomMiddle: return CGPoint(x: -width / 2, y: height - 5)
-                case .BottomRight:  return CGPoint(x: -5, y: height - 5)
+                case .TopLeft:      return CGPoint(x: self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
+                case .TopMiddle:    return CGPoint(x: width / 2, y: self.viewConfig.bottomSquare)
+                case .TopRight:     return CGPoint(x: width - self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
+                case .MiddleLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height / 2)
+                case .MiddleRigh:   return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height / 2)
+                case .BottomLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height - 5)
+                case .BottomMiddle: return CGPoint(x: width / 2, y: height - self.viewConfig.bottomSquare)
+                case .BottomRight:  return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height - self.viewConfig.bottomSquare)
                 default:            return .zero
                 }
             }()

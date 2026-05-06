@@ -214,7 +214,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_media.name = "多媒体"
         sectionModel_media.cellFont = sectionTitleFont
         sectionModel_media.accessoryType = .Switch(type: .Framework)
-        sectionModel_media.switchControlWidth = 88
+        sectionModel_media.switchControlWidth = 51
 
         let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerID: "1111111",footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
         mediaSection.headerClass = PTFusionHeader.self

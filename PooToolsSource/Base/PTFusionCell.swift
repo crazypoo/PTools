@@ -556,26 +556,7 @@ public extension UICollectionViewCell {
                                 borderWidth:CGFloat = 0,
                                 borderColor:UIColor = UIColor.clear,
                                 capsule:Bool = false) {
-        PTGCDManager.gcdMain {
-            if #available(iOS 26.0, *) {
-                let topLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                let topRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                let bottomLeft:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                let bottomRight:UICornerRadius = UICornerRadius(floatLiteral: radius)
-                self.contentView.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
-                self.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
-            } else {
-                self.contentView.layer.cornerRadius = radius
-                self.layer.cornerRadius = radius
-            }
-            self.contentView.layer.masksToBounds = true
-            self.contentView.layer.borderWidth = borderWidth
-            self.contentView.layer.borderColor = borderColor.cgColor
-            
-            self.layer.masksToBounds = true
-            self.layer.borderWidth = borderWidth
-            self.layer.borderColor = borderColor.cgColor
-        }
+        self.contentView.viewCornerRectCorner(radius: radius,borderWidth: borderWidth,borderColor: borderColor,corner: .allCorners,capsule: capsule)
     }
     
     func cellContentViewCornerRectCorners(cornerRadii:CGFloat = 5,
@@ -583,41 +564,6 @@ public extension UICollectionViewCell {
                                           borderColor:UIColor = UIColor.clear,
                                           corner:UIRectCorner = .allCorners,
                                           capsule:Bool = false) {
-        PTGCDManager.gcdMain {
-            if #available(iOS 26.0, *) {
-                var topLeft:UICornerRadius?
-                var topRight:UICornerRadius?
-                var bottomLeft:UICornerRadius?
-                var bottomRight:UICornerRadius?
-                if corner.contains(.topLeft) {
-                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner.contains(.topRight) {
-                    topRight = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner.contains(.bottomLeft) {
-                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner.contains(.bottomRight) {
-                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                if corner == .allCorners {
-                    topLeft = UICornerRadius(floatLiteral: cornerRadii)
-                    topRight = UICornerRadius(floatLiteral: cornerRadii)
-                    bottomLeft = UICornerRadius(floatLiteral: cornerRadii)
-                    bottomRight = UICornerRadius(floatLiteral: cornerRadii)
-                }
-                self.contentView.corner26(tL: topLeft, tR: topRight, bL: bottomLeft, bR: bottomRight, capsule: capsule)
-            } else {
-                let maskPath = UIBezierPath(roundedRect: self.contentView.bounds, byRoundingCorners: corner, cornerRadii: CGSize(width: cornerRadii, height: cornerRadii))
-                let maskLayer = CAShapeLayer()
-                maskLayer.frame = self.contentView.bounds
-                maskLayer.path = maskPath.cgPath
-                self.contentView.layer.mask = maskLayer
-            }
-            self.contentView.layer.masksToBounds = true
-            self.contentView.layer.borderWidth = borderWidth
-            self.contentView.layer.borderColor = borderColor.cgColor
-        }
+        self.contentView.viewCornerRectCorner(radius: cornerRadii,borderWidth: borderWidth,borderColor: borderColor,corner: corner,capsule: capsule)
     }
 }
