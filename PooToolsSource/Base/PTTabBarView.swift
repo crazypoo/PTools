@@ -423,7 +423,6 @@ final public class PTTabBarView: UIView {
         centerButton.backgroundColor = PTAppBaseConfig.share.tabbarCenterBGColor
         centetButtonEffect()
         
-        centerButton.viewCorner(radius: PTAppBaseConfig.share.tabbarCenterButtonSize / 2)
         centerButton.layer.shadowColor = UIColor.black.cgColor
         centerButton.layer.shadowOpacity = 0.2
         centerButton.layer.shadowRadius = 20
@@ -538,6 +537,7 @@ final public class PTTabBarView: UIView {
                     }
                     $0.size.equalTo(PTAppBaseConfig.share.tabbarCenterButtonSize)
                 }
+                centerButton.viewCorner(radius: PTAppBaseConfig.share.tabbarCenterButtonSize / 2)
 
                 centerNameLabel.snp.remakeConstraints { make in
                     make.left.right.equalTo(self.centerButton)
