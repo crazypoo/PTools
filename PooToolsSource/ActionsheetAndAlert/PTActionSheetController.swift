@@ -24,8 +24,8 @@ public class PTActionCell:UIView {
         return blurs
     }()
     
-    lazy var cellButton : PTLayoutButton = {
-        let view = PTLayoutButton()
+    lazy var cellButton : PTActionLayoutButton = {
+        let view = PTActionLayoutButton()
         return view
     }()
     
@@ -284,35 +284,45 @@ public class PTActionSheetController: PTAlertController {
         
         let cell = PTActionCell()
         let btn = cell.cellButton
-        btn.normalTitle = item.title
-        btn.normalTitleFont = item.titleFont
-        btn.normalTitleColor = item.titleColor
-        btn.hightlightTitleFont = btn.normalTitleFont
-        btn.hightlightTitleColor = btn.normalTitleColor
-        btn.configBackgroundHightlightColor = item.heightlightColor
-        btn.contentHorizontalAlignment = item.itemAlignment
+        btn.setTitle(item.title, state: .normal)
+        btn.setTitleFont(item.titleFont, state: .normal)
+        btn.setTitleColor(item.titleColor, state: .normal)
+        btn.setTitleFont(item.titleFont, state: .highlighted)
+        btn.setTitleColor(item.titleColor, state: .highlighted)
+        btn.setBackgroundColor(item.heightlightColor, state: .highlighted)
 
         let edge = item.contentEdgeValue
-        switch item.itemAlignment {
-        case .left, .leading:
-            btn.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: edge, bottom: 0, trailing: 0)
-        case .right, .trailing:
-            btn.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: edge)
-        case .fill:
-            btn.contentEdges = NSDirectionalEdgeInsets(top: 0, leading: edge, bottom: 0, trailing: edge)
-        default:
-            break
+        btn.snp.remakeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            switch item.itemAlignment {
+            case .left, .leading:
+                make.left.equalToSuperview().inset(edge)
+            case .right, .trailing:
+                make.right.equalToSuperview().inset(edge)
+            case .fill:
+                make.left.right.equalToSuperview().inset(edge)
+            default:
+                make.left.right.equalToSuperview()
+            }
         }
-
+        
+        var showStyle:PTLayoutButtonStyle = .image
         if let image = item.image {
             let maxHeight = sheetConfig.rowHeight - 20
             let size = item.imageSize.height > maxHeight ? CGSize(width: item.imageSize.width, height: maxHeight) : item.imageSize
             btn.imageSize = size
             btn.midSpacing = item.contentImageSpace
-            btn.layoutStyle = item.itemLayout == .leftImageRightTitle ? .leftImageRightTitle : .leftTitleRightImage
-            btn.layoutLoadImage(contentData: image, iCloudDocumentName: item.iCloudDocumentName)
+            if item.title.stringIsEmpty() {
+                showStyle = .image
+            } else {
+                showStyle = item.itemLayout == .leftImageRightTitle ? .leftImageRightTitle : .leftTitleRightImage
+            }
+            btn.setImage(image, state: .normal)
+        } else {
+            showStyle = .title
         }
-
+        btn.layoutStyle = showStyle
+        btn.isUserInteractionEnabled = false
         if withCorner {
             if isTitle {
                 cell.viewCornerRectCorner(topLeft: sheetConfig.cornerRadii,topRight: sheetConfig.cornerRadii, corner: [.topLeft,.topRight])
@@ -322,7 +332,8 @@ public class PTActionSheetController: PTAlertController {
         }
 
         if let action = action {
-            btn.addActionHandlers { _ in action() }
+            let tap = UITapGestureRecognizer { _ in action() }
+            cell.addGestureRecognizer(tap)
         }
         return cell
     }
