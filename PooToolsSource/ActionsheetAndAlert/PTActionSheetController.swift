@@ -459,12 +459,18 @@ public class PTActionSheetController: PTAlertController {
 
 extension PTActionSheetController {
     public override func showAnimation(completion: PTActionTask?) {
+        // 1. 强制刷新布局，确保所有 bounds 已经就位
         view.layoutIfNeeded()
-        let height = alertContent.systemLayoutSizeFitting(
-            UIView.layoutFittingCompressedSize
-        ).height
-        alertContent.transform = CGAffineTransform(translationX: 0, y: height)
-        UIView.animate(withDuration: PTAlertConfig.shared.showALertDuration,
+        
+        // 2. 将内容直接推到屏幕最底部之外 (使用 view 的高度最保险)
+        alertContent.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
+        
+        // 3. 使用 Spring 动画 (阻尼回弹效果)
+        UIView.animate(withDuration: 0.45,
+                       delay: 0,
+                       usingSpringWithDamping: 0.85, // 阻尼系数：越接近 1 越不弹，0.85 是一个很舒适的微弹效果
+                       initialSpringVelocity: 0.8,   // 初始速度
+                       options: [.curveEaseOut, .allowUserInteraction],
                        animations: {
             self.view.backgroundColor = UIColor.DevMaskColor
             self.alertContent.transform = .identity
@@ -474,10 +480,13 @@ extension PTActionSheetController {
     }
     
     public override func dismissAnimation(completion: PTActionTask?) {
-        self.alertContent.layoutIfNeeded()
-        UIView.animate(withDuration: PTAlertConfig.shared.hideALertDuration, animations: {
+        // 收回动画不需要弹簧效果，要求干脆利落，时间更短
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       options: .curveEaseIn, // 渐入加速退出
+                       animations: {
             self.view.backgroundColor = .clear
-            self.alertContent.transform = CGAffineTransform(translationX: 0, y: self.alertContent.bounds.height)
+            self.alertContent.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
         }, completion: { _ in
             PTAlertManager.dismissAll()
             completion?()
