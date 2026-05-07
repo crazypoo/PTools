@@ -29,9 +29,10 @@ extension UIColor {
         var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
         var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
         
-        self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
-        to.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
-        
+        guard self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1),
+              to.getRed(&r2, green: &g2, blue: &b2, alpha: &a2) else {
+            return to
+        }
         return UIColor(
             red: r1 + (r2 - r1) * progress,
             green: g1 + (g2 - g1) * progress,
@@ -116,7 +117,6 @@ public final class PTNavigationBarContainer: UIView {
                 let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() * 2 : sheet.options.pullBarHeight
                 make.top.equalToSuperview().offset(-offset)
                 offsetHeight = offset
-                PTNSLogConsole("1231231231231231231231")
             } else {
                 make.top.equalToSuperview()
                 offsetHeight = CGFloat.statusBarHeight()
@@ -154,6 +154,8 @@ public final class PTNavigationBarContainer: UIView {
     public required init?(coder: NSCoder) { fatalError() }
     
     public func apply(style: PTNavigationBarStyle) {
+        backgroundView.alpha = 1.0
+        largeTitleContainer.alpha = 1.0
         switch style {
         case .gradient(let type, let colors):
             backgroundView.backgroundGradient(type: type, colors: colors)
@@ -322,7 +324,6 @@ public final class PTNavigationBarManager:NSObject {
     public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
         installIfNeeded(in: nav)
         currentNav = nav
-        guard lastStyle != style else { return }
         lastStyle = style
         let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
@@ -457,6 +458,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         container.prepareTransition(from: fromStyle, to: toStyle)
         
         if let coordinator = navigationController.transitionCoordinator {
+            self.transitionCoordinatorRef = coordinator
             startDisplayLink()
             coordinator.animate(alongsideTransition: { _ in
                 // 动画过程中，系统会自动处理 alpha 或 这里的 progress
