@@ -6,6 +6,14 @@
 //  Copyright © 2022 crazypoo. All rights reserved.
 //
 
+//
+//  PTHudView.swift
+//  PooTools_Example
+//
+//  Created by jax on 2022/10/9.
+//  Copyright © 2022 crazypoo. All rights reserved.
+//
+
 import UIKit
 import Foundation
 import SnapKit
@@ -71,12 +79,13 @@ public class PTHudView: UIView {
             make.centerY.centerX.equalToSuperview()
             make.width.height.equalTo(hudShare.conterViewSize)
         }
-        centerView.viewCorner(radius: hudShare.conterViewSize * 0.1)
         
         centerView.addSubview(hudView)
         hudView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(loadingHudSpace)
         }
+        centerView.layoutIfNeeded()
+        centerView.viewCorner(radius: hudShare.conterViewSize * 0.1)
     }
     
     required init?(coder: NSCoder) {
