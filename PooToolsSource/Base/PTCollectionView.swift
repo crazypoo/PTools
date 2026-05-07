@@ -486,9 +486,9 @@ public class PTCollectionView: UIView {
     open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
     //MARK: Orthogonal Scroll handler (正交滚动专用)
     /// 正交滚动 (横向滑动) 的实时偏移量回调: (SectionIndex, CGPoint)
-    open var orthogonalDidScroll: (@MainActor (Int, CGPoint) -> Void)?
+    @MainActor open var orthogonalDidScroll:  ((Int, CGPoint) -> Void)?
     /// 正交滚动 (横向滑动) 翻页改变时的回调: (SectionIndex, 当前页码 CurrentPage)
-    open var orthogonalPageDidChange: (@MainActor (Int, Int) -> Void)?
+    @MainActor open var orthogonalPageDidChange: ((Int, Int) -> Void)?
     
     ///头部刷新事件
     open var headerRefreshTask: ((UIRefreshControl) -> Void)?
