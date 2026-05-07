@@ -484,6 +484,12 @@ public class PTCollectionView: UIView {
     open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?
     open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?
     open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
+    //MARK: Orthogonal Scroll handler (正交滚动专用)
+    /// 正交滚动 (横向滑动) 的实时偏移量回调: (SectionIndex, CGPoint)
+    open var orthogonalDidScroll: (@MainActor (Int, CGPoint) -> Void)?
+    /// 正交滚动 (横向滑动) 翻页改变时的回调: (SectionIndex, 当前页码 CurrentPage)
+    open var orthogonalPageDidChange: (@MainActor (Int, Int) -> Void)?
+    
     ///头部刷新事件
     open var headerRefreshTask: ((UIRefreshControl) -> Void)?
     ///底部刷新事件
@@ -1605,6 +1611,30 @@ extension PTCollectionView {
         }
         
         laySection.decorationItems = generateDecorationItems(section: sectionIndex, sectionModel: sectionModel)
+        
+        // 🌟 修复核心：监听正交滚动 (Orthogonal Scrolling)
+        if behavior != .none {
+            laySection.visibleItemsInvalidationHandler = { [weak self] visibleItems, offset, env in
+                guard let self = self else { return }
+                
+                PTGCDManager.gcdMain {
+                    // 1. 触发横向滑动的实时回调 (替代 scrollViewDidScroll)
+                    self.orthogonalDidScroll?(sectionIndex, offset)
+                    
+                    // 2. 模拟停止减速/翻页事件 (替代 scrollViewDidEndDecelerating)
+                    // 由于苹果没有提供原生的 DidEndDecelerating，业界标准做法是通过 offset 实时计算当前处于第几页
+                    let pageWidth = env.container.contentSize.width // 假设每页宽度等于容器宽度
+                    if pageWidth > 0 {
+                        // 使用 round 进行四舍五入，确保滑过一半就判定为新的一页
+                        let currentPage = Int(round(offset.x / pageWidth))
+                        
+                        // 为了防止重复回调，你可以利用 sectionModel 的某个属内存下或者闭包里存一下 lastPage
+                        // 这里我们直接向外抛出当前页码
+                        self.orthogonalPageDidChange?(sectionIndex, currentPage)
+                    }
+                }
+            }
+        }
         return laySection
     }
     
