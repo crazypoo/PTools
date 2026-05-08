@@ -30,9 +30,6 @@ open class PTGrowingTextView: UITextView {
     @IBInspectable open var placeholderColor: UIColor = UIColor(white: 0.8, alpha: 1.0) { didSet { setNeedsDisplay() } }
     open var attributedPlaceholder: NSAttributedString? { didSet { setNeedsDisplay() } }
     
-    /// 占位符的左右偏移量 (如果不设置，建议贴合 textContainerInset)
-    open var placeHolderLROffset: CGFloat = 10 { didSet { setNeedsDisplay() } }
-
     // MARK: - Overrides (处理代码赋值不触发更新的问题)
     open override var text: String! {
         didSet {
@@ -181,24 +178,23 @@ open class PTGrowingTextView: UITextView {
     }
 
     // MARK: - Draw Placeholder
+    // MARK: - Draw Placeholder
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard text.isEmpty else { return }
 
         let font = self.font ?? .systemFont(ofSize: 16)
-        let x = placeHolderLROffset
         
-        // 优化点：Y轴坐标应该基于 textContainerInset.top 计算，
-        // 否则随着文本框增高，占位符会永远跑到正中间，看起来像悬空了
-        // 如果 minHeight 和默认 inset 不匹配，做个平滑兼容
-        let y: CGFloat
-        if currentHeight <= minHeight {
-            y = (minHeight - font.lineHeight) / 2.0
-        } else {
-            y = textContainerInset.top
-        }
+        // 🎯 修复 X 轴偏差：原生的文本起点 = 容器的左内边距 + 文本段落的左右填充（默认5.0）
+        let x = textContainerInset.left + textContainer.lineFragmentPadding
         
-        let width = rect.width - x * 2
+        // 🎯 修复 Y 轴偏差：原生的光标永远从 textContainerInset.top 开始绘制
+        // 不要再使用 (minHeight - font.lineHeight) / 2.0 强制居中，否则会和真实光标脱节
+        let y = textContainerInset.top
+        
+        // 宽度也根据真实的 inset 和 padding 扣减
+        let width = rect.width - x - textContainerInset.right - textContainer.lineFragmentPadding
+        
         let placeholderRect = CGRect(x: x, y: y, width: width, height: font.lineHeight)
 
         if let attributedPlaceholder = attributedPlaceholder {
@@ -214,7 +210,7 @@ open class PTGrowingTextView: UITextView {
             placeholder?.draw(in: placeholderRect, withAttributes: attributes)
         }
     }
-
+    
     // MARK: - Notifications
     @objc private func textDidChangeNotification() {
         setNeedsDisplay() // 👈【核心修复】强制重绘，使 placeholder 在输入时消失或退格为空时出现
