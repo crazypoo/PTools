@@ -3870,11 +3870,11 @@
 		55F162E22B18E32300320925 /* C7Collector */ = {
 			isa = PBXGroup;
 			children = (
-				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */,
 				55F162E32B18E36200320925 /* C7Collector.swift */,
 				55F162E72B18E3F300320925 /* C7CollectorCamera.swift */,
 				55F162E52B18E3C200320925 /* C7CollectorVideo.swift */,
+				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */,
 			);
 			path = C7Collector;

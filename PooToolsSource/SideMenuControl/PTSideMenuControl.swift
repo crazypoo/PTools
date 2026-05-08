@@ -11,6 +11,8 @@ import UIKit
 public typealias PTSideMenuControlHandler = (_ sideMenuControl:PTSideMenuControl) -> Void
 public typealias PTSideMenuControlShowAndAnimationHandler = (_ sideMenuControl:PTSideMenuControl,_ show:UIViewController,_ animated:Bool) -> Void
 
+extension PTSideMenuControl.PTSideMenuPreferences: @unchecked Sendable {}
+
 @objcMembers
 open class PTSideMenuControl: PTBaseViewController {
     
@@ -24,7 +26,7 @@ open class PTSideMenuControl: PTBaseViewController {
     public var sideMenuControlAnimationIn:((_ sideMenuControl:PTSideMenuControl,_ animationControllerFrom:UIViewController,_ toVC:UIViewController)->UIViewControllerAnimatedTransitioning)?
     public var sideMenuControlShouldRevealMenu:((_ sideMenuControl:PTSideMenuControl)->Bool)?
 
-    public static var preferences = PTSideMenuPreferences()
+    @MainActor public static var preferences = PTSideMenuPreferences()
     private var preferences:PTSideMenuPreferences {
         return Self.preferences
     }
@@ -279,6 +281,14 @@ open class PTSideMenuControl: PTBaseViewController {
             self.view.isUserInteractionEnabled = true
             self.isMenuRevealed = didReveal
             self.menuAnimator = nil
+            
+            // 菜单打开时，隐藏底层 Content 的 VoiceOver 焦点；菜单关闭时恢复。
+            self.contentViewController?.view.accessibilityElementsHidden = didReveal
+            
+            // 还可以加上 UIAccessibility.post 通知系统焦点改变，引导盲人焦点到 Menu 上
+            if didReveal {
+                UIAccessibility.post(notification: .screenChanged, argument: self.menuViewController?.view)
+            }
         }
 
         self.menuAnimator = animator
@@ -425,13 +435,13 @@ open class PTSideMenuControl: PTBaseViewController {
     // MARK: Notification
     private func setUpNotifications() {
         NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(appDidEnteredBackground),
-                                                   name: UIScene.didEnterBackgroundNotification,
-                                                   object: nil)
+                                               selector: #selector(appDidEnteredBackground),
+                                               name: UIScene.didEnterBackgroundNotification,
+                                               object: nil)
         NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(appDidEnteredBackground),
-                                                   name: UIApplication.didEnterBackgroundNotification,
-                                                   object: nil)
+                                               selector: #selector(appDidEnteredBackground),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
     }
 
     @objc private func appDidEnteredBackground() {
@@ -890,5 +900,29 @@ extension PTSideMenuControl {
 
         /// 动画配置
         public var animation = PTSideMenuAnimation()
+    }
+}
+
+extension PTSideMenuControl {
+    
+    /// 异步展示 Menu (iOS 15+)
+    @MainActor
+    open func revealMenuAsync(animated: Bool = true) async -> Bool {
+        await withCheckedContinuation { continuation in
+            // 调用你写好的闭包版本
+            self.revealMenu(animated: animated) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
+    /// 异步隐藏 Menu (iOS 15+)
+    @MainActor
+    open func hideMenuAsync(animated: Bool = true) async -> Bool {
+        await withCheckedContinuation { continuation in
+            self.hideMenu(animated: animated) { result in
+                continuation.resume(returning: result)
+            }
+        }
     }
 }

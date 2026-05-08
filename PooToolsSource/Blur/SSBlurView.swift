@@ -8,80 +8,73 @@
 import UIKit
 import SnapKit
 
-/// 高斯模糊
+/// 高斯模糊视图 (重构为标准的 UIView 子类)
 @objcMembers
-public class SSBlurView: NSObject {
-
-    private weak var superview: UIView?
-    private var blur: UIVisualEffectView?
-    private(set) var blurContentView: UIView?
-    private(set) var vibrancyContentView: UIView?
+public class SSBlurView: UIView {
     
-    private var animator: UIViewPropertyAnimator?
+    private let blurEffectView = UIVisualEffectView(effect: nil)
+    private let vibrancyView = UIVisualEffectView(effect: nil)
     
-    open var animationDuration: TimeInterval = 0.1
-    open var style: UIBlurEffect.Style = .light {
+    public var animationDuration: TimeInterval = 0.2
+    public var style: UIBlurEffect.Style = .light {
         didSet { updateBlurEffect() }
     }
     
-    open var alpha: CGFloat = 0 {
-        didSet { updateBlurEffect() }
+    // 暴露内容视图供外部添加子视图
+    public var blurContentView: UIView { blurEffectView.contentView }
+    public var vibrancyContentView: UIView { vibrancyView.contentView }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
     }
     
-    public init(to view: UIView) {
-        superview = view
-        guard let _ = superview else {
-            assertionFailure("Superview cannot be nil when initializing SSBlurView")
-            return
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+    
+    private func setupUI() {
+        self.isUserInteractionEnabled = false // 默认不拦截事件
+        
+        addSubview(blurEffectView)
+        blurEffectView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        
+        blurEffectView.contentView.addSubview(vibrancyView)
+        vibrancyView.snp.makeConstraints { $0.edges.equalToSuperview() }
+    }
+    
+    /// 开启模糊效果 (带动画)
+    public func enable(animated: Bool = true) {
+        let targetEffect = UIBlurEffect(style: style)
+        vibrancyView.effect = UIVibrancyEffect(blurEffect: targetEffect)
+        
+        if animated {
+            UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseInOut) {
+                self.blurEffectView.effect = targetEffect
+            }
+        } else {
+            self.blurEffectView.effect = targetEffect
         }
     }
     
-    public func enable(isHidden: Bool = false) {
-        if blur == nil {
-            applyBlurEffect()
+    /// 关闭模糊效果 (带动画)
+    public func disable(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseInOut) {
+                self.blurEffectView.effect = nil
+                self.vibrancyView.effect = nil
+            }
+        } else {
+            self.blurEffectView.effect = nil
+            self.vibrancyView.effect = nil
         }
-        blur?.isHidden = isHidden
     }
     
     private func updateBlurEffect() {
-        guard blur != nil else {
-            applyBlurEffect()
-            return
+        // 如果当前已经开启了模糊，则更新样式
+        if blurEffectView.effect != nil {
+            enable(animated: true)
         }
-        blur?.effect = UIBlurEffect(style: style)
-        animateBlurEffectChange()
-    }
-    
-    private func animateBlurEffectChange() {
-        animator?.stopAnimation(true)
-        animator = UIViewPropertyAnimator(duration: animationDuration, curve: .easeInOut) {
-            self.blur?.alpha = self.alpha
-        }
-        animator?.startAnimation()
-    }
-    
-    private func applyBlurEffect() {
-        guard blur == nil, let superview = superview else { return }
-        let blurEffectView = createBlurEffectView(style: style)
-        blurEffectView.alpha = alpha
-        superview.insertSubview(blurEffectView, at: 0)
-        blurEffectView.snp.makeConstraints { $0.edges.equalToSuperview() }
-        
-        blur = blurEffectView
-        blurContentView = blurEffectView.contentView
-    }
-    
-    private func createBlurEffectView(style: UIBlurEffect.Style) -> UIVisualEffectView {
-        let blurEffect = UIBlurEffect(style: style)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        
-        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
-        let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
-        blurEffectView.contentView.addSubview(vibrancyView)
-        vibrancyView.snp.makeConstraints { $0.edges.equalToSuperview() }
-        
-        vibrancyContentView = vibrancyView.contentView
-        
-        return blurEffectView
     }
 }

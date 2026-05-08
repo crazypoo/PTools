@@ -146,10 +146,14 @@ public class PTCustomerAlertController: PTAlertController {
             view.addGestureRecognizer(tap)
         }
         
-        blur = SSBlurView.init(to: contentView)
-        blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-        blur!.alpha = 0.9
+        blur = SSBlurView(frame: .zero)
+        blur!.style = .systemThinMaterial
+        blur!.animationDuration = 0.01
         blur!.enable()
+        contentView.addSubview(blur!)
+        blur!.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         contentSubsSet()
         

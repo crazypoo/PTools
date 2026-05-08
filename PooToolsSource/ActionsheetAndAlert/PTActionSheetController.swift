@@ -18,10 +18,10 @@ public typealias PTActionSheetIndexCallback = (_ sheet:PTActionSheetController, 
 public class PTActionCell:UIView {
         
     private lazy var blur:SSBlurView = {
-        let blurs = SSBlurView(to: self)
-        blurs.alpha = 0.9
-        blurs.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-        return blurs
+        let blur = SSBlurView(frame: .zero)
+        blur.animationDuration = 0.01
+        blur.enable(animated: true)
+        return blur
     }()
     
     lazy var cellButton : PTActionLayoutButton = {
@@ -37,12 +37,13 @@ public class PTActionCell:UIView {
                 self.blurChange(style: previousTraitCollection.userInterfaceStyle)
             }
         }
-        addSubview(cellButton)
-        cellButton.snp.makeConstraints { make in
+        addSubviews([blur,cellButton])
+        blur.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        blur.enable()
+        cellButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }        
     }
     
     required init?(coder: NSCoder) {

@@ -614,14 +614,33 @@ class PTFuncNameViewController: PTBaseViewController {
                         }
                     }
                 } else if itemRow.title == .touchID {
-                    let touchID = PTBiologyID.shared
-                    touchID.biologyStatusBlock = { type in
-                        PTNSLogConsole("\(type)")
+                    let biometricsManager = PTBiometricsManager.shared
+                        
+                    // 1. 获取设备支持状态 (对应以前的 biologyStatusBlock)
+                    // 现在变成了一个同步属性，直接读取即可，不用等回调！
+                    let supportType = biometricsManager.currentBiometryStatus
+                    PTNSLogConsole("设备支持的生物识别类型: \(supportType)")
+                    
+                    // 2. 发起验证并等待结果 (对应以前的 biologyStart + biologyVerifyStatusBlock)
+                    // 使用 Task 包装异步任务
+                    Task {
+                        PTNSLogConsole("开始验证...")
+                        
+                        // 使用 await 等待验证结果，代码会在这里暂停，直到用户验证完成才往下走
+                        let verifyStatus = await biometricsManager.startAuthentication(alertTitle: "Test")
+                        
+                        // 拿到结果后直接处理
+                        PTNSLogConsole("验证结果: \(verifyStatus)")
+                        
+                        // 你可以根据具体状态进行业务处理，例如：
+                        if verifyStatus == .success {
+                            PTNSLogConsole("✅ 验证成功，可以进入下一步了！")
+                        } else if verifyStatus == .domainStateChanged {
+                            PTNSLogConsole("⚠️ 警告：检测到用户录入了新的指纹/面容，需要重新登录！")
+                        } else {
+                            PTNSLogConsole("❌ 验证失败或取消")
+                        }
                     }
-                    touchID.biologyVerifyStatusBlock = { type in
-                        PTNSLogConsole("\(type)")
-                    }
-                    touchID.biologyStart(alertTitle: "Test")
                 } else if itemRow.title == .videoEditor {
                     let pickerConfig = PTMediaLibConfig.share
                     pickerConfig.allowSelectImage = false

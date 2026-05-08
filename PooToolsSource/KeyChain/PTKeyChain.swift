@@ -17,6 +17,7 @@ public let kPassword = "kPassword"
     case success, duplicateItem, itemNotFound, keyboardIDNotFound
     case touchIDNotFound, alertCancel, passwordKilled, unknown
     case keyboardCancel, keyboardTouchID, touchIDNotOpen, failed, systemCancel
+    case domainStateChanged
 }
 
 public typealias PTKeyChainBlock = (_ success: Bool) -> Void
