@@ -47,6 +47,16 @@ open class PTSideMenuControl: PTBaseViewController {
 
     private var shouldCallSwitchingDelegate = true
 
+    private var menuAnimator: UIViewPropertyAnimator?
+    
+    open override var childForStatusBarStyle: UIViewController? {
+        return isMenuRevealed ? menuViewController : contentViewController
+    }
+
+    open override var childForStatusBarHidden: UIViewController? {
+        return isMenuRevealed ? menuViewController : contentViewController
+    }
+    
     open var contentViewController: UIViewController! {
         didSet {
             guard contentViewController !== oldValue &&
@@ -124,9 +134,7 @@ open class PTSideMenuControl: PTBaseViewController {
         self.menuViewController = menuViewController
     }
 
-    deinit {
-        unregisterNotifications()
-    }
+    deinit {}
 
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,6 +218,12 @@ open class PTSideMenuControl: PTBaseViewController {
                                       shouldCallDelegate: Bool = true,
                                       shouldChangeStatusBar: Bool = true,
                                       completion: PTBoolTask? = nil) {
+        
+        // 如果已有正在运行的动画，先停止它
+        if let runningAnimator = menuAnimator, runningAnimator.isRunning {
+            runningAnimator.stopAnimation(true)
+        }
+
         menuViewController.beginAppearanceTransition(reveal, animated: animated)
 
         if shouldCallDelegate {
@@ -222,67 +236,64 @@ open class PTSideMenuControl: PTBaseViewController {
 
         self.view.isUserInteractionEnabled = false
         
-        let animationClosure = {
+        // 1. 创建动画器
+        let animator = UIViewPropertyAnimator(duration: reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration,
+                                              dampingRatio: preferences.animation.dampingRatio)
+        
+        // 2. 配置动画状态
+        animator.addAnimations {
             self.menuContainerView.frame = self.sideMenuFrame(visibility: reveal)
             self.contentContainerView.frame = self.contentFrame(visibility: reveal)
             if self.shouldShowShadowOnContent {
                 self.contentContainerOverlay?.alpha = reveal ? self.preferences.animation.shadowAlpha : 0
             }
+            
+            if shouldChangeStatusBar {
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
         }
-
-        let animationCompletionClosure: PTBoolTask = { finish in
+        
+        // 3. 配置完成回调
+        animator.addCompletion { [weak self] position in
+            guard let self = self else { return }
+            
+            // 判断动画是否因为被反转而回到起点
+            let didReveal = position == .end ? reveal : !reveal
+            
             self.menuViewController.endAppearanceTransition()
 
             if shouldCallDelegate {
-                if reveal {
+                if didReveal {
                     self.sideMenuControlDidReveal?(self)
                 } else {
                     self.sideMenuControlDidHideMenu?(self)
                 }
             }
 
-            if !reveal {
+            if !didReveal {
                 self.contentContainerOverlay?.removeFromSuperview()
                 self.contentContainerOverlay = nil
             }
 
             completion?(true)
-            
             self.view.isUserInteractionEnabled = true
-
-            self.isMenuRevealed = reveal
+            self.isMenuRevealed = didReveal
+            self.menuAnimator = nil
         }
 
+        self.menuAnimator = animator
+
+        // 4. 执行动画
         if animated {
-            animateMenu(with: reveal,
-                        shouldChangeStatusBar: shouldChangeStatusBar,
-                        animations: animationClosure,
-                        completion: animationCompletionClosure)
+            animator.startAnimation()
         } else {
-            animationClosure()
-            animationCompletionClosure(true)
-            completion?(true)
+            // 无动画直接触发结束状态
+            animator.fractionComplete = 1.0
+            animator.stopAnimation(false)
+            animator.finishAnimation(at: .end)
         }
-
     }
-
-    private func animateMenu(with reveal: Bool,
-                             shouldChangeStatusBar: Bool = true,
-                             animations: @escaping PTActionTask,
-                             completion: PTBoolTask? = nil) {
-        let duration = reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration
-        UIView.animate(withDuration: duration,
-                       delay: 0,
-                       usingSpringWithDamping: preferences.animation.dampingRatio,
-                       initialSpringVelocity: preferences.animation.initialSpringVelocity,
-                       options: preferences.animation.options,
-                       animations: {
-                        animations()
-        }, completion: { (finished) in
-            completion?(finished)
-        })
-    }
-
+    
     // MARK: Gesture Recognizer
     private func configureGesturesRecognizer() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(PTSideMenuControl.handlePanGesture(_:)))
@@ -327,113 +338,100 @@ open class PTSideMenuControl: PTBaseViewController {
 
     @objc private func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         let isLeft = adjustedDirection == .left
-        var translation = pan.translation(in: pan.view).x
-        let viewToAnimate: UIView
-        let viewToAnimate2: UIView?
-        var leftBorder: CGFloat
-        var rightBorder: CGFloat
-        let containerWidth: CGFloat
-        switch preferences.basic.position {
-        case .above:
-            viewToAnimate = menuContainerView
-            viewToAnimate2 = nil
-            containerWidth = viewToAnimate.frame.width
-            leftBorder = -containerWidth
-            rightBorder = menuWidth - containerWidth
-        case .under:
-            viewToAnimate = contentContainerView
-            viewToAnimate2 = nil
-            containerWidth = viewToAnimate.frame.width
-            leftBorder = 0
-            rightBorder = menuWidth
-        case .sideBySide:
-            viewToAnimate = contentContainerView
-            viewToAnimate2 = menuContainerView
-            containerWidth = viewToAnimate.frame.width
-            leftBorder = 0
-            rightBorder = menuWidth
-        }
-
-        if !isLeft {
-            swap(&leftBorder, &rightBorder)
-            leftBorder *= -1
-            rightBorder *= -1
-        }
+        let translation = pan.translation(in: view).x
+        let velocity = pan.velocity(in: view).x
+        
+        // 计算移动因数：处理左右方向以及 RTL 适配
+        var factor: CGFloat = isLeft ? 1 : -1
+        if shouldReverseDirection { factor *= -1 }
 
         switch pan.state {
         case .began:
-            panningBeganPointX = viewToAnimate.frame.origin.x
-            isValidatePanningBegan = false
+            // 如果没有 Animator，说明是手势主动触发，我们需要创建它并暂停
+            if menuAnimator == nil {
+                let targetReveal = !isMenuRevealed
+                changeMenuVisibility(reveal: targetReveal, shouldCallDelegate: true, shouldChangeStatusBar: true)
+                // 立即暂停动画，交由手势控制进度
+                menuAnimator?.pauseAnimation()
+            } else {
+                // 如果动画正在运行（比如点击了按钮正在打开，此时用户用手指按住），直接暂停接管
+                menuAnimator?.pauseAnimation()
+            }
+            isValidatePanningBegan = true
+            
         case .changed:
-            let resultX = panningBeganPointX + translation
-            let notReachLeftBorder = (!isLeft && preferences.basic.enableRubberEffectWhenPanning) || resultX >= leftBorder
-            let notReachRightBorder = (isLeft && preferences.basic.enableRubberEffectWhenPanning) || resultX <= rightBorder
-            guard notReachLeftBorder && notReachRightBorder else {
-                return
+            guard isValidatePanningBegan, let animator = menuAnimator else { return }
+            
+            // 计算手势拖拽进度 (0.0 到 1.0)
+            var progress = (translation * factor) / menuWidth
+            
+            // 如果当前是打开状态，手势是反向的（用于关闭）
+            if isMenuRevealed {
+                progress = -progress
             }
-
-            if !isValidatePanningBegan {
-                addContentOverlayViewIfNeeded()
-                isValidatePanningBegan = true
-            }
-
-            let factor: CGFloat = isLeft ? 1 : -1
-            let notReachDesiredBorder = isLeft ? resultX <= rightBorder : resultX >= leftBorder
-            if notReachDesiredBorder {
-                viewToAnimate.frame.origin.x = resultX
-            } else {
-                if !isMenuRevealed {
-                    translation -= menuWidth * factor
-                }
-                viewToAnimate.frame.origin.x = (isLeft ? rightBorder : leftBorder) + factor * menuWidth
-                    * log10(translation * factor / menuWidth + 1) * 0.5
-            }
-
-            if let viewToAnimate2 = viewToAnimate2 {
-                viewToAnimate2.frame.origin.x = viewToAnimate.frame.origin.x - containerWidth * factor
-            }
-
-            if shouldShowShadowOnContent {
-                let movingDistance: CGFloat
-                if isLeft {
-                    movingDistance = menuContainerView.frame.maxX
+            
+            // 实现简单的阻尼（橡皮筋）效果
+            if progress < 0 {
+                // 反向拖动（越界），给进度打个折扣
+                if preferences.basic.enableRubberEffectWhenPanning {
+                    progress = progress * 0.2
                 } else {
-                    movingDistance = menuWidth - menuContainerView.frame.minX
+                    progress = 0
                 }
-                let shadowPercent = min(movingDistance / menuWidth, 1)
-                contentContainerOverlay?.alpha = self.preferences.animation.shadowAlpha * shadowPercent
             }
+            
+            // 更新动画进度
+            animator.fractionComplete = min(max(0, progress), 1)
+            
         case .ended, .cancelled, .failed:
-            let offset: CGFloat
-            switch preferences.basic.position {
-            case .above:
-                offset = isLeft ? viewToAnimate.frame.maxX : containerWidth - viewToAnimate.frame.minX
-            case .under, .sideBySide:
-                offset = isLeft ? viewToAnimate.frame.minX : containerWidth - viewToAnimate.frame.maxX
-            }
-            let offsetPercent = offset / menuWidth
-            let decisionPoint: CGFloat = isMenuRevealed ? 0.85 : 0.15
-            if offsetPercent > decisionPoint {
-                // We need to call the delegates, change the status bar only when the menu was previous hidden
-                changeMenuVisibility(reveal: true, shouldCallDelegate: !isMenuRevealed, shouldChangeStatusBar: !isMenuRevealed)
+            guard let animator = menuAnimator else { return }
+            
+            var progress = (translation * factor) / menuWidth
+            if isMenuRevealed { progress = -progress }
+            
+            // 速度阈值：用来判断用户是否进行了“甩”的操作
+            let velocityThreshold: CGFloat = 300
+            
+            let isMovingInFavorableDirection = isMenuRevealed ? (velocity * factor < -velocityThreshold) : (velocity * factor > velocityThreshold)
+            let isMovingInOppositeDirection = isMenuRevealed ? (velocity * factor > velocityThreshold) : (velocity * factor < -velocityThreshold)
+            
+            let shouldComplete: Bool
+            if isMovingInFavorableDirection {
+                // 速度够快且方向正确，判定完成
+                shouldComplete = true
+            } else if isMovingInOppositeDirection {
+                // 速度够快但方向相反（比如打开时反悔往回甩），判定取消
+                shouldComplete = false
             } else {
-                changeMenuVisibility(reveal: false, shouldCallDelegate: isMenuRevealed, shouldChangeStatusBar: true)
+                // 速度慢，按拖动距离过半来判定
+                shouldComplete = progress > 0.5
             }
+            
+            // 关键：如果不完成，就将动画反转，它会自动回到起点
+            animator.isReversed = !shouldComplete
+            
+            // 继承手指离开屏幕时的速度，让松手后的回弹更加符合物理规律
+            let normalizedVelocity = CGVector(dx: abs(velocity) / menuWidth, dy: 0)
+            let springParameters = UISpringTimingParameters(dampingRatio: preferences.animation.dampingRatio, initialVelocity: normalizedVelocity)
+            
+            animator.continueAnimation(withTimingParameters: springParameters, durationFactor: 0)
+            isValidatePanningBegan = false
+            
         default:
             break
         }
     }
-
+    
     // MARK: Notification
     private func setUpNotifications() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(PTSideMenuControl.appDidEnteredBackground),
-                                               name: UIApplication.didEnterBackgroundNotification,
-                                               object: nil)
-    }
-
-    private func unregisterNotifications() {
-        NotificationCenter.default.removeObserver(self)
+                                                   selector: #selector(appDidEnteredBackground),
+                                                   name: UIScene.didEnterBackgroundNotification,
+                                                   object: nil)
+        NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(appDidEnteredBackground),
+                                                   name: UIApplication.didEnterBackgroundNotification,
+                                                   object: nil)
     }
 
     @objc private func appDidEnteredBackground() {

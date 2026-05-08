@@ -13,15 +13,21 @@ open class PTBaseSideController: PTBaseViewController {
 
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let sideMenuBasicConfiguration = PTSideMenuControl.preferences.basic
-        switch sideMenuBasicConfiguration.direction {
+        
+        // 【修复】依赖父视图的 bounds 而不是物理屏幕宽度
+        guard let parentWidth = self.parent?.view.bounds.width else { return }
+        
+        let menuWidth = PTSideMenuControl.preferences.basic.menuWidth
+        let direction = PTSideMenuControl.preferences.basic.direction
+        
+        switch direction {
         case .left:
-            view.frame = CGRectMake(CGFloat.kSCREEN_WIDTH - PTSideMenuControl.preferences.basic.menuWidth, 0, PTSideMenuControl.preferences.basic.menuWidth, view.bounds.height)
+            view.frame = CGRect(x: parentWidth - menuWidth, y: 0, width: menuWidth, height: view.bounds.height)
         case .right:
-            view.frame = CGRectMake(0, 0, PTSideMenuControl.preferences.basic.menuWidth, view.bounds.height)
+            view.frame = CGRect(x: 0, y: 0, width: menuWidth, height: view.bounds.height)
         }
     }
-    
+
     open override func viewDidLoad() {
         super.viewDidLoad()
     }

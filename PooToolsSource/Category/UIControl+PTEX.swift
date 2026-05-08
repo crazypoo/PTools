@@ -9,14 +9,16 @@ import UIKit
 
 // 1. 创建一个私有的闭包包装器
 private class UIControlClosureWrapper: NSObject {
-    let closure: (Any) -> Void
+    // 【关键修改 1】：直接接收 UIControl 而不是 Any。
+    // 避免 UIKit 在 Objective-C 层面传递 id 时，Swift 桥接 Any 产生的运行时类型不稳定。
+    let closure: (UIControl) -> Void
     
-    init(_ closure: @escaping (Any) -> Void) {
+    init(_ closure: @escaping (UIControl) -> Void) {
         self.closure = closure
         super.init()
     }
     
-    @objc func invoke(_ sender: Any) {
+    @objc func invoke(_ sender: UIControl) {
         closure(sender)
     }
 }
@@ -25,14 +27,14 @@ private class UIControlClosureWrapper: NSObject {
 public extension UIControl {
     
     private struct AssociatedKeys {
-        static var controlActionWrappersKey: UInt8 = 0
-        static var clickIntervalKey: UInt8 = 0
-        static var isIgnoreEventKey: UInt8 = 0
+        // 使用 Void? 作为 Key 的地址，这是 Swift 中最高效、安全的关联对象 Key 写法
+        static var wrappersKey: Void?
+        static var clickIntervalKey: Void?
+        static var isIgnoreEventKey: Void?
     }
     
     // MARK: - 属性扩展：防抖时间间隔
     
-    /// 点击事件的防抖间隔时间（秒）。默认是 0（不防抖）
     var clickInterval: TimeInterval {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.clickIntervalKey) as? TimeInterval ?? 0
@@ -42,7 +44,6 @@ public extension UIControl {
         }
     }
     
-    /// 内部使用的标志位，判断当前是否应该忽略事件
     private var isIgnoreEvent: Bool {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.isIgnoreEventKey) as? Bool ?? false
@@ -52,18 +53,21 @@ public extension UIControl {
         }
     }
     
-    // MARK: - 核心方法
+    // MARK: - 核心方法（保留泛型 T）
     
     /// 统一的添加事件闭包方法
     /// - Parameters:
-    ///   - event: 触发的事件类型，例如 .touchUpInside
-    ///   - handler: 触发后的回调闭包
+    ///   - event: 触发的事件类型
+    ///   - handler: 触发后的回调闭包，泛型 T 保证了外部可以直接拿到具体类型（如 UIButton）
     func addActionHandler<T: UIControl>(for event: UIControl.Event, handler: @escaping (_ sender: T) -> Void) {
         
-        var wrappers = objc_getAssociatedObject(self, &AssociatedKeys.controlActionWrappersKey) as? [UInt: UIControlClosureWrapper] ?? [:]
+        // 【关键修改 2】：使用 NSMutableDictionary 替代 Swift 字典 [UInt: Wrapper]。
+        // 彻底解决关联对象在读取/写入 Swift Struct 时因为桥接失败导致的 SIGABRT 闪退。
+        let wrappers = objc_getAssociatedObject(self, &AssociatedKeys.wrappersKey) as? NSMutableDictionary ?? NSMutableDictionary()
+        let eventKey = NSNumber(value: event.rawValue)
         
-        // 【修复 1】：清理旧的 Target，防止内存泄漏和逻辑错误
-        if let oldWrapper = wrappers[event.rawValue] {
+        // 清理旧的 Target
+        if let oldWrapper = wrappers[eventKey] as? UIControlClosureWrapper {
             self.removeTarget(oldWrapper, action: #selector(UIControlClosureWrapper.invoke(_:)), for: event)
         }
         
@@ -71,29 +75,26 @@ public extension UIControl {
         let wrapper = UIControlClosureWrapper { [weak self] sender in
             guard let self = self else { return }
             
-            // 【修复 2】：防抖拦截逻辑
+            // 防抖逻辑
             if self.clickInterval > 0 {
-                if self.isIgnoreEvent {
-                    return // 还在冷却时间内，直接忽略本次点击
-                }
-                
+                if self.isIgnoreEvent { return }
                 self.isIgnoreEvent = true
                 
-                // 延迟重置标志位
                 DispatchQueue.main.asyncAfter(deadline: .now() + self.clickInterval) { [weak self] in
                     self?.isIgnoreEvent = false
                 }
             }
             
-            // 将 sender 安全地转换为泛型 T 并执行回调
+            // 【关键修改 3】：在这里进行安全的泛型转换
+            // sender 确定是 UIControl，将其安全转换为泛型 T（例如 UIButton）再回调给外部
             if let typedSender = sender as? T {
                 handler(typedSender)
             }
         }
         
         // 更新字典并重新绑定
-        wrappers[event.rawValue] = wrapper
-        objc_setAssociatedObject(self, &AssociatedKeys.controlActionWrappersKey, wrappers, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        wrappers[eventKey] = wrapper
+        objc_setAssociatedObject(self, &AssociatedKeys.wrappersKey, wrappers, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
         addTarget(wrapper, action: #selector(UIControlClosureWrapper.invoke(_:)), for: event)
     }
