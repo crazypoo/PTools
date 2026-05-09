@@ -125,6 +125,21 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     // 新增：将视频转换器提升为实例变量，方便全局控制（如取消导出、清理缓存）
     private var videoConverter: VideoConverter?
 
+    // 拖拽时间轴专用的极速抽帧器
+    private lazy var scrubImageGenerator: AVAssetImageGenerator = {
+        let generator = AVAssetImageGenerator(asset: self.videoAVAsset)
+        generator.appliesPreferredTrackTransform = true
+        // 前后容差设为 0，保证拖动画面 100% 精准
+        generator.requestedTimeToleranceBefore = .zero
+        generator.requestedTimeToleranceAfter = .zero
+        // 限制抽帧分辨率（如600x600），保证拖拽极其丝滑不卡顿
+        generator.maximumSize = CGSize(width: 600, height: 600)
+        return generator
+    }()
+    
+    // 记录当前的抽帧任务，以便快速拖动时随时取消旧任务
+    private var scrubTask: Task<Void, Never>?
+
     var hudToHide: PTHudView? = nil
 
     public var onEditCompleteHandler:((URL)->Void)?
@@ -267,6 +282,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
     lazy var playerButton:PTActionLayoutButton = {
         let view = PTActionLayoutButton()
+        view.progressLayerBorderColor = .clear
         view.layoutStyle = .image
         view.imageSize = CGSizeMake(25, 25)
         view.setImage(UIImage(.play.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)), state: .normal)
@@ -278,6 +294,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             sender.isSelected = !sender.isSelected
             
             if sender.isSelected {
+                self.originFilterImageView.isHidden = true
                 if self.currentFilter.type == .none {
                     self.c7Player.filters = []
                 } else {
@@ -342,6 +359,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     lazy var muteButton:PTActionLayoutButton = {
         let view = PTActionLayoutButton()
+        view.progressLayerBorderColor = .clear
         view.layoutStyle = .leftImageRightTitle
         view.imageSize = CGSizeMake(25, 25)
         view.setImage(UIImage(.speaker).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)), state: .normal)
@@ -1188,6 +1206,39 @@ extension PTVideoEditorToolsViewController {
         if self.isSeeking {
             // toleranceBefore 和 toleranceAfter 设为 .zero 保证帧级别的精准度
             self.avPlayer?.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
+            
+            // 取消上一次还没来得及完成的抽帧任务（防抖）
+            self.scrubTask?.cancel()
+            self.scrubTask = Task {
+                do {
+                    // 异步提取画面
+                    let cgImage = try await self.generateImageAsync(at: cmTime)
+                    // 如果快速滑过被取消，立即丢弃旧帧
+                    guard !Task.isCancelled else { return }
+                    
+                    let frameImage = UIImage(cgImage: cgImage)
+                    
+                    await MainActor.run {
+                        // 1. 始终更新底层原始图
+                        self.originImageView.image = frameImage
+                        
+                        // 2. 如果有滤镜，实时渲染到静态滤镜层
+                        if self.currentFilter.type == .none {
+                            self.originFilterImageView.isHidden = true
+                        } else {
+                            if let filterResult = self.currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter {
+                                let dest = HarbethIO(element: frameImage, filters: [filterResult])
+                                if let output = try? dest.output() {
+                                    self.originFilterImageView.image = output
+                                    self.originFilterImageView.isHidden = false
+                                }
+                            }
+                        }
+                    }
+                } catch {
+                    // 抽帧被取消或失败，直接忽略
+                }
+            }
         }
     }
 }
@@ -1327,5 +1378,24 @@ fileprivate extension PTVideoEditorToolsViewController {
         let path = UIBezierPath(rect: mappedRect)
         path.append(UIBezierPath(rect: self.dimView.bounds))
         return path.cgPath
+    }
+    
+    /// 包装 AVAssetImageGenerator 为 async，支持各版本 iOS
+    func generateImageAsync(at time: CMTime) async throws -> CGImage {
+        if #available(iOS 16.0, *) {
+            let (cgImage, _) = try await self.scrubImageGenerator.image(at: time)
+            return cgImage
+        } else {
+            return try await withCheckedThrowingContinuation { continuation in
+                let times = [NSValue(time: time)]
+                self.scrubImageGenerator.generateCGImagesAsynchronously(forTimes: times) { _, image, _, result, error in
+                    if let image = image, result == .succeeded {
+                        continuation.resume(returning: image)
+                    } else {
+                        continuation.resume(throwing: error ?? NSError(domain: "PTVideoEditor", code: 404, userInfo: nil))
+                    }
+                }
+            }
+        }
     }
 }

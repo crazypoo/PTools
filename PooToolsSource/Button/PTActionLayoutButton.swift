@@ -46,7 +46,7 @@ public class PTActionLayoutButton: UIControl {
     public var imageContentMode: UIView.ContentMode = .scaleAspectFit {
         didSet { if oldValue != imageContentMode { updateAppearance() } }
     }
-    
+        
     // 重写 `state` 属性
     public override var state: UIControl.State {
         if !isEnabled {
@@ -304,6 +304,20 @@ public class PTActionLayoutButton: UIControl {
     fileprivate var selectedAtt: ASAttributedString?
     public var currentAtt: ASAttributedString? = nil
 
+    public var progressLayerRadius: CGFloat = 0
+    public var progressLayerTopLeft: CGFloat = 0
+    public var progressLayerTopRight: CGFloat = 0
+    public var progressLayerBottomLeft: CGFloat = 0
+    public var progressLayerBottomRight: CGFloat = 0
+    public var progressLayerCorner: UIRectCorner = .allCorners
+    public var progressLayerCapsule: Bool = false
+    public var progressLayerBorderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth
+    public var progressLayerBorderColor: UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor
+    public var progressLayerShowValueLabel: Bool = PTAppBaseConfig.share.loadImageShowValueLabel
+    public var progressLayerValueLabelFont: UIFont = PTAppBaseConfig.share.loadImageShowValueFont
+    public var progressLayerValueLabelColor: UIColor = PTAppBaseConfig.share.loadImageShowValueColor
+    public var progressLayerUniCount: Int = PTAppBaseConfig.share.loadImageShowValueUniCount
+    
     // 更新状态时的外观
     private func updateAppearance() {
         switch state {
@@ -372,7 +386,20 @@ public class PTActionLayoutButton: UIControl {
         imageView.contentMode = self.imageContentMode
         
         if let currentImage = currentImage {
-            imageView.loadImage(contentData: currentImage) // 你的自定义方法
+            imageView.loadImage(contentData: currentImage,
+                                radius: self.progressLayerRadius,
+                                topLeft: self.progressLayerTopLeft,
+                                topRight: self.progressLayerTopRight,
+                                bottomLeft: self.progressLayerBottomLeft,
+                                bottomRight: self.progressLayerBottomRight,
+                                corner: self.progressLayerCorner,
+                                capsule: self.progressLayerCapsule,
+                                borderWidth: self.progressLayerBorderWidth,
+                                borderColor: self.progressLayerBorderColor,
+                                showValueLabel: self.progressLayerShowValueLabel,
+                                valueLabelFont: self.progressLayerValueLabelFont,
+                                valueLabelColor: self.progressLayerValueLabelColor,
+                                uniCount: self.progressLayerUniCount) // 你的自定义方法
         } else {
             imageView.image = nil
         }

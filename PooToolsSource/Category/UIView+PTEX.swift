@@ -856,6 +856,13 @@ public extension UIView {
     // 3. 核心大一统方法
     func pt_loadCoreImage(contentData: Any,
                           iCloudDocumentName: String = "",
+                          radius: CGFloat = 0,
+                          topLeft: CGFloat = 0,
+                          topRight: CGFloat = 0,
+                          bottomLeft: CGFloat = 0,
+                          bottomRight: CGFloat = 0,
+                          corner: UIRectCorner = .allCorners,
+                          capsule: Bool = false,
                           borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
                           borderColor: UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
                           showValueLabel: Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
@@ -890,6 +897,13 @@ public extension UIView {
                 guard isValid() else { return }
                 setImageBlock(image)
                 self.layerProgress(value: 1,
+                                   radius: radius,
+                                   topLeft: topLeft,
+                                   topRight: topRight,
+                                   bottomLeft: bottomLeft,
+                                   bottomRight: bottomRight,
+                                   corner: corner,
+                                   capsule: capsule,
                                    borderWidth: borderWidth,
                                    borderColor: borderColor,
                                    showValueLabel: showValueLabel,
@@ -970,6 +984,13 @@ public extension UIView {
                         } else {
                             self.layerProgress(
                                 value: CGFloat(received) / CGFloat(total),
+                                radius: radius,
+                                topLeft: topLeft,
+                                topRight: topRight,
+                                bottomLeft: bottomLeft,
+                                bottomRight: bottomRight,
+                                corner: corner,
+                                capsule: capsule,
                                 borderWidth: borderWidth,
                                 borderColor: borderColor,
                                 showValueLabel: showValueLabel,
