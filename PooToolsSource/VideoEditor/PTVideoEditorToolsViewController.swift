@@ -480,7 +480,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let label = UILabel()
         label.textAlignment = .right
         label.text = "0:00"
-        label.font = .systemFont(ofSize: 13.0)
+        label.font = PTVideoEditorConfig.share.videoTimeFont
         label.textColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         return label
     }()
@@ -489,7 +489,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let label = UILabel()
         label.textAlignment = .left
         label.text = "0:00"
-        label.font = .systemFont(ofSize: 13.0)
+        label.font = PTVideoEditorConfig.share.videoTimeFont
         label.textColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         return label
     }()
@@ -822,15 +822,21 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
                 
+        self.setupAudioSession()
+        self.setupLifecycleNotifications()
+
         view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
         imageContent.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-            make.left.right.equalToSuperview().inset(64)
+            make.left.right.equalToSuperview()
             make.height.equalTo(self.imageContent.snp.width)
         }
 
         imageContent.addSubviews([originImageView,originFilterImageView])
-                
+        originImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         originImageView.addSubview(dimView)
         dimView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -897,17 +903,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.currentTimeLabel.text = "0:00"
 
                     if let firstImage = cgImages.first {
-                        let imageSize = UIImage(cgImage: firstImage).size
-                        let scale = self.imageContent.frame.size.height / imageSize.height
-                        let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
                         self.originFilterImageView.image = UIImage(cgImage: firstImage)
                         self.originImageView.image = UIImage(cgImage: firstImage)
-                        self.originImageView.snp.makeConstraints { make in
-                            make.width.equalTo(showImageSize.width)
-                            make.centerX.equalToSuperview()
-                            make.top.bottom.equalToSuperview()
-                            make.centerX.centerY.equalToSuperview()
-                        }
                     }
 
                     let width: CGFloat = 2.0
@@ -1011,8 +1008,35 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     fileprivate func setOutPut(completion: @escaping ((URL?, Error?) -> Void)) {
 
         var videoConverterCrop: ConverterCrop?
-        if let dimFrame = dimFrame {
-            videoConverterCrop = ConverterCrop(frame: dimFrame, contrastSize: originImageView.size)
+
+        if let dimFrame = dimFrame, let image = originImageView.image {
+            let viewSize = originImageView.bounds.size
+            let imageSize = image.size
+            
+            // 1. 计算 AspectFit 模式下的实际缩放比例
+            let widthRatio = viewSize.width / imageSize.width
+            let heightRatio = viewSize.height / imageSize.height
+            let scale = min(widthRatio, heightRatio)
+            
+            // 2. 计算视频画面在 ImageView 中的真实物理绘制区域（剔除黑边）
+            let drawWidth = imageSize.width * scale
+            let drawHeight = imageSize.height * scale
+            let drawX = (viewSize.width - drawWidth) / 2.0
+            let drawY = (viewSize.height - drawHeight) / 2.0
+            let displayRect = CGRect(x: drawX, y: drawY, width: drawWidth, height: drawHeight)
+            
+            // 3. 求交集：限制用户的裁剪框绝对不能超出视频的真实画面边界
+            let actualCropFrame = dimFrame.intersection(displayRect)
+            
+            // 4. 坐标系平移：将相对于屏幕的 x, y 转换为相对于视频画面的 x, y
+            if actualCropFrame.width > 0 && actualCropFrame.height > 0 {
+                let relativeX = actualCropFrame.origin.x - displayRect.origin.x
+                let relativeY = actualCropFrame.origin.y - displayRect.origin.y
+                let relativeCropFrame = CGRect(x: relativeX, y: relativeY, width: actualCropFrame.width, height: actualCropFrame.height)
+                
+                // 5. 组装高精度 Crop 模型，contrastSize 必须是真实的绘制区域尺寸
+                videoConverterCrop = ConverterCrop(frame: relativeCropFrame, contrastSize: displayRect.size)
+            }
         }
 
         let options = ConverterOption(
@@ -1252,9 +1276,6 @@ fileprivate extension PTVideoEditorToolsViewController {
                 
                 // 确保 UI 刷新和播放器操作在主线程进行
                 await MainActor.run {
-                    // 显示 loading 提示框（可选，提升用户体验）
-                    // PTHudView().hudShow()
-                    
                     self.setVideoAsset {
                         self.reloadAsset()
                     }
@@ -1397,5 +1418,45 @@ fileprivate extension PTVideoEditorToolsViewController {
                 }
             }
         }
+    }
+}
+
+// MARK: - 系统级生命周期与音频管控 (App Lifecycle & Audio Session)
+fileprivate extension PTVideoEditorToolsViewController {
+    
+    /// 配置音频会话，突破物理静音键限制
+    func setupAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            // .playback 确保在物理静音键开启时依然能发声
+            // .videoChat 或 .default 确保不会打断系统其他重要音频
+            try audioSession.setCategory(.playback, mode: .default, options: [])
+            try audioSession.setActive(true)
+        } catch {
+            PTNSLogConsole("🎬 AVAudioSession 设置失败: \(error.localizedDescription)", levelType: .error, loggerType: .media)
+        }
+    }
+    
+    /// 注册后台运行通知，防止 GPU 后台崩溃
+    func setupLifecycleNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+    }
+    
+    /// 退到后台时的安全管控
+    @objc func applicationDidEnterBackground() {
+        // 1. 强制暂停播放，释放硬件解码器压力
+        if self.playerButton.isSelected {
+            self.playerButton.isSelected = false
+            self.c7Player?.pause()
+        }
+        
+        // 2. 如果你的 timeObserverToken 正在狂跑，它也会随着暂停而停止执行
+        // 确保 UI 处于绝对静止状态
+        PTNSLogConsole("🎬 App进入后台，视频编辑器已安全静默", levelType: .info, loggerType: .media)
     }
 }

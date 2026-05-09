@@ -72,4 +72,6 @@ public class PTVideoEditorConfig: NSObject {
     public var outPutProgressShowValueLabel:Bool = true
     public var outPutProgressShowValueFont:UIFont = .systemFont(ofSize: 16,weight:.bold)
     public var outPutProgressShowValueColor:UIColor = .systemBlue
+    
+    public var videoTimeFont:UIFont = .systemFont(ofSize: 13)
 }
