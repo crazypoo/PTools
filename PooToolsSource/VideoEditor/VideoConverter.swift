@@ -10,6 +10,9 @@ import UIKit
 import AVKit
 
 open class VideoConverter {
+    // 新增：记录当前正在导出的目标路径，用于失败/取消时的安全清理
+    private var currentExportURL: URL?
+
     public let asset: AVAsset
     public let presets: [String]
 
@@ -63,14 +66,38 @@ open class VideoConverter {
         self.presets = AVAssetExportSession.exportPresets(compatibleWith: asset)
     }
 
-    // Restore
-    open func restore() {
+    // Restore & Clean up
+    open func restore(cleanupDisk: Bool = false) {
         self.option = nil
-        self.assetExportsSession?.cancelExport()
+        
+        // 取消正在进行的导出任务
+        if let session = self.assetExportsSession, session.status == .exporting || session.status == .waiting {
+            session.cancelExport()
+        }
         self.assetExportsSession = nil
+        
         self.timer?.invalidate()
         self.timer = nil
         self.progressCallback = nil
+        
+        // 如果指定需要清理，立即删除残缺文件释放用户存储空间
+        if cleanupDisk, let fileURL = self.currentExportURL {
+            PTGCDManager.gcdBackground {
+                let filePath = fileURL.path
+                if FileManager.default.fileExists(atPath: filePath) {
+                    do {
+                        try FileManager.default.removeItem(atPath: filePath)
+                    } catch {
+                        // 清理失败可以忽略
+                    }
+                }
+            }
+        }
+        
+        // 【极其关键的修复】：将 currentExportURL 的置空操作移到外部！
+        // 无论刚才是否删除了文件，只要任务归零，就彻底忘掉这个路径。
+        // 这样即使后续页面触发 deinit(cleanupDisk: true)，也绝对不会误删已经成功导出的视频。
+        self.currentExportURL = nil
     }
 
     open func convert(_ option: ConverterOption? = nil) async throws -> (AVMutableComposition,AVMutableVideoComposition) {
@@ -174,22 +201,22 @@ open class VideoConverter {
         }
     }
     
-    func convert(ac:AVMutableComposition,avc:AVMutableVideoComposition,temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
-        var outputType:String = ""
-        if option != nil {
-            outputType = option!.outputModel.name
-        } else {
-            outputType = "mov"
-        }
+    func convert(ac: AVMutableComposition, avc: AVMutableVideoComposition, temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
         
-        var outputTypeType:AVFileType = .mov
-        if option != nil {
-            outputTypeType = option!.outputModel.type
-        }
+        let outputType: String = option?.outputModel.name ?? "mov"
+        let outputTypeType: AVFileType = option?.outputModel.type ?? .mov
                 
+        guard outputType.lowercased() != "unknown" else {
+            PTGCDManager.gcdMain {
+                let error = NSError(domain: "PTVideoEditorError", code: 401, userInfo: [NSLocalizedDescriptionKey: "无法识别的输出格式 (Unknown)"])
+                completion(nil, error)
+            }
+            return
+        }
+
         var filePath = ""
         switch outputTypeType {
-        case .mov,.mp4,.m4v,.mobile3GPP,.mobile3GPP2:
+        case .mov, .mp4, .m4v, .mobile3GPP, .mobile3GPP2:
             let temporaryFileName = temporaryFileName ?? "TrimmedMovie.\(outputType)"
             filePath = FileManager.pt.TmpDirectory().appendingPathComponent(temporaryFileName)
         default:
@@ -199,62 +226,31 @@ open class VideoConverter {
         }
 
         let url = URL(fileURLWithPath: filePath)
+        // 【优化点 1】：记录当前文件 URL
+        self.currentExportURL = url
         
         let result = FileManager.pt.removefile(filePath: filePath)
-        if result.isSuccess {
-            self.progressCallback = progress
-            // progress timer
-            PTGCDManager.gcdMain {
-                self.timer = Timer.scheduledTimer(timeInterval: 0.1, repeats: true, block: { timer in
-                    if let progress = self.assetExportsSession?.progress {
-                        self.progressCallback?(Double(progress))
-                        if progress >= 1 {
-                            self.timer?.invalidate()
-                            self.timer = nil
-                        }
-                    } else if self.assetExportsSession == nil {
-                        self.timer?.invalidate()
-                        self.timer = nil
-                    }
-                })
+        guard result.isSuccess else {
+            Task { @MainActor in
+                PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(), subtitle: result.error, icon: .Error)
             }
-                        
-            var presetName = ""
-            switch outputTypeType {
-            case .mov,.mp4,.m4v,.mobile3GPP,.mobile3GPP2:
-                presetName = option?.quality ?? AVAssetExportPresetHighestQuality
-            default:
-                presetName = AVAssetExportPresetPassthrough
-            }
-            
-            self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
-            self.assetExportsSession?.outputFileType = outputTypeType
-            switch outputTypeType {
-            case .mov,.mp4,.m4v,.mobile3GPP,.mobile3GPP2:
-                self.assetExportsSession?.shouldOptimizeForNetworkUse = true
-                self.assetExportsSession?.videoComposition = avc
-            default:break
-            }
-            self.assetExportsSession?.outputURL = url
-
-            self.assetExportsSession?.exportAsynchronously {
-                self.timer?.invalidate()
-                self.timer = nil
-                PTGCDManager.gcdMain {
-                    self.progressCallback?(1)
-                    self.progressCallback = nil
-                    if let url = self.assetExportsSession?.outputURL, self.assetExportsSession?.status == .completed {
-                        completion(url, nil)
-                    } else {
-                        completion(nil, self.assetExportsSession?.error)
-                    }
-                    self.restore()
-                }
-            }
+            return
+        }
+        
+        self.progressCallback = progress
+        
+        // 【核心升级】：双引擎智能路由
+        let nativeSupportedFormats: [AVFileType] = [.mov, .mp4, .m4v, .mobile3GPP, .mobile3GPP2, .m4a]
+        
+        if nativeSupportedFormats.contains(outputTypeType) {
+            // 引擎 A：走苹果原生硬件加速的 ExportSession
+            self.exportUsingExportSession(ac: ac, avc: avc, outputTypeType: outputTypeType, url: url, completion: completion)
+        } else if outputTypeType == .mp3 {
+            // 引擎 C：走第三方 MP3 编码 (需集成 lame)
+            self.exportMP3UsingLame(ac: ac, url: url, completion: completion)
         } else {
-            Task {
-                await PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle:result.error, icon: .Error)
-            }
+            // 引擎 B：走底层流媒体读写器 (支持 wav, caf, aiff 等)
+            self.exportUsingAssetWriter(ac: ac, outputTypeType: outputTypeType, url: url, completion: completion)
         }
     }
 
@@ -312,5 +308,166 @@ open class VideoConverter {
             self.timer?.invalidate()
             self.timer = nil
         }
+    }
+    
+    // MARK: - 引擎 A (原生视频/m4a导出)
+    private func exportUsingExportSession(ac: AVMutableComposition, avc: AVMutableVideoComposition, outputTypeType: AVFileType, url: URL, completion: @escaping ((URL?, Error?) -> Void)) {
+        
+        PTGCDManager.gcdMain {
+            self.timer = Timer.scheduledTimer(timeInterval: 0.1, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                if let progress = self.assetExportsSession?.progress {
+                    self.progressCallback?(Double(progress))
+                }
+            }
+        }
+        
+        var presetName = option?.quality ?? AVAssetExportPresetHighestQuality
+        if outputTypeType == .m4a {
+            presetName = AVAssetExportPresetAppleM4A
+        }
+        
+        self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
+        self.assetExportsSession?.outputFileType = outputTypeType
+        self.assetExportsSession?.outputURL = url
+        
+        if [.mov, .mp4, .m4v].contains(outputTypeType) {
+            self.assetExportsSession?.shouldOptimizeForNetworkUse = true
+            self.assetExportsSession?.videoComposition = avc
+        }
+
+        self.assetExportsSession?.exportAsynchronously { [weak self] in
+            guard let self = self else { return }
+            self.timer?.invalidate()
+            self.timer = nil
+            
+            PTGCDManager.gcdMain {
+                if self.assetExportsSession?.status == .completed {
+                    self.progressCallback?(1)
+                    completion(url, nil)
+                    self.restore(cleanupDisk: false)
+                } else {
+                    completion(nil, self.assetExportsSession?.error)
+                    self.restore(cleanupDisk: true)
+                }
+            }
+        }
+    }
+    
+    // MARK: - 引擎 B (自定义格式 wav/caf/aiff 等导出)
+    private func exportUsingAssetWriter(ac: AVMutableComposition, outputTypeType: AVFileType, url: URL, completion: @escaping ((URL?, Error?) -> Void)) {
+        
+        // 1. 提取音频轨道
+        guard let audioTrack = ac.tracks(withMediaType: .audio).first else {
+            let error = NSError(domain: "PTVideoEditorError", code: 404, userInfo: [NSLocalizedDescriptionKey: "源视频不包含任何音频轨道，无法导出。"])
+            PTGCDManager.gcdMain {
+                completion(nil, error)
+                self.restore(cleanupDisk: true)
+            }
+            return
+        }
+        
+        do {
+            // 2. 初始化读取器 (Reader) - 读取解压后的原始 PCM 数据
+            let assetReader = try AVAssetReader(asset: ac)
+            let readerOutputSettings: [String: Any] = [
+                AVFormatIDKey: kAudioFormatLinearPCM
+            ]
+            let trackOutput = AVAssetReaderTrackOutput(track: audioTrack, outputSettings: readerOutputSettings)
+            if assetReader.canAdd(trackOutput) {
+                assetReader.add(trackOutput)
+            }
+            
+            // 3. 初始化写入器 (Writer) - 将 PCM 封装为您选择的容器 (如 wav, caf)
+            let assetWriter = try AVAssetWriter(outputURL: url, fileType: outputTypeType)
+            
+            // 配置标准 CD 音质参数 (44.1kHz, 16-bit, 立体声)
+            let writerInputSettings: [String: Any] = [
+                AVFormatIDKey: kAudioFormatLinearPCM,
+                AVSampleRateKey: 44100.0,
+                AVNumberOfChannelsKey: 2,
+                AVLinearPCMBitDepthKey: 16,
+                AVLinearPCMIsNonInterleaved: false,
+                AVLinearPCMIsFloatKey: false,
+                AVLinearPCMIsBigEndianKey: false
+            ]
+            let writerInput = AVAssetWriterInput(mediaType: .audio, outputSettings: writerInputSettings)
+            writerInput.expectsMediaDataInRealTime = false
+            
+            if assetWriter.canAdd(writerInput) {
+                assetWriter.add(writerInput)
+            }
+            
+            // 4. 启动底层引擎
+            assetWriter.startWriting()
+            assetReader.startReading()
+            assetWriter.startSession(atSourceTime: .zero)
+            
+            // 5. 创建专属音频处理队列 (脱离主线程)
+            let audioQueue = DispatchQueue(label: "com.ptools.audioExportQueue", qos: .userInitiated)
+            let totalDuration = ac.duration.seconds
+            
+            // 6. 开启异步数据传输流
+            writerInput.requestMediaDataWhenReady(on: audioQueue) { [weak self] in
+                guard let self = self else { return }
+                
+                // 循环注水：只要写入器准备好，并且任务未被取消 (self.option != nil)
+                while writerInput.isReadyForMoreMediaData {
+                    
+                    // 【安全机制】：如果外部调用了 restore()，self.option 会变为 nil。立刻中断死循环。
+                    guard self.option != nil else {
+                        writerInput.markAsFinished()
+                        assetWriter.cancelWriting()
+                        assetReader.cancelReading()
+                        // 内部取消不回调成功，外部已有 restore 逻辑处理
+                        return
+                    }
+                    
+                    if let sampleBuffer = trackOutput.copyNextSampleBuffer() {
+                        // 将提取到的音频帧写入目标文件
+                        writerInput.append(sampleBuffer)
+                        
+                        // 进度计算与抛出
+                        if totalDuration > 0 {
+                            let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+                            let progress = timeStamp.seconds / totalDuration
+                            PTGCDManager.gcdMain {
+                                self.progressCallback?(progress)
+                            }
+                        }
+                    } else {
+                        // 数据读取完毕，关闭阀门
+                        writerInput.markAsFinished()
+                        
+                        assetWriter.finishWriting {
+                            PTGCDManager.gcdMain {
+                                if assetWriter.status == .completed {
+                                    self.progressCallback?(1.0)
+                                    completion(url, nil)
+                                    self.restore(cleanupDisk: false)
+                                } else {
+                                    completion(nil, assetWriter.error)
+                                    self.restore(cleanupDisk: true)
+                                }
+                            }
+                        }
+                        break // 任务完成，跳出循环
+                    }
+                }
+            }
+        } catch {
+            // 初始化抛出异常时的安全处理
+            PTGCDManager.gcdMain {
+                completion(nil, error)
+                self.restore(cleanupDisk: true)
+            }
+        }
+    }
+
+    // MARK: - 引擎 C (MP3 第三方转换)
+    private func exportMP3UsingLame(ac: AVMutableComposition, url: URL, completion: @escaping ((URL?, Error?) -> Void)) {
+        // iOS 原生无法写入 MP3。
+        // 此处需要先将 ac 导出为临时的 .wav PCM 文件，然后再调用 LAME C++ 库进行硬编码转码。
+        PTNSLogConsole("准备调用第三方库转码 MP3...")
     }
 }

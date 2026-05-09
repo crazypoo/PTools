@@ -16,33 +16,37 @@ import SafeSFSymbols
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
 
-actor ImageStore {
-    private var images: [CGImage] = []
-    
-    func append(_ image: CGImage) {
-        images.append(image)
-    }
-    
-    func getImages() -> [CGImage] {
-        return images
-    }
-    
-    var count: Int {
-        return images.count
-    }
-}
+/// 基于 Swift Actor 的现代化防抖器，保证高并发下的线程安全
+public actor PTDebouncer {
+    private var currentTask: Task<Void, Never>?
+    private let delay: TimeInterval
 
-actor ErrorStore {
-    private var error: Error?
-    
-    func set(_ newError: Error) {
-        if error == nil {
-            error = newError
-        }
+    /// 初始化防抖器
+    /// - Parameter delay: 延迟执行的时间（秒）
+    public init(delay: TimeInterval) {
+        self.delay = delay
     }
-    
-    func get() -> Error? {
-        return error
+
+    /// 提交需要防抖执行的任务
+    /// 如果在延迟时间内再次调用，之前的任务将被取消
+    public func debounce(action: @escaping @Sendable () async -> Void) {
+        // 取消之前还没来得及执行的旧任务
+        currentTask?.cancel()
+        
+        // 创建新的等待任务
+        currentTask = Task {
+            do {
+                // 等待指定的延迟时间 (将秒转换为纳秒)
+                try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                
+                // 如果在等待期间任务没有被取消，则执行真正的操作
+                guard !Task.isCancelled else { return }
+                
+                await action()
+            } catch {
+                // Task.sleep 被取消时会抛出 CancellationError，这里直接忽略即可
+            }
+        }
     }
 }
 
@@ -114,6 +118,12 @@ extension PTCropDimView:CAAnimationDelegate {
 
 @objcMembers
 public class PTVideoEditorToolsViewController: PTBaseViewController {
+    // 创建一个 0.3 秒延迟的防抖器
+    private let reloadDebouncer = PTDebouncer(delay: 0.3)
+    // 用于管理和释放播放进度的监听器，防止 CPU 泄漏
+    private var timeObserverToken: Any?
+    // 新增：将视频转换器提升为实例变量，方便全局控制（如取消导出、清理缓存）
+    private var videoConverter: VideoConverter?
 
     public var onEditCompleteHandler:((URL)->Void)?
     public var onlyOutput:Bool = false
@@ -122,10 +132,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let image = PTVideoEditorConfig.share.dismissImage
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
-        buttonItem.addActionHandlers { sender in
+        buttonItem.addActionHandlers { [weak self] sender in
+            guard let self = self else { return }
             self.c7Player.pause()
+            self.videoConverter?.restore(cleanupDisk: true)
             self.returnFrontVC()
         }
+        buttonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
         return buttonItem
     }()
     
@@ -257,6 +270,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 }
             }
         }
+        buttonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
         return buttonItem
     }()
     
@@ -312,8 +326,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         view.isSelected = false
         view.normalTitle = ""
         view.midSpacing = 0
-        view.addActionHandlers { sender in
+        view.addActionHandlers { [weak self] sender in
+            guard let self = self else { return }
             sender.isSelected = !sender.isSelected
+            
             if sender.isSelected {
                 if self.currentFilter.type == .none {
                     self.c7Player.filters = []
@@ -326,36 +342,52 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.avPlayer.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
                 } else {
                     let startTimeSecond = self.videoTime * self.trimPositions.0
-                    let endTimeSecond = self.videoTime * self.trimPositions.1
                     let startTime = CMTimeMakeWithSeconds(startTimeSecond, preferredTimescale: Int32(NSEC_PER_MSEC))
-                    let endTime = CMTimeMakeWithSeconds(endTimeSecond, preferredTimescale: Int32(NSEC_PER_MSEC))
-                    self.avPlayer.seek(to: startTime)
+                    self.avPlayer.seek(to: startTime, toleranceBefore: .zero, toleranceAfter: .zero)
                 }
+                
+                // 【核心优化 2】：在添加新监听器前，必须清除旧的监听器！
+                if let token = self.timeObserverToken {
+                    self.avPlayer.removeTimeObserver(token)
+                    self.timeObserverToken = nil
+                }
+                
                 let interval = CMTime(seconds: 0.01, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
-                let timeObserverToken = self.avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { time in
-                    // 在这里处理播放时间的更新
-                    PTGCDManager.gcdMain {
-                        self.currentPlayTime = CMTimeGetSeconds(time)
-                        let formattedCurrentTime = self.currentPlayTime >= 3600 ?
-                            DateComponentsFormatter.longDurationFormatter.string(from: self.currentPlayTime) ?? "" :
-                            DateComponentsFormatter.shortDurationFormatter.string(from: self.currentPlayTime) ?? ""
-                        self.currentTimeLabel.text = formattedCurrentTime
+                self.timeObserverToken = self.avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+                    guard let self = self else { return }
+                    
+                    self.currentPlayTime = CMTimeGetSeconds(time)
+                    let formattedCurrentTime = self.currentPlayTime >= 3600 ?
+                        DateComponentsFormatter.longDurationFormatter.string(from: self.currentPlayTime) ?? "" :
+                        DateComponentsFormatter.shortDurationFormatter.string(from: self.currentPlayTime) ?? ""
+                    self.currentTimeLabel.text = formattedCurrentTime
+                    
+                    self.updateScrollViewContentOffset(fractionCompleted: (self.currentPlayTime / self.videoTime))
+                    
+                    let endTimeSecond = self.videoTime * self.trimPositions.1
+                    if self.currentPlayTime >= endTimeSecond {
+                        self.c7Player.pause()
+                        // 播放完毕，回到剪辑起点
+                        self.currentPlayTime = self.videoTime * self.trimPositions.0
+                        sender.isSelected = false
+                        self.currentTimeLabel.text = "0:00"
+                        self.updateScrollViewContentOffset(fractionCompleted: self.trimPositions.0)
                         
-                        self.updateScrollViewContentOffset(fractionCompleted: (self.currentPlayTime / self.videoTime))
-                        
-                        let endTimeSecond = self.videoTime * self.trimPositions.1
-                        if self.currentPlayTime >= CMTimeGetSeconds(CMTime(seconds: endTimeSecond, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))) {
-                            self.c7Player.pause()
-                            self.currentPlayTime = self.videoTime * self.trimPositions.0
-                            sender.isSelected = false
-                            self.currentTimeLabel.text = "0:00"
-                            self.updateScrollViewContentOffset(fractionCompleted: self.trimPositions.0)
+                        // 播放结束后移除监听器
+                        if let token = self.timeObserverToken {
+                            self.avPlayer.removeTimeObserver(token)
+                            self.timeObserverToken = nil
                         }
                     }
                 }
                 self.c7Player.play()
             } else {
                 self.c7Player.pause()
+                // 手动暂停时移除监听器
+                if let token = self.timeObserverToken {
+                    self.avPlayer.removeTimeObserver(token)
+                    self.timeObserverToken = nil
+                }
             }
         }
         return view
@@ -448,10 +480,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         view.midSpacing = 5
         view.normalImage = UIImage(.chevron.upChevronDown).withTintColor(.systemBlue)
         view.addActionHandlers { sender in
-            var titles = [String]()
-            self.outputTypes.enumerated().forEach { index,value in
-                titles.append(value.name)
-            }
+            let titles = self.outputTypes.map( { $0.name })
             
             UIAlertController.baseActionSheet(title: PTVideoEditorConfig.share.alertTitleOutputType,subTitle: String(format: PTVideoEditorConfig.share.alertTitleOutputTypeOption, self.currentOutputType.name), titles: titles) { sheet, index, title in
                 self.currentOutputType = self.outputTypes[index]
@@ -501,9 +530,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     //MARK: 時間線
     var trimPositions: (Double, Double) = (0.0,1.0) {
         didSet {
-            self.setVideoAsset {
-                self.reloadAsset()
-            }
+            self.requestVideoAssetReload()
         }
     }
     
@@ -688,9 +715,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     //MARK: 速度
     fileprivate var speed:Double = 1 {
         didSet {
-            self.setVideoAsset {
-                self.reloadAsset()
-            }
+            self.requestVideoAssetReload()
         }
     }
     
@@ -762,6 +787,17 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     //MARK: 覆蓋源文件
     fileprivate var rewrite:Bool = false
     
+    deinit {
+        // 清理幽灵定时器
+        if let token = timeObserverToken {
+            avPlayer?.removeTimeObserver(token)
+        }
+        // 清理可能正在导出的残缺废料
+        videoConverter?.restore(cleanupDisk: true)
+        
+        PTNSLogConsole("🎬 PTVideoEditorToolsViewController 成功销毁并清理内存/磁盘", levelType: .info, loggerType: .media)
+    }
+
     public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
         return .solid(.clear)
     }
@@ -777,14 +813,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
 //        guard let nav = navigationController else { return }
 //        PTBaseNavControl.GobalNavControl(nav: nav)
-        self.dismissButtonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
-        self.doneButtonItem.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
         self.setCustomBackButtonView(self.dismissButtonItem)
         self.setCustomRightButtons(buttons: [self.doneButtonItem])
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        PTNavigationBarManager.shared.restoreIfNeeded(for: self)
     }
     
     public init(asset:PHAsset,avAsset:AVAsset) {
@@ -859,33 +894,47 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.videoTimeLabel.text = formattedDuration
 
                 let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
-                let cgImages = try await self.videoTimeline(for: self.videoAVAsset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
-                self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
-                self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
-                self.updateScrollViewContentOffset(fractionCompleted: .zero)
-                self.currentTimeLabel.text = "0:00"
-
-                let imageSize = UIImage(cgImage: cgImages.first!).size
-                let scale = self.imageContent.frame.size.height / imageSize.height
-                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
-                self.originFilterImageView.image = UIImage(cgImage: cgImages.first!)
-                self.originImageView.image = UIImage(cgImage: cgImages.first!)
-                self.originImageView.snp.makeConstraints { make in
-                    make.width.equalTo(showImageSize.width)
-                    make.centerX.equalToSuperview()
-                    make.top.bottom.equalToSuperview()
-                    make.centerX.centerY.equalToSuperview()
-                }
-
+                let frameCount = self.numberOfFrames(within: timeLineViewRect)
                 
-                let width: CGFloat = 2.0
-                let height: CGFloat = 160.0
-                let x = self.timeLineContent.bounds.midX - width / 2
-                let y = (self.timeLineContent.bounds.height - height) / 2
-                self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
-                self.reloadAsset()
+                // 【核心修改点】：统一调用封装好的 Service，默认限制了 maximumSize 保护内存
+                let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
+                    for: self.videoAVAsset,
+                    numberOfFrames: frameCount
+                )
+                
+                // 确保所有 UI 更新都在主线程安全进行
+                await MainActor.run {
+                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                    self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
+                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                    self.currentTimeLabel.text = "0:00"
+
+                    if let firstImage = cgImages.first {
+                        let imageSize = UIImage(cgImage: firstImage).size
+                        let scale = self.imageContent.frame.size.height / imageSize.height
+                        let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+                        self.originFilterImageView.image = UIImage(cgImage: firstImage)
+                        self.originImageView.image = UIImage(cgImage: firstImage)
+                        self.originImageView.snp.makeConstraints { make in
+                            make.width.equalTo(showImageSize.width)
+                            make.centerX.equalToSuperview()
+                            make.top.bottom.equalToSuperview()
+                            make.centerX.centerY.equalToSuperview()
+                        }
+                    }
+
+                    let width: CGFloat = 2.0
+                    let height: CGFloat = 160.0
+                    let x = self.timeLineContent.bounds.midX - width / 2
+                    let y = (self.timeLineContent.bounds.height - height) / 2
+                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+                    
+                    self.reloadAsset()
+                }
             } catch {
-                PTAlertTipsViewController.tipsAlertShow(title: "",subtitle:error.localizedDescription, icon: .Error)
+                await MainActor.run {
+                    PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: error.localizedDescription, icon: .Error)
+                }
             }
         }
     }
@@ -988,8 +1037,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             speed: speed,
             outputModel: currentOutputType)
 
-        let videoConverter: VideoConverter = VideoConverter(asset:self.videoAVAsset)
-        videoConverter.convert(options,progress: { progress in
+        self.videoConverter = VideoConverter(asset:self.videoAVAsset)
+        videoConverter?.convert(options,progress: { progress in
             PTGCDManager.gcdMain {
                 if progress ?? 0 >= 1 {
                     self.loadingProgress?.removeFromSuperview()
@@ -1011,17 +1060,25 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             isMute: false,
             speed: speed)
 
-        let videoConverter: VideoConverter = VideoConverter(asset:self.videoAVAsset)
-        videoConverter.convert(options) { ac,avc in
-            PTGCDManager.gcdMain {
+        self.videoConverter = VideoConverter(asset:self.videoAVAsset)
+        self.videoConverter?.convert(options) { ac,avc in
+            Task { @MainActor in
                 self.avPlayerItem = AVPlayerItem(asset: ac)
                 self.avPlayerItem.videoComposition = avc
-                self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
                 
-                self.avPlayer.currentItem!.asset.getVideoFirstImage(maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+                // 【核心优化 1】：只替换 Item，绝不重新创建 AVPlayer！
+                if self.avPlayer == nil {
+                    self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
+                    self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+                } else {
+                    self.avPlayer.pause()
+                    self.avPlayer.replaceCurrentItem(with: self.avPlayerItem)
+                }
+                
+                self.avPlayerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
                     self.originImageView.image = image
                 }
-                self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+                
                 covertFinish?()
             }
         }
@@ -1042,19 +1099,30 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             Task {
                 do {
                     let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
-                    let cgImages = try await self.videoTimeline(for: self.avPlayer.currentItem!.asset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
-                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
-                    self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
-                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                    let frameCount = self.numberOfFrames(within: timeLineViewRect)
                     
-                    let width: CGFloat = 2.0
-                    let height: CGFloat = 160.0
-                    let x = self.timeLineContent.bounds.midX - width / 2
-                    let y = (self.timeLineContent.bounds.height - height) / 2
-                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+                    // 【核心修改点】：再次统一调用 Service，注意这里的 asset 是 avPlayer 的 currentItem
+                    let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
+                        for: self.avPlayer.currentItem!.asset,
+                        numberOfFrames: frameCount
+                    )
+                    
+                    await MainActor.run {
+                        self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                        self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
+                        self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                        
+                        let width: CGFloat = 2.0
+                        let height: CGFloat = 160.0
+                        let x = self.timeLineContent.bounds.midX - width / 2
+                        let y = (self.timeLineContent.bounds.height - height) / 2
+                        self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+                    }
 
                 } catch {
-                    PTAlertTipsViewController.tipsAlertShow(title: "",subtitle:error.localizedDescription, icon: .Error)
+                    await MainActor.run {
+                        PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: error.localizedDescription, icon: .Error)
+                    }
                 }
             }
         }
@@ -1102,61 +1170,6 @@ fileprivate extension PTVideoEditorToolsViewController {
         let frameWidth = bounds.height * assetAspectRatio
         return Int(bounds.width / frameWidth) + 1
     }
-    
-    func frameTimes(for asset: AVAsset,
-                    numberOfFrames: Int) -> [NSValue] {
-        let timeIncrement = (asset.duration.seconds * 1000) / Double(numberOfFrames)
-        var timesForThumbnails = [CMTime]()
-        
-        for index in 0..<numberOfFrames {
-            let cmTime = CMTime(value: Int64(timeIncrement * Float64(index)), timescale: 1000)
-            timesForThumbnails.append(cmTime)
-        }
-        
-        return timesForThumbnails.map(NSValue.init)
-    }
-        
-    func videoTimeline(for asset: AVAsset,
-                       in bounds: CGRect,
-                       numberOfFrames: Int) async throws -> [CGImage] {
-        try await withUnsafeThrowingContinuation { continuation in
-            let generator = AVAssetImageGenerator(asset: asset)
-            let times = self.frameTimes(for: asset, numberOfFrames: numberOfFrames)
-            
-            generator.appliesPreferredTrackTransform = true
-            generator.maximumSize = .zero
-            
-            let imageStore = ImageStore()
-            let errorStore = ErrorStore()
-            let group = DispatchGroup()
-            
-            for time in times {
-                group.enter()
-                generator.generateCGImagesAsynchronously(forTimes: [time]) { _, cgImage, _, _, error in
-                    Task {
-                        if let error = error {
-                            await errorStore.set(error)
-                        } else if let cgImage = cgImage {
-                            await imageStore.append(cgImage)
-                        }
-                        group.leave()
-                    }
-                }
-            }
-            
-            group.notify(queue: .main) {
-                Task {
-                    if let error = await errorStore.get() {
-                        continuation.resume(throwing: error)
-                    } else if await imageStore.count == numberOfFrames {
-                        continuation.resume(returning: await imageStore.getImages())
-                    } else {
-                        continuation.resume(throwing: NSError(domain: "Error while generating CGImages", code: 0))
-                    }
-                }
-            }
-        }
-    }
 }
 
 //MARK: ScrollView Delegate
@@ -1192,5 +1205,26 @@ extension PTVideoEditorToolsViewController {
             DateComponentsFormatter.longDurationFormatter.string(from: self.currentPlayTime) ?? "" :
             DateComponentsFormatter.shortDurationFormatter.string(from: self.currentPlayTime) ?? ""
         self.currentTimeLabel.text = formattedCurrentTime
+    }
+}
+
+fileprivate extension PTVideoEditorToolsViewController {
+    // 统一管理所有的视频重建请求
+    private func requestVideoAssetReload() {
+        Task {
+            await reloadDebouncer.debounce { [weak self] in
+                guard let self = self else { return }
+                
+                // 确保 UI 刷新和播放器操作在主线程进行
+                await MainActor.run {
+                    // 显示 loading 提示框（可选，提升用户体验）
+                    // PTHudView().hudShow()
+                    
+                    self.setVideoAsset {
+                        self.reloadAsset()
+                    }
+                }
+            }
+        }
     }
 }

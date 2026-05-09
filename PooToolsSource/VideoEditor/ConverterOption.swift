@@ -37,8 +37,8 @@ public class PTConverterOptionOutputType:NSObject {
                 return "aifc"
             case .amr:
                 return "amr"
-            case .mp3:
-                return "mp3"
+//            case .mp3:
+//                return "mp3"
             case .au:
                 return "au"
             case .ac3:
