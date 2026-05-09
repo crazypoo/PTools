@@ -25,29 +25,13 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         let view = PTCollectionView(viewConfig: config)
         view.registerClassCells(classs: [PTFilterImageCell.ID:PTFilterImageCell.self])
         view.customerLayout = { sectionIndex,sectionModel in
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
-            let screenW:CGFloat = 88
-            let cellHeight:CGFloat = 108
-            let rows = sectionModel.rows
-            rows?.indices.forEach { index in
-                let x = PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index)
-                let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: x, y: 0, width: screenW, height: cellHeight), zIndex: 1000 + index)
-                customers.append(item)
-                groupW += (screenW + 10)
-            }
-
-            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
+            return UICollectionView.horizontalLayout(data: sectionModel.rows,itemOriginalX: PTAppBaseConfig.share.defaultViewSpace,itemWidth: 88,itemHeight: 108,topContentSpace: 0,bottomContentSpace: 0,itemLeadingSpace: 10)
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTVideoEditorConfig.share
             if let itemRow = sectionModel.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFilterImageCell {
                 let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
-                cell.imageView.loadImage(contentData: itemRow.dataModel as Any)
+                cell.imageView.loadImage(contentData: itemRow.dataModel as Any,borderWidth: 0,borderColor: .clear)
                 cell.nameLabel.text = cellFilter.name
                 if self.currentFilter == cellFilter {
                     cell.nameLabel.textColor = config.themeColor
@@ -59,10 +43,9 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             return nil
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
-            self.returnFrontVC() {
-                self.filterHandler(cellFilter)
-            }
+            self.currentFilter = PTVideoEditorConfig.share.filters[indexPath.row]
+            let rows = self.filterCollectionView.getAllRows(in: 0)
+            self.filterCollectionView.reloadRows(rows, in: 0)
         }
         return view
     }()
@@ -93,6 +76,12 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             let rows = self.thumbnailFilterImages.map { PTRows(ID:PTFilterImageCell.ID,dataModel: $0) }            
             let section = PTSection(rows: rows)
             self.filterCollectionView.showCollectionDetail(collectionData: [section])
+        }
+        
+        doneButton.addActionHandlers { sender in
+            self.returnFrontVC {
+                self.filterHandler(self.currentFilter)
+            }
         }
     }
     

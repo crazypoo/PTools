@@ -66,4 +66,10 @@ public class PTVideoEditorConfig: NSObject {
             pri_filters = newValue
         }
     }
+    
+    public var outPutBorderWidth:CGFloat = 5
+    public var outPutBorderCorlor:UIColor = .systemBlue
+    public var outPutProgressShowValueLabel:Bool = true
+    public var outPutProgressShowValueFont:UIFont = .systemFont(ofSize: 16,weight:.bold)
+    public var outPutProgressShowValueColor:UIColor = .systemBlue
 }

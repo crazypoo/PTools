@@ -125,6 +125,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     // 新增：将视频转换器提升为实例变量，方便全局控制（如取消导出、清理缓存）
     private var videoConverter: VideoConverter?
 
+    var hudToHide: PTHudView? = nil
+
     public var onEditCompleteHandler:((URL)->Void)?
     public var onlyOutput:Bool = false
     
@@ -142,8 +144,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         return buttonItem
     }()
     
-    var loadingProgress:PTMediaBrowserLoadingView?
-
     lazy var doneButtonItem:UIButton = {
         let image = PTVideoEditorConfig.share.doneImage
         let buttonItem = UIButton(type: .custom)
@@ -154,20 +154,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             
             // 开启现代化的异步流水线！
             Task {
-                var hudToHide: PTHudView? = nil
-                
                 do {
                     // 1. 准备和转换原视频/音频 (UI主线程操作)
                     await MainActor.run {
                         PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleDoing, subtitle: PTVideoEditorConfig.share.alertTitleConvetering, icon: .Heart)
-                        if self.loadingProgress == nil {
-                            self.loadingProgress = PTMediaBrowserLoadingView(type: .LoopDiagram)
-                            AppWindows!.addSubview(self.loadingProgress!)
-                            self.loadingProgress!.snp.makeConstraints { make in
-                                make.size.equalTo(100)
-                                make.centerX.centerY.equalToSuperview()
-                            }
-                        }
+                        self.originImageView.clearProgressLayer()
+                        self.originFilterImageView.clearProgressLayer()
                     }
                     
                     // 等待转换完成...
@@ -177,21 +169,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     if self.isOnlyAudio {
                         await MainActor.run {
                             self.onEditCompleteHandler?(convertedURL)
+                            if let hud = self.hudToHide { hud.hide(completion: nil) }
                             self.returnFrontVC()
                         }
                         return
                     }
                     
                     // 2. 视频滤镜渲染阶段
-                    hudToHide = await MainActor.run { () -> PTHudView in
-                        PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleDoing, subtitle: PTVideoEditorConfig.share.alertTitleOutputing, icon: .Heart)
-                        let hudConfig = PTHudConfig.share
-                        hudConfig.hudColors = [.gray, .gray]
-                        hudConfig.lineWidth = 4
-                        let hudView = PTHudView()
-                        hudView.hudShow()
-                        return hudView
-                    }
                     
                     let random = Int(arc4random_uniform(89999) + 10000)
                     let outputURL = FileManager.pt.DocumnetsDirectory().appendingPathComponent("condy_export_video_\(random).\(self.currentOutputType.name)")
@@ -199,14 +183,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     // 等待滤镜导出完成...
                     let finalURL = try await self.harbethExportAsync(sourceURL: convertedURL, outputURL: URL(fileURLWithPath: outputURL))
                     
-                    if let hud = hudToHide {
-                        await MainActor.run { hud.hide(completion: nil) }
-                    }
-                    
                     // 3. 收尾与相册保存阶段
                     if self.onlyOutput {
                         await MainActor.run {
                             self.onEditCompleteHandler?(finalURL)
+                            if let hud = self.hudToHide { hud.hide(completion: nil) }
                             self.returnFrontVC()
                         }
                     } else {
@@ -218,6 +199,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         
                         await MainActor.run {
                             PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: PTVideoEditorConfig.share.alertTitleSaveDone, icon: .Done)
+                            if let hud = self.hudToHide { hud.hide(completion: nil) }
                             self.returnFrontVC()
                         }
                     }
@@ -225,9 +207,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 } catch {
                     // 🚀 终极优势：统一集中处理所有可能发生的错误！
                     await MainActor.run {
-                        if let hud = hudToHide { hud.hide(completion: nil) }
-                        self.loadingProgress?.removeFromSuperview()
-                        self.loadingProgress = nil
+                        if let hud = self.hudToHide { hud.hide(completion: nil) }
+                        self.originImageView.clearProgressLayer()
+                        self.originFilterImageView.clearProgressLayer()
                         PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps, subtitle: error.localizedDescription.localized(), icon: .Error)
                     }
                 }
@@ -249,6 +231,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     lazy var originImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -256,6 +239,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.isHidden = true
+        imageView.clipsToBounds = true
         return imageView
     }()
 
@@ -365,9 +349,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         view.isSelected = false
         view.isUserInteractionEnabled = true
         view.midSpacing = 0
-        view.addActionHandlers { sender in
+        view.addActionHandlers { [weak self] sender in
+            guard let self = self else { return }
             sender.isSelected = !sender.isSelected
             self.isMute = sender.isSelected
+            self.avPlayer?.isMuted = self.isMute
         }
         return view
     }()
@@ -418,8 +404,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let amr = PTConverterOptionOutputType()
         amr.type = .amr
         
-        let mp3 = PTConverterOptionOutputType()
-        mp3.type = .mp3
+//        let mp3 = PTConverterOptionOutputType()
+//        mp3.type = .mp3
         
         let au = PTConverterOptionOutputType()
         au.type = .au
@@ -430,7 +416,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let eac3 = PTConverterOptionOutputType()
         eac3.type = .eac3
 
-        return [mov,mp4,m4v,gp,gp2,m4a,caf,wav,aiff,aifc,amr,mp3,au,ac3,eac3]
+        return [mov,mp4,m4v,gp,gp2,m4a,caf,wav,aiff,aifc,amr/*,mp3*/,au,ac3,eac3]
     }()
     
     lazy var outputTypeButton:PTLayoutButton = {
@@ -708,6 +694,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             c7Player.filters = []
             // 同步更新预览图（非播放状态下）
             self.originFilterImageView.image = self.originImageView.image
+            self.originFilterImageView.isHidden = true
             return
         }
         
@@ -722,6 +709,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 let dest = HarbethIO(element: self.originImageView.image!, filters: [filterResult])
                 if let output = try? dest.output() {
                     self.originFilterImageView.image = output
+                    self.originFilterImageView.isHidden = false
                 }
             }
         }
@@ -794,8 +782,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 PTNSLogConsole("創建失敗", levelType: .error,loggerType: .media)
             }
         }
-//        guard let nav = navigationController else { return }
-//        PTBaseNavControl.GobalNavControl(nav: nav)
         self.setCustomBackButtonView(self.dismissButtonItem)
         self.setCustomRightButtons(buttons: [self.doneButtonItem])
     }
@@ -1024,10 +1010,19 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         videoConverter?.convert(options,progress: { progress in
             PTGCDManager.gcdMain {
                 if progress ?? 0 >= 1 {
-                    self.loadingProgress?.removeFromSuperview()
-                    self.loadingProgress = nil
+                    if self.hudToHide == nil {
+                        let hudConfig = PTHudConfig.share
+                        hudConfig.hudColors = [.gray, .gray]
+                        hudConfig.lineWidth = 4
+                        self.hudToHide = PTHudView()
+                        self.hudToHide?.hudShow()
+                    }
+                }
+                
+                if self.originFilterImageView.isHidden {
+                    self.originImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
                 } else {
-                    self.loadingProgress?.progress = progress ?? 0
+                    self.originFilterImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
                 }
             }
         },completion: completion)
@@ -1181,13 +1176,19 @@ extension PTVideoEditorToolsViewController {
     public override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         super.scrollViewDidScroll(scrollView)
         let presentValue = Double((scrollView.contentOffset.x + (scrollView.contentSize.width / 2)) / scrollView.contentSize.width)
-        let current = Float64(videoTime * presentValue)
+        let clampedValue = max(0.0, min(1.0, presentValue))
+        let current = Float64(videoTime * clampedValue)
         let cmTime = CMTimeMakeWithSeconds(current, preferredTimescale: Int32(NSEC_PER_SEC))
         self.currentPlayTime = CMTimeGetSeconds(cmTime)
         let formattedCurrentTime = self.currentPlayTime >= 3600 ?
             DateComponentsFormatter.longDurationFormatter.string(from: self.currentPlayTime) ?? "" :
             DateComponentsFormatter.shortDurationFormatter.string(from: self.currentPlayTime) ?? ""
         self.currentTimeLabel.text = formattedCurrentTime
+        // 实时让播放器画面精准跟随手指！
+        if self.isSeeking {
+            // toleranceBefore 和 toleranceAfter 设为 .zero 保证帧级别的精准度
+            self.avPlayer?.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
+        }
     }
 }
 
