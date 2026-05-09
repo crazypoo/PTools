@@ -868,21 +868,21 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             make.height.equalTo(self.imageContent.snp.width)
         }
 
-        imageContent.addSubviews([originImageView,originFilterImageView])
+        imageContent.addSubviews([originImageView])
         originImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
-        originImageView.addSubview(dimView)
+        originImageView.addSubviews([originFilterImageView,dimView])
+        originFilterImageView.snp.makeConstraints { make in
+            make.edges.equalTo(self.originImageView)
+        }
+
         dimView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         dimFrame = nil
-        
-        originFilterImageView.snp.makeConstraints { make in
-            make.edges.equalTo(self.originImageView)
-        }
-        
+                
         playContent.snp.makeConstraints { make in
             make.top.equalTo(self.imageContent.snp.bottom).offset(7.5)
             make.left.right.equalToSuperview()
