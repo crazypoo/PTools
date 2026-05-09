@@ -9,9 +9,9 @@
 import UIKit
 
 extension UIColor {
-    static let background = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
-    static let foreground = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-    static let border = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1) // F2F4F6
-    static let croppingPreset = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1) // F2F4F6
-    static let croppingPresetSelected = #colorLiteral(red: 0.7323174477, green: 0.7364212871, blue: 0.7465394735, alpha: 1) // F2F4F6
+    static let background = PTVideoEditorConfig.share.sliderBackgroundColor
+    static let foreground = PTVideoEditorConfig.share.sliderFontColor
+    static let border = PTVideoEditorConfig.share.sliberBorder
+    static let croppingPreset = PTVideoEditorConfig.share.croppingPreset
+    static let croppingPresetSelected = PTVideoEditorConfig.share.croppingPresetSelected
 }

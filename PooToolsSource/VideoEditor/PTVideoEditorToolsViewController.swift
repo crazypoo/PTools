@@ -126,16 +126,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     private var videoConverter: VideoConverter?
 
     // 拖拽时间轴专用的极速抽帧器
-    private lazy var scrubImageGenerator: AVAssetImageGenerator = {
-        let generator = AVAssetImageGenerator(asset: self.videoAVAsset)
-        generator.appliesPreferredTrackTransform = true
-        // 前后容差设为 0，保证拖动画面 100% 精准
-        generator.requestedTimeToleranceBefore = .zero
-        generator.requestedTimeToleranceAfter = .zero
-        // 限制抽帧分辨率（如600x600），保证拖拽极其丝滑不卡顿
-        generator.maximumSize = CGSize(width: 600, height: 600)
-        return generator
-    }()
+    private var scrubImageGenerator: AVAssetImageGenerator?
     
     // 记录当前的抽帧任务，以便快速拖动时随时取消旧任务
     private var scrubTask: Task<Void, Never>?
@@ -172,7 +163,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 do {
                     // 1. 准备和转换原视频/音频 (UI主线程操作)
                     await MainActor.run {
-                        PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleDoing, subtitle: PTVideoEditorConfig.share.alertTitleConvetering, icon: .Heart)
                         self.originImageView.clearProgressLayer()
                         self.originFilterImageView.clearProgressLayer()
                     }
@@ -621,15 +611,63 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     guard let image = self.originImageView.image!.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
                     
                     let vc = PTVideoEditorToolsCropControl(image: image)
-                    vc.cropImageHandler = { imageSize,cropFrame in
+                    vc.cropImageHandler = { [weak self] returnedImageSize,cropFrame in
+                        guard let self = self else { return }
                         PTGCDManager.gcdAfter(time: 0.1) {
-                            let videoRect = self.videoRect
-                            let frameX = cropFrame.origin.x * videoRect.size.width / imageSize.width
-                            let frameY = cropFrame.origin.y * videoRect.size.height / imageSize.height
-                            let frameWidth = cropFrame.size.width * videoRect.size.width / imageSize.width
-                            let frameHeight = cropFrame.size.height * videoRect.size.height / imageSize.height
-                            let dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
-                            self.dimFrame = dimFrame
+                            
+                            // 1. 获取 imageView 的容器尺寸和底层原始图片尺寸
+                            let viewSize = self.originImageView.bounds.size
+                            let originalImageSize = image.size
+                            
+                            // 2. 逆向计算 scaleAspectFit 模式下，画面在屏幕上的真实绘制区域（剔除上下/左右黑边）
+                            let widthRatio = viewSize.width / originalImageSize.width
+                            let heightRatio = viewSize.height / originalImageSize.height
+                            let scale = min(widthRatio, heightRatio)
+                            
+                            let drawWidth = originalImageSize.width * scale
+                            let drawHeight = originalImageSize.height * scale
+                            let drawX = (viewSize.width - drawWidth) / 2.0
+                            let drawY = (viewSize.height - drawHeight) / 2.0
+                            
+                            // 3. 将返回的裁剪框坐标，归一化为 0.0 ~ 1.0 的相对比例 (基于旋转后的图片)
+                            let normalizedX = cropFrame.origin.x / returnedImageSize.width
+                            let normalizedY = cropFrame.origin.y / returnedImageSize.height
+                            let normalizedW = cropFrame.size.width / returnedImageSize.width
+                            let normalizedH = cropFrame.size.height / returnedImageSize.height
+                            
+                            // 4. 【高阶算法】：根据当前的旋转角度，将坐标系反向推导回“未旋转”时的底层比例系
+                            var originalNormX = normalizedX
+                            var originalNormY = normalizedY
+                            var originalNormW = normalizedW
+                            var originalNormH = normalizedH
+                            
+                            let rotationIndex = Int(self.rotate) % 4
+                            switch rotationIndex {
+                            case 1: // 顺时针 90 度
+                                originalNormX = normalizedY
+                                originalNormY = 1.0 - normalizedX - normalizedW
+                                originalNormW = normalizedH
+                                originalNormH = normalizedW
+                            case 2: // 顺时针 180 度
+                                originalNormX = 1.0 - normalizedX - normalizedW
+                                originalNormY = 1.0 - normalizedY - normalizedH
+                            case 3: // 顺时针 270 度
+                                originalNormX = 1.0 - normalizedY - normalizedH
+                                originalNormY = normalizedX
+                                originalNormW = normalizedH
+                                originalNormH = normalizedW
+                            default:
+                                break
+                            }
+                            
+                            // 5. 将还原后的真实比例，完美映射到 ImageView 剔除了黑边的绘制区域上
+                            let frameX = drawX + (originalNormX * drawWidth)
+                            let frameY = drawY + (originalNormY * drawHeight)
+                            let frameWidth = originalNormW * drawWidth
+                            let frameHeight = originalNormH * drawHeight
+                            
+                            // 6. 这个完美的绝对坐标系边界，直接赋值给 dimFrame！
+                            self.dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
                         }
                     }
                     let nav = PTBaseNavControl(rootViewController: vc)
@@ -643,13 +681,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         self.rotate = 0
                         self.degree = 0
                     } else {
-                        let rotate = CGFloat(.pi / 2 * self.rotate)
-                        transform = transform.rotated(by: rotate)
-                        self.degree = rotate * 180 / CGFloat.pi
+                        let rotateAngle = CGFloat(.pi / 2 * self.rotate)
+                        transform = transform.rotated(by: rotateAngle)
+                        self.degree = rotateAngle * 180 / .pi
                     }
-                    self.dimFrame = nil
                     self.originImageView.transform = transform
-                    self.dimView.transform = transform
                 case .mute:
                     if let cell = collectionViews.cellForItem(at: indexPath) as? PTVideoEditorToolsCell {
                         cell.buttonView.isSelected.toggle()
@@ -1086,7 +1122,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.avPlayerItem = AVPlayerItem(asset: ac)
                 self.avPlayerItem.videoComposition = avc
                 
-                // 【核心优化 1】：只替换 Item，绝不重新创建 AVPlayer！
+                let generator = AVAssetImageGenerator(asset: ac)
+                generator.appliesPreferredTrackTransform = true
+                generator.requestedTimeToleranceBefore = .zero
+                generator.requestedTimeToleranceAfter = .zero
+                generator.maximumSize = CGSize(width: 600, height: 600)
+                self.scrubImageGenerator = generator
+
                 if self.avPlayer == nil {
                     self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
                     self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
@@ -1368,48 +1410,24 @@ fileprivate extension PTVideoEditorToolsViewController {
     /// 根据当前视频旋转角度和裁剪框，生成遮罩路径
     /// - Parameter cropRect: 这里的 rect 是相对于视频原始画面（未旋转前）的比例坐标或像素坐标
     func calculateMaskPath(with cropRect: CGRect) -> CGPath {
-        let viewSize = self.dimView.bounds.size
-        let imageSize = self.originImageView.bounds.size
-        
-        // 计算图片在 AspectFit 模式下的实际绘制区域
-        let horizontalScale = viewSize.width / imageSize.width
-        let verticalScale = viewSize.height / imageSize.height
-        let finalScale = min(horizontalScale, verticalScale)
-        
-        let actualWidth = imageSize.width * finalScale
-        let actualHeight = imageSize.height * finalScale
-        let xOffset = (viewSize.width - actualWidth) / 2
-        let yOffset = (viewSize.height - actualHeight) / 2
-        
-        // 将传入的裁剪框映射到当前展示的 UI 坐标
-        // 注意：这里需要根据 self.degree 调整映射关系
-        var mappedRect = CGRect.zero
-        
-        // 核心逻辑：无论怎么旋转，裁剪框是相对于“内容”的
-        // 我们利用变换矩阵来处理坐标映射，而不是写死 if-else
-        let rectInImage = CGRect(
-            x: xOffset + cropRect.origin.x,
-            y: yOffset + cropRect.origin.y,
-            width: cropRect.width,
-            height: cropRect.height
-        )
-        
-        mappedRect = rectInImage
-        
-        let path = UIBezierPath(rect: mappedRect)
+        let path = UIBezierPath(rect: cropRect)
         path.append(UIBezierPath(rect: self.dimView.bounds))
         return path.cgPath
     }
     
     /// 包装 AVAssetImageGenerator 为 async，支持各版本 iOS
     func generateImageAsync(at time: CMTime) async throws -> CGImage {
+        guard let generator = self.scrubImageGenerator else {
+            throw NSError(domain: "PTVideoEditor", code: 404, userInfo: [NSLocalizedDescriptionKey: "抽帧器未就绪"])
+        }
+        
         if #available(iOS 16.0, *) {
-            let (cgImage, _) = try await self.scrubImageGenerator.image(at: time)
+            let (cgImage, _) = try await generator.image(at: time)
             return cgImage
         } else {
             return try await withCheckedThrowingContinuation { continuation in
                 let times = [NSValue(time: time)]
-                self.scrubImageGenerator.generateCGImagesAsynchronously(forTimes: times) { _, image, _, result, error in
+                generator.generateCGImagesAsynchronously(forTimes: times) { _, image, _, result, error in
                     if let image = image, result == .succeeded {
                         continuation.resume(returning: image)
                     } else {
