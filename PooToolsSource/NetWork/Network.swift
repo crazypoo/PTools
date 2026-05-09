@@ -773,6 +773,8 @@ public struct PTNetworkConfig: Sendable {
     public var cleanThreshold: Double = 0.7            // 清到70%
     public var cleanCachePreSec: TimeInterval = 60
     
+    public var logMaxCount:Double = 3000
+
     public init() {} // 提供公开的初始化方法
 }
 
@@ -1366,7 +1368,7 @@ extension Network {
             }
         }
         
-        let printStr = jsonString.count > 3000 ? String(jsonString.prefix(3000)) + "\n...[数据过大已截断]..." : jsonString
+        let printStr = jsonString.count > Int(Network.share.config.logMaxCount) ? String(jsonString.prefix(Int(Network.share.config.logMaxCount))) + "\n...[数据过大已截断]..." : jsonString
         logRequestSuccess(url: url, jsonStr: printStr)
         return (result, jsonString)
     }
