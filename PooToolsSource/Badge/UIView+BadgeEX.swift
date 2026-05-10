@@ -77,6 +77,10 @@ extension UIView: PTBadgeProtocol {
         } else {
             badge.layer.borderWidth = 0
         }
+        
+        if badgeConfig.canDragToDelete {
+            self.isUserInteractionEnabled = true
+        }
     }
     
     // MARK: - Gesture Handling (Optimized)

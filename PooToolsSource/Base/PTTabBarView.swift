@@ -95,7 +95,7 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
                 } else {
                     imageView.isHidden = false
                     lottieView.isHidden = true
-                    imageView.loadImage(contentData: string)
+                    imageView.loadImage(contentData: string,radius: PTAppBaseConfig.share.tabbarRadius,topLeft: PTAppBaseConfig.share.tabbarTopLeft,topRight: PTAppBaseConfig.share.tabbarTopRight,bottomLeft: PTAppBaseConfig.share.tabbarBottomLeft,bottomRight: PTAppBaseConfig.share.tabbarBottomRight,corner: PTAppBaseConfig.share.tabbarCorner,capsule: PTAppBaseConfig.share.tabbarCapsule,borderWidth: PTAppBaseConfig.share.tabbarBorderWidth,borderColor: PTAppBaseConfig.share.tabbarBorderColor,showValueLabel: PTAppBaseConfig.share.tabbarShowValueLabel,valueLabelFont: PTAppBaseConfig.share.loadImageShowValueFont,valueLabelColor: PTAppBaseConfig.share.tabbarValueLabelColor)
                 }
             }
         case let animation as LottieAnimation:
@@ -103,7 +103,7 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
         default:
             imageView.isHidden = false
             lottieView.isHidden = true
-            self.imageView.loadImage(contentData: media)
+            self.imageView.loadImage(contentData: media,radius: PTAppBaseConfig.share.tabbarRadius,topLeft: PTAppBaseConfig.share.tabbarTopLeft,topRight: PTAppBaseConfig.share.tabbarTopRight,bottomLeft: PTAppBaseConfig.share.tabbarBottomLeft,bottomRight: PTAppBaseConfig.share.tabbarBottomRight,corner: PTAppBaseConfig.share.tabbarCorner,capsule: PTAppBaseConfig.share.tabbarCapsule,borderWidth: PTAppBaseConfig.share.tabbarBorderWidth,borderColor: PTAppBaseConfig.share.tabbarBorderColor,showValueLabel: PTAppBaseConfig.share.tabbarShowValueLabel,valueLabelFont: PTAppBaseConfig.share.loadImageShowValueFont,valueLabelColor: PTAppBaseConfig.share.tabbarValueLabelColor)
         }
     }
     
@@ -669,14 +669,39 @@ final public class PTTabBarView: UIView {
         return itemWidth
     }
     
-    public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none) {
+    public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) {
         let item = items[index]
-        let itemWidth:CGFloat = barItemWidth()
         var config = PTBadgeConfiguration()
-        config.centerOffset = CGPointMake(itemWidth / 2 + PTTabBarItemView.itemImageSize() / 2, 7)
-        item.badgeConfig = config
-        item.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
-        item.badgeRemoveCallback = {
+        config.canDragToDelete = badgeCanDrag
+        
+        var badgeWidth:CGFloat = 0
+        switch badgeStyle {
+        case .redDot:
+            badgeWidth = config.radius * 2
+        case .number:
+            switch badgeValue {
+            case let val as Int:
+                badgeWidth = UIView.sizeFor(string: "\(val)", font: config.font).width
+            case let val as String:
+                var value = 0
+                if let intVal = val.int {
+                    value = intVal
+                } else {
+                    value = 0
+                }
+                badgeWidth = UIView.sizeFor(string: "\(value)", font: config.font).width
+            default:
+                badgeWidth = UIView.sizeFor(string: "\(0)", font: config.font).width
+            }
+        case .new:
+            let str = (badgeValue as? String) ?? "new"
+            badgeWidth = UIView.sizeFor(string: "\(str)", font: config.font).width
+        }
+        
+        config.centerOffset = CGPointMake(PTTabBarItemView.itemImageSize() - badgeWidth / 2, 7)
+        item.imageContent.badgeConfig = config
+        item.imageContent.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
+        item.imageContent.badgeRemoveCallback = {
             self.badgeDragRemoveIndex?(index)
         }
     }

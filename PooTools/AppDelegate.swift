@@ -268,15 +268,6 @@ class AppDelegate: PTAppWindowsDelegate {
 
         PTRouter.shareInstance.customNavClass = PTBaseNavControl.self
         PTRouter.shareInstance.webPath = "scheme://webview/home"
-//        Task {
-//            await PTRouterServiceManager.shared.registerService(
-//                PTRouteViewController.self,
-//                scope: .prototype // 每次获取生成新实例，用完即释放
-//            ) {
-//                return PTFuncNameViewController()
-//            }
-//        }
-        // 2. 注册页面路由 (支持正则动态参数捕获)
         let loginInterceptor = PTLoginInterceptor()
         PTRouteViewController.patternString.forEach { value in
             PTRouter.addRouterItem(value, classString: NSStringFromClass(PTRouteViewController.self))

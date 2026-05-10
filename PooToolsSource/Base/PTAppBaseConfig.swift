@@ -133,4 +133,17 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarScrollOffset:CGFloat = 20
     public var tabbarCenterButtonSize: CGFloat = 64
     public var tabbarBar26LRSpacing:CGFloat = 24.adapter
+    
+    public var tabbarRadius: CGFloat = 0
+    public var tabbarTopLeft: CGFloat = 0
+    public var tabbarTopRight: CGFloat = 0
+    public var tabbarBottomLeft: CGFloat = 0
+    public var tabbarBottomRight: CGFloat = 0
+    public var tabbarCorner: UIRectCorner = .allCorners
+    public var tabbarCapsule: Bool = false
+    public var tabbarBorderWidth: CGFloat = 0
+    public var tabbarBorderColor: UIColor = .clear
+    public var tabbarShowValueLabel: Bool = false
+    public var tabbarValueLabelFont: UIFont = .appfont(size: 10)
+    public var tabbarValueLabelColor: UIColor = .systemBlue
 }
