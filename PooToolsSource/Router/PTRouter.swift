@@ -164,6 +164,9 @@ public class PTRouerParamsClosureWrapper: NSObject {
 
 public class PTRouter: PTRouterParser {
     
+    /// 全局自定义导航栏容器类型（默认兜底为系统 UINavigationController）
+    public var customNavClass: UINavigationController.Type = UINavigationController.self
+
     // MARK: - Constants
     public typealias FailedHandleBlock = ([String: Any]) -> Void
     public typealias RouteResponse = (pattern: PTRouterPattern?, queries: [String: Any])
@@ -821,7 +824,25 @@ extension PTRouter {
             } else {
                 switch jumpType {
                 case .modal:
-                    PTUtils.modal(vc)
+                    // 1. 解析需要用到的样式
+                    let pStyle = UIModalPresentationStyle(rawValue: queries["PTRouterPStyleKey"] as? Int ?? 0) ?? .fullScreen
+                    let tStyle = UIModalTransitionStyle(rawValue: queries["PTRouterTStyleKey"] as? Int ?? 0) ?? .coverVertical
+                    
+                    // 2. 检查是否需要包 Nav
+                    let needNav = queries["PTRouterWrapInNavKey"] as? Bool ?? false
+                    
+                    if needNav {
+                        // 优先看本次跳转有没有专门重载 Nav，没有就用全局配置的 Nav
+                        let navClass = queries["PTRouterNavOverrideKey"] as? UINavigationController.Type ?? shareInstance.customNavClass
+                        
+                        // 实例化你自定义的 Nav
+                        let customNav = navClass.init(rootViewController: vc)
+                        
+                        // 完美弹出
+                        PTUtils.modal(customNav, presentationStyle: pStyle, transitionStyle: tStyle)
+                    } else {
+                        PTUtils.modal(vc, presentationStyle: pStyle, transitionStyle: tStyle)
+                    }
                 case .push:
                     PTUtils.push(vc)
                 case .popToTaget:

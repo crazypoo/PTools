@@ -8,16 +8,30 @@
 
 import UIKit
 
-class PTRouterExampleModel:PTModelProtocol {
-    var foo:String = "1"
-    var poo:String = "2"
-    
-    required init() {}
+struct PTRouterExampleModel:PTRoutableParams {
+    typealias Target = PTRouteViewController
+    let foo:String
+    let poo:String
+
+    func toDictionary() -> [String : Any] {
+        ["foo":foo,"poo":poo]
+    }
 }
 
 typealias PTRouteHandler = (_ value:String) -> Void
 
-class PTRouteViewController: PTBaseViewController {
+class PTRouteViewController: PTBaseViewController,PTRoutableStaticController {
+    typealias Params = PTRouterExampleModel
+
+    var id = ""
+    required init(routerParams: [String : Any]) {
+        self.id = (routerParams["foo"] as? String) ?? ""
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     var viewModels:PTRouterExampleModel?
     var handle:PTRouteHandler?
@@ -38,20 +52,12 @@ class PTRouteViewController: PTBaseViewController {
 }
 
 extension PTRouteViewController:PTRouterable {
+    
     static var priority: UInt {
         PTRouterDefaultPriority
     }
     
     static var patternString: [String] {
-        ["scheme://route/route"]
+        ["ptools://routerTest"]
     }
-    
-    static func registerAction(info: [String : Any]) -> Any {
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(info)")
-        let vc = PTRouteViewController()
-        vc.viewModels = (info["model"] as? PTRouterExampleModel)
-        vc.handle = info["task"] as? PTRouteHandler
-        return vc
-    }
-    
 }

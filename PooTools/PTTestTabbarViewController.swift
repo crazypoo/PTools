@@ -36,10 +36,18 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
             PTNSLogConsole("\(index)")
         }
         ptCustomBar.shouldSelectIndex = { index in
+            if index == 1,!PTTestGlobalFunction.shared.isLogin {
+                // 🌟 启动 Task，利用我们完美的路由去触发登录流程
+                Task {
+                    // 触发登录页（自带 NavigationController 且 Modal 出来）
+                    // 享受底层 LoginInterceptor 的全套保护机制
+                    let _ = try? await PTTypedBuilder<PTTestLoginViewController>(path: "ptools://login")
+                        .jumpType(.modal, wrapInNav: true)
+                        .navigation()
+                }
+                return false
+            }
             PTNSLogConsole("should\(index)")
-//            if index == 1 {
-//                return false
-//            }
             return true
         }
         ptCustomBar.didTapCenter = {

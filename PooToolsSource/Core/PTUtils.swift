@@ -394,18 +394,21 @@ public extension PTUtils {
 public extension PTUtils {
     
     class func push(_ vc: UIViewController) {
-        guard let current = getActivityViewController() else { return }
-        let nav = (current as? UINavigationController) ?? findFirstNavController(responder: current)
+        guard let current = PTUtils.getCurrentVC(),let nav = current.navigationController else { return }
         vc.hidesBottomBarWhenPushed = true
-        nav?.pushViewController(vc, animated: true)
+        nav.pushViewController(vc, animated: true)
     }
 
-    class func modal(_ vc: UIViewController) {
+    class func modal(_ vc: UIViewController,
+                     presentationStyle: UIModalPresentationStyle = .fullScreen,
+                     transitionStyle: UIModalTransitionStyle = .coverVertical) {
+        
         guard let current = getActivityViewController() else { return }
         guard vc.presentedViewController == nil else { return }
 
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .fullScreen
+        // 优先使用传递进来的样式
+        vc.modalTransitionStyle = transitionStyle
+        vc.modalPresentationStyle = presentationStyle
 
         current.present(vc, animated: true, completion: nil)
     }

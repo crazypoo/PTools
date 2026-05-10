@@ -737,22 +737,25 @@ class PTFuncNameViewController: PTBaseViewController {
                 } else if itemRow.title == .checkUpdate {
                     PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6596749489", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
                 } else if itemRow.title == .route {
-                    UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"], otherBlock: { sheet,index,title in
+                    UIAlertController.baseActionSheet(title: "Route", titles: ["example"], otherBlock: { sheet,index,title in
                         switch index {
-                        case 0:break
-//                            PTRouter.routeJump(vcName: NSStringFromClass(PTRouteViewController.self), scheme: PTRouteViewController.patternString.first!)
-                        case 1:break
-//                            PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
-//                            let model = PTRouterExampleModel()
-//                            PTRouter.openURL(("scheme://route/route",["model":model]))
-                        case 2:break
-//                            PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
-//                            
-//                            let handler = { (value:String) in
-//                                UIViewController.gobal_drop(title: value)
-//                            }
-//                            
-//                            PTRouter.openURL(("scheme://route/route",["task":handler]))
+                        case 0:
+                            Task {
+                                do {
+                                    // 完美体验：自动补全、类型安全、精确错误捕获
+                                    let detailVC = try await PTTypedBuilder<PTRouteViewController>(path: "ptools://routerTest")
+                                        .with(params: PTRouterExampleModel(foo: "1", poo: "123"))
+                                        .jumpType(.modal, wrapInNav: true, presentationStyle: .fullScreen, transitionStyle: .coverVertical)
+                                        .navigation()
+                                    
+                                    PTNSLogConsole("成功拿到目标控制器：\(detailVC.id)")
+                                    
+                                } catch PTRouterError.interceptorBlocked {
+                                    PTNSLogConsole("跳转被拦截（如未登录）")
+                                } catch {
+                                    PTNSLogConsole("路由异常: \(error)")
+                                }
+                            }
                         default:
                             break
                         }

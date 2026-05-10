@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public class PTRouterBuilder {
     
@@ -105,6 +106,12 @@ public struct PTTypedBuilder<T: PTRoutableStaticController> {
     private let path: String
     private var params: T.Params?
 
+    private var jumpType: PTJumpType = .push
+    private var wrapInNav: Bool = false
+    private var customNavOverride: UINavigationController.Type? = nil
+    private var presentationStyle: UIModalPresentationStyle = .fullScreen
+    private var transitionStyle: UIModalTransitionStyle = .coverVertical
+    
     public init(path: String) {
         self.path = path
     }
@@ -116,11 +123,32 @@ public struct PTTypedBuilder<T: PTRoutableStaticController> {
         return copy
     }
 
+    public func jumpType(_ type: PTJumpType,
+                         wrapInNav: Bool = false,
+                         customNavOverride: UINavigationController.Type? = nil,
+                         presentationStyle: UIModalPresentationStyle = .fullScreen,
+                         transitionStyle: UIModalTransitionStyle = .coverVertical) -> Self {
+        var copy = self
+        copy.jumpType = type
+        copy.wrapInNav = wrapInNav
+        copy.customNavOverride = customNavOverride
+        copy.presentationStyle = presentationStyle
+        copy.transitionStyle = transitionStyle
+        return copy
+    }
+
     @discardableResult
     // 1. 加上 throws，且返回值从 T? 变成了绝对安全的 T
     public func navigation() async throws -> T {
-        let dict = params?.toDictionary() ?? [:]
+        var dict = params?.toDictionary() ?? [:]
         
+        dict[PTJumpTypeKey] = "\(jumpType.rawValue)"
+        dict["PTRouterWrapInNavKey"] = wrapInNav
+        if let navOverride = customNavOverride {
+            dict["PTRouterNavOverrideKey"] = navOverride
+        }
+        dict["PTRouterPStyleKey"] = presentationStyle.rawValue
+        dict["PTRouterTStyleKey"] = transitionStyle.rawValue
         // 2. 加上 try，调用底层的核心引擎
         let vc = try await PTRouter.openURLVC(path, userInfo: dict)
         
