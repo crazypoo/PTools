@@ -843,6 +843,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTNavigationBarManager.shared.restoreIfNeeded(for: self)
+        PTGCDManager.gcdAfter(time: 0.15, block: {
+            self.changeStatusBar(type: PTDarkModeOption.isLight ? .Light : .Dark)
+        })
     }
     
     public init(asset:PHAsset,avAsset:AVAsset) {

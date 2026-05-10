@@ -213,10 +213,11 @@ public extension PTDarkModeOption {
         let currentDate = Date()
         let currentTimeStamp = Int(currentDate.pt.dateToTimeStamp())!
         let dateString = currentDate.pt.toformatterTimeString(formatter: "yyyy-MM-dd")
-        let startTimeStamp = Int(Date.pt.formatterTimeStringToTimestamp(timesString: dateString + " " + timeIntervalValue[0], formatter: "yyyy-MM-dd HH:mm", timestampType: .second))!
-        var endTimeStamp = Int(Date.pt.formatterTimeStringToTimestamp(timesString: dateString + " " + timeIntervalValue[1], formatter: "yyyy-MM-dd HH:mm", timestampType: .second))!
+        let defaultTimeStamp = 0
+        let startTimeStamp = Int(Date.pt.formatterTimeStringToTimestamp(timesString: dateString + " " + timeIntervalValue[0], formatter: "yyyy-MM-dd HH:mm", timestampType: .second)) ?? defaultTimeStamp
+        var endTimeStamp = Int(Date.pt.formatterTimeStringToTimestamp(timesString: dateString + " " + timeIntervalValue[1], formatter: "yyyy-MM-dd HH:mm", timestampType: .second)) ?? defaultTimeStamp
         if startTimeStamp > endTimeStamp {
-            endTimeStamp = endTimeStamp + 884600
+            endTimeStamp = endTimeStamp + 86400
         }
         return currentTimeStamp >= startTimeStamp && currentTimeStamp <= endTimeStamp
     }

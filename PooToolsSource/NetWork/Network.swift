@@ -1323,7 +1323,7 @@ extension Network {
         init(_ type: T?) { self.type = type }
     }
 
-    /// 抽取新旧框架共同的：非空校验、HTML校验、业务 Code (401) 拦截逻辑
+    /// 抽取新旧框架共同的：非空校验、HTML校验、业务 Code (401) 拦截逻辑，并输出美化后的日志
     private static func validateAndPreprocessResponse(url: String, response: HTTPURLResponse?, data: Data?) throws -> (PTBaseStructModel, String) {
         var result = PTBaseStructModel()
         result.resultData = data
@@ -1336,7 +1336,7 @@ extension Network {
         
         let isMockData = (response == nil)
         
-        // 非 JSON 的情况（可能是 HTML 或纯文本）
+        // 1. 非 JSON 的情况（可能是 HTML 或纯文本）
         if !isMockData && !isJSONResponse(response, data: data) {
             if let html = String(data: data, encoding: .utf8), html.containsHTMLTags() {
                 let error = PTNetworkError.htmlResponse(html)
@@ -1345,16 +1345,16 @@ extension Network {
             }
             var originalText = ""
             if UIApplication.shared.inferredEnvironment_PT == .debug {
-                originalText = prettyJSONString(from: String(decoding: data, as: UTF8.self)) ?? ""
+                originalText = String(decoding: data, as: UTF8.self)
             }
             logRequestSuccess(url: url, jsonStr: originalText)
             result.originalString = originalText
             return (result, "") // JSON String为空，代表外部无需继续解析
         }
         
-        // JSON 情况
-        let jsonString = String(data: data, encoding: .utf8) ?? ""
-        result.originalString = jsonString
+        // 2. JSON 情况：获取交给底层模型解析的原始紧凑字符串
+        let rawJsonString = String(data: data, encoding: .utf8) ?? ""
+        result.originalString = rawJsonString
         
         if let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
             let businessCode = jsonDict["code"] as? Int ?? 200
@@ -1368,11 +1368,24 @@ extension Network {
             }
         }
         
-        let printStr = jsonString.count > Int(Network.share.config.logMaxCount) ? String(jsonString.prefix(Int(Network.share.config.logMaxCount))) + "\n...[数据过大已截断]..." : jsonString
-        logRequestSuccess(url: url, jsonStr: printStr)
-        return (result, jsonString)
+        // 🌟 3. 核心改变：只在 Debug 环境下，计算并打印美化后的 JSON (绝不影响线上性能)
+        if UIApplication.shared.inferredEnvironment_PT != .appStore {
+            // 生成带缩进的美化 JSON
+            let prettyStr = prettyPrintedJSONString(from: data)
+            
+            // 安全截断防爆盾
+            let maxLen = Int(Network.share.config.logMaxCount)
+            let printStr = prettyStr.count > maxLen ? String(prettyStr.prefix(maxLen)) + "\n\n...[JSON过大，为保护Xcode控制台已截断]..." : prettyStr
+            
+            logRequestSuccess(url: url, jsonStr: printStr)
+        } else {
+            // 线上环境直接不打印，或者只简单记录
+        }
+        
+        // 注意：返回给 SmartCodable 的依然是原始数据 rawJsonString，保证解析效率最高
+        return (result, rawJsonString)
     }
-    
+
     /// 核心常规请求引擎
     private class func _internalRequestApi(needGobal: Bool,
                                            urlStr: URLConvertible,
@@ -1740,6 +1753,26 @@ extension Network {
         return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
             // 指定使用 KakaJSON 进行解析
             return try parseResponse(url: url, response: response, data: data, modelType: typeBox.type)
+        }
+    }
+}
+
+extension Network {
+    /// 将 Data 优雅地转换为带缩进的 Pretty JSON 字符串
+    private static func prettyPrintedJSONString(from data: Data) -> String {
+        do {
+            // 1. 先尝试解析成 JSON 对象
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            
+            // 2. 转换为 prettyPrinted (带缩进) 格式的 Data
+            // .withoutEscapingSlashes 确保网址的斜杠 (/) 不会被转义成 (\/)
+            let prettyData = try JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted, .withoutEscapingSlashes])
+            
+            // 3. 转回字符串
+            return String(data: prettyData, encoding: .utf8) ?? ""
+        } catch {
+            // 如果转换失败（可能本身就不是合法的完整 JSON），就退回到普通的纯文本
+            return String(data: data, encoding: .utf8) ?? ""
         }
     }
 }

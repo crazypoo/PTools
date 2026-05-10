@@ -74,7 +74,9 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        changeStatusBar(type: .Dark)
+        PTGCDManager.gcdAfter(time: 0.15, block: {
+            self.changeStatusBar(type: .Dark)
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {

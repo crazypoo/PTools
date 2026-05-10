@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+/*
+ 其他地方使用方法
+ // 1. 注册成为主题观察者 (控制器生命周期中只注册一次)
+        themeProvider.register(observer: self)
+// 2. 主动调用一次，初始化当前界面的颜色
+        apply()
+ */
 // MARK: - PTThemeProvider协议
 public protocol PTThemeProvider: AnyObject {
     func register<Observer: PTThemeable>(observer: Observer)
@@ -43,7 +50,7 @@ public class LegacyThemeProvider: PTThemeProvider {
     /// 注册监听
     /// - Parameter observer: 监听对象
     public func register<Observer: PTThemeable>(observer: Observer) {
-        return
+        observers.add(observer)
     }
     
     // MARK: 通知监听对象更新theme

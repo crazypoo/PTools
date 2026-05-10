@@ -47,30 +47,13 @@ public class PTDarkModeControl: PTBaseViewController {
         cConfig.topRefresh = false
         let view = PTCollectionView(viewConfig: cConfig)
         view.customerLayout = { sectionIndex,sectionModel in
-            var bannerGroupSize : NSCollectionLayoutSize
-            var customers = [NSCollectionLayoutGroupCustomItem]()
-            var groupH:CGFloat = 0
-            let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
             var cellHeight:CGFloat = 0
             if Gobal_device_info.isPad {
                 cellHeight = 64
             } else {
                 cellHeight = 44.adapter
             }
-            
-            let rows = sectionModel.rows
-            let inset = PTAppBaseConfig.share.defaultViewSpace
-            let width = screenW - inset * 2
-            rows?.indices.forEach { index in
-                let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: inset, y: groupH, width: width, height: cellHeight), zIndex: 1000 + index)
-                customers.append(item)
-                groupH += cellHeight
-            }
-            
-            bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(screenW - PTAppBaseConfig.share.defaultViewSpace * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                customers
-            })
+            return UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: cellHeight,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace)
         }
         view.headerInCollection = { kind,collectionView,model,index in
             if let headerID = model.headerReuseID {
@@ -201,6 +184,7 @@ public class PTDarkModeControl: PTBaseViewController {
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
+        themeProvider.register(observer: self)
         apply()
     }
     
@@ -244,14 +228,14 @@ public class PTDarkModeControl: PTBaseViewController {
 
 extension PTDarkModeControl: PTThemeable {
     public func apply() {
-        showDetail()
         PTGCDManager.gcdMain {
             let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
             self.changeStatusBar(type: type)
             self.backButton.setImage(PTDarkModeOption.backImage, for: .normal)
             self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
-            self.showDetail()
-            PTBaseNavControl.GobalNavControl(nav: self.navigationController!)
+            self.newCollectionView.clearAllData(finishTask: { _ in
+                self.showDetail()
+            })
         }
     }
 }

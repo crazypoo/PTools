@@ -168,6 +168,11 @@ open class PTNavBar: UIView {
                     make.size.equalTo(CGSize.SwitchSize)
                     make.centerY.equalToSuperview()
                 }
+            } else {
+                value.snp.makeConstraints { make in
+                    make.size.equalTo(value.bounds.size)
+                    make.centerY.equalToSuperview()
+                }
             }
         }
         let widthToTal:CGFloat = stackTotalWidth(leftStack)
