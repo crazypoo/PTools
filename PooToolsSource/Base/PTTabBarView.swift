@@ -267,13 +267,14 @@ final public class PTTabBarItemView: UIControl {
                         break
                     }
                 }
-                if let _ = findImageView {
+                if let findContent = findImageView {
                     return self
                 } else {
-                    return view
+                    return findView
                 }
+            } else {
+                return view
             }
-            return view
         }
     }
     
@@ -736,6 +737,9 @@ final public class PTTabBarView: UIView {
         config.centerOffset = CGPointMake(PTTabBarItemView.itemImageSize() + badgeWidth / 2, 7)
         item.imageContent.badgeConfig = config
         item.imageContent.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
+        if !badgeCanDrag {
+            item.imageContent.isUserInteractionEnabled = true
+        }
         item.imageContent.badgeRemoveCallback = {
             self.badgeDragRemoveIndex?(index)
         }
