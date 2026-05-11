@@ -61,7 +61,6 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
         
         lottieView.isHidden = true
         lottieView.loopMode = .autoReverse
-        lottieView.isUserInteractionEnabled = false
         lottieView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -117,13 +116,13 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
 }
 
 final public class PTTabBarItemView: UIControl {
-
+    
     private let titleLabel = UILabel()
     private var content: PTTabBarItemContent!
-
+    
     private let metailView = UIView()
     private let glassBackgroundView = UIVisualEffectView()
-
+    
     public class func itemImageSize() -> CGFloat {
         let tab26ModeBottomSpacing = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 0
         let safeAreaHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? tab26ModeBottomSpacing : 0
@@ -150,16 +149,16 @@ final public class PTTabBarItemView: UIControl {
             }
         }
     }
-
+    
     public init(content: PTTabBarItemContent, title: String) {
         super.init(frame: .zero)
-
+        
         self.content = content
         setupUI(title: title)
     }
-
+    
     public required init?(coder: NSCoder) { fatalError() }
-
+    
     private func setupUI(title: String) {
         
         var subViews = [UIView]()
@@ -184,9 +183,9 @@ final public class PTTabBarItemView: UIControl {
             titleLabel.textAlignment = .center
             titleLabel.textColor = PTAppBaseConfig.share.tabNormalColor
         }
-
+        
         addSubviews(subViews)
-
+        
         if PTAppBaseConfig.share.tabSelectedMetail {
             metailView.isUserInteractionEnabled = false
             metailView.clipsToBounds = true
@@ -212,7 +211,7 @@ final public class PTTabBarItemView: UIControl {
             }
             $0.size.equalTo(PTTabBarItemView.itemImageSize())
         }
-
+        
         if !title.stringIsEmpty() {
             titleLabel.snp.makeConstraints {
                 $0.top.equalTo(content.view.snp.bottom).offset(PTAppBaseConfig.share.tabContentSpacing)
@@ -247,6 +246,40 @@ final public class PTTabBarItemView: UIControl {
             }
             $0.size.equalTo(PTTabBarItemView.itemImageSize())
         }
+    }
+    
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        // 如果点击到的子视图是我们的 ImageView，我们强行把响应者改成自己 (ContentView)
+        
+        if let findView = view as? PTTabBarItemView {
+            if let badge = findView.imageContent.badge {
+                return badge
+            } else {
+                return self
+            }
+        } else {
+            if let findView = view {
+                var findImageView:UIImageView?
+                for subs in findView.subviews {
+                    if let findSubs = subs as? UIImageView {
+                        findImageView = findSubs
+                        break
+                    }
+                }
+                if let _ = findImageView {
+                    return self
+                } else {
+                    return view
+                }
+            }
+            return view
+        }
+    }
+    
+    // 这样你的 touchesBegan 就能正常工作了
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
     }
 }
 
@@ -508,6 +541,7 @@ final public class PTTabBarView: UIView {
                 for (index, config) in configs.enumerated() {
 
                     let item = makeItem(config: config, index: index)
+                    item.tag = index
                     items.append(item)
 
                     if index < midIndex {
@@ -567,6 +601,7 @@ final public class PTTabBarView: UIView {
         for (index, config) in configs.enumerated() {
 
             let item = makeItem(config: config, index: index)
+            item.tag = index
             items.append(item)
             leftStackView.addArrangedSubview(item)
         }
@@ -698,7 +733,7 @@ final public class PTTabBarView: UIView {
             badgeWidth = UIView.sizeFor(string: "\(str)", font: config.font).width
         }
         
-        config.centerOffset = CGPointMake(PTTabBarItemView.itemImageSize() - badgeWidth / 2, 7)
+        config.centerOffset = CGPointMake(PTTabBarItemView.itemImageSize() + badgeWidth / 2, 7)
         item.imageContent.badgeConfig = config
         item.imageContent.showBadge(style: badgeStyle, value: badgeValue, aniType: anumationType)
         item.imageContent.badgeRemoveCallback = {
