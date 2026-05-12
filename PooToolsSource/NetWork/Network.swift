@@ -1406,11 +1406,11 @@ extension Network {
         
         for plugin in Network.share.plugins { await plugin.willSend(&urlRequest) }
         
-        if urlRequest.isMock {
-            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
-                return try parser(urlStr1, nil, mockData)
-            }
-        }
+//        if urlRequest.isMock {
+//            if let mockData = await NetworkCache.shared.read(request: urlRequest) {
+//                return try parser(urlStr1, nil, mockData)
+//            }
+//        }
         
         let policy: PTNetworkDedupPolicy = (urlRequest.cachePolicyType == .none) ? .none : .identical
         let finalRequest = urlRequest

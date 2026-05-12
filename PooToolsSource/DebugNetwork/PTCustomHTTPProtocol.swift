@@ -90,23 +90,43 @@ final class PTCustomHTTPProtocol: URLProtocol {
         guard let newRequest = (request as NSObject).mutableCopy() as? NSMutableURLRequest else {
             fatalError("Can not convert to NSMutableURLRequest")
         }
-        
-        // 记录上传测速初始状态
         PTNetworkSpeedMonitor.shared.addUploadSpeed(0)
-        
-        // 🌟 核心防线：对新请求打上处理标记
         URLProtocol.setProperty(true, forKey: PTCustomHTTPProtocol.requestProperty, in: newRequest)
 
-        // 检查自定义大文件持久化缓存 (接入第12份重构逻辑)
+        // 🌟 1. 优先校验静态资源持久化大文件缓存
         if let cache = URLCache.customHttp.validCache(for: request) {
             use(cache)
-            let name = request.url?.lastPathComponent ?? ""
-            PTNSLogConsole("Use cache for \(name)")
+            PTNSLogConsole("Use disk cache for \(request.url?.lastPathComponent ?? "")")
             return
         }
-
-        PTNSLogConsole(request.requestId)
         
+        // 🌟 2. 桥接打通业务网络模块的 Actor 内存/磁盘缓存！
+        // 检查业务层请求头是否允许使用缓存
+        let cachePolicyRaw = request.allHTTPHeaderFields?["cachePolicy"] ?? ""
+        if cachePolicyRaw == PTNetworkCachePolicy.cacheOnly.rawValue ||
+           cachePolicyRaw == PTNetworkCachePolicy.cacheElseNetwork.rawValue {
+            
+            // 跨 Actor 安全读取业务层缓存
+            let originalRequest = request
+            // 避免阻塞当前线程发起，利用信号量或 Task 快速读取
+            var hitBusinessCacheData: Data?
+            let semaphore = DispatchSemaphore(value: 0)
+            Task {
+                hitBusinessCacheData = await NetworkCache.shared.read(request: originalRequest)
+                semaphore.signal()
+            }
+            _ = semaphore.wait(timeout: .now() + 0.05) // 50ms 极速等待内存击穿
+            
+            if let data = hitBusinessCacheData {
+                // 构造合规的本地虚拟成功响应返回给上层 Alamofire
+                let fakeResponse = HTTPURLResponse(url: originalRequest.url!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: originalRequest.allHTTPHeaderFields)!
+                let cachedResp = CachedURLResponse(response: fakeResponse, data: data)
+                use(cachedResp)
+                PTNSLogConsole("Use Business API Cache for \(originalRequest.url?.path ?? "")")
+                return
+            }
+        }
+
         // 实例化调度器，捕获当前线程上下文
         threadOperator = PTThreadOperator()
         startTime = Date()
