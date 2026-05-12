@@ -93,5 +93,6 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         ptCustomBar.setup(configs: items,layoutStyle: .centerRaised,centerContent: aaaaaa)
         ptCustomBar.badge(index: 0,badgeValue: "10",badgeCanDrag: true)
         ptCustomBar.badge(index: 1,badgeValue: "10",badgeStyle: .redDot)
+        self.centerRaisedSet = true
     }
 }

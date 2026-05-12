@@ -260,14 +260,17 @@ final public class PTTabBarItemView: UIControl {
             }
         } else {
             if let findView = view {
-                var findImageView:UIImageView?
+                if let _ = findView as? LottieAnimationView {
+                    return self
+                }
+                var findImageView:UIView?
                 for subs in findView.subviews {
                     if let findSubs = subs as? UIImageView {
                         findImageView = findSubs
                         break
                     }
                 }
-                if let findContent = findImageView {
+                if let _ = findImageView {
                     return self
                 } else {
                     return findView

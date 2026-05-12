@@ -146,4 +146,7 @@ public class PTAppBaseConfig: NSObject {
     public var tabbarShowValueLabel: Bool = false
     public var tabbarValueLabelFont: UIFont = .appfont(size: 10)
     public var tabbarValueLabelColor: UIColor = .systemBlue
+    
+    public var tabBarAccessoryHeight: CGFloat = 44
+    public var tabBarAccessoryBottomSpacing: CGFloat = 10
 }

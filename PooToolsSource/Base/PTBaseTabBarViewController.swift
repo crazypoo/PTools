@@ -11,11 +11,14 @@ import SnapKit
 import SwifterSwift
 
 private var kPTTabBarHiddenKey: Void?
+private var kPTTabBarAccessoryViewKey: Void?
 
 public protocol PTTabBarVisibilityProtocol {
     var pt_prefersTabBarHidden: Bool { get set }
     // 🌟 新增：允许控制器主动抛出需要监听的 ScrollView
     var pt_observedScrollView: UIScrollView? { get }
+    // 🌟 新增：允许控制器挂载专属的 AccessoryView
+    var pt_tabBarAccessoryView: UIView? { get set }
 }
 
 extension UIViewController: PTTabBarVisibilityProtocol {
@@ -32,12 +35,56 @@ extension UIViewController: PTTabBarVisibilityProtocol {
     @objc open var pt_observedScrollView: UIScrollView? {
         return nil
     }
+    
+    public var pt_tabBarAccessoryView: UIView? {
+        get {
+            return objc_getAssociatedObject(self, &kPTTabBarAccessoryViewKey) as? UIView
+        }
+        set {
+            let oldValue = pt_tabBarAccessoryView
+            guard oldValue !== newValue else { return }
+            
+            objc_setAssociatedObject(self, &kPTTabBarAccessoryViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+            // 🌟 响应式修复：如果当前控制器正在被展示，立刻通知 TabBarController 更新容器
+            // 遍历寻找外层的自定义 TabBar 容器
+            var nextVC: UIViewController? = self
+            while let current = nextVC {
+                if let tabBarVC = current.tabBarController as? PTBaseTabBarViewController {
+                    // 确保赋值的控制器属于当前选中的链路，防止后台 Tab 乱刷新当前界面
+                    // 延迟一帧等待关联对象彻底稳固
+                    DispatchQueue.main.async {
+                        tabBarVC.refreshCurrentAccessoryViewIfNeeded()
+                    }
+                    break
+                }
+                nextVC = current.parent
+            }
+        }
+    }
 }
 
 open class PTBaseTabBarViewController: UITabBarController {
     
     public var ptCustomBar = PTTabBarView()
     
+    public var centerRaisedSet:Bool = false {
+        didSet {
+            accessoryContainerView.snp.updateConstraints { make in
+                make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
+            }
+        }
+    }
+    
+    // 🌟 新增：全局挂载 Accessory 视图的容器
+    public let accessoryContainerView = UIView()
+    // 记录当前正在展示的子内容视图
+    private var currentAccessoryContentView: UIView?
+    // 🌟 新增：专门用于毛玻璃效果的背景视图
+    private let accessoryBlurView = UIVisualEffectView()
+    // 🌟 新增：顶部分割线（可选，增加精致感）
+    private let topBorderLine = UIView()
+
     // 🌟 新增：记录 TabBar 是否因为 Push 到了子页面而被整体隐藏
     private var isTabBarGloballyHidden: Bool = false
     // 🌟 新增：记录当前的最小化状态和圆圈尺寸
@@ -61,6 +108,13 @@ open class PTBaseTabBarViewController: UITabBarController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        /*
+         //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
+         //tabBarController.mode = .tabSidebar
+         */
+        setupTabBar()
+        setupAccessoryContainer() // 🌟 初始化容器
+
         PTNavigationBarManager.shared.tabBarHandler = { [weak self] nav, toVC, animated, coordinator in
             guard let self = self else { return }
             // 🌟 修复点 1：升级拦截逻辑，支持深度查找嵌套的 NavigationController
@@ -88,13 +142,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             
             self.handleTabBar(nav: nav, to: toVC, animated: animated, coordinator: coordinator)
         }
-        
-        /*
-         //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
-         //tabBarController.mode = .tabSidebar
-         */
-        setupTabBar()
-        
+                
         didScrollStateChange = { [weak self] isScrolled,offsetY in
             guard let self = self else { return }
             if PTAppBaseConfig.share.tabbarScrollEnabled {
@@ -146,6 +194,39 @@ open class PTBaseTabBarViewController: UITabBarController {
         }
     }
     
+    // 🌟 新增：设置卡槽容器的初始布局
+    private func setupAccessoryContainer() {
+        view.addSubview(accessoryContainerView)
+        accessoryContainerView.clipsToBounds = true
+        accessoryContainerView.backgroundColor = .clear
+        
+        // 1. 配置毛玻璃材质 (与你的 CustomBar 保持视觉统一)
+        if PTAppBaseConfig.share.tab26Mode {
+            accessoryBlurView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+        } else {
+            accessoryBlurView.effect = UIBlurEffect(style: .systemMaterial)
+        }
+        accessoryContainerView.addSubview(accessoryBlurView)
+        accessoryBlurView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // 2. 添加顶部半透明高光线
+        topBorderLine.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        accessoryContainerView.addSubview(topBorderLine)
+        topBorderLine.snp.makeConstraints { make in
+            make.top.left.right.equalToSuperview()
+            make.height.equalTo(0.5)
+        }
+        
+        // 3. 基础容器约束 (初始高度为 0)
+        accessoryContainerView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
+            make.bottom.equalTo(ptCustomBar.snp.top).offset(-PTAppBaseConfig.share.tabBarAccessoryBottomSpacing)
+            make.height.equalTo(0)
+        }
+    }
+
     open func configure(items: [PTTabBarItemConfig]) {
         let vcs = items.map { item -> UIViewController in
             return item.viewController
@@ -192,13 +273,11 @@ open class PTBaseTabBarViewController: UITabBarController {
         var targetVC: UIViewController = selectedVC
         var targetNav: UINavigationController? = selectedVC.navigationController
         
-        // 1. 如果是侧边栏，剥开第一层洋葱
         if let sideMenu = selectedVC as? PTSideMenuControl {
             targetVC = sideMenu.contentViewController ?? sideMenu
-            targetNav = sideMenu.navigationController // 兜底
+            targetNav = sideMenu.navigationController
         }
         
-        // 2. 如果当前目标是导航控制器，剥开第二层洋葱
         if let nav = targetVC as? UINavigationController {
             targetNav = nav
             if let topVC = nav.topViewController {
@@ -206,7 +285,9 @@ open class PTBaseTabBarViewController: UITabBarController {
             }
         }
         
-        // 3. 将最终剥出来的 targetVC 传给同步方法
+        // 🌟 核心补救：强制加载当前目标页面的 View，确保它的 viewDidLoad 立刻执行！
+        targetVC.loadViewIfNeeded()
+        
         updateTabBar(for: targetNav, to: targetVC, animated: false)
     }
     
@@ -337,12 +418,17 @@ extension PTBaseTabBarViewController {
                               to viewController: UIViewController,
                               animated: Bool) {
         let hidden = viewController.pt_prefersTabBarHidden
-        // 🌟 1. 第一时间上锁，告诉全局：“我要进入二级页面了，谁也别动 TabBar 的约束！”
+        // 🌟 第一时间上锁，告诉全局：“我要进入二级页面了，谁也别动 TabBar 的约束！”
         isTabBarGloballyHidden = hidden
         // 🌟 修复 1：每次切换页面或 Tab 时，强制重置为展开状态
         updateTabBarMinimizeState(shouldMinimize: false,animated: false,force: true)
         setTabBar(hidden: hidden, animated: animated)
         
+        // 2. 🌟 切换 AccessoryView 逻辑
+        // 如果整体 TabBar 都要隐藏，Accessory 自然也要强制隐藏
+        let targetAccessoryView = hidden ? nil : viewController.pt_tabBarAccessoryView
+        switchAccessoryView(to: targetAccessoryView, animated: animated)
+
         // 🌟 新增：更新 TabBar 状态的同时，监听新页面的 ScrollView 滑动状态
         if hidden {
             scrollObservation?.invalidate()
@@ -398,6 +484,58 @@ extension PTBaseTabBarViewController {
             self.ptCustomBar.isHidden = hidden
         }
     }
+    
+    // 🌟 新增：执行 Accessory 视图的无缝插拔动画
+    private func switchAccessoryView(to newContentView: UIView?, animated: Bool) {
+        guard newContentView !== currentAccessoryContentView else { return }
+                
+        let oldView = currentAccessoryContentView
+        currentAccessoryContentView = newContentView
+        
+        let removeOldBlock = {
+            oldView?.removeFromSuperview()
+        }
+        
+        // 1. 将新视图添加到卡槽顶层 (盖在 blurView 和 borderLine 上面)
+        if let newView = newContentView {
+            // 确保业务视图自身背景透明，否则会遮挡毛玻璃！
+            newView.backgroundColor = .clear
+            
+            accessoryContainerView.addSubview(newView)
+            newView.snp.remakeConstraints { make in
+                // 顶部避开 0.5pt 的高光线
+                make.top.equalToSuperview().offset(0.5)
+                make.left.right.bottom.equalToSuperview()
+            }
+        }
+        
+        // 2. 🌟 核心固化：直接读取全局统一配置的高度常量
+        let standardHeight = PTAppBaseConfig.share.tabBarAccessoryHeight
+        let targetHeight: CGFloat = (newContentView != nil) ? standardHeight : 0
+        
+        // 更新高度约束
+        accessoryContainerView.snp.updateConstraints { make in
+            make.height.equalTo(targetHeight)
+        }
+        accessoryContainerView.viewCorner(radius: standardHeight / 2)
+        
+        
+        // 3. 执行丝滑转场动画
+        if animated {
+            newContentView?.alpha = 0
+            UIView.animate(withDuration: 0.25,delay: 0, options: [.curveEaseInOut], animations: {
+                oldView?.alpha = 0
+                newContentView?.alpha = 1
+                self.view.layoutIfNeeded()
+            }) { _ in
+                removeOldBlock()
+                oldView?.alpha = 1
+            }
+        } else {
+            removeOldBlock()
+            newContentView?.alpha = 1
+        }
+    }
 }
 
 extension PTBaseTabBarViewController {
@@ -449,6 +587,27 @@ extension PTBaseTabBarViewController {
                 let isScrolled = offset.y > -scrollView.adjustedContentInset.top
                 self.didScrollStateChange?(isScrolled, offset.y)
             }
+        }
+    }
+}
+
+extension PTBaseTabBarViewController {
+    // 🌟 修复处 2：新增暴露给协议调用的即时刷新接口
+    public func refreshCurrentAccessoryViewIfNeeded() {
+        // 重新推导当前顶层 VC
+        guard let selectedVC = selectedViewController else { return }
+        var targetVC: UIViewController = selectedVC
+        
+        if let sideMenu = selectedVC as? PTSideMenuControl {
+            targetVC = sideMenu.contentViewController ?? sideMenu
+        }
+        if let nav = targetVC as? UINavigationController, let topVC = nav.topViewController {
+            targetVC = topVC
+        }
+        
+        // 只有当全局没有隐藏 TabBar 时，才去主动切换卡槽内容
+        if !isTabBarGloballyHidden {
+            switchAccessoryView(to: targetVC.pt_tabBarAccessoryView, animated: true)
         }
     }
 }

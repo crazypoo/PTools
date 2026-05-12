@@ -1145,7 +1145,7 @@ class PTFuncNameViewController: PTBaseViewController {
         navigationItem.largeTitleDisplayMode = .never
 
         // Do any additional setup after loading the view.
-                
+                        
         registerScreenShotService()
         
         NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
