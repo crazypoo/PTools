@@ -2034,8 +2034,10 @@
 				55E601CD2F88A5F3004840AB /* DebugFile */,
 				55E601CB2F889684004840AB /* DebugLibs */,
 				55C409972C097014009C0FB6 /* DEBUGLocation */,
+				55F516AE2FB2BC2400FECD49 /* DebugNetwork */,
 				55E602482F8C95F4004840AB /* DebugPerformance */,
 				55E602472F8C941A004840AB /* DebugRuler */,
+				55F516AD2FB2B45400FECD49 /* DebugUserDefault */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				55B4FA202AE1005E006D35F3 /* FaceIDPermission */,
 				55F162FF2B1977C000320925 /* FilterCamera */,
@@ -2412,26 +2414,11 @@
 				557E3A8D2C044157002466A0 /* CwlDemangle.swift */,
 				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
-				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
-				557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */,
 				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
 				55C409912C061B8A009C0FB6 /* PTDebugShareManager.swift */,
-				557E3A812C04396D002466A0 /* PTDebugUserInfo.swift */,
 				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
-				557E3AA52C046F51002466A0 /* PTErrorHelper.swift */,
-				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
-				557E3AA32C046F10002466A0 /* PTHttpModel.swift */,
 				557E3A832C043BAD002466A0 /* PTLaunchTimeTracker.swift */,
-				5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */,
-				557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */,
-				55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */,
-				55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */,
-				55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */,
-				55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */,
-				557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */,
-				553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */,
-				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
 				557E3AB12C04752F002466A0 /* StderrCapture.swift */,
 				557E3AAF2C047517002466A0 /* StdoutCapture.swift */,
 			);
@@ -2686,6 +2673,7 @@
 				556738032B040EB80058CEBA /* LocalConsole.swift */,
 				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */,
+				5525542E2C0E0CB600C2653A /* PTLogConsoleViewController.swift */,
 				231D15B3272CDEE9003D6F62 /* ResizeController.swift */,
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
@@ -3768,6 +3756,7 @@
 				557E3A7D2C043842002466A0 /* PTCrashModel.swift */,
 				557E3A912C0446AB002466A0 /* PTCrashViewModel.swift */,
 				557E3A792C042F7D002466A0 /* PTCreateLeakViewController.swift */,
+				557E3A812C04396D002466A0 /* PTDebugUserInfo.swift */,
 				557E3A892C044082002466A0 /* Thread+PTDebugEx.swift */,
 			);
 			path = DebugCrash;
@@ -3893,6 +3882,33 @@
 				55F163082B1A29BE00320925 /* PTTakePictureReviewer.swift */,
 			);
 			path = FilterCamera;
+			sourceTree = "<group>";
+		};
+		55F516AD2FB2B45400FECD49 /* DebugUserDefault */ = {
+			isa = PBXGroup;
+			children = (
+				553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */,
+				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
+			);
+			path = DebugUserDefault;
+			sourceTree = "<group>";
+		};
+		55F516AE2FB2BC2400FECD49 /* DebugNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				557E3AA72C046F85002466A0 /* PTCacheStoragePolicy.swift */,
+				557E3A992C046CC8002466A0 /* PTCustomHTTPProtocol.swift */,
+				557E3AA52C046F51002466A0 /* PTErrorHelper.swift */,
+				557E3AA12C046EE0002466A0 /* PTHttpDatasource.swift */,
+				557E3AA32C046F10002466A0 /* PTHttpModel.swift */,
+				557E3A9F2C046E8E002466A0 /* PTNetworkHelper.swift */,
+				55C409832C04B816009C0FB6 /* PTNetworkViewModel.swift */,
+				55C409852C04BE22009C0FB6 /* PTNetworkWatcherCell.swift */,
+				55C409872C04C9FD009C0FB6 /* PTNetworkWatcherDetailViewController.swift */,
+				55C409812C04B6D9009C0FB6 /* PTNetworkWatcherViewController.swift */,
+				557E3A9D2C046DDA002466A0 /* PTThreadOperator.swift */,
+			);
+			path = DebugNetwork;
 			sourceTree = "<group>";
 		};
 		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
@@ -4172,8 +4188,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4183,13 +4198,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4204,13 +4215,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

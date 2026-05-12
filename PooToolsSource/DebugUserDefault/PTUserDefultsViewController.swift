@@ -112,10 +112,9 @@ class PTUserDefultsViewController: PTBaseViewController {
         UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "PT UserDefault delete".localized(),okBtns: ["PT Button comfirm".localized()],cancelBtn: "PT Button cancel".localized()) {
             
         } moreBtn: { index, title in
-            let bundleIdentifier = Bundle.main.bundleIdentifier
-            
-            UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier!)
-            
+            if let bundleIdentifier = Bundle.main.bundleIdentifier,!bundleIdentifier.stringIsEmpty() {
+                UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier)
+            }
             self.showDetail()
         }
     }

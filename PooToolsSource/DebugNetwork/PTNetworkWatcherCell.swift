@@ -11,37 +11,34 @@ import SnapKit
 import SwifterSwift
 import AttributedString
 
+// MARK: - 抓包主列表展示 Cell
 class PTNetworkWatcherCell: PTBaseNormalCell {
     static let ID = "PTNetworkWatchCell"
     
-    lazy var codeLabel:UILabel = {
+    lazy var codeLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
         view.font = .appfont(size: 18)
         return view
     }()
     
-    lazy var infoLabel:UILabel = {
+    lazy var infoLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }()
     
-    var cellModel:PTHttpModel! {
+    var cellModel: PTHttpModel! {
         didSet {
-            var successColor:UIColor = .clear
-            if cellModel.isSuccess {
-                successColor = .systemGreen
-            } else {
-                successColor = .systemRed
-            }
+            // 利用重构后双重安全校验的 isSuccess 驱动精准的 UI 色彩标识
+            let successColor: UIColor = cellModel.isSuccess ? .systemGreen : .systemRed
             codeLabel.textColor = successColor
             codeLabel.text = cellModel.statusCode
             
-            let att:ASAttributedString = """
+            let att: ASAttributedString = """
             \(wrap: .embedding("""
-            \("[\(cellModel.method ?? "")]",.foreground(.gray),.font(.appfont(size: 17)),.paragraph(.alignment(.left))) \(cellModel.startTime ?? "",.foreground(successColor),.font(.appfont(size: 12)),.paragraph(.alignment(.left)))
-            \(cellModel.id,.foreground(successColor),.font(.appfont(size: 18)),.paragraph(.alignment(.left))) \(cellModel.url?.absoluteString ?? "",.foreground(.gray),.font(.appfont(size: 13)),.paragraph(.alignment(.left)))
+            \("[\(cellModel.method ?? "")]", .foreground(.gray), .font(.appfont(size: 17)), .paragraph(.alignment(.left))) \(cellModel.startTime ?? "", .foreground(successColor), .font(.appfont(size: 12)), .paragraph(.alignment(.left)))
+            \(cellModel.id, .foreground(successColor), .font(.appfont(size: 18)), .paragraph(.alignment(.left))) \(cellModel.url?.absoluteString ?? "", .foreground(.gray), .font(.appfont(size: 13)), .paragraph(.alignment(.left)))
             """))
             """
             infoLabel.attributedText = att.value
@@ -49,14 +46,12 @@ class PTNetworkWatcherCell: PTBaseNormalCell {
     }
     
     override init(frame: CGRect) {
-        super.init(frame:frame)
-        
-        contentView.addSubviews([codeLabel,infoLabel])
+        super.init(frame: frame)
+        contentView.addSubviews([codeLabel, infoLabel])
         codeLabel.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalToSuperview()
         }
-        
         infoLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
@@ -69,28 +64,23 @@ class PTNetworkWatcherCell: PTBaseNormalCell {
     }
 }
 
+// MARK: - 详情页长文本支持搜索高亮的 Cell
 class PTNetworkWatcherDetailCell: PTBaseNormalCell {
     static let ID = "PTNetworkWatcherDetailCell"
         
     lazy var details: UITextView = {
         let textView = UITextView()
-        textView.font = UIFont.systemFont(
-            ofSize: 12,
-            weight: .medium
-        )
+        textView.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         textView.isScrollEnabled = false
-
         textView.textColor = .gray
         textView.backgroundColor = .clear
         textView.isSelectable = true
         textView.isEditable = false
-
         return textView
     }()
 
     override init(frame: CGRect) {
-        super.init(frame:frame)
-        
+        super.init(frame: frame)
         contentView.addSubviews([details])
         details.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -104,14 +94,11 @@ class PTNetworkWatcherDetailCell: PTBaseNormalCell {
     
     func setup(_ description: String, _ searched: String?) {
         details.text = description
-
         setupHighlighted(description, searched)
     }
 
     private func setupHighlighted(_ description: String, _ searched: String?) {
-        guard let searched, !searched.isEmpty else {
-            return
-        }
+        guard let searched = searched, !searched.isEmpty else { return }
 
         let attributedString = NSMutableAttributedString(string: description)
         let highlightedWords = searched.lowercased().components(separatedBy: " ")
@@ -122,26 +109,17 @@ class PTNetworkWatcherDetailCell: PTBaseNormalCell {
         for word in highlightedWords {
             var searchRange = fullRange
             while searchRange.location != NSNotFound {
-                searchRange = (description as NSString).range(
-                    of: word,
-                    options: .caseInsensitive,
-                    range: searchRange
-                )
-
+                searchRange = (description as NSString).range(of: word, options: .caseInsensitive, range: searchRange)
                 if searchRange.location != NSNotFound {
                     attributedString.addAttribute(.foregroundColor, value: UIColor.randomColor, range: searchRange)
                     attributedString.addAttribute(.backgroundColor, value: UIColor.yellow, range: searchRange)
                     attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 14), range: searchRange)
 
-                    searchRange = NSRange(
-                        location: searchRange.location + searchRange.length,
-                        length: (description as NSString).length - (searchRange.location + searchRange.length)
-                    )
+                    let newLocation = searchRange.location + searchRange.length
+                    searchRange = NSRange(location: newLocation, length: (description as NSString).length - newLocation)
                 }
             }
         }
-
         details.attributedText = attributedString
     }
-
 }

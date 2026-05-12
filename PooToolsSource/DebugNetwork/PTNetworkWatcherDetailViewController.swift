@@ -11,18 +11,19 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
+// MARK: - 单条请求深度详情展示页面
 class PTNetworkWatcherDetailViewController: PTBaseViewController {
 
-    fileprivate var viewModel:PTHttpModel!
+    fileprivate var viewModel: PTHttpModel!
     private var infos: [Config]!
     private var filteredInfos: [Config] = []
     private var currentInfos: [Config] {
         return searchIsActivity ? filteredInfos : infos
     }
     
-    fileprivate var searchIsActivity:Bool = false
+    fileprivate var searchIsActivity: Bool = false
         
-    lazy var searchBar:PTSearchBar = {
+    lazy var searchBar: PTSearchBar = {
         let view = PTSearchBar()
         view.searchBarOutViewColor = .clear
         view.searchTextFieldBackgroundColor = .lightGray
@@ -35,7 +36,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         return view
     }()
 
-    private lazy var titleViewContailer:PTNavTitleContainer = {
+    private lazy var titleViewContailer: PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
         searchBar.snp.makeConstraints { make in
@@ -48,55 +49,48 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         return view
     }()
 
-    lazy var newCollectionView:PTCollectionView = {
+    lazy var newCollectionView: PTCollectionView = {
         let config = PTCollectionViewConfig()
         config.viewType = .Custom
         config.refreshWithoutAnimation = true
         
-        let view = PTCollectionView(viewConfig: config)        
-        view.headerInCollection = { kind,collectionView,model,index in
-            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerReuseID ?? "", for: index) as? PTFusionHeader,let headerModel = model.headerDataModel as? PTFusionCellModel {
+        let view = PTCollectionView(viewConfig: config)
+        view.headerInCollection = { kind, collectionView, model, index in
+            if let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerReuseID ?? "", for: index) as? PTFusionHeader, let headerModel = model.headerDataModel as? PTFusionCellModel {
                 header.sectionModel = headerModel
                 return header
             }
             return nil
         }
-        view.customerLayout = { sectionIndex,sectionModel in
+        view.customerLayout = { sectionIndex, sectionModel in
             if let headerModel = sectionModel.headerDataModel as? PTFusionCellModel {
                 if headerModel.name == "Simple info" {
-                    return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64,cellRowCount: 1,originalX: 0)
+                    return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64, cellRowCount: 1, originalX: 0)
                 } else {
-                    var bannerGroupSize : NSCollectionLayoutSize
                     var customers = [NSCollectionLayoutGroupCustomItem]()
-                    var groupH:CGFloat = 0
-                    let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
+                    var groupH: CGFloat = 0
+                    let screenW: CGFloat = CGFloat.kSCREEN_WIDTH
                     let cellModel = self.currentInfos[sectionIndex - 1]
-                    var cellHeight:CGFloat = UIView.sizeFor(string: cellModel.description, font: .appfont(size: 12),width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10
-                    if cellHeight < 64 {
-                        cellHeight = 64
-                    }
+                    var cellHeight: CGFloat = UIView.sizeFor(string: cellModel.description, font: .appfont(size: 12), width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10
+                    if cellHeight < 64 { cellHeight = 64 }
                     
                     let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: 0, y: groupH, width: screenW, height: cellHeight), zIndex: 1000)
                     customers.append(customItem)
                     groupH = cellHeight
 
-                    bannerGroupSize = NSCollectionLayoutSize(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-                    return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                        customers
-                    })
+                    let bannerGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(screenW), heightDimension: .absolute(groupH))
+                    return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { _ in customers })
                 }
             } else {
                 return UICollectionView.girdCollectionLayout(data: sectionModel.rows, itemHeight: 0)
             }
         }
-        view.cellInCollection = { collection,itemSection,indexPath in
-            if let itemRow = itemSection.rows?[indexPath.row],let headerModel = itemSection.headerDataModel as? PTFusionCellModel {
+        view.cellInCollection = { collection, itemSection, indexPath in
+            if let itemRow = itemSection.rows?[indexPath.row], let _ = itemSection.headerDataModel as? PTFusionCellModel {
                 let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath)
                 switch baseCell {
                 case let cell as PTNetworkWatcherCell:
-                    if let cellModel = itemRow.dataModel as? PTHttpModel {
-                        cell.cellModel = cellModel
-                    }
+                    if let cellModel = itemRow.dataModel as? PTHttpModel { cell.cellModel = cellModel }
                     return cell
                 case let cell as PTNetworkWatcherDetailCell:
                     let cellModel = self.currentInfos[indexPath.section - 1]
@@ -108,31 +102,22 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
             }
             return nil
         }
-        view.collectionDidSelect = { collection,model,indexPath in
-            if let itemRow = model.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTHttpModel {
-                let vc = PTNetworkWatcherDetailViewController(viewModel: cellModel)
-                self.navigationController?.pushViewController(vc)
-            }
-        }
         return view
     }()
 
-    lazy var backButton:UIButton = {
+    lazy var backButton: UIButton = {
         let button = baseButtonCreate(image: UIImage(.arrow.uturnLeftCircle))
-        button.addActionHandlers(handler: { _ in
-            self.navigationController?.popViewController()
-        })
+        button.addActionHandlers { [weak self] _ in self?.navigationController?.popViewController() }
         return button
     }()
 
-    lazy var shareButton:UIButton = {
+    lazy var shareButton: UIButton = {
         let shareButton = baseButtonCreate(image: UIImage(.square.andArrowUp))
-        shareButton.addActionHandlers { sender in
+        shareButton.addActionHandlers { [weak self] _ in
+            guard let self = self else { return }
             let logText = self.formatLog(model: self.viewModel)
-
             var fileName = self.viewModel.url?.path.replacingOccurrences(of: "/", with: "-") ?? "-log"
-            fileName.removeFirst()
-
+            if !fileName.isEmpty { fileName.removeFirst() }
             PTDebugShareManager.generateFileAndShare(text: logText, fileName: fileName)
         }
         return shareButton
@@ -157,9 +142,8 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
+        let collectionInset: CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top: CGFloat = CGFloat.kNavBarHeight_Total
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
@@ -168,10 +152,8 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
 
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview()
+            make.edges.equalToSuperview()
         }
-                        
         loadListModel()
     }
     
@@ -182,7 +164,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         simpleData_row.cellClass = PTNetworkWatcherCell.self
         let headerModel_simple = PTFusionCellModel()
         headerModel_simple.name = "Simple info"
-        let section = PTSection(headerHeight: 34 ,rows: [simpleData_row],headerDataModel: headerModel_simple)
+        let section = PTSection(headerHeight: 34, rows: [simpleData_row], headerDataModel: headerModel_simple)
         section.headerClass = PTFusionHeader.self
         sections.append(section)
         
@@ -192,18 +174,17 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
                 headerModel.name = value.title
                 let row = PTRows()
                 row.cellClass = PTNetworkWatcherDetailCell.self
-                let section_detail = PTSection(headerHeight: 34 ,rows: [row],headerDataModel: headerModel)
+                let section_detail = PTSection(headerHeight: 34, rows: [row], headerDataModel: headerModel)
                 section_detail.headerClass = PTFusionHeader.self
                 return section_detail
             }
             sections.append(contentsOf: sectionInfos)
         }
-        
         newCollectionView.showCollectionDetail(collectionData: sections)
     }
     
     private func formatLog(model: PTHttpModel) -> String {
-        let formattedLog = """
+        return """
         [\(model.method ?? "")] \(model.startTime ?? "") (\(model.statusCode ?? ""))
 
         ------- URL -------
@@ -228,9 +209,8 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         \(model.totalDuration ?? "No data")
 
         ------- MIME TYPE -------
-        \(model.mineType ?? "No data")
+        \(model.mimeType ?? "No data")
         """
-        return formattedLog
     }
 }
 
@@ -241,42 +221,22 @@ extension PTNetworkWatcherDetailViewController {
     }
 }
 
+// 🌟 全面切换至标准化命名的 mimeType 字段
 extension [PTNetworkWatcherDetailViewController.Config] {
     init(model: PTHttpModel) {
         self = [
-            .init(
-                title: "TOTAL TIME",
-                description: model.totalDuration ?? "No data"
-            ),
-            .init(
-                title: "REQUEST HEADER",
-                description: model.requestHeaderFields?.formattedString() ?? "No data"
-            ),
-            .init(
-                title: "REQUEST",
-                description: model.requestData?.formattedString() ?? "No data"
-            ),
-            .init(
-                title: "RESPONSE HEADER",
-                description: model.responseHeaderFields?.formattedString() ?? "No data"
-            ),
-            .init(
-                title: "RESPONSE",
-                description: model.responseData?.formattedString() ?? "No data"
-            ),
-            .init(
-                title: "RESPONSE SIZE",
-                description: model.responseData?.formattedSize() ?? "No data"
-            ),
-            .init(
-                title: "MIME TYPE",
-                description: model.mineType ?? "No data"
-            )
+            .init(title: "TOTAL TIME", description: model.totalDuration ?? "No data"),
+            .init(title: "REQUEST HEADER", description: model.requestHeaderFields?.formattedString() ?? "No data"),
+            .init(title: "REQUEST", description: model.requestData?.formattedString() ?? "No data"),
+            .init(title: "RESPONSE HEADER", description: model.responseHeaderFields?.formattedString() ?? "No data"),
+            .init(title: "RESPONSE", description: model.responseData?.formattedString() ?? "No data"),
+            .init(title: "RESPONSE SIZE", description: model.responseData?.formattedSize() ?? "No data"),
+            .init(title: "MIME TYPE", description: model.mimeType ?? "No data")
         ]
     }
 }
 
-extension PTNetworkWatcherDetailViewController:UISearchBarDelegate {
+extension PTNetworkWatcherDetailViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchIsActivity = true
         return true
@@ -289,8 +249,6 @@ extension PTNetworkWatcherDetailViewController:UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredInfos = searchText.isEmpty ? infos : infos.filter { $0.description.localizedCaseInsensitiveContains(searchText) }
-        newCollectionView.clearAllData { cView in
-            self.loadListModel()
-        }
+        newCollectionView.clearAllData { [weak self] _ in self?.loadListModel() }
     }
 }

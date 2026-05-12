@@ -11,6 +11,7 @@ import SnapKit
 
 let PTNetworkFloatingTap = 9998
 
+// MARK: - 全局网络监控控制助手
 final class PTNetworkHelper {
     static let shared = PTNetworkHelper()
 
@@ -18,8 +19,8 @@ final class PTNetworkHelper {
     var protobufTransferMap: [String: [String]]?
     var isNetworkEnable: Bool
 
-    var floatingView : PFloatingButton?
-    lazy var speedLabel : UILabel = {
+    var floatingView: PFloatingButton?
+    lazy var speedLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .black
         label.textColor = .white
@@ -40,6 +41,7 @@ final class PTNetworkHelper {
         isNetworkEnable = true
         PTCustomHTTPProtocol.start()
         floatingButtonCreate()
+        // 开启每秒刷新悬浮窗网速显示的定时器
         measurementsTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateSpeedLabels), userInfo: nil, repeats: true)
     }
 
@@ -57,7 +59,6 @@ final class PTNetworkHelper {
     
     private func floatingButtonCreate() {
         if floatingView == nil {
-            
             floatingView = PFloatingButton(inView: PTConsoleWindow.shared, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
             floatingView?.tag = PTNetworkFloatingTap
             floatingView?.autoDocking = false
@@ -69,9 +70,10 @@ final class PTNetworkHelper {
     }
     
     @objc private func updateSpeedLabels() {
-        let downloadSpeed = PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024
-        let uploadSpeed = PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024
+        // 安全读取第一步重构的线程安全测速池数据
+        let downloadSpeed = PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024.0
+        let uploadSpeed = PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024.0
 
-        PTNetworkHelper.shared.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s",uploadSpeed, downloadSpeed)
+        PTNetworkHelper.shared.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s", uploadSpeed, downloadSpeed)
     }
 }

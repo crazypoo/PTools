@@ -8,12 +8,14 @@
 
 import Foundation
 
+// MARK: - 主列表视图模型
 final class PTNetworkViewModel {
 
     var reachEnd = true
     var firstIn = true
     var reloadDataFinish = true
 
+    // 动态同步底层安全的模型列表副本
     var models = PTHttpDatasource.shared.httpModels
     var cacheModels = [PTHttpModel]()
     var searchModels = [PTHttpModel]()
@@ -21,18 +23,25 @@ final class PTNetworkViewModel {
     var networkSearchWord = ""
 
     func applyFilter() {
+        // 安全抓取最新快照
         cacheModels = PTHttpDatasource.shared.httpModels
         searchModels = cacheModels
 
         if networkSearchWord.isEmpty {
             models = cacheModels
         } else {
-            searchModels = searchModels.filter { $0.url?.absoluteString.lowercased().contains(networkSearchWord.lowercased()) == true || $0.statusCode?.lowercased().contains(networkSearchWord.lowercased()) == true || $0.endTime?.lowercased().contains(networkSearchWord.lowercased()) == true }
+            let searchLower = networkSearchWord.lowercased()
+            searchModels = searchModels.filter {
+                $0.url?.absoluteString.lowercased().contains(searchLower) == true ||
+                $0.statusCode?.lowercased().contains(searchLower) == true ||
+                $0.endTime?.lowercased().contains(searchLower) == true
+            }
             models = searchModels
         }
     }
 
     func handleClearAction() {
+        // 调用重构后线程安全的数据源清空接口
         PTHttpDatasource.shared.removeAll()
         models.removeAll()
     }

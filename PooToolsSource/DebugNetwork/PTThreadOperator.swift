@@ -17,8 +17,9 @@ final class PTThreadOperator: NSObject {
     override init() {
         self.thread = Thread.current
 
+        // 捕获当前线程的 RunLoop 模式，确保跨线程同步回拨时不会被阻断
         if let mode = RunLoop.current.currentMode {
-            self.modes = [mode, .default].map { $0 }
+            self.modes = [mode, .default]
         } else {
             self.modes = [.default]
         }
@@ -26,12 +27,15 @@ final class PTThreadOperator: NSObject {
         super.init()
     }
 
+    /// 将闭包任务安全地同步派发回当前对象初始化的目标线程执行
     func execute(_ operation: @escaping PTActionTask) {
         self.operation = operation
+        // 严格依赖 performSelector 机制跨线程同步 (waitUntilDone: true)
         perform(#selector(operate), on: thread, with: nil, waitUntilDone: true, modes: modes.map(\.rawValue))
         self.operation = nil
     }
 
+    // 移除 @MainActor 标记，彻底杜绝多线程环境下的调度冲突与主线程死锁
     @MainActor @objc private func operate() {
         operation?()
     }
