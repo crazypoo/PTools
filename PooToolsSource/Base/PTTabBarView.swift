@@ -119,10 +119,7 @@ final public class PTTabBarItemView: UIControl {
     
     private let titleLabel = UILabel()
     private var content: PTTabBarItemContent!
-    
-    private let metailView = UIView()
-    private let glassBackgroundView = UIVisualEffectView()
-    
+        
     public class func itemImageSize() -> CGFloat {
         let tab26ModeBottomSpacing = Gobal_device_info.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 0
         let safeAreaHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? tab26ModeBottomSpacing : 0
@@ -142,11 +139,6 @@ final public class PTTabBarItemView: UIControl {
             content.setSelected(isSelectedItem, animated: true)
             titleLabel.textColor = isSelectedItem ? PTAppBaseConfig.share.tabSelectedColor : PTAppBaseConfig.share.tabNormalColor
             titleLabel.font = isSelectedItem ? PTAppBaseConfig.share.tabSelectedFont : PTAppBaseConfig.share.tabNormalFont
-            if PTAppBaseConfig.share.tabSelectedMetail {
-                metailView.backgroundColor = isSelectedItem ? PTAppBaseConfig.share.tabSelectedMetailColor : .clear
-                glassBackgroundView.isHidden = !isSelectedItem
-                self.layoutMetailView()
-            }
         }
     }
     
@@ -164,9 +156,9 @@ final public class PTTabBarItemView: UIControl {
         var subViews = [UIView]()
         if PTAppBaseConfig.share.tabSelectedMetail {
             if !title.stringIsEmpty() {
-                subViews = [metailView,titleLabel,content.view]
+                subViews = [titleLabel,content.view]
             } else {
-                subViews = [metailView,content.view]
+                subViews = [content.view]
             }
         } else {
             if !title.stringIsEmpty() {
@@ -185,24 +177,7 @@ final public class PTTabBarItemView: UIControl {
         }
         
         addSubviews(subViews)
-        
-        if PTAppBaseConfig.share.tabSelectedMetail {
-            metailView.isUserInteractionEnabled = false
-            metailView.clipsToBounds = true
-            metailView.snp.makeConstraints { make in
-                make.top.bottom.equalToSuperview()
-                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabSelectedMetailLRSpacing)
-            }
-            
-            glassBackgroundView.isHidden = true
-            glassBackgroundView.clipsToBounds = true
-            glassBackgroundView.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-            metailView.addSubviews([glassBackgroundView])
-            glassBackgroundView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        }
-        
+                
         content.view.snp.makeConstraints {
             if !title.stringIsEmpty() {
                 $0.top.centerX.equalToSuperview()
@@ -228,11 +203,6 @@ final public class PTTabBarItemView: UIControl {
     
     private func layoutMetailView() {
         self.layoutSubviews()
-        if PTAppBaseConfig.share.tabSelectedMetail {
-            metailView.viewCorner(radius: self.frame.size.height / 2)
-            glassBackgroundView.layer.cornerRadius = self.frame.size.height / 2
-            glassBackgroundView.layer.cornerCurve = .continuous
-        }
     }
     
     // 🌟 新增方法：用于恢复 Icon 的初始布局
@@ -358,6 +328,10 @@ final public class PTTabBarView: UIView {
         return view
     }()
 
+    // 🌟 新增：全局共享的选中底色遮罩容器
+    private let sharedSelectionMaskView = UIView()
+    private let sharedMaskGlassView = UIVisualEffectView()
+
     // MARK: - Init
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -376,6 +350,7 @@ final public class PTTabBarView: UIView {
         backgroundColor = .clear
 
         setupGlassEffect()
+        setupSharedSelectionMask() // 🌟 1. 优先初始化共享遮罩（保证在 StackView 底层）
         setupStackView()
         setupShadow()
         setupCenterButton()
@@ -508,6 +483,8 @@ final public class PTTabBarView: UIView {
         if PTAppBaseConfig.share.tab26Mode || PTAppBaseConfig.share.tabbarMetailMode {
             highlightLayer.frame = glassBackgroundView.bounds
         }
+        // 无动画强行刷正游标位置，避免初次从 (0,0) 飞过来的尴尬现象
+        updateSelectionMaskFrame(to: currentIndex, animated: false)
     }
 
     public func setup(configs: [PTTabBarItemConfig],
@@ -648,12 +625,63 @@ final public class PTTabBarView: UIView {
         }
 
         currentIndex = index
-
+        // 🌟 触发底色游标的丝滑平移过渡
+        updateSelectionMaskFrame(to: index, animated: true)
         // 4️⃣ 已选中
         didSelectIndex?(index)
         didSelectInsideIndex?(index)
     }
     
+    // 🌟 新增核心算法：追踪目标 Item 并执行 Frame 平移动画
+    private func updateSelectionMaskFrame(to index: Int, animated: Bool) {
+        guard PTAppBaseConfig.share.tabSelectedMetail, index < items.count else { return }
+        
+        // 确保布局刷新完毕，拿到最真实的子视图 Frame
+        self.layoutIfNeeded()
+        
+        let targetItem = items[index]
+        guard let stackView = targetItem.superview else { return }
+        
+        // 决定计算坐标系的参考层
+        let targetContainer = (glassBackgroundView.superview != nil) ? glassBackgroundView.contentView : self
+        
+        // 坐标系转换：把目标 Item 在 StackView 里的 frame 转换到当前参照层中
+        let convertedFrame = stackView.convert(targetItem.frame, to: targetContainer)
+        
+        // 还原原有的左右内缩逻辑 (LRSpacing)
+        let inset = PTAppBaseConfig.share.tabSelectedMetailLRSpacing
+        let finalFrame = CGRect(
+            x: convertedFrame.origin.x + inset,
+            y: convertedFrame.origin.y,
+            width: max(convertedFrame.width - (inset * 2), 0),
+            height: convertedFrame.height
+        )
+        
+        let cornerRadius = finalFrame.height / 2
+        
+        let layoutUpdates = {
+            self.sharedSelectionMaskView.frame = finalFrame
+            self.sharedSelectionMaskView.layer.cornerRadius = cornerRadius
+            self.sharedMaskGlassView.layer.cornerRadius = cornerRadius
+            self.sharedMaskGlassView.layer.cornerCurve = .continuous
+        }
+        
+        // 仅在非首次加载且开启了动画时执行 Spring 过渡
+        if animated && sharedSelectionMaskView.frame != .zero {
+            // 参数调整说明：damping 0.75 带有轻微Q弹的高级感，velocity 响应灵敏
+            UIView.animate(withDuration: 0.35,
+                           delay: 0,
+                           usingSpringWithDamping: 0.75,
+                           initialSpringVelocity: 0.2,
+                           options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
+                           animations: {
+                layoutUpdates()
+            })
+        } else {
+            layoutUpdates()
+        }
+    }
+
     private func makeItem(config: PTTabBarItemConfig,
                           index: Int) -> PTTabBarItemView {
 
@@ -771,6 +799,7 @@ final public class PTTabBarView: UIView {
         let circleRadius: CGFloat = PTAppBaseConfig.share.tabbarMiniSize / 2
 
         if isMinimized {
+            sharedSelectionMaskView.alpha = 0 // 🌟 最小化时隐藏共享游标
             // 1. 偷天换日：将当前选中的 Icon 转移到最小化容器中
             let iconView = selectedItem.imageContent
             minimizedCenterView.addSubview(iconView)
@@ -828,6 +857,11 @@ final public class PTTabBarView: UIView {
                 glassBackgroundView.layer.cornerRadius = normalRadius
                 highlightLayer.cornerRadius = normalRadius
             }
+            
+            sharedSelectionMaskView.alpha = 1 // 🌟 展开时恢复共享游标
+            DispatchQueue.main.async {
+                self.updateSelectionMaskFrame(to: self.currentIndex, animated: false)
+            }
         }
     }
     
@@ -839,5 +873,23 @@ final public class PTTabBarView: UIView {
     @objc private func handleMinimizedDoubleTap() {
         // 触发外部的双击回调
         didDoubleTapIndex?(currentIndex)
+    }
+    
+    // 🌟 新增方法：配置全局共享底色遮罩
+    private func setupSharedSelectionMask() {
+        guard PTAppBaseConfig.share.tabSelectedMetail else { return }
+        
+        sharedSelectionMaskView.backgroundColor = PTAppBaseConfig.share.tabSelectedMetailColor
+        sharedSelectionMaskView.clipsToBounds = true
+        
+        sharedMaskGlassView.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        sharedSelectionMaskView.addSubview(sharedMaskGlassView)
+        sharedMaskGlassView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // 决定父图层：如果主容器有毛玻璃，插在毛玻璃的 contentView 最底层；否则插在 self 最底层
+        let targetContainer = (glassBackgroundView.superview != nil) ? glassBackgroundView.contentView : self
+        targetContainer.insertSubview(sharedSelectionMaskView, at: 0)
     }
 }
