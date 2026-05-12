@@ -810,6 +810,10 @@ public final class Network: @unchecked Sendable {
         configuration.timeoutIntervalForRequest = config.netRequsetTime
         configuration.waitsForConnectivity = true
         configuration.requestCachePolicy = .useProtocolCachePolicy
+        var protocols = configuration.protocolClasses ?? []
+        protocols.insert(PTCustomHTTPProtocol.self, at: 0)
+        configuration.protocolClasses = protocols
+
         configuration.urlCache = URLCache(
             memoryCapacity: 20 * 1024 * 1024,
             diskCapacity: 100 * 1024 * 1024
@@ -1072,6 +1076,10 @@ public final class Network: @unchecked Sendable {
         config.timeoutIntervalForRequest = Network.share.config.downloadRequsetTime
         config.timeoutIntervalForResource = Network.share.config.downloadEndTime
         config.httpMaximumConnectionsPerHost = 6   // 控制并发
+        var protocols = config.protocolClasses ?? []
+        protocols.insert(PTCustomHTTPProtocol.self, at: 0)
+        config.protocolClasses = protocols
+
         return Session(configuration: config)
     }()
     

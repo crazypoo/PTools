@@ -35,6 +35,9 @@ final class PTCustomHTTPProtocol: URLProtocol {
     // 核心判定：是否拦截处理该请求
     private class func canServeRequest(_ request: URLRequest) -> Bool {
         // 🌟 防死锁机制：如果已经被我们标记过，说明是底层转发请求，直接放行，避免无限递归
+        guard PTNetworkHelper.shared.isNetworkEnable else { return false }
+
+        // 防递归死锁机制：已经被内部二次包装实际发出的请求，放行
         if property(forKey: requestProperty, in: request) != nil { return false }
 
         if let scheme = request.url?.scheme?.lowercased(), scheme == "http" || scheme == "https" {
