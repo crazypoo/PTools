@@ -332,7 +332,7 @@ public class PTCheckUpdateFunction: NSObject {
                 Task.init {
                     do {
                         let result = try await Network.requestCodableApi(needGobal:false,urlStr: "https://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self)
-                        if let responseModel = result.customerModel as? PTCheckUpdateModel {
+                        if let responseModel = result.customerModel {
                             if !responseModel.results.isEmpty {
                                 let versionModel = responseModel.results.first!
                                 let versionStr = versionModel.version
