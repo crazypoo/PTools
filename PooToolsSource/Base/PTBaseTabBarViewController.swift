@@ -64,6 +64,20 @@ extension UIViewController: PTTabBarVisibilityProtocol {
     }
 }
 
+public class PTAccessoryContainerView: UIView {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        
+        // 1. 如果自身被隐藏、透明度极低，或者高度几乎为 0，绝对不拦截任何点击
+        if self.isHidden || self.alpha < 0.01 || self.frame.height < 5 {
+            return nil
+        }
+        
+        // 2. 只有当确实点击到了内部实际内容时，才进行响应
+        return view
+    }
+}
+
 open class PTBaseTabBarViewController: UITabBarController {
     
     public var ptCustomBar = PTTabBarView()
@@ -77,7 +91,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     }
     
     // 🌟 新增：全局挂载 Accessory 视图的容器
-    public let accessoryContainerView = UIView()
+    public let accessoryContainerView = PTAccessoryContainerView()
     // 记录当前正在展示的子内容视图
     private var currentAccessoryContentView: UIView?
     // 🌟 新增：专门用于毛玻璃效果的背景视图
@@ -420,6 +434,14 @@ extension PTBaseTabBarViewController {
         let hidden = viewController.pt_prefersTabBarHidden
         // 🌟 第一时间上锁，告诉全局：“我要进入二级页面了，谁也别动 TabBar 的约束！”
         isTabBarGloballyHidden = hidden
+        
+        if hidden {
+            accessoryContainerView.isUserInteractionEnabled = false
+        } else {
+            accessoryContainerView.isHidden = false
+            accessoryContainerView.isUserInteractionEnabled = true
+        }
+
         // 🌟 修复 1：每次切换页面或 Tab 时，强制重置为展开状态
         updateTabBarMinimizeState(shouldMinimize: false,animated: false,force: true)
         setTabBar(hidden: hidden, animated: animated)
@@ -487,7 +509,12 @@ extension PTBaseTabBarViewController {
     
     // 🌟 新增：执行 Accessory 视图的无缝插拔动画
     private func switchAccessoryView(to newContentView: UIView?, animated: Bool) {
-        guard newContentView !== currentAccessoryContentView else { return }
+        guard newContentView !== currentAccessoryContentView else {
+            if isTabBarGloballyHidden {
+                accessoryContainerView.isHidden = true
+            }
+            return
+        }
                 
         let oldView = currentAccessoryContentView
         currentAccessoryContentView = newContentView
@@ -519,21 +546,34 @@ extension PTBaseTabBarViewController {
         }
         accessoryContainerView.viewCorner(radius: standardHeight / 2)
         
+        // 🌟 核心动作封装
+        let updateUIBlock = {
+            oldView?.alpha = 0
+            newContentView?.alpha = 1
+            // ⚠️ 局部刷新自身布局即可，绝不调用 self.view.layoutIfNeeded() 干扰 UINavigationController！
+            self.accessoryContainerView.layoutIfNeeded()
+        }
+
+        let completionBlock = {
+            removeOldBlock()
+            oldView?.alpha = 1
+            // 🌟 闭环保护：如果收缩为 0，立刻彻底物理隐藏
+            if targetHeight == 0 || self.isTabBarGloballyHidden {
+                self.accessoryContainerView.isHidden = true
+            }
+        }
         
         // 3. 执行丝滑转场动画
         if animated {
             newContentView?.alpha = 0
             UIView.animate(withDuration: 0.25,delay: 0, options: [.curveEaseInOut], animations: {
-                oldView?.alpha = 0
-                newContentView?.alpha = 1
-                self.view.layoutIfNeeded()
+                updateUIBlock()
             }) { _ in
-                removeOldBlock()
-                oldView?.alpha = 1
+                completionBlock()
             }
         } else {
-            removeOldBlock()
-            newContentView?.alpha = 1
+            updateUIBlock()
+            completionBlock()
         }
     }
 }
