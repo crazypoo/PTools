@@ -158,6 +158,12 @@ public class PTCollectionViewConfig: NSObject {
     open var pinHeaderToVisibleBounds: Bool = false
     /// 是否固定 Section Footer 在屏幕底部
     open var pinFooterToVisibleBounds: Bool = false
+    
+    // 🌟 新增：无感触底预加载配置
+    /// 是否开启无感触底预加载 (Smart Prefetch)
+    open var enableSmartPrefetch: Bool = false
+    /// 触发预加载的阈值：距离底部还有多少个 Item 时触发（默认距离最后 5 个时触发）
+    open var prefetchThreshold: Int = 5
 }
 
 public class PTCollectionIndexViewConfiguration: NSObject {
@@ -220,7 +226,7 @@ final class PTIndexItemView: UILabel {
 struct LayoutCacheKey: Hashable {
     let section: Int
     let width: CGFloat
-    let version: Int   // 👈 新增
+    let version: Int
 }
 
 struct HeightCacheKey: Hashable {
@@ -307,7 +313,7 @@ public class PTCollectionView: UIView {
     
     // 声明一个节流任务
     private var scrollDebounceWorkItem: DispatchWorkItem?
-    /// 原生 Diffable 数据源 👈 新增
+    /// 原生 Diffable 数据源
     private var diffableDataSource: PTDataSource!
     ///Photos
     let imageManager = PHCachingImageManager()
@@ -361,7 +367,7 @@ public class PTCollectionView: UIView {
     fileprivate var touchedIndex: Int = 0 {
         didSet {
             if touchedIndex != oldValue {
-                impactFeedbackGenerator.prepare() // 👈 预先唤醒硬件
+                impactFeedbackGenerator.prepare()
                 impactFeedbackGenerator.impactOccurred()
             }
         }
@@ -484,11 +490,17 @@ public class PTCollectionView: UIView {
     open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?
     open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?
     open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
+    
     //MARK: Orthogonal Scroll handler (正交滚动专用)
     /// 正交滚动 (横向滑动) 的实时偏移量回调: (SectionIndex, CGPoint)
     @MainActor open var orthogonalDidScroll:  ((Int, CGPoint) -> Void)?
     /// 正交滚动 (横向滑动) 翻页改变时的回调: (SectionIndex, 当前页码 CurrentPage)
     @MainActor open var orthogonalPageDidChange: ((Int, Int) -> Void)?
+    
+    // 🌟 新增：无感知触底预加载回调
+    /// 无感知触底预加载事件触发回调
+    /// ⚠️ 注意：外部收到此回调后，务必自行进行 isLoading 状态拦截，防止重复触发请求
+    open var collectionWillReachBottomTask: PTActionTask?
     
     ///头部刷新事件
     open var headerRefreshTask: ((UIRefreshControl) -> Void)?
@@ -528,19 +540,17 @@ public class PTCollectionView: UIView {
 
     public var viewConfig: PTCollectionViewConfig! {
         didSet {
-            // 1. 同步滚动条和交互状态
+            // 🌟 修复提升：动态同步所有属性配置变化
             collectionView.showsVerticalScrollIndicator = viewConfig.showsVerticalScrollIndicator
             collectionView.showsHorizontalScrollIndicator = viewConfig.showsHorizontalScrollIndicator
             collectionView.alwaysBounceHorizontal = viewConfig.alwaysBounceHorizontal
             collectionView.alwaysBounceVertical = viewConfig.alwaysBounceVertical
             
-            // 2. 动态开关拖拽功能
             collectionView.dragInteractionEnabled = viewConfig.canMoveItem
             if viewConfig.canMoveItem {
                 collectionView.allowsMoveItem()
             }
             
-            // 3. 处理右侧索引条
             if (viewConfig.sideIndexTitles?.count ?? 0) > 0 && viewConfig.indexConfig != nil {
                 if collectionView.superview == nil {
                     addSubview(collectionView)
@@ -550,12 +560,10 @@ public class PTCollectionView: UIView {
                 }
                 setIndexViews()
             } else {
-                // 如果外部清空了索引条数据，应该隐藏它们
                 indicator.removeFromSuperview()
                 indexContainerView.removeFromSuperview()
             }
             
-            // 4. 如果是在初始化之后修改了 ViewType 布局类型，自动让集合视图重新布局！
             if collectionView.superview != nil {
                 collectionView.collectionViewLayout.invalidateLayout()
             }
@@ -580,7 +588,6 @@ public class PTCollectionView: UIView {
 
         setIndexViews()
         
-        // 👈 内存警告通知监听，防止 OOM 崩溃
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
         
         setupDiffableDataSource()
@@ -597,11 +604,10 @@ public class PTCollectionView: UIView {
     
     @objc private func didReceiveMemoryWarning() {
         PTGCDManager.gcdMain {
-            // 清理缓存以释放内存
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             self.waterfallCache.removeAll()
-            self.fallbackLayouts.removeAll() // 👈 新增
+            self.fallbackLayouts.removeAll()
         }
     }
     
@@ -625,13 +631,11 @@ extension PTCollectionView {
             let snapshot = self.diffableDataSource.snapshot()
             
             guard indexPath.section < snapshot.sectionIdentifiers.count else {
-                // 越界说明系统正在执行消失动画，直接返回一个基础占位 Cell
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
             }
 
             let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
             
-            // 沿用你写好的自定义回调逻辑
             if let cell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
                 if let swipeCell = cell as? PTBaseSwipeCell {
                     if let indexPathSwipe = self.indexPathSwipe {
@@ -659,7 +663,6 @@ extension PTCollectionView {
             let snapshot = self.diffableDataSource.snapshot()
             
             guard indexPath.section < snapshot.sectionIdentifiers.count else {
-                // 越界说明 Header/Footer 正在执行消失动画，返回基础占位 View 避免系统拿不到 View 而崩溃
                 return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
             }
             let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
@@ -681,8 +684,6 @@ extension PTCollectionView {
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
         }
         
-        // 🌟 新增：初始化时给 DataSource 应用一个空数据的 Snapshot
-        // 这会让 UICollectionView 知道当前数据是干净的，并且能激活相关代理和空状态
         let initialSnapshot = PTSnapshot()
         diffableDataSource.apply(initialSnapshot, animatingDifferences: false)
     }
@@ -723,7 +724,6 @@ extension PTCollectionView {
 
 //MARK: UICollectionViewDelegate
 extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
-    // 💡 辅助方法：统一从单一数据源安全获取 Section 模型
     private func getSafeSectionModel(at index: Int) -> PTSection? {
         let snapshot = self.diffableDataSource.snapshot()
         guard index >= 0, index < snapshot.sectionIdentifiers.count else {
@@ -744,7 +744,24 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
+        
+        // 1. 抛出原有的正常展示回调
         collectionWillDisplay?(collectionView, cell, itemSec, indexPath)
+        
+        // 🌟 修复注入：无感知触底预加载验证逻辑
+        if viewConfig.enableSmartPrefetch, let collectionWillReachBottomTask = collectionWillReachBottomTask {
+            let snapshot = diffableDataSource.snapshot()
+            let totalItems = snapshot.numberOfItems
+            
+            guard totalItems > viewConfig.prefetchThreshold else { return }
+            
+            if let currentItem = diffableDataSource.itemIdentifier(for: indexPath),
+               let currentIndex = snapshot.indexOfItem(currentItem) {
+                if (totalItems - 1) - currentIndex <= viewConfig.prefetchThreshold {
+                    collectionWillReachBottomTask()
+                }
+            }
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
@@ -771,44 +788,44 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     }
             
     public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionWillBeginDecelerating?(cv)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionViewDidScroll?(cv)
         throttleScrollUpdate()
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionWillBeginDragging?(cv)
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionDidEndDragging?(cv,decelerate)
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionWillEndDraging?(cv,velocity,targetContentOffset)
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionDidEndDecelerating?(cv)
         hideIndicator()
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionDidEndScrollingAnimation?(cv)
     }
     
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return } // 👈 优化类型转换
+        guard let cv = scrollView as? UICollectionView else { return }
         collectionDidScrolltoTop?(cv)
     }
 }
@@ -827,10 +844,9 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
         guard let rows = sectionModel.rows, indexPath.item < rows.count else { return [] }
         let rowModel = rows[indexPath.item]
         
-        // 提供数据载体
         let itemProvider = NSItemProvider(object: rowModel.diffId as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = rowModel // 将模型存在 localObject 中方便当前 App 内部获取
+        dragItem.localObject = rowModel
         
         return [dragItem]
     }
@@ -840,7 +856,6 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
         guard viewConfig.canMoveItem else {
             return UICollectionViewDropProposal(operation: .forbidden)
         }
-        // 如果是 App 内部的拖放，允许移动
         if collectionView.hasActiveDrag {
             return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
         }
@@ -854,25 +869,20 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
         
         var snapshot = diffableDataSource.snapshot()
         
-        // 1. 提取源和目标模型
         guard let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath),
               let destItem = diffableDataSource.itemIdentifier(for: destinationIndexPath) else { return }
         
-        // 🌟 2. 核心操作：同步内存中的真实数据 (修改 class 内部的 rows 数组)
         let sourceSection = snapshot.sectionIdentifiers[sourceIndexPath.section]
         let destSection = snapshot.sectionIdentifiers[destinationIndexPath.section]
         
-        // a. 从源 Section 的数组中拔出数据
         if let indexToRemove = sourceSection.rows?.firstIndex(of: sourceItem) {
             sourceSection.rows?.remove(at: indexToRemove)
         }
         
-        // b. 插入到目标 Section 的数组中
         if destSection.rows == nil { destSection.rows = [] }
         let insertIndex = min(destinationIndexPath.item, destSection.rows?.count ?? 0)
         destSection.rows?.insert(sourceItem, at: insertIndex)
         
-        // 🌟 3. 精准清理被影响的缓存，防止布局错乱
         self.layoutCache.removeAll()
         self.heightCache.remove(forKey: HeightCacheKey(id: sourceItem.diffId, width: collectionView.bounds.width))
         
@@ -884,21 +894,18 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
             self.clearWaterfallCache(section: destinationIndexPath.section)
         }
         
-        // 🌟 4. 更新快照 (驱动 UI 动画)
         if destinationIndexPath >= sourceIndexPath {
             snapshot.moveItem(sourceItem, afterItem: destItem)
         } else {
             snapshot.moveItem(sourceItem, beforeItem: destItem)
         }
         
-        // 5. 应用动画，并抛出回调给外部
         let animated = !self.viewConfig.refreshWithoutAnimation
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
             self.itemMoveTo?(collectionView, sourceIndexPath, destinationIndexPath)
         }
         
-        // 执行系统的放置动画
         coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
     }
 }
@@ -949,13 +956,11 @@ private extension PTCollectionView {
     }
 
     private func addIndexGesture() {
-        // 👈 添加 [weak self] 防止内存泄漏
         let pan = UIPanGestureRecognizer { [weak self] sender in
             guard let self = self, let gesture = sender as? UIPanGestureRecognizer else { return }
             let point = gesture.location(in: self.stackView)
             
             for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
-                
                 if view.frame.contains(point) {
                     self.selectIndex(view.index)
                     break
@@ -970,7 +975,6 @@ private extension PTCollectionView {
     }
         
     private func selectIndex(_ index: Int) {
-        
         guard let config = viewConfig.indexConfig else { return }
         
         for case let view as PTIndexItemView in stackView.arrangedSubviews {
@@ -999,12 +1003,8 @@ private extension PTCollectionView {
     func setIndicatorCenter(t index: Int,config:PTCollectionIndexViewConfiguration,alpha:CGFloat = 1) {
         for case let targetView as PTIndexItemView in stackView.arrangedSubviews {
             if targetView.index == index {
-                // 🟢 转换坐标（关键）
                 let targetFrame = targetView.convert(targetView.bounds, to: self)
-                
-                // 🟢 计算中心点（让 indicator 对齐 index item）
                 let centerY = targetFrame.midY
-                
                 let indicatorX = bounds.width - indicator.bounds.width / 2 - (config.itemSize.width)
                 
                 UIView.animate(withDuration: 0.15) {
@@ -1018,7 +1018,6 @@ private extension PTCollectionView {
     }
     
     private func setupIndexUI() {
-        
         guard let titles = viewConfig.sideIndexTitles,
               let config = viewConfig.indexConfig else { return }
         
@@ -1054,7 +1053,6 @@ private extension PTCollectionView {
                 make.size.equalTo(config.itemSize)
             }
             
-            // 👈 添加 [weak self] 防止内存泄漏
             let tap = UITapGestureRecognizer { [weak self] sender in
                 guard let self = self else { return }
                 self.isTouched = true
@@ -1078,7 +1076,6 @@ private extension PTCollectionView {
 
 //MARK: 触摸事件
 extension PTCollectionView {
-    
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
 
@@ -1114,23 +1111,17 @@ extension PTCollectionView {
     private func findCurrentSectionFast() -> Int? {
         let indexPaths = collectionView.indexPathsForVisibleItems
         guard !indexPaths.isEmpty else { return nil }
-        
         return indexPaths.min()?.section
     }
     
     private func throttleScrollUpdate() {
         guard isTouched == false else { return }
-        
-        // 取消上一次还没执行的任务
         scrollDebounceWorkItem?.cancel()
         
-        // 创建新任务
         let workItem = DispatchWorkItem { [weak self] in
             self?.handleScrollUpdate()
         }
         scrollDebounceWorkItem = workItem
-        
-        // 延迟 0.05 秒执行（50ms的防抖，既能跟手，又能极大减少计算频次）
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
     }
 }
@@ -1141,16 +1132,11 @@ extension PTCollectionView {
                               model: AnyObject,
                               calculator: (Int, AnyObject) -> CGFloat) -> CGFloat {
         guard let row = diffableDataSource.itemIdentifier(for: indexPath) else {
-            // 如果因为某些原因（比如正在执行删除动画）拿不到模型，就走实时计算兜底
             return calculator(indexPath.section, model)
         }
 
-        let key = HeightCacheKey(
-            id: row.diffId,                 // 👈 稳定ID
-            width: collectionView.bounds.width
-        )
+        let key = HeightCacheKey(id: row.diffId, width: collectionView.bounds.width)
         
-       
         if let cache = heightCache.get(forKey: key) {
             return cache.doubleValue
         }
@@ -1164,20 +1150,13 @@ extension PTCollectionView {
 //MARK: Cell 相关
 extension PTCollectionView  {
     private func autoRegisterIfNeeded(sections: [PTSection]) {
-        
         for section in sections {
-            
-            // 🟢 header
             if let headerClass = section.headerClass as? PTSupplementaryRegisterable.Type {
                 registerSupplementaryIfNeeded(headerClass)
             }
-            
-            // 🟢 footer
             if let footerClass = section.footerClass as? PTSupplementaryRegisterable.Type {
                 registerSupplementaryIfNeeded(footerClass)
             }
-            
-            // 🟢 cells
             section.rows?.forEach { row in
                 if let cellClass = row.cellClass as? PTCellRegisterable.Type {
                     registerCellIfNeeded(cellClass)
@@ -1187,26 +1166,18 @@ extension PTCollectionView  {
     }
     
     private func registerCellIfNeeded(_ cellClass: PTCellRegisterable.Type) {
-        
         let reuseID = cellClass.reuseID
-        
         guard !registeredCells.contains(reuseID) else { return }
-        
         collectionView.register(cellClass as? UICollectionViewCell.Type, forCellWithReuseIdentifier: reuseID)
-        
         registeredCells.insert(reuseID)
     }
     
     private func registerSupplementaryIfNeeded(_ viewClass: PTSupplementaryRegisterable.Type) {
-        
         let reuseID = viewClass.reuseID
-        
         guard !registeredSupplementary.contains(reuseID) else { return }
-        
         collectionView.register(viewClass as? UICollectionReusableView.Type,
                                 forSupplementaryViewOfKind: viewClass.kind,
                                 withReuseIdentifier: reuseID)
-        
         registeredSupplementary.insert(reuseID)
     }
 }
@@ -1224,16 +1195,13 @@ extension PTCollectionView {
                                                 animated: Bool = true,
                                                 animation: PTDiffAnimation = .default,
                                                 finishTask:PTCollectionCallback? = nil) {
-        // 1. 自动注册 Cell
         self.autoRegisterIfNeeded(sections: collectionData)
         
-        // 2. 备份数据，供你其他的布局业务使用
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
         self.waterfallCache.removeAll()
         self.fallbackLayouts.removeAll()
         
-        // 3. 构建全新的 Snapshot
         var snapshot = PTSnapshot()
         snapshot.appendSections(collectionData)
         
@@ -1247,11 +1215,10 @@ extension PTCollectionView {
             if #available(iOS 17.0, *) {
                 PTUnavailableManager.hideUnavailableView(in: self)
             } else {
-                // 让第三方库立即感知数据变化并隐藏
                 self.collectionView.reloadEmptyDataSet()
             }
         }
-        // 4. 交给苹果底层去 Diff 和执行动画！✨
+        
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
             guard let self = self else { return }
             self.setiOS17EmptyDataView()
@@ -1259,15 +1226,14 @@ extension PTCollectionView {
         }
     }
     
-    /// 插入 Rows
     public func clearAllData(finishTask:PTCollectionCallback? = nil) {
         self.layoutCache.removeAll()
         self.heightCache.removeAll()
         self.waterfallCache.removeAll()
-        self.fallbackLayouts.removeAll() // 👈 新增
+        self.fallbackLayouts.removeAll()
         
         var snapshot = PTSnapshot()
-        snapshot.deleteAllItems() // 一键清空快照
+        snapshot.deleteAllItems()
         
         let animated = !self.viewConfig.refreshWithoutAnimation
         diffableDataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
@@ -1289,14 +1255,12 @@ extension PTCollectionView {
             if sectionModel.rows == nil { sectionModel.rows = [] }
             sectionModel.rows?.append(contentsOf: rows)
             
-            // 🌟 4. 清理受影响的缓存
             self.layoutCache.removeAll()
             if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                 self.clearWaterfallCache(section: section)
             }
-            sectionModel.layoutVersion += 1 // 标记脏数据强制重绘
+            sectionModel.layoutVersion += 1
             
-            // 🌟 5. 告诉 DiffableDataSource 把新数据加进去！
             snapshot.appendItems(rows, toSection: sectionModel)
             
             let animated = !self.viewConfig.refreshWithoutAnimation
@@ -1307,7 +1271,6 @@ extension PTCollectionView {
         }
     }
     
-    /// 插入 Section
     public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             guard !sections.isEmpty else {
@@ -1321,7 +1284,6 @@ extension PTCollectionView {
             var snapshot = self.diffableDataSource.snapshot()
             var insertIndex = snapshot.sectionIdentifiers.count
 
-            // 处理插入位置
             if let index = afterIndex, index < snapshot.sectionIdentifiers.count {
                 insertIndex = index + 1
                 let anchorSection = snapshot.sectionIdentifiers[index]
@@ -1330,7 +1292,6 @@ extension PTCollectionView {
                 snapshot.appendSections(sections)
             }
 
-            // 把新 section 里面的 rows 装入 Snapshot，并清理缓存
             for i in 0..<sections.count {
                 let targetIndex = insertIndex + i
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
@@ -1350,7 +1311,6 @@ extension PTCollectionView {
         }
     }
 
-    /// 删除 Rows
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             var snapshot = self.diffableDataSource.snapshot()
@@ -1369,7 +1329,6 @@ extension PTCollectionView {
             sectionModel.layoutVersion += 1
             sectionModel.rows?.removeAll(where: { rows.contains($0) })
 
-            // 从快照中删除 UI 元素
             snapshot.deleteItems(rows)
 
             if sectionModel.rows?.isEmpty ?? true {
@@ -1384,14 +1343,13 @@ extension PTCollectionView {
         }
     }
     
-    /// 跨 Section 批量删除 Rows
     public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             
             var allRowsToDelete: [PTRows] = []
-            var sectionsToDelete: [PTSection] = [] // 🌟 【新增】：收集因为删光了 Row 而变成空的 Section
+            var sectionsToDelete: [PTSection] = []
             var snapshot = self.diffableDataSource.snapshot()
             
             for (sectionIndex, rows) in rowsMap {
@@ -1434,14 +1392,10 @@ extension PTCollectionView {
         }
     }
     
-    /// 删除 Sections
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
-        // 注意：这里我们统一使用 gcdMain。因为 Snapshot 的获取和 Apply 必须在主线程执行！
-        // 之前在后台线程(gcdGobal)操作很容易引发数据竞争和崩溃。
         PTGCDManager.gcdMain {
             var snapshot = self.diffableDataSource.snapshot()
                         
-            // 利用我们之前说的优雅反查机制，清理缓存
             for sectionModel in sections {
                 if let index = snapshot.indexOfSection(sectionModel) {
                     if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
@@ -1486,10 +1440,7 @@ extension PTCollectionView {
     }
     
     private func buildSection(sectionModel: PTSection,sectionIndex: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        // 🌟 修复核心 1：千万不要用 frame.size.width！
-        // DiffableDataSource 提前计算布局时，frame 可能为 0。使用 environment 获取真实的可用宽度。
         let screenWidth = environment.container.contentSize.width
-
         let behavior = viewConfig.collectionViewBehavior
         let group: NSCollectionLayoutGroup
         
@@ -1612,24 +1563,15 @@ extension PTCollectionView {
         
         laySection.decorationItems = generateDecorationItems(section: sectionIndex, sectionModel: sectionModel)
         
-        // 🌟 修复核心：监听正交滚动 (Orthogonal Scrolling)
+        // 🌟 修复注入：监听正交滚动 (Orthogonal Scrolling)
         if behavior != .none {
             laySection.visibleItemsInvalidationHandler = { [weak self] visibleItems, offset, env in
                 guard let self = self else { return }
-                
                 PTGCDManager.gcdMain {
-                    // 1. 触发横向滑动的实时回调 (替代 scrollViewDidScroll)
                     self.orthogonalDidScroll?(sectionIndex, offset)
-                    
-                    // 2. 模拟停止减速/翻页事件 (替代 scrollViewDidEndDecelerating)
-                    // 由于苹果没有提供原生的 DidEndDecelerating，业界标准做法是通过 offset 实时计算当前处于第几页
-                    let pageWidth = env.container.contentSize.width // 假设每页宽度等于容器宽度
+                    let pageWidth = env.container.contentSize.width
                     if pageWidth > 0 {
-                        // 使用 round 进行四舍五入，确保滑过一半就判定为新的一页
                         let currentPage = Int(round(offset.x / pageWidth))
-                        
-                        // 为了防止重复回调，你可以利用 sectionModel 的某个属内存下或者闭包里存一下 lastPage
-                        // 这里我们直接向外抛出当前页码
                         self.orthogonalPageDidChange?(sectionIndex, currentPage)
                     }
                 }
@@ -1639,11 +1581,7 @@ extension PTCollectionView {
     }
     
     fileprivate func generateSection(section: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        
         let snapshot = self.diffableDataSource.snapshot()
-        
-        // 🌟 核心修复 1：防越界保护！
-        // 防止在执行删除动画时，Layout 请求了已经被我们从 mSections 中删除的旧索引
         guard section >= 0, section < snapshot.sectionIdentifiers.count else {
             if let fallback = fallbackLayouts[section] {
                 return fallback
@@ -1661,9 +1599,7 @@ extension PTCollectionView {
 
         let sectionLayout = buildSection(sectionModel: sectionModel,sectionIndex: section, environment: environment)
         layoutCache.set(sectionLayout, forKey: key)
-        
         fallbackLayouts[section] = sectionLayout
-        
         return sectionLayout
     }
     
@@ -1689,7 +1625,6 @@ extension PTCollectionView {
                 absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: viewConfig.decorationItemsEdges.top + (sectionModel.headerHeight ?? .leastNormalMagnitude))
             )
             headerItem.contentInsets = .zero
-            // 🌟 新增：开启吸顶效果
             headerItem.pinToVisibleBounds = viewConfig.pinHeaderToVisibleBounds
             supplementaryItems.append(headerItem)
         }
@@ -1706,7 +1641,6 @@ extension PTCollectionView {
                 alignment: .bottom,
                 absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: 0)
             )
-            // 🌟 新增：开启吸底效果
             footerItem.pinToVisibleBounds = viewConfig.pinFooterToVisibleBounds
             supplementaryItems.append(footerItem)
         }
@@ -1746,7 +1680,6 @@ extension PTCollectionView {
         
         let key = WaterfallCacheKey(section: section, width: width, version: version)
         
-        // 🟢 1️⃣ 命中缓存（直接返回）
         if let cache = waterfallCache[key] {
             return (cache.items, cache.contentHeight)
         }
@@ -1767,9 +1700,7 @@ extension PTCollectionView {
         var items: [NSCollectionLayoutGroupCustomItem] = []
         
         for (index, model) in data.enumerated() {
-            
             let h = itemHeight(index, model)
-            
             let minColumn = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
             
             let frame = CGRect(
@@ -1781,23 +1712,21 @@ extension PTCollectionView {
             
             let item = NSCollectionLayoutGroupCustomItem(frame: frame)
             items.append(item)
-            
             columnHeights[minColumn] = frame.maxY + itemTrailingSpace
         }
         
         let maxHeight = (columnHeights.max() ?? 0) - itemTrailingSpace + config.contentBottomSpace
                 
-        // 🟢 2️⃣ 写入缓存
         waterfallCache[key] = WaterfallCache(
             columnHeights: columnHeights,
             items: items,
             contentHeight: maxHeight
         )
-        
         return (items, maxHeight)
     }
     
     private func clearWaterfallCache(section: Int) {
+        // 🌟 修复提升：原地过滤移除优化
         let keysToRemove = waterfallCache.keys.filter { $0.section == section }
         for key in keysToRemove {
             waterfallCache.removeValue(forKey: key)
@@ -1826,18 +1755,14 @@ extension PTCollectionView {
     
     @available(iOS 17, *)
     private func showEmptyConfig() {
-        // 🌟 修复：精准计算所有 Section 的总 Row 数量，不要只查 first
         let snapshot = self.diffableDataSource.snapshot()
         let isEmpty = snapshot.numberOfItems == 0
         if viewConfig.showEmptyAlert {
             if isEmpty {
-                // 先隐藏，再展示
                 PTUnavailableManager.hideUnavailableView(in: self) {
                     if let config = self.viewConfig.emptyViewConfig {
                         PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self] in
-                            // 处理按钮点击事件
                             self?.showEmptyLoading()
-                            // 延迟触发外部回调
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 self?.emptyTap?(nil)
                             }
@@ -1898,7 +1823,6 @@ extension PTCollectionView {
                                 }
                         }
                     }
-                    // 🌟 新增：配置完成后，强制让第三方库立即刷新并展示！
                     self.collectionView.reloadEmptyDataSet()
                 }
             } else {
@@ -1960,18 +1884,15 @@ extension PTCollectionView {
     }
     
     public func registerSupplementaryView(classs:[String:AnyClass],kind:String) {
-        //kind:UICollectionView.elementKindSectionFooter && UICollectionView.elementKindSectionHeader
         collectionView.registerSupplementaryView(classs: classs, kind: kind)
     }
 }
 
 extension PTCollectionView {
-    /// 刷新指定的 Sections (通过 Index)
     public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             var snapshot = self.diffableDataSource.snapshot()
             
-            // 🌟 换成从 snapshot 里安全提取模型
             let validSections = indexes.compactMap { index -> PTSection? in
                 guard index >= 0 && index < snapshot.sectionIdentifiers.count else { return nil }
                 return snapshot.sectionIdentifiers[index]
@@ -1996,10 +1917,6 @@ extension PTCollectionView {
         }
     }
     
-    /// 刷新指定的 Rows
-    /// - Parameters:
-    ///   - rows: 需要刷新的 Row 模型数组
-    ///   - section: 这些 Row 所在的 Section Index (用于清理相关的布局缓存)
     public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             var snapshot = self.diffableDataSource.snapshot()
@@ -2008,7 +1925,6 @@ extension PTCollectionView {
                 return
             }
             
-            // 1. 清理布局缓存 (因为 reload 可能会改变 cell 的高度或内容)
             let width = self.collectionView.bounds.width
             let sectionModel = snapshot.sectionIdentifiers[section]
             for row in rows {
@@ -2025,18 +1941,14 @@ extension PTCollectionView {
             
             self.markSectionDirty(section)
             
-            // 安全校验：确保这些 row 真的存在于当前的 snapshot 中，避免传入脏数据导致异常
             let existingRows = rows.filter { snapshot.indexOfItem($0) != nil }
-            
             guard !existingRows.isEmpty else {
                 completion?()
                 return
             }
             
-            // 直接告诉 Snapshot 重新加载这些 items
             snapshot.reloadItems(existingRows)
             
-            // 3. 应用变更
             let animated = !self.viewConfig.refreshWithoutAnimation
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
                 completion?()
@@ -2044,9 +1956,6 @@ extension PTCollectionView {
         }
     }
     
-    /// 跨 Section 批量刷新 Rows
-    /// - Parameters:
-    ///   - rowsMap: 字典形式传入，Key 为 Section Index，Value 为该 Section 下需要刷新的 Row 模型数组
     public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
             var snapshot = self.diffableDataSource.snapshot()
@@ -2054,46 +1963,36 @@ extension PTCollectionView {
             
             var allRowsToReload: [PTRows] = []
             
-            // 1. 遍历字典，精准清理受影响的 Section 缓存，并收集所有的 Rows
             for (sectionIndex, rows) in rowsMap {
-                // 防越界保护
                 guard sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count else { continue }
                 let sectionModel = snapshot.sectionIdentifiers[sectionIndex]
                 
-                // 🌟 精准清理 Height 缓存：只删掉需要重绘的 Row 的高度
                 for row in rows {
                     let cacheKey = HeightCacheKey(id: row.diffId, width: containerWidth)
                     self.heightCache.remove(forKey: cacheKey)
                 }
                 
-                // 🌟 细粒度清理 Layout 缓存：在版本升级前，精准抹杀旧布局
                 let oldLayoutKey = LayoutCacheKey(section: sectionIndex, width: containerWidth, version: sectionModel.layoutVersion)
                 self.layoutCache.remove(forKey: oldLayoutKey)
-                // 清理对应的瀑布流缓存
+                
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.clearWaterfallCache(section: sectionIndex)
                 }
-                // 标记该 Section 布局失效
                 sectionModel.layoutVersion += 1
                 
-                // 把这个 Section 里的需要刷新的 rows 装进大集合里
                 allRowsToReload.append(contentsOf: rows)
             }
             
-            // 安全过滤：防止外部传入了已经被删除的脏数据
             let existingRows = allRowsToReload.filter { snapshot.indexOfItem($0) != nil }
             guard !existingRows.isEmpty else {
                 completion?()
                 return
             }
             
-            // ✨ 重点：把所有跨 Section 的 Row 一次性丢给底层！
             snapshot.reloadItems(existingRows)
             
-            // 3. 应用变更
             let animated = !self.viewConfig.refreshWithoutAnimation
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                // 如果是瀑布流，跨 section 刷新可能导致整体高度变化，这里做一次全局 layout 刷新
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.collectionView.collectionViewLayout.invalidateLayout()
                 }
@@ -2102,11 +2001,8 @@ extension PTCollectionView {
         }
     }
     
-    /// 强制重绘当前所有的 Section 和 Row
-    /// (适用于主题切换、多语言切换、或者强制重绘现有数据的场景)
     public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) {
         PTGCDManager.gcdMain {
-            // 1. 既然是全量刷新，先彻底清空所有的布局和高度缓存
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             self.waterfallCache.removeAll()
@@ -2119,21 +2015,18 @@ extension PTCollectionView {
                 return
             }
             
-            // 2. 标记所有 Section 布局失效
             for section in allSections {
                 section.layoutVersion += 1
             }
             
-            // 🌟 3. 核心修复：同时把 Sections 加入重绘队列！这样 Header/Footer 才会更新
+            // 🌟 修复注入：重绘映射关联 Section 队列确保 Header/Footer 及布局完全迭代
             snapshot.reloadSections(allSections)
             
-            // 4. 把所有的 Items 也加入重绘队列
             let allExistingItems = snapshot.itemIdentifiers
             if !allExistingItems.isEmpty {
                 snapshot.reloadItems(allExistingItems)
             }
             
-            // 5. 应用变更
             self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.collectionView.collectionViewLayout.invalidateLayout()
@@ -2147,68 +2040,42 @@ extension PTCollectionView {
 //MARK: Get Models (Data Query)
 extension PTCollectionView {
     
-    /// 1. 通过 IndexPath 获取单个 Row 模型 (最常用)
     public func getRow(at indexPath: IndexPath) -> PTRows? {
-        // 🌟 直接向底层 Diffable 请求，绝对安全，不会有越界崩溃
         return diffableDataSource.itemIdentifier(for: indexPath)
     }
     
-    /// 2. 通过一组 IndexPath 批量获取 Row 模型
     public func getRows(at indexPaths: [IndexPath]) -> [PTRows] {
         return indexPaths.compactMap { getRow(at: $0) }
     }
     
-    /// 3. 通过数据 ID 查找 Row 模型 (非常适合处理网络回调或通知)
     public func getRow(by diffId: String) -> PTRows? {
         let snapshot = diffableDataSource.snapshot()
-        // 从当前屏幕真实展示的数据快照中查找
         return snapshot.itemIdentifiers.first { $0.diffId == diffId }
     }
     
-    /// 4. 获取某个 Section 下的所有 Row 模型
     public func getAllRows(in section: Int) -> [PTRows] {
         let snapshot = diffableDataSource.snapshot()
         let sectionIdentifiers = snapshot.sectionIdentifiers
-        
-        // 防越界保护
         guard section >= 0 && section < sectionIdentifiers.count else { return [] }
-        
         let targetSection = sectionIdentifiers[section]
         return snapshot.itemIdentifiers(inSection: targetSection)
     }
     
-    /// 将一组 IndexPath 转换为按 Section 分组的 Rows 字典
-    /// 非常适合配合 `reloadSectionsRows` 或 `deleteSectionsRows` 使用
-    /// - Parameter indexPaths: 需要处理的 IndexPath 数组
-    /// - Returns: 按 Section Index 分组的字典 [Int: [PTRows]]
     public func getSectionRowsMap(from indexPaths: [IndexPath]) -> [Int: [PTRows]] {
         var rowsMap: [Int: [PTRows]] = [:]
-        
         for indexPath in indexPaths {
-            // 获取对应的 Row 模型
             if let row = self.getRow(at: indexPath) {
-                // Swift 字典的优雅写法：如果该 section 还没有数组，就默认创建一个空数组并追加
                 rowsMap[indexPath.section, default: []].append(row)
             }
         }
-        
         return rowsMap
     }
     
-    /// 根据 Header ID 查找对应的 Section Index
-    /// - Parameter headerID: 需要查找的目标 Header ID
-    /// - Returns: 如果找到则返回对应的 Index，如果列表中不存在则返回 nil
     public func getSectionIndex(byHeaderID headerID: String) -> Int? {
-        // 1. 获取当前唯一真实的数据快照
         let snapshot = self.diffableDataSource.snapshot()
-        
-        // 2. snapshot.sectionIdentifiers 是一个包含当前所有 PTSection 模型的数组
-        // 3. 使用 firstIndex(where:) 遍历数组，找出内部属性与目标 ID 匹配的那个元素的下标
         let index = snapshot.sectionIdentifiers.firstIndex { sectionModel in
-            // 注意：这里请将 headerReuseID 替换为你模型中真实代表 header id 的属性名
             return sectionModel.headerReuseID == headerID
         }
-        
         return index
     }
 }
