@@ -10,11 +10,6 @@ import UIKit
 import SmartCodable
 import KakaJSON
 
-// 🌟 1. 专门定义一个轻量级的空模型，用来给不需要解析 JSON 的接口占位
-public struct PTDummyModel: PTModelProtocol {
-    public init() {}
-}
-
 open class PTBaseModel: Convertible {
     required public init() {}
             
@@ -40,25 +35,40 @@ extension PTBaseModel: PTDiffableModel {
     }
 }
 
-// 🌟 1. 定义一个协议，要求遵守它的人必须同时遵守 SmartCodable 和 PTDiffableModel
-public protocol PTModelProtocol: SmartCodableX, PTDiffableModel {
-    // 如果你有所有模型共有的属性，比如 id，可以写在这里
-    // var id: String? { get set }
+// 🌟 专门定义一个轻量级的空模型，用来给不需要解析 JSON 的接口占位
+public struct PTDummyModel: PTModelProtocol {
+    public init() {}
 }
 
-// 🌟 2. 利用协议扩展，提供 Diffable 的默认实现！
-// 这样所有遵守 PTModelProtocol 的结构体都不用再手写这两行代码了。
+// 🌟 要求遵守它的人必须同时遵守 SmartCodable 和 PTDiffableModel
+public protocol PTModelProtocol: SmartCodableX, PTDiffableModel {}
+
 public extension PTModelProtocol {
     var diffId: String {
-        // 对于 struct，这里最好用属性来做 hash，或者直接转 JSON 字符串作为标识
-        // 因为 struct 没有 ObjectIdentifier
         return "\(type(of: self))-\(UUID().uuidString)"
     }
     
     var diffHash: Int {
-        return 0 // 默认不参与 diff
+        return 0
     }
     
-    // 如果需要保留 didFinishMapping 的默认空实现，可以加在这里
     func didFinishMapping() {}
+}
+
+// 🌟 Swift 6 终极数据包裹：支持强泛型推断与向后兼容的并发载体
+public struct PTBaseStructModel<T>: @unchecked Sendable {
+    public var originalString: String = ""
+    public var customerModel: T? = nil
+    public var resultData: Data? = Data()
+    
+    public init() {}
+}
+
+// 向下兼容旧版单体擦除模型
+public typealias PTLegacyStructModel = PTBaseStructModel<Any>
+
+// 🌟 Swift 6 安全补丁：跨线程安全传递元类型的容器
+public struct PTSendableTypeBox<T>: @unchecked Sendable {
+    let type: T?
+    init(_ type: T?) { self.type = type }
 }
