@@ -432,18 +432,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'Speech' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PooTools/SpeechRecognizerPermission'
-        subspec.dependency 'OSSSpeechKit'
-        subspec.frameworks = 'Speech','AVFoundation'
-        subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SPEECH POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/NetWork'

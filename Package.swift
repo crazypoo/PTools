@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 6.3
 import PackageDescription
 
 let package = Package(
@@ -31,7 +31,7 @@ let package = Package(
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.2.0"),
         .package(url: "https://github.com/lixiang1994/AttributedString.git", branch: "master"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "7.0.0"),
-        .package(url: "https://github.com/aheze/pop.git", from: "1.0.1"),
+//        .package(url: "https://github.com/aheze/pop.git", from: "1.0.1"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.6.0"),
         .package(url: "https://github.com/sparrowcode/SafeSFSymbols.git", from: "2.0.0"),
         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "4.0.0"),
@@ -47,25 +47,25 @@ let package = Package(
         .package(url: "https://github.com/Kitura/Swift-JWT.git", from: "4.0.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", from: "1.1.0"),
         .package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.5.0"),
-        .package(url: "https://github.com/swisspol/GCDWebServer.git", branch: "master"),
-        .package(url: "https://github.com/BeauNouvelle/FaceAware.git", branch: "master"),
+//        .package(url: "https://github.com/SvenTiigi/GCDWebServer.git", .upToNextMajor(from: "3.5.9")),
+        .package(url: "https://github.com/gentique/VisionFaceAware.git", from: "1.0.0"),
         .package(url: "https://github.com/pujiaxin33/JXPagingView.git", from: "2.1.0"),
         .package(url: "https://github.com/pujiaxin33/JXSegmentedView.git", from: "1.3.0"),
         .package(url: "https://github.com/borenfocus/BRPickerView.git", from: "2.7.0"),
         .package(url: "https://github.com/ephread/Instructions.git", from: "2.2.0"),
-        .package(url: "https://github.com/SwiftKitz/Appz.git", branch: "master"),
-        .package(url: "https://github.com/AndyM129/AMKLaunchTimeProfiler.git", branch: "master"),
+//        .package(url: "https://github.com/SwiftKitz/Appz.git", branch: "master"),
+//        .package(url: "https://github.com/AndyM129/AMKLaunchTimeProfiler.git", branch: "master"),
         .package(url: "https://github.com/marmelroy/PhoneNumberKit.git", from: "3.7.0"),
-        .package(url: "https://github.com/speechkit/OSSSpeechKit.git", from: "1.1.0"),
+//        .package(url: "https://github.com/speechkit/OSSSpeechKit.git", from: "1.1.0"),
         .package(url: "https://github.com/securing/IOSSecuritySuite.git", from: "1.9.0"),
         .package(url: "https://github.com/yangKJ/Harbeth.git", from: "1.1.0"),
         .package(url: "https://github.com/yangKJ/Kakapos.git", branch: "master"),
         .package(url: "https://github.com/aheze/Popovers.git", from: "1.3.0"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
-        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "3.22.1"),
-        .package(url: "https://github.com/svga/SVGAPlayer-iOS.git", branch: "master"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
+//        .package(url: "https://github.com/svga/SVGAPlayer-iOS.git", branch: "master"),
         .package(url: "https://github.com/madebybowtie/FlagKit.git", branch: "master"),
-        .package(url: "https://github.com/Kjuly/KTVHTTPCache.git", branch: "master"),
+//        .package(url: "https://github.com/Kjuly/KTVHTTPCache.git", branch: "master"),
         .package(url: "https://github.com/facebook/SocketRocket.git", from: "0.6.0")
     ],
     targets: [
@@ -82,7 +82,7 @@ let package = Package(
                 "DeviceKit",
                 "AttributedString", // 对应更新后的依赖名称
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
-                "pop",
+//                "pop",
                 "Kingfisher",
                 "SafeSFSymbols",
                 "SmartCodable",
@@ -92,13 +92,13 @@ let package = Package(
                 "FlagKit",
                 "NotificationBannerSwift",
                 "Instructions",
-                "Appz",
-                "AMKLaunchTimeProfiler",
+//                "Appz",
+//                "AMKLaunchTimeProfiler",
                 "BRPickerView",
                 "IOSSecuritySuite",
-                "KTVHTTPCache",
+//                "KTVHTTPCache",
                 "Popovers",
-                "GCDWebServer",
+//                "GCDWebServer",
                 "FaceAware"
             ],
             path: "PooToolsSource",
@@ -180,7 +180,7 @@ let package = Package(
         .target(name: "PooToolsFilterCamera", dependencies: ["PooTools", "PTCameraPermission", "PTMicPermission", "PooToolsHarbethKit", "PooToolsMediaViewer"], path: "PooToolsSource/FilterCamera", swiftSettings: [.define("POOTOOLS_FILTERCAMERA"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsImageEditor", dependencies: ["PooTools", "PooToolsFilterCamera"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsVideoEditor", dependencies: ["PooTools", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsSVG", dependencies: ["PooTools", "PocketSVG", .product(name: "SwiftProtobuf", package: "swift-protobuf"), "SVGAPlayer"], path: "PooToolsSource/KingfisherSVG", swiftSettings: [.define("POOTOOLS_SVG"), .define("POOTOOLS_COCOAPODS")]),
+//        .target(name: "PooToolsSVG", dependencies: ["PooTools", "PocketSVG", .product(name: "SwiftProtobuf", package: "swift-protobuf"), "SVGAPlayer"], path: "PooToolsSource/KingfisherSVG", swiftSettings: [.define("POOTOOLS_SVG"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCheckDirtyWord", dependencies: ["PooTools"], path: "PooToolsSource/CheckDirtyWord", resources: [.process("Resource")], swiftSettings: [.define("POOTOOLS_CHECKDIRTYWORD"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
@@ -212,7 +212,7 @@ let package = Package(
         .target(name: "PooToolsPagingControl", dependencies: ["PooTools", .product(name: "JXPagingView", package: "JXPagingView"), "JXSegmentedView"], path: "PooToolsSource/SegmentControl", swiftSettings: [.define("POOTOOLS_PAGINGCONTROL"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsScanQRCode", dependencies: ["PooTools", "PooToolsPhotoPicker", "PTCameraPermission"], path: "PooToolsSource/QRCodeScan", swiftSettings: [.define("POOTOOLS_SCANQRCODE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsStepCount", dependencies: ["PooTools", "PTHealthPermission"], path: "PooToolsSource/HealthKit", swiftSettings: [.define("POOTOOLS_STEPCOUNT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsSpeech", dependencies: ["PooTools", "PTSpeechPermission", "OSSSpeechKit"], path: "PooToolsSource/Speech", swiftSettings: [.define("POOTOOLS_SPEECH"), .define("POOTOOLS_COCOAPODS")]),
+//        .target(name: "PooToolsSpeech", dependencies: ["PooTools", "PTSpeechPermission", "OSSSpeechKit"], path: "PooToolsSource/Speech", swiftSettings: [.define("POOTOOLS_SPEECH"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsContact", dependencies: ["PooTools", "PTContactsPermission"], path: "PooToolsSource/Contact", swiftSettings: [.define("POOTOOLS_CONTACT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsVision", dependencies: ["PooTools"], path: "PooToolsSource/Vision", swiftSettings: [.define("POOTOOLS_VISION"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsRouter", dependencies: ["PooTools"], path: "PooToolsSource/Router", swiftSettings: [.define("POOTOOLS_ROUTER"), .define("POOTOOLS_COCOAPODS")]),
