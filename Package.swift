@@ -31,7 +31,7 @@ let package = Package(
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.2.0"),
         .package(url: "https://github.com/lixiang1994/AttributedString.git", branch: "master"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "7.0.0"),
-        .package(url: "https://github.com/facebookarchive/pop.git", branch: "master"),
+        .package(url: "https://github.com/aheze/pop.git", from: "1.0.1"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.6.0"),
         .package(url: "https://github.com/sparrowcode/SafeSFSymbols.git", from: "2.0.0"),
         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "4.0.0"),
