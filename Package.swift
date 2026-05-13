@@ -29,10 +29,7 @@ let package = Package(
         .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "6.0.0"),
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", from: "3.8.0"),
         .package(url: "https://github.com/devicekit/DeviceKit.git", from: "5.2.0"),
-        
-        // 💡 修复错误 1：原仓库无 Package.swift，替换为目前社区完美支持 SPM 的可用源
-        .package(url: "https://github.com/indragiek/AttributedString.git", branch: "master"),
-        
+        .package(url: "https://github.com/lixiang1994/AttributedString.git", branch: "master"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "7.0.0"),
         .package(url: "https://github.com/facebookarchive/pop.git", branch: "master"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.6.0"),
