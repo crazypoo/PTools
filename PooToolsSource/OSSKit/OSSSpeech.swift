@@ -26,336 +26,276 @@ import Speech
 import Foundation
 import AVFoundation
 
-/// The authorization status of the Microphone and recording, imitating the native `SFSpeechRecognizerAuthorizationStatus`
-public enum OSSSpeechKitAuthorizationStatus: Int {
-    /// The app's authorization status has not yet been determined.
+public enum OSSSpeechKitAuthorizationStatus: Int, Sendable {
     case notDetermined = 0
-    /// The user denied your app's request to perform speech recognition.
     case denied = 1
-    /// The device prevents your app from performing speech recognition.
     case restricted = 2
-    /// The user granted your app's request to perform speech recognition.
     case authorized = 3
 
-    /// A public message that can be displayed to the user.
     public var message: String {
+        // 假设上游包含 String 的 .localized() 扩展
         switch self {
-        case .notDetermined:
-            return "PT OSS messageNotDetermined".localized()
-        case .denied:
-            return "PT OSS messageDenied".localized()
-        case .restricted:
-            return "PT OSS messageRestricted".localized()
-        case .authorized:
-            return "PT OSS messageAuthorized".localized()
+        case .notDetermined: return "PT OSS messageNotDetermined".localized()
+        case .denied: return "PT OSS messageDenied".localized()
+        case .restricted: return "PT OSS messageRestricted".localized()
+        case .authorized: return "PT OSS messageAuthorized".localized()
         }
     }
 }
 
-/// All of the possible error types that can be thrown by OSSSpeechKit
-public enum OSSSpeechKitErrorType: Int {
-    /// No microphone access
+public enum OSSSpeechKitErrorType: Int, Sendable {
     case noMicrophoneAccess = -1
-    /// An invalid utterance.
     case invalidUtterance = -2
-    /// Invalid text - usually an empty string.
     case invalidText = -3
-    /// The voice type is invalid.
     case invalidVoice = -4
-    /// Speech recognition request is invalid.
     case invalidSpeechRequest = -5
-    /// The audio engine is invalid.
     case invalidAudioEngine = -6
-    /// Voice recognition is unavailable.
     case recogniserUnavailble = -7
-    /// Voice record is invalid
     case invalidRecordVoice = -8
-    ///  Voice record file path is Invalid
     case invalidVoiceFilePath = -9
-    /// Voice record file path can not delete
     case invalidDeleteVoiceFilePath = -10
-    /// Voice record file path can not transcription
     case invalidTranscriptionFilePath = -11
 
-    /// The OSSSpeechKit error message string.
-    ///
-    /// The error message strings can be altered in the Localized strings file.
     public var errorMessage: String {
         switch self {
-        case .noMicrophoneAccess:
-            return "PT OSS messageNoMicAccess".localized()
-        case .invalidUtterance:
-            return "PT OSS messageInvalidUtterance".localized()
-        case .invalidText:
-            return "PT OSS messageInvalidText".localized()
-        case .invalidVoice:
-            return "PT OSS messageInvalidVoice".localized()
-        case .invalidSpeechRequest:
-            return "PT OSS messageInvalidSpeechRequest".localized()
-        case .invalidAudioEngine:
-            return "PT OSS messageInvalidAudioEngine".localized()
-        case .recogniserUnavailble:
-            return "PT OSS messageRecogniserUnavailable".localized()
-        case .invalidRecordVoice:
-            return "PT OSS messageInvalidRecordVoice".localized()
-        case .invalidVoiceFilePath:
-            return "PT OSS messageInvalidVoiceFolePath".localized()
-        case .invalidDeleteVoiceFilePath:
-            return "PT OSS messageInvalidDeleteVoiceFilePath".localized()
-        case .invalidTranscriptionFilePath:
-            return "PT OSS messageInvalidTranscriptionFilePath".localized()
+        case .noMicrophoneAccess: return "PT OSS messageNoMicAccess".localized()
+        case .invalidUtterance: return "PT OSS messageInvalidUtterance".localized()
+        case .invalidText: return "PT OSS messageInvalidText".localized()
+        case .invalidVoice: return "PT OSS messageInvalidVoice".localized()
+        case .invalidSpeechRequest: return "PT OSS messageInvalidSpeechRequest".localized()
+        case .invalidAudioEngine: return "PT OSS messageInvalidAudioEngine".localized()
+        case .recogniserUnavailble: return "PT OSS messageRecogniserUnavailable".localized()
+        case .invalidRecordVoice: return "PT OSS messageInvalidRecordVoice".localized()
+        case .invalidVoiceFilePath: return "PT OSS messageInvalidVoiceFolePath".localized()
+        case .invalidDeleteVoiceFilePath: return "PT OSS messageInvalidDeleteVoiceFilePath".localized()
+        case .invalidTranscriptionFilePath: return "PT OSS messageInvalidTranscriptionFilePath".localized()
         }
     }
 
-    /// The highlevel type of error that occured.
-    ///
-    /// A String will be used in the OSSSpeechKitErrorType error: Error? that is returned when an exception is thrown.
     public var errorRequestType: String {
         switch self {
-        case .noMicrophoneAccess,
-            .invalidAudioEngine,
-            .invalidRecordVoice:
+        case .noMicrophoneAccess, .invalidAudioEngine, .invalidRecordVoice:
             return "PT OSS requestTypeNoMicAccess".localized()
-        case .invalidUtterance:
-            return "PT OSS requestTypeInvalidUtterance".localized()
-        case .invalidText,
-             .invalidVoice,
-             .invalidSpeechRequest,
-             .recogniserUnavailble:
+        case .invalidUtterance: return "PT OSS requestTypeInvalidUtterance".localized()
+        case .invalidText, .invalidVoice, .invalidSpeechRequest, .recogniserUnavailble:
             return "PT OSS requestTypeInvalidSpeech".localized()
-        case .invalidVoiceFilePath,.invalidDeleteVoiceFilePath:
+        case .invalidVoiceFilePath, .invalidDeleteVoiceFilePath:
             return "PT OSS requestTypeInvalidFilePath".localized()
         case .invalidTranscriptionFilePath:
             return "PT OSS requestTypeInvalidTranscriptionFilePath".localized()
         }
     }
 
-    /// An error that is used to capture details of the error event.
     public var error: Error? {
-        let err = NSError(domain: "au.com.appdevguy.ossspeechkit",
-                          code: rawValue,
-                          userInfo: ["message": errorMessage, "request": errorRequestType])
-        return err
+        return NSError(domain: "au.com.appdevguy.ossspeechkit",
+                       code: rawValue,
+                       userInfo: ["message": errorMessage, "request": errorRequestType])
     }
 }
 
-/// The speech recognition task type.
-public enum OSSSpeechRecognitionTaskType: Int {
-    /// Undefined is the standard recognition type and allows the system to decide which type of task is best.
+public enum OSSSpeechRecognitionTaskType: Int, Sendable {
     case undefined = 0
-    /// Use captured speech for text entry purposes.
-    ///
-    /// Use this when doing a similar task that of the keyboard voice to text function.
     case dictation = 1
-    /// Use this short speechs that have specific words or terms.
     case search = 2
-    /// Use this for short speechs such as "Yes", "No", "Thanks", etc.
     case confirmation = 3
 
-    /// Returns a speech recognition hint based on the enum value.
     public var taskType: SFSpeechRecognitionTaskHint {
         switch self {
-        case .undefined:
-            return .unspecified
-        case .dictation:
-            return .dictation
-        case .search:
-            return .search
-        case .confirmation:
-            return .confirmation
+        case .undefined: return .unspecified
+        case .dictation: return .dictation
+        case .search: return .search
+        case .confirmation: return .confirmation
         }
     }
 }
 
-/// Delegate to handle events such as failed authentication for microphone among many more.
-public protocol OSSSpeechDelegate: AnyObject {
-    /// When the microphone has finished accepting audio, this delegate will be called with the final best text output.
+/// 推荐在 Swift 6 中继承自 Sendable，确保 Delegate 实例本身跨域传递安全
+public protocol OSSSpeechDelegate: AnyObject, Sendable {
     func didFinishListening(withText text: String)
-    ///When the microphone has finished accepting recording, this function will be called with the final best text output or voice file path.
-    func didFinishListening(withAudioFileURL url: URL,withText text: String)
-    /// Handle returning authentication status to user - primary use is for non-authorized state.
+    func didFinishListening(withAudioFileURL url: URL, withText text: String)
     func authorizationToMicrophone(withAuthentication type: OSSSpeechKitAuthorizationStatus)
-    /// If the speech recogniser and request fail to set up, this method will be called.
     func didFailToCommenceSpeechRecording()
-    /// Method for real time recpetion of translated text.
     func didCompleteTranslation(withText text: String)
-    /// Error handling function.
     func didFailToProcessRequest(withError error: Error?)
-    /// When delete some voice file,this delegate will be return success or not
-    func deleteVoiceFile(withFinish finish: Bool ,withError error: Error?)
-    /// Get the content according to the path of the voice file
-    func voiceFilePathTranscription(withText text:String)
+    func deleteVoiceFile(withFinish finish: Bool, withError error: Error?)
+    func voiceFilePathTranscription(withText text: String)
 }
 
+/// 核心引擎，继承自 NSObject 以遵循后台 AV 代理协议。
+/// 使用 @unchecked Sendable 搭配内部状态锁机制，完全适配 Swift 6 并发模型。
+public class OSSSpeech: NSObject, @unchecked Sendable {
 
-/// Speech is the primary interface. To use, set the voice and then call `.speak(string: "your string")`
-public class OSSSpeech: NSObject {
+    // MARK: - 内部线程安全存储
+    private let lock = NSRecursiveLock()
+    
+    private var _audioRecorder: AVAudioRecorder?
+    private var _audioFileURL: URL?
+    private var _saveRecord: Bool = true
+    private var _soundSamples = [Float]()
+    private var _levelTimer: Timer?
+    private var _onUpdate: (([Float]) -> Void)?
+    
+    private var _voice: OSSVoice?
+    private var _shouldUseOnDeviceRecognition = false
+    private var _recognitionTaskType = OSSSpeechRecognitionTaskType.undefined
+    private var _utterance: OSSUtterance?
+    private weak var _delegate: OSSSpeechDelegate?
+    private var _spokenText: String = ""
+    
+    private var _audioEngine: AVAudioEngine?
+    private var _speechRecognizer: SFSpeechRecognizer?
+    private var _request: SFSpeechAudioBufferRecognitionRequest?
+    private var _recognitionTask: SFSpeechRecognitionTask?
 
-    // MARK: - Private Properties
-
-    private var audioRecorder: AVAudioRecorder?
-    // 【优化】移除强制解包 !，改为可选型 ? 保证安全
-    private var audioFileURL: URL?
-    public var saveRecord: Bool = true
-    private var soundSamples = [Float]()
-    private var levelTimer: Timer?
-    public var onUpdate: (([Float]) -> Void)?
-
-    // 【优化】性能提升：将 DateFormatter 提取为复用的 lazy 变量，避免频繁初始化带来的性能开销
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd-HH:mm:ss"
         return formatter
     }()
 
-    private var speechSynthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
-
-    // MARK: - Variables
-
-    public weak var delegate: OSSSpeechDelegate?
-    public var voice: OSSVoice?
-    public var shouldUseOnDeviceRecognition = false
-    public var recognitionTaskType = OSSSpeechRecognitionTaskType.undefined
-    public var utterance: OSSUtterance?
-
-    #if !os(macOS)
-    private var session: AVAudioSession?
-    public var audioSession: AVAudioSession {
-        get { session ?? AVAudioSession.sharedInstance() }
-        set { session = newValue }
-    }
-    #endif
-
+    private let speechSynthesizer = AVSpeechSynthesizer()
     public var srp = SFSpeechRecognizer.self
 
-    private var audioEngine: AVAudioEngine?
-    private var speechRecognizer: SFSpeechRecognizer?
-    private var request: SFSpeechAudioBufferRecognitionRequest?
-    private var recognitionTask: SFSpeechRecognitionTask?
-    private var spokenText: String = ""
+#if !os(macOS)
+    private var _session: AVAudioSession?
+    public var audioSession: AVAudioSession {
+        get { lock.withLock { _session ?? AVAudioSession.sharedInstance() } }
+        set { lock.withLock { _session = newValue } }
+    }
+#endif
 
-    // MARK: - Lifecycle
-
-    private override init() {
-        super.init()
+    // MARK: - 公开属性 (通过锁提供线程安全访问)
+    public weak var delegate: OSSSpeechDelegate? {
+        get { lock.withLock { _delegate } }
+        set { lock.withLock { _delegate = newValue } }
+    }
+    public var voice: OSSVoice? {
+        get { lock.withLock { _voice } }
+        set { lock.withLock { _voice = newValue } }
+    }
+    public var shouldUseOnDeviceRecognition: Bool {
+        get { lock.withLock { _shouldUseOnDeviceRecognition } }
+        set { lock.withLock { _shouldUseOnDeviceRecognition = newValue } }
+    }
+    public var recognitionTaskType: OSSSpeechRecognitionTaskType {
+        get { lock.withLock { _recognitionTaskType } }
+        set { lock.withLock { _recognitionTaskType = newValue } }
+    }
+    public var utterance: OSSUtterance? {
+        get { lock.withLock { _utterance } }
+        set { lock.withLock { _utterance = newValue } }
+    }
+    public var saveRecord: Bool {
+        get { lock.withLock { _saveRecord } }
+        set { lock.withLock { _saveRecord = newValue } }
+    }
+    public var onUpdate: (([Float]) -> Void)? {
+        get { lock.withLock { _onUpdate } }
+        set { lock.withLock { _onUpdate = newValue } }
     }
 
+    // MARK: - 单例
     public static let shared = OSSSpeech()
+    private override init() { super.init() }
 
-    // MARK: - Public Methods
-    
-    // 【辅助方法】确保 Delegate 始终在主线程被调用，防止外部 UI 更新崩溃
-    private func safeDelegateCall(_ block: @escaping () -> Void) {
-        if Thread.isMainThread {
+    // MARK: - 【Swift 6 优化】安全的主线程派发器
+    private func notifyDelegateOnMain(_ block: @escaping @MainActor @Sendable () -> Void) {
+        Task { @MainActor in
             block()
-        } else {
-            DispatchQueue.main.async { block() }
         }
     }
-
+    
+    // MARK: - Public 播报接口
     public func speakText(_ text: String? = nil) {
-        if !utteranceIsValid() {
-            guard let speechText = text, !speechText.isEmpty else {
-                PTNSLogConsole("PT OSS text is empty".localized(), levelType: PTLogMode, loggerType: .speech)
-                safeDelegateCall { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidUtterance.error) }
-                return
+        lock.withLock {
+            if _utterance == nil {
+                guard let speechText = text, !speechText.isEmpty else {
+                    let err = OSSSpeechKitErrorType.invalidUtterance.error
+                    notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: err) }
+                    return
+                }
+                _utterance = OSSUtterance(string: speechText)
             }
-            utterance = OSSUtterance(string: speechText)
+            if let speechText = text, !speechText.isEmpty {
+                _utterance?.speechString = speechText
+            }
         }
-        if let speechText = text, !speechText.isEmpty {
-            utterance?.speechString = speechText
-        }
-        speak()
+        internalSpeak()
     }
 
     public func speakAttributedText(attributedText: NSAttributedString) {
         if attributedText.string.isEmpty {
-            PTNSLogConsole("PT OSS text is empty".localized(), levelType: PTLogMode, loggerType: .speech)
-            safeDelegateCall { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidText.error) }
+            let err = OSSSpeechKitErrorType.invalidText.error
+            notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: err) }
             return
         }
-        if !utteranceIsValid() {
-            utterance = OSSUtterance(attributedString: attributedText)
+        lock.withLock {
+            if _utterance == nil {
+                _utterance = OSSUtterance(attributedString: attributedText)
+            }
+            if _utterance?.attributedSpeechString.string != attributedText.string {
+                _utterance?.attributedSpeechString = attributedText
+            }
         }
-        if utterance?.attributedSpeechString.string != attributedText.string {
-            utterance?.attributedSpeechString = attributedText
-        }
-        speak()
+        internalSpeak()
     }
 
     public func pauseSpeaking() {
-        if speechSynthesizer.isSpeaking {
-            speechSynthesizer.pauseSpeaking(at: .immediate)
-        }
+        if speechSynthesizer.isSpeaking { speechSynthesizer.pauseSpeaking(at: .immediate) }
     }
-
     public func continueSpeaking() {
-        if speechSynthesizer.isPaused {
-            speechSynthesizer.continueSpeaking()
-        }
+        if speechSynthesizer.isPaused { speechSynthesizer.continueSpeaking() }
     }
-
     public func stopSpeaking() {
         if speechSynthesizer.isSpeaking || speechSynthesizer.isPaused {
             speechSynthesizer.stopSpeaking(at: .immediate)
         }
     }
 
-    // MARK: - Private Methods
-
-    private func utteranceIsValid() -> Bool {
-        guard utterance != nil else {
-            PTNSLogConsole("PT OSS no utterance".localized(), levelType: PTLogMode, loggerType: .speech)
-            return false
-        }
-        return true
-    }
-
-    private func speak() {
-        let speechVoice = voice ?? OSSVoice()
-        let validString = utterance?.speechString ?? "error"
+    private func internalSpeak() {
+        let (targetVoice, targetUtterance) = lock.withLock { (_voice ?? OSSVoice(), _utterance) }
+        let validString = targetUtterance?.speechString ?? "error"
         let newUtterance = AVSpeechUtterance(string: validString)
-        newUtterance.voice = speechVoice
-        
-        if let validUtterance = utterance {
-            newUtterance.rate = validUtterance.rate
-            newUtterance.pitchMultiplier = validUtterance.pitchMultiplier
-            newUtterance.volume = validUtterance.volume
+        newUtterance.voice = targetVoice
+
+        if let valid = targetUtterance {
+            newUtterance.rate = valid.rate
+            newUtterance.pitchMultiplier = valid.pitchMultiplier
+            newUtterance.volume = valid.volume
         }
-        
+
         setSession(isRecording: false)
         stopSpeaking()
         speechSynthesizer.speak(newUtterance)
     }
 
     @discardableResult private func setSession(isRecording: Bool) -> Bool {
-        #if !os(macOS)
+#if !os(macOS)
         do {
             let category: AVAudioSession.Category = isRecording ? .playAndRecord : .playback
             try audioSession.setCategory(category, options: isRecording ? .defaultToSpeaker : .duckOthers)
             try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
             return true
         } catch {
-            safeDelegateCall {
+            notifyDelegateOnMain {
                 if isRecording { self.delegate?.didFailToCommenceSpeechRecording() }
                 self.delegate?.didFailToProcessRequest(withError: error)
             }
             return false
         }
-        #else
+#else
         return false
-        #endif
+#endif
     }
 
-    // MARK: - Public Voice Recording Methods
-
+    // MARK: - 语音识别录音机制
     public func recordVoice(requestMicPermission requested: Bool = true) {
-        #if !os(macOS)
+#if !os(macOS)
         if requested, audioSession.recordPermission != .granted {
             requestMicPermission()
             return
         }
-        #endif
+#endif
         getMicroPhoneAuthorization()
     }
 
@@ -364,33 +304,32 @@ public class OSSSpeech: NSObject {
     }
 
     public func clearSpokenText() {
-        spokenText = ""
+        lock.withLock { _spokenText = "" }
     }
-    
-    // MARK: - Private Voice Recording
 
     private func requestMicPermission() {
-        #if !os(macOS)
-        audioSession.requestRecordPermission { [weak self] allowed in
+#if !os(macOS)
+        // 确保闭包标注为 @Sendable
+        audioSession.requestRecordPermission { @Sendable [weak self] allowed in
             guard let self = self else { return }
             if !allowed {
-                PTNSLogConsole("PT OSS messageNoMicAccess".localized(), levelType: PTLogMode, loggerType: .speech)
-                self.safeDelegateCall { self.delegate?.authorizationToMicrophone(withAuthentication: .denied) }
+                self.notifyDelegateOnMain { self.delegate?.authorizationToMicrophone(withAuthentication: .denied) }
                 return
             }
             self.getMicroPhoneAuthorization()
         }
-        #endif
+#endif
     }
 
     private func getMicroPhoneAuthorization() {
-        srp.requestAuthorization { [weak self] authStatus in
+        srp.requestAuthorization { @Sendable [weak self] authStatus in
             guard let self = self else { return }
             let status = OSSSpeechKitAuthorizationStatus(rawValue: authStatus.rawValue) ?? .notDetermined
-            self.safeDelegateCall { self.delegate?.authorizationToMicrophone(withAuthentication: status) }
-            
+            self.notifyDelegateOnMain { self.delegate?.authorizationToMicrophone(withAuthentication: status) }
+
             if status == .authorized {
-                OperationQueue.main.addOperation {
+                // 改用现代并发任务启动
+                Task {
                     self.recordAndRecognizeSpeech()
                 }
             }
@@ -398,119 +337,143 @@ public class OSSSpeech: NSObject {
     }
 
     private func resetAudioEngine() {
-        guard let engine = audioEngine else { return }
-        if engine.isRunning { engine.stop() }
-        let node = engine.inputNode
-        node.removeTap(onBus: 0)
-        
-        audioRecorder?.stop()
-        stopVisualizerTimer()
-        
-        if node.inputFormat(forBus: 0).channelCount == 0 {
-            node.reset()
+        lock.withLock {
+            if let engine = _audioEngine, engine.isRunning { engine.stop() }
+            _audioEngine?.inputNode.removeTap(onBus: 0)
+            _audioRecorder?.stop()
+            stopVisualizerTimer()
+            
+            if let node = _audioEngine?.inputNode, node.inputFormat(forBus: 0).channelCount == 0 {
+                node.reset()
+            }
+            _audioEngine?.reset()
         }
-        audioEngine?.reset()
     }
 
     private func cancelRecording() {
-        request?.endAudio()
-        request = nil
-        recognitionTask?.finish()
+        lock.withLock {
+            _request?.endAudio()
+            _request = nil
+            _recognitionTask?.finish()
+        }
         resetAudioEngine()
     }
 
     private func engineSetup() {
-        if audioEngine == nil { audioEngine = AVAudioEngine() }
-        guard let engine = audioEngine else {
+        lock.lock()
+        if _audioEngine == nil { _audioEngine = AVAudioEngine() }
+        guard let engine = _audioEngine else {
+            lock.unlock()
             notifyEngineError()
             return
         }
-        
         let input = engine.inputNode
         let recordingFormat = input.outputFormat(forBus: 0)
         guard let outputFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 8000, channels: 1, interleaved: true),
               let converter = AVAudioConverter(from: recordingFormat, to: outputFormat) else {
+            lock.unlock()
             notifyEngineError()
             return
         }
-        
-        input.installTap(onBus: 0, bufferSize: 8192, format: recordingFormat) { [weak self] (buffer, _) in
-            var newBufferAvailable = true
+        lock.unlock()
+
+        // 【Swift 6 规范】定义一个内部引用类型容器来持有状态，并标记为 @unchecked Sendable
+        // 因为 Tap 回调本身在单一音频线程按顺序同步触发，内部状态修改是绝对安全的。
+        final class ConverterState: @unchecked Sendable {
+            var hasData: Bool = true
+        }
+
+        input.installTap(onBus: 0, bufferSize: 8192, format: recordingFormat) { @Sendable [weak self] (buffer, _) in
+            // 使用 let 声明容器实例，完美通过逃逸闭包的捕获校验
+            let state = ConverterState()
+            
             let inputCallback: AVAudioConverterInputBlock = { _, outStatus in
-                if newBufferAvailable {
+                if state.hasData {
                     outStatus.pointee = .haveData
-                    newBufferAvailable = false
+                    state.hasData = false
                     return buffer
                 } else {
                     outStatus.pointee = .noDataNow
                     return nil
                 }
             }
-            let convertedBuffer = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: AVAudioFrameCount(outputFormat.sampleRate) * buffer.frameLength / AVAudioFrameCount(buffer.format.sampleRate))!
+            
+            guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: AVAudioFrameCount(outputFormat.sampleRate) * buffer.frameLength / AVAudioFrameCount(buffer.format.sampleRate)) else { return }
             var error: NSError?
             let status = converter.convert(to: convertedBuffer, error: &error, withInputFrom: inputCallback)
-            
+
             if status == .error {
                 self?.notifyEngineError(error)
                 return
             }
-            self?.request?.append(convertedBuffer)
+            self?.lock.withLock { self?._request?.append(convertedBuffer) }
         }
-        
+
         engine.prepare()
-        do {
-            try engine.start()
-        } catch {
-            notifyEngineError(error)
-        }
+        do { try engine.start() } catch { notifyEngineError(error) }
     }
-    
+
     private func notifyEngineError(_ error: Error? = nil) {
-        safeDelegateCall {
+        notifyDelegateOnMain {
             self.delegate?.didFailToCommenceSpeechRecording()
             self.delegate?.didFailToProcessRequest(withError: error ?? OSSSpeechKitErrorType.invalidAudioEngine.error)
         }
     }
 
     private func recordAndRecognizeSpeech() {
-        if let recognizer = speechRecognizer, !recognizer.isAvailable {
+        lock.lock()
+        if let recognizer = _speechRecognizer, !recognizer.isAvailable {
+            lock.unlock()
             cancelRecording()
             setSession(isRecording: false)
+            lock.lock()
         }
         if speechSynthesizer.isSpeaking { stopSpeaking() }
-        
+        lock.unlock()
+
         guard setSession(isRecording: true) else { return }
-        
-        request = SFSpeechAudioBufferRecognitionRequest()
-        engineSetup()
-        
-        let identifier = voice?.voiceType.rawValue ?? OSSVoiceEnum.UnitedStatesEnglish.rawValue
-        speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: identifier))
-        
-        guard let recognizer = speechRecognizer, recognizer.isAvailable else {
-            let errorType: OSSSpeechKitErrorType = speechRecognizer == nil ? .invalidSpeechRequest : .recogniserUnavailble
-            safeDelegateCall {
+
+        lock.lock()
+        _request = SFSpeechAudioBufferRecognitionRequest()
+        let identifier = _voice?.voiceType.rawValue ?? OSSVoiceEnum.UnitedStatesEnglish.rawValue
+        _speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: identifier))
+        let targetRec = _speechRecognizer
+        let targetReq = _request
+        let targetShouldUseOnDevice = _shouldUseOnDeviceRecognition
+        let targetTaskHint = _recognitionTaskType.taskType
+        let isRecValid = targetRec?.isAvailable ?? false
+        let isSaveRecord = _saveRecord
+        lock.unlock()
+
+        guard let recognizer = targetRec, isRecValid else {
+            let errType: OSSSpeechKitErrorType = targetRec == nil ? .invalidSpeechRequest : .recogniserUnavailble
+            notifyDelegateOnMain {
                 self.delegate?.didFailToCommenceSpeechRecording()
-                self.delegate?.didFailToProcessRequest(withError: errorType.error)
+                self.delegate?.didFailToProcessRequest(withError: errType.error)
             }
             return
         }
-        
-        if let audioRequest = request {
+
+        engineSetup()
+
+        if let audioRequest = targetReq {
             if recognizer.supportsOnDeviceRecognition {
-                audioRequest.requiresOnDeviceRecognition = shouldUseOnDeviceRecognition
+                audioRequest.requiresOnDeviceRecognition = targetShouldUseOnDevice
             }
-            recognizer.defaultTaskHint = recognitionTaskType.taskType
-            recognitionTask = recognizer.recognitionTask(with: audioRequest, delegate: self)
+            recognizer.defaultTaskHint = targetTaskHint
+            lock.withLock {
+                _recognitionTask = recognizer.recognitionTask(with: audioRequest, delegate: self)
+            }
         }
-        
-        if saveRecord { readyToRecord() }
+
+        if isSaveRecord { readyToRecord() }
     }
-    
+
     private func readyToRecord() {
-        let dateString = dateFormatter.string(from: Date())
+        let dateString = lock.withLock { dateFormatter.string(from: Date()) }
         let url = getDocumentsDirectory().appendingPathComponent("\(dateString)-osKit.m4a")
-        audioFileURL = url // 安全赋值
+        
+        lock.withLock { _audioFileURL = url }
 
         let audioSettings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -518,105 +481,120 @@ public class OSSSpeech: NSObject {
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
-        
+
         do {
-            audioRecorder = try AVAudioRecorder(url: url, settings: audioSettings)
-            audioRecorder?.isMeteringEnabled = true
-            audioRecorder?.delegate = self
-            audioRecorder?.prepareToRecord()
-            audioRecorder?.record()
-            soundSamples.removeAll()
+            let recorder = try AVAudioRecorder(url: url, settings: audioSettings)
+            recorder.isMeteringEnabled = true
+            recorder.delegate = self
+            recorder.prepareToRecord()
+            recorder.record()
+            
+            lock.withLock {
+                _audioRecorder = recorder
+                _soundSamples.removeAll()
+            }
             visualizerTimer()
         } catch {
-            safeDelegateCall { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidRecordVoice.error) }
+            notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidRecordVoice.error) }
         }
     }
 
     private func visualizerTimer() {
         let interval: Double = 0.01
-        audioRecorder?.record(forDuration: interval)
-        
-        // 【优化】确保 Timer 添加到主线程的 RunLoop 中，防止在后台线程调度失败
-        DispatchQueue.main.async { [weak self] in
+        lock.withLock { _ = _audioRecorder?.record(forDuration: interval) }
+
+        // 使用 Task 结合 MainActor 保证 Timer 完美运行在主线程生命周期
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
-            self.levelTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
-                self.audioRecorder?.updateMeters()
-                let decibels = self.audioRecorder?.averagePower(forChannel: 0) ?? -160
-                let normalizedValue = pow(10, decibels / 20)
-                self.soundSamples.append(normalizedValue)
-                self.safeDelegateCall { self.onUpdate?(self.soundSamples) }
-                self.audioRecorder?.record(forDuration: interval)
+                
+                let (decibels, cbUpdate) = self.lock.withLock { () -> (Float, (([Float]) -> Void)?) in
+                    self._audioRecorder?.updateMeters()
+                    let db = self._audioRecorder?.averagePower(forChannel: 0) ?? -160
+                    let normalized = pow(10, db / 20)
+                    self._soundSamples.append(normalized)
+                    self._audioRecorder?.record(forDuration: interval)
+                    return (db, self._onUpdate)
+                }
+
+                // 派发出采集到的样本
+                if let cb = cbUpdate {
+                    let currentSamples = self.lock.withLock { self._soundSamples }
+                    cb(currentSamples)
+                }
             }
-            RunLoop.main.add(self.levelTimer!, forMode: .common)
+            self.lock.withLock { self._levelTimer = timer }
+            RunLoop.main.add(timer, forMode: .common)
         }
     }
-    
+
     private func stopVisualizerTimer() {
-        safeDelegateCall { self.onUpdate?(self.soundSamples) }
-        soundSamples.removeAll()
-        levelTimer?.invalidate()
-        levelTimer = nil
-    }
+        let (cbUpdate, currentSamples, timer) = lock.withLock { () -> ((([Float]) -> Void)?, [Float], Timer?) in
+            let cb = _onUpdate
+            let samples = _soundSamples
+            let t = _levelTimer
+            _soundSamples.removeAll()
+            _levelTimer = nil
+            return (cb, samples, t)
+        }
         
+        timer?.invalidate()
+        notifyDelegateOnMain { cbUpdate?(currentSamples) }
+    }
+
     public func getDocumentsDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
-        
-    /// Delete one voice file(s)
+
     public func deleteVoiceFolderItem(url: URL?) {
         let fileManager = FileManager.default
         let folderURL = getDocumentsDirectory()
-        
+
         do {
             let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
             for fileURL in contents {
-                // 【修复】重写了文件遍历删除逻辑，避免原代码因为提前 return 导致的逻辑断裂
                 if let targetURL = url {
                     if fileURL.absoluteString == targetURL.absoluteString {
                         try fileManager.removeItem(at: fileURL)
-                        safeDelegateCall { self.delegate?.deleteVoiceFile(withFinish: true, withError: nil) }
-                        return // 找到指定文件并删除后，退出即可
+                        notifyDelegateOnMain { self.delegate?.deleteVoiceFile(withFinish: true, withError: nil) }
+                        return
                     }
                 } else {
-                    // url 为 nil，删除所有后缀为 "-osKit.m4a" 的文件
                     if fileURL.lastPathComponent.contains("-osKit.m4a") {
                         try fileManager.removeItem(at: fileURL)
                     }
                 }
             }
-            
-            // 如果 url 为 nil（批量删除模式），循环结束后统一回调成功
             if url == nil {
-                safeDelegateCall { self.delegate?.deleteVoiceFile(withFinish: true, withError: nil) }
+                notifyDelegateOnMain { self.delegate?.deleteVoiceFile(withFinish: true, withError: nil) }
             }
         } catch {
-            safeDelegateCall { self.delegate?.deleteVoiceFile(withFinish: false, withError: OSSSpeechKitErrorType.invalidDeleteVoiceFilePath.error) }
+            notifyDelegateOnMain { self.delegate?.deleteVoiceFile(withFinish: false, withError: OSSSpeechKitErrorType.invalidDeleteVoiceFilePath.error) }
         }
     }
-    
-    /// Transcription voice file path
+
     public func recognizeSpeech(filePath: URL, finalBlock: ((_ text: String) -> Void)? = nil) {
-        // 【补充】功能完善：必须先校验文件是否存在，否则会由于文件找不到而静默失败
         guard FileManager.default.fileExists(atPath: filePath.path) else {
-            safeDelegateCall { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error) }
+            notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error) }
             return
         }
 
-        let identifier = voice?.voiceType.rawValue ?? OSSVoiceEnum.UnitedStatesEnglish.rawValue
-        speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: identifier))
-        
+        let identifier = lock.withLock { _voice?.voiceType.rawValue ?? OSSVoiceEnum.UnitedStatesEnglish.rawValue }
+        let localRecognizer = SFSpeechRecognizer(locale: Locale(identifier: identifier))
+        lock.withLock { _speechRecognizer = localRecognizer }
+
         guard let audioFile = try? AVAudioFile(forReading: filePath) else {
-            safeDelegateCall { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error) }
+            notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error) }
             return
         }
-        
+
         let request = SFSpeechURLRecognitionRequest(url: audioFile.url)
-        speechRecognizer?.recognitionTask(with: request) { [weak self] (result, error) in
+        localRecognizer?.recognitionTask(with: request) { @Sendable [weak self] (result, error) in
             guard let self = self else { return }
             if let result = result, result.isFinal {
                 let transcription = result.bestTranscription.formattedString
-                self.safeDelegateCall {
+                self.notifyDelegateOnMain {
                     if let block = finalBlock {
                         block(transcription)
                     } else {
@@ -624,32 +602,36 @@ public class OSSSpeech: NSObject {
                     }
                 }
             } else if error != nil {
-                self.safeDelegateCall { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidTranscriptionFilePath.error) }
+                self.notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidTranscriptionFilePath.error) }
             }
         }
     }
 }
 
-// MARK: - Extension SFSpeechRecognitionTaskDelegate & SFSpeechRecognizerDelegate
+// MARK: - 扩展遵循代理
 extension OSSSpeech: SFSpeechRecognitionTaskDelegate, SFSpeechRecognizerDelegate {
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) {
-        recognitionTask = nil
-        safeDelegateCall {
-            self.delegate?.didFinishListening(withText: self.spokenText)
-            // 安全解包 audioFileURL
-            if self.saveRecord, let fileURL = self.audioFileURL {
-                self.delegate?.didFinishListening(withAudioFileURL: fileURL, withText: self.spokenText)
+        let (spoken, isSave, fileURL) = lock.withLock { () -> (String, Bool, URL?) in
+            _recognitionTask = nil
+            return (_spokenText, _saveRecord, _audioFileURL)
+        }
+        
+        notifyDelegateOnMain {
+            self.delegate?.didFinishListening(withText: spoken)
+            if isSave, let targetURL = fileURL {
+                self.delegate?.didFinishListening(withAudioFileURL: targetURL, withText: spoken)
             }
         }
         setSession(isRecording: false)
     }
 
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didHypothesizeTranscription transcription: SFTranscription) {
-        safeDelegateCall { self.delegate?.didCompleteTranslation(withText: transcription.formattedString) }
+        let text = transcription.formattedString
+        notifyDelegateOnMain { self.delegate?.didCompleteTranslation(withText: text) }
     }
 
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) {
-        spokenText = recognitionResult.bestTranscription.formattedString
+        lock.withLock { _spokenText = recognitionResult.bestTranscription.formattedString }
     }
 
     public func speechRecognitionDidDetectSpeech(_ task: SFSpeechRecognitionTask) {}
@@ -657,11 +639,10 @@ extension OSSSpeech: SFSpeechRecognitionTaskDelegate, SFSpeechRecognizerDelegate
     public func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {}
 }
 
-// MARK: - AVAudioRecorderDelegate
 extension OSSSpeech: AVAudioRecorderDelegate {
     public func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
-            audioRecorder?.stop()
+            lock.withLock { _audioRecorder?.stop() }
             stopVisualizerTimer()
         }
     }

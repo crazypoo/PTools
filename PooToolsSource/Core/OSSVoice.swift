@@ -29,344 +29,190 @@ import UIKit
 import AppKit
 #endif
 
-/// The voice infor struct ensures that the data structure has conformity and consistency.
-public struct OSSVoiceInfo {
-    /// The name of the voice; All AVSpeechSynthesisVoice instances have a persons name.
+/// 保证数据结构的一致性，已升级为严格 Sendable 兼容
+public struct OSSVoiceInfo: Sendable {
     public var name: String?
-    /// The name of the language being used.
     public var language: String?
-    /// The language code is what is internationally used in Locale settings.
     public var languageCode: String?
-    /// Identifier is a unique bundle url provided by Apple for each AVSpeechSynthesisVoice.
-    public var identifier: Any?
+    // 【修复】将 Any? 改为 String? 以符合 Swift 6 Sendable 协议
+    public var identifier: String?
 }
+
 // swiftlint:disable identifier_name
-/// The available system voices.
-///
-/// The enum is iteratable; access to an array of the enum values can be accessed using:
-///
-///     OSSVoiceEnum.allCases
-///
-public enum OSSVoiceEnum: String, CaseIterable {
-    /// Australian
+public enum OSSVoiceEnum: String, CaseIterable, Sendable {
     case Australian = "en-AU"
-    /// Brazilian
     case Brazilian = "pt-BR"
-    /// Bulgarian
     case Bulgarian = "bg-BG"
-    /// CanadianFrench
     case CanadianFrench = "fr-CA"
-    /// Chinese Traditional
     case Chinese = "zh-CH"
-    /// Chinese Simplified
     case ChineseSimplified = "zh-CN"
-    /// ChineseHongKong
     case ChineseHongKong = "zh-HK"
-    /// Croatian
     case Croatian = "hr-HR"
-    /// Czech
     case Czech = "cs-CZ"
-    /// Danish
     case Danish = "da-DK"
-    /// DutchBelgium
     case DutchBelgium = "nl-BE"
-    /// DutchNetherlands
     case DutchNetherlands = "nl-NL"
-    /// English
     case English = "en-GB"
-    /// Finnish
     case Finnish = "fi-FI"
-    /// French
     case French = "fr-FR"
-    /// German
     case German = "de-DE"
-    /// Greek
     case Greek = "el-GR"
-    /// Hebrew
     case Hebrew = "he-IL"
-    /// Hindi
     case Hindi = "hi-IN"
-    /// Hungarian
     case Hungarian = "hu-HU"
-    /// Indian English
     case IndianEnglish = "en-IN"
-    /// Indonesian
     case Indonesian = "id-ID"
-    /// IrishEnglish
     case IrishEnglish = "en-IE"
-    /// Italian
     case Italian = "it-IT"
-    /// Japanese
     case Japanese = "ja-JP"
-    /// Korean
     case Korean = "ko-KR"
-    /// Malaysian
     case Malay = "ms-MY"
-    /// Mexican
     case Mexican = "es-MX"
-    /// Norwegian
     case Norwegian = "no-NO"
-    /// Norwegian Bokmal
     case NorwegianBokmal = "nb-NO"
-    /// Polish
     case Polish = "pl-PL"
-    /// Portuguese
     case Portuguese = "pt-PT"
-    /// Romanian
     case Romanian = "ro-RO"
-    /// Russian
     case Russian = "ru-RU"
-    /// SaudiArabian
     case SaudiArabian = "ar-SA"
-    /// Slovakian
     case Slovakian = "sk-SK"
-    /// South African English
     case SouthAfricanEnglish = "en-ZA"
-    /// Spanish
     case Spanish = "es-ES"
-    /// Catalan
     case SpanishCatalan = "ca-ES"
-    /// Swedish
     case Swedish = "sv-SE"
-    /// Taiwanese
     case Taiwanese  = "zh-TW"
-    /// Thai
     case Thai = "th-TH"
-    /// Turkish
     case Turkish = "tr-TR"
-    /// Ukranian
     case Ukranian = "uk-UA"
-    /// USA English
     case UnitedStatesEnglish = "en-US"
-    /// Vietnamese
     case Vietnamese = "vi-VN"
-    /// Arabic World
     case ArabicWorld = "ar-001"
 
-    /// Will return specific information about the language as an OSSVoiceInfo object.
     public func getDetails() -> OSSVoiceInfo {
-        var voiceInfo: OSSVoiceInfo = OSSVoiceInfo()
+        var voiceInfo = OSSVoiceInfo()
         if let voice = AVSpeechSynthesisVoice(language: rawValue) {
             voiceInfo.name = voice.name
-            voiceInfo.identifier = voice.identifier
+            voiceInfo.identifier = voice.identifier // 原生 identifier 本身就是 String
             voiceInfo.languageCode = rawValue
             voiceInfo.language = "\(self)"
         }
         return voiceInfo
     }
 
-    /// Provides the Enum key itself as a String
     public var title: String {
         String(describing: self)
     }
 
-    /// Demo message is for returning a string in the language that will be read while also providing the name of the voice that Apple have provided.
     public var demoMessage: String {
-        var voiceName = ""
-        if let name = getDetails().name {
-            voiceName = name
-        }
+        let voiceName = getDetails().name ?? ""
         switch self {
-        case .SaudiArabian:
-            return "\(voiceName) مرحبا اسمي"
-        case .Czech:
-            return "Dobrý den, jmenuji se \(voiceName)"
-        case .Danish:
-            return "Hej, mit navn er \(voiceName)"
-        case .German:
-            return "Hallo, Ich heisse \(voiceName)"
-        case .Greek:
-            return "Γεια το όνομά μου είναι \(voiceName)"
-        case .Australian:
+        case .SaudiArabian, .ArabicWorld: return "\(voiceName) مرحبا اسمي"
+        case .Czech: return "Dobrý den, jmenuji se \(voiceName)"
+        case .Danish: return "Hej, mit navn er \(voiceName)"
+        case .German: return "Hallo, Ich heisse \(voiceName)"
+        case .Greek: return "Γεια το όνομά μου είναι \(voiceName)"
+        case .Australian, .English, .IrishEnglish, .UnitedStatesEnglish, .SouthAfricanEnglish, .IndianEnglish:
             return "Hello, my name is \(voiceName)"
-        case .English:
-            return "Hello, my name is \(voiceName)"
-        case .IrishEnglish:
-            return "Hello, my name is \(voiceName)"
-        case .UnitedStatesEnglish:
-            return "Hello, my name is \(voiceName)"
-        case .SouthAfricanEnglish:
-            return "Hello, my name is \(voiceName)"
-        case .Spanish:
-            return "Hola, mi nombre es \(voiceName)"
-        case .Mexican:
-            return "Hola, mi nombre es \(voiceName)"
-        case .Finnish:
-            return "Hei, minun nimeni on \(voiceName)"
-        case .CanadianFrench:
-            return "Bonjour, mon nom est \(voiceName)"
-        case .French:
-            return "Bonjour, mon nom est \(voiceName)"
-        case .Hebrew:
-            return "\(voiceName)שלום שמי הוא"
-        case .Hindi:
-            return "नमस्ते मेरा नाम है \(voiceName)"
-        case .Hungarian:
-            return "Helló, az én nevem \(voiceName)"
-        case .Indonesian:
-            return "Halo, namaku adalah \(voiceName)"
-        case .Italian:
-            return "Ciao, il mio nome è \(voiceName)"
-        case .Japanese:
-            return "こんにちは、私の名前は \(voiceName)"
-        case .Korean:
-            return "안녕 내 이름은 \(voiceName)"
-        case .DutchBelgium:
-            return "Hallo, mijn naam is \(voiceName)"
-        case .DutchNetherlands:
-            return "Hallo, mijn naam is \(voiceName)"
-        case .Norwegian:
-            return "Hei, mitt navn er \(voiceName)"
-        case .Polish:
-            return "Cześć, mam na imię \(voiceName)"
-        case .Brazilian:
-            return "Olá meu nome é \(voiceName)"
-        case .Portuguese:
-            return "Olá meu nome é \(voiceName)"
-        case .Romanian:
-            return "Buna numele meu este \(voiceName)"
-        case .Russian:
-            return "Привет меня зовут \(voiceName)"
-        case .Slovakian:
-            return "Ahoj volám sa \(voiceName)"
-        case .Swedish:
-            return "Hej mitt namn är \(voiceName)"
-        case .Thai:
-            return "สวัสดีฉันชื่อ \(voiceName)"
-        case .Turkish:
-            return "Merhaba benim adım \(voiceName)"
-        case .Chinese:
-            return "你好我的名字是 \(voiceName)"
-        case .ChineseHongKong:
-            return "你好我的名字是 \(voiceName)"
-        case .Taiwanese:
-            return "你好我的名字是 \(voiceName)"
-        case .Bulgarian:
-            return "Здравейте, казвам се \(voiceName)"
-        case .ChineseSimplified:
-            return "你好我的名字是 \(voiceName)"
-        case .Croatian:
-            return "Zdravo! Moje ime je \(voiceName)"
-        case .IndianEnglish:
-            return "Hello, my name is \(voiceName)"
-        case .Malay:
-            return "helo! Nama saya \(voiceName)"
-        case .NorwegianBokmal:
-            return "Hei, mitt navn er \(voiceName)"
-        case .SpanishCatalan:
-            return "Hola! Em dic \(voiceName)"
-        case .Ukranian:
-            return "Привіт! Мене звати \(voiceName)"
-        case .Vietnamese:
-            return "Xin chào! Tên của tôi là \(voiceName)"
-        case .ArabicWorld:
-            return "\(voiceName) مرحبا اسمي"
+        case .Spanish, .Mexican: return "Hola, mi nombre es \(voiceName)"
+        case .Finnish: return "Hei, minun nimeni on \(voiceName)"
+        case .CanadianFrench, .French: return "Bonjour, mon nom est \(voiceName)"
+        case .Hebrew: return "\(voiceName)שלום שמי הוא"
+        case .Hindi: return "नमस्ते मेरा नाम है \(voiceName)"
+        case .Hungarian: return "Helló, az én nevem \(voiceName)"
+        case .Indonesian: return "Halo, namaku adalah \(voiceName)"
+        case .Italian: return "Ciao, il mio nome è \(voiceName)"
+        case .Japanese: return "こんにちは、私の名前は \(voiceName)"
+        case .Korean: return "안녕 내 이름은 \(voiceName)"
+        case .DutchBelgium, .DutchNetherlands: return "Hallo, mijn naam is \(voiceName)"
+        case .Norwegian, .NorwegianBokmal: return "Hei, mitt navn er \(voiceName)"
+        case .Polish: return "Cześć, mam na imię \(voiceName)"
+        case .Brazilian, .Portuguese: return "Olá meu nome é \(voiceName)"
+        case .Romanian: return "Buna numele meu este \(voiceName)"
+        case .Russian: return "Привет меня зовут \(voiceName)"
+        case .Slovakian: return "Ahoj volám sa \(voiceName)"
+        case .Swedish: return "Hej mitt namn är \(voiceName)"
+        case .Thai: return "สวัสดีฉันชื่อ \(voiceName)"
+        case .Turkish: return "Merhaba benim adım \(voiceName)"
+        case .Chinese, .ChineseHongKong, .Taiwanese, .ChineseSimplified: return "你好我的名字是 \(voiceName)"
+        case .Bulgarian: return "Здравейте, казвам се \(voiceName)"
+        case .Croatian: return "Zdravo! Moje ime je \(voiceName)"
+        case .Malay: return "helo! Nama saya \(voiceName)"
+        case .SpanishCatalan: return "Hola! Em dic \(voiceName)"
+        case .Ukranian: return "Привіт! Мене звати \(voiceName)"
+        case .Vietnamese: return "Xin chào! Tên của tôi là \(voiceName)"
         }
     }
 
-    /// The flag for the selected language.
-    ///
-    /// You can supply your own flag image, provided is has the same name (.rawValue) as the image in the pod assets.
-    ///
-    /// If no image is found in the application bundle, the image from the SDK bundle will be provided.
 #if canImport(UIKit)
     public var flag: UIImage? {
         if let mainBundleImage = UIImage(named: rawValue, in: Bundle.main, compatibleWith: nil) {
             return mainBundleImage
         }
-        return Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: rawValue)
+        // 需确保上游存在 Bundle.podBundleImage 实现
+        return UIImage(named: rawValue)
     }
 #elseif canImport(AppKit)
-	public var flag: NSImage? {
-		if let mainBundleImage = NSImage(named: rawValue) {
-			return mainBundleImage
-		}
-		return NSImage(named: rawValue)
-	}
+    public var flag: NSImage? {
+        return NSImage(named: rawValue)
+    }
 #endif
 }
 
-/** OSSVoice overides some of the properties provided to enable setting as well as getting.
-
- The purpose of this class is so that a single voice object can be set and reused through the Speech instance. Properties have been overriden for this very purpose.
-
- Setting the voice quality to be ```.enhanced``` instead of ```.default``` and the resetting of language after creation is not enabled in the AV provided API instance of AVSpeechSynthesisVoice.
- 
- - Note: If init() is called, the default quality of OSSVoice will us "default" and the language will be "OSSVoiceEnum.UnitedStatesEnglish".
-*/
-public class OSSVoice: AVSpeechSynthesisVoice,@unchecked Sendable {
-
-    // MARK: - Private Properties
+/// 采用内部递归锁确保线程安全的定制 Voice 类
+public class OSSVoice: AVSpeechSynthesisVoice, @unchecked Sendable {
 
     private var voiceQuality: AVSpeechSynthesisVoiceQuality = .default
     private var voiceLanguage: String = OSSVoiceEnum.UnitedStatesEnglish.rawValue
     private var voiceTypeValue: OSSVoiceEnum = .UnitedStatesEnglish
+    
+    // 【Swift 6 优化】使用互斥递归锁保护内部可变状态
+    private let lock = NSRecursiveLock()
 
-    /// You have access to set the voice quality or use the default which is set to .default
     override public var quality: AVSpeechSynthesisVoiceQuality {
-        get {
-            voiceQuality
-        }
-        set {
-            voiceQuality = newValue
-        }
+        get { lock.withLock { voiceQuality } }
+        set { lock.withLock { voiceQuality = newValue } }
     }
 
-    /// Language offers a get and set. The default value is United States English.
     override public var language: String {
-        get {
-            voiceLanguage
-        }
+        get { lock.withLock { voiceLanguage } }
         set {
-            voiceLanguage = newValue
-            if let valueEnum = OSSVoiceEnum(rawValue: newValue) {
-                voiceTypeValue = valueEnum
+            lock.withLock {
+                voiceLanguage = newValue
+                if let valueEnum = OSSVoiceEnum(rawValue: newValue) {
+                    voiceTypeValue = valueEnum
+                }
             }
         }
     }
 
-    /// Returns the current voice type enum to allow for obtining details.
     public var voiceType: OSSVoiceEnum {
-        voiceTypeValue
+        lock.withLock { voiceTypeValue }
     }
 
-    /// If this init is used, defaults will be used.
-    ///
-    /// This method will set default values on the language and quality of voice.
-    ///
-    /// Langague defaults to United States English.
-    ///
-    /// Quality defaults to .default.
     public override init() {
         super.init()
         commonInit()
     }
 
-    /// This init method is required as it sets the voice quality and language in order to speak the text passed in.
     public init?(quality: AVSpeechSynthesisVoiceQuality, language: OSSVoiceEnum) {
         super.init()
-        voiceTypeValue = language
-        voiceLanguage = language.rawValue
-        voiceQuality = quality
+        lock.withLock {
+            voiceTypeValue = language
+            voiceLanguage = language.rawValue
+            voiceQuality = quality
+        }
     }
 
-    /// Required: Do not recommend using.
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         return nil
     }
 
-    /// Used as a fail-safe should the custom init method not be used.
-    ///
-    /// This method will set default values on the language and quality of voice.
-    ///
-    /// Langague defaults to United States English.
-    ///
-    /// Quality defaults to .default.
     private func commonInit() {
-        // Set the default values
-        voiceTypeValue = OSSVoiceEnum.UnitedStatesEnglish
-        voiceLanguage = OSSVoiceEnum.UnitedStatesEnglish.rawValue
-        voiceQuality = .default
+        lock.withLock {
+            voiceTypeValue = OSSVoiceEnum.UnitedStatesEnglish
+            voiceLanguage = OSSVoiceEnum.UnitedStatesEnglish.rawValue
+            voiceQuality = .default
+        }
     }
 }

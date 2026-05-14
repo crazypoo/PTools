@@ -18,6 +18,7 @@ class PTMediaBrowserNav: UIView {
         if #available(iOS 26.0, *) {
             view.configuration = UIButton.Configuration.clearGlass()
         }
+        view.bounds = CGRectMake(0, 0, 34, 34)
         return view
     }()
     
@@ -29,6 +30,9 @@ class PTMediaBrowserNav: UIView {
     
     lazy var navBar:PTNavBar = {
         let view = PTNavBar()
+        view.setLeftButtons([closeButton])
+        view.titleView = titleLabel
+        view.titleViewMode = .fill
         return view
     }()
     
@@ -46,9 +50,6 @@ class PTMediaBrowserNav: UIView {
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
         }
-        navBar.setLeftButtons([closeButton])
-        navBar.titleView = titleLabel
-        navBar.titleViewMode = .fill
     }
     
     required init?(coder: NSCoder) {

@@ -274,16 +274,16 @@ public class PTMediaBrowserController: PTBaseViewController {
         self.view.window?.makeKeyAndVisible()
         
         // MARK: -  动画包裹 StatusBar 变更，防止闪烁
-        UIView.animate(withDuration: 0.3) {
+        PTGCDManager.gcdAfter(time: 0.35, block: {
             self.changeStatusBar(type: .Dark)
-        }
+        })
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        UIView.animate(withDuration: 0.3) {
+        PTGCDManager.gcdAfter(time: 0.35, block: {
             self.changeStatusBar(type: .Auto)
-        }
+        })
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
