@@ -465,6 +465,7 @@ public extension UIImageView {
 // MARK: - Dynamic properties
 public extension UIImageView {
     // 优化：彻底移除了极度危险的 malloc(4)，改用 Swift 标准的安全指针绑定方式
+    @MainActor
     private struct AssociatedKeys {
         static var gifDidStart: UInt8 = 0
         static var gifDidLoop: UInt8 = 0
