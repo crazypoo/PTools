@@ -509,7 +509,7 @@ public class OSSSpeech: NSObject, @unchecked Sendable {
             let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
                 
-                let (decibels, cbUpdate) = self.lock.withLock { () -> (Float, (([Float]) -> Void)?) in
+                let (_, cbUpdate) = self.lock.withLock { () -> (Float, (([Float]) -> Void)?) in
                     self._audioRecorder?.updateMeters()
                     let db = self._audioRecorder?.averagePower(forChannel: 0) ?? -160
                     let normalized = pow(10, db / 20)
