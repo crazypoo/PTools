@@ -14,6 +14,7 @@ struct ViewHierarchyDependencies {
     var layers: [ViewHierarchyLayer]
 }
 
+@MainActor
 final class ViewHierarchyCoordinator: Coordinator<ViewHierarchyDependencies, OperationQueue, Void> {
     let layerToggleInputRange = Inspector.sharedInstance.configuration.keyCommands.layerToggleInputRange
 

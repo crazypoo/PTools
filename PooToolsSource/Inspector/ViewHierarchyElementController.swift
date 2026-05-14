@@ -40,7 +40,7 @@ extension ViewHierarchyElementController {
         let prettyClassNameWithoutQualifiers: String
         var superclassName: String?
         var classNameWithoutQualifiers: String
-        let expirationDate = Date().addingTimeInterval(Inspector.sharedInstance.configuration.snapshotExpirationTimeInterval)
+        @MainActor let expirationDate = Date().addingTimeInterval(Inspector.sharedInstance.configuration.snapshotExpirationTimeInterval)
 
         let additionalSafeAreaInsets: UIEdgeInsets
         let definesPresentationContext: Bool
@@ -75,6 +75,7 @@ extension ViewHierarchyElementController {
         let traitCollection: UITraitCollection
         let viewRespectsSystemMinimumLayoutMargins: Bool
 
+        @MainActor
         init(viewController: UIViewController, depth: Int) {
             isModalInPresentation = viewController.isModalInPresentation
             performsActionsWhilePresentingModally = viewController.performsActionsWhilePresentingModally
@@ -126,6 +127,7 @@ extension ViewHierarchyElementController {
     }
 }
 
+@MainActor
 final class ViewHierarchyElementController: CustomDebugStringConvertible {
     var debugDescription: String {
         String(describing: store.latest)
@@ -164,7 +166,7 @@ final class ViewHierarchyElementController: CustomDebugStringConvertible {
 
     private(set) lazy var deepestAbsoulteLevel: Int = children.map(\.depth).max() ?? depth
 
-    lazy var children: [ViewHierarchyElementReference] = makeChildren()
+    @MainActor lazy var children: [ViewHierarchyElementReference] = makeChildren()
 
     var allChildren: [ViewHierarchyElementReference] {
         children.reversed().flatMap { [$0] + $0.allChildren }
@@ -190,7 +192,7 @@ final class ViewHierarchyElementController: CustomDebugStringConvertible {
     let objectIdentifier: ObjectIdentifier
 
     // MARK: - Init
-
+    @MainActor
     init(
         _ viewController: UIViewController,
         iconProvider: ViewHierarchyElementIconProvider? = .none,
@@ -220,7 +222,7 @@ final class ViewHierarchyElementController: CustomDebugStringConvertible {
         store = SnapshotStore(initialSnapshot)
     }
 
-    private func makeChildReference(from childViewController: UIViewController) -> ViewHierarchyElementController {
+    @MainActor private func makeChildReference(from childViewController: UIViewController) -> ViewHierarchyElementController {
         ViewHierarchyElementController(
             childViewController,
             iconProvider: iconProvider,
@@ -230,7 +232,7 @@ final class ViewHierarchyElementController: CustomDebugStringConvertible {
         )
     }
 
-    private func makeChildren() -> [ViewHierarchyElementReference] {
+    @MainActor private func makeChildren() -> [ViewHierarchyElementReference] {
         underlyingViewController?.children.compactMap { makeChildReference(from: $0) } ?? []
     }
 

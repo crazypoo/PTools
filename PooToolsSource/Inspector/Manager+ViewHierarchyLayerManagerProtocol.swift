@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 extension Manager: ViewHierarchyLayerManagerProtocol {
     var isShowingLayers: Bool {
         viewHierarchyCoordinator.isShowingLayers == true

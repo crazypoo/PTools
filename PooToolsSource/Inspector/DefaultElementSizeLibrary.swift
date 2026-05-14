@@ -40,6 +40,7 @@ enum DefaultElementSizeLibrary: InspectorElementLibraryProtocol, Swift.CaseItera
         }
     }
 
+    @MainActor
     func sections(for object: NSObject) -> InspectorElementSections {
         switch self {
         case .tableView:

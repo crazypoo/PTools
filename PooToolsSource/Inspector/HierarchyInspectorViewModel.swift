@@ -94,11 +94,10 @@ extension HierarchyInspectorViewModel: @MainActor HierarchyInspectorViewModelPro
         }
     }
 
-    func loadData() {
+    @MainActor func loadData() {
         switch isSearching {
         case true:
             return snapshotViewModel.loadData()
-
         case false:
             return commandGroupsViewModel.loadData()
         }
@@ -134,7 +133,7 @@ extension HierarchyInspectorViewModel: @MainActor HierarchyInspectorViewModelPro
         }
     }
 
-    func titleForHeader(in section: Int) -> String? {
+    @MainActor func titleForHeader(in section: Int) -> String? {
         switch isSearching {
         case true:
             return snapshotViewModel.titleForHeader(in: section)
@@ -144,7 +143,7 @@ extension HierarchyInspectorViewModel: @MainActor HierarchyInspectorViewModelPro
         }
     }
 
-    func cellViewModelForRow(at indexPath: IndexPath) -> HierarchyInspectorCellViewModel {
+    @MainActor func cellViewModelForRow(at indexPath: IndexPath) -> HierarchyInspectorCellViewModel {
         switch isSearching {
         case true:
             return snapshotViewModel.cellViewModelForRow(at: indexPath)

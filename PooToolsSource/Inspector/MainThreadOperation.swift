@@ -25,6 +25,8 @@ class MainThreadOperation: Operation, @unchecked Sendable {
             return
         }
 
-        closure()
+        Task { @MainActor in
+            closure()
+        }
     }
 }

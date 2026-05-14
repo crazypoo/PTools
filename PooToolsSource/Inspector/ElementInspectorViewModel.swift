@@ -44,6 +44,7 @@ final class ElementInspectorViewModel: ElementInspectorViewModelProtocol {
         return index
     }
 
+    @MainActor
     init(
         catalog: ViewHierarchyElementCatalog,
         element: ViewHierarchyElementReference,

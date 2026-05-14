@@ -81,7 +81,7 @@ extension ViewHierarchyLayer: Comparable {
 }
 
 // MARK: - Built-in layers
-
+@MainActor
 public extension ViewHierarchyLayer {
     /// Highlights activity indicator views
     static let activityIndicators = Inspector.ViewHierarchyLayer(name: "Activity Indicators", allowsInternalViews: true) { $0 is UIActivityIndicatorView }

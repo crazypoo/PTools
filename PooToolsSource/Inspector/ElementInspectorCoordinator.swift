@@ -35,9 +35,9 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         $0.delegate = self
     }
 
-    private var formPanelController: ElementInspectorFormPanelViewController? { currentPanelViewController as? ElementInspectorFormPanelViewController }
+    @MainActor private var formPanelController: ElementInspectorFormPanelViewController? { currentPanelViewController as? ElementInspectorFormPanelViewController }
 
-    private(set) lazy var adaptiveModalPresenter = AdaptiveModalPresenter(
+    @MainActor private(set) lazy var adaptiveModalPresenter = AdaptiveModalPresenter(
         presentationStyle: { presentationController, _ in
             switch presentationController.presentedViewController {
             case let navigationController as ElementInspectorNavigationController where navigationController.shouldAdaptModalPresentation == false:
@@ -83,13 +83,13 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         }
     }
 
-    var isCapableOfSidePresentation: Bool {
+    @MainActor var isCapableOfSidePresentation: Bool {
         guard Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelSidePresentationAvailable else { return false }
         let minimumSize = Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelSidePresentationMinimumContainerSize
         return presenter.frame.width >= minimumSize.width && presenter.frame.height >= minimumSize.height
     }
 
-    func transitionDelegate(for viewController: UIViewController) -> UIViewControllerTransitioningDelegate? {
+    @MainActor func transitionDelegate(for viewController: UIViewController) -> UIViewControllerTransitioningDelegate? {
         switch viewController {
         case is ElementInspectorNavigationController where isCapableOfSidePresentation:
             return transitionPresenter
@@ -98,7 +98,7 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         }
     }
 
-    private(set) lazy var navigationController: ElementInspectorNavigationController = {
+    @MainActor private(set) lazy var navigationController: ElementInspectorNavigationController = {
         let navigationController = makeNavigationController(from: dependencies.sourceView)
 
         injectElementInspectorsForViewHierarchy(inside: navigationController, dependencies: dependencies)
@@ -119,7 +119,7 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         delegate?.elementInspectorCoordinator(self, didFinishInspecting: dependencies.rootElement, with: reason)
     }
 
-    func setPopoverModalPresentationStyle(for viewController: UIViewController, from sourceView: UIView) {
+    @MainActor func setPopoverModalPresentationStyle(for viewController: UIViewController, from sourceView: UIView) {
         viewController.setPopoverModalPresentationStyle(
             delegate: adaptiveModalPresenter,
             transitionDelegate: transitionDelegate(for: viewController),
@@ -127,7 +127,7 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         )
     }
 
-    static func makeElementInspectorViewController(
+    @MainActor static func makeElementInspectorViewController(
         element: ViewHierarchyElementReference,
         preferredPanel: ElementInspectorPanel?,
         initialPanel: ElementInspectorPanel?,
@@ -185,15 +185,15 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         }
     }
 
-    var topElementInspectorViewController: ElementInspectorViewController? {
+    @MainActor var topElementInspectorViewController: ElementInspectorViewController? {
         navigationController.topViewController as? ElementInspectorViewController
     }
 
-    var currentPanelViewController: ElementInspectorPanelViewController? {
+    @MainActor var currentPanelViewController: ElementInspectorPanelViewController? {
         topElementInspectorViewController?.currentPanelViewController
     }
 
-    func makeNavigationController(from sourceView: UIView) -> ElementInspectorNavigationController {
+    @MainActor func makeNavigationController(from sourceView: UIView) -> ElementInspectorNavigationController {
         let navigationController = ElementInspectorNavigationController()
         navigationController.dismissDelegate = self
 
@@ -215,7 +215,7 @@ extension ElementInspectorCoordinator: ViewHierarchyActionableProtocol {
         }
     }
 
-    func perform(action: ViewHierarchyElementAction, with element: ViewHierarchyElementReference, from sourceView: UIView) {
+    @MainActor func perform(action: ViewHierarchyElementAction, with element: ViewHierarchyElementReference, from sourceView: UIView) {
         guard canPerform(action: action) else {
             delegate?.perform(action: action, with: element, from: sourceView)
             return
@@ -254,7 +254,7 @@ extension ElementInspectorCoordinator: ViewHierarchyActionableProtocol {
 // MARK: - DismissablePresentationProtocol
 
 extension ElementInspectorCoordinator: DismissablePresentationProtocol {
-    func dismissPresentation(animated: Bool) {
+    @MainActor func dismissPresentation(animated: Bool) {
         if let presentingViewController = navigationController.presentingViewController {
             presentingViewController.dismiss(animated: animated, completion: nil)
         }
@@ -264,7 +264,7 @@ extension ElementInspectorCoordinator: DismissablePresentationProtocol {
 // MARK: - Private Helpers
 
 private extension ElementInspectorCoordinator {
-    func injectElementInspectorsForViewHierarchy(
+    @MainActor func injectElementInspectorsForViewHierarchy(
         inside navigationController: ElementInspectorNavigationController,
         dependencies: ElementInspectorDependencies
     ) {
@@ -315,7 +315,7 @@ private extension ElementInspectorCoordinator {
 }
 
 extension ElementInspectorCoordinator: UIViewControllerTransitionPresenterDelegate {
-    func animationController(forPresented presented: UIViewController,
+    @MainActor func animationController(forPresented presented: UIViewController,
                              presenting: UIViewController,
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning?
     {
@@ -330,7 +330,7 @@ extension ElementInspectorCoordinator: UIViewControllerTransitionPresenterDelega
         }
     }
 
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    @MainActor func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         guard transitionDelegate(for: dismissed) != nil else { return nil }
 
         switch dismissed {

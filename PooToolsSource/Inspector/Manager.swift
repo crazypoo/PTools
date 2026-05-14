@@ -14,6 +14,7 @@ struct ManagerDependencies {
     var swiftUIhost: InspectorSwiftUIHost?
 }
 
+@MainActor
 final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
     var snapshot: ViewHierarchySnapshot { viewHierarchyCoordinator.latestSnapshot() }
     var keyWindow: UIWindow? { dependencies.viewHierarchy.keyWindow }
@@ -68,7 +69,9 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
     deinit {
         operationQueue.cancelAllOperations()
 
-        viewHierarchyCoordinator.removeAllLayers()
+        Task { @MainActor in
+            viewHierarchyCoordinator.removeAllLayers()
+        }
 
         children.forEach { child in
             (child as? DismissablePresentationProtocol)?.dismissPresentation(animated: true)

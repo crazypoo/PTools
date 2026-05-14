@@ -33,12 +33,14 @@ final class IconButton: BaseControl {
 
     var actionHandler: Action?
 
+    @MainActor
     init(_ glyph: Icon.Glyph,
          style: Style = .rounded,
          size: CGSize = .init(16),
-         tintColor: UIColor = Inspector.sharedInstance.configuration.colorStyle.textColor,
+         tintColor: UIColor? = nil,
          actionHandler: Action? = nil) {
-        icon = Icon(glyph, color: tintColor, size: size)
+        let tincolor = tintColor ?? Inspector.sharedInstance.configuration.colorStyle.textColor
+        icon = Icon(glyph, color: tincolor, size: size)
         self.style = style
         self.actionHandler = actionHandler
         super.init(frame: .zero)

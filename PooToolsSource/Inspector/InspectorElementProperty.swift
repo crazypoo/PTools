@@ -13,7 +13,7 @@ public enum InspectorElementProperty {
     public struct PreviewTarget {
         internal let reference: ViewHierarchyElement
 
-        public init(view: UIView) {
+        @MainActor public init(view: UIView) {
             reference = ViewHierarchyElement(with: view, iconProvider: .default)
         }
     }

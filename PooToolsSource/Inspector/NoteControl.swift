@@ -19,7 +19,7 @@ public enum InspectorElemenPropertyNoteIcon: ColorStylable {
         }
     }
 
-    var color: UIColor {
+    @MainActor var color: UIColor {
         switch self {
         case .info:
             return colorStyle.tertiaryTextColor

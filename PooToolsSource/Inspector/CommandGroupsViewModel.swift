@@ -91,6 +91,7 @@ extension HierarchyInspectorViewModel {
             group(in: section).title
         }
 
+        @MainActor
         func cellViewModelForRow(at indexPath: IndexPath) -> HierarchyInspectorCellViewModel {
             let action = self.action(at: indexPath)
 

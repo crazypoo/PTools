@@ -8,7 +8,7 @@ import UIKit
 import SafeSFSymbols
 
 extension Manager: KeyCommandPresentable {
-    var keyCommands: [UIKeyCommand] {
+    @MainActor var keyCommands: [UIKeyCommand] {
         if let cachedKeyCommands = keyCommandsStore.wrappedValue {
             return cachedKeyCommands
         }
@@ -17,7 +17,7 @@ extension Manager: KeyCommandPresentable {
         return keyCommands
     }
 
-    var commandGroups: CommandsGroups {
+    @MainActor var commandGroups: CommandsGroups {
         makeCommandGroups(limit: .none)
     }
 
@@ -25,7 +25,7 @@ extension Manager: KeyCommandPresentable {
         #selector(UIViewController.inspectorKeyCommandHandler(_:))
     }
 
-    private var slowAnimationsCommand: Command {
+    @MainActor private var slowAnimationsCommand: Command {
         let totalSpeed = snapshot
             .root
             .windows
@@ -48,7 +48,7 @@ extension Manager: KeyCommandPresentable {
         }
     }
 
-    private func makeKeyCommands(withSelector aSelector: Selector) -> [UIKeyCommand] {
+    @MainActor private func makeKeyCommands(withSelector aSelector: Selector) -> [UIKeyCommand] {
         let layerToggleInputRange = Inspector.sharedInstance.configuration.keyCommands.layerToggleInputRange
         let limit = layerToggleInputRange.upperBound - layerToggleInputRange.lowerBound
         let commandGroups = makeCommandGroups(limit: limit)
@@ -70,7 +70,7 @@ extension Manager: KeyCommandPresentable {
         // .sortedByInputKey()
     }
 
-    private var defaultActions: CommandsGroup {
+    @MainActor private var defaultActions: CommandsGroup {
         .group(
             commands: {
                 var array = [Command]()
@@ -83,7 +83,7 @@ extension Manager: KeyCommandPresentable {
         )
     }
 
-    private func makeCommandGroups(limit: Int?) -> CommandsGroups {
+    @MainActor private func makeCommandGroups(limit: Int?) -> CommandsGroups {
         var commandGroups: CommandsGroups = []
         if let userCommandGroups = dependencies.customization?.commandGroups {
             commandGroups.append(contentsOf: userCommandGroups)
@@ -100,7 +100,7 @@ extension Manager: KeyCommandPresentable {
         return commandGroups
     }
 
-    private var presentInspectorKeyCommand: UIKeyCommand {
+    @MainActor private var presentInspectorKeyCommand: UIKeyCommand {
         let settings = Inspector.sharedInstance.configuration.keyCommands.presentationSettings
         return .init(
             title: Texts.presentInspector,
@@ -110,7 +110,7 @@ extension Manager: KeyCommandPresentable {
         )
     }
 
-    private var hideSystemWindows: Command {
+    @MainActor private var hideSystemWindows: Command {
         Command(
             title: "Show System Windows",
             icon: .init(.macwindow.onRectangle),
@@ -120,14 +120,14 @@ extension Manager: KeyCommandPresentable {
 
                 if Inspector.sharedInstance.configuration.showFullApplicationHierarchy {
                     Task {
-                        await Inspector.present()
+                        Inspector.present()
                     }
                 }
             }
         )
     }
 
-    private var insectViewHierarchy: CommandsGroups {
+    @MainActor private var insectViewHierarchy: CommandsGroups {
         guard let keyWindow = keyWindow else { return [] }
 
         let showFullApplicationHierarchy = dependencies.configuration.showFullApplicationHierarchy
@@ -153,7 +153,7 @@ extension Manager: KeyCommandPresentable {
         return commands
     }
 
-    private func inspectCommands(window element: ViewHierarchyElementReference, from presenter: UIView) -> CommandsGroup {
+    @MainActor private func inspectCommands(window element: ViewHierarchyElementReference, from presenter: UIView) -> CommandsGroup {
         .group(
             title: "\(element.displayName) Hierarchy",
             commands: {
@@ -182,7 +182,7 @@ extension Manager: KeyCommandPresentable {
         )
     }
 
-    private var toggleInterfaceStyleCommand: Command? {
+    @MainActor private var toggleInterfaceStyleCommand: Command? {
         guard
             let keyWindow = keyWindow,
             snapshot.root.bundleInfo?.interfaceStyle == nil
@@ -221,7 +221,7 @@ extension Manager: KeyCommandPresentable {
         )
     }
 
-    private func forEach(
+    @MainActor private func forEach(
         viewController viewHierarchy: [ViewHierarchyElementReference],
         _ action: ViewHierarchyElementAction,
         from sourceView: UIView

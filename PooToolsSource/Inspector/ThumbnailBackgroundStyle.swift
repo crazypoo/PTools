@@ -48,7 +48,7 @@ enum ThumbnailBackgroundStyle: Hashable, CaseIterable, RawRepresentable {
         }
     }
 
-    var color: UIColor {
+    @MainActor var color: UIColor {
         switch (self, Inspector.sharedInstance.configuration.colorStyle) {
         case (.strong, .dark):
             return UIColor(white: 0.40, alpha: 1)
@@ -68,7 +68,7 @@ enum ThumbnailBackgroundStyle: Hashable, CaseIterable, RawRepresentable {
         }
     }
 
-    var contrastingColor: UIColor {
+    @MainActor var contrastingColor: UIColor {
         switch (self, Inspector.sharedInstance.configuration.colorStyle) {
         case (.strong, .dark):
             return .darkText

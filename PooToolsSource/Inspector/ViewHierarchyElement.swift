@@ -27,7 +27,7 @@ extension ViewHierarchyElement {
         var displayName: String
         var elementDescription: String
         var elementName: String
-        var expirationDate: Date = makeExpirationDate()
+        @MainActor var expirationDate: Date = makeExpirationDate()
         var frame: CGRect
         var iconImage: UIImage?
         var isContainer: Bool
@@ -67,7 +67,7 @@ extension ViewHierarchyElement {
             traitCollection = view.traitCollection
         }
 
-        private static func makeExpirationDate() -> Date {
+        @MainActor private static func makeExpirationDate() -> Date {
             let expiration = Inspector.sharedInstance.configuration.snapshotExpirationTimeInterval
             let expirationDate = Date().addingTimeInterval(expiration)
 
@@ -76,6 +76,7 @@ extension ViewHierarchyElement {
     }
 }
 
+@MainActor
 final class ViewHierarchyElement: CustomDebugStringConvertible {
     var debugDescription: String {
         String(describing: store.latest)
@@ -113,6 +114,7 @@ final class ViewHierarchyElement: CustomDebugStringConvertible {
 
     // MARK: - Init
 
+    @MainActor
     init(
         with view: UIView,
         iconProvider: ViewHierarchyElementIconProvider? = .none,
@@ -140,7 +142,7 @@ final class ViewHierarchyElement: CustomDebugStringConvertible {
 
     var isUnderlyingViewUserInteractionEnabled: Bool
 
-    private func makeChildren() -> [ViewHierarchyElementReference] {
+    @MainActor private func makeChildren() -> [ViewHierarchyElementReference] {
         guard let underlyingView = underlyingView else { return [] }
         return underlyingView
             .children
@@ -435,7 +437,7 @@ extension ViewHierarchyElement: Hashable {
 }
 
 private extension ViewHierarchyElementIconProvider {
-    func resizedIcon(for view: UIView?) -> UIImage? {
+    @MainActor func resizedIcon(for view: UIView?) -> UIImage? {
         autoreleasepool {
             value(for: view)?.resized(.elementIconSize)
         }

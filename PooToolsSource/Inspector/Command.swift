@@ -28,6 +28,7 @@ public extension Inspector {
             closure != nil
         }
 
+        @MainActor
         public init(
             title: String,
             icon: UIImage?,
@@ -57,14 +58,17 @@ extension Inspector.Command: Comparable {
 // MARK: - Internal Convenience
 
 extension Command {
+    @MainActor
     private static var keyCommandSettings: InspectorConfiguration.KeyCommandSettings {
         Inspector.sharedInstance.configuration.keyCommands
     }
 
+    @MainActor
     static func emptyLayer(_ title: String) -> Command {
         Command(title: title, icon: .emptyLayerAction, closure: .none)
     }
 
+    @MainActor
     static func layer(_ title: String, isSelected: Bool, at index: Int, closure: @escaping Closure) -> Command {
         .init(
             title: title,
@@ -76,6 +80,7 @@ extension Command {
         )
     }
 
+    @MainActor
     static func showAllLayers(closure: @escaping Closure) -> Command {
         Command(
             title: Texts.select("All"),
@@ -86,6 +91,7 @@ extension Command {
         )
     }
 
+    @MainActor
     static func hideVisibleLayers(closure: @escaping Closure) -> Command {
         Command(
             title: Texts.hide("All"),
@@ -96,17 +102,19 @@ extension Command {
         )
     }
 
+    @MainActor
     static func presentInspector(animated: Bool = true) -> Command {
         Command(title: Texts.presentInspector.lowercased(),
                 icon: nil,
                 keyInput: keyCommandSettings.presentationOptions.input,
                 modifierFlags: keyCommandSettings.presentationOptions.modifierFlags) {
             Task {
-                await Inspector.present(animated: animated)
+                Inspector.present(animated: animated)
             }
         }
     }
 
+    @MainActor
     static func inspectElement(_ element: ViewHierarchyElementReference,
                                displayName: String? = .none,
                                icon: UIImage? = .none,

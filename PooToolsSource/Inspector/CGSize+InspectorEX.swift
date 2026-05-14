@@ -9,11 +9,11 @@
 import UIKit
 
 extension CGSize {
-    static var regularIconSize: CGSize { Inspector.sharedInstance.appearance.regularIconSize }
+    @MainActor static var regularIconSize: CGSize { Inspector.sharedInstance.appearance.regularIconSize }
 
-    static var elementIconSize: CGSize { Inspector.sharedInstance.appearance.elementIconSize }
+    @MainActor static var elementIconSize: CGSize { Inspector.sharedInstance.appearance.elementIconSize }
 
-    static var actionIconSize: CGSize { Inspector.sharedInstance.appearance.actionIconSize }
+    @MainActor static var actionIconSize: CGSize { Inspector.sharedInstance.appearance.actionIconSize }
 }
 
 extension CGSize {

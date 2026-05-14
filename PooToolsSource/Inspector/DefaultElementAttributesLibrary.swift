@@ -63,6 +63,7 @@ enum DefaultElementAttributesLibrary: Swift.CaseIterable, InspectorElementLibrar
         }
     }
 
+    @MainActor
     func sections(for object: NSObject) -> InspectorElementSections {
         switch self {
         case .application:

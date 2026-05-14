@@ -68,10 +68,10 @@ open class Coordinator<Dependencies, Presenter, Content>: CoordinatorProtocol, D
     /// Creates the flow that the coordinator manages.
 
     /// This method gets called before `start()` is called for the first time.
-    open func loadContent() -> Content? { .none }
+    @MainActor open func loadContent() -> Content? { .none }
 
     /// Starts the navigation flow and returns its result.
-    open func start() -> Content {
+    @MainActor open func start() -> Content {
         if isStarted == false {
             content = loadContent()
 

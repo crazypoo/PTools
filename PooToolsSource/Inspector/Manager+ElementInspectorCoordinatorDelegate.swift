@@ -7,7 +7,7 @@
 import UIKit
 
 extension Manager: ElementInspectorCoordinatorDelegate {
-    func elementInspectorCoordinator(_ coordinator: ElementInspectorCoordinator,
+    @MainActor func elementInspectorCoordinator(_ coordinator: ElementInspectorCoordinator,
                                      didFinishInspecting element: ViewHierarchyElementReference,
                                      with reason: ElementInspectorDismissReason)
     {
@@ -17,7 +17,7 @@ extension Manager: ElementInspectorCoordinatorDelegate {
 }
 
 extension Manager {
-    func startElementInspectorCoordinator(for view: UIView,
+    @MainActor func startElementInspectorCoordinator(for view: UIView,
                                           panel: ElementInspectorPanel,
                                           from sourceView: UIView?,
                                           animated: Bool)
@@ -26,7 +26,7 @@ extension Manager {
         startElementInspectorCoordinator(for: reference, panel: panel, from: sourceView, animated: animated)
     }
 
-    func startElementInspectorCoordinator(for element: ViewHierarchyElementReference,
+    @MainActor func startElementInspectorCoordinator(for element: ViewHierarchyElementReference,
                                           panel: ElementInspectorPanel,
                                           from sourceView: UIView?,
                                           animated: Bool)

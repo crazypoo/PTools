@@ -12,7 +12,7 @@ enum ElementInspectorPanel: Hashable, Swift.CaseIterable, MenuContentProtocol {
     case size
     case children
 
-    static var `default`: ElementInspectorPanel { Inspector.sharedInstance.configuration.elementInspectorConfiguration.defaultPanel }
+    @MainActor static var `default`: ElementInspectorPanel { Inspector.sharedInstance.configuration.elementInspectorConfiguration.defaultPanel }
 
     var title: String {
         switch self {
@@ -40,7 +40,7 @@ enum ElementInspectorPanel: Hashable, Swift.CaseIterable, MenuContentProtocol {
         }
     }
 
-    var isDefault: Bool {
+    @MainActor var isDefault: Bool {
         self == .default
     }
 

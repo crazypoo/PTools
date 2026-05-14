@@ -16,7 +16,7 @@ enum DefaultElementIdentityLibrary: Swift.CaseIterable, InspectorElementLibraryP
         NSObject.self
     }
 
-    func sections(for object: NSObject) -> InspectorElementSections {
+    @MainActor func sections(for object: NSObject) -> InspectorElementSections {
         switch (self, object) {
         case let (.preview, view as UIView):
             return .init(with: PreviewIdentitySectionDataSource(with: view))

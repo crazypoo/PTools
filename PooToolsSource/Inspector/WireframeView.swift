@@ -15,13 +15,14 @@ final class WireframeView: LayerView {
 
     private lazy var trailingAnchorConstraint = layoutGuideView.trailingAnchor.constraint(equalTo: trailingAnchor).then { $0.isActive = true }
 
+    @MainActor
     override init(
         frame: CGRect,
         element: ViewHierarchyElementReference,
-        color borderColor: UIColor = Inspector.sharedInstance.configuration.colorStyle.wireframeLayerColor,
-        border borderWidth: CGFloat = Inspector.sharedInstance.appearance.wireframeLayerBorderWidth
+        color borderColor: UIColor? = nil,
+        border borderWidth: CGFloat? = nil
     ) {
-        super.init(frame: frame, element: element, color: borderColor, border: borderWidth)
+        super.init(frame: frame, element: element, color: borderColor ?? Inspector.sharedInstance.configuration.colorStyle.wireframeLayerColor, border: borderWidth ?? Inspector.sharedInstance.appearance.wireframeLayerBorderWidth)
 
         isUserInteractionEnabled = true
     }

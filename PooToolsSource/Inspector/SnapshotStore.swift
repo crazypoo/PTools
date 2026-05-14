@@ -25,14 +25,15 @@ final class SnapshotStore<Snapshot>: NSObject {
         }
     }
 
+    @MainActor
     init(
         _ initial: Snapshot,
-        maxCount: Int = Inspector.sharedInstance.configuration.snapshotMaxCount,
-        delay: TimeInterval = Inspector.sharedInstance.configuration.snapshotExpirationTimeInterval
+        maxCount: Int? = nil,
+        delay: TimeInterval? = nil
     ) {
         first = initial
-        self.delay = delay
-        self.maxCount = maxCount
+        self.delay = delay ?? Inspector.sharedInstance.configuration.snapshotExpirationTimeInterval
+        self.maxCount = maxCount ?? Inspector.sharedInstance.configuration.snapshotMaxCount
     }
 
     func scheduleSnapshot(_ provider: Provider) {

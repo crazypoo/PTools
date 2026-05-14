@@ -886,7 +886,7 @@ extension NSObject {
         _className.starts(with: "_")
     }
 
-    var _isSystemContainer: Bool {
+    @MainActor var _isSystemContainer: Bool {
         let className = _classNameWithoutQualifiers
 
         for systemContainer in Inspector.sharedInstance.configuration.knownSystemContainers {

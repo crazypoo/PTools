@@ -7,7 +7,7 @@
 import UIKit
 
 extension ElementInspectorCoordinator: ElementInspectorViewControllerDelegate {
-    func elementInspectorViewController(_ viewController: ElementInspectorViewController,
+    @MainActor func elementInspectorViewController(_ viewController: ElementInspectorViewController,
                                         didSelect element: ViewHierarchyElementReference,
                                         with action: ViewHierarchyElementAction,
                                         from fromElement: ViewHierarchyElementReference)

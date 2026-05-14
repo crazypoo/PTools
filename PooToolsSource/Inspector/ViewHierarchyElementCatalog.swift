@@ -14,11 +14,11 @@ struct ViewHierarchyElementCatalog {
     var libraries: [ElementInspectorPanel: [InspectorElementLibraryProtocol]]
     var iconProvider: ViewHierarchyElementIconProvider?
 
-    func makeElement(from view: UIView) -> ViewHierarchyElement {
+    @MainActor func makeElement(from view: UIView) -> ViewHierarchyElement {
         ViewHierarchyElement(with: view, iconProvider: iconProvider)
     }
 
-    func makeElement(from viewController: UIViewController) -> ViewHierarchyElementController {
+    @MainActor func makeElement(from viewController: UIViewController) -> ViewHierarchyElementController {
         ViewHierarchyElementController(viewController, iconProvider: iconProvider)
     }
 }

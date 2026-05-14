@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 struct ViewHierarchySnapshot: ExpirableProtocol {
     let expirationDate = Date().addingTimeInterval(Inspector.sharedInstance.configuration.snapshotExpirationTimeInterval)
 

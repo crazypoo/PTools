@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 final class ViewHierarchyRoot {
     weak var parent: ViewHierarchyElementReference?
 

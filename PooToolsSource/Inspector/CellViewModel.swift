@@ -55,6 +55,7 @@ extension ElementChildrenPanelViewModel {
 // MARK: - ElementChildrenPanelTableViewCellViewModelProtocol
 
 extension ElementChildrenPanelViewModel.CellViewModel: ElementChildrenPanelTableViewCellViewModelProtocol {
+    @MainActor
     var summaryInfo: ViewHierarchyElementSummary {
         ViewHierarchyElementSummary(
             automaticallyAdjustIndentation: automaticallyAdjustIndentation,
@@ -78,6 +79,7 @@ extension ElementChildrenPanelViewModel.CellViewModel: ElementChildrenPanelTable
 
     var showDisclosureIcon: Bool { relativeDepth > .zero }
 
+    @MainActor
     var appearance: (transform: CGAffineTransform, alpha: CGFloat) {
         if animatedDisplay {
             return (transform: Inspector.sharedInstance.appearance.elementInspector.panelInitialTransform, alpha: .zero)
@@ -110,6 +112,7 @@ extension ElementChildrenPanelViewModel.CellViewModel: ElementChildrenPanelTable
 
     private var subtitleFont: UIFont { elementInspectorAppearance.font(forRelativeDepth: relativeDepth) }
 
+    @MainActor
     private var isCollapseButtonEnabled: Bool {
         relativeDepth < Inspector.sharedInstance.configuration.elementInspectorConfiguration.childrenListMaximumInteractiveDepth
     }
@@ -139,14 +142,14 @@ extension ElementChildrenPanelViewModel.CellViewModel: Hashable {
 // MARK: - Images
 
 private extension ElementChildrenPanelViewModel.CellViewModel {
-    static let thumbnailImageLostConnection = IconKit.imageOfWifiExlusionMark(
+    @MainActor static let thumbnailImageLostConnection = IconKit.imageOfWifiExlusionMark(
         CGSize(
             width: Inspector.sharedInstance.appearance.elementInspector.horizontalMargins * 1.5,
             height: Inspector.sharedInstance.appearance.elementInspector.horizontalMargins * 1.5
         )
     ).withRenderingMode(.alwaysTemplate)
 
-    static let thumbnailImageIsHidden = IconKit.imageOfEyeSlashFill(
+    @MainActor static let thumbnailImageIsHidden = IconKit.imageOfEyeSlashFill(
         CGSize(
             width: Inspector.sharedInstance.appearance.elementInspector.horizontalMargins * 1.5,
             height: Inspector.sharedInstance.appearance.elementInspector.horizontalMargins * 1.5

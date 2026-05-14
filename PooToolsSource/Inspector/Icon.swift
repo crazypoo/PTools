@@ -20,13 +20,13 @@ final class Icon: BaseView {
 
     private lazy var heightConstraint_inspector = heightAnchor.constraint(equalToConstant: size.height)
 
-    init(_ glpyh: Glyph, color: UIColor = Inspector.sharedInstance.configuration.colorStyle.textColor, size: CGSize = CGSize(width: 16, height: 16)) {
+    @MainActor init(_ glpyh: Glyph, color: UIColor? = nil, size: CGSize = CGSize(width: 16, height: 16)) {
         self.glpyh = glpyh
 
         super.init(frame: CGRect(origin: .zero, size: size))
         self.size = size
 
-        tintColor = color
+        tintColor = color ?? Inspector.sharedInstance.configuration.colorStyle.textColor
     }
 
     @available(*, unavailable)

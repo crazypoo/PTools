@@ -13,7 +13,7 @@ final class SeparatorView: BaseView {
         case hard
         case color(UIColor)
 
-        fileprivate var color: UIColor {
+        @MainActor fileprivate var color: UIColor {
             switch self {
             case .soft:
                 return colorStyle.textColor.withAlphaComponent(0.09)

@@ -6,8 +6,10 @@
 
 import UIKit
 
-typealias Closure = () -> Void
+public typealias Closure = @MainActor @Sendable () -> Void
 
+// 1. 核心类显式标记为 @MainActor，保证内部所有 UIKit 操作的数据安全性
+@MainActor
 public final class Inspector {
     // MARK: - Public Properties
 
@@ -35,8 +37,10 @@ public final class Inspector {
 
     // MARK: - Internal Properties
 
+    // 静态单例自动继承 @MainActor 隔离
     static let sharedInstance = Inspector()
 
+    // 保证在主线程上下文中初始化带有主线程属性的结构体
     let appearance = InspectorAppearance()
 
     private(set) var contextMenuPresenter: ContextMenuPresenter?
@@ -73,12 +77,13 @@ public final class Inspector {
                 configuration: configuration,
                 coordinatorFactory: ViewHierarchyCoordinatorFactory.self,
                 customization: customization,
-                viewHierarchy: ViewHierarchy.shared,
+                viewHierarchy: ViewHierarchy.shared, // 假设 ViewHierarchy.shared 也是主线程安全或 Sendable 的
                 swiftUIhost: swiftUIHost
             ),
             presentedBy: OperationQueue.main
         )
 
+        // 闭包继承 @MainActor 上下文，安全捕获 weak self 和 UIKit 元素
         contextMenuPresenter = ContextMenuPresenter { [weak self] interaction in
             guard
                 let self = self,
@@ -106,7 +111,7 @@ public final class Inspector {
 // MARK: - Presentation
 
 extension Inspector {
-    @MainActor func present(animated: Bool = true) {
+    func present(animated: Bool = true) {
         manager?.presentInspector(animated: animated)
     }
 }
@@ -165,7 +170,8 @@ extension Inspector {
 }
 
 // MARK: - Public API
-
+// 2. 对外暴露的便捷静态 API 全部标记为 @MainActor，因为它们直接访问受主线程隔离的 sharedInstance
+@MainActor
 public extension Inspector {
     static func start() {
         sharedInstance.start()
@@ -175,7 +181,7 @@ public extension Inspector {
         sharedInstance.stop()
     }
 
-    @MainActor static func present(animated: Bool = true) {
+    static func present(animated: Bool = true) {
         sharedInstance.present(animated: animated)
     }
 

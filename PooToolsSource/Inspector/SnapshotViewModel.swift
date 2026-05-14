@@ -38,7 +38,9 @@ extension HierarchyInspectorViewModel {
         var searchQuery: String? {
             didSet {
                 if oldValue != searchQuery {
-                    loadData()
+                    Task { @MainActor in
+                        loadData()
+                    }
                 }
             }
         }
@@ -74,7 +76,7 @@ extension HierarchyInspectorViewModel {
             currentSearchResults.count
         }
 
-        func titleForHeader(in section: Int) -> String? {
+        @MainActor func titleForHeader(in section: Int) -> String? {
             Texts.allResults(count: currentSearchResults.count, in: snapshot.root.displayName)
         }
 
@@ -82,6 +84,7 @@ extension HierarchyInspectorViewModel {
             .element(currentSearchResults[indexPath.row])
         }
 
+        @MainActor
         @objc func loadData() {
             currentSearchResults = {
                 guard let key = searchQuery else {

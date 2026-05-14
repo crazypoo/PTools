@@ -42,7 +42,7 @@ extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
         formPanelViewController.present(colorPickerViewController, animated: true)
     }
 
-    func elementInspectorFormPanel(_ formPanelViewController: ElementInspectorFormPanelViewController,
+    @MainActor func elementInspectorFormPanel(_ formPanelViewController: ElementInspectorFormPanelViewController,
                                    didTap imagePreviewControl: ImagePreviewControl)
     {
         let alertController = UIAlertController(

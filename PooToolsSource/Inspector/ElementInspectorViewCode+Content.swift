@@ -29,7 +29,7 @@ extension ElementInspectorViewCode {
             .init(type: .scrollView, view: scrollView)
         }
 
-        static func empty(withMessage message: String) -> Content {
+        @MainActor static func empty(withMessage message: String) -> Content {
             let label = UILabel()
             label.text = message
             label.font = .preferredFont(forTextStyle: .body)
@@ -40,7 +40,7 @@ extension ElementInspectorViewCode {
             return .init(type: .backgroundView, view: label)
         }
 
-        static var loadingIndicator: Content {
+        @MainActor static var loadingIndicator: Content {
             let activityIndicator = UIActivityIndicatorView()
             activityIndicator.style = .large
             activityIndicator.hidesWhenStopped = true

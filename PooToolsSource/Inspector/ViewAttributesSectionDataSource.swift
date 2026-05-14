@@ -7,6 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
+    @MainActor
     final class ViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
