@@ -22,9 +22,9 @@ struct InspectorAppearance: Hashable {
 
     var elementInspector = ElementInspectorAppearance()
 
-    var highlightLayerBorderWidth: CGFloat = 2 / UIScreen.main.scale
+    @MainActor var highlightLayerBorderWidth: CGFloat = 2 / UIScreen.main.scale
 
-    var wireframeLayerBorderWidth: CGFloat = 1 / UIScreen.main.scale
+    @MainActor var wireframeLayerBorderWidth: CGFloat = 1 / UIScreen.main.scale
 
     // MARK: - Empty Layer Style
 

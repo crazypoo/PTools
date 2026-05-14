@@ -7,5 +7,6 @@
 import Foundation
 
 protocol DataReloadingProtocol {
+    @MainActor
     func reloadData()
 }

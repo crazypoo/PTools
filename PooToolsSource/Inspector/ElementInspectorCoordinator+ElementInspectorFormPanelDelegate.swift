@@ -16,10 +16,10 @@ extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
             assertionFailure("whaaaat")
             return
         }
-
-        elementInspectorViewController.reloadData()
-
-        elementInspectorViewController.viewModel.element.highlightView?.reloadData()
+        Task { @MainActor in
+            elementInspectorViewController.reloadData()
+            elementInspectorViewController.viewModel.element.highlightView?.reloadData()
+        }
     }
 
     func elementInspectorFormPanel(_ formPanelViewController: ElementInspectorFormPanelViewController, didTap colorPreviewControl: ColorPreviewControl) {

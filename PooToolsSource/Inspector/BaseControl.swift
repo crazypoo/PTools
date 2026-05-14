@@ -10,7 +10,7 @@ import UIKit
 
 extension UIControl.Event {
     /// Event happens when the control's state is changed.
-    static var stateChanged = UIControl.Event(rawValue: 1 << 24)
+    @MainActor static var stateChanged = UIControl.Event(rawValue: 1 << 24)
 }
 
 class BaseControl: UIControl, InternalViewProtocol, ElementInspectorAppearanceProviding {
