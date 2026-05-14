@@ -11,6 +11,7 @@ import SnapKit
 import AttributedString
 import SwifterSwift
 
+@MainActor
 open class PTViewRulerPlugin: NSObject {
     public static let share = PTViewRulerPlugin.init()
     

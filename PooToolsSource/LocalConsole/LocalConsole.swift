@@ -306,7 +306,9 @@ public class LocalConsole: NSObject {
 
     public var menu: UIMenuElement? = nil {
         didSet {
-            terminal!.menuButton.menu = makeMenu()
+            Task { @MainActor in
+                terminal!.menuButton.menu = makeMenu()
+            }
         }
     }
 
@@ -375,7 +377,9 @@ public class LocalConsole: NSObject {
     func commitTextChanges(requestMenuUpdate menuUpdateRequested: Bool) {
         if menuUpdateRequested {
             // Update the context menu to show the clipboard/clear actions.
-            terminal!.menuButton.menu = makeMenu()
+            Task { @MainActor in
+                terminal!.menuButton.menu = makeMenu()
+            }
         }
     }
     
@@ -647,8 +651,10 @@ public class LocalConsole: NSObject {
 
         }
 
-        terminal?.menuButton.showsMenuAsPrimaryAction = true
-        terminal?.menuButton.menu = makeMenu()
+        Task { @MainActor in
+            terminal?.menuButton.showsMenuAsPrimaryAction = true
+            terminal?.menuButton.menu = makeMenu()
+        }
     }
     
     var hasShortened = false
@@ -722,6 +728,7 @@ extension LocalConsole:UITextFieldDelegate {}
 
 //MARK: Menu
 extension LocalConsole {
+    @MainActor
     func makeMenu() -> UIMenu {
         let result: UIAction
         // Something here causes a crash < iOS 15. Fall back to copy text for iOS 15 and below.
@@ -796,7 +803,7 @@ extension LocalConsole {
 
         let inspect = UIAction(title: "Inspectors",image: UIImage.InspectorImage) { _ in
             Task {
-                await Inspector.sharedInstance.present(animated: true)
+                Inspector.sharedInstance.present(animated: true)
             }
         }
         
@@ -940,10 +947,12 @@ extension LocalConsole {
     }
     
     func rulerAction() {
-        if PTViewRulerPlugin.share.showed {
-            PTViewRulerPlugin.share.hide()
-        } else {
-            PTViewRulerPlugin.share.show()
+        Task { @MainActor in
+            if PTViewRulerPlugin.share.showed {
+                PTViewRulerPlugin.share.hide()
+            } else {
+                PTViewRulerPlugin.share.show()
+            }
         }
     }
     
