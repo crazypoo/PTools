@@ -484,7 +484,10 @@ final public class PTTabBarView: UIView {
             highlightLayer.frame = glassBackgroundView.bounds
         }
         // 无动画强行刷正游标位置，避免初次从 (0,0) 飞过来的尴尬现象
-        updateSelectionMaskFrame(to: currentIndex, animated: false)
+        if let leftStack = leftStackView.superview, leftStack.frame.width > 0 {
+            // 如果开启了底色遮罩游标，顺便对其进行无动画校正
+            updateSelectionMaskFrame(to: currentIndex, animated: false)
+        }
     }
 
     public func setup(configs: [PTTabBarItemConfig],
@@ -718,24 +721,32 @@ final public class PTTabBarView: UIView {
     }
 
     private func barItemWidth() -> CGFloat {
-        var itemWidth:CGFloat = 0
+        // 🌟 核心修复：优先使用自身实际 bounds 宽度；若尚未布局完成，使用父容器或主窗口的安全宽度，绝不直接使用物理屏幕全局常量！
+        var safeContainerWidth: CGFloat = self.bounds.width
+        if safeContainerWidth <= 0 {
+            // 兜底推导：当前 App 运行窗口的真实宽度
+            safeContainerWidth = self.superview?.bounds.width ?? AppWindows?.bounds.width ?? 375.0
+        }
+        
+        var itemWidth: CGFloat = 0
         switch layoutStyle {
         case .normal:
             if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2) / CGFloat(items.count)
+                itemWidth = (safeContainerWidth - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2) / CGFloat(items.count)
             } else {
-                itemWidth = CGFloat.kSCREEN_WIDTH / CGFloat(items.count)
+                itemWidth = safeContainerWidth / CGFloat(items.count)
             }
         case .centerRaised:
+            let centerSize = PTAppBaseConfig.share.tabbarCenterButtonSize
             if PTAppBaseConfig.share.tab26Mode {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2 - PTAppBaseConfig.share.tabbarCenterButtonSize) / CGFloat(items.count)
+                itemWidth = (safeContainerWidth - PTAppBaseConfig.share.tabbarBar26LRSpacing * 2 - centerSize) / CGFloat(items.count)
             } else {
-                itemWidth = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.tabbarCenterButtonSize) / CGFloat(items.count)
+                itemWidth = (safeContainerWidth - centerSize) / CGFloat(items.count)
             }
         }
-        return itemWidth
+        return max(itemWidth, 0)
     }
-    
+
     public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) {
         let item = items[index]
         var config = PTBadgeConfiguration()
