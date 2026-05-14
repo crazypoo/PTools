@@ -11,13 +11,13 @@ import SnapKit
 import AttributedString
 import SwifterSwift
 
-public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UIControl) -> Void
-public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:PTActionLayoutButton) -> Void
+// ✅ Swift 6 优化：显式标记 @MainActor 确保 UI 回调在主线程安全执行
+public typealias PTCellSwitchBlock = @MainActor (_ rowText: String, _ sender: UIControl) -> Void
+public typealias PTSectionMoreBlock = @MainActor (_ rowText: String, _ sender: PTActionLayoutButton) -> Void
 
 fileprivate extension UIView {
     /// 绘制简单横线
     func drawLine() -> UIView {
-        
         let lineView = UIView()
         lineView.backgroundColor = UIColor(hexString: "#E8E8E8")
         return lineView
@@ -26,7 +26,7 @@ fileprivate extension UIView {
 
 public final class PTFusionContentView: UIView {
     
-    public var switchValueChangeBlock:PTCellSwitchBlock?
+    public var switchValueChangeBlock: PTCellSwitchBlock?
 
     // MARK: - View Pool（一次创建）
     private var cellModel = PTFusionCellModel()
@@ -35,25 +35,33 @@ public final class PTFusionContentView: UIView {
     private let rightIcon = UIImageView()
     private let titleLabel = UILabel()
     private let contentLabel = UILabel()
-    private lazy var systemSwitch:UISwitch = {
+    
+    // ✅ Swift 6 优化：添加 [weak self] 彻底修复强引用循环（内存泄漏）
+    private lazy var systemSwitch: UISwitch = {
         let view = UISwitch()
-        view.addSwitchAction(handler: { sender in
-            self.switchValueChangeBlock?(self.cellModel.name,sender)
-        })
-        return view
-    }()
-    private lazy var customSwitch:PTSwitch = {
-        let view = PTSwitch()
-        view.valueChangeCallBack = { value in
-            self.switchValueChangeBlock?(self.cellModel.name,self.customSwitch)
+        view.addSwitchAction { [weak self] sender in
+            guard let self else { return }
+            self.switchValueChangeBlock?(self.cellModel.name, sender)
         }
         return view
     }()
+    
+    // ✅ Swift 6 优化：添加 [weak self] 修复强引用循环
+    private lazy var customSwitch: PTSwitch = {
+        let view = PTSwitch()
+        view.valueChangeCallBack = { [weak self] _ in
+            guard let self else { return }
+            self.switchValueChangeBlock?(self.cellModel.name, self.customSwitch)
+        }
+        return view
+    }()
+    
     public var activeSwitch: UIControl? {
         if !systemSwitch.isHidden { return systemSwitch }
         if !customSwitch.isHidden { return customSwitch }
         return nil
     }
+    
     public let moreButton = PTActionLayoutButton()
     private let disclosure = UIImageView()
     
@@ -65,6 +73,7 @@ public final class PTFusionContentView: UIView {
         view.isHidden = true
         return view
     }()
+    
     public lazy var bottomLineView: UIView = {
         let view = drawLine()
         view.isHidden = true
@@ -76,6 +85,7 @@ public final class PTFusionContentView: UIView {
         view.isHidden = true
         return view
     }()
+    
     public lazy var bottomImaginaryLineView: PTImaginaryLineView = {
         let view = PTImaginaryLineView()
         view.isHidden = true
@@ -83,65 +93,63 @@ public final class PTFusionContentView: UIView {
     }()
 
     // MARK: - Constraints（缓存）
-    
+    // ✅ Swift 6 优化：将隐式解包(!)改为可选型(?)，使用更加安全
     private var rightAnchorConstraint: Constraint?
-    private var titleLeftToIcon: Constraint!
-    private var titleLeftToSpacing: Constraint!
+    private var titleLeftToIcon: Constraint?
+    private var titleLeftToSpacing: Constraint?
 
-    private var moreWidthConstraint: Constraint!
-    private var moreTopConstraint: Constraint!
-    private var moreBottomConstraint: Constraint!
-    private var moreRightConstraint: Constraint!
+    private var moreWidthConstraint: Constraint?
+    private var moreTopConstraint: Constraint?
+    private var moreBottomConstraint: Constraint?
+    private var moreRightConstraint: Constraint?
     
-    private var contentRightConstraint: Constraint!
+    private var contentRightConstraint: Constraint?
     
-    private var leftSpacingWidthConstraint: Constraint!
-    private var rightSpacingWidthConstraint: Constraint!
+    private var leftSpacingWidthConstraint: Constraint?
+    private var rightSpacingWidthConstraint: Constraint?
 
     // MARK: - Init
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
+// MARK: - UI Setup
 private extension PTFusionContentView {
         
     func setupUI() {
-        
-        addSubviews([leftSpacingView, rightSpacingView, topLineView, bottomLineView,topImaginaryLineView, bottomImaginaryLineView, leftIcon, rightIcon, titleLabel, contentLabel, systemSwitch,customSwitch, moreButton, disclosure])
+        addSubviews([
+            leftSpacingView, rightSpacingView, topLineView, bottomLineView,
+            topImaginaryLineView, bottomImaginaryLineView, leftIcon, rightIcon,
+            titleLabel, contentLabel, systemSwitch, customSwitch, moreButton, disclosure
+        ])
         
         titleLabel.numberOfLines = 0
         contentLabel.numberOfLines = 0
         
         leftSpacingView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.top.bottom.equalToSuperview()
+            make.left.top.bottom.equalToSuperview()
             leftSpacingWidthConstraint = make.width.equalTo(0).constraint
         }
         
         rightSpacingView.snp.makeConstraints { make in
-            make.right.equalToSuperview()
-            make.top.bottom.equalToSuperview()
+            make.right.top.bottom.equalToSuperview()
             rightSpacingWidthConstraint = make.width.equalTo(0).constraint
         }
         
         topLineView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview().inset(0)
-            make.right.equalToSuperview().inset(0)
+            make.top.left.right.equalToSuperview()
             make.height.equalTo(0)
         }
         
         bottomLineView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(0)
-            make.right.equalToSuperview().inset(0)
+            make.bottom.left.right.equalToSuperview()
             make.height.equalTo(0)
         }
         
@@ -152,74 +160,66 @@ private extension PTFusionContentView {
         bottomImaginaryLineView.snp.makeConstraints { make in
             make.edges.equalTo(self.bottomLineView)
         }
-        // 左图
-        leftIcon.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(0)
-            $0.top.equalToSuperview().inset(0)
-            $0.bottom.equalToSuperview().inset(0)
-            $0.width.equalTo(leftIcon.snp.height)
+        
+        leftIcon.snp.makeConstraints { make in
+            make.left.top.bottom.equalToSuperview()
+            make.width.equalTo(leftIcon.snp.height)
         }
         
-        // 右图
-        rightIcon.snp.makeConstraints {
-            rightAnchorConstraint = $0.right.equalToSuperview().offset(-16).constraint
-            $0.top.equalToSuperview().inset(0)
-            $0.bottom.equalToSuperview().inset(0)
-            $0.width.equalTo(rightIcon.snp.height)
+        rightIcon.snp.makeConstraints { make in
+            rightAnchorConstraint = make.right.equalToSuperview().offset(-16).constraint
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(rightIcon.snp.height)
         }
         
-        // title
-        titleLabel.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            titleLeftToIcon = $0.left.equalTo(leftIcon.snp.right).offset(12).constraint
-            titleLeftToSpacing = $0.left.equalTo(leftSpacingView.snp.right).constraint
+        titleLabel.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            titleLeftToIcon = make.left.equalTo(leftIcon.snp.right).offset(12).constraint
+            titleLeftToSpacing = make.left.equalTo(leftSpacingView.snp.right).constraint
         }
-        titleLeftToSpacing.deactivate()
-        titleLeftToIcon.activate()
+        titleLeftToSpacing?.deactivate()
+        titleLeftToIcon?.activate()
 
-        // content
-        contentLabel.snp.makeConstraints {
-            $0.left.equalTo(titleLabel.snp.right).offset(8)
-            $0.top.bottom.equalToSuperview()
-            $0.right.lessThanOrEqualTo(rightIcon.snp.left).offset(-8)
+        contentLabel.snp.makeConstraints { make in
+            make.left.equalTo(titleLabel.snp.right).offset(8)
+            make.top.bottom.equalToSuperview()
+            make.right.lessThanOrEqualTo(rightIcon.snp.left).offset(-8)
         }
         
-        // switch
-        systemSwitch.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().inset(16)
+        systemSwitch.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().inset(16)
         }
         
-        customSwitch.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().inset(16)
-            $0.size.equalTo(CGSize.SwitchSize)
+        customSwitch.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().inset(16)
+            make.size.equalTo(CGSize.SwitchSize)
         }
         
-        // more
-        moreButton.snp.makeConstraints {
-            moreRightConstraint = $0.right.equalToSuperview().inset(16).constraint
-            moreTopConstraint = $0.top.equalToSuperview().inset(0).constraint
-            moreBottomConstraint = $0.bottom.equalToSuperview().inset(0).constraint
-            moreWidthConstraint = $0.width.equalTo(0).constraint
+        moreButton.snp.makeConstraints { make in
+            moreRightConstraint = make.right.equalToSuperview().inset(16).constraint
+            moreTopConstraint = make.top.equalToSuperview().constraint
+            moreBottomConstraint = make.bottom.equalToSuperview().constraint
+            moreWidthConstraint = make.width.equalTo(0).constraint
         }
         
-        // disclosure
-        disclosure.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().offset(-16)
-            $0.size.equalTo(16)
+        disclosure.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-16)
+            make.size.equalTo(16)
         }
     }
 }
 
+// MARK: - Data & Layout Configuration
 extension PTFusionContentView {
     
     public func configure(model: PTFusionCellModel) {
         cellModel = model
         let newState = model.layoutState
         
-        // ✅ 1. 只有结构变化才更新 layout
+        // 只有结构变化才更新 layout
         if currentLayoutState != newState {
             applyLayout(cellModel: model)
             currentLayoutState = newState
@@ -229,24 +229,20 @@ extension PTFusionContentView {
         applyData(model)
     }
         
-    private func applyLayout(cellModel:PTFusionCellModel) {
-        // 显示控制（不再 remove）
+    private func applyLayout(cellModel: PTFusionCellModel) {
         leftIcon.isHidden = !cellModel.layoutState.showLeftIcon
         rightIcon.isHidden = !cellModel.layoutState.showRightIcon
         titleLabel.isHidden = !cellModel.layoutState.showTitle
         contentLabel.isHidden = !cellModel.layoutState.showContent
-        switch cellModel.accessoryType {
-        case .Switch(let value):
-            switch value {
-            case .Framework:
-                customSwitch.snp.updateConstraints {
-                    $0.right.equalToSuperview().inset(cellModel.rightSpace)
-                    $0.size.equalTo(CGSize(width: cellModel.switchControlWidth, height: CGSize.SwitchSize.height))
-                }
-            default:break
+        
+        if case let .Switch(value) = cellModel.accessoryType,
+           case .Framework = value {
+            customSwitch.snp.updateConstraints { make in
+                make.right.equalToSuperview().inset(cellModel.rightSpace)
+                make.size.equalTo(CGSize(width: cellModel.switchControlWidth, height: CGSize.SwitchSize.height))
             }
-        default:break
         }
+        
         switch cellModel.layoutState.accessory {
         case .Switch:
             disclosure.isHidden = true
@@ -261,7 +257,7 @@ extension PTFusionContentView {
             disclosure.isHidden = true
             moreButton.isHidden = true
         }
-                
+                 
         moreButton.layoutStyle = cellModel.moreLayoutStyle
         moreButton.midSpacing = cellModel.moreDisclosureIndicatorSpace
         moreButton.imageSize = cellModel.moreDisclosureIndicatorSize
@@ -269,25 +265,24 @@ extension PTFusionContentView {
         moreButton.setTitleColor(cellModel.moreColor, state: .normal)
         moreButton.setTitle(cellModel.moreString, state: .normal)
         moreButton.setImage(cellModel.moreDisclosureIndicator, state: .normal)
-        moreRightConstraint.update(inset: cellModel.rightSpace)
-        moreTopConstraint.update(inset: cellModel.imageTopOffset)
-        moreBottomConstraint.update(inset: cellModel.imageBottomOffset)
-        moreWidthConstraint.update(offset: cellModel.cachedMoreWidth)
         
-        disclosure.snp.updateConstraints {
-            $0.right.equalToSuperview().inset(cellModel.rightSpace)
-            $0.size.equalTo(cellModel.moreDisclosureIndicatorSize)
+        // ✅ Swift 6：安全调用可选型约束更新
+        moreRightConstraint?.update(inset: cellModel.rightSpace)
+        moreTopConstraint?.update(inset: cellModel.imageTopOffset)
+        moreBottomConstraint?.update(inset: cellModel.imageBottomOffset)
+        moreWidthConstraint?.update(offset: cellModel.cachedMoreWidth)
+        
+        disclosure.snp.updateConstraints { make in
+            make.right.equalToSuperview().inset(cellModel.rightSpace)
+            make.size.equalTo(cellModel.moreDisclosureIndicatorSize)
         }
 
-        // 动态右边约束目标
         let targetView: UIView = {
             switch cellModel.layoutState.accessory {
             case .Switch(let value):
                 switch value {
-                case .Framework:
-                    return customSwitch
-                case .System:
-                    return systemSwitch
+                case .Framework: return customSwitch
+                case .System: return systemSwitch
                 }
             case .DisclosureIndicator: return disclosure
             case .More: return moreButton
@@ -301,26 +296,26 @@ extension PTFusionContentView {
             make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
         }
         
-        leftSpacingWidthConstraint.update(offset: cellModel.leftSpace)
-        rightSpacingWidthConstraint.update(offset: cellModel.rightSpace)
+        leftSpacingWidthConstraint?.update(offset: cellModel.leftSpace)
+        rightSpacingWidthConstraint?.update(offset: cellModel.rightSpace)
         
         if cellModel.layoutState.showLeftIcon {
-            titleLeftToSpacing.deactivate()
-            titleLeftToIcon.activate()
-            titleLeftToIcon.update(offset: cellModel.contentLeftSpace)
+            titleLeftToSpacing?.deactivate()
+            titleLeftToIcon?.activate()
+            titleLeftToIcon?.update(offset: cellModel.contentLeftSpace)
         } else {
-            titleLeftToIcon.deactivate()
-            titleLeftToSpacing.activate()
+            titleLeftToIcon?.deactivate()
+            titleLeftToSpacing?.activate()
         }
         
-        rightIcon.snp.remakeConstraints { // 这里只允许一个 remake（固定结构）
-            $0.right.equalTo(targetView.snp.left).offset(-cellModel.contentRightSpace)
-            $0.top.equalToSuperview().inset(cellModel.imageTopOffset)
-            $0.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-            $0.width.equalTo(rightIcon.snp.height)
+        rightIcon.snp.remakeConstraints { make in
+            make.right.equalTo(targetView.snp.left).offset(-cellModel.contentRightSpace)
+            make.top.equalToSuperview().inset(cellModel.imageTopOffset)
+            make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
+            make.width.equalTo(rightIcon.snp.height)
         }
-                
-        var rightTargetSpacing:CGFloat = 0
+                 
+        var rightTargetSpacing: CGFloat = 0
         if cellModel.layoutState.showRightIcon {
             rightTargetSpacing = cellModel.contentToRightImageSpacing
         } else {
@@ -339,10 +334,8 @@ extension PTFusionContentView {
                 switch cellModel.layoutState.accessory {
                 case .Switch(let value):
                     switch value {
-                    case .Framework:
-                        return customSwitch
-                    case .System:
-                        return systemSwitch
+                    case .Framework: return customSwitch
+                    case .System: return systemSwitch
                     }
                 case .DisclosureIndicator: return disclosure
                 case .More: return moreButton
@@ -351,10 +344,10 @@ extension PTFusionContentView {
             }
         }()
         
-        contentLabel.snp.remakeConstraints {
-            $0.left.equalTo(titleLabel.snp.right).offset(8)
-            $0.top.bottom.equalToSuperview()
-            $0.right.equalTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
+        contentLabel.snp.remakeConstraints { make in
+            make.left.equalTo(titleLabel.snp.right).offset(8)
+            make.top.bottom.equalToSuperview()
+            make.right.equalTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
         }
         
         switch cellModel.haveLine {
@@ -380,6 +373,7 @@ extension PTFusionContentView {
             topLineView.isHidden = true
             topImaginaryLineView.isHidden = false
         }
+        
         topLineView.backgroundColor = cellModel.topLineColor
         topLineView.snp.updateConstraints { make in
             make.height.equalTo(cellModel.topLineHeight)
@@ -398,49 +392,45 @@ extension PTFusionContentView {
     }
     
     private func applyData(_ model: PTFusionCellModel) {
-        
         titleLabel.attributed.text = model.cachedTitleAttr
-        
         contentLabel.numberOfLines = model.contentNumberOfLines
         contentLabel.attributed.text = model.cachedContentAttr
         
         leftIcon.contentMode = .scaleAspectFit
-        leftIcon.loadImage(contentData: model.leftImage as Any,iCloudDocumentName: model.iCloudDocument)
+        leftIcon.loadImage(contentData: model.leftImage as Any, iCloudDocumentName: model.iCloudDocument)
+        
         rightIcon.contentMode = .scaleAspectFit
-        rightIcon.loadImage(contentData: model.contentIcon as Any,iCloudDocumentName: model.iCloudDocument)
+        rightIcon.loadImage(contentData: model.contentIcon as Any, iCloudDocumentName: model.iCloudDocument)
+        
         disclosure.contentMode = .scaleAspectFit
-        disclosure.loadImage(contentData: model.disclosureIndicatorImage as Any,iCloudDocumentName: model.iCloudDocument)
+        disclosure.loadImage(contentData: model.disclosureIndicatorImage as Any, iCloudDocumentName: model.iCloudDocument)
     }
     
     private func applySwitch(_ model: PTFusionCellModel) {
-        
-        // 默认隐藏
         systemSwitch.isHidden = true
         customSwitch.isHidden = true
         
-        guard case let .Switch(type) = model.accessoryType else {
-            return
-        }
-                
+        guard case let .Switch(type) = model.accessoryType else { return }
+                 
         switch type {
         case .System:
             systemSwitch.onTintColor = model.switchOnTinColor
             systemSwitch.thumbTintColor = model.switchThumbTintColor
             systemSwitch.tintColor = model.switchTintColor
             systemSwitch.backgroundColor = model.switchBackgroundColor
-            customSwitch.isHidden = true
             systemSwitch.isHidden = false
         case .Framework:
             customSwitch.onTintColor = model.switchOnTinColor
             customSwitch.thumbColor = model.switchThumbTintColor
             customSwitch.switchTintColor = model.switchTintColor
             customSwitch.backgroundColor = model.switchBackgroundColor
-            systemSwitch.isHidden = true
             customSwitch.isHidden = false
         }
     }
 }
 
+// ✅ Swift 6 优化：显式添加 @MainActor 保证遵循该协议的类型在并发下对齐 Actor 隔离
+@MainActor
 protocol PTFusionCellProtocol: AnyObject {
     var switchValueChangeBlock: PTCellSwitchBlock? { get set }
     var moreActionBlock: PTSectionMoreBlock? { get set }
@@ -459,7 +449,6 @@ extension PTFusionCellProtocol {
         dataContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
         bindEvents()
     }
     
@@ -494,11 +483,12 @@ extension PTFusionCellProtocol {
 }
 
 @objcMembers
-open class PTFusionCell: PTBaseNormalCell,PTFusionCellProtocol {
+open class PTFusionCell: PTBaseNormalCell, PTFusionCellProtocol {
     public static let ID = "PTFusionCell"
         
     public var switchValueChangeBlock: PTCellSwitchBlock?
     public var moreActionBlock: PTSectionMoreBlock?
+    
     open var switchValue: Bool? {
         didSet { updateSwitch(switchValue) }
     }
@@ -507,27 +497,26 @@ open class PTFusionCell: PTBaseNormalCell,PTFusionCellProtocol {
         didSet { updateModel(cellModel) }
     }
         
-    public lazy var dataContent: PTFusionContentView = {
-        PTFusionContentView()
-    }()
+    public lazy var dataContent: PTFusionContentView = PTFusionContentView()
 
-    public override init(frame:CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupFusionUI(in: contentView)
     }
-        
+    
+    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 @objcMembers
-open class PTFusionSwipeCell: PTBaseSwipeCell,PTFusionCellProtocol {
+open class PTFusionSwipeCell: PTBaseSwipeCell, PTFusionCellProtocol {
     public static let ID = "PTFusionSwipeCell"
     
     public var switchValueChangeBlock: PTCellSwitchBlock?
     public var moreActionBlock: PTSectionMoreBlock?
+    
     open var switchValue: Bool? {
         didSet { updateSwitch(switchValue) }
     }
@@ -536,34 +525,25 @@ open class PTFusionSwipeCell: PTBaseSwipeCell,PTFusionCellProtocol {
         didSet { updateModel(cellModel) }
     }
         
-    public lazy var dataContent: PTFusionContentView = {
-        PTFusionContentView()
-    }()
+    public lazy var dataContent: PTFusionContentView = PTFusionContentView()
 
-    public override init(frame:CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupFusionUI(in: contentView)
     }
 
+    @available(*, unavailable)
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 public extension UICollectionViewCell {
-    func cellContentViewCorners(radius:CGFloat = 0,
-                                borderWidth:CGFloat = 0,
-                                borderColor:UIColor = UIColor.clear,
-                                capsule:Bool = false) {
-        self.contentView.viewCornerRectCorner(radius: radius,borderWidth: borderWidth,borderColor: borderColor,corner: .allCorners,capsule: capsule)
+    func cellContentViewCorners(radius: CGFloat = 0, borderWidth: CGFloat = 0, borderColor: UIColor = .clear, capsule: Bool = false) {
+        self.contentView.viewCornerRectCorner(radius: radius, borderWidth: borderWidth, borderColor: borderColor, corner: .allCorners, capsule: capsule)
     }
     
-    func cellContentViewCornerRectCorners(cornerRadii:CGFloat = 5,
-                                          borderWidth:CGFloat = 0,
-                                          borderColor:UIColor = UIColor.clear,
-                                          corner:UIRectCorner = .allCorners,
-                                          capsule:Bool = false) {
-        self.contentView.viewCornerRectCorner(radius: cornerRadii,borderWidth: borderWidth,borderColor: borderColor,corner: corner,capsule: capsule)
+    func cellContentViewCornerRectCorners(cornerRadii: CGFloat = 5, borderWidth: CGFloat = 0, borderColor: UIColor = .clear, corner: UIRectCorner = .allCorners, capsule: Bool = false) {
+        self.contentView.viewCornerRectCorner(radius: cornerRadii, borderWidth: borderWidth, borderColor: borderColor, corner: corner, capsule: capsule)
     }
 }
