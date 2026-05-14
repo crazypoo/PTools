@@ -7,7 +7,7 @@
 import UIKit
 import SafeSFSymbols
 
-extension Manager: KeyCommandPresentable {
+extension Manager: @preconcurrency KeyCommandPresentable {
     @MainActor var keyCommands: [UIKeyCommand] {
         if let cachedKeyCommands = keyCommandsStore.wrappedValue {
             return cachedKeyCommands

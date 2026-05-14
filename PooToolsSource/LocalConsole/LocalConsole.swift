@@ -367,10 +367,12 @@ public class LocalConsole: NSObject {
     public var terminal:PTTerminal?
     public var maskView:PTDevMaskView?
 
-    fileprivate let userdefaultShares = PTUserDefaultKeysAndValues.shares
+    @MainActor fileprivate let userdefaultShares = PTUserDefaultKeysAndValues.shares
     public var showAllUserDefaultsKeys = false {
         didSet {
-            userdefaultShares.showAllUserDefaultsKeys = showAllUserDefaultsKeys
+            Task { @MainActor in
+                userdefaultShares.showAllUserDefaultsKeys = showAllUserDefaultsKeys
+            }
         }
     }
     

@@ -8,7 +8,7 @@ import Foundation
 
 // MARK: - LayerViewDelegate
 
-extension ViewHierarchyCoordinator: LayerViewDelegate {
+extension ViewHierarchyCoordinator: @preconcurrency LayerViewDelegate {
     func layerView(_ layerView: LayerViewProtocol, didSelect element: ViewHierarchyElementReference, withAction action: ViewHierarchyElementAction) {
         guard canPerform(action: action) else {
             delegate?.perform(action: action, with: element, from: layerView.sourceView)

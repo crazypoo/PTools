@@ -9,6 +9,7 @@
 import UIKit
 import SwifterSwift
 
+@MainActor
 class PTUserDefaultKeysAndValues: NSObject {
     static let shares = PTUserDefaultKeysAndValues()
     

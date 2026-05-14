@@ -7,7 +7,7 @@
 import UIKit
 
 extension HierarchyInspectorViewModel {
-    final class SnapshotViewModel: NSObject, HierarchyInspectorSectionViewModelProtocol {
+    final class SnapshotViewModel: NSObject, @preconcurrency HierarchyInspectorSectionViewModelProtocol {
         let shouldAnimateKeyboard: Bool = true
 
         private struct Details: HierarchyInspectorReferenceSummaryCellViewModelProtocol {

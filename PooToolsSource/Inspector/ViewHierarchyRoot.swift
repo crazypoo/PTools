@@ -108,7 +108,7 @@ final class ViewHierarchyRoot {
     }
 }
 
-extension ViewHierarchyRoot: ViewHierarchyElementReference {
+extension ViewHierarchyRoot: @preconcurrency ViewHierarchyElementReference {
     var viewHierarchy: [ViewHierarchyElementReference] { children.flatMap(\.viewHierarchy) }
 
     var underlyingObject: NSObject? { application }

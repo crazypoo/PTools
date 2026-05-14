@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension ViewHierarchyCoordinator: AsyncOperationProtocol {
+extension ViewHierarchyCoordinator: @preconcurrency AsyncOperationProtocol {
     func asyncOperation(name: String, execute closure: @escaping Closure) {
         let mainTask = MainThreadOperation(name: name, closure: closure)
 

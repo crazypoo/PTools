@@ -11,7 +11,7 @@ import UIKit
 /// A coordinator is an abstract object that has the sole responsibility to coordinate a fragment of an App's overall navigation.
 ///
 /// Basically which screen should be shown, what screen should be shown next, etc.
-open class Coordinator<Dependencies, Presenter, Content>: CoordinatorProtocol, Dismissable, Startable {
+open class Coordinator<Dependencies, Presenter, Content>: CoordinatorProtocol, Dismissable, @preconcurrency Startable {
     public typealias _Self = Coordinator<Dependencies, Presenter, Content>
 
     /// The dependencies neeeded for this part of the navigation flow.

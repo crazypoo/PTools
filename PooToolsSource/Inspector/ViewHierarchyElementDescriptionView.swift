@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 struct ViewHierarchyElementSummary: ElementInspectorAppearanceProviding {
     var automaticallyAdjustIndentation: Bool = false
     var hideCollapseButton: Bool = true

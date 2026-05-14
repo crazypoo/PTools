@@ -7,7 +7,7 @@
 import MobileCoreServices
 import UIKit
 
-extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
+extension ElementInspectorCoordinator: @preconcurrency ElementInspectorFormPanelDelegate {
     func elementInspectorFormPanel(_ formPanelViewController: ElementInspectorFormPanelViewController,
                                    didUpdateProperty property: InspectorElementProperty,
                                    in section: InspectorElementSection)
@@ -31,11 +31,13 @@ extension ElementInspectorCoordinator: ElementInspectorFormPanelDelegate {
             }
 
             if let sheet = $0.sheetPresentationController {
-                sheet.detents = [.medium(), .large()]
-                sheet.selectedDetentIdentifier = .medium
-                sheet.prefersGrabberVisible = true
-                sheet.sourceView = colorPreviewControl
-                sheet.preferredCornerRadius = Inspector.sharedInstance.appearance.elementInspector.horizontalMargins
+                Task { @MainActor in
+                    sheet.detents = [.medium(), .large()]
+                    sheet.selectedDetentIdentifier = .medium
+                    sheet.prefersGrabberVisible = true
+                    sheet.sourceView = colorPreviewControl
+                    sheet.preferredCornerRadius = Inspector.sharedInstance.appearance.elementInspector.horizontalMargins
+                }
             }
         }
 

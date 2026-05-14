@@ -6,7 +6,7 @@
 
 import UIKit
 
-enum DefaultElementIdentityLibrary: Swift.CaseIterable, InspectorElementLibraryProtocol {
+enum DefaultElementIdentityLibrary: Swift.CaseIterable, @preconcurrency InspectorElementLibraryProtocol {
     case preview
     case hierarchy
     case highlightView

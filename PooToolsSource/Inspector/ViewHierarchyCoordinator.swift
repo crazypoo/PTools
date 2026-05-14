@@ -49,7 +49,7 @@ final class ViewHierarchyCoordinator: Coordinator<ViewHierarchyDependencies, Ope
 
 // MARK: - DismissablePresentationProtocol
 
-extension ViewHierarchyCoordinator: DismissablePresentationProtocol {
+extension ViewHierarchyCoordinator: @preconcurrency DismissablePresentationProtocol {
     func dismissPresentation(animated: Bool) {
         clearData()
     }
@@ -57,7 +57,7 @@ extension ViewHierarchyCoordinator: DismissablePresentationProtocol {
 
 // MARK: - ViewHierarchyActionableProtocol
 
-extension ViewHierarchyCoordinator: ViewHierarchyActionableProtocol {
+extension ViewHierarchyCoordinator: @preconcurrency ViewHierarchyActionableProtocol {
     func canPerform(action: ViewHierarchyElementAction) -> Bool {
         switch action {
         case .layer: return true

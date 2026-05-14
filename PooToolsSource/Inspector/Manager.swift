@@ -62,7 +62,9 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
         )
 
         if dependencies.configuration.enableLayoutSubviewsSwizzling {
-            UIView.startSwizzling()
+            Task { @MainActor in
+                UIView.startSwizzling()
+            }
         }
     }
 
@@ -70,7 +72,7 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
         operationQueue.cancelAllOperations()
 
         Task { @MainActor in
-            viewHierarchyCoordinator.removeAllLayers()
+            self.viewHierarchyCoordinator.removeAllLayers()
         }
 
         children.forEach { child in
@@ -86,7 +88,7 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
 
 // MARK: - AsyncOperationProtocol
 
-extension Manager: AsyncOperationProtocol {
+extension Manager: @preconcurrency AsyncOperationProtocol {
     func asyncOperation(name: String = #function, execute closure: @escaping Closure) {
         operationQueue.addOperation(
             MainThreadAsyncOperation(name: name, closure: closure)

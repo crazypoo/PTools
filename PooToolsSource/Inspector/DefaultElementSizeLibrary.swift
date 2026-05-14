@@ -6,7 +6,7 @@
 
 import UIKit
 
-enum DefaultElementSizeLibrary: InspectorElementLibraryProtocol, Swift.CaseIterable {
+enum DefaultElementSizeLibrary: @preconcurrency InspectorElementLibraryProtocol, Swift.CaseIterable {
     case button
     case segmentedControl
     case label

@@ -120,7 +120,7 @@ final class InspectorHighlightView: LayerView {
         name: String,
         colorScheme: ViewHierarchyColorScheme,
         element: ViewHierarchyElementReference,
-        border borderWidth: CGFloat = Inspector.sharedInstance.appearance.highlightLayerBorderWidth
+        border borderWidth: CGFloat? = nil
     ) {
         self.colorScheme = colorScheme
 
@@ -128,7 +128,7 @@ final class InspectorHighlightView: LayerView {
             frame: frame,
             element: element,
             color: .systemGray,
-            border: borderWidth
+            border: borderWidth ?? Inspector.sharedInstance.appearance.highlightLayerBorderWidth
         )
 
         preservesSuperviewLayoutMargins = true

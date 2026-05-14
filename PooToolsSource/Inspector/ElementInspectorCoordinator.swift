@@ -64,7 +64,9 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
     private(set) lazy var colorPicker = ColorPickerPresenter(
         onColorSelected: { [weak self] selectedColor in
             guard let self = self else { return }
-            self.formPanelController?.selectColor(selectedColor)
+            Task { @MainActor in
+                self.formPanelController?.selectColor(selectedColor)
+            }
         },
         onDimiss: { [weak self] in
             guard let self = self else { return }
@@ -77,8 +79,10 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
 
         for url in urls {
             guard let data = try? Data(contentsOf: url) else { continue }
-            let image = UIImage(data: data)
-            self.formPanelController?.selectImage(image)
+            Task { @MainActor in
+                let image = UIImage(data: data)
+                self.formPanelController?.selectImage(image)
+            }
             break
         }
     }
@@ -205,7 +209,7 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
 
 // MARK: - ViewHierarchyActionableProtocol
 
-extension ElementInspectorCoordinator: ViewHierarchyActionableProtocol {
+extension ElementInspectorCoordinator: @preconcurrency ViewHierarchyActionableProtocol {
     func canPerform(action: ViewHierarchyElementAction) -> Bool {
         switch action {
         case .inspect:
@@ -253,7 +257,7 @@ extension ElementInspectorCoordinator: ViewHierarchyActionableProtocol {
 
 // MARK: - DismissablePresentationProtocol
 
-extension ElementInspectorCoordinator: DismissablePresentationProtocol {
+extension ElementInspectorCoordinator: @preconcurrency DismissablePresentationProtocol {
     @MainActor func dismissPresentation(animated: Bool) {
         if let presentingViewController = navigationController.presentingViewController {
             presentingViewController.dismiss(animated: animated, completion: nil)
@@ -314,7 +318,7 @@ private extension ElementInspectorCoordinator {
     }
 }
 
-extension ElementInspectorCoordinator: UIViewControllerTransitionPresenterDelegate {
+extension ElementInspectorCoordinator: @preconcurrency UIViewControllerTransitionPresenterDelegate {
     @MainActor func animationController(forPresented presented: UIViewController,
                              presenting: UIViewController,
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning?

@@ -40,6 +40,7 @@ extension ViewHierarchyElement {
         var shortElementDescription: String
         var traitCollection: UITraitCollection
 
+        @MainActor
         init(view: UIView, icon: UIImage?, depth: Int) {
             self.depth = depth
 
@@ -77,7 +78,7 @@ extension ViewHierarchyElement {
 }
 
 @MainActor
-final class ViewHierarchyElement: CustomDebugStringConvertible {
+final class ViewHierarchyElement: @preconcurrency CustomDebugStringConvertible {
     var debugDescription: String {
         String(describing: store.latest)
     }
@@ -159,7 +160,7 @@ final class ViewHierarchyElement: CustomDebugStringConvertible {
 
 // MARK: - ViewHierarchyElementReference {
 
-extension ViewHierarchyElement: ViewHierarchyElementReference {
+extension ViewHierarchyElement: @preconcurrency ViewHierarchyElementReference {
     var canHostContextMenuInteraction: Bool {
         store.latest.canHostContextMenuInteraction
     }
@@ -426,7 +427,7 @@ extension ViewHierarchyElement: ViewHierarchyElementReference {
 
 // MARK: - Hashable
 
-extension ViewHierarchyElement: Hashable {
+extension ViewHierarchyElement: @preconcurrency Hashable {
     static func == (lhs: ViewHierarchyElement, rhs: ViewHierarchyElement) -> Bool {
         lhs.objectIdentifier == rhs.objectIdentifier
     }

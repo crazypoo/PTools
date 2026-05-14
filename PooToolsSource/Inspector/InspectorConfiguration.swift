@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 public struct InspectorConfiguration {
     var elementInspectorConfiguration = ElementInspectorConfiguration()
 

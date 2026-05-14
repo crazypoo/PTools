@@ -12,5 +12,5 @@ protocol InspectorAppearanceProviding {
 }
 
 extension InspectorAppearanceProviding {
-    var inspectorAppearance: InspectorAppearance { Inspector.sharedInstance.appearance }
+    @MainActor var inspectorAppearance: InspectorAppearance { Inspector.sharedInstance.appearance }
 }
