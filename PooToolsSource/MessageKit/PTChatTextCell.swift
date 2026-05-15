@@ -22,7 +22,7 @@ public class PTChatTextCell: PTChatBaseCell {
 
     public var cellModel: PTChatListModel! {
         didSet {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.setBaseSubviews(cellModel: self.cellModel)
                 self.dataContentSets(cellModel: self.cellModel)
             }

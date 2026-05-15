@@ -123,8 +123,11 @@ public extension PTPOP where Base == CGFloat {
 extension CGFloat: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = CGFloat
     public var adapter: CGFloat {
-        let scale = adapterScale()
-        let value = self * scale
+        var value:CGFloat = 0
+        Task { @MainActor in
+            let scale = adapterScale()
+            value = self * scale
+        }
         return value
     }
 }

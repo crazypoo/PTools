@@ -51,6 +51,7 @@ public protocol PTEyeTrackingDelegate: NSObjectProtocol {
  库和应用程序之间的通信都是通过EyeTrackingManager进行的。
  - 要在 iOS 12.0 + , TrueDepthCamera的设备上运行
  */
+@MainActor
 public class PTEyeTrackingManager: NSObject {
     
     /**
@@ -197,9 +198,9 @@ extension PTEyeTrackingManager {
 }
 
 //MARK: PTEyeTrackingSessionManagerDelegate的时间处理
-extension PTEyeTrackingManager: PTEyeTrackingSessionManagerDelegate {
+extension PTEyeTrackingManager: @preconcurrency PTEyeTrackingSessionManagerDelegate {
     
-    func update(withFaceAnchor anchor: ARFaceAnchor) {
+    @MainActor func update(withFaceAnchor anchor: ARFaceAnchor) {
         guard let dataManager = dataManager as? PTEyeTrackingDataManager else {
             return
         }
@@ -215,7 +216,7 @@ extension PTEyeTrackingManager: PTEyeTrackingSessionManagerDelegate {
 // MARK: 屏幕旋转处理
 extension PTEyeTrackingManager {
     
-    @objc private func rotated() {
+    @MainActor @objc private func rotated() {
         guard let portraitScreenSize = portraitScreenSize else { return }
         
         switch UIDevice.current.orientation {
@@ -237,7 +238,7 @@ extension PTEyeTrackingManager {
 extension PTEyeTrackingManager {
     
     /// 发生您正在看的部分的事件。
-    private func findLookAt(with lookAtPoint: CGPoint) {
+    @MainActor private func findLookAt(with lookAtPoint: CGPoint) {
         // 在无法追踪的情况下会被return。
         if trackingState == .notTracked {
             return

@@ -110,12 +110,12 @@ public class PTDarkModeControl: PTBaseViewController {
                     cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
                     if cellModel.name == PTDarkModeOption.smartCellName {
                         cell.switchValue = PTDarkModeOption.isSmartPeeling
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             cell.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
                         }
                     } else if cellModel.name == PTDarkModeOption.followSystemCellName {
                         cell.switchValue = PTDarkModeOption.isFollowSystem
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             cell.contentView.viewCornerRectCorner(bottomLeft: 5,bottomRight: 5, corner: [.bottomLeft,.bottomRight])
                         }
                     }
@@ -228,7 +228,7 @@ public class PTDarkModeControl: PTBaseViewController {
 
 extension PTDarkModeControl: PTThemeable {
     public func apply() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
             self.changeStatusBar(type: type)
             self.backButton.setImage(PTDarkModeOption.backImage, for: .normal)

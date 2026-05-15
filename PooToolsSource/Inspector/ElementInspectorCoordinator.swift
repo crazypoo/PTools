@@ -71,7 +71,9 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
         },
         onDimiss: { [weak self] in
             guard let self = self else { return }
-            self.formPanelController?.finishColorSelection()
+            Task { @MainActor in
+                self.formPanelController?.finishColorSelection()
+            }
         }
     )
 

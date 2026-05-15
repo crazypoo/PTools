@@ -70,7 +70,10 @@ public extension CGSize {
 extension CGSize: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = CGSize
     public var adapter: CGSize {
-        let scale = adapterScale()
+        var scale:CGFloat = 0
+        Task { @MainActor in
+            scale = adapterScale()
+        }
         let width = width * scale
         let height = height * scale
         return CGSize(width: width, height: height)

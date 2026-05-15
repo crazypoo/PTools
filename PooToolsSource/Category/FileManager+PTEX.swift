@@ -778,7 +778,7 @@ public extension PTPOP where Base: FileManager {
                 let videoImage = getVideoImage(videoUrlSouceType: .server, path: path, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
                 allImageArray.append(videoImage)
             }
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 videoImages(allImageArray)
             }
         }

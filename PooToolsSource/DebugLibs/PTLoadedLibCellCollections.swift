@@ -105,22 +105,24 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
         \(desc,.foreground(.lightGray),.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)))
         """))
         """
-            self.libName.attributed.text = att
-            
-            self.statusLabel.text = library.isPrivate ? "Private" : "Public"
-            self.statusLabel.textColor = library.isPrivate ? .systemRed : .systemGreen
-            self.statusLabel.backgroundColor = self.statusLabel.textColor.withAlphaComponent(0.5)
-            self.statusLabel.snp.updateConstraints { make in
-                make.width.equalTo(self.statusLabel.sizeFor().width + 16)
-            }
+            Task { @MainActor in
+                self.libName.attributed.text = att
+                
+                self.statusLabel.text = library.isPrivate ? "Private" : "Public"
+                self.statusLabel.textColor = library.isPrivate ? .systemRed : .systemGreen
+                self.statusLabel.backgroundColor = self.statusLabel.textColor.withAlphaComponent(0.5)
+                self.statusLabel.snp.updateConstraints { make in
+                    make.width.equalTo(self.statusLabel.sizeFor().width + 16)
+                }
 
-            // Configure expand indicator and loading state
-            if library.isLoading {
-                self.arrowImage.isHidden = true
-                self.loadingIndicator.startAnimating()
-            } else {
-                self.arrowImage.isHidden = false
-                self.loadingIndicator.stopAnimating()
+                // Configure expand indicator and loading state
+                if library.isLoading {
+                    self.arrowImage.isHidden = true
+                    self.loadingIndicator.startAnimating()
+                } else {
+                    self.arrowImage.isHidden = false
+                    self.loadingIndicator.stopAnimating()
+                }
             }
         }
     }

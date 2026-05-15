@@ -33,7 +33,7 @@ public class PTChatConfig: NSObject {
     
     //MARK: Base setting
     ///文本內容實際顯示最大的Width
-    public static let ChatContentShowMaxWidth = CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset
+    @MainActor public static let ChatContentShowMaxWidth = CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset
     ///設置持有人ID
     public var imOwnerId:String = ""
     @PTClampedPropertyWrapper(range:10...120) public var messageExpTime: Int = 60

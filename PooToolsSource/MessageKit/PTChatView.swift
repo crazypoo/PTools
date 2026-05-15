@@ -215,10 +215,14 @@ public class PTChatView: UIView {
                             } else if itemRow.ID == PTChatMediaCell.ID,let mediaCell = cell as? PTChatMediaCell {
                                 mediaCell.cellModel = cellModel
                                 mediaCell.mediaPlayButtonTapCallback = {
-                                    self.tapMessageHandler?(cellModel,indexPath)
+                                    Task { @MainActor in
+                                        self.tapMessageHandler?(cellModel,indexPath)
+                                    }
                                 }
                                 mediaCell.mediaDownloadFinishCallback = {
-                                    self.messageDownloadedHandler?(cellModel,indexPath)
+                                    Task { @MainActor in
+                                        self.messageDownloadedHandler?(cellModel,indexPath)
+                                    }
                                 }
                             } else if itemRow.ID == PTChatMapCell.ID,let mapCell = cell as? PTChatMapCell {
                                 mapCell.cellModel = cellModel
@@ -321,7 +325,9 @@ public class PTChatView: UIView {
                         let items = menuTitles.enumerated().map { index, title in
                             
                             let menuItem = PTEditMenuAction(title: title) {
-                                self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
+                                Task { @MainActor in
+                                    self.cellMenuItemsTapCallBack?(indexPath, cellModel, title, index)
+                                }
                             }
                             return menuItem
                         }

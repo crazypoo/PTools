@@ -360,20 +360,21 @@ public class PTSheetViewController: PTBaseViewController {
         // [修复核心漏洞 2] 必须使用 [weak self] 防止内存泄漏！
         self.contentViewController.pullBarTappedAction = { [weak self] in
             guard let self = self else { return }
-            guard UIAccessibility.isVoiceOverRunning else { return }
-            
-            let shouldDismiss = self.allowGestureThroughOverlay && (self.dismissOnOverlayTap || self.dismissOnPull)
-            guard !shouldDismiss else {
-                self.attemptDismiss(animated: true)
-                return
-            }
-            
-            if self.sizes.count > 1 {
-                let index = (self.sizes.firstIndex(of: self.currentSize) ?? 0) + 1
-                if index >= self.sizes.count {
-                    self.resize(to: self.sizes[0])
-                } else {
-                    self.resize(to: self.sizes[index])
+            Task { @MainActor in
+                guard UIAccessibility.isVoiceOverRunning else { return }
+                let shouldDismiss = self.allowGestureThroughOverlay && (self.dismissOnOverlayTap || self.dismissOnPull)
+                guard !shouldDismiss else {
+                    self.attemptDismiss(animated: true)
+                    return
+                }
+                
+                if self.sizes.count > 1 {
+                    let index = (self.sizes.firstIndex(of: self.currentSize) ?? 0) + 1
+                    if index >= self.sizes.count {
+                        self.resize(to: self.sizes[0])
+                    } else {
+                        self.resize(to: self.sizes[index])
+                    }
                 }
             }
         }

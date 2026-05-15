@@ -30,7 +30,7 @@ enum PTDebugUserInfo {
         ].compactMap { $0 }
     }
 
-    static func getAppVersionInfo() -> Info? {
+    @MainActor static func getAppVersionInfo() -> Info? {
         guard let version = kAppVersion else {
             return nil
         }
@@ -38,7 +38,7 @@ enum PTDebugUserInfo {
         return Info(title: "App version", detail: "\(version)")
     }
 
-    static func getAppBuildInfo() -> Info? {
+    @MainActor static func getAppBuildInfo() -> Info? {
         guard let build = kAppBuildVersion
         else {
             return nil
@@ -47,7 +47,7 @@ enum PTDebugUserInfo {
         return Info(title: "Build version", detail: "Build: \(build)")
     }
 
-    static func getBundleName() -> Info? {
+    @MainActor static func getBundleName() -> Info? {
         guard let bundleName = kAppName else {
             return nil
         }
@@ -55,7 +55,7 @@ enum PTDebugUserInfo {
         return Info(title: "Bundle name", detail: "\(bundleName)")
     }
 
-    static func getBundleId() -> Info? {
+    @MainActor static func getBundleId() -> Info? {
         guard let bundleID = kAppBundleId else {
             return nil
         }

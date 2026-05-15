@@ -138,7 +138,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
             make.top.equalToSuperview().inset(PTChatBaseCell.timeTopSpace)
             make.height.equalTo(timeLabelHeight)
         }
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor  [ weak self] in
             self?.messageTimeLabel.viewCorner(radius: timeLabelHeight / 2)
         }
     }

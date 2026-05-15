@@ -88,13 +88,17 @@ public class PTDynamicNotificationView: UIView {
     public func showNotification() {
         PTAnimationFunction.animationIn(animationView: self, animationType: .Top, transformValue: contentHeight)
         PTGCDManager.gcdAfter(time: showTime) {
-            self.hideNotification()
+            Task { @MainActor in
+                self.hideNotification()
+            }
         }
     }
     
     public func hideNotification() {
         PTAnimationFunction.animationOut(animationView: self, animationType: .Top,toValue: -(self.contentHeight + 10)) {
-            self.alpha = 0
+            Task { @MainActor in
+                self.alpha = 0
+            }
         } completion: { _ in
             self.removeFromSuperview()
             self.hideHandler?()

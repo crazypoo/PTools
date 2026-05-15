@@ -25,12 +25,13 @@ import SwifterSwift
 @objcMembers
 public class PTWhatsNews:NSObject {
 
-    public static func markCurrentVersionAsPresented() {
+    @MainActor public static func markCurrentVersionAsPresented() {
         PTCoreUserDefultsWrapper.PTWhatNewsLatestAppVersionPresented = kAppVersion!
     }
 
-    public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = kAppVersion) -> Bool {
-        guard let currentAppVersion = currentVersion else { return false }
+    @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool {
+        let newVersion = currentVersion ?? kAppVersion
+        guard let currentAppVersion = newVersion else { return false }
         let previousAppVersion = PTCoreUserDefultsWrapper.PTWhatNewsLatestAppVersionPresented
         let didUpdate = previousAppVersion != currentAppVersion
         switch option {

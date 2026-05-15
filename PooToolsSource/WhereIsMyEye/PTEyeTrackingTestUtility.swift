@@ -12,7 +12,7 @@ class PTEyeTrackingTestUtility {
     
     internal var trackingState: PTEyeTrackingState = .notTracked
     internal var semaphore: Bool = false
-    internal var screenSize = kSCREEN_BOUNDS
+    @MainActor internal var screenSize = kSCREEN_BOUNDS
     
     private var portraitScreenSize: CGRect?
     
@@ -21,7 +21,7 @@ class PTEyeTrackingTestUtility {
     private var upperAreaView: UIView?
     private var bottomAreaView: UIView?
     
-    internal init(){
+    @MainActor internal init(){
         // 指定纵向设备屏幕大小
         if CGFloat.kSCREEN_WIDTH < CGFloat.kSCREEN_HEIGHT {
             portraitScreenSize = kSCREEN_BOUNDS
@@ -30,7 +30,7 @@ class PTEyeTrackingTestUtility {
         }
     }
     
-    internal func showStatusView(parent: UIView) {
+    @MainActor internal func showStatusView(parent: UIView) {
         if statusLabel == nil {
             let label = UILabel(frame: CGRect(x: 50,
                                               y: kSCREEN_BOUNDS.height / 2 - 15,
@@ -47,7 +47,7 @@ class PTEyeTrackingTestUtility {
         statusLabel?.isHidden = false
     }
     
-    internal func showCursorView(parent: UIView) {
+    @MainActor internal func showCursorView(parent: UIView) {
         if cursorView == nil {
             let size = CGFloat(12)
             let view = UIView(frame: CGRect(x: kSCREEN_BOUNDS.width / 2 - size / 2,
@@ -79,7 +79,7 @@ class PTEyeTrackingTestUtility {
         cursorView?.isHidden = true
     }
     
-    internal func updateTestViews(with lookAtPoint: CGPoint) {
+    @MainActor internal func updateTestViews(with lookAtPoint: CGPoint) {
         //self.updateStatusLabel(with: lookAtPoint)
         updateCursorView(with: lookAtPoint)
     }
@@ -94,7 +94,7 @@ class PTEyeTrackingTestUtility {
 //        statusLabel.text = "x : \(transformedPoint.x), y : \(transformedPoint.y)"
 //    }
     
-    internal func updateCursorView(with lookAtPoint: CGPoint) {
+    @MainActor internal func updateCursorView(with lookAtPoint: CGPoint) {
         guard let cursorView = cursorView else { return }
         
         var x = max(-kSCREEN_BOUNDS.width / 2, min(lookAtPoint.x, kSCREEN_BOUNDS.width / 2))
@@ -124,7 +124,7 @@ class PTEyeTrackingTestUtility {
     }
     
     
-    internal func rotated(){
+    @MainActor internal func rotated(){
         // 存在在屏幕旋转时无法准确定位光标的错误
         let size: CGFloat = 12
         cursorView?.frame.origin.x = (kSCREEN_BOUNDS.width / 2) - (size / 2)

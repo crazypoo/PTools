@@ -67,7 +67,7 @@ public class PTChatMapCell: PTChatBaseCell {
         guard let _ = cellModel.msgContent else { return }
 
         func setDicTolocation(dic:NSDictionary) {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 let lat = (dic["lat"] as? String) ?? "0"
                 let lng = (dic["lng"] as? String) ?? "0"
             
@@ -76,7 +76,7 @@ public class PTChatMapCell: PTChatBaseCell {
             }
         }
         
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             switch cellModel.msgContent {
             case let dicContent as NSDictionary:
                 setDicTolocation(dic: dicContent)

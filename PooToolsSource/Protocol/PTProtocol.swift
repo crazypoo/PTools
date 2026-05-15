@@ -57,7 +57,7 @@ public protocol PTNumberValueAdapterable {
 }
 
 extension PTNumberValueAdapterable {
-    func adapterScale() -> Double {
+    @MainActor func adapterScale() -> Double {
         if let scale = PTNumberValueAdapter.share.adapterScale {
             return scale
         } else {

@@ -88,7 +88,7 @@ public class PTVision: NSObject {
                         resultText += candidates.map { $0.string }.joined(separator: "\n")
                     }
 
-                    PTGCDManager.gcdMain {
+                    Task { @MainActor in
                         PTNSLogConsole(resultText, levelType: PTLogMode, loggerType: .vision)
                         resultBlock?(resultText, observations)
                     }

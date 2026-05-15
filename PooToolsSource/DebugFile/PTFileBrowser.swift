@@ -30,7 +30,9 @@ public extension PTFileBrowser {
         // 增加 [weak self] 确保闭包内的内存安全
         navigationController.dismiss(animated: false) { [weak self] in
             guard let self = self else { return }
-            PTUtils.getCurrentVC()?.pt_present(self.navigationController, animated: true, completion: nil)
+            Task { @MainActor in
+                PTUtils.getCurrentVC()?.pt_present(self.navigationController, animated: true, completion: nil)
+            }
         }
     }
 

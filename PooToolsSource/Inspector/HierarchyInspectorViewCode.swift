@@ -159,7 +159,7 @@ final class HierarchyInspectorViewCode: BaseView {
             return
         }
 
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.delegate?.hierarchyInspectorViewCodeDidTapOutside(self)
         }
     }

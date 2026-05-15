@@ -87,7 +87,7 @@ final class ElementInspectorViewController: ElementInspectorPanelViewController,
 
         guard let formPanel = currentPanelViewController as? ElementInspectorFormPanelViewController else { return }
 
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             formPanel.togglePanels(to: formPanel.listState.next() ?? .allCollapsed, animated: true)
         }
     }

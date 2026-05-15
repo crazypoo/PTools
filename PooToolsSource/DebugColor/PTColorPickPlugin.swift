@@ -16,7 +16,7 @@ public typealias PTColorPickMagnifyLayerBlock = (CGPoint) -> String
 public let kPTClosePluginNotification = "kPTClosePluginNotification"
 
 public extension CGFloat {
-    static func SizeFrom750(x: CGFloat) -> CGFloat {
+    @MainActor static func SizeFrom750(x: CGFloat) -> CGFloat {
         x * CGFloat.kSCREEN_WIDTH / 750
     }
 }

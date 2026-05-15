@@ -142,7 +142,9 @@ public class PTCycleScrollView: UIView {
             }
             if clearSubs {
                 PTGCDManager.gcdAfter(time: 0.01) { [weak self] in
-                    self?.collectionViewSetData()
+                    Task { @MainActor in
+                        self?.collectionViewSetData()
+                    }
                 }
             }
         }
@@ -473,47 +475,48 @@ extension PTCycleScrollView {
     private func setupArrowIcon() {
         PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
             guard let self = self else { return }
+            Task { @MainActor in
+                // 验证无限轮播开启
+                guard self.infiniteLoop else {
+                    assertionFailure("当前未开启无限轮播 `infiniteLoop`，请设置后使用此模式。")
+                    return
+                }
 
-            // 验证无限轮播开启
-            guard self.infiniteLoop else {
-                assertionFailure("当前未开启无限轮播 `infiniteLoop`，请设置后使用此模式。")
-                return
+                // 验证方向图标资源存在
+                guard let arrowIcons = self.arrowLRIcon else {
+                    assertionFailure("初始化方向图片 `arrowLRIcon` 数据为空。")
+                    return
+                }
+
+                // 默认 Frame 初始化
+                if self.arrowLRFrame?.count ?? 0 < 2 {
+                    let width = self.frame.width * 0.25
+                    let height = self.frame.height
+                    self.arrowLRFrame = [
+                        CGRect(x: 5, y: 0, width: width, height: height),
+                        CGRect(x: self.frame.width - width - 5, y: 0, width: width, height: height)
+                    ]
+                }
+
+                guard let arrowFrames = self.arrowLRFrame, arrowFrames.count >= 2 else {
+                    assertionFailure("初始化方向图片 `arrowLRFrame` 数据为空或数量不足。")
+                    return
+                }
+
+                // 添加左右箭头图标
+                self.addArrowImageView(
+                    frame: arrowFrames[0],
+                    image: arrowIcons.first,
+                    tag: 0,
+                    contentMode: .left
+                )
+                self.addArrowImageView(
+                    frame: arrowFrames[1],
+                    image: arrowIcons.last,
+                    tag: 1,
+                    contentMode: .right
+                )
             }
-
-            // 验证方向图标资源存在
-            guard let arrowIcons = self.arrowLRIcon else {
-                assertionFailure("初始化方向图片 `arrowLRIcon` 数据为空。")
-                return
-            }
-
-            // 默认 Frame 初始化
-            if self.arrowLRFrame?.count ?? 0 < 2 {
-                let width = self.frame.width * 0.25
-                let height = self.frame.height
-                self.arrowLRFrame = [
-                    CGRect(x: 5, y: 0, width: width, height: height),
-                    CGRect(x: self.frame.width - width - 5, y: 0, width: width, height: height)
-                ]
-            }
-
-            guard let arrowFrames = self.arrowLRFrame, arrowFrames.count >= 2 else {
-                assertionFailure("初始化方向图片 `arrowLRFrame` 数据为空或数量不足。")
-                return
-            }
-
-            // 添加左右箭头图标
-            self.addArrowImageView(
-                frame: arrowFrames[0],
-                image: arrowIcons.first,
-                tag: 0,
-                contentMode: .left
-            )
-            self.addArrowImageView(
-                frame: arrowFrames[1],
-                image: arrowIcons.last,
-                tag: 1,
-                contentMode: .right
-            )
         }
     }
 
@@ -700,7 +703,7 @@ extension PTCycleScrollView {
         
         PTGCDManager.gcdMain {
             PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     if let image = image {
                         self.videoFrameCache.setObject(image, forKey: url as NSString)
                         completion(image)
@@ -801,7 +804,9 @@ extension PTCycleScrollView {
                 if itemIndex == 0, let url = URL(string: videoPath) {
                     if self!.autoPlayVideo {
                         PTGCDManager.gcdAfter(time: 0.1) {
-                            cell.setPlayer(videoQ: url)
+                            Task { @MainActor in
+                                cell.setPlayer(videoQ: url)
+                            }
                         }
                     }
                 } else {
@@ -810,7 +815,9 @@ extension PTCycleScrollView {
             }
             cell.showPlayButton = self.showPlayButton
             cell.playEndcallback = {
-                self.playEndCallback?()
+                Task { @MainActor in
+                    self.playEndCallback?()
+                }
             }
         } else {
             loadImageWithAny(imagePath: imagePath, cell: cell, itemIndex: itemIndex)
@@ -862,7 +869,7 @@ extension PTCycleScrollView {
         
         timer = Timer.scheduledTimer(withTimeInterval: autoScrollTimeInterval, repeats: true, block: { newTimer in
             PTGCDManager.gcdGobal(qosCls: .background) {
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.automaticScroll()
                 }
             }

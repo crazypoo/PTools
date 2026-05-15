@@ -14,7 +14,7 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.text = newValue?.localized()
             }
         }
@@ -29,7 +29,7 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.setTitle(newValue?.localized(), for: .normal)
             }
         }
@@ -45,7 +45,7 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.text = newValue?.localized()
             }
         }
@@ -60,7 +60,7 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.placeholder = newValue?.localized()
             }
         }
@@ -75,7 +75,7 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.title = newValue?.localized()
             }
         }

@@ -91,8 +91,10 @@ class PTVideoEditorToolsSlider: UIControl {
         hapticGenerator.prepare()
         
         PTGCDManager.gcdAfter(time: 0.1) {
-            self.internalValue = self.value
-            self.xPosition = self.xPosition(forValue: self.value)
+            Task { @MainActor in
+                self.internalValue = self.value
+                self.xPosition = self.xPosition(forValue: self.value)
+            }
         }
     }
     

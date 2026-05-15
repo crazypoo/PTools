@@ -73,9 +73,11 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         }
         
         generateFilterImages {
-            let rows = self.thumbnailFilterImages.map { PTRows(ID:PTFilterImageCell.ID,dataModel: $0) }            
-            let section = PTSection(rows: rows)
-            self.filterCollectionView.showCollectionDetail(collectionData: [section])
+            Task { @MainActor in
+                let rows = self.thumbnailFilterImages.map { PTRows(ID:PTFilterImageCell.ID,dataModel: $0) }
+                let section = PTSection(rows: rows)
+                self.filterCollectionView.showCollectionDetail(collectionData: [section])
+            }
         }
         
         doneButton.addActionHandlers { sender in

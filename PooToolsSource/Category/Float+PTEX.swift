@@ -82,8 +82,12 @@ public extension BinaryFloatingPoint {
 extension Float: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = Float
     public var adapter: Float {
-        let scale = adapterScale()
-        let value = self * Float(scale)
+        var value:Float = 0
+        Task { @MainActor in
+            let scale = adapterScale()
+            value = self * Float(scale)
+        }
         return value
+
     }
 }

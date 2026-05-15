@@ -194,7 +194,9 @@ public class PTHeartRateViewController: PTBaseViewController {
         
         if !Gobal_device_info.isSimulator {
             PTGCDManager.gcdAfter(time: 0.1) {
-                self.initVideoCapture()
+                Task { @MainActor in
+                    self.initVideoCapture()
+                }
             }
         }
     }
@@ -289,7 +291,7 @@ extension PTHeartRateViewController {
         
         let hsv = rgb2hsv((red: redmean, green: greenmean, blue: bluemean, alpha: 1.0))
         if (hsv.1 > 0.5 && hsv.2 > 0.5) {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.validFrames.text = "PT HeartRate loading".localized()
                 self.toggleTorch(status: true)
                 if !self.measurementStartedFlag {
@@ -313,7 +315,7 @@ extension PTHeartRateViewController {
             validFrameCounter = 0
             measurementStartedFlag = false
             pulseDetector.reset()
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.validFrames.text = "PT HeartRate touch".localized()
                 self.player.stop()
                 self.svgaIsPlaying = false

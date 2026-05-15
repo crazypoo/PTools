@@ -27,7 +27,7 @@ final class InspectorViewCoordinator: Coordinator<InspectorViewDependencies, UIV
 
     weak var delegate: InspectorViewCoordinatorDelegate?
 
-    private lazy var inspectorViewController: InspectorViewController = {
+    @MainActor private lazy var inspectorViewController: InspectorViewController = {
         let viewModel = HierarchyInspectorViewModel(
             commandGroupsProvider: dependencies.commandGroupsProvider,
             snapshot: dependencies.snapshot,

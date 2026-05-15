@@ -18,7 +18,7 @@ open class PTImageCell: PTBaseNormalCell {
     public var imageData:Any! {
         didSet {
             if showAnimator {
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.resetAnimator()
                 }
             } else {
@@ -28,7 +28,9 @@ open class PTImageCell: PTBaseNormalCell {
             imageView.loadImage(contentData: imageData as Any, loadFinish:  { _ in
                 if self.showAnimator {
                     PTGCDManager.gcdAfter(time: 0.1, block: {
-                        self.removeAnimator()
+                        Task { @MainActor in
+                            self.removeAnimator()
+                        }
                     })
                 }
             })

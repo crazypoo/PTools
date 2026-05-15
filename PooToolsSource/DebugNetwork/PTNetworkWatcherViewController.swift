@@ -178,7 +178,9 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     func observers() {
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "reloadHttp_PooTools"), object: nil, queue: .main) { [weak self] notification in
             if let success = notification.object as? Bool {
-                self?.reloadHttp(needScrollToEnd: self?.viewModel.reachEnd ?? true, success: success)
+                Task { @MainActor in
+                    self?.reloadHttp(needScrollToEnd: self?.viewModel.reachEnd ?? true, success: success)
+                }
             }
         }
     }

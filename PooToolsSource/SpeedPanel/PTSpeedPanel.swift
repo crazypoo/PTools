@@ -73,7 +73,9 @@ public class PTSpeedPanel: UIView {
         layer.addSublayer(tickLayer)
         
         PTGCDManager.gcdAfter(time: 0.5) {
-            self.animationStart()
+            Task { @MainActor in
+                self.animationStart()
+            }
         }
     }
     
@@ -137,7 +139,7 @@ public class PTSpeedPanel: UIView {
         
     // 更新仪表盘
     fileprivate func updatePanel() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let center = CGPoint(x: self.frame.size.width/2.0, y: self.frame.size.height/2.0)
             let startAngle = -CGFloat.pi / 2
             let endAngle = startAngle + 2 * CGFloat.pi * (self.currentSpeed / self.viewConfig.maxValue)

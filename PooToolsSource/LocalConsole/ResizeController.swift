@@ -131,10 +131,12 @@ class ResizeController {
                     guard let self = self, let termial = termial else { return }
                     LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
                     PTGCDManager.gcdAfter(time: 0.55, block: {
-                        UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                            termial.center = self.consoleCenterPoint
-                            LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
-                        }.startAnimation()
+                        Task { @MainActor in
+                            UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
+                                termial.center = self.consoleCenterPoint
+                                LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
+                            }.startAnimation()
+                        }
                     })
                 }
                 platterView.FontSColorBlock = { color in
@@ -271,7 +273,7 @@ class ResizeController {
     var initialWidth = CGFloat.zero
     
     static let kMinConsoleWidth: CGFloat = systemLog_base_width
-    static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
+    @MainActor static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
     
     @MainActor @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
         guard let terminal = LocalConsole.shared.terminal else { return } // 🔴 安全解包
@@ -523,8 +525,10 @@ class PlatterView: UIView {
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = color.hexString
                 self?.FontSColorBlock?(color)
                 PTGCDManager.gcdAfter(time: 0.1) {
-                    ResizeController.shared.isActive.toggle()
-                    ResizeController.shared.platterView.reveal()
+                    Task { @MainActor in
+                        ResizeController.shared.isActive.toggle()
+                        ResizeController.shared.platterView.reveal()
+                    }
                 }
             }
             let nav = PTBaseNavControl(rootViewController: colorPicker)

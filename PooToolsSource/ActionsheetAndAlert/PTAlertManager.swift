@@ -138,7 +138,6 @@ private extension PTAlertManager {
 
             controller.dismissAnimation { [weak self] in
                 guard let self else { return }
-
                 self.recycle(window)
 
                 container.showingWindows.removeValue(forKey: key)
@@ -148,7 +147,9 @@ private extension PTAlertManager {
 
                 self.makeMainWindowKey(in: scene)
 
-                self.showNextIfNeeded(scene: scene)
+                Task { @MainActor in
+                    self.showNextIfNeeded(scene: scene)
+                }
 
                 completion?()
             }

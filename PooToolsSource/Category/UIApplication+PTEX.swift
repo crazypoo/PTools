@@ -29,7 +29,7 @@ public extension UIApplication {
     class func applicationEnvironmentAsync() async -> Environment {
         // 在主線程異步更新 environment
         return await withCheckedContinuation { continuation in
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 let environment = UIApplication.shared.inferredEnvironment_PT
                 continuation.resume(returning: environment)
             }
@@ -169,7 +169,7 @@ public extension PTPOP where Base: UIApplication {
     //MARK: 类似iPhone点击了Home键
     ///类似iPhone点击了Home键
     static func likeTapHome() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
         }
     }

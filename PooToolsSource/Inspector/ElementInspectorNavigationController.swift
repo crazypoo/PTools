@@ -68,7 +68,7 @@ class ElementInspectorNavigationController: UINavigationController, InternalView
 
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         // Async here is preventing weird popover behavior.
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.preferredContentSize = container.preferredContentSize
         }
     }

@@ -18,7 +18,7 @@ public class PTChatFileCell: PTChatBaseCell {
 
     public var cellModel: PTChatListModel! {
         didSet {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.setBaseSubviews(cellModel: self.cellModel)
                 self.dataContentSets(cellModel: self.cellModel)
             }
@@ -126,7 +126,7 @@ public class PTChatFileCell: PTChatBaseCell {
         } else {
             // 在线文件大小
             url.getFileSizeOnline { fileSize in
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     let fileSizeString = FileManager.pt.covertUInt64ToString(with: fileSize)
                     self.setFileInfo(name: url.lastPathComponent, size: fileSizeString)
                 }

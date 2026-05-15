@@ -228,6 +228,7 @@ public extension UILabel {
         let pressDuration = self.copyPressDuration != 0.5 ? self.copyPressDuration : 0.5
         longPressGesture.minimumPressDuration = TimeInterval(pressDuration)
         self.addGestureRecognizer(longPressGesture)
+
     }
     
     @objc func getLabelSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,

@@ -366,49 +366,50 @@ public class PTSegmentView: UIView {
     
     private func setUI(datas:[PTSegmentModel]) {
         PTGCDManager.gcdAfter(time: 0.1) {
-            
-            self.getTotalW(datas: datas) { totalWidth, isExceed in
-                self.getContentWidth(datas: datas) { currentModel, index,subContentW,x,showType in
-                    var newX = x
-                    
-                    if !self.viewConfig.leftEdges {
-                        if !isExceed {
-                            newX += (self.frame.size.width - totalWidth) / 2
+            Task { @MainActor in
+                self.getTotalW(datas: datas) { totalWidth, isExceed in
+                    self.getContentWidth(datas: datas) { currentModel, index,subContentW,x,showType in
+                        var newX = x
+                        
+                        if !self.viewConfig.leftEdges {
+                            if !isExceed {
+                                newX += (self.frame.size.width - totalWidth) / 2
+                            }
                         }
+                                            
+                        let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: currentModel,contentW: (subContentW-self.viewConfig.subViewInContentSpace),showType: showType)
+                        subView.tag = index
+                        subView.frame = CGRect(x: newX, y: 0, width: subContentW, height: self.frame.size.height)
+                        
+                        switch showType {
+                        case .TitleImage:
+                            subView.imageBtn.tag = index
+                            subView.imageBtn.addActionHandlers { (sender) in
+                                self.setSelectItem(indexs: sender.tag)
+                                self.segTapBlock?(sender.tag)
+                            }
+                        default:
+                            subView.imageBtn.tag = index
+                            subView.imageBtn.addActionHandlers { (sender) in
+                                self.setSelectItem(indexs: sender.tag)
+                                self.segTapBlock?(sender.tag)
+                            }
+                        }
+                        self.scrolView.addSubview(subView)
+                        self.subViewArr.append(subView)
                     }
-                                        
-                    let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: currentModel,contentW: (subContentW-self.viewConfig.subViewInContentSpace),showType: showType)
-                    subView.tag = index
-                    subView.frame = CGRect(x: newX, y: 0, width: subContentW, height: self.frame.size.height)
                     
-                    switch showType {
-                    case .TitleImage:
-                        subView.imageBtn.tag = index
-                        subView.imageBtn.addActionHandlers { (sender) in
-                            self.setSelectItem(indexs: sender.tag)
-                            self.segTapBlock?(sender.tag)
-                        }
-                    default:
-                        subView.imageBtn.tag = index
-                        subView.imageBtn.addActionHandlers { (sender) in
-                            self.setSelectItem(indexs: sender.tag)
-                            self.segTapBlock?(sender.tag)
-                        }
+                    self.addSubview(self.scrolView)
+                    self.scrolView.snp.makeConstraints { (make) in
+                        make.edges.equalToSuperview()
                     }
-                    self.scrolView.addSubview(subView)
-                    self.subViewArr.append(subView)
+                    self.scrolView.contentSize = CGSize(width: totalWidth, height: self.frame.size.height)
+                    self.selectedIndex = self.viewConfig.normalSelecdIndex
+                    
+                    self.scrolView.isScrollEnabled = isExceed
                 }
-                
-                self.addSubview(self.scrolView)
-                self.scrolView.snp.makeConstraints { (make) in
-                    make.edges.equalToSuperview()
-                }
-                self.scrolView.contentSize = CGSize(width: totalWidth, height: self.frame.size.height)
-                self.selectedIndex = self.viewConfig.normalSelecdIndex
-                
-                self.scrolView.isScrollEnabled = isExceed
+                self.layoutSubviews()
             }
-            self.layoutSubviews()
         }
     }
     
@@ -452,33 +453,35 @@ public class PTSegmentView: UIView {
                             badgeAnimation:PTBadgeAnimType = .breathe,
                             badgeValue:Any = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
-            guard indexView < self.subViewArr.count,
-                  let subView = self.subViewArr[indexView] as? PTSegmentSubView else { return }
+            Task { @MainActor in
+                guard indexView < self.subViewArr.count,
+                      let subView = self.subViewArr[indexView] as? PTSegmentSubView else { return }
 
-            let width = subView.pt.jx_width
-            let height = subView.pt.jx_height
-            let badgePoint: CGPoint = {
-                switch badgePosition {
-                case .TopLeft:      return CGPoint(x: self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
-                case .TopMiddle:    return CGPoint(x: width / 2, y: self.viewConfig.bottomSquare)
-                case .TopRight:     return CGPoint(x: width - self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
-                case .MiddleLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height / 2)
-                case .MiddleRigh:   return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height / 2)
-                case .BottomLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height - 5)
-                case .BottomMiddle: return CGPoint(x: width / 2, y: height - self.viewConfig.bottomSquare)
-                case .BottomRight:  return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height - self.viewConfig.bottomSquare)
-                default:            return .zero
-                }
-            }()
+                let width = subView.pt.jx_width
+                let height = subView.pt.jx_height
+                let badgePoint: CGPoint = {
+                    switch badgePosition {
+                    case .TopLeft:      return CGPoint(x: self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
+                    case .TopMiddle:    return CGPoint(x: width / 2, y: self.viewConfig.bottomSquare)
+                    case .TopRight:     return CGPoint(x: width - self.viewConfig.badgeXOffset, y: self.viewConfig.bottomSquare)
+                    case .MiddleLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height / 2)
+                    case .MiddleRigh:   return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height / 2)
+                    case .BottomLeft:   return CGPoint(x: self.viewConfig.badgeXOffset, y: height - 5)
+                    case .BottomMiddle: return CGPoint(x: width / 2, y: height - self.viewConfig.bottomSquare)
+                    case .BottomRight:  return CGPoint(x: width - self.viewConfig.badgeXOffset, y: height - self.viewConfig.bottomSquare)
+                    default:            return .zero
+                    }
+                }()
 
-            var config = PTBadgeConfiguration()
-            config.centerOffset = badgePoint
-            config.borderWidth = PTAppBaseConfig.share.tabBadgeBorderHeight
-            config.borderColor = PTAppBaseConfig.share.tabBadgeBorderColor
-            config.font = PTAppBaseConfig.share.tabBadgeFont
-            config.bgColor = badgeBGColor
-            subView.badgeConfig = config
-            subView.showBadge(style: badgeShowType, value: badgeValue, aniType: badgeAnimation)
+                var config = PTBadgeConfiguration()
+                config.centerOffset = badgePoint
+                config.borderWidth = PTAppBaseConfig.share.tabBadgeBorderHeight
+                config.borderColor = PTAppBaseConfig.share.tabBadgeBorderColor
+                config.font = PTAppBaseConfig.share.tabBadgeFont
+                config.bgColor = badgeBGColor
+                subView.badgeConfig = config
+                subView.showBadge(style: badgeShowType, value: badgeValue, aniType: badgeAnimation)
+            }
         }
     }
     

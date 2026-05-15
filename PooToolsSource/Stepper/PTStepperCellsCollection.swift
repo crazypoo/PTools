@@ -16,7 +16,7 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
     
     public var cellModel: PTStepperListModel! {
         didSet {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.circleView.snp.updateConstraints { make in
                     make.size.equalTo(self.cellModel.stopCircleWidth)
                 }
@@ -139,7 +139,7 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
 
     public var cellModel: PTStepperListModel! {
         didSet {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.circleView.snp.updateConstraints { make in
                     make.size.equalTo(self.cellModel.stopCircleWidth)
                 }

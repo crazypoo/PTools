@@ -157,7 +157,7 @@ public extension String {
     static let MicAuthorizationFail = "PT Setting mic fail".localized()
     static let LocationAuthorizationFail = "PT Setting location fail".localized()
     
-    static func authorizationSet(type:PTPermission.Kind) -> String {
+    @MainActor static func authorizationSet(type:PTPermission.Kind) -> String {
         var name:String = ""
         switch type {
         case PTPermission.Kind.location:

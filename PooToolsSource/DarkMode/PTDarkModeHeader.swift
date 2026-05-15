@@ -127,7 +127,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@preconcurrency PTSupplemen
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset(10)
         }
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
         }
         

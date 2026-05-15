@@ -489,7 +489,9 @@ public class PTEditImageViewController: PTBaseViewController {
         defaultDrawPathWidth = width
         
         PTGCDManager.gcdAfter(time: 0.35, block: {
-            self.changeStatusBar(type: .Dark)
+            Task { @MainActor in
+                self.changeStatusBar(type: .Dark)
+            }
         })
     }
     

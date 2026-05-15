@@ -138,10 +138,12 @@ public class PTAlertTipsViewController: PTAlertController {
                     // 🛠️ 修复3：定时器内部也需要 [weak self]
                     PTGCDManager.gcdAfter(time: viewLow.duration) { [weak self] in
                         guard let self = self else { return }
-                        if self.tipsViewLow?.alpha != 0 {
-                            self.dismissAnimation(completion: {
-                                self.dismissCallback?()
-                            })
+                        Task { @MainActor in
+                            if self.tipsViewLow?.alpha != 0 {
+                                self.dismissAnimation(completion: {
+                                    self.dismissCallback?()
+                                })
+                            }
                         }
                     }
                 }
@@ -156,10 +158,12 @@ public class PTAlertTipsViewController: PTAlertController {
                     // 🛠️ 修复3：定时器内部也需要 [weak self]
                     PTGCDManager.gcdAfter(time: viewHight.duration) { [weak self] in
                         guard let self = self else { return }
-                        if self.tipsViewHight?.alpha != 0 {
-                            self.dismissAnimation(completion: {
-                                self.dismissCallback?()
-                            })
+                        Task { @MainActor in
+                            if self.tipsViewHight?.alpha != 0 {
+                                self.dismissAnimation(completion: {
+                                    self.dismissCallback?()
+                                })
+                            }
                         }
                     }
                 }

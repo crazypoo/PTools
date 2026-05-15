@@ -174,18 +174,20 @@ public extension UIViewController {
                        sender:UIView,
                        arrowDirections:UIPopoverArrowDirection) {
         PTGCDManager.gcdAfter(time: 0.1) {
-            popoverVC.preferredContentSize = popoverSize
-            popoverVC.modalPresentationStyle = .popover
-            
-            let presentationCtr = popoverVC.popoverPresentationController
-            presentationCtr?.sourceView = sender
-            presentationCtr?.sourceRect = sender.bounds
-            presentationCtr?.permittedArrowDirections = arrowDirections
-            presentationCtr?.delegate = self
-            if (self.navigationController?.viewControllers.count ?? 0) > 0 {
-                self.navigationController?.present(popoverVC, animated: true)
-            } else {
-                self.present(popoverVC, animated: true)
+            Task { @MainActor in
+                popoverVC.preferredContentSize = popoverSize
+                popoverVC.modalPresentationStyle = .popover
+                
+                let presentationCtr = popoverVC.popoverPresentationController
+                presentationCtr?.sourceView = sender
+                presentationCtr?.sourceRect = sender.bounds
+                presentationCtr?.permittedArrowDirections = arrowDirections
+                presentationCtr?.delegate = self
+                if (self.navigationController?.viewControllers.count ?? 0) > 0 {
+                    self.navigationController?.present(popoverVC, animated: true)
+                } else {
+                    self.present(popoverVC, animated: true)
+                }
             }
         }
     }
@@ -225,7 +227,7 @@ public extension UIViewController {
     //MARK: 定位权限
     /// 定位权限
     func locationAuthorize() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             UIAlertController.base_alertVC(title:String.LocationAuthorizationFail,msg: String.authorizationSet(type: PTPermission.Kind.location(access: .whenInUse)),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
                 PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
             })
@@ -243,7 +245,7 @@ public extension UIViewController {
             // 请求授权
             AVCaptureDevice.requestAccess(for: avMediaType) { (granted) in
                 if granted {
-                    PTGCDManager.gcdMain {
+                    Task { @MainActor in
                         _ = self.avCaptureDeviceAuthorize(avMediaType: avMediaType)
                     }
                 }
@@ -262,7 +264,7 @@ public extension UIViewController {
             default:
                 break
             }
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 UIAlertController.base_alertVC(title:title,msg: msg,okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
                     PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })
@@ -280,11 +282,13 @@ public extension UIViewController {
             return true
         case .notDetermined:
             PTPermission.photoLibrary.request {
-                _ = self.photoAuthorize()
+                Task { @MainActor in
+                    _ = self.photoAuthorize()
+                }
             }
             return false
         default:
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 UIAlertController.base_alertVC(title:String.PhotoAuthorizationFail,msg: String.authorizationSet(type: PTPermission.Kind.photoLibrary),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index,title in
                     PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })

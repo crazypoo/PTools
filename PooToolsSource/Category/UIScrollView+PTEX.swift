@@ -58,11 +58,13 @@ public extension PTPOP where Base : UIScrollView {
         base.setContentOffset(CGPoint(x: 0, y: CGFloat(index) * base.frame.size.height), animated: false)
         let splitFrame = CGRect(x: 0, y: CGFloat(index) * base.frame.size.height, width: base.bounds.size.width, height: base.bounds.size.height)
         PTGCDManager.gcdAfter(time: 0.3) {
-            base.drawHierarchy(in: splitFrame, afterScreenUpdates: true)
-            if index < maxIndex {
-                snapShotContentScrollPage(index: index + 1, maxIndex: maxIndex, callback: callback)
-            } else {
-                callback()
+            Task { @MainActor in
+                base.drawHierarchy(in: splitFrame, afterScreenUpdates: true)
+                if index < maxIndex {
+                    snapShotContentScrollPage(index: index + 1, maxIndex: maxIndex, callback: callback)
+                } else {
+                    callback()
+                }
             }
         }
     }
@@ -84,13 +86,15 @@ public extension PTPOP where Base : UIScrollView {
         UIGraphicsBeginImageContextWithOptions(base.contentSize, false, UIScreen.main.scale)
         /// 这个方法是一个绘图，里面可能有递归调用
         snapShotContentScrollPage(index: 0, maxIndex: Int(page)) {
-            let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            /// 设置原点偏移
-            base.setContentOffset(originOffset, animated: false)
-            snapShotView?.removeFromSuperview()
-            /// 获取 snapShotContentScroll 时的回调图像
-            completionHandler(screenShotImage)
+            Task { @MainActor in
+                let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                /// 设置原点偏移
+                base.setContentOffset(originOffset, animated: false)
+                snapShotView?.removeFromSuperview()
+                /// 获取 snapShotContentScroll 时的回调图像
+                completionHandler(screenShotImage)
+            }
         }
     }
     

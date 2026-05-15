@@ -249,14 +249,18 @@ public class PTCheckUpdateFunction: NSObject {
             case 0:
                 if force {
                     if url != nil {
-                        PTAppStoreFunction.jumpLink(url: url!)
+                        Task { @MainActor in
+                            PTAppStoreFunction.jumpLink(url: url!)
+                        }
                     } else {
                         PTNSLogConsole("非法url",levelType: .error,loggerType: .checkUpdate)
                     }
                 }
             case 1:
                 if url != nil {
-                    PTAppStoreFunction.jumpLink(url: url!)
+                    Task { @MainActor in
+                        PTAppStoreFunction.jumpLink(url: url!)
+                    }
                 } else {
                     PTNSLogConsole("非法url",levelType: .error,loggerType: .checkUpdate)
                 }

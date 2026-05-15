@@ -75,7 +75,9 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTGCDManager.gcdAfter(time: 0.15, block: {
-            self.changeStatusBar(type: .Dark)
+            Task { @MainActor in
+                self.changeStatusBar(type: .Dark)
+            }
         })
     }
     
@@ -105,7 +107,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }
 
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.cropView.image(self.image, isMin: true)
         }
     }

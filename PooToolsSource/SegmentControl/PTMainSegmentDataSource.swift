@@ -16,7 +16,7 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
     open var change:PTSegmentControlModelType? = .ImageTitle(type: .Normal)
     open var titleNormalColor:UIColor = .black
     open var titleSelectedColor:UIColor = .black
-    open var itemWidths: CGFloat = CGFloat.kSCREEN_WIDTH / 4
+    @MainActor open var itemWidths: CGFloat = CGFloat.kSCREEN_WIDTH / 4
     private var cell_width_array = [CGFloat]()
     private var cell_width_array_sub = [CGFloat]()
     
@@ -26,24 +26,26 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
         itemSpacing = 0
                 
         dataSourceData.enumerated().forEach { (index,model) in
-            let titleModel = PTMainSegmentModel()
-            titleModel.title = model?.categoryName
-            titleModel.subTitle = model?.subTitle
-            titleModel.itemWidthIncrement = itemWidthIncrement
-            titleModel.onlyShowTitle = change!
-            titleModel.index = index
-            titleModel.itemSpace = itemSpacing
-            titleModel.titleNormalColor = titleNormalColor
-            titleModel.titleCurrentColor = titleNormalColor
-            titleModel.titleSelectedColor = titleSelectedColor
-            titleModel.titleNormalFont = .appfont(size: 16)
-            titleModel.titleSelectedFont = .appfont(size: 16,bold: true)
-            titleModel.subTitleSelectedColor = titleNormalColor
-            titleModel.subTitleNormalColor = titleNormalColor
-            titleModel.subTitleCurrentColor = titleSelectedColor
-            titleModel.imageURL = model?.imageURL ?? ""
-            titleModel.itemWidth = itemWidths
-            dataSource.append(titleModel)
+            Task { @MainActor in
+                let titleModel = PTMainSegmentModel()
+                titleModel.title = model?.categoryName
+                titleModel.subTitle = model?.subTitle
+                titleModel.itemWidthIncrement = itemWidthIncrement
+                titleModel.onlyShowTitle = change!
+                titleModel.index = index
+                titleModel.itemSpace = itemSpacing
+                titleModel.titleNormalColor = titleNormalColor
+                titleModel.titleCurrentColor = titleNormalColor
+                titleModel.titleSelectedColor = titleSelectedColor
+                titleModel.titleNormalFont = .appfont(size: 16)
+                titleModel.titleSelectedFont = .appfont(size: 16,bold: true)
+                titleModel.subTitleSelectedColor = titleNormalColor
+                titleModel.subTitleNormalColor = titleNormalColor
+                titleModel.subTitleCurrentColor = titleSelectedColor
+                titleModel.imageURL = model?.imageURL ?? ""
+                titleModel.itemWidth = itemWidths
+                dataSource.append(titleModel)
+            }
         }
 
         for (index, model) in (dataSource as! [PTMainSegmentModel]).enumerated() {

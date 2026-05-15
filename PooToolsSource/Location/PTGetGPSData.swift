@@ -122,13 +122,14 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
             let doneStr = "\("PT Location change to".localized())\(newCity)"
             
             UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "PT Location change".localized(),okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
-                
-                self.selectCurrentBlock?()
-                self.isShow = 0
+                Task { @MainActor in
+                    self.selectCurrentBlock?()
+                    self.isShow = 0
+                }
             } moreBtn: { _, _ in
                 self.setObjectFunction(city: newCity)
                 self.isShow = 0
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.selectNewBlock?()
                 }
             }

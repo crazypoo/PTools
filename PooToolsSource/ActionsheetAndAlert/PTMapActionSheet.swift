@@ -31,7 +31,7 @@ open class PTMapActionSheet: NSObject {
     ///   - location: 跳转坐标
     ///   - dismissTask: 关闭回调
     @MainActor open class func mapNavAlert(currentAppScheme:String,
-                                           currentAppName:String = kAppDisplayName!,
+                                           currentAppName:String? = nil,
                                            qqKey:String = "",
                                            formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
                                            location:CLLocationCoordinate2D,
@@ -45,7 +45,7 @@ open class PTMapActionSheet: NSObject {
         let appScheme = currentAppScheme
         let locations = location
         var navAppName = [String]()
-        let appName = currentAppName
+        let appName = currentAppName ?? kAppDisplayName!
         if let baiduURL = URL(string: "baidumap://"),UIApplication.shared.canOpenURL(baiduURL) {
             navAppName.append(baiduName)
         }

@@ -155,7 +155,7 @@ public class StatusBarManager {
     }
     
     fileprivate func updateStatusBar() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             UIView.animate(withDuration: self.duration) {
                 AppWindows?.rootViewController?.setNeedsStatusBarAppearanceUpdate()
             }

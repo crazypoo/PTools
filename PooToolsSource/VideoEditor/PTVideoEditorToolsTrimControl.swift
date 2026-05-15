@@ -43,7 +43,7 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
         }
         
         PTGCDManager.gcdAfter(time: 0.1) {
-            Task {
+            Task { @MainActor in
                 do {
                     var track: AVAssetTrack!
                     if #available(iOS 16.0, *) {

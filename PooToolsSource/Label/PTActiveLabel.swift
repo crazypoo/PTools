@@ -538,8 +538,10 @@ public class PTActiveLabel: UILabel {
             // 保持延迟取消高亮的体验
             let when = Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
             PTGCDManager.gcdAfter(time: when) {
-                self.updateAttributesWhenSelected(false)
-                self.selectedElement = nil
+                Task { @MainActor in
+                    self.updateAttributesWhenSelected(false)
+                    self.selectedElement = nil
+                }
             }
             avoidSuperCall = true
         case .cancelled:

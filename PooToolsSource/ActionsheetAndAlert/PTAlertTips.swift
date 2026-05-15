@@ -169,8 +169,10 @@ public class PTAlertTipsLow: UIView {
             
             if self.dismissInTime {
                 PTGCDManager.gcdAfter(time: self.duration) {
-                    if self.alpha != 0 {
-                        self.dismiss(completion: completion)
+                    Task { @MainActor in
+                        if self.alpha != 0 {
+                            self.dismiss(completion: completion)
+                        }
                     }
                 }
             }
@@ -427,8 +429,10 @@ public class PTAlertTipsHight: UIView {
             
             if self.dismissInTime {
                 PTGCDManager.gcdAfter(time: self.duration) {
-                    if self.alpha != 0 {
-                        self.dismiss(completion: completion)
+                    Task { @MainActor in
+                        if self.alpha != 0 {
+                            self.dismiss(completion: completion)
+                        }
                     }
                 }
             }

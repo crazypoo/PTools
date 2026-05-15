@@ -465,7 +465,7 @@ public class PTCollectionView: UIView {
     private(set) lazy var refreshControl:UIRefreshControl = {
         let control = UIRefreshControl()
         control.addRefreshHandlers { [weak self] sender in
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self?.headerRefreshTask?(sender)
             }
         }
@@ -604,7 +604,7 @@ public class PTCollectionView: UIView {
     }
     
     @objc private func didReceiveMemoryWarning() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             self.waterfallCache.removeAll()
@@ -1245,7 +1245,7 @@ extension PTCollectionView {
     }
 
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             var snapshot = self.diffableDataSource.snapshot()
             guard section >= 0, section < snapshot.sectionIdentifiers.count else {
                 completion?()
@@ -1273,7 +1273,7 @@ extension PTCollectionView {
     }
     
     public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             guard !sections.isEmpty else {
                 completion?()
                 return
@@ -1313,7 +1313,7 @@ extension PTCollectionView {
     }
 
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             var snapshot = self.diffableDataSource.snapshot()
             guard section >= 0, section < snapshot.sectionIdentifiers.count else {
                 completion?()
@@ -1345,7 +1345,7 @@ extension PTCollectionView {
     }
     
     public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             
@@ -1394,7 +1394,7 @@ extension PTCollectionView {
     }
     
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             var snapshot = self.diffableDataSource.snapshot()
                         
             for sectionModel in sections {
@@ -1568,7 +1568,7 @@ extension PTCollectionView {
         if behavior != .none {
             laySection.visibleItemsInvalidationHandler = { [weak self] visibleItems, offset, env in
                 guard let self = self else { return }
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.orthogonalDidScroll?(sectionIndex, offset)
                     let pageWidth = env.container.contentSize.width
                     if pageWidth > 0 {
@@ -1846,14 +1846,14 @@ extension PTCollectionView {
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH
         if viewConfig.footerRefresh {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.collectionView.pt_endMJRefresh()
             }
         }
 #endif
         
         if viewConfig.topRefresh {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.refreshControl.endRefreshing()
             }
         }
@@ -1891,7 +1891,7 @@ extension PTCollectionView {
 
 extension PTCollectionView {
     public func reloadSections(at indexes: [Int], animated: Bool = true, completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             var snapshot = self.diffableDataSource.snapshot()
             
             let validSections = indexes.compactMap { index -> PTSection? in
@@ -1919,7 +1919,7 @@ extension PTCollectionView {
     }
     
     public func reloadRows(_ rows: [PTRows], in section: Int, completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             var snapshot = self.diffableDataSource.snapshot()
             guard section >= 0, section < snapshot.sectionIdentifiers.count else {
                 completion?()
@@ -1958,7 +1958,7 @@ extension PTCollectionView {
     }
     
     public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             var snapshot = self.diffableDataSource.snapshot()
             let containerWidth = self.collectionView.bounds.width
             
@@ -2003,7 +2003,7 @@ extension PTCollectionView {
     }
     
     public func reloadAllData(animated: Bool = true, completion: PTActionTask? = nil) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.layoutCache.removeAll()
             self.heightCache.removeAll()
             self.waterfallCache.removeAll()

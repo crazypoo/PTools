@@ -610,9 +610,11 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
             }
             
             PTGCDManager.gcdAfter(time: 10) {
-                if !finish {
-                    C7CameraConfig.share.hudHide()
-                    PTNSLogConsole("转换失败")
+                Task { @MainActor in
+                    if !finish {
+                        C7CameraConfig.share.hudHide()
+                        PTNSLogConsole("转换失败")
+                    }
                 }
             }
         }

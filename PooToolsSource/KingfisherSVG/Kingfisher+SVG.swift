@@ -73,7 +73,7 @@ public extension UIImageView {
         KingfisherManager.shared.retrieveImage(with: url, options: [.processor(processor), .forceRefresh]) {  result in
             switch result {
             case .success(let value):
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.image = value.image
                 }
             case .failure(let error):
@@ -103,7 +103,7 @@ public extension UIButton {
         KingfisherManager.shared.retrieveImage(with: url, options: [.processor(processor), .forceRefresh]) {  result in
             switch result {
             case .success(let value):
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.setImage(value.image, for: state)
                 }
             case .failure(let error):

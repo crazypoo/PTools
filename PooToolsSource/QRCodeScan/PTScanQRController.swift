@@ -264,7 +264,7 @@ public class PTScanQRController: PTBaseViewController {
         
         addTimer()
         startScanAction {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.scanSession()
             }
         }
@@ -291,21 +291,21 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 進入相冊
     func enterPhotos() {
         PTGCDManager.gcdAfter(time: 0.1) {
-            if self.viewConfig.openAblumFollowSystem {
-                Task {
-                    do {
-                        let object:UIImage = try await PTImagePicker.openAlbum()
-                        await MainActor.run {
-                            PTGCDManager.gcdMain {
+            Task { @MainActor in
+                if self.viewConfig.openAblumFollowSystem {
+                    Task {
+                        do {
+                            let object:UIImage = try await PTImagePicker.openAlbum()
+                            Task { @MainActor in
                                 self.findQR(inImage: object)
                             }
+                        } catch let pickerError as PTImagePicker.PickerError {
+                            pickerError.outPutLog()
                         }
-                    } catch let pickerError as PTImagePicker.PickerError {
-                        pickerError.outPutLog()
                     }
+                } else {
+                    self.ptAblum()
                 }
-            } else {
-                self.ptAblum()
             }
         }
     }
@@ -322,7 +322,7 @@ public class PTScanQRController: PTBaseViewController {
         vc.mediaLibShow()
         vc.selectImageBlock = { item,isOriginal in
             if let img = item.first?.image {
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     self.findQR(inImage: img)
                 }
             }
@@ -335,7 +335,9 @@ public class PTScanQRController: PTBaseViewController {
         switch PTPermission.photoLibrary.status {
         case .notDetermined:
             PTPermission.photoLibrary.request {
-                self.photosAction()
+                Task { @MainActor in
+                    self.photosAction()
+                }
             }
         case .authorized:
             enterPhotos()
@@ -359,7 +361,9 @@ public class PTScanQRController: PTBaseViewController {
                     case .authorized:
                         handle()
                     default:
-                        self.processResult(result: "",error: NSError(domain: "PT Setting reject camera".localized(), code: 501))
+                        Task { @MainActor in
+                            self.processResult(result: "",error: NSError(domain: "PT Setting reject camera".localized(), code: 501))
+                        }
                     }
                 }
             case .denied:
@@ -389,7 +393,7 @@ public class PTScanQRController: PTBaseViewController {
             }
             
             view.layer.insertSublayer(videoPreviewLayer, at: 0)
-            PTGCDManager.gcdBackground {
+            Task { @MainActor in
                 self.session.startRunning()
             }
             
@@ -409,7 +413,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 添加時間控制器
     func addTimer() {
         if !session.isRunning && hasEntered {
-            PTGCDManager.gcdBackground {
+            Task { @MainActor in
                 self.session.startRunning()
             }
         }
@@ -429,7 +433,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 移除時間控制器
     func removeTimer() {
         timer.invalidate()
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.scanningLine.removeFromSuperview()
         }
         if session.isRunning {
@@ -476,7 +480,7 @@ public class PTScanQRController: PTBaseViewController {
         resultBlock?(result,error)
 
         if viewConfig.autoReturn {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.returnFrontVC()
                 self.navigationController?.setNavigationBarHidden(false, animated: false)
             }
@@ -489,7 +493,7 @@ public class PTScanQRController: PTBaseViewController {
         self.sessionQueue.async {
             self.removeTimer()
         }
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
             let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
             if features!.count == 0 {
@@ -617,8 +621,10 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         backBtn.isHidden = true
         if metadataObjects.count == 1 {
             PTGCDManager.gcdAfter(time: 0.8) {
-                let barInfo = self.layerArr[1]
-                self.processResult(result: barInfo.codeString,error: nil)
+                Task { @MainActor in
+                    let barInfo = self.layerArr[1]
+                    self.processResult(result: barInfo.codeString,error: nil)
+                }
             }
         }
     }

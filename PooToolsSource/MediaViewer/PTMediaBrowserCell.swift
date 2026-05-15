@@ -324,7 +324,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func cellLoadData() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let currentID = UUID()
             self.loadIdentifier = currentID
             self.showLoading()
@@ -442,12 +442,12 @@ extension PTMediaBrowserCell {
 
     private func baseLoadImageData(imageData:Any, currentID: UUID) {
         imageView.loadImage(contentData: imageData, iCloudDocumentName: viewConfig.iCloudDocumentName, emptyImage: UIImage()) { receivedSize, totalSize in
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 let progress = CGFloat(receivedSize / totalSize)
                 self.loading.progress = progress
             }
         } loadFinish: { value in
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 guard self.loadIdentifier == currentID else { return }
                 self.handleImageLoadFinish(result:value)
             }
@@ -598,7 +598,7 @@ extension PTMediaBrowserCell {
         imageView.image = UIImage()
         gifImage = nil
         avItem.generateThumbnail { image in
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 if image != nil {
                     self.currentCellType = .Video
                     self.hideLoading()

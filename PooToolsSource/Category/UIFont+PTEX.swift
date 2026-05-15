@@ -21,7 +21,9 @@ public extension UIFont {
         }
         
         if scale {
-            setFont = setFont.adapter
+            Task { @MainActor in
+                setFont = setFont.adapter
+            }
         }
         return setFont
     }
@@ -33,9 +35,12 @@ public extension UIFont {
         if customFont.stringIsEmpty() {
             fatalError("自定義需要有字體名字")
         } else {
-            if let setFont = UIFont(name: customFont, size: size) {
+            if var setFont = UIFont(name: customFont, size: size) {
                 if scale {
-                    return setFont.adapter
+                    Task { @MainActor in
+                        setFont = setFont.adapter
+                    }
+                    return setFont
                 }
                 return setFont
             } else {
@@ -50,8 +55,11 @@ public extension UIFont {
                                 scale:Bool = false) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
-        let setFont = UIFont(descriptor: descriptor!, size: size)
-        return scale ? setFont.adapter : setFont
+        var setFont = UIFont(descriptor: descriptor!, size: size)
+        Task { @MainActor in
+            setFont = scale ? setFont.adapter : setFont
+        }
+        return setFont
     }
     
     fileprivate class func text(_ ofSize: CGFloat, W Weight: UIFont.Weight) -> UIFont {
@@ -198,7 +206,10 @@ public extension UIFont {
 extension UIFont:PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = UIFont
     public var adapter: UIFont {
-        let adjustedSize = adapterScale() * self.pointSize
+        var adjustedSize:CGFloat = 0
+        Task { @MainActor in
+            adjustedSize = adapterScale() * self.pointSize
+        }
         return UIFont(descriptor: self.fontDescriptor, size: adjustedSize)
     }
 }

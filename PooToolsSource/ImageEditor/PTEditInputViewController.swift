@@ -860,7 +860,9 @@ class PTEditInputViewController: PTBaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTGCDManager.gcdAfter(time: 0.35, block: {
-            self.changeStatusBar(type: .Dark)
+            Task { @MainActor in
+                self.changeStatusBar(type: .Dark)
+            }
         })
     }
     
@@ -898,7 +900,9 @@ class PTEditInputViewController: PTBaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIApplication.keyboardWillHideNotification, object: nil)
         
         PTGCDManager.gcdAfter(time: 0.35) {
-            self.textView.becomeFirstResponder()
+            Task { @MainActor in
+                self.textView.becomeFirstResponder()
+            }
         }
     }
         

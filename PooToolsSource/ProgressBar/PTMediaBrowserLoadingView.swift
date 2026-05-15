@@ -50,7 +50,7 @@ public class PTMediaBrowserLoadingView: UIView {
             let safeProgress = max(0, min(1, progress))
             
             // 确保 UI 刷新和隐藏操作在主线程执行
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.setNeedsDisplay()
                 if safeProgress >= 1 {
                     self.hudHide()

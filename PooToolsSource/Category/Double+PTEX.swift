@@ -131,7 +131,10 @@ public extension PTPOP where Base == Double {
 extension Double: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = Double
     public var adapter: Double {
-        let scale = adapterScale()
+        var scale:CGFloat = 0
+        Task { @MainActor in
+            scale = adapterScale()
+        }
         let value = self * scale
         return value
     }

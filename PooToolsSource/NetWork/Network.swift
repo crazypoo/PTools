@@ -612,7 +612,7 @@ public final class Network: @unchecked Sendable {
     }
     
     public func hudShow()  {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let _ = Network.share.hudConfig
             if self.hud == nil {
                 self.hud = PTHudView()

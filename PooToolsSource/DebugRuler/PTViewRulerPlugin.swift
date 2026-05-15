@@ -88,7 +88,7 @@ fileprivate class PTVisualInfoController:UIView {
         
         self.addSubviews([self.closeBtn,self.infoLabel])
 
-        PTGCDManager.gcdMain {
+        Task { @MainActor  in
             self.viewCorner(radius: CGFloat.SizeFrom750(x: 8),borderWidth: 1,borderColor: UIColor.hex("#999999",alpha:0.2))
         }
     }
@@ -97,14 +97,16 @@ fileprivate class PTVisualInfoController:UIView {
         super.layoutSubviews()
         
         PTGCDManager.gcdAfter(time: 0.1) {
-            self.closeBtn.snp.makeConstraints { make in
-                make.size.equalTo(CGFloat.SizeFrom750(x: 44))
-                make.centerY.equalToSuperview()
-                make.right.equalToSuperview().inset(10)
-            }
-            self.infoLabel.snp.makeConstraints { make in
-                make.left.top.bottom.equalToSuperview().inset(5)
-                make.right.equalTo(self.closeBtn.snp.left).offset(-10)
+            Task { @MainActor  in
+                self.closeBtn.snp.makeConstraints { make in
+                    make.size.equalTo(CGFloat.SizeFrom750(x: 44))
+                    make.centerY.equalToSuperview()
+                    make.right.equalToSuperview().inset(10)
+                }
+                self.infoLabel.snp.makeConstraints { make in
+                    make.left.top.bottom.equalToSuperview().inset(5)
+                    make.right.equalTo(self.closeBtn.snp.left).offset(-10)
+                }
             }
         }
     }

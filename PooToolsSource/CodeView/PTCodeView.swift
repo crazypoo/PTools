@@ -67,10 +67,10 @@ public class PTCodeView: UIView {
         let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
         timer.schedule(deadline: .now(), repeating: .seconds(1))
         timer.setEventHandler {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 newCount -= 1
                 if newCount < 1 {
-                    PTGCDManager.gcdMain {
+                    Task { @MainActor in
                         if !self.dismiss! {
                             timer.suspend()
                             self.timeChange()
@@ -105,7 +105,9 @@ public class PTCodeView: UIView {
         }
         changeString = String(format: "%@", tempString)
         PTGCDManager.gcdAfter(time: 0.1) {
-            self.codeBlock?(self,self.changeString)
+            Task { @MainActor in
+                self.codeBlock?(self,self.changeString)
+            }
         }
         self.setNeedsDisplay()
     }

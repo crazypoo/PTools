@@ -74,7 +74,10 @@ extension CGRect: PTNumberValueAdapterable {
             return self
         }
 
-        let scale = adapterScale()
+        var scale:CGFloat = 0
+        Task { @MainActor in
+            scale = adapterScale()
+        }
         let x = origin.x * scale
         let y = origin.y * scale
         let width = size.width * scale

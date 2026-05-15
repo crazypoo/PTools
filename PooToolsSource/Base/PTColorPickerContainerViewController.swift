@@ -41,7 +41,9 @@ open class PTColorPickerContainerViewController: PTBaseViewController {
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTGCDManager.gcdAfter(time: 0.2) {
-            self.changeStatusBar(type: .Dark)
+            Task { @MainActor in
+                self.changeStatusBar(type: .Dark)
+            }
         }
     }
     

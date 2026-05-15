@@ -111,15 +111,19 @@ class TouchOverlayView: UIView {
         touchIndicatorView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         
         animateBlock {
-            self.alpha = 1
-            self.touchIndicatorView.transform = .identity
+            Task { @MainActor in
+                self.alpha = 1
+                self.touchIndicatorView.transform = .identity
+            }
         }
     }
     
     func hide(completion: @escaping PTActionTask) {
         animateBlock {
-            self.alpha = 0
-            self.touchIndicatorView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            Task { @MainActor in
+                self.alpha = 0
+                self.touchIndicatorView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }
         } completion: {
             completion()
         }

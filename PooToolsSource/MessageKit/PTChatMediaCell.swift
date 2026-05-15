@@ -117,7 +117,7 @@ public class PTChatMediaCell: PTChatBaseCell {
     
     private func updateCellModel(cellModel: PTChatListModel) {
         // 避免每次调用时都重新设置视图属性，提前配置
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.contentImageView.image = PTAppBaseConfig.share.defaultEmptyImage
             self.setBaseSubviews(cellModel: self.cellModel)
             self.updateConstraintsForCellModel(cellModel)
@@ -234,7 +234,7 @@ public class PTChatMediaCell: PTChatBaseCell {
 
     private func videoUrlLoad(url: String) {
         PTVideoManager.shared.getVideoItem(for: url,autoCacheVideo: true) { item in
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.contentImageView.image = item.coverImage ?? PTAppBaseConfig.share.defaultEmptyImage
             }
         } videoReady: { item in
@@ -259,9 +259,11 @@ public class PTChatMediaCell: PTChatBaseCell {
     
     public func mediaDownloadFunction(urlReal:URL) {
         self.loadingView.hubTapCallback = {
-            self.loadingView.removeFromSuperview()
-            self.mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadPauseImage, for: .normal)
-            Network.share.suspend(fileUrl: urlReal.absoluteString)
+            Task { @MainActor in
+                self.loadingView.removeFromSuperview()
+                self.mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadPauseImage, for: .normal)
+                Network.share.suspend(fileUrl: urlReal.absoluteString)
+            }
         }
         dataContent.addSubviews([loadingView])
         loadingView.snp.makeConstraints { make in

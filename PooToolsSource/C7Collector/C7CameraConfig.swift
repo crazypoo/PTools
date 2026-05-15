@@ -95,7 +95,7 @@ public class C7CameraConfig: NSObject {
     }
     
     func hudShow() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.hudConfig()
             if self.hud == nil {
                 self.hud = PTHudView()

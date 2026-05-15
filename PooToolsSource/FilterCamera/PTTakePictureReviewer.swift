@@ -82,7 +82,7 @@ public class PTTakePictureReviewer:UIView {
         PTUtils.getCurrentVC()?.view.addSubview(self)
         showAlert()
         
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.viewCorner(radius: 5,borderWidth: 0,borderColor: .clear)
             self.shareImageView.viewCorner(radius: 5)
         }
@@ -102,7 +102,9 @@ public class PTTakePictureReviewer:UIView {
     
     func dismissAlert() {
         PTAnimationFunction.animationOut(animationView: self, animationType: .Left, toValue: -AnimationValue, animation: {
-            self.alpha = 0
+            Task { @MainActor in
+                self.alpha = 0
+            }
         }) { ok in
             self.removeFromSuperview()
             self.dismissTask?()

@@ -580,7 +580,9 @@ public extension PTActionLayoutButton {
             
             // 2. 将原本分散在各处的 0.1s 延迟刷新统一集中到这里
             PTGCDManager.gcdAfter(time: 0.1) {
-                self?.updateAppearance()
+                Task { @MainActor in
+                    self?.updateAppearance()
+                }
             }
         }
     }

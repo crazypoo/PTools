@@ -58,9 +58,11 @@ class PTLoadedLibsViewController: PTBaseViewController {
                 let headerModel = self.viewModel.filteredLibraries[index.section]
                 header.configure(with: headerModel)
                 header.onToggle = { [weak self] in
-                    self?.viewModel.toggleLibraryExpansion(at: index.section)
-                    // 展开/收起由于没有异步网络请求，本地直接刷新即可
-                    self?.setDataList()
+                    Task { @MainActor in
+                        self?.viewModel.toggleLibraryExpansion(at: index.section)
+                        // 展开/收起由于没有异步网络请求，本地直接刷新即可
+                        self?.setDataList()
+                    }
                 }
                 return header
             }

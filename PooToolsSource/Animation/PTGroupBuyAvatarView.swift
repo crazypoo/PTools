@@ -193,7 +193,9 @@ public class PTGroupBuyAvatarView: UIView {
             }
 
             PTGCDManager.gcdAfter(time: 0.6) {
-                self.startAnimation()
+                Task { @MainActor in
+                    self.startAnimation()
+                }
             }
         })
     }

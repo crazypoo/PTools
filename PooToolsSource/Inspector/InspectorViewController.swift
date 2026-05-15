@@ -296,8 +296,8 @@ extension InspectorViewController {
         guard viewCode.searchView.isFirstResponder else { return }
 
         viewModel.search(viewCode.searchView.query) {
-            self.reloadData()
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
+                self.reloadData()
                 self.scrollToTopSection()
             }
         }
@@ -339,7 +339,7 @@ extension InspectorViewController: HierarchyInspectorViewCodeDelegate {
 extension InspectorViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string == UIKeyCommand.inputTab {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.setFirstResponderAndSelectFirstRow()
             }
             return false

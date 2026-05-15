@@ -36,7 +36,7 @@ public struct PTTabBarItemConfig {
     }
 }
 
-final public class PTTabBarImageContent: PTTabBarItemContent {
+final public class PTTabBarImageContent: @preconcurrency PTTabBarItemContent {
 
     private let container = UIView()
     private let imageView = UIImageView()
@@ -196,7 +196,9 @@ final public class PTTabBarItemView: UIControl {
         
         if PTAppBaseConfig.share.tabSelectedMetail {
             PTGCDManager.gcdAfter(time: 0.1, block: {
-                self.layoutMetailView()
+                Task { @MainActor in
+                    self.layoutMetailView()
+                }
             })
         }
     }

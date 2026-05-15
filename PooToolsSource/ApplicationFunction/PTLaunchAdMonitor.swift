@@ -204,8 +204,10 @@ public class PTLaunchAdMonitor: NSObject {
         // 💡 优化5：定时器闭包严格使用 [weak self]，确保广告结束后彻底释放资源
         skipButton.buttonTimeRun(timeInterval: totalTime, originalTitle: "", timeFinish: { [weak self] in
             guard let self = self else { return }
-            self.adShowed = false
-            self.hideView()
+            Task { @MainActor in
+                self.adShowed = false
+                self.hideView()
+            }
         }, timingCallPack: { [weak self] time in
             guard let self = self else { return }
             self.adShowed = true
@@ -227,7 +229,7 @@ public class PTLaunchAdMonitor: NSObject {
         
         loadImageAtPath(path: model.image as Any) { [weak self] type, media, gifTime in
             guard let self = self else { return }
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.resetMediaStates()
                 
                 switch type {
