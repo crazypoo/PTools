@@ -306,8 +306,10 @@ public class CropPickerView: UIView {
     public override func awakeFromNib() {
         super.awakeFromNib()
         
-        if self.scrollView.delegate == nil {
-            self.initVars()
+        Task { @MainActor in
+            if self.scrollView.delegate == nil {
+                self.initVars()
+            }
         }
     }
     
@@ -802,7 +804,7 @@ extension CropPickerView {
 }
 
 // MARK: LineButtonDelegate
-extension CropPickerView: LineButtonDelegate {
+extension CropPickerView: @preconcurrency LineButtonDelegate {
     // When highlighted on the line button disappears, Enable interaction for all buttons.
     func lineButtonUnHighlighted() {
         self.lineButtonTouchPoint = nil

@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 final class PTDebugPerformanceToolKit {
     
     static let shared = PTDebugPerformanceToolKit.init()
@@ -82,7 +83,7 @@ final class PTDebugPerformanceToolKit {
     }
     
     deinit {
-        performanceClose()
+//        performanceClose()
     }
     
     func performanceClose() {
@@ -137,7 +138,7 @@ final class PTDebugPerformanceToolKit {
         maxLeaks = max(maxLeaks, currentLeaks)
         leaksMeasurements = array(leaksMeasurements, byAddingMeasurement: leak())
 
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.updateFloatingView()
         }
         

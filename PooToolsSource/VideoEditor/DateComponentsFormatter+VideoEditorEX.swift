@@ -9,14 +9,14 @@
 import Foundation
 
 extension DateComponentsFormatter {
-    static var shortDurationFormatter: DateComponentsFormatter = {
+    @MainActor static var shortDurationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.zeroFormattingBehavior = .pad
         formatter.allowedUnits = [.minute, .second]
         return formatter
     }()
 
-    static var longDurationFormatter: DateComponentsFormatter = {
+    @MainActor static var longDurationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.zeroFormattingBehavior = .pad
         formatter.allowedUnits = [.hour, .minute, .second]

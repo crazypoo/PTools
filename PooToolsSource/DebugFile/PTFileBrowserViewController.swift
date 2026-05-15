@@ -212,66 +212,68 @@ public class PTFileBrowserViewController: PTBaseViewController {
         
         // 优化2：将文件系统读取放入后台队列，避免文件过多时卡主 UI 导致掉帧
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            var tempFileList = [PTFileModel]()
-            let fileDirectoryPth = self.currentDirectoryPath
-            
-            if FileManager.pt.judgeFileOrFolderExists(filePath: fileDirectoryPth.path),
-               let subPath = FileManager.pt.shallowSearchAllFiles(folderPath: fileDirectoryPth.path) {
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 
-                for fileName in subPath {
-                    let filePath = fileDirectoryPth.path.appending("/\(fileName)")
-                    let fileModel = PTFileModel()
-                    fileModel.name = fileName
-                    fileModel.fileURL = URL(fileURLWithPath: filePath) // 记录 URL 供后续使用
+                var tempFileList = [PTFileModel]()
+                let fileDirectoryPth = self.currentDirectoryPath
+                
+                if FileManager.pt.judgeFileOrFolderExists(filePath: fileDirectoryPth.path),
+                   let subPath = FileManager.pt.shallowSearchAllFiles(folderPath: fileDirectoryPth.path) {
                     
-                    var isDirectory: ObjCBool = false
-                    if FileManager.default.fileExists(atPath: filePath, isDirectory: &isDirectory) {
-                        fileModel.fileType = PTFileBrowser.shared.getFileType(filePath: fileModel.fileURL)
+                    for fileName in subPath {
+                        let filePath = fileDirectoryPth.path.appending("/\(fileName)")
+                        let fileModel = PTFileModel()
+                        fileModel.name = fileName
+                        fileModel.fileURL = URL(fileURLWithPath: filePath) // 记录 URL 供后续使用
                         
-                        if let fileAttributes = FileManager.pt.fileAttributes(path: filePath) {
-                            fileModel.modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date ?? Date()
-                            if isDirectory.boolValue {
-                                fileModel.size = Int64(FileManager.pt.fileOrDirectorySingleSize(filePath: filePath))
-                            } else {
-                                fileModel.size = fileAttributes[FileAttributeKey.size] as? Int64 ?? 0
+                        var isDirectory: ObjCBool = false
+                        if FileManager.default.fileExists(atPath: filePath, isDirectory: &isDirectory) {
+                            fileModel.fileType = PTFileBrowser.shared.getFileType(filePath: fileModel.fileURL)
+                            
+                            if let fileAttributes = FileManager.pt.fileAttributes(path: filePath) {
+                                fileModel.modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date ?? Date()
+                                if isDirectory.boolValue {
+                                    fileModel.size = Int64(FileManager.pt.fileOrDirectorySingleSize(filePath: filePath))
+                                } else {
+                                    fileModel.size = fileAttributes[FileAttributeKey.size] as? Int64 ?? 0
+                                }
                             }
+                            tempFileList.append(fileModel)
                         }
-                        tempFileList.append(fileModel)
                     }
                 }
-            }
-            
-            // 数据准备完毕后，切换回主线程更新 UI
-            DispatchQueue.main.async {
-                self.dataList = tempFileList
-                var mSections = [PTSection]()
                 
-                let rows = self.dataList.map { value in
-                    let fusionModel = PTFusionCellModel()
-                    fusionModel.leftImage = self.getImage(type: value.fileType)
-                    fusionModel.name = value.name
+                // 数据准备完毕后，切换回主线程更新 UI
+                DispatchQueue.main.async {
+                    self.dataList = tempFileList
+                    var mSections = [PTSection]()
                     
-                    // 优化4：直接使用我们在第一步优化中添加的属性，代码大幅简化！
-                    fusionModel.desc = "\(value.formattedSize) | \(value.formattedDate)"
-                    
-                    switch value.fileType {
-                    case .folder:
-                        fusionModel.accessoryType = .DisclosureIndicator
-                        fusionModel.disclosureIndicatorImage = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
-                    default:
-                        fusionModel.accessoryType = .NoneAccessoryView
-                    }
+                    let rows = self.dataList.map { value in
+                        let fusionModel = PTFusionCellModel()
+                        fusionModel.leftImage = self.getImage(type: value.fileType)
+                        fusionModel.name = value.name
+                        
+                        // 优化4：直接使用我们在第一步优化中添加的属性，代码大幅简化！
+                        fusionModel.desc = "\(value.formattedSize) | \(value.formattedDate)"
+                        
+                        switch value.fileType {
+                        case .folder:
+                            fusionModel.accessoryType = .DisclosureIndicator
+                            fusionModel.disclosureIndicatorImage = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
+                        default:
+                            fusionModel.accessoryType = .NoneAccessoryView
+                        }
 
-                    return PTRows(title: value.name, ID: PTFusionCell.ID, dataModel: fusionModel)
+                        return PTRows(title: value.name, ID: PTFusionCell.ID, dataModel: fusionModel)
+                    }
+                    
+                    if !rows.isEmpty {
+                        mSections.append(PTSection(rows: rows))
+                    }
+                    // 去掉了原先硬编码的 PTGCDManager.gcdAfter(time: 0.5) 人为延迟，提升用户体验
+                    self.newCollectionView.showCollectionDetail(collectionData: mSections)
                 }
-                
-                if !rows.isEmpty {
-                    mSections.append(PTSection(rows: rows))
-                }
-                // 去掉了原先硬编码的 PTGCDManager.gcdAfter(time: 0.5) 人为延迟，提升用户体验
-                self.newCollectionView.showCollectionDetail(collectionData: mSections)
             }
         }
     }

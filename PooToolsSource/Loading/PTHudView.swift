@@ -32,6 +32,7 @@ let loadingHudSpace: CGFloat = 5
     case Waiting
 }
 
+@MainActor
 @objcMembers
 public class PTHudConfig: NSObject {
     public static let share = PTHudConfig()

@@ -411,7 +411,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
     
-    private func hudConfig() {
+    @MainActor private func hudConfig() {
         let hudConfig = PTHudConfig.share
         hudConfig.hudColors = [.gray,.gray]
         hudConfig.lineWidth = 4

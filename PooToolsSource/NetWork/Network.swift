@@ -604,7 +604,7 @@ public final class Network: @unchecked Sendable {
     }()
     
     public var hud:PTHudView?
-    public var hudConfig : PTHudConfig {
+    @MainActor public var hudConfig : PTHudConfig {
         let hudConfig = PTHudConfig.share
         hudConfig.hudColors = [.gray,.gray]
         hudConfig.lineWidth = 4

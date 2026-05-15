@@ -88,7 +88,7 @@ public class C7CameraConfig: NSObject {
     }
     
     var hud:PTHudView?
-    private func hudConfig() {
+    @MainActor private func hudConfig() {
         let hudConfig = PTHudConfig.share
         hudConfig.hudColors = [.gray,.gray]
         hudConfig.lineWidth = 4

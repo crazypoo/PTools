@@ -15,7 +15,7 @@ import SwifterSwift
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
-public class PTLaunchADModel: NSObject {
+public class PTLaunchADModel: NSObject,@unchecked Sendable {
     public var image: Any?
     public var time: TimeInterval = 0
     public var tapURL: [AnyHashable: Any]?
@@ -32,6 +32,7 @@ public struct CountdownItem<T: Sendable> : Sendable{
  启动页面广告管理器 (优化版)
  针对冷启动场景优化了内存释放与渲染性能
  */
+@MainActor
 @objcMembers
 public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
     public static let share = PTLaunchAdMonitor()
@@ -209,15 +210,17 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
                 self.hideView()
             }
         }, timingCallPack: { [weak self] time in
-            guard let self = self else { return }
-            self.adShowed = true
-            
-            guard let newIndex = self.currentCountdownIndex(remainTime: time, totalTime: totalTime, timeline: timeline) else { return }
-            
-            if newIndex != currentIndex {
-                currentIndex = newIndex
-                let model = timeline[newIndex].value
-                self.handleAdDisplay(model: model)
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                self.adShowed = true
+                
+                guard let newIndex = self.currentCountdownIndex(remainTime: time, totalTime: totalTime, timeline: timeline) else { return }
+                
+                if newIndex != currentIndex {
+                    currentIndex = newIndex
+                    let model = timeline[newIndex].value
+                    self.handleAdDisplay(model: model)
+                }
             }
         })
     }
@@ -321,7 +324,7 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         }
     }
     
-    func buildCountdownTimeline<T>(items: [(TimeInterval, T)]) -> (timeline: [CountdownItem<T>], totalTime: TimeInterval) {
+    @MainActor func buildCountdownTimeline<T>(items: [(TimeInterval, T)]) -> (timeline: [CountdownItem<T>], totalTime: TimeInterval) {
         var current: TimeInterval = 0
         let timeline = items.map { duration, value in
             let item = CountdownItem(duration: duration, value: value, start: current, end: current + duration)
