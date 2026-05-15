@@ -12,8 +12,10 @@ import UIKit
 open class PTFullscreenPopGesture {
     /// 只需要在 App 启动时（例如 AppDelegate 的 didFinishLaunchingWithOptions）调用一次此方法
     public static func configure() {
-        UINavigationController.enableFullscreenPop()
-        UIViewController.enableSwizzling()
+        Task { @MainActor in
+            UINavigationController.enableFullscreenPop()
+            UIViewController.enableSwizzling()
+        }
     }
 }
 
@@ -21,6 +23,7 @@ open class PTFullscreenPopGesture {
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
 
     // 使用标准、安全的 Key 定义关联对象
+    @MainActor
     private struct AssociatedKeys {
         static var fullscreenPopGesture: UInt8 = 0
         static var viewControllerBasedNavBar: UInt8 = 0
@@ -111,6 +114,7 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
 // MARK: - UIViewController Extension
 extension UIViewController {
 
+    @MainActor
     private struct AssociatedKeys {
         static var interactivePopDisabled: UInt8 = 0
         static var prefersNavigationBarHidden: UInt8 = 0

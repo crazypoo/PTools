@@ -122,7 +122,7 @@ public class PTCoinAnimation: UIView {
     }
 }
 
-extension PTCoinAnimation:CAAnimationDelegate {
+extension PTCoinAnimation:@preconcurrency CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation,
                                  finished flag: Bool) {
         if anim == showLabel.layer.animation(forKey: "babyCoin_scale") {

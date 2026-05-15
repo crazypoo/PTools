@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 @objcMembers
 public class PTFPSTool: NSObject {
     public static let shared = PTFPSTool.init()

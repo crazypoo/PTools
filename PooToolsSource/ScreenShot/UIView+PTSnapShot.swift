@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIView:SnapshotKitProtocol {
+extension UIView:@preconcurrency SnapshotKitProtocol {
     
     // MARK: - SnapshotKitProtocol 实现
     

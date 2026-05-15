@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 
+@MainActor
 @objcMembers
 public class PTGetGPSData: NSObject {
     public static let share = PTGetGPSData()

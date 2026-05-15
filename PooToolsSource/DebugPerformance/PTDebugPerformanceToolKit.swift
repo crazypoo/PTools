@@ -56,7 +56,7 @@ final class PTDebugPerformanceToolKit {
     var currentCPU: CGFloat = 0
     var maxCPU: CGFloat = 0
 
-    var fpsCounter = PTFPSTool.shared
+    @MainActor var fpsCounter = PTFPSTool.shared
     var currentFPS: CGFloat = 0
     var minFPS: CGFloat = 9999
     var maxFPS: CGFloat = 0
@@ -84,14 +84,18 @@ final class PTDebugPerformanceToolKit {
     }
     
     func performanceClose() {
-        measurementsTimer?.invalidate()
-        measurementsTimer = nil
-        fpsCounter.close()
+        Task { @MainActor in
+            measurementsTimer?.invalidate()
+            measurementsTimer = nil
+            fpsCounter.close()
+        }
     }
     
     func performanceRestart() {
-        fpsCounter.open()
-        measurementsTimer = Timer( timeInterval: 1.0, target: self, selector: #selector(updateMeasurements), userInfo: nil, repeats: true)
+        Task { @MainActor in
+            fpsCounter.open()
+            measurementsTimer = Timer( timeInterval: 1.0, target: self, selector: #selector(updateMeasurements), userInfo: nil, repeats: true)
+        }
         RunLoop.main.add(measurementsTimer!, forMode: .common)
     }
     
@@ -118,12 +122,14 @@ final class PTDebugPerformanceToolKit {
         maxMemory = max(maxMemory, currentMemory)
 
         // FPS measurements
-        currentFPS = fps()
-        fpsMeasurements = array(fpsMeasurements, byAddingMeasurement: currentFPS)
-        if !currentFPS.isZero {
-            minFPS = min(minFPS, currentFPS)
+        Task { @MainActor in
+            currentFPS = fps()
+            fpsMeasurements = array(fpsMeasurements, byAddingMeasurement: currentFPS)
+            if !currentFPS.isZero {
+                minFPS = min(minFPS, currentFPS)
+            }
+            maxFPS = max(maxFPS, currentFPS)
         }
-        maxFPS = max(maxFPS, currentFPS)
         
         currentLeaks = leak()
         maxLeaks = max(maxLeaks, currentLeaks)
@@ -207,6 +213,7 @@ final class PTDebugPerformanceToolKit {
         return kerr == KERN_SUCCESS ? CGFloat(info.resident_size) / 1024.0 / 1024.0 : 0
     }
 
+    @MainActor
     private func fps() -> CGFloat {
         CGFloat(fpsCounter.fpsValue)
     }
