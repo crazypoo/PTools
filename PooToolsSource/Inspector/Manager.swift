@@ -22,7 +22,7 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
 
     lazy var keyCommandsStore = ExpirableStore<[UIKeyCommand]>(lifespan: dependencies.configuration.snapshotExpirationTimeInterval)
 
-    @MainActor func dismissInspectorViewIfNeeded(_ closure: @escaping PTActionTask) {
+    func dismissInspectorViewIfNeeded(_ closure: @escaping PTActionTask) {
         let coordinators = children.compactMap { $0 as? InspectorViewCoordinator }
 
         if coordinators.isEmpty { return closure() }
@@ -69,16 +69,16 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
     }
 
     deinit {
-        operationQueue.cancelAllOperations()
+//        operationQueue.cancelAllOperations()
 
-        Task { @MainActor [ weak self] in
-            self?.viewHierarchyCoordinator.removeAllLayers()
-        }
+//        Task { @MainActor [ weak self] in
+//            self?.viewHierarchyCoordinator.removeAllLayers()
+//        }
 
-        children.forEach { child in
-            (child as? DismissablePresentationProtocol)?.dismissPresentation(animated: true)
-            child.removeFromParent()
-        }
+//        children.forEach { child in
+//            (child as? DismissablePresentationProtocol)?.dismissPresentation(animated: true)
+//            child.removeFromParent()
+//        }
     }
 
     override func loadContent() -> Void? {

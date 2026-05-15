@@ -13,8 +13,8 @@ protocol ViewHierarchyCoordinatorFactoryProtocol {
                                 defaultLayers: [Inspector.ViewHierarchyLayer]) -> ViewHierarchyCoordinator
 }
 
-enum ViewHierarchyCoordinatorFactory: ViewHierarchyCoordinatorFactoryProtocol {
-    static func makeCoordinator(with windows: [UIWindow],
+enum ViewHierarchyCoordinatorFactory: @preconcurrency ViewHierarchyCoordinatorFactoryProtocol {
+    @MainActor static func makeCoordinator(with windows: [UIWindow],
                                 operationQueue: OperationQueue,
                                 customization: InspectorCustomizationProviding?,
                                 defaultLayers: [Inspector.ViewHierarchyLayer]) -> ViewHierarchyCoordinator

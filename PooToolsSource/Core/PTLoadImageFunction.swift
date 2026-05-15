@@ -56,7 +56,7 @@ public class PTLoadImageFunction: NSObject {
     }
 
     // 主入口方法
-    public static func loadImage(contentData: Any,
+    @MainActor public static func loadImage(contentData: Any,
                                  iCloudDocumentName: String = "",
                                  progressHandle: PTLoadImageProgressBlock? = nil) async -> PTLoadImageResult {
         switch contentData {

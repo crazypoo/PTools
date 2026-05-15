@@ -22,7 +22,7 @@
 //
 
 #if canImport(Speech)
-import Speech
+@preconcurrency import Speech
 import Foundation
 import AVFoundation
 
@@ -574,35 +574,52 @@ public class OSSSpeech: NSObject, @unchecked Sendable {
         }
     }
 
-    public func recognizeSpeech(filePath: URL, finalBlock: ((_ text: String) -> Void)? = nil) {
+    public func recognizeSpeech(filePath: URL, finalBlock: (@Sendable (_ text: String) -> Void)? = nil) {
+            
         guard FileManager.default.fileExists(atPath: filePath.path) else {
-            notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error) }
+            // 2. 推荐使用 Swift 原生的 MainActor 进行主线程派发
+            Task { @MainActor in
+                self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error)
+            }
             return
         }
 
+        // 保持你原有的锁逻辑（假设 lock 是 NSRecursiveLock 或 NSLock 等安全锁）
         let identifier = lock.withLock { _voice?.voiceType.rawValue ?? OSSVoiceEnum.UnitedStatesEnglish.rawValue }
         let localRecognizer = SFSpeechRecognizer(locale: Locale(identifier: identifier))
         lock.withLock { _speechRecognizer = localRecognizer }
 
         guard let audioFile = try? AVAudioFile(forReading: filePath) else {
-            notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error) }
+            Task { @MainActor in
+                self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidVoiceFilePath.error)
+            }
             return
         }
 
         let request = SFSpeechURLRecognitionRequest(url: audioFile.url)
+        
+        // SFSpeechRecognizer 的回调在后台队列触发，闭包自带 @Sendable 属性
         localRecognizer?.recognitionTask(with: request) { @Sendable [weak self] (result, error) in
+            // 安全解包 self
             guard let self = self else { return }
+            
             if let result = result, result.isFinal {
                 let transcription = result.bestTranscription.formattedString
-                self.notifyDelegateOnMain {
+                
+                // 3. 将 UI 更新或 Delegate 回调安全地推送到主线程
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
                     if let block = finalBlock {
+                        // 因为方法签名中声明了 @Sendable，现在在这里调用 block 是绝对安全的
                         block(transcription)
                     } else {
                         self.delegate?.voiceFilePathTranscription(withText: transcription)
                     }
                 }
             } else if error != nil {
-                self.notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidTranscriptionFilePath.error) }
+                Task { @MainActor [weak self] in
+                    self?.delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidTranscriptionFilePath.error)
+                }
             }
         }
     }

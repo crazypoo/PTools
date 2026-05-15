@@ -197,7 +197,9 @@ class PTDarkModePickerView: UIView {
         PTAnimationFunction.animationOut(animationView: bgView, animationType: .Bottom,toValue: bgView.layer.position.y) {
             
         } completion: { finish in
-            self.removeFromSuperview()
+            Task { @MainActor in
+                self.removeFromSuperview()
+            }
         }
     }
     

@@ -55,9 +55,13 @@ extension Manager {
     }
 
     @MainActor func presentInspector(animated: Bool, from presenter: UIViewController) {
+        // 1. 将 [weak self] 放在最外层的 @Sendable 闭包中
         dismissInspectorViewIfNeeded { [weak self] in
-            guard let self = self else { return }
+            
+            // 2. 内层 Task 继承外层的 weak self 即可
             Task { @MainActor in
+                // 3. 在安全的隔离区（主线程）中解包
+                guard let self = self else { return }
                 let coordinator = self.makeInspectorViewCoordinator(presentedBy: presenter)
 
                 presenter.present(coordinator.start(), animated: animated) { [weak self] in

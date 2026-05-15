@@ -63,7 +63,7 @@ final class InspectorViewCoordinator: Coordinator<InspectorViewDependencies, UIV
 
 // MARK: - InspectorViewControllerDelegate
 
-extension InspectorViewCoordinator: InspectorViewControllerDelegate {
+extension InspectorViewCoordinator: @preconcurrency InspectorViewControllerDelegate {
     func inspectorViewController(_ viewController: InspectorViewController, didSelect command: InspectorCommand?) {
         finish(command: command)
     }

@@ -50,8 +50,10 @@ public final class PTFusionContentView: UIView {
     private lazy var customSwitch: PTSwitch = {
         let view = PTSwitch()
         view.valueChangeCallBack = { [weak self] _ in
-            guard let self else { return }
-            self.switchValueChangeBlock?(self.cellModel.name, self.customSwitch)
+            Task { @MainActor in
+                guard let self else { return }
+                self.switchValueChangeBlock?(self.cellModel.name, self.customSwitch)
+            }
         }
         return view
     }()

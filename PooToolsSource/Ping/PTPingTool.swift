@@ -33,7 +33,7 @@ public struct PTPingResponse: Sendable {
 }
 
 // 1. 优化：将回调标记为 @Sendable，确保跨隔离域传递时的线程安全
-public typealias PingComplete = @Sendable (_ response: PTPingResponse?, _ error: Error?) -> Void
+public typealias PingComplete = @Sendable (PTPingResponse?, (any Error)?) -> Void
 
 public enum NetworkActivityIndicatorStatus: Sendable {
     case auto       //自动显示
@@ -93,8 +93,8 @@ open class PTPingTool: NSObject {
     deinit {
         NotificationCenter.default.removeObserver(self)
         // 确保销毁时清理定时器
-        sendTimer?.invalidate()
-        checkTimer?.invalidate()
+//        sendTimer?.invalidate()
+//        checkTimer?.invalidate()
     }
 
     public init(hostName: String? = nil) {
@@ -160,16 +160,14 @@ private extension PTPingTool {
 
         if interval.second > 0 {
             // 3. 修复闭包并发捕获：在 Timer 闭包内部声明 @MainActor，确保对 self 的访问安全
-            sendTimer = Timer(timeInterval: interval.second, repeats: true, block: { [weak self] (_) in
-                Task { @MainActor [weak self] in
+            sendTimer = Timer(timeInterval: interval.second, repeats: true, block: { [weak self, pingType, interval, complete] (_) in
+                            
+                // 内层的 Task 同样需要声明捕获这些变量
+                Task { @MainActor [weak self, pingType, interval, complete] in
                     guard let self = self else { return }
                     self.pingStart(pingType: pingType, interval: interval, complete: complete)
                 }
             })
-            //循环发送
-            if let timer = sendTimer {
-                RunLoop.main.add(timer, forMode: .common)
-            }
         }
     }
 

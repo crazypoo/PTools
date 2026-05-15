@@ -9,10 +9,27 @@
 import CFNetwork
 import Foundation
 
-public enum AddressStyle {
+// 1. 声明枚举，并建议加上 Sendable 协议以满足 Swift 6 的严格并发检查
+public enum AddressStyle: Sendable {
     case any    /* Use the first IPv4 or IPv6 address found (default). */
     case icmpV4 /* Use the first IPv4 address found. */
     case icmpV6 /* Use the first IPv6 address found. */
+}
+
+// 2. 扩展枚举，遵守 CustomStringConvertible 协议
+extension AddressStyle: CustomStringConvertible {
+    
+    /// 提供人类可读的字符串描述，非常适合用于 UI 展示或控制台日志打印
+    public var description: String {
+        switch self {
+        case .any:
+            return "自动匹配 (IPv4 / IPv6)"
+        case .icmpV4:
+            return "仅限 IPv4"
+        case .icmpV6:
+            return "仅限 IPv6"
+        }
+    }
 }
 
 public protocol SimplePingDelegate : AnyObject {

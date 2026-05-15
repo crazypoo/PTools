@@ -14,7 +14,7 @@ public let CorePodBundleName = "PooToolsResource"
 // 2. 新增：专门用于后台/全局线程的 Task（不带 @MainActor，避免线程冲突警告）
 public typealias PTBackgroundTask = @Sendable () -> Void
 
-public typealias PTBoolTask = (Bool) -> Void
+public typealias PTBoolTask = (@Sendable (Bool) -> Void)
 
 @MainActor public var AppWindows: UIWindow? {
     UIApplication.shared.currentWindow

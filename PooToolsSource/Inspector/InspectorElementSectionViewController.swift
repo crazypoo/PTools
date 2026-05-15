@@ -164,7 +164,9 @@ final class InspectorElementSectionViewController: UIViewController, DataReloadi
 
         } completion: { [weak self] _ in
             if let formView = self?.viewCode as? InspectorElementSectionFormView {
-                formView.collapseIcon.hideLoading()
+                Task { @MainActor in
+                    formView.collapseIcon.hideLoading()
+                }
             }
         }
     }

@@ -50,10 +50,12 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         let view = PTSwitch()
         view.isOn = PTNetworkHelper.shared.isNetworkEnable
         view.valueChangeCallBack = { sender in
-            if sender {
-                PTNetworkHelper.shared.enable()
-            } else {
-                PTNetworkHelper.shared.disable()
+            Task { @MainActor in
+                if sender {
+                    PTNetworkHelper.shared.enable()
+                } else {
+                    PTNetworkHelper.shared.disable()
+                }
             }
         }
         view.bounds = CGRect(origin: .zero, size: CGSize.SwitchSize)

@@ -114,14 +114,14 @@ public class PTSearchBar: UISearchBar {
     
     /// 异步加载放大镜图标
     private func loadSearchImage() {
-        guard let clearImage = searchBarImage else { return }
-        
-        // 计算目标高度
-        let clearTopSpace = min(max(searchImageTopSpacing, 0), self.frame.height * 0.5)
-        let clearHeight = max(self.frame.height - clearTopSpace * 2, 16) // 给一个最小保护值
         
         Task { @MainActor [weak self] in
             guard let self = self else { return }
+            guard let clearImage = self.searchBarImage else { return }
+            
+            // 计算目标高度
+            let clearTopSpace = min(max(self.searchImageTopSpacing, 0), self.frame.height * 0.5)
+            let clearHeight = max(self.frame.height - clearTopSpace * 2, 16) // 给一个最小保护值
             let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
             self.processAndSetImage(result: result, targetHeight: clearHeight, iconState: .search)
         }

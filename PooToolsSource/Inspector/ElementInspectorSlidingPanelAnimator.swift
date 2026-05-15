@@ -122,7 +122,9 @@ final class ElementInspectorSlidingPanelAnimator: NSObject, @preconcurrency Elem
             self.shadowView.layer.shadowOpacity = 1
             self.backgroundGestureView.alpha = 1
         } completion: { finish in
-            transitionContext.completeTransition(finish)
+            Task { @MainActor in
+                transitionContext.completeTransition(finish)
+            }
         }
     }
 
@@ -139,13 +141,15 @@ final class ElementInspectorSlidingPanelAnimator: NSObject, @preconcurrency Elem
             self.shadowView.layer.shadowOpacity = 0
             self.backgroundGestureView.alpha = 0
         } completion: { finish in
-            if finish {
-                self.backgroundGestureView.removeFromSuperview()
+            Task { @MainActor in
+                if finish {
+                    self.backgroundGestureView.removeFromSuperview()
+                }
+                else {
+                    self.backgroundGestureView.alpha = 1
+                }
+                transitionContext.completeTransition(finish)
             }
-            else {
-                self.backgroundGestureView.alpha = 1
-            }
-            transitionContext.completeTransition(finish)
         }
     }
 }

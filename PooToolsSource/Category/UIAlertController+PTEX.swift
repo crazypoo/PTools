@@ -314,7 +314,7 @@ public extension UIAlertController {
         let feedBackTitleText:UITextField
         #if POOTOOLS_INPUT
         let feedBackTitle = PTTextField()
-        feedBackTitle.placeholder = feedBackTitlePlaceholder
+        feedBackTitle.placeholder = feedBackTitlePlaceholderItem
         feedBackTitle.setPlaceHolderTextColor(.lightGray)
         feedBackTitle.clearButtonMode = .whileEditing
         feedBackTitle.font = feedBackTitleFont
@@ -328,7 +328,7 @@ public extension UIAlertController {
         feedBackTitleText.tintColor = titleTintColor
         #else
         feedBackTitleText = UITextField()
-        feedBackTitleText.placeholder = feedBackTitlePlaceholder
+        feedBackTitleText.placeholder = feedBackTitlePlaceholderItem
         feedBackTitleText.setPlaceHolderTextColor(.lightGray)
         feedBackTitleText.clearButtonMode = .whileEditing
         feedBackTitleText.font = feedBackTitleFont
@@ -345,7 +345,7 @@ public extension UIAlertController {
         if let textInsets = textInset {
             feedBackContent.textContainerInset = textInsets
         }
-        feedBackContent.pt_placeholder = feedBackContentPlaceholder
+        feedBackContent.pt_placeholder = feedBackContentPlaceholderItem
         feedBackContent.pt_placeholderLabel?.textColor = .lightGray
         feedBackContent.pt_placeholderLabel?.font = feedBackContentFont
         feedBackContent.font = feedBackContentFont

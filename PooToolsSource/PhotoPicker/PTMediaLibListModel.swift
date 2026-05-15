@@ -131,7 +131,7 @@ public final class PTMediaModel:NSObject,@unchecked Sendable {
         CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
     }
     
-    public var previewSize: CGSize {
+    @MainActor public var previewSize: CGSize {
         let scale: CGFloat = UIScreen.main.scale
         if whRatio > 1 {
             let h = min(UIScreen.main.bounds.height, PTMaxImageWidth) * scale
@@ -215,7 +215,7 @@ public extension PTMediaModel {
 }
 
 //MARK: 结果输出Model
-public class PTResultModel: NSObject {
+public class PTResultModel: NSObject ,@unchecked Sendable {
     @objc public let asset: PHAsset
     
     @objc public let image: UIImage

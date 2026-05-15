@@ -44,6 +44,7 @@ internal protocol PTSwiftPropertyCompatible {
     var swiftCallBack: SwiftCallBack?  { get set }
 }
 
+@MainActor
 public struct PTNumberValueAdapter {
     public static var share = PTNumberValueAdapter()
         

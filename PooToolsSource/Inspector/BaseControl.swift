@@ -13,7 +13,7 @@ extension UIControl.Event {
     @MainActor static var stateChanged = UIControl.Event(rawValue: 1 << 24)
 }
 
-class BaseControl: UIControl, InternalViewProtocol, ElementInspectorAppearanceProviding {
+class BaseControl: UIControl, InternalViewProtocol, @preconcurrency ElementInspectorAppearanceProviding {
     // MARK: - Properties
 
     private lazy var oldState: State = state

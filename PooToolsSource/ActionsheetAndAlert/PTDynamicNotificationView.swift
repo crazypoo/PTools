@@ -100,8 +100,10 @@ public class PTDynamicNotificationView: UIView {
                 self.alpha = 0
             }
         } completion: { _ in
-            self.removeFromSuperview()
-            self.hideHandler?()
+            Task { @MainActor in
+                self.removeFromSuperview()
+                self.hideHandler?()
+            }
         }
     }
 }

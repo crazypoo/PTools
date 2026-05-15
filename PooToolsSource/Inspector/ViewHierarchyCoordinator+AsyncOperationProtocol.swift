@@ -19,10 +19,12 @@ extension ViewHierarchyCoordinator: @preconcurrency AsyncOperationProtocol {
         let hideLoaderTask = hideLoaderTask(loaderView)
 
         let showLoaderTask = showLoaderTask(loaderView, in: keyWindow) { [weak self] _ in
-            guard let self = self else { return }
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
 
-            self.operationQueue.addOperation(mainTask)
-            self.operationQueue.addOperation(hideLoaderTask)
+                self.operationQueue.addOperation(mainTask)
+                self.operationQueue.addOperation(hideLoaderTask)
+            }
         }
 
         operationQueue.addOperation(showLoaderTask)

@@ -432,7 +432,7 @@ extension PTMediaLibView {
 }
 
 // MARK: - Photo Library Observer
-extension PTMediaLibView: PHPhotoLibraryChangeObserver {
+extension PTMediaLibView: @preconcurrency PHPhotoLibraryChangeObserver {
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         // 注销观察者防止重复触发
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
@@ -495,9 +495,9 @@ extension PTMediaLibView {
             
             // 2. 资源下载检查：如果是 iCloud 资源，需要先下载
             downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) { [weak self] in
-                guard let self = self else { return }
                 // 4. 更新 UI 表现
-                Task { @MainActor in
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
                     cellModel.isSelected = true
                     self.selectedModel.append(cellModel)
                     isSelected?(true)
@@ -743,13 +743,17 @@ public class PTMediaLibViewController: PTBaseViewController {
         }
 
         view.updateTitle = { [weak self] in
-            self?.scheduleTitleUpdate()
+            Task { @MainActor [weak self] in
+                self?.scheduleTitleUpdate()
+            }
         }
 
         view.selectedModelDidUpdate = { [weak self] in
-            guard let self else { return }
-            self.selectedModel = self.mediaListView.selectedModel
-            self.totalModels = self.mediaListView.totalModels
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.selectedModel = self.mediaListView.selectedModel
+                self.totalModels = self.mediaListView.totalModels
+            }
         }
 
         return view

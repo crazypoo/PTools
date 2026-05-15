@@ -21,7 +21,7 @@ public class PTLaunchADModel: NSObject {
     public var tapURL: [AnyHashable: Any]?
 }
 
-public struct CountdownItem<T> {
+public struct CountdownItem<T: Sendable> : Sendable{
     let duration: TimeInterval
     let value: T
     let start: TimeInterval
@@ -33,7 +33,7 @@ public struct CountdownItem<T> {
  针对冷启动场景优化了内存释放与渲染性能
  */
 @objcMembers
-public class PTLaunchAdMonitor: NSObject {
+public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
     public static let share = PTLaunchAdMonitor()
     
     public var imageContentMode: UIView.ContentMode = .scaleAspectFill

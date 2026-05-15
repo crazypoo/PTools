@@ -74,7 +74,7 @@ public extension UIImage {
 }
 
 extension UIImage {
-    var assetName: String? {
+    @MainActor var assetName: String? {
         guard
             let regex = try? NSRegularExpression(pattern: "(?<=named\\().+(?=\\))|(?<=symbol\\()\\w+:\\s\\w+(?=\\))", options: .caseInsensitive),
             let firstMatch = regex.firstMatch(in: description)
@@ -87,7 +87,7 @@ extension UIImage {
         return assetName
     }
 
-    var sizeDesription: String {
+    @MainActor var sizeDesription: String {
         guard
             let width = formatter.string(from: size.width * scale / screenScale),
             let height = formatter.string(from: size.height * scale / screenScale)
@@ -102,15 +102,15 @@ extension UIImage {
 }
 
 private extension UIImage {
-    static var sharedFormatter = NumberFormatter().then {
+    @MainActor static var sharedFormatter = NumberFormatter().then {
         $0.maximumFractionDigits = 1
     }
 
-    var formatter: NumberFormatter {
+    @MainActor var formatter: NumberFormatter {
         Self.sharedFormatter
     }
 
-    var screenScale: CGFloat {
+    @MainActor var screenScale: CGFloat {
         UIScreen.main.scale
     }
 }

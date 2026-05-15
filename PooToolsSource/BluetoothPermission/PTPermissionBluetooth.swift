@@ -33,8 +33,8 @@ public class PTPermissionBluetooth: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
-        PTPermissionBluetoothHandler.shared.completion = completion
-        Task { @MainActor in 
+        Task { @MainActor in
+            PTPermissionBluetoothHandler.shared.completion = completion
             PTPermissionBluetoothHandler.shared.reqeustUpdate()
         }
     }

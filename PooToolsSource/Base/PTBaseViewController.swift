@@ -1507,8 +1507,10 @@ fileprivate class PTBaseScreenShotAlert:UIView {
                 self.alpha = 0
             }
         }) { ok in
-            self.removeFromSuperview()
-            self.dismissTask?()
+            Task { @MainActor in
+                self.removeFromSuperview()
+                self.dismissTask?()
+            }
         }
     }
     

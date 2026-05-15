@@ -202,7 +202,9 @@ extension ElementInspectorFormPanelViewController {
             completion?(finished)
 
             if let self = self {
-                self.itemStateDelegate?.elementInspectorFormPanelItemDidChangeState(self)
+                Task { @MainActor in
+                    self.itemStateDelegate?.elementInspectorFormPanelItemDidChangeState(self)
+                }
             }
         }
     }
