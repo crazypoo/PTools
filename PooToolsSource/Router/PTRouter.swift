@@ -858,7 +858,7 @@ extension PTRouter {
         }
     }
     
-    private class func showTabBar(queries: [String: Any]) {
+    @MainActor private class func showTabBar(queries: [String: Any]) {
         let selectIndex: Int = processParameter(queries[PTRouterTabBarSelecIndex] ?? 0) ?? 0
         let tabVC = UIApplication.shared.delegate?.window??.rootViewController
         if let tabVC = tabVC as? UITabBarController {

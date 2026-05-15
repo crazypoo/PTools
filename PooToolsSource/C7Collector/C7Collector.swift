@@ -98,7 +98,7 @@ extension C7Collector {
             if self.autoCorrectDirection {
                 image = image.c7.fixOrientation()
             }
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.delegate?.preview(self, fliter: image)
             }
         })

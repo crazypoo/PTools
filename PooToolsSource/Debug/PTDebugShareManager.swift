@@ -10,7 +10,7 @@ import UIKit
 
 enum PTDebugShareManager {
 
-    static func generateFileAndShare(text: String, fileName: String) {
+    @MainActor static func generateFileAndShare(text: String, fileName: String) {
         let tempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(fileName).txt")
 
         do {
@@ -21,7 +21,7 @@ enum PTDebugShareManager {
         }
     }
 
-    static func share(_ tempURL: URL) {
+    @MainActor static func share(_ tempURL: URL) {
         
         let items: [Any] = [tempURL]
 

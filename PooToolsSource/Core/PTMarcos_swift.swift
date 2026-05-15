@@ -7,19 +7,19 @@
 //
 
 import UIKit
-import DeviceKit
+@preconcurrency import DeviceKit
 
 public let CorePodBundleName = "PooToolsResource"
 
 public typealias PTActionUncheckTask = () -> Void
-public typealias PTActionTask = @MainActor @Sendable () -> Void
-public typealias PTActionAsyncTask = @MainActor @Sendable () async -> Void
+public typealias PTActionTask = @Sendable () -> Void
+public typealias PTActionAsyncTask = @Sendable () async -> Void
 // 2. 新增：专门用于后台/全局线程的 Task（不带 @MainActor，避免线程冲突警告）
 public typealias PTBackgroundTask = @Sendable () -> Void
 
 public typealias PTBoolTask = (Bool) -> Void
 
-public var AppWindows: UIWindow? {
+@MainActor public var AppWindows: UIWindow? {
     UIApplication.shared.currentWindow
 }
 
@@ -51,37 +51,37 @@ public var isXModel: Bool {
 
 //MARK: 当前屏幕Bounds
 ///当前屏幕Bounds
-public let kSCREEN_BOUNDS = UIScreen.main.bounds
+@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds
 //MARK: 当前屏幕Size
 ///当前屏幕Size
-public let kSCREEN_SIZE = kSCREEN_BOUNDS.size
+@MainActor public let kSCREEN_SIZE = kSCREEN_BOUNDS.size
 //MARK: 当前屏幕比例
 ///当前屏幕比例
-public let kSCREEN_SCALE = UIScreen.main.scale
+@MainActor public let kSCREEN_SCALE = UIScreen.main.scale
 
 // MARK: App版本&设备系统版本
-public let infoDictionary            = Bundle.main.infoDictionary
+@MainActor public let infoDictionary            = Bundle.main.infoDictionary
 //MARK: App显示名称
 ///App显示名称
-public let kAppDisplayName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
+@MainActor public let kAppDisplayName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
 //MARK: App名称
 ///App名称
-public let kAppName: String?         = infoDictionary!["CFBundleName"] as? String
+@MainActor public let kAppName: String?         = infoDictionary!["CFBundleName"] as? String
 //MARK: App版本号
 ///App版本号
-public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
+@MainActor public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
 //MARK: App Build版本号
 ///AppBuild版本号
-public let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
+@MainActor public let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
 //MARK: App Bundle Id
 ///App BundleId
-public let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
+@MainActor public let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
 //MARK: 平台名称（iPhone Simulator 、 iPhone）
 ///平台名称（iPhone Simulator 、 iPhone）
-public let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
+@MainActor public let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
 //MARK: iOS系统版本
 ///iOS系统版本
-public let kiOSVersion: String       = UIDevice.current.systemVersion
+@MainActor public let kiOSVersion: String       = UIDevice.current.systemVersion
 //MARK: 系统名称+版本，e.g. @"iOS 12.1"
 ///系统名称+版本，e.g. @"iOS 12.1"
-public let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion
+@MainActor public let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion

@@ -9,6 +9,7 @@
 import Foundation
 import ObjectiveC
 
+@MainActor
 final class PTHttpDatasource {
     static let shared = PTHttpDatasource()
 
@@ -74,13 +75,14 @@ final class PTHttpDatasource {
 extension URLRequest {
     
     // 🌟 性能极客优化：采用单字节的静态变量指针地址做 Key，不仅避开命名冲突，查找速度更是呈数量级提升
+    @MainActor
     private struct AssociatedKeys {
         static var requestId: UInt8 = 0
         static var startTime: UInt8 = 0
     }
 
     /// 当前请求绑定的唯一生命周期追踪凭证 (自动按需注入 UUID)
-    var requestId: String {
+    @MainActor var requestId: String {
         get {
             // 通过获取静态内存地址做 Key 读取关联对象
             if let id = objc_getAssociatedObject(self, &AssociatedKeys.requestId) as? String {
@@ -107,7 +109,7 @@ extension URLRequest {
     }
 
     /// 记录请求发起的初始时间戳
-    var startTime: NSNumber? {
+    @MainActor var startTime: NSNumber? {
         get {
             objc_getAssociatedObject(self, &AssociatedKeys.startTime) as? NSNumber
         }

@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 
+@MainActor
 final class PTDebugLocationKit {
     static let shared = PTDebugLocationKit()
 

@@ -34,7 +34,7 @@ public class PTCallMessageMailFunction: NSObject {
         }
     }
     
-    public class func sendMessage(content:String,
+    @MainActor public class func sendMessage(content:String,
                                   users:[String],
                                   resultBlock:MessageResultBlock?) {
         let vc = MFMessageComposeViewController()
@@ -46,7 +46,7 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     
-    public class func sendMail(title:String,
+    @MainActor public class func sendMail(title:String,
                                content:String,
                                recipients:[String]?,
                                ccRecipients:[String]?,

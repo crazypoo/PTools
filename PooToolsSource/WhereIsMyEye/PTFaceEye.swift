@@ -18,7 +18,7 @@ public class PTFaceEye: NSObject {
     ///EyeTracking的当前使用状态
     public var trackingEyeState:((_ state:PTEyeTrackingState)->Void)?
 
-    private lazy var manager:PTEyeTrackingManager = {
+    @MainActor private lazy var manager:PTEyeTrackingManager = {
         let manager = PTEyeTrackingManager()
         manager.delegate = self
         manager.showCursorView(parent: AppWindows!)
@@ -31,7 +31,7 @@ public class PTFaceEye: NSObject {
     }
     
     ///开启
-    public func createEye() {
+    @MainActor public func createEye() {
         if Gobal_device_info.isFaceIDCapable {
             manager.run()
         } else {
@@ -40,19 +40,19 @@ public class PTFaceEye: NSObject {
     }
     
     ///关闭
-    public func dismissEye() {
+    @MainActor public func dismissEye() {
         manager.hideCursorView()
         manager.hideStatusView()
         manager.pause()
     }
     
     ///隐藏焦点
-    public func hideCursorView() {
+    @MainActor public func hideCursorView() {
         manager.hideCursorView()
     }
     
     ///开启焦点
-    public func showCursorView() {
+    @MainActor public func showCursorView() {
         manager.showCursorView(parent: AppWindows!)
     }
 }

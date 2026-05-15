@@ -118,13 +118,14 @@ public extension UIAlertController {
                             msgFont:UIFont = UIFont.systemFont(ofSize: 15),
                             okBtns:[String] = [String](),
                             cancelBtn:String = "",
-                            showIn:UIViewController? = PTUtils.getCurrentVC(),
+                            showIn:UIViewController? = nil,
                             cancelBtnColor:UIColor = .systemBlue,
                             doneBtnColors:[UIColor] = [UIColor](),
                             alertBGColor:UIColor = .white,
     @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                             cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
+        let current = showIn ?? PTUtils.getCurrentVC()
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
         if !cancelBtn.stringIsEmpty() {
@@ -179,7 +180,7 @@ public extension UIAlertController {
         }
         alertContentView.layer.cornerRadius = alertCornerRadius
         
-        showIn?.present(alert, animated: true, completion: nil)
+        current?.present(alert, animated: true, completion: nil)
     }
     
     //MARK: ALERT輸入框基類
@@ -206,7 +207,7 @@ public extension UIAlertController {
                                       titleFont:UIFont = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
                                       cancelBtn:String,
-                                      showIn:UIViewController? = PTUtils.getCurrentVC(),
+                                      showIn:UIViewController? = nil,
                                       cancelBtnColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
                                       doneBtnColor:UIColor = .systemBlue,
                                       placeHolders:[String],
@@ -218,6 +219,8 @@ public extension UIAlertController {
     @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                                       cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String]) -> Void)?) {
+        let current = showIn ?? PTUtils.getCurrentVC()
+
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
@@ -265,7 +268,7 @@ public extension UIAlertController {
             alertContentView.backgroundColor = alertBGColor
         }
         alertContentView.layer.cornerRadius = alertCornerRadius
-        showIn?.present(alert, animated: true, completion: nil)
+        current?.present(alert, animated: true, completion: nil)
     }
     
     //MARK: 初始化創建Alert

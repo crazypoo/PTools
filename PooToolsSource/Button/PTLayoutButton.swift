@@ -730,18 +730,26 @@ public class PTLayoutButton: UIButton {
 extension PTLayoutButton {
     func layoutLoadImage(contentData:Any,
                          iCloudDocumentName:String = "",
-                         borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
-                         borderColor:UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
-                         showValueLabel:Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
-                         valueLabelFont:UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
-                         valueLabelColor:UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
-                         uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
-                         emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                         borderWidth:CGFloat? = nil,
+                         borderColor:UIColor? = nil,
+                         showValueLabel:Bool? = nil,
+                         valueLabelFont:UIFont? = nil,
+                         valueLabelColor:UIColor? = nil,
+                         uniCount:Int? = nil,
+                         emptyImage:UIImage? = nil,
                          controlState:UIControl.State = .normal) {
         Task {
+            let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
+            let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
+            let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
+            let valueLabelF = valueLabelFont ?? PTAppBaseConfig.share.loadImageShowValueFont
+            let valueLabelC = valueLabelColor ?? PTAppBaseConfig.share.loadImageShowValueColor
+            let uniC = uniCount ?? PTAppBaseConfig.share.loadImageShowValueUniCount
+            let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
+
             let result = await PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
-                PTGCDManager.gcdMain {
-                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+                Task { @MainActor in
+                    self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderW,borderColor: borderC,showValueLabel: showValueL,valueLabelFont:valueLabelF,valueLabelColor:valueLabelC,uniCount:uniC)
                 }
             }
             if let findImage = result.firstImage {
@@ -760,13 +768,13 @@ extension PTLayoutButton {
             } else {
                 switch controlState {
                 case .normal:
-                    normalImage = emptyImage
+                    normalImage = placeholder
                 case .selected:
-                    selectedImage = emptyImage
+                    selectedImage = placeholder
                 case .highlighted:
-                    hightlightImage = emptyImage
+                    hightlightImage = placeholder
                 case .disabled:
-                    disabledImage = emptyImage
+                    disabledImage = placeholder
                 default:
                     break
                 }

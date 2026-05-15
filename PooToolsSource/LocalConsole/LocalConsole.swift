@@ -476,17 +476,19 @@ public class LocalConsole: NSObject {
     // MARK: Handle keyboard show/hide.
     private var keyboardHeight: CGFloat? = nil {
         didSet {
-            temporaryKeyboardHeightValueTracker = oldValue
-            
-            if possibleEndpoints.count > 2, terminal?.center != possibleEndpoints[0] && terminal?.center != possibleEndpoints[1] {
-                let nearestTargetPosition = nearestTargetTo(terminal?.center ?? .zero, possibleTargets: possibleEndpoints.suffix(2))
+            Task { @MainActor in
+                temporaryKeyboardHeightValueTracker = oldValue
                 
-                UIViewPropertyAnimator(duration: 0.55, dampingRatio: 1) {
-                    self.terminal?.center = nearestTargetPosition
-                }.startAnimation()
+                if possibleEndpoints.count > 2, terminal?.center != possibleEndpoints[0] && terminal?.center != possibleEndpoints[1] {
+                    let nearestTargetPosition = nearestTargetTo(terminal?.center ?? .zero, possibleTargets: possibleEndpoints.suffix(2))
+                    
+                    UIViewPropertyAnimator(duration: 0.55, dampingRatio: 1) {
+                        self.terminal?.center = nearestTargetPosition
+                    }.startAnimation()
+                }
+                
+                temporaryKeyboardHeightValueTracker = keyboardHeight
             }
-            
-            temporaryKeyboardHeightValueTracker = keyboardHeight
         }
     }
     
@@ -501,7 +503,7 @@ public class LocalConsole: NSObject {
         keyboardHeight = nil
     }
 
-    var possibleEndpoints: [CGPoint] {
+    @MainActor var possibleEndpoints: [CGPoint] {
         guard let appWindow = AppWindows else { return [] }
         
         let screenSize = appWindow.frame.size
@@ -583,10 +585,12 @@ public class LocalConsole: NSObject {
     }
 
     func snapToCachedEndpoint() {
-        let cachedConsolePosition = CGPoint(x: PTCoreUserDefultsWrapper.PTLocalConsoleX ?? possibleEndpoints.first!.x, y: PTCoreUserDefultsWrapper.PTLocalConsoleY ?? possibleEndpoints.first!.y)
-        
-        terminal!.center = cachedConsolePosition // Update console center so possibleEndpoints are calculated correctly.
-        terminal!.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
+        Task { @MainActor in
+            let cachedConsolePosition = CGPoint(x: PTCoreUserDefultsWrapper.PTLocalConsoleX ?? possibleEndpoints.first!.x, y: PTCoreUserDefultsWrapper.PTLocalConsoleY ?? possibleEndpoints.first!.y)
+            
+            terminal!.center = cachedConsolePosition // Update console center so possibleEndpoints are calculated correctly.
+            terminal!.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
+        }
     }
     
     lazy var consoleWindow:PTBaseViewController = {
@@ -633,24 +637,25 @@ public class LocalConsole: NSObject {
     private func setupTerminalActions() {
 
         terminal?.dragEnd = { [weak self] in
-            // After the PiP is thrown, determine the best corner and re-target it there.
-            let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
-            
-            let projectedPosition = CGPoint(x: self!.terminal!.center.x + project(initialVelocity: self!.terminal!.x, decelerationRate: decelerationRate), y: self!.terminal!.center.y + project(initialVelocity: self!.terminal!.y, decelerationRate: decelerationRate))
-            
-            let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self!.possibleEndpoints)
-            
-            let relativeInitialVelocity = CGVector(dx: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.x, to: nearestTargetPosition.x), dy: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.y, to: nearestTargetPosition.y))
-            
-            let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
-            let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
-            positionAnimator.addAnimations { [self] in
-                self!.terminal!.center = nearestTargetPosition
+            Task { @MainActor in
+                // After the PiP is thrown, determine the best corner and re-target it there.
+                let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
+                
+                let projectedPosition = CGPoint(x: self!.terminal!.center.x + project(initialVelocity: self!.terminal!.x, decelerationRate: decelerationRate), y: self!.terminal!.center.y + project(initialVelocity: self!.terminal!.y, decelerationRate: decelerationRate))
+                
+                let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: self!.possibleEndpoints)
+                
+                let relativeInitialVelocity = CGVector(dx: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.x, to: nearestTargetPosition.x), dy: relativeVelocity(forVelocity: self!.terminal!.x, from: self!.terminal!.center.y, to: nearestTargetPosition.y))
+                
+                let timingParameters = UISpringTimingParameters(damping: 0.85, response: 0.45, initialVelocity: relativeInitialVelocity)
+                let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
+                positionAnimator.addAnimations { [self] in
+                    self!.terminal!.center = nearestTargetPosition
+                }
+                positionAnimator.startAnimation()
+                PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
+                PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
             }
-            positionAnimator.startAnimation()
-            PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
-            PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
-
         }
 
         Task { @MainActor in
@@ -968,15 +973,19 @@ extension LocalConsole {
         
     func resizeAction() {
         PTGCDManager.gcdAfter(time: 0.1) {
-            ResizeController.shared.isActive.toggle()
-            ResizeController.shared.platterView.reveal()
+            Task { @MainActor in
+                ResizeController.shared.isActive.toggle()
+                ResizeController.shared.platterView.reveal()
+            }
         }
     }
     
     func shareAction() {
-        let activityViewController = PTActivityViewController(text: terminal!.systemText!.pt_fullText)
-        activityViewController.previewNumberOfLines = 10
-        PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
+        Task { @MainActor in
+            let activityViewController = PTActivityViewController(text: terminal!.systemText!.pt_fullText)
+            activityViewController.previewNumberOfLines = 10
+            PTUtils.getCurrentVC()?.present(activityViewController, animated: true)
+        }
     }
     
     /// Clear text in the console view.
@@ -1029,12 +1038,14 @@ extension LocalConsole {
             maskView?.removeFromSuperview()
             maskView = nil
         } else {
-            PTCoreUserDefultsWrapper.AppDebbugMark = true
-            
-            let maskConfig = PTDevMaskConfig()
-            maskView = PTDevMaskView(config: maskConfig)
-            maskView?.frame = AppWindows!.frame
-            AppWindows?.addSubview(maskView!)
+            Task { @MainActor in
+                PTCoreUserDefultsWrapper.AppDebbugMark = true
+                
+                let maskConfig = PTDevMaskConfig()
+                maskView = PTDevMaskView(config: maskConfig)
+                maskView?.frame = AppWindows!.frame
+                AppWindows?.addSubview(maskView!)
+            }
         }
     }
     
@@ -1070,7 +1081,7 @@ extension LocalConsole {
         terminal!.systemText!.pt_fullText.copyToPasteboard()
     }
     
-    func respringAction() {
+    @MainActor func respringAction() {
         guard let window = AppWindows else { return }
         
         window.layer.cornerRadius = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat
@@ -1087,7 +1098,9 @@ extension LocalConsole {
 
                 // This will cause jetsam to terminate backboardd.
                 while true {
-                    window.snapshotView(afterScreenUpdates: false)
+                    Task { @MainActor in
+                        window.snapshotView(afterScreenUpdates: false)
+                    }
                 }
             }
         }
@@ -1251,7 +1264,7 @@ extension LocalConsole {
     
     func displayReport() {
         
-        PTGCDManager.gcdMain { [self] in
+        Task { @MainActor [self] in
 
             let safeAreaInsets = PTUtils.getCurrentVC()?.view.safeAreaInsets ?? .zero
             

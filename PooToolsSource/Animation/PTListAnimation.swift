@@ -14,6 +14,7 @@ public protocol PTListAnimationProtocol {
 }
 
 // 优化：将 class 改为无 case 的 enum，作为纯命名空间，防止被意外实例化
+@MainActor
 public enum PTListAnimationConfig {
     /// 移动的距离（点数）
     public static var offset: CGFloat = 30.0
@@ -85,6 +86,7 @@ public enum PTListAnimationType: PTListAnimationProtocol {
         }
     }
     
+    @MainActor
     public static func random() -> PTListAnimationType {
         let index = Int.random(in: 0..<3)
         switch index {
@@ -126,9 +128,10 @@ public extension UIView {
                  initialAlpha: CGFloat = 0,
                  finalAlpha: CGFloat = 1,
                  delay: Double = 0,
-                 duration: TimeInterval = PTListAnimationConfig.duration,
+                 duration: TimeInterval? = nil,
                  options: UIView.AnimationOptions = [],
                  completion: PTActionTask? = nil) {
+        let time = duration ?? PTListAnimationConfig.duration
         
         let transformFrom = transform
         var transformTo = transform
@@ -137,7 +140,7 @@ public extension UIView {
         if !reversed { transform = transformTo }
         alpha = initialAlpha
         
-        UIView.animate(withDuration: duration, delay: delay, options: options, animations: {
+        UIView.animate(withDuration: time, delay: delay, options: options, animations: {
             self.transform = reversed ? transformTo : transformFrom
             self.alpha = finalAlpha
         }) { _ in
@@ -151,12 +154,13 @@ public extension UIView {
                  initialAlpha: CGFloat = 0.0,
                  finalAlpha: CGFloat = 1.0,
                  delay: Double = 0,
-                 duration: TimeInterval = PTListAnimationConfig.duration,
+                 duration: TimeInterval? = nil,
                  usingSpringWithDamping dampingRatio: CGFloat,
                  initialSpringVelocity velocity: CGFloat,
                  options: UIView.AnimationOptions = [],
                  completion: PTActionTask? = nil) {
-        
+        let time = duration ?? PTListAnimationConfig.duration
+
         let transformFrom = transform
         var transformTo = transform
         animations.forEach { transformTo = transformTo.concatenating($0.initialTransform) }
@@ -164,7 +168,7 @@ public extension UIView {
         if !reversed { transform = transformTo }
         alpha = initialAlpha
         
-        UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: dampingRatio, initialSpringVelocity: velocity, options: options, animations: {
+        UIView.animate(withDuration: time, delay: delay, usingSpringWithDamping: dampingRatio, initialSpringVelocity: velocity, options: options, animations: {
             self.transform = reversed ? transformTo : transformFrom
             self.alpha = finalAlpha
         }) { _ in
@@ -177,10 +181,11 @@ public extension UIView {
                           initialAlpha: CGFloat = 0.0,
                           finalAlpha: CGFloat = 1.0,
                           delay: Double = 0,
-                          duration: TimeInterval = PTListAnimationConfig.duration,
+                          duration: TimeInterval? = nil,
                           options: UIView.KeyframeAnimationOptions = [],
                           completion: PTActionTask? = nil) {
-        
+        let time = duration ?? PTListAnimationConfig.duration
+
         let numberOfFrames: Int = animations.count
         guard numberOfFrames > 0 else {
             completion?()
@@ -190,7 +195,7 @@ public extension UIView {
         let singleFrameDuration = 1.0 / Double(numberOfFrames)
         alpha = initialAlpha
         
-        UIView.animateKeyframes(withDuration: duration, delay: delay, options: options, animations: {
+        UIView.animateKeyframes(withDuration: time, delay: delay, options: options, animations: {
             for (index, animation) in animations.enumerated() {
                 let frameDurationStartTime = index == 0 ? 0.0 : singleFrameDuration * Double(index)
                 let frameAlphaValue = initialAlpha + ((finalAlpha - initialAlpha) * CGFloat(frameDurationStartTime))
@@ -221,17 +226,18 @@ public extension UIView {
                         finalAlpha: CGFloat = 1.0,
                         delay: Double = 0,
                         animationInterval: TimeInterval = 0.05,
-                        duration: TimeInterval = PTListAnimationConfig.duration,
+                        duration: TimeInterval? = nil,
                         options: UIView.AnimationOptions = [],
                         completion: PTActionTask? = nil) {
-        
+        let time = duration ?? PTListAnimationConfig.duration
+
         performAnimation(views: views, animations: animations, reversed: reversed, initialAlpha: initialAlpha, delay: delay) { view, index, dispatchGroup in
             view.animate(animations: animations,
                          reversed: reversed,
                          initialAlpha: initialAlpha,
                          finalAlpha: finalAlpha,
                          delay: Double(index) * animationInterval,
-                         duration: duration,
+                         duration: time,
                          options: options,
                          completion: { dispatchGroup.leave() })
         } completion: {
@@ -246,19 +252,20 @@ public extension UIView {
                         finalAlpha: CGFloat = 1.0,
                         delay: Double = 0,
                         animationInterval: TimeInterval = 0.05,
-                        duration: TimeInterval = PTListAnimationConfig.duration,
+                        duration: TimeInterval? = nil,
                         usingSpringWithDamping dampingRatio: CGFloat,
                         initialSpringVelocity velocity: CGFloat,
                         options: UIView.AnimationOptions = [],
                         completion: PTActionTask? = nil) {
-        
+        let time = duration ?? PTListAnimationConfig.duration
+
         performAnimation(views: views, animations: animations, reversed: reversed, initialAlpha: initialAlpha, delay: delay) { view, index, dispatchGroup in
             view.animate(animations: animations,
                          reversed: reversed,
                          initialAlpha: initialAlpha,
                          finalAlpha: finalAlpha,
                          delay: Double(index) * animationInterval,
-                         duration: duration,
+                         duration: time,
                          usingSpringWithDamping: dampingRatio,
                          initialSpringVelocity: velocity,
                          options: options,
@@ -307,10 +314,12 @@ public extension UIView {
                       initialAlpha: CGFloat = 0,
                       finalAlpha: CGFloat = 1,
                       delay: Double = 0,
-                      duration: TimeInterval = PTListAnimationConfig.duration,
+                      duration: TimeInterval? = nil,
                       options: UIView.AnimationOptions = []) async {
         await withCheckedContinuation { continuation in
-            animate(animations: animations, reversed: reversed, initialAlpha: initialAlpha, finalAlpha: finalAlpha, delay: delay, duration: duration, options: options) {
+            let time = duration ?? PTListAnimationConfig.duration
+
+            animate(animations: animations, reversed: reversed, initialAlpha: initialAlpha, finalAlpha: finalAlpha, delay: delay, duration: time, options: options) {
                 continuation.resume()
             }
         }
@@ -325,10 +334,11 @@ public extension UIView {
                              finalAlpha: CGFloat = 1.0,
                              delay: Double = 0,
                              animationInterval: TimeInterval = 0.05,
-                             duration: TimeInterval = PTListAnimationConfig.duration,
+                             duration: TimeInterval? = nil,
                              options: UIView.AnimationOptions = []) async {
         await withCheckedContinuation { continuation in
-            animate(views: views, animations: animations, reversed: reversed, initialAlpha: initialAlpha, finalAlpha: finalAlpha, delay: delay, animationInterval: animationInterval, duration: duration, options: options) {
+            let time = duration ?? PTListAnimationConfig.duration
+            animate(views: views, animations: animations, reversed: reversed, initialAlpha: initialAlpha, finalAlpha: finalAlpha, delay: delay, animationInterval: animationInterval, duration: time, options: options) {
                 continuation.resume()
             }
         }

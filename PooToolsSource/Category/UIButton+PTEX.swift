@@ -37,14 +37,15 @@ public extension UIButton {
     
     // 建议：底层其实使用的是 Kingfisher，建议后续更名为 pt_setWebImage
     @objc func pt_SDWebImage(imageString:String,
-                             placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,
+                             placeholder:UIImage? = nil,
                              forState:UIControl.State = .normal,
                              loadedHandler:PTImageLoadHandler? = nil) {
+        let empty = placeholder ?? PTAppBaseConfig.share.defaultPlaceholderImage
         guard let _ = URL(string: imageString) else {
             loadedHandler?(nil, nil, nil)
             return
         }
-        kf.setImage(with: URL(string: imageString), for: forState,placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption(),completionHandler: { result in
+        kf.setImage(with: URL(string: imageString), for: forState,placeholder: empty,options: PTAppBaseConfig.share.gobalWebImageLoadOption(),completionHandler: { result in
             switch result {
             case .success(let result):
                 loadedHandler?(nil,result.originalSource.url,result.image)
@@ -139,27 +140,36 @@ public extension UIButton {
     
     func loadImage(contentData:Any,
                    iCloudDocumentName:String = "",
-                   borderWidth:CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
-                   borderColor:UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
-                   showValueLabel:Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
-                   valueLabelFont:UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
-                   valueLabelColor:UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
-                   uniCount:Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
-                   emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                   borderWidth:CGFloat? = nil,
+                   borderColor:UIColor? = nil,
+                   showValueLabel:Bool? = nil,
+                   valueLabelFont:UIFont? = nil,
+                   valueLabelColor:UIColor? = nil,
+                   uniCount:Int? = nil,
+                   emptyImage:UIImage? = nil,
                    controlState:UIControl.State = .normal,
                    progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
         // 直接调用父类 UIView 封装好的核心逻辑
+        
+        let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
+        let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
+        let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
+        let valueLabelF = valueLabelFont ?? PTAppBaseConfig.share.loadImageShowValueFont
+        let valueLabelC = valueLabelColor ?? PTAppBaseConfig.share.loadImageShowValueColor
+        let uniC = uniCount ?? PTAppBaseConfig.share.loadImageShowValueUniCount
+        let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
+
         pt_loadCoreImage(
             contentData: contentData,
             iCloudDocumentName: iCloudDocumentName,
-            borderWidth: borderWidth,
-            borderColor: borderColor,
-            showValueLabel: showValueLabel,
-            valueLabelFont: valueLabelFont,
-            valueLabelColor: valueLabelColor,
-            uniCount: uniCount,
-            emptyImage: emptyImage,
+            borderWidth: borderW,
+            borderColor: borderC,
+            showValueLabel: showValueL,
+            valueLabelFont: valueLabelF,
+            valueLabelColor: valueLabelC,
+            uniCount: uniC,
+            emptyImage: placeholder,
             progressHandle: progressHandle,
             setImageBlock: { [weak self] image in
                 self?.setImage(image, for: controlState) // UIButton 特有的渲染方式

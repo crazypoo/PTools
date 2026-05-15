@@ -42,7 +42,7 @@ public extension Double {
         return (self * divisor).rounded() / divisor
     }
     
-    func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> Double {
+    @MainActor func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> Double {
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             return self
         }
@@ -53,7 +53,7 @@ public extension Double {
         return (self * (width / base)).rounded(3)
     }
     
-    func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> Double {
+    @MainActor func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> Double {
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             return self
         }
@@ -67,27 +67,27 @@ public extension Double {
 
 public extension BinaryInteger {
     
-    func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> Double {
+    @MainActor func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> Double {
         let temp = Double("\(self)") ?? 0
         return temp.autoWidth(inch)
     }
-    func autoWidth<T: BinaryInteger>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
+    @MainActor func autoWidth<T: BinaryInteger>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoWidth(inch))
     }
-    func autoWidth<T: BinaryFloatingPoint>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
+    @MainActor func autoWidth<T: BinaryFloatingPoint>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoWidth(inch))
     }
-    func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> Double {
+    @MainActor func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> Double {
         let temp = Double("\(self)") ?? 0
         return temp.autoHeight(inch)
     }
-    func autoHeight<T: BinaryInteger>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
+    @MainActor func autoHeight<T: BinaryInteger>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoHeight(inch))
     }
-    func autoHeight<T: BinaryFloatingPoint>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
+    @MainActor func autoHeight<T: BinaryFloatingPoint>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoHeight(inch))
     }
@@ -95,27 +95,27 @@ public extension BinaryInteger {
 
 public extension BinaryFloatingPoint {
     
-    func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> Double {
+    @MainActor func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> Double {
         let temp = Double("\(self)") ?? 0
         return temp.autoWidth(inch)
     }
-    func autoWidth<T: BinaryInteger>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
+    @MainActor func autoWidth<T: BinaryInteger>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoWidth(inch))
     }
-    func autoWidth<T: BinaryFloatingPoint>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
+    @MainActor func autoWidth<T: BinaryFloatingPoint>(_ inch: InchWidth = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoWidth(inch))
     }
-    func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> Double {
+    @MainActor func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> Double {
         let temp = Double("\(self)") ?? 0
         return temp.autoHeight(inch)
     }
-    func autoHeight<T: BinaryInteger>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
+    @MainActor func autoHeight<T: BinaryInteger>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoHeight(inch))
     }
-    func autoHeight<T: BinaryFloatingPoint>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
+    @MainActor func autoHeight<T: BinaryFloatingPoint>(_ inch: InchHeight = .TouchIDNormalModel) -> T {
         let temp = Double("\(self)") ?? 0
         return T(temp.autoHeight(inch))
     }
@@ -124,10 +124,10 @@ public extension BinaryFloatingPoint {
 
 public extension CGSize {
     
-    func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> CGSize {
+    @MainActor func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> CGSize {
         return CGSize(width: width.autoWidth(), height: height.autoWidth())
     }
-    func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> CGSize {
+    @MainActor func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> CGSize {
         return CGSize(width: width.autoHeight(), height: height.autoHeight())
     }
 }

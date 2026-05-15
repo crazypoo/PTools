@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 @objcMembers
 public class PTAppStoreFunction: NSObject {
     
@@ -15,8 +16,9 @@ public class PTAppStoreFunction: NSObject {
     ///評分App
     /// - Parameters:
     ///   - appid: App的App id
-    static public func rateApp(appid:String = PTAppBaseConfig.share.appID) {
-        let openAppStore = "itms-apps://itunes.apple.com/app/id\(appid)?action=write-review"
+    static public func rateApp(appid:String? = nil) {
+        let aID = appid ?? PTAppBaseConfig.share.appID
+        let openAppStore = "itms-apps://itunes.apple.com/app/id\(aID)?action=write-review"
         PTAppStoreFunction.jumpLink(url: URL(string: openAppStore)!)
     }
     
@@ -24,13 +26,15 @@ public class PTAppStoreFunction: NSObject {
     ///跳转到AppStore
     /// - Parameters:
     ///   - appid: App的App id
-    static public func appStoreURL(appid:String = PTAppBaseConfig.share.appID) -> String {
-        let urlString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
+    static public func appStoreURL(appid:String? = nil) -> String {
+        let aID = appid ?? PTAppBaseConfig.share.appID
+        let urlString = String(format: "itms-apps://itunes.apple.com/app/id%@",aID)
         return urlString
     }
     
-    static public func jumpToAppStore(appid:String = PTAppBaseConfig.share.appID) {
-        PTAppStoreFunction.jumpLink(url: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
+    static public func jumpToAppStore(appid:String? = nil) {
+        let aID = appid ?? PTAppBaseConfig.share.appID
+        PTAppStoreFunction.jumpLink(url: URL(string: PTAppStoreFunction.appStoreURL(appid: aID))!)
     }
 
     static public func jumpLink(url:URL) {

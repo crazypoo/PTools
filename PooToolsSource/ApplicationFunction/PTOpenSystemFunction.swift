@@ -119,12 +119,16 @@ public class PTOpenSystemFunction: NSObject {
         }
         
         if let uri = uriString, let url = URL(string: uri) {
-            PTAppStoreFunction.jumpLink(url: url)
+            Task { @MainActor in
+                PTAppStoreFunction.jumpLink(url: url)
+            }
         }
     }
     
     public class func jumpCurrentAppSetting() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-        PTAppStoreFunction.jumpLink(url: url)
+        Task { @MainActor in
+            PTAppStoreFunction.jumpLink(url: url)
+        }
     }
 }

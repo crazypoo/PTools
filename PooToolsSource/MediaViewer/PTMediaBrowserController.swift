@@ -117,8 +117,10 @@ public class PTMediaBrowserController: PTBaseViewController {
                 let cellModel = self.mediaData[indexPath.row]
                 cell.dataModel = cellModel
                 cell.viewerDismissBlock = { [weak self] in
-                    self?.returnFrontVC {
-                        self?.viewDismissBlock?()
+                    Task { @MainActor in
+                        self?.returnFrontVC {
+                            self?.viewDismissBlock?()
+                        }
                     }
                 }
                 cell.zoomTask = { [weak self] boolValue in
@@ -126,28 +128,34 @@ public class PTMediaBrowserController: PTBaseViewController {
                 }
                 cell.tapTask = { [weak self] in
                     guard let self = self else { return }
-                    self.toolBarControl(hide: !self.navControl.isHidden)
+                    Task { @MainActor in
+                        self.toolBarControl(hide: !self.navControl.isHidden)
+                    }
                 }
                 cell.longTapWakeUp = { [weak self] in
                     guard let self = self else { return }
-                    self.toolBarControl(hide: true)
-                    self.moreAction(sender: self.bottomControl.moreActionButton)
-                    PTGCDManager.gcdAfter(time: 0.5) {
-                        cell.imageLongTaped = false
+                    Task { @MainActor in
+                        self.toolBarControl(hide: true)
+                        self.moreAction(sender: self.bottomControl.moreActionButton)
+                        PTGCDManager.gcdAfter(time: 0.5) {
+                            cell.imageLongTaped = false
+                        }
                     }
                 }
                 cell.videoPlayHandler = { [weak self] videoController in
                     videoController.modalPresentationStyle = .fullScreen
                     videoController.onCloseTapped = {
-                        let current = PTUtils.getCurrentVC()
-                        if let sheet = current as? PTPlayerViewController {
-                            if sheet.checkVCIsPresenting() {
-                                sheet.dismissAnimated()
+                        Task { @MainActor in
+                            let current = PTUtils.getCurrentVC()
+                            if let sheet = current as? PTPlayerViewController {
+                                if sheet.checkVCIsPresenting() {
+                                    sheet.dismissAnimated()
+                                } else {
+                                    sheet.navigationController?.popViewController(animated: true)
+                                }
                             } else {
-                                sheet.navigationController?.popViewController(animated: true)
+                                current?.dismissAnimated()
                             }
-                        } else {
-                            current?.dismissAnimated()
                         }
                     }
                     let current = PTUtils.getCurrentVC()
@@ -370,7 +378,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             let cellSection = PTSection(rows:rows)
             sections.append(cellSection)
             
-            PTGCDManager.gcdMain {
+            Task { @MainActor in 
                 self.navControl.titleLabel.isHidden = false
                 let initialIndex = min(self.defaultIndex, max(0, self.mediaData.count - 1))
                 self.navControl.titleLabel.text = "\(initialIndex + 1)/\(self.mediaData.count)"

@@ -9,6 +9,7 @@
 import CoreLocation
 import Foundation
 
+@MainActor
 final class PTDebugLocationModel: NSObject {
     var selectedIndex: Int = PTDebugLocationKit.shared.indexSaved
 

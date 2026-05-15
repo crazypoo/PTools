@@ -17,10 +17,10 @@ extension CLLocationManager {
         }
     }
     
-    private var simulatedLocation: CLLocation? { PTDebugLocationKit.shared.simulatedLocation }
+    @MainActor private var simulatedLocation: CLLocation? { PTDebugLocationKit.shared.simulatedLocation }
 
     @objc func swizzledStartLocation() {}
-    @objc func swizzedRequestLocation() {
+    @MainActor @objc func swizzedRequestLocation() {
         if let simulatedLocation {
             delegate?.locationManager?(self, didUpdateLocations: [simulatedLocation])
         } else {

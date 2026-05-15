@@ -118,10 +118,10 @@ extension PTBaseNavControl {
     }
     
     public class func GobalNavControl(nav:UINavigationController,
-                                      textColor:UIColor = PTAppBaseConfig.share.navTitleTextColor,
+                                      textColor:UIColor? = nil,
                                       navColor:UIColor = .clear) {
         let colors:UIColor = navColor
-        let textColors:UIColor = textColor
+        let textColors:UIColor = textColor ?? PTAppBaseConfig.share.navTitleTextColor
         
         //修改导航栏文字颜色字号
         let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]

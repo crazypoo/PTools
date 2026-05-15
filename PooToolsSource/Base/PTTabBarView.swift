@@ -68,11 +68,11 @@ final public class PTTabBarImageContent: PTTabBarItemContent {
 
     public var view: UIView { container }
 
-    public func setSelected(_ selected: Bool, animated: Bool) {
+    @MainActor public func setSelected(_ selected: Bool, animated: Bool) {
         imageSet(media: selected ? (selectedImage ?? normalImage) : normalImage)
     }
     
-    private func imageSet(media:Any) {
+    @MainActor private func imageSet(media:Any) {
         switch media {
         case let string as String:
             if string.lowercased().contains("json") {

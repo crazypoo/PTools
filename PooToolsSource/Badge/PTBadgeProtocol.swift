@@ -41,6 +41,7 @@ public enum PTBadgeAnimType {
 // MARK: - Configuration
 
 /// 将分散的配置属性聚合到一个结构体中，避免污染 UIView 的命名空间
+@MainActor
 public struct PTBadgeConfiguration {
     public var font: UIFont = PTAppBaseConfig.share.tabBadgeFont
     public var bgColor: UIColor = .red

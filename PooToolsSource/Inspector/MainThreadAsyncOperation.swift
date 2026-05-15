@@ -8,7 +8,7 @@ import Foundation
 
 final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {
     override func main() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.closure()
         }
     }

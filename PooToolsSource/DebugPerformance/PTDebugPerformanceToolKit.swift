@@ -76,7 +76,9 @@ final class PTDebugPerformanceToolKit {
     var performanceDataUpdateCallBack:((PTDebugPerformanceToolKit)->Void)?
     
     init() {
-        setupPerformanceMeasurement()
+        Task { @MainActor in
+            setupPerformanceMeasurement()
+        }
     }
     
     deinit {
@@ -99,7 +101,7 @@ final class PTDebugPerformanceToolKit {
         RunLoop.main.add(measurementsTimer!, forMode: .common)
     }
     
-    func setupPerformanceMeasurement() {
+    @MainActor func setupPerformanceMeasurement() {
         performanceRestart()
         // Additional setup for measurements
         cpuMeasurements = Array(repeating: 0, count: measurementsLimit)
@@ -228,7 +230,7 @@ final class PTDebugPerformanceToolKit {
         }
     }
     
-    private func floatingButtonCreate() {
+    @MainActor private func floatingButtonCreate() {
         if floatingView == nil {
             floatingView = PFloatingButton(inView: PTConsoleWindow.shared, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))
             floatingView?.tag = 9999

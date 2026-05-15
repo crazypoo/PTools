@@ -190,15 +190,16 @@ public extension UIViewController {
         }
     }
     
-    @objc func listPopover(popoverConfig:PTPopoverConfig = PTPopoverConfig(),
+    @objc func listPopover(popoverConfig:PTPopoverConfig? = nil,
                            items:[PTPopoverItem],
                            popoverWidth:CGFloat,
                            sender:UIView,
                            arrowDirections:UIPopoverArrowDirection,
                            selectedHandler:@escaping PTPopoverHandler) {
-        let popoverVC = PTPopoverMenuContent(config:popoverConfig,viewModel: items)
+        let config = popoverConfig ?? PTPopoverConfig()
+        let popoverVC = PTPopoverMenuContent(config:config,viewModel: items)
         popoverVC.didSelectedHandler = selectedHandler
-        let popoverSize = CGSize(width: popoverWidth, height: CGFloat(items.count) * popoverConfig.rowHeight)
+        let popoverSize = CGSize(width: popoverWidth, height: CGFloat(items.count) * config.rowHeight)
         popoverVC.preferredContentSize = popoverSize
         popoverVC.modalPresentationStyle = .popover
         // 在需要显示的地方使用 popoverPresentationController 来 present
@@ -207,7 +208,7 @@ public extension UIViewController {
         presentationCtr?.sourceRect = sender.bounds
         presentationCtr?.permittedArrowDirections = arrowDirections
         presentationCtr?.delegate = self
-        presentationCtr?.backgroundColor = popoverConfig.backgroundColor
+        presentationCtr?.backgroundColor = config.backgroundColor
         if (navigationController?.viewControllers.count ?? 0) > 0 {
             navigationController?.present(popoverVC, animated: true)
         } else {

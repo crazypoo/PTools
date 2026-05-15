@@ -77,7 +77,7 @@ let GlobalVideoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
     case HundredMillion
 }
 
-public func deviceSafeAreaInsets() -> UIEdgeInsets {
+@MainActor public func deviceSafeAreaInsets() -> UIEdgeInsets {
     return AppWindows?.safeAreaInsets ?? .zero
 }
 
@@ -259,7 +259,7 @@ public extension PTUtils {
         }
     }
     
-    class func getCurrentVC() -> UIViewController? {
+    @MainActor class func getCurrentVC() -> UIViewController? {
         guard let root = AppWindows?.rootViewController else {
                return nil
            }
@@ -279,7 +279,7 @@ public extension PTUtils {
     }
 
     // MARK: - 取得頂部控制器
-    class func getTopViewController(_ base: UIViewController? = nil) -> UIViewController? {
+    @MainActor class func getTopViewController(_ base: UIViewController? = nil) -> UIViewController? {
         let baseVC = base ?? AppWindows?.rootViewController
         guard let vc = baseVC else { return nil }
 
@@ -295,12 +295,12 @@ public extension PTUtils {
     }
     
     // MARK: - Root Controller
-    class func getRootViewController() -> UIViewController? {
+    @MainActor class func getRootViewController() -> UIViewController? {
         return AppWindows?.rootViewController
     }
     
     //MARK: - 需要注册的时候传入一个导航包含的控制器
-    class func setRootViewController(_ navController: UIViewController) {
+    @MainActor class func setRootViewController(_ navController: UIViewController) {
 #if DEBUG
         assert(navController is UINavigationController, "Root 必須是 UINavigationController")
 #endif
@@ -308,7 +308,7 @@ public extension PTUtils {
     }
     
     // MARK: - 活躍 VC
-    class func getActivityViewController() -> UIViewController? {
+    @MainActor class func getActivityViewController() -> UIViewController? {
         guard let rootVC = AppWindows?.rootViewController else {
             return nil
         }
@@ -320,7 +320,7 @@ public extension PTUtils {
         return current
     }
 
-    class func visibleVC() -> UIViewController? {
+    @MainActor class func visibleVC() -> UIViewController? {
         if let nav = getActivityViewController() as? UINavigationController {
             return nav.visibleViewController
         }
@@ -385,7 +385,7 @@ public extension PTUtils {
         return views2.filter { views1.contains($0) }
     }
     
-    class func isViewAddedToWindow(ofType type: AnyClass) -> Bool {
+    @MainActor class func isViewAddedToWindow(ofType type: AnyClass) -> Bool {
         AppWindows?.subviews.contains { $0.isKind(of: type) } ?? false
     }
 }
@@ -393,13 +393,13 @@ public extension PTUtils {
 //MARK: Translation
 public extension PTUtils {
     
-    class func push(_ vc: UIViewController) {
+    @MainActor class func push(_ vc: UIViewController) {
         guard let current = PTUtils.getCurrentVC(),let nav = current.navigationController else { return }
         vc.hidesBottomBarWhenPushed = true
         nav.pushViewController(vc, animated: true)
     }
 
-    class func modal(_ vc: UIViewController,
+    @MainActor class func modal(_ vc: UIViewController,
                      presentationStyle: UIModalPresentationStyle = .fullScreen,
                      transitionStyle: UIModalTransitionStyle = .coverVertical) {
         
@@ -413,7 +413,7 @@ public extension PTUtils {
         current.present(vc, animated: true, completion: nil)
     }
 
-    class func popToVC(ofType type: UIViewController.Type) {
+    @MainActor class func popToVC(ofType type: UIViewController.Type) {
         guard let nav = getTopViewController()?.navigationController else { return }
         if let target = nav.viewControllers.last(where: { $0.isKind(of: type) }) {
             nav.popToViewController(target, animated: true)
@@ -423,11 +423,11 @@ public extension PTUtils {
     }
 
     //MARK: - 跳转到首页
-    class func popToRootVC() {
+    @MainActor class func popToRootVC() {
         getTopViewController()?.navigationController?.popToRootViewController(animated: true)
     }
 
-    class func returnFrontVC() {
+    @MainActor class func returnFrontVC() {
         let vc = PTUtils.getCurrentVC()
         if vc?.presentingViewController != nil {
             vc?.dismiss(animated: true, completion: nil)
@@ -460,7 +460,7 @@ public extension PTUtils {
 #endif
     }
     
-    class func modalDismissBeforePush(_ vc: UIViewController) {
+    @MainActor class func modalDismissBeforePush(_ vc: UIViewController) {
         if let visiableVC = PTUtils.getTopViewController(nil), visiableVC.presentingViewController != nil {
             visiableVC.dismiss(animated: false) {
                 push(vc)
@@ -470,7 +470,7 @@ public extension PTUtils {
         }
     }
     
-    class func pusbWindowNavRoot(_ vc: UIViewController) {
+    @MainActor class func pusbWindowNavRoot(_ vc: UIViewController) {
         if let app = UIApplication.shared.delegate, let window = app.window {
             if let rootVC = window?.rootViewController {
                 if let nav: UINavigationController = rootVC as? UINavigationController {
@@ -484,7 +484,7 @@ public extension PTUtils {
 }
 
 public extension PTUtils {
-    static func compareVersionWithServerVersion(_ version: String) -> ComparisonResult {
+    @MainActor static func compareVersionWithServerVersion(_ version: String) -> ComparisonResult {
         let currentVersion = kAppVersion ?? "0.0.0"
         return currentVersion.compare(version,options: .numeric)
     }

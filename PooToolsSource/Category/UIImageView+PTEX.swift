@@ -32,8 +32,11 @@ public extension UIImageView {
     }
     
     //TODO: 由于内部使用的是 Kingfisher，此方法名带有 SDWebImage 可能会引起误解，建议未来重命名
-    @objc func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage,loadedHandler:PTImageLoadHandler? = nil) {
-        kf.setImage(with: URL(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
+    @objc func pt_SDWebImage(imageString:String,
+                             placeholder:UIImage? = nil,
+                             loadedHandler:PTImageLoadHandler? = nil) {
+        let empty = placeholder ?? PTAppBaseConfig.share.defaultPlaceholderImage
+        kf.setImage(with: URL(string: imageString),placeholder: empty,options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
             switch result {
             case .success(let result):
                 loadedHandler?(nil,result.originalSource.url,result.image)
@@ -53,15 +56,23 @@ public extension UIImageView {
                    bottomRight: CGFloat = 0,
                    corner: UIRectCorner = .allCorners,
                    capsule: Bool = false,
-                   borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
-                   borderColor: UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
-                   showValueLabel: Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
-                   valueLabelFont: UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
-                   valueLabelColor: UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
-                   uniCount: Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
-                   emptyImage: UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                   borderWidth: CGFloat? = nil,
+                   borderColor: UIColor? = nil,
+                   showValueLabel: Bool? = nil,
+                   valueLabelFont: UIFont? = nil,
+                   valueLabelColor: UIColor? = nil,
+                   uniCount: Int? = nil,
+                   emptyImage: UIImage? = nil,
                    progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+        
+        let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
+        let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
+        let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
+        let valueLabelF = valueLabelFont ?? PTAppBaseConfig.share.loadImageShowValueFont
+        let valueLabelC = valueLabelColor ?? PTAppBaseConfig.share.loadImageShowValueColor
+        let uniC = uniCount ?? PTAppBaseConfig.share.loadImageShowValueUniCount
+        let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
         // 直接调用父类 UIView 封装好的核心逻辑
         pt_loadCoreImage(
             contentData: contentData,
@@ -73,13 +84,13 @@ public extension UIImageView {
             bottomRight: bottomRight,
             corner: corner,
             capsule: capsule,
-            borderWidth: borderWidth,
-            borderColor: borderColor,
-            showValueLabel: showValueLabel,
-            valueLabelFont: valueLabelFont,
-            valueLabelColor: valueLabelColor,
-            uniCount: uniCount,
-            emptyImage: emptyImage,
+            borderWidth: borderW,
+            borderColor: borderC,
+            showValueLabel: showValueL,
+            valueLabelFont: valueLabelF,
+            valueLabelColor: valueLabelC,
+            uniCount: uniC,
+            emptyImage: placeholder,
             progressHandle: progressHandle,
             setImageBlock: { [weak self] image in
                 self?.image = image // UIImageView 特有的渲染方式
@@ -131,11 +142,12 @@ public extension UIImageView {
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
     /// - Parameter loopCount: The number of loops we want for this gif. -1 means infinite.
-    func setImage(_ image: UIImage, manager: PTGifManager = .defaultManager, loopCount: Int = -1) {
+    func setImage(_ image: UIImage, manager: PTGifManager? = nil, loopCount: Int = -1) {
+        let manager_new = manager ?? PTGifManager.defaultManager
         if let _ = image.imageData {
-            setGifImage(image, manager: manager, loopCount: loopCount)
+            setGifImage(image, manager: manager_new, loopCount: loopCount)
         } else {
-            manager.deleteImageView(self)
+            manager_new.deleteImageView(self)
             self.image = image
         }
     }
@@ -147,18 +159,20 @@ public extension UIImageView {
     /// Convenience initializer. Creates a gif holder (defaulted to infinite loop).
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
-    convenience init(gifImage: UIImage, manager: PTGifManager = .defaultManager, loopCount: Int = -1) {
+    convenience init(gifImage: UIImage, manager: PTGifManager? = nil, loopCount: Int = -1) {
+        let manager_new = manager ?? PTGifManager.defaultManager
         self.init()
-        setGifImage(gifImage,manager: manager, loopCount: loopCount)
+        setGifImage(gifImage,manager: manager_new, loopCount: loopCount)
     }
     
     /// Convenience initializer. Creates a gif holder (defaulted to infinite loop).
     ///
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
-    convenience init(gifURL: URL, manager: PTGifManager = .defaultManager, loopCount: Int = -1) {
+    convenience init(gifURL: URL, manager: PTGifManager? = nil, loopCount: Int = -1) {
+        let manager_new = manager ?? PTGifManager.defaultManager
         self.init()
-        setGifFromURL(gifURL, manager: manager, loopCount: loopCount)
+        setGifFromURL(gifURL, manager: manager_new, loopCount: loopCount)
     }
     
     /// Set a gif image and a manager to an existing UIImageView.
@@ -166,7 +180,8 @@ public extension UIImageView {
     /// - Parameter gifImage: The UIImage containing the gif backing data
     /// - Parameter manager: The manager to handle the gif display
     /// - Parameter loopCount: The number of loops we want for this gif. -1 means infinite.
-    func setGifImage(_ gifImage: UIImage, manager: PTGifManager = .defaultManager, loopCount: Int = -1) {
+    func setGifImage(_ gifImage: UIImage, manager: PTGifManager? = nil, loopCount: Int = -1) {
+        let manager_new = manager ?? PTGifManager.defaultManager
         if let imageData = gifImage.imageData, (gifImage.imageCount ?? 0) < 1 {
             image = UIImage(data: imageData)
             return
@@ -183,7 +198,7 @@ public extension UIImageView {
         if let source = gifImage.imageSource, let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) {
             currentImage = UIImage(cgImage: cgImage)
             
-            if manager.addImageView(self) {
+            if manager_new.addImageView(self) {
                 startDisplay()
                 startAnimatingGif()
             }
@@ -204,18 +219,19 @@ public extension UIImageView {
     /// - Returns: An URL session task. Note: You can cancel the downloading task if it needed.
     @discardableResult
     func setGifFromURL(_ url: URL,
-                       manager: PTGifManager = .defaultManager,
+                       manager: PTGifManager? = nil,
                        loopCount: Int = -1,
                        levelOfIntegrity: PTGifLevelOfIntegrity = .default,
                        session: URLSession = URLSession.shared,
                        showLoader: Bool = true,
                        customLoader: UIView? = nil) -> URLSessionDataTask? {
-        
-        if let data =  manager.remoteCache[url] {
+        let manager_new = manager ?? PTGifManager.defaultManager
+
+        if let data =  manager_new.remoteCache[url] {
             self.parseDownloadedGif(url: url,
                     data: data,
                     error: nil,
-                    manager: manager,
+                    manager: manager_new,
                     loopCount: loopCount,
                     levelOfIntegrity: levelOfIntegrity)
             return nil
@@ -230,7 +246,7 @@ public extension UIImageView {
             self?.parseDownloadedGif(url: url,
                                     data: data,
                                     error: error,
-                                    manager: manager,
+                                    manager: manager_new,
                                     loopCount: loopCount,
                                     levelOfIntegrity: levelOfIntegrity)
         }

@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 import SafeSFSymbols
 
+@MainActor
 @objcMembers
 public class PTAppBaseConfig: NSObject {
     public static let share = PTAppBaseConfig()
@@ -85,11 +86,14 @@ public class PTAppBaseConfig: NSObject {
     ///SDWebImage的加载失误图片方式(全局控制)
     public var loadImageRetryMaxCount:Int = 3
     public var loadImageRetryInerval:TimeInterval = 2
-    public func gobalWebImageLoadOption(maxCount:Int = PTAppBaseConfig.share.loadImageRetryMaxCount,retryInterval:TimeInterval = PTAppBaseConfig.share.loadImageRetryInerval) -> KingfisherOptionsInfo {
+    public func gobalWebImageLoadOption(maxCount:Int? = nil,
+                                        retryInterval:TimeInterval? = nil) -> KingfisherOptionsInfo {
 #if POOTOOLS_DEBUG
         PTDevFunction.gobalWebImageLoadOption()
 #else
-        return [KingfisherOptionsInfoItem.cacheOriginalImage,KingfisherOptionsInfoItem.backgroundDecode,KingfisherOptionsInfoItem.retryStrategy(DelayRetryStrategy(maxRetryCount: maxCount, retryInterval: .seconds(retryInterval)))]
+        let maxC = maxCount ?? PTAppBaseConfig.share.loadImageRetryMaxCount
+        let retry = retryInterval ?? PTAppBaseConfig.share.loadImageRetryInerval
+        return [KingfisherOptionsInfoItem.cacheOriginalImage,KingfisherOptionsInfoItem.backgroundDecode,KingfisherOptionsInfoItem.retryStrategy(DelayRetryStrategy(maxRetryCount: maxC, retryInterval: .seconds(retry)))]
 #endif
     }
     

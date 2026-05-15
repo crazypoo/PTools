@@ -70,6 +70,7 @@ public typealias PTDecorationInCollectionHandler = @MainActor (_ index:Int,_ sec
 public typealias PTViewInDecorationResetHandler = @MainActor (_ collectionView: UICollectionView, _ view: UICollectionReusableView, _ elementKind: String, _ indexPath: IndexPath,_ sectionModel: PTSection) -> Void
 
 //MARK: Collection展示的基本配置参数设置
+@MainActor
 @objcMembers
 public class PTCollectionViewConfig: NSObject {
     ///CollectionView上下滑动条

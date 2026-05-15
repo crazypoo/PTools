@@ -16,6 +16,7 @@ public class PTPopoverItem:NSObject {
     public var icon:Any?
 }
 
+@MainActor
 @objcMembers
 public class PTPopoverConfig:NSObject {
     public var textFont:UIFont = .appfont(size: 16)

@@ -35,6 +35,7 @@ public struct PTFusionLayoutConfig:Equatable {
     let accessory: PTFusionShowAccessoryType
 }
 
+@MainActor
 @objcMembers
 open class PTFusionCellModel: NSObject {
     ///图片名
@@ -238,7 +239,7 @@ open class PTFusionCellModel: NSObject {
     }()
 }
 
-extension PTFusionCellModel: PTDiffableModel {
+extension PTFusionCellModel: @preconcurrency PTDiffableModel {
 
     public var diffId: String {
         return cellID ?? UUID().uuidString

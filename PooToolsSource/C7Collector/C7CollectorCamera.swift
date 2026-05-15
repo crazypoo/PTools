@@ -457,7 +457,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
         if restartRecordAfterSwitchCamera {
             restartRecordAfterSwitchCamera = false
                 
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 let pauseTime = self.animateLayer.timeOffset
                 self.animateLayer.speed = 1
                 self.animateLayer.timeOffset = 0
@@ -466,14 +466,14 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
                 self.animateLayer.beginTime = timeSincePause
             }
         } else {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.startRecordAnimation()
             }
         }
     }
     
     public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.recordUrls.append(outputFileURL)
             self.recordDurations.append(output.recordedDuration.seconds)
             
@@ -487,7 +487,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
     }
     
     private func finishRecordAndMergeVideo() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.stopRecordAnimation()
             
             defer {
@@ -554,7 +554,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
     }
     
     private func stopRecordAnimation() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.borderLayer.strokeColor = PTFilterCameraViewController.cameraBtnNormalColor.cgColor
             self.borderLayer.lineWidth = PTFilterCameraViewController.borderLayerWidth
             self.animateLayer.speed = 1

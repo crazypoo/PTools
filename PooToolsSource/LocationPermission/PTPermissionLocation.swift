@@ -86,7 +86,7 @@ public class PTPermissionLocation: PTPermission {
             switch access {
             case .whenInUse:
                 PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
                         PTGCDManager.gcdMain {
                             completion()
@@ -96,7 +96,7 @@ public class PTPermissionLocation: PTPermission {
                 }
             case .always:
                 PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     PTPermissionLocationAlwaysHandler.shared?.requestPermission {
                         PTGCDManager.gcdMain {
                             completion()

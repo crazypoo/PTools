@@ -1564,9 +1564,10 @@ public extension String {
     ///   - traitCollection: 當前系統的顯示模式
     ///   - bundle: 顏色所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    func color(traitCollection:UITraitCollection = (AppWindows?.rootViewController?.traitCollection)!,
+    @MainActor func color(traitCollection:UITraitCollection? = nil,
                bundle:Bundle = PTUtils.cgBaseBundle()) -> UIColor {
-        UIColor(named: self, in: bundle, compatibleWith: traitCollection) ?? .randomColor
+        let traitCollection_new = traitCollection ?? (AppWindows?.rootViewController?.traitCollection)!
+        return UIColor(named: self, in: bundle, compatibleWith: traitCollection_new) ?? .randomColor
     }
     
     //MARK: 根據文件名字拿到Bundle上的圖片
@@ -1575,9 +1576,10 @@ public extension String {
     ///   - traitCollection: 當前系統的顯示模式
     ///   - bundle: 圖片所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    func image(traitCollection:UITraitCollection = (AppWindows?.rootViewController?.traitCollection)!,
+    @MainActor func image(traitCollection:UITraitCollection? = nil,
                bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
-        UIImage(named: self, in: bundle, compatibleWith: traitCollection) ?? UIColor.randomColor.createImageWithColor()
+        let traitCollection_new = traitCollection ?? (AppWindows?.rootViewController?.traitCollection)!
+        return UIImage(named: self, in: bundle, compatibleWith: traitCollection_new) ?? UIColor.randomColor.createImageWithColor()
     }
     
     //MARK: 根據文件名字拿到Bundle上的圖片
@@ -1585,7 +1587,7 @@ public extension String {
     /// - Parameters:
     ///   - bundle: 圖片所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
+    @MainActor func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
         image(bundle: bundle)
     }
     

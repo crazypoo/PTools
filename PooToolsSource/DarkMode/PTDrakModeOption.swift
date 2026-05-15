@@ -104,7 +104,7 @@ public extension PTDarkModeOption {
     
     // MARK: 初始化的调用
     /// 默认设置
-    static func defaultDark() {
+    @MainActor static func defaultDark() {
         // 默认跟随系统暗黑模式开启监听
         if (PTDarkModeOption.isFollowSystem) {
             PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: true)
@@ -114,7 +114,7 @@ public extension PTDarkModeOption {
     }
     
     // MARK: 设置系统是否跟随
-    static func setDarkModeFollowSystem(isFollowSystem: Bool) {
+    @MainActor static func setDarkModeFollowSystem(isFollowSystem: Bool) {
         // 1.1、设置是否跟随系统
         UserDefaults.pt.userDefaultsSetValue(value: isFollowSystem, key: PTDarkToSystemKey)
         let result = UITraitCollection.current.userInterfaceStyle == .light ? true : false
@@ -129,7 +129,7 @@ public extension PTDarkModeOption {
     }
     
     // MARK: 设置：浅色 / 深色
-    static func setDarkModeCustom(isLight: Bool) {
+    @MainActor static func setDarkModeCustom(isLight: Bool) {
         // 1.1、只要设置了模式：就是黑或者白
         AppWindows?.overrideUserInterfaceStyle = isLight ? .light : .dark
         // 1.2、设置跟随系统和智能换肤：否
@@ -142,7 +142,7 @@ public extension PTDarkModeOption {
     // MARK: 设置：智能换肤
     /// 智能换肤
     /// - Parameter isSmartPeeling: 是否智能换肤
-    static func setSmartPeelingDarkMode(isSmartPeeling: Bool) {
+    @MainActor static func setSmartPeelingDarkMode(isSmartPeeling: Bool) {
         // 1.1、设置智能换肤
         UserDefaults.pt.userDefaultsSetValue(value: isSmartPeeling, key: PTSmartPeelingKey)
         // 1.2、智能换肤根据时间段来设置：黑或者白
@@ -154,7 +154,7 @@ public extension PTDarkModeOption {
     
     // MARK: 智能换肤时间选择后
     /// 智能换肤时间选择后
-    static func setSmartPeelingTimeChange(startTime: String,
+    @MainActor static func setSmartPeelingTimeChange(startTime: String,
                                           endTime: String) {
         /// 是否是浅色
         var light: Bool = false

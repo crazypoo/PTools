@@ -95,7 +95,7 @@ public class PTMediaLibView: UIView {
 // MARK: - Media Loading & Data Management
 extension PTMediaLibView {
     func loadMedia(addImage: Bool = false, loadFinish: PTCollectionCallback? = nil) {
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self, let album = self.currentAlbum else { return }
             
             if !addImage {
@@ -114,7 +114,7 @@ extension PTMediaLibView {
     }
     
     private func updateTitleCounter() {
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
             self.selectedCount?(self.selectedModel.count)
         }
@@ -200,7 +200,7 @@ private extension PTMediaLibView {
 // MARK: - Helper Methods (UI Update)
 extension PTMediaLibView {
     private func refreshCellIndex() {
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
             let visibleIndexPaths = self.collectionView.contentCollectionView.indexPathsForVisibleItems
             
@@ -435,7 +435,7 @@ extension PTMediaLibView: PHPhotoLibraryChangeObserver {
         // 注销观察者防止重复触发
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
         
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
             let config = PTMediaLibConfig.share
             
@@ -472,7 +472,6 @@ extension PTMediaLibView {
     ///   - cellModel: 当前点击的数据模型
     ///   - cell: 当前点击的 UI 单元格
     ///   - isSelected: 选择状态回调（通常用于同步按钮内部状态）
-    @MainActor
     func cellSelectedFunction(cellModel: PTMediaModel, cell: PTMediaLibCell, isSelected: PTBoolTask? = nil) {
         let config = PTMediaLibConfig.share
         
@@ -482,7 +481,7 @@ extension PTMediaLibView {
             let currentCount = self.selectedModel.count
             guard canAddModel(cellModel, currentSelectCount: currentCount, sender: PTUtils.getCurrentVC()) else {
                 // 如果不满足条件（如已达上限），重置 Cell 状态并返回
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     cell.editButton.isHidden = true
                     self.selectedModel.removeAll(where: { $0 == cellModel })
                     self.cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
@@ -493,14 +492,12 @@ extension PTMediaLibView {
             // 2. 资源下载检查：如果是 iCloud 资源，需要先下载
             downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) { [weak self] in
                 guard let self = self else { return }
-                
-                // 3. 更新数据模型状态
-                cellModel.isSelected = true
-                self.selectedModel.append(cellModel)
-                isSelected?(true)
-                
                 // 4. 更新 UI 表现
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
+                    cellModel.isSelected = true
+                    self.selectedModel.append(cellModel)
+                    isSelected?(true)
+
                     cell.selectButton.isSelected = true
                     cell.layer.removeAllAnimations()
                     // 选中后获取高清图（预览用）
@@ -534,7 +531,7 @@ extension PTMediaLibView {
         isSelected?(false)
         
         // 3. UI 线程更新
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
             
             cell.selectButton.isSelected = false
@@ -621,7 +618,7 @@ extension PTMediaLibView {
     
     /// 使用新产生的 Asset 替换/更新已选中的模型
     private func updateSelectedModelWithNewAsset(_ asset: PHAsset) {
-        PTGCDManager.gcdMain { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self = self else { return }
             
             // 创建新模型
@@ -929,7 +926,9 @@ public class PTMediaLibViewController: PTBaseViewController {
         case .notDetermined:
             PTPermission.photoLibrary.request { [weak self] in
                 if PTPermission.photoLibrary.status == .authorized {
-                    self?.loadImageData()
+                    Task { @MainActor in
+                        self?.loadImageData()
+                    }
                 }
             }
         default:

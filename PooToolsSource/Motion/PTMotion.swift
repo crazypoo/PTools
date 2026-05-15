@@ -28,7 +28,7 @@ public class PTMotion: NSObject {
     }
 
     // MARK: - Start Motion Tracking
-    public func startMotion(from startDate: Date = Date()) {
+    @MainActor public func startMotion(from startDate: Date = Date()) {
         guard CMPedometer.isStepCountingAvailable(), CMMotionActivityManager.isActivityAvailable() else {
             let msg = "哎喲，不能運行哦，僅支持 M7 以上處理器，暫時只能在 iPhone5s 以上使用。"
             UIAlertController.base_alertVC(msg: msg, showIn: PTUtils.getCurrentVC(), moreBtn: nil)

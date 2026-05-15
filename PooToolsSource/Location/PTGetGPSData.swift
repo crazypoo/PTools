@@ -82,20 +82,20 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
                             self.showChangeCityAlert(newCity: cityStr, oldCity: savedCity)
                         } else {
                             self.setObjectFunction(city: cityStr)
-                            PTGCDManager.gcdMain {
+                            Task { @MainActor in
                                 self.selectNewBlock?()
                             }
                         }
                     } else {
                         self.setObjectFunction(city: cityStr)
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             self.selectNewBlock?()
                         }
                     }
                 }
                 
                 if distance > 1000 {
-                    PTGCDManager.gcdMain {
+                    Task { @MainActor in
                         self.selectNewBlock?()
                     }
                 }
@@ -105,7 +105,7 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
     
     @MainActor public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 // 在主线程上更新UI或执行其他操作
                 self.locationManager.requestWhenInUseAuthorization()
                 self.locationManager.requestAlwaysAuthorization()

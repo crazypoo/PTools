@@ -9,6 +9,7 @@
 import Foundation
 
 // MARK: - 主列表视图模型
+@MainActor
 final class PTNetworkViewModel {
 
     var reachEnd = true

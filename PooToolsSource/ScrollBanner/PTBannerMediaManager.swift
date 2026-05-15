@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import AVKit
 
+@MainActor
 class PTBannerVideoManager {
 
     static let shared = PTBannerVideoManager()
@@ -22,19 +23,18 @@ class PTBannerVideoManager {
             return
         }
 
-        DispatchQueue.global().async {
-            PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
+        PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
+            Task { @MainActor in
                 if let image = image {
                     self.cache.setObject(image, forKey: url as NSString)
                 }
-                DispatchQueue.main.async {
-                    completion(image)
-                }
+                completion(image)
             }
         }
     }
 }
 
+@MainActor
 public final class PTBannerPlayerManager {
 
     public static let shared = PTBannerPlayerManager()

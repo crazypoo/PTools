@@ -25,16 +25,16 @@ public extension CGFloat {
 
     //MARK: 獲取屏幕寬度
     ///獲取屏幕寬度
-    static let kSCREEN_WIDTH = kSCREEN_SIZE.width
+    @MainActor static let kSCREEN_WIDTH = kSCREEN_SIZE.width
     
     //MARK: 獲取屏幕高度
     ///獲取屏幕高度
-    static let kSCREEN_HEIGHT = kSCREEN_SIZE.height
+    @MainActor static let kSCREEN_HEIGHT = kSCREEN_SIZE.height
     
     //MARK: 等比例调整
     ///等比例调整
     /// - Returns: CGFloat
-    static func ScaleW(w:CGFloat)->CGFloat {
+    @MainActor static func ScaleW(w:CGFloat)->CGFloat {
         let width:CGFloat = w * kSCREEN_WIDTH/375
         return width
     }
@@ -50,14 +50,14 @@ public extension CGFloat {
     //MARK: 獲取StatusBar的高度
     ///獲取StatusBar的高度
     /// - Returns: CGFloat
-    static func statusBarHeight() -> CGFloat {
+    @MainActor static func statusBarHeight() -> CGFloat {
         let statusBarFrame = AppWindows?.windowScene?.statusBarManager?.statusBarFrame
         return statusBarFrame?.height ?? (Gobal_device_info.isFaceIDCapable ? 44 : 20)
     }
     
     //MARK: 獲取導航欄總高度
     ///獲取導航欄總高度
-    static let kNavBarHeight_Total: CGFloat = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
+    @MainActor static let kNavBarHeight_Total: CGFloat = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
 
     //MARK: Tabbar安全高度
     ///Tabbar安全高度
@@ -85,8 +85,8 @@ public extension CGFloat {
         }
     }
     
-    static let kLeftSafeAreaWidth = AppWindows?.safeAreaInsets.left ?? 0
-    static let kRightSafeAreaWidth = AppWindows?.safeAreaInsets.right ?? 0
+    @MainActor static let kLeftSafeAreaWidth = AppWindows?.safeAreaInsets.left ?? 0
+    @MainActor static let kRightSafeAreaWidth = AppWindows?.safeAreaInsets.right ?? 0
 }
 
 public extension PTPOP where Base == CGFloat {

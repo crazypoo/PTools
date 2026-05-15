@@ -64,6 +64,7 @@ extension String {
     }
 }
 
+@MainActor
 open class PTGifManager {
     
     // A convenient default manager if we only have one gif to display here and there
@@ -92,7 +93,7 @@ open class PTGifManager {
     }
     
     deinit {
-        stopTimer()
+//        stopTimer()
     }
     
     public func startTimerIfNeeded() {

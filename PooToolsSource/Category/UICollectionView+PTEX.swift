@@ -108,8 +108,8 @@ public extension UICollectionView {
     }
     
     // MARK: - Gird 形式布局计算
-    @objc class func girdCollectionContentHeight(data: [AnyObject]?,
-                                                 groupW: CGFloat = CGFloat.kSCREEN_WIDTH,
+    class func girdCollectionContentHeight(data: [AnyObject]?,
+                                                 groupW: CGFloat? = nil,
                                                  itemHeight: CGFloat,
                                                  cellRowCount: NSInteger = 3,
                                                  originalX: CGFloat = 10,
@@ -118,12 +118,13 @@ public extension UICollectionView {
                                                  cellLeadingSpace: CGFloat = 0,
                                                  cellTrailingSpace: CGFloat = 0,
                                                  handle: (_ groupHeight: CGFloat, _ groupItem: [NSCollectionLayoutGroupCustomItem]) -> Void) {
-        let result = UICollectionView.girdCollectionContentHeight(data: data, groupW: groupW, itemHeight: itemHeight, cellRowCount: cellRowCount, originalX: originalX, topContentSpace: topContentSpace, bottomContentSpace: bottomContentSpace, cellLeadingSpace: cellLeadingSpace, cellTrailingSpace: cellTrailingSpace)
+        let viewW = groupW ?? CGFloat.kSCREEN_WIDTH
+        let result = UICollectionView.girdCollectionContentHeight(data: data, groupW: viewW, itemHeight: itemHeight, cellRowCount: cellRowCount, originalX: originalX, topContentSpace: topContentSpace, bottomContentSpace: bottomContentSpace, cellLeadingSpace: cellLeadingSpace, cellTrailingSpace: cellTrailingSpace)
         handle(result.0, result.1)
     }
     
     class func girdCollectionContentHeight(data: [AnyObject]?,
-                                           groupW: CGFloat = CGFloat.kSCREEN_WIDTH,
+                                           groupW: CGFloat? = nil,
                                            itemHeight: CGFloat,
                                            cellRowCount: NSInteger = 3,
                                            originalX: CGFloat = 10,
@@ -132,7 +133,8 @@ public extension UICollectionView {
                                            cellLeadingSpace: CGFloat = 0,
                                            cellTrailingSpace: CGFloat = 0) -> (CGFloat, [NSCollectionLayoutGroupCustomItem]) {
         guard let data = data, !data.isEmpty else { return (0, []) }
-        
+        let viewW = groupW ?? CGFloat.kSCREEN_WIDTH
+
         var customers = [NSCollectionLayoutGroupCustomItem]()
         // 性能优化：提前分配内存容量
         customers.reserveCapacity(data.count)
@@ -142,7 +144,7 @@ public extension UICollectionView {
         
         // 安全优化：防止 cellRowCount 为 0 导致除以 0 崩溃；防止宽度为负数导致 Layout 崩溃
         let safeRowCount = max(1, cellRowCount)
-        let rawItemW = (groupW - originalX * 2 - CGFloat(safeRowCount - 1) * cellLeadingSpace) / CGFloat(safeRowCount)
+        let rawItemW = (viewW - originalX * 2 - CGFloat(safeRowCount - 1) * cellLeadingSpace) / CGFloat(safeRowCount)
         let itemW = max(0.1, rawItemW)
         
         var x: CGFloat = originalX
@@ -172,8 +174,8 @@ public extension UICollectionView {
         return (groupH, customers)
     }
     
-    @objc class func girdCollectionLayout(data: [AnyObject]?,
-                                          groupWidth: CGFloat = CGFloat.kSCREEN_WIDTH,
+    class func girdCollectionLayout(data: [AnyObject]?,
+                                          groupWidth: CGFloat? = nil,
                                           itemHeight: CGFloat,
                                           cellRowCount: NSInteger = 3,
                                           originalX: CGFloat = 10,
@@ -182,11 +184,12 @@ public extension UICollectionView {
                                           cellLeadingSpace: CGFloat = 0,
                                           cellTrailingSpace: CGFloat = 0,
                                           sectionContentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)) -> NSCollectionLayoutGroup {
-        
-        let result = UICollectionView.girdCollectionContentHeight(data: data, groupW: groupWidth, itemHeight: itemHeight, cellRowCount: cellRowCount, originalX: originalX, topContentSpace: topContentSpace, bottomContentSpace: bottomContentSpace, cellLeadingSpace: cellLeadingSpace, cellTrailingSpace: cellTrailingSpace)
+        let viewW = groupWidth ?? CGFloat.kSCREEN_WIDTH
+
+        let result = UICollectionView.girdCollectionContentHeight(data: data, groupW: viewW, itemHeight: itemHeight, cellRowCount: cellRowCount, originalX: originalX, topContentSpace: topContentSpace, bottomContentSpace: bottomContentSpace, cellLeadingSpace: cellLeadingSpace, cellTrailingSpace: cellTrailingSpace)
         
         // 安全优化：保证 group 的宽和高始终为正数，防止闪退
-        let safeGroupWidth = max(0.1, groupWidth - originalX * 2)
+        let safeGroupWidth = max(0.1, viewW - originalX * 2)
         let safeGroupHeight = max(0.1, result.0)
         
         let bannerGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(safeGroupWidth),
@@ -198,27 +201,29 @@ public extension UICollectionView {
     }
     
     // MARK: - WaterFallLayout (瀑布流布局)
-    @objc class func waterFallLayout(data: [AnyObject]?,
-                                     screenWidth: CGFloat = CGFloat.kSCREEN_WIDTH,
+    class func waterFallLayout(data: [AnyObject]?,
+                                     screenWidth: CGFloat? = nil,
                                      rowCount: Int = 2,
-                                     itemOriginalX: CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                     itemOriginalX: CGFloat? = nil,
                                      topContentSpace: CGFloat = 0,
                                      bottomContentSpace: CGFloat = 0,
                                      itemSpace: CGFloat,
                                      itemTrailingSpace: CGFloat = 0,
                                      itemHeight: (Int, AnyObject) -> CGFloat) -> NSCollectionLayoutGroup {
+        let viewW = screenWidth ?? CGFloat.kSCREEN_WIDTH
+        let itemX = itemOriginalX ?? PTAppBaseConfig.share.defaultViewSpace
         
         guard let data = data, !data.isEmpty else {
-            let size = NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, screenWidth)), heightDimension: .absolute(0.1))
+            let size = NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, viewW)), heightDimension: .absolute(0.1))
             return NSCollectionLayoutGroup.custom(layoutSize: size) { _ in [] }
         }
         
         let safeRowCount = max(1, rowCount)
-        let rawCellWidth = (screenWidth - itemOriginalX * 2 - CGFloat(safeRowCount - 1) * itemSpace) / CGFloat(safeRowCount)
+        let rawCellWidth = (viewW - itemX * 2 - CGFloat(safeRowCount - 1) * itemSpace) / CGFloat(safeRowCount)
         let cellWidth = max(0.1, rawCellWidth)
         
         var columnHeights = Array(repeating: topContentSpace, count: safeRowCount)
-        let columnX: [CGFloat] = (0..<safeRowCount).map { itemOriginalX + CGFloat($0) * (cellWidth + itemSpace) }
+        let columnX: [CGFloat] = (0..<safeRowCount).map { itemX + CGFloat($0) * (cellWidth + itemSpace) }
         
         var customItems: [NSCollectionLayoutGroupCustomItem] = []
         customItems.reserveCapacity(data.count) // 性能提升
@@ -244,26 +249,28 @@ public extension UICollectionView {
         let calculatedMax = (columnHeights.max() ?? topContentSpace) - itemTrailingSpace + bottomContentSpace
         let maxHeight = max(0.1, calculatedMax)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, screenWidth)), heightDimension: .absolute(maxHeight))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, viewW)), heightDimension: .absolute(maxHeight))
         
         return NSCollectionLayoutGroup.custom(layoutSize: groupSize) { _ in return customItems }
     }
     
     // MARK: - TagShowLayout (标签流水布局)
-    @objc class func tagShowLayout(data: [PTTagLayoutModel]?,
-                                   screenWidth: CGFloat = CGFloat.kSCREEN_WIDTH,
-                                   itemOriginalX: CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+    class func tagShowLayout(data: [PTTagLayoutModel]?,
+                                   screenWidth: CGFloat? = nil,
+                                   itemOriginalX: CGFloat? = nil,
                                    itemHeight: CGFloat = 32,
                                    topContentSpace: CGFloat = 10,
                                    bottomContentSpace: CGFloat = 10,
                                    itemLeadingSpace: CGFloat = 10,
                                    itemTrailingSpace: CGFloat = 10,
                                    itemContentSpace: CGFloat = 20) -> NSCollectionLayoutGroup {
-        
-        let result = UICollectionView.tagShowLayoutHeight(data: data, screenWidth: screenWidth, itemOriginalX: itemOriginalX, itemHeight: itemHeight, topContentSpace: topContentSpace, bottomContentSpace: bottomContentSpace, itemLeadingSpace: itemLeadingSpace, itemTrailingSpace: itemTrailingSpace, itemContentSpace: itemContentSpace)
+        let viewW = screenWidth ?? CGFloat.kSCREEN_WIDTH
+        let itemX = itemOriginalX ?? PTAppBaseConfig.share.defaultViewSpace
+
+        let result = UICollectionView.tagShowLayoutHeight(data: data, screenWidth: viewW, itemOriginalX: itemX, itemHeight: itemHeight, topContentSpace: topContentSpace, bottomContentSpace: bottomContentSpace, itemLeadingSpace: itemLeadingSpace, itemTrailingSpace: itemTrailingSpace, itemContentSpace: itemContentSpace)
 
         let safeGroupHeight = max(0.1, result.groupHeight)
-        let bannerGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, screenWidth)), heightDimension: .absolute(safeGroupHeight))
+        let bannerGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, viewW)), heightDimension: .absolute(safeGroupHeight))
         
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { _ in
             return result.groupItems
@@ -271,8 +278,8 @@ public extension UICollectionView {
     }
     
     class func tagShowLayoutHeight(data: [PTTagLayoutModel]?,
-                                   screenWidth: CGFloat = CGFloat.kSCREEN_WIDTH,
-                                   itemOriginalX: CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                   screenWidth: CGFloat? = nil,
+                                   itemOriginalX: CGFloat? = nil,
                                    itemHeight: CGFloat = 32,
                                    topContentSpace: CGFloat = 10,
                                    bottomContentSpace: CGFloat = 10,
@@ -282,15 +289,17 @@ public extension UICollectionView {
         guard let datas = data, !datas.isEmpty else {
             return (topContentSpace + bottomContentSpace, [], 0)
         }
+        let viewW = screenWidth ?? CGFloat.kSCREEN_WIDTH
+        let itemX = itemOriginalX ?? PTAppBaseConfig.share.defaultViewSpace
 
         var customItems: [NSCollectionLayoutGroupCustomItem] = []
         customItems.reserveCapacity(datas.count)
         
-        var x = itemOriginalX
+        var x = itemX
         var y: CGFloat = topContentSpace
         var columnCount = 1
 
-        let maxRowWidth = max(0.1, screenWidth - itemOriginalX * 2)
+        let maxRowWidth = max(0.1, viewW - itemX * 2)
         let safeItemHeight = max(0.1, itemHeight)
 
         func calculateCellWidth(for model: PTTagLayoutModel) -> CGFloat {
@@ -305,8 +314,8 @@ public extension UICollectionView {
         for (index, model) in datas.enumerated() {
             let currentWidth = calculateCellWidth(for: model)
 
-            if x + currentWidth > (screenWidth - itemOriginalX) { // 换行逻辑优化：基于屏幕右侧边缘计算
-                x = itemOriginalX
+            if x + currentWidth > (viewW - itemX) { // 换行逻辑优化：基于屏幕右侧边缘计算
+                x = itemX
                 y += safeItemHeight + itemTrailingSpace
                 columnCount += 1
             }
@@ -323,14 +332,15 @@ public extension UICollectionView {
     }
     
     // MARK: - 横向布局 (Horizontal)
-    @objc class func horizontalLayout(data: [AnyObject]?,
-                                      itemOriginalX: CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+    class func horizontalLayout(data: [AnyObject]?,
+                                      itemOriginalX: CGFloat? = nil,
                                       itemWidth: CGFloat = 100,
                                       itemHeight: CGFloat = 44,
                                       topContentSpace: CGFloat = 10,
                                       bottomContentSpace: CGFloat = 10,
                                       itemLeadingSpace: CGFloat = 10) -> NSCollectionLayoutGroup {
-        var groupWidth: CGFloat = itemOriginalX
+        let itemX = itemOriginalX ?? PTAppBaseConfig.share.defaultViewSpace
+        var groupWidth: CGFloat = itemX
         var customers = [NSCollectionLayoutGroupCustomItem]()
         
         if let data = data {
@@ -347,21 +357,22 @@ public extension UICollectionView {
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { _ in return customers })
     }
     
-    @objc class func horizontalLayoutSystem(data: [AnyObject]?,
-                                            itemOriginalX: CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+    class func horizontalLayoutSystem(data: [AnyObject]?,
+                                            itemOriginalX: CGFloat? = nil,
                                             itemWidth: CGFloat = 100,
                                             itemHeight: CGFloat = 44,
                                             topContentSpace: CGFloat = 10,
                                             bottomContentSpace: CGFloat = 10,
                                             itemLeadingSpace: CGFloat = 10) -> NSCollectionLayoutGroup {
-        var groupWidth: CGFloat = itemOriginalX
+        let itemX = itemOriginalX ?? PTAppBaseConfig.share.defaultViewSpace
+        var groupWidth: CGFloat = itemX
         var customers = [NSCollectionLayoutItem]()
         
         if let data = data {
             customers.reserveCapacity(data.count)
             data.enumerated().forEach { (index, _) in
                 let customItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(max(0.1, itemWidth)), heightDimension: .absolute(max(0.1, itemHeight))))
-                customItem.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: NSCollectionLayoutSpacing.fixed(index == 0 ? itemOriginalX : itemLeadingSpace), top: NSCollectionLayoutSpacing.fixed(topContentSpace), trailing: NSCollectionLayoutSpacing.fixed(0), bottom: NSCollectionLayoutSpacing.fixed(bottomContentSpace))
+                customItem.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: NSCollectionLayoutSpacing.fixed(index == 0 ? itemX : itemLeadingSpace), top: NSCollectionLayoutSpacing.fixed(topContentSpace), trailing: NSCollectionLayoutSpacing.fixed(0), bottom: NSCollectionLayoutSpacing.fixed(bottomContentSpace))
                 customers.append(customItem)
                 groupWidth += (itemWidth + itemLeadingSpace)
             }
@@ -407,8 +418,8 @@ public extension UICollectionView {
     }
     
     // MARK: - 横向分页布局
-    @objc class func horizontalPagingLayout(data: [AnyObject]?,
-                                            monitorWidth: CGFloat = CGFloat.kSCREEN_WIDTH,
+    class func horizontalPagingLayout(data: [AnyObject]?,
+                                            monitorWidth: CGFloat? = nil,
                                             itemOriginalX: CGFloat = 0,
                                             itemHeight: CGFloat = 76,
                                             topContentSpace: CGFloat = 0,
@@ -420,6 +431,7 @@ public extension UICollectionView {
         guard let data = data, !data.isEmpty else {
             return NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(0.1), heightDimension: .absolute(0.1)), subitems: [])
         }
+        let viewW = monitorWidth ?? CGFloat.kSCREEN_WIDTH
 
         // 安全校验：防止除数为 0 导致崩溃
         let safeColumnCount = max(1, columnCount)
@@ -427,7 +439,7 @@ public extension UICollectionView {
         
         let itemsPerPage = safeColumnCount * safeRowCount
         let totalPages = Int(ceil(Double(data.count) / Double(itemsPerPage)))
-        let rawItemWidth = (monitorWidth - itemOriginalX * 2 - CGFloat(safeColumnCount - 1) * itemLeadingSpace) / CGFloat(safeColumnCount)
+        let rawItemWidth = (viewW - itemOriginalX * 2 - CGFloat(safeColumnCount - 1) * itemLeadingSpace) / CGFloat(safeColumnCount)
         let itemWidth = max(0.1, rawItemWidth)
         let safeItemHeight = max(0.1, itemHeight)
         
@@ -441,7 +453,7 @@ public extension UICollectionView {
             let rowIndex = (index % itemsPerPage) / safeColumnCount
             let columnIndex = index % safeColumnCount
 
-            let x = CGFloat(pageIndex) * monitorWidth + itemOriginalX + CGFloat(columnIndex) * (itemWidth + itemLeadingSpace)
+            let x = CGFloat(pageIndex) * viewW + itemOriginalX + CGFloat(columnIndex) * (itemWidth + itemLeadingSpace)
             let y = topContentSpace + CGFloat(rowIndex) * (safeItemHeight + itemTrailingSpace)
 
             groupHeight = max(groupHeight, y + safeItemHeight + bottomContentSpace)
@@ -454,7 +466,7 @@ public extension UICollectionView {
         }
 
         let layoutSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(max(0.1, monitorWidth * CGFloat(totalPages))),
+            widthDimension: .absolute(max(0.1, viewW * CGFloat(totalPages))),
             heightDimension: .absolute(max(0.1, groupHeight))
         )
 

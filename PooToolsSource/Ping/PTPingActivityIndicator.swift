@@ -14,14 +14,14 @@ class PTPingActivityIndicator {
 
     var isHidden = false {
         willSet {
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.mIndicatorWindow.isHidden = newValue
             }
         }
     }
 
     private init(){
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.createUI()
         }
     }
@@ -47,7 +47,7 @@ class PTPingActivityIndicator {
 }
 
 private extension PTPingActivityIndicator {
-    func createUI() {
+    @MainActor func createUI() {
         if let windowScene = AppWindows?.windowScene, let statusBarManager = windowScene.statusBarManager {
             mIndicatorWindow.windowScene = windowScene
             mIndicatorWindow.frame = statusBarManager.statusBarFrame

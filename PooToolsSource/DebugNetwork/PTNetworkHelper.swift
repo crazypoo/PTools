@@ -36,7 +36,7 @@ final class PTNetworkHelper {
         self.isNetworkEnable = false
     }
 
-    func enable() {
+    @MainActor func enable() {
         guard !isNetworkEnable else { return }
         isNetworkEnable = true
         PTCustomHTTPProtocol.start()
@@ -57,7 +57,7 @@ final class PTNetworkHelper {
         measurementsTimer = nil
     }
     
-    private func floatingButtonCreate() {
+    @MainActor private func floatingButtonCreate() {
         if floatingView == nil {
             floatingView = PFloatingButton(inView: PTConsoleWindow.shared, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
             floatingView?.tag = PTNetworkFloatingTap

@@ -211,7 +211,7 @@ public extension UIView {
         
     @objc func viewCornerRectCorner(radius: CGFloat = 5, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, borderWidth: CGFloat = 0, borderColor: UIColor = UIColor.clear, corner: UIRectCorner = .allCorners, capsule: Bool = false) {
         
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let tracker = self.getOrCreateTracker() // 记得用你抽出来的统一获取 tracker 的方法
             
             tracker.layoutActions["PTCornerRectCorner"] = { [weak self] currentBounds in
@@ -370,7 +370,7 @@ public extension UIView {
                        corner: UIRectCorner = .allCorners,
                        capsule: Bool = false) {
         
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let tracker = self.getOrCreateTracker()
             
             tracker.layoutActions["Gradient"] = { [weak self] currentBounds in
@@ -485,7 +485,7 @@ public extension UIView {
                        valueLabelFont: UIFont = .systemFont(ofSize: 16, weight: .bold),
                        valueLabelColor: UIColor = .white,
                        uniCount: Int = 0) {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             let tracker = self.getOrCreateTracker() // 确保你保留了之前的 getOrCreateTracker 方法
             
             // 1. 初始化 Layer (如果还没有的话)
@@ -863,16 +863,24 @@ public extension UIView {
                           bottomRight: CGFloat = 0,
                           corner: UIRectCorner = .allCorners,
                           capsule: Bool = false,
-                          borderWidth: CGFloat = PTAppBaseConfig.share.loadImageProgressBorderWidth,
-                          borderColor: UIColor = PTAppBaseConfig.share.loadImageProgressBorderColor,
-                          showValueLabel: Bool = PTAppBaseConfig.share.loadImageShowValueLabel,
-                          valueLabelFont: UIFont = PTAppBaseConfig.share.loadImageShowValueFont,
-                          valueLabelColor: UIColor = PTAppBaseConfig.share.loadImageShowValueColor,
-                          uniCount: Int = PTAppBaseConfig.share.loadImageShowValueUniCount,
-                          emptyImage: UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                          borderWidth: CGFloat? = nil,
+                          borderColor: UIColor? = nil,
+                          showValueLabel: Bool? = nil,
+                          valueLabelFont: UIFont? = nil,
+                          valueLabelColor: UIColor? = nil,
+                          uniCount: Int? = nil,
+                          emptyImage: UIImage? = nil,
                           progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                           setImageBlock: @escaping @MainActor (UIImage?) -> Void, // <--- 关键点：交还给具体类的渲染闭包
                           loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+        let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
+        let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
+        let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
+        let valueLabelF = valueLabelFont ?? PTAppBaseConfig.share.loadImageShowValueFont
+        let valueLabelC = valueLabelColor ?? PTAppBaseConfig.share.loadImageShowValueColor
+        let uniC = uniCount ?? PTAppBaseConfig.share.loadImageShowValueUniCount
+        let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
+
         // 取消旧任务
         cancelImageLoad()
 
@@ -887,7 +895,7 @@ public extension UIView {
             guard isValid() else { return }
             Task { @MainActor in
                 guard isValid() else { return }
-                setImageBlock(emptyImage)
+                setImageBlock(placeholder)
             }
         }
 
@@ -904,12 +912,12 @@ public extension UIView {
                                    bottomRight: bottomRight,
                                    corner: corner,
                                    capsule: capsule,
-                                   borderWidth: borderWidth,
-                                   borderColor: borderColor,
-                                   showValueLabel: showValueLabel,
-                                   valueLabelFont: valueLabelFont,
-                                   valueLabelColor: valueLabelColor,
-                                   uniCount: uniCount)
+                                   borderWidth: borderW,
+                                   borderColor: borderC,
+                                   showValueLabel: showValueL,
+                                   valueLabelFont: valueLabelF,
+                                   valueLabelColor: valueLabelC,
+                                   uniCount: uniC)
                 // 构造一个虚拟的 Result 用于本地图片/颜色等的回调
                 // 假设 PTLoadImageResult 有个对应的构造器，如果没有请按照你的实际 struct 进行初始化
                 // loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
@@ -991,12 +999,12 @@ public extension UIView {
                                 bottomRight: bottomRight,
                                 corner: corner,
                                 capsule: capsule,
-                                borderWidth: borderWidth,
-                                borderColor: borderColor,
-                                showValueLabel: showValueLabel,
-                                valueLabelFont: valueLabelFont,
-                                valueLabelColor: valueLabelColor,
-                                uniCount: uniCount
+                                borderWidth: borderW,
+                                borderColor: borderC,
+                                showValueLabel: showValueL,
+                                valueLabelFont: valueLabelF,
+                                valueLabelColor: valueLabelC,
+                                uniCount: uniC
                             )
                         }
                     }

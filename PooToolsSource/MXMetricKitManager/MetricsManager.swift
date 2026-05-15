@@ -57,7 +57,7 @@ public class MetricsManager: NSObject, MXMetricManagerSubscriber {
     }
     
     //MARK: 用在applicationDidBecomeActive
-    public func uploadPendingMetrics() {
+    @MainActor public func uploadPendingMetrics() {
         let fileManager = FileManager.default
         let documentDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
 
@@ -83,7 +83,7 @@ public class MetricsManager: NSObject, MXMetricManagerSubscriber {
         }
     }
     
-    func uploadToServer(data: Data, completion: PTBoolTask? = nil) {
+    @MainActor func uploadToServer(data: Data, completion: PTBoolTask? = nil) {
         if let uploadURL = URL(string: PTAppBaseConfig.share.MXMetricKitUploadAddress) {
             var request = URLRequest(url: uploadURL)
             request.httpMethod = "POST"

@@ -57,11 +57,12 @@ extension Manager {
     @MainActor func presentInspector(animated: Bool, from presenter: UIViewController) {
         dismissInspectorViewIfNeeded { [weak self] in
             guard let self = self else { return }
+            Task { @MainActor in
+                let coordinator = self.makeInspectorViewCoordinator(presentedBy: presenter)
 
-            let coordinator = self.makeInspectorViewCoordinator(presentedBy: presenter)
-
-            presenter.present(coordinator.start(), animated: animated) { [weak self] in
-                self?.addChild(coordinator)
+                presenter.present(coordinator.start(), animated: animated) { [weak self] in
+                    self?.addChild(coordinator)
+                }
             }
         }
     }
