@@ -329,7 +329,7 @@ extension InspectorViewController {
 }
 
 // MARK: - HierarchyInspectorViewDelegate
-extension InspectorViewController: HierarchyInspectorViewCodeDelegate {
+extension InspectorViewController: @preconcurrency HierarchyInspectorViewCodeDelegate {
     func hierarchyInspectorViewCodeDidTapOutside(_ view: HierarchyInspectorViewCode) {
         finish()
     }

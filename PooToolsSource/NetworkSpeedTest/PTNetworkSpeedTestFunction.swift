@@ -21,6 +21,7 @@ import SmartCodable
     case Latency
 }
 
+@MainActor
 @objcMembers
 public class PTNetworkSpeedTestFunction: NSObject {
     public static let shared = PTNetworkSpeedTestFunction()
@@ -112,7 +113,7 @@ public class PTNetworkSpeedTestFunction: NSObject {
 }
 
 // MARK: URLSessionTaskDelegate && URLSessionTaskDelegate methods
-extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDelegate {
+extension PTNetworkSpeedTestFunction : @preconcurrency URLSessionDataDelegate, @preconcurrency URLSessionTaskDelegate {
     public func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
         if task == downloadTask {
             let latency = (downloadStartTime! - tapStartTime!) * 1000
@@ -120,44 +121,49 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
             PTNSLogConsole("Network latency: \(latency) ms",levelType: .notice,loggerType: .network)
             netSpeedUpload()
             netSpeedStateType = .Upload
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.valueUpdateTask?(PTNetworkSpeedTestType.Latency,latency)
             }
         } else if task == uploadTask {
             
             if testDone != nil {
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     PTGCDManager.gcdGroupUtility(label: "ValueDone", threadCount: 2) { dispatchSemaphore, dispatchGroup, currentIndex in
                         if currentIndex == 0 {
                             PTGCDManager.gcdAfter(time: 0.35) {
-                                self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
-                                dispatchSemaphore.signal()
-                                dispatchGroup.leave()
+                                Task { @MainActor in
+                                    self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
+                                    dispatchSemaphore.signal()
+                                    dispatchGroup.leave()
+                                }
                             }
                         } else if currentIndex == 1 {
                             PTGCDManager.gcdAfter(time: 0.35) {
-                                self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
-                                dispatchSemaphore.signal()
-                                dispatchGroup.leave()
+                                Task { @MainActor in
+                                    self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
+                                    dispatchSemaphore.signal()
+                                    dispatchGroup.leave()
+                                }
                             }
                         } else {
                             dispatchSemaphore.signal()
                             dispatchGroup.leave()
                         }
                     } allRequestsFinished: {
-                        self.testDone!()
-                        let historyModel = PTNetworkSpeedHistoriaModel()
-                        historyModel.download = String(format: "%.2f", self.downloadValue)
-                        historyModel.upload = String(format: "%.2f", self.uploadValue)
-                        historyModel.latency = String(format: "%.2f", self.latencyValue)
-                        historyModel.networkType = self.netWorkName
-                        historyModel.date = Date().toString()
-                        
-                        let jsonString = historyModel.toJSONString(prettyPrint: true) ?? ""
-                        PTNSLogConsole(jsonString,levelType: .notice,loggerType: .network)
-                        self.saveHistory(jsonString: jsonString)
-                        self.netSpeedStateType = .Free
-
+                        Task { @MainActor in
+                            self.testDone!()
+                            let historyModel = PTNetworkSpeedHistoriaModel()
+                            historyModel.download = String(format: "%.2f", self.downloadValue)
+                            historyModel.upload = String(format: "%.2f", self.uploadValue)
+                            historyModel.latency = String(format: "%.2f", self.latencyValue)
+                            historyModel.networkType = self.netWorkName
+                            historyModel.date = Date().toString()
+                            
+                            let jsonString = historyModel.toJSONString(prettyPrint: true) ?? ""
+                            PTNSLogConsole(jsonString,levelType: .notice,loggerType: .network)
+                            self.saveHistory(jsonString: jsonString)
+                            self.netSpeedStateType = .Free
+                        }
                     } cancelCompletion: {
                         
                     }

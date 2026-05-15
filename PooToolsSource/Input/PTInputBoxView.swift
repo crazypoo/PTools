@@ -16,6 +16,7 @@ public enum PTInputBoxConfigurationType {
 }
 
 // MARK: - Configuration
+@MainActor
 open class PTInputBoxConfiguration {
     /// 输入框个数
     open var inputBoxNumber: Int = 4

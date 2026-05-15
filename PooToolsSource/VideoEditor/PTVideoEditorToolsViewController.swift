@@ -820,7 +820,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             avPlayer?.removeTimeObserver(token)
         }
         // 清理可能正在导出的残缺废料
-        videoConverter?.restore(cleanupDisk: true)
+        Task { @MainActor [weak self] in
+            self?.videoConverter?.restore(cleanupDisk: true)
+        }
         
         PTNSLogConsole("🎬 PTVideoEditorToolsViewController 成功销毁并清理内存/磁盘", levelType: .info, loggerType: .media)
     }

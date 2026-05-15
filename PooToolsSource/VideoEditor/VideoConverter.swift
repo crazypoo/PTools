@@ -9,8 +9,10 @@
 import UIKit
 import AVKit
 
+// 新增：引入 @MainActor 保证外部调用的安全，解决绝大部分 Sendable 捕获警告
+@MainActor
 open class VideoConverter {
-    // 新增：记录当前正在导出的目标路径，用于失败/取消时的安全清理
+    // 记录当前正在导出的目标路径，用于失败/取消时的安全清理
     private var currentExportURL: URL?
 
     public let asset: AVAsset
@@ -19,9 +21,25 @@ open class VideoConverter {
     public var option: ConverterOption?
 
     private var assetExportsSession: AVAssetExportSession?
-    private var timer: Timer?
-
-    private var progressCallback: ((Double?) -> Void)?
+    
+    // 进度回调，标记为 @Sendable 以允许跨线程安全传递
+    private var progressCallback: (@Sendable (Double?) -> Void)?
+    
+    // 【核心新增】：使用内部锁管理后台取消状态，供非主线程的音视频底层 API 安全读取
+    private let cancelLock = NSLock()
+    private var _isCancelledState: Bool = false
+    private var isCancelledState: Bool {
+        get {
+            cancelLock.lock()
+            defer { cancelLock.unlock() }
+            return _isCancelledState
+        }
+        set {
+            cancelLock.lock()
+            _isCancelledState = newValue
+            cancelLock.unlock()
+        }
+    }
 
     private var videoTrack: AVAssetTrack? {
         return self.asset.tracks(withMediaType: .video).first
@@ -40,7 +58,7 @@ open class VideoConverter {
 
     private var naturalSize: CGSize? {
         guard let videoTrack = self.videoTrack,
-            let converterDegree = self.converterDegree else { return nil }
+              let converterDegree = self.converterDegree else { return nil }
         if converterDegree == .degree90 || converterDegree == .degree270 {
             return CGSize(width: videoTrack.naturalSize.height, height: videoTrack.naturalSize.width)
         } else {
@@ -57,8 +75,7 @@ open class VideoConverter {
         let cropY = frame.origin.y * naturalSize.height / contrastSize.height
         let cropWidth = frame.size.width * naturalSize.width / contrastSize.width
         let cropHeight = frame.size.height * naturalSize.height / contrastSize.height
-        let cropFrame = CGRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
-        return cropFrame
+        return CGRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
     }
 
     public init(asset: AVAsset) {
@@ -68,6 +85,9 @@ open class VideoConverter {
 
     // Restore & Clean up
     open func restore(cleanupDisk: Bool = false) {
+        // 通知后台队列（如果有）立刻停止
+        self.isCancelledState = true
+        
         self.option = nil
         
         // 取消正在进行的导出任务
@@ -75,150 +95,134 @@ open class VideoConverter {
             session.cancelExport()
         }
         self.assetExportsSession = nil
-        
-        self.timer?.invalidate()
-        self.timer = nil
         self.progressCallback = nil
         
-        // 如果指定需要清理，立即删除残缺文件释放用户存储空间
+        // 如果指定需要清理，使用分离的 Task 在后台删除残缺文件
         if cleanupDisk, let fileURL = self.currentExportURL {
-            PTGCDManager.gcdBackground {
+            // Swift 6 推荐使用 Task.detached 代替 DispatchQueue.global 进行独立的后台任务
+            Task.detached(priority: .background) {
                 let filePath = fileURL.path
                 if FileManager.default.fileExists(atPath: filePath) {
-                    do {
-                        try FileManager.default.removeItem(atPath: filePath)
-                    } catch {
-                        // 清理失败可以忽略
-                    }
+                    try? FileManager.default.removeItem(atPath: filePath)
                 }
             }
         }
         
-        // 【极其关键的修复】：将 currentExportURL 的置空操作移到外部！
-        // 无论刚才是否删除了文件，只要任务归零，就彻底忘掉这个路径。
-        // 这样即使后续页面触发 deinit(cleanupDisk: true)，也绝对不会误删已经成功导出的视频。
+        // 彻底忘掉这个路径
         self.currentExportURL = nil
     }
 
-    open func convert(_ option: ConverterOption? = nil) async throws -> (AVMutableComposition,AVMutableVideoComposition) {
-        await withUnsafeContinuation { continuation in
-            self.restore()
-            guard let videoTrack = self.videoTrack else {
-                continuation.resume(throwing: NSError(domain: "Can't find video", code: 404, userInfo: nil) as! Never)
-                return
-            }
-            self.option = option
-            if self.renderSize?.width == 0 || self.renderSize?.height == 0 {
-                self.restore()
-                continuation.resume(throwing: NSError(domain: "The crop size is too small", code: 503, userInfo: nil) as! Never)
-                return
-            }
-
-            let composition = AVMutableComposition()
-
-            guard let videoCompositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                self.restore()
-                continuation.resume(throwing: NSError(domain: "Can't find video", code: 404, userInfo: nil) as! Never)
-                return
-            }
-
-            let range: CMTimeRange
-            let duration: CMTime
-            if let trimPositions = option?.trimRange {
-                let value = trimPositions.1 - trimPositions.0
-                duration = CMTime(seconds: value * asset.duration.seconds, preferredTimescale: asset.duration.timescale)
-                range = CMTimeRange(start: CMTimeMakeWithSeconds(asset.duration.seconds * trimPositions.0, preferredTimescale: Int32(NSEC_PER_MSEC)), duration: duration)
-            } else {
-                duration = asset.duration
-                range = CMTimeRange(start: .zero, duration: duration)
-            }
-            
-            // trim
-            try? videoCompositionTrack.insertTimeRange(range, of: videoTrack, at: .zero)
-
-            let newDuration = Double(duration.seconds) / (self.option?.speed ?? 1)
-            let time = CMTime(seconds: newDuration, preferredTimescale: duration.timescale)
-            let newRange = CMTimeRange(start: .zero, duration: duration)
-            videoCompositionTrack.scaleTimeRange(newRange, toDuration: time)
-            videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
-
-            // mute
-            if !(option?.isMute ?? false) {
-                if let audioTrack = self.asset.tracks(withMediaType: AVMediaType.audio).first {
-                    let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                    // mute trim
-                    try? audioCompositionTrack?.insertTimeRange(range, of: audioTrack, at: .zero)
-                    audioCompositionTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: duration), toDuration: time)
-                }
-            }
-
-            let compositionInstructions = AVMutableVideoCompositionInstruction()
-            compositionInstructions.timeRange = CMTimeRange(start: .zero, duration: time)
-            compositionInstructions.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1).cgColor
-
-            let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
-            // opacity
-            layerInstructions.setOpacity(1.0, at: .zero)
-            // transform
-            if let transform = self.transform {
-                layerInstructions.setTransform(transform, at: .zero)
-            }
-            compositionInstructions.layerInstructions = [layerInstructions]
-
-            let videoComposition = AVMutableVideoComposition()
-            videoComposition.instructions = [compositionInstructions]
-            // size
-            if let renderSize = self.renderSize {
-                videoComposition.renderSize = renderSize
-            }
-            videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
-            continuation.resume(returning: (composition,videoComposition))
+    // 【优化】：移除无用的 withUnsafeContinuation，因为内部组装全是同步逻辑
+    open func convert(_ option: ConverterOption? = nil) async throws -> (AVMutableComposition, AVMutableVideoComposition) {
+        self.restore()
+        // 开启新的任务，复位取消标志
+        self.isCancelledState = false
+        
+        guard let videoTrack = self.videoTrack else {
+            throw NSError(domain: "Can't find video", code: 404, userInfo: nil)
         }
+        self.option = option
+        if self.renderSize?.width == 0 || self.renderSize?.height == 0 {
+            self.restore()
+            throw NSError(domain: "The crop size is too small", code: 503, userInfo: nil)
+        }
+
+        let composition = AVMutableComposition()
+
+        guard let videoCompositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            self.restore()
+            throw NSError(domain: "Can't find video", code: 404, userInfo: nil)
+        }
+
+        let range: CMTimeRange
+        let duration: CMTime
+        if let trimPositions = option?.trimRange {
+            let value = trimPositions.1 - trimPositions.0
+            duration = CMTime(seconds: value * asset.duration.seconds, preferredTimescale: asset.duration.timescale)
+            range = CMTimeRange(start: CMTimeMakeWithSeconds(asset.duration.seconds * trimPositions.0, preferredTimescale: Int32(NSEC_PER_MSEC)), duration: duration)
+        } else {
+            duration = asset.duration
+            range = CMTimeRange(start: .zero, duration: duration)
+        }
+        
+        // trim
+        try? videoCompositionTrack.insertTimeRange(range, of: videoTrack, at: .zero)
+
+        let newDuration = Double(duration.seconds) / (self.option?.speed ?? 1)
+        let time = CMTime(seconds: newDuration, preferredTimescale: duration.timescale)
+        let newRange = CMTimeRange(start: .zero, duration: duration)
+        videoCompositionTrack.scaleTimeRange(newRange, toDuration: time)
+        videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
+
+        // mute
+        if !(option?.isMute ?? false) {
+            if let audioTrack = self.asset.tracks(withMediaType: AVMediaType.audio).first {
+                let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+                try? audioCompositionTrack?.insertTimeRange(range, of: audioTrack, at: .zero)
+                audioCompositionTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: duration), toDuration: time)
+            }
+        }
+
+        let compositionInstructions = AVMutableVideoCompositionInstruction()
+        compositionInstructions.timeRange = CMTimeRange(start: .zero, duration: time)
+        compositionInstructions.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1).cgColor
+
+        let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+        layerInstructions.setOpacity(1.0, at: .zero)
+        if let transform = self.transform {
+            layerInstructions.setTransform(transform, at: .zero)
+        }
+        compositionInstructions.layerInstructions = [layerInstructions]
+
+        let videoComposition = AVMutableVideoComposition()
+        videoComposition.instructions = [compositionInstructions]
+        if let renderSize = self.renderSize {
+            videoComposition.renderSize = renderSize
+        }
+        videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
+        
+        return (composition, videoComposition)
     }
 
-    open func convert(_ option: ConverterOption? = nil,handler:@escaping ((AVMutableComposition,AVMutableVideoComposition)->Void)) {
-        
-        Task.init {
+    open func convert(_ option: ConverterOption? = nil, handler: @escaping @Sendable (AVMutableComposition, AVMutableVideoComposition) -> Void) {
+        Task {
             do {
                 let conver = try await convert(option)
-                handler(conver.0,conver.1)
+                handler(conver.0, conver.1)
             } catch {
-                PTNSLogConsole(error.localizedDescription, levelType: .error,loggerType: .media)
+                PTNSLogConsole(error.localizedDescription, levelType: .error, loggerType: .media)
             }
         }
     }
 
     // Convert
-    open func convert(_ option: ConverterOption? = nil, temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
-
-        Task.init {
+    open func convert(_ option: ConverterOption? = nil, temporaryFileName: String? = nil, progress: (@Sendable (Double?) -> Void)? = nil, completion: @escaping @Sendable (URL?, Error?) -> Void) {
+        Task {
             do {
                 let convert = try await self.convert(option)
-                self.convert(ac: convert.0, avc: convert.1,progress: progress, completion: completion)
+                self.convert(ac: convert.0, avc: convert.1, temporaryFileName: temporaryFileName, progress: progress, completion: completion)
             } catch {
-                completion(nil,(error.localizedDescription as! Error))
+                completion(nil, error)
             }
         }
     }
     
-    func convert(ac: AVMutableComposition, avc: AVMutableVideoComposition, temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
+    private func convert(ac: AVMutableComposition, avc: AVMutableVideoComposition, temporaryFileName: String? = nil, progress: (@Sendable (Double?) -> Void)? = nil, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         
         let outputType: String = option?.outputModel.name ?? "mov"
         let outputTypeType: AVFileType = option?.outputModel.type ?? .mov
                 
         guard outputType.lowercased() != "unknown" else {
-            PTGCDManager.gcdMain {
-                let error = NSError(domain: "PTVideoEditorError", code: 401, userInfo: [NSLocalizedDescriptionKey: "无法识别的输出格式 (Unknown)"])
-                completion(nil, error)
-            }
+            let error = NSError(domain: "PTVideoEditorError", code: 401, userInfo: [NSLocalizedDescriptionKey: "无法识别的输出格式 (Unknown)"])
+            completion(nil, error)
             return
         }
 
         var filePath = ""
         switch outputTypeType {
         case .mov, .mp4, .m4v, .mobile3GPP, .mobile3GPP2:
-            let temporaryFileName = temporaryFileName ?? "TrimmedMovie.\(outputType)"
-            filePath = FileManager.pt.TmpDirectory().appendingPathComponent(temporaryFileName)
+            let tempName = temporaryFileName ?? "TrimmedMovie.\(outputType)"
+            filePath = FileManager.pt.TmpDirectory().appendingPathComponent(tempName)
         default:
             let random = Int(arc4random_uniform(89999) + 10000)
             let fileName = "condy_export_audio_\(random).\(outputType)"
@@ -226,30 +230,24 @@ open class VideoConverter {
         }
 
         let url = URL(fileURLWithPath: filePath)
-        // 【优化点 1】：记录当前文件 URL
         self.currentExportURL = url
         
         let result = FileManager.pt.removefile(filePath: filePath)
         guard result.isSuccess else {
-            Task { @MainActor in
-                PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(), subtitle: result.error, icon: .Error)
-            }
+            // 已在 @MainActor 保护下，可直接调用 UI 层组件
+            PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(), subtitle: result.error, icon: .Error)
             return
         }
         
         self.progressCallback = progress
         
-        // 【核心升级】：双引擎智能路由
         let nativeSupportedFormats: [AVFileType] = [.mov, .mp4, .m4v, .mobile3GPP, .mobile3GPP2, .m4a]
         
         if nativeSupportedFormats.contains(outputTypeType) {
-            // 引擎 A：走苹果原生硬件加速的 ExportSession
             self.exportUsingExportSession(ac: ac, avc: avc, outputTypeType: outputTypeType, url: url, completion: completion)
         } else if outputTypeType == .mp3 {
-            // 引擎 C：走第三方 MP3 编码 (需集成 lame)
             self.exportMP3UsingLame(ac: ac, url: url, completion: completion)
         } else {
-            // 引擎 B：走底层流媒体读写器 (支持 wav, caf, aiff 等)
             self.exportUsingAssetWriter(ac: ac, outputTypeType: outputTypeType, url: url, completion: completion)
         }
     }
@@ -269,11 +267,11 @@ open class VideoConverter {
     // Video Rotate & Rrigin
     private var transform: CGAffineTransform? {
         guard let naturalSize = self.naturalSize,
-            let radian = self.radian,
-            let converterDegree = self.converterDegree else { return nil }
+              let radian = self.radian,
+              let converterDegree = self.converterDegree else { return nil }
 
         var transform = CGAffineTransform.identity
-            transform = transform.rotated(by: radian)
+        transform = transform.rotated(by: radian)
         if converterDegree == .degree90 {
             transform = transform.translatedBy(x: 0, y: -naturalSize.width)
         } else if converterDegree == .degree180 {
@@ -296,58 +294,45 @@ open class VideoConverter {
         return transform
     }
 
-    // Progress Time Timer
-    @objc private func timerAction(_ sender: Timer) {
-        if let progress = self.assetExportsSession?.progress {
-            self.progressCallback?(Double(progress))
-            if progress >= 1 {
-                self.timer?.invalidate()
-                self.timer = nil
-            }
-        } else if self.assetExportsSession == nil {
-            self.timer?.invalidate()
-            self.timer = nil
-        }
-    }
-    
     // MARK: - 引擎 A (原生视频/m4a导出)
-    private func exportUsingExportSession(ac: AVMutableComposition, avc: AVMutableVideoComposition, outputTypeType: AVFileType, url: URL, completion: @escaping ((URL?, Error?) -> Void)) {
-        
-        PTGCDManager.gcdMain {
-            self.timer = Timer.scheduledTimer(timeInterval: 0.1, repeats: true) { [weak self] _ in
-                guard let self = self else { return }
-                if let progress = self.assetExportsSession?.progress {
-                    self.progressCallback?(Double(progress))
-                }
-            }
-        }
+    private func exportUsingExportSession(ac: AVMutableComposition, avc: AVMutableVideoComposition, outputTypeType: AVFileType, url: URL, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         
         var presetName = option?.quality ?? AVAssetExportPresetHighestQuality
         if outputTypeType == .m4a {
             presetName = AVAssetExportPresetAppleM4A
         }
         
-        self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
-        self.assetExportsSession?.outputFileType = outputTypeType
-        self.assetExportsSession?.outputURL = url
+        let exportSession = AVAssetExportSession(asset: ac, presetName: presetName)
+        self.assetExportsSession = exportSession
+        exportSession?.outputFileType = outputTypeType
+        exportSession?.outputURL = url
         
         if [.mov, .mp4, .m4v].contains(outputTypeType) {
-            self.assetExportsSession?.shouldOptimizeForNetworkUse = true
-            self.assetExportsSession?.videoComposition = avc
+            exportSession?.shouldOptimizeForNetworkUse = true
+            exportSession?.videoComposition = avc
         }
 
-        self.assetExportsSession?.exportAsynchronously { [weak self] in
-            guard let self = self else { return }
-            self.timer?.invalidate()
-            self.timer = nil
-            
-            PTGCDManager.gcdMain {
-                if self.assetExportsSession?.status == .completed {
+        // 【优化】：使用 Swift 并发的死循环监听，彻底抛弃 Timer，避免内存泄漏和线程警告
+        Task {
+            while exportSession?.status == .exporting || exportSession?.status == .waiting {
+                if let progress = exportSession?.progress {
+                    self.progressCallback?(Double(progress))
+                }
+                // 每 0.1 秒检查一次
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
+        }
+
+        exportSession?.exportAsynchronously { [weak self] in
+            // AVAssetExportSession 的回调可能在任意后台队列，安全切回主线程
+            Task { @MainActor in
+                guard let self = self else { return }
+                if exportSession?.status == .completed {
                     self.progressCallback?(1)
                     completion(url, nil)
                     self.restore(cleanupDisk: false)
                 } else {
-                    completion(nil, self.assetExportsSession?.error)
+                    completion(nil, exportSession?.error)
                     self.restore(cleanupDisk: true)
                 }
             }
@@ -355,20 +340,16 @@ open class VideoConverter {
     }
     
     // MARK: - 引擎 B (自定义格式 wav/caf/aiff 等导出)
-    private func exportUsingAssetWriter(ac: AVMutableComposition, outputTypeType: AVFileType, url: URL, completion: @escaping ((URL?, Error?) -> Void)) {
+    private func exportUsingAssetWriter(ac: AVMutableComposition, outputTypeType: AVFileType, url: URL, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         
-        // 1. 提取音频轨道
         guard let audioTrack = ac.tracks(withMediaType: .audio).first else {
             let error = NSError(domain: "PTVideoEditorError", code: 404, userInfo: [NSLocalizedDescriptionKey: "源视频不包含任何音频轨道，无法导出。"])
-            PTGCDManager.gcdMain {
-                completion(nil, error)
-                self.restore(cleanupDisk: true)
-            }
+            completion(nil, error)
+            self.restore(cleanupDisk: true)
             return
         }
         
         do {
-            // 2. 初始化读取器 (Reader) - 读取解压后的原始 PCM 数据
             let assetReader = try AVAssetReader(asset: ac)
             let readerOutputSettings: [String: Any] = [
                 AVFormatIDKey: kAudioFormatLinearPCM
@@ -378,10 +359,7 @@ open class VideoConverter {
                 assetReader.add(trackOutput)
             }
             
-            // 3. 初始化写入器 (Writer) - 将 PCM 封装为您选择的容器 (如 wav, caf)
             let assetWriter = try AVAssetWriter(outputURL: url, fileType: outputTypeType)
-            
-            // 配置标准 CD 音质参数 (44.1kHz, 16-bit, 立体声)
             let writerInputSettings: [String: Any] = [
                 AVFormatIDKey: kAudioFormatLinearPCM,
                 AVSampleRateKey: 44100.0,
@@ -398,76 +376,70 @@ open class VideoConverter {
                 assetWriter.add(writerInput)
             }
             
-            // 4. 启动底层引擎
             assetWriter.startWriting()
             assetReader.startReading()
             assetWriter.startSession(atSourceTime: .zero)
             
-            // 5. 创建专属音频处理队列 (脱离主线程)
             let audioQueue = DispatchQueue(label: "com.ptools.audioExportQueue", qos: .userInitiated)
             let totalDuration = ac.duration.seconds
             
-            // 6. 开启异步数据传输流
+            // 提取 progressCallback 供内部使用，避免在后台队列捕捉 MainActor 的 self
+            let localProgressCallback = self.progressCallback
+            
             writerInput.requestMediaDataWhenReady(on: audioQueue) { [weak self] in
-                guard let self = self else { return }
-                
-                // 循环注水：只要写入器准备好，并且任务未被取消 (self.option != nil)
-                while writerInput.isReadyForMoreMediaData {
-                    
-                    // 【安全机制】：如果外部调用了 restore()，self.option 会变为 nil。立刻中断死循环。
-                    guard self.option != nil else {
-                        writerInput.markAsFinished()
-                        assetWriter.cancelWriting()
-                        assetReader.cancelReading()
-                        // 内部取消不回调成功，外部已有 restore 逻辑处理
-                        return
-                    }
-                    
-                    if let sampleBuffer = trackOutput.copyNextSampleBuffer() {
-                        // 将提取到的音频帧写入目标文件
-                        writerInput.append(sampleBuffer)
+                Task { @MainActor in
+                    // 此时代码正在后台的 audioQueue 执行
+                    while writerInput.isReadyForMoreMediaData {
                         
-                        // 进度计算与抛出
-                        if totalDuration > 0 {
-                            let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-                            let progress = timeStamp.seconds / totalDuration
-                            PTGCDManager.gcdMain {
-                                self.progressCallback?(progress)
-                            }
+                        // 【核心修复】：使用线程安全的锁标志判断，而不直接访问主线程隔离的 `self.option`
+                        if self?.isCancelledState == true {
+                            writerInput.markAsFinished()
+                            assetWriter.cancelWriting()
+                            assetReader.cancelReading()
+                            return
                         }
-                    } else {
-                        // 数据读取完毕，关闭阀门
-                        writerInput.markAsFinished()
                         
-                        assetWriter.finishWriting {
-                            PTGCDManager.gcdMain {
-                                if assetWriter.status == .completed {
-                                    self.progressCallback?(1.0)
-                                    completion(url, nil)
-                                    self.restore(cleanupDisk: false)
-                                } else {
-                                    completion(nil, assetWriter.error)
-                                    self.restore(cleanupDisk: true)
+                        if let sampleBuffer = trackOutput.copyNextSampleBuffer() {
+                            writerInput.append(sampleBuffer)
+                            
+                            if totalDuration > 0 {
+                                let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+                                let progress = timeStamp.seconds / totalDuration
+                                
+                                // 切回主线程去更新 UI 进度
+                                Task { @MainActor in
+                                    localProgressCallback?(progress)
                                 }
                             }
+                        } else {
+                            writerInput.markAsFinished()
+                            
+                            assetWriter.finishWriting {
+                                Task { @MainActor in
+                                    guard let self = self else { return }
+                                    if assetWriter.status == .completed {
+                                        self.progressCallback?(1.0)
+                                        completion(url, nil)
+                                        self.restore(cleanupDisk: false)
+                                    } else {
+                                        completion(nil, assetWriter.error)
+                                        self.restore(cleanupDisk: true)
+                                    }
+                                }
+                            }
+                            break
                         }
-                        break // 任务完成，跳出循环
                     }
                 }
             }
         } catch {
-            // 初始化抛出异常时的安全处理
-            PTGCDManager.gcdMain {
-                completion(nil, error)
-                self.restore(cleanupDisk: true)
-            }
+            completion(nil, error)
+            self.restore(cleanupDisk: true)
         }
     }
 
     // MARK: - 引擎 C (MP3 第三方转换)
-    private func exportMP3UsingLame(ac: AVMutableComposition, url: URL, completion: @escaping ((URL?, Error?) -> Void)) {
-        // iOS 原生无法写入 MP3。
-        // 此处需要先将 ac 导出为临时的 .wav PCM 文件，然后再调用 LAME C++ 库进行硬编码转码。
+    private func exportMP3UsingLame(ac: AVMutableComposition, url: URL, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         PTNSLogConsole("准备调用第三方库转码 MP3...")
     }
 }

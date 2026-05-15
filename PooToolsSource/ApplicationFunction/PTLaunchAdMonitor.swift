@@ -203,8 +203,8 @@ public class PTLaunchAdMonitor: NSObject {
         
         // 💡 优化5：定时器闭包严格使用 [weak self]，确保广告结束后彻底释放资源
         skipButton.buttonTimeRun(timeInterval: totalTime, originalTitle: "", timeFinish: { [weak self] in
-            guard let self = self else { return }
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 self.adShowed = false
                 self.hideView()
             }
