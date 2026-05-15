@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension ElementInspectorFormPanelViewController: @preconcurrency InspectorElementSectionViewControllerDelegate {
+extension ElementInspectorFormPanelViewController: @MainActor InspectorElementSectionViewControllerDelegate {
     func inspectorElementSectionViewController(_ sectionViewController: InspectorElementSectionViewController,
                                                willUpdate property: InspectorElementProperty) {}
 

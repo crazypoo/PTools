@@ -40,7 +40,7 @@ public protocol PTAlertTipsAnimation {
     func animation()
 }
 
-public class PTAlertTipsDone:UIView,@preconcurrency PTAlertTipsAnimation {
+public class PTAlertTipsDone:UIView, @MainActor PTAlertTipsAnimation {
     private let lineThick: CGFloat
     
     init(lineThick: CGFloat) {
@@ -79,7 +79,7 @@ public class PTAlertTipsDone:UIView,@preconcurrency PTAlertTipsAnimation {
     }
 }
 
-public class PTAlertTipsError:UIView,@preconcurrency PTAlertTipsAnimation {
+public class PTAlertTipsError:UIView, @MainActor PTAlertTipsAnimation {
     private let lineThick: CGFloat
     
     init(lineThick: CGFloat) {

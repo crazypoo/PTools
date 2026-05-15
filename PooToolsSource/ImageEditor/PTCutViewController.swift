@@ -805,7 +805,7 @@ extension PTCutViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
-extension PTCutViewController: @preconcurrency PTClipEngineContext {
+extension PTCutViewController: @MainActor PTClipEngineContext {
     public var engineMaxClipFrame: CGRect { maxClipFrame }
     public var engineMinClipSize: CGSize { minClipSize }
 }

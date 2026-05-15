@@ -654,10 +654,12 @@ class PTFuncNameViewController: PTBaseViewController {
                     let vc = PTMediaLibViewController()
                     vc.mediaLibShow()
                     vc.selectedHudStatusBlock = { result in
-                        if result {
-                            PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
-                        } else {
-                            PTAlertTipsViewController.tipsAlertShow(icon: .Done)
+                        Task { @MainActor in
+                            if result {
+                                PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
+                            } else {
+                                PTAlertTipsViewController.tipsAlertShow(icon: .Done)
+                            }
                         }
                     }
                     vc.selectImageBlock = { result, isOriginal in

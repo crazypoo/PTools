@@ -75,7 +75,7 @@ class PTSwiftViewController: PTBaseViewController {
     }
 }
 
-extension PTSwiftViewController:@preconcurrency PTRouterable {
+extension PTSwiftViewController:@MainActor PTRouterable {
     static var priority: UInt {
         PTRouterDefaultPriority
     }

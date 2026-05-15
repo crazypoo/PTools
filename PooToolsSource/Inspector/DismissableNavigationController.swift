@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class DismissableNavigationController: UINavigationController, @preconcurrency Dismissable {
+open class DismissableNavigationController: UINavigationController, @MainActor Dismissable {
     public var dismissHandler: ((DismissableNavigationController) -> Void)?
 
     private lazy var presentationControllerDelegate = AdaptivePresentationControllerDelegate(

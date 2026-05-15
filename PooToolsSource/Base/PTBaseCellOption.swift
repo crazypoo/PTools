@@ -31,7 +31,7 @@ extension PTCellBindable where Self: UICollectionViewCell {
 }
 
 @objcMembers
-open class PTBaseNormalCell: UICollectionViewCell,@preconcurrency PTCellRegisterable {
+open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable {
     
     public var isStaticCell:Bool = false {
         didSet {

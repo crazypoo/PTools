@@ -18,7 +18,7 @@ private struct PTBadgeKeys {
     static var removeCallback: UInt8 = 0
 }
 
-extension UIView: @preconcurrency PTBadgeProtocol {
+extension UIView: @MainActor PTBadgeProtocol {
     
     // MARK: - Protocol Properties
     

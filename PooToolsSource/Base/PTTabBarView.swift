@@ -36,7 +36,7 @@ public struct PTTabBarItemConfig {
     }
 }
 
-final public class PTTabBarImageContent: @preconcurrency PTTabBarItemContent {
+final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
 
     private let container = UIView()
     private let imageView = UIImageView()

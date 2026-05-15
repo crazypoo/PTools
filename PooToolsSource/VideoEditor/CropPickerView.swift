@@ -804,7 +804,7 @@ extension CropPickerView {
 }
 
 // MARK: LineButtonDelegate
-extension CropPickerView: @preconcurrency LineButtonDelegate {
+extension CropPickerView: @MainActor LineButtonDelegate {
     // When highlighted on the line button disappears, Enable interaction for all buttons.
     func lineButtonUnHighlighted() {
         self.lineButtonTouchPoint = nil

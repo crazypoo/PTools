@@ -20,7 +20,7 @@ struct PTRouterExampleModel:PTRoutableParams {
 
 typealias PTRouteHandler = (_ value:String) -> Void
 
-class PTRouteViewController: PTBaseViewController,@preconcurrency PTRoutableStaticController {
+class PTRouteViewController: PTBaseViewController,@MainActor PTRoutableStaticController {
     typealias Params = PTRouterExampleModel
 
     var id = ""
@@ -53,7 +53,7 @@ class PTRouteViewController: PTBaseViewController,@preconcurrency PTRoutableStat
     }
 }
 
-extension PTRouteViewController:@preconcurrency PTRouterable {
+extension PTRouteViewController:@MainActor PTRouterable {
     
     static var priority: UInt {
         PTRouterDefaultPriority

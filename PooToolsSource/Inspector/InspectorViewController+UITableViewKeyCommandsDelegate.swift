@@ -8,7 +8,7 @@ import UIKit
 
 // MARK: - UITableViewKeyCommandsDelegate
 
-extension InspectorViewController: @preconcurrency UITableViewKeyCommandsDelegate {
+extension InspectorViewController: @MainActor UITableViewKeyCommandsDelegate {
     func tableViewDidBecomeFirstResponder(_ tableView: UIKeyCommandTableView) {
         addSearchKeyCommandListeners()
     }

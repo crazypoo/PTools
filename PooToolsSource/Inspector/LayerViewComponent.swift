@@ -6,6 +6,6 @@
 
 import UIKit
 
-class LayerViewComponent: BaseView, @preconcurrency LayerViewProtocol {
+class LayerViewComponent: BaseView, @MainActor LayerViewProtocol {
     var sourceView: UIView { self }
 }

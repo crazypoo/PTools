@@ -478,7 +478,7 @@ extension InspectorElementSectionViewController {
 
 // MARK: - ColorPreviewControlDelegate
 
-extension InspectorElementSectionViewController: @preconcurrency ColorPreviewControlDelegate {
+extension InspectorElementSectionViewController: @MainActor ColorPreviewControlDelegate {
     func colorPreviewControlDidTap(_ colorPreviewControl: ColorPreviewControl) {
         delegate?.inspectorElementSectionViewController(self, didTap: colorPreviewControl)
     }
@@ -486,7 +486,7 @@ extension InspectorElementSectionViewController: @preconcurrency ColorPreviewCon
 
 // MARK: - OptionListControlDelegate
 
-extension InspectorElementSectionViewController: @preconcurrency OptionListControlDelegate {
+extension InspectorElementSectionViewController: @MainActor OptionListControlDelegate {
     func optionListControlDidChangeSelectedIndex(_ optionListControl: OptionListControl) {
         valueChanged(optionListControl)
     }
@@ -494,7 +494,7 @@ extension InspectorElementSectionViewController: @preconcurrency OptionListContr
 
 // MARK: - ImagePreviewControlDelegate
 
-extension InspectorElementSectionViewController: @preconcurrency ImagePreviewControlDelegate {
+extension InspectorElementSectionViewController: @MainActor ImagePreviewControlDelegate {
     func imagePreviewControlDidTap(_ imagePreviewControl: ImagePreviewControl) {
         delegate?.inspectorElementSectionViewController(self, didTap: imagePreviewControl)
     }
@@ -502,7 +502,7 @@ extension InspectorElementSectionViewController: @preconcurrency ImagePreviewCon
 
 // MARK: - InspectorElementSectionViewCodeDelegate
 
-extension InspectorElementSectionViewController: @preconcurrency InspectorElementFormItemViewDelegate {
+extension InspectorElementSectionViewController: @MainActor InspectorElementFormItemViewDelegate {
     func inspectorElementFormItemView(
         _ item: InspectorElementSectionView,
         willChangeFrom oldState: InspectorElementSectionState?,

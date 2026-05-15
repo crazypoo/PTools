@@ -15,7 +15,7 @@ enum DarkMode {
     case dark
 }
 
-class PTDarkModeHeader: PTBaseCollectionReusableView,@preconcurrency PTSupplementaryRegisterable {
+class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
     static let ID = "PTDarkModeHeader"
     
     static public var kind: String { UICollectionView.elementKindSectionHeader }

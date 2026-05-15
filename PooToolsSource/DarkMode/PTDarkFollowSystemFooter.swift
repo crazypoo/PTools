@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PTDarkFollowSystemFooter: PTBaseCollectionReusableView,@preconcurrency PTSupplementaryRegisterable {
+class PTDarkFollowSystemFooter: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
     static let ID = "PTDarkFollowSystemFooter"
     
     static public var kind: String { UICollectionView.elementKindSectionFooter }

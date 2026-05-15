@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIBarButtonItem:@preconcurrency PTBadgeProtocol {
+extension UIBarButtonItem: @MainActor PTBadgeProtocol {
     
     // MARK: - Private View Finder
     

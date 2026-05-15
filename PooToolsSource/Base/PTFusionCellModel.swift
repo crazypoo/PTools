@@ -239,7 +239,7 @@ open class PTFusionCellModel: NSObject {
     }()
 }
 
-extension PTFusionCellModel: @preconcurrency PTDiffableModel {
+extension PTFusionCellModel: @MainActor PTDiffableModel {
 
     public var diffId: String {
         return cellID ?? UUID().uuidString

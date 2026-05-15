@@ -116,7 +116,7 @@ extension InspectorElementLayoutConstraintSectionView: InspectorElementSectionVi
 
 // MARK: - ToggleControlDelegate
 
-extension InspectorElementLayoutConstraintSectionView: @preconcurrency ToggleControlDelegate {
+extension InspectorElementLayoutConstraintSectionView: @MainActor ToggleControlDelegate {
     func toggleControl(_ toggleControl: ToggleControl, didChangeValueTo isOn: Bool) {
         animate {
             self.isConstraintActive = toggleControl.isOn
