@@ -35,7 +35,7 @@ private extension ElementInspectorSlidingPanelAnimator {
     }
 }
 
-final class ElementInspectorSlidingPanelAnimator: NSObject, ElementInspectorAppearanceProviding, UIViewControllerAnimatedTransitioning {
+final class ElementInspectorSlidingPanelAnimator: NSObject, @preconcurrency ElementInspectorAppearanceProviding, UIViewControllerAnimatedTransitioning {
     let duration: TimeInterval = .veryLong
 
     var isPresenting: Bool = true

@@ -13,6 +13,14 @@ import CoreVideo
 // 因为系统要求继承 NSObject 无法使用 actor，且我们手动用 GCD 保证了线程安全，
 // 所以通过 @unchecked 显式告知 Swift 6 编译器跳过对这个类的严格状态并发检查。
 public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable {
+    public let requiredPixelBufferAttributesForRenderContext: [String : any Sendable] = [
+        kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA
+    ]
+    
+    public let sourcePixelBufferAttributes: [String : any Sendable]? = [
+        kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA
+    ]
+    
     
     private let renderQueue = DispatchQueue(label: "com.condy.exporter.rendering.queue")
     private let renderContextQueue = DispatchQueue(label: "com.condy.exporter.rendercontext.queue")
@@ -24,17 +32,7 @@ public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable
     var renderContext: AVVideoCompositionRenderContext? {
         renderContextQueue.sync { _renderContext }
     }
-    
-    // ⭐️ 核心改进 3：将 var 改为 let。
-    // 协议仅要求 { get }，设为常量能彻底消除非隔离状态的数据竞争警告。
-    public let requiredPixelBufferAttributesForRenderContext: [String : Any] = [
-        kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA
-    ]
-    
-    public let sourcePixelBufferAttributes: [String : Any]? = [
-        kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA
-    ]
-    
+        
     public func startRequest(_ request: AVAsynchronousVideoCompositionRequest) {
         // AVFoundation 会在后台线程调用此方法，使用 sync 将渲染任务串行化
         self.renderQueue.sync {

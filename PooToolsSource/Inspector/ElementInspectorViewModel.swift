@@ -66,6 +66,7 @@ final class ElementInspectorViewModel: ElementInspectorViewModelProtocol {
         }()
     }
 
+    @MainActor
     var summaryInfo: ViewHierarchyElementSummary {
         ViewHierarchyElementSummary(
             iconImage: element.iconImage,

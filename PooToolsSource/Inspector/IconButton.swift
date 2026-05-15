@@ -9,7 +9,7 @@ import UIKit
 final class IconButton: BaseControl {
     typealias Action = PTActionTask
 
-    enum Style: ElementInspectorAppearanceProviding {
+    enum Style: @preconcurrency ElementInspectorAppearanceProviding {
         case rounded
         case plain
 

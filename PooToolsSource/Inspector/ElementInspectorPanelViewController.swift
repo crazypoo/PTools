@@ -6,7 +6,7 @@
 
 import UIKit
 
-class ElementInspectorPanelViewController: UIViewController, ElementInspectorAppearanceProviding {
+class ElementInspectorPanelViewController: UIViewController, @preconcurrency ElementInspectorAppearanceProviding {
     // MARK: - Layout
 
     open var panelScrollView: UIScrollView? { nil }

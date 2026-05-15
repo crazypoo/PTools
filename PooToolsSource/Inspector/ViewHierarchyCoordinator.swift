@@ -157,6 +157,7 @@ extension ViewHierarchyCoordinator {
 }
 
 private extension ViewHierarchyLayer {
+    @MainActor
     static let highlightViews: ViewHierarchyLayer = .layer(
         name: "Highlight Elements"
     ) { _ in

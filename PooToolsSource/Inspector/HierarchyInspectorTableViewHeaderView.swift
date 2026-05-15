@@ -6,7 +6,7 @@
 
 import UIKit
 
-final class HierarchyInspectorTableViewHeaderView: UITableViewHeaderFooterView, ElementInspectorAppearanceProviding {
+final class HierarchyInspectorTableViewHeaderView: UITableViewHeaderFooterView, @preconcurrency ElementInspectorAppearanceProviding {
     private(set) lazy var separatorView = SeparatorView(style: .hard)
 
     private lazy var titleStackView = UIStackView(arrangedSubviews: [titleLabel]).then {

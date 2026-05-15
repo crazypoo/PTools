@@ -26,7 +26,7 @@ extension ElementChildrenPanelViewController: UITableViewDataSource {
     }
 }
 
-extension ElementChildrenPanelViewController: ElementChildrenPanelTableViewCodeCellDelegate {
+extension ElementChildrenPanelViewController: @preconcurrency ElementChildrenPanelTableViewCodeCellDelegate {
     func elementChildrenPanelTableViewCodeCellDidToggleCollapse(_ cell: ElementChildrenPanelTableViewCodeCell) {
         guard let indexPath = viewModel.indexPath(for: cell.viewModel) else { return }
         toggleCollapse(at: indexPath)
