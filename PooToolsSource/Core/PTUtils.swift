@@ -206,7 +206,7 @@ public class PTUtils: NSObject {
     
     // MARK: - 監聽截圖事件
     @discardableResult // 允许调用方忽略返回值（如果他们有其他方式管理）
-    public static func observeScreenshot(_ action: @escaping (Notification) -> Void) -> NSObjectProtocol {
+    public static func observeScreenshot(_ action: @Sendable @escaping (Notification) -> Void) -> NSObjectProtocol {
         // http://stackoverflow.com/questions/13484516/ios-detection-of-screenshot
         return NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification, object: nil, queue: .main, using: action)
     }

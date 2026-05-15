@@ -268,7 +268,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                         }
                         
                         vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
-                            UIViewController.gobal_drop(title: resultText)
+                            Task { @MainActor in
+                                UIViewController.gobal_drop(title: resultText)
+                            }
                         }
                     }
                 })
@@ -1074,10 +1076,12 @@ class PTFuncDetailViewController: PTBaseViewController {
         let vc = PTMediaLibViewController()
         vc.mediaLibShow()
         vc.selectedHudStatusBlock = { result in
-            if result {
-                PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
-            } else {
-                PTAlertTipsViewController.tipsAlertShow(icon: .Done)
+            Task { @MainActor in
+                if result {
+                    PTAlertTipsViewController.tipsAlertShow(icon: .Heart)
+                } else {
+                    PTAlertTipsViewController.tipsAlertShow(icon: .Done)
+                }
             }
         }
         vc.selectImageBlock = { result, isOriginal in

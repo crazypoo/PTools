@@ -1052,7 +1052,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         vc.present(nav, animated: true)
     }
     
-    fileprivate func setOutPut(completion: @escaping ((URL?, Error?) -> Void)) {
+    fileprivate func setOutPut(completion: @escaping (@Sendable (URL?, Error?) -> Void)) {
 
         var videoConverterCrop: ConverterCrop?
 

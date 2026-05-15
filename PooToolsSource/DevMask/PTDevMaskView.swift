@@ -46,10 +46,12 @@ public class PTDevMaskView: PTBaseMaskView {
         view.onTintColor = .randomColor
         view.isOn = false
         view.valueChangeCallBack = { value in
-            if value {
-                self.eyeTrackingFunction.createEye()
-            } else {
-                self.eyeTrackingFunction.dismissEye()
+            Task { @MainActor in
+                if value {
+                    self.eyeTrackingFunction.createEye()
+                } else {
+                    self.eyeTrackingFunction.dismissEye()
+                }
             }
         }
         return view

@@ -70,11 +70,13 @@ public class MetricsManager: NSObject, MXMetricManagerSubscriber {
                 let data = try Data(contentsOf: fileURL)
                 
                 uploadToServer(data: data) { success in
-                    if success {
-                        try? fileManager.removeItem(at: fileURL)
-                        PTNSLogConsole("✅ 上傳後刪除：\(fileName)")
-                    } else {
-                        PTNSLogConsole("⏳ 稍後重試：\(fileName)")
+                    Task { @MainActor in
+                        if success {
+                            try? fileManager.removeItem(at: fileURL)
+                            PTNSLogConsole("✅ 上傳後刪除：\(fileName)")
+                        } else {
+                            PTNSLogConsole("⏳ 稍後重試：\(fileName)")
+                        }
                     }
                 }
             }

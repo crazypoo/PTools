@@ -124,7 +124,9 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                 }
                 cell.zoomTask = { [weak self] boolValue in
-                    self?.toolBarControl(hide: boolValue)
+                    Task { @MainActor in
+                        self?.toolBarControl(hide: boolValue)
+                    }
                 }
                 cell.tapTask = { [weak self] in
                     guard let self = self else { return }

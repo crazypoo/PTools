@@ -520,21 +520,35 @@ public struct RequestKey: Hashable {
 // 🌟 泛型去重管理池：完美闭环跨线程并发与擦除提取
 public actor RequestDeduplicator {
     public static let shared = RequestDeduplicator()
+    
+    // 使用 Any 存储不同泛型类型的 Task
     private var runningTasks: [RequestKey: Any] = [:]
     
     private init() {}
     
-    public func execute<T>(request: URLRequest, policy: PTNetworkDedupPolicy, task: @escaping @Sendable () async throws -> PTBaseStructModel<T>) async throws -> PTBaseStructModel<T> {
+    public func execute<T>(
+        request: URLRequest,
+        policy: PTNetworkDedupPolicy,
+        task: @escaping @Sendable () async throws -> PTBaseStructModel<T>
+    ) async throws -> PTBaseStructModel<T> {
+        
         switch policy {
         case .none: return try await task()
         default:
             let key = RequestKey(request: request)
+            
+            // 1. 检查是否存在同类型同参数的正在运行任务
             if let existingTask = runningTasks[key] as? Task<PTBaseStructModel<T>, Error> {
                 return try await existingTask.value
             }
+            
+            // 2. 创建新任务
             let newTask = Task { try await task() }
             runningTasks[key] = newTask
+            
+            // 3. 任务结束后清理现场
             defer { runningTasks.removeValue(forKey: key) }
+            
             return try await newTask.value
         }
     }
@@ -824,7 +838,7 @@ public final class Network: @unchecked Sendable {
         }
         return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
     }
-    
+
     private class func _internalRequestBodyAPI<T>(needGobal: Bool, urlStr: String, body: Data, header: HTTPHeaders?, method: HTTPMethod, cachePolicy: PTNetworkCachePolicy?, parser: @escaping ResponseParser<T>) async throws -> PTBaseStructModel<T> {
         let urlStr1 = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
         var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
