@@ -95,12 +95,14 @@ public class PTPermissionLocation: PTPermission {
                     }
                 }
             case .always:
-                PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
                 Task { @MainActor in
-                    PTPermissionLocationAlwaysHandler.shared?.requestPermission {
-                        PTGCDManager.gcdMain {
-                            completion()
-                            PTPermissionLocationAlwaysHandler.shared = nil
+                    PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
+                    Task { @MainActor in
+                        PTPermissionLocationAlwaysHandler.shared?.requestPermission {
+                            Task { @MainActor in
+                                completion()
+                                PTPermissionLocationAlwaysHandler.shared = nil
+                            }
                         }
                     }
                 }

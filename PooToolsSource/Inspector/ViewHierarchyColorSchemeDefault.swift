@@ -7,7 +7,7 @@
 import UIKit
 
 extension ViewHierarchyColorScheme {
-    static let `default`: ViewHierarchyColorScheme = .init { view in
+    @MainActor static let `default`: ViewHierarchyColorScheme = .init { view in
         if view._layerView?.element is ViewHierarchyElementController {
             return .systemOrange
         }

@@ -79,7 +79,7 @@ class YDSWhiteDecorationView: UICollectionReusableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .random
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.viewCornerRectCorner(radius: 8,corner: [.allCorners])
         }
     }
@@ -603,7 +603,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     })
                 } else if itemRow.title == .cleanCache {
                     PTGCDManager.gcdGobal(qosCls: .background) {
-                        Task {
+                        Task { @MainActor in
                             let isCleared = await PCleanCache.clearCaches()
                             if isCleared {
                                 UIAlertController.gobal_drop(title: "清理成功")
@@ -668,7 +668,7 @@ class PTFuncNameViewController: PTBaseViewController {
 
                             } completion: { avAsset in
                                 if let getAv = avAsset {
-                                    PTGCDManager.gcdMain {
+                                    Task { @MainActor in
                                         let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv)
                                         controller.videoEditorShow(vc: self)
                                         controller.onEditCompleteHandler = { url in
@@ -676,13 +676,13 @@ class PTFuncNameViewController: PTBaseViewController {
                                         }
                                     }
                                 } else {
-                                    PTGCDManager.gcdMain {
+                                    Task { @MainActor in
                                         PTAlertTipsViewController.tipsAlertShow(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon: .Error)
                                     }
                                 }
                             }
                         } else {
-                            PTGCDManager.gcdMain {
+                            Task { @MainActor in
                                 PTAlertTipsViewController.tipsAlertShow(title:"沒有選擇Video",icon: .Error)
                             }
                         }
@@ -702,7 +702,9 @@ class PTFuncNameViewController: PTBaseViewController {
                         }
                         
                         PTGCDManager.gcdAfter(time: 5) {
-                            newImage.removeFromSuperview()
+                            Task { @MainActor in
+                                newImage.removeFromSuperview()
+                            }
                         }
                     }
                     sign.dismissBlock = {
@@ -834,8 +836,8 @@ class PTFuncNameViewController: PTBaseViewController {
                             let hud = PTHudView()
                             hud.hudShow()
                             PTGCDManager.gcdAfter(time: 5) {
-                                hud.hide {
-                                    
+                                Task { @MainActor in
+                                    hud.hide { }
                                 }
                             }
                         case 1:
@@ -847,29 +849,41 @@ class PTFuncNameViewController: PTBaseViewController {
                             }
                             cycle.startAnimation()
                             PTGCDManager.gcdAfter(time: 5) {
-                                cycle.stopAnimation {
-                                    cycle.removeFromSuperview()
+                                Task { @MainActor in
+                                    cycle.stopAnimation {
+                                        cycle.removeFromSuperview()
+                                    }
                                 }
                             }
                         case 2:
                             PTGCDManager.gcdAfter(time: 1, block: {
-                                PTProgressHUD.show(text: "12312312312312312312")
+                                Task { @MainActor in
+                                    PTProgressHUD.show(text: "12312312312312312312")
+                                }
                             })
                         case 3:
                             PTGCDManager.gcdAfter(time: 1, block: {
-                                PTProgressHUD.showLogo(text: "123123123123", image: UIImage(named: "DemoImage"))
+                                Task { @MainActor in
+                                    PTProgressHUD.showLogo(text: "123123123123", image: UIImage(named: "DemoImage"))
+                                }
                             })
                         case 4:
                             PTGCDManager.gcdAfter(time: 1, block: {
-                                PTProgressHUD.showProgress(text:"111111111",progressMode: .determinateBar)
+                                Task { @MainActor in
+                                    PTProgressHUD.showProgress(text:"111111111",progressMode: .determinateBar)
+                                }
                             })
                         case 5:
                             PTGCDManager.gcdAfter(time: 1, block: {
-                                PTProgressHUD.showProgress(text:"2222222222222",progressMode: .determinatePie)
+                                Task { @MainActor in
+                                    PTProgressHUD.showProgress(text:"2222222222222",progressMode: .determinatePie)
+                                }
                             })
                         case 6:
                             PTGCDManager.gcdAfter(time: 1, block: {
-                                PTProgressHUD.showProgress(text:"333333333333",progressMode: .determinateRing)
+                                Task { @MainActor in
+                                    PTProgressHUD.showProgress(text:"333333333333",progressMode: .determinateRing)
+                                }
                             })
                         default:
                             break
@@ -994,9 +1008,11 @@ class PTFuncNameViewController: PTBaseViewController {
             if #available(iOS 17, *) {
                 self.collectionView.showEmptyLoading()
                 PTGCDManager.gcdAfter(time: 1, block: {
-                    self.collectionView.hideEmptyLoading(task: {
-                        self.showCollectionViewData()
-                    })
+                    Task { @MainActor in
+                        self.collectionView.hideEmptyLoading(task: {
+                            self.showCollectionViewData()
+                        })
+                    }
                 })
             } else {
                 self.showCollectionViewData()
@@ -1179,8 +1195,10 @@ class PTFuncNameViewController: PTBaseViewController {
         
         if #unavailable(iOS 17.0) {
             PTGCDManager.gcdAfter(time: 10) {
-                self.showCollectionViewData()
-            }    
+                Task { @MainActor in
+                    self.showCollectionViewData()
+                }
+            }
         } else {
             if vcEmpty {
                 let emptyConfig = PTEmptyDataViewConfig()
@@ -1203,7 +1221,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
                 
                 PTGCDManager.gcdAfter(time: 5) {
-                    self.emptyReload()
+                    Task { @MainActor in
+                        self.emptyReload()
+                    }
                 }
             }
         }
@@ -1247,11 +1267,13 @@ class PTFuncNameViewController: PTBaseViewController {
                 
         
         PTGCDManager.gcdAfter(time: 5) {
-            let vvvvv = PTDynamicNotificationView(showTimes: 3, canTap: true) { view in
-                view.backgroundColor = .random
-            }
-            vvvvv.showNotification()
-            vvvvv.hideHandler = {
+            Task { @MainActor in
+                let vvvvv = PTDynamicNotificationView(showTimes: 3, canTap: true) { view in
+                    view.backgroundColor = .random
+                }
+                vvvvv.showNotification()
+                vvvvv.hideHandler = {
+                }
             }
         }
         
@@ -1289,7 +1311,9 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         
         PTGCDManager.gcdAfter(time: 10, block: {
-            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: self.aaaaaaa.getSectionIndex(byHeaderID: "1111111")))")
+            Task { @MainActor in
+                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: self.aaaaaaa.getSectionIndex(byHeaderID: "1111111")))")
+            }
         })
     }
     
@@ -1311,9 +1335,11 @@ class PTFuncNameViewController: PTBaseViewController {
     func emptyReload() {
         emptyViewLoading()
         PTGCDManager.gcdAfter(time: 2) {
-            self.hideEmptyView {
-                self.collectionView.clearAllData { cView in
-                    self.showCollectionViewData()
+            Task { @MainActor in
+                self.hideEmptyView {
+                    self.collectionView.clearAllData { cView in
+                        self.showCollectionViewData()
+                    }
                 }
             }
         }
@@ -1326,7 +1352,7 @@ class PTFuncNameViewController: PTBaseViewController {
             self.cacheSize = cacheSize
             
             // 切換到主線程更新 UI
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 self.collectionView.showCollectionDetail(collectionData: self.cSections())
             }
         }
@@ -1425,7 +1451,9 @@ extension PTProgressHUD {
         hud?.progress = 0.5
         
         PTGCDManager.gcdAfter(time: 2.5, block: {
-            hud?.progress = 1
+            Task { @MainActor in
+                hud?.progress = 1
+            }
         })
     }
 }

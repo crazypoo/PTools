@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 @objcMembers
 public class PTFaceEye: NSObject {
     ///初始化单例
@@ -57,7 +58,7 @@ public class PTFaceEye: NSObject {
     }
 }
 
-extension PTFaceEye:PTEyeTrackingDelegate {
+extension PTFaceEye:@preconcurrency PTEyeTrackingDelegate {
     public func didChange(eyeTrackingState: PTEyeTrackingState) {
         trackingEyeState?(eyeTrackingState)
     }

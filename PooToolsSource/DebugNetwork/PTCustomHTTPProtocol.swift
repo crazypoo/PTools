@@ -33,7 +33,7 @@ final class PTCustomHTTPProtocol: URLProtocol {
     }
 
     // 核心判定：是否拦截处理该请求
-    private class func canServeRequest(_ request: URLRequest) -> Bool {
+    @MainActor private class func canServeRequest(_ request: URLRequest) -> Bool {
         // 🌟 防死锁机制：如果已经被我们标记过，说明是底层转发请求，直接放行，避免无限递归
         guard PTNetworkHelper.shared.isNetworkEnable else { return false }
 
@@ -46,11 +46,11 @@ final class PTCustomHTTPProtocol: URLProtocol {
         return false
     }
 
-    override class func canInit(with request: URLRequest) -> Bool {
+    @MainActor  override class func canInit(with request: URLRequest) -> Bool {
         canServeRequest(request)
     }
 
-    override class func canInit(with task: URLSessionTask) -> Bool {
+    @MainActor  override class func canInit(with task: URLSessionTask) -> Bool {
         guard let request = task.currentRequest else { return false }
         return canServeRequest(request)
     }
@@ -142,77 +142,75 @@ final class PTCustomHTTPProtocol: URLProtocol {
         dataTask?.resume()
     }
 
-    override func stopLoading() {
-        Task { @MainActor in
-            dataTask?.cancel()
-            if let task = dataTask {
-                task.cancel()
-                dataTask = nil
+    @MainActor override func stopLoading() {
+        dataTask?.cancel()
+        if let task = dataTask {
+            task.cancel()
+            dataTask = nil
+        }
+
+        guard PTNetworkHelper.shared.isNetworkEnable else { return }
+
+        // 🌟 接入第二步重构的模型实体
+        let model = PTHttpModel()
+        model.url = request.url
+        model.method = request.httpMethod
+        model.mimeType = response?.mimeType // 使用修正后的标准字段
+
+        if let requestBody = request.httpBody {
+            model.requestData = requestBody
+        } else if let requestBodyStream = request.httpBodyStream {
+            // 兼容宿主应用内部定义的 Input Stream 读取扩展
+            model.requestData = requestBodyStream.toData()
+        }
+
+        if let httpResponse = response {
+            model.statusCode = "\(httpResponse.statusCode)"
+        }
+
+        model.responseData = data
+        model.size = data.formattedSize()
+        model.isImage = (response?.mimeType?.contains("image")) ?? false
+
+        // 耗时精准计算
+        let startTimeDouble = startTime.timeIntervalSince1970
+        let endTimeDouble = Date().timeIntervalSince1970
+        let durationDouble = abs(endTimeDouble - startTimeDouble)
+        model.totalDuration = String(format: "%.4f (s)", durationDouble)
+
+        model.startTime = startTime.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
+        model.endTime = Date().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
+
+        model.errorDescription = error?.localizedDescription
+        model.errorLocalizedDescription = error?.localizedDescription
+        model.requestHeaderFields = request.allHTTPHeaderFields
+
+        if let response = response {
+            // 兼容项目内置的字典键转换扩展
+            model.responseHeaderFields = response.allHeaderFields.convertKeysToString()
+            model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: "Cache-Policy")
+        }
+
+        if let responseDate = model.endTime {
+            model.responseHeaderFields?.updateValue(responseDate, forKey: "Response-Date")
+        }
+
+        // 图片二次校验策略
+        if let urlString = model.url?.absoluteString {
+            let lowercasedURL = urlString.lowercased()
+            if ["png", "jpg", "gif", "jpeg"].contains(where: { lowercasedURL.hasSuffix(".\($0)") }) {
+                model.isImage = true
             }
+        }
 
-            guard PTNetworkHelper.shared.isNetworkEnable else { return }
-
-            // 🌟 接入第二步重构的模型实体
-            let model = PTHttpModel()
-            model.url = request.url
-            model.method = request.httpMethod
-            model.mimeType = response?.mimeType // 使用修正后的标准字段
-
-            if let requestBody = request.httpBody {
-                model.requestData = requestBody
-            } else if let requestBodyStream = request.httpBodyStream {
-                // 兼容宿主应用内部定义的 Input Stream 读取扩展
-                model.requestData = requestBodyStream.toData()
-            }
-
-            if let httpResponse = response {
-                model.statusCode = "\(httpResponse.statusCode)"
-            }
-
-            model.responseData = data
-            model.size = data.formattedSize()
-            model.isImage = (response?.mimeType?.contains("image")) ?? false
-
-            // 耗时精准计算
-            let startTimeDouble = startTime.timeIntervalSince1970
-            let endTimeDouble = Date().timeIntervalSince1970
-            let durationDouble = abs(endTimeDouble - startTimeDouble)
-            model.totalDuration = String(format: "%.4f (s)", durationDouble)
-
-            model.startTime = startTime.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
-            model.endTime = Date().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
-
-            model.errorDescription = error?.localizedDescription
-            model.errorLocalizedDescription = error?.localizedDescription
-            model.requestHeaderFields = request.allHTTPHeaderFields
-
-            if let response = response {
-                // 兼容项目内置的字典键转换扩展
-                model.responseHeaderFields = response.allHeaderFields.convertKeysToString()
-                model.responseHeaderFields?.updateValue(getCachePolicy(value: request.cachePolicy.rawValue), forKey: "Cache-Policy")
-            }
-
-            if let responseDate = model.endTime {
-                model.responseHeaderFields?.updateValue(responseDate, forKey: "Response-Date")
-            }
-
-            // 图片二次校验策略
-            if let urlString = model.url?.absoluteString {
-                let lowercasedURL = urlString.lowercased()
-                if ["png", "jpg", "gif", "jpeg"].contains(where: { lowercasedURL.hasSuffix(".\($0)") }) {
-                    model.isImage = true
-                }
-            }
-
-            model.requestId = request.requestId
-            
-            // 🌟 接入第二步重构的语义化错误清洗器
-            let finalModel = PTErrorHelper.handle(error, model: model)
-            
-            // 🌟 接入第三步重构的线程安全池，存入数据并发送局部刷新通知
-            if PTHttpDatasource.shared.addHttpRequest(finalModel) {
-                NotificationCenter.default.post(name: NSNotification.Name("reloadHttp_PooTools"), object: finalModel.isSuccess)
-            }
+        model.requestId = request.requestId
+        
+        // 🌟 接入第二步重构的语义化错误清洗器
+        let finalModel = PTErrorHelper.handle(error, model: model)
+        
+        // 🌟 接入第三步重构的线程安全池，存入数据并发送局部刷新通知
+        if PTHttpDatasource.shared.addHttpRequest(finalModel) {
+            NotificationCenter.default.post(name: NSNotification.Name("reloadHttp_PooTools"), object: finalModel.isSuccess)
         }
     }
 

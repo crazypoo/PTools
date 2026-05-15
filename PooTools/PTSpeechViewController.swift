@@ -168,7 +168,7 @@ class PTSpeechViewController: PTBaseViewController {
 //                        self.isSendVoice = true
                     }
                     self.isRecording = false
-                    PTGCDManager.gcdMain {
+                    Task { @MainActor in
                         self.speechKit.endVoiceRecording()
                         self.translateToText = false
                             self.soundRecorder.stop()

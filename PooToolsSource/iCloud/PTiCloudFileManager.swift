@@ -9,6 +9,7 @@
 import Foundation
 
 /// iCloud 文件同步管理器
+@MainActor
 class PTiCloudFileManager {
     
     // 单例模式，方便在全局调用

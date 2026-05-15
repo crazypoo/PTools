@@ -53,23 +53,25 @@ class SceneDelegate: PTWindowSceneDelegate {
             adModel.tapURL = ["123":"https://www.qq.com"]
             
             PTLaunchAdMonitor.share.showAd(adModels: [adModel], onView: window,skipFont: .appfont(size: 14), ltdString: "Copyright (c) \(Date().year) 111111.\n All rights reserved.",comNameFont: .appfont(size: 10), timeUp:  {
-                let guideModel = PTGuidePageModel()
-                guideModel.mainView = window
-                guideModel.imageArrays = ["DemoImage","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray","DemoImage","DemoImage","DemoImage","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
-                guideModel.tapHidden = false
-                guideModel.forwardImage = "DemoImage"
-                guideModel.backImage = "DemoImage"
-                guideModel.pageControlTintColor = .gray
-                guideModel.pageControl = .pageControl(type: .pill)
-                guideModel.skipShow = true
-                
-                if self.guideHud == nil {
-                    self.guideHud = PTGuidePageHUD(viewModel: guideModel)
-                    self.guideHud!.animationTime = 1.5
-                    self.guideHud!.adHadRemove = {
-                        
+                Task { @MainActor in
+                    let guideModel = PTGuidePageModel()
+                    guideModel.mainView = window
+                    guideModel.imageArrays = ["DemoImage","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray","DemoImage","DemoImage","DemoImage","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
+                    guideModel.tapHidden = false
+                    guideModel.forwardImage = "DemoImage"
+                    guideModel.backImage = "DemoImage"
+                    guideModel.pageControlTintColor = .gray
+                    guideModel.pageControl = .pageControl(type: .pill)
+                    guideModel.skipShow = true
+                    
+                    if self.guideHud == nil {
+                        self.guideHud = PTGuidePageHUD(viewModel: guideModel)
+                        self.guideHud!.animationTime = 1.5
+                        self.guideHud!.adHadRemove = {
+                            
+                        }
+                        self.guideHud!.guideShow()
                     }
-                    self.guideHud!.guideShow()
                 }
             })
         }

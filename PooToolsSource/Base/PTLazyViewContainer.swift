@@ -9,6 +9,7 @@
 import UIKit
 
 /// 延迟创建视图容器，只有在需要时才创建实际视图，避免不必要的内存开销
+@MainActor
 public final class PTLazyViewContainer<T: UIView> {
     
     public private(set) var view: T?

@@ -269,6 +269,7 @@ public final class PTNavBarItem {
     public var barColorStyle:PTNavigationBarStyle = .transparent
 }
 
+@MainActor
 public final class PTNavigationBarManager:NSObject {
     
     public static let shared = PTNavigationBarManager()
@@ -365,13 +366,13 @@ public final class PTNavigationBarManager:NSObject {
         }
     }
     
-    public func setAlpha(_ alpha: CGFloat) {
+    @MainActor public func setAlpha(_ alpha: CGFloat) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.backgroundView.alpha = alpha
     }
     
-    public func bind(to nav: UINavigationController) {
+    @MainActor public func bind(to nav: UINavigationController) {
         nav.delegate = self
     }
     
@@ -396,13 +397,13 @@ public final class PTNavigationBarManager:NSObject {
 }
 
 extension PTNavigationBarManager {
-    func updateScrollProgress(_ progress: CGFloat) {
+    @MainActor func updateScrollProgress(_ progress: CGFloat) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.updateLargeTitle(progress: progress)
     }
     
-    public func currentNavLargeTitleBarHeight() -> CGFloat {
+    @MainActor public func currentNavLargeTitleBarHeight() -> CGFloat {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return 0 }
         container.layoutIfNeeded()
@@ -617,7 +618,7 @@ extension PTNavigationBarManager {
         displayLink = nil
     }
     
-    @objc private func handleDisplayLink() {
+    @MainActor @objc private func handleDisplayLink() {
         guard let coordinator = transitionCoordinatorRef,
               let container = transitionContainer else { return }
         
@@ -1118,6 +1119,7 @@ extension PTBaseViewController: UIScrollViewDelegate {
     抽出两个Controller同样用到的地方
  */
 extension PTBaseViewController {
+    @MainActor
     fileprivate struct AssociatedKeys {
         static var emptyViewConfigCallBack = 992
         static var screenShotActionCallBack = 991
@@ -1258,15 +1260,17 @@ extension PTBaseViewController {
                         if let handler = self.screenShotHandle {
                             handler(image)
                         } else {
-                            if self.screenFunc == nil {
-                                self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image) {
-                                    self.screenFunc = nil
+                            Task { @MainActor in
+                                if self.screenFunc == nil {
+                                    self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image) {
+                                        self.screenFunc = nil
+                                    }
+                                    if let actionHandle = self.screenShotActionHandle {
+                                        self.screenFunc?.actionHandle = actionHandle
+                                    }
+                                } else {
+                                    self.screenShotHandle?(nil)
                                 }
-                                if let actionHandle = self.screenShotActionHandle {
-                                    self.screenFunc?.actionHandle = actionHandle
-                                }
-                            } else {
-                                self.screenShotHandle?(nil)
                             }
                         }
                     }

@@ -196,9 +196,13 @@ class AppDelegate: PTAppWindowsDelegate {
             PTPermission.mediaLibrary.request {
                 switch PTPermission.mediaLibrary.status {
                 case .authorized:
-                    self.sharePlaylist()
+                    Task { @MainActor in
+                        self.sharePlaylist()
+                    }
                 default:
-                    PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
+                    Task { @MainActor in
+                        PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
+                    }
                 }
             }
         case .authorized:

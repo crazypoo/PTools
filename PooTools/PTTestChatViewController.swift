@@ -22,11 +22,13 @@ class PTTestChatViewController: PTBaseViewController {
         let view = PTChatView()
         view.listBottomOffset = CGFloat.kTabbarSaveAreaHeight
         view.headerLoadReadyHandler = {
-            self.testModel().enumerated().forEach { index,value in
-                self.chatContent.chatDataArr.insert(value, at: 0)
+            Task { @MainActor in
+                self.testModel().enumerated().forEach { index,value in
+                    self.chatContent.chatDataArr.insert(value, at: 0)
+                }
+                self.chatContent.listCollection.endRefresh()
+                self.chatContent.viewReloadData()
             }
-            self.chatContent.listCollection.endRefresh()
-            self.chatContent.viewReloadData()
         }
         view.resendMessageHandler = { cellModel,indexPath in
             PTNSLogConsole("\(cellModel)\(indexPath)")
@@ -75,7 +77,9 @@ class PTTestChatViewController: PTBaseViewController {
                     }
                 }
                 vc.viewDismissBlock = {
-                    self.changeStatusBar(type: .Dark)
+                    Task { @MainActor in
+                        self.changeStatusBar(type: .Dark)
+                    }
                 }
                 vc.modalPresentationStyle = .fullScreen
                 self.navigationController?.present(vc, animated: true)
@@ -232,7 +236,9 @@ class PTTestChatViewController: PTBaseViewController {
         chatContent.chatDataArr = testModel()
         chatContent.viewReloadData { cView in
             PTGCDManager.gcdAfter(time: 0.35) {
-                cView.scrollToBottom(animated: true)
+                Task { @MainActor in
+                    cView.scrollToBottom(animated: true)
+                }
             }
         }
         
@@ -240,8 +246,10 @@ class PTTestChatViewController: PTBaseViewController {
         
         
         PTGCDManager.gcdAfter(time: 5) {
-            self.chatContent.chatDataArr.removeAll(where: { $0.messageType == .Typing })
-            self.chatContent.viewReloadData()
+            Task { @MainActor in
+                self.chatContent.chatDataArr.removeAll(where: { $0.messageType == .Typing })
+                self.chatContent.viewReloadData()
+            }
         }
     }
 }

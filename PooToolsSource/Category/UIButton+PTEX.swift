@@ -17,6 +17,7 @@ public typealias TouchedBlock = (_ sender:UIButton) -> Void
 public extension UIButton {
     
     // 优化：将 Int 替换为 UInt8 配合指针使用，防止内存异常
+    @MainActor
     private struct AssociatedKeys {
         static var CountdownTimerKey: UInt8 = 0
     }

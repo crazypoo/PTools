@@ -17,6 +17,7 @@ import Security
 private let kBiometryService = "PTBiometricsService"
 private let kBiometryDomainStateKey = "PTBiometryDomainStateKey"
 
+@MainActor
 @objcMembers
 public class PTBiometricsManager: NSObject {
     public static let shared = PTBiometricsManager()

@@ -46,7 +46,9 @@ class PTRouteViewController: PTBaseViewController,@preconcurrency PTRoutableStat
         }
         
         PTGCDManager.gcdAfter(time: 2) {
-            self.handle?("OKOK")
+            Task { @MainActor in
+                self.handle?("OKOK")
+            }
         }
     }
 }

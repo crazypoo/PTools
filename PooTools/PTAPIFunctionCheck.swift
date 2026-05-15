@@ -25,7 +25,7 @@ class PTAPIFunctionCheck: NSObject {
         return lauguage
     }
 
-    class func apiHeaderSet(parmas:[String:String]?) ->HTTPHeaders {
+    @MainActor class func apiHeaderSet(parmas:[String:String]?) -> HTTPHeaders {
         
         let currentSteamTime = NSDate().timeIntervalSinceNow
         
@@ -50,7 +50,7 @@ class PTAPIFunctionCheck: NSObject {
     }
 
     class func swiftApiRequest<T:SmartCodableX>(apiUrl:String,method:HTTPMethod = .post,parameters:[String:String]? = nil,modelType: T.Type,success:@escaping ((Any?) -> Void),fail:@escaping ((String)->Void)) {
-        Task.init {
+        Task.init { @MainActor in
             do {
                 let header = PTAPIFunctionCheck.apiHeaderSet(parmas: parameters)
 

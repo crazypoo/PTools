@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 
+@MainActor
 class PTPermissionLocationAlwaysHandler: NSObject, @preconcurrency CLLocationManagerDelegate {
     
     // MARK: - Location Manager
@@ -59,6 +60,6 @@ class PTPermissionLocationAlwaysHandler: NSObject, @preconcurrency CLLocationMan
     }
     
     deinit {
-        locationManager.delegate = nil
+//        locationManager.delegate = nil
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 import SwifterSwift
 
 public extension UILabel {
+    @MainActor
     private struct AssociatedKey {
         static var startTime: CFTimeInterval = 0
         static var fromValue: Double = 0
@@ -221,7 +222,12 @@ public extension UILabel {
             self.becomeFirstResponder()
             
             let menuItems = PTEditMenuAction(title: "copy") {
-                (self.text ?? self.attributedText?.string)?.copyToPasteboard()
+                Task { @MainActor in
+                    let text = self.text ?? self.attributedText?.string ?? ""
+                    if !text.stringIsEmpty() {
+                        text.copyToPasteboard()
+                    }
+                }
             }
             self.pt_bindEditMenu(actions: [menuItems])
         }

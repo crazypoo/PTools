@@ -15,6 +15,7 @@ struct ReturnStruct {
 }
 
 // MARK: - PTRouterDynamicParamsMapping
+@MainActor
 class PTRouterDynamicParamsMapping {
     
     var filterKey: [String] = []
@@ -59,7 +60,7 @@ extension NSObject {
      - Parameter propertyParameter: 属性key-value
      - Returns: ReturnStruct
      */
-    func setPropertyParameter(_ propertyParameter: [String: Any]) -> ReturnStruct {
+    @MainActor func setPropertyParameter(_ propertyParameter: [String: Any]) -> ReturnStruct {
         // 创建可变字典，以便进行修改
         var filteredDictionary = propertyParameter
         // 移除指定的键

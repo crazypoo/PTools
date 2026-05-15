@@ -12,6 +12,7 @@ import SnapKit
 let PTNetworkFloatingTap = 9998
 
 // MARK: - 全局网络监控控制助手
+@MainActor
 final class PTNetworkHelper {
     static let shared = PTNetworkHelper()
 

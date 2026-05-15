@@ -12,7 +12,7 @@ protocol LayerViewDelegate: AnyObject {
                    withAction action: ViewHierarchyElementAction)
 }
 
-class LayerView: UIImageView, LayerViewProtocol {
+class LayerView: UIImageView, @preconcurrency LayerViewProtocol {
     weak var delegate: LayerViewDelegate?
 
     var shouldPresentOnTop = false

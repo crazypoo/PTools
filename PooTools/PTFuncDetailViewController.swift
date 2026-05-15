@@ -67,43 +67,45 @@ class PTFuncDetailViewController: PTBaseViewController {
         switch typeString {
         case String.localNetWork:
             PTGCDManager.gcdAfter(time: 1) {
-                var uploadInfoString = ""
-                switch self.appNetWorkStatus {
-                case .wifi:
-                    self.localNetwork = !self.localNetwork
-                    if self.localNetwork {
-                        FileManager.pt.createFolder(folderPath: PTUploadFilePath)
-                        
-                        self.webServer = GCDWebUploader(uploadDirectory: PTUploadFilePath)
-                        self.webServer!.delegate = self
-                        self.webServer!.allowHiddenItems = false
-                        self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
-                        
-                        self.webServer.run { server in
-                            if self.webServer!.start() {
-                                let port = self.webServer!.port
-                                uploadInfoString = String(format: "请在上传设备浏览器上输入%@\n端口为:%lu\n例子:IP地址:端口地址", self.webServer!.serverURL! as CVarArg,port)
-                            } else {
-                                uploadInfoString = "GCDWebServer not running!"
+                Task { @MainActor in
+                    var uploadInfoString = ""
+                    switch self.appNetWorkStatus {
+                    case .wifi:
+                        self.localNetwork = !self.localNetwork
+                        if self.localNetwork {
+                            FileManager.pt.createFolder(folderPath: PTUploadFilePath)
+                            
+                            self.webServer = GCDWebUploader(uploadDirectory: PTUploadFilePath)
+                            self.webServer!.delegate = self
+                            self.webServer!.allowHiddenItems = false
+                            self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
+                            
+                            self.webServer.run { server in
+                                if self.webServer!.start() {
+                                    let port = self.webServer!.port
+                                    uploadInfoString = String(format: "请在上传设备浏览器上输入%@\n端口为:%lu\n例子:IP地址:端口地址", self.webServer!.serverURL! as CVarArg,port)
+                                } else {
+                                    uploadInfoString = "GCDWebServer not running!"
+                                }
                             }
+                        } else {
+                            uploadInfoString = "GCDWebServer not running!"
                         }
-                    } else {
-                        uploadInfoString = "GCDWebServer not running!"
+                        
+                        let label = UILabel()
+                        label.textColor = .black
+                        label.textAlignment = .center
+                        label.numberOfLines = 0
+                        label.lineBreakMode = .byCharWrapping
+                        label.text = uploadInfoString
+                        self.view.addSubview(label)
+                        label.snp.makeConstraints { make in
+                            make.edges.equalToSuperview()
+                        }
+                    default:
+                        UIViewController.gobal_drop(title: "请先将设备连接到WIFI上方可操作")
+                        self.localNetwork = false
                     }
-                    
-                    let label = UILabel()
-                    label.textColor = .black
-                    label.textAlignment = .center
-                    label.numberOfLines = 0
-                    label.lineBreakMode = .byCharWrapping
-                    label.text = uploadInfoString
-                    self.view.addSubview(label)
-                    label.snp.makeConstraints { make in
-                        make.edges.equalToSuperview()
-                    }
-                default:
-                    UIViewController.gobal_drop(title: "请先将设备连接到WIFI上方可操作")
-                    self.localNetwork = false
                 }
             }
         case String.dymanicCode:
@@ -213,7 +215,9 @@ class PTFuncDetailViewController: PTBaseViewController {
             throughLabel.strikeThroughAlignment = .middle
             throughLabel.strikeThroughColor = .random
             PTGCDManager.gcdAfter(time: 2) {
-                throughLabel.strikeThroughEnabled = true
+                Task { @MainActor in
+                    throughLabel.strikeThroughEnabled = true
+                }
             }
             view.addSubview(throughLabel)
             throughLabel.snp.makeConstraints { make in
@@ -429,15 +433,17 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.height.equalTo(22)
             }
             
-            PTGCDManager.gcdMain {
+            Task { @MainActor in
                 verProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
                 horProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
                 
             }
             
             PTGCDManager.gcdAfter(time: 1) {
-                verProgress.animationProgress(duration: 1, value: 0.5)
-                horProgress.animationProgress(duration: 1, value: 0.75)
+                Task { @MainActor in
+                    verProgress.animationProgress(duration: 1, value: 0.5)
+                    horProgress.animationProgress(duration: 1, value: 0.75)
+                }
             }
         case String.encryption:
             
@@ -864,22 +870,22 @@ class PTFuncDetailViewController: PTBaseViewController {
                             let imageURL = URL(fileURLWithPath: imagePath)
                             PHPhotoLibrary.pt.saveImageUrlToAlbum(fileUrl: imageURL) { finish, error in
                                 if finish {
-                                    PTGCDManager.gcdMain {
+                                    Task { @MainActor in
                                         PTAlertTipsViewController.tipsAlertShow(title: "Photo Saved.The photo was successfully saved to Photos.", icon: .Done)
                                     }
                                 } else {
-                                    PTGCDManager.gcdMain {
+                                    Task { @MainActor in
                                         PTAlertTipsViewController.tipsAlertShow(title: "Photo Not Saved", icon: .Error)
                                     }
                                 }
                             }
                         } else {
-                            PTGCDManager.gcdMain {
+                            Task { @MainActor in
                                 PTAlertTipsViewController.tipsAlertShow(title: "Photo cannot be Saved", icon: .Error)
                             }
                         }
                     } else {
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             PTAlertTipsViewController.tipsAlertShow(title: "Photo url error", icon: .Error)
                         }
                     }
@@ -892,22 +898,22 @@ class PTFuncDetailViewController: PTBaseViewController {
                             let videoURL = URL(fileURLWithPath: videoPath)
                             PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: videoURL) { finish, error in
                                 if finish {
-                                    PTGCDManager.gcdMain {
+                                    Task { @MainActor in
                                         PTAlertTipsViewController.tipsAlertShow(title: "Video Saved.The Video was successfully saved to Video.", icon: .Done)
                                     }
                                 } else {
-                                    PTGCDManager.gcdMain {
+                                    Task { @MainActor in
                                         PTAlertTipsViewController.tipsAlertShow(title: "Video Not Saved", icon: .Error)
                                     }
                                 }
                             }
                         } else {
-                            PTGCDManager.gcdMain {
+                            Task { @MainActor in
                                 PTAlertTipsViewController.tipsAlertShow(title: "Video cannot be Saved", icon: .Error)
                             }
                         }
                     } else {
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             PTAlertTipsViewController.tipsAlertShow(title: "Video url error", icon: .Error)
                         }
                     }
@@ -932,7 +938,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 switch self.typeString {
                 case String.LivePhoto:
                     guard let sourceVideoPath = pickedVideoURL else {
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             PTAlertTipsViewController.tipsAlertShow(title: "It seems a video was not selected.Try again.", icon: .Error)
                         }
                         return
@@ -947,7 +953,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     }
                     
                     PTLivePhoto.generate(from: photoURL, videoURL: sourceVideoPath, progress: { (percent) in
-                        PTGCDManager.gcdMain {
+                        Task { @MainActor in
                             progressView.progress = Float(percent)
                         }
                     }) { result in
@@ -1079,7 +1085,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 PTNSLogConsole("选择了视频\(result)")
                 mediaSelectedCallback(result.first!)
             } else {
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
                     PTAlertTipsViewController.tipsAlertShow(title:"沒有選擇媒体",icon: .Error)
                 }
             }

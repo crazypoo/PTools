@@ -16,7 +16,7 @@ public enum PTAlertTipsIcon:Equatable {
     case SpinnerLarge
     case Custom(image:UIImage)
     
-    public func createView(lineThick:CGFloat) -> UIView {
+    @MainActor public func createView(lineThick:CGFloat) -> UIView {
         switch self {
         case .Done:
             return PTAlertTipsDone(lineThick: lineThick)
@@ -40,7 +40,7 @@ public protocol PTAlertTipsAnimation {
     func animation()
 }
 
-public class PTAlertTipsDone:UIView,PTAlertTipsAnimation {
+public class PTAlertTipsDone:UIView,@preconcurrency PTAlertTipsAnimation {
     private let lineThick: CGFloat
     
     init(lineThick: CGFloat) {
@@ -79,7 +79,7 @@ public class PTAlertTipsDone:UIView,PTAlertTipsAnimation {
     }
 }
 
-public class PTAlertTipsError:UIView,PTAlertTipsAnimation {
+public class PTAlertTipsError:UIView,@preconcurrency PTAlertTipsAnimation {
     private let lineThick: CGFloat
     
     init(lineThick: CGFloat) {

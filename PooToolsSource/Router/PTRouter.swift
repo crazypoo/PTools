@@ -806,8 +806,10 @@ extension PTRouter {
         } else {
             // 降级兜底方案：走原有的旧逻辑 (init() + KVC)
             resultVC = await vcClass.init()
-            _ = resultVC.setPropertyParameter(queries)
-            shareInstance.logcat?(uriTuple.0, .logNormal, "降级使用 KVC 赋值初始化")
+            Task { @MainActor in
+                _ = resultVC.setPropertyParameter(queries)
+                shareInstance.logcat?(uriTuple.0, .logNormal, "降级使用 KVC 赋值初始化")
+            }
         }
         
         // 执行跳转
