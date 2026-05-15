@@ -28,7 +28,7 @@ class PTCameraAnimationUtils: NSObject {
         return animation
     }
     
-    class func springAnimation() -> CAKeyframeAnimation {
+    @MainActor class func springAnimation() -> CAKeyframeAnimation {
         let animate = CAKeyframeAnimation(keyPath: "transform")
         animate.duration = PTCameraFilterConfig.share.selectBtnAnimationDuration
         animate.isRemovedOnCompletion = true

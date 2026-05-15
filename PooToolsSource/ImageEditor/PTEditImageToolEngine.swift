@@ -100,7 +100,7 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     public var onInteractStateChanged: ((Bool) -> Void)?
     
     // MARK: - 生命周期
-    
+    @MainActor
     public init(context: PTEditImageEngineContext) {
         self.context = context
         super.init()
@@ -137,48 +137,50 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 具体手势实现: 绘制
     
     private func handleDrawGesture(_ pan: UIPanGestureRecognizer, context: PTEditImageEngineContext) {
-        let point = pan.location(in: drawingImageView)
-        let scrollView = context.engineScrollView
-        let originalImageSize = context.engineOriginalImageSize
-        let editRect = context.engineEditRect
-        
-        if pan.state == .began {
-            onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
+        Task { @MainActor in
+            let point = pan.location(in: drawingImageView)
+            let scrollView = context.engineScrollView
+            let originalImageSize = context.engineOriginalImageSize
+            let editRect = context.engineEditRect
             
-            let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
-            let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
-            let scale = ratio / originalRatio
-            
-            var size = drawingImageView.frame.size
-            size.width /= scale
-            size.height /= scale
-            if context.engineShouldSwapSize {
-                swap(&size.width, &size.height)
-            }
-            
-            var toImageScale = Self.maxDrawLineImageWidth / size.width
-            if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
-                toImageScale = Self.maxDrawLineImageWidth / size.height
-            }
-            
-            let path = PTDrawPath(
-                pathColor: drawColor,
-                pathWidth: PTImageEditorConfig.share.drawLineWidth / scrollView.zoomScale,
-                defaultLinePath: defaultDrawPathWidth,
-                ratio: ratio / originalRatio / toImageScale,
-                startPoint: point
-            )
-            drawPaths.append(path)
-            
-        } else if pan.state == .changed {
-            let path = drawPaths.last
-            path?.addLine(to: point)
-            drawLine()
-            
-        } else if pan.state == .cancelled || pan.state == .ended {
-            onInteractStateChanged?(false) // 通知 VC 恢复工具栏
-            if let path = drawPaths.last {
-                context.engineEditorManager.storeAction(.draw(path))
+            if pan.state == .began {
+                onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
+                
+                let originalRatio = min(scrollView.frame.width / originalImageSize.width, scrollView.frame.height / originalImageSize.height)
+                let ratio = min(scrollView.frame.width / editRect.width, scrollView.frame.height / editRect.height)
+                let scale = ratio / originalRatio
+                
+                var size = drawingImageView.frame.size
+                size.width /= scale
+                size.height /= scale
+                if context.engineShouldSwapSize {
+                    swap(&size.width, &size.height)
+                }
+                
+                var toImageScale = Self.maxDrawLineImageWidth / size.width
+                if context.engineEditImageSize.width / context.engineEditImageSize.height > 1 {
+                    toImageScale = Self.maxDrawLineImageWidth / size.height
+                }
+                
+                let path = PTDrawPath(
+                    pathColor: drawColor,
+                    pathWidth: PTImageEditorConfig.share.drawLineWidth / scrollView.zoomScale,
+                    defaultLinePath: defaultDrawPathWidth,
+                    ratio: ratio / originalRatio / toImageScale,
+                    startPoint: point
+                )
+                drawPaths.append(path)
+                
+            } else if pan.state == .changed {
+                let path = drawPaths.last
+                path?.addLine(to: point)
+                drawLine()
+                
+            } else if pan.state == .cancelled || pan.state == .ended {
+                onInteractStateChanged?(false) // 通知 VC 恢复工具栏
+                if let path = drawPaths.last {
+                    context.engineEditorManager.storeAction(.draw(path))
+                }
             }
         }
     }
@@ -348,42 +350,43 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
     
     public func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         guard let context = context else { return }
-        
-        let point = pan.location(in: mosaicContainerView)
-        
-        if pan.state == .began {
-            onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
+        Task { @MainActor in
+            let point = pan.location(in: mosaicContainerView)
             
-            var actualSize = context.engineEditRect.size
-            if context.engineShouldSwapSize {
-                swap(&actualSize.width, &actualSize.height)
+            if pan.state == .began {
+                onInteractStateChanged?(true) // 通知 VC 隐藏工具栏
+                
+                var actualSize = context.engineEditRect.size
+                if context.engineShouldSwapSize {
+                    swap(&actualSize.width, &actualSize.height)
+                }
+                let ratio = min(
+                    context.engineScrollView.frame.width / context.engineEditRect.width,
+                    context.engineScrollView.frame.height / context.engineEditRect.height
+                )
+                
+                let pathW = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
+                let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
+                
+                mosaicImageLayerMaskLayer?.lineWidth = pathW
+                mosaicImageLayerMaskLayer?.path = path.path.cgPath
+                mosaicPaths.append(path)
+                
+            } else if pan.state == .changed {
+                let path = mosaicPaths.last
+                path?.addLine(to: point)
+                mosaicImageLayerMaskLayer?.path = path?.path.cgPath
+                
+            } else if pan.state == .cancelled || pan.state == .ended {
+                onInteractStateChanged?(false) // 通知 VC 恢复工具栏
+                
+                if let path = mosaicPaths.last {
+                    context.engineEditorManager.storeAction(.mosaic(path))
+                }
+                
+                // 手指抬起，烘焙马赛克到图片
+                generateNewMosaicImage()
             }
-            let ratio = min(
-                context.engineScrollView.frame.width / context.engineEditRect.width,
-                context.engineScrollView.frame.height / context.engineEditRect.height
-            )
-            
-            let pathW = PTImageEditorConfig.share.mosaicLineWidth / context.engineScrollView.zoomScale
-            let path = PTMosaicPath(pathWidth: pathW, ratio: ratio, startPoint: point)
-            
-            mosaicImageLayerMaskLayer?.lineWidth = pathW
-            mosaicImageLayerMaskLayer?.path = path.path.cgPath
-            mosaicPaths.append(path)
-            
-        } else if pan.state == .changed {
-            let path = mosaicPaths.last
-            path?.addLine(to: point)
-            mosaicImageLayerMaskLayer?.path = path?.path.cgPath
-            
-        } else if pan.state == .cancelled || pan.state == .ended {
-            onInteractStateChanged?(false) // 通知 VC 恢复工具栏
-            
-            if let path = mosaicPaths.last {
-                context.engineEditorManager.storeAction(.mosaic(path))
-            }
-            
-            // 手指抬起，烘焙马赛克到图片
-            generateNewMosaicImage()
         }
     }
     

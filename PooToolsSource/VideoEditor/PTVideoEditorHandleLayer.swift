@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 class PTVideoEditorHandleLayer: CALayer {
     enum Side {
         case left

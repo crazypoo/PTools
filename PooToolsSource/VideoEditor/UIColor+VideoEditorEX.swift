@@ -9,9 +9,9 @@
 import UIKit
 
 extension UIColor {
-    static let background = PTVideoEditorConfig.share.sliderBackgroundColor
-    static let foreground = PTVideoEditorConfig.share.sliderFontColor
-    static let border = PTVideoEditorConfig.share.sliberBorder
-    static let croppingPreset = PTVideoEditorConfig.share.croppingPreset
-    static let croppingPresetSelected = PTVideoEditorConfig.share.croppingPresetSelected
+    @MainActor static let background = PTVideoEditorConfig.share.sliderBackgroundColor
+    @MainActor static let foreground = PTVideoEditorConfig.share.sliderFontColor
+    @MainActor static let border = PTVideoEditorConfig.share.sliberBorder
+    @MainActor static let croppingPreset = PTVideoEditorConfig.share.croppingPreset
+    @MainActor static let croppingPresetSelected = PTVideoEditorConfig.share.croppingPresetSelected
 }

@@ -29,6 +29,7 @@ extension NSError {
     static let timeoutError = NSError(message: "timeout")
 }
 
+@MainActor
 public class PTCameraFilterConfig: NSObject {
     
     public static let share = PTCameraFilterConfig()

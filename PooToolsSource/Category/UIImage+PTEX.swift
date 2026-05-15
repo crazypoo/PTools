@@ -1034,6 +1034,7 @@ public extension PTPOP where Base: UIImage {
         return info == .first || info == .last || info == .premultipliedFirst || info == .premultipliedLast
     }
 
+    @MainActor
     static func animateGifImage(data: Data) -> UIImage? {
         // Kingfisher
         let info: [String: Any] = [

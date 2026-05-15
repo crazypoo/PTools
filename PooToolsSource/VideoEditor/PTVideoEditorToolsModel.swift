@@ -20,6 +20,7 @@ public enum PTVideoEditorVideoToolsType: CaseIterable {
     case rewrite
 }
 
+@MainActor
 final public class PTVideoEditorToolsModel {
     let videoControl: PTVideoEditorVideoToolsType
     

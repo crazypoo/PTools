@@ -32,6 +32,7 @@ import Harbeth
     @objc optional func captureOutput(_ collector: C7Collector, texture: MTLTexture)
 }
 
+@MainActor
 public class C7Collector: NSObject, Cacheable {
     
     public var filters: [C7FilterProtocol] = []

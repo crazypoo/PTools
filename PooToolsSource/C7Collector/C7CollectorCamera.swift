@@ -7,13 +7,14 @@
 //
 
 import Foundation
-import AVFoundation
+@preconcurrency import AVFoundation
 import Harbeth
 import Photos
 import Kakapos
 
 /// 相机数据采集器，在主线程返回图片
 /// The camera data collector returns pictures in the main thread.
+@MainActor
 public final class C7CollectorCamera: C7Collector {
     
     public var shotImageCallback: ((UIImage) -> Void)!
@@ -85,8 +86,8 @@ public final class C7CollectorCamera: C7Collector {
     public var savedVideo:PTActionTask? = nil
 
     deinit {
-        stopRunning()
-        videoOutput.setSampleBufferDelegate(nil, queue: nil)
+//        stopRunning()
+//        videoOutput.setSampleBufferDelegate(nil, queue: nil)
     }
     
     public override func setupInit() {
@@ -237,7 +238,7 @@ public final class C7CollectorCamera: C7Collector {
         }
 
         sessionQueue.async {
-            Task {
+            Task { @MainActor in
                 // Ensure the session is stopped completely before reconfiguring
                 self.captureSession.stopRunning()
 
@@ -274,9 +275,9 @@ public final class C7CollectorCamera: C7Collector {
                     // Restart the session after configuration
                     self.startRunning()
                     self.captureSession.commitConfiguration()
-                    await handle?()
+                    handle?()
                 } catch {
-                    await PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)", icon: .Error)
+                    PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Filter cam change failed".localized() + "\(error.localizedDescription)", icon: .Error)
                 }
             }
         }
@@ -407,7 +408,9 @@ extension C7CollectorCamera {
     
     public func startRunning() {
         sessionQueue.async {
-            self.captureSession.startRunning()
+            Task { @MainActor in
+                self.captureSession.startRunning()
+            }
         }
     }
     
@@ -425,7 +428,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureVideoDataOutputSampleBuffe
     }
 }
 
-extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
+extension C7CollectorCamera:@preconcurrency AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
     }
     
@@ -444,7 +447,7 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
     }
 }
 
-extension C7CollectorCamera: AVCaptureFileOutputRecordingDelegate {
+extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
         guard recordLongGes?.state != .possible else {
             finishRecordAndMergeVideo()
@@ -676,7 +679,7 @@ extension C7CollectorCamera: AVCaptureFileOutputRecordingDelegate {
     }
 }
 
-extension C7CollectorCamera: CAAnimationDelegate {
+extension C7CollectorCamera: @preconcurrency CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if anim is CAAnimationGroup {
             focusCursorView.alpha = 0
@@ -688,7 +691,7 @@ extension C7CollectorCamera: CAAnimationDelegate {
     }
 }
 
-extension C7CollectorCamera: C7CollectorImageDelegate {
+extension C7CollectorCamera: @preconcurrency C7CollectorImageDelegate {
     public func preview(_ collector: C7Collector, fliter image: C7Image) {
         self.showedImageView.image = image.rotated(by: 90)
     }

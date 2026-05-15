@@ -955,9 +955,9 @@ public class PTMediaLibViewController: PTBaseViewController {
             }
 
             if model.models.isEmpty {
-                DispatchQueue.global().async {
+                DispatchQueue.main.async {
                     model.refetchPhotos()
-                    DispatchQueue.main.async { setup() }
+                    setup()
                 }
             } else {
                 setup()
@@ -977,30 +977,32 @@ extension PTMediaLibViewController {
     private func fetchMediaResultAsync(model: PTMediaModel, index: Int, isOriginal: Bool) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
         return await withCheckedContinuation { continuation in
             let operation = PTFetchImageOperation(model: model, isOriginal: isOriginal) { image, asset in
-                if let image = image {
-                    let isEdited = model.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
-                    
-#if POOTOOLS_IMAGEEDITOR
-                    let resultModel = PTResultModel(
-                        asset: asset ?? model.asset,
-                        image: image,
-                        isEdited: isEdited,
-                        editModel: isEdited ? model.editImageModel : nil,
-                        avEditorOutputItem: model.avEditorOutputItem,
-                        index: index
-                    )
-#else
-                    let resultModel = PTResultModel(
-                        asset: asset ?? model.asset,
-                        image: image,
-                        isEdited: isEdited,
-                        avEditorOutputItem: model.avEditorOutputItem,
-                        index: index
-                    )
-#endif
-                    continuation.resume(returning: (resultModel, nil, index))
-                } else {
-                    continuation.resume(returning: (nil, asset ?? model.asset, index))
+                Task { @MainActor in
+                    if let image = image {
+                        let isEdited = model.editImage != nil && !PTMediaLibConfig.share.saveNewImageAfterEdit
+                        
+    #if POOTOOLS_IMAGEEDITOR
+                        let resultModel = PTResultModel(
+                            asset: asset ?? model.asset,
+                            image: image,
+                            isEdited: isEdited,
+                            editModel: isEdited ? model.editImageModel : nil,
+                            avEditorOutputItem: model.avEditorOutputItem,
+                            index: index
+                        )
+    #else
+                        let resultModel = PTResultModel(
+                            asset: asset ?? model.asset,
+                            image: image,
+                            isEdited: isEdited,
+                            avEditorOutputItem: model.avEditorOutputItem,
+                            index: index
+                        )
+    #endif
+                        continuation.resume(returning: (resultModel, nil, index))
+                    } else {
+                        continuation.resume(returning: (nil, asset ?? model.asset, index))
+                    }
                 }
             }
             

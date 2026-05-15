@@ -14,6 +14,7 @@ import UIKit
     case horizontal
 }
 
+@MainActor
 public class PTImageEditorConfig: NSObject {
     public static let share = PTImageEditorConfig()
     

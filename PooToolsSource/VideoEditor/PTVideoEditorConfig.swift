@@ -9,6 +9,7 @@
 import UIKit
 import SafeSFSymbols
 
+@MainActor
 @objcMembers
 public class PTVideoEditorConfig: NSObject {
     public static let share = PTVideoEditorConfig()
