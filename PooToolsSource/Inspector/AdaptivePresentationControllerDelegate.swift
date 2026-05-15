@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptivePresentationControllerDelegate, Dismissable {
+public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptivePresentationControllerDelegate, @preconcurrency Dismissable {
     public typealias ModalPresentationStyleProvider = (UIPresentationController, UITraitCollection) -> UIModalPresentationStyle
 
     public typealias DismissDecisionProvider = (UIPresentationController) -> Bool

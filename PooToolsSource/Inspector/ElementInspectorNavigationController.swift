@@ -10,7 +10,7 @@ protocol ElementInspectorNavigationControllerDismissDelegate: AnyObject {
     func elementInspectorNavigationControllerDidFinish(_ navigationController: ElementInspectorNavigationController)
 }
 
-class ElementInspectorNavigationController: UINavigationController, InternalViewProtocol, ElementInspectorAppearanceProviding {
+class ElementInspectorNavigationController: UINavigationController, InternalViewProtocol, @preconcurrency ElementInspectorAppearanceProviding {
     weak var dismissDelegate: ElementInspectorNavigationControllerDismissDelegate?
 
     var shouldAdaptModalPresentation: Bool = true {

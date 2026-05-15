@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 final class ElementInspectorConfiguration {
     var isPresentingFromBottomSheet: Bool {
         return isPhoneIdiom

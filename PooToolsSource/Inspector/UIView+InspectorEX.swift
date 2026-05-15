@@ -645,7 +645,7 @@ extension UIView {
     }
 }
 
-extension UIView: ViewHierarchyElementRepresentable {
+extension UIView: @preconcurrency ViewHierarchyElementRepresentable {
     var depth: Int {
         allParents.count
     }

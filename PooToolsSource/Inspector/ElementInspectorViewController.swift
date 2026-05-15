@@ -448,7 +448,7 @@ private extension ElementInspectorViewController {
     }
 }
 
-extension ElementInspectorViewController: ElementInspectorFormPanelItemStateDelegate {
+extension ElementInspectorViewController: @preconcurrency ElementInspectorFormPanelItemStateDelegate {
     func elementInspectorFormPanelItemDidChangeState(_ formPanelViewController: ElementInspectorFormPanelViewController) {
         toggleCollapseButton.collapseState = formPanelViewController.listState
     }

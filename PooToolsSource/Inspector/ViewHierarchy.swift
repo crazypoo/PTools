@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 final class ViewHierarchy {
     static let shared = ViewHierarchy(application: .shared)
 
@@ -18,7 +19,7 @@ final class ViewHierarchy {
 
 // MARK: - ViewHierarchyRepresentable
 
-extension ViewHierarchy: ViewHierarchyRepresentable {
+extension ViewHierarchy: @preconcurrency ViewHierarchyRepresentable {
     var windows: [UIWindow] { application.currentWindows ?? [] }
 
     var keyWindow: UIWindow? { windows.first(where: \.isKeyWindow) }

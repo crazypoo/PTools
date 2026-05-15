@@ -6,7 +6,7 @@
 
 import UIKit
 
-class HierarchyInspectorTableViewCell: UITableViewCell, ElementInspectorAppearanceProviding {
+class HierarchyInspectorTableViewCell: UITableViewCell, @preconcurrency ElementInspectorAppearanceProviding {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
 

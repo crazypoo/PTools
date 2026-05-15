@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementIdentityLibrary {
-    @MainActor final class PreviewIdentitySectionDataSource: InspectorElementSectionDataSource {
+    @MainActor final class PreviewIdentitySectionDataSource: @preconcurrency InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = Texts.preview
