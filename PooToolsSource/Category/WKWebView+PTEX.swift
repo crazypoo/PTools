@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 
 extension WKWebView {
+    @MainActor
     fileprivate struct WKWebViewAssociateKeys {
         static var confiDefault = 998
     }
@@ -19,7 +20,7 @@ public extension PTPOP where Base: WKWebView {
     
     //MARK: WKWebViewConfiguration默认配置
     /// WKWebViewConfiguration默认配置
-    static var confiDefault: WKWebViewConfiguration {
+    @MainActor static var confiDefault: WKWebViewConfiguration {
         get {
             if let obj = objc_getAssociatedObject(self, &WKWebView.WKWebViewAssociateKeys.confiDefault) as? WKWebViewConfiguration {
                 return obj
@@ -112,7 +113,7 @@ public extension PTPOP where Base: WKWebView {
         }
     }
     
-    static func clearWebKitCache() {
+    @MainActor static func clearWebKitCache() {
         let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
         if #available(iOS 17, *) {

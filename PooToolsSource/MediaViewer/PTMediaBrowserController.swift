@@ -481,10 +481,10 @@ fileprivate extension PTMediaBrowserController {
         self.actionSheetTitle.enumerated().forEach { index,value in
             // MARK: -  修复 Action 闭包里的内存泄漏
             let action = PTEditMenuAction(title: value) { [weak self] in
-                guard let self = self else { return }
-                guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
-                Task { @MainActor in
-                    self.handleAction(at: index, gifImage: cell.gifImage)
+                Task { @MainActor [ weak self] in
+                    guard let self = self else { return }
+                    guard let cell = self.newCollectionView.visibleCells().first as? PTMediaBrowserCell else { return }
+                        self.handleAction(at: index, gifImage: cell.gifImage)
                 }
             }
             actions.append(action)

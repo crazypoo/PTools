@@ -226,7 +226,7 @@ public class PTDarkModeControl: PTBaseViewController {
     }
 }
 
-extension PTDarkModeControl: PTThemeable {
+extension PTDarkModeControl: @preconcurrency PTThemeable {
     public func apply() {
         Task { @MainActor in
             let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark

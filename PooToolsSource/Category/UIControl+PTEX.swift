@@ -26,6 +26,7 @@ private class UIControlClosureWrapper: NSObject {
 // 2. 为 UIControl 添加扩展
 public extension UIControl {
     
+    @MainActor
     private struct AssociatedKeys {
         // 使用 Void? 作为 Key 的地址，这是 Swift 中最高效、安全的关联对象 Key 写法
         static var wrappersKey: Void?
@@ -110,7 +111,7 @@ public extension UIControl {
         addAction(unhighlightAction, for: .touchCancel)
     }
     
-    private struct Container {
+    @MainActor private struct Container {
         static var expandClickEdgeInsets: Void?
     }
 

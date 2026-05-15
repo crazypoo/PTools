@@ -113,34 +113,36 @@ public class PTDevMaskView: PTBaseMaskView {
 #if POOTOOLS_DEBUGTRACKINGEYES
         if Gobal_device_info.isFaceIDCapable {
             PTPermission.camera.request {
-                self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
-                self.eyeTracking.snp.makeConstraints { make in
-                    make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                    make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
-                    make.width.equalTo(51)
-                    make.height.equalTo(31)
-                }
-                
-                self.eyeTrackingLabel.snp.makeConstraints { make in
-                    make.left.equalTo(self.eyeTracking.snp.right).offset(10)
-                    make.centerY.equalTo(self.eyeTracking)
-                }
-                
-                self.eyeTrackingFocus.snp.makeConstraints { make in
-                    make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                    make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
-                    make.width.equalTo(51)
-                    make.height.equalTo(31)
-                }
-                
-                self.eyeTrackingLabelFocus.snp.makeConstraints { make in
-                    make.left.equalTo(self.eyeTrackingFocus.snp.right).offset(10)
-                    make.centerY.equalTo(self.eyeTrackingFocus)
-                }
+                Task { @MainActor in
+                    self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
+                    self.eyeTracking.snp.makeConstraints { make in
+                        make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                        make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
+                        make.width.equalTo(51)
+                        make.height.equalTo(31)
+                    }
+                    
+                    self.eyeTrackingLabel.snp.makeConstraints { make in
+                        make.left.equalTo(self.eyeTracking.snp.right).offset(10)
+                        make.centerY.equalTo(self.eyeTracking)
+                    }
+                    
+                    self.eyeTrackingFocus.snp.makeConstraints { make in
+                        make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                        make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
+                        make.width.equalTo(51)
+                        make.height.equalTo(31)
+                    }
+                    
+                    self.eyeTrackingLabelFocus.snp.makeConstraints { make in
+                        make.left.equalTo(self.eyeTrackingFocus.snp.right).offset(10)
+                        make.centerY.equalTo(self.eyeTrackingFocus)
+                    }
 
-                self.eyeTrackingFunction.eyeLookAt = { point in
-                    if self.focusBool {
-                        self.springMotionView.move(to: point)
+                    self.eyeTrackingFunction.eyeLookAt = { point in
+                        if self.focusBool {
+                            self.springMotionView.move(to: point)
+                        }
                     }
                 }
             }

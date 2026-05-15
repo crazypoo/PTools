@@ -506,27 +506,31 @@ extension UIViewController {
         
         #if POOTOOLS_DEBUG
         PTGCDManager.gcdAfter(time: 0.35, block: {
-            let share = LocalConsole.shared
-            if share.isVisiable {
-                SwizzleTool.swizzleDidAddSubview {
-                    // Configure console window.
-                    if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
-                        currentVC.view.window?.bringSubviewToFront(findMask)
+            Task { @MainActor in
+                let share = LocalConsole.shared
+                if share.isVisiable {
+                    SwizzleTool.swizzleDidAddSubview {
+                        // Configure console window.
+                        Task { @MainActor in
+                            if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
+                                currentVC.view.window?.bringSubviewToFront(findMask)
+                            }
+                        }
                     }
                 }
-            }
 
-            // 确保调试窗口在最前
-            if let debugWindow = UIViewController.getExistingDebugWindow() {
-                debugWindow.forEach { value in
-                    value.isHidden = false
-                    switch value {
-                    case let window as PTConsoleWindow:
-                        window.windowLevel = PTConsoleWindow.debugWindowLevel
-                    default:
-                        break
+                // 确保调试窗口在最前
+                if let debugWindow = UIViewController.getExistingDebugWindow() {
+                    debugWindow.forEach { value in
+                        value.isHidden = false
+                        switch value {
+                        case let window as PTConsoleWindow:
+                            window.windowLevel = PTConsoleWindow.debugWindowLevel
+                        default:
+                            break
+                        }
+                        value.makeKeyAndVisible()
                     }
-                    value.makeKeyAndVisible()
                 }
             }
         })

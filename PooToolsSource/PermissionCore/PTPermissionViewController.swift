@@ -245,110 +245,146 @@ public class PTPermissionViewController: PTBaseViewController {
 #if POOTOOLS_PERMISSION_TRACKING
             if !showTracking! {
                 PTPermission.tracking.request {
-                    self.showDetail()
+                    Task { @MainActor in
+                        self.showDetail()
+                    }
                 }
             }
 #endif
         case .camera:
 #if POOTOOLS_PERMISSION_CAMERA
             PTPermission.camera.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .photoLibrary:
 #if POOTOOLS_PERMISSION_PHOTO
             PTPermission.photoLibrary.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .calendar(access: .full):
 #if POOTOOLS_PERMISSION_CALENDAR
             PTPermission.calendar(access: .full).request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .calendar(access: .write):
 #if POOTOOLS_PERMISSION_CALENDAR
             PTPermission.calendar(access: .write).request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .reminders:
 #if POOTOOLS_PERMISSION_REMINDERS
             PTPermission.reminders.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .notification:
 #if POOTOOLS_PERMISSION_NOTIFICATION
             PTPermission.notification.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .location(access: .whenInUse):
 #if POOTOOLS_PERMISSION_LOCATION
             PTPermission.location(access: .whenInUse).request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .location(access: .always):
 #if POOTOOLS_PERMISSION_LOCATION
             PTPermission.location(access: .always).request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .health:
 #if POOTOOLS_PERMISSION_HEALTH
             PTPermissionHealth.request(forReading: [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!],writing:Set<HKSampleType>()) {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .speech:
 #if POOTOOLS_PERMISSION_SPEECH
             PTPermission.speech.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .faceID:
 #if POOTOOLS_PERMISSION_FACEIDPERMISSION
             PTPermission.faceID.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .motion:
 #if POOTOOLS_PERMISSION_MOTION
             PTPermission.motion.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .contacts:
 #if POOTOOLS_PERMISSION_CONTACTS
             PTPermission.contacts.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .microphone:
 #if POOTOOLS_PERMISSION_MIC
             PTPermission.microphone.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .mediaLibrary:
 #if POOTOOLS_PERMISSION_MEDIA
             PTPermission.mediaLibrary.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .bluetooth:
 #if POOTOOLS_PERMISSION_BLUETOOTH
             PTPermission.bluetooth.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         case .siri:
 #if POOTOOLS_PERMISSION_SIRI
             PTPermission.siri.request {
-                self.showDetail()
+                Task { @MainActor in
+                    self.showDetail()
+                }
             }
 #endif
         }

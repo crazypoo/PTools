@@ -1217,13 +1217,15 @@ extension PTBaseViewController {
         if UIApplication.shared.inferredEnvironment_PT != .appStore {
             SwizzleTool.swizzleDidAddSubview {
                 // Configure console window.
-                let lcm = LocalConsole.shared
-                if lcm.isVisiable {
-                    if let maskView = lcm.maskView {
-                        PTUtils.fetchWindow()!.bringSubviewToFront(maskView)
-                    }
-                    if let terminal = lcm.terminal {
-                        PTUtils.fetchWindow()?.bringSubviewToFront(terminal)
+                Task { @MainActor in
+                    let lcm = LocalConsole.shared
+                    if lcm.isVisiable {
+                        if let maskView = lcm.maskView {
+                            PTUtils.fetchWindow()!.bringSubviewToFront(maskView)
+                        }
+                        if let terminal = lcm.terminal {
+                            PTUtils.fetchWindow()?.bringSubviewToFront(terminal)
+                        }
                     }
                 }
             }

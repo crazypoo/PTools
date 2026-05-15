@@ -126,7 +126,7 @@ public extension UIButton {
                 if finish {
                     self.setTitle(originalTitle, for: self.state)
                     self.isUserInteractionEnabled = countdownFinishCanTap
-                    PTGCDManager.gcdMain {
+                    Task { @MainActor in
                         timeFinish?()
                     }
                 } else {

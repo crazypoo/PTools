@@ -446,8 +446,10 @@ public extension PTUtils {
                 completion?()
                 SwizzleTool.swizzleDidAddSubview {
                     // Configure console window.
-                    if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
-                        currentVC.view.window?.bringSubviewToFront(findMask)
+                    Task { @MainActor in
+                        if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
+                            currentVC.view.window?.bringSubviewToFront(findMask)
+                        }
                     }
                 }
             })
