@@ -45,6 +45,7 @@ public struct InspectorElementSection {
 
 // MARK: - Array Extensions
 
+@MainActor
 public extension InspectorElementSections {
     static let empty = InspectorElementSections()
 

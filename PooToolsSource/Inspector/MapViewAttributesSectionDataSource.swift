@@ -4,10 +4,11 @@
 //  Copyright © 2024 crazypoo. All rights reserved.
 //
 
-import MapKit
+@preconcurrency import MapKit
 
 extension DefaultElementAttributesLibrary {
-    final class MapViewAttributesSectionDataSource: InspectorElementSectionDataSource {
+    @MainActor
+    final class MapViewAttributesSectionDataSource: @preconcurrency InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Map View"
@@ -140,12 +141,14 @@ extension DefaultElementAttributesLibrary {
     }
 }
 
-extension MKPointOfInterestFilter: @retroactive CaseIterable {
-    public static let allCases: [MKPointOfInterestFilter] = [
-        .includingAll,
-        .excludingAll
-    ]
-
+extension MKPointOfInterestFilter {
+    public static var allCases: [MKPointOfInterestFilter] {
+        [
+            .includingAll,
+            .excludingAll
+        ]
+    }
+    
     public var displayName: String {
         switch self {
         case .includingAll:
@@ -153,8 +156,10 @@ extension MKPointOfInterestFilter: @retroactive CaseIterable {
         case .excludingAll:
             return "Excluding All"
         default:
+            // ⚠️ 假设前提：你的项目中已经通过其他 extension 为
+            // MKPointOfInterestCategory 实现了 CaseIterable 和 description。
             return MKPointOfInterestCategory.allCases
-                .compactMap { includes($0) ? $0.description : .none }
+                .compactMap { includes($0) ? $0.description : nil }
                 .joined(separator: ", ")
         }
     }
