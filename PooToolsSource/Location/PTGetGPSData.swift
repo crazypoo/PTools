@@ -66,36 +66,38 @@ extension PTGetGPSData:@preconcurrency CLLocationManagerDelegate {
             guard let placeMark = placemarks?.first, let placeLocation = placeMark.location else {
                 return
             }
-            var distance:CLLocationDistance = 0
-            var cityStr = "PT Location fail".localized()
-            if let city = placeMark.locality, !city.isEmpty {
-                self.lat = placeLocation.coordinate.latitude
-                self.lon = placeLocation.coordinate.longitude
-                cityStr = city
-                let loc1 = CLLocation(latitude: self.lat, longitude: self.lon)
-                distance = loc1.distance(from: placeLocation)
-                
-                if self.showChangeAlert {
-                    let savedCity = UserDefaults.standard.string(forKey: "locCity") ?? ""
-                    if savedCity != cityStr {
-                        self.showChangeCityAlert(newCity: cityStr, oldCity: savedCity)
+            Task { @MainActor in
+                var distance:CLLocationDistance = 0
+                var cityStr = "PT Location fail".localized()
+                if let city = placeMark.locality, !city.isEmpty {
+                    self.lat = placeLocation.coordinate.latitude
+                    self.lon = placeLocation.coordinate.longitude
+                    cityStr = city
+                    let loc1 = CLLocation(latitude: self.lat, longitude: self.lon)
+                    distance = loc1.distance(from: placeLocation)
+                    
+                    if self.showChangeAlert {
+                        let savedCity = UserDefaults.standard.string(forKey: "locCity") ?? ""
+                        if savedCity != cityStr {
+                            self.showChangeCityAlert(newCity: cityStr, oldCity: savedCity)
+                        } else {
+                            self.setObjectFunction(city: cityStr)
+                            PTGCDManager.gcdMain {
+                                self.selectNewBlock?()
+                            }
+                        }
                     } else {
                         self.setObjectFunction(city: cityStr)
                         PTGCDManager.gcdMain {
                             self.selectNewBlock?()
                         }
                     }
-                } else {
-                    self.setObjectFunction(city: cityStr)
+                }
+                
+                if distance > 1000 {
                     PTGCDManager.gcdMain {
                         self.selectNewBlock?()
                     }
-                }
-            }
-            
-            if distance > 1000 {
-                PTGCDManager.gcdMain {
-                    self.selectNewBlock?()
                 }
             }
         }

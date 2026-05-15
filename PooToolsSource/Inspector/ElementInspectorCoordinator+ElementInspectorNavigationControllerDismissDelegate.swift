@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension ElementInspectorCoordinator: ElementInspectorNavigationControllerDismissDelegate {
+extension ElementInspectorCoordinator: @preconcurrency ElementInspectorNavigationControllerDismissDelegate {
     func elementInspectorNavigationControllerDidFinish(_ navigationController: ElementInspectorNavigationController) {
         finish(with: .dismiss)
     }

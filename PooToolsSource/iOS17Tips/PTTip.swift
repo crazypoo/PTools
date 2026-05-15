@@ -94,6 +94,7 @@ public struct Test1Tip: Tip {
 }
 
 @available(iOS 17, *)
+@MainActor
 public class PTTip: NSObject {
     public static let shared = PTTip()
     // 私有化初始化方法，确保单例纯粹性

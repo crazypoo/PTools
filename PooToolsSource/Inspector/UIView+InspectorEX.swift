@@ -529,7 +529,7 @@ extension UIView {
 }
 
 private extension ViewBinding {
-    func constraints(for view: UIView, inside superview: UIView) -> [NSLayoutConstraint] {
+    @MainActor func constraints(for view: UIView, inside superview: UIView) -> [NSLayoutConstraint] {
         switch self {
         case .centerX:
             return [

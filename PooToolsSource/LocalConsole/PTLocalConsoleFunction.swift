@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 public class PTLocalConsoleFunction: NSObject {
     static public let share = PTLocalConsoleFunction()
     

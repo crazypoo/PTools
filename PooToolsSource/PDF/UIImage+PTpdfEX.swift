@@ -12,48 +12,48 @@ import Foundation
 // MARK: - UIImage+PDF
 public extension UIImage {
     
-    static func pdfImage(with name: String, size: PDFImageSize, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with name: String, size: PDFImageSize, pageNumber: Int = 1) -> UIImage? {
         guard let url = resourceURLForName(name) else { return nil }
         return _pdfImage(with: url, size: size, pageNumber: pageNumber)
     }
     
-    static func pdfImage(with name: String, width: CGFloat, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with name: String, width: CGFloat, pageNumber: Int = 1) -> UIImage? {
         guard let url = resourceURLForName(name) else { return nil }
         return _pdfImage(with: url, size: .customWidth(width), pageNumber: pageNumber)
     }
     
-    static func pdfImage(with name: String, height: CGFloat, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with name: String, height: CGFloat, pageNumber: Int = 1) -> UIImage? {
         guard let url = resourceURLForName(name) else { return nil }
         return _pdfImage(with: url, size: .customHeight(height), pageNumber: pageNumber)
     }
     
-    static func pdfImage(with name: String, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with name: String, pageNumber: Int = 1) -> UIImage? {
         guard let url = resourceURLForName(name) else { return nil }
         return _pdfImage(with: url, size: .default, pageNumber: pageNumber)
     }
     
-    static func pdfImage(with name: String, size: CGSize, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with name: String, size: CGSize, pageNumber: Int = 1) -> UIImage? {
         guard let url = resourceURLForName(name) else { return nil }
         return _pdfImage(with: url, size: .custom(size), pageNumber: pageNumber)
     }
     
-    static func pdfImage(with url: URL, size: PDFImageSize, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with url: URL, size: PDFImageSize, pageNumber: Int = 1) -> UIImage? {
         return _pdfImage(with:url, size: size, pageNumber: pageNumber)
     }
     
-    static func pdfImage(with url: URL, width: CGFloat, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with url: URL, width: CGFloat, pageNumber: Int = 1) -> UIImage? {
         return _pdfImage(with: url, size: .customWidth(width), pageNumber: pageNumber)
     }
     
-    static func pdfImage(with url: URL, height: CGFloat, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with url: URL, height: CGFloat, pageNumber: Int = 1) -> UIImage? {
         return _pdfImage(with: url, size: .customHeight(height), pageNumber: pageNumber)
     }
     
-    static func pdfImage(with url: URL, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with url: URL, pageNumber: Int = 1) -> UIImage? {
         return _pdfImage(with: url, size: .default, pageNumber: pageNumber)
     }
     
-    static func pdfImage(with url: URL, size: CGSize, pageNumber: Int = 1) -> UIImage? {
+    @MainActor static func pdfImage(with url: URL, size: CGSize, pageNumber: Int = 1) -> UIImage? {
         return _pdfImage(with:url, size: .custom(size), pageNumber: pageNumber)
     }
 }
@@ -71,7 +71,7 @@ extension UIImage {
 // MARK: - Private
 extension UIImage {
     
-    private static func _pdfImage(with url: URL, size: PDFImageSize, pageNumber: Int) -> UIImage? {
+    @MainActor private static func _pdfImage(with url: URL, size: PDFImageSize, pageNumber: Int) -> UIImage? {
         
         guard let pdf = CGPDFDocument(url as CFURL), let page = pdf.page(at: pageNumber) else { return nil }
         
@@ -155,16 +155,16 @@ extension UIImage {
 // MARK: - Cache Public
 public extension UIImage {
     
-    static var pdfCacheOnDisk = false
-    static var pdfCacheInMemory = true
+    @MainActor static var pdfCacheOnDisk = false
+    @MainActor static var pdfCacheInMemory = true
     
     // all
-    static func removeAllPDFCache() {
+    @MainActor static func removeAllPDFCache() {
         removeAllPDFDiskCache()
         removeAllPDFMemoryCache()
     }
     
-    static func removeAllPDFMemoryCache() {
+    @MainActor static func removeAllPDFMemoryCache() {
         imageCache.removeAllObjects()
     }
     
@@ -175,12 +175,12 @@ public extension UIImage {
     }
     
     // memory
-    static func removeMemoryCachedPDFImage(with name: String, size: PDFImageSize, pageNumber: Int = 1) {
+    @MainActor static func removeMemoryCachedPDFImage(with name: String, size: PDFImageSize, pageNumber: Int = 1) {
         guard let url = resourceURLForName(name) else { return }
         removeMemoryCachedPDFImage(with: url, size: size, pageNumber: pageNumber)
     }
     
-    static func removeMemoryCachedPDFImage(with url: URL, size: PDFImageSize, pageNumber: Int = 1) {
+    @MainActor static func removeMemoryCachedPDFImage(with url: URL, size: PDFImageSize, pageNumber: Int = 1) {
         guard let targetSize = pdfSize(with: url, size: size, pageNumber: pageNumber),
               let hashString = pdfCacheHashString(with: url, size: targetSize, pageNumber: pageNumber) else { return }
         
@@ -204,14 +204,14 @@ public extension UIImage {
 extension UIImage {
     
     // MARK: - Memory Cache
-    private static let imageCache = NSCache<NSString, UIImage>()
+    @MainActor private static let imageCache = NSCache<NSString, UIImage>()
     
-    private static func cacheImageInMemory(_ image: UIImage, url: URL, size: CGSize, pageNumber: Int) {
+    @MainActor private static func cacheImageInMemory(_ image: UIImage, url: URL, size: CGSize, pageNumber: Int) {
         guard let hashString = pdfCacheHashString(with: url, size: size, pageNumber: pageNumber) else { return }
         imageCache.setObject(image, forKey: NSString(string: hashString))
     }
     
-    private static func memoryCachedImage(url: URL, size: CGSize, pageNumber: Int) -> UIImage? {
+    @MainActor private static func memoryCachedImage(url: URL, size: CGSize, pageNumber: Int) -> UIImage? {
         guard let hashString = pdfCacheHashString(with: url, size: size, pageNumber: pageNumber) else { return nil }
         return imageCache.object(forKey: NSString(string: hashString))
     }
