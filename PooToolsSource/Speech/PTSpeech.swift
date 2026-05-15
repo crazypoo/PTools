@@ -19,6 +19,7 @@ public typealias FinishBlock = (_ text:String) -> Void
     case IsBusy
 }
 
+@MainActor
 @objcMembers
 public class PTSpeech: NSObject {
     public static let share = PTSpeech()
@@ -125,7 +126,7 @@ public class PTSpeech: NSObject {
     }
 }
 
-extension PTSpeech:SFSpeechRecognitionTaskDelegate {
+extension PTSpeech:@preconcurrency SFSpeechRecognitionTaskDelegate {
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) {
         buffer = recognitionResult.bestTranscription.formattedString
     }

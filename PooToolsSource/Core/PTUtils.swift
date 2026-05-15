@@ -154,6 +154,7 @@ public func checkCustomClass(for cls: AnyClass) -> Bool {
 
 public typealias PTImageLoadHandler = (_ error:Error?,_ sourceURL:URL?,_ image:UIImage?) -> Void
 
+@MainActor
 @objcMembers
 public class PTUtils: NSObject {
         

@@ -27,6 +27,7 @@ public class PTMessageTextCustomAttTagModel:PTModelProtocol {
     required public init() {}
 }
 
+@MainActor
 @objcMembers
 public class PTChatConfig: NSObject {
     public static let share = PTChatConfig()

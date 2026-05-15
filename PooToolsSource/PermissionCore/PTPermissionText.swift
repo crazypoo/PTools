@@ -9,7 +9,7 @@
 import UIKit
 
 enum PTPermissionText {
-    static func permission_name(for kind: PTPermission.Kind) -> String {
+    @MainActor static func permission_name(for kind: PTPermission.Kind) -> String {
         switch kind {
         case .camera:
             return "PT Permission camera ".localized()

@@ -11,7 +11,7 @@ import AVFoundation
 import UIKit
 
 public extension AVAsset {
-    func exportToDocuments(filename:String, completion: @escaping (_ outputURL: URL) -> ()) -> Bool {
+    @MainActor func exportToDocuments(filename:String, completion: @escaping (_ outputURL: URL) -> ()) -> Bool {
         
         var isExporting = false
         

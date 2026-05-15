@@ -197,30 +197,30 @@ public extension String {
     }
 
     /// 基础本地化
-    func localized() -> String {
+    @MainActor func localized() -> String {
         return localized(tableName: nil, bundle: Bundle.podCoreBundle())
     }
 
     /// 带格式化参数的本地化
-    func localizedFormat(_ arguments: CVarArg...) -> String {
+    @MainActor func localizedFormat(_ arguments: CVarArg...) -> String {
         return String(format: localized(), arguments: arguments)
     }
     
     /// 复数形式的本地化
-    func localizedPlural(_ argument: CVarArg) -> String {
+    @MainActor func localizedPlural(_ argument: CVarArg) -> String {
         return String.localizedStringWithFormat(localized(), argument)
     }
 }
 
-public func Localized(_ string: String) -> String {
+@MainActor public func Localized(_ string: String) -> String {
     return string.localized()
 }
 
-public func Localized(_ string: String, arguments: CVarArg...) -> String {
+@MainActor public func Localized(_ string: String, arguments: CVarArg...) -> String {
     return String(format: string.localized(), arguments: arguments)
 }
 
-public func LocalizedPlural(_ string: String, argument: CVarArg) -> String {
+@MainActor public func LocalizedPlural(_ string: String, argument: CVarArg) -> String {
     return string.localizedPlural(argument)
 }
 

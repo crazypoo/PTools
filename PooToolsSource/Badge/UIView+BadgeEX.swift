@@ -11,13 +11,14 @@ import QuartzCore
 import SwifterSwift
 
 // MARK: - Associated Keys
+@MainActor
 private struct PTBadgeKeys {
     static var badge: UInt8 = 0
     static var config: UInt8 = 0
     static var removeCallback: UInt8 = 0
 }
 
-extension UIView: PTBadgeProtocol {
+extension UIView: @preconcurrency PTBadgeProtocol {
     
     // MARK: - Protocol Properties
     

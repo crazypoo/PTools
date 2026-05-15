@@ -30,11 +30,11 @@ public class PTScanQRConfig:NSObject {
     ///點擊二維碼圖片
     open var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///條形碼提示
-    open var barCodeTips:String = "PT Scan code".localized()
+    @MainActor open var barCodeTips:String = "PT Scan code".localized()
     ///取消按鈕名字
-    open var cancelButtonName:String = "PT Button cancel".localized()
+    @MainActor open var cancelButtonName:String = "PT Button cancel".localized()
     ///掃描二維碼後提示
-    open var scanedTips:String = "PT Scan tap".localized()
+    @MainActor open var scanedTips:String = "PT Scan tap".localized()
     ///是否可以掃二維碼
     open var canScanQR:Bool = true
     ///是否自动返回
@@ -42,11 +42,11 @@ public class PTScanQRConfig:NSObject {
     ///是否跟随系统判断选择相册
     open var openAblumFollowSystem:Bool = true
     ///授權確定按鈕
-    open var authorizedDoneButton:String = "PT Setting".localized()
+    @MainActor open var authorizedDoneButton:String = "PT Setting".localized()
     ///授權取消按鈕
-    open var authorizedCancelButton:String = "PT Button cancel".localized()
+    @MainActor open var authorizedCancelButton:String = "PT Button cancel".localized()
     ///加載中
-    open var loadingTitle:String = "PT Alert Doning".localized()
+    @MainActor open var loadingTitle:String = "PT Alert Doning".localized()
 }
 
 public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Void

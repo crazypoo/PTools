@@ -27,7 +27,7 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
     case uploadDataError(String)
     case businessError(code: Int, msg: String)
     
-    public var errorDescription: String? {
+    @MainActor public var errorDescription: String? {
         switch self {
         case .noNetwork:        return "PT Network no network".localized()
         case .checkIPFail:      return "IP address error"
@@ -62,9 +62,9 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
     }
 }
 
-public let AppTestMode = "PT App network environment test".localized()
-public let AppCustomMode = "PT App network environment custom".localized()
-public let AppDisMode = "PT App network environment distribution".localized()
+@MainActor public let AppTestMode = "PT App network environment test".localized()
+@MainActor public let AppCustomMode = "PT App network environment custom".localized()
+@MainActor public let AppDisMode = "PT App network environment distribution".localized()
 
 public enum NetworkCellularType : String {
     case ALL = "Cellular"
@@ -85,7 +85,7 @@ public enum NetWorkStatus {
     case other
     case checking
     
-    public static func valueName(type:NetWorkStatus) -> String {
+    @MainActor public static func valueName(type:NetWorkStatus) -> String {
         switch type {
         case .unknown:            return "PT App network status unknow".localized()
         case .notReachable:       return "PT App network status disconnect".localized()
@@ -105,7 +105,7 @@ public enum NetWorkEnvironment : Int {
     case Test
     case Distribution
     
-    public static func valueName(type:NetWorkEnvironment) -> String {
+    @MainActor public static func valueName(type:NetWorkEnvironment) -> String {
         switch type {
         case .Development:  return "PT App network environment custom".localized()
         case .Test:         return "PT App network environment test".localized()

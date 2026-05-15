@@ -55,17 +55,17 @@ public class PTGuidePageModel: NSObject {
     /// 选中颜色(.pill, .snake)
     public var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3)
     /// 普通图片(.system)
-    public var pageControlActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    @MainActor public var pageControlActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
     /// 选中图片(.system)
-    public var pageControlInActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    @MainActor public var pageControlInActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
     /// 自定义Pagecontrol普通颜色
     public var customPageControlTintColor: UIColor = UIColor.white
     /// 自定义Pagecontrol点阵边距
     public var customPageControlIndicatorPadding: CGFloat = 8
     
-    public var skipName: String = "PT Button skip".localized()
+    @MainActor public var skipName: String = "PT Button skip".localized()
     public var skipFont: UIFont = .appfont(size: 14)
-    public var startString: String = "PT Guide start".localized()
+    @MainActor public var startString: String = "PT Guide start".localized()
     public var startFont: UIFont = .appfont(size: 21)
 }
 

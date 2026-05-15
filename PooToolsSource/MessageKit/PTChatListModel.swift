@@ -34,7 +34,9 @@ open class PTChatListModel: PTModelProtocol {
     ///创建者ID
     public var creatorId:String = "" {
         didSet {
-            belongToMe = (creatorId == PTChatConfig.share.imOwnerId)
+            Task { @MainActor in
+                belongToMe = (creatorId == PTChatConfig.share.imOwnerId)
+            }
         }
     }
     ///内容

@@ -32,7 +32,7 @@ public enum OSSSpeechKitAuthorizationStatus: Int, Sendable {
     case restricted = 2
     case authorized = 3
 
-    public var message: String {
+    @MainActor public var message: String {
         // 假设上游包含 String 的 .localized() 扩展
         switch self {
         case .notDetermined: return "PT OSS messageNotDetermined".localized()
@@ -56,7 +56,7 @@ public enum OSSSpeechKitErrorType: Int, Sendable {
     case invalidDeleteVoiceFilePath = -10
     case invalidTranscriptionFilePath = -11
 
-    public var errorMessage: String {
+    @MainActor public var errorMessage: String {
         switch self {
         case .noMicrophoneAccess: return "PT OSS messageNoMicAccess".localized()
         case .invalidUtterance: return "PT OSS messageInvalidUtterance".localized()
@@ -72,7 +72,7 @@ public enum OSSSpeechKitErrorType: Int, Sendable {
         }
     }
 
-    public var errorRequestType: String {
+    @MainActor public var errorRequestType: String {
         switch self {
         case .noMicrophoneAccess, .invalidAudioEngine, .invalidRecordVoice:
             return "PT OSS requestTypeNoMicAccess".localized()
@@ -86,7 +86,7 @@ public enum OSSSpeechKitErrorType: Int, Sendable {
         }
     }
 
-    public var error: Error? {
+    @MainActor public var error: Error? {
         return NSError(domain: "au.com.appdevguy.ossspeechkit",
                        code: rawValue,
                        userInfo: ["message": errorMessage, "request": errorRequestType])
@@ -206,7 +206,7 @@ public class OSSSpeech: NSObject, @unchecked Sendable {
     }
     
     // MARK: - Public 播报接口
-    public func speakText(_ text: String? = nil) {
+    @MainActor public func speakText(_ text: String? = nil) {
         lock.withLock {
             if _utterance == nil {
                 guard let speechText = text, !speechText.isEmpty else {
@@ -223,7 +223,7 @@ public class OSSSpeech: NSObject, @unchecked Sendable {
         internalSpeak()
     }
 
-    public func speakAttributedText(attributedText: NSAttributedString) {
+    @MainActor public func speakAttributedText(attributedText: NSAttributedString) {
         if attributedText.string.isEmpty {
             let err = OSSSpeechKitErrorType.invalidText.error
             notifyDelegateOnMain { self.delegate?.didFailToProcessRequest(withError: err) }

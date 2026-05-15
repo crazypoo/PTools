@@ -26,6 +26,7 @@ public class PTOpenSystemConfig:NSObject {
 /*
  根據所需跳轉某Setting內的方法
  */
+@MainActor
 @objcMembers
 public class PTOpenSystemFunction: NSObject {
     

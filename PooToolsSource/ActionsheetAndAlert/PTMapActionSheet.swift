@@ -10,10 +10,10 @@ import UIKit
 import MapKit
 
 public extension String {
-    static let BaiduMap = "PT Map baidu".localized()
-    static let AMap = "PT Map avi".localized()
-    static let QQMap = "PT Map qq".localized()
-    static let GoogleMap = "PT Map google".localized()
+    @MainActor static let BaiduMap = "PT Map baidu".localized()
+    @MainActor static let AMap = "PT Map avi".localized()
+    @MainActor static let QQMap = "PT Map qq".localized()
+    @MainActor static let GoogleMap = "PT Map google".localized()
 }
 
 /*
@@ -35,34 +35,42 @@ open class PTMapActionSheet: NSObject {
                                            qqKey:String = "",
                                            formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
                                            location:CLLocationCoordinate2D,
-                                           sheetTitle:String = "PT Select nav".localized(),
-                                           cancelButtonName:String = "PT Button cancel".localized(),
-                                           baiduName:String = String.BaiduMap,
-                                           aMapName:String = String.AMap,
-                                           gMapName:String = String.GoogleMap,
-                                           qMapName:String = String.QQMap,
+                                           sheetTitle:String? = nil,
+                                           cancelButtonName:String? = nil,
+                                           baiduName:String? = nil,
+                                           aMapName:String? = nil,
+                                           gMapName:String? = nil,
+                                           qMapName:String? = nil,
                                            dismissTask:PTActionTask? = nil) {
+        let title = sheetTitle ?? "PT Select nav".localized()
+        let cancel = cancelButtonName ?? "PT Button cancel".localized()
+
+        let baiduN = baiduName ?? String.BaiduMap
+        let aMapN = aMapName ?? String.AMap
+        let gMapN = gMapName ?? String.GoogleMap
+        let qMapN = qMapName ?? String.QQMap
+
         let appScheme = currentAppScheme
         let locations = location
         var navAppName = [String]()
         let appName = currentAppName ?? kAppDisplayName!
         if let baiduURL = URL(string: "baidumap://"),UIApplication.shared.canOpenURL(baiduURL) {
-            navAppName.append(baiduName)
+            navAppName.append(baiduN)
         }
         
         if let aMapURL = URL(string: "iosamap://"),UIApplication.shared.canOpenURL(aMapURL) {
-            navAppName.append(aMapName)
+            navAppName.append(aMapN)
         }
         
         if let gMapURL = URL(string: "comgooglemaps://"),UIApplication.shared.canOpenURL(gMapURL) {
-            navAppName.append(gMapName)
+            navAppName.append(gMapN)
         }
         
         if let qMapURL = URL(string: "qqmap://"),UIApplication.shared.canOpenURL(qMapURL) && !qqKey.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
-            navAppName.append(qMapName)
+            navAppName.append(qMapN)
         }
         
-        UIAlertController.baseActionSheet(title: sheetTitle,cancelButtonName:cancelButtonName, destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
+        UIAlertController.baseActionSheet(title: title,cancelButtonName:cancel, destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
             let currentLocation = MKMapItem.forCurrentLocation()
             let toLocation = MKMapItem(placemark: MKPlacemark(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])

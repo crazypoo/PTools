@@ -58,17 +58,17 @@ public class PTMediaBrowserConfig: NSObject {
     ///背景模糊
     public var dynamicBackground:Bool = false
     ///更多文字设置
-    public var showMore:String = "...\("PT More".localized())"
+    @MainActor public var showMore:String = "...\("PT More".localized())"
     ///保存
-    public var saveDesc:String = "PT Media save".localized()
+    @MainActor public var saveDesc:String = "PT Media save".localized()
     ///删除
-    public var deleteDesc:String = "PT Media delete".localized()
+    @MainActor public var deleteDesc:String = "PT Media delete".localized()
     ///ActionSheet Title
-    public var actionTitle:String = "PT Media option".localized()
+    @MainActor public var actionTitle:String = "PT Media option".localized()
     ///ActionSheet Cancel
-    public var actionCancel:String = "PT Button cancel".localized()
+    @MainActor public var actionCancel:String = "PT Button cancel".localized()
     ///Image reload
-    public var imageReloadButton:String = "PT Image load fail".localized()
+    @MainActor public var imageReloadButton:String = "PT Image load fail".localized()
 
     public var pageControlOption:PTMediaPageControlOption = .scrolling
     

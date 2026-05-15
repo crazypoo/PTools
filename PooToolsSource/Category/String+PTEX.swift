@@ -152,10 +152,10 @@ public enum PTConstellationType {
 }
 
 public extension String {
-    static let CameraAuthorizationFail = "PT Setting camera fail".localized()
-    static let PhotoAuthorizationFail = "PT Setting photo fail".localized()
-    static let MicAuthorizationFail = "PT Setting mic fail".localized()
-    static let LocationAuthorizationFail = "PT Setting location fail".localized()
+    @MainActor static let CameraAuthorizationFail = "PT Setting camera fail".localized()
+    @MainActor static let PhotoAuthorizationFail = "PT Setting photo fail".localized()
+    @MainActor static let MicAuthorizationFail = "PT Setting mic fail".localized()
+    @MainActor static let LocationAuthorizationFail = "PT Setting location fail".localized()
     
     @MainActor static func authorizationSet(type:PTPermission.Kind) -> String {
         var name:String = ""
@@ -674,7 +674,7 @@ public extension String {
     
     //MARK: 根據字符串轉換成二維碼圖片
     ///根據字符串轉換成二維碼圖片
-    func createQRImage(size:CGFloat) -> UIImage? {
+    @MainActor func createQRImage(size:CGFloat) -> UIImage? {
         let filter = CIFilter(name: "CIQRCodeGenerator")
         filter?.setDefaults()
         let data = nsString.data(using: String.Encoding.utf8.rawValue)
@@ -1565,9 +1565,10 @@ public extension String {
     ///   - bundle: 顏色所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
     @MainActor func color(traitCollection:UITraitCollection? = nil,
-               bundle:Bundle = PTUtils.cgBaseBundle()) -> UIColor {
+               bundle:Bundle? = nil) -> UIColor {
+        let newBundle = bundle ?? PTUtils.cgBaseBundle()
         let traitCollection_new = traitCollection ?? (AppWindows?.rootViewController?.traitCollection)!
-        return UIColor(named: self, in: bundle, compatibleWith: traitCollection_new) ?? .randomColor
+        return UIColor(named: self, in: newBundle, compatibleWith: traitCollection_new) ?? .randomColor
     }
     
     //MARK: 根據文件名字拿到Bundle上的圖片
@@ -1577,9 +1578,10 @@ public extension String {
     ///   - bundle: 圖片所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
     @MainActor func image(traitCollection:UITraitCollection? = nil,
-               bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
+                          bundle:Bundle? = nil) -> UIImage {
         let traitCollection_new = traitCollection ?? (AppWindows?.rootViewController?.traitCollection)!
-        return UIImage(named: self, in: bundle, compatibleWith: traitCollection_new) ?? UIColor.randomColor.createImageWithColor()
+        let newBundle = bundle ?? PTUtils.cgBaseBundle()
+        return UIImage(named: self, in: newBundle, compatibleWith: traitCollection_new) ?? UIColor.randomColor.createImageWithColor()
     }
     
     //MARK: 根據文件名字拿到Bundle上的圖片
@@ -1587,8 +1589,9 @@ public extension String {
     /// - Parameters:
     ///   - bundle: 圖片所在Bundle
     /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
-    @MainActor func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle()) -> UIImage {
-        image(bundle: bundle)
+    @MainActor func darkModeImage(bundle:Bundle? = nil) -> UIImage {
+        let newBundle = bundle ?? PTUtils.cgBaseBundle()
+        return image(bundle: newBundle)
     }
     
     //MARK: 路由扩展

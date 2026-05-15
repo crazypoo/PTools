@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 @objcMembers
 public class PTAlertConfig: NSObject {
     public static let shared = PTAlertConfig()

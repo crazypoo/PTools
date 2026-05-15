@@ -136,7 +136,7 @@ extension UIImage {
 }
 
 extension UIImage {
-    static func icon(_ name: String) -> UIImage? {
+    @MainActor static func icon(_ name: String) -> UIImage? {
         Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: name)
     }
 }
@@ -154,20 +154,20 @@ extension UIImage {
 extension UIImage {
     static let elementAttributesPanel: UIImage = IconKit.imageOfSliderHorizontal().withRenderingMode(.alwaysTemplate)
     static let elementChildrenPanel: UIImage = IconKit.imageOfRelationshipDiagram().withRenderingMode(.alwaysTemplate)
-    static let elementIdentityPanel: UIImage = .icon("identityPanel")!
+    @MainActor static let elementIdentityPanel: UIImage = .icon("identityPanel")!
     static let elementSizePanel: UIImage = IconKit.imageOfSetSquareFill().withRenderingMode(.alwaysTemplate)
 }
 
 extension UIImage {
     static let applicationIcon: UIImage = UIImage(.app.badgeFill)
-    static let collapseMirroredSymbol: UIImage = .icon("collapse-mirrored")!
-    static let collapseSymbol: UIImage = .icon("collapse")!
-    static let expandSymbol: UIImage = .icon("expand")!
-    static let hiddenViewSymbol: UIImage = .icon("Hidden-32_Normal")!
-    static let infoOutlineSymbol: UIImage = .icon("info.circle")!
-    static let infoSymbol: UIImage = IconKit.imageOfInfoCircleFill().withRenderingMode(.alwaysTemplate)
-    static let missingSymbol: UIImage = .icon("missing-view-32_Normal")!
-    static let warningSymbol: UIImage = .icon("exclamationmark.triangle")!
+    @MainActor static let collapseMirroredSymbol: UIImage = .icon("collapse-mirrored")!
+    @MainActor static let collapseSymbol: UIImage = .icon("collapse")!
+    @MainActor static let expandSymbol: UIImage = .icon("expand")!
+    @MainActor static let hiddenViewSymbol: UIImage = .icon("Hidden-32_Normal")!
+    @MainActor static let infoOutlineSymbol: UIImage = .icon("info.circle")!
+    @MainActor static let infoSymbol: UIImage = IconKit.imageOfInfoCircleFill().withRenderingMode(.alwaysTemplate)
+    @MainActor static let missingSymbol: UIImage = .icon("missing-view-32_Normal")!
+    @MainActor static let warningSymbol: UIImage = .icon("exclamationmark.triangle")!
 }
 
 extension UIImage {

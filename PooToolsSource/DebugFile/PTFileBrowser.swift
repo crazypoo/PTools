@@ -9,6 +9,7 @@
 import UIKit
 import UniformTypeIdentifiers // iOS 14+ 的文件类型检测框架
 
+@MainActor
 public class PTFileBrowser: NSObject {
     
     public static let shared = PTFileBrowser()
@@ -29,8 +30,8 @@ public extension PTFileBrowser {
     func start() {
         // 增加 [weak self] 确保闭包内的内存安全
         navigationController.dismiss(animated: false) { [weak self] in
-            guard let self = self else { return }
             Task { @MainActor in
+                guard let self = self else { return }
                 PTUtils.getCurrentVC()?.pt_present(self.navigationController, animated: true, completion: nil)
             }
         }

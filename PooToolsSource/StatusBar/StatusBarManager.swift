@@ -29,6 +29,7 @@ public class StatusBarState: NSObject {
 }
 
 /// 全局状态栏状态管理单例类
+@MainActor
 public class StatusBarManager {
     
     public static let shared = StatusBarManager()

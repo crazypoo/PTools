@@ -19,9 +19,10 @@ public extension UIAlertController {
     ///   - cancelBlock: 取消回調
     @objc class func alertVC(title:String = "",
                              msg:String = "",
-                             cancel:String = "PT Button cancel".localized(),
+                             cancel:String? = nil,
                              cancelBlock:PTActionTask?) {
-        UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
+        let cancelString = cancel ?? "PT Button cancel".localized()
+        UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancelString,cancel: cancelBlock)
     }
     
     //MARK: ActionSheet基類
@@ -40,7 +41,7 @@ public extension UIAlertController {
     ///   - canTapBackground:
     @objc class func baseActionSheet(title:String,
                                      subTitle:String = "",
-                                     cancelButtonName:String = "PT Button cancel".localized(),
+                                     cancelButtonName:String? = nil,
                                      destructiveButtons:[String] = [String](),
                                      titles:[String],
                                      canTapBackground:Bool = true,
@@ -48,9 +49,10 @@ public extension UIAlertController {
                                      cancelBlock: PTActionSheetCallback? = nil,
                                      otherBlock: @escaping PTActionSheetIndexCallback,
                                      tapBackgroundBlock: PTActionSheetCallback? = nil) {
-        
+        let cancelString = cancelButtonName ?? "PT Button cancel".localized()
+
         let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle)
-        let cancelItem = PTActionSheetItem(title: cancelButtonName)
+        let cancelItem = PTActionSheetItem(title: cancelString)
 
         let destructiveItems = destructiveButtons.map { value in
             let item = PTActionSheetItem(title: value)
@@ -74,7 +76,7 @@ public extension UIAlertController {
     }
     
     @objc class func baseCustomActionSheet(viewConfig:PTActionSheetViewConfig = PTActionSheetViewConfig(),titleItem:PTActionSheetTitleItem,
-                                           cancelItem:PTActionSheetItem = PTActionSheetItem(title: "PT Button cancel".localized()),
+                                           cancelItem:PTActionSheetItem? = nil,
                                            destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
                                            contentItems:[PTActionSheetItem],
                                            destructiveBlock:PTActionSheetIndexCallback? = nil,
@@ -82,8 +84,9 @@ public extension UIAlertController {
                                            otherBlock: @escaping PTActionSheetIndexCallback,
                                            canTapBackground:Bool = false,
                                            tapBackgroundBlock: PTActionSheetCallback? = nil) {
-                                
-        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItem,destructiveItems: destructiveItems,contentItems: contentItems,canTapBackground: canTapBackground)
+        let cancelItems = cancelItem ?? PTActionSheetItem(title: "PT Button cancel".localized())
+                            
+        let actionSheet = PTActionSheetController(viewConfig:viewConfig,titleItem:titleItem,cancelItem:cancelItems,destructiveItems: destructiveItems,contentItems: contentItems,canTapBackground: canTapBackground)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock
@@ -286,22 +289,28 @@ public extension UIAlertController {
     ///   - titleFont: 标题字体
     ///   - done: 完成回調(标题,内容)
     ///   - dismiss: 界面離開後的回調
-    class func alertSendFeedBack(alertTitle:String = "PT Screen feedback".localized(),
-                                 feedBackTitlePlaceholder:String = "PT Feedback input title".localized(),
+    class func alertSendFeedBack(alertTitle:String? = nil,
+                                 feedBackTitlePlaceholder:String? = nil,
                                  feedBackTitleFont:UIFont = .appfont(size: 16),
-                                 feedBackContentPlaceholder:String = "PT Feedback input content".localized(),
+                                 feedBackContentPlaceholder:String? = nil,
                                  feedBackContentFont:UIFont = .appfont(size: 16),
                                  feedBackContentCount:NSNumber = 100,
                                  feedBackWordCountFont:UIFont = .appfont(size: 12),
                                  feedBackContentIsSecureTextEntry:Bool = false,
-                                 cancelString:String = "PT Button cancel".localized(),
-                                 sendString:String = "PT Button comfirm".localized(),
+                                 cancelString:String? = nil,
+                                 sendString:String? = nil,
                                  titleFont:UIFont = .appfont(size: 18),
                                  textInset:UIEdgeInsets? = .zero,
                                  titleTintColor:UIColor = .systemBlue,
                                  textTintColor:UIColor = .systemBlue,
                                  done: @escaping (String, String) -> Void,
                                  dismiss:PTActionTask? = nil) {
+        let titleItem = alertTitle ?? "PT Screen feedback".localized()
+        let cancelItem = cancelString ?? "PT Button cancel".localized()
+        let sendItem = sendString ?? "PT Button comfirm".localized()
+        let feedBackTitlePlaceholderItem = feedBackTitlePlaceholder ?? "PT Feedback input title".localized()
+        let feedBackContentPlaceholderItem = feedBackContentPlaceholder ?? "PT Feedback input content".localized()
+
         let feedBackTitleText:UITextField
         #if POOTOOLS_INPUT
         let feedBackTitle = PTTextField()
@@ -344,7 +353,7 @@ public extension UIAlertController {
         feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry
         feedBackContent.tintColor = textTintColor
         
-        let customerAlert = PTCustomerAlertController(title: alertTitle,customerViewHeight:250,customerViewCallback: { customerView in
+        let customerAlert = PTCustomerAlertController(title: titleItem,customerViewHeight:250,customerViewCallback: { customerView in
             customerView.addSubviews([feedBackTitleText,feedBackContent])
             feedBackTitleText.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -361,7 +370,7 @@ public extension UIAlertController {
             feedBackContent.pt_wordCountLabel?.backgroundColor = .clear
             feedBackContent.pt_wordCountLabel?.font = feedBackWordCountFont
             feedBackContent.pt_maxWordCount = feedBackContentCount
-        },buttons: [cancelString,sendString], buttonsColors: [],contentSpace:60)
+        },buttons: [cancelItem,sendItem], buttonsColors: [],contentSpace:60)
         customerAlert.bottomButtonTapCallback = { title,index in
             if index == 1 {
                 done(feedBackTitleText.text ?? "",feedBackContent.text ?? "")

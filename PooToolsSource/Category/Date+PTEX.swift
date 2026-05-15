@@ -42,7 +42,7 @@ public extension Date {
         return dateComponets.weekday
     }
     
-    func getWeekDayFromeDate() -> String {
+    @MainActor func getWeekDayFromeDate() -> String {
         let weekDay = self.getWeekDayType()
         var weekDayStr = ""
         switch weekDay {

@@ -12,7 +12,7 @@ import UIKit
 public class PTDebugFunction: NSObject {
     //MARK: App測試模式的檢測
     ///App測試模式的檢測
-    class open func registerDefaultsFromSettingsBundle(pod:Bool = false) {
+    @MainActor class open func registerDefaultsFromSettingsBundle(pod:Bool = false) {
         var bundleSelected:Bundle!
         if pod {
             let bundle = PTUtils.cgBaseBundle()

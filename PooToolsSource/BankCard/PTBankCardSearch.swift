@@ -19,7 +19,7 @@ public class PTBankCardSearch: NSObject {
     /// - Parameters:
     ///   - bankCardNumber: 銀行卡號
     ///   - handle: 回調
-    class public func bankCard(_ bankCardNumber: String) async throws -> String {
+    @MainActor class public func bankCard(_ bankCardNumber: String) async throws -> String {
         //"發卡行.卡種名稱",
         let bankName = ["邮储银行·绿卡通","邮储银行·绿卡银联标准卡" , "邮储银行·绿卡银联标准卡" , "邮储银行·绿卡专用卡" , "邮储银行·绿卡银联标准卡",
                         "邮储银行·绿卡(银联卡)" , "邮储银行·绿卡VIP卡" , "邮储银行·银联标准卡" , "邮储银行·中职学生资助卡" , "邮政储蓄银行·IC绿卡通VIP卡",

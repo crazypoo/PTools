@@ -26,7 +26,7 @@ open class PTPermission {
         kind.name
     }
     
-    open var localisedName: String {
+    @MainActor open var localisedName: String {
         PTPermissionText.permission_name(for: kind)
     }
     
@@ -37,7 +37,7 @@ open class PTPermission {
      */
     @available(iOSApplicationExtension, unavailable)
     open func openSettingPage() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
         }
     }

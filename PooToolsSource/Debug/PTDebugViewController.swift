@@ -233,9 +233,9 @@ extension PTDebugViewController:UITextFieldDelegate {
 }
 
 fileprivate extension String {
-    static let ipMode = "\("PT Debug network input title".localized())\("PT Debug mode select".localized())"
-    static let addressInput = "PT Debug mode custom address".localized()
-    static let DebugMode = "PT Debug mode".localized()
+    @MainActor static let ipMode = "\("PT Debug network input title".localized())\("PT Debug mode select".localized())"
+    @MainActor static let addressInput = "PT Debug mode custom address".localized()
+    @MainActor static let DebugMode = "PT Debug mode".localized()
     
     static let socketMode = "Socket Mode"
     static let socketAddressInput = "Socket address input"

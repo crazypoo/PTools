@@ -167,6 +167,7 @@ public extension PTPOP where Base: FileManager {
     ///创建文件夹(蓝色的，文件夹和文件是不一样的)
     /// - Parameter folderName: 文件夹的名字
     /// - Returns: 返回创建的 创建文件夹路径
+    @MainActor
     @discardableResult
     static func createFolder(folderPath: String) -> (isSuccess: Bool, error: String) {
         if judgeFileOrFolderExists(filePath: folderPath) {
@@ -213,6 +214,7 @@ public extension PTPOP where Base: FileManager {
     /// 删除文件夹
     /// - Parameters:
     ///  - folderPath: 文件的路径
+    @MainActor
     @discardableResult
     static func removefolder(folderPath: String) -> (isSuccess: Bool, error: String) {
         let filePath = "\(folderPath)"
@@ -249,6 +251,7 @@ public extension PTPOP where Base: FileManager {
     ///删除文件
     /// - Parameters:
     ///  - filePath: 文件路径
+    @MainActor
     @discardableResult
     static func removefile(filePath: String) -> (isSuccess: Bool, error: String) {
         guard judgeFileOrFolderExists(filePath: filePath) else {
@@ -286,6 +289,7 @@ public extension PTPOP where Base: FileManager {
     ///   - content: 写入内容
     ///   - writePath: 写入路径
     /// - Returns: 写入的结果
+    @MainActor
     @discardableResult
     static func writeToFile(writeType: FileWriteType,
                             content: Any,
@@ -349,6 +353,7 @@ public extension PTPOP where Base: FileManager {
     ///   - readType: 读取的类型
     ///   - readPath: 读取文件路径
     /// - Returns: 返回读取的内容
+    @MainActor
     @discardableResult
     static func readFromFile(readType: FileWriteType,
                              readPath: String) -> (isSuccess: Bool, content: Any?, error: String) {
@@ -393,6 +398,7 @@ public extension PTPOP where Base: FileManager {
     ///   - toFilePath:
     ///   - isOverwrite: 当要拷贝到的(文件夹/文件)路径存在，会拷贝失败，这里传入是否覆盖
     /// - Returns: 拷贝的结果
+    @MainActor
     @discardableResult
     static func copyFile(type: MoveOrCopyType,
                          fromeFilePath: String,
@@ -429,6 +435,7 @@ public extension PTPOP where Base: FileManager {
     /// - Parameters:
     ///   - fromeFile: 被移动的文件路径
     ///   - toFile: 移动后的文件路径
+    @MainActor
     @discardableResult
     static func moveFile(type: MoveOrCopyType,
                          fromeFilePath: String,
@@ -741,12 +748,9 @@ public extension PTPOP where Base: FileManager {
                                     videoImage: @escaping (UIImage?) -> Void,
                                     preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        DispatchQueue.global().async {
-            //  获取截图
+        Task { @MainActor in
             let image = getVideoImage(videoUrlSouceType: .server, path: videoPath, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
-            PTGCDManager.gcdMain {
-                videoImage(image)
-            }
+            videoImage(image)
         }
     }
     
@@ -768,19 +772,18 @@ public extension PTPOP where Base: FileManager {
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图数组
     static func getServerVideoImages(videoPaths: [String],
-                                     videoImages: @escaping ([UIImage?]) -> Void,
+                                     videoImages: @escaping ([UIImage]) -> Void,
                                      preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        PTGCDManager.gcdGobal {
+        Task { @MainActor in
             //  获取截图
-            var allImageArray: [UIImage?] = []
+            var allImageArray: [UIImage] = []
             for path in videoPaths {
-                let videoImage = getVideoImage(videoUrlSouceType: .server, path: path, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
-                allImageArray.append(videoImage)
+                if let videoImage = getVideoImage(videoUrlSouceType: .server, path: path, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform) {
+                    allImageArray.append(videoImage)
+                }
             }
-            Task { @MainActor in
-                videoImages(allImageArray)
-            }
+            videoImages(allImageArray)
         }
     }
     

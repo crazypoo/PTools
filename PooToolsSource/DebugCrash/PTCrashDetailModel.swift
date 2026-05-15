@@ -20,7 +20,7 @@ final class PTCrashDetailModel: NSObject {
 
     // MARK: - ViewModel
 
-    func numberOfItems(section: Int) -> Int {
+    @MainActor func numberOfItems(section: Int) -> Int {
         switch PTCrashDetailViewController.Features(rawValue: section) {
         case .details:
             return details.count
@@ -33,7 +33,7 @@ final class PTCrashDetailModel: NSObject {
         }
     }
 
-    var details: [PTDebugUserInfo.Info] {
+    @MainActor var details: [PTDebugUserInfo.Info] {
         [
             .init(title: "Error", detail: data.type.rawValue),
             .init(title: "Date", detail: data.details.date.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")),
@@ -63,7 +63,7 @@ final class PTCrashDetailModel: NSObject {
         return infos
     }
 
-    func dataSourceForItem(_ indexPath: IndexPath) -> PTDebugUserInfo.Info? {
+    @MainActor func dataSourceForItem(_ indexPath: IndexPath) -> PTDebugUserInfo.Info? {
         switch PTCrashDetailViewController.Features(rawValue: indexPath.section) {
         case .details:
             return details[indexPath.row]
@@ -76,7 +76,7 @@ final class PTCrashDetailModel: NSObject {
         }
     }
 
-    func getAllValues() -> String {
+    @MainActor func getAllValues() -> String {
         var result = "network-details-title".localized() + ":\n"
         for detail in details {
             result += "\(detail.title): \(detail.detail)\n"

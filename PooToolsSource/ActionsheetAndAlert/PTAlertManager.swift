@@ -218,7 +218,7 @@ private extension PTAlertManager {
 // MARK: - Queue / Logic
 private extension PTAlertManager {
 
-    func isDuplicate(_ controller: PTAlertProtocol,
+    @MainActor func isDuplicate(_ controller: PTAlertProtocol,
                      container: SceneContainer) -> Bool {
 
         if container.showingWindows.values.contains(where: {
@@ -255,7 +255,7 @@ private extension PTAlertManager {
         }
     }
 
-    func insertQueue(_ controller: PTAlertProtocol,
+    @MainActor func insertQueue(_ controller: PTAlertProtocol,
                      container: inout SceneContainer) {
 
         container.waitQueue.append(controller)
@@ -320,7 +320,7 @@ private extension PTAlertManager {
         reusableWindows.append(window)
     }
 
-    func configWindow(_ window: PTAlertWindow,
+    @MainActor func configWindow(_ window: PTAlertWindow,
                       controller: PTAlertProtocol) {
 
         window.frame = UIScreen.main.bounds

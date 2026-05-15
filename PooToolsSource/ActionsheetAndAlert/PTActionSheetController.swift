@@ -216,13 +216,13 @@ public class PTActionSheetController: PTAlertController {
     
     public init(viewConfig:PTActionSheetViewConfig = PTActionSheetViewConfig(),
                 titleItem:PTActionSheetTitleItem? = nil,
-                cancelItem:PTActionSheetItem = PTActionSheetItem(title: "PT Button cancel".localized()),
+                cancelItem:PTActionSheetItem? = nil,
                 destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
                 contentItems:[PTActionSheetItem]? = [PTActionSheetItem](),
                 canTapBackground:Bool = false) {
         self.sheetConfig = viewConfig
         self.titleItem = titleItem
-        self.cancelSheetItem = cancelItem
+        self.cancelSheetItem = cancelItem ?? PTActionSheetItem(title: "PT Button cancel".localized())
         self.destructiveItems = destructiveItems
         self.contentItems = contentItems ?? []
         self.canTapBackground = canTapBackground

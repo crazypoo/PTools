@@ -10,7 +10,7 @@ import WebKit
 import SafeSFSymbols
 
 extension ViewHierarchyElementIconProvider {
-    static let `default` = ViewHierarchyElementIconProvider { object in
+    @MainActor static let `default` = ViewHierarchyElementIconProvider { object in
 
         guard let object = object else { return .missingSymbol }
 
@@ -129,33 +129,33 @@ private extension UIImage {
     static let button: UIImage = UIImage(.hand.tapFill)
     static let collectionView: UIImage = UIImage(systemName: "square.grid.3x1.below.line.grid.1x2")!
     static let collectionViewController: UIImage = UIImage(.square.grid_3x3)
-    static let containerViewSymbol: UIImage = .icon("filled-view-32_Normal")!
+    @MainActor static let containerViewSymbol: UIImage = .icon("filled-view-32_Normal")!
     static let control: UIImage = UIImage(systemName: "dial.min.fill")!
-    static let datePicker: UIImage = .icon("UIDatePicker_32_Normal")!
-    static let emptyViewSymbol: UIImage = .icon("EmptyView-32_Normal")!
-    static let horizontalStack: UIImage = .icon("HStack-32_Normal")!
+    @MainActor static let datePicker: UIImage = .icon("UIDatePicker_32_Normal")!
+    @MainActor static let emptyViewSymbol: UIImage = .icon("EmptyView-32_Normal")!
+    @MainActor static let horizontalStack: UIImage = .icon("HStack-32_Normal")!
     static let imageView: UIImage = UIImage(.photo)
-    static let keyWindow: UIImage = .icon("Key-UIWindow-32_Normal")!
+    @MainActor static let keyWindow: UIImage = .icon("Key-UIWindow-32_Normal")!
     static let keyboardWindow: UIImage = UIImage(.keyboard.macwindow,weight: .regular)
     static let mapView: UIImage = UIImage(.map)
-    static let navigationBar: UIImage = .icon("NavigationBar-32_Normal")!
+    @MainActor static let navigationBar: UIImage = .icon("NavigationBar-32_Normal")!
     static let navigationController: UIImage = UIImage(.chevron.leftSquare)
     static let nsObject: UIImage = UIImage(.shippingbox,weight:.regular)
-    static let pageViewController: UIImage = .icon("UIPageViewController")!
-    static let scrollView: UIImage = .icon("UIScrollView_32_Normal")!
-    static let searchController: UIImage = .icon("UISearchController")!
-    static let segmentedControl: UIImage = .icon("UISegmentedControl_32_Normal")!
-    static let slider: UIImage = .icon("UISlider_32_Normal")!
+    @MainActor static let pageViewController: UIImage = .icon("UIPageViewController")!
+    @MainActor static let scrollView: UIImage = .icon("UIScrollView_32_Normal")!
+    @MainActor static let searchController: UIImage = .icon("UISearchController")!
+    @MainActor static let segmentedControl: UIImage = .icon("UISegmentedControl_32_Normal")!
+    @MainActor static let slider: UIImage = .icon("UISlider_32_Normal")!
     static let staticText: UIImage = UIImage(.textformat.abc,weight:.bold)
-    static let tabBar: UIImage = .icon("TabbedView-32_Normal")!
-    static let tabBarController: UIImage = .icon("TabbedView-32_Normal")!
+    @MainActor static let tabBar: UIImage = .icon("TabbedView-32_Normal")!
+    @MainActor static let tabBarController: UIImage = .icon("TabbedView-32_Normal")!
     static let tableView: UIImage = UIImage(.square.fillTextGrid_1x2)
-    static let tableViewController: UIImage = .icon("UITableViewController")!
+    @MainActor static let tableViewController: UIImage = .icon("UITableViewController")!
     static let textField: UIImage = UIImage(systemName: "character.textbox")!.applyingSymbolConfiguration(.init(weight: .bold))!
     static let textView: UIImage = UIImage(.textformat.abcDottedunderline,weight:.bold)
-    static let toggle: UIImage = .icon("Toggle-32_Normal")!
-    static let toolbar: UIImage = .icon("UIToolbar-32_Normal")!
-    static let verticalStack: UIImage = .icon("VStack-32_Normal")!
+    @MainActor static let toggle: UIImage = .icon("Toggle-32_Normal")!
+    @MainActor static let toolbar: UIImage = .icon("UIToolbar-32_Normal")!
+    @MainActor static let verticalStack: UIImage = .icon("VStack-32_Normal")!
     static let webView: UIImage = UIImage(.safari)
     static let window: UIImage = UIImage(.macwindow,weight:.regular)
 }

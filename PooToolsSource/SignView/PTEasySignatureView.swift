@@ -22,12 +22,12 @@ public class PTSignatureConfig:NSObject {
     public var signContentTitleColor:UIColor = UIColor.randomColor
     public var signContentDescFont:UIFont = UIFont.appfont(size: 13)
     public var signContentDescColor:UIColor = UIColor.randomColor
-    public var infoTitle:String = "PT Sign placeholder".localized()
-    public var infoDesc:String = "PT Sign font".localized()
-    public var clearName:String = "PT Button delete".localized()
+    @MainActor public var infoTitle:String = "PT Sign placeholder".localized()
+    @MainActor public var infoDesc:String = "PT Sign font".localized()
+    @MainActor public var clearName:String = "PT Button delete".localized()
     public var clearFont:UIFont = .appfont(size: 14)
     public var clearTextColor:UIColor = .randomColor
-    public var saveName:String = "PT Button save".localized()
+    @MainActor public var saveName:String = "PT Button save".localized()
     public var saveFont:UIFont = .appfont(size: 14)
     public var saveTextColor:UIColor = .randomColor
     public var navBarColor:UIColor = .randomColor

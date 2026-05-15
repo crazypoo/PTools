@@ -234,7 +234,7 @@ public class PTCheckUpdateFunction: NSObject {
         return (currentVersion,appStoreVersion)
     }
     
-    public func tfUpdate(force:Bool,
+    @MainActor public func tfUpdate(force:Bool,
                          version:String,
                          note:String?,
                          url:URL?) {
