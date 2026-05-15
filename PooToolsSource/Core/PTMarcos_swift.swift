@@ -11,9 +11,6 @@ import UIKit
 
 public let CorePodBundleName = "PooToolsResource"
 
-public typealias PTActionUncheckTask = () -> Void
-public typealias PTActionTask = @Sendable () -> Void
-public typealias PTActionAsyncTask = @Sendable () async -> Void
 // 2. 新增：专门用于后台/全局线程的 Task（不带 @MainActor，避免线程冲突警告）
 public typealias PTBackgroundTask = @Sendable () -> Void
 

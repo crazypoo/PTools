@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 class PTPingActivityIndicator {
     static let shared = PTPingActivityIndicator()
     var statusBarStyle: UIStatusBarStyle = .lightContent

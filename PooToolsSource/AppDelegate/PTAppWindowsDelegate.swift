@@ -11,10 +11,10 @@ import UIKit
 import SwifterSwift
 
 /// 服务路由
-public var serivceHost = "scheme://services?"
+@MainActor public var serivceHost = "scheme://services?"
 
 /// web跳转路由
-public var webRouterUrl = "scheme://webview/home"
+@MainActor public var webRouterUrl = "scheme://webview/home"
 
 open class PTAppWindowsDelegate: PTAppDelegate {
     

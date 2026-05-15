@@ -7,8 +7,9 @@
 //
 
 import Foundation
-import CoreNFC
+@preconcurrency import CoreNFC
 
+@MainActor
 @available(iOS 13.0, *)
 public class PTNFCToolKit: NSObject {
     public static let shared = PTNFCToolKit()
@@ -110,7 +111,7 @@ public class PTNFCToolKit: NSObject {
 }
 
 @available(iOS 13.0, *)
-extension PTNFCToolKit: NFCTagReaderSessionDelegate {
+extension PTNFCToolKit: @preconcurrency NFCTagReaderSessionDelegate {
     public func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
         
     }
@@ -123,138 +124,157 @@ extension PTNFCToolKit: NFCTagReaderSessionDelegate {
     public func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         guard let tag = tags.first else { return }
 
-        session.connect(to: tag) { [weak self] error in
-            guard let self = self else { return }
-            if let error = error {
-                session.invalidate(errorMessage: "\(self.connectErrorMsg) \(error.localizedDescription)")
-                self.onError?(error)
-                self.clear()
-                return
-            }
-
-            switch tag {
-            case .miFare(let tag):
-                PTNSLogConsole("MiFare UID: \(tag.identifier.map { String(format: "%02x", $0) }.joined())")
-                session.invalidate(errorMessage: miFareErrorMsg)
-                self.clear()
-
-            case .iso7816(let tag):
-                if let command = self.apduCommand {
-                    tag.sendCommand(apdu: command) { [weak self] data, sw1, sw2, error in
-                        guard let self = self else { return }
-                        if let error = error {
-                            session.invalidate(errorMessage: "\(self.apduErrorMsg)：\(error.localizedDescription)")
-                            self.onError?(error)
-                        } else {
-                            session.alertMessage = String(format: self.apduSuccessMsg, sw1, sw2)
-                            session.invalidate()
-                            self.apduCompletion?(data)
-                        }
-                        self.clear()
-                    }
-                } else {
-                    self.queryNDEF(tag: tag, session: session)
+        session.connect(to: tag) {  error in
+            Task { @MainActor in
+                if let error = error {
+                    session.invalidate(errorMessage: "\(self.connectErrorMsg) \(error.localizedDescription)")
+                    self.onError?(error)
+                    self.clear()
+                    return
                 }
-
-            case .iso15693(let tag):
-                PTNSLogConsole("ISO15693 UID: \(tag.identifier.map { String(format: "%02x", $0) }.joined())")
-                session.invalidate(errorMessage: nfc15693ErrorMsg)
-                self.clear()
-
-            case .feliCa(let tag):
-                PTNSLogConsole("FeliCa IDm: \(tag.currentIDm.map { String(format: "%02x", $0) }.joined())")
-                session.invalidate(errorMessage: felicaErrorMsg)
-                self.clear()
-            @unknown default:
-                session.invalidate(errorMessage: unknowErrorMsg)
-                self.clear()
             }
+            self.processDetectedTag(tag, session: session)
         }
     }
 
     private func queryNDEF(tag: NFCISO7816Tag, session: NFCTagReaderSession) {
         let ndefTag = tag as NFCNDEFTag
-        ndefTag.queryNDEFStatus { [weak self] status, _, error in
-            guard let self = self else { return }
-            if let error = error {
-                session.invalidate(errorMessage: "\(self.findErrorMsg)\(error.localizedDescription)")
-                self.onError?(error)
-                self.clear()
-                return
-            }
-
-            switch status {
-            case .readOnly, .readWrite:
-                if let writeMessage = self.writeMessage {
-                    self.writeNDEF(to: ndefTag, message: writeMessage, session: session)
-                } else {
-                    self.readNDEF(from: ndefTag, session: session)
+        ndefTag.queryNDEFStatus { status, _, error in
+            Task { @MainActor in
+                if let error = error {
+                    session.invalidate(errorMessage: "\(self.findErrorMsg)\(error.localizedDescription)")
+                    self.onError?(error)
+                    self.clear()
+                    return
                 }
-            case .notSupported:
-                session.invalidate(errorMessage: notSupportNDEFMsg)
-                self.clear()
-            @unknown default:
-                session.invalidate(errorMessage: unknowStateMsg)
-                self.clear()
+
+                switch status {
+                case .readOnly, .readWrite:
+                    if let writeMessage = self.writeMessage {
+                        self.writeNDEF(to: ndefTag, message: writeMessage, session: session)
+                    } else {
+                        self.readNDEF(from: ndefTag, session: session)
+                    }
+                case .notSupported:
+                    session.invalidate(errorMessage: self.notSupportNDEFMsg)
+                    self.clear()
+                @unknown default:
+                    session.invalidate(errorMessage: self.unknowStateMsg)
+                    self.clear()
+                }
             }
         }
     }
 
     private func readNDEF(from tag: NFCNDEFTag, session: NFCTagReaderSession) {
-        tag.readNDEF { [weak self] message, error in
-            if let error = error {
-                session.invalidate(errorMessage: "\(self!.readErrorMsg)\(error.localizedDescription)")
-                self?.onError?(error)
-                self?.clear()
-                return
-            }
+        tag.readNDEF { message, error in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return } // 4. 彻底修复崩溃：使用 guard let 替代原有的 self!
+                
+                if let error = error {
+                    session.invalidate(errorMessage: "\(self.readErrorMsg)\(error.localizedDescription)")
+                    self.onError?(error)
+                    self.clear()
+                    return
+                }
 
-            if let records = message?.records {
-                session.alertMessage = self?.readSuccessMsg ?? ""
-                session.invalidate()
-                self?.onReadSuccess?(records)
-            } else {
-                session.invalidate(errorMessage: self?.unFindMsg ?? "")
+                if let records = message?.records {
+                    session.alertMessage = self.readSuccessMsg
+                    session.invalidate()
+                    self.onReadSuccess?(records)
+                } else {
+                    session.invalidate(errorMessage: self.unFindMsg)
+                }
+                self.clear()
             }
-            self?.clear()
         }
     }
 
     private func writeNDEF(to tag: NFCNDEFTag, message: NFCNDEFMessage, session: NFCTagReaderSession) {
-        tag.writeNDEF(message) { [weak self] error in
-            if let error = error {
-                session.invalidate(errorMessage: "\(self!.writingErrorMsg)\(error.localizedDescription)")
-                self?.onError?(error)
-                self?.clear()
-                return
-            }
+        tag.writeNDEF(message) { error in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return } // 修复潜在崩溃
+                
+                if let error = error {
+                    session.invalidate(errorMessage: "\(self.writingErrorMsg)\(error.localizedDescription)")
+                    self.onError?(error)
+                    self.clear()
+                    return
+                }
 
-            if self?.shouldLockAfterWrite == true {
-                self?.lockTag(tag: tag, session: session)
-            } else {
-                Task{ @MainActor in
-                    session.alertMessage = self?.writingSuccessMsg ?? ""
+                if self.shouldLockAfterWrite {
+                    self.lockTag(tag: tag, session: session)
+                } else {
+                    session.alertMessage = self.writingSuccessMsg
                     session.invalidate()
-                    self?.onWriteSuccess?()
-                    self?.clear()
+                    self.onWriteSuccess?()
+                    self.clear()
                 }
             }
         }
     }
 
     private func lockTag(tag: NFCNDEFTag, session: NFCTagReaderSession) {
-        tag.writeLock { [weak self] error in
-            if let error = error {
-                session.invalidate(errorMessage: "\(self!.lockErrorMsg)\(error.localizedDescription)")
-                self?.onError?(error)
-            } else {
-                Task{ @MainActor in
-                    session.alertMessage = self?.onlyReadMsg ?? ""
+        tag.writeLock { error in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return } // 修复潜在崩溃
+                
+                if let error = error {
+                    session.invalidate(errorMessage: "\(self.lockErrorMsg)\(error.localizedDescription)")
+                    self.onError?(error)
+                } else {
+                    session.alertMessage = self.onlyReadMsg
                     session.invalidate()
-                    self?.onWriteSuccess?()
+                    self.onWriteSuccess?()
                 }
+                self.clear()
             }
-            self?.clear()
+        }
+    }
+    
+    @MainActor
+    private func processDetectedTag(_ tag: NFCTag, session: NFCTagReaderSession) {
+        switch tag {
+        case .miFare(let mifareTag):
+            let uidString = mifareTag.identifier.map { String(format: "%02x", $0) }.joined()
+            PTNSLogConsole("MiFare UID: \(uidString)")
+            session.invalidate(errorMessage: miFareErrorMsg)
+            self.clear()
+
+        case .iso7816(let iso7816Tag):
+            if let command = self.apduCommand {
+                iso7816Tag.sendCommand(apdu: command) { data, sw1, sw2, error in
+                    Task { @MainActor in
+                        if let error = error {
+                            session.invalidate(errorMessage: "\(self.apduErrorMsg)：\(error.localizedDescription)")
+                            self.onError?(error)
+                        } else {
+                            session.alertMessage = String(format: self.apduSuccessMsg, String(sw1), String(sw2))
+                            session.invalidate()
+                            self.apduCompletion?(data)
+                        }
+                        self.clear()
+                    }
+                }
+            } else {
+                self.queryNDEF(tag: iso7816Tag, session: session)
+            }
+
+        case .iso15693(let iso15693Tag):
+            let uidString = iso15693Tag.identifier.map { String(format: "%02x", $0) }.joined()
+            PTNSLogConsole("ISO15693 UID: \(uidString)")
+            session.invalidate(errorMessage: nfc15693ErrorMsg)
+            self.clear()
+
+        case .feliCa(let felicaTag):
+            let idmString = felicaTag.currentIDm.map { String(format: "%02x", $0) }.joined()
+            PTNSLogConsole("FeliCa IDm: \(idmString)")
+            session.invalidate(errorMessage: felicaErrorMsg)
+            self.clear()
+            
+        @unknown default:
+            session.invalidate(errorMessage: unknowErrorMsg)
+            self.clear()
         }
     }
 }

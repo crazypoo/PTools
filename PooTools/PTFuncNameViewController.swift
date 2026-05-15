@@ -774,13 +774,16 @@ class PTFuncNameViewController: PTBaseViewController {
                         case 2:
                             UIAlertController.alertSendFeedBack { title, content in
                                 UIAlertController.gobal_drop(title: title,subTitle: content) {
-                                    UIAlertController.base_textfield_alertVC(okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), placeHolders: ["placeholder"], textFieldTexts: ["Test"], keyboardType: [.default], textFieldDelegate: self) { result in
-                                        
+                                    Task { @MainActor in
+                                        UIAlertController.base_textfield_alertVC(okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), placeHolders: ["placeholder"], textFieldTexts: ["Test"], keyboardType: [.default], textFieldDelegate: self) { result in
+                                            
+                                        }
                                     }
                                 } notifiDismiss: {
-                                    UIAlertController.alertVC(title: "notifi消失之后", msg: "哦", cancel: "PT Button cancel".localized(), cancelBlock: {
-                                        
-                                    })
+                                    Task { @MainActor in
+                                        UIAlertController.alertVC(title: "notifi消失之后", msg: "哦", cancel: "PT Button cancel".localized(), cancelBlock: {
+                                        })
+                                    }
                                 }
                             }
                         case 3:

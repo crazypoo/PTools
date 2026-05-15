@@ -50,7 +50,7 @@ enum ElementInspectorPanelListState: Swift.CaseIterable, MenuContentProtocol {
         }
     }
 
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .allCollapsed:
             return .collapseMirroredSymbol

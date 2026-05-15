@@ -8,6 +8,10 @@
 
 import UIKit
 
+public typealias PTActionUncheckTask = () -> Void
+public typealias PTActionTask = @Sendable () -> Void
+public typealias PTActionAsyncTask = @Sendable () async -> Void
+
 @objcMembers
 public final class PTGCDManager: NSObject, @unchecked Sendable {
     

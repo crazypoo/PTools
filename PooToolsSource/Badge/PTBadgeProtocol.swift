@@ -64,6 +64,7 @@ public struct PTBadgeConfiguration {
 // MARK: - Associated Keys
 
 /// 使用 UInt8 并取地址，是 Swift 中关联对象最安全、标准的写法
+@MainActor
 internal struct PTBadgeAssociatedKeys {
     static var badgeLabel: UInt8 = 0
     static var badgeConfig: UInt8 = 0 // 用一个 Config 替代之前零散的几十个 Key

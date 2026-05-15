@@ -15,7 +15,7 @@ class PTPermissionBluetoothHandler: NSObject, @preconcurrency CBCentralManagerDe
     
     // MARK: - Init
     
-    static let shared: PTPermissionBluetoothHandler = .init()
+    @MainActor static let shared: PTPermissionBluetoothHandler = .init()
     
     override init() {
         super.init()

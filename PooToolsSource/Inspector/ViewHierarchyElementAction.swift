@@ -36,7 +36,7 @@ enum ViewHierarchyElementAction: @preconcurrency MenuContentProtocol {
         }
     }
 
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case let .layer(action):
             return action.image

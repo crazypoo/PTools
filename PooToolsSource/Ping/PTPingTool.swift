@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public enum PTPingTimeInterval {
+public enum PTPingTimeInterval: Sendable {
     case second(_ interval: TimeInterval)       //秒
     case millisecond(_ interval: TimeInterval)  //毫秒
     case microsecond(_ interval: TimeInterval)  //微秒
@@ -26,35 +26,39 @@ public enum PTPingTimeInterval {
     }
 }
 
-public struct PTPingResponse {
+public struct PTPingResponse: Sendable {
     public var pingAddressIP = ""
     public var responseTime: PTPingTimeInterval = .second(0)
     public var responseBytes: Int = 0
 }
 
-public typealias PingComplete = (_ response: PTPingResponse?, _ error: Error?) -> Void
+// 1. 优化：将回调标记为 @Sendable，确保跨隔离域传递时的线程安全
+public typealias PingComplete = @Sendable (_ response: PTPingResponse?, _ error: Error?) -> Void
 
-public enum NetworkActivityIndicatorStatus {
+public enum NetworkActivityIndicatorStatus: Sendable {
     case auto       //自动显示
     case always     //一直显示
     case none       //不显示
 }
 
-public enum PTPingError: Error, Equatable {
+public enum PTPingError: Error, Equatable, Sendable {
     case requestError   //发起失败
     case receiveError   //响应失败
     case timeout        //超时
 }
 
-struct PTPingItem {
+struct PTPingItem: Sendable {
     var sendTime = Date()
     var sequence: UInt16 = 0
 }
 
+// 2. 核心优化：使用 @MainActor 隔离整个工具类
+// 这不仅符合该类重度依赖 RunLoop.main 和更新 UI Indicator 的现状，也彻底解决了状态竞争警告
+@MainActor
 open class PTPingTool: NSObject {
     open var timeout: PTPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
-    open var debugLog = true                                  //是否开启日志输出
-    open var stopWhenError = false                            //遇到错误停止ping
+    open var debugLog = true                                   //是否开启日志输出
+    open var stopWhenError = false                             //遇到错误停止ping
     open private(set) var isPing = false
     open var isRunning: Bool = false
     open var showNetworkActivityIndicator: NetworkActivityIndicatorStatus = .none              //是否在状态栏显示
@@ -88,6 +92,9 @@ open class PTPingTool: NSObject {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        // 确保销毁时清理定时器
+        sendTimer?.invalidate()
+        checkTimer?.invalidate()
     }
 
     public init(hostName: String? = nil) {
@@ -152,12 +159,17 @@ private extension PTPingTool {
         isRunning = true
 
         if interval.second > 0 {
+            // 3. 修复闭包并发捕获：在 Timer 闭包内部声明 @MainActor，确保对 self 的访问安全
             sendTimer = Timer(timeInterval: interval.second, repeats: true, block: { [weak self] (_) in
-                guard let self = self else { return }
-                self.pingStart(pingType: pingType, interval: interval, complete: complete)
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
+                    self.pingStart(pingType: pingType, interval: interval, complete: complete)
+                }
             })
             //循环发送
-            RunLoop.main.add(sendTimer!, forMode: .common)
+            if let timer = sendTimer {
+                RunLoop.main.add(timer, forMode: .common)
+            }
         }
     }
 
@@ -183,14 +195,14 @@ private extension PTPingTool {
 
     @objc func _didEnterBackground() {
         if debugLog {
-            PTNSLogConsole("didEnterBackground: stop ping",levelType: PTLogMode,loggerType: .network)
+            PTNSLogConsole("didEnterBackground: stop ping", levelType: PTLogMode, loggerType: .network)
         }
         pingStop()
     }
 
     @objc func _didBecomeActive() {
         if debugLog {
-            PTNSLogConsole("didBecomeActive: ping resume",levelType: PTLogMode,loggerType: .network)
+            PTNSLogConsole("didBecomeActive: ping resume", levelType: PTLogMode, loggerType: .network)
         }
         start(pingType: pinger.addressStyle, interval: pingInterval, complete: complete)
     }
@@ -243,103 +255,118 @@ private extension PTPingTool {
 
 extension PTPingTool: SimplePingDelegate {
     
-    public func simplePing(_ pinger: SimplePing, didStart address: Data) {
-        pingAddressIP = displayAddressForAddress(address: NSData(data: address))
-        if debugLog {
-            PTNSLogConsole("ping: ", pingAddressIP,levelType: PTLogMode,loggerType: .network)
-        }
-        //发送一次ping
-        sendPingData()
-    }
-
-    public func simplePing(_ pinger: SimplePing, didFail error: Error) {
-        if debugLog {
-            PTNSLogConsole("ping failed: ", shortErrorFromError(error: error as NSError),levelType: .error,loggerType: .network)
-        }
-        PTPingActivityIndicator.shared.update(time: 460)
-        if let complete = complete {
-            complete(nil, PTPingError.requestError)
-        }
-        //标记完成
-        pingComplete()
-        //停止ping
-        if stopWhenError {
-            pingStop()
-        }
-    }
-
-    public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
-        if debugLog {
-            PTNSLogConsole("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)",levelType: PTLogMode,loggerType: .network)
-        }
-        isPing = true
-        lastSendItem = PTPingItem(sendTime: Date(), sequence: sequenceNumber)
-        //发送数据之后监测是否超时
-        if timeout.second > 0 {
-            checkTimer?.invalidate()
-            checkTimer = nil
-            checkTimer = Timer(timeInterval: timeout.second, repeats: false, block: { [weak self] (_) in
-                guard let self = self else { return }
-                if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {
-                    PTPingActivityIndicator.shared.update(time: 460)
-                    //超时
-                    if let complete = self.complete {
-                        complete(nil, PTPingError.timeout)
-                    }
-                    //标记完成
-                    self.pingComplete()
-                    //停止ping
-                    if self.stopWhenError {
-                        self.pingStop()
-                    }
-                }
-            })
-            RunLoop.main.add(checkTimer!, forMode: .common)
-        }
-    }
-
-    public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
-        if debugLog {
-            PTNSLogConsole("ping send error: ", sequenceNumber, shortErrorFromError(error: error as NSError),levelType: .error,loggerType: .network)
-        }
-        PTPingActivityIndicator.shared.update(time: 460)
-        if let complete = complete {
-            complete(nil, PTPingError.receiveError)
-        }
-        //标记完成
-        pingComplete()
-        //停止ping
-        if stopWhenError {
-            pingStop()
-        }
-    }
-
-    public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
-        if let sendPingItem = lastSendItem {
-            let time = Date().timeIntervalSince(sendPingItem.sendTime).truncatingRemainder(dividingBy: 1) * 1000
-            if debugLog {
-                PTNSLogConsole("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms",levelType: PTLogMode,loggerType: .network)
+    // 代理方法将由 SimplePing 在其调度的 RunLoop (此处为 Main) 上触发，受 @MainActor 保护
+    nonisolated public func simplePing(_ pinger: SimplePing, didStart address: Data) {
+        Task { @MainActor in
+            self.pingAddressIP = self.displayAddressForAddress(address: NSData(data: address))
+            if self.debugLog {
+                PTNSLogConsole("ping: ", self.pingAddressIP, levelType: PTLogMode, loggerType: .network)
             }
-            PTPingActivityIndicator.shared.update(time: Int(time))
-            if let complete = complete {
-                let response = PTPingResponse(pingAddressIP: pingAddressIP, responseTime: .millisecond(time), responseBytes: packet.count)
-                complete(response, nil)
+            //发送一次ping
+            self.sendPingData()
+        }
+    }
+
+    nonisolated public func simplePing(_ pinger: SimplePing, didFail error: Error) {
+        Task { @MainActor in
+            if self.debugLog {
+                PTNSLogConsole("ping failed: ", self.shortErrorFromError(error: error as NSError), levelType: .error, loggerType: .network)
             }
-            lastReciveItem = PTPingItem(sendTime: Date(), sequence: sequenceNumber)
+            PTPingActivityIndicator.shared.update(time: 460)
+            if let complete = self.complete {
+                complete(nil, PTPingError.requestError)
+            }
             //标记完成
-            pingComplete()
+            self.pingComplete()
+            //停止ping
+            if self.stopWhenError {
+                self.pingStop()
+            }
         }
     }
 
-    public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
-        if debugLog {
-            PTNSLogConsole("unexpected receive packet, size=\(packet.count)",levelType: PTLogMode,loggerType: .network)
+    nonisolated public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
+        Task { @MainActor in
+            if self.debugLog {
+                PTNSLogConsole("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)", levelType: PTLogMode, loggerType: .network)
+            }
+            self.isPing = true
+            self.lastSendItem = PTPingItem(sendTime: Date(), sequence: sequenceNumber)
+            
+            //发送数据之后监测是否超时
+            if self.timeout.second > 0 {
+                self.checkTimer?.invalidate()
+                self.checkTimer = nil
+                
+                // 确保在主线程上下文安全解包 self 和处理超时逻辑
+                self.checkTimer = Timer(timeInterval: self.timeout.second, repeats: false, block: { [weak self] (_) in
+                    Task { @MainActor [weak self] in
+                        guard let self = self else { return }
+                        if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {
+                            PTPingActivityIndicator.shared.update(time: 460)
+                            //超时
+                            if let complete = self.complete {
+                                complete(nil, PTPingError.timeout)
+                            }
+                            //标记完成
+                            self.pingComplete()
+                            //停止ping
+                            if self.stopWhenError {
+                                self.pingStop()
+                            }
+                        }
+                    }
+                })
+                if let timer = self.checkTimer {
+                    RunLoop.main.add(timer, forMode: .common)
+                }
+            }
         }
-        //标记完成
-        pingComplete()
-        //停止ping
-        if stopWhenError {
-            pingStop()
+    }
+
+    nonisolated public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
+        Task { @MainActor in
+            if self.debugLog {
+                PTNSLogConsole("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError), levelType: .error, loggerType: .network)
+            }
+            PTPingActivityIndicator.shared.update(time: 460)
+            if let complete = self.complete {
+                complete(nil, PTPingError.receiveError)
+            }
+            self.pingComplete()
+            if self.stopWhenError {
+                self.pingStop()
+            }
+        }
+    }
+
+    nonisolated public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
+        Task { @MainActor in
+            if let sendPingItem = self.lastSendItem {
+                let time = Date().timeIntervalSince(sendPingItem.sendTime).truncatingRemainder(dividingBy: 1) * 1000
+                if self.debugLog {
+                    PTNSLogConsole("\(packet.count) bytes from \(self.pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms", levelType: PTLogMode, loggerType: .network)
+                }
+                PTPingActivityIndicator.shared.update(time: Int(time))
+                if let complete = self.complete {
+                    let response = PTPingResponse(pingAddressIP: self.pingAddressIP, responseTime: .millisecond(time), responseBytes: packet.count)
+                    complete(response, nil)
+                }
+                self.lastReciveItem = PTPingItem(sendTime: Date(), sequence: sequenceNumber)
+                self.pingComplete()
+            }
+        }
+    }
+
+    nonisolated public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
+        Task { @MainActor in
+            if self.debugLog {
+                PTNSLogConsole("unexpected receive packet, size=\(packet.count)", levelType: PTLogMode, loggerType: .network)
+            }
+            self.pingComplete()
+            if self.stopWhenError {
+                self.pingStop()
+            }
         }
     }
 }

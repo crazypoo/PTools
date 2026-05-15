@@ -9,7 +9,7 @@ import UIKit
 public enum InspectorElemenPropertyNoteIcon: ColorStylable {
     case info, warning
 
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .info:
             return .infoOutlineSymbol

@@ -27,7 +27,7 @@ enum ElementInspectorPanel: Hashable, Swift.CaseIterable, MenuContentProtocol {
         }
     }
 
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .identity:
             return .elementIdentityPanel

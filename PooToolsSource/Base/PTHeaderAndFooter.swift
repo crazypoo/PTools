@@ -11,7 +11,7 @@ import SnapKit
 import AttributedString
 
 @objcMembers
-public class PTFusionHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
+public class PTFusionHeader: PTBaseCollectionReusableView,@preconcurrency PTSupplementaryRegisterable {
     public static let ID = "PTFusionHeader"
     
     static public var kind: String { UICollectionView.elementKindSectionHeader }
@@ -69,7 +69,7 @@ public class PTFusionHeader: PTBaseCollectionReusableView,PTSupplementaryRegiste
 }
 
 @objcMembers
-public class PTVersionFooter: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
+public class PTVersionFooter: PTBaseCollectionReusableView,@preconcurrency PTSupplementaryRegisterable {
     public static let ID = "PTVersionFooter"
     static public var kind: String { UICollectionView.elementKindSectionFooter }
     static public var reuseID: String { PTVersionFooter.ID }

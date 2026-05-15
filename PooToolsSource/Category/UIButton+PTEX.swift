@@ -120,22 +120,18 @@ public extension UIButton {
                        countdownFinishCanTap:Bool = true,
                        uni:String = "",
                        timeFinish:PTActionTask? = nil,
-                       timingCallPack:((TimeInterval)->Void)? = nil) {
+                       timingCallPack:(@Sendable (TimeInterval)->Void)? = nil) {
         buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
             Task { @MainActor in
                 if finish {
                     self.setTitle(originalTitle, for: self.state)
                     self.isUserInteractionEnabled = countdownFinishCanTap
-                    Task { @MainActor in
-                        timeFinish?()
-                    }
+                    timeFinish?()
                 } else {
                     let buttonTime = String(format: "%02d%@", time, uni) // 优化：使用 %02d 替代 %.2d 更加规范
                     self.setTitle(buttonTime, for: self.state)
                     self.isUserInteractionEnabled = countdowningCanTap
-                    PTGCDManager.gcdMain {
-                        timingCallPack?(TimeInterval(time))
-                    }
+                    timingCallPack?(TimeInterval(time))
                 }
             }
         }
