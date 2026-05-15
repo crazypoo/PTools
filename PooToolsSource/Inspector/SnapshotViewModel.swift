@@ -18,6 +18,7 @@ extension HierarchyInspectorViewModel {
             let depth: Int
             let element: ViewHierarchyElementReference
 
+            @MainActor
             init(with element: ViewHierarchyElementReference, isEnabled: Bool) {
                 title = element.displayName
                 self.isEnabled = isEnabled

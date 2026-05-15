@@ -71,8 +71,8 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
     deinit {
         operationQueue.cancelAllOperations()
 
-        Task { @MainActor in
-            self.viewHierarchyCoordinator.removeAllLayers()
+        Task { @MainActor [ weak self] in
+            self?.viewHierarchyCoordinator.removeAllLayers()
         }
 
         children.forEach { child in

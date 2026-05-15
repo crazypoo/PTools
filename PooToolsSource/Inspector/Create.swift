@@ -17,6 +17,8 @@ extension Create where Self: AnyObject {
     ///     }
     ///
     /// - Parameter closure: A closure that will be executed.
+    @inlinable
+    @discardableResult
     func then(_ closure: (Self) throws -> Void) rethrows -> Self {
         try closure(self)
         return self
