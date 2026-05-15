@@ -15,7 +15,7 @@ protocol ElementChildrenPanelItemViewModelProtocol: AnyObject {
 }
 
 extension ElementChildrenPanelViewModel {
-    final class CellViewModel: ElementInspectorAppearanceProviding {
+    final class CellViewModel: @preconcurrency ElementInspectorAppearanceProviding {
         weak var parent: Parent?
 
         private var _isCollapsed: Bool {
@@ -54,7 +54,7 @@ extension ElementChildrenPanelViewModel {
 
 // MARK: - ElementChildrenPanelTableViewCellViewModelProtocol
 
-extension ElementChildrenPanelViewModel.CellViewModel: ElementChildrenPanelTableViewCellViewModelProtocol {
+extension ElementChildrenPanelViewModel.CellViewModel: @preconcurrency ElementChildrenPanelTableViewCellViewModelProtocol {
     @MainActor
     var summaryInfo: ViewHierarchyElementSummary {
         ViewHierarchyElementSummary(

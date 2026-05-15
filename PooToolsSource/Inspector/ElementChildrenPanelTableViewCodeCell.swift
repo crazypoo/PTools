@@ -18,7 +18,7 @@ protocol ElementChildrenPanelTableViewCellViewModelProtocol: ElementChildrenPane
     var isHidden: Bool { get }
 }
 
-final class ElementChildrenPanelTableViewCodeCell: UITableViewCell, ElementInspectorAppearanceProviding {
+final class ElementChildrenPanelTableViewCodeCell: UITableViewCell, @preconcurrency ElementInspectorAppearanceProviding {
     weak var delegate: ElementChildrenPanelTableViewCodeCellDelegate?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

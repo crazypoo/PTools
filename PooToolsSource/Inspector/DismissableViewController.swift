@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class DismissableViewController: UIViewController, Dismissable {
+open class DismissableViewController: UIViewController, @preconcurrency Dismissable {
     open var dismissHandler: ((DismissableViewController) -> Void)?
 
     override open func didMove(toParent parent: UIViewController?) {
