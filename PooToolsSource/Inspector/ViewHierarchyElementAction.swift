@@ -6,7 +6,7 @@
 
 import UIKit
 
-enum ViewHierarchyElementAction: MenuContentProtocol {
+enum ViewHierarchyElementAction: @preconcurrency MenuContentProtocol {
     case layer(action: ViewHierarchyLayerAction)
     case inspect(preferredPanel: ElementInspectorPanel)
     case copy(info: ViewHierarchyInformation)
@@ -47,6 +47,7 @@ enum ViewHierarchyElementAction: MenuContentProtocol {
         }
     }
 
+    @MainActor
     static func allCases(for element: ViewHierarchyElementReference) -> [ViewHierarchyElementAction] {
         var actions = [ViewHierarchyElementAction]()
 
@@ -72,6 +73,7 @@ enum ViewHierarchyElementAction: MenuContentProtocol {
         let actions: [ViewHierarchyElementAction]
     }
 
+    @MainActor
     static func actionGroups(for element: ViewHierarchyElementReference) -> [ElementActionGroup] {
         [
             .init(

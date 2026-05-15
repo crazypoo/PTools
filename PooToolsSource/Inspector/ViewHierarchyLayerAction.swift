@@ -6,9 +6,10 @@
 
 import UIKit
 
-enum ViewHierarchyLayerAction: Swift.CaseIterable, MenuContentProtocol {
+enum ViewHierarchyLayerAction: Swift.CaseIterable, @preconcurrency MenuContentProtocol {
     case hideHighlight, showHighlight
 
+    @MainActor
     static func allCases(for element: ViewHierarchyElementReference) -> [ViewHierarchyLayerAction] {
         allCases.filter { layerAction in
             switch layerAction {

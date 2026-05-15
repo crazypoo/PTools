@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-final class InspectorUI: UIViewControllerRepresentable, InspectorSwiftUIHost {
+final class InspectorUI: UIViewControllerRepresentable, @preconcurrency InspectorSwiftUIHost {
     // MARK: - InspectorSwiftUIHostable
 
     let viewHierarchyLayers: [Inspector.ViewHierarchyLayer]?

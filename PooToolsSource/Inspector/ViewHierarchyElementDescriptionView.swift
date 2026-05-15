@@ -7,7 +7,7 @@
 import UIKit
 
 @MainActor
-struct ViewHierarchyElementSummary: ElementInspectorAppearanceProviding {
+struct ViewHierarchyElementSummary: @preconcurrency ElementInspectorAppearanceProviding {
     var automaticallyAdjustIndentation: Bool = false
     var hideCollapseButton: Bool = true
     var iconImage: UIImage?

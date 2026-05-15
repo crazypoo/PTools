@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension ViewHierarchyCoordinator: ViewHierarchyLayerConstructorProtocol {
+extension ViewHierarchyCoordinator: @preconcurrency ViewHierarchyLayerConstructorProtocol {
     var isShowingLayers: Bool {
         visibleReferences.keys.isEmpty == false
     }

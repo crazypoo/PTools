@@ -158,6 +158,7 @@ public extension PTRouterServiceManager {
     }
 }
 
+@MainActor
 public class PTServiceActionMapper {
     public static let shared = PTServiceActionMapper()
     

@@ -26,6 +26,7 @@ struct ElementInspectorDependencies {
     var sourceView: UIView
 }
 
+@MainActor
 final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencies, UIWindow, UINavigationController> {
     weak var delegate: ElementInspectorCoordinatorDelegate?
 
@@ -63,9 +64,9 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
 
     private(set) lazy var colorPicker = ColorPickerPresenter(
         onColorSelected: { [weak self] selectedColor in
-            guard let self = self else { return }
+            guard let self = self,let formPanelController = self.formPanelController else { return }
             Task { @MainActor in
-                self.formPanelController?.selectColor(selectedColor)
+                formPanelController.selectColor(selectedColor)
             }
         },
         onDimiss: { [weak self] in
@@ -75,13 +76,13 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
     )
 
     private(set) lazy var documentPicker = DocumentPickerPresenter { [weak self] urls in
-        guard let self = self else { return }
+        guard let self = self,let formPanelController = self.formPanelController else { return }
 
         for url in urls {
             guard let data = try? Data(contentsOf: url) else { continue }
             Task { @MainActor in
                 let image = UIImage(data: data)
-                self.formPanelController?.selectImage(image)
+                formPanelController.selectImage(image)
             }
             break
         }

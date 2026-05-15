@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-private var kEmptyDataSetSource:UInt8 = 0
-private var kEmptyDataSetDelegate:UInt8 = 0
-private var kEmptyDataSetView:UInt8 = 0
-private var kConfigureEmptyDataSetView:UInt8 = 0
+@MainActor private var kEmptyDataSetSource:UInt8 = 0
+@MainActor private var kEmptyDataSetDelegate:UInt8 = 0
+@MainActor private var kEmptyDataSetView:UInt8 = 0
+@MainActor private var kConfigureEmptyDataSetView:UInt8 = 0
 
 class WeakObjectContainer: NSObject {
     weak var weakObject: AnyObject?

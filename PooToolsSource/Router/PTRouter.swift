@@ -763,7 +763,7 @@ extension PTRouter {
         await PTRouter.openURL((urlString, userInfo))
     }
     
-    
+    @MainActor
     public class func openCacheRouter(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
         
         if uriTuple.0.isEmpty {
@@ -877,6 +877,7 @@ extension PTRouter {
     
     // 修改 PTRouter.routerService 方法：
     // 服务调用 (重构版)
+    @MainActor
     public class func routerService(_ uriTuple: (String, [String: Any])) -> Any? {
         let request = PTRouterRequest(uriTuple.0)
         let queries = request.queries
@@ -906,6 +907,7 @@ extension PTRouter {
     /// ⚠️ 改造点 1：返回值从 Unmanaged<AnyObject>? 强制改为了 Any?
     /// 这个修改极其重要！Swift 的闭包会自动管理内存，不再需要手动处理引用计数。
     @available(*, deprecated, message: "请优先使用 PTRouterServiceManager 直接调用协议。如果必须通过 URL 动态调用，请确保已在 PTServiceActionMapper 中注册")
+    @MainActor
     public class func performTarget(protocolName: String,
                                     actionName: String,
                                     param: Any? = nil,
@@ -924,6 +926,7 @@ extension PTRouter {
     
     /// ⚠️ 改造点 2：无返回值的调用
     @available(*, deprecated, message: "请优先使用 PTRouterServiceManager 直接调用协议。")
+    @MainActor
     public class func performTargetVoidType(protocolName: String,
                                             actionName: String,
                                             param: Any? = nil,

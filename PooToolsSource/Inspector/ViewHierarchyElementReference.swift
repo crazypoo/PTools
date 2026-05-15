@@ -98,7 +98,7 @@ extension ViewHierarchyElementReference {
         return array
     }
 
-    var summaryInfo: ViewHierarchyElementSummary {
+    @MainActor var summaryInfo: ViewHierarchyElementSummary {
         ViewHierarchyElementSummary(
             iconImage: iconImage,
             isContainer: isContainer,
@@ -109,19 +109,19 @@ extension ViewHierarchyElementReference {
 
     // MARK: - Layer Views Convenience Methods
 
-    var isShowingLayerWireframeView: Bool {
+    @MainActor var isShowingLayerWireframeView: Bool {
         underlyingView?.allSubviews.contains { $0 is WireframeView } ?? false
     }
 
-    var isHostingAnyLayerHighlightView: Bool {
+    @MainActor var isHostingAnyLayerHighlightView: Bool {
         underlyingView?.allSubviews.contains { $0 is InspectorHighlightView } ?? false
     }
 
-    var containsVisibleHighlightViews: Bool {
+    @MainActor var containsVisibleHighlightViews: Bool {
         underlyingView?.allSubviews.contains { ($0 as? InspectorHighlightView)?.isHidden == false } ?? false
     }
 
-    var highlightView: InspectorHighlightView? {
+    @MainActor var highlightView: InspectorHighlightView? {
         underlyingView?._highlightView
     }
 }

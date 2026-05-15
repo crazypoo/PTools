@@ -12,6 +12,7 @@ public typealias TapedBlock = (_ sender:AnyObject) -> Void
 
 public extension UIGestureRecognizer {
     
+    @MainActor
     private struct AssociatedKeys {
         static var UIGestureRecognizerBlockKey = 998
     }
