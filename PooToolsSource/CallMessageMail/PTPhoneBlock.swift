@@ -12,6 +12,7 @@ import SwifterSwift
 public typealias CallBlock = (_ timeInterval:TimeInterval)->Void
 public typealias CanCall = (_ ok:Bool)->Void
 
+@MainActor
 @objcMembers
 public class PTPhoneBlock: NSObject {
     public static let shared = PTPhoneBlock()

@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-private var UIViewShowsDebugBorderKey: UInt8 = 0
-private var UIViewPreviousBorderColorKey: UInt8 = 1
-private var UIViewPreviousBorderWidthKey: UInt8 = 2
-private var UIViewDebugBorderColorKey: UInt8 = 3
+@MainActor private var UIViewShowsDebugBorderKey: UInt8 = 0
+@MainActor private var UIViewPreviousBorderColorKey: UInt8 = 1
+@MainActor private var UIViewPreviousBorderWidthKey: UInt8 = 2
+@MainActor private var UIViewDebugBorderColorKey: UInt8 = 3
 
 extension UIView {
 

@@ -24,6 +24,7 @@ let PTMaxImageWidth: CGFloat = 500
     case externalAlbumList
 }
 
+@MainActor
 @objcMembers
 public class PTMediaLibConfig:NSObject {
     public static let share = PTMediaLibConfig()
@@ -179,6 +180,7 @@ public class PTMediaLibConfig:NSObject {
     public var cropVideoAfterSelectThumbnail = true
 }
 
+@MainActor
 public class PTMediaLibUIConfig:NSObject {
     public static let share = PTMediaLibUIConfig()
     
@@ -247,7 +249,7 @@ public class PTMediaLibUIConfig:NSObject {
     public var albumCellDescFont:UIFont = .appfont(size: 14)
 }
 
-
+@MainActor
 @objcMembers
 public class PTCameraConfig: NSObject {
     private var pri_allowTakePhoto = true

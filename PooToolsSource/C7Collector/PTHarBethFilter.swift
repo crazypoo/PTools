@@ -15,6 +15,7 @@ public typealias maxminTuple = (current: Float, min: Float, max: Float)?
 public typealias FilterCallback = (_ value: Float) -> C7FilterProtocol
 public typealias FilterResult = (filter: C7FilterProtocol?, maxminValue: maxminTuple, callback: FilterCallback?)
 
+@MainActor
 public class PTHarBethFilter:NSObject {
     
     public static let share = PTHarBethFilter(name: "", type: .cigaussian)
@@ -305,6 +306,7 @@ public class PTHarBethFilter:NSObject {
     }
 }
 
+@MainActor
 public extension PTHarBethFilter {
     @objc static let cigaussian = PTHarBethFilter(name: "PT Filter cam filter cigaussian".localized(), type: .cigaussian)
     @objc static let hueBlend = PTHarBethFilter(name: "PT Filter cam filter hueblend".localized(), type: .hueblend)

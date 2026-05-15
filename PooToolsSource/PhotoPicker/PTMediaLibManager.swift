@@ -53,6 +53,7 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
     }
 }
 
+@MainActor
 func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
     guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else {
         return false
@@ -113,7 +114,11 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     return true
 }
 
-@MainActor func downloadAssetIfNeed(alertTitle: String = PTMediaLibUIConfig.share.alertTitle, subTitle: String = PTMediaLibUIConfig.share.downloadTimeOutError, model: PTMediaModel, sender: UIViewController?, completion: @escaping PTActionTask) {
+@MainActor func downloadAssetIfNeed(alertTitle: String? = nil, subTitle: String? = nil, model: PTMediaModel, sender: UIViewController?, completion: @escaping PTActionTask) {
+    
+    let alertTitle_new = alertTitle ?? PTMediaLibUIConfig.share.alertTitle
+    let subTitle_new = subTitle ?? PTMediaLibUIConfig.share.downloadTimeOutError
+
     let config = PTMediaLibConfig.share
     guard model.type == .video,
           model.asset.pt.isInCloud,
@@ -139,7 +144,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
         guard !Task.isCancelled else { return }
         
         // 执行超时逻辑
-        PTAlertTipsViewController.tipsAlertShow(title: alertTitle,subtitle: subTitle, icon: .Error)
+        PTAlertTipsViewController.tipsAlertShow(title: alertTitle_new,subtitle: subTitle_new, icon: .Error)
 
         if let requestAssetID = container.id {
             PHImageManager.default().cancelImageRequest(requestAssetID)

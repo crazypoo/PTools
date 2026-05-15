@@ -18,7 +18,7 @@ public struct PTEmptyParams<VC: UIViewController>: PTRoutableParams {
     }
 }
 
-class PTTestLoginViewController: PTBaseViewController,PTRoutableStaticController {
+class PTTestLoginViewController: PTBaseViewController,@preconcurrency PTRoutableStaticController {
     typealias Params = PTEmptyParams<PTTestLoginViewController>
     
     required init(routerParams: [String : Any]) {
@@ -36,7 +36,7 @@ class PTTestLoginViewController: PTBaseViewController,PTRoutableStaticController
     }
 }
 
-extension PTTestLoginViewController:PTRouterable {
+extension PTTestLoginViewController:@preconcurrency PTRouterable {
     
     static var priority: UInt {
         PTRouterDefaultPriority

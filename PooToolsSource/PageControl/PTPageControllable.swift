@@ -105,7 +105,7 @@ public protocol PTPageControllable : AnyObject {
     func update(currentPage: Int, totalPages: Int)
 }
 
-extension UIPageControl: PTPageControllable {
+extension UIPageControl: @preconcurrency PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.currentPage = index
     }
@@ -116,7 +116,7 @@ extension UIPageControl: PTPageControllable {
     }
 }
 
-extension PTImagePageControl: PTPageControllable {
+extension PTImagePageControl: @preconcurrency PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.progress = CGFloat(index)
     }
@@ -127,7 +127,7 @@ extension PTImagePageControl: PTPageControllable {
     }
 }
 
-extension PTFilledPageControl: PTPageControllable {
+extension PTFilledPageControl: @preconcurrency PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.progress = CGFloat(index)
     }
@@ -138,7 +138,7 @@ extension PTFilledPageControl: PTPageControllable {
     }
 }
 
-extension PTPillPageControl: PTPageControllable {
+extension PTPillPageControl: @preconcurrency PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.setProgress(CGFloat(index), animated: true)
     }
@@ -149,7 +149,7 @@ extension PTPillPageControl: PTPageControllable {
     }
 }
 
-extension PTSnakePageControl: PTPageControllable {
+extension PTSnakePageControl: @preconcurrency PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.setProgress(CGFloat(index), animated: true)
     }
@@ -160,7 +160,7 @@ extension PTSnakePageControl: PTPageControllable {
     }
 }
 
-extension PTScrollingPageControl: PTPageControllable {
+extension PTScrollingPageControl: @preconcurrency PTPageControllable {
     public func setCurrentPage(index: Int) {
         self.setProgress(CGFloat(index), animated: true)
     }

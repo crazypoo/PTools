@@ -859,17 +859,18 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     
     private func adjustStatusChanged() {
         guard let context = context else { return }
-        
-        // 使用缓存的参考底图进行渲染，如果没有则降级使用未 adjustment 的图
-        let baseImage = editImageAdjustRef ?? context.engineImageWithoutAdjust
-        
-        if let image = adjustFilterValueSet(filterImage: baseImage) {
-            context.engineUpdateEditImage(image) // 把渲染好的结果还给 VC
+        Task { @MainActor in
+            // 使用缓存的参考底图进行渲染，如果没有则降级使用未 adjustment 的图
+            let baseImage = editImageAdjustRef ?? context.engineImageWithoutAdjust
+            
+            if let image = adjustFilterValueSet(filterImage: baseImage) {
+                context.engineUpdateEditImage(image) // 把渲染好的结果还给 VC
+            }
         }
     }
     
     // MARK: - Harbeth 滤镜渲染核心
-    
+    @MainActor
     public func adjustFilterValueSet(filterImage: UIImage?) -> UIImage? {
         guard !currentAdjustStatus.allValueIsZero else { return filterImage }
         
@@ -895,7 +896,8 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     }
 }
 
-public class PTFilterEngine: NSObject, PTEditImageToolEngine {
+@MainActor
+public class PTFilterEngine: NSObject, @preconcurrency PTEditImageToolEngine {
     
     // MARK: - 核心状态
     
@@ -936,6 +938,7 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     // MARK: - 滤镜业务逻辑
     
     /// 异步生成底部菜单所需的滤镜缩略图
+    @MainActor
     public func generateFilterThumbnails() async {
         guard let context = context, let thumbnailImage = context.engineThumbnailImage else { return }
         
@@ -946,8 +949,10 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
             var results: [UIImage] = []
             
             for filter in filters {
-                PTHarBethFilter.share.texureSize = thumbnailImage.size
-                results.append(filter.getCurrentFilterImage(image: thumbnailImage))
+                Task { @MainActor in
+                    PTHarBethFilter.share.texureSize = thumbnailImage.size
+                    results.append(filter.getCurrentFilterImage(image: thumbnailImage))
+                }
             }
             return results
         }.value // .value 会等待后台任务执行完毕并返回结果
@@ -961,22 +966,24 @@ public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     /// 切换滤镜
     public func changeFilter(_ filter: PTHarBethFilter) {
         guard let context = context else { return }
-        currentFilter = filter
-        
-        let resultImage: UIImage
-        let cacheKey = filter.name.nsString // 转换为 NSString 作为 Key
-        // 1. 优先从安全的 NSCache 中读取
-        if let cachedImage = filterCache.object(forKey: cacheKey) {
-            resultImage = cachedImage
-        } else {
-            // 2. 缓存没命中，调用底层算法重新生成
-            resultImage = filter.getCurrentFilterImage(image: context.engineOriginalImage)
-            // 3. 存入 NSCache
-            filterCache.setObject(resultImage, forKey: cacheKey)
+        Task { @MainActor in
+            currentFilter = filter
+            
+            let resultImage: UIImage
+            let cacheKey = filter.name.nsString // 转换为 NSString 作为 Key
+            // 1. 优先从安全的 NSCache 中读取
+            if let cachedImage = filterCache.object(forKey: cacheKey) {
+                resultImage = cachedImage
+            } else {
+                // 2. 缓存没命中，调用底层算法重新生成
+                resultImage = filter.getCurrentFilterImage(image: context.engineOriginalImage)
+                // 3. 存入 NSCache
+                filterCache.setObject(resultImage, forKey: cacheKey)
+            }
+            
+            // 把应用了滤镜的干净底图，交回给大堂经理 (VC) 去跑流水线！
+            context.engineDidUpdateFilteredBaseImage(resultImage)
         }
-        
-        // 把应用了滤镜的干净底图，交回给大堂经理 (VC) 去跑流水线！
-        context.engineDidUpdateFilteredBaseImage(resultImage)
     }
 }
 

@@ -48,6 +48,7 @@ public class PTMediaLibListModel: NSObject {
         self.isCameraRoll = isCameraRoll
     }
     
+    @MainActor
     public func refetchPhotos() {
         let models = PTMediaLibManager.fetchPhoto(
             in: result,
