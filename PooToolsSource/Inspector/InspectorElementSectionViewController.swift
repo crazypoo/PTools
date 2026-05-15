@@ -34,7 +34,7 @@ protocol InspectorElementSectionViewControllerDelegate: OperationQueueManagerPro
     )
 }
 
-final class InspectorElementSectionViewController: UIViewController, DataReloadingProtocol, ElementInspectorAppearanceProviding {
+final class InspectorElementSectionViewController: UIViewController, DataReloadingProtocol, @preconcurrency ElementInspectorAppearanceProviding {
     weak var delegate: InspectorElementSectionViewControllerDelegate?
 
     let viewCode: InspectorElementSectionView
@@ -476,7 +476,7 @@ extension InspectorElementSectionViewController {
 
 // MARK: - ColorPreviewControlDelegate
 
-extension InspectorElementSectionViewController: ColorPreviewControlDelegate {
+extension InspectorElementSectionViewController: @preconcurrency ColorPreviewControlDelegate {
     func colorPreviewControlDidTap(_ colorPreviewControl: ColorPreviewControl) {
         delegate?.inspectorElementSectionViewController(self, didTap: colorPreviewControl)
     }
@@ -484,7 +484,7 @@ extension InspectorElementSectionViewController: ColorPreviewControlDelegate {
 
 // MARK: - OptionListControlDelegate
 
-extension InspectorElementSectionViewController: OptionListControlDelegate {
+extension InspectorElementSectionViewController: @preconcurrency OptionListControlDelegate {
     func optionListControlDidChangeSelectedIndex(_ optionListControl: OptionListControl) {
         valueChanged(optionListControl)
     }
@@ -492,7 +492,7 @@ extension InspectorElementSectionViewController: OptionListControlDelegate {
 
 // MARK: - ImagePreviewControlDelegate
 
-extension InspectorElementSectionViewController: ImagePreviewControlDelegate {
+extension InspectorElementSectionViewController: @preconcurrency ImagePreviewControlDelegate {
     func imagePreviewControlDidTap(_ imagePreviewControl: ImagePreviewControl) {
         delegate?.inspectorElementSectionViewController(self, didTap: imagePreviewControl)
     }
@@ -500,7 +500,7 @@ extension InspectorElementSectionViewController: ImagePreviewControlDelegate {
 
 // MARK: - InspectorElementSectionViewCodeDelegate
 
-extension InspectorElementSectionViewController: InspectorElementFormItemViewDelegate {
+extension InspectorElementSectionViewController: @preconcurrency InspectorElementFormItemViewDelegate {
     func inspectorElementFormItemView(
         _ item: InspectorElementSectionView,
         willChangeFrom oldState: InspectorElementSectionState?,
