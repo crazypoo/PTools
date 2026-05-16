@@ -455,7 +455,7 @@ public extension PTPOP where Base: UILabel {
     //MARK: 获取已知label的文本行数和每一行内容
     ///获取已知label的文本行数和每一行内容
     /// - Returns: 每行的内容
-    func linesCountAndLinesContent() -> (Int?, [String]?) {
+    @MainActor func linesCountAndLinesContent() -> (Int?, [String]?) {
         guard let t = base.text else {return (0, nil)}
         let lodFontName = base.font.fontName == ".SFUI-Regular" ? "TimesNewRomanPSMT" : base.font.fontName
         let fontSize = getFontSizeForLabel()

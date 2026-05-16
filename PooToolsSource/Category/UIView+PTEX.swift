@@ -47,7 +47,7 @@ extension CALayer {
 
 public extension PTPOP where Base:UIView {
     /// 快捷获取/设置 x 坐标
-    var jx_x: CGFloat{
+    @MainActor var jx_x: CGFloat{
         get {
             base.frame.origin.x
         } set {
@@ -56,7 +56,7 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 快捷获取/设置 y 坐标
-    var jx_y: CGFloat{
+    @MainActor var jx_y: CGFloat{
         get {
             base.frame.origin.y
         } set {
@@ -65,7 +65,7 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 快捷获取/设置 宽度
-    var jx_width: CGFloat{
+    @MainActor var jx_width: CGFloat{
         get {
             base.frame.size.width
         } set {
@@ -74,7 +74,7 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 快捷获取/设置 高度
-    var jx_height: CGFloat{
+    @MainActor var jx_height: CGFloat{
         get {
             base.frame.size.height
         } set {
@@ -83,14 +83,14 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 获取视图自身的中心点 (相对于自身 bounds)
-    var jx_viewCenter: CGPoint{
+    @MainActor var jx_viewCenter: CGPoint{
         get {
             CGPoint(x: jx_width * 0.5, y: jx_height * 0.5)
         }
     }
     
     /// 快捷获取/设置 centerX
-    var jx_centerX: CGFloat{
+    @MainActor var jx_centerX: CGFloat{
         get {
             jx_width * 0.5
         } set{
@@ -99,7 +99,7 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 快捷获取/设置 centerY
-    var jx_centerY: CGFloat{
+    @MainActor var jx_centerY: CGFloat{
         get {
             jx_height * 0.5
         } set{
@@ -108,12 +108,12 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 在父视图中的 Y 轴中心坐标
-    var inSuperViewCenterY: CGFloat{
+    @MainActor var inSuperViewCenterY: CGFloat{
         jx_y + jx_centerY
     }
     
     /// 快捷获取/设置 最大 X 值 (MaxX)
-    var maxX: CGFloat{
+    @MainActor var maxX: CGFloat{
         get {
             jx_x + jx_width
         } set{
@@ -122,7 +122,7 @@ public extension PTPOP where Base:UIView {
     }
     
     /// 快捷获取/设置 最大 Y 值 (MaxY)
-    var maxY: CGFloat{
+    @MainActor var maxY: CGFloat{
         get{
             jx_y + jx_height
         }
@@ -586,6 +586,7 @@ public extension UIView {
         UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
     }
     
+    @MainActor
     private struct AssociatedKeys {
         static var layoutSubviewsCallback: UInt8 = 0
         static var layoutShapeLayerCallback: UInt8 = 0
@@ -594,6 +595,7 @@ public extension UIView {
         static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
     }
 
+    @MainActor
     private struct PTImageLoadKeys {
         static var ptLoadTask: UInt8 = 0
         static var ptLoadUUID: UInt8 = 0
@@ -937,7 +939,7 @@ public extension UIView {
                 if images.count > 1 {
                     DispatchQueue.global().async {
                         let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
-                        DispatchQueue.main.async {
+                        Task { @MainActor in
                             guard isValid() else { return }
                             setImageBlock(gif)
                             loadFinish?(result)

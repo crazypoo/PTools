@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class PTSoundRecorder: NSObject,AVAudioRecorderDelegate {
+final class PTSoundRecorder: NSObject,AVAudioRecorderDelegate {
     
     let speechKit = OSSSpeech.shared
     

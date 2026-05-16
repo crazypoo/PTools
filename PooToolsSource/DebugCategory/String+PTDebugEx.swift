@@ -9,7 +9,7 @@
 import UIKit
 
 extension String {
-    static var cell = "cell"
+    @MainActor static var cell = "cell"
 
     /// Generates a `UIImage` instance from this string using a specified
     /// attributes and size.

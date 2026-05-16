@@ -785,7 +785,9 @@ open class PTBaseViewController: UIViewController {
 
     deinit {
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .viewCycle)
-        removeFromSuperStatusBar()
+//        Task { @MainActor in
+//            removeFromSuperStatusBar()
+//        }
     }
     
     // MARK: - 子类 override 以决定样式

@@ -12,7 +12,7 @@ import CocoaLumberjack
 import SwifterSwift
 import OSLog
 
-// 🚀 优化点 1：现代化并发。使用 Swift Actor 处理文件写入，天生线程安全，完全取代传统的 DispatchQueue。
+// 🚀 优化点 1：现代化并发，使用 actor 处理文件写入，天生线程安全。
 public actor PTLogFileManager {
     public static let shared = PTLogFileManager()
     private let fileManager = FileManager.default
@@ -30,63 +30,59 @@ public actor PTLogFileManager {
             if !fileManager.fileExists(atPath: logURL.path) {
                 fileManager.createFile(atPath: logURL.path, contents: nil, attributes: nil)
             }
-            // 使用现代 API 处理文件句柄
             let fileHandle = try FileHandle(forWritingTo: logURL)
             defer { try? fileHandle.close() }
             
             try fileHandle.seekToEnd()
             fileHandle.write(data)
         } catch {
-            PTNSLogConsole("❌ [PTLogFileManager] 写入日志文件失败: \(error)")
+            // 内部错误直接使用基础打印，避免循环调用
+            print("❌ [PTLogFileManager] 写入日志文件失败: \(error)")
         }
     }
 }
 
-// 🚀 优化点 2：全局环境状态缓存保持不变，但命名和格式稍微调整，使其更适配新排版。
+// 🚀 优化点 2：使用 Bundle 底层状态判断环境，彻底摆脱对 UIApplication 的 @MainActor 依赖。
+// 这样一来，这段代码在任何线程初始化都不会触发 Swift 6 的严格并发警告。
 private let currentAppEnvironment: String = {
-    let isAppStore = UIApplication.shared.inferredEnvironment_PT == .appStore
-    let isTestFlight = UIApplication.shared.inferredEnvironment_PT == .testFlight
-    if isAppStore { return "生產環境 (App Store)" }
-    if isTestFlight { return "測試環境 (TestFlight)" }
+    #if DEBUG
+    // 只要是 Debug 编译环境，就直接返回，且编译器不会去检查 #else 里面的代码逻辑是否可达
     return "DEBUG 環境"
+    #else
+    // 只有在 Release（发布）环境下，才会编译并执行下方代码来判断是 TestFlight 还是 App Store
+    let isTestFlight = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+    if isTestFlight {
+        return "測試環境 (TestFlight)"
+    }
+    
+    return "生產環境 (App Store)"
+    #endif
 }()
 
 // MARK: - 核心解析工具
-// MARK: - 核心解析工具
 private func convertToJSONString(_ elements: [Any]) -> String {
     return elements.compactMap { element -> String? in
-        // 1. 如果是字符串，尝试判断它是不是一个 JSON 格式的字符串
         if let stringElement = element as? String {
             if let data = stringElement.data(using: .utf8),
                let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
                let prettyStr = prettyJSONString(from: jsonObject) {
-                return prettyStr // 是 JSON 字符串，美化后输出
+                return prettyStr
             }
-            return stringElement // 只是普通字符串，原样返回
-        }
-        // 2. 如果是字典、数组或其他可以被 JSON 序列化的对象
-        else if let prettyStr = prettyJSONString(from: element) {
+            return stringElement
+        } else if let prettyStr = prettyJSONString(from: element) {
             return prettyStr
         }
-        
-        // 3. 其他不支持 JSON 格式化的类型，直接走默认打印
         return "\(element)"
     }.joined(separator: "\n")
 }
 
-// 🚀 新增：原生 JSON 美化工具
 public func prettyJSONString(from object: Any) -> String? {
-    // 确保对象可以被转换为 JSON
     guard JSONSerialization.isValidJSONObject(object) else { return nil }
-    
     do {
-        // 使用 .prettyPrinted 选项来实现多行缩进的美化效果
-        // .withoutEscapingSlashes 可以防止网址中的斜杠 "/" 被转义为 "\/" (iOS 13+ 支持)
         var options: JSONSerialization.WritingOptions = [.prettyPrinted]
         if #available(iOS 13.0, *) {
             options.insert(.withoutEscapingSlashes)
         }
-        
         let data = try JSONSerialization.data(withJSONObject: object, options: options)
         return String(data: data, encoding: .utf8)
     } catch {
@@ -108,6 +104,7 @@ public func PTNSLogConsole(_ any: Any...,
 }
 
 // MARK: - 自定义打印 (主入口)
+// 🚀 优化点 3：这是一个全局无隔离（nonisolated）函数，你可以在任何 Actor 或线程中直接调用，再也不需要包在主线程里！
 public func PTNSLog(_ msg: Any...,
                     isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
                     file: NSString = #file,
@@ -116,14 +113,11 @@ public func PTNSLog(_ msg: Any...,
                     fn: String = #function,
                     levelType: LoggerEXLevelType = .info,
                     loggerType: LoggerEXType = .other) {
-    
-    // 将所有输入转化为格式化良好的字符串
+    // 同步处理字符串转化，因为 msg 数组中可能包含非 Sendable 的类型（Any）
     let msgStr = convertToJSONString(msg)
-    
     let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:mm:ss")
     let fileName = file.lastPathComponent
     
-    // 🚀 优化点 4：重新设计排版！使用分隔符和对齐的方式，极大地提升可读性。
     let logOutput = """
     
     ====================== 🔨 \(currentAppEnvironment) 🔨 ======================
@@ -137,9 +131,8 @@ public func PTNSLog(_ msg: Any...,
     
     """
     
-    // 控制台输出 & OSLog 处理
-    let environment = UIApplication.shared.inferredEnvironment_PT
-    if environment == .appStore {
+    // 🚀 优化点 4：os.Logger 和 DDLog 都是天生线程安全的，直接在当前线程输出，效率最高。
+    if currentAppEnvironment.contains("生產") {
         DDLogSet(levelType: levelType, prefix: logOutput)
     } else {
         Task { @MainActor in
@@ -152,19 +145,20 @@ public func PTNSLog(_ msg: Any...,
             case .trace, .notice, .critical, .fault:
                 logger.notice("\(logOutput)")
             }
-        }
-        
-#if POOTOOLS_DEBUG
-        // 确保 UI 更新在主线程
-        Task { @MainActor in
-            if LocalConsole.shared.isVisiable {
-                LocalConsole.shared.print(logOutput)
+            
+    #if PTOOLS_DEBUG
+            // 🚀 优化点 5：仅针对触及 UI 的 LocalConsole，在内部进行主线程隔离派发。
+            // 这样外部调用者对并发完全无感知！
+            Task { @MainActor in
+                if LocalConsole.shared.isVisiable {
+                    LocalConsole.shared.print(logOutput)
+                }
             }
+    #endif
         }
-#endif
     }
     
-    // 🚀 优化点 5：使用 Task 结合 Actor，优雅地异步写入文件，绝对不阻塞主线程
+    // 异步写入文件，绝对不阻塞任何业务逻辑线程
     if isWriteLog {
         Task {
             await PTLogFileManager.shared.append(logText: logOutput)
@@ -184,7 +178,7 @@ fileprivate func DDLogSet(levelType: LoggerEXLevelType = .info, prefix: String) 
     }
 }
 
-// MARK: - 内存查看工具 (也进行了排版美化)
+// MARK: - 内存查看工具
 public func PTPrintPointer<T>(ptr: UnsafePointer<T>,
                               isWriteLog: Bool = false,
                               file: NSString = #file,
@@ -236,7 +230,9 @@ public enum PTMemAlign : Int {
     case one = 1, two = 2, four = 4, eight = 8
 }
 
-private let _EMPTY_PTR = UnsafeRawPointer(bitPattern: 0x1)!
+private var _EMPTY_PTR: UnsafeRawPointer {
+    return UnsafeRawPointer(bitPattern: 0x1)!
+}
 
 /// 辅助查看内存的小工具类
 public struct PTMems<T> {

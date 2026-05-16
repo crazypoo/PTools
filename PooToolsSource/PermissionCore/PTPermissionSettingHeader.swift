@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-class PTPermissionSettingHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
+class PTPermissionSettingHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
     static let ID = "PTPermissionSettingHeader"
     static public var kind: String { UICollectionView.elementKindSectionHeader }
     static public var reuseID: String { PTPermissionSettingHeader.ID }

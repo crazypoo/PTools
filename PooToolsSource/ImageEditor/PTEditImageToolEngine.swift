@@ -55,7 +55,7 @@ public protocol PTEditImageEngineContext: AnyObject {
 }
 
 // 所有交互式编辑工具（涂鸦、马赛克等）的通用协议
-public protocol PTEditImageToolEngine: AnyObject {
+@MainActor public protocol PTEditImageToolEngine: AnyObject {
     /// 关联的画布视图（引擎在这个视图上进行渲染）
     var canvasView: UIView { get }
     /// 工具被选中时触发
@@ -788,8 +788,10 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     
     private func setupSliderCallbacks() {
         adjustSlider.beginAdjust = { [weak self] in
-            guard let self = self else { return }
-            self.preAdjustStatus = self.currentAdjustStatus
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
+                self.preAdjustStatus = self.currentAdjustStatus
+            }
         }
         
         adjustSlider.valueChanged = { [weak self] value in
@@ -797,11 +799,13 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
         }
         
         adjustSlider.endAdjust = { [weak self] in
-            guard let self = self, let context = self.context else { return }
-            context.engineEditorManager.storeAction(
-                .adjust(oldStatus: self.preAdjustStatus, newStatus: self.currentAdjustStatus)
-            )
-            self.hasAdjustedImage = true
+            Task { @MainActor [weak self] in
+                guard let self = self, let context = self.context else { return }
+                context.engineEditorManager.storeAction(
+                    .adjust(oldStatus: self.preAdjustStatus, newStatus: self.currentAdjustStatus)
+                )
+                self.hasAdjustedImage = true
+            }
         }
     }
     
@@ -899,8 +903,7 @@ public class PTAdjustEngine: NSObject, PTEditImageToolEngine {
     }
 }
 
-@MainActor
-public class PTFilterEngine: NSObject, @preconcurrency PTEditImageToolEngine {
+public class PTFilterEngine: NSObject, PTEditImageToolEngine {
     
     // MARK: - 核心状态
     
@@ -947,23 +950,46 @@ public class PTFilterEngine: NSObject, @preconcurrency PTEditImageToolEngine {
         
         let filters = PTImageEditorConfig.share.filters
         
-        // 1. Task.detached 会将繁重的图片处理任务踢到后台子线程，绝不阻塞主线程 UI
+        // 1. Task.detached 将繁重任务踢到后台
         let thumbnails = await Task.detached(priority: .userInitiated) {
-            var results: [UIImage] = []
             
-            for filter in filters {
-                Task { @MainActor in
-                    PTHarBethFilter.share.texureSize = thumbnailImage.size
-                    results.append(filter.getCurrentFilterImage(image: thumbnailImage))
+            // 🚀 修复核心：使用 withTaskGroup 安全地管理并发任务并收集结果
+            // 声明返回类型为 (Int, UIImage?)，Int 用于记录初始索引以保证排序
+            return await withTaskGroup(of: (Int, UIImage?).self) { group in
+                
+                for (index, filter) in filters.enumerated() {
+                    group.addTask {
+                        // ⚠️ 注意：如果 PTHarBethFilter 单例必须在主线程修改，这里保留 MainActor.run。
+                        // 但如果你发现应用依然卡顿，说明图片处理并未真正放到后台，
+                        // 后续建议将 PTHarBethFilter 的设计改为支持非主线程实例调用。
+                        let image = await MainActor.run {
+                            PTHarBethFilter.share.texureSize = thumbnailImage.size
+                            return filter.getCurrentFilterImage(image: thumbnailImage)
+                        }
+                        return (index, image)
+                    }
                 }
+                
+                // 安全地收集所有子任务的结果
+                var unorderedResults: [(Int, UIImage)] = []
+                
+                // for await 会等待 group 中的任务一个个完成，并将结果安全地（无数据竞争）追加到数组中
+                for await (index, image) in group {
+                    if let img = image {
+                        unorderedResults.append((index, img))
+                    }
+                }
+                
+                // 按照初始的 filters 顺序对结果进行重排
+                unorderedResults.sort { $0.0 < $1.0 }
+                
+                // 剥离索引，只返回纯图片数组
+                return unorderedResults.map { $1 }
             }
-            return results
-        }.value // .value 会等待后台任务执行完毕并返回结果
+        }.value
         
-        // 2. 切回主线程 (MainActor) 更新属性，确保 UI 安全
-        await MainActor.run {
-            self.thumbnailFilterImages = thumbnails
-        }
+        // 2. 方法本身已经是 @MainActor，直接更新属性，UI 绝对安全
+        self.thumbnailFilterImages = thumbnails
     }
     
     /// 切换滤镜

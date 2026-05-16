@@ -116,7 +116,7 @@ class PTImageStickerView: PTBaseStickerView {
     }
 }
 
-public protocol PTStickerViewDelegate: NSObject {
+@MainActor public protocol PTStickerViewDelegate: NSObject {
     /// Called when scale or rotate or move.
     func stickerBeginOperation(_ sticker: PTBaseStickerView)
     
@@ -539,7 +539,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
 }
 
-extension PTBaseStickerView: PTStickerViewAdditional {
+extension PTBaseStickerView: @MainActor PTStickerViewAdditional {
     func resetState() {
         onOperation = false
         cleanTimer()
@@ -1215,7 +1215,7 @@ extension PTEditInputViewController: UITextViewDelegate {
     }
 }
 
-extension PTEditInputViewController: NSLayoutManagerDelegate {
+extension PTEditInputViewController: @MainActor NSLayoutManagerDelegate {
     func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
         guard layoutFinishedFlag else {
             return

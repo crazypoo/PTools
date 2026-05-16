@@ -46,11 +46,11 @@ final class PTCustomHTTPProtocol: URLProtocol {
         return false
     }
 
-    @MainActor  override class func canInit(with request: URLRequest) -> Bool {
+    @MainActor override class func canInit(with request: URLRequest) -> Bool {
         canServeRequest(request)
     }
 
-    @MainActor  override class func canInit(with task: URLSessionTask) -> Bool {
+    @MainActor override class func canInit(with task: URLSessionTask) -> Bool {
         guard let request = task.currentRequest else { return false }
         return canServeRequest(request)
     }

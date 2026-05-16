@@ -12,7 +12,7 @@ import SwifterSwift
 
 // 优化 1：使用 String 作为 RawValue 时，如果不赋值，默认就是 case 的字符串名称
 // 优化 2：将 case 改为小驼峰命名 (lowerCamelCase)，符合 Swift API 设计规范
-public enum LoggerEXType: String, CaseIterable {
+public enum LoggerEXType: String, CaseIterable,Sendable {
     case viewCycle = "ViewCycle"
     case network = "Network"
     case other = "Other"
@@ -57,7 +57,7 @@ public enum LoggerEXType: String, CaseIterable {
 }
 
 // 优化 1：case 改为小驼峰命名
-@objc public enum LoggerEXLevelType: Int, CaseIterable {
+@objc public enum LoggerEXLevelType: Int, CaseIterable, Sendable {
     case debug
     case error
     case info
@@ -68,15 +68,23 @@ public enum LoggerEXType: String, CaseIterable {
     case fault
 }
 
-@MainActor public let PTLogMode: LoggerEXLevelType = {
-    // 优化 3：探讨这里的逻辑。这里我先假设你需要开发环境用 debug，正式环境用 error。
-    // 如果你原本的逻辑是刻意为之，可以改回你的版本。
-    if UIApplication.shared.inferredEnvironment_PT != .appStore {
+public var PTLogMode: LoggerEXLevelType {
+    #if DEBUG
+    // 开发环境直接返回 debug
+    return .debug
+    #else
+    // 通过底层沙盒凭据判断，替代对 UIApplication 的依赖
+    let isTestFlight = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+    if isTestFlight {
+        // 如果你需要 TestFlight 也输出 debug，可以在这里保留；
+        // 如果 TestFlight 视同正式环境，可以改成 .error
         return .debug
     } else {
+        // App Store 正式生产环境
         return .error
     }
-}()
+    #endif
+}
 
 public extension Logger {
     // 优化 4：去掉强制解包 `!`，提供一个安全的默认值 ("com.unknown.app") 防止极端情况崩溃

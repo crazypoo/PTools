@@ -96,7 +96,7 @@ public func PTIVarList(_ className:String) -> [String] {
                 listName.append(String(cString: findName))
             }
             if let type = ivar_getTypeEncoding(ivar),let findName = name {
-                PTNSLogConsole("\(String(cString: findName) + "<---->" + String(cString: type))",levelType: PTLogMode,loggerType: .utils)
+                PTNSLogConsole("\(String(cString: findName) + "<---->" + String(cString: type))",loggerType: .utils)
             }
         }
         free(list)
@@ -114,10 +114,10 @@ public func PTPropertyList(_ classString: String) -> [String] {
         let name = property_getName(property)
         
         if let type = property_getAttributes(property) {
-            PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type))",levelType: PTLogMode,loggerType: .utils)
+            PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type))",loggerType: .utils)
         }
         guard let propertyName = NSString(utf8String: name) as String? else {
-            PTNSLogConsole("Couldn't unwrap property name for \(property)",levelType: PTLogMode,loggerType: .utils)
+            PTNSLogConsole("Couldn't unwrap property name for \(property)",loggerType: .utils)
             break
         }
         propertyListName.append(propertyName)
@@ -133,7 +133,7 @@ public func PTMethodsList(_ classString: String) -> [Selector] {
     for index in 0..<numericCast(methodNum) {
         if let met = methods?[index] {
             let selector = method_getName(met)
-            PTNSLogConsole("\(classString)的方法：\(selector)",levelType: PTLogMode,loggerType: .utils)
+            PTNSLogConsole("\(classString)的方法：\(selector)",loggerType: .utils)
             // list.append(met)
             list.append(selector)
         }

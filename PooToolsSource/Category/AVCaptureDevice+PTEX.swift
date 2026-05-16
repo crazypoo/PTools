@@ -68,7 +68,8 @@ public extension AVCaptureDevice {
         } else {
             selectedFormat = formatWithHighestResolution(availableFormats)
         }
-        PTNSLogConsole("selected format: \(String(describing: selectedFormat))",levelType: PTLogMode,loggerType: .avCaptureDevice)
+        
+        PTNSLogConsole("selected format: \(String(describing: selectedFormat))",loggerType: .avCaptureDevice)
         
         if let selectedFormat = selectedFormat {
             do {

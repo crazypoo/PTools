@@ -25,17 +25,7 @@ public extension UIApplication {
     class func applicationEnvironment() -> Environment {
         UIApplication.shared.inferredEnvironment_PT
     }
-    
-    class func applicationEnvironmentAsync() async -> Environment {
-        // 在主線程異步更新 environment
-        return await withCheckedContinuation { continuation in
-            Task { @MainActor in
-                let environment = UIApplication.shared.inferredEnvironment_PT
-                continuation.resume(returning: environment)
-            }
-        }
-    }
-    
+        
     /// Overrides the user interface style adopted by all windows in all connected scenes.
     /// - Parameter userInterfaceStyle: The user interface style adopted by all windows in all connected scenes.
     func override(_ userInterfaceStyle: UIUserInterfaceStyle) {
@@ -74,7 +64,7 @@ public extension UIApplication {
     /// 使用私有结构体和静态常量来缓存应用信息，确保高开销的 I/O 操作只执行一次
     private struct AppInfoCache {
         
-        static let inferredEnvironment: Environment = {
+        @MainActor static let inferredEnvironment: Environment = {
             #if DEBUG
             return .debug
             #elseif targetEnvironment(simulator)
@@ -149,7 +139,7 @@ public extension PTPOP where Base: UIApplication {
      */
     //MARK: iOS更换App图标
     ///iOS更换App图标
-    static func changeAppIcon(with name:String? = nil) {
+    @MainActor static func changeAppIcon(with name:String? = nil) {
         if UIApplication.shared.supportsAlternateIcons {
             PTNSLogConsole("you can change this app's icon",levelType: PTLogMode,loggerType: .uiApplication)
         } else {
@@ -159,19 +149,20 @@ public extension PTPOP where Base: UIApplication {
         
         UIApplication.shared.setAlternateIconName(name) { error in
             if error != nil {
-                UIViewController.gobal_drop(title: error.debugDescription)
-
+                Task { @MainActor in
+                    UIViewController.gobal_drop(title: error.debugDescription)
+                }
             }
-            PTNSLogConsole("The alternate icon's name is \(String(describing: name))",levelType: PTLogMode,loggerType: .uiApplication)
+            Task { @MainActor in
+                PTNSLogConsole("The alternate icon's name is \(String(describing: name))",levelType: PTLogMode,loggerType: .uiApplication)
+            }
         }
     }
     
     //MARK: 类似iPhone点击了Home键
     ///类似iPhone点击了Home键
-    static func likeTapHome() {
-        Task { @MainActor in
-            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
-        }
+    @MainActor static func likeTapHome() {
+        UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
     }
     
     /// app定位区域
