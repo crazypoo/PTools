@@ -22,7 +22,7 @@ extension UIControl.ContentHorizontalAlignment: @retroactive CaseIterable {
 }
 
 extension UIControl.ContentHorizontalAlignment: CustomImageConvertible {
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .leading:
             return IconKit.imageOfHorizontalAlignmentLeading()
@@ -60,7 +60,7 @@ extension UIControl.ContentVerticalAlignment: @retroactive CaseIterable {
 }
 
 extension UIControl.ContentVerticalAlignment: CustomImageConvertible {
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .center:
             return IconKit.imageOfVerticalAlignmentCenter()

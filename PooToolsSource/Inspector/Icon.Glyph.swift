@@ -17,7 +17,7 @@ extension Icon {
         case search
         case sliderHorizontal
 
-        func draw(color: UIColor, frame: CGRect, resizing: IconKit.ResizingBehavior) {
+        @MainActor func draw(color: UIColor, frame: CGRect, resizing: IconKit.ResizingBehavior) {
             switch self {
             case .sliderHorizontal:
                 IconKit.drawSliderHorizontal(color: color, frame: frame, resizing: resizing)

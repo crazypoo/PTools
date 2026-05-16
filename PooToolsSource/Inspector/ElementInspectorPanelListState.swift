@@ -6,7 +6,7 @@
 
 import UIKit
 
-enum ElementInspectorPanelListState: Swift.CaseIterable, MenuContentProtocol {
+enum ElementInspectorPanelListState: Swift.CaseIterable, @MainActor MenuContentProtocol {
     case allCollapsed, firstExpanded, mixed, allExpanded
 
     func next() -> Self? {

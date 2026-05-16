@@ -89,7 +89,7 @@ enum ThumbnailBackgroundStyle: Hashable, CaseIterable, RawRepresentable {
         }
     }
 
-    var image: UIImage {
+    @MainActor var image: UIImage {
         switch self {
         case .strong:
             return IconKit.imageOfAppearanceLight().withRenderingMode(.alwaysTemplate)

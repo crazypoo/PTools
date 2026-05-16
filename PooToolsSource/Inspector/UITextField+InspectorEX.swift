@@ -237,7 +237,7 @@ extension UITextField.BorderStyle: @retroactive CaseIterable {
 }
 
 extension UITextField.BorderStyle: CustomImageConvertible {
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .none:
             return IconKit.imageOfBorderStyleNone()

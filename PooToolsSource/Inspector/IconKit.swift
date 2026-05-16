@@ -6,6 +6,7 @@
 
 import UIKit
 
+@MainActor
 class IconKit: NSObject {
     // MARK: - Canvas Drawings
 
@@ -1993,7 +1994,7 @@ class IconKit: NSObject {
 
     class func imageOfBorderStyleRoundedRect() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2011,7 +2012,7 @@ class IconKit: NSObject {
 
     class func imageOfBorderStyleBezel() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2029,7 +2030,7 @@ class IconKit: NSObject {
 
     class func imageOfBorderStyleLine() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2047,7 +2048,7 @@ class IconKit: NSObject {
 
     class func imageOfBorderStyleNone() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2065,7 +2066,7 @@ class IconKit: NSObject {
 
     class func imageOfTextAlignmentNatural() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2083,7 +2084,7 @@ class IconKit: NSObject {
 
     class func imageOfTextAlignmentJustified() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2101,7 +2102,7 @@ class IconKit: NSObject {
 
     class func imageOfTextAlignmentRight() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2119,7 +2120,7 @@ class IconKit: NSObject {
 
     class func imageOfTextAlignmentCenter() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2137,7 +2138,7 @@ class IconKit: NSObject {
 
     class func imageOfAppearanceDark() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2155,7 +2156,7 @@ class IconKit: NSObject {
 
     class func imageOfAppearanceMedium() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2173,7 +2174,7 @@ class IconKit: NSObject {
 
     class func imageOfSliderHorizontal() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2191,7 +2192,7 @@ class IconKit: NSObject {
 
     class func imageOfSetSquareFill() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2209,7 +2210,7 @@ class IconKit: NSObject {
 
     class func imageOfAppearanceLight() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2227,7 +2228,7 @@ class IconKit: NSObject {
 
     class func imageOfTextAlignmentLeft() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2245,7 +2246,7 @@ class IconKit: NSObject {
 
     class func imageOfColorGrid() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2263,7 +2264,7 @@ class IconKit: NSObject {
 
     class func imageOfVerticalAlignmentTop() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2281,7 +2282,7 @@ class IconKit: NSObject {
 
     class func imageOfVerticalAlignmentCenter() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2299,7 +2300,7 @@ class IconKit: NSObject {
 
     class func imageOfVerticalAlignmentBottom() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2317,7 +2318,7 @@ class IconKit: NSObject {
 
     class func imageOfVerticalAlignmentFill() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2335,7 +2336,7 @@ class IconKit: NSObject {
 
     class func imageOfHorizontalAlignmentFill() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2353,7 +2354,7 @@ class IconKit: NSObject {
 
     class func imageOfHorizontalAlignmentRight() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2371,7 +2372,7 @@ class IconKit: NSObject {
 
     class func imageOfHorizontalAlignmentTrailing() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2389,7 +2390,7 @@ class IconKit: NSObject {
 
     class func imageOfHorizontalAlignmentCenter() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2407,7 +2408,7 @@ class IconKit: NSObject {
 
     class func imageOfHorizontalAlignmentLeft() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2425,7 +2426,7 @@ class IconKit: NSObject {
 
     class func imageOfHorizontalAlignmentLeading() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2443,7 +2444,7 @@ class IconKit: NSObject {
 
     class func imageOfWifiExlusionMark(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2461,7 +2462,7 @@ class IconKit: NSObject {
 
     class func imageOfEyeSlashFill(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2479,7 +2480,7 @@ class IconKit: NSObject {
 
     class func imageOfRelationshipDiagram(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2497,7 +2498,7 @@ class IconKit: NSObject {
 
     class func imageOfInfoCircleFill(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2515,7 +2516,7 @@ class IconKit: NSObject {
 
     class func imageOfChevronUpDown(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2533,7 +2534,7 @@ class IconKit: NSObject {
 
     class func imageOfSizeArrowVertical() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2551,7 +2552,7 @@ class IconKit: NSObject {
 
     class func imageOfSizeArrowHorizontal() -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2569,7 +2570,7 @@ class IconKit: NSObject {
 
     class func imageOfChevronRight(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage? {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2588,7 +2589,7 @@ class IconKit: NSObject {
 
     class func imageOfChevronLeft(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage? {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2607,7 +2608,7 @@ class IconKit: NSObject {
 
     class func imageOfChevronDown(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
@@ -2625,7 +2626,7 @@ class IconKit: NSObject {
 
     class func imageOfSearch(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage {
         enum LocalCache {
-            static var image: UIImage!
+            @MainActor static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image

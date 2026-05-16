@@ -29,7 +29,7 @@ extension DefaultElementAttributesLibrary {
             case isHighlighted = "Highlighted"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let control = control else { return [] }
 
             return Property.allCases.compactMap { property in

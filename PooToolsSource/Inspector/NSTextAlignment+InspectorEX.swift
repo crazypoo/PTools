@@ -21,7 +21,7 @@ extension NSTextAlignment: @retroactive CaseIterable {
 }
 
 extension NSTextAlignment: CustomImageConvertible {
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         switch self {
         case .left:
             return IconKit.imageOfTextAlignmentLeft()
