@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias PTServiceCreator = () -> Any
+public typealias PTServiceCreator = () -> Sendable
 
 // 1. 服务生命周期定义
 public enum PTServiceScope {
@@ -23,7 +23,7 @@ public actor PTRouterServiceManager {
     // 存储结构优化：同时保存 Scope 和 Creator
     // ⚠️ 注意：再也没有 serviceQueue 了！
     private var creatorsMap: [String: (scope: PTServiceScope, creator: PTServiceCreator)] = [:]
-    private var servicesCache: [String: Any] = [:]
+    private var servicesCache: [String: Sendable] = [:]
     
     private init() {}
     
@@ -33,7 +33,7 @@ public actor PTRouterServiceManager {
         creatorsMap[key] = (scope, creator)
     }
     
-    public func getService<Service>(_ serviceType: Service.Type) -> Service? {
+    public func getService<Service: Sendable>(_ serviceType: Service.Type) -> Service? {
         let key = PTRouterServiceManager.serviceName(of: serviceType)
         
         // 1. 查单例缓存
@@ -66,7 +66,7 @@ public extension PTRouterServiceManager {
         self.creatorsMap[named] = (scope, creator)
     }
     
-    func registerService(named: String, instance: Any) {
+    func registerService(named: String, instance: Sendable) {
         // 直接传实例的话，强制当做 singleton 存入缓存
         self.servicesCache[named] = instance
     }
@@ -79,7 +79,7 @@ public extension PTRouterServiceManager {
         registerService(named: PTRouterServiceManager.serviceName(of: service), scope: scope, creator: lazyCreator)
     }
     
-    func registerService<Service>(_ service: Service.Type, instance: Service) {
+    func registerService<Service: Sendable>(_ service: Service.Type, instance: Service) {
         registerService(named: PTRouterServiceManager.serviceName(of: service), instance: instance)
     }
     
@@ -114,7 +114,7 @@ public extension PTRouterServiceManager {
 
 // MARK: - Service Create & Fetch (按字符串)
 public extension PTRouterServiceManager {
-    func createService(named: String) -> Any? {
+    func createService(named: String) -> (Any & Sendable)? {
         // 1. 检查是否有缓存
         if let service = servicesCache[named] {
             return service
@@ -136,7 +136,7 @@ public extension PTRouterServiceManager {
         return service
     }
     
-    func getService(named: String) -> Any? {
+    func getService(named: String) -> (Any & Sendable)? {
         return createService(named: named)
     }
 }

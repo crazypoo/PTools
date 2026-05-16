@@ -51,7 +51,7 @@ public class PTRouterPattern {
     }
     
     /// 匹配传入的真实 URL，并返回提取的参数字典
-    public func matchResult(for requestURL: String) -> (matched: Bool, queries: [String: Any]) {
+    public func matchResult(for requestURL: String) -> (matched: Bool, queries: [String: Sendable]) {
         guard let regex = self.regex else { return (false, [:]) }
         
         let nsString = requestURL as NSString
@@ -61,7 +61,7 @@ public class PTRouterPattern {
         }
         
         // 匹配成功，开始提取参数
-        var extractedQueries: [String: Any] = [:]
+        var extractedQueries: [String: Sendable] = [:]
         
         // NSRegularExpression 的 range(at: 0) 是整个匹配串，捕获组从 1 开始
         for (index, name) in paramNames.enumerated() {

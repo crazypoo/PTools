@@ -131,7 +131,7 @@ public let PTRouterTabBarSelecIndex = "tabBarSelecIndex"
 //路由优先级默认值
 public let PTRouterDefaultPriority: UInt = 1000
 
-public typealias ComplateHandler = (([String: Any]?, Any?) -> Void)?
+public typealias ComplateHandler = (@MainActor ([String: Any]?, Any?) -> Void)?
 
 public enum PTRouterError: Error, LocalizedError {
     case notFound(url: String)
@@ -150,7 +150,7 @@ public enum PTRouterError: Error, LocalizedError {
 }
 
 // 定义一个封装类来存储和执行接受参数的闭包
-public class PTRouerParamsClosureWrapper: NSObject {
+public class PTRouerParamsClosureWrapper: NSObject,@unchecked Sendable {
     public var closure: ((Any) -> Void)?
 
     public init(closure: @escaping (Any) -> Void) {
@@ -162,20 +162,21 @@ public class PTRouerParamsClosureWrapper: NSObject {
     }
 }
 
+@MainActor
 public class PTRouter: PTRouterParser {
     
     /// 全局自定义导航栏容器类型（默认兜底为系统 UINavigationController）
     public var customNavClass: UINavigationController.Type = UINavigationController.self
 
     // MARK: - Constants
-    public typealias FailedHandleBlock = ([String: Any]) -> Void
+    public typealias FailedHandleBlock = @MainActor ([String: Any]) -> Void
     public typealias RouteResponse = (pattern: PTRouterPattern?, queries: [String: Any])
     public typealias MatchResult = (matched: Bool, queries: [String: Any])
-    public typealias LazyRegisterHandleBlock = (_ url: String, _ userInfo: [String: Any]) -> Any?
-    public typealias RouterLogHandleBlock = (_ url: String, _ logType: PTRouterLogType, _ errorMsg: String) -> Void
+    public typealias LazyRegisterHandleBlock = @MainActor (_ url: String, _ userInfo: [String: Any]) -> Any?
+    public typealias RouterLogHandleBlock = @MainActor (_ url: String, _ logType: PTRouterLogType, _ errorMsg: String) -> Void
     
     // MARK: - 自定义跳转
-    public typealias CustomJumpActionClouse = (PTJumpType, UIViewController) -> Void
+    public typealias CustomJumpActionClouse = @MainActor (PTJumpType, UIViewController) -> Void
 
     // MARK: - Private property
     // 存储新的异步拦截器
@@ -246,18 +247,18 @@ public class PTRouter: PTRouterParser {
         return await PTRouter.matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces)).pattern != nil
     }
     
-    func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
+    func requestURL(_ urlString: String, userInfo: [String: Sendable] = [String: Sendable]()) async -> RouteResponse {
         await PTRouter.matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
     // MARK: - Private method
-    private class func matchURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
+    private class func matchURL(_ urlString: String, userInfo: [String: Sendable] = [String: Sendable]()) async -> RouteResponse {
         
         let request = PTRouterRequest(urlString)
         // queries 包含了 ? 后面跟随的基础参数 (比如 scheme://user/123?from=home 里的 from=home)
         var queries = request.queries
         var matched: PTRouterPattern?
-        var matchUserInfo: [String: Any] = userInfo
+        var matchUserInfo: [String: Sendable] = userInfo
         
         // 1. 处理动态重定向 (Relocation)
         let relocationMap = shareInstance.reloadRouterMap(PTRouter.shareInstance.reloadRouterMap, url: urlString)
@@ -266,7 +267,7 @@ public class PTRouter: PTRouterParser {
            let firstMatched = shareInstance.patterns.first(where: { $0.patternString == url }) {
             // 命中重定向
             matched = firstMatched
-            if let relocationUserInfo = relocationMap[PTRouter.userInfoKey] as? [String: Any] {
+            if let relocationUserInfo = relocationMap[PTRouter.userInfoKey] as? [String: Sendable] {
                 matchUserInfo = relocationUserInfo
             }
         } else {
@@ -302,7 +303,7 @@ public class PTRouter: PTRouterParser {
         
         // 3. 匹配失败处理
         guard let currentPattern = matched else {
-            var info: [String: Any] = [PTRouter.matchFailedKey: urlString]
+            var info: [String: Sendable] = [PTRouter.matchFailedKey: urlString]
             info.merge(matchUserInfo) { current, _ in current }
             shareInstance.globalOpenFailedHandler?(info)
             shareInstance.logcat?(urlString, .logError, "not matched, please check the router register is all ready")
@@ -338,11 +339,14 @@ public class PTRouter: PTRouterParser {
     }
         
     /// 执行异步拦截检查
-    private class func executeAsyncIntercept(_ path: String, queries: [String: Any]) async -> Bool {
-        for interceptor in asyncInterceptors {
+    private class func executeAsyncIntercept(_ path: String, queries: [String: Sendable]) async -> Bool {
+        let interceptorsSnapshot = asyncInterceptors
+        
+        for interceptor in interceptorsSnapshot {
             // 如果不在白名单内，执行拦截
             if !interceptor.whiteList.contains(path) {
                 do {
+                    // 因为 interceptor 已经是 Sendable，跨越 await 不再会报 Data Race
                     let shouldContinue = try await interceptor.handle(queries: queries)
                     if !shouldContinue { return false }
                 } catch {
@@ -482,7 +486,7 @@ public extension PTRouter {
     ///   - urlString: real request urlstring
     ///   - userInfo: custom userInfo, could contain Object
     /// - Returns: response for request, contain pattern and queries
-    class func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> RouteResponse {
+    class func requestURL(_ urlString: String, userInfo: [String: Sendable] = [String: Sendable]()) async -> RouteResponse {
         await shareInstance.requestURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
@@ -578,6 +582,7 @@ extension PTRouter {
     
 }
 
+@MainActor
 public protocol CustomRouterInfo {
     static var patternString: String { get }
     static var routerClass: String { get }
@@ -673,7 +678,7 @@ extension PTRouter {
     
     @discardableResult
     @MainActor
-    public class func openURLVC(_ urlString: String, userInfo: [String: Any] = [:]) async throws -> UIViewController {
+    public class func openURLVC(_ urlString: String, userInfo: [String: Sendable] = [:]) async throws -> UIViewController {
         
         // 1. 拦截器检查
         let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
@@ -720,7 +725,7 @@ extension PTRouter {
 
     @discardableResult
     @MainActor // 确保 UI 跳转在主线程
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [:]) async throws -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: Sendable] = [:]) async throws -> Any? {
         // 1. 执行异步拦截检查
         let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
         guard canContinue else {
@@ -732,7 +737,7 @@ extension PTRouter {
     }
 
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async throws -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: Sendable] = [String: Sendable](), complateHandler: ComplateHandler = nil) async throws -> Any? {
         if urlString.isEmpty {
             throw PTRouterError.notFound(url: urlString)
         }
@@ -744,7 +749,7 @@ extension PTRouter {
     }
     
     @discardableResult
-    public class func openURL(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func openURL(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
         if !shareInstance.routerLoaded {
             return shareInstance.lazyRegisterHandleBlock?(uriTuple.0, uriTuple.1)
         } else {
@@ -753,18 +758,18 @@ extension PTRouter {
     }
     
     @discardableResult
-    public class func openWebURL(_ uriTuple: (String, [String: Any])) async -> Any? {
+    public class func openWebURL(_ uriTuple: (String, [String: Sendable])) async -> Any? {
         await PTRouter.openURL(uriTuple)
     }
     
     @discardableResult
     public class func openWebURL(_ urlString: String,
-                                 userInfo: [String: Any] = [String: Any]()) async -> Any? {
+                                 userInfo: [String: Sendable] = [String: Sendable]()) async -> Any? {
         await PTRouter.openURL((urlString, userInfo))
     }
     
     @MainActor
-    public class func openCacheRouter(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func openCacheRouter(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
         
         if uriTuple.0.isEmpty {
             return nil
@@ -778,7 +783,7 @@ extension PTRouter {
     }
     
     // 重构你的 routerJump 方法
-    public class func routerJump(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func routerJump(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
         
         let response = await PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
         let queries = response.queries
@@ -805,7 +810,7 @@ extension PTRouter {
             shareInstance.logcat?(uriTuple.0, .logNormal, "使用 PTRoutableController 协议安全初始化")
         } else {
             // 降级兜底方案：走原有的旧逻辑 (init() + KVC)
-            resultVC = await vcClass.init()
+            resultVC = vcClass.init()
             Task { @MainActor in
                 _ = resultVC.setPropertyParameter(queries)
                 shareInstance.logcat?(uriTuple.0, .logNormal, "降级使用 KVC 赋值初始化")
@@ -945,65 +950,63 @@ extension PTRouter {
     }
 }
 
-//MARK: Service
+// MARK: Service
 public extension PTRouter {
     // MARK: - Register With Service Name
-    /// 通过服务名称(named)注册LAServiceCreator
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - creator: 服务构造者
-    class func registerService(named: String, creator: @escaping PTServiceCreator) {
+    
+    // 🌟 修复 1：把原来可能定义为别名的 PTServiceCreator 直接展开为 @Sendable 闭包，并返回 Any & Sendable
+    /// 通过服务名称(named)注册 Creator
+    class func registerService(named: String, creator: @escaping @Sendable () -> (Any & Sendable)) {
         Task {
             await PTRouterServiceManager.shared.registerService(named: named, creator: creator)
         }
     }
     
+    // 🌟 修复 2：将 Any 升级为 Any & Sendable
     /// 通过服务名称(named)注册一个服务实例 (存在缓存中)
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - instance: 服务实例
-    class func registerService(named: String, instance: Any) {
+    class func registerService(named: String, instance: Any & Sendable) {
         Task {
             await PTRouterServiceManager.shared.registerService(named: named, instance: instance)
         }
     }
     
-    /// 通过服务名称(named)注册LAServiceCreator
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
-    class func registerService(named: String, lazyCreator: @escaping @autoclosure PTServiceCreator) {
+    /// 通过服务名称(named)注册懒加载 Creator
+    class func registerService(named: String, lazyCreator: @escaping @autoclosure @Sendable () -> (Any & Sendable)) {
+        // 🌟 修复关键 1：在进入 Task 之前，将 autoclosure 显式声明并转换为标准的 @Sendable 闭包快照
+        // 这向编译器发出了强烈的信号：这个闭包是绝对线程安全的！
+        let safeCreator: @Sendable () -> (Any & Sendable) = lazyCreator
+        
         Task {
-            await PTRouterServiceManager.shared.registerService(named: named, lazyCreator: lazyCreator)
+            // 🌟 修复关键 2：直接调用 manager 的 creator 注册方法！
+            // 因为 safeCreator 本质就是一个闭包，这样就避免了在传递时被错误执行求值
+            await PTRouterServiceManager.shared.registerService(named: named, creator: safeCreator)
         }
     }
+
     
     // MARK: - Register With Service Type
-    /// 通过服务接口注册LAServiceCreator
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - creator: 服务构造者
-    class func registerService<Service>(_ service: Service.Type, creator: @escaping () -> Service) {
+    
+    // 🌟 修复 3：给泛型 Service 加上 Sendable 约束
+    /// 通过服务接口注册 Creator
+    class func registerService<Service: Sendable>(_ service: Service.Type, creator: @escaping @Sendable () -> Service) {
         Task {
             await PTRouterServiceManager.shared.registerService(service, creator: creator)
         }
     }
     
-    /// 通过服务接口注册LAServiceCreator
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - lazyCreator: 延迟实例化构造者 (如：```registerService(named: "A", lazyCreator: A())```)
-    class func registerService<Service>(_ service: Service.Type, lazyCreator: @escaping @autoclosure () -> Service) {
+    /// 通过服务接口注册懒加载 Creator
+    class func registerService<Service: Sendable>(_ service: Service.Type, lazyCreator: @escaping @autoclosure @Sendable () -> Service) {
+        // 🌟 同样的处理方式，显式保留 Sendable 属性
+        let safeCreator: @Sendable () -> Service = lazyCreator
+        
         Task {
-            await PTRouterServiceManager.shared.registerService(service, lazyCreator: lazyCreator())
+            // 完美桥接底层的 creator 方法
+            await PTRouterServiceManager.shared.registerService(service, creator: safeCreator)
         }
     }
     
     /// 通过服务接口注册一个服务实例 (存在缓存中)
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - instance: 服务实例
-    class func registerService<Service>(_ service: Service.Type, instance: Service) {
+    class func registerService<Service: Sendable>(_ service: Service.Type, instance: Service) {
         Task {
             await PTRouterServiceManager.shared.registerService(service, instance: instance)
         }
@@ -1012,40 +1015,31 @@ public extension PTRouter {
 
 public extension PTRouter {
     
-    /// 根据服务名称创建服务（如果缓存中已有服务实例，则不需要创建）
-    /// - Parameters:
-    ///   - named: 服务名称
-    ///   - shouldCache: 是否需要缓存
+    // 🌟 修复 4：解决最核心的返回值报错！将 Any? 改为 (Any & Sendable)?
+    /// 根据服务名称创建服务
+    @MainActor
     @discardableResult
-    class func createService(named: String, shouldCache: Bool = true) -> Any? {
-        Task {
-            await PTRouterServiceManager.shared.createService(named: named)
-        }
+    class func createService(named: String, shouldCache: Bool = true) async -> (Any & Sendable)? {
+        await PTRouterServiceManager.shared.createService(named: named)
     }
     
-    /// 根据服务接口创建服务（如果缓存中已有服务实例，则不需要创建）
-    /// - Parameters:
-    ///   - service: 服务接口
-    ///   - shouldCache: 是否需要缓存
+    // 🌟 修复 5：同步给泛型添加约束
+    /// 根据服务接口创建服务
     @discardableResult
-    class func createService<Service>(_ service: Service.Type) async -> Service? {
-        // 直接调用底层 actor 极其安全的强类型泛型方法
+    class func createService<Service: Sendable>(_ service: Service.Type) async -> Service? {
         return await PTRouterServiceManager.shared.getService(service)
     }
 
     /// 通过服务名称获取服务
-    /// - Parameter named: 服务名称
+    @MainActor
     @discardableResult
-    class func getService(named: String) -> Any? {
-        Task {
-            await PTRouterServiceManager.shared.getService(named: named)
-        }
+    class func getService(named: String) async -> (Any & Sendable)? {
+        await PTRouterServiceManager.shared.getService(named: named)
     }
     
     /// 通过服务接口获取服务
-    /// - Parameter service: 服务接口
     @discardableResult
-    class func getService<Service>(_ service: Service.Type) async -> Service? {
+    class func getService<Service: Sendable>(_ service: Service.Type) async -> Service? {
         return await PTRouterServiceManager.shared.getService(service)
     }
 }

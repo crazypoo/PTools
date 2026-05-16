@@ -272,17 +272,19 @@ class AppDelegate: PTAppWindowsDelegate {
 
         PTRouter.shareInstance.customNavClass = PTBaseNavControl.self
         PTRouter.shareInstance.webPath = "scheme://webview/home"
-        let loginInterceptor = PTLoginInterceptor()
+        var valuePaths = [String]()
+        var loginInterceptor = PTLoginInterceptor()
         PTRouteViewController.patternString.forEach { value in
             PTRouter.addRouterItem(value, classString: NSStringFromClass(PTRouteViewController.self))
-            loginInterceptor.whiteList.append(value)
+            valuePaths.append(value)
         }
         
         PTTestLoginViewController.patternString.forEach { value in
             PTRouter.addRouterItem(value, classString: NSStringFromClass(PTTestLoginViewController.self))
-            loginInterceptor.whiteList.append(value)
+            valuePaths.append(value)
         }
-        loginInterceptor.whiteList.removeDuplicates()
+        valuePaths.removeDuplicates()
+        loginInterceptor.addWhiteListPaths(valuePaths)
         PTRouter.addAsyncInterceptor(loginInterceptor)
         return true
     }

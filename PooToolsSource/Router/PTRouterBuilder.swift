@@ -65,14 +65,14 @@ extension PTRouterBuilder {
         buildResult.0 = path
     }
     
-    @discardableResult
+    @MainActor @discardableResult
     public func buildService<PTRouterServiceProtocol>(_ protocolInstance: PTRouterServiceProtocol.Type, methodName: String) -> Self {
         let protocolName = String(describing: protocolInstance)
         buildResult.0 = "\(PTRouter.shareInstance.serviceHost)protocol=\(protocolName)&method=\(methodName)"
         return self
     }
     
-    @discardableResult
+    @MainActor @discardableResult
     public func buildServicePath<PTRouterServiceProtocol>(_ protocolInstance: PTRouterServiceProtocol.Type, methodName: String) -> String {
         let protocolName = String(describing: protocolInstance)
         return "\(PTRouter.shareInstance.serviceHost)protocol=\(protocolName)&method=\(methodName)"
@@ -92,8 +92,8 @@ extension PTRouterBuilder {
     
     @discardableResult
     public func fetchService() async -> Any? {
-        let result = PTRouter.generate(buildResult.0, params: buildResult.1, jumpType: .push)
-        PTRouter.shareInstance.logcat?(buildResult.0, .logNormal, "")
+        let result = await PTRouter.generate(buildResult.0, params: buildResult.1, jumpType: .push)
+        await PTRouter.shareInstance.logcat?(buildResult.0, .logNormal, "")
         return await PTRouter.openURL(result)
     }
     

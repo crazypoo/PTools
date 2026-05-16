@@ -9,12 +9,12 @@
 import Foundation
 
 /// 异步拦截器协议
-public protocol PTRouterAsyncInterceptor {
+public protocol PTRouterAsyncInterceptor: Sendable {
     /// 优先级：数字越大越先执行
     var priority: UInt { get }
     /// 白名单：哪些路径不需要拦截
     var whiteList: [String] { get }
     
     /// 拦截逻辑：返回 true 继续，返回 false 或抛出错误则中断
-    func handle(queries: [String: Any]) async throws -> Bool
+    func handle(queries: [String: Sendable]) async throws -> Bool
 }

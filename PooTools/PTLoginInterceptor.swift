@@ -14,17 +14,39 @@ class PTTestGlobalFunction:NSObject {
     var isLogin = false
 }
 
-class PTLoginInterceptor: PTRouterAsyncInterceptor {
-    public var priority: UInt = 100 // 设置一个高优先级
+final class PTLoginInterceptor: PTRouterAsyncInterceptor, @unchecked Sendable {
+    public let priority: UInt = 100
     
-    // 登录页、注册页、首页等通常在白名单内
-    public var whiteList: [String] = [
-        "ptools://login",
+    private var _whiteList: [String] = [
+        "ptools://login"
     ]
+    
+    // 🌟 优化 3：声明一把互斥锁，保护数组的读写
+    private let lock = NSLock()
 
-    public func handle(queries: [String: Any]) async throws -> Bool {
+    // 🌟 优化 4：对外暴露的只读属性，满足 PTRouterAsyncInterceptor 协议
+    public var whiteList: [String] {
+        lock.lock() // 读之前上锁
+        defer { lock.unlock() } // 读完自动解锁
+        return _whiteList
+    }
+    
+    // 🌟 新增：专门暴露给外部使用的安全添加方法
+    public func addWhiteListPaths(_ paths: [String]) {
+        lock.lock() // 写之前上锁
+        defer { lock.unlock() } // 写完自动解锁
+        
+        for path in paths {
+            if !_whiteList.contains(path) {
+                _whiteList.append(path)
+            }
+        }
+    }
+
+    @MainActor
+    public func handle(queries: [String: Sendable]) async throws -> Bool {
         // 1. 检查本地登录状态 (假设你有 UserManager)
-        if await PTTestGlobalFunction.shared.isLogin {
+        if PTTestGlobalFunction.shared.isLogin {
             return true // 已登录，放行
         }
         

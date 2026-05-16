@@ -8,12 +8,12 @@
 
 import Foundation
 
-class PTRouterRequest: PTRouterParser {
+class PTRouterRequest: PTRouterParser {    
     
     var urlString: String
     var sheme: String
     var paths: [String]
-    var queries: [String: Any]
+    var queries: [String: Sendable]
     
     init(_ urlString: String) {
         self.urlString = urlString

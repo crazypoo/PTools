@@ -10,17 +10,17 @@ import Foundation
 
 protocol PTRouterParser {
     
-    typealias ParserResult = (paths: [String], queries: [String: Any])
+    typealias ParserResult = (paths: [String], queries: [String: Sendable])
     // 不做百分号转义
     static func parser(_ url: URL) -> ParserResult
     static func parserSheme(_ url: URL) -> String
     static func parserPaths(_ url: URL) -> [String]
-    static func parserQuerys(_ url: URL) -> [String: Any]
+    static func parserQuerys(_ url: URL) -> [String: Sendable]
     // 做百分号转义
     static func parser(_ urlString: String) -> ParserResult
     static func parserSheme(_ urlString: String) -> String
     static func parserPaths(_ urlString: String) -> [String]
-    static func parserQuerys(_ urlString: String) -> [String: Any]
+    static func parserQuerys(_ urlString: String) -> [String: Sendable]
 }
 
 extension PTRouterParser {
@@ -43,12 +43,12 @@ extension PTRouterParser {
         return paths
     }
     
-    static func parserQuerys(_ url: URL) -> [String: Any] {
+    static func parserQuerys(_ url: URL) -> [String: Sendable] {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            return [String: Any]()
+            return [String: Sendable]()
         }
         let query = routerParserQuery(components)
-        return (query as [String: Any])
+        return (query as [String: Sendable])
     }
     
     static func parser(_ urlString: String) -> ParserResult {
@@ -76,8 +76,8 @@ extension PTRouterParser {
         return paths
     }
     
-    static func parserQuerys(_ urlString: String) -> [String: Any] {
-        var queries = [String: Any]()
+    static func parserQuerys(_ urlString: String) -> [String: Sendable] {
+        var queries = [String: Sendable]()
         
         urlString.components(separatedBy: "#").forEach { componentString in
             if let url = canOpenURLString(componentString) {
@@ -109,14 +109,14 @@ extension PTRouterParser {
     }
     
     /// 解析Query
-    private static func routerParserQuery(_ components: URLComponents) -> [String: Any] {
+    private static func routerParserQuery(_ components: URLComponents) -> [String: Sendable] {
         
         guard let items = components.queryItems,
               items.count > 0 else {
             return [:]
         }
         
-        var queries = [String: Any]()
+        var queries = [String: Sendable]()
         items.forEach { (item) in
             if let value = item.value {
                 queries[item.name] = value

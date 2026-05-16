@@ -20,7 +20,7 @@ extension NSTextAlignment: @retroactive CaseIterable {
     ]
 }
 
-extension NSTextAlignment: CustomImageConvertible {
+extension NSTextAlignment: @MainActor CustomImageConvertible {
     @MainActor var image: UIImage? {
         switch self {
         case .left:
