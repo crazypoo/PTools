@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreMotion
+@preconcurrency import CoreMotion
 
 public typealias PTMotionBlock = (_ step: Int, _ confidence: String, _ status: String) -> Void
 

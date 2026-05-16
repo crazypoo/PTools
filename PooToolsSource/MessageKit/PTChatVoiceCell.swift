@@ -194,7 +194,7 @@ public class PTChatVoiceCell: PTChatBaseCell {
     }
 }
 
-extension PTChatVoiceCell:AVAudioPlayerDelegate {
+extension PTChatVoiceCell:@preconcurrency AVAudioPlayerDelegate {
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         stopPlaying()
     }

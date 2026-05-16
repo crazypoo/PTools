@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ControlAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class ControlAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Control"

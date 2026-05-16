@@ -250,6 +250,7 @@ public protocol PTDebugPlugin {
     var action: UIAction { get }
 }
 
+@MainActor
 final class PTDebugPluginManager {
     
     static let shared = PTDebugPluginManager()
@@ -287,9 +288,10 @@ final class PTDebugPluginManager {
 
 public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL) -> Void
 
+@MainActor
 @objcMembers
 public class LocalConsole: NSObject {
-    @MainActor public static let shared = LocalConsole()
+    public static let shared = LocalConsole()
             
     // 新增一个游标，记录已经渲染到 UI 的日志索引
     private var lastFlushedIndex: Int = 0
@@ -964,10 +966,12 @@ extension LocalConsole {
     }
     
     func colorAction() {
-        if PTColorPickPlugin.share.showed {
-            PTColorPickPlugin.share.close()
-        } else {
-            PTColorPickPlugin.share.show()
+        Task { @MainActor in
+            if PTColorPickPlugin.share.showed {
+                PTColorPickPlugin.share.close()
+            } else {
+                PTColorPickPlugin.share.show()
+            }
         }
     }
         
