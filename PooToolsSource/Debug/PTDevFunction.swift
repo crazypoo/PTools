@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 
+@MainActor
 @objcMembers
 public class PTDevFunction: NSObject {
     public static let share = PTDevFunction()

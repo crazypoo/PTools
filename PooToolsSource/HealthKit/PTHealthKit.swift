@@ -12,6 +12,7 @@ import SwiftDate
 
 public typealias StepBlock = (_ isLoad:Bool,_ stepCount:Double) -> Void
 
+@MainActor
 public class PTHealthKit: NSObject {
     public static let share = PTHealthKit()
     
@@ -69,13 +70,13 @@ public class PTHealthKit: NSObject {
             let endDate = String.currentDate().toDate()!.dateAtEndOf(.day).date
 
             results?.enumerateStatistics(from: todayDate, to: endDate, with: { result, stop in
-                let quantity = result.sumQuantity()
-                if quantity != nil {
-                    let value = quantity?.doubleValue(for: .count())
-                    self.stepCounts += value!
-                }
-                self.isLoad = true
-                PTGCDManager.gcdMain {
+                Task { @MainActor in
+                    let quantity = result.sumQuantity()
+                    if quantity != nil {
+                        let value = quantity?.doubleValue(for: .count())
+                        self.stepCounts += value!
+                    }
+                    self.isLoad = true
                     self.loadBlock?(self.isLoad,self.stepCounts)
                 }
             })
@@ -84,7 +85,7 @@ public class PTHealthKit: NSObject {
     }
     
     @available(iOS 18.0,watchOS 11.0,*)
-    public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping (Bool) -> Swift.Void) {
+    public func updateWorkoutEffortScore(_ sample:HKQuantitySample,workout:HKWorkout,newScore:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {
         PTNSLogConsole("updateWorkoutEfforcore samle from: %@", sample.sourceRevision.source.bundleIdentifier)
         let healthStore = HKHealthStore()
         let sampleType = HKQuantityType.quantityType(forIdentifier: .workoutEffortScore)!
@@ -117,7 +118,7 @@ public class PTHealthKit: NSObject {
     }
     
     @available(iOS 18.0,watchOS 11.0,*)
-    public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping (Bool) -> Swift.Void) {
+    public func addWordoutEffortScore(_ workout:HKWorkout,score:Double,completion:@escaping @Sendable (Bool) -> Swift.Void) {
         let healthStore = HKHealthStore()
         let sampleType = HKQuantityType.quantityType(forIdentifier: .workoutEffortScore)!
         let newSample = HKQuantitySample(type: sampleType, quantity: HKQuantity(unit: HKUnit.appleEffortScore(), doubleValue: score), start: workout.startDate, end: workout.endDate)

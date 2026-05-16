@@ -10,8 +10,8 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-private var kPTTabBarHiddenKey: Void?
-private var kPTTabBarAccessoryViewKey: Void?
+@MainActor private var kPTTabBarHiddenKey: Void?
+@MainActor private var kPTTabBarAccessoryViewKey: Void?
 
 public protocol PTTabBarVisibilityProtocol {
     var pt_prefersTabBarHidden: Bool { get set }
@@ -21,7 +21,7 @@ public protocol PTTabBarVisibilityProtocol {
     var pt_tabBarAccessoryView: UIView? { get set }
 }
 
-extension UIViewController: PTTabBarVisibilityProtocol {
+extension UIViewController: @MainActor PTTabBarVisibilityProtocol {
     public var pt_prefersTabBarHidden: Bool {
         get {
             return (objc_getAssociatedObject(self, &kPTTabBarHiddenKey) as? Bool) ?? false
@@ -623,9 +623,10 @@ extension PTBaseTabBarViewController {
             
             self.scrollObservation = scrollView.observe(\.contentOffset, options: [.new]) { [weak self] scrollView, change in
                 guard let self = self, let offset = change.newValue else { return }
-                
-                let isScrolled = offset.y > -scrollView.adjustedContentInset.top
-                self.didScrollStateChange?(isScrolled, offset.y)
+                Task { @MainActor in
+                    let isScrolled = offset.y > -scrollView.adjustedContentInset.top
+                    self.didScrollStateChange?(isScrolled, offset.y)
+                }
             }
         }
     }

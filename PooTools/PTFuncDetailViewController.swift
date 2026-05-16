@@ -939,34 +939,34 @@ class PTFuncDetailViewController: PTBaseViewController {
             createButton.addActionHandlers { sender in
                 switch self.typeString {
                 case String.LivePhoto:
-                    guard let sourceVideoPath = pickedVideoURL else {
-                        Task { @MainActor in
-                            PTAlertTipsViewController.tipsAlertShow(title: "It seems a video was not selected.Try again.", icon: .Error)
-                        }
-                        return
-                    }
-                    var photoURL: URL?
-                    if let sourceKeyPhoto = pickedPhoto {
-                        guard let data = sourceKeyPhoto.jpegData(compressionQuality: 1.0) else { return }
-                        photoURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory().appendingPathComponent("photo.jpg"))
-                        if let photoURL = photoURL {
-                            try? data.write(to: photoURL)
-                        }
-                    }
-                    
-                    PTLivePhoto.generate(from: photoURL, videoURL: sourceVideoPath, progress: { (percent) in
-                        Task { @MainActor in
-                            progressView.progress = Float(percent)
-                        }
-                    }) { result in
-                        switch result {
-                        case .success((let livePhoto,let resource)):
-                            livePhotoView.livePhoto = livePhoto
+                    Task {
+                        do {
+                            guard let sourceVideoPath = pickedVideoURL else {
+                                Task { @MainActor in
+                                    PTAlertTipsViewController.tipsAlertShow(title: "It seems a video was not selected.Try again.", icon: .Error)
+                                }
+                                return
+                            }
+                            var photoURL: URL?
+                            if let sourceKeyPhoto = pickedPhoto {
+                                guard let data = sourceKeyPhoto.jpegData(compressionQuality: 1.0) else { return }
+                                photoURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory().appendingPathComponent("photo.jpg"))
+                                if let photoURL = photoURL {
+                                    try? data.write(to: photoURL)
+                                }
+                            }
+                            
+                            let results = try await PTLivePhoto.generate(from: photoURL, videoURL: sourceVideoPath) { percent in
+                                Task { @MainActor in
+                                    progressView.progress = Float(percent)
+                                }
+                            }
+                            livePhotoView.livePhoto = results.0
                             livePhotoView.startPlayback(with: .hint)
 
                             Task {
                                 do {
-                                    let success = try await PTLivePhoto.saveToLibrary(resource)
+                                    let success = try await PTLivePhoto.saveToLibrary(results.1)
                                     if success {
                                         PTAlertTipsViewController.tipsAlertShow(title: "Live Photo Saved.The live photo was successfully saved to Photos.", icon: .Done)
                                     } else {
@@ -976,8 +976,8 @@ class PTFuncDetailViewController: PTBaseViewController {
                                     PTAlertTipsViewController.tipsAlertShow(title: error.localizedDescription, icon: .Error)
                                 }
                             }
-                        case .failure(let error):
-                            PTAlertTipsViewController.tipsAlertShow(title: error.errorDescription, icon: .Error)
+                        } catch {
+                            PTAlertTipsViewController.tipsAlertShow(title: error.localizedDescription, icon: .Error)
                         }
                     }
                 case String.LivePhotoDisassemble:

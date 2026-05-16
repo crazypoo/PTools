@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: 涂鸦path
 public class PTDrawPath: NSObject {
-    private static var pathIndex = 0
+    @MainActor private static var pathIndex = 0
     
     private let pathColor: UIColor
     
@@ -35,7 +35,7 @@ public class PTDrawPath: NSObject {
         return self.index == other.index
     }
 
-    init(pathColor: UIColor, pathWidth: CGFloat, defaultLinePath: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
+    @MainActor init(pathColor: UIColor, pathWidth: CGFloat, defaultLinePath: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         self.pathColor = pathColor
         path = UIBezierPath()
         path.lineWidth = pathWidth / ratio

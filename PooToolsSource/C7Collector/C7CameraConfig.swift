@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 
+@MainActor
 public class C7CameraConfig: NSObject {
     public static let share = C7CameraConfig()
     /// The default camera position after entering the camera. Defaults to back.
@@ -107,8 +108,10 @@ public class C7CameraConfig: NSObject {
     func hudHide(completion:PTActionTask? = nil) {
         if self.hud != nil {
             self.hud!.hide {
-                self.hud = nil
-                completion?()
+                Task { @MainActor in
+                    self.hud = nil
+                    completion?()
+                }
             }
         }
     }

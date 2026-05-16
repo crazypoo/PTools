@@ -141,14 +141,18 @@ public class PTStepper: UIView {
     private lazy var addButton : UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(self.addImage, for: .normal)
-        view.addActionHandlers(handler: self.handleAddButtonTap)
+        view.addActionHandlers(handler: { sender in
+            self.handleAddButtonTap(sender: sender)
+        })
         return view
     }()
     
     private lazy var reduceButton : UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(self.reduceImage, for: .normal)
-        view.addActionHandlers(handler: self.handleReduceButtonTap)
+        view.addActionHandlers(handler: { sender in
+            self.handleReduceButtonTap(sender: sender)
+        })
         return view
     }()
     

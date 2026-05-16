@@ -376,53 +376,53 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
          视频
          */
         
-        let mov = PTConverterOptionOutputType()
+        var mov = PTConverterOptionOutputType()
         mov.type = .mov
         
-        let mp4 = PTConverterOptionOutputType()
+        var mp4 = PTConverterOptionOutputType()
         mp4.type = .mp4
 
-        let m4v = PTConverterOptionOutputType()
+        var m4v = PTConverterOptionOutputType()
         m4v.type = .m4v
 
-        let gp = PTConverterOptionOutputType()
+        var gp = PTConverterOptionOutputType()
         gp.type = .mobile3GPP
 
-        let gp2 = PTConverterOptionOutputType()
+        var gp2 = PTConverterOptionOutputType()
         gp2.type = .mobile3GPP2
         
         /*
          音频
          */
         
-        let m4a = PTConverterOptionOutputType()
+        var m4a = PTConverterOptionOutputType()
         m4a.type = .m4a
 
-        let caf = PTConverterOptionOutputType()
+        var caf = PTConverterOptionOutputType()
         caf.type = .caf
         
-        let wav = PTConverterOptionOutputType()
+        var wav = PTConverterOptionOutputType()
         wav.type = .wav
         
-        let aiff = PTConverterOptionOutputType()
+        var aiff = PTConverterOptionOutputType()
         aiff.type = .aiff
         
-        let aifc = PTConverterOptionOutputType()
+        var aifc = PTConverterOptionOutputType()
         aifc.type = .aifc
         
-        let amr = PTConverterOptionOutputType()
+        var amr = PTConverterOptionOutputType()
         amr.type = .amr
         
 //        let mp3 = PTConverterOptionOutputType()
 //        mp3.type = .mp3
         
-        let au = PTConverterOptionOutputType()
+        var au = PTConverterOptionOutputType()
         au.type = .au
         
-        let ac3 = PTConverterOptionOutputType()
+        var ac3 = PTConverterOptionOutputType()
         ac3.type = .ac3
         
-        let eac3 = PTConverterOptionOutputType()
+        var eac3 = PTConverterOptionOutputType()
         eac3.type = .eac3
 
         return [mov,mp4,m4v,gp,gp2,m4a,caf,wav,aiff,aifc,amr/*,mp3*/,au,ac3,eac3]
