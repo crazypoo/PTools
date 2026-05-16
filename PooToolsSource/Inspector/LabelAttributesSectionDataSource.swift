@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class LabelAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class LabelAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Label"
@@ -41,7 +41,7 @@ extension DefaultElementAttributesLibrary {
             case shadowColor = "Shadow"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let label = label else { return [] }
 
             return Property.allCases.compactMap { property in

@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 class PTTestGlobalFunction:NSObject {
     static let shared = PTTestGlobalFunction()
     var isLogin = false
@@ -23,7 +24,7 @@ class PTLoginInterceptor: PTRouterAsyncInterceptor {
 
     public func handle(queries: [String: Any]) async throws -> Bool {
         // 1. 检查本地登录状态 (假设你有 UserManager)
-        if PTTestGlobalFunction.shared.isLogin {
+        if await PTTestGlobalFunction.shared.isLogin {
             return true // 已登录，放行
         }
         
