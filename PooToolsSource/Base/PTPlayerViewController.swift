@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AVFoundation
+@preconcurrency import AVFoundation
 import SnapKit
 import SwifterSwift
 
@@ -71,9 +71,9 @@ open class PTPlayerViewController: PTBaseViewController {
     }
     
     deinit {
-        if let token = timeObserverToken {
-            videoPlayer?.removeTimeObserver(token)
-        }
+//        if let token = timeObserverToken {
+//            videoPlayer?.removeTimeObserver(token)
+//        }
         videoPlayer?.pause()
         videoPlayer = nil
     }
@@ -180,10 +180,12 @@ open class PTPlayerViewController: PTBaseViewController {
             guard let self = self,
                   let duration = player.currentItem?.duration.seconds,
                   duration > 0 else { return }
-            let current = time.seconds
-            self.slider.value = Float(current / duration)
-            self.currentTimeLabel.text = self.formatTime(current)
-            self.durationLabel.text = self.formatTime(duration)
+            Task { @MainActor in
+                let current = time.seconds
+                self.slider.value = Float(current / duration)
+                self.currentTimeLabel.text = self.formatTime(current)
+                self.durationLabel.text = self.formatTime(duration)
+            }
         }
     }
     

@@ -8,8 +8,12 @@
 
 import UIKit
 
-public class PTSegmentControlBaseModel: NSObject {
+public final class PTSegmentControlBaseModel: NSObject,@unchecked Sendable {
     public var categoryName:String = ""
     public var subTitle:String = ""
     public var imageURL:String = ""
+    
+    public override init() {
+        super.init()
+    }
 }

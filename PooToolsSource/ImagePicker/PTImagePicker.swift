@@ -61,7 +61,7 @@ public enum PTImagePicker {
     }
     
     //MARK: PickerCompletion
-    public typealias Completion<T: PTImagePickerObject> = (_ result: Result<T, PTImagePicker.PickerError>) -> Void
+    public typealias Completion<T: PTImagePickerObject> = @MainActor (_ result: Result<T, PTImagePicker.PickerError>) -> Void
 }
 
 //MARK: 控制器
@@ -95,18 +95,37 @@ extension PTImagePicker {
     }
 }
 
+private struct SendableBox<T>: @unchecked Sendable {
+    let value: T
+}
+
 // MARK: - 控制器囘調
 private extension PTImagePicker.Controller {
+    
+    @MainActor
     func pickObject(completion: @escaping PTImagePicker.Completion<T>) {
         self.completion = completion
     }
     
+    // 🚀 终极修复 2：改造 async 桥接方法，使用 Box 进行装箱和拆箱
+    @MainActor
     func pickObject() async throws -> T {
-        try await withCheckedThrowingContinuation { continuation in
-            pickObject { result in
-                continuation.resume(with: result)
+        // 让 continuation 传递我们的安全盒子 (SendableBox)
+        let box = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<SendableBox<T>, Error>) in
+            
+            self.pickObject { result in
+                switch result {
+                case .success(let obj):
+                    // 成功时：把非 Sendable 的 T (如 UIImage) 装进盒子里传递
+                    continuation.resume(returning: SendableBox(value: obj))
+                case .failure(let error):
+                    // 失败时：错误类型通常天然是 Sendable 的，直接抛出
+                    continuation.resume(throwing: error)
+                }
             }
         }
+        // 拆开盒子，返回真实的图片或数据对象
+        return box.value
     }
 }
 
@@ -140,7 +159,7 @@ private extension PTImagePicker.Controller {
 
 //MARK: 打開相冊
 extension PTImagePicker.Controller {
-    public static func openAlbum<U:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> U {
+    @MainActor public static func openAlbum<U:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> U {
         let picker:PTImagePicker.Controller<U> = try showAlbumPicker(mediaType: mediaType)
         return try await picker.pickObject()
     }
@@ -194,7 +213,7 @@ extension PTImagePicker{
     }
     
     /// Open album -> 圖片/GIF數據 or 視頻路徑
-    public static func openAlbum() async throws -> PTAlbumObject {
+    @MainActor public static func openAlbum() async throws -> PTAlbumObject {
         try await PTImagePicker.Controller<PTAlbumObject>.openAlbum(.All)
     }
     
@@ -204,7 +223,7 @@ extension PTImagePicker{
     }
     
     /// 圖片 圖片URL
-    public static func openAlbum() async throws -> PTPhotoObject {
+    @MainActor public static func openAlbum() async throws -> PTPhotoObject {
         try await PTImagePicker.Controller<PTPhotoObject>.openAlbum(.Photo)
     }
 }
@@ -212,32 +231,32 @@ extension PTImagePicker{
 // MARK: 閉包方式
 extension PTImagePicker {
     /// Open album -> 圖片
-    public static func openAlbumForImage(completion: @escaping PTImagePicker.Completion<UIImage>) {
+    @MainActor public static func openAlbumForImage(completion: @escaping PTImagePicker.Completion<UIImage>) {
         PTImagePicker.Controller<UIImage>.openAlbum(.Photo, completion: completion)
     }
     
     /// Open album -> 圖片/GIF數據
-    public static func openAlbumForImageData(completion: @escaping PTImagePicker.Completion<Data>) {
+    @MainActor public static func openAlbumForImageData(completion: @escaping PTImagePicker.Completion<Data>) {
         PTImagePicker.Controller<Data>.openAlbum(.Photo, completion: completion)
     }
     
     /// Open album -> 視頻路徑
-    public static func openAlbumForVideoURL(completion: @escaping PTImagePicker.Completion<URL>) {
+    @MainActor public static func openAlbumForVideoURL(completion: @escaping PTImagePicker.Completion<URL>) {
         PTImagePicker.Controller<URL>.openAlbum(.Video, completion: completion)
     }
     
     /// Open album -> 圖片/GIF數據 or 視頻路徑
-    public static func openAlbumForObject(completion: @escaping PTImagePicker.Completion<PTAlbumObject>) {
+    @MainActor public static func openAlbumForObject(completion: @escaping PTImagePicker.Completion<PTAlbumObject>) {
         PTImagePicker.Controller<PTAlbumObject>.openAlbum(.All, completion: completion)
     }
     
     /// Photograph -> 圖片
-    public static func photograph(completion: @escaping PTImagePicker.Completion<UIImage>) {
+    @MainActor public static func photograph(completion: @escaping PTImagePicker.Completion<UIImage>) {
         PTImagePicker.Controller<UIImage>.photograph(completion: completion)
     }
     
     /// Open album -> 圖片/URL
-    public static func openAlbumForImageObject(completion: @escaping PTImagePicker.Completion<PTPhotoObject>) {
+    @MainActor public static func openAlbumForImageObject(completion: @escaping PTImagePicker.Completion<PTPhotoObject>) {
         PTImagePicker.Controller<PTPhotoObject>.openAlbum(.Photo, completion: completion)
     }
 }

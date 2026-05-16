@@ -13,8 +13,8 @@ public typealias ExporterBuffer = CVPixelBuffer
 
 public struct Exporter {
     
-    public typealias PixelBufferCallback = (_ buffer: ExporterBuffer) -> ExporterBuffer?
-    public typealias ExportComplete = (Result<URL, Exporter.Error>) -> Void
+    public typealias PixelBufferCallback = @Sendable (_ buffer: ExporterBuffer) -> ExporterBuffer?
+    public typealias ExportComplete = @Sendable (Result<URL, Exporter.Error>) -> Void
     
     let provider: Exporter.Provider
     
@@ -32,8 +32,17 @@ public struct Exporter {
     public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) {
         do {
             let (composition, videoComposition) = try setupComposition(options: options, filtering: filtering)
-            let export = try setupExportSession(composition: composition, options: options)
+            
+            // 🚀 修复核心 1：使用 nonisolated(unsafe) 关键字。
+            // 这明确告诉 Swift 6 编译器：我知道这个 export 对象不是 Sendable，
+            // 但我保证它的生命周期是安全的，请允许它被闭包捕获。
+            nonisolated(unsafe) let export = try setupExportSession(composition: composition, options: options)
             export.videoComposition = videoComposition
+            
+            // 🚀 修复核心 2：提前提取 URL，切断对 self 的依赖。
+            // URL 类型天生是 Sendable 的，这样 Task 就只会捕获 targetURL，彻底忘掉 self。
+            let targetURL = provider.outputURL
+            
             Task {
                 do {
                     await export.export()
@@ -45,7 +54,8 @@ public struct Exporter {
                             complete(.failure(Exporter.Error.unknown))
                         }
                     case .completed:
-                        complete(.success(provider.outputURL))
+                        // 🚀 修复核心 3：在这里使用刚刚提取的安全局部变量 targetURL
+                        complete(.success(targetURL))
                     default:
                         complete(.failure(Exporter.Error.exportAsynchronously(export.status)))
                         break

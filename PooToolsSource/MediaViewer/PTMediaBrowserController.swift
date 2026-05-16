@@ -54,7 +54,9 @@ public class PTMediaBrowserController: PTBaseViewController {
             if let sheet = self.sheetViewController {
                 if self.navigationController?.viewControllers.first == self {
                     self.returnFrontVC {
-                        self.viewDismissBlock?()
+                        Task { @MainActor in
+                            self.viewDismissBlock?()
+                        }
                     }
                 } else {
                     self.navigationController?.popViewController(animated: true) {
@@ -62,8 +64,12 @@ public class PTMediaBrowserController: PTBaseViewController {
                     }
                 }
             } else {
-                self.returnFrontVC {
-                    self.viewDismissBlock?()
+                Task { @MainActor in
+                    self.returnFrontVC {
+                        Task { @MainActor in
+                            self.viewDismissBlock?()
+                        }
+                    }
                 }
             }
         }
@@ -119,7 +125,9 @@ public class PTMediaBrowserController: PTBaseViewController {
                 cell.viewerDismissBlock = { [weak self] in
                     Task { @MainActor in
                         self?.returnFrontVC {
-                            self?.viewDismissBlock?()
+                            Task { @MainActor in
+                                self?.viewDismissBlock?()
+                            }
                         }
                     }
                 }
