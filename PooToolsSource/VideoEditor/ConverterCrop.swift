@@ -8,12 +8,7 @@
 
 import UIKit
 
-public struct ConverterCrop {
+public struct ConverterCrop:Sendable {
     public var frame: CGRect
     public var contrastSize: CGSize
-
-    public init(frame: CGRect, contrastSize: CGSize) {
-        self.frame = frame
-        self.contrastSize = contrastSize
-    }
 }

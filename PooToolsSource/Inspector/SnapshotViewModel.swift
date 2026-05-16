@@ -7,7 +7,8 @@
 import UIKit
 
 extension HierarchyInspectorViewModel {
-    final class SnapshotViewModel: NSObject, @preconcurrency HierarchyInspectorSectionViewModelProtocol {
+    @MainActor
+    final class SnapshotViewModel: NSObject, @MainActor HierarchyInspectorSectionViewModelProtocol {
         let shouldAnimateKeyboard: Bool = true
 
         private struct Details: HierarchyInspectorReferenceSummaryCellViewModelProtocol {
@@ -39,7 +40,7 @@ extension HierarchyInspectorViewModel {
         var searchQuery: String? {
             didSet {
                 if oldValue != searchQuery {
-                    Task { @MainActor in
+                    Task {
                         loadData()
                     }
                 }
@@ -77,7 +78,7 @@ extension HierarchyInspectorViewModel {
             currentSearchResults.count
         }
 
-        @MainActor func titleForHeader(in section: Int) -> String? {
+        func titleForHeader(in section: Int) -> String? {
             Texts.allResults(count: currentSearchResults.count, in: snapshot.root.displayName)
         }
 
@@ -85,7 +86,6 @@ extension HierarchyInspectorViewModel {
             .element(currentSearchResults[indexPath.row])
         }
 
-        @MainActor
         @objc func loadData() {
             currentSearchResults = {
                 guard let key = searchQuery else {

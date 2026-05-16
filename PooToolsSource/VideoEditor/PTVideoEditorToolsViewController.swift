@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AVFoundation
+@preconcurrency import AVFoundation
 import SwifterSwift
 import SnapKit
 import Harbeth
@@ -106,7 +106,7 @@ class PTCropDimView: UIView {
     }
 }
 
-extension PTCropDimView:CAAnimationDelegate {
+extension PTCropDimView:@MainActor CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard let path = self.path else { return }
         if let mask = self.layer.mask as? CAShapeLayer {
@@ -171,7 +171,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     let convertedURL = try await self.setOutPutAsync()
                     
                     // 如果是纯音频，直接结束返回
-                    if self.isOnlyAudio {
+                    if await self.isOnlyAudio {
                         await MainActor.run {
                             self.onEditCompleteHandler?(convertedURL)
                             if let hud = self.hudToHide { hud.hide(completion: nil) }
@@ -183,13 +183,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     // 2. 视频滤镜渲染阶段
                     
                     let random = Int(arc4random_uniform(89999) + 10000)
-                    let outputURL = FileManager.pt.DocumnetsDirectory().appendingPathComponent("condy_export_video_\(random).\(self.currentOutputType.name)")
+                    let outputURL = FileManager.pt.DocumnetsDirectory().appendingPathComponent("condy_export_video_\(random).\(await self.currentOutputType.name)")
                     
                     // 等待滤镜导出完成...
                     let finalURL = try await self.harbethExportAsync(sourceURL: convertedURL, outputURL: URL(fileURLWithPath: outputURL))
                     
                     // 3. 收尾与相册保存阶段
-                    if self.onlyOutput {
+                    if await self.onlyOutput {
                         await MainActor.run {
                             self.onEditCompleteHandler?(finalURL)
                             if let hud = self.hudToHide { hud.hide(completion: nil) }
@@ -200,7 +200,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         try await self.saveToAlbumAsync(outputURL: finalURL, rewrite: self.rewrite, localIdentifier: self.videoAsset.localIdentifier)
                         
                         // 及时清理临时垃圾
-                        FileManager.pt.removefile(filePath: finalURL.path)
+                        await FileManager.pt.removefile(filePath: finalURL.path)
                         
                         await MainActor.run {
                             PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: PTVideoEditorConfig.share.alertTitleSaveDone, icon: .Done)
@@ -816,9 +816,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     deinit {
         // 清理幽灵定时器
-        if let token = timeObserverToken {
-            avPlayer?.removeTimeObserver(token)
-        }
+//        if let token = timeObserverToken {
+//            avPlayer?.removeTimeObserver(token)
+//        }
         // 清理可能正在导出的残缺废料
         Task { @MainActor [weak self] in
             self?.videoConverter?.restore(cleanupDisk: true)
@@ -936,9 +936,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
                 let frameCount = self.numberOfFrames(within: timeLineViewRect)
                 
+                let safeAsset = self.videoAVAsset!
                 // 【核心修改点】：统一调用封装好的 Service，默认限制了 maximumSize 保护内存
                 let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
-                    for: self.videoAVAsset,
+                    for: safeAsset,
                     numberOfFrames: frameCount
                 )
                 
@@ -962,6 +963,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     
                     self.reloadAsset()
                 }
+
             } catch {
                 await MainActor.run {
                     PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: error.localizedDescription, icon: .Error)
@@ -1095,7 +1097,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             speed: speed,
             outputModel: currentOutputType)
 
-        self.videoConverter = VideoConverter(asset:self.videoAVAsset)
+        let safeOutputAsset = self.videoAVAsset!
+        self.videoConverter = VideoConverter(asset:safeOutputAsset)
         videoConverter?.convert(options,progress: { progress in
             Task { @MainActor in
                 if progress ?? 0 >= 1 {
@@ -1117,8 +1120,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         },completion: completion)
     }
     
-    fileprivate func setVideoAsset(covertFinish:PTActionTask? = nil) {
-
+    fileprivate func setVideoAsset() async {
         let options = ConverterOption(
             trimRange: trimPositions,
             convertCrop: nil,
@@ -1127,36 +1129,40 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             isMute: false,
             speed: speed)
 
-        self.videoConverter = VideoConverter(asset:self.videoAVAsset)
-        self.videoConverter?.convert(options) { ac,avc in
-            Task { @MainActor in
-                self.avPlayerItem = AVPlayerItem(asset: ac)
-                self.avPlayerItem.videoComposition = avc
-                
-                let generator = AVAssetImageGenerator(asset: ac)
-                generator.appliesPreferredTrackTransform = true
-                generator.requestedTimeToleranceBefore = .zero
-                generator.requestedTimeToleranceAfter = .zero
-                generator.maximumSize = CGSize(width: 600, height: 600)
-                self.scrubImageGenerator = generator
-
-                if self.avPlayer == nil {
-                    self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
-                    self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
-                } else {
-                    self.avPlayer.pause()
-                    self.avPlayer.replaceCurrentItem(with: self.avPlayerItem)
-                }
-                
-                self.avPlayerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
-                    self.originImageView.image = image
-                }
-                
-                covertFinish?()
+        let safeConvertAsset = self.videoAVAsset!
+        self.videoConverter = VideoConverter(asset:safeConvertAsset)
+        
+        // 挂起等待外部处理完毕
+        let (ac, avc) = await withCheckedContinuation { continuation in
+            self.videoConverter?.convert(options) { resultAc, resultAvc in
+                continuation.resume(returning: (resultAc, resultAvc))
             }
         }
+        
+        self.avPlayerItem = AVPlayerItem(asset: ac)
+        self.avPlayerItem.videoComposition = avc
+        
+        let generator = AVAssetImageGenerator(asset: ac)
+        generator.appliesPreferredTrackTransform = true
+        generator.requestedTimeToleranceBefore = .zero
+        generator.requestedTimeToleranceAfter = .zero
+        generator.maximumSize = CGSize(width: 600, height: 600)
+        self.scrubImageGenerator = generator
+
+        if self.avPlayer == nil {
+            self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
+            self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+        } else {
+            self.avPlayer.pause()
+            self.avPlayer.replaceCurrentItem(with: self.avPlayerItem)
+        }
+        
+        // 此处的闭包可以保留（如果你封装了 getVideoFirstImage），但整个流程已经是干净的了。
+        self.avPlayerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
+            self.originImageView.image = image
+        }
     }
-    
+
     func reloadAsset() {
         PTGCDManager.gcdAfter(time: 0.35) {
             Task { @MainActor in
@@ -1231,7 +1237,7 @@ extension PTVideoEditorToolsViewController {
 }
 
 //MARK: 實時圖像輸出
-extension PTVideoEditorToolsViewController:C7CollectorImageDelegate {
+extension PTVideoEditorToolsViewController:@MainActor C7CollectorImageDelegate {
     public func preview(_ collector: C7Collector, fliter image: C7Image) {
         originImageView.image = image
     }
@@ -1326,12 +1332,10 @@ fileprivate extension PTVideoEditorToolsViewController {
         Task {
             await reloadDebouncer.debounce { [weak self] in
                 guard let self = self else { return }
-                
-                // 确保 UI 刷新和播放器操作在主线程进行
-                await MainActor.run {
-                    self.setVideoAsset {
-                        self.reloadAsset()
-                    }
+                // 🌟 优化点 6：由于方法已经是 async，直接 await 等待即可，清爽无比！
+                await self.setVideoAsset()
+                Task { @MainActor in
+                    self.reloadAsset()
                 }
             }
         }

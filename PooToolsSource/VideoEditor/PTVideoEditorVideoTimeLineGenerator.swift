@@ -64,7 +64,7 @@ fileprivate extension PTVideoEditorVideoTimeLineGenerator {
 }
 
 // Timeline这个功能封装成一个独立的服务，职责更加单一
-public class PTVideoTimelineService {
+public final class PTVideoTimelineService:Sendable {
     
     /// 异步获取视频时间轴帧数组
     /// - Parameters:

@@ -37,6 +37,7 @@ protocol HierarchyInspectorSectionViewModelProtocol {
     func loadData()
 }
 
+@MainActor
 final class HierarchyInspectorViewModel {
     let commandGroupsViewModel: CommandGroupsViewModel
 
