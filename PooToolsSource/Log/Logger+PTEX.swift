@@ -68,7 +68,7 @@ public enum LoggerEXType: String, CaseIterable {
     case fault
 }
 
-public let PTLogMode: LoggerEXLevelType = {
+@MainActor public let PTLogMode: LoggerEXLevelType = {
     // 优化 3：探讨这里的逻辑。这里我先假设你需要开发环境用 debug，正式环境用 error。
     // 如果你原本的逻辑是刻意为之，可以改回你的版本。
     if UIApplication.shared.inferredEnvironment_PT != .appStore {
@@ -80,10 +80,10 @@ public let PTLogMode: LoggerEXLevelType = {
 
 public extension Logger {
     // 优化 4：去掉强制解包 `!`，提供一个安全的默认值 ("com.unknown.app") 防止极端情况崩溃
-    private static var subsystem = Bundle.main.bundleIdentifier ?? "com.ptools.unknown"
+    @MainActor private static var subsystem = Bundle.main.bundleIdentifier ?? "com.ptools.unknown"
         
     // 优化 5：修正单词拼写 loger -> logger
-    static func logger(categoryName: String) -> Logger {
+    @MainActor static func logger(categoryName: String) -> Logger {
         return Logger(subsystem: subsystem, category: categoryName)
     }
 }

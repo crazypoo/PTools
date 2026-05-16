@@ -978,7 +978,7 @@ extension PTEditImageViewController {
 }
 
 // MARK: unod & redo
-extension PTEditImageViewController: PTMediaEditorManagerDelegate {
+extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
     func editorManager(_ manager: PTMediaEditManager, didUpdateActions actions: [PTMediaEditorAction], redoActions: [PTMediaEditorAction]) {
         undoButton.isEnabled = !actions.isEmpty
         redoButton.isEnabled = actions.count != redoActions.count
@@ -1110,7 +1110,7 @@ extension PTEditImageViewController: PTMediaEditorManagerDelegate {
     }
 }
 
-extension PTEditImageViewController: PTEditImageEngineContext {
+extension PTEditImageViewController: @MainActor PTEditImageEngineContext {
     public var engineScrollView: UIScrollView { mainScrollView }
     public var engineOriginalImageSize: CGSize { originalImage.size }
     public var engineEditImageSize: CGSize { editImage.size }

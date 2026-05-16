@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 final class StdoutCapture {
 
     private static let shared = StdoutCapture()

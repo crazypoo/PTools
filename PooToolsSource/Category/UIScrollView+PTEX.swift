@@ -10,7 +10,7 @@ import UIKit
 
 public extension PTPOP where Base : UIScrollView {
     
-    var visibleRect: CGRect {
+    @MainActor var visibleRect: CGRect {
         let contentWidth = base.contentSize.width - base.contentOffset.x
         let contentHeight = base.contentSize.height - base.contentOffset.y
         return CGRect(
@@ -26,7 +26,7 @@ public extension PTPOP where Base : UIScrollView {
         case top, bottom, left, right
     }
     
-    func scrollTo(_ side: Side, animated: Bool) {
+    @MainActor func scrollTo(_ side: Side, animated: Bool) {
         let point: CGPoint
         switch side {
         case .top:
@@ -52,7 +52,7 @@ public extension PTPOP where Base : UIScrollView {
     //MARK: 根据偏移量和页数绘制
     ///根据偏移量和页数绘制
     /// 此方法为绘图，根据偏移量和页数可能会递归调用insideraw
-    private func snapShotContentScrollPage(index: Int,
+    @MainActor private func snapShotContentScrollPage(index: Int,
                                            maxIndex: Int,
                                            callback: @escaping PTActionTask) {
         base.setContentOffset(CGPoint(x: 0, y: CGFloat(index) * base.frame.size.height), animated: false)
@@ -73,7 +73,7 @@ public extension PTPOP where Base : UIScrollView {
     /// 获取ScrollView的contentScroll长图像
     /// - Parameters:
     ///  - completionHandler: 获取闭包
-    func snapShotContentScroll(_ completionHandler: @escaping (_ screenShotImage: UIImage?) -> Void) {
+    @MainActor func snapShotContentScroll(_ completionHandler: @escaping (_ screenShotImage: UIImage?) -> Void) {
         /// 放一个假的封面
         let snapShotView = base.snapshotView(afterScreenUpdates: true)
         snapShotView?.frame = CGRect(x: base.frame.origin.x, y: base.frame.origin.y, width: snapShotView?.frame.size.width ?? 0, height: snapShotView?.frame.size.height ?? 0)
@@ -98,7 +98,7 @@ public extension PTPOP where Base : UIScrollView {
         }
     }
     
-    func scrolToLeftAnimation(animation:Bool) {
+    @MainActor func scrolToLeftAnimation(animation:Bool) {
         var off = base.contentOffset
         off.x = 0 - base.contentInset.left
         base.setContentOffset(off, animated: true)

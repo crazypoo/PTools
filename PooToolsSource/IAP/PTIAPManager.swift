@@ -14,7 +14,8 @@ public typealias ProductsCompletionBlock = ([SKProduct]) -> Void
 public typealias PurchaseCompletionBlock = (SKPaymentTransaction?) -> Void
 public typealias IAPErrorBlock = (Error) -> Void
 
-public class PTIAPManager: NSObject, SKProductsRequestDelegate, @MainActor SKPaymentTransactionObserver {
+@MainActor
+public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @MainActor SKPaymentTransactionObserver {
     
     public static let shared = PTIAPManager()
     

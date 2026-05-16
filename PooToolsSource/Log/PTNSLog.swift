@@ -142,14 +142,16 @@ public func PTNSLog(_ msg: Any...,
     if environment == .appStore {
         DDLogSet(levelType: levelType, prefix: logOutput)
     } else {
-        let logger = Logger.logger(categoryName: loggerType.rawValue)
-        switch levelType {
-        case .debug: logger.debug("\(logOutput)")
-        case .error: logger.error("\(logOutput)")
-        case .info: logger.info("\(logOutput)")
-        case .warning: logger.warning("\(logOutput)")
-        case .trace, .notice, .critical, .fault:
-            logger.notice("\(logOutput)")
+        Task { @MainActor in
+            let logger = Logger.logger(categoryName: loggerType.rawValue)
+            switch levelType {
+            case .debug: logger.debug("\(logOutput)")
+            case .error: logger.error("\(logOutput)")
+            case .info: logger.info("\(logOutput)")
+            case .warning: logger.warning("\(logOutput)")
+            case .trace, .notice, .critical, .fault:
+                logger.notice("\(logOutput)")
+            }
         }
         
 #if POOTOOLS_DEBUG

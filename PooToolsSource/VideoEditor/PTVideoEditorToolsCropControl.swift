@@ -32,7 +32,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
             self.cropView.crop { [weak self] (crop) in
                 guard let self = self else { return }
                 if let error = crop.error {
-                    Task {
+                    Task { @MainActor in
                         PTAlertTipsViewController.tipsAlertShow(title: PTVideoEditorConfig.share.alertTitleOpps,subtitle: error.localizedDescription, icon: .Error)
                     }
                     return

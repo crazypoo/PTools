@@ -10,7 +10,7 @@ import Foundation
 
 struct PTActiveBuilder {
 
-    static func createElements(type: PTActiveType, from text: String, range: NSRange, filterPredicate: PTActiveStringBoolCallBack?) -> [PTElementTuple] {
+    @MainActor static func createElements(type: PTActiveType, from text: String, range: NSRange, filterPredicate: PTActiveStringBoolCallBack?) -> [PTElementTuple] {
         switch type {
         case .mention, .hashtag:
             return createElementsIgnoringFirstCharacter(text: text, type: type, range: range, filterPredicate: filterPredicate)
@@ -25,7 +25,7 @@ struct PTActiveBuilder {
         }
     }
 
-    static func createURLElements(text: String, range: NSRange, maximumLength: Int?) -> ([PTElementTuple], String) {
+    @MainActor static func createURLElements(text: String, range: NSRange, maximumLength: Int?) -> ([PTElementTuple], String) {
         let type = PTActiveType.url
         let matches = PTRegexParser.getElements(from: text, with: type.pattern, range: range)
         
@@ -63,7 +63,7 @@ struct PTActiveBuilder {
         return (elements, mutableText as String)
     }
 
-    private static func createElements(text: String,
+    @MainActor private static func createElements(text: String,
                                        type: PTActiveType,
                                        range: NSRange,
                                        minLength: Int = 2,
@@ -84,7 +84,7 @@ struct PTActiveBuilder {
         return elements
     }
 
-    private static func createElementsIgnoringFirstCharacter(text: String,
+    @MainActor private static func createElementsIgnoringFirstCharacter(text: String,
                                                              type: PTActiveType,
                                                              range: NSRange,
                                                              filterPredicate: PTActiveStringBoolCallBack?) -> [PTElementTuple] {

@@ -34,14 +34,14 @@ private let fatalSignals: [Int32] = [
 // MARK: - NSException 异常捕获
 
 // 保存系统原有的未捕获异常处理器
-private var preUncaughtExceptionHandler: NSUncaughtExceptionHandler?
+@MainActor private var preUncaughtExceptionHandler: NSUncaughtExceptionHandler?
 
 public class CrashUncaughtExceptionHandler {
     /// 接收异常的闭包回调
-    public static var exceptionReceiveClosure: ((Int32?, NSException?, String, [String]) -> Void)?
+    @MainActor public static var exceptionReceiveClosure: ((Int32?, NSException?, String, [String]) -> Void)?
 
     /// 准备并注册异常捕获
-    public func prepare() {
+    @MainActor public func prepare() {
         preUncaughtExceptionHandler = NSGetUncaughtExceptionHandler()
         NSSetUncaughtExceptionHandler(UncaughtExceptionHandler)
     }
@@ -54,11 +54,13 @@ private func UncaughtExceptionHandler(exception: NSException) {
     let name = exception.name.rawValue
     let crash = "\nName: \(name)\nReason: \(reason)"
 
-    // 触发自定义的回调
-    CrashUncaughtExceptionHandler.exceptionReceiveClosure?(nil, exception, crash, arr)
-    
-    // 如果系统之前有其他处理器（例如其他第三方 SDK 注册的），继续传递给它们
-    preUncaughtExceptionHandler?(exception)
+    Task { @MainActor in
+        // 触发自定义的回调
+        CrashUncaughtExceptionHandler.exceptionReceiveClosure?(nil, exception, crash, arr)
+        
+        // 如果系统之前有其他处理器（例如其他第三方 SDK 注册的），继续传递给它们
+        preUncaughtExceptionHandler?(exception)
+    }
     
     // 强制杀掉进程，防止程序在异常状态下继续运行导致不可知的错误
     kill(getpid(), SIGKILL)
@@ -68,20 +70,20 @@ private func UncaughtExceptionHandler(exception: NSException) {
 // MARK: - Unix 信号捕获 (Signal)
 
 // 优化：使用字典保存每个信号对应的原有 sigaction 结构体，确保不会丢失
-private var previousSignalHandlers: [Int32: sigaction] = [:]
+@MainActor private var previousSignalHandlers: [Int32: sigaction] = [:]
 
 public class CrashSignalExceptionHandler {
     /// 接收信号崩溃的闭包回调
-    public static var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)?
+    @MainActor public static var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)?
 
     /// 准备并注册信号捕获
-    public func prepare() {
+    @MainActor public func prepare() {
         backupOriginalHandler()
         signalNewRegister()
     }
 
     /// 备份系统或第三方原有的信号处理器
-    private func backupOriginalHandler() {
+    @MainActor private func backupOriginalHandler() {
         for signalType in fatalSignals {
             var oldAction = sigaction()
             // 传入 nil 获取当前的 action 并保存在 oldAction 中
@@ -108,18 +110,20 @@ public class CrashSignalExceptionHandler {
 private func CrashSignalHandler(signal: Int32, info: UnsafeMutablePointer<__siginfo>?, context: UnsafeMutableRawPointer?) {
     let exceptionInfo = "Signal \(SignalName(signal))"
 
-    // 触发自定义回调
-    CrashSignalExceptionHandler.exceptionReceiveClosure?(signal, nil, exceptionInfo)
-    
-    // 恢复系统默认的信号处理器，防止死循环
-    ClearSignalRegister()
+    Task { @MainActor in
+        // 触发自定义回调
+        CrashSignalExceptionHandler.exceptionReceiveClosure?(signal, nil, exceptionInfo)
+        
+        // 恢复系统默认的信号处理器，防止死循环
+        ClearSignalRegister()
 
-    // 尝试调用崩溃前备份的其他信号处理器（将崩溃信息传递给其他 SDK）
-    if let oldAction = previousSignalHandlers[signal] {
-        if oldAction.__sigaction_u.__sa_sigaction != nil {
-            oldAction.__sigaction_u.__sa_sigaction(signal, info, context)
-        } else if oldAction.__sigaction_u.__sa_handler != nil {
-            oldAction.__sigaction_u.__sa_handler(signal)
+        // 尝试调用崩溃前备份的其他信号处理器（将崩溃信息传递给其他 SDK）
+        if let oldAction = previousSignalHandlers[signal] {
+            if oldAction.__sigaction_u.__sa_sigaction != nil {
+                oldAction.__sigaction_u.__sa_sigaction(signal, info, context)
+            } else if oldAction.__sigaction_u.__sa_handler != nil {
+                oldAction.__sigaction_u.__sa_handler(signal)
+            }
         }
     }
     
@@ -189,7 +193,7 @@ public class PTCrashHandler {
     }
 
     /// 启动崩溃捕获监听（建议在 App 启动的尽早阶段调用，如 AppDelegate）
-    public func prepare() {
+    @MainActor public func prepare() {
         uncaughtExceptionHandler.prepare()
         signalExceptionHandler.prepare()
     }

@@ -107,7 +107,7 @@ public extension PTPOP where Base: WKWebView {
     /// - Parameters:
     ///  - callBack: 回调函数
     /// - Returns: WKWebView视图
-    func snapShotContentScroll(callBack: @escaping (UIImage?) -> ()) {
+    @MainActor func snapShotContentScroll(callBack: @escaping (UIImage?) -> ()) {
         base.scrollView.pt.snapShotContentScroll { screenShotImage in
             callBack(screenShotImage)
         }

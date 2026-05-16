@@ -721,7 +721,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     }
 }
 
-extension PTFilterCameraViewController: C7CollectorImageDelegate {
+extension PTFilterCameraViewController: @MainActor C7CollectorImageDelegate {
     
     public func preview(_ collector: C7Collector, fliter image: C7Image) {
         self.originImageView.image = image.pt.fixOrientation()
@@ -741,7 +741,7 @@ extension PTFilterCameraViewController {
     }
 }
 
-extension PTFilterCameraViewController: CAAnimationDelegate {
+extension PTFilterCameraViewController: @MainActor CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if anim is CAAnimationGroup {
             focusCursorView.alpha = 0

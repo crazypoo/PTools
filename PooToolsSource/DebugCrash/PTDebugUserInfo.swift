@@ -84,7 +84,7 @@ enum PTDebugUserInfo {
         return Info(title: "ios version", detail: iOSVersion)
     }
 
-    static func getMeasureAppStartUpTime() -> Info? {
+    @MainActor static func getMeasureAppStartUpTime() -> Info? {
         guard let launchStartTime = PTLaunchTimeTracker.launchStartTime else { return nil }
 
         return Info(title: "Inicialization time",detail: String(format: "%.4lf%", launchStartTime) + " (s)")

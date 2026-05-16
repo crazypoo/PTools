@@ -42,16 +42,16 @@ struct PTRegexParser {
     static let snsID = "([a-zA-Z]+\\d*)"
 
     // 优化 2：添加 NSLock 保证线程安全
-    private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
+    @MainActor private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
     private static let cacheLock = NSLock()
 
-    static func getElements(from text: String, with pattern: String, range: NSRange) -> [NSTextCheckingResult]{
+    @MainActor static func getElements(from text: String, with pattern: String, range: NSRange) -> [NSTextCheckingResult]{
         guard let elementRegex = regularExpression(for: pattern) else { return [] }
         let result = elementRegex.matches(in: text, options: [], range: range)
         return result
     }
 
-    private static func regularExpression(for pattern: String) -> NSRegularExpression? {
+    @MainActor private static func regularExpression(for pattern: String) -> NSRegularExpression? {
         // 使用锁来保护字典的读写操作
         cacheLock.lock()
         defer { cacheLock.unlock() } // 无论以何种方式 return，defer 都会确保锁被释放

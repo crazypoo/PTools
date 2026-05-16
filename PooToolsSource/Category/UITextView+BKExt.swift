@@ -11,7 +11,7 @@ import SnapKit
 
 // MARK: - 扩展 UITextView，添加 placeholder 和 字数限制功能
 public extension UITextView {
-    
+    @MainActor
     private struct AssociatedKeys {
         static var pt_placeholderLabelKey = 999
         static var pt_placeholderKey = 998

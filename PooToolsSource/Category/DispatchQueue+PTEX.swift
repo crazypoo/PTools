@@ -11,7 +11,7 @@ import UIKit
 extension DispatchQueue: PTProtocolCompatible {}
 
 public extension PTPOP where Base == DispatchQueue {
-    private static var unaTracker = [String]()
+    @MainActor private static var unaTracker = [String]()
     
     //MARK: 函数只被执行一次
     ///函数只被执行一次

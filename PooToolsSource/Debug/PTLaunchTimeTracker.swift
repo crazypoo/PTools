@@ -9,9 +9,9 @@
 import Foundation
 
 enum PTLaunchTimeTracker {
-    static var launchStartTime: TimeInterval?
+    @MainActor static var launchStartTime: TimeInterval?
 
-    static func measureAppStartUpTime() {
+    @MainActor static func measureAppStartUpTime() {
         // 设置kinfo结构体并获取当前进程信息
         var kinfo = kinfo_proc()
         var size = MemoryLayout<kinfo_proc>.stride
