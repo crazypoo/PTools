@@ -21,6 +21,7 @@ public struct PTAlertDebugSnapshot {
     }
 }
 
+@MainActor
 @objcMembers
 public final class PTAlertManager: NSObject {
 
@@ -137,21 +138,23 @@ private extension PTAlertManager {
                   let controller = container.showingControllers[key] else { continue }
 
             controller.dismissAnimation { [weak self] in
-                guard let self else { return }
-                self.recycle(window)
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    self.recycle(window)
 
-                container.showingWindows.removeValue(forKey: key)
-                container.showingControllers.removeValue(forKey: key)
+                    container.showingWindows.removeValue(forKey: key)
+                    container.showingControllers.removeValue(forKey: key)
 
-                self.updateContainer(container, for: scene)
+                    self.updateContainer(container, for: scene)
 
-                self.makeMainWindowKey(in: scene)
+                    self.makeMainWindowKey(in: scene)
 
-                Task { @MainActor in
-                    self.showNextIfNeeded(scene: scene)
+                    Task { @MainActor in
+                        self.showNextIfNeeded(scene: scene)
+                    }
+
+                    completion?()
                 }
-
-                completion?()
             }
         }
     }
@@ -355,8 +358,9 @@ private extension PTAlertManager {
             queue: .main) { [weak self] notification in
 
             guard let scene = notification.object as? UIWindowScene else { return }
-
-            self?.sceneContainers.removeValue(forKey: scene)
+                Task { @MainActor in
+                    self?.sceneContainers.removeValue(forKey: scene)
+                }
         }
     }
 }

@@ -273,7 +273,7 @@ class AppDelegate: PTAppWindowsDelegate {
         PTRouter.shareInstance.customNavClass = PTBaseNavControl.self
         PTRouter.shareInstance.webPath = "scheme://webview/home"
         var valuePaths = [String]()
-        var loginInterceptor = PTLoginInterceptor()
+        let loginInterceptor = PTLoginInterceptor()
         PTRouteViewController.patternString.forEach { value in
             PTRouter.addRouterItem(value, classString: NSStringFromClass(PTRouteViewController.self))
             valuePaths.append(value)

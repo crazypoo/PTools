@@ -29,13 +29,14 @@ public protocol PTThemeable: AnyObject {
 
 // MARK: - 设置遵守UITraitEnvironment的可以使用协议PTThemeable
 public extension PTThemeable where Self: UITraitEnvironment {
-    var themeProvider: PTThemeProvider {
+    @MainActor var themeProvider: PTThemeProvider {
         LegacyThemeProvider.shared
     }
 }
 
 // MARK: - LegacyThemeProvider
-public class LegacyThemeProvider: PTThemeProvider {
+@MainActor
+public class LegacyThemeProvider: @MainActor PTThemeProvider {
     
     /// 单粒
     static let shared = LegacyThemeProvider()
@@ -56,7 +57,7 @@ public class LegacyThemeProvider: PTThemeProvider {
     // MARK: 通知监听对象更新theme
     /// 通知监听对象更新theme
     private func notifyObservers() {
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             self.observers.allObjects
                 .compactMap({ $0 as? PTThemeable })
                 .forEach({ $0.apply() })

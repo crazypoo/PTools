@@ -50,7 +50,7 @@ class CropDimView: UIView {
 }
 
 // MARK: CAAnimationDelegate
-extension CropDimView: CAAnimationDelegate {
+extension CropDimView: @MainActor CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         guard let path = self.path else { return }
         if let mask = self.layer.mask as? CAShapeLayer {

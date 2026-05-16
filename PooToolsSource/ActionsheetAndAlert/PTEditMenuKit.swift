@@ -64,16 +64,16 @@ public final class PTEditMenuKit: NSObject {
     }
 
     deinit {
-        // deinit 默认是非隔离的 (nonisolated)，若要访问 MainActor 属性需特殊处理或捕获
-        if #available(iOS 16.0, *) {
-            let interactionObj = editMenuInteraction
-            let viewObj = targetView
-            Task { @MainActor [interactionObj, viewObj] in
-                if let interaction = interactionObj as? UIEditMenuInteraction {
-                    viewObj?.removeInteraction(interaction)
-                }
-            }
-        }
+//        // deinit 默认是非隔离的 (nonisolated)，若要访问 MainActor 属性需特殊处理或捕获
+//        if #available(iOS 16.0, *) {
+//            let interactionObj = editMenuInteraction
+//            let viewObj = targetView
+//            Task { @MainActor [interactionObj, viewObj] in
+//                if let interaction = interactionObj as? UIEditMenuInteraction {
+//                    viewObj?.removeInteraction(interaction)
+//                }
+//            }
+//        }
     }
 
     private func configure() {

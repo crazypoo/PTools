@@ -52,7 +52,7 @@ extension DefaultElementAttributesLibrary {
             case isSecureTextEntry = "Secure Text Entry"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let textField = textField else { return [] }
 
             return Property.allCases.compactMap { property in

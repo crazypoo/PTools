@@ -9,7 +9,8 @@
 import UIKit
 import CoreLocation
 
-class PTLocationManager: NSObject,CLLocationManagerDelegate {
+@MainActor
+class PTLocationManager: NSObject,@MainActor CLLocationManagerDelegate {
     static var shared = PTLocationManager()
     private var locationManager = CLLocationManager()
 
@@ -33,7 +34,9 @@ class PTLocationManager: NSObject,CLLocationManagerDelegate {
                 }
 
                 if let placemark = placemarks?.first {
-                    self.displayLocationInfo(placemark)
+                    Task { @MainActor in
+                        self.displayLocationInfo(placemark)
+                    }
                 } else {
                     PTNSLogConsole("Error with the data. Missing placemark for location info.")
                 }

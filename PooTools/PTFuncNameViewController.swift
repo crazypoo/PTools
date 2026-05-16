@@ -159,7 +159,7 @@ class PTFuncNameViewController: PTBaseViewController {
         return models
     }
     
-    func cSections() -> [PTSection] {
+    @MainActor func cSections() -> [PTSection] {
         let disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
         let sectionTitleFont:UIFont = .appfont(size: 18,bold: true)
         /**
@@ -856,7 +856,9 @@ class PTFuncNameViewController: PTBaseViewController {
                             PTGCDManager.gcdAfter(time: 5) {
                                 Task { @MainActor in
                                     cycle.stopAnimation {
-                                        cycle.removeFromSuperview()
+                                        Task { @MainActor in
+                                            cycle.removeFromSuperview()
+                                        }
                                     }
                                 }
                             }
@@ -1015,7 +1017,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 PTGCDManager.gcdAfter(time: 1, block: {
                     Task { @MainActor in
                         self.collectionView.hideEmptyLoading(task: {
-                            self.showCollectionViewData()
+                            Task { @MainActor in
+                                self.showCollectionViewData()
+                            }
                         })
                     }
                 })
@@ -1222,7 +1226,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
                 emptyDataViewConfig = emptyConfig
                 showEmptyView {
-                    self.emptyReload()
+                    Task { @MainActor in
+                        self.emptyReload()
+                    }
                 }
                 
                 PTGCDManager.gcdAfter(time: 5) {
@@ -1342,8 +1348,12 @@ class PTFuncNameViewController: PTBaseViewController {
         PTGCDManager.gcdAfter(time: 2) {
             Task { @MainActor in
                 self.hideEmptyView {
-                    self.collectionView.clearAllData { cView in
-                        self.showCollectionViewData()
+                    Task { @MainActor in
+                        self.collectionView.clearAllData { cView in
+                            Task { @MainActor in
+                                self.showCollectionViewData()
+                            }
+                        }
                     }
                 }
             }

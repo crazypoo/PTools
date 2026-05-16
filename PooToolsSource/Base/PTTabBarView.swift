@@ -36,6 +36,7 @@ public struct PTTabBarItemConfig {
     }
 }
 
+@MainActor
 final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
 
     private let container = UIView()
