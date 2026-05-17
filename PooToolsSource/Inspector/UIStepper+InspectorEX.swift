@@ -143,7 +143,7 @@ public extension UIStepper {
             self.wraps        = wraps
         }
         
-        public static let defaultOptions = UIStepper.Options(
+        @MainActor public static let defaultOptions = UIStepper.Options(
             value: 0,
             minimumValue: 0,
             maximumValue: 100

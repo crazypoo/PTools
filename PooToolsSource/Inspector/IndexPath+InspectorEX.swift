@@ -14,8 +14,8 @@ extension IndexPath {
         case sectionBelowBounds, sectionAboveBounds, rowBelowBounds, rowAboveBounds
     }
     
-    static var first = IndexPath(row: .zero, section: .zero)
-    var isFirst: Bool { self == .first }
+    @MainActor static var first = IndexPath(row: .zero, section: .zero)
+    @MainActor var isFirst: Bool { self == .first }
     var isEvenRow: Bool { row % 2 == 0 }
 
     func previousRow() -> IndexPath {
