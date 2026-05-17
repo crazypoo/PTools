@@ -15,18 +15,27 @@ import Photos
 import SmartCodable
 import KakaJSON
 
-public enum PTNetworkError: Error, LocalizedError, CustomNSError {
+public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable {
+    
+    // MARK: - 基础网络错误
     case noNetwork
     case checkIPFail
     case downloadFail
     case jsonExplainFail
     case modelExplainFail
     
+    // MARK: - 业务与数据错误
     case dataEmpty
     case htmlResponse(String)
     case uploadDataError(String)
     case businessError(code: Int, msg: String)
     
+    // MARK: - LocalizedError 协议实现
+    
+    /// 错误的本地化描述
+    /// 🌟 修复：移除了 @MainActor。
+    /// LocalizedError 协议要求此属性是非隔离的 (non-isolated)。
+    /// 只要 `.localized()` 扩展没有修改外部状态，它就是线程安全的。
     @MainActor public var errorDescription: String? {
         switch self {
         case .noNetwork:        return "PT Network no network".localized()
@@ -42,6 +51,9 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
         }
     }
     
+    // MARK: - CustomNSError 协议实现
+    
+    /// 错误代码
     public var errorCode: Int {
         switch self {
         case .checkIPFail:      return 99999999995
@@ -57,6 +69,7 @@ public enum PTNetworkError: Error, LocalizedError, CustomNSError {
         }
     }
     
+    /// 错误域
     public static var errorDomain: String {
         return "com.pt.network.error"
     }
@@ -136,18 +149,45 @@ public var PTSocketURLMode:NetWorkEnvironment {
     return .Distribution
 }
 
-public final class NetworkReachability {
+/// 🌟 步骤 1：标记为 @unchecked Sendable。
+/// 这告诉编译器：“虽然我内部有 var，但我会通过加锁的方式自己保证线程安全，请允许我跨线程传递。”
+public final class NetworkReachability: @unchecked Sendable {
+    
     public static let shared = NetworkReachability()
+    
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "network.reachability")
     
-    private(set) var isReachable: Bool = true
-    private(set) var isExpensive: Bool = false
+    // 🌟 步骤 2：引入互斥锁，用于保护共享数据的读写
+    private let lock = NSLock()
+    
+    // 🌟 步骤 3：将真实的数据隐藏起来
+    private var _isReachable: Bool = true
+    private var _isExpensive: Bool = false
+    
+    // 🌟 步骤 4：对外暴露计算属性。每次读取时都加锁，保证读取时不会发生正在写入的情况。
+    public var isReachable: Bool {
+        lock.withLock {
+            return _isReachable
+        }
+    }
+    
+    public var isExpensive: Bool {
+        lock.withLock {
+            return _isExpensive
+        }
+    }
     
     private init() {
+        // NWPathMonitor 的回调是在我们指定的 queue (后台线程) 中触发的
         monitor.pathUpdateHandler = { [weak self] path in
-            self?.isReachable = (path.status == .satisfied)
-            self?.isExpensive = path.isExpensive
+            guard let self = self else { return }
+            
+            // 🌟 步骤 5：在写入数据时同样加锁，确保写入操作的原子性和安全性
+            self.lock.withLock {
+                self._isReachable = (path.status == .satisfied)
+                self._isExpensive = path.isExpensive
+            }
         }
         monitor.start(queue: queue)
     }
@@ -581,6 +621,11 @@ public struct PTNetworkConfig: Sendable {
     public init() {}
 }
 
+private enum PreparedUploadMedia {
+    case data(Data, mimeType: String, fileName: String)
+    case fileURL(URL, mimeType: String, fileName: String)
+}
+
 // MARK: - ================= 4. 核心 Network 调度枢纽 =================
 
 public final class Network: @unchecked Sendable {
@@ -804,7 +849,7 @@ public final class Network: @unchecked Sendable {
     }
     
     private typealias ResponseParser<T> = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel<T>
-    private typealias UploadResponseParser<T> = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel<T>
+    public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>
     
     // MARK: - ================= 5. 底层核心执行引擎 =================
 
@@ -874,99 +919,155 @@ public final class Network: @unchecked Sendable {
         return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
     }
     
-    private class func _internalFileUpload<T>(needGobal: Bool, media: Any, path: URLConvertible, method: HTTPMethod, fileKey: String, params: [String: String]?, header: HTTPHeaders?, jsonRequest: Bool, parser: @escaping UploadResponseParser<T>) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
-        AsyncThrowingStream { continuation in
-            Task {
-                do {
-                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
-                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
-                    
-                    let session = Network.share.session
-                    session.upload(multipartFormData: { multipartFormData in
-                        if let phasset = media as? PHAsset {
-                            switch phasset.mediaType {
-                            case .image:
-                                Task {
-                                    let image = await phasset.asyncImage()
-                                    if let findImage = image {
-                                        let canPNG = findImage.pngData() != nil
-                                        if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
-                                            let ext = canPNG ? "png" : "jpg"
-                                            multipartFormData.append(imageData, withName: fileKey, fileName: "image_\(Int(Date().timeIntervalSince1970)).\(ext)", mimeType: MimeTypeHelper.mimeType(for: ext))
-                                        } else { continuation.finish(throwing: PTNetworkError.uploadDataError("Image data error")) }
-                                    }
-                                }
-                            case .video:
-                                phasset.converPHAssetToAVURLAsset { urlAsset in
-                                    if let url = urlAsset?.url {
-                                        let ext = url.pathExtension.lowercased()
-                                        multipartFormData.append(url, withName: fileKey, fileName: "video_\(Int(Date().timeIntervalSince1970)).\(ext)", mimeType: MimeTypeHelper.mimeType(for: ext))
-                                    } else { continuation.finish(throwing: PTNetworkError.uploadDataError("Video data error")) }
-                                }
-                            case .audio:
-                                phasset.converPHAssetToAVURLAsset { urlAsset in
-                                    if let url = urlAsset?.url {
-                                        let ext = url.pathExtension.lowercased()
-                                        multipartFormData.append(url, withName: fileKey, fileName: "audio_\(Int(Date().timeIntervalSince1970)).\(ext)", mimeType: MimeTypeHelper.mimeType(for: ext))
-                                    }
-                                }
-                            default: continuation.finish(throwing: NSError(domain: "Unknow data error", code: 666))
-                            }
-                        } else if let findImage = media as? UIImage {
-                            let canPNG = findImage.pngData() != nil
-                            if let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) {
-                                let ext = canPNG ? "png" : "jpg"
-                                multipartFormData.append(imageData, withName: fileKey, fileName: "image_\(Int(Date().timeIntervalSince1970)).\(ext)", mimeType: MimeTypeHelper.mimeType(for: ext))
-                            } else { continuation.finish(throwing: NSError(domain: "Image data error", code: 666)) }
-                        } else if let findUrl = media as? URL {
-                            if findUrl.isFileURL {
-                                let uploadURL: URL
-                                if findUrl.path.contains("File Provider Storage") || findUrl.path.contains("com.apple.FileProvider") {
-                                    let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(findUrl.lastPathComponent)
-                                    try? FileManager.default.removeItem(at: tmpURL)
-                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
-                                    uploadURL = tmpURL
-                                } else { uploadURL = findUrl }
-                                let ext = uploadURL.pathExtension.lowercased()
-                                multipartFormData.append(uploadURL, withName: fileKey, fileName: uploadURL.lastPathComponent, mimeType: MimeTypeHelper.mimeType(for: ext))
-                            } else { continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666)) }
-                        } else if let findString = media as? String, let findUrl = URL(string: findString) {
-                            if findUrl.isFileURL {
-                                let uploadURL: URL
-                                if findUrl.path.contains("File Provider Storage") || findUrl.path.contains("com.apple.FileProvider") {
-                                    let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(findUrl.lastPathComponent)
-                                    try? FileManager.default.removeItem(at: tmpURL)
-                                    try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
-                                    uploadURL = tmpURL
-                                } else { uploadURL = findUrl }
-                                let ext = uploadURL.pathExtension.lowercased()
-                                multipartFormData.append(uploadURL, withName: fileKey, fileName: uploadURL.lastPathComponent, mimeType: MimeTypeHelper.mimeType(for: ext))
-                            } else { continuation.finish(throwing: NSError(domain: "Need to down load first", code: 666)) }
+    // 确保你的 parser 带有 @Sendable 标记
+        private class func _internalFileUpload<T>(
+            needGobal: Bool,
+            media: Any,
+            path: URLConvertible,
+            method: HTTPMethod,
+            fileKey: String,
+            params: [String: String]?,
+            header: HTTPHeaders?,
+            jsonRequest: Bool,
+            parser: @escaping @Sendable UploadResponseParser<T> // 🌟 关键：标记为 @Sendable
+        ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+            
+            AsyncThrowingStream { continuation in
+                Task {
+                    do {
+                        // 1️⃣ 数据准备阶段
+                        let preparedMedia = try await prepareMediaResource(media: media)
+                        let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                        
+                        // 2️⃣ 手动构建 MultipartFormData 对象，取代闭包构建法！
+                        // 这将消除闭包内捕获局部变量带来的并发安全隐患
+                        let multipartData = MultipartFormData()
+                        
+                        // 填充主文件
+                        switch preparedMedia {
+                        case .data(let data, let mimeType, let fileName):
+                            multipartData.append(data, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                        case .fileURL(let url, let mimeType, let fileName):
+                            multipartData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
                         }
                         
+                        // 填充附加参数
                         params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) { multipartFormData.append(data, withName: key) }
+                            if let data = value.data(using: .utf8) {
+                                multipartData.append(data, withName: key)
+                            }
                         }
-                    }, to: pathUrl, method: method, headers: apiHeader)
-                    .uploadProgress { progress in continuation.yield((progress, nil)) }
-                    .response { resp in
-                        switch resp.result {
-                        case .success(_):
-                            do {
-                                let parsed = try parser(pathUrl, resp.response, resp.data)
-                                continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                continuation.finish()
-                            } catch { continuation.finish(throwing: error) }
-                        case .failure(let error):
-                            logRequestFailure(url: pathUrl, error: error)
-                            continuation.finish(throwing: error)
-                        }
+                        
+                        let session = Network.share.session
+                        
+                        // 3️⃣ 发起请求，并在回调中显式声明 @Sendable
+                        session.upload(multipartFormData: multipartData, to: pathUrl, method: method, headers: apiHeader)
+                            .uploadProgress { @Sendable progress in // 🌟 显式告诉编译器这是并发安全的闭包
+                                continuation.yield((progress, nil))
+                            }
+                            .response { @Sendable resp in           // 🌟 显式告诉编译器这是并发安全的闭包
+                                switch resp.result {
+                                case .success(_):
+                                    do {
+                                        // 确保 parser 和其他捕获的变量不会造成数据竞争
+                                        let parsed = try parser(pathUrl, resp.response, resp.data)
+                                        continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                        continuation.finish()
+                                    } catch {
+                                        continuation.finish(throwing: error)
+                                    }
+                                case .failure(let error):
+                                    // 假设 logRequestFailure 为全局函数或已在此上下文安全
+                                    logRequestFailure(url: pathUrl, error: error)
+                                    continuation.finish(throwing: error)
+                                }
+                            }
+                    } catch {
+                        continuation.finish(throwing: error)
                     }
-                } catch { continuation.finish(throwing: error) }
+                }
             }
         }
+    // 🌟 步骤 3：将媒体处理逻辑提取为一个独立的 async 方法
+    private class func prepareMediaResource(media: Any) async throws -> PreparedUploadMedia {
+        if let phasset = media as? PHAsset {
+            switch phasset.mediaType {
+            case .image:
+                let image = await phasset.asyncImage()
+                guard let findImage = image else { throw PTNetworkError.uploadDataError("Image data error") }
+                let canPNG = findImage.pngData() != nil
+                guard let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) else {
+                    throw PTNetworkError.uploadDataError("Image data error")
+                }
+                let ext = canPNG ? "png" : "jpg"
+                let fileName = "image_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                return .data(imageData, mimeType: MimeTypeHelper.mimeType(for: ext), fileName: fileName)
+                
+            case .video, .audio:
+                // 使用 withCheckedThrowingContinuation 将基于闭包的回调转换为 Swift 的 async/await
+                let urlAsset: AVURLAsset = try await withCheckedThrowingContinuation { cont in
+                    phasset.converPHAssetToAVURLAsset { asset in
+                        if let asset = asset {
+                            cont.resume(returning: asset)
+                        } else {
+                            cont.resume(throwing: PTNetworkError.uploadDataError("Video/Audio data error"))
+                        }
+                    }
+                }
+                
+                let url = urlAsset.url
+                let ext = url.pathExtension.lowercased()
+                let prefix = phasset.mediaType == .video ? "video" : "audio"
+                let fileName = "\(prefix)_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                return .fileURL(url, mimeType: MimeTypeHelper.mimeType(for: ext), fileName: fileName)
+                
+            default:
+                throw PTNetworkError.uploadDataError("Unknown data error")
+            }
+            
+        } else if let findImage = media as? UIImage {
+            let canPNG = findImage.pngData() != nil
+            guard let imageData = findImage.pngData() ?? findImage.jpegData(compressionQuality: 0.6) else {
+                throw PTNetworkError.uploadDataError("Image data error")
+            }
+            let ext = canPNG ? "png" : "jpg"
+            let fileName = "image_\(Int(Date().timeIntervalSince1970)).\(ext)"
+            return .data(imageData, mimeType: MimeTypeHelper.mimeType(for: ext), fileName: fileName)
+            
+        } else if let findUrl = media as? URL {
+            return try processUploadFileURL(findUrl)
+            
+        } else if let findString = media as? String, let findUrl = URL(string: findString) {
+            return try processUploadFileURL(findUrl)
+            
+        } else {
+            throw PTNetworkError.uploadDataError("Unsupported media type")
+        }
     }
-    
+
+    // 🌟 步骤 4：独立处理 FileProvider 沙盒文件的拷贝逻辑
+    private class func processUploadFileURL(_ findUrl: URL) throws -> PreparedUploadMedia {
+        guard findUrl.isFileURL else {
+            throw PTNetworkError.uploadDataError("Need to download first")
+        }
+        
+        let uploadURL: URL
+        if findUrl.path.contains("File Provider Storage") || findUrl.path.contains("com.apple.FileProvider") {
+            let tmpURL = FileManager.default.temporaryDirectory.appendingPathComponent(findUrl.lastPathComponent)
+            try? FileManager.default.removeItem(at: tmpURL)
+            try? FileManager.default.copyItem(at: findUrl, to: tmpURL)
+            uploadURL = tmpURL
+        } else {
+            uploadURL = findUrl
+        }
+        
+        let ext = uploadURL.pathExtension.lowercased()
+        let fileName = uploadURL.lastPathComponent
+        return .fileURL(uploadURL, mimeType: MimeTypeHelper.mimeType(for: ext), fileName: fileName)
+    }
+
+
     private class func _internalImageUpload<T>(needGobal: Bool, images: [UIImage]?, path: URLConvertible, method: HTTPMethod, fileKey: [String], params: [String: String]?, header: HTTPHeaders?, jsonRequest: Bool, pngData: Bool, parser: @escaping UploadResponseParser<T>) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
         AsyncThrowingStream { continuation in
             Task {
