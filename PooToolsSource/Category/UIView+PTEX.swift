@@ -20,7 +20,7 @@ import AVFoundation
     case BottomToTop
 }
 
-var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
+@MainActor var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 extension UIView: PTProtocolCompatible {}
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
@@ -847,15 +847,18 @@ public extension UIView {
     }
 }
 
-//MARK: Load image core
 public extension UIView {
+    
     // 2. 手动取消
+    // 🌟 标记 @MainActor 确保在主线程操作 Task 引用
+    @MainActor
     func cancelImageLoad() {
         ptLoadTask?.cancel()
         ptLoadTask = nil
     }
     
     // 3. 核心大一统方法
+    @MainActor // 🌟 整个方法基于 UI，直接标记为 MainActor
     func pt_loadCoreImage(contentData: Any,
                           iCloudDocumentName: String = "",
                           radius: CGFloat = 0,
@@ -872,9 +875,10 @@ public extension UIView {
                           valueLabelColor: UIColor? = nil,
                           uniCount: Int? = nil,
                           emptyImage: UIImage? = nil,
-                          progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
-                          setImageBlock: @escaping @MainActor (UIImage?) -> Void, // <--- 关键点：交还给具体类的渲染闭包
-                          loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+                          progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                          setImageBlock: @escaping @MainActor @Sendable (UIImage?) -> Void,
+                          loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
+        
         let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
         let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
         let showValueL = showValueLabel ?? PTAppBaseConfig.share.loadImageShowValueLabel
@@ -887,78 +891,74 @@ public extension UIView {
         cancelImageLoad()
 
         let loadID = UUID()
-        ptLoadUUID = loadID
+        self.ptLoadUUID = loadID
 
-        func isValid() -> Bool {
-            return self.ptLoadUUID == loadID
+        // 内部安全校验：由于整个上下文是 @MainActor，直接比对是安全的
+        let isValid: @MainActor @Sendable () -> Bool = { [weak self] in
+            return self?.ptLoadUUID == loadID
         }
 
-        func setEmpty() {
+        let setEmpty: @MainActor @Sendable () -> Void = {
             guard isValid() else { return }
-            Task { @MainActor in
-                guard isValid() else { return }
-                setImageBlock(placeholder)
+            // 此时调用 setImageBlock 绝对安全
+            setImageBlock(placeholder)
+        }
+
+        let showImage: @MainActor @Sendable (UIImage) -> Void = { [weak self] image in
+            guard let self = self, isValid() else { return }
+            
+            setImageBlock(image)
+            self.layerProgress(value: 1,
+                               radius: radius,
+                               topLeft: topLeft,
+                               topRight: topRight,
+                               bottomLeft: bottomLeft,
+                               bottomRight: bottomRight,
+                               corner: corner,
+                               capsule: capsule,
+                               borderWidth: borderW,
+                               borderColor: borderC,
+                               showValueLabel: showValueL,
+                               valueLabelFont: valueLabelF,
+                               valueLabelColor: valueLabelC,
+                               uniCount: uniC)
+        }
+
+        let finish: @MainActor @Sendable (PTLoadImageResult) -> Void = { result in
+            guard isValid() else { return }
+            
+            guard let images = result.allImages, !images.isEmpty else {
+                setEmpty()
+                loadFinish?(result)
+                return
             }
-        }
 
-        func showImage(_ image: UIImage) {
-            guard isValid() else { return }
-            Task { @MainActor in
-                guard isValid() else { return }
-                setImageBlock(image)
-                self.layerProgress(value: 1,
-                                   radius: radius,
-                                   topLeft: topLeft,
-                                   topRight: topRight,
-                                   bottomLeft: bottomLeft,
-                                   bottomRight: bottomRight,
-                                   corner: corner,
-                                   capsule: capsule,
-                                   borderWidth: borderW,
-                                   borderColor: borderC,
-                                   showValueLabel: showValueL,
-                                   valueLabelFont: valueLabelF,
-                                   valueLabelColor: valueLabelC,
-                                   uniCount: uniC)
-                // 构造一个虚拟的 Result 用于本地图片/颜色等的回调
-                // 假设 PTLoadImageResult 有个对应的构造器，如果没有请按照你的实际 struct 进行初始化
-                // loadFinish?(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0))
-            }
-        }
-
-        func finish(_ result: PTLoadImageResult) {
-            guard isValid() else { return }
-            Task { @MainActor in
-                guard isValid() else { return }
-                guard let images = result.allImages, !images.isEmpty else {
-                    setEmpty()
+            if images.count > 1 {
+                let loadTime = result.loadTime
+                Task { @MainActor in // 保护内部 Task
+                    let gif = await Task.detached {
+                        return UIImage.animatedImage(with: images, duration: loadTime)
+                    }.value
+                    
+                    guard isValid() == true else { return }
+                    setImageBlock(gif)
                     loadFinish?(result)
-                    return
                 }
+            } else {
+                setImageBlock(result.firstImage)
+                loadFinish?(result)
+            }
+        }
 
-                if images.count > 1 {
-                    DispatchQueue.global().async {
-                        let gif = UIImage.animatedImage(with: images, duration: result.loadTime)
-                        Task { @MainActor in
-                            guard isValid() else { return }
-                            setImageBlock(gif)
-                            loadFinish?(result)
-                        }
+        let loadVideo: @MainActor @Sendable (URL) -> Void = { [weak self] url in
+            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { [weak self] image in
+                Task { @MainActor in
+                    guard self?.ptLoadUUID == loadID else { return }
+                    if let image {
+                        showImage(image)
+                    } else {
+                        setEmpty()
                     }
-                } else {
-                    setImageBlock(result.firstImage)
-                    loadFinish?(result)
-                }
-            }
-        }
-
-        func loadVideo(url: URL) {
-            PTVideoCoverCache.getVideoFirstImage(videoUrl: url.absoluteString) { image in
-                guard isValid() else { return }
-                if let image {
-                    showImage(image)
-                } else {
-                    setEmpty()
                 }
             }
         }
@@ -968,11 +968,12 @@ public extension UIView {
 
             // 视频
             if GlobalVideoExts.contains(ext) {
-                loadVideo(url: url)
+                loadVideo(url)
                 return
             }
 
-            ptLoadTask = Task {
+            // 🌟 将 Task 明确标记为继承 @MainActor，保护内部的 UI 操作
+            ptLoadTask = Task { @MainActor in
                 if Task.isCancelled { return }
 
                 if let cache = await PTLoadImageFunction.cachedImage(from: url) {
@@ -984,11 +985,10 @@ public extension UIView {
                 let result = await PTLoadImageFunction.loadImage(
                     contentData: url,
                     iCloudDocumentName: iCloudDocumentName
-                ) { received, total in
-                    guard isValid() else { return }
-
+                ) { @Sendable received, total in
+                    // 🌟 网络进度回调（可能是后台），切回主线程再操作 self
                     Task { @MainActor in
-                        guard isValid() else { return }
+                        guard self.ptLoadUUID == loadID else { return }
                         if let progressHandle {
                             progressHandle(received, total)
                         } else {
@@ -1011,6 +1011,7 @@ public extension UIView {
                         }
                     }
                 }
+                
                 if Task.isCancelled { return }
                 finish(result)
             }
@@ -1028,19 +1029,23 @@ public extension UIView {
                 setEmpty()
             }
         case let asset as PHAsset:
-            ptLoadTask = Task {
+            ptLoadTask = Task { @MainActor in
                 if Task.isCancelled { return }
                 let result = await PTLoadImageFunction.handleAssetContent(asset: asset)
                 if Task.isCancelled { return }
                 finish(result)
             }
         case let avasset as AVAsset:
-            avasset.getVideoFirstImage { image in
-                guard isValid() else { return }
-                if let image {
-                    showImage(image)
-                } else {
-                    setEmpty()
+            avasset.getVideoFirstImage { [weak self] image in
+                Task { @MainActor in
+                    // 确保 UIView 还没有被销毁，并且本次加载任务没有被新任务覆盖
+                    guard let self = self, self.ptLoadUUID == loadID else { return }
+                    
+                    if let image {
+                        showImage(image)
+                    } else {
+                        setEmpty()
+                    }
                 }
             }
         case let url as URL:
@@ -1390,31 +1395,40 @@ public protocol UIFadeOut {}
 extension UIFadeOut where Self: UIView {
     
     /**
-        Hide view with fade out animation.
+     Hide view with fade out animation.
      
      - parameter duration: Duration of all animation.
      - parameter delay: Pause when view dissapear in middle of animation.
      - parameter work: Apply view changes here.
      - parameter completion: Call after end of animation.
      */
+    // 🌟 修复 1：明确整个扩展方法都在主线程执行
+    @MainActor
     public func fadeUpdate(duration: TimeInterval = 1,
                            delay: TimeInterval = 0.15,
-                           work: @escaping (Self) -> Void,
-                           completion: PTActionTask? = nil) {
+                           work: @escaping @MainActor (Self) -> Void,
+                           completion: (@MainActor @Sendable () -> Void)? = nil) {
+        
         let partDuration = (duration - delay) / 2
         let storedAlpha = self.alpha
+        
+        // 第一阶段：淡出
         UIView.animate(withDuration: partDuration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
             self?.alpha = .zero
         }, completion: { [weak self] finished in
-            if let self = self {
-                work(self)
-            }
+            guard let self = self else { return }
+            
+            // 🌟 在这里执行外部传入的 UI 数据更新操作
+            // 因为 work 被标记了 @MainActor，且当前在 UIView.animate 的主线程回调中，所以绝对安全
+            work(self)
+            
+            // 第二阶段：淡入（嵌套动画）
             UIView.animate(withDuration: partDuration, delay: delay, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
                 self?.alpha = storedAlpha
             }, completion: { finished in
-                Task { @MainActor in
-                    completion?()
-                }
+                // 🌟 修复 4：UIView.animate 的 completion 天然就在 MainActor 上，
+                // 直接调用即可，去掉了冗余的 Task { @MainActor in }，动画衔接会更丝滑
+                completion?()
             })
         })
     }

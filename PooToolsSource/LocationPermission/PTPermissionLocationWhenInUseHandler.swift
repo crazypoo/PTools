@@ -63,7 +63,7 @@ class PTPermissionLocationWhenInUseHandler: NSObject, @preconcurrency CLLocation
     
     // MARK: - Init
     
-    static var shared: PTPermissionLocationWhenInUseHandler?
+    @MainActor static var shared: PTPermissionLocationWhenInUseHandler?
     
     override init() {
         super.init()

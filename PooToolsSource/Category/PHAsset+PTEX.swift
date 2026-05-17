@@ -14,14 +14,50 @@ import PhotosUI
 extension PHAsset: PTProtocolCompatible {}
 
 public extension PHAsset {
-    // 使用 objc_Association 来存储 requestID
+    // 使用 objc_Association 来存储状态
+    @MainActor
     private struct AssociatedKeys {
         static var requestID = 1
         static var exportSession = 2
-        static var timer = 3
+        // 🌟 修复 1：将 Timer 替换为 Task，完美契合 Swift 6 且不受 RunLoop 限制
+        static var exportTask = 3
     }
     
-    var requestID: PHImageRequestID? {
+    private struct PTSendableExportSession: @unchecked Sendable {
+        let session: AVAssetExportSession
+    }
+
+    // 🌟 修改：接收 PTSendableExportSession 包装器
+    @MainActor private func startExportProgressMonitoring(sendableSession: PTSendableExportSession, progressHandler: @escaping @Sendable (Float) -> Void) {
+        exportTask?.cancel() // 停止之前的任务
+        
+        exportTask = Task {
+            // 在 Task 内部安全地解包拿出 session
+            let session = sendableSession.session
+            
+            // 只要任务未被取消，就不断轮询进度
+            while !Task.isCancelled {
+                let progress = session.progress
+                PTNSLogConsole("当前下载进度：\(progress * 100)%")
+                progressHandler(progress)
+
+                // 达到完成状态即刻退出循环
+                if progress >= 1.0 || session.status == .completed || session.status == .failed || session.status == .cancelled {
+                    PTNSLogConsole("下载监控结束")
+                    break
+                }
+                
+                // 暂停 0.1 秒 (100,000,000 纳秒) 后继续下一次检查
+                try? await Task.sleep(nanoseconds: 100_000_000)
+            }
+        }
+    }
+    
+    struct PTSendableAVAsset: @unchecked Sendable {
+        let asset: AVAsset
+    }
+
+    @MainActor var requestID: PHImageRequestID? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.requestID) as? PHImageRequestID
         }
@@ -30,7 +66,7 @@ public extension PHAsset {
         }
     }
     
-    var exportSession: AVAssetExportSession? {
+    @MainActor var exportSession: AVAssetExportSession? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.exportSession) as? AVAssetExportSession
         }
@@ -39,27 +75,39 @@ public extension PHAsset {
         }
     }
 
-    var exportTimer: Timer? {
+    // 🌟 将原本的 exportTimer 改为 exportTask
+    @MainActor var exportTask: Task<Void, Never>? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.timer) as? Timer
+            return objc_getAssociatedObject(self, &AssociatedKeys.exportTask) as? Task<Void, Never>
         }
         set {
-            objc_setAssociatedObject(self, &AssociatedKeys.timer, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.exportTask, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
-    func convertPHAssetToAVAsset(progressHandler: @escaping (Float) -> Void) async throws -> AVAsset? {
-        await withUnsafeContinuation { continuation in
+    // 🌟 修复 2：将 progressHandler 标记为 @Sendable，并使用 withCheckedContinuation
+    @MainActor
+    func convertPHAssetToAVAsset(progressHandler: @escaping @Sendable (Float) -> Void) async throws -> AVAsset? {
+        
+        // continuation 期待返回安全的 PTSendableAVAsset? 类型
+        let safeResult = await withCheckedContinuation { continuation in
             self.convertPHAssetToAVAsset(progress: { progress in
                 progressHandler(progress)
-            }, completion: { avAsset in
-                continuation.resume(returning: avAsset)
+            }, completion: { safeAssetWrapper in
+                // 此时 safeAssetWrapper 是 Sendable 的，跨越隔离边界绝对安全！
+                continuation.resume(returning: safeAssetWrapper)
             })
         }
+        
+        // 当代码执行到这里，我们已经安全地回到了 @MainActor 隔离区。
+        // 现在可以放心地将原始的 AVAsset 剥离出来并返回了。
+        return safeResult?.asset
     }
-    
-    func convertPHAssetToAVAsset(progress: @escaping (Float) -> Void,
-                                 completion: @escaping (AVAsset?) -> Void) {
+
+    // 🌟 修改：将 completion 的参数改为我们新建的安全包装器 PTSendableAVAsset?
+    @MainActor func convertPHAssetToAVAsset(progress: @escaping @Sendable (Float) -> Void,
+                                 completion: @escaping @Sendable (PTSendableAVAsset?) -> Void) {
+        
         let options = PHVideoRequestOptions()
         options.version = .original
         options.isNetworkAccessAllowed = true
@@ -77,20 +125,18 @@ public extension PHAsset {
             exportSession.outputURL = outputURL
             exportSession.outputFileType = .mov
             self.exportSession = exportSession
+            
+            let safeSession = PTSendableExportSession(session: exportSession)
 
-            // 開始導出
             exportSession.exportAsynchronously {
                 DispatchQueue.main.async {
-                    switch exportSession.status {
+                    switch safeSession.session.status {
                     case .completed:
                         PTNSLogConsole("导出完成，路径: \(outputURL)")
                         let asset = AVAsset(url: outputURL)
-                        completion(asset)
-                    case .failed:
-                        PTNSLogConsole("导出失败: \(exportSession.error?.localizedDescription ?? "未知错误")")
-                        completion(nil)
-                    case .cancelled:
-                        PTNSLogConsole("导出被取消")
+                        // 🌟 核心修复点：将 asset 包装成安全类型后再通过闭包传递！
+                        completion(PTSendableAVAsset(asset: asset))
+                    case .failed, .cancelled:
                         completion(nil)
                     default:
                         break
@@ -98,32 +144,40 @@ public extension PHAsset {
                 }
             }
 
-            // 啟動進度監控（只要 exportAsynchronously 一啟動，progress 才會開始動）
-            self.startExportProgressMonitoring(exportSession: exportSession, progressHandler: progress)
+            self.startExportProgressMonitoring(sendableSession: safeSession, progressHandler: progress)
         }
     }
 
-    private func startExportProgressMonitoring(exportSession: AVAssetExportSession, progressHandler: @escaping (Float) -> Void) {
-        exportTimer?.invalidate()  // 保險起見
-        exportTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            let progress = exportSession.progress
-            PTNSLogConsole("当前下载进度：\(progress * 100)%")
-            progressHandler(progress)
+    // 🌟 修复 3：使用 Swift 并发中的 Task 替代 Timer，彻底解决后台线程无法触发定时器的问题
+    @MainActor private func startExportProgressMonitoring(exportSession: AVAssetExportSession, progressHandler: @escaping @Sendable (Float) -> Void) {
+        exportTask?.cancel() // 停止之前的任务
+        
+        exportTask = Task { [weak exportSession] in
+            guard let session = exportSession else { return }
+            
+            // 只要任务未被取消且导出还在进行中，就不断轮询进度
+            while !Task.isCancelled {
+                let progress = session.progress
+                PTNSLogConsole("当前下载进度：\(progress * 100)%")
+                progressHandler(progress)
 
-            if progress >= 1.0 {
-                self.exportTimer?.invalidate()
-                self.exportTimer = nil
-                PTNSLogConsole("下载完成")
+                // 达到完成状态即刻退出循环
+                if progress >= 1.0 || session.status == .completed || session.status == .failed || session.status == .cancelled {
+                    PTNSLogConsole("下载监控结束")
+                    break
+                }
+                
+                // 暂停 0.1 秒 (100,000,000 纳秒) 后继续下一次检查
+                try? await Task.sleep(nanoseconds: 100_000_000)
             }
         }
     }
 
-    //MARK: PHAsset轉換成AVURLAsset
-    func converPHAssetToAVURLAsset(version:PHVideoRequestOptionsVersion = .current,
-                                   supportIcloud:Bool  = true,
-                                   deliveryMode:PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
-                                   completion:@escaping (AVURLAsset?) -> Void) {
+    // MARK: - PHAsset 转换为 AVURLAsset
+    func converPHAssetToAVURLAsset(version: PHVideoRequestOptionsVersion = .current,
+                                   supportIcloud: Bool = true,
+                                   deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                                   completion: @escaping @Sendable (AVURLAsset?) -> Void) {
         let options = PHVideoRequestOptions()
         options.version = version
         options.isNetworkAccessAllowed = supportIcloud
@@ -137,7 +191,7 @@ public extension PHAsset {
             }
         }
     }
-           
+            
     func converPHAssetToAVURLAssetAsync() async -> AVURLAsset? {
         await withCheckedContinuation { continuation in
             converPHAssetToAVURLAsset { aSet in
@@ -146,15 +200,17 @@ public extension PHAsset {
         }
     }
     
-    func calcelExport() {
+    // 🌟 修复 4：适配新的 Task 取消机制
+    @MainActor func calcelExport() {
         if let exportSession = self.exportSession {
             exportSession.cancelExport()
-            self.exportTimer?.invalidate()
         }
+        self.exportTask?.cancel()
+        self.exportTask = nil
     }
     
-    //MARK: LivePhtot轉換Image
-    func convertLivePhotoToImage(completion: @escaping (UIImage?) -> Void) {
+    // MARK: - LivePhoto 转换 Image
+    func convertLivePhotoToImage(completion: @escaping @Sendable (UIImage?) -> Void) {
         let imageManager = PHImageManager.default()
         let options = PHImageRequestOptions()
         options.deliveryMode = .highQualityFormat
@@ -176,30 +232,30 @@ public extension PHAsset {
         }
     }
     
-    //MARK: PHAsset轉換成圖片
+    // MARK: - PHAsset 转换为图片
     func fetchImage(targetSize: CGSize = PHImageManagerMaximumSize,
                     contentMode: PHImageContentMode = .aspectFit,
-                    deliveryMode:PHImageRequestOptionsDeliveryMode = .highQualityFormat,
-                    version:PHImageRequestOptionsVersion = .current,
-                    supportIcloud:Bool  = true,
-                    completion: @escaping (UIImage?) -> Void) {
+                    deliveryMode: PHImageRequestOptionsDeliveryMode = .highQualityFormat,
+                    version: PHImageRequestOptionsVersion = .current,
+                    supportIcloud: Bool  = true,
+                    completion: @escaping @Sendable (UIImage?) -> Void) {
         let options = PHImageRequestOptions()
         options.version = version
         options.deliveryMode = deliveryMode
         options.isNetworkAccessAllowed = supportIcloud
 
-        PHImageManager.default().requestImage(for: self, targetSize: targetSize, contentMode: contentMode, options: options) { image, info in
+        PHImageManager.default().requestImage(for: self, targetSize: targetSize, contentMode: contentMode, options: options) { image, _ in
             completion(image)
         }
     }
     
-    //MARK: 獲取PHAsset的視頻第一針
+    // MARK: - 获取 PHAsset 的视频第一帧
     func fetchVideoFirstFrame(targetSize: CGSize = CGSize(width: 300, height: 300),
-                              version:PHVideoRequestOptionsVersion = .current,
-                              supportIcloud:Bool  = true,
-                              deliveryMode:PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
-                              completion: @escaping (UIImage?) -> Void) {
-        self.converPHAssetToAVURLAsset(version:version,supportIcloud: supportIcloud,deliveryMode: deliveryMode) { asset in
+                              version: PHVideoRequestOptionsVersion = .current,
+                              supportIcloud: Bool  = true,
+                              deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                              completion: @escaping @Sendable (UIImage?) -> Void) {
+        self.converPHAssetToAVURLAsset(version: version, supportIcloud: supportIcloud, deliveryMode: deliveryMode) { asset in
             asset?.getVideoFirstImage(maximumSize: targetSize) { image in
                 completion(image)
             }
@@ -207,10 +263,10 @@ public extension PHAsset {
     }
     
     /// 导出 PHAsset 视频为临时文件
-    func exportVideo(version:PHVideoRequestOptionsVersion = .current,
-                     supportIcloud:Bool  = true,
-                     deliveryMode:PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
-                     completion: @escaping (URL?) -> Void) {
+    func exportVideo(version: PHVideoRequestOptionsVersion = .current,
+                     supportIcloud: Bool = true,
+                     deliveryMode: PHVideoRequestOptionsDeliveryMode = .highQualityFormat,
+                     completion: @escaping @Sendable (URL?) -> Void) {
         let options = PHVideoRequestOptions()
         options.version = version
         options.isNetworkAccessAllowed = supportIcloud
@@ -222,21 +278,25 @@ public extension PHAsset {
                 return
             }
 
-            // 输出路径
             let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).mp4")
 
             session.outputURL = outputURL
             session.outputFileType = .mp4
             session.shouldOptimizeForNetworkUse = true
+            
+            // 🌟 修复关键点：使用我们在上一步创建的安全包装器
+            let safeSession = PTSendableExportSession(session: session)
 
+            // 启动异步导出
             session.exportAsynchronously {
                 DispatchQueue.main.async {
-                    switch session.status {
+                    // 🌟 在跨线程的闭包内部，统一通过 safeSession 读取状态，避免直接捕获 session
+                    switch safeSession.session.status {
                     case .completed:
                         PTNSLogConsole("✅ 导出成功: \(outputURL)")
                         completion(outputURL)
                     case .failed, .cancelled:
-                        PTNSLogConsole("❌ 导出失败: \(session.error?.localizedDescription ?? "未知错误")")
+                        PTNSLogConsole("❌ 导出失败: \(safeSession.session.error?.localizedDescription ?? "未知错误")")
                         completion(nil)
                     default:
                         break
@@ -257,17 +317,12 @@ public extension PHAsset {
 
 public extension PTPOP where Base: PHAsset {
     var isInCloud: Bool {
-        guard let resource = resource else {
-            return false
-        }
+        guard let resource = resource else { return false }
         return !(resource.value(forKey: "locallyAvailable") as? Bool ?? true)
     }
 
     var isGif: Bool {
-        guard let filename = filename else {
-            return false
-        }
-        
+        guard let filename = filename else { return false }
         return filename.hasSuffix("GIF")
     }
     
@@ -279,14 +334,12 @@ public extension PTPOP where Base: PHAsset {
         PHAssetResource.assetResources(for: base).first
     }
     
-    //MARK: 判斷是否為LivePhoto
-    ///判斷是否為LivePhoto
+    // MARK: - 判断是否为 LivePhoto
     func isLivePhoto() -> Bool {
         return base.mediaSubtypes.contains(.photoLive)
     }
         
-    func convertPHAssetToPHLivePhoto(completion: @escaping (PHLivePhoto?) -> Void) {
-        // 检查该 PHAsset 是否为 Live Photo 类型
+    func convertPHAssetToPHLivePhoto(completion: @escaping @Sendable (PHLivePhoto?) -> Void) {
         guard base.pt.isLivePhoto() else {
             completion(nil)
             return
@@ -295,7 +348,6 @@ public extension PTPOP where Base: PHAsset {
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
 
-        // 请求 Live Photo
         PHImageManager.default().requestLivePhoto(for: base, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: options) { livePhoto, info in
             if let isDegraded = info?[PHImageResultIsDegradedKey] as? Bool, !isDegraded {
                 completion(livePhoto)

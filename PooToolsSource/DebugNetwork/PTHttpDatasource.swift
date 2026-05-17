@@ -73,53 +73,63 @@ final class PTHttpDatasource {
 }
 
 extension URLRequest {
-    
-    // 🌟 性能极客优化：采用单字节的静态变量指针地址做 Key，不仅避开命名冲突，查找速度更是呈数量级提升
-    @MainActor
-    private struct AssociatedKeys {
-        static var requestId: UInt8 = 0
-        static var startTime: UInt8 = 0
+        
+    // 🌟 性能极客优化：使用 nonisolated(unsafe) 告诉编译器我们通过内部的锁/队列来保证这个静态 Key 的安全
+     private struct AssociatedKeys {
+         nonisolated(unsafe) static var requestId: UInt8 = 0
+         nonisolated(unsafe) static var startTime: UInt8 = 0
     }
-
-    /// 当前请求绑定的唯一生命周期追踪凭证 (自动按需注入 UUID)
-    @MainActor var requestId: String {
+    
+    // 创建一个私有的全局串行队列，用来隔离 Objective-C Runtime 关联对象的并发读写
+    private static let runtimeQueue = DispatchQueue(label: "com.custom.http.request.runtimeQueue")
+    
+    /// 当前请求绑定的唯一生命周期追踪凭证 (🌟 移除 @MainActor，升级为全线程安全访问)
+    var requestId: String {
         get {
-            // 通过获取静态内存地址做 Key 读取关联对象
-            if let id = objc_getAssociatedObject(self, &AssociatedKeys.requestId) as? String {
-                return id
-            } else {
-                let newValue = UUID().uuidString
+            // 使用串行队列同步读取，防止多线程同时读写 Runtime 导致崩溃
+            Self.runtimeQueue.sync {
+                if let id = objc_getAssociatedObject(self, &AssociatedKeys.requestId) as? String {
+                    return id
+                } else {
+                    let newValue = UUID().uuidString
+                    objc_setAssociatedObject(
+                        self,
+                        &AssociatedKeys.requestId,
+                        newValue,
+                        .OBJC_ASSOCIATION_COPY_NONATOMIC
+                    )
+                    return newValue
+                }
+            }
+        }
+        set {
+            Self.runtimeQueue.sync {
                 objc_setAssociatedObject(
                     self,
                     &AssociatedKeys.requestId,
                     newValue,
                     .OBJC_ASSOCIATION_COPY_NONATOMIC
                 )
-                return newValue
+            }
+        }
+    }
+    
+    /// 记录请求发起的初始时间戳 (🌟 同样移除 @MainActor)
+    var startTimeStamp: NSNumber? {
+        get {
+            Self.runtimeQueue.sync {
+                objc_getAssociatedObject(self, &AssociatedKeys.startTime) as? NSNumber
             }
         }
         set {
-            objc_setAssociatedObject(
-                self,
-                &AssociatedKeys.requestId,
-                newValue,
-                .OBJC_ASSOCIATION_COPY_NONATOMIC
-            )
-        }
-    }
-
-    /// 记录请求发起的初始时间戳
-    @MainActor var startTime: NSNumber? {
-        get {
-            objc_getAssociatedObject(self, &AssociatedKeys.startTime) as? NSNumber
-        }
-        set {
-            objc_setAssociatedObject(
-                self,
-                &AssociatedKeys.startTime,
-                newValue,
-                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
-            )
+            Self.runtimeQueue.sync {
+                objc_setAssociatedObject(
+                    self,
+                    &AssociatedKeys.startTime,
+                    newValue,
+                    .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+                )
+            }
         }
     }
 }

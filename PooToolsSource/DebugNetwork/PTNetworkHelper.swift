@@ -70,11 +70,13 @@ final class PTNetworkHelper {
         }
     }
     
-    @objc private func updateSpeedLabels() {
-        // 安全读取第一步重构的线程安全测速池数据
-        let downloadSpeed = PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024.0
-        let uploadSpeed = PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024.0
+    @MainActor @objc private func updateSpeedLabels() {
+        Task { @MainActor in
+            // 安全读取第一步重构的线程安全测速池数据
+            let downloadSpeed = await PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024.0
+            let uploadSpeed = await PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024.0
 
-        PTNetworkHelper.shared.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s", uploadSpeed, downloadSpeed)
+            PTNetworkHelper.shared.speedLabel.text = String(format: "↑ %.2f KB/s\n↓ %.2f KB/s", uploadSpeed, downloadSpeed)
+        }
     }
 }

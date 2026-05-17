@@ -671,7 +671,7 @@ class PTFuncNameViewController: PTBaseViewController {
                             } completion: { avAsset in
                                 if let getAv = avAsset {
                                     Task { @MainActor in
-                                        let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv)
+                                        let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv.asset)
                                         controller.videoEditorShow(vc: self)
                                         controller.onEditCompleteHandler = { url in
                                             PTAlertTipsViewController.tipsAlertShow(title:"我好了\(url)",icon: .Done)

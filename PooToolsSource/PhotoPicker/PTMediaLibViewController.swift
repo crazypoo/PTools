@@ -402,7 +402,7 @@ extension PTMediaLibView {
                 return
             }
             
-            self?.presentVideoEditor(asset: model.asset, avAsset: avAsset)
+            self?.presentVideoEditor(asset: model.asset, avAsset: avAsset.asset)
         })
     }
     

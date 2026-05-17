@@ -85,12 +85,14 @@ public class PTPermissionLocation: PTPermission {
         case .location(let access):
             switch access {
             case .whenInUse:
-                PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
                 Task { @MainActor in
+                    PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
                     PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
                         PTGCDManager.gcdMain {
                             completion()
-                            PTPermissionLocationWhenInUseHandler.shared = nil
+                            Task { @MainActor in
+                                PTPermissionLocationWhenInUseHandler.shared = nil
+                            }
                         }
                     }
                 }

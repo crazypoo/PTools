@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Alamofire
+@preconcurrency import Alamofire
 import Network
 import SwifterSwift
 import CoreTelephony
