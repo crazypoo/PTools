@@ -16,7 +16,7 @@ public class PTCountryCodeModel:NSObject {
 
 @objcMembers
 public class PTCountryCodes: NSObject {
-    public static let share = PTCountryCodes()
+    @MainActor public static let share = PTCountryCodes()
     
     let countryCodeDic = [
         "Abkhazia(1st)":"+7 840",

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SpringConfiguration {
+public struct SpringConfiguration : Sendable {
     /// Controls how fast the spring motion oscillates.
     /// The higher the value, the faster the object moves towards equilibrium.
     public var angularFrequency: Float

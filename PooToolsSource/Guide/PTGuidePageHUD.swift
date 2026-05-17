@@ -24,8 +24,10 @@ public enum PTGuidePageControlSelection {
 /*
  Guide初始配置
  */
+@MainActor
 @objcMembers
 public class PTGuidePageModel: NSObject {
+    
     /// 是否显示开始体验
     public var tapHidden: Bool = false
     /// 图片数组
@@ -54,18 +56,23 @@ public class PTGuidePageModel: NSObject {
     public var fillPageControlIndicatorRadius: CGFloat = 4
     /// 选中颜色(.pill, .snake)
     public var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3)
+    
+    // 🌟 修复 2：移除了单独的 @MainActor，因为整个类已经是主线程隔离的了
+    
     /// 普通图片(.system)
-    @MainActor public var pageControlActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    public var pageControlActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
     /// 选中图片(.system)
-    @MainActor public var pageControlInActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    public var pageControlInActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    
     /// 自定义Pagecontrol普通颜色
     public var customPageControlTintColor: UIColor = UIColor.white
     /// 自定义Pagecontrol点阵边距
     public var customPageControlIndicatorPadding: CGFloat = 8
     
-    @MainActor public var skipName: String = "PT Button skip".localized()
+    // 🌟 修复 3：同样移除了这里单独的 @MainActor
+    public var skipName: String = "PT Button skip".localized()
     public var skipFont: UIFont = .appfont(size: 14)
-    @MainActor public var startString: String = "PT Guide start".localized()
+    public var startString: String = "PT Guide start".localized()
     public var startFont: UIFont = .appfont(size: 21)
 }
 
