@@ -143,7 +143,17 @@ public final class PTGCDManager: NSObject, @unchecked Sendable {
     
     // MARK: - GCD延时执行
     public class func gcdAfter(time: TimeInterval, block: @escaping PTActionTask) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: block)
+        // 开启一个明确绑定到主线程的现代 Task
+        Task { @MainActor in
+            // 将 TimeInterval (秒) 转换为 Task.sleep 所需的纳秒 (1秒 = 1_000_000_000纳秒)
+            let nanoseconds = UInt64(time * 1_000_000_000)
+            
+            // 使用 await 进行非阻塞的延迟等待
+            try? await Task.sleep(nanoseconds: nanoseconds)
+            
+            // 延迟结束后，安全地执行回调代码
+            block()
+        }
     }
     
     // MARK: 在后台执行任务

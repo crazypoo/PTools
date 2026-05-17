@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-import DeviceKit
+@preconcurrency import DeviceKit
 import Photos
 import Combine
 import SafeSFSymbols
@@ -159,7 +159,21 @@ class PTFuncNameViewController: PTBaseViewController {
         return models
     }
     
-    @MainActor func cSections() -> [PTSection] {
+    func DeviceIdentifier() -> String {
+        // 1. 如果当前已经在主线程，直接获取
+        if Thread.isMainThread {
+            // 注意：这里由于 Swift 6 的静态检查，直接写 Device.identifier 可能还是会黄牌警告。
+            // 所以我们依然需要 assumeIsolated 来安抚编译器
+            return MainActor.assumeIsolated { Device.identifier }
+        } else {
+            // 2. 如果在后台线程，同步阻塞当前线程，去主线程拿数据后再返回
+            return DispatchQueue.main.sync {
+                return Device.identifier
+            }
+        }
+    }
+    
+    func cSections() -> [PTSection] {
         let disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
         let sectionTitleFont:UIFont = .appfont(size: 18,bold: true)
         /**
@@ -225,7 +239,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let jailBroken = PTFusionCellModel()
         jailBroken.name = .phoneSimpleInfo
         jailBroken.cellDescFont = .appfont(size: 12)
-        jailBroken.desc = "是否X类型:\(UIDevice.pt.oneOfXDevice() ? "是" : "否"),是否越狱了:\(UIDevice.pt.isJailBroken ? "是" : "否"),机型:\(Device.identifier),运营商:\(String(describing: UIDevice.pt.carrierNames()?.first))"
+        jailBroken.desc = "是否X类型:\(UIDevice.pt.oneOfXDevice() ? "是" : "否"),是否越狱了:\(UIDevice.pt.isJailBroken ? "是" : "否"),机型:\(DeviceIdentifier()),运营商:\(String(describing: UIDevice.pt.carrierNames()?.first))"
         jailBroken.accessoryType = .NoneAccessoryView
         
         let callPhone = self.rowBaseModel(name: .phoneCall)
@@ -614,16 +628,16 @@ class PTFuncNameViewController: PTBaseViewController {
                         }
                     }
                 } else if itemRow.title == .touchID {
-                    let biometricsManager = PTBiometricsManager.shared
-                        
-                    // 1. 获取设备支持状态 (对应以前的 biologyStatusBlock)
-                    // 现在变成了一个同步属性，直接读取即可，不用等回调！
-                    let supportType = biometricsManager.currentBiometryStatus
-                    PTNSLogConsole("设备支持的生物识别类型: \(supportType)")
                     
-                    // 2. 发起验证并等待结果 (对应以前的 biologyStart + biologyVerifyStatusBlock)
-                    // 使用 Task 包装异步任务
-                    Task {
+                    Task { @MainActor in
+                        let biometricsManager = PTBiometricsManager.shared
+                            
+                        // 1. 获取设备支持状态 (对应以前的 biologyStatusBlock)
+                        // 现在变成了一个同步属性，直接读取即可，不用等回调！
+                        let supportType = biometricsManager.currentBiometryStatus
+                        PTNSLogConsole("设备支持的生物识别类型: \(supportType)")
+                        // 2. 发起验证并等待结果 (对应以前的 biologyStart + biologyVerifyStatusBlock)
+                        // 使用 Task 包装异步任务
                         PTNSLogConsole("开始验证...")
                         
                         // 使用 await 等待验证结果，代码会在这里暂停，直到用户验证完成才往下走

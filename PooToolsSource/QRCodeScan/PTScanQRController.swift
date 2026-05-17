@@ -11,9 +11,21 @@ import SnapKit
 import Photos
 import SwifterSwift
 
-public class PTScanBarInfo:NSObject {
-    public var codeView:UIView = UIView()
-    public var codeString:String = ""
+@MainActor
+public class PTScanBarInfo: NSObject {
+    
+    /// 扫码界面的视图容器
+    public var codeView: UIView = UIView()
+    
+    /// 解析出来的扫码结果字符串
+    public var codeString: String = ""
+    
+    // 如果需要的话，我们可以添加一个便利的初始化方法
+    public init(codeView: UIView = UIView(), codeString: String = "") {
+        self.codeView = codeView
+        self.codeString = codeString
+        super.init()
+    }
 }
 
 @objcMembers
@@ -507,7 +519,7 @@ public class PTScanQRController: PTBaseViewController {
     }
 }
 
-extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
+extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
     func showMaskView(showTips:Bool) -> UIView {
         let maskView = UIView(frame: view.bounds)
         maskView.backgroundColor = UIColor(red: 0, green:  0, blue: 0, alpha: 0.6)

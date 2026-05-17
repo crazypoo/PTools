@@ -8,13 +8,14 @@
 
 import UIKit
 
+@MainActor
 class PTLeakViewModel: NSObject {
     
-    private var data: [PTPerformanceLeakDetector.LeakModel] {
+    private var data: [LeakModel] {
         PTPerformanceLeakDetector.leaks
     }
 
-    var filteredInfo = [PTPerformanceLeakDetector.LeakModel]()
+    var filteredInfo = [LeakModel]()
 
     var leakSearchWord = ""
 
@@ -29,7 +30,9 @@ class PTLeakViewModel: NSObject {
     }
     
     func handleClearAction() {
-        PTPerformanceLeakDetector.leaks.removeAll()
+        Task { @MainActor in
+            PTPerformanceLeakDetector.leaks.removeAll()
+        }
         filteredInfo.removeAll()
     }
 }

@@ -9,8 +9,12 @@
 import UIKit
 import Foundation
 
-public struct PTPerformanceLeak {
+// MARK: - Models
 
+// 1. 在 Swift 6 中，包含 UI 元素的结构体最好明确其执行上下文。
+// 由于它持有 UIViewController 和 UIView，我们将其隔离到主线程。
+@MainActor
+public struct PTPerformanceLeak {
     public let controller: UIViewController?
     public let view: UIView?
     public let message: String
@@ -24,15 +28,34 @@ public struct PTPerformanceLeak {
     public var isDeallocation: Bool { controller == nil && view == nil }
 }
 
-final class PTPerformanceLeakDetector {
+// 2. 将数据模型标记为 Sendable，使其在 Swift 6 中可以跨 actor 边界安全传递
+public struct LeakModel: Sendable {
+    public let details: String
+    public let screenshot: UIImage?
+    public let id: Int
 
-    static var callback: ((PTPerformanceLeak) -> Void)?
-    static var delay = 1.0
-    static var warningWindow: UIWindow?
-    static var lastBackgroundedDate = Date(timeIntervalSince1970: 0)
-    static var leaks = [LeakModel]()
+    public var hasDeallocated = false
+    public var timeAllocated: String?
 
-    static func setup() {
+    public var isActive: Bool { !hasDeallocated }
+    public var symbol: String { hasDeallocated ? "✳️" : "⚠️" }
+}
+
+// MARK: - Main Detector Class
+
+// 3. 将整个管理类标记为 @MainActor。
+// 在 Swift 6 中，包含静态可变属性 (static var) 的类必须被隔离以防止数据竞争。
+@MainActor
+public final class PTPerformanceLeakDetector {
+
+    // 闭包现在明确要求在主线程执行
+    public static var callback: (@MainActor (PTPerformanceLeak) -> Void)?
+    public static var delay = 1.0
+    public static var warningWindow: UIWindow?
+    public static var lastBackgroundedDate = Date(timeIntervalSince1970: 0)
+    public static var leaks = [LeakModel]()
+
+    public static func setup() {
         NotificationCenter.default.addObserver(self, selector: #selector(toBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
@@ -45,13 +68,9 @@ final class PTPerformanceLeakDetector {
         "UITextEffectsWindow"
     ]
 
-    static var ignoredWindowClassNames: [String] {
-        get {
-            _ignoredWindowClassNames
-        }
-        set {
-            _ignoredWindowClassNames += newValue
-        }
+    public static var ignoredWindowClassNames: [String] {
+        get { _ignoredWindowClassNames }
+        set { _ignoredWindowClassNames += newValue }
     }
 
     private static var _ignoredViewControllerClassNames = [
@@ -61,16 +80,11 @@ final class PTPerformanceLeakDetector {
         "_UIAlertControllerTextFieldViewController",
         "UISystemInputAssistantViewController",
         "UIPredictionViewController"
-//        ,
-//        "PooTools.PTBaseViewController"
     ]
-    static var ignoredViewControllerClassNames: [String] {
-        get {
-            _ignoredViewControllerClassNames
-        }
-        set {
-            _ignoredViewControllerClassNames += newValue
-        }
+    
+    public static var ignoredViewControllerClassNames: [String] {
+        get { _ignoredViewControllerClassNames }
+        set { _ignoredViewControllerClassNames += newValue }
     }
 
     private static var _ignoredViewClassNames = [
@@ -78,62 +92,51 @@ final class PTPerformanceLeakDetector {
         "CAMPreviewView",
         "_UIPointerInteractionAssistantEffectContainerView"
     ]
-    static var ignoredViewClassNames: [String] {
-        get {
-            _ignoredViewClassNames
-        }
-        set {
-            _ignoredViewClassNames += newValue
-        }
+    
+    public static var ignoredViewClassNames: [String] {
+        get { _ignoredViewClassNames }
+        set { _ignoredViewClassNames += newValue }
     }
 }
 
+// MARK: - UIView Extensions
+
+@MainActor
 extension UIView {
 
-    /**
-     Same as removeFromSuperview() but it also checks if it or any of its subviews don't deinit after the view is removed from the view tree. In that case the PerformanceLeakDetector warning callback will be triggered.
-
-     Make sure you have set PerformanceLeakDetector.onDetect(){}, preferably in AppDelegate's application(_:didFinishLaunchingWithOptions:), else it will act the same as regular removeFromSuperview() .
-
-     Only use this method if the view is supposed to deinit shortly after it is removed from the view tree, or else it may trigger false warnings. In that case use regular removeFromSuperview() instead.
-
-     */
     @objc public func removeFromSuperviewDetectLeaks() {
-        let superViewWasNil = superview == nil && window == nil // check if view was removed already
+        let superViewWasNil = superview == nil && window == nil
         removeFromSuperview()
 
-        // only check when app is active for now
-        // callback may be nil on purpose, e.g. for release builds, so just ignore then
         if PTPerformanceLeakDetector.callback != nil, !superViewWasNil, UIApplication.shared.applicationState == .active {
             checkForLeakedSubViews()
         }
     }
-}
-
-extension UIView {
 
     @objc fileprivate func checkForLeakedSubViews() {
-
         let delay = PTPerformanceLeakDetector.delay
 
         iterateTopSubviews { topSubview in
-
             let startTime = Date()
+            
+            // 4. 在闭包中保持 @MainActor 上下文
             PTGCDManager.gcdAfter(time: delay) { [weak topSubview, weak self] in
-                Task { @MainActor in
-                    if self == nil || self?.superview == nil,
-                        self?.firstViewController == nil, // in case it switched VC
-                        let leakedView = topSubview?.rootView,
-                        leakedView == topSubview || !(leakedView is UIWindow), // prevents rare crash
-                        leakedView.firstViewController == nil, // prevents false positives
-                        objc_getAssociatedObject(leakedView, &LVCDDeallocator.key) == nil,
-                        UIApplication.shared.applicationState == .active, // theoretically not needed when also checking lastBackgroundedDate, but just in case
-                        PTPerformanceLeakDetector.lastBackgroundedDate < startTime,
-                        !PTPerformanceLeakDetector.ignoredViewClassNames.contains(type(of: leakedView).description()) {
+                Task { @MainActor [weak topSubview, weak self] in
+                    guard let self = self, let topSubview = topSubview else { return }
+                    
+                    if self.superview == nil,
+                       self.firstViewController == nil,
+                       let leakedView = topSubview.rootView as UIView?,
+                       leakedView == topSubview || !(leakedView is UIWindow),
+                       leakedView.firstViewController == nil,
+                       objc_getAssociatedObject(leakedView, &LVCDDeallocator.key) == nil,
+                       UIApplication.shared.applicationState == .active,
+                       PTPerformanceLeakDetector.lastBackgroundedDate < startTime,
+                       !PTPerformanceLeakDetector.ignoredViewClassNames.contains(type(of: leakedView).description()) {
 
                         let errorTitle = "VIEW STILL IN MEMORY"
                         var errorMessage = leakedView.debugDescription.lvcdRemoveBundleAndModuleName()
-                        if let bundleName = Bundle.main.infoDictionary?["CFBundleName"] {
+                        if let bundleName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
                             errorMessage = errorMessage.replacingOccurrences(of: "\(bundleName).", with: "")
                         }
 
@@ -156,7 +159,7 @@ extension UIView {
                         deallocator.objectType = "VIEW"
                         deallocator.subviews = leakedView.subviews
                         deallocator.weakView = leakedView
-                        deallocator.screenshot = screenshot
+                        // 5. 传入 &LVCDDeallocator.key 替代旧的 malloc 指针
                         objc_setAssociatedObject(leakedView, &LVCDDeallocator.key, deallocator, .OBJC_ASSOCIATION_RETAIN)
                     }
                 }
@@ -165,19 +168,15 @@ extension UIView {
     }
 
     fileprivate func makeScreenshot() -> UIImage? {
-
         let fvc = firstViewController
         if let fvc, fvc.view == self {
-            // UIImagePickerController is not available in tvOS so do OS check
             #if os(iOS)
             if fvc is UIImagePickerController {
-                /// screenshotting UIIPC is not possible and can even lead to a permanent memory leak, PHPicker works fine though
                 return nil
             }
             #endif
         }
 
-        // create centered checkerboard background pattern image
         let squareSize: CGFloat = 20
         let offset = CGPoint(x: frame.width.truncatingRemainder(dividingBy: squareSize) * 0.5, y: frame.height.truncatingRemainder( dividingBy: squareSize) * 0.5)
         let checkerBoard = UIView(frame: .init(x: 0, y: 0, width: squareSize * 2, height: squareSize * 2))
@@ -200,13 +199,11 @@ extension UIView {
 
         let wasAlpha = alpha
         let wasHidden = isHidden
-        alpha = alpha < 0.1 ? 1.0 : alpha // useful for alerts
+        alpha = alpha < 0.1 ? 1.0 : alpha
         isHidden = false
         var wasTARMICS = [ObjectIdentifier: Bool]()
         var cornerRadius: CGFloat = 0
 
-        // stick to two levels for now, seems to work best without constraint warnings
-        // level 3 is necessary for getting UIAlert radius
         iterateSubviews(maxLevel: 3) { subview, level in
             if !(subview is UINavigationBar || subview is UICollectionViewCell || subview is UITabBar || subview is UIToolbar || level > 2) {
                 wasTARMICS[ObjectIdentifier(subview)] = subview.translatesAutoresizingMaskIntoConstraints
@@ -215,20 +212,18 @@ extension UIView {
             if cornerRadius == 0, subview.bounds == bounds, subview.layer.cornerRadius != 0 {
                 cornerRadius = subview.layer.cornerRadius
             }
-
             return true
         }
 
         let container = UIView(frame: .init(origin: .zero, size: frame.size))
         container.addSubview(self)
-        objc_setAssociatedObject(container, &LVCDDeallocator.key, LVCDDeallocator(), .OBJC_ASSOCIATION_RETAIN) // prevents triggering warnings itself
+        objc_setAssociatedObject(container, &LVCDDeallocator.key, LVCDDeallocator(), .OBJC_ASSOCIATION_RETAIN)
 
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = UIBezierPath(rect: frame).cgPath
         shapeLayer.fillColor = UIColor(patternImage: checkerBoardImage).withAlphaComponent(0.5).cgColor
         container.layer.insertSublayer(shapeLayer, at: 0)
 
-        // check for subviews sticking out its bounds, forget about the same for sublayers for now
         var unclippedFrame = frame
 
         iterateSubviews { subview, _ in
@@ -236,15 +231,13 @@ extension UIView {
                 return false
             }
 
-            var alpha: CGFloat = 0
-            subview.backgroundColor?.getRed(nil, green: nil, blue: nil, alpha: &alpha)
+            var subAlpha: CGFloat = 0
+            subview.backgroundColor?.getRed(nil, green: nil, blue: nil, alpha: &subAlpha)
 
-            if subview.frame.size.height * subview.frame.size.width != 0, alpha >= 0.1 {
+            if subview.frame.size.height * subview.frame.size.width != 0, subAlpha >= 0.1 {
                 unclippedFrame = unclippedFrame.union(subview.convert(subview.bounds, to: container))
             }
-            return !subview.clipsToBounds && !subview.layer.masksToBounds && !(
-                subview is UIScrollView
-            )
+            return !subview.clipsToBounds && !subview.layer.masksToBounds && !(subview is UIScrollView)
         }
 
         guard unclippedFrame.size.width > 0, unclippedFrame.size.height > 0 else {
@@ -257,15 +250,13 @@ extension UIView {
         container.frame = .init(x: 0 - unclippedFrame.minX, y: 0 - unclippedFrame.minY, width: unclippedFrame.width, height: unclippedFrame.height)
         container2.layer.cornerRadius = cornerRadius
         container2.layer.masksToBounds = container2.layer.cornerRadius > 0
-        objc_setAssociatedObject(container2, &LVCDDeallocator.key, LVCDDeallocator(), .OBJC_ASSOCIATION_RETAIN) // prevents triggering warnings itself
+        objc_setAssociatedObject(container2, &LVCDDeallocator.key, LVCDDeallocator(), .OBJC_ASSOCIATION_RETAIN)
 
         var iosOnMac = false
         if #available(iOS 13, tvOS 13, * ) {
             iosOnMac = ProcessInfo.processInfo.isMacCatalystApp
         }
-        let maxWidth: CGFloat = 240 - (
-            iosOnMac ? 12 : 0
-        ) // hard coded width for now
+        let maxWidth: CGFloat = 240 - (iosOnMac ? 12 : 0)
         let imageSize = container2.frame.width <= maxWidth ? container2.frame.size : CGSize(width: maxWidth, height: maxWidth * (container2.frame.height / container2.frame.width))
 
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
@@ -273,13 +264,10 @@ extension UIView {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
-        // restore values just in case
         alpha = wasAlpha
         isHidden = wasHidden
 
-        iterateSubviews {
-            subview,
-                level in
+        iterateSubviews { subview, level in
             if !(subview is UINavigationBar || subview is UICollectionViewCell || subview is UITabBar || subview is UIToolbar || level > 2) {
                 subview.translatesAutoresizingMaskIntoConstraints = wasTARMICS[ObjectIdentifier(subview)] ?? subview.translatesAutoresizingMaskIntoConstraints
             }
@@ -305,10 +293,10 @@ extension UIView {
 
     private func iterateSubviews(maxLevel: UInt = UInt.max, level: UInt = 0, onSubview: (UIView, UInt) -> (Bool)) {
         if onSubview(self, level) {
-            let level = level + 1
-            if level <= maxLevel {
+            let nextLevel = level + 1
+            if nextLevel <= maxLevel {
                 for subview in subviews {
-                    subview.iterateSubviews(maxLevel: maxLevel, level: level, onSubview: onSubview)
+                    subview.iterateSubviews(maxLevel: maxLevel, level: nextLevel, onSubview: onSubview)
                 }
             }
         }
@@ -323,13 +311,16 @@ extension UIView {
     }
 }
 
+// MARK: - UIViewController Extensions
+
+@MainActor
 extension UIViewController {
 
-    fileprivate static let lvcdCheckForMemoryLeakNotification = Notification.Name("lvcdCheckForMemoryLeak")
-    fileprivate static let lvcdCheckForSplitViewVCMemoryLeakNotification = Notification.Name("lvcdCheckForSplitViewVCMemoryLeak")
+    nonisolated fileprivate static let lvcdCheckForMemoryLeakNotification = Notification.Name("lvcdCheckForMemoryLeak")
+    nonisolated fileprivate static let lvcdCheckForSplitViewVCMemoryLeakNotification = Notification.Name("lvcdCheckForSplitViewVCMemoryLeak")
 
-    static func lvcdSwizzleLifecycleMethods() {
-        lvcdActuallySwizzleLifecycleMethods // this makes sure it can only swizzle once
+    public static func lvcdSwizzleLifecycleMethods() {
+        _ = lvcdActuallySwizzleLifecycleMethods
     }
 
     private static let lvcdActuallySwizzleLifecycleMethods: Void = {
@@ -339,7 +330,7 @@ extension UIViewController {
             #selector(removeFromParent) <-> #selector(lvcdRemoveFromParent)
             #selector(showDetailViewController(_:sender:)) <-> #selector(lvcdShowDetailViewController(_:sender:))
             #selector(setter: view) <-> #selector(lvcdSetView(_:))
-        }        
+        }
     }()
 
     private func lvcdShouldIgnore() -> Bool {
@@ -358,16 +349,14 @@ extension UIViewController {
             deallocator.strongView?.checkForLeakedSubViews()
             deallocator.strongView = newView
         }
-        lvcdSetView(
-            newView
-        )
+        lvcdSetView(newView)
     }
 
     @objc private func lvcdViewDidLoad() {
         lvcdViewDidLoad() // run original implementation
         PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
-            guard let self else { return }
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 if !self.lvcdShouldIgnore() {
                     if objc_getAssociatedObject(self, &LVCDDeallocator.key) == nil {
                         objc_setAssociatedObject(self, &LVCDDeallocator.key, LVCDDeallocator(self.view), .OBJC_ASSOCIATION_RETAIN)
@@ -386,22 +375,23 @@ extension UIViewController {
     }
 
     @objc private func lvcdViewDidDisappear(_ animated: Bool) {
-        lvcdViewDidDisappear(animated) // run original implementation
-
-        // ignore parent VCs because one of their children will trigger viewDidDisappear() too
-        if (self as? UINavigationController)?.viewControllers.isEmpty ?? true,(self as? UITabBarController)?.viewControllers?.isEmpty ?? true,(self as? UIPageViewController)?.viewControllers?.isEmpty ?? true,!lvcdShouldIgnore() {
+        lvcdViewDidDisappear(animated)
+        if (self as? UINavigationController)?.viewControllers.isEmpty ?? true,
+           (self as? UITabBarController)?.viewControllers?.isEmpty ?? true,
+           (self as? UIPageViewController)?.viewControllers?.isEmpty ?? true,
+           !lvcdShouldIgnore() {
             NotificationCenter.lvcd.post(name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
         }
     }
 
     @objc private func lvcdRemoveFromParent() {
-        lvcdRemoveFromParent() // run original implementation
+        lvcdRemoveFromParent()
         if !lvcdShouldIgnore(), view?.window != nil {
             NotificationCenter.lvcd.post(name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
         }
     }
 
-    @objc private func lvcdShowDetailViewController(_ vc: UIViewController,sender: Any?) {
+    @objc private func lvcdShowDetailViewController(_ vc: UIViewController, sender: Any?) {
         NotificationCenter.lvcd.post(name: Self.lvcdCheckForSplitViewVCMemoryLeakNotification, object: self)
         NotificationCenter.lvcd.post(name: Self.lvcdCheckForMemoryLeakNotification,object: nil)
 
@@ -411,7 +401,7 @@ extension UIViewController {
             mldAssociatedObject.viewController = vc
             objc_setAssociatedObject(vc, &LVCDSplitViewAssociatedObject.key, mldAssociatedObject, .OBJC_ASSOCIATION_RETAIN)
         }
-        lvcdShowDetailViewController(vc, sender: sender) // run original implementation
+        lvcdShowDetailViewController(vc, sender: sender)
     }
 
     fileprivate static var lvcdMemoryCheckQueue = Set<ObjectIdentifier>()
@@ -421,7 +411,6 @@ extension UIViewController {
     }
 
     @objc private func lvcdCheckForMemoryLeak(restarted: Bool = false) {
-        // only check when active for now
         guard UIApplication.shared.applicationState == .active else { return }
 
         if (view != nil && view.window != nil) || lvcdShouldIgnore() {
@@ -430,17 +419,18 @@ extension UIViewController {
 
         let objectIdentifier = ObjectIdentifier(self)
 
-        // in some cases lvcdCheckForMemoryLeakNotification may be called multiple times at once, this guard prevents double checking
-        guard !Self.lvcdMemoryCheckQueue.contains(objectIdentifier) else {
-            return
-        }
+        guard !Self.lvcdMemoryCheckQueue.contains(objectIdentifier) else { return }
         Self.lvcdMemoryCheckQueue.insert(objectIdentifier)
 
-        Task { @MainActor [self] in
+        // Switch to MainActor task execution
+        Task { @MainActor in
             Self.lvcdMemoryCheckQueue.remove(objectIdentifier)
-            let rootParentVC = lvcdRootParentViewController
-            guard rootParentVC.presentedViewController == nil, !isViewLoaded || rootParentVC.view.window == nil, let deallocator = objc_getAssociatedObject(self, &LVCDDeallocator.key) as? LVCDDeallocator,
-                deallocator.objectIdentifier == 0
+            let rootParentVC = self.lvcdRootParentViewController
+            
+            guard rootParentVC.presentedViewController == nil,
+                  !self.isViewLoaded || rootParentVC.view.window == nil,
+                  let deallocator = objc_getAssociatedObject(self, &LVCDDeallocator.key) as? LVCDDeallocator,
+                  deallocator.objectIdentifier == 0
             else { return }
 
             if let svc = self as? UISplitViewController {
@@ -448,53 +438,45 @@ extension UIViewController {
             }
 
             let startTime = Date()
-
             let delay = PTPerformanceLeakDetector.delay
+            
             PTGCDManager.gcdAfter(time: delay) { [weak self] in
-                // if self is nil it deinitted, so no memory leak
-                guard let self else { return }
-                Task { @MainActor  in
-                    // if backgrounded now or during the delay ignore for now
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
+                    
                     if UIApplication.shared.applicationState != .active || PTPerformanceLeakDetector.lastBackgroundedDate > startTime {
                         return
                     }
 
-                    // if somehow this asyncAfter code is executed way too late restart just in case
                     if !restarted && abs(startTime.timeIntervalSinceNow) > delay + 0.5 {
                         self.lvcdCheckForMemoryLeak(restarted: true)
                         return
                     }
 
-                    // these conditions constitute a 'limbo' ViewController, i.e. a memory leak:
                     if !self.isViewLoaded || self.view?.window == nil, self.parent == nil, self.presentedViewController == nil, self.view == nil || self.view.superview == nil || type(of: self.view.rootView).description() == "UILayoutContainerView" {
-                        // once warned don't warn again
+                        
                         NotificationCenter.lvcd.removeObserver(self, name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
 
                         let errorTitle = "VIEWCONTROLLER STILL IN MEMORY"
                         var errorMessage = self.debugDescription.lvcdRemoveBundleAndModuleName()
 
-                        // add children's names to the message in case of NavVC or TabVC for easier identification
                         if let nvc = self as? UINavigationController {
                             errorMessage = "\(errorMessage):\n\(nvc.viewControllers)"
                         }
                         if let tbvc = self as? UITabBarController, let vcs = tbvc.viewControllers {
                             errorMessage = "\(errorMessage):\n\(vcs)"
                         }
-                        // add alert title/message to the message for easier identification
                         if let alertVC = self as? UIAlertController {
-
                             var actions = alertVC.actions.isEmpty ? "-" : ""
                             for action in alertVC.actions {
                                 actions = "\(actions) \"\(action.title ?? "-")\","
                             }
-
                             errorMessage = """
                                 \(errorMessage)
                                 title: \"\((alertVC.title ?? "") == "" ? "" : alertVC.title!)\"
                                 message: \"\((alertVC.message ?? "") == "" ? "" : alertVC.message!)\"
                                 actions: \(actions);
                             """
-
                             if alertVC.textFields?.isEmpty == false {
                                 var tfs = ""
                                 for tf in alertVC.textFields ?? [] {
@@ -502,7 +484,6 @@ extension UIViewController {
                                 }
                                 errorMessage += "\ntextfields: \(tfs);"
                             }
-
                             errorMessage = errorMessage.replacingOccurrences(of: ",;", with: ";")
                         }
 
@@ -527,13 +508,8 @@ extension UIViewController {
         }
     }
 
-    // Call this method if the ViewController deinitializes.
-    // If a memory leak was detected earlier, this indicates that the leak has resolved itself.
-    // Notify that the memory issue has been resolved
     fileprivate class func lvcdMemoryLeakResolved(memoryLeakDetectionDate: TimeInterval, errorMessage: String, objectIdentifier: Int, objectType: String, screenshot: UIImage?) {
-
         let interval = Date().timeIntervalSince1970 - memoryLeakDetectionDate
-
         let errorTitle = "LEAKED \(objectType) DEINNITED"
         let errorMessage = String(format: "\(errorMessage)\n\nDeinnited after %.3fs.",interval)
 
@@ -549,7 +525,8 @@ extension UIViewController {
     }
 
     fileprivate class LVCDSplitViewAssociatedObject {
-        static var key = malloc(1)!
+        // 6. 使用 UInt8 替代容易泄漏和崩溃的 malloc(1)!
+        @MainActor static var key: UInt8 = 0
 
         weak var splitViewController: UISplitViewController?
         weak var viewController: UIViewController? {
@@ -559,19 +536,33 @@ extension UIViewController {
         }
 
         @objc func checkIfBelongsToSplitViewController(_ notification: Notification) {
-            if notification.object as? UISplitViewController == splitViewController, let viewController {
-                objc_setAssociatedObject(viewController, &LVCDSplitViewAssociatedObject.key, nil, .OBJC_ASSOCIATION_RETAIN)
+            // 1. 在开启 Task 之前，做条件判断并把需要的属性提取为局部变量
+            // 这样 Task 内部就不需要再访问 `self` 了
+            guard notification.object as? UISplitViewController == splitViewController, let vc = viewController else {
+                return
+            }
+            
+            // 提前提取出 splitViewController，彻底和 self 解绑
+            let currentSplitVC = self.splitViewController
+            
+            // 2. 开启主线程任务
+            Task { @MainActor in
+                // 清理并重新设置关联对象，这里直接使用局部变量 vc
+                objc_setAssociatedObject(vc, &LVCDSplitViewAssociatedObject.key, nil, .OBJC_ASSOCIATION_RETAIN)
 
-                if objc_getAssociatedObject(viewController, &LVCDDeallocator.key) == nil {
-                    objc_setAssociatedObject(viewController, &LVCDDeallocator.key, LVCDDeallocator(viewController.view), .OBJC_ASSOCIATION_RETAIN)
+                if objc_getAssociatedObject(vc, &LVCDDeallocator.key) == nil {
+                    objc_setAssociatedObject(vc, &LVCDDeallocator.key, LVCDDeallocator(vc.view), .OBJC_ASSOCIATION_RETAIN)
                 }
 
-                viewController.addCheckForMemoryLeakObserver()
+                vc.addCheckForMemoryLeakObserver()
 
-                PTGCDManager.gcdAfter(time: PTPerformanceLeakDetector.delay) { [weak splitViewController, weak viewController] in
-                    if splitViewController == nil {
-                        Task { @MainActor  in
-                            viewController?.lvcdCheckForMemoryLeak()
+                // 3. 将局部变量 currentSplitVC 和 vc 弱引用传入延时任务
+                PTGCDManager.gcdAfter(time: PTPerformanceLeakDetector.delay) { [weak currentSplitVC, weak vc] in
+                    
+                    if currentSplitVC == nil {
+                        // 4. 这里的闭包已经被我们升级为 @MainActor 了，所以不需要再嵌套 Task
+                        Task { @MainActor in
+                            vc?.lvcdCheckForMemoryLeak()
                         }
                     }
                 }
@@ -580,12 +571,16 @@ extension UIViewController {
     }
 }
 
+// MARK: - Sub Helpers
+
 extension NotificationCenter {
     fileprivate static let lvcd = NotificationCenter()
 }
 
+@MainActor
 private class LVCDDeallocator {
-    static var key = malloc(1)!
+    // 使用安全的静态键传递给关联对象
+    static var key: UInt8 = 0
 
     var memoryLeakDetectionDate: TimeInterval = 0.0
     var errorMessage = ""
@@ -593,22 +588,20 @@ private class LVCDDeallocator {
     var objectType = ""
     var screenshot: UIImage?
 
-    // used by ViewController
     var strongView: UIView?
-
-    // used by View
     var subviews: [UIView]?
     var subviewObserver: NSKeyValueObservation?
     weak var weakView: UIView? {
         didSet {
             subviewObserver?.invalidate()
             subviewObserver = weakView?.layer.observe(\.sublayers, options: [.old, .new]) { [weak self] _, _ in
-                if let view = self?.weakView {
-                    self?.subviews = view.subviews
+                // 确保在主线程更新 UI 数组
+                Task { @MainActor [weak self] in
+                    if let view = self?.weakView {
+                        self?.subviews = view.subviews
+                    }
                 }
             }
-            // using observer allows to keep track of subviews during leak without themselves leaking
-            // if leaked view clears it can then check its current subviews for leaks
         }
     }
 
@@ -617,31 +610,39 @@ private class LVCDDeallocator {
     }
 
     deinit {
-        // ViewController
-        strongView?.checkForLeakedSubViews()
-        strongView = nil // not needed, but just for peace of mind
-
-        // View
+        // 注意：deinit 在 Swift 6 的隔离类型中是脱离 actor 上下文的 (nonisolated)
+        // 但如果仅处理自身状态或交由 MainActor 处理即可
+        let viewToRelease = strongView
+        let subviewsToRelease = subviews
+        let id = objectIdentifier
+        let msg = errorMessage
+        let date = memoryLeakDetectionDate
+        let type = objectType
+        let image = screenshot
+        
+        Task { @MainActor in
+            viewToRelease?.checkForLeakedSubViews()
+            for subview in subviewsToRelease ?? [] {
+                subview.checkForLeakedSubViews()
+            }
+            if id != 0 {
+                UIViewController.lvcdMemoryLeakResolved(memoryLeakDetectionDate: date, errorMessage: msg, objectIdentifier: id, objectType: type, screenshot: image)
+            }
+        }
+        
         subviewObserver?.invalidate()
-        for subview in subviews ?? [] {
-            subview.checkForLeakedSubViews()
-        }
-
-        if objectIdentifier != 0 {
-            UIViewController.lvcdMemoryLeakResolved(memoryLeakDetectionDate: memoryLeakDetectionDate, errorMessage: errorMessage, objectIdentifier: objectIdentifier, objectType: objectType, screenshot: screenshot)
-        }
     }
 }
 
+@MainActor
 extension UIResponder {
     fileprivate var viewController: UIViewController? {
         next as? UIViewController ?? next?.viewController
     }
 }
 
+@MainActor
 extension UIApplication {
-
-    /// get a window, preferably once that is in foreground (active) in case you have multiple windows on iPad
     private var lvcdActiveMainKeyWindow: UIWindow? {
         if #available(iOS 13, tvOS 13, *) {
             let activeScenes = connectedScenes.filter {
@@ -655,12 +656,14 @@ extension UIApplication {
         }
     }
 
-    private class func lvcdTopViewController(controller: UIViewController? = UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController) -> UIViewController? {
-        controller?.presentedViewController != nil ? lvcdTopViewController(controller: controller!.presentedViewController!) : controller
+    private class func lvcdTopViewController(controller: UIViewController? = nil) -> UIViewController? {
+        let new = controller ?? UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController
+        return new?.presentedViewController != nil ? lvcdTopViewController(controller: new?.presentedViewController!) : new
     }
 
-    private class func lvcdFindViewControllerWithTag(controller: UIViewController? = UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController, tag: Int ) -> UIViewController? {
-        controller == nil ? nil : (controller!.view.tag == tag ? controller! : lvcdFindViewControllerWithTag(controller: controller!.presentedViewController,tag: tag))
+    private class func lvcdFindViewControllerWithTag(controller: UIViewController? = nil, tag: Int ) -> UIViewController? {
+        let new = controller ?? UIApplication.shared.lvcdActiveMainKeyWindow?.rootViewController
+        return new == nil ? nil : (new?.view.tag == tag ? new : lvcdFindViewControllerWithTag(controller: new?.presentedViewController,tag: tag))
     }
 
     @available(iOS 13.0, tvOS 13, *)
@@ -681,8 +684,9 @@ extension String {
         }
     }
 
-    private static var lvcdBundleName: String?
-    private static var lvcdModuleName: String?
+    // 这些全局可变状态在 Swift 6 下需要保护，既然是工具方法，隔离到 MainActor 是最简单的方式
+    @MainActor private static var lvcdBundleName: String?
+    @MainActor private static var lvcdModuleName: String?
 
     @MainActor fileprivate func lvcdRemoveBundleAndModuleName() -> String {
         Self.lvcdBundleName = Self.lvcdBundleName ?? kAppName
@@ -694,19 +698,5 @@ extension String {
             return replacingOccurrences(of: "\(Self.lvcdBundleName!).", with: "").replacingOccurrences(of: "\(Self.lvcdModuleName!).", with: "")
         }
         return self
-    }
-}
-
-extension PTPerformanceLeakDetector {
-    struct LeakModel {
-        let details: String
-        let screenshot: UIImage?
-        let id: Int
-
-        var hasDeallocated = false
-        var timeAllocated: String?
-
-        var isActive: Bool { !hasDeallocated }
-        var symbol: String { hasDeallocated ? "✳️" : "⚠️" }
     }
 }
