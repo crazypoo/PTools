@@ -147,8 +147,8 @@ public extension UIButton {
                    uniCount:Int? = nil,
                    emptyImage:UIImage? = nil,
                    controlState:UIControl.State = .normal,
-                   progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
-                   loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+                   progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                   loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
         // 直接调用父类 UIView 封装好的核心逻辑
         
         let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth

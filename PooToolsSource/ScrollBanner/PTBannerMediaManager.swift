@@ -17,17 +17,21 @@ class PTBannerVideoManager {
 
     private var cache = NSCache<NSString, UIImage>()
 
-    func loadCover(url: String, completion: @escaping (UIImage?) -> Void) {
+    public func loadCover(url: String, completion: @escaping @MainActor @Sendable (UIImage?) -> Void) {
         if let img = cache.object(forKey: url as NSString) {
             completion(img)
             return
         }
 
-        PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
+        // 🌟 修复 2：使用 [weak self] 弱捕获，防止在后台线程强持有 @MainActor 隔离的对象
+        PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { [weak self] image in
+            // 回到主线程执行 UI 和缓存相关的操作
             Task { @MainActor in
                 if let image = image {
-                    self.cache.setObject(image, forKey: url as NSString)
+                    // 🌟 修复 3：通过可选链安全地访问 self，即使对象在等待期间释放也不会崩溃
+                    self?.cache.setObject(image, forKey: url as NSString)
                 }
+                // 安全地执行标记了 @MainActor 的闭包
                 completion(image)
             }
         }

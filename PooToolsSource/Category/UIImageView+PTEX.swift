@@ -63,8 +63,8 @@ public extension UIImageView {
                    valueLabelColor: UIColor? = nil,
                    uniCount: Int? = nil,
                    emptyImage: UIImage? = nil,
-                   progressHandle: ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
-                   loadFinish: ((PTLoadImageResult) -> Void)? = nil) {
+                   progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
+                   loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
         
         let borderW = borderWidth ?? PTAppBaseConfig.share.loadImageProgressBorderWidth
         let borderC = borderColor ?? PTAppBaseConfig.share.loadImageProgressBorderColor
@@ -242,13 +242,15 @@ public extension UIImageView {
         let loader: UIView? = showLoader ? createLoader(from: customLoader) : nil
         
         let task = session.dataTask(with: url) { [weak self] data, _, error in
-            loader?.removeFromSuperview()
-            self?.parseDownloadedGif(url: url,
-                                    data: data,
-                                    error: error,
-                                    manager: manager_new,
-                                    loopCount: loopCount,
-                                    levelOfIntegrity: levelOfIntegrity)
+            Task { @MainActor in
+                loader?.removeFromSuperview()
+                self?.parseDownloadedGif(url: url,
+                                        data: data,
+                                        error: error,
+                                        manager: manager_new,
+                                        loopCount: loopCount,
+                                        levelOfIntegrity: levelOfIntegrity)
+            }
         }
         
         task.resume()
