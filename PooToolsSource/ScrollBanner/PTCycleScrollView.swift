@@ -701,7 +701,7 @@ extension PTCycleScrollView {
             return
         }
         
-        PTGCDManager.gcdMain {
+        Task { @MainActor in
             PTVideoCoverCache.getVideoFirstImage(videoUrl: url) { image in
                 Task { @MainActor in
                     if let image = image {

@@ -22,7 +22,7 @@ public typealias KeyboardCompletion = @MainActor @Sendable (UIViewAnimatingPosit
 
 // 定义一个静态 Key 用于关联对象存储
 private enum AssociatedKeys {
-    @MainActor static var keyboardTokens = "keyboardTokens"
+    @MainActor static var keyboardTokens:UInt8 = 0
 }
 
 // MARK: - KeyboardAnimatable Extension

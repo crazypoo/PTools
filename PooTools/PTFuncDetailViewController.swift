@@ -852,10 +852,12 @@ class PTFuncDetailViewController: PTBaseViewController {
                     self.livePhotoMediaSelect(type: .Video) { result in
                         result.asset.converPHAssetToAVURLAsset { avAsset in
                             if let avURLAsset = avAsset {
-                                let _ = avURLAsset.exportToDocuments(filename: self.pickedVideoName) { outputURL in
-                                    UIImage.pt.getVideoFirstImage(videoUrl: URL(fileURLWithPath: outputURL.absoluteString).absoluteString) { image in
-                                        pickedVideoURL = URL(fileURLWithPath: outputURL.absoluteString)
-                                        videoImageView.image = image
+                                Task { @MainActor in
+                                    let _ = avURLAsset.exportToDocuments(filename: self.pickedVideoName) { outputURL in
+                                        UIImage.pt.getVideoFirstImage(videoUrl: URL(fileURLWithPath: outputURL.absoluteString).absoluteString) { image in
+                                            pickedVideoURL = URL(fileURLWithPath: outputURL.absoluteString)
+                                            videoImageView.image = image
+                                        }
                                     }
                                 }
                             } else {
@@ -985,25 +987,27 @@ class PTFuncDetailViewController: PTBaseViewController {
                         if result.asset.pt.isLivePhoto() {
                             result.asset.pt.convertPHAssetToPHLivePhoto { livePhoto in
                                 if let lPhoto = livePhoto {
-                                    livePhotoView.livePhoto = lPhoto
-                                    livePhotoView.startPlayback(with: .hint)
-                                    Task {
-                                        let result = try await PTLivePhoto.extractResources(from: lPhoto)
-                                        disassembleImageURL = result.pairedImage
-                                        pickedVideoURL = result.pairedVideo
-                                        if let keyPhotoPath = disassembleImageURL {
-                                            if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
-                                                guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
-                                                    return
+                                    Task { @MainActor in
+                                        livePhotoView.livePhoto = lPhoto
+                                        livePhotoView.startPlayback(with: .hint)
+                                        Task {
+                                            let result = try await PTLivePhoto.extractResources(from: lPhoto)
+                                            disassembleImageURL = result.pairedImage
+                                            pickedVideoURL = result.pairedVideo
+                                            if let keyPhotoPath = disassembleImageURL {
+                                                if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
+                                                    guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
+                                                        return
+                                                    }
+                                                    showImageView.image = keyPhotoImage
                                                 }
-                                                showImageView.image = keyPhotoImage
                                             }
-                                        }
-                                        if let pairedVideoPath = pickedVideoURL?.path  {
-                                            if FileManager.pt.judgeFileOrFolderExists(filePath: pairedVideoPath) {
-                                                let fileURL = URL(fileURLWithPath: pairedVideoPath)
-                                                UIImage.pt.getVideoFirstImage(videoUrl: fileURL.absoluteString) { image in
-                                                    videoImageView.image = image
+                                            if let pairedVideoPath = pickedVideoURL?.path  {
+                                                if FileManager.pt.judgeFileOrFolderExists(filePath: pairedVideoPath) {
+                                                    let fileURL = URL(fileURLWithPath: pairedVideoPath)
+                                                    UIImage.pt.getVideoFirstImage(videoUrl: fileURL.absoluteString) { image in
+                                                        videoImageView.image = image
+                                                    }
                                                 }
                                             }
                                         }

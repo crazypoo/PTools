@@ -155,16 +155,18 @@ final class ElementInspectorViewController: ElementInspectorPanelViewController,
                     self?.updatePreferredContentSize()
 
                 } completion: { [weak self] _ in
-                    oldValue?.didMove(toParent: nil)
-                    oldValue?.removeFromParent()
+                    Task { @MainActor [weak self] in
+                        oldValue?.didMove(toParent: nil)
+                        oldValue?.removeFromParent()
 
-                    guard let self = self else { return }
+                        guard let self = self else { return }
 
-                    self.segmentedControl.isUserInteractionEnabled = true
-                    panelViewController.didMove(toParent: self)
+                        self.segmentedControl.isUserInteractionEnabled = true
+                        panelViewController.didMove(toParent: self)
 
-                    self.animate(withDuration: .veryLong) { [weak self] in
-                        self?.updatePreferredContentSize()
+                        self.animate(withDuration: .veryLong) { [weak self] in
+                            self?.updatePreferredContentSize()
+                        }
                     }
                 }
             }
