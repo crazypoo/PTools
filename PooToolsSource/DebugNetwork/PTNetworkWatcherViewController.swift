@@ -113,71 +113,51 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         return deleteButton
     }()
     
+    func testAction() {
+        // 1. 开启一个绑定到主线程的异步 Task，为使用 await 提供环境
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            
+            let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
+            
+            // 2. 异步调用 actor 的方法启动测速
+            await networkSpeedMonitor.startMonitoring()
+            self.floatingButtonCreate()
+            
+            // 3. 现代 Swift 6 轮询方案：使用 for 循环 + Task.sleep 代替 Timer
+            for _ in 1...10 {
+                // 暂停 1 秒 (1_000_000_000 纳秒 = 1 秒)
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                
+                // 防御性编程：如果用户在这 10 秒内退出了当前页面，直接中断循环避免内存泄漏
+                guard !Task.isCancelled else { break }
+                
+                // 4. 安全地跨越并发边界，从 actor 获取最新速度
+                let currentDownloadSpeed = await networkSpeedMonitor.downloadSpeed
+                let currentUploadSpeed = await networkSpeedMonitor.uploadSpeed
+                
+                // 终极修复：正确换算至 MB/s 级别
+                let downloadSpeedMB = currentDownloadSpeed / 1048576.0
+                let uploadSpeedMB = currentUploadSpeed / 1048576.0
+
+                self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
+            }
+            
+            // 5. 10 秒循环自然结束，执行清理逻辑
+            if let floatingView = self.floatingView {
+                floatingView.removeFromSuperview()
+                self.floatingView = nil
+            }
+            
+            // 异步停止测速器
+            await networkSpeedMonitor.stopMonitoring()
+        }
+    }
+    
     lazy var testButton: UIButton = {
         let testButton = baseButtonCreate(image: UIImage(.sparkles))
         testButton.addActionHandlers { [weak self] _ in
-            // 1. 开启一个绑定到主线程的异步 Task，为使用 await 提供环境
-            Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                
-                let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
-                
-                // 2. 异步调用 actor 的方法启动测速
-                await networkSpeedMonitor.startMonitoring()
-                self.floatingButtonCreate()
-                
-                // 3. 现代 Swift 6 轮询方案：使用 for 循环 + Task.sleep 代替 Timer
-                for _ in 1...10 {
-                    // 暂停 1 秒 (1_000_000_000 纳秒 = 1 秒)
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                    
-                    // 防御性编程：如果用户在这 10 秒内退出了当前页面，直接中断循环避免内存泄漏
-                    guard !Task.isCancelled else { break }
-                    
-                    // 4. 安全地跨越并发边界，从 actor 获取最新速度
-                    let currentDownloadSpeed = await networkSpeedMonitor.downloadSpeed
-                    let currentUploadSpeed = await networkSpeedMonitor.uploadSpeed
-                    
-                    // 终极修复：正确换算至 MB/s 级别
-                    let downloadSpeedMB = currentDownloadSpeed / 1048576.0
-                    let uploadSpeedMB = currentUploadSpeed / 1048576.0
-
-                    self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
-                }
-                
-                // 5. 10 秒循环自然结束，执行清理逻辑
-                if let floatingView = self.floatingView {
-                    floatingView.removeFromSuperview()
-                    self.floatingView = nil
-                }
-                
-                // 异步停止测速器
-                await networkSpeedMonitor.stopMonitoring()
-            }
-//            guard let self = self else { return }
-//            let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
-//            networkSpeedMonitor.startMonitoring()
-//            self.floatingButtonCreate()
-//            
-//            var count = 0
-//            Timer.scheduledTimer(timeInterval: 1, repeats: true) { timers in
-//                count += 1
-//                // 🌟 终极修复：正确换算至 MB/s 级别 (1024 * 1024 = 1048576.0)，彻底解决永远为 0 的换算 Bug
-//                let downloadSpeedMB = networkSpeedMonitor.downloadSpeed / 1048576.0
-//                let uploadSpeedMB = networkSpeedMonitor.uploadSpeed / 1048576.0
-//
-//                self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
-//                
-//                // 10 秒压测自动终止
-//                if count > 10 {
-//                    timers.invalidate()
-//                    if let floatingView = self.floatingView {
-//                        floatingView.removeFromSuperview()
-//                        self.floatingView = nil
-//                    }
-//                    networkSpeedMonitor.stopMonitoring()
-//                }
-//            }
+            self?.testAction()
         }
         return testButton
     }()

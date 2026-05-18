@@ -18,6 +18,7 @@ extension CGFloat: PTProtocolCompatible {}
     case CentigradeDegree
 }
 
+
 public extension CGFloat {
     //MARK: 屏幕分辨率
     /// 屏幕分辨率

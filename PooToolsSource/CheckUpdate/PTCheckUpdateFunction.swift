@@ -207,7 +207,7 @@ public class PTTFUpdateCustomModel:PTModelProtocol {
 
 @objcMembers
 public class PTCheckUpdateFunction: NSObject {
-    public static let share = PTCheckUpdateFunction()
+    @MainActor public static let share = PTCheckUpdateFunction()
     
     //MARK: LoadingHud
     var hud:PTHudView?
@@ -474,7 +474,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
 
-    public static func appConnectApiRequest<T:SmartCodableX>(token:String,apiUrl:String,parameters:[String:Any]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
+    public static func appConnectApiRequest<T:SmartCodableX>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
         if showHud {
             toggleHud(show: true)
         }
@@ -526,7 +526,7 @@ public class PTCheckUpdateFunction: NSObject {
                                     } fail: { error in
                                     }
                                 case 1:
-                                    PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: resultModel.data![0].relationships?.betaBuildLocalizations?.links?.related ?? "", modelType: PTTFModelCollection.self,showHud: false) { infoResult, infoJsonString in
+                                    PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: resultModel.data?[0].relationships?.betaBuildLocalizations?.links?.related ?? "", modelType: PTTFModelCollection.self,showHud: false) { infoResult, infoJsonString in
                                         Task { @MainActor in
                                             if let resultModelBuilda = infoResult as? PTTFModelCollection {
                                                 note = resultModelBuilda.data?.first?.attributes?.whatsNew ?? ""

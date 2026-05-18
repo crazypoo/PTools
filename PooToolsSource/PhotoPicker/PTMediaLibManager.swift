@@ -301,7 +301,7 @@ public class PTMediaLibManager: NSObject {
         return predicates
     }
     
-    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, handler: @escaping (PTMediaLibListModel) -> Void) {
+    public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, handler: @escaping @MainActor @Sendable (PTMediaLibListModel) -> Void) {
         PTGCDManager.shared.runOnBackground {
             let option = PHFetchOptions()
             let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)

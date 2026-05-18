@@ -21,7 +21,7 @@ public enum PTImageType {
     case unknown
 }
 
-public typealias PTLoadImageProgressBlock = ((_ receivedSize: Int64, _ totalSize: Int64) -> Void)
+public typealias PTLoadImageProgressBlock = (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)
 
 public struct PTLoadImageResult {
     public let allImages: [UIImage]?

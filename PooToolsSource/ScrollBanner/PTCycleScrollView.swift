@@ -407,7 +407,7 @@ public class PTCycleScrollView: UIView {
     fileprivate var videoFrameCache = NSCache<NSString, UIImage>()
 
     deinit {
-        invalidateTimer()
+//        invalidateTimer()
     }
     
     /// Init
@@ -691,7 +691,7 @@ extension PTCycleScrollView {
         }
     }
     
-    func getVideoFrame(for url: String, completion: @escaping (UIImage?) -> Void) {
+    func getVideoFrame(for url: String, completion: @escaping @MainActor @Sendable (UIImage?) -> Void) {
         if let cachedImage = videoFrameCache.object(forKey: url as NSString) {
             completion(cachedImage)
             return

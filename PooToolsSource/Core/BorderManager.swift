@@ -8,6 +8,7 @@
 import UIKit
 
 /// This class handles enabling and disabling debug borders on a specified view.
+@MainActor
 class BorderManager {
     weak var layer: CALayer?
     
