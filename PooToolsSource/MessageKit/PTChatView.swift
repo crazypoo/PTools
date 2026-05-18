@@ -10,7 +10,7 @@ import SnapKit
 import AVFoundation
 import Photos
 
-public typealias PTChatHandler = (PTChatListModel,IndexPath) -> Void
+public typealias PTChatHandler = @MainActor (PTChatListModel,IndexPath) -> Void
 public typealias PTChatCellHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath,_ baseCell:UICollectionViewCell) -> PTChatBaseCell?
 public typealias PTChatCustomerCellHeightHandler = (_ dataModel:PTChatListModel,_ indexPath:Int) -> CGFloat
 public typealias PTAttCellCallBack = (String,IndexPath,PTChatListModel) -> Void

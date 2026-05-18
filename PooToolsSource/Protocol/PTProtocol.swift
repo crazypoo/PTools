@@ -9,25 +9,36 @@
 import UIKit
 import Foundation
 
+// 1. 定义包装器，并补全 public 访问控制
 public struct PTPOP<Base> {
-    let base: Base
-    init(_ base: Base) {
+    public let base: Base // 升级：添加 public，确保在其他模块可以访问 base 实例
+    
+    public init(_ base: Base) {
         self.base = base
     }
 }
 
+// 2. Swift 6 核心升级：条件遵守 Sendable 协议
+// 解释：这行代码告诉 Swift 6 编译器：“只要被包装的 Base 类型是线程安全的，那么 PTPOP 也是线程安全的。”
+// 这在并发编程（如 Task, async/await）中是必不可少的。
+extension PTPOP: Sendable where Base: Sendable {}
+
+// 3. 定义协议
 public protocol PTProtocolCompatible {}
 
+// 4. 实现扩展
 public extension PTProtocolCompatible {
     
+    // 静态类型的命名空间
     static var pt: PTPOP<Self>.Type {
-        get{ PTPOP<Self>.self }
-        set {}
+        // 升级：移除空的 set {}。在 Swift 6 中，纯计算属性配合 actor 隔离会更安全、无警告。
+        get { PTPOP<Self>.self }
     }
     
+    // 实例类型的命名空间
     var pt: PTPOP<Self> {
+        // 同理，移除空 set，保持其为一个纯粹的只读包装器。
         get { PTPOP(self) }
-        set {}
     }
 }
 

@@ -69,35 +69,60 @@ public extension PTPOP where Base : UIScrollView {
         }
     }
     
-    //MARK: 获取ScrollView的contentScroll长图像
-    /// 获取ScrollView的contentScroll长图像
-    /// - Parameters:
-    ///  - completionHandler: 获取闭包
-    @MainActor func snapShotContentScroll(_ completionHandler: @escaping (_ screenShotImage: UIImage?) -> Void) {
-        /// 放一个假的封面
-        let snapShotView = base.snapshotView(afterScreenUpdates: true)
-        snapShotView?.frame = CGRect(x: base.frame.origin.x, y: base.frame.origin.y, width: snapShotView?.frame.size.width ?? 0, height: snapShotView?.frame.size.height ?? 0)
-        base.superview?.addSubview(snapShotView!)
-        ///  基的原点偏移
+    /// 获取 ScrollView 长截图
+    /// - Parameter completionHandler: 截图完成后的回调，返回生成的 UIImage
+    @MainActor
+    func snapShotContentScroll(_ completionHandler: @escaping @MainActor @Sendable (_ screenShotImage: UIImage?) -> Void) {
+        
+        // 1. 安全解包：防止 snapshotView 为 nil 时引发强制解包崩溃
+        guard let snapShotView = base.snapshotView(afterScreenUpdates: true) else {
+            completionHandler(nil)
+            return
+        }
+        
+        // 2. 设置假封面的 frame 并添加到父视图
+        snapShotView.frame = CGRect(
+            x: base.frame.origin.x,
+            y: base.frame.origin.y,
+            width: snapShotView.frame.size.width,
+            height: snapShotView.frame.size.height
+        )
+        base.superview?.addSubview(snapShotView)
+        
+        /// 记录初始的原点偏移
         let originOffset = base.contentOffset
-        /// 分页
-        let page  = floorf(Float(base.contentSize.height / base.bounds.height))
-        /// 打开位图上下文大小为截图的大小
+        
+        // 3. 安全防护：防止除以 0 的情况发生
+        guard base.bounds.height > 0 else {
+            snapShotView.removeFromSuperview()
+            completionHandler(nil)
+            return
+        }
+        
+        // 4. 分页计算：使用 ceil 向上取整，确保即使最后不足一页也能被完整截取
+        let page = Int(ceil(base.contentSize.height / base.bounds.height))
+        
+        /// 打开位图上下文，大小为 ScrollView 的真实内容大小
         UIGraphicsBeginImageContextWithOptions(base.contentSize, false, UIScreen.main.scale)
-        /// 这个方法是一个绘图，里面可能有递归调用
-        snapShotContentScrollPage(index: 0, maxIndex: Int(page)) {
+        
+        /// 执行可能包含异步等待的递归绘图方法
+        snapShotContentScrollPage(index: 0, maxIndex: page) {
+            // 5. 确保结束操作和回调严格在主线程执行
             Task { @MainActor in
+                // 从当前上下文获取拼接好的长图
                 let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                /// 设置原点偏移
+                UIGraphicsEndImageContext() // 切记关闭上下文，防止内存泄漏
+                
+                /// 恢复初始偏移量并移除假封面
                 base.setContentOffset(originOffset, animated: false)
-                snapShotView?.removeFromSuperview()
-                /// 获取 snapShotContentScroll 时的回调图像
+                snapShotView.removeFromSuperview()
+                
+                /// 通过回调返回图像
                 completionHandler(screenShotImage)
             }
         }
     }
-    
+
     @MainActor func scrolToLeftAnimation(animation:Bool) {
         var off = base.contentOffset
         off.x = 0 - base.contentInset.left

@@ -238,10 +238,12 @@ public class PTChatMediaCell: PTChatBaseCell {
                 self.contentImageView.image = item.coverImage ?? PTAppBaseConfig.share.defaultEmptyImage
             }
         } videoReady: { item in
-            if let urlSave = URL(string: url) {
-                self.loadMediaURL = urlSave
+            Task { @MainActor in
+                if let urlSave = URL(string: url) {
+                    self.loadMediaURL = urlSave
+                }
+                self.videoCacheURL = item.localVideoURL
             }
-            self.videoCacheURL = item.localVideoURL
         }
                 
         mediaPlayButtonImageSet()
@@ -272,10 +274,12 @@ public class PTChatMediaCell: PTChatBaseCell {
         PTVideoFileCache.shared.prepareVideo(url: urlReal,progress: { _, _, progress in
             self.loadingView.progress = progress
         }, completion: { localURL in
-            self.loadingView.removeFromSuperview()
-            self.videoCacheURL = localURL
-            self.mediaPlayButtonImageSet()
-            self.mediaDownloadFinishCallback?()
+            Task { @MainActor in
+                self.loadingView.removeFromSuperview()
+                self.videoCacheURL = localURL
+                self.mediaPlayButtonImageSet()
+                self.mediaDownloadFinishCallback?()
+            }
         })
     }
     

@@ -25,20 +25,15 @@ public enum PTChatMessageStatus:Int,SmartCaseDefaultable {
     case Error
 }
 
-open class PTChatListModel: PTModelProtocol {
+@MainActor
+open class PTChatListModel: @preconcurrency PTModelProtocol {
     ///消息时间戳
     public var messageTimeStamp:TimeInterval = 0
     ///消息ID
     public var msgId:String = ""
     public var messageType:PTChatMessageType = .Text
     ///创建者ID
-    public var creatorId:String = "" {
-        didSet {
-            Task { @MainActor in
-                belongToMe = (creatorId == PTChatConfig.share.imOwnerId)
-            }
-        }
-    }
+    public var creatorId:String = ""
     ///内容
     @SmartAny public var msgContent:Any?
     ///消息人头像
@@ -48,8 +43,10 @@ open class PTChatListModel: PTModelProtocol {
     ///发送者名字
     public var senderName:String = ""
     ///是否属于我
-    public var belongToMe:Bool = false
-    
+    public var belongToMe: Bool {
+        return creatorId == PTChatConfig.share.imOwnerId
+    }
+
     //MARK: 这个是需要自定义cell时用
     ///自定义CELL的ID
     public var customerCellId:String = ""

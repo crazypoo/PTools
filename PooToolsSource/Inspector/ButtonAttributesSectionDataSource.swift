@@ -7,7 +7,10 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ButtonAttributesSectionDataSource: InspectorElementSectionDataSource {
+    
+    // 1. 添加 @MainActor：确保整个 UI 数据源在 Swift 6 下是严格主线程安全的
+    @MainActor
+    final class ButtonAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Button"
@@ -18,14 +21,11 @@ extension DefaultElementAttributesLibrary {
             guard let button = object as? UIButton else { return nil }
 
             self.button = button
-            selectedControlState = button.state
+            self.selectedControlState = button.state
         }
 
         private var selectedControlState: UIControl.State
 
-        // 步骤 1: 移除 iOS 15 中已废弃的参数
-        // 移除了 reversesTitleShadowWhenHighlighted, showsTouchWhenHighlighted,
-        // adjustsImageWhenHighlighted, adjustsImageWhenDisabled
         private enum Property: String, Swift.CaseIterable {
             case type = "Type"
             case fontName = "Font Name"
@@ -91,13 +91,14 @@ extension DefaultElementAttributesLibrary {
                 case .titleText:
                     return .textField(
                         title: property.rawValue,
-                        // 步骤 2: 兼容读取 Configuration 中的标题
                         placeholder: button.configuration?.title ?? button.title(for: self.selectedControlState) ?? property.rawValue,
                         value: { button.configuration?.title ?? button.title(for: self.selectedControlState) }
                     ) { title in
-                        // 步骤 2: 如果按钮使用了 iOS 15 的 Configuration，优先更新 Configuration
-                        if button.configuration != nil {
-                            button.configuration?.title = title
+                        // 🌟 修复点 1：正确修改 Configuration 值类型结构体
+                        if var config = button.configuration {
+                            config.title = title
+                            // 必须重新赋值回 button.configuration 才能生效
+                            button.configuration = config
                         } else {
                             button.setTitle(title, for: self.selectedControlState)
                         }
@@ -108,9 +109,10 @@ extension DefaultElementAttributesLibrary {
                         title: property.rawValue,
                         color: { button.titleColor(for: self.selectedControlState) }
                     ) { currentTitleColor in
-                        if button.configuration != nil {
-                            // Configuration 模式下的文字颜色通常由 baseForegroundColor 控制
-                            button.configuration?.baseForegroundColor = currentTitleColor
+                        // 🌟 修复点 2：修复字体颜色的 Configuration 更新
+                        if var config = button.configuration {
+                            config.baseForegroundColor = currentTitleColor
+                            button.configuration = config
                         } else {
                             button.setTitleColor(currentTitleColor, for: self.selectedControlState)
                         }
@@ -121,7 +123,6 @@ extension DefaultElementAttributesLibrary {
                         title: property.rawValue,
                         color: { button.titleShadowColor(for: self.selectedControlState) }
                     ) { currentTitleShadowColor in
-                        // 注意：Configuration 模式不直接支持 ShadowColor，这里只保留传统设置
                         button.setTitleShadowColor(currentTitleShadowColor, for: self.selectedControlState)
                     }
                     
@@ -130,8 +131,10 @@ extension DefaultElementAttributesLibrary {
                         title: property.rawValue,
                         image: { button.configuration?.image ?? button.image(for: self.selectedControlState) }
                     ) { image in
-                        if button.configuration != nil {
-                            button.configuration?.image = image
+                        // 🌟 修复点 3：修复图片的 Configuration 更新
+                        if var config = button.configuration {
+                            config.image = image
+                            button.configuration = config
                         } else {
                             button.setImage(image, for: self.selectedControlState)
                         }
@@ -142,8 +145,10 @@ extension DefaultElementAttributesLibrary {
                         title: property.rawValue,
                         image: { button.configuration?.background.image ?? button.backgroundImage(for: self.selectedControlState) }
                     ) { backgroundImage in
-                        if button.configuration != nil {
-                            button.configuration?.background.image = backgroundImage
+                        // 🌟 修复点 4：修复背景图片的 Configuration 更新
+                        if var config = button.configuration {
+                            config.background.image = backgroundImage
+                            button.configuration = config
                         } else {
                             button.setBackgroundImage(backgroundImage, for: self.selectedControlState)
                         }

@@ -88,10 +88,12 @@ private extension DraggableViewProtocol {
     }
 
     func finalizeDrag() {
-        let center = centerInsideDraggableArea(from: draggableView.center)
+        Task { @MainActor in
+            let center = centerInsideDraggableArea(from: draggableView.center)
 
-        animate(withDuration: .long, options: [.beginFromCurrentState, .curveEaseIn]) {
-            self.draggableView.center = center
+            animate(withDuration: .long, options: [.beginFromCurrentState, .curveEaseIn]) {
+                self.draggableView.center = center
+            }
         }
     }
 }
