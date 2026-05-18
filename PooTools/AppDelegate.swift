@@ -350,11 +350,13 @@ class AppDelegate: PTAppWindowsDelegate {
 //        PTNSLogConsole("\(String(format: "Download Speed: %.2f KB/s", networkSpeedMonitor.downloadSpeed / 1024))")
 //        PTNSLogConsole("\(String(format: "Upload Speed: %.2f KB/s", networkSpeedMonitor.uploadSpeed / 1024))")
         
-        let downloadSpeed = PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024
-        let uploadSpeed = PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024
-        
-        PTNSLogConsole("\(String(format: "Download Speed: %.2f KB/s", downloadSpeed))")
-        PTNSLogConsole("\(String(format: "Upload Speed: %.2f KB/s", uploadSpeed))")
+        Task { @MainActor in
+            let downloadSpeed = await PTNetworkSpeedMonitor.shared.averageDownloadSpeed() / 1024
+            let uploadSpeed = await PTNetworkSpeedMonitor.shared.averageUploadSpeed() / 1024
+            
+            PTNSLogConsole("\(String(format: "Download Speed: %.2f KB/s", downloadSpeed))")
+            PTNSLogConsole("\(String(format: "Upload Speed: %.2f KB/s", uploadSpeed))")
+        }
     }
 
 //    func fetchPlaylistLink(gotID:String) {

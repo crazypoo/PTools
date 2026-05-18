@@ -9,12 +9,12 @@
 import Foundation
 
 enum StderrCapture {
-    static var isCapturing = false
+    @MainActor static var isCapturing = false
     private static let inputPipe = Pipe()
     private static let outputPipe = Pipe()
-    private static var originalDescriptor = FileHandle.standardError.fileDescriptor
+    @MainActor private static var originalDescriptor = FileHandle.standardError.fileDescriptor
 
-    static func startCapturing() {
+    @MainActor static func startCapturing() {
         guard !isCapturing else { return }
 
         inputPipe.fileHandleForReading.readabilityHandler = { fileHandle in
@@ -34,7 +34,7 @@ enum StderrCapture {
         isCapturing = true
     }
 
-    static func syncData() {
+    @MainActor static func syncData() {
         guard isCapturing, inputPipe.fileHandleForReading.isReadable else {
             return
         }
@@ -48,7 +48,7 @@ enum StderrCapture {
         _ = synchronizeData.wait(timeout: .now() + .milliseconds(10))
     }
 
-    static func stopCapturing() {
+    @MainActor static func stopCapturing() {
         guard isCapturing else { return }
 
         isCapturing = false

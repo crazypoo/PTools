@@ -11,7 +11,7 @@ import SnapKit
 import SwifterSwift
 import SafeSFSymbols
 
-public class PTDarkSmartFooter: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
+public class PTDarkSmartFooter: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
     static let ID = "PTDarkSmartFooter"
     
     static public var kind: String { UICollectionView.elementKindSectionFooter }

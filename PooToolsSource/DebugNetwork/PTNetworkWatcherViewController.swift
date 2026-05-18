@@ -116,30 +116,68 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     lazy var testButton: UIButton = {
         let testButton = baseButtonCreate(image: UIImage(.sparkles))
         testButton.addActionHandlers { [weak self] _ in
-            guard let self = self else { return }
-            let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
-            networkSpeedMonitor.startMonitoring()
-            self.floatingButtonCreate()
-            
-            var count = 0
-            Timer.scheduledTimer(timeInterval: 1, repeats: true) { timers in
-                count += 1
-                // 🌟 终极修复：正确换算至 MB/s 级别 (1024 * 1024 = 1048576.0)，彻底解决永远为 0 的换算 Bug
-                let downloadSpeedMB = networkSpeedMonitor.downloadSpeed / 1048576.0
-                let uploadSpeedMB = networkSpeedMonitor.uploadSpeed / 1048576.0
-
-                self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
+            // 1. 开启一个绑定到主线程的异步 Task，为使用 await 提供环境
+            Task { @MainActor [weak self] in
+                guard let self = self else { return }
                 
-                // 10 秒压测自动终止
-                if count > 10 {
-                    timers.invalidate()
-                    if let floatingView = self.floatingView {
-                        floatingView.removeFromSuperview()
-                        self.floatingView = nil
-                    }
-                    networkSpeedMonitor.stopMonitoring()
+                let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
+                
+                // 2. 异步调用 actor 的方法启动测速
+                await networkSpeedMonitor.startMonitoring()
+                self.floatingButtonCreate()
+                
+                // 3. 现代 Swift 6 轮询方案：使用 for 循环 + Task.sleep 代替 Timer
+                for _ in 1...10 {
+                    // 暂停 1 秒 (1_000_000_000 纳秒 = 1 秒)
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    
+                    // 防御性编程：如果用户在这 10 秒内退出了当前页面，直接中断循环避免内存泄漏
+                    guard !Task.isCancelled else { break }
+                    
+                    // 4. 安全地跨越并发边界，从 actor 获取最新速度
+                    let currentDownloadSpeed = await networkSpeedMonitor.downloadSpeed
+                    let currentUploadSpeed = await networkSpeedMonitor.uploadSpeed
+                    
+                    // 终极修复：正确换算至 MB/s 级别
+                    let downloadSpeedMB = currentDownloadSpeed / 1048576.0
+                    let uploadSpeedMB = currentUploadSpeed / 1048576.0
+
+                    self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
                 }
+                
+                // 5. 10 秒循环自然结束，执行清理逻辑
+                if let floatingView = self.floatingView {
+                    floatingView.removeFromSuperview()
+                    self.floatingView = nil
+                }
+                
+                // 异步停止测速器
+                await networkSpeedMonitor.stopMonitoring()
             }
+//            guard let self = self else { return }
+//            let networkSpeedMonitor = PTNetworkSpeedTestMonitor()
+//            networkSpeedMonitor.startMonitoring()
+//            self.floatingButtonCreate()
+//            
+//            var count = 0
+//            Timer.scheduledTimer(timeInterval: 1, repeats: true) { timers in
+//                count += 1
+//                // 🌟 终极修复：正确换算至 MB/s 级别 (1024 * 1024 = 1048576.0)，彻底解决永远为 0 的换算 Bug
+//                let downloadSpeedMB = networkSpeedMonitor.downloadSpeed / 1048576.0
+//                let uploadSpeedMB = networkSpeedMonitor.uploadSpeed / 1048576.0
+//
+//                self.speedLabel.text = String(format: "↑ %.2f MB/s\n↓ %.2f MB/s", uploadSpeedMB, downloadSpeedMB)
+//                
+//                // 10 秒压测自动终止
+//                if count > 10 {
+//                    timers.invalidate()
+//                    if let floatingView = self.floatingView {
+//                        floatingView.removeFromSuperview()
+//                        self.floatingView = nil
+//                    }
+//                    networkSpeedMonitor.stopMonitoring()
+//                }
+//            }
         }
         return testButton
     }()
@@ -220,7 +258,7 @@ extension PTNetworkWatcherViewController: UISearchBarDelegate {
 }
 
 // MARK: - 本地极限吞吐量性能压测引擎 (Network.framework 极客架构)
-class PTNetworkSpeedTestMonitor {
+public actor PTNetworkSpeedTestMonitor {
 
     private var connection: NWConnection?
     private var listener: NWListener?
@@ -228,41 +266,60 @@ class PTNetworkSpeedTestMonitor {
     private var bytesReceived: Int = 0
     private var bytesSent: Int = 0
 
-    // 对外暴漏实时读数
-    var downloadSpeed: Double = 0.0
-    var uploadSpeed: Double = 0.0
+    // 2. 对外暴漏实时读数，外部读取时需要使用 await (例如: await monitor.downloadSpeed)
+    public private(set) var downloadSpeed: Double = 0.0
+    public private(set) var uploadSpeed: Double = 0.0
 
-    func startMonitoring() {
-        // 🌟 终极修复：监听器指定使用 .any 随机指派系统空闲端口，杜绝 8080 端口硬编码占用导致的压测启动失败
+    public init() {}
+
+    public func startMonitoring() {
         do {
             listener = try NWListener(using: .tcp, on: .any)
+            
+            // 3. Network 框架的回调不在 actor 隔离区，需使用 Task { await } 桥接回 actor 内部
             listener?.newConnectionHandler = { [weak self] newConnection in
-                self?.setupReceive(on: newConnection)
-                newConnection.start(queue: .global())
-            }
-            listener?.stateUpdateHandler = { [weak self] state in
-                switch state {
-                case .ready:
-                    // 监听就绪后，安全获取真实绑定的随机端口并触发本地回环连接
-                    if let port = self?.listener?.port {
-                        self?.startConnection(to: port)
-                    }
-                default: break
+                Task { [weak self] in
+                    await self?.handleNewConnection(newConnection)
                 }
             }
+            
+            listener?.stateUpdateHandler = { [weak self] state in
+                Task { [weak self] in
+                    await self?.handleListenerState(state)
+                }
+            }
+            
             listener?.start(queue: .global())
         } catch {
+            // 假设你项目中有这个宏，保持不变
             PTNSLogConsole("Failed to create listener: \(error)")
         }
     }
 
-    func stopMonitoring() {
+    public func stopMonitoring() {
         connection?.cancel()
         listener?.cancel()
+        connection = nil
+        listener = nil
+    }
+
+    // 提取出来的方法，在 actor 内部安全执行
+    private func handleNewConnection(_ newConnection: NWConnection) {
+        setupReceive(on: newConnection)
+        newConnection.start(queue: .global())
+    }
+
+    private func handleListenerState(_ state: NWListener.State) {
+        switch state {
+        case .ready:
+            if let port = listener?.port {
+                startConnection(to: port)
+            }
+        default: break
+        }
     }
 
     private func startConnection(to port: NWEndpoint.Port) {
-        // 安全连接至动态获取到的监听端口
         connection = NWConnection(host: "127.0.0.1", port: port, using: .tcp)
         connection?.start(queue: .global())
         startSendingData()
@@ -270,33 +327,50 @@ class PTNetworkSpeedTestMonitor {
 
     private func startSendingData() {
         guard let connection = connection, connection.state == .ready else {
-            // 若连接处于准备阶段，延迟发起数据流重试
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.startSendingData()
+            // 4. Swift 6 异步延迟重试的现代写法，取代 DispatchQueue.asyncAfter
+            Task {
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1秒
+                startSendingData()
             }
             return
         }
         
-        let data = Data(repeating: 0, count: 1024)
+        // 5. ⚠️ 性能优化点：将 payload 提升到 1MB，避免极速递归下的 Task 调度开销压垮 CPU
+        let data = Data(repeating: 0, count: 1024 * 1024)
         if startTime == nil { startTime = Date().timeIntervalSince1970 }
 
         connection.send(content: data, completion: .contentProcessed { [weak self] error in
             if error == nil {
-                self?.bytesSent += data.count
-                self?.calculateUploadSpeed()
-                // 极速递归发送触发 I/O 极限吞吐
-                self?.startSendingData()
+                Task { [weak self] in
+                    await self?.recordSend(bytes: data.count)
+                    // 递归发送下一段
+                    await self?.startSendingData()
+                }
             }
         })
     }
 
+    private func recordSend(bytes: Int) {
+        bytesSent += bytes
+        calculateUploadSpeed()
+    }
+
     private func setupReceive(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 1024) { [weak self] data, _, _, error in
-            guard let self = self, let data = data, error == nil else { return }
-            self.bytesReceived += data.count
-            self.calculateDownloadSpeed()
-            self.setupReceive(on: connection)
+        // 接收端的最大长度也同步提升至 1MB
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 1024 * 1024) { [weak self] data, _, _, error in
+            guard let data = data, error == nil else { return }
+            
+            Task { [weak self] in
+                await self?.recordReceive(bytes: data.count)
+                // 继续监听接收
+                await self?.setupReceive(on: connection)
+            }
         }
+    }
+
+    private func recordReceive(bytes: Int) {
+        bytesReceived += bytes
+        calculateDownloadSpeed()
     }
 
     private func calculateDownloadSpeed() {

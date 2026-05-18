@@ -587,11 +587,13 @@ fileprivate extension PTMediaBrowserController {
                 } coverReady: { item in
                     
                 } videoReady: { [weak self] item in
-                    loadingView.hudHide()
-                    if let findLocal = item.localVideoURL {
-                        self?.saveVideo(videoPath: findLocal.path,videoOrURL: url)
-                    } else {
-                        self?.viewSaveImageBlock?(false)
+                    Task { @MainActor in
+                        loadingView.hudHide()
+                        if let findLocal = item.localVideoURL {
+                            self?.saveVideo(videoPath: findLocal.path,videoOrURL: url)
+                        } else {
+                            self?.viewSaveImageBlock?(false)
+                        }
                     }
                 }
             }

@@ -9,7 +9,7 @@ import Foundation
 import MachO
 
 public class SystemReport {
-    public static let shared = SystemReport()
+    @MainActor public static let shared = SystemReport()
     
     public var versionString: String {
         ProcessInfo.processInfo.operatingSystemVersionString

@@ -195,7 +195,7 @@ class PTSpeechViewController: PTBaseViewController {
 }
 
 //MARK: OSSSpeechDelegate
-extension PTSpeechViewController:OSSSpeechDelegate {
+extension PTSpeechViewController:@preconcurrency OSSSpeechDelegate {
     //MARK: 语音发送操作
     func recordButtonPressed() {
         if avCaptureDeviceAuthorize(avMediaType: .audio) {

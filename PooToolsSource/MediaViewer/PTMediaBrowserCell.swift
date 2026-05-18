@@ -492,21 +492,27 @@ extension PTMediaBrowserCell {
     func handleVideoLoading(videoUrl: String, currentID: UUID) {
         if let url = URL(string: videoUrl) {
             PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { item in
-                guard self.loadIdentifier == currentID else { return }
-                if let findImage = item.coverImage {
-                    self.hideLoading()
-                    self.setupVideoView(image: findImage, videoUrl: videoUrl)
-                } else {
-                    self.handleVideoLoadError()
+                Task { @MainActor in
+                    guard self.loadIdentifier == currentID else { return }
+                    if let findImage = item.coverImage {
+                        self.hideLoading()
+                        self.setupVideoView(image: findImage, videoUrl: videoUrl)
+                    } else {
+                        self.handleVideoLoadError()
+                    }
                 }
             } videoReady: { item in
-                guard self.loadIdentifier == currentID else { return }
-                self.videoCacheURL = item.localVideoURL
-                
-                if let _ = self.videoCacheURL {
-                } else {
-                    PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
-                        self.videoCacheURL = localURL
+                Task { @MainActor in
+                    guard self.loadIdentifier == currentID else { return }
+                    self.videoCacheURL = item.localVideoURL
+                    
+                    if let _ = self.videoCacheURL {
+                    } else {
+                        PTVideoFileCache.shared.prepareVideo(url: url) { localURL in
+                            Task { @MainActor in
+                                self.videoCacheURL = localURL
+                            }
+                        }
                     }
                 }
             }
@@ -573,13 +579,15 @@ extension PTMediaBrowserCell {
         } coverReady: { item in
             
         } videoReady: { item in
-            self.hideLoading()
-            self.videoCacheURL = item.localVideoURL
-            if let findLocal = item.localVideoURL {
-                videoController.videoPlayer = AVPlayer(url: findLocal)
-                self.videoPlayHandler?(videoController)
-            } else {
-                PTNSLogConsole("Video url error")
+            Task { @MainActor in
+                self.hideLoading()
+                self.videoCacheURL = item.localVideoURL
+                if let findLocal = item.localVideoURL {
+                    videoController.videoPlayer = AVPlayer(url: findLocal)
+                    self.videoPlayHandler?(videoController)
+                } else {
+                    PTNSLogConsole("Video url error")
+                }
             }
         }
     }

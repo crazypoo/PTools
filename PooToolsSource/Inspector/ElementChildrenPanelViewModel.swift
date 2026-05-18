@@ -77,7 +77,7 @@ final class ElementChildrenPanelViewModel: NSObject {
     }
 }
 
-extension ElementChildrenPanelViewModel: ElementChildrenPanelViewModelProtocol {
+extension ElementChildrenPanelViewModel: @MainActor ElementChildrenPanelViewModelProtocol {
     @MainActor func shouldHighlightItem(at indexPath: IndexPath) -> Bool { !indexPath.isFirst }
 
     var title: String? { "More info" }
