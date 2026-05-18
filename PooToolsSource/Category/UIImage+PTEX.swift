@@ -1389,7 +1389,7 @@ public extension UIImage {
     ///
     /// - Parameter imageData: The actual image data, can be GIF or some other format
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    convenience init?(imageData:Data, levelOfIntegrity: PTGifLevelOfIntegrity = .default) throws {
+    @MainActor convenience init?(imageData:Data, levelOfIntegrity: PTGifLevelOfIntegrity = .default) throws {
         do {
             try self.init(gifData: imageData, levelOfIntegrity: levelOfIntegrity)
         } catch {
@@ -1401,7 +1401,7 @@ public extension UIImage {
     ///
     /// - Parameter imageName: Filename
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    convenience init?(imageName: String, levelOfIntegrity: PTGifLevelOfIntegrity = .default, bundle: Bundle = Bundle.main) throws {
+    @MainActor convenience init?(imageName: String, levelOfIntegrity: PTGifLevelOfIntegrity = .default, bundle: Bundle = Bundle.main) throws {
         self.init()
 
         do {
@@ -1420,7 +1420,7 @@ public extension UIImage {
     ///
     /// - Parameter gifData: The actual gif data
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    convenience init(gifData:Data, levelOfIntegrity: PTGifLevelOfIntegrity = .default) throws {
+    @MainActor convenience init(gifData:Data, levelOfIntegrity: PTGifLevelOfIntegrity = .default) throws {
         self.init()
         try setGifFromData(gifData, levelOfIntegrity: levelOfIntegrity)
     }
@@ -1429,7 +1429,7 @@ public extension UIImage {
     ///
     /// - Parameter gifName: Filename
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    convenience init(gifName: String, levelOfIntegrity: PTGifLevelOfIntegrity = .default, bundle: Bundle = Bundle.main) throws {
+    @MainActor convenience init(gifName: String, levelOfIntegrity: PTGifLevelOfIntegrity = .default, bundle: Bundle = Bundle.main) throws {
         self.init()
         try setGif(gifName, levelOfIntegrity: levelOfIntegrity, bundle: bundle)
     }
@@ -1438,7 +1438,7 @@ public extension UIImage {
     ///
     /// - Parameter data: The actual gif data
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    func setGifFromData(_ data: Data, levelOfIntegrity: PTGifLevelOfIntegrity) throws {
+    @MainActor func setGifFromData(_ data: Data, levelOfIntegrity: PTGifLevelOfIntegrity) throws {
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else { return }
         self.imageSource = imageSource
         imageData = data
@@ -1450,14 +1450,14 @@ public extension UIImage {
     /// Set backing data for this gif. Overwrites any existing data.
     ///
     /// - Parameter name: Filename
-    func setGif(_ name: String, bundle: Bundle = Bundle.main) throws {
+    @MainActor func setGif(_ name: String, bundle: Bundle = Bundle.main) throws {
         try setGif(name, levelOfIntegrity: .default, bundle: bundle)
     }
     
     /// Check the number of frame for this gif
     ///
     /// - Return number of frames
-    func framesCount() -> Int {
+    @MainActor func framesCount() -> Int {
         return displayOrder?.count ?? 0
     }
     
@@ -1465,7 +1465,7 @@ public extension UIImage {
     ///
     /// - Parameter name: Filename
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    func setGif(_ name: String, levelOfIntegrity: PTGifLevelOfIntegrity, bundle: Bundle = Bundle.main) throws {
+    @MainActor func setGif(_ name: String, levelOfIntegrity: PTGifLevelOfIntegrity, bundle: Bundle = Bundle.main) throws {
         if let url = bundle.url(forResource: name, withExtension: name.pathExtension() == "gif" ? "" : "gif") {
             if let data = try? Data(contentsOf: url) {
                 try setGifFromData(data, levelOfIntegrity: levelOfIntegrity)
@@ -1475,7 +1475,7 @@ public extension UIImage {
         }
     }
     
-    func clear() {
+    @MainActor func clear() {
         imageData = nil
         imageSource = nil
         displayOrder = nil
@@ -1553,7 +1553,7 @@ public extension UIImage {
     ///
     /// - Parameter delaysArray: decoded delay times for this gif
     /// - Parameter levelOfIntegrity: 0 to 1, 1 meaning no frame skipping
-    private func calculateFrameDelay(_ delaysArray: [Float], levelOfIntegrity: PTGifLevelOfIntegrity) {
+    @MainActor private func calculateFrameDelay(_ delaysArray: [Float], levelOfIntegrity: PTGifLevelOfIntegrity) {
         let levelOfIntegrity = max(0, min(1, levelOfIntegrity))
         var delays = delaysArray
 
@@ -1618,7 +1618,7 @@ public extension UIImage {
     }
     
     /// Compute frame size for this gif
-    private func calculateFrameSize(){
+    @MainActor private func calculateFrameSize(){
         guard let imageSource = imageSource,
             let imageCount = imageCount,
             let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
@@ -1633,6 +1633,7 @@ public extension UIImage {
 // MARK: - Properties
 public extension UIImage {
     
+    @MainActor
     private struct AssociatedKeys {
         static var UIImageGIFImageSourceKey = malloc(4)
         static var UIImageGIFDisplayRefreshFactorKey = malloc(4)
@@ -1642,7 +1643,7 @@ public extension UIImage {
         static var UIImageGIFImageDataKey = malloc(4)
     }
 
-    var imageSource: CGImageSource? {
+    @MainActor var imageSource: CGImageSource? {
         get {
             let result = objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageSourceKey!)
             return result == nil ? nil : (result as! CGImageSource)
@@ -1652,27 +1653,27 @@ public extension UIImage {
         }
     }
     
-    var displayRefreshFactor: Int?{
+    @MainActor var displayRefreshFactor: Int?{
         get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayRefreshFactorKey!) as? Int }
         set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayRefreshFactorKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var imageSize: Int?{
+    @MainActor var imageSize: Int?{
         get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageSizeKey!) as? Int }
         set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFImageSizeKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var imageCount: Int?{
+    @MainActor var imageCount: Int?{
         get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageCountKey!) as? Int }
         set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFImageCountKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var displayOrder: [Int]?{
+    @MainActor var displayOrder: [Int]?{
         get { return objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayOrderKey!) as? [Int] }
         set { objc_setAssociatedObject(self, AssociatedKeys.UIImageGIFDisplayOrderKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var imageData:Data? {
+    @MainActor var imageData:Data? {
         get {
             let result = objc_getAssociatedObject(self, AssociatedKeys.UIImageGIFImageDataKey!)
             return result == nil ? nil : (result as? Data)

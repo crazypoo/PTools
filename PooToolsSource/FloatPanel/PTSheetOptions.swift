@@ -12,7 +12,7 @@ import UIKit
 public struct PTSheetOptions {
     
     /// 默认的配置实例
-    public static var `default` = PTSheetOptions()
+    @MainActor public static var `default` = PTSheetOptions()
     
     public enum TransitionOverflowType {
         case color(color: UIColor)

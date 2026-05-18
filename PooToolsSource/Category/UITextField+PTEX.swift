@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import SwifterSwift
 
-private var maxLengthKey:UInt8 = 0
+@MainActor private var maxLengthKey:UInt8 = 0
 
 public extension UITextField {
     var maxLength: Int {

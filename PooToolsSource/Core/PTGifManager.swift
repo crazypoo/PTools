@@ -39,7 +39,7 @@ public extension PTGifLevelOfIntegrity {
 #endif
 }
 
-public enum PTGifParseError: Error {
+public enum PTGifParseError: Error,Sendable {
     case invalidFilename
     case noImages
     case noProperties

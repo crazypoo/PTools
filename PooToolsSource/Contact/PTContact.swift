@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Contacts
+@preconcurrency import Contacts
 
 @objcMembers
 public class PTContactIndexModel:NSObject {
@@ -29,6 +29,7 @@ public class PTContactSubModel:NSObject {
     open var image:UIImage?
 }
 
+@MainActor
 @objcMembers
 public class PTContact: NSObject {
 
@@ -73,59 +74,61 @@ public class PTContact: NSObject {
         }
     }
 
-    public func getContactData(handle: @escaping (_ model:PTContactIndexModel?) -> Void) {
+    public func getContactData(handle: @escaping @MainActor @Sendable (_ model:PTContactIndexModel?) -> Void) {
         PTGCDManager.shared.runOnBackground(priority: .background, block: {
-            PTContact.selectContactsData { contacts, error in
-                if error == nil {
-                    var contactDict = [String: [(CNContact,UIImage?)]]()
-                    let formatter = CNContactFormatter()
-                    formatter.style = .fullName
-                    for contact in contacts {
-                        let familyName = contact.familyName
-                        let chinestToEng = familyName.chineseTransToMandarinAlphabet()
-                        let firstLetter = String(chinestToEng.prefix(1)).uppercased()
-                        if var array = contactDict[firstLetter] {
-                            array.append((contact,contact.imageDataAvailable ? UIImage(data: contact.thumbnailImageData ?? Data()) : nil))
-                            contactDict[firstLetter] = array
-                        } else {
-                            contactDict[firstLetter] = [(contact, contact.imageDataAvailable ? UIImage(data: contact.thumbnailImageData ?? Data()) : nil)]
-                        }
-                    }
-                    
-                    // 按照首字母排序字典
-                    let sortedKeys = contactDict.keys.sorted()
-
-                    let indexModel = PTContactIndexModel()
-                    indexModel.indexStrings = sortedKeys
-                    
-                    // 遍历字典并输出每个键对应的联系人
-                    var contractModels = [PTContactModel]()
-                    for key in sortedKeys {
-                        let keyModel = PTContactModel()
-                        keyModel.key = key
-                        if let contacts = contactDict[key] {
-                            let subModel = PTContactSubModel()
-                            for contact in contacts {
-                                if let image = contact.1 {
-                                    // 处理联系人头像
-                                    subModel.image = image
-                                }
-
-                                for number in contact.0.phoneNumbers {
-                                    subModel.phonenumbers.append(number.value.stringValue)
-                                }
-                                subModel.givenName = contact.0.givenName
-                                subModel.familyName = contact.0.familyName
-                                keyModel.contractModel.append(subModel)
+            PTGCDManager.shared.runOnMain {
+                PTContact.selectContactsData { contacts, error in
+                    if error == nil {
+                        var contactDict = [String: [(CNContact,UIImage?)]]()
+                        let formatter = CNContactFormatter()
+                        formatter.style = .fullName
+                        for contact in contacts {
+                            let familyName = contact.familyName
+                            let chinestToEng = familyName.chineseTransToMandarinAlphabet()
+                            let firstLetter = String(chinestToEng.prefix(1)).uppercased()
+                            if var array = contactDict[firstLetter] {
+                                array.append((contact,contact.imageDataAvailable ? UIImage(data: contact.thumbnailImageData ?? Data()) : nil))
+                                contactDict[firstLetter] = array
+                            } else {
+                                contactDict[firstLetter] = [(contact, contact.imageDataAvailable ? UIImage(data: contact.thumbnailImageData ?? Data()) : nil)]
                             }
                         }
-                        contractModels.append(keyModel)
+                        
+                        // 按照首字母排序字典
+                        let sortedKeys = contactDict.keys.sorted()
+
+                        let indexModel = PTContactIndexModel()
+                        indexModel.indexStrings = sortedKeys
+                        
+                        // 遍历字典并输出每个键对应的联系人
+                        var contractModels = [PTContactModel]()
+                        for key in sortedKeys {
+                            let keyModel = PTContactModel()
+                            keyModel.key = key
+                            if let contacts = contactDict[key] {
+                                let subModel = PTContactSubModel()
+                                for contact in contacts {
+                                    if let image = contact.1 {
+                                        // 处理联系人头像
+                                        subModel.image = image
+                                    }
+
+                                    for number in contact.0.phoneNumbers {
+                                        subModel.phonenumbers.append(number.value.stringValue)
+                                    }
+                                    subModel.givenName = contact.0.givenName
+                                    subModel.familyName = contact.0.familyName
+                                    keyModel.contractModel.append(subModel)
+                                }
+                            }
+                            contractModels.append(keyModel)
+                        }
+                        indexModel.contractModel = contractModels
+                        handle(indexModel)
+                    } else {
+                        PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts",levelType: .error,loggerType: .contract)
+                        handle(nil)
                     }
-                    indexModel.contractModel = contractModels
-                    handle(indexModel)
-                } else {
-                    PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts",levelType: .error,loggerType: .contract)
-                    handle(nil)
                 }
             }
         })

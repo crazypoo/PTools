@@ -106,7 +106,7 @@ open class PFloatingButton: UIButton {
     }
     
     deinit {
-        autoAddTraceButtonTimer?.invalidate()
+//        autoAddTraceButtonTimer?.invalidate()
     }
     
     private func defaultSetting() {
@@ -286,12 +286,14 @@ open class PFloatingButton: UIButton {
         
         autoAddTraceButtonTimer?.invalidate()
         autoAddTraceButtonTimer = Timer.scheduledTimer(withTimeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, repeats: false) { [weak self, weak traceView] _ in
-            guard let self = self, let viewToRemove = traceView else { return }
-            UIView.animate(withDuration: 0.2, animations: {
-                viewToRemove.alpha = 0
-            }) { _ in
-                viewToRemove.removeFromSuperview()
-                self.traceViews.removeAll(where: { $0 == viewToRemove })
+            PTGCDManager.shared.runOnMain {
+                guard let self = self, let viewToRemove = traceView else { return }
+                UIView.animate(withDuration: 0.2, animations: {
+                    viewToRemove.alpha = 0
+                }) { _ in
+                    viewToRemove.removeFromSuperview()
+                    self.traceViews.removeAll(where: { $0 == viewToRemove })
+                }
             }
         }
     }
@@ -345,6 +347,7 @@ private extension UIGestureRecognizer {
         addAction(actionHandler)
     }
     
+    @MainActor
     private struct AssociatedKeys {
         static var actionKey:UInt8 = 0
     }
