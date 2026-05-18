@@ -196,10 +196,8 @@ final public class PTTabBarItemView: UIControl {
         }
         
         if PTAppBaseConfig.share.tabSelectedMetail {
-            PTGCDManager.gcdAfter(time: 0.1, block: {
-                Task { @MainActor in
-                    self.layoutMetailView()
-                }
+            PTGCDManager.shared.delayOnMain(time: 0.1, block: {
+                self.layoutMetailView()
             })
         }
     }

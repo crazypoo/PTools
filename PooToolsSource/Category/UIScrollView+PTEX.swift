@@ -57,14 +57,12 @@ public extension PTPOP where Base : UIScrollView {
                                            callback: @escaping PTActionTask) {
         base.setContentOffset(CGPoint(x: 0, y: CGFloat(index) * base.frame.size.height), animated: false)
         let splitFrame = CGRect(x: 0, y: CGFloat(index) * base.frame.size.height, width: base.bounds.size.width, height: base.bounds.size.height)
-        PTGCDManager.gcdAfter(time: 0.3) {
-            Task { @MainActor in
-                base.drawHierarchy(in: splitFrame, afterScreenUpdates: true)
-                if index < maxIndex {
-                    snapShotContentScrollPage(index: index + 1, maxIndex: maxIndex, callback: callback)
-                } else {
-                    callback()
-                }
+        PTGCDManager.shared.delayOnMain(time: 0.3) {
+            base.drawHierarchy(in: splitFrame, afterScreenUpdates: true)
+            if index < maxIndex {
+                snapShotContentScrollPage(index: index + 1, maxIndex: maxIndex, callback: callback)
+            } else {
+                callback()
             }
         }
     }

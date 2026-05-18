@@ -72,18 +72,16 @@ public class PTChatTypingIndicator: UIView {
         var delay: TimeInterval = 0
         for dot in dots {
             let currentDelay = delay // 捕获当前的 delay 值
-            PTGCDManager.gcdAfter(time: delay) { [weak self] in
+            PTGCDManager.shared.delayOnMain(time: delay) { [weak self] in
                 guard let self = self else { return }
-                Task { @MainActor in
-                    if self.isBounceEnabled {
-                        dot.layer.add(self.initialOffsetAnimationLayer, forKey: AnimationKeys.offset)
-                        let bounceLayer = self.bounceAnimationLayer
-                        bounceLayer.timeOffset = currentDelay + 0.33
-                        dot.layer.add(bounceLayer, forKey: AnimationKeys.bounce)
-                    }
-                    if self.isFadeEnabled {
-                        dot.layer.add(self.opacityAnimationLayer, forKey: AnimationKeys.opacity)
-                    }
+                if self.isBounceEnabled {
+                    dot.layer.add(self.initialOffsetAnimationLayer, forKey: AnimationKeys.offset)
+                    let bounceLayer = self.bounceAnimationLayer
+                    bounceLayer.timeOffset = currentDelay + 0.33
+                    dot.layer.add(bounceLayer, forKey: AnimationKeys.bounce)
+                }
+                if self.isFadeEnabled {
+                    dot.layer.add(self.opacityAnimationLayer, forKey: AnimationKeys.opacity)
                 }
             }
             delay += 0.33

@@ -192,10 +192,8 @@ public class PTGroupBuyAvatarView: UIView {
                 dot.frame.origin.x += (self.dotSpacing * 3)
             }
 
-            PTGCDManager.gcdAfter(time: 0.6) {
-                Task { @MainActor in
-                    self.startAnimation()
-                }
+            PTGCDManager.shared.delayOnMain(time: 0.6) {
+                self.startAnimation()
             }
         })
     }

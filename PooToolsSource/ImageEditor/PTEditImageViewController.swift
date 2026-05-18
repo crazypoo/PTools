@@ -488,10 +488,8 @@ public class PTEditImageViewController: PTBaseViewController {
         let width = PTImageEditorConfig.share.drawLineWidth / mainScrollView.zoomScale * toImageScale
         defaultDrawPathWidth = width
         
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: .Dark)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
         })
     }
     

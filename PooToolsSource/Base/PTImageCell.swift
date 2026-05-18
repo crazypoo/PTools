@@ -27,11 +27,9 @@ open class PTImageCell: PTBaseNormalCell {
             
             imageView.loadImage(contentData: imageData as Any, loadFinish:  { _ in
                 if self.showAnimator {
-                    PTGCDManager.gcdAfter(time: 0.1, block: {
-                        Task { @MainActor in
-                            self.removeAnimator()
-                        }
-                    })
+                    PTGCDManager.shared.delayOnMain(time: 0.1) {
+                        self.removeAnimator()
+                    }
                 }
             })
         }

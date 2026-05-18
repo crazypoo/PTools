@@ -104,10 +104,8 @@ public class PTCodeView: UIView {
             tempString.append(dataSource[Int(index)])
         }
         changeString = String(format: "%@", tempString)
-        PTGCDManager.gcdAfter(time: 0.1) {
-            Task { @MainActor in
-                self.codeBlock?(self,self.changeString)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            self.codeBlock?(self,self.changeString)
         }
         self.setNeedsDisplay()
     }

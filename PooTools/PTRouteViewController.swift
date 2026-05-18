@@ -45,10 +45,8 @@ class PTRouteViewController: PTBaseViewController,@MainActor PTRoutableStaticCon
             PTNSLogConsole(">>>>>>>\(viewModels!.poo)")
         }
         
-        PTGCDManager.gcdAfter(time: 2) {
-            Task { @MainActor in
-                self.handle?("OKOK")
-            }
+        PTGCDManager.shared.delayOnMain(time: 2) {
+            self.handle?("OKOK")
         }
     }
 }

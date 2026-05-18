@@ -80,7 +80,7 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
     }
     
     func configure(with library: PTLoadedLibrary) {
-        PTGCDManager.gcdMain {
+        PTGCDManager.shared.runOnMain {
             // Extract a cleaner name from the path if needed
             let displayName: String
             if library.name.hasSuffix(".app") || library.name.hasSuffix(".framework") || library.name.hasSuffix(".dylib") {

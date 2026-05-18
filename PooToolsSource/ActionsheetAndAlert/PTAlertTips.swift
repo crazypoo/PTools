@@ -168,11 +168,9 @@ public class PTAlertTipsLow: UIView {
             }
             
             if self.dismissInTime {
-                PTGCDManager.gcdAfter(time: self.duration) {
-                    Task { @MainActor in
-                        if self.alpha != 0 {
-                            self.dismiss(completion: completion)
-                        }
+                PTGCDManager.shared.delayOnMain(time: self.duration) {
+                    if self.alpha != 0 {
+                        self.dismiss(completion: completion)
                     }
                 }
             }
@@ -428,11 +426,9 @@ public class PTAlertTipsHight: UIView {
             }
             
             if self.dismissInTime {
-                PTGCDManager.gcdAfter(time: self.duration) {
-                    Task { @MainActor in
-                        if self.alpha != 0 {
-                            self.dismiss(completion: completion)
-                        }
+                PTGCDManager.shared.delayOnMain(time: self.duration) {
+                    if self.alpha != 0 {
+                        self.dismiss(completion: completion)
                     }
                 }
             }

@@ -173,21 +173,19 @@ public extension UIViewController {
                        popoverSize:CGSize,
                        sender:UIView,
                        arrowDirections:UIPopoverArrowDirection) {
-        PTGCDManager.gcdAfter(time: 0.1) {
-            Task { @MainActor in
-                popoverVC.preferredContentSize = popoverSize
-                popoverVC.modalPresentationStyle = .popover
-                
-                let presentationCtr = popoverVC.popoverPresentationController
-                presentationCtr?.sourceView = sender
-                presentationCtr?.sourceRect = sender.bounds
-                presentationCtr?.permittedArrowDirections = arrowDirections
-                presentationCtr?.delegate = self
-                if (self.navigationController?.viewControllers.count ?? 0) > 0 {
-                    self.navigationController?.present(popoverVC, animated: true)
-                } else {
-                    self.present(popoverVC, animated: true)
-                }
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            popoverVC.preferredContentSize = popoverSize
+            popoverVC.modalPresentationStyle = .popover
+            
+            let presentationCtr = popoverVC.popoverPresentationController
+            presentationCtr?.sourceView = sender
+            presentationCtr?.sourceRect = sender.bounds
+            presentationCtr?.permittedArrowDirections = arrowDirections
+            presentationCtr?.delegate = self
+            if (self.navigationController?.viewControllers.count ?? 0) > 0 {
+                self.navigationController?.present(popoverVC, animated: true)
+            } else {
+                self.present(popoverVC, animated: true)
             }
         }
     }
@@ -335,7 +333,7 @@ public extension UIViewController {
         banner.onTap = {
             notifiTap?()
         }
-        PTGCDManager.gcdAfter(time: duration) {
+        PTGCDManager.shared.delayOnMain(time: duration) {
             notifiDismiss?()
         }
 #else
@@ -505,35 +503,32 @@ extension UIViewController {
         }
         
         #if POOTOOLS_DEBUG
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                let share = LocalConsole.shared
-                if share.isVisiable {
-                    SwizzleTool.swizzleDidAddSubview {
-                        // Configure console window.
-                        Task { @MainActor in
-                            if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
-                                currentVC.view.window?.bringSubviewToFront(findMask)
-                            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            let share = LocalConsole.shared
+            if share.isVisiable {
+                SwizzleTool.swizzleDidAddSubview {
+                    // Configure console window.
+                    Task { @MainActor in
+                        if let currentVC = PTUtils.getCurrentVC(),let findMask = share.maskView {
+                            currentVC.view.window?.bringSubviewToFront(findMask)
                         }
-                    }
-                }
-
-                // 确保调试窗口在最前
-                if let debugWindow = UIViewController.getExistingDebugWindow() {
-                    debugWindow.forEach { value in
-                        value.isHidden = false
-                        switch value {
-                        case let window as PTConsoleWindow:
-                            window.windowLevel = PTConsoleWindow.debugWindowLevel
-                        default:
-                            break
-                        }
-                        value.makeKeyAndVisible()
                     }
                 }
             }
-        })
+
+            // 确保调试窗口在最前
+            if let debugWindow = UIViewController.getExistingDebugWindow() {
+                debugWindow.forEach { value in
+                    value.isHidden = false
+                    switch value {
+                    case let window as PTConsoleWindow:
+                        window.windowLevel = PTConsoleWindow.debugWindowLevel
+                    default:
+                        break
+                    }
+                    value.makeKeyAndVisible()
+                }
+            }        })
         #endif
 
     }

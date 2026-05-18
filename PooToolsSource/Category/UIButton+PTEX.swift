@@ -23,8 +23,8 @@ public extension UIButton {
     }
     
     // MARK: - Runtime
-    private var countdownTimer: DispatchSourceTimer? {
-        get { return objc_getAssociatedObject(self, &AssociatedKeys.CountdownTimerKey) as? DispatchSourceTimer }
+    private var countdownTimer: Task<Void, Never>? {
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.CountdownTimerKey) as? Task<Void, Never> }
         set { objc_setAssociatedObject(self, &AssociatedKeys.CountdownTimerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 
@@ -95,7 +95,7 @@ public extension UIButton {
     ///   - finishBlock:回調
     func buttonTimeRun_Base(timeInterval:TimeInterval,
                             finishBlock: @Sendable @escaping (_ finish:Bool, _ time:Int) -> Void) {
-        countdownTimer = PTGCDManager.timeRun(timeInterval: timeInterval, finishBlock: finishBlock)
+        countdownTimer = PTGCDManager.shared.countdown(timeInterval: timeInterval, progressBlock: finishBlock)
     }
     
     /// 中斷倒數

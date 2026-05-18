@@ -331,10 +331,8 @@ class PTCutViewController: PTBaseViewController {
             shadowView.alpha = 1
         }        
         
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: .Dark)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
         })
     }
     
@@ -379,11 +377,9 @@ class PTCutViewController: PTBaseViewController {
             make.height.equalTo(PTCutViewController.cutRatioHeight)
         }
 
-        PTGCDManager.gcdAfter(time: 0.1) {
-            Task { @MainActor in
-                self.bottomShadowLayer.frame = self.bottomToolView.bounds
-                self.bottomToolView.layer.addSublayer(self.bottomShadowLayer)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            self.bottomShadowLayer.frame = self.bottomToolView.bounds
+            self.bottomToolView.layer.addSublayer(self.bottomShadowLayer)
         }
 
         mainScrollView.addSubview(containerView)
@@ -412,10 +408,8 @@ class PTCutViewController: PTBaseViewController {
         
         showCutRatio { collectionView in
             if self.clipRatios.count > 1, let index = self.clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {
-                PTGCDManager.gcdAfter(time: 1) {
-                    Task { @MainActor in
-                        collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
-                    }
+                PTGCDManager.shared.delayOnMain(time: 1) {
+                    collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
                 }
             }
         }

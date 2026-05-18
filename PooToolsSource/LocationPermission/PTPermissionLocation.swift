@@ -88,11 +88,9 @@ public class PTPermissionLocation: PTPermission {
                 Task { @MainActor in
                     PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
                     PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
-                        PTGCDManager.gcdMain {
+                        PTGCDManager.shared.runOnMain {
                             completion()
-                            Task { @MainActor in
-                                PTPermissionLocationWhenInUseHandler.shared = nil
-                            }
+                            PTPermissionLocationWhenInUseHandler.shared = nil
                         }
                     }
                 }

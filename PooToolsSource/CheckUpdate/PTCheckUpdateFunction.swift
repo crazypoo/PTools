@@ -394,7 +394,9 @@ public class PTCheckUpdateFunction: NSObject {
         alert_Tips(tipsTitle: "PT Found new version".localized(),cancelTitle: cancelTitle,cancelBlock: {
             if test {
                 if isShowError {
-                    PTCoreUserDefultsWrapper.AppNoMoreShowUpdate = true
+                    Task { @MainActor in
+                        PTCoreUserDefultsWrapper.AppNoMoreShowUpdate = true
+                    }
                 }
             }
         },doneTitle: "PT Upgrade".localized()) {
@@ -437,7 +439,7 @@ public class PTCheckUpdateFunction: NSObject {
     }
 
     private class func toggleHud(show:Bool) {
-        PTGCDManager.gcdMain {
+        PTGCDManager.shared.runOnMain {
             show ? PTCheckUpdateFunction.share.hudShow() : PTCheckUpdateFunction.share.hudHide()
         }
     }
@@ -511,7 +513,7 @@ public class PTCheckUpdateFunction: NSObject {
                     var note = ""
                     var downLoadLink = ""
                     if let buildId = resultModel.data?[0].id,!buildId.stringIsEmpty() {
-                        PTGCDManager.gcdGroupUtility(label: "com.tf.get", semaphoreCount: 3, threadCount: 3) { dispatchSemaphore, dispatchGroup, currentIndex in
+                        await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 3, threadCount: 3) { currentIndex in
                             Task { @MainActor in
                                 switch currentIndex {
                                 case 0:
@@ -520,12 +522,8 @@ public class PTCheckUpdateFunction: NSObject {
                                             if let resultModelBuilda = newerResult as? PTTFNewerBuildVersionModel {
                                                 build = resultModelBuilda.data?.attributes?.version ?? "1.0.0"
                                             }
-                                            dispatchSemaphore.signal()
-                                            dispatchGroup.leave()
                                         }
                                     } fail: { error in
-                                        dispatchSemaphore.signal()
-                                        dispatchGroup.leave()
                                     }
                                 case 1:
                                     PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: resultModel.data![0].relationships?.betaBuildLocalizations?.links?.related ?? "", modelType: PTTFModelCollection.self,showHud: false) { infoResult, infoJsonString in
@@ -533,12 +531,8 @@ public class PTCheckUpdateFunction: NSObject {
                                             if let resultModelBuilda = infoResult as? PTTFModelCollection {
                                                 note = resultModelBuilda.data?.first?.attributes?.whatsNew ?? ""
                                             }
-                                            dispatchSemaphore.signal()
-                                            dispatchGroup.leave()
                                         }
                                     } fail: { error in
-                                        dispatchSemaphore.signal()
-                                        dispatchGroup.leave()
                                     }
                                 case 2:
                                                                     
@@ -548,16 +542,10 @@ public class PTCheckUpdateFunction: NSObject {
                                             if let resultModelBuilda = newerResult as? PTTFModelCollection {
                                                 downLoadLink = resultModelBuilda.data?.filter { !($0.attributes?.publicLink ?? "").stringIsEmpty() }.first?.attributes?.publicLink ?? ""
                                             }
-                                            dispatchSemaphore.signal()
-                                            dispatchGroup.leave()
                                         }
                                     } fail: { error in
-                                        dispatchSemaphore.signal()
-                                        dispatchGroup.leave()
                                     }
-                                default:
-                                    dispatchSemaphore.signal()
-                                    dispatchGroup.leave()
+                                default:break
                                 }
                             }
                         } allRequestsFinished: {
@@ -570,7 +558,7 @@ public class PTCheckUpdateFunction: NSObject {
                                 
                                 updateModelCallback(updateModel)
                             }
-                        } cancelCompletion: {}
+                        }
                     } else {
                         updateModelCallback(nil)
                     }

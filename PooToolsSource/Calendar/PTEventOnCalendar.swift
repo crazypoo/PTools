@@ -19,7 +19,7 @@ public class PTEventOnCalendar: NSObject {
     ///   - parameter: 返回的参数
     ///   - eventsClosure: 闭包
     private static func resultMain<T>(parameter: T, eventsClosure: @escaping ((T) -> Void)) {
-        PTGCDManager.gcdMain {
+        PTGCDManager.shared.runOnMain {
             eventsClosure(parameter)
         }
     }
@@ -290,11 +290,11 @@ extension PTEventOnCalendar {
 
         do {
             try eventStore.save(event, span: .thisEvent)
-            PTGCDManager.gcdAfter(time: 0.2) {
+            PTGCDManager.shared.delayOnMain(time: 0.2) {
                 handle?(true,nil)
             }
         } catch {
-            PTGCDManager.gcdAfter(time: 0.2) {
+            PTGCDManager.shared.delayOnMain(time: 0.2) {
                 handle?(false,error)
             }
         }
@@ -436,11 +436,11 @@ extension PTEventOnCalendar {
         event.calendar = eventStore.defaultCalendarForNewReminders()
         do {
             try eventStore.save(event, commit: true)
-            PTGCDManager.gcdAfter(time: 0.2) {
+            PTGCDManager.shared.delayOnMain(time: 0.2) {
                 handle?(true,nil)
             }
         } catch {
-            PTGCDManager.gcdAfter(time: 0.2) {
+            PTGCDManager.shared.delayOnMain(time: 0.2) {
                 handle?(false,error)
             }
         }

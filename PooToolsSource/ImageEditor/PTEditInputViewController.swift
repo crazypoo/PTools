@@ -859,10 +859,8 @@ class PTEditInputViewController: PTBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: .Dark)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
         })
     }
     
@@ -899,10 +897,8 @@ class PTEditInputViewController: PTBaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIApplication.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIApplication.keyboardWillHideNotification, object: nil)
         
-        PTGCDManager.gcdAfter(time: 0.35) {
-            Task { @MainActor in
-                self.textView.becomeFirstResponder()
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35) {
+            self.textView.becomeFirstResponder()
         }
     }
         

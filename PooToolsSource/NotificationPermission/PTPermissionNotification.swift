@@ -55,7 +55,7 @@ public class PTPermissionNotification: PTPermission {
     private func fetchAuthorizationStatus() -> UNAuthorizationStatus? {
         var notificationSettings: UNNotificationSettings?
         let semaphore = DispatchSemaphore(value: 0)
-        PTGCDManager.gcdGobalNormal {
+        PTGCDManager.shared.runOnBackground {
             UNUserNotificationCenter.current().getNotificationSettings { setttings in
                 notificationSettings = setttings
                 semaphore.signal()
@@ -68,7 +68,7 @@ public class PTPermissionNotification: PTPermission {
     public override func request(completion: @escaping PTActionTask) {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-            PTGCDManager.gcdMain {
+            PTGCDManager.shared.runOnMain {
                 completion()
             }
         }

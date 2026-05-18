@@ -356,10 +356,8 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
         }
 
         // 延迟刷新 UI 确保相册数据库已同步
-        PTGCDManager.gcdAfter(time: 0.2) {
-            Task { @MainActor in
-                self.loadMedia(addImage: true)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.2) {
+            self.loadMedia(addImage: true)
         }
     }
 }
@@ -457,10 +455,8 @@ extension PTMediaLibView: @preconcurrency PHPhotoLibraryChangeObserver {
                 
                 // 自动滚动到底部（如果需要）
                 if !PTMediaLibUIConfig.share.shortIsTop {
-                    PTGCDManager.gcdAfter(time: 0.1) {
-                        Task { @MainActor in
-                            self.collectionView.contentCollectionView.scrollToBottom(animated: true)
-                        }
+                    PTGCDManager.shared.delayOnMain(time: 0.1) {
+                        self.collectionView.contentCollectionView.scrollToBottom(animated: true)
                     }
                 }
             }
@@ -775,10 +771,8 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: .Dark)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
         })
     }
 
@@ -851,10 +845,8 @@ public class PTMediaLibViewController: PTBaseViewController {
                 self.scheduleTitleUpdate() // 🌟 优化：复用 scheduleTitleUpdate 进行安全更新
 
                 if !PTMediaLibUIConfig.share.shortIsTop {
-                    PTGCDManager.gcdAfter(time: 0.05, block: {
-                        Task { @MainActor in
-                            self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
-                        }
+                    PTGCDManager.shared.delayOnMain(time: 0.05, block: {
+                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
                     })
                 }
             }

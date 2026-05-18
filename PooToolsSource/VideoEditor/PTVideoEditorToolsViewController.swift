@@ -614,62 +614,60 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     let vc = PTVideoEditorToolsCropControl(image: image)
                     vc.cropImageHandler = { [weak self] returnedImageSize,cropFrame in
                         guard let self = self else { return }
-                        PTGCDManager.gcdAfter(time: 0.1) {
-                            Task { @MainActor in
-                                // 1. 获取 imageView 的容器尺寸和底层原始图片尺寸
-                                let viewSize = self.originImageView.bounds.size
-                                let originalImageSize = image.size
-                                
-                                // 2. 逆向计算 scaleAspectFit 模式下，画面在屏幕上的真实绘制区域（剔除上下/左右黑边）
-                                let widthRatio = viewSize.width / originalImageSize.width
-                                let heightRatio = viewSize.height / originalImageSize.height
-                                let scale = min(widthRatio, heightRatio)
-                                
-                                let drawWidth = originalImageSize.width * scale
-                                let drawHeight = originalImageSize.height * scale
-                                let drawX = (viewSize.width - drawWidth) / 2.0
-                                let drawY = (viewSize.height - drawHeight) / 2.0
-                                
-                                // 3. 将返回的裁剪框坐标，归一化为 0.0 ~ 1.0 的相对比例 (基于旋转后的图片)
-                                let normalizedX = cropFrame.origin.x / returnedImageSize.width
-                                let normalizedY = cropFrame.origin.y / returnedImageSize.height
-                                let normalizedW = cropFrame.size.width / returnedImageSize.width
-                                let normalizedH = cropFrame.size.height / returnedImageSize.height
-                                
-                                // 4. 【高阶算法】：根据当前的旋转角度，将坐标系反向推导回“未旋转”时的底层比例系
-                                var originalNormX = normalizedX
-                                var originalNormY = normalizedY
-                                var originalNormW = normalizedW
-                                var originalNormH = normalizedH
-                                
-                                let rotationIndex = Int(self.rotate) % 4
-                                switch rotationIndex {
-                                case 1: // 顺时针 90 度
-                                    originalNormX = normalizedY
-                                    originalNormY = 1.0 - normalizedX - normalizedW
-                                    originalNormW = normalizedH
-                                    originalNormH = normalizedW
-                                case 2: // 顺时针 180 度
-                                    originalNormX = 1.0 - normalizedX - normalizedW
-                                    originalNormY = 1.0 - normalizedY - normalizedH
-                                case 3: // 顺时针 270 度
-                                    originalNormX = 1.0 - normalizedY - normalizedH
-                                    originalNormY = normalizedX
-                                    originalNormW = normalizedH
-                                    originalNormH = normalizedW
-                                default:
-                                    break
-                                }
-                                
-                                // 5. 将还原后的真实比例，完美映射到 ImageView 剔除了黑边的绘制区域上
-                                let frameX = drawX + (originalNormX * drawWidth)
-                                let frameY = drawY + (originalNormY * drawHeight)
-                                let frameWidth = originalNormW * drawWidth
-                                let frameHeight = originalNormH * drawHeight
-                                
-                                // 6. 这个完美的绝对坐标系边界，直接赋值给 dimFrame！
-                                self.dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
+                        PTGCDManager.shared.delayOnMain(time: 0.1) {
+                            // 1. 获取 imageView 的容器尺寸和底层原始图片尺寸
+                            let viewSize = self.originImageView.bounds.size
+                            let originalImageSize = image.size
+                            
+                            // 2. 逆向计算 scaleAspectFit 模式下，画面在屏幕上的真实绘制区域（剔除上下/左右黑边）
+                            let widthRatio = viewSize.width / originalImageSize.width
+                            let heightRatio = viewSize.height / originalImageSize.height
+                            let scale = min(widthRatio, heightRatio)
+                            
+                            let drawWidth = originalImageSize.width * scale
+                            let drawHeight = originalImageSize.height * scale
+                            let drawX = (viewSize.width - drawWidth) / 2.0
+                            let drawY = (viewSize.height - drawHeight) / 2.0
+                            
+                            // 3. 将返回的裁剪框坐标，归一化为 0.0 ~ 1.0 的相对比例 (基于旋转后的图片)
+                            let normalizedX = cropFrame.origin.x / returnedImageSize.width
+                            let normalizedY = cropFrame.origin.y / returnedImageSize.height
+                            let normalizedW = cropFrame.size.width / returnedImageSize.width
+                            let normalizedH = cropFrame.size.height / returnedImageSize.height
+                            
+                            // 4. 【高阶算法】：根据当前的旋转角度，将坐标系反向推导回“未旋转”时的底层比例系
+                            var originalNormX = normalizedX
+                            var originalNormY = normalizedY
+                            var originalNormW = normalizedW
+                            var originalNormH = normalizedH
+                            
+                            let rotationIndex = Int(self.rotate) % 4
+                            switch rotationIndex {
+                            case 1: // 顺时针 90 度
+                                originalNormX = normalizedY
+                                originalNormY = 1.0 - normalizedX - normalizedW
+                                originalNormW = normalizedH
+                                originalNormH = normalizedW
+                            case 2: // 顺时针 180 度
+                                originalNormX = 1.0 - normalizedX - normalizedW
+                                originalNormY = 1.0 - normalizedY - normalizedH
+                            case 3: // 顺时针 270 度
+                                originalNormX = 1.0 - normalizedY - normalizedH
+                                originalNormY = normalizedX
+                                originalNormW = normalizedH
+                                originalNormH = normalizedW
+                            default:
+                                break
                             }
+                            
+                            // 5. 将还原后的真实比例，完美映射到 ImageView 剔除了黑边的绘制区域上
+                            let frameX = drawX + (originalNormX * drawWidth)
+                            let frameY = drawY + (originalNormY * drawHeight)
+                            let frameWidth = originalNormW * drawWidth
+                            let frameHeight = originalNormH * drawHeight
+                            
+                            // 6. 这个完美的绝对坐标系边界，直接赋值给 dimFrame！
+                            self.dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
                         }
                     }
                     let nav = PTBaseNavControl(rootViewController: vc)
@@ -847,10 +845,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTNavigationBarManager.shared.restoreIfNeeded(for: self)
-        PTGCDManager.gcdAfter(time: 0.15, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: PTDarkModeOption.isLight ? .Light : .Dark)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.15, block: {
+            self.changeStatusBar(type: PTDarkModeOption.isLight ? .Light : .Dark)
         })
     }
     
@@ -906,10 +902,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
         }
         
-        PTGCDManager.gcdAfter(time: 0.35) {
-            Task { @MainActor in
-                self.bottomContentSet()
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35) {
+            self.bottomContentSet()
         }
         
         timeLineContent.snp.makeConstraints { make in
@@ -1164,16 +1158,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     }
 
     func reloadAsset() {
-        PTGCDManager.gcdAfter(time: 0.35) {
-            Task { @MainActor in
-                self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
-                self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
-                let formattedDuration = self.videoTime >= 3600 ?
-                    DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
-                    DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
-                self.videoTimeLabel.text = formattedDuration
-                self.currentPlayTime = 0
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35) {
+            self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
+            self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
+            let formattedDuration = self.videoTime >= 3600 ?
+                DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
+                DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
+            self.videoTimeLabel.text = formattedDuration
+            self.currentPlayTime = 0
 
             Task { @MainActor in
                 do {
@@ -1390,7 +1382,7 @@ fileprivate extension PTVideoEditorToolsViewController {
                     if let asset = assets.firstObject {
                         let assetCollectionList = PHAssetCollection.fetchAssetCollectionsContaining(asset, with: .album, options: nil)
                         if let assetCollection = assetCollectionList.firstObject {
-                            PTGCDManager.gcdMain {
+                            PTGCDManager.shared.runOnMain {
                                 let assetToDelete = [asset] as NSArray
                                 let albumChangeRequest = PHAssetCollectionChangeRequest(for: assetCollection)
                                 albumChangeRequest?.removeAssets(assetToDelete)

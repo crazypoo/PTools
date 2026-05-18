@@ -66,48 +66,45 @@ class PTFuncDetailViewController: PTBaseViewController {
         
         switch typeString {
         case String.localNetWork:
-            PTGCDManager.gcdAfter(time: 1) {
-                Task { @MainActor in
-                    var uploadInfoString = ""
-                    switch self.appNetWorkStatus {
-                    case .wifi:
-                        self.localNetwork = !self.localNetwork
-                        if self.localNetwork {
-                            FileManager.pt.createFolder(folderPath: PTUploadFilePath)
-                            
-                            self.webServer = GCDWebUploader(uploadDirectory: PTUploadFilePath)
-                            self.webServer!.delegate = self
-                            self.webServer!.allowHiddenItems = false
-                            self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
-                            
-                            self.webServer.run { server in
-                                if self.webServer!.start() {
-                                    let port = self.webServer!.port
-                                    uploadInfoString = String(format: "请在上传设备浏览器上输入%@\n端口为:%lu\n例子:IP地址:端口地址", self.webServer!.serverURL! as CVarArg,port)
-                                } else {
-                                    uploadInfoString = "GCDWebServer not running!"
-                                }
-                            }
-                        } else {
-                            uploadInfoString = "GCDWebServer not running!"
-                        }
+            PTGCDManager.shared.delayOnMain(time: 1) {
+                var uploadInfoString = ""
+                switch self.appNetWorkStatus {
+                case .wifi:
+                    self.localNetwork = !self.localNetwork
+                    if self.localNetwork {
+                        FileManager.pt.createFolder(folderPath: PTUploadFilePath)
                         
-                        let label = UILabel()
-                        label.textColor = .black
-                        label.textAlignment = .center
-                        label.numberOfLines = 0
-                        label.lineBreakMode = .byCharWrapping
-                        label.text = uploadInfoString
-                        self.view.addSubview(label)
-                        label.snp.makeConstraints { make in
-                            make.edges.equalToSuperview()
+                        self.webServer = GCDWebUploader(uploadDirectory: PTUploadFilePath)
+                        self.webServer!.delegate = self
+                        self.webServer!.allowHiddenItems = false
+                        self.webServer!.allowedFileExtensions = ["mp4","mov","doc","docx","xls","xlsx","txt","pdf","jpg","jpeg","png","gif","mp3"]
+                        
+                        self.webServer.run { server in
+                            if self.webServer!.start() {
+                                let port = self.webServer!.port
+                                uploadInfoString = String(format: "请在上传设备浏览器上输入%@\n端口为:%lu\n例子:IP地址:端口地址", self.webServer!.serverURL! as CVarArg,port)
+                            } else {
+                                uploadInfoString = "GCDWebServer not running!"
+                            }
                         }
-                    default:
-                        UIViewController.gobal_drop(title: "请先将设备连接到WIFI上方可操作")
-                        self.localNetwork = false
+                    } else {
+                        uploadInfoString = "GCDWebServer not running!"
                     }
-                }
-            }
+                    
+                    let label = UILabel()
+                    label.textColor = .black
+                    label.textAlignment = .center
+                    label.numberOfLines = 0
+                    label.lineBreakMode = .byCharWrapping
+                    label.text = uploadInfoString
+                    self.view.addSubview(label)
+                    label.snp.makeConstraints { make in
+                        make.edges.equalToSuperview()
+                    }
+                default:
+                    UIViewController.gobal_drop(title: "请先将设备连接到WIFI上方可操作")
+                    self.localNetwork = false
+                }            }
         case String.dymanicCode:
             let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
             view.addSubview(codeView)
@@ -214,10 +211,8 @@ class PTFuncDetailViewController: PTBaseViewController {
             throughLabel.verticalAlignment = .middle
             throughLabel.strikeThroughAlignment = .middle
             throughLabel.strikeThroughColor = .random
-            PTGCDManager.gcdAfter(time: 2) {
-                Task { @MainActor in
-                    throughLabel.strikeThroughEnabled = true
-                }
+            PTGCDManager.shared.delayOnMain(time: 2) {
+                throughLabel.strikeThroughEnabled = true
             }
             view.addSubview(throughLabel)
             throughLabel.snp.makeConstraints { make in
@@ -383,7 +378,7 @@ class PTFuncDetailViewController: PTBaseViewController {
 
             switch typeString {
             case String.movieCutOutput:
-                PTGCDManager.gcdAfter(time: 1) {
+                PTGCDManager.shared.delayOnMain(time: 1) {
                     var value:CGFloat = 0
                     let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
                         layoutBtn.layerProgress(value: value,radius: 50,borderWidth: 4)
@@ -441,11 +436,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                 
             }
             
-            PTGCDManager.gcdAfter(time: 1) {
-                Task { @MainActor in
-                    verProgress.animationProgress(duration: 1, value: 0.5)
-                    horProgress.animationProgress(duration: 1, value: 0.75)
-                }
+            PTGCDManager.shared.delayOnMain(time: 1) {
+                verProgress.animationProgress(duration: 1, value: 0.5)
+                horProgress.animationProgress(duration: 1, value: 0.75)
             }
         case String.encryption:
             

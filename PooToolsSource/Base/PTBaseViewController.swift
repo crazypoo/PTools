@@ -828,10 +828,8 @@ open class PTBaseViewController: UIViewController {
             }
         }
         
-        PTGCDManager.gcdAfter(time: 0.1, block: {
-            Task { @MainActor in
-                self.updateStatusBar(self.preferredNavigationBarStyle())
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.1, block: {
+            self.updateStatusBar(self.preferredNavigationBarStyle())
         })
     }
     
@@ -1244,37 +1242,35 @@ extension PTBaseViewController {
                 return
             }
 
-            PTGCDManager.gcdAfter(time: 1) {
-                Task { @MainActor in
-                    let fetchOptions = PHFetchOptions()
-                    fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            PTGCDManager.shared.delayOnMain(time: 1) {
+                let fetchOptions = PHFetchOptions()
+                fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 
-                    guard let lastAsset = PHAsset.fetchAssets(with: .image, options: fetchOptions).firstObject,
-                          lastAsset.mediaSubtypes == .photoScreenshot else {
+                guard let lastAsset = PHAsset.fetchAssets(with: .image, options: fetchOptions).firstObject,
+                      lastAsset.mediaSubtypes == .photoScreenshot else {
+                    self.screenShotHandle?(nil)
+                    return
+                }
+
+                self.getImage(for: lastAsset) { image in
+                    guard let image else {
                         self.screenShotHandle?(nil)
                         return
                     }
 
-                    self.getImage(for: lastAsset) { image in
-                        guard let image else {
-                            self.screenShotHandle?(nil)
-                            return
-                        }
-
-                        if let handler = self.screenShotHandle {
-                            handler(image)
-                        } else {
-                            Task { @MainActor in
-                                if self.screenFunc == nil {
-                                    self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image) {
-                                        self.screenFunc = nil
-                                    }
-                                    if let actionHandle = self.screenShotActionHandle {
-                                        self.screenFunc?.actionHandle = actionHandle
-                                    }
-                                } else {
-                                    self.screenShotHandle?(nil)
+                    if let handler = self.screenShotHandle {
+                        handler(image)
+                    } else {
+                        Task { @MainActor in
+                            if self.screenFunc == nil {
+                                self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image) {
+                                    self.screenFunc = nil
                                 }
+                                if let actionHandle = self.screenShotActionHandle {
+                                    self.screenFunc?.actionHandle = actionHandle
+                                }
+                            } else {
+                                self.screenShotHandle?(nil)
                             }
                         }
                     }

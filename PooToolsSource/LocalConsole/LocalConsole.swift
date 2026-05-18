@@ -976,11 +976,9 @@ extension LocalConsole {
     }
         
     func resizeAction() {
-        PTGCDManager.gcdAfter(time: 0.1) {
-            Task { @MainActor in
-                ResizeController.shared.isActive.toggle()
-                ResizeController.shared.platterView.reveal()
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            ResizeController.shared.isActive.toggle()
+            ResizeController.shared.platterView.reveal()
         }
     }
     
@@ -1098,7 +1096,7 @@ extension LocalConsole {
         
         // Concurrently run these snapshots to decrease the time to crash.
         for _ in 0...1000 {
-            PTGCDManager.gcdGobal(qosCls: .default) {
+            PTGCDManager.shared.runOnBackground {
 
                 // This will cause jetsam to terminate backboardd.
                 while true {

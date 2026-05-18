@@ -212,7 +212,7 @@ public extension UIView {
             }
         }) { _ in
             // 确保在主线程回调，移除 Task 包装，因为 UIView 动画回调天然在主线程
-            PTGCDManager.gcdMain(block: {
+            PTGCDManager.shared.runOnMain(block: {
                 completion?()
             })
         }

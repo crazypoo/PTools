@@ -302,22 +302,20 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 進入相冊
     func enterPhotos() {
-        PTGCDManager.gcdAfter(time: 0.1) {
-            Task { @MainActor in
-                if self.viewConfig.openAblumFollowSystem {
-                    Task {
-                        do {
-                            let object:UIImage = try await PTImagePicker.openAlbum()
-                            Task { @MainActor in
-                                self.findQR(inImage: object)
-                            }
-                        } catch let pickerError as PTImagePicker.PickerError {
-                            pickerError.outPutLog()
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            if self.viewConfig.openAblumFollowSystem {
+                Task {
+                    do {
+                        let object:UIImage = try await PTImagePicker.openAlbum()
+                        Task { @MainActor in
+                            self.findQR(inImage: object)
                         }
+                    } catch let pickerError as PTImagePicker.PickerError {
+                        pickerError.outPutLog()
                     }
-                } else {
-                    self.ptAblum()
                 }
+            } else {
+                self.ptAblum()
             }
         }
     }
@@ -632,11 +630,9 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
         
         backBtn.isHidden = true
         if metadataObjects.count == 1 {
-            PTGCDManager.gcdAfter(time: 0.8) {
-                Task { @MainActor in
-                    let barInfo = self.layerArr[1]
-                    self.processResult(result: barInfo.codeString,error: nil)
-                }
+            PTGCDManager.shared.delayOnMain(time: 0.8) {
+                let barInfo = self.layerArr[1]
+                self.processResult(result: barInfo.codeString,error: nil)
             }
         }
     }

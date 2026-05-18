@@ -72,10 +72,8 @@ public class PTSpeedPanel: UIView {
         layer.addSublayer(panelLayer)
         layer.addSublayer(tickLayer)
         
-        PTGCDManager.gcdAfter(time: 0.5) {
-            Task { @MainActor in
-                self.animationStart()
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.5) {
+            self.animationStart()
         }
     }
     

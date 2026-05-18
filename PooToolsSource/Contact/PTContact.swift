@@ -74,7 +74,7 @@ public class PTContact: NSObject {
     }
 
     public func getContactData(handle: @escaping (_ model:PTContactIndexModel?) -> Void) {
-        PTGCDManager.gcdGobal(qosCls: .background) {
+        PTGCDManager.shared.runOnBackground(priority: .background, block: {
             PTContact.selectContactsData { contacts, error in
                 if error == nil {
                     var contactDict = [String: [(CNContact,UIImage?)]]()
@@ -127,8 +127,8 @@ public class PTContact: NSObject {
                     PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts",levelType: .error,loggerType: .contract)
                     handle(nil)
                 }
-            }            
-        }
+            }
+        })
     }
     
     // MARK: 添加新联系人

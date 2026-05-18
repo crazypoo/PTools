@@ -95,18 +95,15 @@ fileprivate class PTVisualInfoController:UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        
-        PTGCDManager.gcdAfter(time: 0.1) {
-            Task { @MainActor  in
-                self.closeBtn.snp.makeConstraints { make in
-                    make.size.equalTo(CGFloat.SizeFrom750(x: 44))
-                    make.centerY.equalToSuperview()
-                    make.right.equalToSuperview().inset(10)
-                }
-                self.infoLabel.snp.makeConstraints { make in
-                    make.left.top.bottom.equalToSuperview().inset(5)
-                    make.right.equalTo(self.closeBtn.snp.left).offset(-10)
-                }
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            self.closeBtn.snp.makeConstraints { make in
+                make.size.equalTo(CGFloat.SizeFrom750(x: 44))
+                make.centerY.equalToSuperview()
+                make.right.equalToSuperview().inset(10)
+            }
+            self.infoLabel.snp.makeConstraints { make in
+                make.left.top.bottom.equalToSuperview().inset(5)
+                make.right.equalTo(self.closeBtn.snp.left).offset(-10)
             }
         }
     }

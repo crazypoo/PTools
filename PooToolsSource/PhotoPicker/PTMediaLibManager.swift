@@ -207,7 +207,7 @@ public class PTMediaLibManager: NSObject {
             }
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if downloadFinished {
-                PTGCDManager.gcdMain {
+                PTGCDManager.shared.runOnMain {
                     completion(image, isDegraded)
                 }
             }
@@ -302,7 +302,7 @@ public class PTMediaLibManager: NSObject {
     }
     
     public class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool, allowSelectLivePhotoOnly: Bool, allowSelectRegularImageOnly: Bool = false, handler: @escaping (PTMediaLibListModel) -> Void) {
-        PTGCDManager.gcdGobal {
+        PTGCDManager.shared.runOnBackground {
             let option = PHFetchOptions()
             let predicates: [NSPredicate] = PTMediaLibManager.predicatesGet(allowSelectImage: allowSelectImage, allowSelectVideo: allowSelectVideo, allowSelectLivePhotoOnly: allowSelectLivePhotoOnly, allowSelectRegularImageOnly: allowSelectRegularImageOnly)
 
@@ -317,7 +317,7 @@ public class PTMediaLibManager: NSObject {
                     stop.pointee = true
                     let result = PHAsset.fetchAssets(in: collection, options: option)
                     let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
-                    PTGCDManager.gcdMain {
+                    PTGCDManager.shared.runOnMain {
                         handler(albumModel)
                     }
                 }

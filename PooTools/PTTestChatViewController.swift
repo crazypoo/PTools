@@ -235,21 +235,17 @@ class PTTestChatViewController: PTBaseViewController {
         
         chatContent.chatDataArr = testModel()
         chatContent.viewReloadData { cView in
-            PTGCDManager.gcdAfter(time: 0.35) {
-                Task { @MainActor in
-                    cView.scrollToBottom(animated: true)
-                }
+            PTGCDManager.shared.delayOnMain(time: 0.35) {
+                cView.scrollToBottom(animated: true)
             }
         }
         
         bindScrollView(chatContent.listCollection.contentCollectionView)
         
         
-        PTGCDManager.gcdAfter(time: 5) {
-            Task { @MainActor in
-                self.chatContent.chatDataArr.removeAll(where: { $0.messageType == .Typing })
-                self.chatContent.viewReloadData()
-            }
+        PTGCDManager.shared.delayOnMain(time: 5) {
+            self.chatContent.chatDataArr.removeAll(where: { $0.messageType == .Typing })
+            self.chatContent.viewReloadData()
         }
     }
 }

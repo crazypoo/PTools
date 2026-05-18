@@ -45,7 +45,7 @@ public class PTPermissionFaceID: PTPermission {
     
     public override func request(completion: @escaping PTActionTask) {
         LAContext().evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: " ") { _, _ in
-            PTGCDManager.gcdMain {
+            PTGCDManager.shared.runOnMain {
                 completion()
             }
         }

@@ -193,10 +193,8 @@ public class PTHeartRateViewController: PTBaseViewController {
         }
         
         if !Gobal_device_info.isSimulator {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                Task { @MainActor in
-                    self.initVideoCapture()
-                }
+            PTGCDManager.shared.delayOnMain(time: 0.1) {
+                self.initVideoCapture()
             }
         }
     }

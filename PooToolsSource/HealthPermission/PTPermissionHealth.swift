@@ -34,7 +34,7 @@ public class PTPermissionHealth: PTPermission {
     
     public static func request(forReading readingTypes: Set<HKObjectType>, writing writingTypes: Set<HKSampleType>, completion: @escaping PTActionTask) {
         HKHealthStore().requestAuthorization(toShare: writingTypes, read: readingTypes) { _, _ in
-            PTGCDManager.gcdMain {
+            PTGCDManager.shared.runOnMain {
                 completion()
             }
         }

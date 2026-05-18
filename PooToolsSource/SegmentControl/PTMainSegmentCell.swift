@@ -80,18 +80,16 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
                 lineView.isHidden = false
             }
             
-            PTGCDManager.gcdAfter(time: 0.1) {
-                Task { @MainActor in
-                    self.titleLabel.snp.remakeConstraints { make in
-                        make.left.right.equalToSuperview()
-                        make.bottom.equalTo(self.contentView.snp.centerY)
-                    }
-                    
-                    self.subTitleLabel.isHidden = false
-                    self.subTitleLabel.snp.remakeConstraints { make in
-                        make.left.right.equalToSuperview()
-                        make.top.equalTo(self.contentView.snp.centerY)
-                    }
+            PTGCDManager.shared.delayOnMain(time: 0.1) {
+                self.titleLabel.snp.remakeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.bottom.equalTo(self.contentView.snp.centerY)
+                }
+                
+                self.subTitleLabel.isHidden = false
+                self.subTitleLabel.snp.remakeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.equalTo(self.contentView.snp.centerY)
                 }
             }
         case .OnlyImage:

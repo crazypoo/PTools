@@ -17,11 +17,11 @@ extension CGPoint {
 func animateBlock(_ block: @escaping PTActionTask, completion: PTActionTask? = nil) {
     let options = UIView.AnimationOptions(arrayLiteral: .curveEaseInOut, .allowUserInteraction, .beginFromCurrentState)
     UIView.animate(withDuration: 0.15, delay: 0, options: options) {
-        PTGCDManager.gcdMain {
+        PTGCDManager.shared.runOnMain {
             block()
         }
     } completion: { _ in
-        PTGCDManager.gcdMain {
+        PTGCDManager.shared.runOnMain {
             completion?()
         }
     }

@@ -33,7 +33,7 @@ public class PTPermissionMedia: PTPermission {
     
     public override func request(completion: @escaping PTActionTask) {
         MPMediaLibrary.requestAuthorization { status in
-            PTGCDManager.gcdMain {
+            PTGCDManager.shared.runOnMain {
                 completion()
             }
         }

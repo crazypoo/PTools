@@ -1256,7 +1256,7 @@ public extension PTPOP where Base: UIImage {
                        complete:@escaping (Data?, CGSize) -> Void) {
         queue.async {
             let data = resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
-            PTGCDManager.gcdMain {
+            PTGCDManager.shared.runOnMain {
                 complete(data, mode.resize(base.size))
             }
         }
@@ -1269,10 +1269,10 @@ public extension PTPOP where Base: UIImage {
     /// - Returns: 压缩后数据
     func compressDataSizeAsync(maxSize: Int = 1024 * 1024 * 2) async -> Data? {
         return await withCheckedContinuation { continuation in
-            PTGCDManager.gcdGobal(qosCls: .unspecified, block: {
+            PTGCDManager.shared.runOnBackground {
                 let compressed = self.base.pt.compressDataSize(maxSize: maxSize)
                 continuation.resume(returning: compressed)
-            })
+            }
         }
     }
     

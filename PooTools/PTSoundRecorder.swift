@@ -19,32 +19,30 @@ final class PTSoundRecorder: NSObject,AVAudioRecorderDelegate {
     var levelTimer:Timer?
     
     func start() {
-        PTGCDManager.gcdBackground {
-            PTGCDManager.gcdMain {
-                let audioSession = AVAudioSession.sharedInstance()
+        PTGCDManager.shared.runOnMain {
+            let audioSession = AVAudioSession.sharedInstance()
+            
+            do {
+                try audioSession.setCategory(.playAndRecord, mode: .default)
+                try audioSession.setActive(true)
                 
-                do {
-                    try audioSession.setCategory(.playAndRecord, mode: .default)
-                    try audioSession.setActive(true)
-                    
-                    let settings = [
-                        AVFormatIDKey: Int(kAudioFormatLinearPCM),
-                        AVSampleRateKey: 44100,
-                        AVNumberOfChannelsKey: 1,
-                        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-                    ]
-                    
-                    self.audioRecorder = try AVAudioRecorder(url: URL(fileURLWithPath: "/dev/null"), settings: settings)
-                    self.audioRecorder?.isMeteringEnabled = true
-                    self.audioRecorder?.prepareToRecord()
-                    self.audioRecorder?.record()
-                    
-                    self.soundSamples.removeAll()
-                    self.startTimer()
-                    
-                } catch {
-                    PTNSLogConsole("Error starting recording: \(error.localizedDescription)")
-                }
+                let settings = [
+                    AVFormatIDKey: Int(kAudioFormatLinearPCM),
+                    AVSampleRateKey: 44100,
+                    AVNumberOfChannelsKey: 1,
+                    AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+                ]
+                
+                self.audioRecorder = try AVAudioRecorder(url: URL(fileURLWithPath: "/dev/null"), settings: settings)
+                self.audioRecorder?.isMeteringEnabled = true
+                self.audioRecorder?.prepareToRecord()
+                self.audioRecorder?.record()
+                
+                self.soundSamples.removeAll()
+                self.startTimer()
+                
+            } catch {
+                PTNSLogConsole("Error starting recording: \(error.localizedDescription)")
             }
         }
     }

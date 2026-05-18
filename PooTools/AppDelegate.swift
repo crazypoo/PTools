@@ -175,7 +175,7 @@ class AppDelegate: PTAppWindowsDelegate {
 //        #endif
                 
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
-        PTGCDManager.gcdMain {
+        PTGCDManager.shared.runOnMain {
             Task {
                 // 只要 Task 存活，这个 for 循环就会一直等待最新的网络状态
                 for await currentStatus in PTNetWorkStatus.shared.statusStream {

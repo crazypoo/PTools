@@ -42,7 +42,7 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
             make.centerY.equalToSuperview()
         }
         
-        PTGCDManager.gcdAfter(time: 0.1) {
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
             Task { @MainActor in
                 do {
                     var track: AVAssetTrack!

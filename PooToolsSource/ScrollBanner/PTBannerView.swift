@@ -611,7 +611,7 @@ extension PTBannerView {
         self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: true)
         self.setDescView(index: index)
         self.setDescViewHeight(index: index)
-        PTGCDManager.gcdAfter(time: 1, block: {
+        PTGCDManager.shared.delayOnMain(time: 1, block: {
             PTBannerScheduler.shared.add(self)
         })
     }

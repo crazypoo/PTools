@@ -147,10 +147,8 @@ public class PTMediaBrowserController: PTBaseViewController {
                     Task { @MainActor in
                         self.toolBarControl(hide: true)
                         self.moreAction(sender: self.bottomControl.moreActionButton)
-                        PTGCDManager.gcdAfter(time: 0.5) {
-                            Task { @MainActor in
-                                cell.imageLongTaped = false
-                            }
+                        PTGCDManager.shared.delayOnMain(time: 0.5) {
+                            cell.imageLongTaped = false
                         }
                     }
                 }
@@ -294,19 +292,15 @@ public class PTMediaBrowserController: PTBaseViewController {
         self.view.window?.makeKeyAndVisible()
         
         // MARK: -  动画包裹 StatusBar 变更，防止闪烁
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: .Dark)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            self.changeStatusBar(type: .Dark)
         })
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        PTGCDManager.gcdAfter(time: 0.35, block: {
-            Task { @MainActor in
-                self.changeStatusBar(type: .Auto)
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.35, block: {
+            self.changeStatusBar(type: .Auto)
         })
     }
     
@@ -468,14 +462,12 @@ public class PTMediaBrowserController: PTBaseViewController {
 
         newCollectionView.clearAllData(finishTask: { [weak self] _ in
             guard let self = self else { return }
-            PTGCDManager.gcdAfter(time: 0.35) {
-                Task { @MainActor in
-                    let loadSome = min(self.defaultIndex, max(0, self.mediaData.count - 1))
-                    self.currentIndex = loadSome
-                    if loadSome < self.mediaData.count {
-                        let cellModel = self.mediaData[loadSome]
-                        self.updateBottom(models: cellModel)
-                    }
+            PTGCDManager.shared.delayOnMain(time: 0.35) {
+                let loadSome = min(self.defaultIndex, max(0, self.mediaData.count - 1))
+                self.currentIndex = loadSome
+                if loadSome < self.mediaData.count {
+                    let cellModel = self.mediaData[loadSome]
+                    self.updateBottom(models: cellModel)
                 }
             }
             self.showCollectionViewData()
@@ -644,25 +636,23 @@ fileprivate extension PTMediaBrowserController {
                     self.newCollectionView.deleteRows([findIndexRow], from: 0)
                     self.mediaData.remove(at: currentPageControlValue)
                     
-                    PTGCDManager.gcdAfter(time: 0.35) { [weak self] in
+                    PTGCDManager.shared.delayOnMain(time: 0.35) { [weak self] in
                         guard let self = self else { return }
-                        Task { @MainActor in
-                            let rawCurrentPage = self.getPageControlCurrentValue()
-                            let safeCurrentPage = min(rawCurrentPage, self.mediaData.count - 1)
-                            
-                            self.navControl.titleLabel.text = "\(safeCurrentPage + 1)/\(self.mediaData.count)"
-                            
-                            if self.mediaData.count > 1 {
-                                self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
-                                self.setPageControlValue(safeCurrentPage)
-                            } else {
-                                self.bottomControl.pageControlView.isHidden = true
-                            }
-                            
-                            if safeCurrentPage < self.mediaData.count {
-                                let models = self.mediaData[safeCurrentPage]
-                                self.updateBottom(models: models)
-                            }
+                        let rawCurrentPage = self.getPageControlCurrentValue()
+                        let safeCurrentPage = min(rawCurrentPage, self.mediaData.count - 1)
+                        
+                        self.navControl.titleLabel.text = "\(safeCurrentPage + 1)/\(self.mediaData.count)"
+                        
+                        if self.mediaData.count > 1 {
+                            self.bottomControl.pageControlView.isHidden = !self.viewConfig.pageControlShow
+                            self.setPageControlValue(safeCurrentPage)
+                        } else {
+                            self.bottomControl.pageControlView.isHidden = true
+                        }
+                        
+                        if safeCurrentPage < self.mediaData.count {
+                            let models = self.mediaData[safeCurrentPage]
+                            self.updateBottom(models: models)
                         }
                     }
                     self.viewDeleteImageBlock?(currentPageControlValue)
@@ -679,15 +669,13 @@ fileprivate extension PTMediaBrowserController {
         \(wrap: .embedding("""
         \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)),.action { [weak self] in
                 guard let self = self else { return }
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    Task { @MainActor in
-                            let fullAtts:ASAttributedString = """
-                            \(wrap: .embedding("""
-                            \(models.imageInfo,.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))
-                            """))
-                            """
-                            self.bottomControl.setLabelAtt(att: fullAtts)
-                    }
+                PTGCDManager.shared.delayOnMain(time: 0.1) {
+                    let fullAtts:ASAttributedString = """
+                    \(wrap: .embedding("""
+                    \(models.imageInfo,.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))
+                    """))
+                    """
+                    self.bottomControl.setLabelAtt(att: fullAtts)
                 }
 
                 let maskView = UIView()

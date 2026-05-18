@@ -128,26 +128,15 @@ extension PTNetworkSpeedTestFunction : @preconcurrency URLSessionDataDelegate, @
             
             if testDone != nil {
                 Task { @MainActor in
-                    PTGCDManager.gcdGroupUtility(label: "ValueDone", threadCount: 2) { dispatchSemaphore, dispatchGroup, currentIndex in
+                    await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 2, threadCount: 2) { currentIndex in
                         if currentIndex == 0 {
-                            PTGCDManager.gcdAfter(time: 0.35) {
-                                Task { @MainActor in
-                                    self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
-                                    dispatchSemaphore.signal()
-                                    dispatchGroup.leave()
-                                }
+                            PTGCDManager.shared.delayOnMain(time: 0.35) {
+                                self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
                             }
                         } else if currentIndex == 1 {
-                            PTGCDManager.gcdAfter(time: 0.35) {
-                                Task { @MainActor in
-                                    self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
-                                    dispatchSemaphore.signal()
-                                    dispatchGroup.leave()
-                                }
+                            PTGCDManager.shared.delayOnMain(time: 0.35) {
+                                self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
                             }
-                        } else {
-                            dispatchSemaphore.signal()
-                            dispatchGroup.leave()
                         }
                     } allRequestsFinished: {
                         Task { @MainActor in
@@ -164,8 +153,6 @@ extension PTNetworkSpeedTestFunction : @preconcurrency URLSessionDataDelegate, @
                             self.saveHistory(jsonString: jsonString)
                             self.netSpeedStateType = .Free
                         }
-                    } cancelCompletion: {
-                        
                     }
                 }
             }

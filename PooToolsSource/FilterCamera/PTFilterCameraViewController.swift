@@ -110,10 +110,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
                         }
                     }
                     
-                    PTGCDManager.gcdAfter(time: 3) {
-                        Task { @MainActor in
-                            self.takePhotoView?.dismissAlert()
-                        }
+                    PTGCDManager.shared.delayOnMain(time: 3) {
+                        self.takePhotoView?.dismissAlert()
                     }
                 } else {
                     self.camera.stopRunning()
@@ -480,7 +478,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             return
         }
                 
-        PTGCDManager.gcdAfter(time: 0.1) {
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
             if !Gobal_device_info.isSimulator {
                 switch PTPermission.camera.status {
                 case .notDetermined:
@@ -501,11 +499,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 default:
                     return
                 }
-                PTGCDManager.gcdAfter(time: 1, block: {
-                    Task { @MainActor in
-                        if self.camera.captureSession.isRunning,self.originImageView.image != nil {
-                            self.generateFilterImages()
-                        }
+                PTGCDManager.shared.delayOnMain(time: 1, block: {
+                    if self.camera.captureSession.isRunning,self.originImageView.image != nil {
+                        self.generateFilterImages()
                     }
                 })
             }

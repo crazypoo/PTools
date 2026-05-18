@@ -814,7 +814,7 @@ public final class Network: @unchecked Sendable {
             let businessCode = jsonDict["code"] as? Int ?? 200
             let businessMsg = jsonDict["msg"] as? String ?? "Unknown error"
             if businessCode == 401 {
-                PTGCDManager.gcdMain { NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil) }
+                PTGCDManager.shared.runOnMain { NotificationCenter.default.post(name: NSNotification.Name("PTNetworkTokenExpiredNotification"), object: nil) }
                 throw PTNetworkError.businessError(code: businessCode, msg: businessMsg)
             }
         }

@@ -70,7 +70,7 @@ public class PTMotion: NSObject {
     private func startActivityUpdates() {
         activityManager.startActivityUpdates(to: operationQueue) { [weak self] activity in
             guard let self = self, let activity = activity else { return }
-            PTGCDManager.gcdMain {
+            PTGCDManager.shared.runOnMain {
                 let confidence = self.confidenceString(from: activity.confidence)
                 let status = self.statusDescription(from: activity)
                 self.motionBlock?(self.stepCount, confidence, status)

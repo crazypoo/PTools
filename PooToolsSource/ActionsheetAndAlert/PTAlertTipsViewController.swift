@@ -136,14 +136,12 @@ public class PTAlertTipsViewController: PTAlertController {
                 
                 if viewLow.dismissInTime {
                     // 🛠️ 修复3：定时器内部也需要 [weak self]
-                    PTGCDManager.gcdAfter(time: viewLow.duration) { [weak self] in
+                    PTGCDManager.shared.delayOnMain(time: viewLow.duration) { [weak self] in
                         guard let self = self else { return }
-                        Task { @MainActor in
-                            if self.tipsViewLow?.alpha != 0 {
-                                self.dismissAnimation(completion: {
-                                    self.dismissCallback?()
-                                })
-                            }
+                        if self.tipsViewLow?.alpha != 0 {
+                            self.dismissAnimation(completion: {
+                                self.dismissCallback?()
+                            })
                         }
                     }
                 }
@@ -156,14 +154,12 @@ public class PTAlertTipsViewController: PTAlertController {
                 
                 if viewHight.dismissInTime {
                     // 🛠️ 修复3：定时器内部也需要 [weak self]
-                    PTGCDManager.gcdAfter(time: viewHight.duration) { [weak self] in
+                    PTGCDManager.shared.delayOnMain(time: viewHight.duration) { [weak self] in
                         guard let self = self else { return }
-                        Task { @MainActor in
-                            if self.tipsViewHight?.alpha != 0 {
-                                self.dismissAnimation(completion: {
-                                    self.dismissCallback?()
-                                })
-                            }
+                        if self.tipsViewHight?.alpha != 0 {
+                            self.dismissAnimation(completion: {
+                                self.dismissCallback?()
+                            })
                         }
                     }
                 }

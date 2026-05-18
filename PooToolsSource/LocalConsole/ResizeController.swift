@@ -130,13 +130,11 @@ class ResizeController {
                 platterView.FontSizeBlock = { [weak self, weak termial] (fontSize) in
                     guard let self = self, let termial = termial else { return }
                     LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
-                    PTGCDManager.gcdAfter(time: 0.55, block: {
-                        Task { @MainActor in
-                            UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                                termial.center = self.consoleCenterPoint
-                                LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
-                            }.startAnimation()
-                        }
+                    PTGCDManager.shared.delayOnMain(time: 0.55, block: {
+                        UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
+                            termial.center = self.consoleCenterPoint
+                            LocalConsole.shared.consoleWindow.view.backgroundColor = .randomColor
+                        }.startAnimation()
                     })
                 }
                 platterView.FontSColorBlock = { color in
@@ -524,11 +522,9 @@ class PlatterView: UIView {
             colorPicker.selectedColorCallback = { [weak self] color in
                 PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = color.hexString
                 self?.FontSColorBlock?(color)
-                PTGCDManager.gcdAfter(time: 0.1) {
-                    Task { @MainActor in
-                        ResizeController.shared.isActive.toggle()
-                        ResizeController.shared.platterView.reveal()
-                    }
+                PTGCDManager.shared.delayOnMain(time: 0.1) {
+                    ResizeController.shared.isActive.toggle()
+                    ResizeController.shared.platterView.reveal()
                 }
             }
             let nav = PTBaseNavControl(rootViewController: colorPicker)

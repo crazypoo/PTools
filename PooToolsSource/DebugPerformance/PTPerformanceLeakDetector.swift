@@ -120,48 +120,46 @@ extension UIView {
             let startTime = Date()
             
             // 4. 在闭包中保持 @MainActor 上下文
-            PTGCDManager.gcdAfter(time: delay) { [weak topSubview, weak self] in
-                Task { @MainActor [weak topSubview, weak self] in
-                    guard let self = self, let topSubview = topSubview else { return }
-                    
-                    if self.superview == nil,
-                       self.firstViewController == nil,
-                       let leakedView = topSubview.rootView as UIView?,
-                       leakedView == topSubview || !(leakedView is UIWindow),
-                       leakedView.firstViewController == nil,
-                       objc_getAssociatedObject(leakedView, &LVCDDeallocator.key) == nil,
-                       UIApplication.shared.applicationState == .active,
-                       PTPerformanceLeakDetector.lastBackgroundedDate < startTime,
-                       !PTPerformanceLeakDetector.ignoredViewClassNames.contains(type(of: leakedView).description()) {
+            PTGCDManager.shared.delayOnMain(time: delay) { [weak topSubview, weak self] in
+                guard let self = self, let topSubview = topSubview else { return }
+                
+                if self.superview == nil,
+                   self.firstViewController == nil,
+                   let leakedView = topSubview.rootView as UIView?,
+                   leakedView == topSubview || !(leakedView is UIWindow),
+                   leakedView.firstViewController == nil,
+                   objc_getAssociatedObject(leakedView, &LVCDDeallocator.key) == nil,
+                   UIApplication.shared.applicationState == .active,
+                   PTPerformanceLeakDetector.lastBackgroundedDate < startTime,
+                   !PTPerformanceLeakDetector.ignoredViewClassNames.contains(type(of: leakedView).description()) {
 
-                        let errorTitle = "VIEW STILL IN MEMORY"
-                        var errorMessage = leakedView.debugDescription.lvcdRemoveBundleAndModuleName()
-                        if let bundleName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
-                            errorMessage = errorMessage.replacingOccurrences(of: "\(bundleName).", with: "")
-                        }
-
-                        PTPerformanceLeakDetector.callback?(
-                            .init(view: leakedView, message: "\(errorTitle) \(errorMessage)")
-                        )
-                        
-                        PTNSLogConsole("\(errorTitle) \(errorMessage)")
-
-                        let screenshot = leakedView.makeScreenshot()
-
-                        PTPerformanceLeakDetector.leaks.append(
-                            .init(details: errorMessage, screenshot: screenshot, id: Int(bitPattern: ObjectIdentifier(leakedView)))
-                        )
-
-                        let deallocator = LVCDDeallocator()
-                        deallocator.memoryLeakDetectionDate = Date().timeIntervalSince1970 - delay
-                        deallocator.errorMessage = errorMessage
-                        deallocator.objectIdentifier = Int(bitPattern: ObjectIdentifier(leakedView))
-                        deallocator.objectType = "VIEW"
-                        deallocator.subviews = leakedView.subviews
-                        deallocator.weakView = leakedView
-                        // 5. 传入 &LVCDDeallocator.key 替代旧的 malloc 指针
-                        objc_setAssociatedObject(leakedView, &LVCDDeallocator.key, deallocator, .OBJC_ASSOCIATION_RETAIN)
+                    let errorTitle = "VIEW STILL IN MEMORY"
+                    var errorMessage = leakedView.debugDescription.lvcdRemoveBundleAndModuleName()
+                    if let bundleName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
+                        errorMessage = errorMessage.replacingOccurrences(of: "\(bundleName).", with: "")
                     }
+
+                    PTPerformanceLeakDetector.callback?(
+                        .init(view: leakedView, message: "\(errorTitle) \(errorMessage)")
+                    )
+                    
+                    PTNSLogConsole("\(errorTitle) \(errorMessage)")
+
+                    let screenshot = leakedView.makeScreenshot()
+
+                    PTPerformanceLeakDetector.leaks.append(
+                        .init(details: errorMessage, screenshot: screenshot, id: Int(bitPattern: ObjectIdentifier(leakedView)))
+                    )
+
+                    let deallocator = LVCDDeallocator()
+                    deallocator.memoryLeakDetectionDate = Date().timeIntervalSince1970 - delay
+                    deallocator.errorMessage = errorMessage
+                    deallocator.objectIdentifier = Int(bitPattern: ObjectIdentifier(leakedView))
+                    deallocator.objectType = "VIEW"
+                    deallocator.subviews = leakedView.subviews
+                    deallocator.weakView = leakedView
+                    // 5. 传入 &LVCDDeallocator.key 替代旧的 malloc 指针
+                    objc_setAssociatedObject(leakedView, &LVCDDeallocator.key, deallocator, .OBJC_ASSOCIATION_RETAIN)
                 }
             }
         }
@@ -354,15 +352,13 @@ extension UIViewController {
 
     @objc private func lvcdViewDidLoad() {
         lvcdViewDidLoad() // run original implementation
-        PTGCDManager.gcdAfter(time: 0.1) { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self = self else { return }
-                if !self.lvcdShouldIgnore() {
-                    if objc_getAssociatedObject(self, &LVCDDeallocator.key) == nil {
-                        objc_setAssociatedObject(self, &LVCDDeallocator.key, LVCDDeallocator(self.view), .OBJC_ASSOCIATION_RETAIN)
-                    }
-                    self.addCheckForMemoryLeakObserver(skipIgnoreCheck: true)
+        PTGCDManager.shared.delayOnMain(time: 0.1) { [weak self] in
+            guard let self = self else { return }
+            if !self.lvcdShouldIgnore() {
+                if objc_getAssociatedObject(self, &LVCDDeallocator.key) == nil {
+                    objc_setAssociatedObject(self, &LVCDDeallocator.key, LVCDDeallocator(self.view), .OBJC_ASSOCIATION_RETAIN)
                 }
+                self.addCheckForMemoryLeakObserver(skipIgnoreCheck: true)
             }
         }
     }
@@ -440,69 +436,67 @@ extension UIViewController {
             let startTime = Date()
             let delay = PTPerformanceLeakDetector.delay
             
-            PTGCDManager.gcdAfter(time: delay) { [weak self] in
-                Task { @MainActor [weak self] in
-                    guard let self = self else { return }
+            PTGCDManager.shared.delayOnMain(time: delay) { [weak self] in
+                guard let self = self else { return }
+                
+                if UIApplication.shared.applicationState != .active || PTPerformanceLeakDetector.lastBackgroundedDate > startTime {
+                    return
+                }
+
+                if !restarted && abs(startTime.timeIntervalSinceNow) > delay + 0.5 {
+                    self.lvcdCheckForMemoryLeak(restarted: true)
+                    return
+                }
+
+                if !self.isViewLoaded || self.view?.window == nil, self.parent == nil, self.presentedViewController == nil, self.view == nil || self.view.superview == nil || type(of: self.view.rootView).description() == "UILayoutContainerView" {
                     
-                    if UIApplication.shared.applicationState != .active || PTPerformanceLeakDetector.lastBackgroundedDate > startTime {
-                        return
+                    NotificationCenter.lvcd.removeObserver(self, name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
+
+                    let errorTitle = "VIEWCONTROLLER STILL IN MEMORY"
+                    var errorMessage = self.debugDescription.lvcdRemoveBundleAndModuleName()
+
+                    if let nvc = self as? UINavigationController {
+                        errorMessage = "\(errorMessage):\n\(nvc.viewControllers)"
                     }
-
-                    if !restarted && abs(startTime.timeIntervalSinceNow) > delay + 0.5 {
-                        self.lvcdCheckForMemoryLeak(restarted: true)
-                        return
+                    if let tbvc = self as? UITabBarController, let vcs = tbvc.viewControllers {
+                        errorMessage = "\(errorMessage):\n\(vcs)"
                     }
-
-                    if !self.isViewLoaded || self.view?.window == nil, self.parent == nil, self.presentedViewController == nil, self.view == nil || self.view.superview == nil || type(of: self.view.rootView).description() == "UILayoutContainerView" {
-                        
-                        NotificationCenter.lvcd.removeObserver(self, name: Self.lvcdCheckForMemoryLeakNotification, object: nil)
-
-                        let errorTitle = "VIEWCONTROLLER STILL IN MEMORY"
-                        var errorMessage = self.debugDescription.lvcdRemoveBundleAndModuleName()
-
-                        if let nvc = self as? UINavigationController {
-                            errorMessage = "\(errorMessage):\n\(nvc.viewControllers)"
+                    if let alertVC = self as? UIAlertController {
+                        var actions = alertVC.actions.isEmpty ? "-" : ""
+                        for action in alertVC.actions {
+                            actions = "\(actions) \"\(action.title ?? "-")\","
                         }
-                        if let tbvc = self as? UITabBarController, let vcs = tbvc.viewControllers {
-                            errorMessage = "\(errorMessage):\n\(vcs)"
-                        }
-                        if let alertVC = self as? UIAlertController {
-                            var actions = alertVC.actions.isEmpty ? "-" : ""
-                            for action in alertVC.actions {
-                                actions = "\(actions) \"\(action.title ?? "-")\","
+                        errorMessage = """
+                            \(errorMessage)
+                            title: \"\((alertVC.title ?? "") == "" ? "" : alertVC.title!)\"
+                            message: \"\((alertVC.message ?? "") == "" ? "" : alertVC.message!)\"
+                            actions: \(actions);
+                        """
+                        if alertVC.textFields?.isEmpty == false {
+                            var tfs = ""
+                            for tf in alertVC.textFields ?? [] {
+                                tfs = "\(tfs) \"\(tf.placeholder ?? "-")\","
                             }
-                            errorMessage = """
-                                \(errorMessage)
-                                title: \"\((alertVC.title ?? "") == "" ? "" : alertVC.title!)\"
-                                message: \"\((alertVC.message ?? "") == "" ? "" : alertVC.message!)\"
-                                actions: \(actions);
-                            """
-                            if alertVC.textFields?.isEmpty == false {
-                                var tfs = ""
-                                for tf in alertVC.textFields ?? [] {
-                                    tfs = "\(tfs) \"\(tf.placeholder ?? "-")\","
-                                }
-                                errorMessage += "\ntextfields: \(tfs);"
-                            }
-                            errorMessage = errorMessage.replacingOccurrences(of: ",;", with: ";")
+                            errorMessage += "\ntextfields: \(tfs);"
                         }
-
-                        PTPerformanceLeakDetector.callback?( .init(controller: self, message: "\(errorTitle) \(errorMessage)"))
-                        PTNSLogConsole("\(errorTitle) \(errorMessage)")
-
-                        let screenshot = self.view?.rootView.makeScreenshot()
-                        let id = Int(bitPattern: ObjectIdentifier(self))
-
-                        if !PTPerformanceLeakDetector.leaks.contains(where: { $0.id == id }) {
-                            PTPerformanceLeakDetector.leaks.append( .init(details: errorMessage, screenshot: screenshot, id: id))
-                        }
-
-                        deallocator.memoryLeakDetectionDate = Date().timeIntervalSince1970 - delay
-                        deallocator.errorMessage = errorMessage
-                        deallocator.objectIdentifier = Int(bitPattern: ObjectIdentifier(self))
-                        deallocator.objectType = "VIEWCONTROLLER"
-                        deallocator.screenshot = screenshot
+                        errorMessage = errorMessage.replacingOccurrences(of: ",;", with: ";")
                     }
+
+                    PTPerformanceLeakDetector.callback?( .init(controller: self, message: "\(errorTitle) \(errorMessage)"))
+                    PTNSLogConsole("\(errorTitle) \(errorMessage)")
+
+                    let screenshot = self.view?.rootView.makeScreenshot()
+                    let id = Int(bitPattern: ObjectIdentifier(self))
+
+                    if !PTPerformanceLeakDetector.leaks.contains(where: { $0.id == id }) {
+                        PTPerformanceLeakDetector.leaks.append( .init(details: errorMessage, screenshot: screenshot, id: id))
+                    }
+
+                    deallocator.memoryLeakDetectionDate = Date().timeIntervalSince1970 - delay
+                    deallocator.errorMessage = errorMessage
+                    deallocator.objectIdentifier = Int(bitPattern: ObjectIdentifier(self))
+                    deallocator.objectType = "VIEWCONTROLLER"
+                    deallocator.screenshot = screenshot
                 }
             }
         }
@@ -557,13 +551,11 @@ extension UIViewController {
                 vc.addCheckForMemoryLeakObserver()
 
                 // 3. 将局部变量 currentSplitVC 和 vc 弱引用传入延时任务
-                PTGCDManager.gcdAfter(time: PTPerformanceLeakDetector.delay) { [weak currentSplitVC, weak vc] in
+                PTGCDManager.shared.delayOnMain(time: PTPerformanceLeakDetector.delay) { [weak currentSplitVC, weak vc] in
                     
                     if currentSplitVC == nil {
                         // 4. 这里的闭包已经被我们升级为 @MainActor 了，所以不需要再嵌套 Task
-                        Task { @MainActor in
-                            vc?.lvcdCheckForMemoryLeak()
-                        }
+                        vc?.lvcdCheckForMemoryLeak()
                     }
                 }
             }

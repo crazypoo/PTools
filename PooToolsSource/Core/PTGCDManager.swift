@@ -8,291 +8,176 @@
 
 import UIKit
 
-public typealias PTActionUncheckTask = () -> Void
+// 闭包类型定义：添加 @Sendable 以满足跨边界传递的安全要求
 public typealias PTActionTask = @Sendable () -> Void
 public typealias PTActionAsyncTask = @Sendable () async -> Void
 
-@objcMembers
-public final class PTGCDManager: NSObject, @unchecked Sendable {
+// 使用 actor 来保证内部状态的绝对线程安全，完美契合 Swift 6
+public actor PTGCDManager {
     
     public static let shared = PTGCDManager()
     
-    // 使用 NSLock 保护多线程共享的可变状态，满足 Swift 6 并发安全要求
-    private let lock = NSLock()
+    // 用于保存定时器的 Task 引用，替代原有的 NSCache 和 DispatchSourceTimer
+    private var activeTimers: [String: Task<Void, Never>] = [:]
     
-    // 定时器容器，统一在主线程操作以保证线程安全
-    @MainActor lazy var timerContainer = NSCache<NSString, DispatchSourceTimer>()
+    // 内部的取消标志，无需 NSLock，actor 自动保证读写安全
+    public var cancelFlag: Bool = false
     
-    // 内部存储的取消标志
-    private var _cancelFlag: Bool = false
+    // 确保单例纯粹性
+    private init() {}
     
-    // 线程安全的计算属性
-    public var cancelFlag: Bool {
-        get {
-            lock.lock()
-            defer { lock.unlock() }
-            return _cancelFlag
-        }
-        set {
-            lock.lock()
-            _cancelFlag = newValue
-            lock.unlock()
-        }
-    }
-    
-    private var dispatchSemaphore: DispatchSemaphore?
-    private var dispatchGroup: DispatchGroup?
-    private var cancelCompletionHandler: PTActionTask?
-    
-    // 私有化初始化方法，确保单例纯粹性
-    private override init() {
-        super.init()
-    }
-    
-    // MARK: - GCD定时器 (统一在主线程调度)
-    @MainActor public func scheduledDispatchTimer(WithTimerName name: String?,
-                                                  timeInterval: Double,
-                                                  queue: DispatchQueue = .main,
-                                                  repeats: Bool,
-                                                  action: @escaping PTActionTask) {
+    // MARK: - Swift 6 异步定时器
+    public func scheduledTimer(withName name: String,
+                               timeInterval: TimeInterval,
+                               repeats: Bool,
+                               action: @escaping @MainActor @Sendable () -> Void) {
         
-        guard let name = name else { return }
+        // 如果已存在同名任务，先取消，防止内存泄漏或重复执行
+        cancelTimer(withName: name)
         
-        var timer = timerContainer.object(forKey: name as NSString)
-        if timer == nil {
-            timer = DispatchSource.makeTimerSource(flags: [], queue: queue)
-            timer?.resume()
-            timerContainer.setObject(timer!, forKey: name as NSString)
-        }
-        
-        // 精度10毫秒，减少频繁调度
-        timer?.schedule(deadline: .now(), repeating: timeInterval, leeway: .milliseconds(10))
-        
-        // 闭包中捕获的内容必须安全。此处调用 action 并检查是否重复
-        timer?.setEventHandler(handler: { [weak self] in
-            action()
+        let task = Task {
+            let nanoseconds = UInt64(timeInterval * 1_000_000_000)
+            
+            repeat {
+                // 检查任务是否被取消，协作式退出
+                if Task.isCancelled { break }
+                
+                do {
+                    // 非阻塞式休眠
+                    try await Task.sleep(nanoseconds: nanoseconds)
+                } catch {
+                    // Task 被取消时会抛出 CancellationError，直接退出循环
+                    break
+                }
+                
+                if Task.isCancelled { break }
+                
+                // 确保 action 在主线程执行
+                await MainActor.run {
+                    action()
+                }
+                
+            } while repeats && !Task.isCancelled
+            
+            // 执行完毕后清理字典中的自身引用
             if !repeats {
-                // 回到主线程移除定时器缓存
-                Task { @MainActor in
-                    self?.cancleTimer(WithTimerName: name)
-                }
-            }
-        })
-    }
-    
-    // MARK: 取消定时器
-    @MainActor public func cancleTimer(WithTimerName name: String?) {
-        guard let name = name, let timer = timerContainer.object(forKey: name as NSString) else { return }
-        timer.cancel()
-        timerContainer.removeObject(forKey: name as NSString)
-    }
-    
-    // MARK: 检查定时器是否已存在
-    @MainActor public func isExistTimer(WithTimerName name: String?) -> Bool {
-        guard let findName = name, !findName.isEmpty else { return false }
-        return timerContainer.object(forKey: findName as NSString) != nil
-    }
-
-    // MARK: - GCD线程组
-    public class func gcdGroupUtility(label: String,
-                                      semaphoreCount: Int = 3,
-                                      threadCount: Int,
-                                      doSomeThing: @escaping @Sendable (_ dispatchSemaphore: DispatchSemaphore, _ dispatchGroup: DispatchGroup, _ currentIndex: Int) -> Void,
-                                      allRequestsFinished: @escaping PTActionTask,
-                                      cancelCompletion: @escaping PTActionTask) {
-        
-        let dispatchGroup = DispatchGroup()
-        let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount)
-        let concurrentQueue = DispatchQueue.global(qos: .utility)
-        
-        // 使用一个保护并发计数的类，或者依赖串行队列更新。这里使用简单的并发机制
-        let lock = NSLock()
-        var tasksCompleted = 0
-        
-        for i in 0..<threadCount {
-            concurrentQueue.async(group: dispatchGroup) {
-                dispatchSemaphore.wait()
-                
-                // 线程安全地读取 cancelFlag
-                if PTGCDManager.shared.cancelFlag {
-                    lock.lock()
-                    tasksCompleted += 1
-                    lock.unlock()
-                    
-                    dispatchGroup.leave()
-                    dispatchSemaphore.signal()
-                    return
-                }
-                
-                dispatchGroup.enter()
-                doSomeThing(dispatchSemaphore, dispatchGroup, i)
-                
-                lock.lock()
-                tasksCompleted += 1
-                lock.unlock()
+                removeTimerRef(name: name)
             }
         }
         
-        dispatchGroup.notify(queue: .main) {
+        activeTimers[name] = task
+    }
+    
+    public func cancelTimer(withName name: String) {
+        activeTimers[name]?.cancel()
+        activeTimers.removeValue(forKey: name)
+    }
+    
+    public func isExistTimer(withName name: String) -> Bool {
+        return activeTimers[name] != nil
+    }
+    
+    // 仅供内部清理使用
+    private func removeTimerRef(name: String) {
+        activeTimers.removeValue(forKey: name)
+    }
+    
+    // MARK: - 结构化并发组 (替代 DispatchGroup & DispatchSemaphore)
+    public func taskGroupUtility(semaphoreCount: Int = 3,
+                                 threadCount: Int,
+                                 doSomeThing: @escaping @Sendable (_ currentIndex: Int) async -> Void,
+                                 allRequestsFinished: @escaping @MainActor @Sendable () -> Void) async {
+        
+        await withTaskGroup(of: Void.self) { group in
+            var activeTasks = 0
+            
+            for i in 0..<threadCount {
+                if self.cancelFlag { break } // 检查全局取消标志
+                
+                // 并发数控制机制：如果达到上限，先等待其中一个任务完成
+                if activeTasks >= semaphoreCount {
+                    _ = await group.next()
+                    activeTasks -= 1
+                }
+                
+                group.addTask {
+                    await doSomeThing(i)
+                }
+                activeTasks += 1
+            }
+            
+            // 等待所有已添加的剩余任务完成
+            await group.waitForAll()
+        }
+        
+        // 全部完成后，安全切回主线程
+        await MainActor.run {
             allRequestsFinished()
-            if PTGCDManager.shared.cancelFlag && tasksCompleted == threadCount {
-                cancelCompletion()
-            }
         }
     }
     
-    // MARK: - GCD延时执行
-    public class func gcdAfter(time: TimeInterval, block: @escaping PTActionTask) {
-        // 开启一个明确绑定到主线程的现代 Task
+    // MARK: - 现代化的快捷调度 (nonisolated)
+    // nonisolated 关键字允许在 actor 外部不使用 await 直接调用这些无需访问 actor 内部状态的方法
+    
+    public nonisolated func delayOnMain(time: TimeInterval, block: @escaping @MainActor @Sendable () -> Void) {
         Task { @MainActor in
-            // 将 TimeInterval (秒) 转换为 Task.sleep 所需的纳秒 (1秒 = 1_000_000_000纳秒)
             let nanoseconds = UInt64(time * 1_000_000_000)
-            
-            // 使用 await 进行非阻塞的延迟等待
             try? await Task.sleep(nanoseconds: nanoseconds)
-            
-            // 延迟结束后，安全地执行回调代码
             block()
         }
     }
     
-    // MARK: 在后台执行任务
-    public class func gcdBackground(block: @escaping PTActionTask) {
-        // 修正：真正地在后台执行，而不是切到后台又强制包一层 @MainActor
-        DispatchQueue.global(qos: .background).async {
+    /// 在后台执行任务，支持指定优先级 (等同于以前的 QoS)
+    /// - Parameters:
+    ///   - priority: 任务优先级，默认是 .background。相当于以前的 qosCls
+    ///   - block: 要执行的后台任务闭包
+    public nonisolated func runOnBackground(priority: TaskPriority? = nil,
+                                            block: @escaping PTActionTask) {
+        // 使用 Task.detached 创建一个完全脱离当前上下文的独立后台任务
+        // 这样可以确保它绝对不会在 MainActor(主线程) 上运行
+        Task.detached(priority: priority) {
             block()
         }
     }
     
-    // MARK: 计时器倒计时基础方法
-    public class func timeRun(timeInterval: TimeInterval,
-                              finishBlock: @escaping @Sendable (_ finish: Bool, _ time: Int) -> Void) -> DispatchSourceTimer {
-        // 使用局部可变状态封装，避免外部并发修改
-        var newCount = Int(timeInterval) + 1
-        let timer = DispatchSource.makeTimerSource(flags: [], queue: .main)
-        
-        timer.schedule(deadline: .now(), repeating: .seconds(1))
-        timer.setEventHandler {
-            newCount -= 1
-            finishBlock(newCount <= 0, newCount)
-            if newCount <= 0 {
-                timer.cancel()
-            }
-        }
-        
-        timer.resume()
-        return timer
+    public nonisolated func runOnBackground(block: @escaping PTActionTask) {
+        // detached 创建完全独立的任务，不继承上下文，真正的后台执行
+        PTGCDManager.shared.runOnBackground(priority: .background, block: block)
     }
     
-    // MARK: - 任务组执行工具 (完全采用 Swift 结构化并发)
-    public struct PTTaskGroupUtils {
-        
-        /// 执行一组 async 任务并收集结果与错误
-        /// - 注意：Swift 6 要求泛型 T 必须符合 Sendable，以跨线程安全传递
-        public static func performTaskGroup<T: Sendable>(concurrent: Bool = true,
-                                                         tasks: [@Sendable () async throws -> T]) async -> (results: [T], errors: [Error]) {
-            var results: [T] = []
-            var errors: [Error] = []
+    public nonisolated func runOnMain(block: @escaping @MainActor @Sendable () -> Void) {
+        Task { @MainActor in
+            block()
+        }
+    }
+    
+    // MARK: - 倒计时任务
+    @discardableResult
+    public nonisolated func countdown(timeInterval: TimeInterval,
+                                      progressBlock: @escaping @MainActor @Sendable (_ isFinished: Bool, _ remainingTime: Int) -> Void) -> Task<Void, Never> {
+        return Task {
+            var remaining = Int(timeInterval) + 1
             
-            if concurrent {
-                await withTaskGroup(of: Result<T, Error>.self) { group in
-                    for task in tasks {
-                        group.addTask {
-                            do {
-                                let result = try await task()
-                                return .success(result)
-                            } catch {
-                                return .failure(error)
-                            }
-                        }
-                    }
-                    
-                    for await result in group {
-                        switch result {
-                        case .success(let value):
-                            results.append(value)
-                        case .failure(let error):
-                            errors.append(error)
-                        }
-                    }
+            while remaining > 0 {
+                if Task.isCancelled { break }
+                
+                remaining -= 1
+                let currentRemaining = remaining
+                
+                await MainActor.run {
+                    progressBlock(false, currentRemaining)
                 }
-            } else {
-                // 顺序执行
-                for task in tasks {
-                    do {
-                        let result = try await task()
-                        results.append(result)
-                    } catch {
-                        errors.append(error)
-                    }
+                
+                if currentRemaining > 0 {
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
             }
             
-            return (results, errors)
-        }
-    }
-    
-    // MARK: - 快速队列调度
-    // 在主线程执行异步任务
-    @MainActor public class func runOnMainAsync(_ block: @escaping PTActionAsyncTask) {
-        Task { @MainActor in
-            await block()
-        }
-    }
-    
-    public class func gcdUncheckMain(block: @escaping PTActionTask) {
-        Task { @MainActor in
-            block()
-        }
-    }
-
-    public class func gcdMain(block: @escaping PTActionTask) {
-        Task { @MainActor in
-            block()
-        }
-    }
-    
-    public class func gcdUncheckGobal(qosCls: DispatchQoS.QoSClass = .default,
-                                      block: @escaping PTActionTask) {
-        // 修正：既然是 Global 后台任务，使用 Task.detached 或直接派发，去掉 @MainActor
-        Task.detached {
-            block()
-        }
-    }
-    
-    public class func gcdGobal(qosCls: DispatchQoS.QoSClass = .default,
-                               block: @escaping PTActionTask) {
-        Task.detached {
-            block()
-        }
-    }
-    
-    public class func gcdUncheckGobalNormal(block: @escaping PTActionTask) {
-        Task.detached {
-            block()
-        }
-    }
-    
-    public class func gcdGobalNormal(block: @escaping PTActionTask) {
-        Task.detached {
-            block()
-        }
-    }
-    
-    // MARK: - GCD倒计时
-    public class func timeRunWithTime_base(timeInterval: TimeInterval,
-                                           finishBlock: @escaping @Sendable (_ finish: Bool, _ time: Int) -> Void) {
-        var newCount = Int(timeInterval) + 1
-        let timer = DispatchSource.makeTimerSource(flags: [], queue: .main)
-        timer.schedule(deadline: .now(), repeating: .seconds(1))
-        timer.setEventHandler {
-            newCount -= 1
-            finishBlock(false, newCount)
-            if newCount < 1 {
-                timer.cancel()
-                finishBlock(true, 0)
+            if !Task.isCancelled {
+                await MainActor.run {
+                    progressBlock(true, 0)
+                }
             }
         }
-        timer.resume()
     }
 }

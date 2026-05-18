@@ -40,13 +40,13 @@ public class PTPermissionReminders: PTPermission {
         
         if #available(iOS 17.0, *) {
             eventStore.requestFullAccessToReminders { (accessGranted: Bool, error: Error?) in
-                PTGCDManager.gcdMain {
+                PTGCDManager.shared.runOnMain {
                     completion()
                 }
             }
         } else {
             eventStore.requestAccess(to: EKEntityType.reminder) { (accessGranted: Bool, error: Error?) in
-                PTGCDManager.gcdMain {
+                PTGCDManager.shared.runOnMain {
                     completion()
                 }
             }

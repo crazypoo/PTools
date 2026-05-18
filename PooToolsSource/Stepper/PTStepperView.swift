@@ -278,10 +278,8 @@ open class PTStepperView: UIView {
     public func viewConfigSet(viewConfig:PTStepperListConfig) {
         self.viewConfig = viewConfig
         self.layoutSubviews()
-        PTGCDManager.gcdAfter(time: 0.1, block: {
-            Task { @MainActor in
-                self.dataListSet()
-            }
+        PTGCDManager.shared.delayOnMain(time: 0.1, block: {
+            self.dataListSet()
         })
     }
     
@@ -295,10 +293,8 @@ open class PTStepperView: UIView {
         switch self.viewConfig.type {
         case .Horizontal(let type):
             if type == .Normal {
-                PTGCDManager.gcdAfter(time: 0.01) {
-                    Task { @MainActor in
-                        self.normalHorizontalItemWidth = self.width / CGFloat(self.viewConfig.stepperModels.count)
-                    }
+                PTGCDManager.shared.delayOnMain(time: 0.01) {
+                    self.normalHorizontalItemWidth = self.width / CGFloat(self.viewConfig.stepperModels.count)
                 }
             }
         case .Vertical( _):

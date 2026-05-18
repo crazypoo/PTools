@@ -87,10 +87,8 @@ public class PTDynamicNotificationView: UIView {
     
     public func showNotification() {
         PTAnimationFunction.animationIn(animationView: self, animationType: .Top, transformValue: contentHeight)
-        PTGCDManager.gcdAfter(time: showTime) {
-            Task { @MainActor in
-                self.hideNotification()
-            }
+        PTGCDManager.shared.delayOnMain(time: showTime) {
+            self.hideNotification()
         }
     }
     
