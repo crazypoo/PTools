@@ -15,7 +15,7 @@ import Photos
 import SmartCodable
 import KakaJSON
 
-public enum PTNetworkError: Error, LocalizedError, CustomNSError, Sendable {
+public enum PTNetworkError: Error, @preconcurrency LocalizedError, CustomNSError, Sendable {
     
     // MARK: - 基础网络错误
     case noNetwork
@@ -889,8 +889,8 @@ public final class Network: @unchecked Sendable {
         var newHeader = prepareRequestHeaders(header: header, jsonRequest: false, cachePolicy: cachePolicy)
         if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
         
-        var dic: [String: Any] = [:]
-        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: Any] { dic = dictionary }
+        var dic: [String: any Any & Sendable] = [:]
+        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
         logRequestStart(url: urlStr1, parameters: dic, headers: newHeader, method: method)
         
         let session = Network.share.session
@@ -1362,7 +1362,7 @@ public final class Network: @unchecked Sendable {
 
 // MARK: - ================= 9. 监控探针与耗时剖析 =================
 
-public class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate {
+public final class NetworkSessionDelegate:NSObject,URLSessionTaskDelegate {
     public func urlSession(_ session:URLSession,task:URLSessionTask,didFinishCollecting metrics: URLSessionTaskMetrics) {
         PTNSLogConsole("网络任务实例化和完成之间的时间间隔（taskInterval）: \(String(describing: metrics.taskInterval))")
         PTNSLogConsole("网络任务重定向次数（redirectCount）: \(String(describing: metrics.redirectCount))")

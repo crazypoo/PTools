@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UITabBarItem:PTBadgeProtocol {
+extension UITabBarItem:@MainActor PTBadgeProtocol {
     
     // MARK: - Private View Finder
     

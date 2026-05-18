@@ -8,8 +8,8 @@
 
 import UIKit
 
-var isSwizzed: Bool = false
-var logTag: String = ""
+@MainActor var isSwizzed: Bool = false
+@MainActor var logTag: String = ""
 
 public extension UIViewController {
     

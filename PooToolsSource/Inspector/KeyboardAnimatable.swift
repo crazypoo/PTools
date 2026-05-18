@@ -41,9 +41,9 @@ public extension KeyboardAnimatable {
         }
     }
     
-    func animateWhenKeyboard(_ notificationName: KeyboardNotificationName, // 假设这是你自定义的枚举/通知名类型
-                             animations: @escaping KeyboardAnimations,
-                             completion: KeyboardCompletion? = nil) {
+    func animateWhenKeyboard(_ notificationName: KeyboardNotificationName,
+                                 animations: @escaping KeyboardAnimations,
+                                 completion: KeyboardCompletion? = nil) {
         
         // 添加前先尝试移除旧的，防止多次注册导致动画错乱
         stopAnimatingWhenKeyboard(notificationName)
@@ -51,31 +51,34 @@ public extension KeyboardAnimatable {
         let token = notificationCenter.addObserver(
             forName: notificationName.rawValue,
             object: nil,
-            queue: .main // 确保回调在主线程队列触发
-        ) { @MainActor [weak self] notification in // 4. Swift 6: 指定闭包内的 MainActor 上下文并弱引用 self 避免循环引用
-            guard self != nil else { return }
+            queue: .main // 运行时仍然保证投递到主队列
+        ) { [weak self] notification in // 🌟 修复点 1：移除这里的 @MainActor，匹配系统 API 的类型要求
             
-            let keyboardAnimation = KeyboardAnimation(
-                animation: animations,
-                completion: completion
-            )
-            
-            // 执行你的自定义动画扩展
-            UIView.animate(
-                withKeyboardNotification: notification,
-                animations: keyboardAnimation.animation,
-                completion: keyboardAnimation.completion
-            )
+            // 🌟 修复点 2：在闭包内部使用 Task 桥接回 MainActor 上下文
+            Task { @MainActor in
+                guard self != nil else { return }
+                
+                let keyboardAnimation = KeyboardAnimation(
+                    animation: animations,
+                    completion: completion
+                )
+                
+                // 执行你的自定义动画扩展
+                UIView.animate(
+                    withKeyboardNotification: notification,
+                    animations: keyboardAnimation.animation,
+                    completion: keyboardAnimation.completion
+                )
+            }
         }
         
-        // 5. 保存这个 Token，以便未来可以注销它
-        // 注意：这里假设 notificationName.rawValue 是 String 或 NSNotification.Name，如果报错可转为 String
+        // 保存这个 Token，以便未来可以注销它
         let key = String(describing: notificationName.rawValue)
         var currentTokens = self.observerTokens
         currentTokens[key] = token
         self.observerTokens = currentTokens
     }
-    
+
     func stopAnimatingWhenKeyboard(_ notificationNames: KeyboardNotificationName...) {
         var currentTokens = self.observerTokens
         
