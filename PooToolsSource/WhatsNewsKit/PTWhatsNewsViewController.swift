@@ -54,14 +54,14 @@ public class PTWhatsNews:NSObject {
 public class PTWhatsNewsTitleItem:NSObject {
     public var title:String = ""
     public var titleFont:UIFont = UIFont.appfont(size: 26,bold: true)
-    public var titleColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+    public var titleColor:UIColor = .black
     public var atts:ASAttributedString?
     public var textAlignment:NSTextAlignment = .center
     
-    public init(title: String = "What's News", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white), atts: ASAttributedString? = nil, textAlignment:NSTextAlignment = .center) {
+    @MainActor public init(title: String = "What's News", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: ASAttributedString? = nil, textAlignment:NSTextAlignment = .center) {
         self.title = title
         self.titleFont = titleFont
-        self.titleColor = titleColor
+        self.titleColor = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         self.atts = atts
         self.textAlignment = textAlignment
     }
@@ -110,16 +110,16 @@ public class PTWhatsNewsIKnowItem:NSObject {
 public class PTWhatsNewsItem:NSObject {
     public var title:String = ""
     public var titleFont:UIFont = UIFont.appfont(size: 20,bold: true)
-    public var titleColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+    public var titleColor:UIColor = .black
     public var contentSpace:CGFloat = 2
     public var subTitle:String = ""
     public var subTitleFont:UIFont = UIFont.appfont(size: 16,bold: true)
     public var subTitleColor:UIColor = .lightGray
     public var newsImage:Any?
     
-    public init(title: String = "",
+    @MainActor public init(title: String = "",
                 titleFont: UIFont = UIFont.appfont(size: 20,bold: true),
-                titleColor: UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                titleColor: UIColor? = nil,
                 contentSpace: CGFloat = 2,
                 subTitle: String = "",
                 subTitleFont: UIFont = UIFont.appfont(size: 16,bold: true),
@@ -127,7 +127,7 @@ public class PTWhatsNewsItem:NSObject {
                 newsImage: Any? = nil) {
         self.title = title
         self.titleFont = titleFont
-        self.titleColor = titleColor
+        self.titleColor = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         self.contentSpace = contentSpace
         self.subTitle = subTitle
         self.subTitleFont = subTitleFont
@@ -329,19 +329,20 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         PTWhatsNews.markCurrentVersionAsPresented()
     }
     
-    public init(titleItem: PTWhatsNewsTitleItem = PTWhatsNewsTitleItem(),
+    public init(titleItem: PTWhatsNewsTitleItem? = nil,
                 iKnowItem:PTWhatsNewsIKnowItem = PTWhatsNewsIKnowItem(),
                 newsItem:[PTWhatsNewsItem]) {
         super.init(nibName: nil, bundle: nil)
+        let titleItemN = titleItem ?? PTWhatsNewsTitleItem()
         iKnowItems = iKnowItem
         newsItems = newsItem
-        if titleItem.atts != nil {
-            titleLabel.attributedText = titleItem.atts!.value
+        if titleItemN.atts != nil {
+            titleLabel.attributedText = titleItemN.atts!.value
         } else {
-            titleLabel.textColor = titleItem.titleColor
-            titleLabel.font = titleItem.titleFont
-            titleLabel.text = titleItem.title
-            titleLabel.textAlignment = titleItem.textAlignment
+            titleLabel.textColor = titleItemN.titleColor
+            titleLabel.font = titleItemN.titleFont
+            titleLabel.text = titleItemN.title
+            titleLabel.textAlignment = titleItemN.textAlignment
         }
         
         iKnowButton.normalTitle = iKnowItem.title

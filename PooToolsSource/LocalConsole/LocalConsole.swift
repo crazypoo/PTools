@@ -61,6 +61,7 @@ extension String {
     static let log = "Log"
 }
 
+@MainActor
 extension UIImage {
     static func resizeImage()-> UIImage {
         return UIImage(.arrow.upBackwardAndArrowDownForward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
@@ -303,7 +304,7 @@ public class LocalConsole: NSObject {
     private var dynamicRange: NSRange?
 
     public var closeAllOutsideFunction:PTActionTask?
-    public var leakCallback: ((PTPerformanceLeak) -> Void)?
+    public var leakCallback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?
     public var networkStatus = ""
 
     public var menu: UIMenuElement? = nil {

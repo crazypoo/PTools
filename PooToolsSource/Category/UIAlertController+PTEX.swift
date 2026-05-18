@@ -114,10 +114,10 @@ public extension UIAlertController {
     ///   - moreBtn: 更多按鈕點擊回調
     ///   - msgFont:
     class func base_alertVC(title:String = "",
-                            titleColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                            titleColor:UIColor? = nil,
                             titleFont:UIFont = UIFont.systemFont(ofSize: 15),
                             msg:String = "",
-                            msgColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                            msgColor:UIColor? = nil,
                             msgFont:UIFont = UIFont.systemFont(ofSize: 15),
                             okBtns:[String] = [String](),
                             cancelBtn:String = "",
@@ -128,6 +128,8 @@ public extension UIAlertController {
     @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                             cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
+        let titleColorN = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+        let msgColorN = msgColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         let current = showIn ?? PTUtils.getCurrentVC()
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
@@ -164,14 +166,14 @@ public extension UIAlertController {
         // KVC修改系统弹框文字颜色字号
         if !title.stringIsEmpty() {
             let alertStr = NSMutableAttributedString(string: title)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor, NSAttributedString.Key.font: titleFont]
+            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColorN, NSAttributedString.Key.font: titleFont]
             alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title.count))
             alert.setValue(alertStr, forKey: "attributedTitle")
         }
         
         if !msg.stringIsEmpty() {
             let alertMsgStr = NSMutableAttributedString(string: msg)
-            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColor, NSAttributedString.Key.font: msgFont]
+            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColorN, NSAttributedString.Key.font: msgFont]
             alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg.count))
             alert.setValue(alertMsgStr, forKey: "attributedMessage")
         }
@@ -206,12 +208,12 @@ public extension UIAlertController {
     ///   - cancel: 取消回調
     ///   - doneBtn: 更多按鈕點擊回調
     class func base_textfield_alertVC(title:String = "",
-                                      titleColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                                      titleColor:UIColor? = nil,
                                       titleFont:UIFont = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
                                       cancelBtn:String,
                                       showIn:UIViewController? = nil,
-                                      cancelBtnColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
+                                      cancelBtnColor:UIColor? = nil,
                                       doneBtnColor:UIColor = .systemBlue,
                                       placeHolders:[String],
                                       textFieldTexts:[String],
@@ -222,6 +224,9 @@ public extension UIAlertController {
     @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                                       cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String]) -> Void)?) {
+        let titleColorN = titleColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+        let cancelBtnColorN = cancelBtnColor ?? PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+
         let current = showIn ?? PTUtils.getCurrentVC()
 
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
@@ -229,7 +234,7 @@ public extension UIAlertController {
         let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
             cancel?()
         }
-        cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
+        cancelAction.setValue(cancelBtnColorN, forKey: "titleTextColor")
         alert.addAction(cancelAction)
 
         if placeHolders.count == textFieldTexts.count {
@@ -260,7 +265,7 @@ public extension UIAlertController {
         // KVC修改系统弹框文字颜色字号
         if !title.stringIsEmpty() {
             let alertStr = NSMutableAttributedString(string: title)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor, NSAttributedString.Key.font: titleFont]
+            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColorN, NSAttributedString.Key.font: titleFont]
             alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title.count))
             alert.setValue(alertStr, forKey: "attributedTitle")
         }

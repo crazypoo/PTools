@@ -49,7 +49,7 @@ public struct LeakModel: Sendable {
 public final class PTPerformanceLeakDetector {
 
     // 闭包现在明确要求在主线程执行
-    public static var callback: (@MainActor (PTPerformanceLeak) -> Void)?
+    public static var callback: (@MainActor @Sendable (PTPerformanceLeak) -> Void)?
     public static var delay = 1.0
     public static var warningWindow: UIWindow?
     public static var lastBackgroundedDate = Date(timeIntervalSince1970: 0)
