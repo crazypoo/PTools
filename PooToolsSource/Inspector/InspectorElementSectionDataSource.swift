@@ -32,7 +32,7 @@ public extension InspectorElementSectionDataSource {
 }
 
 extension InspectorElementSectionDataSource {
-    func makeView() -> InspectorElementSectionView {
+    @MainActor func makeView() -> InspectorElementSectionView {
         let aClass = customClass ?? InspectorElementSectionFormView.self
 
         let view = aClass.makeItemView(with: state)

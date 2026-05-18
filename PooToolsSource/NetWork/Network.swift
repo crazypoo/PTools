@@ -128,8 +128,8 @@ public enum NetWorkEnvironment : Int {
 }
 
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
-public typealias UploadProgress = (_ progress: Progress) -> Void
-public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
+public typealias UploadProgress = @MainActor @Sendable (_ progress: Progress) -> Void
+public typealias FileDownloadProgress = @MainActor @Sendable (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
 public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<URL?>) -> ()
 public typealias FileDownloadFail = (_ error:Error?) -> ()
 
