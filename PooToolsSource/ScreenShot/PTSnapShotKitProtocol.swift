@@ -22,7 +22,7 @@ public struct SnapshotConfiguration {
     }
     
     /// 提供一个默认的配置
-    public static let `default` = SnapshotConfiguration()
+    @MainActor public static let `default` = SnapshotConfiguration()
 }
 
 public protocol SnapshotKitProtocol {
@@ -57,19 +57,20 @@ public protocol SnapshotKitProtocol {
 public extension SnapshotKitProtocol {
     
     // 提供无参数调用的默认实现，默认使用 .default 配置
-    func takeSnapshotOfVisibleContent() -> UIImage? {
+    @MainActor func takeSnapshotOfVisibleContent() -> UIImage? {
         return takeSnapshotOfVisibleContent(with: .default)
     }
     
-    func takeSnapshotOfFullContent() -> UIImage? {
+    @MainActor func takeSnapshotOfFullContent() -> UIImage? {
         return takeSnapshotOfFullContent(with: .default)
     }
     
-    func asyncTakeSnapshotOfFullContent(_ completion: @escaping ((_ image: UIImage?) -> Void)) {
+    @MainActor func asyncTakeSnapshotOfFullContent(_ completion: @escaping ((_ image: UIImage?) -> Void)) {
         asyncTakeSnapshotOfFullContent(with: .default, completion: completion)
     }
     
     // 提供 async/await 版本的默认实现，如果实现类没有写这个方法，系统会自动用闭包版本封装一个
+    @MainActor 
     @available(iOS 13.0, *)
     func takeSnapshotOfFullContent(with configuration: SnapshotConfiguration = .default) async -> UIImage? {
         return await withCheckedContinuation { continuation in

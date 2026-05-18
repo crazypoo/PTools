@@ -9,6 +9,7 @@
 import Foundation
 import ARKit
 
+@MainActor 
 class PTEyeTrackingDataManager {
     
     // 实际设备尺寸(以米为单位)

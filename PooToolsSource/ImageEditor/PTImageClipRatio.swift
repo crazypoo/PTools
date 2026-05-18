@@ -37,21 +37,21 @@ extension PTImageClipRatio {
 }
 
 public extension PTImageClipRatio {
-    @objc static let custom = PTImageClipRatio(title: "custom", whRatio: 0)
+    @MainActor @objc static let custom = PTImageClipRatio(title: "custom", whRatio: 0)
     
-    @objc static let circle = PTImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
+    @MainActor @objc static let circle = PTImageClipRatio(title: "circle", whRatio: 1, isCircle: true)
     
-    @objc static let wh1x1 = PTImageClipRatio(title: "1 : 1", whRatio: 1)
+    @MainActor @objc static let wh1x1 = PTImageClipRatio(title: "1 : 1", whRatio: 1)
     
-    @objc static let wh3x4 = PTImageClipRatio(title: "3 : 4", whRatio: 3.0 / 4.0)
+    @MainActor @objc static let wh3x4 = PTImageClipRatio(title: "3 : 4", whRatio: 3.0 / 4.0)
     
-    @objc static let wh4x3 = PTImageClipRatio(title: "4 : 3", whRatio: 4.0 / 3.0)
+    @MainActor @objc static let wh4x3 = PTImageClipRatio(title: "4 : 3", whRatio: 4.0 / 3.0)
     
-    @objc static let wh2x3 = PTImageClipRatio(title: "2 : 3", whRatio: 2.0 / 3.0)
+    @MainActor @objc static let wh2x3 = PTImageClipRatio(title: "2 : 3", whRatio: 2.0 / 3.0)
     
-    @objc static let wh3x2 = PTImageClipRatio(title: "3 : 2", whRatio: 3.0 / 2.0)
+    @MainActor @objc static let wh3x2 = PTImageClipRatio(title: "3 : 2", whRatio: 3.0 / 2.0)
     
-    @objc static let wh9x16 = PTImageClipRatio(title: "9 : 16", whRatio: 9.0 / 16.0)
+    @MainActor @objc static let wh9x16 = PTImageClipRatio(title: "9 : 16", whRatio: 9.0 / 16.0)
     
-    @objc static let wh16x9 = PTImageClipRatio(title: "16 : 9", whRatio: 16.0 / 9.0)
+    @MainActor @objc static let wh16x9 = PTImageClipRatio(title: "16 : 9", whRatio: 16.0 / 9.0)
 }
