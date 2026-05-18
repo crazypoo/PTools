@@ -745,12 +745,12 @@ public extension PTPOP where Base: FileManager {
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图
     static func getServerVideoImage(videoPath: String,
-                                    videoImage: @escaping (UIImage?) -> Void,
+                                    videoImage: @escaping @MainActor @Sendable (UIImage?) -> Void,
                                     preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        Task { @MainActor in
+        Task {
             let image = getVideoImage(videoUrlSouceType: .server, path: videoPath, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
-            videoImage(image)
+            await videoImage(image)
         }
     }
     
@@ -772,10 +772,10 @@ public extension PTPOP where Base: FileManager {
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图数组
     static func getServerVideoImages(videoPaths: [String],
-                                     videoImages: @escaping ([UIImage]) -> Void,
+                                     videoImages: @escaping @MainActor @Sendable ([UIImage]) -> Void,
                                      preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
-        Task { @MainActor in
+        Task {
             //  获取截图
             var allImageArray: [UIImage] = []
             for path in videoPaths {
@@ -783,7 +783,7 @@ public extension PTPOP where Base: FileManager {
                     allImageArray.append(videoImage)
                 }
             }
-            videoImages(allImageArray)
+            await videoImages(allImageArray)
         }
     }
     

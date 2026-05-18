@@ -877,7 +877,7 @@ open class PTTipsView: UIView {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-        dismissTimer?.invalidate()
+//        dismissTimer?.invalidate()
     }
 }
 

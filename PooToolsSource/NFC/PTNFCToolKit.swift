@@ -37,6 +37,7 @@ public class PTNFCToolKit: NSObject {
 
     private var readerSession: NFCTagReaderSession?
     private var onReadSuccess: (([NFCNDEFPayload]) -> Void)?
+    // 注意：如果你的 PTActionTask 不是 @Sendable，Swift 6 可能会提醒。建议定义为 typealias PTActionTask = @Sendable () -> Void
     private var onWriteSuccess: PTActionTask?
     private var onError: ((Error) -> Void)?
     private var apduCommand: NFCISO7816APDU?
@@ -47,7 +48,7 @@ public class PTNFCToolKit: NSObject {
     // MARK: - Public API
 
     public func startReading(onSuccess: @escaping ([NFCNDEFPayload]) -> Void,
-                      onError: @escaping (Error) -> Void) {
+                             onError: @escaping (Error) -> Void) {
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 0, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))
             return
@@ -63,9 +64,9 @@ public class PTNFCToolKit: NSObject {
     }
 
     public func startWriting(message: NFCNDEFMessage,
-                      lockAfterWrite: Bool = false,
-                      onSuccess: @escaping PTActionTask,
-                      onError: @escaping (Error) -> Void) {
+                             lockAfterWrite: Bool = false,
+                             onSuccess: @escaping PTActionTask,
+                             onError: @escaping (Error) -> Void) {
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 1, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))
             return
@@ -82,8 +83,8 @@ public class PTNFCToolKit: NSObject {
     }
 
     public func sendAPDU(command: NFCISO7816APDU,
-                  onSuccess: @escaping (Data) -> Void,
-                  onError: @escaping (Error) -> Void) {
+                         onSuccess: @escaping (Data) -> Void,
+                         onError: @escaping (Error) -> Void) {
         guard NFCTagReaderSession.readingAvailable else {
             onError(NSError(domain: "PTNFCToolKit", code: 2, userInfo: [NSLocalizedDescriptionKey: "設備不支援 NFC"]))
             return
@@ -110,150 +111,77 @@ public class PTNFCToolKit: NSObject {
     }
 }
 
+// MARK: - Delegate (使用 nonisolated 避免主线程死锁和并发警告)
 @available(iOS 13.0, *)
 extension PTNFCToolKit: @preconcurrency NFCTagReaderSessionDelegate {
-    public func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
-        
+    
+    nonisolated public func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
+        // Session 激活时的回调，保持为空即可
     }
     
-    public func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
-        onError?(error)
-        clear()
+    nonisolated public func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
+        Task { @MainActor in
+            self.onError?(error)
+            self.clear()
+        }
     }
 
-    public func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
+    nonisolated public func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         guard let tag = tags.first else { return }
 
-        session.connect(to: tag) {  error in
+        session.connect(to: tag) { error in
+            if let error = error {
+                // 在后台线程直接操作 session，不跨界
+                session.invalidate(errorMessage: "連線失敗: \(error.localizedDescription)")
+                Task { @MainActor in
+                    self.onError?(error)
+                    self.clear()
+                }
+                return
+            }
+            
+            // 连线成功后，切回主线程进行状态处理
             Task { @MainActor in
-                if let error = error {
-                    session.invalidate(errorMessage: "\(self.connectErrorMsg) \(error.localizedDescription)")
-                    self.onError?(error)
-                    self.clear()
-                    return
-                }
-            }
-            self.processDetectedTag(tag, session: session)
-        }
-    }
-
-    private func queryNDEF(tag: NFCISO7816Tag, session: NFCTagReaderSession) {
-        let ndefTag = tag as NFCNDEFTag
-        ndefTag.queryNDEFStatus { status, _, error in
-            Task { @MainActor in
-                if let error = error {
-                    session.invalidate(errorMessage: "\(self.findErrorMsg)\(error.localizedDescription)")
-                    self.onError?(error)
-                    self.clear()
-                    return
-                }
-
-                switch status {
-                case .readOnly, .readWrite:
-                    if let writeMessage = self.writeMessage {
-                        self.writeNDEF(to: ndefTag, message: writeMessage, session: session)
-                    } else {
-                        self.readNDEF(from: ndefTag, session: session)
-                    }
-                case .notSupported:
-                    session.invalidate(errorMessage: self.notSupportNDEFMsg)
-                    self.clear()
-                @unknown default:
-                    session.invalidate(errorMessage: self.unknowStateMsg)
-                    self.clear()
-                }
+                self.processDetectedTag(tag, session: session)
             }
         }
     }
+}
 
-    private func readNDEF(from tag: NFCNDEFTag, session: NFCTagReaderSession) {
-        tag.readNDEF { message, error in
-            Task { @MainActor [weak self] in
-                guard let self = self else { return } // 4. 彻底修复崩溃：使用 guard let 替代原有的 self!
-                
-                if let error = error {
-                    session.invalidate(errorMessage: "\(self.readErrorMsg)\(error.localizedDescription)")
-                    self.onError?(error)
-                    self.clear()
-                    return
-                }
-
-                if let records = message?.records {
-                    session.alertMessage = self.readSuccessMsg
-                    session.invalidate()
-                    self.onReadSuccess?(records)
-                } else {
-                    session.invalidate(errorMessage: self.unFindMsg)
-                }
-                self.clear()
-            }
-        }
-    }
-
-    private func writeNDEF(to tag: NFCNDEFTag, message: NFCNDEFMessage, session: NFCTagReaderSession) {
-        tag.writeNDEF(message) { error in
-            Task { @MainActor [weak self] in
-                guard let self = self else { return } // 修复潜在崩溃
-                
-                if let error = error {
-                    session.invalidate(errorMessage: "\(self.writingErrorMsg)\(error.localizedDescription)")
-                    self.onError?(error)
-                    self.clear()
-                    return
-                }
-
-                if self.shouldLockAfterWrite {
-                    self.lockTag(tag: tag, session: session)
-                } else {
-                    session.alertMessage = self.writingSuccessMsg
-                    session.invalidate()
-                    self.onWriteSuccess?()
-                    self.clear()
-                }
-            }
-        }
-    }
-
-    private func lockTag(tag: NFCNDEFTag, session: NFCTagReaderSession) {
-        tag.writeLock { error in
-            Task { @MainActor [weak self] in
-                guard let self = self else { return } // 修复潜在崩溃
-                
-                if let error = error {
-                    session.invalidate(errorMessage: "\(self.lockErrorMsg)\(error.localizedDescription)")
-                    self.onError?(error)
-                } else {
-                    session.alertMessage = self.onlyReadMsg
-                    session.invalidate()
-                    self.onWriteSuccess?()
-                }
-                self.clear()
-            }
-        }
-    }
+// MARK: - Core Logic
+@available(iOS 13.0, *)
+extension PTNFCToolKit {
     
     @MainActor
     private func processDetectedTag(_ tag: NFCTag, session: NFCTagReaderSession) {
         switch tag {
         case .miFare(let mifareTag):
             let uidString = mifareTag.identifier.map { String(format: "%02x", $0) }.joined()
-            PTNSLogConsole("MiFare UID: \(uidString)")
+            // 确保你的 PTNSLogConsole 支持跨并发域，或者它本身就是全局安全的
+            print("MiFare UID: \(uidString)")
             session.invalidate(errorMessage: miFareErrorMsg)
             self.clear()
 
         case .iso7816(let iso7816Tag):
             if let command = self.apduCommand {
+                // 将可能变化的主线程状态设为本地常量，以便在后台闭包中使用
+                let localApduErrorMsg = self.apduErrorMsg
+                let localApduSuccessMsg = self.apduSuccessMsg
+                
                 iso7816Tag.sendCommand(apdu: command) { data, sw1, sw2, error in
-                    Task { @MainActor in
-                        if let error = error {
-                            session.invalidate(errorMessage: "\(self.apduErrorMsg)：\(error.localizedDescription)")
+                    if let error = error {
+                        session.invalidate(errorMessage: "\(localApduErrorMsg)：\(error.localizedDescription)")
+                        Task { @MainActor in
                             self.onError?(error)
-                        } else {
-                            session.alertMessage = String(format: self.apduSuccessMsg, String(sw1), String(sw2))
-                            session.invalidate()
-                            self.apduCompletion?(data)
+                            self.clear()
                         }
-                        self.clear()
+                    } else {
+                        session.alertMessage = String(format: localApduSuccessMsg, String(sw1), String(sw2))
+                        session.invalidate()
+                        Task { @MainActor in
+                            self.apduCompletion?(data)
+                            self.clear()
+                        }
                     }
                 }
             } else {
@@ -262,19 +190,154 @@ extension PTNFCToolKit: @preconcurrency NFCTagReaderSessionDelegate {
 
         case .iso15693(let iso15693Tag):
             let uidString = iso15693Tag.identifier.map { String(format: "%02x", $0) }.joined()
-            PTNSLogConsole("ISO15693 UID: \(uidString)")
+            print("ISO15693 UID: \(uidString)")
             session.invalidate(errorMessage: nfc15693ErrorMsg)
             self.clear()
 
         case .feliCa(let felicaTag):
             let idmString = felicaTag.currentIDm.map { String(format: "%02x", $0) }.joined()
-            PTNSLogConsole("FeliCa IDm: \(idmString)")
+            print("FeliCa IDm: \(idmString)")
             session.invalidate(errorMessage: felicaErrorMsg)
             self.clear()
             
         @unknown default:
             session.invalidate(errorMessage: unknowErrorMsg)
             self.clear()
+        }
+    }
+
+    @MainActor
+    private func queryNDEF(tag: NFCISO7816Tag, session: NFCTagReaderSession) {
+        let ndefTag = tag as NFCNDEFTag
+        
+        // 1. 移除 localWriteMessage 的提前捕获
+        // 只保留那些确实是 Sendable 的基本类型（如 String）的捕获
+        let localFindErrorMsg = self.findErrorMsg
+        let localNotSupportMsg = self.notSupportNDEFMsg
+        let localUnknowStateMsg = self.unknowStateMsg
+        
+        // 2. 使用 [weak self] 弱引用传入闭包，避免循环引用，且 Actor 的弱引用是 Sendable 的
+        ndefTag.queryNDEFStatus { [weak self] status, _, error in
+            if let error = error {
+                session.invalidate(errorMessage: "\(localFindErrorMsg)\(error.localizedDescription)")
+                Task { @MainActor in
+                    self?.onError?(error)
+                    self?.clear()
+                }
+                return
+            }
+
+            switch status {
+            case .readOnly, .readWrite:
+                Task { @MainActor in
+                    guard let self = self else { return }
+                    
+                    // 3. 核心修复：直接在已经受到 @MainActor 保护的作用域内，读取 self.writeMessage
+                    // 因为此时已经在主线程，所以根本不存在跨越边界的问题，不会触发 Data Race
+                    if let safeWriteMessage = self.writeMessage {
+                        self.writeNDEF(to: ndefTag, message: safeWriteMessage, session: session)
+                    } else {
+                        self.readNDEF(from: ndefTag, session: session)
+                    }
+                }
+            case .notSupported:
+                session.invalidate(errorMessage: localNotSupportMsg)
+                Task { @MainActor in self?.clear() }
+            @unknown default:
+                session.invalidate(errorMessage: localUnknowStateMsg)
+                Task { @MainActor in self?.clear() }
+            }
+        }
+    }
+
+    @MainActor
+    private func readNDEF(from tag: NFCNDEFTag, session: NFCTagReaderSession) {
+        let localReadErrorMsg = self.readErrorMsg
+        let localReadSuccessMsg = self.readSuccessMsg
+        let localUnFindMsg = self.unFindMsg
+        
+        // 增加 [weak self] 防止循环引用
+        tag.readNDEF { [weak self] message, error in
+            if let error = error {
+                session.invalidate(errorMessage: "\(localReadErrorMsg)\(error.localizedDescription)")
+                Task { @MainActor in
+                    self?.onError?(error)
+                    self?.clear()
+                }
+                return
+            }
+
+            if let records = message?.records {
+                session.alertMessage = localReadSuccessMsg
+                session.invalidate()
+                
+                // 【核心修复】使用 nonisolated(unsafe) 包装非 Sendable 的 records
+                // 这明确告诉 Swift 6 编译器：我们将安全地把这个对象转移给主线程，后台不再触碰它
+                nonisolated(unsafe) let safeRecords = records
+                
+                Task { @MainActor in
+                    // 在主线程中使用包装好的 safeRecords
+                    self?.onReadSuccess?(safeRecords)
+                    self?.clear()
+                }
+            } else {
+                session.invalidate(errorMessage: localUnFindMsg)
+                Task { @MainActor in self?.clear() }
+            }
+        }
+    }
+
+    @MainActor
+    private func writeNDEF(to tag: NFCNDEFTag, message: NFCNDEFMessage, session: NFCTagReaderSession) {
+        let localWritingErrorMsg = self.writingErrorMsg
+        let localWritingSuccessMsg = self.writingSuccessMsg
+        let localShouldLock = self.shouldLockAfterWrite // 捕获锁状态
+        
+        tag.writeNDEF(message) { error in
+            if let error = error {
+                session.invalidate(errorMessage: "\(localWritingErrorMsg)\(error.localizedDescription)")
+                Task { @MainActor in
+                    self.onError?(error)
+                    self.clear()
+                }
+                return
+            }
+
+            if localShouldLock {
+                Task { @MainActor in
+                    self.lockTag(tag: tag, session: session)
+                }
+            } else {
+                session.alertMessage = localWritingSuccessMsg
+                session.invalidate()
+                Task { @MainActor in
+                    self.onWriteSuccess?()
+                    self.clear()
+                }
+            }
+        }
+    }
+
+    @MainActor
+    private func lockTag(tag: NFCNDEFTag, session: NFCTagReaderSession) {
+        let localLockErrorMsg = self.lockErrorMsg
+        let localOnlyReadMsg = self.onlyReadMsg
+        
+        tag.writeLock { error in
+            if let error = error {
+                session.invalidate(errorMessage: "\(localLockErrorMsg)\(error.localizedDescription)")
+                Task { @MainActor in
+                    self.onError?(error)
+                    self.clear()
+                }
+            } else {
+                session.alertMessage = localOnlyReadMsg
+                session.invalidate()
+                Task { @MainActor in
+                    self.onWriteSuccess?()
+                    self.clear()
+                }
+            }
         }
     }
 }
