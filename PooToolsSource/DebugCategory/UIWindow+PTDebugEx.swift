@@ -11,6 +11,7 @@ import UIKit
 
 extension UIWindow {
     // MARK: - Constants
+    @MainActor
     private enum Constants {
         static let touchIndicatorViewMinAlpha: CGFloat = 0.6
         static var associatedTouchIndicators: UInt8 = 0
@@ -102,7 +103,7 @@ extension UIWindow {
 
 // MARK: - DispatchQueue extension for once
 extension DispatchQueue {
-    private static var _onceTracker = [String]()
+    @MainActor private static var _onceTracker = [String]()
 
     @MainActor class func once(token: String, block: PTActionTask) {
         objc_sync_enter(self)

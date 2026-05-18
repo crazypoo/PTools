@@ -11,6 +11,7 @@ import SnapKit
 
 typealias LocalConsoleTextColorTask = ((_ color:UIColor) -> Void)
 
+@MainActor
 @available(iOSApplicationExtension, unavailable)
 class ResizeController {
     

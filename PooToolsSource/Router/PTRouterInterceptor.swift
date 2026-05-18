@@ -16,5 +16,5 @@ public protocol PTRouterAsyncInterceptor: Sendable {
     var whiteList: [String] { get }
     
     /// 拦截逻辑：返回 true 继续，返回 false 或抛出错误则中断
-    func handle(queries: [String: Sendable]) async throws -> Bool
+    func handle(queries: [String: any Any & Sendable]) async throws -> Bool
 }

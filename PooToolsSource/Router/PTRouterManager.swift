@@ -6,7 +6,7 @@
 //  Copyright © 2023 crazypoo. All rights reserved.
 //
 
-import Foundation
+@preconcurrency import Foundation
 import UIKit
 
 /// 对于KVO监听，动态创建子类，需要特殊处理
@@ -31,7 +31,7 @@ public class PTRouterManager: NSObject {
     // MARK: - 注册路由
     public static func addGloableRouter(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
-                                        _ userInfo: [String: Any],
+                                        _ userInfo: [String: any Any & Sendable],
                                         forceCheckEnable: Bool = false) async -> Any? {
         
         PTRouter.globalOpenFailedHandler { (info) in
@@ -59,7 +59,7 @@ extension PTRouterManager {
     // MARK: - 自动注册路由
     public class func registerRouterMap(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
-                                        _ userInfo: [String: Any],
+                                        _ userInfo: [String: any Any & Sendable],
                                         forceCheckEnable: Bool = false) async -> Any? {
         Task {
             do {

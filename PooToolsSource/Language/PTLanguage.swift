@@ -143,7 +143,7 @@ public enum PTLocale: String {
 }
 
 // MARK: - 2. 核心语言管理类 (整合 PTLanguage 和 Localize)
-public class PTLanguage: NSObject {
+public class PTLanguage: NSObject,@unchecked Sendable {
     public static let share = PTLanguage()
     /// 当前App语言，修改此属性会自动触发全App的UI刷新
     public var language: String {
@@ -227,6 +227,7 @@ public extension String {
 // MARK: - 5. UIViewController & UIView 扩展 (UI 监听优化)
 
 // 定义规范的 Runtime Keys
+@MainActor
 private struct AssociatedKeys {
     static var vcBlockKey: UInt8 = 0
     static var viewBlockKey: UInt8 = 0

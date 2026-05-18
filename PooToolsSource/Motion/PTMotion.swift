@@ -12,7 +12,7 @@ import UIKit
 public typealias PTMotionBlock = (_ step: Int, _ confidence: String, _ status: String) -> Void
 
 @objcMembers
-public class PTMotion: NSObject {
+public class PTMotion: NSObject,@unchecked Sendable {
 
     public static let shared = PTMotion()
     

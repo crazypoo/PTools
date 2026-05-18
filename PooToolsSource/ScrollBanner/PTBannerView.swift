@@ -13,7 +13,7 @@ import AttributedString
 
 public final class PTBannerScheduler {
 
-    public static let shared = PTBannerScheduler()
+    nonisolated(unsafe) public static let shared = PTBannerScheduler()
     public var autoScrollInterval: TimeInterval = 2
 
     private var banners = NSHashTable<PTBannerView>.weakObjects()

@@ -339,7 +339,7 @@ public class PTRouter: PTRouterParser {
     }
         
     /// 执行异步拦截检查
-    private class func executeAsyncIntercept(_ path: String, queries: [String: Sendable]) async -> Bool {
+    private class func executeAsyncIntercept(_ path: String, queries: [String: any Any & Sendable]) async -> Bool {
         let interceptorsSnapshot = asyncInterceptors
         
         for interceptor in interceptorsSnapshot {
@@ -725,7 +725,7 @@ extension PTRouter {
 
     @discardableResult
     @MainActor // 确保 UI 跳转在主线程
-    public class func openURL(_ urlString: String, userInfo: [String: Sendable] = [:]) async throws -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: any Any & Sendable] = [:]) async throws -> Any? {
         // 1. 执行异步拦截检查
         let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
         guard canContinue else {
