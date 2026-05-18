@@ -30,7 +30,7 @@ public struct UIImageColors {
     }
 }
 
-public enum UIImageColorsQuality: CGFloat {
+public enum UIImageColorsQuality: CGFloat, Sendable {
     case lowest = 50 // 50px
     case low = 100 // 100px
     case high = 250 // 250px
@@ -146,14 +146,14 @@ extension UIImage {
     }
     #endif
 
-    public func getColors(quality: UIImageColorsQuality = .high, _ completion: @escaping (UIImageColors?) -> Void) {
+    public func getColors(quality: UIImageColorsQuality = .high, _ completion: @escaping @MainActor @Sendable (UIImageColors?) -> Void) {
         // 使用标准的 GCD 全局队列替代自定义封装，如果有必要你可以换回你的 PTGCDManager
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = self.getColors(quality: quality)
-            DispatchQueue.main.async {
+        PTGCDManager.shared.runOnBackground(priority: .userInitiated, block: {
+            PTGCDManager.shared.runOnMain {
+                let result = self.getColors(quality: quality)
                 completion(result)
             }
-        }
+        })
     }
 
     public func getColors(quality: UIImageColorsQuality = .high) -> UIImageColors? {
