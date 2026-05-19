@@ -13,7 +13,7 @@ struct PTRouterExampleModel:PTRoutableParams {
     let foo:String
     let poo:String
 
-    func toDictionary() -> [String : Any] {
+    func toDictionary() -> [String : any Sendable] {
         ["foo":foo,"poo":poo]
     }
 }
@@ -24,7 +24,7 @@ class PTRouteViewController: PTBaseViewController,@MainActor PTRoutableStaticCon
     typealias Params = PTRouterExampleModel
 
     var id = ""
-    required init(routerParams: [String : Any]) {
+    required init(routerParams: [String : any Any & Sendable]) {
         self.id = (routerParams["foo"] as? String) ?? ""
         super.init(nibName: nil, bundle: nil)
     }

@@ -172,7 +172,7 @@ public class PTRouter: PTRouterParser {
     public typealias FailedHandleBlock = @MainActor ([String: Any]) -> Void
     public typealias RouteResponse = (pattern: PTRouterPattern?, queries: [String: Any])
     public typealias MatchResult = (matched: Bool, queries: [String: Any])
-    public typealias LazyRegisterHandleBlock = @MainActor (_ url: String, _ userInfo: [String: Any]) -> Any?
+    public typealias LazyRegisterHandleBlock = @MainActor (_ url: String, _ userInfo: [String: Any]) -> (any Sendable)?
     public typealias RouterLogHandleBlock = @MainActor (_ url: String, _ logType: PTRouterLogType, _ errorMsg: String) -> Void
     
     // MARK: - 自定义跳转
@@ -564,10 +564,10 @@ public struct RouteItem {
 extension PTRouter {
     
     // MARK: - Convenience method
-    public class func generate(_ patternString: String, params: [String: Any] = [String: Any](), jumpType: PTJumpType) -> (String, [String: Any]) {
+    public class func generate(_ patternString: String, params: [String: any Any & Sendable] = [:], jumpType: PTJumpType) -> (String, [String: any Any & Sendable]) {
         
         if let url = URL(string: patternString) {
-            let orginParams = url.urlParameters ?? [String: Any]()
+            let orginParams = url.urlParameters ?? [:]
             var queries = params
             queries[PTJumpTypeKey] = "\(jumpType.rawValue)"
             
@@ -577,7 +577,7 @@ extension PTRouter {
             return (patternString, queries)
         }
         
-        return ("", [String: Any]())
+        return ("", [:])
     }
     
 }
@@ -586,12 +586,12 @@ extension PTRouter {
 public protocol CustomRouterInfo {
     static var patternString: String { get }
     static var routerClass: String { get }
-    var params: [String: Any] { get }
+    var params: [String: any Any & Sendable] { get }
     var jumpType: PTJumpType { get }
 }
 
 extension CustomRouterInfo {
-    public var requiredURL: (String, [String: Any]) {
+    public var requiredURL: (String, [String: any Any & Sendable]) {
         PTRouter.generate(Self.patternString, params: params, jumpType: jumpType)
     }
 }
@@ -749,7 +749,7 @@ extension PTRouter {
     }
     
     @discardableResult
-    public class func openURL(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func openURL(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> (any Sendable)? {
         if !shareInstance.routerLoaded {
             return shareInstance.lazyRegisterHandleBlock?(uriTuple.0, uriTuple.1)
         } else {
@@ -758,18 +758,18 @@ extension PTRouter {
     }
     
     @discardableResult
-    public class func openWebURL(_ uriTuple: (String, [String: Sendable])) async -> Any? {
+    public class func openWebURL(_ uriTuple: (String, [String: Sendable])) async -> (any Sendable)? {
         await PTRouter.openURL(uriTuple)
     }
     
     @discardableResult
     public class func openWebURL(_ urlString: String,
-                                 userInfo: [String: Sendable] = [String: Sendable]()) async -> Any? {
+                                 userInfo: [String: Sendable] = [String: Sendable]()) async -> (any Sendable)? {
         await PTRouter.openURL((urlString, userInfo))
     }
     
     @MainActor
-    public class func openCacheRouter(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func openCacheRouter(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> (any Sendable)? {
         
         if uriTuple.0.isEmpty {
             return nil
@@ -783,7 +783,7 @@ extension PTRouter {
     }
     
     // 重构你的 routerJump 方法
-    public class func routerJump(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func routerJump(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> (any Sendable)? {
         
         let response = await PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
         let queries = response.queries
@@ -885,7 +885,7 @@ extension PTRouter {
     // 修改 PTRouter.routerService 方法：
     // 服务调用 (重构版)
     @MainActor
-    public class func routerService(_ uriTuple: (String, [String: Any])) -> Any? {
+    public class func routerService(_ uriTuple: (String, [String: Any])) -> (any Sendable)? {
         let request = PTRouterRequest(uriTuple.0)
         let queries = request.queries
         

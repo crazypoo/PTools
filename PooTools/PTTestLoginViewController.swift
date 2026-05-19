@@ -13,7 +13,7 @@ public struct PTEmptyParams<VC: UIViewController>: PTRoutableParams {
     
     public init() {}
     
-    public func toDictionary() -> [String: Any] {
+    public func toDictionary() -> [String: any Sendable] {
         return [:] // 无参，返回空字典
     }
 }

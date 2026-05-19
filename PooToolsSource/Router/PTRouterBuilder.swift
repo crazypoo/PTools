@@ -11,7 +11,7 @@ import UIKit
 
 public class PTRouterBuilder {
     
-    public var buildResult: (String, [String: Any]) = ("", [:])
+    public var buildResult: (String, [String: any Any & Sendable]) = ("", [:])
     
     public init () {}
 }
@@ -56,7 +56,7 @@ extension PTRouterBuilder {
     }
     
     @discardableResult
-    public func withAny(key: String, value: Any) -> Self {
+    public func withAny(key: String, value: any Any & Sendable) -> Self {
         buildResult.1[key] = value
         return self
     }
@@ -85,13 +85,13 @@ extension PTRouterBuilder {
     }
     
     @discardableResult
-    public func buildDictionary(param: [String: Any]) -> Self {
+    public func buildDictionary(param: [String: any Any & Sendable]) -> Self {
         buildResult.1.merge(dic: param)
         return self
     }
     
     @discardableResult
-    public func fetchService() async -> Any? {
+    public func fetchService() async -> (any Sendable)? {
         let result = await PTRouter.generate(buildResult.0, params: buildResult.1, jumpType: .push)
         await PTRouter.shareInstance.logcat?(buildResult.0, .logNormal, "")
         return await PTRouter.openURL(result)

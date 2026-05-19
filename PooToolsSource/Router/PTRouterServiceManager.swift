@@ -163,7 +163,7 @@ public class PTServiceActionMapper {
     public static let shared = PTServiceActionMapper()
     
     // 存储映射关系：[ProtocolName_MethodName : 执行闭包]
-    private var actionMap: [String: (Any?, Any?) -> Any?] = [:]
+    private var actionMap: [String: (Any?, Any?) -> (any Sendable)?] = [:]
     
     // 注册动态服务闭包
     public func register(protocolName: String, methodName: String, action: @escaping (Any?, Any?) -> Any?) {
@@ -172,7 +172,7 @@ public class PTServiceActionMapper {
     }
     
     // 执行动态服务
-    public func execute(protocolName: String, methodName: String, param: Any?, otherParam: Any?) -> Any? {
+    public func execute(protocolName: String, methodName: String, param: Any?, otherParam: Any?) -> (any Sendable)? {
         let key = "\(protocolName)_\(methodName)"
         
         guard let action = actionMap[key] else {

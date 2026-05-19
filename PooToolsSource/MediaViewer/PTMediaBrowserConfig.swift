@@ -30,6 +30,7 @@ public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Vo
     case Empty
 }
 
+@MainActor
 @objcMembers
 public class PTMediaBrowserConfig: NSObject {
     public static let share = PTMediaBrowserConfig()
@@ -58,17 +59,17 @@ public class PTMediaBrowserConfig: NSObject {
     ///背景模糊
     public var dynamicBackground:Bool = false
     ///更多文字设置
-    @MainActor public var showMore:String = "...\("PT More".localized())"
+    public var showMore:String = "...\("PT More".localized())"
     ///保存
-    @MainActor public var saveDesc:String = "PT Media save".localized()
+    public var saveDesc:String = "PT Media save".localized()
     ///删除
-    @MainActor public var deleteDesc:String = "PT Media delete".localized()
+    public var deleteDesc:String = "PT Media delete".localized()
     ///ActionSheet Title
-    @MainActor public var actionTitle:String = "PT Media option".localized()
+    public var actionTitle:String = "PT Media option".localized()
     ///ActionSheet Cancel
-    @MainActor public var actionCancel:String = "PT Button cancel".localized()
+    public var actionCancel:String = "PT Button cancel".localized()
     ///Image reload
-    @MainActor public var imageReloadButton:String = "PT Image load fail".localized()
+    public var imageReloadButton:String = "PT Image load fail".localized()
 
     public var pageControlOption:PTMediaPageControlOption = .scrolling
     
