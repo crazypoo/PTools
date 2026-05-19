@@ -128,10 +128,10 @@ public extension PTPOP where Base == Double {
     }
 }
 
-extension Double: @preconcurrency PTNumberValueAdapterable {
+extension Double: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = Double
-    @MainActor public var adapter: Double {
-        let value = self * adapterScale()
+    public var adapter: Double {
+        let value = self * PTNumberValueAdapter.share.currentScale
         return value
     }
 }

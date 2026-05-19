@@ -32,7 +32,7 @@ public class PTRouterManager: NSObject {
     public static func addGloableRouter(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
                                         _ userInfo: [String: any Any & Sendable],
-                                        forceCheckEnable: Bool = false) async -> Any? {
+                                        forceCheckEnable: Bool = false) async -> (any Sendable)? {
         
         PTRouter.globalOpenFailedHandler { (info) in
             guard let matchFailedKey = info[PTRouter.matchFailedKey] as? String else { return }
@@ -59,8 +59,8 @@ extension PTRouterManager {
     // MARK: - 自动注册路由
     public class func registerRouterMap(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
-                                        _ userInfo: [String: any Any & Sendable],
-                                        forceCheckEnable: Bool = false) async -> Any? {
+                                        _ userInfo: [String: Sendable],
+                                        forceCheckEnable: Bool = false) async -> (any Sendable)? {
         Task {
             do {
                 let beginRegisterTime = CFAbsoluteTimeGetCurrent()

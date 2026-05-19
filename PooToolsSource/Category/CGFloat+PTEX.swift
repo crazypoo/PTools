@@ -22,7 +22,7 @@ extension CGFloat: PTProtocolCompatible {}
 public extension CGFloat {
     //MARK: 屏幕分辨率
     /// 屏幕分辨率
-    static let kScreenScale: CGFloat = UIScreen.main.scale
+    @MainActor static let kScreenScale: CGFloat = UIScreen.main.scale
 
     //MARK: 獲取屏幕寬度
     ///獲取屏幕寬度
@@ -42,8 +42,8 @@ public extension CGFloat {
 
     //MARK: 獲取導航欄Bar高度
     ///獲取導航欄Bar高度
-    static let kNavBarHeight: CGFloat = UINavigationController().navigationBar.frame.height
-    static let kNavBarWidth: CGFloat = UINavigationController().navigationBar.frame.width
+    @MainActor static let kNavBarHeight: CGFloat = UINavigationController().navigationBar.frame.height
+    @MainActor static let kNavBarWidth: CGFloat = UINavigationController().navigationBar.frame.width
 
     //MARK: Picker height
     static let kPickerHeight: CGFloat = 216
@@ -124,11 +124,6 @@ public extension PTPOP where Base == CGFloat {
 extension CGFloat: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = CGFloat
     public var adapter: CGFloat {
-        var value:CGFloat = 0
-        Task { @MainActor in
-            let scale = adapterScale()
-            value = self * scale
-        }
-        return value
+        return self * PTNumberValueAdapter.share.currentScale
     }
 }

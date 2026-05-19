@@ -211,12 +211,12 @@ public class PTCheckUpdateFunction: NSObject {
     
     //MARK: LoadingHud
     var hud:PTHudView?
-
+    
     public enum PTUpdateAlertType:Int {
         case System
         case User
     }
-        
+    
     @MainActor public func renewVersion(newVersion:String) -> (String,String) {
         var appStoreVersion = newVersion.replacingOccurrences(of: ".", with: "")
         if appStoreVersion.nsString.length == 2 {
@@ -235,9 +235,9 @@ public class PTCheckUpdateFunction: NSObject {
     }
     
     @MainActor public func tfUpdate(force:Bool,
-                         version:String,
-                         note:String?,
-                         url:URL?) {
+                                    version:String,
+                                    note:String?,
+                                    url:URL?) {
         var okBtns = [String]()
         if force {
             okBtns = ["PT Upgrade".localized()]
@@ -271,10 +271,10 @@ public class PTCheckUpdateFunction: NSObject {
     }
     
     @MainActor public func updateAlert(force:Bool,
-                            appid:String,
-                            version:String,
-                            note:String?,
-                            alertType:PTUpdateAlertType = .System) {
+                                       appid:String,
+                                       version:String,
+                                       note:String?,
+                                       alertType:PTUpdateAlertType = .System) {
         let versionResult = self.renewVersion(newVersion: version)
         let currentVersion = versionResult.0
         let appStoreVersion = versionResult.1
@@ -305,16 +305,16 @@ public class PTCheckUpdateFunction: NSObject {
                 }
             }
         }
-
+        
     }
     
     @MainActor public func checkUpdateAlert(appid:String,
-                                 test:Bool,
-                                 url:URL?,
-                                 version:String,
-                                 note:String?,
-                                 force:Bool,
-                                 alertType:PTUpdateAlertType = .System) {
+                                            test:Bool,
+                                            url:URL?,
+                                            version:String,
+                                            note:String?,
+                                            force:Bool,
+                                            alertType:PTUpdateAlertType = .System) {
         if test {
             self.tfUpdate(force: force, version: version, note: note, url: url)
         } else {
@@ -323,12 +323,12 @@ public class PTCheckUpdateFunction: NSObject {
     }
     
     @MainActor public func checkTheVersionWithappid(appid:String? = nil,
-                                         test:Bool,
-                                         url:URL?,
-                                         version:String?,
-                                         note:String?,
-                                         force:Bool,
-                                         alertType:PTUpdateAlertType = .System) {
+                                                    test:Bool,
+                                                    url:URL?,
+                                                    version:String?,
+                                                    note:String?,
+                                                    force:Bool,
+                                                    alertType:PTUpdateAlertType = .System) {
         let aID = appid ?? PTAppBaseConfig.share.appID
         if test {
             self.tfUpdate(force: force, version: version ?? "1.0.0", note: note, url: url)
@@ -358,7 +358,7 @@ public class PTCheckUpdateFunction: NSObject {
             }
         }
     }
-        
+    
     @MainActor func alert_Tips(tipsTitle: String = "",
                                cancelTitle: String = "",
                                cancelBlock: PTActionTask? = nil,
@@ -413,19 +413,19 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
     
-    @MainActor private func hudConfig() {
-        let hudConfig = PTHudConfig.share
-        hudConfig.hudColors = [.gray,.gray]
-        hudConfig.lineWidth = 4
+    private func hudConfig() {
+        Task { @MainActor in
+            let hudConfig = PTHudConfig.share
+            hudConfig.hudColors = [.gray,.gray]
+            hudConfig.lineWidth = 4
+        }
     }
     
     func hudShow() {
-        Task { @MainActor in
-            self.hudConfig()
-            if self.hud == nil {
-                self.hud = PTHudView()
-                self.hud!.hudShow()
-            }
+        self.hudConfig()
+        if self.hud == nil {
+            self.hud = PTHudView()
+            self.hud!.hudShow()
         }
     }
     
@@ -437,7 +437,7 @@ public class PTCheckUpdateFunction: NSObject {
             }
         }
     }
-
+    
     private class func toggleHud(show:Bool) {
         PTGCDManager.shared.runOnMain {
             show ? PTCheckUpdateFunction.share.hudShow() : PTCheckUpdateFunction.share.hudHide()
@@ -449,7 +449,7 @@ public class PTCheckUpdateFunction: NSObject {
         // 设置 iat 和 exp 时间
         let currentDate = Date()
         let expirationDate = currentDate.addingTimeInterval(expTime) // 有效期 20 分钟
-
+        
         // 创建 JWT Claims
         let claims = PTAppleClaims(
             iss: issuerID,
@@ -457,11 +457,11 @@ public class PTCheckUpdateFunction: NSObject {
             exp: expirationDate,
             aud: "appstoreconnect-v1"
         )
-
+        
         // 创建 JWT Header
         var jwtHeader = Header()
         jwtHeader.kid = keyID
-
+        
         // 生成 JWT
         var jwt = JWT(header: jwtHeader, claims: claims)
         do {
@@ -473,12 +473,12 @@ public class PTCheckUpdateFunction: NSObject {
             return nil
         }
     }
-
+    
     public static func appConnectApiRequest<T:SmartCodableX>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
         if showHud {
             toggleHud(show: true)
         }
-
+        
         Task {
             do {
                 let headerDic = ["Authorization":"Bearer \(token)","Content-Type":"application/json"]
@@ -499,75 +499,96 @@ public class PTCheckUpdateFunction: NSObject {
             }
         }
     }
-
-    public static func fetchTestFlightBuilds(issuerID:String,keyID:String,privateKey:String,expTime:TimeInterval = 1200,updateModelCallback:@escaping ((PTTFUpdateCustomModel?) -> Void)) {
-        guard let token = generateJWT(issuerID:issuerID,keyID:keyID,privateKey:privateKey,expTime:expTime) else {
+    
+    @MainActor
+    final class PTTFUpdateState {
+        var build: String = "1.0.0"
+        var note: String = ""
+        var downLoadLink: String = ""
+    }
+    
+    public static func fetchTestFlightBuilds(issuerID: String, keyID: String, privateKey: String, expTime: TimeInterval = 1200, updateModelCallback: @escaping @Sendable (PTTFUpdateCustomModel?) -> Void) {
+        
+        guard let token = generateJWT(issuerID: issuerID, keyID: keyID, privateKey: privateKey, expTime: expTime) else {
             PTNSLogConsole("无法生成 JWT")
             return
         }
         
         PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/builds", modelType: PTTFModelCollection.self) { result, jsonString in
+            
+            guard let resultModel = result as? PTTFModelCollection,
+                  let firstData = resultModel.data?.first,
+                  !firstData.id.stringIsEmpty() else {
+                Task { @MainActor in updateModelCallback(nil) }
+                return
+            }
+            
+            let buildId = firstData.id
+            let apiUrlString = firstData.relationships?.betaBuildLocalizations?.links?.related ?? ""
+            
             Task { @MainActor in
-                if let resultModel = result as? PTTFModelCollection {
-                    var build:String = ""
-                    var note = ""
-                    var downLoadLink = ""
-                    if let buildId = resultModel.data?[0].id,!buildId.stringIsEmpty() {
-                        await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 3, threadCount: 3) { currentIndex in
-                            Task { @MainActor in
-                                switch currentIndex {
-                                case 0:
-                                    PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/buildBetaDetails/\(buildId)/build", modelType: PTTFNewerBuildVersionModel.self,showHud: false) { newerResult, newerJsonString in
-                                        Task { @MainActor in
-                                            if let resultModelBuilda = newerResult as? PTTFNewerBuildVersionModel {
-                                                build = resultModelBuilda.data?.attributes?.version ?? "1.0.0"
-                                            }
-                                        }
-                                    } fail: { error in
-                                    }
-                                case 1:
-                                    PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: resultModel.data?[0].relationships?.betaBuildLocalizations?.links?.related ?? "", modelType: PTTFModelCollection.self,showHud: false) { infoResult, infoJsonString in
-                                        Task { @MainActor in
-                                            if let resultModelBuilda = infoResult as? PTTFModelCollection {
-                                                note = resultModelBuilda.data?.first?.attributes?.whatsNew ?? ""
-                                            }
-                                        }
-                                    } fail: { error in
-                                    }
-                                case 2:
-                                                                    
-                                    let para = ["filter[app]":PTAppBaseConfig.share.appID,"fields[betaGroups]":"name,publicLink"]
-                                    PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/betaGroups", parameters: para,modelType: PTTFModelCollection.self,showHud: false) { newerResult, newerJsonString in
-                                        Task { @MainActor in
-                                            if let resultModelBuilda = newerResult as? PTTFModelCollection {
-                                                downLoadLink = resultModelBuilda.data?.filter { !($0.attributes?.publicLink ?? "").stringIsEmpty() }.first?.attributes?.publicLink ?? ""
-                                            }
-                                        }
-                                    } fail: { error in
-                                    }
-                                default:break
+                // 💡 修复点 1：实例化我们的状态类。用 let 声明，这样跨闭包捕获它是绝对安全的！
+                let updateState = PTTFUpdateState()
+                
+                // 💡 修复点 2：将 appID 提前在主线程读取出来，避免在后台闭包里发生数据竞争
+                let appID = PTAppBaseConfig.share.appID
+                
+                await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 3, threadCount: 3) { currentIndex in
+                    switch currentIndex {
+                    case 0:
+                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/buildBetaDetails/\(buildId)/build", modelType: PTTFNewerBuildVersionModel.self, showHud: false) { newerResult, _ in
+                            
+                            if let resultModelBuilda = newerResult as? PTTFNewerBuildVersionModel,
+                               let versionStr = resultModelBuilda.data?.attributes?.version {
+                                Task { @MainActor in
+                                    // 通过常量实例去修改属性，安全！
+                                    updateState.build = versionStr
                                 }
                             }
-                        } allRequestsFinished: {
-                            Task { @MainActor in
-                                PTNSLogConsole("\(build)\(note)")
-                                let updateModel = PTTFUpdateCustomModel()
-                                updateModel.version = build
-                                updateModel.downloadURL = downLoadLink
-                                updateModel.desc = note
-                                
-                                updateModelCallback(updateModel)
+                        } fail: { _ in }
+                        
+                    case 1:
+                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: apiUrlString, modelType: PTTFModelCollection.self, showHud: false) { infoResult, _ in
+                            
+                            if let resultModelBuilda = infoResult as? PTTFModelCollection,
+                               let whatsNewStr = resultModelBuilda.data?.first?.attributes?.whatsNew {
+                                Task { @MainActor in
+                                    updateState.note = whatsNewStr
+                                }
                             }
-                        }
-                    } else {
-                        updateModelCallback(nil)
+                        } fail: { _ in }
+                        
+                    case 2:
+                        // 使用刚刚提前提取出来的 appID
+                        let para = ["filter[app]": appID, "fields[betaGroups]": "name,publicLink"]
+                        PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/betaGroups", parameters: para, modelType: PTTFModelCollection.self, showHud: false) { newerResult, _ in
+                            
+                            if let resultModelBuilda = newerResult as? PTTFModelCollection,
+                               let linkStr = resultModelBuilda.data?.filter({ !($0.attributes?.publicLink ?? "").stringIsEmpty() }).first?.attributes?.publicLink {
+                                Task { @MainActor in
+                                    updateState.downLoadLink = linkStr
+                                }
+                            }
+                        } fail: { _ in }
+                        
+                    default: break
                     }
-                } else {
-                    updateModelCallback(nil)
+                    
+                } allRequestsFinished: {
+                    Task { @MainActor in
+                        // 💡 最终完成时，直接从我们的状态类中取值即可
+                        PTNSLogConsole("\(updateState.build)\(updateState.note)")
+                        let updateModel = PTTFUpdateCustomModel()
+                        updateModel.version = updateState.build
+                        updateModel.downloadURL = updateState.downLoadLink
+                        updateModel.desc = updateState.note
+                        
+                        updateModelCallback(updateModel)
+                    }
                 }
             }
-        } fail: { error in
-            updateModelCallback(nil)
+        } fail: { _ in
+            Task { @MainActor in updateModelCallback(nil) }
         }
     }
 }

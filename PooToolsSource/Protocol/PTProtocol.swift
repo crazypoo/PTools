@@ -55,45 +55,99 @@ internal protocol PTSwiftPropertyCompatible {
     var swiftCallBack: SwiftCallBack?  { get set }
 }
 
-@MainActor
-public struct PTNumberValueAdapter {
-    public static var share = PTNumberValueAdapter()
+public final class PTAdapterConfig: @unchecked Sendable {
+    public static let shared = PTAdapterConfig()
+    
+    // 用于缓存计算好的比例，默认值为 1.0
+    private var _cachedScale: Double = 1.0
+    private var isCalculated = false // 标记是否已经计算过
+    
+    // 任何线程都可以安全读取这个比例
+    public var scale: Double {
+        return _cachedScale
+    }
+    
+    // 2. 这个方法限制在主线程，专门用来做初始化计算
+    @MainActor
+    public func calculateScaleIfNeeded() {
+        // 如果已经计算过了，就不再重复计算
+        guard !isCalculated else { return }
         
-    /// 记录适配比例
+        // 优先使用手动设置的比例
+        if let customScale = PTNumberValueAdapter.share.adapterScale {
+            _cachedScale = customScale
+        } else {
+            // 这里都在主线程执行，所以调用 UIDevice 和 kSCREEN_WIDTH 绝对安全
+            let isPad = UIDevice.current.userInterfaceIdiom == .pad
+            if isPad {
+                _cachedScale = 1.5
+            } else {
+                switch CGFloat.kSCREEN_WIDTH {
+                case 0...320:   _cachedScale = 0.85
+                case 321...375: _cachedScale = 1.0
+                case 376...414: _cachedScale = 1.15
+                case 415...:    _cachedScale = 1.3
+                default:        _cachedScale = 1.0
+                }
+            }
+        }
+        isCalculated = true
+    }
+}
+
+public final class PTNumberValueAdapter: @unchecked Sendable {
+    // 使用 let 保证单例本身的引用不会被意外修改
+    public static let share = PTNumberValueAdapter()
+    
+    // 记录用户手动设置的适配比例
     fileprivate var adapterScale: Double?
+    
+    // 内部缓存计算好的最终比例，默认是 1.0
+    private var _calculatedScale: Double = 1.0
+    private var isCalculated = false
+    
+    // 私有化初始化方法，确保单例的唯一性
+    private init() {}
+    
+    // 提供一个供外部在任意线程读取的属性
+    public var currentScale: Double {
+        return _calculatedScale
+    }
+    
+    // 如果你需要手动设置比例，可以通过这个方法
+    public func setAdapterScale(_ scale: Double) {
+        self.adapterScale = scale
+        self._calculatedScale = scale
+        self.isCalculated = true
+    }
+    
+    // 2. 专门在主线程执行的计算方法（因为用到了 UIDevice 和 kSCREEN_WIDTH）
+    @MainActor
+    public func calculateScaleIfNeeded() {
+        // 如果已经计算过，或者用户手动设置过，就不再重复计算
+        guard !isCalculated else { return }
+        
+        if let customScale = adapterScale {
+            _calculatedScale = customScale
+        } else {
+            let isPad = UIDevice.current.userInterfaceIdiom == .pad
+            if isPad {
+                _calculatedScale = 1.5
+            } else {
+                switch CGFloat.kSCREEN_WIDTH {
+                case 0...320:   _calculatedScale = 0.85
+                case 321...375: _calculatedScale = 1.0
+                case 376...414: _calculatedScale = 1.15
+                case 415...:    _calculatedScale = 1.3
+                default:        _calculatedScale = 1.0
+                }
+            }
+        }
+        isCalculated = true
+    }
 }
 
 public protocol PTNumberValueAdapterable {
     associatedtype PTNumberValueAdapterType
     var adapter: PTNumberValueAdapterType { get }
-}
-
-extension PTNumberValueAdapterable {
-    @MainActor func adapterScale() -> Double {
-        if let scale = PTNumberValueAdapter.share.adapterScale {
-            return scale
-        } else {
-            let isPad = UIDevice.current.userInterfaceIdiom == .pad
-            var adjustedScale:Double = 1
-            // 如果是 iPad 设备，进一步调整字体大小
-            if isPad {
-                adjustedScale = 1.5 // iPad 上的字体适当放大
-            } else {
-                // 根据屏幕宽度调整字体大小
-                switch CGFloat.kSCREEN_WIDTH {
-                case 0...320:
-                    adjustedScale = 0.85 // 适用于较小屏幕
-                case 321...375:
-                    adjustedScale = 1 // 适用于中等屏幕
-                case 376...414:
-                    adjustedScale = 1.15 // 适用于较大屏幕
-                case 415...:
-                    adjustedScale = 1.3 // 适用于最大屏幕
-                default:
-                    adjustedScale = 1
-                }
-            }
-            return adjustedScale
-        }
-    }
 }

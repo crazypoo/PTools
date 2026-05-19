@@ -53,7 +53,7 @@ public class PTWhatsNews:NSObject {
 @objcMembers
 public class PTWhatsNewsTitleItem:NSObject {
     public var title:String = ""
-    public var titleFont:UIFont = UIFont.appfont(size: 26,bold: true)
+    public var titleFont:UIFont = .systemFont(ofSize: 26)
     public var titleColor:UIColor = .black
     public var atts:ASAttributedString?
     public var textAlignment:NSTextAlignment = .center
@@ -70,7 +70,7 @@ public class PTWhatsNewsTitleItem:NSObject {
 @objcMembers
 public class PTWhatsNewsIKnowItem:NSObject {
     public var title:String = ""
-    public var titleFont:UIFont = UIFont.appfont(size: 16,bold: true)
+    public var titleFont:UIFont = .systemFont(ofSize: 16)
     public var titleColor:UIColor = .white
     public var backgroundColor:UIColor = .systemBlue
     public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle
@@ -78,7 +78,7 @@ public class PTWhatsNewsIKnowItem:NSObject {
     public var itemSpace:CGFloat = 10
     public var privacy:String = ""
     public var privacyURL:String = ""
-    public var privacyFont:UIFont = .appfont(size: 14)
+    public var privacyFont:UIFont = .systemFont(ofSize: 14)
     public var privacyColor:UIColor = .systemBlue
 
     public init(title: String = "I Know",
@@ -109,11 +109,11 @@ public class PTWhatsNewsIKnowItem:NSObject {
 @objcMembers
 public class PTWhatsNewsItem:NSObject {
     public var title:String = ""
-    public var titleFont:UIFont = UIFont.appfont(size: 20,bold: true)
+    public var titleFont:UIFont = .systemFont(ofSize: 20)
     public var titleColor:UIColor = .black
     public var contentSpace:CGFloat = 2
     public var subTitle:String = ""
-    public var subTitleFont:UIFont = UIFont.appfont(size: 16,bold: true)
+    public var subTitleFont:UIFont = .systemFont(ofSize: 16)
     public var subTitleColor:UIColor = .lightGray
     public var newsImage:Any?
     

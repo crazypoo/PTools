@@ -100,11 +100,7 @@ public extension Int {
 extension Int: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = Int
     public var adapter: Int {
-        var value:Double = 0
-        Task { @MainActor in
-            let scale = adapterScale()
-            value = Double(self) * scale
-        }
+        let value:Double = Double(self) * PTNumberValueAdapter.share.currentScale
         return Int(value)
     }
 }

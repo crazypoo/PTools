@@ -21,9 +21,7 @@ public extension UIFont {
         }
         
         if scale {
-            Task { @MainActor in
-                setFont = setFont.adapter
-            }
+            setFont = setFont.adapter
         }
         return setFont
     }
@@ -37,10 +35,7 @@ public extension UIFont {
         } else {
             if var setFont = UIFont(name: customFont, size: size) {
                 if scale {
-                    Task { @MainActor in
-                        setFont = setFont.adapter
-                    }
-                    return setFont
+                    return setFont.adapter
                 }
                 return setFont
             } else {
@@ -49,16 +44,14 @@ public extension UIFont {
         }
     }
         
-    @objc class func systemFont(ofSize size: CGFloat, 
+    @objc class func systemFont(ofSize size: CGFloat,
                                 weight: UIFont.Weight,
                                 design: UIFontDescriptor.SystemDesign,
                                 scale:Bool = false) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
         var setFont = UIFont(descriptor: descriptor!, size: size)
-        Task { @MainActor in
-            setFont = scale ? setFont.adapter : setFont
-        }
+        setFont = scale ? setFont.adapter : setFont
         return setFont
     }
     
@@ -203,13 +196,9 @@ public extension UIFont {
     }
 }
 
-extension UIFont:PTNumberValueAdapterable {
+extension UIFont: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = UIFont
     public var adapter: UIFont {
-        var adjustedSize:CGFloat = 0
-        Task { @MainActor in
-            adjustedSize = adapterScale() * self.pointSize
-        }
-        return UIFont(descriptor: self.fontDescriptor, size: adjustedSize)
+        return UIFont(descriptor: self.fontDescriptor, size: PTNumberValueAdapter.share.currentScale * self.pointSize)
     }
 }

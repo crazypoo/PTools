@@ -8,8 +8,7 @@
 
 import Foundation
 
-public typealias PTServiceCreator = () -> Sendable
-
+public typealias PTServiceCreator = @Sendable () -> any Sendable
 // 1. 服务生命周期定义
 public enum PTServiceScope {
     case singleton  // 单例：全局唯一，强缓存
@@ -28,7 +27,7 @@ public actor PTRouterServiceManager {
     private init() {}
     
     // MARK: - 基础强类型注册与获取 (核心方法)
-    public func registerService<Service>(_ serviceType: Service.Type, scope: PTServiceScope = .singleton, creator: @escaping () -> Service) {
+    public func registerService<Service>(_ serviceType: Service.Type, scope: PTServiceScope = .singleton, creator: @Sendable @escaping () -> Service) {
         let key = PTRouterServiceManager.serviceName(of: serviceType)
         creatorsMap[key] = (scope, creator)
     }
@@ -75,7 +74,7 @@ public extension PTRouterServiceManager {
         registerService(named: named, scope: scope, creator: lazyCreator)
     }
     
-    func registerService<Service>(_ service: Service.Type, scope: PTServiceScope = .singleton, lazyCreator: @escaping @autoclosure () -> Service) {
+    func registerService<Service>(_ service: Service.Type, scope: PTServiceScope = .singleton, lazyCreator: @Sendable @escaping @autoclosure () -> Service) {
         registerService(named: PTRouterServiceManager.serviceName(of: service), scope: scope, creator: lazyCreator)
     }
     

@@ -725,7 +725,7 @@ extension PTRouter {
 
     @discardableResult
     @MainActor // 确保 UI 跳转在主线程
-    public class func openURL(_ urlString: String, userInfo: [String: any Any & Sendable] = [:]) async throws -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: any Any & Sendable] = [:]) async throws -> (any Sendable)? {
         // 1. 执行异步拦截检查
         let canContinue = await executeAsyncIntercept(urlString, queries: userInfo)
         guard canContinue else {
@@ -737,7 +737,7 @@ extension PTRouter {
     }
 
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Sendable] = [String: Sendable](), complateHandler: ComplateHandler = nil) async throws -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: Sendable] = [String: Sendable](), complateHandler: ComplateHandler = nil) async throws -> (any Sendable)? {
         if urlString.isEmpty {
             throw PTRouterError.notFound(url: urlString)
         }
