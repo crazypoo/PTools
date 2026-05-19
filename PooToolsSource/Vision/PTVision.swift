@@ -10,6 +10,20 @@ import UIKit
 import Vision
 import VisionKit
 
+public struct PTVisionTextResult: @unchecked Sendable {
+    public let text: String
+    public let observations: [VNRecognizedTextObservation]
+    
+    public init(text: String, observations: [VNRecognizedTextObservation]) {
+        self.text = text
+        self.observations = observations
+    }
+}
+
+private struct PTObservationBox: @unchecked Sendable {
+    let items: [VNRecognizedTextObservation]
+}
+
 // 1. 标记为 final 和 Sendable，向 Swift 6 证明这个单例是跨线程安全的
 public final class PTVision: NSObject, @unchecked Sendable {
     
@@ -61,15 +75,16 @@ public final class PTVision: NSObject, @unchecked Sendable {
             }
         }
     }
-    
+        
     // MARK: - OCR查找文字方法(UIImage) (Async/Await)
     public static func findText(withImage image: UIImage,
                                 revision: Int = VNRecognizeTextRequestRevision2,
-                                recognitionLanguages: [String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> (String, [VNRecognizedTextObservation]) {
+                                recognitionLanguages: [String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> PTVisionTextResult {
         
         try await withCheckedThrowingContinuation { continuation in
             PTVision.share.findText(withImage: image, revision: revision, recognitionLanguages: recognitionLanguages) { resultText, textObservations in
-                continuation.resume(returning: (resultText, textObservations))
+                let safeResult = PTVisionTextResult(text: resultText, observations: textObservations)
+                continuation.resume(returning: safeResult)
             }
         }
     }
@@ -103,11 +118,11 @@ public final class PTVision: NSObject, @unchecked Sendable {
                         let candidates = observation.topCandidates(maximumCandidates)
                         resultText += candidates.map { $0.string }.joined(separator: "\n")
                     }
-
+                    let safeBox = PTObservationBox(items: observations)
                     // 3. 计算完成后，安全地切回主线程进行回调，方便外部直接更新 UI
                     Task { @MainActor in
                         PTNSLogConsole(resultText, levelType: PTLogMode, loggerType: .vision)
-                        resultBlock?(resultText, observations)
+                        resultBlock?(resultText, safeBox.items)
                     }
                 }
             }

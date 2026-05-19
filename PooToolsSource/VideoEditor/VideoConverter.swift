@@ -21,6 +21,16 @@ open class VideoConverter {
     public var option: ConverterOption?
 
     private var assetExportsSession: AVAssetExportSession?
+    private struct PTSafeExportSessionBox: @unchecked Sendable {
+        let session: AVAssetExportSession?
+    }
+    
+    private struct PTSafeAudioExportBox: @unchecked Sendable {
+        let reader: AVAssetReader
+        let writer: AVAssetWriter
+        let trackOutput: AVAssetReaderTrackOutput
+        let writerInput: AVAssetWriterInput
+    }
     
     // 进度回调，标记为 @Sendable 以允许跨线程安全传递
     private var progressCallback: (@Sendable (Double?) -> Void)?
@@ -312,11 +322,17 @@ open class VideoConverter {
             exportSession?.videoComposition = avc
         }
 
-        // 【优化】：使用 Swift 并发的死循环监听，彻底抛弃 Timer，避免内存泄漏和线程警告
-        Task {
-            while exportSession?.status == .exporting || exportSession?.status == .waiting {
-                if let progress = exportSession?.progress {
-                    self.progressCallback?(Double(progress))
+        let safeBox = PTSafeExportSessionBox(session: exportSession)
+
+        // 【优化】：使用 Swift 并发的死循环监听，彻底抛弃 Timer
+        Task { [weak self] in // 💡 优化点：添加 [weak self] 防止内存泄漏
+            // 💡 修复点 2：通过 safeBox 安全地访问 session，消除数据竞争警告
+            while safeBox.session?.status == .exporting || safeBox.session?.status == .waiting {
+                if let progress = safeBox.session?.progress {
+                    // 如果 progressCallback 会更新 UI，强烈建议在这里也切回主线程执行
+                    Task { @MainActor in
+                        self?.progressCallback?(Double(progress))
+                    }
                 }
                 // 每 0.1 秒检查一次
                 try? await Task.sleep(nanoseconds: 100_000_000)
@@ -327,12 +343,14 @@ open class VideoConverter {
             // AVAssetExportSession 的回调可能在任意后台队列，安全切回主线程
             Task { @MainActor in
                 guard let self = self else { return }
-                if exportSession?.status == .completed {
+                
+                // 💡 修复点 3：在这里也使用 safeBox 来读取状态，保证全局的安全与统一
+                if safeBox.session?.status == .completed {
                     self.progressCallback?(1)
                     completion(url, nil)
                     self.restore(cleanupDisk: false)
                 } else {
-                    completion(nil, exportSession?.error)
+                    completion(nil, safeBox.session?.error)
                     self.restore(cleanupDisk: true)
                 }
             }
@@ -385,50 +403,50 @@ open class VideoConverter {
             
             // 提取 progressCallback 供内部使用，避免在后台队列捕捉 MainActor 的 self
             let localProgressCallback = self.progressCallback
-            
-            writerInput.requestMediaDataWhenReady(on: audioQueue) { [weak self] in
-                Task { @MainActor in
-                    // 此时代码正在后台的 audioQueue 执行
-                    while writerInput.isReadyForMoreMediaData {
+            let safeBox = PTSafeAudioExportBox(reader: assetReader, writer: assetWriter, trackOutput: trackOutput, writerInput: writerInput)
+            safeBox.writerInput.requestMediaDataWhenReady(on: audioQueue) { [weak self] in
+                // 💡 修复点 2：去掉了原本包裹在整个 while 外面的 Task { @MainActor in }
+                // 让繁重的 SampleBuffer 处理直接在这个 audioQueue 后台队列上飞速运行
+                
+                while safeBox.writerInput.isReadyForMoreMediaData {
+                    
+                    if self?.isCancelledState == true {
+                        safeBox.writerInput.markAsFinished()
+                        safeBox.writer.cancelWriting()
+                        safeBox.reader.cancelReading()
+                        return
+                    }
+                    
+                    if let sampleBuffer = safeBox.trackOutput.copyNextSampleBuffer() {
+                        safeBox.writerInput.append(sampleBuffer)
                         
-                        // 【核心修复】：使用线程安全的锁标志判断，而不直接访问主线程隔离的 `self.option`
-                        if self?.isCancelledState == true {
-                            writerInput.markAsFinished()
-                            assetWriter.cancelWriting()
-                            assetReader.cancelReading()
-                            return
-                        }
-                        
-                        if let sampleBuffer = trackOutput.copyNextSampleBuffer() {
-                            writerInput.append(sampleBuffer)
+                        if totalDuration > 0 {
+                            let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+                            let progress = timeStamp.seconds / totalDuration
                             
-                            if totalDuration > 0 {
-                                let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-                                let progress = timeStamp.seconds / totalDuration
-                                
-                                // 切回主线程去更新 UI 进度
-                                Task { @MainActor in
-                                    localProgressCallback?(progress)
+                            // 💡 修复点 3：仅仅在这里切回主线程去更新 UI 进度
+                            Task { @MainActor in
+                                localProgressCallback?(progress)
+                            }
+                        }
+                    } else {
+                        safeBox.writerInput.markAsFinished()
+                        
+                        safeBox.writer.finishWriting {
+                            // 💡 修复点 4：导出彻底完成后，切回主线程执行完成回调
+                            Task { @MainActor in
+                                guard let self = self else { return }
+                                if safeBox.writer.status == .completed {
+                                    self.progressCallback?(1.0)
+                                    completion(url, nil)
+                                    self.restore(cleanupDisk: false)
+                                } else {
+                                    completion(nil, safeBox.writer.error)
+                                    self.restore(cleanupDisk: true)
                                 }
                             }
-                        } else {
-                            writerInput.markAsFinished()
-                            
-                            assetWriter.finishWriting {
-                                Task { @MainActor in
-                                    guard let self = self else { return }
-                                    if assetWriter.status == .completed {
-                                        self.progressCallback?(1.0)
-                                        completion(url, nil)
-                                        self.restore(cleanupDisk: false)
-                                    } else {
-                                        completion(nil, assetWriter.error)
-                                        self.restore(cleanupDisk: true)
-                                    }
-                                }
-                            }
-                            break
                         }
+                        break
                     }
                 }
             }
