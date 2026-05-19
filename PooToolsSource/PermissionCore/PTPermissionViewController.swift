@@ -13,6 +13,7 @@ import HealthKit
 #endif
 import DeviceKit
 
+@MainActor
 @objcMembers
 public class PTPermissionStatic:NSObject {
     public static let share = PTPermissionStatic()

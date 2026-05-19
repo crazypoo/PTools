@@ -17,7 +17,7 @@ public class PTRouterBridge: NSObject {
     
     // 方法1：根据URL字符串打开
     @discardableResult
-    public class func openURL(_ urlString: String, userInfo: [String: Any] = [String: Any](), complateHandler: ComplateHandler = nil) async throws -> Any? {
+    public class func openURL(_ urlString: String, userInfo: [String: Sendable] = [:], complateHandler: ComplateHandler = nil) async throws -> (any Sendable)? {
         Task {
             do {
                 let anys = try await PTRouter.openURL(urlString, userInfo: userInfo, complateHandler: complateHandler)
@@ -32,19 +32,19 @@ public class PTRouterBridge: NSObject {
     
     // 方法2：根据URL元组打开
     @discardableResult
-    public class func openURL(_ uriTuple: (String, [String: Any]), complateHandler: ComplateHandler = nil) async -> Any? {
+    public class func openURL(_ uriTuple: (String, [String: Sendable]), complateHandler: ComplateHandler = nil) async -> Any? {
         return await PTRouter.openURL(uriTuple, complateHandler: complateHandler)
     }
 
     // 方法3：根据URL元组打开WebURL
     @discardableResult
-    public class func openWebURL(_ uriTuple: (String, [String: Any])) async -> Any? {
+    public class func openWebURL(_ uriTuple: (String, [String: Sendable])) async -> Any? {
         return await PTRouter.openURL(uriTuple)
     }
 
      // 方法4：根据URL字符串打开WebURL
     @discardableResult
-    public class func openWebURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) async -> Any? {
+    public class func openWebURL(_ urlString: String, userInfo: [String: Sendable] = [:]) async -> Any? {
         return await PTRouter.openURL((urlString, userInfo))
     }
 }

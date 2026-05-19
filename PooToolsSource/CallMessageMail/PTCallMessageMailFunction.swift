@@ -13,6 +13,7 @@ import MessageUI
 public typealias MessageResultBlock = (_ sendResult: MessageComposeResult) -> Void
 public typealias MailResultBlock = (_ sendResult: MFMailComposeResult) -> Void
 
+@MainActor
 @objcMembers
 public class PTCallMessageMailFunction: NSObject {
     public static let share = PTCallMessageMailFunction()
@@ -34,7 +35,7 @@ public class PTCallMessageMailFunction: NSObject {
         }
     }
     
-    @MainActor public class func sendMessage(content:String,
+    public class func sendMessage(content:String,
                                   users:[String],
                                   resultBlock:MessageResultBlock?) {
         let vc = MFMessageComposeViewController()
@@ -46,7 +47,7 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     
-    @MainActor public class func sendMail(title:String,
+    public class func sendMail(title:String,
                                content:String,
                                recipients:[String]?,
                                ccRecipients:[String]?,
@@ -84,7 +85,7 @@ public class PTCallMessageMailFunction: NSObject {
 }
 
 extension PTCallMessageMailFunction:WKNavigationDelegate {
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    @nonobjc public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.url,
               let scheme = url.scheme?.lowercased() else {
             decisionHandler(.allow)
@@ -100,14 +101,14 @@ extension PTCallMessageMailFunction:WKNavigationDelegate {
     }
 }
 
-extension PTCallMessageMailFunction:MFMessageComposeViewControllerDelegate {
+extension PTCallMessageMailFunction:@preconcurrency MFMessageComposeViewControllerDelegate {
     public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true)
         messageResultBlock?(result)
     }
 }
 
-extension PTCallMessageMailFunction:MFMailComposeViewControllerDelegate {
+extension PTCallMessageMailFunction:@preconcurrency MFMailComposeViewControllerDelegate {
     public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true) {
             self.mailResultBlock?(result)

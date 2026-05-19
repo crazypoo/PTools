@@ -1100,7 +1100,7 @@ extension PTFuncDetailViewController {
     }
 }
 
-extension PTFuncDetailViewController:GCDWebUploaderDelegate {
+extension PTFuncDetailViewController:@preconcurrency GCDWebUploaderDelegate {
     func webUploader(_ uploader: GCDWebUploader, didUploadFileAtPath path: String) {
         PTNSLogConsole("[UPLOAD] \(path)")
     }

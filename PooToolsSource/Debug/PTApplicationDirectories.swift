@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class PTApplicationDirectories {
+final class PTApplicationDirectories: @unchecked Sendable {
     static let shared = PTApplicationDirectories()
 
     var support: URL {

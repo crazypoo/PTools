@@ -13,7 +13,7 @@ import LocalAuthentication
 public let kAccount = "kAccount"
 public let kPassword = "kPassword"
 
-@objc public enum PTBiologyVerifyStatus: Int {
+@objc public enum PTBiologyVerifyStatus: Int,Sendable {
     case success, duplicateItem, itemNotFound, keyboardIDNotFound
     case touchIDNotFound, alertCancel, passwordKilled, unknown
     case keyboardCancel, keyboardTouchID, touchIDNotOpen, failed, systemCancel

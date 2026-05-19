@@ -78,7 +78,7 @@ public final class PTVision: NSObject, @unchecked Sendable {
     public func findText(withImage image: UIImage,
                          revision: Int = VNRecognizeTextRequestRevision2,
                          recognitionLanguages: [String] = ["zh-cn","zh-Hant","zh-Hans","en","es"],
-                         resultBlock: (@Sendable (_ resultText: String, _ textObservations: [VNRecognizedTextObservation]) -> Void)?) {
+                         resultBlock: (@MainActor @Sendable (_ resultText: String, _ textObservations: [VNRecognizedTextObservation]) -> Void)?) {
         
         // 提前在当前线程获取 CGImage，避免在后台访问带有 UI 状态的 UIImage 可能引发的隐患
         guard let cgImage = image.cgImage else {

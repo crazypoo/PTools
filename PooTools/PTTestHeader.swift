@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PTTestHeader: PTBaseCollectionReusableView,PTSupplementaryRegisterable {
+class PTTestHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
     static let ID = "PTTestHeader"
     
     static public var kind: String { UICollectionView.elementKindSectionFooter }

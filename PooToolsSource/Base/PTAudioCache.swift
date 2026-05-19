@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import Alamofire
 
+@MainActor
 public final class PTAudioCacheFileManager {
 
     public static let shared = PTAudioCacheFileManager()
@@ -65,13 +66,10 @@ public final class PTAudioCacheFileManager {
             DispatchQueue.main.async {
                 // 需要转码
                 if PTAudioTranscoder.needTranscode(localURL) {
-                    PTAudioTranscoder.transcodeToM4A(
-                        from: localURL,
-                        to: finalM4AURL
-                    ) { m4aURL in
-                        // 删除原始文件
+                    Task {
+                        let resultURL = await PTAudioTranscoder.transcodeToM4A(from: localURL, to: finalM4AURL)
                         try? FileManager.default.removeItem(at: localURL)
-                        completion(m4aURL)
+                        completion(resultURL)
                     }
                 } else {
                     completion(localURL)
@@ -85,6 +83,7 @@ public final class PTAudioCacheFileManager {
     }
 }
 
+@MainActor
 public final class PTAudioService {
 
     public static let shared = PTAudioService()
@@ -141,32 +140,32 @@ public enum PTAudioTranscoder {
         return ext != "m4a"
     }
 
-    /// 转成 m4a（系统方案）
-    public static func transcodeToM4A(from sourceURL: URL,to targetURL: URL,completion: @escaping (URL?) -> Void) {
+    /// 转成 m4a（Swift 6 原生 async/await 方案）
+    /// - Parameters:
+    ///   - sourceURL: 源音频路径
+    ///   - targetURL: 目标输出路径
+    /// - Returns: 成功则返回 targetURL，失败则返回 nil
+    public static func transcodeToM4A(from sourceURL: URL, to targetURL: URL) async -> URL? {
         let asset = AVURLAsset(url: sourceURL)
 
-        guard AVAssetExportSession.exportPresets(compatibleWith: asset).contains(AVAssetExportPresetAppleM4A) else {
-            completion(nil)
-            return
+        guard AVAssetExportSession.exportPresets(compatibleWith: asset).contains(AVAssetExportPresetAppleM4A),
+              let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A) else {
+            return nil
         }
 
-        let exporter = AVAssetExportSession(
-            asset: asset,
-            presetName: AVAssetExportPresetAppleM4A
-        )
+        exporter.outputURL = targetURL
+        exporter.outputFileType = .m4a
+        exporter.shouldOptimizeForNetworkUse = true
 
-        exporter?.outputURL = targetURL
-        exporter?.outputFileType = .m4a
-        exporter?.shouldOptimizeForNetworkUse = true
+        // 🚀 核心改动：使用原生的 async export() 方法。
+        // 代码会在这里挂起等待，直到导出完成或失败，完全消除了闭包和多线程抢占的风险
+        await exporter.export()
 
-        exporter?.exportAsynchronously {
-            DispatchQueue.main.async {
-                if exporter?.status == .completed {
-                    completion(targetURL)
-                } else {
-                    completion(nil)
-                }
-            }
+        // 导出结束后，直接在当前上下文中读取 status
+        if exporter.status == .completed {
+            return targetURL
+        } else {
+            return nil
         }
     }
 }

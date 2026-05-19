@@ -169,10 +169,10 @@ public class PTRouter: PTRouterParser {
     public var customNavClass: UINavigationController.Type = UINavigationController.self
 
     // MARK: - Constants
-    public typealias FailedHandleBlock = @MainActor ([String: Any]) -> Void
-    public typealias RouteResponse = (pattern: PTRouterPattern?, queries: [String: Any])
-    public typealias MatchResult = (matched: Bool, queries: [String: Any])
-    public typealias LazyRegisterHandleBlock = @MainActor (_ url: String, _ userInfo: [String: Any]) -> (any Sendable)?
+    public typealias FailedHandleBlock = @MainActor ([String: Sendable]) -> Void
+    public typealias RouteResponse = (pattern: PTRouterPattern?, queries: [String: Sendable])
+    public typealias MatchResult = (matched: Bool, queries: [String: Sendable])
+    public typealias LazyRegisterHandleBlock = @MainActor (_ url: String, _ userInfo: [String: Sendable]) -> (any Sendable)?
     public typealias RouterLogHandleBlock = @MainActor (_ url: String, _ logType: PTRouterLogType, _ errorMsg: String) -> Void
     
     // MARK: - 自定义跳转
