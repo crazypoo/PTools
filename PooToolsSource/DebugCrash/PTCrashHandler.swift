@@ -11,6 +11,14 @@ import MachO.dyld
 
 // MARK: - 辅助工具
 
+private struct PTSafeExceptionBox: @unchecked Sendable {
+    let exception: NSException
+}
+
+private struct PTSafeSignalPointerBox: @unchecked Sendable {
+    let info: UnsafeMutablePointer<__siginfo>?
+    let context: UnsafeMutableRawPointer?
+}
 /**
  获取主执行文件的内存偏移量 (ASLR Slide)
  用于在符号化崩溃堆栈时计算真实的内存地址
@@ -53,14 +61,30 @@ private func UncaughtExceptionHandler(exception: NSException) {
     let reason = exception.reason ?? "未知原因"
     let name = exception.name.rawValue
     let crash = "\nName: \(name)\nReason: \(reason)"
-
+    
+    // 2. 🌟 将非线程安全的 exception 装入盒子
+    let safeBox = PTSafeExceptionBox(exception: exception)
+    
+    // 3. 🌟 引入信号量，阻塞当前崩溃线程，确保主线程处理完日志后再杀死进程
+    let semaphore = DispatchSemaphore(value: 0)
+    
     Task { @MainActor in
-        // 触发自定义的回调
-        CrashUncaughtExceptionHandler.exceptionReceiveClosure?(nil, exception, crash, arr)
+        // 4. 🌟 在主线程安全地拆箱
+        let safeException = safeBox.exception
         
-        // 如果系统之前有其他处理器（例如其他第三方 SDK 注册的），继续传递给它们
-        preUncaughtExceptionHandler?(exception)
+        // 触发自定义的回调
+        CrashUncaughtExceptionHandler.exceptionReceiveClosure?(nil, safeException, crash, arr)
+        
+        // 如果系统之前有其他处理器，继续传递给它们
+        preUncaughtExceptionHandler?(safeException)
+        
+        // 处理完毕，通知当前线程可以继续执行并结束进程
+        semaphore.signal()
     }
+    
+    // 等待主线程处理，设置一个 2 秒的超时时间。
+    // 如果主线程本身死锁导致崩溃，超时机制能保证 App 最终能够正常退出，避免卡死。
+    _ = semaphore.wait(timeout: .now() + 2.0)
     
     // 强制杀掉进程，防止程序在异常状态下继续运行导致不可知的错误
     kill(getpid(), SIGKILL)
@@ -110,6 +134,12 @@ public class CrashSignalExceptionHandler {
 private func CrashSignalHandler(signal: Int32, info: UnsafeMutablePointer<__siginfo>?, context: UnsafeMutableRawPointer?) {
     let exceptionInfo = "Signal \(SignalName(signal))"
 
+    // 2. 🌟 将非线程安全的指针装入安全盒子中
+    let safeBox = PTSafeSignalPointerBox(info: info, context: context)
+    
+    // 3. 🌟 引入信号量，阻塞当前崩溃线程，确保主线程处理完日志后再杀进程
+    let semaphore = DispatchSemaphore(value: 0)
+
     Task { @MainActor in
         // 触发自定义回调
         CrashSignalExceptionHandler.exceptionReceiveClosure?(signal, nil, exceptionInfo)
@@ -117,15 +147,25 @@ private func CrashSignalHandler(signal: Int32, info: UnsafeMutablePointer<__sigi
         // 恢复系统默认的信号处理器，防止死循环
         ClearSignalRegister()
 
+        // 4. 🌟 安全拆箱，取出底层指针准备传递
+        let safeInfo = safeBox.info
+        let safeContext = safeBox.context
+
         // 尝试调用崩溃前备份的其他信号处理器（将崩溃信息传递给其他 SDK）
         if let oldAction = previousSignalHandlers[signal] {
             if oldAction.__sigaction_u.__sa_sigaction != nil {
-                oldAction.__sigaction_u.__sa_sigaction(signal, info, context)
+                oldAction.__sigaction_u.__sa_sigaction(signal, safeInfo, safeContext)
             } else if oldAction.__sigaction_u.__sa_handler != nil {
                 oldAction.__sigaction_u.__sa_handler(signal)
             }
         }
+        
+        // 处理完毕，通知崩溃线程可以执行 kill 了
+        semaphore.signal()
     }
+    
+    // 等待主线程处理日志，设置 2 秒的超时时间，防止死锁导致程序假死
+    _ = semaphore.wait(timeout: .now() + 2.0)
     
     // 强制杀掉进程
     kill(getpid(), SIGKILL)

@@ -187,13 +187,18 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
         self.playerLayer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - self.bottomViewHeight)
     }
     
+    private final class PTIndexBox: @unchecked Sendable {
+        var value: Int = -1
+    }
+    
     // MARK: - 私有方法：启动广告序列
     @MainActor private func startAdSequence(adModels: [PTLaunchADModel]) {
         let totalTime: TimeInterval = adModels.reduce(0) { $0 + $1.time }
         let result = buildCountdownTimeline(items: adModels.map { ($0.time, $0) })
         let timeline = result.timeline
-        var currentIndex = -1
         
+        let indexBox = PTIndexBox()
+                
         skipButton.setTitle("\(totalTime)", for: .normal)
         let buttonWidth = skipButton.sizeFor().width + 15
         skipButton.snp.updateConstraints { make in
@@ -216,8 +221,8 @@ public class PTLaunchAdMonitor: NSObject, @unchecked Sendable {
                 
                 guard let newIndex = self.currentCountdownIndex(remainTime: time, totalTime: totalTime, timeline: timeline) else { return }
                 
-                if newIndex != currentIndex {
-                    currentIndex = newIndex
+                if newIndex != indexBox.value {
+                    indexBox.value = newIndex
                     let model = timeline[newIndex].value
                     self.handleAdDisplay(model: model)
                 }

@@ -155,19 +155,21 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
             
             let originalRequest = request
             
-            // 🌟 核心修复：1. 显式弱引用捕获 self 规避 Data Race；2. 内部闭包只使用前面提取出的安全值
+            // 🌟 核心修复：使用你之前定义的 UncheckedSendableBox 将非 Sendable 的 self 包装起来
+            let selfBox = UncheckedSendableBox(self)
+            
             // 异步等待读取 Actor 缓存（跨边界读取数据天然安全）
             Task { @MainActor in
                 if let hitBusinessCacheData = await NetworkCache.shared.read(request: originalRequest) {
                     let fakeResponse = HTTPURLResponse(url: originalRequest.url!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: originalRequest.allHTTPHeaderFields)!
                     let cachedResp = CachedURLResponse(response: fakeResponse, data: hitBusinessCacheData)
                     
-                    // 在 MainActor 保护下安全调用 self 内部方法
-                    self.use(cachedResp)
+                    // 🌟 在 MainActor 保护下，从盒子中取出 self 安全调用内部方法
+                    selfBox.value.use(cachedResp)
                     PTNSLogConsole("Use Business API Cache for \(originalRequest.url?.path ?? "")")
                 } else {
-                    // 在 MainActor 保护下安全发起网络请求
-                    self.startActualNetworkRequest(with: safeRequestToLaunch)
+                    // 🌟 同样从盒子中取出 self 发起实际网络请求
+                    selfBox.value.startActualNetworkRequest(with: safeRequestToLaunch)
                 }
             }
         } else {

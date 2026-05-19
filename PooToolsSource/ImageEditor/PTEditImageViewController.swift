@@ -222,64 +222,68 @@ public class PTEditImageViewController: PTBaseViewController {
         return view
     }()
     
+    func doneAction() {
+        var stickerStates: [PTBaseStickertState] = []
+        for view in self.stickerEngine.canvasView.subviews {
+            guard let view = view as? PTBaseStickerView else { continue }
+            stickerStates.append(view.state)
+        }
+        
+        var hasEdit = true
+        if self.drawEngine.drawPaths.isEmpty,
+           self.currentClipStatus.editRect.size == self.imageSize,
+           self.currentClipStatus.angle == 0,
+           self.mosaicEngine.mosaicPaths.isEmpty,
+           stickerStates.isEmpty,
+           self.adjustEngine.currentAdjustStatus.allValueIsZero {
+            hasEdit = false
+        }
+        
+        guard hasEdit else {
+            self.dismiss(animated: self.animate) {
+                self.editFinishBlock?(self.originalImage, nil)
+            }
+            return
+        }
+
+        // 2. 弹出提示框
+        PTAlertTipsViewController.tipsAlertShow(title: PTImageEditorConfig.share.doingAlertTitle, icon: .Heart)
+
+        // 3. 🚀 开启现代并发任务进行图片合成
+        Task { @MainActor in
+            // 巧妙的机制：让出当前线程的控制权 (极短暂睡眠)，确保系统的 RunLoop 有时间把上面那句 HUD 渲染到屏幕上
+            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1秒
+            
+            // 开始合成大图 (buildImage 内部有图层渲染，必须在 MainActor 执行)
+            var resImage = self.buildImage()
+            resImage = resImage.pt.clipImage(
+                angle: self.currentClipStatus.angle,
+                editRect: self.currentClipStatus.editRect,
+                isCircle: self.currentClipStatus.ratio?.isCircle ?? false
+            )
+            
+            let editModel = PTEditModel(
+                drawPaths: self.drawEngine.drawPaths,
+                mosaicPaths: self.mosaicEngine.mosaicPaths,
+                clipStatus: self.currentClipStatus,
+                adjustStatus: self.adjustEngine.currentAdjustStatus,
+                selectFilter: self.filterEngine.currentFilter,
+                stickers: stickerStates,
+                actions: self.editorManager.actions
+            )
+            
+            // 合成完毕，直接 dismiss
+            self.dismiss(animated: self.animate) {
+                self.editFinishBlock?(resImage, editModel)
+            }
+        }
+    }
+    
     private lazy var doneButton:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTImageEditorConfig.share.submitImage, for: .normal)
-        view.addActionHandlers { sender in
-            var stickerStates: [PTBaseStickertState] = []
-            for view in self.stickerEngine.canvasView.subviews {
-                guard let view = view as? PTBaseStickerView else { continue }
-                stickerStates.append(view.state)
-            }
-            
-            var hasEdit = true
-            if self.drawEngine.drawPaths.isEmpty,
-               self.currentClipStatus.editRect.size == self.imageSize,
-               self.currentClipStatus.angle == 0,
-               self.mosaicEngine.mosaicPaths.isEmpty,
-               stickerStates.isEmpty,
-               self.adjustEngine.currentAdjustStatus.allValueIsZero {
-                hasEdit = false
-            }
-            
-            guard hasEdit else {
-                self.dismiss(animated: self.animate) {
-                    self.editFinishBlock?(self.originalImage, nil)
-                }
-                return
-            }
-
-            // 2. 弹出提示框
-            PTAlertTipsViewController.tipsAlertShow(title: PTImageEditorConfig.share.doingAlertTitle, icon: .Heart)
-
-            // 3. 🚀 开启现代并发任务进行图片合成
-            Task { @MainActor in
-                // 巧妙的机制：让出当前线程的控制权 (极短暂睡眠)，确保系统的 RunLoop 有时间把上面那句 HUD 渲染到屏幕上
-                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1秒
-                
-                // 开始合成大图 (buildImage 内部有图层渲染，必须在 MainActor 执行)
-                var resImage = self.buildImage()
-                resImage = resImage.pt.clipImage(
-                    angle: self.currentClipStatus.angle,
-                    editRect: self.currentClipStatus.editRect,
-                    isCircle: self.currentClipStatus.ratio?.isCircle ?? false
-                )
-                
-                let editModel = PTEditModel(
-                    drawPaths: self.drawEngine.drawPaths,
-                    mosaicPaths: self.mosaicEngine.mosaicPaths,
-                    clipStatus: self.currentClipStatus,
-                    adjustStatus: self.adjustEngine.currentAdjustStatus,
-                    selectFilter: self.filterEngine.currentFilter,
-                    stickers: stickerStates,
-                    actions: self.editorManager.actions
-                )
-                
-                // 合成完毕，直接 dismiss
-                self.dismiss(animated: self.animate) {
-                    self.editFinishBlock?(resImage, editModel)
-                }
-            }
+        view.addActionHandlers { _ in
+            self.doneAction()
         }
         view.bounds = CGRect(origin: .zero, size: .init(width: 34, height: 34))
         return view

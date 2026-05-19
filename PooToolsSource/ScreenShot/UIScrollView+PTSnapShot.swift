@@ -51,7 +51,7 @@ extension UIScrollView {
         return image
     }
 
-    public func scrollAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping ((UIImage?) -> Void)) {
+    public func scrollAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping @Sendable (UIImage?) -> Void) {
         let originalOffset = self.contentOffset
 
         // 【修复】使用 ceil 向上取整，保证剩余不足一页的内容也能被截取到
