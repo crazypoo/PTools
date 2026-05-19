@@ -130,8 +130,8 @@ public enum NetWorkEnvironment : Int {
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: NetWorkStatus, _ NetWorkEnvironment: NetWorkEnvironment) -> Void
 public typealias UploadProgress = @MainActor @Sendable (_ progress: Progress) -> Void
 public typealias FileDownloadProgress = @MainActor @Sendable (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double) -> ()
-public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<URL?>) -> ()
-public typealias FileDownloadFail = (_ error:Error?) -> ()
+public typealias FileDownloadSuccess = @MainActor @Sendable (_ reponse:AFDownloadResponse<URL?>) -> ()
+public typealias FileDownloadFail = @MainActor @Sendable (_ error:Error?) -> ()
 
 public var PTBaseURLMode:NetWorkEnvironment {
     guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppServiceIdentifier else { return .Distribution }
@@ -919,76 +919,83 @@ public final class Network: @unchecked Sendable {
         return try await RequestDeduplicator.shared.execute(request: urlRequest, policy: policy) { try await realRequest() }
     }
     
+    private struct PTSafeUploadParamsBox: @unchecked Sendable {
+        let media: Any
+        let path: URLConvertible
+    }
+    
     // 确保你的 parser 带有 @Sendable 标记
-        private class func _internalFileUpload<T>(
-            needGobal: Bool,
-            media: Any,
-            path: URLConvertible,
-            method: HTTPMethod,
-            fileKey: String,
-            params: [String: String]?,
-            header: HTTPHeaders?,
-            jsonRequest: Bool,
-            parser: @escaping @Sendable UploadResponseParser<T> // 🌟 关键：标记为 @Sendable
-        ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
-            
-            AsyncThrowingStream { continuation in
-                Task {
-                    do {
-                        // 1️⃣ 数据准备阶段
-                        let preparedMedia = try await prepareMediaResource(media: media)
-                        let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
-                        let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
-                        
-                        // 2️⃣ 手动构建 MultipartFormData 对象，取代闭包构建法！
-                        // 这将消除闭包内捕获局部变量带来的并发安全隐患
-                        let multipartData = MultipartFormData()
-                        
-                        // 填充主文件
-                        switch preparedMedia {
-                        case .data(let data, let mimeType, let fileName):
-                            multipartData.append(data, withName: fileKey, fileName: fileName, mimeType: mimeType)
-                        case .fileURL(let url, let mimeType, let fileName):
-                            multipartData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
+    private class func _internalFileUpload<T>(
+        needGobal: Bool,
+        media: Any,
+        path: URLConvertible,
+        method: HTTPMethod,
+        fileKey: String,
+        params: [String: String]?,
+        header: HTTPHeaders?,
+        jsonRequest: Bool,
+        parser: @escaping @Sendable UploadResponseParser<T> // 🌟 关键：标记为 @Sendable
+    ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+        let safeBox = PTSafeUploadParamsBox(media: media, path: path)
+        
+        return AsyncThrowingStream { continuation in
+            Task {
+                do {
+                    // 1️⃣ 数据准备阶段
+                    let preparedMedia = try await prepareMediaResource(media: safeBox.media)
+                    let pathUrl = try await createURLRequest(urlStr: path, needGobal: needGobal)
+                    let apiHeader = prepareRequestHeaders(header: header, jsonRequest: jsonRequest)
+                    
+                    // 2️⃣ 手动构建 MultipartFormData 对象，取代闭包构建法！
+                    // 这将消除闭包内捕获局部变量带来的并发安全隐患
+                    let multipartData = MultipartFormData()
+                    
+                    // 填充主文件
+                    switch preparedMedia {
+                    case .data(let data, let mimeType, let fileName):
+                        multipartData.append(data, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                    case .fileURL(let url, let mimeType, let fileName):
+                        multipartData.append(url, withName: fileKey, fileName: fileName, mimeType: mimeType)
+                    }
+                    
+                    // 填充附加参数
+                    params?.forEach { key, value in
+                        if let data = value.data(using: .utf8) {
+                            multipartData.append(data, withName: key)
                         }
-                        
-                        // 填充附加参数
-                        params?.forEach { key, value in
-                            if let data = value.data(using: .utf8) {
-                                multipartData.append(data, withName: key)
-                            }
+                    }
+                    
+                    let session = Network.share.session
+                    
+                    // 3️⃣ 发起请求，并在回调中显式声明 @Sendable
+                    session.upload(multipartFormData: multipartData, to: pathUrl, method: method, headers: apiHeader)
+                        .uploadProgress { @Sendable progress in // 🌟 显式告诉编译器这是并发安全的闭包
+                            continuation.yield((progress, nil as PTBaseStructModel<T>?))
                         }
-                        
-                        let session = Network.share.session
-                        
-                        // 3️⃣ 发起请求，并在回调中显式声明 @Sendable
-                        session.upload(multipartFormData: multipartData, to: pathUrl, method: method, headers: apiHeader)
-                            .uploadProgress { @Sendable progress in // 🌟 显式告诉编译器这是并发安全的闭包
-                                continuation.yield((progress, nil))
-                            }
-                            .response { @Sendable resp in           // 🌟 显式告诉编译器这是并发安全的闭包
-                                switch resp.result {
-                                case .success(_):
-                                    do {
-                                        // 确保 parser 和其他捕获的变量不会造成数据竞争
-                                        let parsed = try parser(pathUrl, resp.response, resp.data)
-                                        continuation.yield((Progress(totalUnitCount: 1), parsed))
-                                        continuation.finish()
-                                    } catch {
-                                        continuation.finish(throwing: error)
-                                    }
-                                case .failure(let error):
-                                    // 假设 logRequestFailure 为全局函数或已在此上下文安全
-                                    logRequestFailure(url: pathUrl, error: error)
+                        .response { @Sendable resp in           // 🌟 显式告诉编译器这是并发安全的闭包
+                            switch resp.result {
+                            case .success(_):
+                                do {
+                                    // 确保 parser 和其他捕获的变量不会造成数据竞争
+                                    let parsed = try parser(pathUrl, resp.response, resp.data)
+                                    continuation.yield((Progress(totalUnitCount: 1), parsed))
+                                    continuation.finish()
+                                } catch {
                                     continuation.finish(throwing: error)
                                 }
+                            case .failure(let error):
+                                // 假设 logRequestFailure 为全局函数或已在此上下文安全
+                                logRequestFailure(url: pathUrl, error: error)
+                                continuation.finish(throwing: error)
                             }
-                    } catch {
-                        continuation.finish(throwing: error)
-                    }
+                        }
+                } catch {
+                    continuation.finish(throwing: error)
                 }
             }
         }
+    }
+    
     // 🌟 步骤 3：将媒体处理逻辑提取为一个独立的 async 方法
     private class func prepareMediaResource(media: Any) async throws -> PreparedUploadMedia {
         if let phasset = media as? PHAsset {
@@ -1312,7 +1319,7 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {
+    @MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {
         guard fileUrl.isURL(), !fileUrl.stringIsEmpty() else { fail?(AFError.invalidURL(url: "PT URL Error")); return }
         let dest: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options) = { _, _ in
             return (URL(fileURLWithPath: saveFilePath), [.removePreviousFile, .createIntermediateDirectories])
@@ -1332,7 +1339,7 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
+    @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
         try await withCheckedThrowingContinuation { continuation in
             self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil, progress: progress, success: { response in
                 if let fileURL = response.fileURL { continuation.resume(returning: fileURL) }
@@ -1348,14 +1355,16 @@ public final class Network: @unchecked Sendable {
     /// 🌟 全新现代化的流式下载方法，支持在业务层循环获取进度
     public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {
         AsyncThrowingStream { continuation in
-            self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil) { _, _, progress in
-                continuation.yield((progress, nil))
-            } success: { response in
-                if let fileURL = response.fileURL {
-                    continuation.yield((1.0, fileURL))
-                    continuation.finish()
-                } else { continuation.finish(throwing: PTNetworkError.downloadFail) }
-            } fail: { error in continuation.finish(throwing: error ?? PTNetworkError.downloadFail) }
+            Task { @MainActor in
+                self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil) { _, _, progress in
+                    continuation.yield((progress, nil))
+                } success: { response in
+                    if let fileURL = response.fileURL {
+                        continuation.yield((1.0, fileURL))
+                        continuation.finish()
+                    } else { continuation.finish(throwing: PTNetworkError.downloadFail) }
+                } fail: { error in continuation.finish(throwing: error ?? PTNetworkError.downloadFail) }
+            }
         }
     }
 }

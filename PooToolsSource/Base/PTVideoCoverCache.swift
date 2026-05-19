@@ -146,21 +146,23 @@ public final class PTVideoFileCache: Sendable {
     public func prepareVideo(url: URL,
                              progress: FileDownloadProgress? = nil,
                              completion: @escaping @Sendable (URL?) -> Void) { // 🌟 Swift 6: 异步回调标记 @Sendable
-        // 本地文件直接返回
-        if let cached = cachedFileURL(for: url) {
-            completion(cached)
-            return
-        }
+        Task { @MainActor in
+            // 本地文件直接返回
+            if let cached = cachedFileURL(for: url) {
+                completion(cached)
+                return
+            }
 
-        let localURL = cacheURL(for: url)
-        // 确保您的 urlToUnicodeURLString 方法是线程安全的扩展
-        let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
+            let localURL = cacheURL(for: url)
+            // 确保您的 urlToUnicodeURLString 方法是线程安全的扩展
+            let downloadURL = url.absoluteString.urlToUnicodeURLString() ?? ""
 
-        // 假定 Network.share.download 的成功和失败回调在 Swift 6 环境下也支持并发安全
-        Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress: progress) { _ in
-            completion(localURL)
-        } fail: { _ in
-            completion(nil)
+            // 假定 Network.share.download 的成功和失败回调在 Swift 6 环境下也支持并发安全
+            Network.share.download(fileUrl: downloadURL, saveFilePath: localURL.path, progress: progress) { _ in
+                completion(localURL)
+            } fail: { _ in
+                completion(nil)
+            }
         }
     }
 }

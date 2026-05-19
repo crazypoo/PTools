@@ -287,7 +287,7 @@ public extension UIView {
     ///   - completion: An optional block to execute when the animations finish. This block takes the parameter `finalPosition`, which describes the position where the animations stopped. Use this value to specify whether the animations stopped at their starting point, their end point, or their current position.
     static func animate(withKeyboardNotification notification: Notification,
                         animations: @escaping (KeyboardAnimationInfo) -> Void,
-                        completion: ((UIViewAnimatingPosition) -> Void)? = nil) {
+                        completion: KeyboardCompletion? = nil) {
         
         guard let keyboardAnimationInfo = notification.keyboardAnimationInfo else { return }
         

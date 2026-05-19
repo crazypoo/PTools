@@ -49,7 +49,7 @@ class PTAPIFunctionCheck: NSObject {
         return HTTPHeaders.init(headerDic)
     }
 
-    class func swiftApiRequest<T:SmartCodableX>(apiUrl:String,method:HTTPMethod = .post,parameters:[String:String]? = nil,modelType: T.Type,success:@escaping ((Any?) -> Void),fail:@escaping ((String)->Void)) {
+    class func swiftApiRequest<T:SmartCodableX & Sendable>(apiUrl:String,method:HTTPMethod = .post,parameters:[String:String]? = nil,modelType: T.Type,success:@escaping @Sendable (Any?) -> Void,fail:@escaping @Sendable (String)->Void) {
         Task { @MainActor in
             do {
                 let header = PTAPIFunctionCheck.apiHeaderSet(parmas: parameters)

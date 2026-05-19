@@ -135,7 +135,7 @@ extension UITableView {
         }
     }
 
-    public func tableAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping ((UIImage?) -> Void)) {
+    public func tableAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping @Sendable (UIImage?) -> Void) {
         // 真正的异步：主线程采集，后台拼接
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             let originalOffset = self.contentOffset

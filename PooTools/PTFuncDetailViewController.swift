@@ -22,6 +22,10 @@ let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
 
 class PTFuncDetailViewController: PTBaseViewController {
 
+    var pickedPhoto: UIImage?
+    var pickedVideoURL: URL?
+    var disassembleImageURL: URL?
+
     private let pickedVideoName = "pickedExportedVideo.mov"
     
     enum PTLivePhotoMediaSelectedType {
@@ -810,10 +814,6 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
         case String.LivePhoto,String.LivePhotoDisassemble:
             
-            var pickedPhoto: UIImage?
-            var pickedVideoURL: URL?
-            var disassembleImageURL: URL?
-
             let livePhotoView = PHLivePhotoView()
             livePhotoView.contentMode = .scaleAspectFit
             livePhotoView.delegate = self
@@ -835,7 +835,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             case String.LivePhoto:
                 let tap_image = UITapGestureRecognizer { sender in
                     self.livePhotoMediaSelect(type: .Image) { result in
-                        pickedPhoto = result.image
+                        self.pickedPhoto = result.image
                         showImageView.image = result.image
                     }
                 }
@@ -847,8 +847,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                             if let avURLAsset = avAsset {
                                 Task { @MainActor in
                                     let _ = avURLAsset.exportToDocuments(filename: self.pickedVideoName) { outputURL in
-                                        UIImage.pt.getVideoFirstImage(videoUrl: URL(fileURLWithPath: outputURL.absoluteString).absoluteString) { image in
-                                            pickedVideoURL = URL(fileURLWithPath: outputURL.absoluteString)
+                                        let finalURL = URL(fileURLWithPath: outputURL.absoluteString)
+                                        UIImage.pt.getVideoFirstImage(videoUrl: finalURL.absoluteString) { image in
+                                            self.pickedVideoURL = finalURL
                                             videoImageView.image = image
                                         }
                                     }
@@ -862,7 +863,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 videoImageView.addGestureRecognizer(tap_video)
             case String.LivePhotoDisassemble:
                 let tap_image = UITapGestureRecognizer { sender in
-                    if let imagePath = disassembleImageURL?.path {
+                    if let imagePath = self.disassembleImageURL?.path {
                         if FileManager.pt.judgeFileOrFolderExists(filePath: imagePath) {
                             let imageURL = URL(fileURLWithPath: imagePath)
                             PHPhotoLibrary.pt.saveImageUrlToAlbum(fileUrl: imageURL) { finish, error in
@@ -890,7 +891,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 showImageView.addGestureRecognizer(tap_image)
 
                 let tap_video = UITapGestureRecognizer { sender in
-                    if let videoPath = pickedVideoURL?.path {
+                    if let videoPath = self.pickedVideoURL?.path {
                         if FileManager.pt.judgeFileOrFolderExists(filePath: videoPath) {
                             let videoURL = URL(fileURLWithPath: videoPath)
                             PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: videoURL) { finish, error in
@@ -936,14 +937,14 @@ class PTFuncDetailViewController: PTBaseViewController {
                 case String.LivePhoto:
                     Task {
                         do {
-                            guard let sourceVideoPath = pickedVideoURL else {
+                            guard let sourceVideoPath = self.pickedVideoURL else {
                                 Task { @MainActor in
                                     PTAlertTipsViewController.tipsAlertShow(title: "It seems a video was not selected.Try again.", icon: .Error)
                                 }
                                 return
                             }
                             var photoURL: URL?
-                            if let sourceKeyPhoto = pickedPhoto {
+                            if let sourceKeyPhoto = self.pickedPhoto {
                                 guard let data = sourceKeyPhoto.jpegData(compressionQuality: 1.0) else { return }
                                 photoURL = URL(fileURLWithPath: FileManager.pt.DocumnetsDirectory().appendingPathComponent("photo.jpg"))
                                 if let photoURL = photoURL {
@@ -985,9 +986,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                                         livePhotoView.startPlayback(with: .hint)
                                         Task {
                                             let result = try await PTLivePhoto.extractResources(from: lPhoto)
-                                            disassembleImageURL = result.pairedImage
-                                            pickedVideoURL = result.pairedVideo
-                                            if let keyPhotoPath = disassembleImageURL {
+                                            self.disassembleImageURL = result.pairedImage
+                                            self.pickedVideoURL = result.pairedVideo
+                                            if let keyPhotoPath = self.disassembleImageURL {
                                                 if FileManager.pt.judgeFileOrFolderExists(filePath: keyPhotoPath.path) {
                                                     guard let keyPhotoImage = UIImage(contentsOfFile: keyPhotoPath.path) else {
                                                         return
@@ -995,7 +996,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                                                     showImageView.image = keyPhotoImage
                                                 }
                                             }
-                                            if let pairedVideoPath = pickedVideoURL?.path  {
+                                            if let pairedVideoPath = self.pickedVideoURL?.path  {
                                                 if FileManager.pt.judgeFileOrFolderExists(filePath: pairedVideoPath) {
                                                     let fileURL = URL(fileURLWithPath: pairedVideoPath)
                                                     UIImage.pt.getVideoFirstImage(videoUrl: fileURL.absoluteString) { image in

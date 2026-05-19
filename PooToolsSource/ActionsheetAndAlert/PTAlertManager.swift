@@ -132,27 +132,32 @@ private extension PTAlertManager {
     // MARK: Dismiss
     func _dismiss(_ key: String, completion: PTActionTask?) {
 
-        for (scene, var container) in sceneContainers {
-
+        for (scene, container) in sceneContainers {
+                
             guard let window = container.showingWindows[key],
                   let controller = container.showingControllers[key] else { continue }
-
+            
             controller.dismissAnimation { [weak self] in
                 Task { @MainActor [weak self] in
                     guard let self else { return }
                     self.recycle(window)
-
-                    container.showingWindows.removeValue(forKey: key)
-                    container.showingControllers.removeValue(forKey: key)
-
-                    self.updateContainer(container, for: scene)
-
-                    self.makeMainWindowKey(in: scene)
-
-                    Task { @MainActor in
-                        self.showNextIfNeeded(scene: scene)
+                    
+                    // 2. 🌟 核心修复：在安全的 MainActor 上下文中，直接从数据源获取最新的 container 进行修改
+                    if var currentContainer = self.sceneContainers[scene] {
+                        // 安全地修改字典
+                        currentContainer.showingWindows.removeValue(forKey: key)
+                        currentContainer.showingControllers.removeValue(forKey: key)
+                        
+                        // 将修改后的 container 更新回去
+                        self.updateContainer(currentContainer, for: scene)
                     }
-
+                    
+                    self.makeMainWindowKey(in: scene)
+                    
+                    // 3. 🌟 优化：因为当前上下文本来就是在 @MainActor Task 中，
+                    // 所以不需要再嵌套一层 Task { @MainActor in }，直接调用即可。
+                    self.showNextIfNeeded(scene: scene)
+                    
                     completion?()
                 }
             }

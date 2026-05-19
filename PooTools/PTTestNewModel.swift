@@ -58,7 +58,7 @@ class YDSBaseResultModel: PTModelProtocol {
  继承用聪明子分类
  */
 @SmartSubclass
-class YDSBaseModel: YDSBaseModelEX {
+class YDSBaseModel: YDSBaseModelEX,@unchecked Sendable{
     var msg:String = ""
 }
 

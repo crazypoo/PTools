@@ -8,6 +8,27 @@
 
 import UIKit
 
+private final class PTWeakSelfBox<T: AnyObject>: @unchecked Sendable {
+    weak var value: T?
+    init(_ value: T?) { self.value = value }
+}
+
+// 用于安全传递带有 Any 类型的 Notification
+private final class PTNotificationBox: @unchecked Sendable {
+    let notification: Notification
+    init(_ notification: Notification) { self.notification = notification }
+}
+
+// 用于安全传递外部的动画闭包
+private final class PTKeyboardActionBox<Anim, Comp>: @unchecked Sendable {
+    let animations: Anim
+    let completion: Comp
+    init(_ animations: Anim, _ completion: Comp) {
+        self.animations = animations
+        self.completion = completion
+    }
+}
+
 public typealias KeyboardAnimationInfo = (duration: TimeInterval, keyboardFrame: CGRect, curve: UIView.AnimationCurve)
 
 // 1. 将闭包别名移到外部，并加上 @MainActor 和 @Sendable 以符合 Swift 6 严格并发检查
@@ -44,39 +65,37 @@ public extension KeyboardAnimatable {
     func animateWhenKeyboard(_ notificationName: KeyboardNotificationName,
                                  animations: @escaping KeyboardAnimations,
                                  completion: KeyboardCompletion? = nil) {
-        
+            
         // 添加前先尝试移除旧的，防止多次注册导致动画错乱
         stopAnimatingWhenKeyboard(notificationName)
         
-        let token = notificationCenter.addObserver(
+        let weakSelfBox = PTWeakSelfBox(self)
+        let actionBox = PTKeyboardActionBox(animations, completion)
+
+        _ = notificationCenter.addObserver(
             forName: notificationName.rawValue,
             object: nil,
             queue: .main // 运行时仍然保证投递到主队列
-        ) { [weak self] notification in // 🌟 修复点 1：移除这里的 @MainActor，匹配系统 API 的类型要求
-            
-            // 🌟 修复点 2：在闭包内部使用 Task 桥接回 MainActor 上下文
+        ) { notification in
+            let notifBox = PTNotificationBox(notification)
+            // 🌟 4. 开启 Task 回到主线程，安全拆箱并执行
             Task { @MainActor in
-                guard self != nil else { return }
+                // 拆箱 self，如果对象已经被销毁则直接返回，安全可靠
+                guard weakSelfBox.value != nil else { return }
                 
                 let keyboardAnimation = KeyboardAnimation(
-                    animation: animations,
-                    completion: completion
+                    animation: actionBox.animations,
+                    completion: actionBox.completion
                 )
                 
-                // 执行你的自定义动画扩展
+                // 执行你的自定义动画扩展，使用拆箱后的 notification
                 UIView.animate(
-                    withKeyboardNotification: notification,
+                    withKeyboardNotification: notifBox.notification,
                     animations: keyboardAnimation.animation,
                     completion: keyboardAnimation.completion
                 )
             }
         }
-        
-        // 保存这个 Token，以便未来可以注销它
-        let key = String(describing: notificationName.rawValue)
-        var currentTokens = self.observerTokens
-        currentTokens[key] = token
-        self.observerTokens = currentTokens
     }
 
     func stopAnimatingWhenKeyboard(_ notificationNames: KeyboardNotificationName...) {
