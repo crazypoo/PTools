@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public class PTMediaLibListModel: NSObject {
+public class PTMediaLibListModel: NSObject,@unchecked Sendable {
     public let title: String
     
     public var count: Int {

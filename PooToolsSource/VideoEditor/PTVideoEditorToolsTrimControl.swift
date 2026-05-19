@@ -11,6 +11,10 @@ import SnapKit
 import SwifterSwift
 import AVFoundation
 
+private struct PTSafeMediaBox<T>: @unchecked Sendable {
+    let mediaItem: T
+}
+
 class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
 
     var trimPosotionsHandler:(((Double, Double))->Void)!
@@ -65,8 +69,10 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
                     let scale = UIScreen.main.scale
                     let maxSize = CGSize(width: bounds.width * scale, height: bounds.height * scale)
                     
+                    let newAsset = PTSafeMediaBox(mediaItem: self.asset)
+                    
                     let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
-                        for: self.asset,
+                        for: newAsset.mediaItem!,
                         numberOfFrames: count,
                         maximumSize: maxSize
                     )

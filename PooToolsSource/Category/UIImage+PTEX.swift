@@ -19,6 +19,10 @@ import SwifterSwift
 extension UIImage : PTProtocolCompatible {}
 extension CIImage : PTProtocolCompatible {}
 
+private final class PTAssetIdentifierBox: @unchecked Sendable {
+    var identifier: String?
+}
+
 public extension UIImage {
     
     // MARK: - 1. 基础初始化与主题支持
@@ -619,7 +623,7 @@ public extension PTPOP where Base: UIImage {
     /// - Returns: 视频的第一帧
     static func getVideoFirstImage(videoUrl: String,
                                    maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                                   closure: @escaping (UIImage?) -> Void) {
+                                   closure: @escaping @Sendable (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
             closure(nil)
             return
@@ -698,7 +702,7 @@ public extension PTPOP where Base: UIImage {
         }
     }
     
-    func saveImageToAlbum(completion: @escaping (String?) -> Void) {
+    func saveImageToAlbum(completion: @escaping @Sendable (String?) -> Void) {
         PHPhotoLibrary.requestAuthorization { status in
             guard status == .authorized else {
                 PTNSLogConsole("無法存取相簿權限")
@@ -706,15 +710,15 @@ public extension PTPOP where Base: UIImage {
                 return
             }
 
-            var assetIdentifier: String?
-
+            let box = PTAssetIdentifierBox()
+            
             // 在相簿執行寫入操作
             PHPhotoLibrary.shared().performChanges {
                 let request = PHAssetChangeRequest.creationRequestForAsset(from: base)
-                assetIdentifier = request.placeholderForCreatedAsset?.localIdentifier
+                box.identifier = request.placeholderForCreatedAsset?.localIdentifier
             } completionHandler: { success, error in
                 DispatchQueue.main.async {
-                    if success, let identifier = assetIdentifier {
+                    if success, let identifier = box.identifier {
                         PTNSLogConsole("保存成功，PHAsset localIdentifier: \(identifier)")
                         completion(identifier)
                     } else {
@@ -742,7 +746,7 @@ public extension PTPOP where Base: UIImage {
     }
     
     /// 保存圖片到相簿，並回傳 `PHAsset`
-    func saveImageToAlbum(completion: @escaping (PHAsset?) -> Void) {
+    func saveImageToAlbum(completion: @escaping @Sendable (PHAsset?) -> Void) {
         // 檢查並請求相簿存取權限
         PHPhotoLibrary.requestAuthorization { status in
             guard status == .authorized else {
@@ -751,15 +755,15 @@ public extension PTPOP where Base: UIImage {
                 return
             }
 
-            var assetIdentifier: String?
+            let box = PTAssetIdentifierBox()
 
             // 執行寫入操作
             PHPhotoLibrary.shared().performChanges {
                 let request = PHAssetChangeRequest.creationRequestForAsset(from: base)
-                assetIdentifier = request.placeholderForCreatedAsset?.localIdentifier
+                box.identifier = request.placeholderForCreatedAsset?.localIdentifier
             } completionHandler: { success, error in
                 DispatchQueue.main.async {
-                    if success, let identifier = assetIdentifier {
+                    if success, let identifier = box.identifier {
                         PTNSLogConsole("保存成功，PHAsset localIdentifier: \(identifier)")
                         let assets = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
                         completion(assets.firstObject)
@@ -1162,7 +1166,7 @@ public extension PTPOP where Base: UIImage {
 }
 
 //MARK: 压缩模式
-public enum CompressionMode {
+public enum CompressionMode: Sendable {
     /// 分辨率规则
     private static let resolutionRule: (min: CGFloat, max: CGFloat, low: CGFloat, default: CGFloat, high: CGFloat) = (10, 4096, 512, 1024, 2048)
     /// 数据大小规则
@@ -1253,7 +1257,7 @@ public extension PTPOP where Base: UIImage {
     ///   - complete: 完成回调(压缩后Data, 调整后分辨率)
     func asyncCompress(mode: CompressionMode = .medium,
                        queue: DispatchQueue = DispatchQueue.global(),
-                       complete:@escaping (Data?, CGSize) -> Void) {
+                       complete:@escaping @Sendable (Data?, CGSize) -> Void) {
         queue.async {
             let data = resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
             PTGCDManager.shared.runOnMain {

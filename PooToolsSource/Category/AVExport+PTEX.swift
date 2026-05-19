@@ -10,6 +10,20 @@ import UIKit
 import AVFoundation
 extension AVAssetExportSession: PTProtocolCompatible { }
 
+public struct PTAssetExportResult: @unchecked Sendable {
+    public let session: AVAssetExportSession
+    public let duration: Float64
+    public let outputFullFilePath: String
+    public let outputFilePath: String
+    
+    public init(session: AVAssetExportSession, duration: Float64, outputFullFilePath: String, outputFilePath: String) {
+        self.session = session
+        self.duration = duration
+        self.outputFullFilePath = outputFullFilePath
+        self.outputFilePath = outputFilePath
+    }
+}
+
 public extension PTPOP where Base: AVAssetExportSession {
     
     // MARK: 本地视频压缩
@@ -25,10 +39,16 @@ public extension PTPOP where Base: AVAssetExportSession {
                                    outputPath: String,
                                    outputFileType: AVFileType = .mp4,
                                    shouldOptimizeForNetworkUse: Bool = true,
-                                   exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality) async throws -> (AVAssetExportSession, Float64, String, String) {
+                                   exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality) async throws -> PTAssetExportResult {
         await withCheckedContinuation { continuation in
             AVAssetExportSession.pt.assetExportSession(inputPath: inputPath, outputPath: outputPath,outputFileType: outputFileType,shouldOptimizeForNetworkUse: shouldOptimizeForNetworkUse,exportPresetMediumQuality: exportPresetMediumQuality) { session, float64, outputFullFilePath, outputFilePath in
-                continuation.resume(returning: (session, float64, outputFullFilePath, outputFilePath))
+                let safeResult = PTAssetExportResult(
+                                session: session,
+                                duration: float64,
+                                outputFullFilePath: outputFullFilePath,
+                                outputFilePath: outputFilePath
+                            )
+                continuation.resume(returning: safeResult)
             }
         }
     }

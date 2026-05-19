@@ -10,19 +10,19 @@ import UIKit
 @preconcurrency import Contacts
 
 @objcMembers
-public class PTContactIndexModel:NSObject {
+public class PTContactIndexModel:NSObject, @unchecked Sendable {
     open var indexStrings:[String] = [String]()
     open var contractModel:[PTContactModel] = [PTContactModel]()
 }
 
 @objcMembers
-public class PTContactModel:NSObject {
+public class PTContactModel:NSObject, @unchecked Sendable {
     open var key:String = ""
     open var contractModel:[PTContactSubModel] = [PTContactSubModel]()
 }
 
 @objcMembers
-public class PTContactSubModel:NSObject {
+public class PTContactSubModel:NSObject, @unchecked Sendable {
     open var givenName:String = ""
     open var familyName:String = ""
     open var phonenumbers:[String] = []

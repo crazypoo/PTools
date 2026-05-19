@@ -974,7 +974,7 @@ public extension String {
     
     //MARK: 根據鏈接獲取圖片第一個圖片
     func getVideoFirstImage(maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                            closure: @escaping (UIImage?) -> Void) {
+                            closure: @escaping @Sendable (UIImage?) -> Void) {
         guard let url = URL(string: self) else {
             closure(nil)
             return

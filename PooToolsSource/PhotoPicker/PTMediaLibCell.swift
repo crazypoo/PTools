@@ -137,8 +137,10 @@ class PTMediaLibCell: PTBaseNormalCell {
 
         smallImageTask = Task {
             PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self] image, isDegraded in
-                guard let self = self, self.imageIdentifier == ident else { return }
-                self.imageView.image = image
+                Task { @MainActor in
+                    guard let self = self, self.imageIdentifier == ident else { return }
+                    self.imageView.image = image
+                }
             }
         }
     }
@@ -301,8 +303,10 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
             
             fetchTask = Task {
                 PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: side, height: side)) { [weak self] image, _ in
-                    guard let self = self, self.imageIdentifier == ident else { return }
-                    self.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+                    Task { @MainActor in
+                        guard let self = self, self.imageIdentifier == ident else { return }
+                        self.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+                    }
                 }
             }
         }

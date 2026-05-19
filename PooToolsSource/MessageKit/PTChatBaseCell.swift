@@ -83,7 +83,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
     
     deinit {
-        timer?.invalidate()
+//        timer?.invalidate()
     }
     
     // MARK: - UI Setup Methods

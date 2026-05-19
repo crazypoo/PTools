@@ -51,7 +51,7 @@ public extension AVAsset {
     }
     
     func getVideoFirstImage(maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                            closure: @escaping (UIImage?) -> Void) {
+                            closure: @escaping @Sendable (UIImage?) -> Void) {
         let generator = AVAssetImageGenerator(asset: self)
         generator.appliesPreferredTrackTransform = true
         generator.maximumSize = maximumSize

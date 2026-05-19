@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import EventKit
-import SwiftDate
+@preconcurrency import EventKit
+@preconcurrency import SwiftDate
 
 @objcMembers
 public class PTEventOnCalendar: NSObject {
@@ -18,7 +18,7 @@ public class PTEventOnCalendar: NSObject {
     /// - Parameters:
     ///   - parameter: 返回的参数
     ///   - eventsClosure: 闭包
-    private static func resultMain<T>(parameter: T, eventsClosure: @escaping ((T) -> Void)) {
+    private static func resultMain<T : Sendable>(parameter: T, eventsClosure: @escaping @Sendable (T) -> Void) {
         PTGCDManager.shared.runOnMain {
             eventsClosure(parameter)
         }
@@ -91,7 +91,7 @@ public class PTEventOnCalendar: NSObject {
                                   notes:String,
                                   eventType:EKEntityType,
                                   remindTime:TimeInterval,
-                                  handle:((_ finish:Bool,_ error:Error?) -> Void)? = nil) {
+                                  handle:(@Sendable (_ finish:Bool,_ error:Error?) -> Void)? = nil) {
         let eventStore = EKEventStore()
         if #available(iOS 17.0, *) {
             switch eventType {
@@ -144,7 +144,7 @@ public class PTEventOnCalendar: NSObject {
     ///   - startDate: 开始时间
     ///   - endDate: 结束时间
     ///   - eventsClosure: 事件闭包
-    static func selectCalendarsEvents(startDate: Date, endDate: Date, eventsClosure: @escaping (([EKEvent]) -> Void)) {
+    static func selectCalendarsEvents(startDate: Date, endDate: Date, eventsClosure: @escaping @Sendable ([EKEvent]) -> Void) {
         let eventStore = EKEventStore()
         // 请求日历事件
         eventStore.requestAccess(to: .event, completion: {
@@ -278,7 +278,7 @@ extension PTEventOnCalendar {
                                    location:String,
                                    notes:String,
                                    remindTime:TimeInterval,
-                                   handle:((_ finish:Bool,_ error:Error?) -> Void)? = nil) {
+                                   handle: (@Sendable (_ finish: Bool, _ error: Error?) -> Void)? = nil) {
         let event = EKEvent(eventStore: eventStore)
         event.title = eventTitle
         event.location = location
@@ -301,7 +301,7 @@ extension PTEventOnCalendar {
     }
     
     // MARK: 查询出所有提醒事件
-    static func selectReminder(remindersClosure: @escaping (([EKReminder]?) -> Void)) {
+    static func selectReminder(remindersClosure: @escaping @Sendable ([EKReminder]?) -> Void) {
         // 在取得提醒之前，需要先获取授权
         let eventStore = EKEventStore()
         eventStore.requestAccess(to: .reminder) {
@@ -424,7 +424,7 @@ extension PTEventOnCalendar {
                                     location:String,
                                     notes:String,
                                     remindTime:TimeInterval,
-                                    handle:((_ finish:Bool,_ error:Error?) -> Void)? = nil) {
+                                    handle:(@Sendable (_ finish:Bool,_ error:Error?) -> Void)? = nil) {
         let event = EKReminder(eventStore: eventStore)
         event.title = eventTitle
         event.location = location

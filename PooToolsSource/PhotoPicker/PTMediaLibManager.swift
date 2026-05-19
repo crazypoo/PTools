@@ -10,6 +10,10 @@ import Foundation
 import Photos
 import UIKit
 
+private struct PTSafeMediaBox<T>: @unchecked Sendable {
+    let mediaItem: T
+}
+
 func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) {
     guard !selected.isEmpty else {
         return
@@ -187,12 +191,12 @@ public class PTMediaLibManager: NSObject {
     }
 
     @discardableResult
-    public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
     }
     
     /// Fetch image for asset.
-    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
@@ -215,7 +219,7 @@ public class PTMediaLibManager: NSObject {
     }
     
     @discardableResult
-    public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
+    public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping @Sendable (UIImage?, Bool) -> Void) -> PHImageRequestID {
         fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
 
@@ -416,7 +420,8 @@ public class PTMediaLibManager: NSObject {
                 // iOS11 and earlier, callback is not on the main thread.
                 let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
                 if let avAsset = session?.asset {
-                    let item = AVPlayerItem(asset: avAsset)
+                    let safeAssetBox = PTSafeMediaBox(mediaItem: avAsset)
+                    let item = AVPlayerItem(asset: safeAssetBox.mediaItem)
                     completion(item, info, isDegraded)
                 } else {
                     completion(nil, nil, true)
