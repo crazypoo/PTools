@@ -36,7 +36,7 @@ public class PTDebugViewController: PTBaseViewController {
         
         let cell_input = PTFusionCellModel()
         cell_input.name = .addressInput
-        let url_debug: String = PTCoreUserDefultsWrapper.AppRequestUrl
+        let url_debug: String = PTCoreUserDefultsWrapper.shared.AppRequestUrl
         if url_debug.isEmpty {
             cell_input.content = await Network.gobalUrl() // 使用 await
         } else {
@@ -63,7 +63,7 @@ public class PTDebugViewController: PTBaseViewController {
         
         let cell_input_socket = PTFusionCellModel()
         cell_input_socket.name = .socketAddressInput
-        let url_debug_socket: String = PTCoreUserDefultsWrapper.AppSocketUrl
+        let url_debug_socket: String = PTCoreUserDefultsWrapper.shared.AppSocketUrl
         if url_debug_socket.isEmpty {
             cell_input_socket.content = await Network.socketGobalUrl() // 使用 await
         } else {
@@ -92,11 +92,11 @@ public class PTDebugViewController: PTBaseViewController {
             if let itemRow = itemSection.rows?[indexPath.row],let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as? PTFusionCell,let cellModel = itemRow.dataModel as? PTFusionCellModel {
                 cell.cellModel = cellModel
                 if itemRow.title == .DebugMode {
-                    cell.switchValue = PTCoreUserDefultsWrapper.AppDebugMode
+                    cell.switchValue = PTCoreUserDefultsWrapper.shared.AppDebugMode
                     cell.switchValueChangeBlock = { title,sender in
-                        PTCoreUserDefultsWrapper.AppDebugMode.toggle()
+                        PTCoreUserDefultsWrapper.shared.AppDebugMode.toggle()
                         let console = LocalConsole.shared
-                        console.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
+                        console.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
                     }
                 }
                 return cell
@@ -107,7 +107,7 @@ public class PTDebugViewController: PTBaseViewController {
             if let itemRow = model.rows?[indexPath.row] {
                 if itemRow.title == .ipMode {
                     UIAlertController.baseActionSheet(title: "PT Debug network select".localized(), cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index,string in
-                        PTCoreUserDefultsWrapper.AppServiceIdentifier = "\(index + 1)"
+                        PTCoreUserDefultsWrapper.shared.AppServiceIdentifier = "\(index + 1)"
 
                         var modeName = ""
                         switch PTBaseURLMode {
@@ -127,7 +127,7 @@ public class PTDebugViewController: PTBaseViewController {
                     switch PTBaseURLMode {
                     case .Development:
                         var current = ""
-                        let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
+                        let url_debug:String = PTCoreUserDefultsWrapper.shared.AppRequestUrl
                         if url_debug.isEmpty {
                             current = Network.share.config.serverAddress_dev
                         } else {
@@ -136,7 +136,7 @@ public class PTDebugViewController: PTBaseViewController {
                         
                         UIAlertController.base_textfield_alertVC(title:"PT Debug network input title".localized(),okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["PT Debug network input placeholder".localized()], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                             let newURL = result.values.first
-                            PTCoreUserDefultsWrapper.AppRequestUrl = newURL!
+                            PTCoreUserDefultsWrapper.shared.AppRequestUrl = newURL!
                             
                             self.settingCellModels[indexPath.row].content = newURL!
                             let cell = collection.cellForItem(at: IndexPath(row: 1, section: 0)) as! PTFusionCell
@@ -147,7 +147,7 @@ public class PTDebugViewController: PTBaseViewController {
                     }
                 } else if itemRow.title == .socketMode {
                     UIAlertController.baseActionSheet(title: "Socket Mode", cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index,string in
-                        PTCoreUserDefultsWrapper.AppSocketServiceIdentifier = "\(index + 1)"
+                        PTCoreUserDefultsWrapper.shared.AppSocketServiceIdentifier = "\(index + 1)"
 
                         var modeName = ""
                         switch PTSocketURLMode {
@@ -167,7 +167,7 @@ public class PTDebugViewController: PTBaseViewController {
                     switch PTSocketURLMode {
                     case .Development:
                         var current = ""
-                        let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
+                        let url_debug:String = PTCoreUserDefultsWrapper.shared.AppSocketUrl
                         if url_debug.isEmpty {
                             current = Network.share.config.socketAddress_dev
                         } else {
@@ -176,7 +176,7 @@ public class PTDebugViewController: PTBaseViewController {
                         
                         UIAlertController.base_textfield_alertVC(title:"Socket address input",okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["PT Debug network input placeholder".localized()], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                             let newURL = result.values.first
-                            PTCoreUserDefultsWrapper.AppSocketUrl = newURL!
+                            PTCoreUserDefultsWrapper.shared.AppSocketUrl = newURL!
                             
                             self.settingCellModels[indexPath.row].content = newURL!
                             let cell = collection.cellForItem(at: indexPath) as! PTFusionCell

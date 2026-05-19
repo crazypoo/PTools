@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class TextFieldAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class TextFieldAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Text Field"

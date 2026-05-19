@@ -18,7 +18,7 @@ public class PTDevFunction: NSObject {
     ///SDWebImage的加载失误图片方式(全局控制)
     public class func gobalWebImageLoadOption() -> KingfisherOptionsInfo {
 //        #if DEBUG
-//        let devServer:Bool = PTCoreUserDefultsWrapper.WebImageOption
+//        let devServer:Bool = PTCoreUserDefultsWrapper.shared.WebImageOption
 //        if devServer {
 //            return [KingfisherOptionsInfoItem.cacheOriginalImage]
 //        } else {

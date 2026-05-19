@@ -15,19 +15,19 @@ final class PTDebugLocationKit {
 
     var simulatedLocation: CLLocation? {
         get {
-            let latitude = PTCoreUserDefultsWrapper.PTMockLocationLat
-            let longitude = PTCoreUserDefultsWrapper.PTMockLocationLng
+            let latitude = PTCoreUserDefultsWrapper.shared.PTMockLocationLat
+            let longitude = PTCoreUserDefultsWrapper.shared.PTMockLocationLng
             guard !latitude.isZero, !longitude.isZero else { return nil }
 
             return .init(latitude: latitude, longitude: longitude)
         }
         set {
             if let location = newValue {
-                PTCoreUserDefultsWrapper.PTMockLocationLat = location.coordinate.latitude
-                PTCoreUserDefultsWrapper.PTMockLocationLng = location.coordinate.longitude
+                PTCoreUserDefultsWrapper.shared.PTMockLocationLat = location.coordinate.latitude
+                PTCoreUserDefultsWrapper.shared.PTMockLocationLng = location.coordinate.longitude
             } else {
-                PTCoreUserDefultsWrapper.PTMockLocationLat = 0
-                PTCoreUserDefultsWrapper.PTMockLocationLng = 0
+                PTCoreUserDefultsWrapper.shared.PTMockLocationLat = 0
+                PTCoreUserDefultsWrapper.shared.PTMockLocationLng = 0
             }
         }
     }

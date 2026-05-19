@@ -18,9 +18,9 @@ class PTDebugLocationViewController: PTBaseViewController {
 
     lazy var valueSwitch:PTSwitch = {
         let view = PTSwitch()
-        view.isOn = PTCoreUserDefultsWrapper.PTMockLocationOpen
+        view.isOn = PTCoreUserDefultsWrapper.shared.PTMockLocationOpen
         view.valueChangeCallBack = { value in
-            PTCoreUserDefultsWrapper.PTMockLocationOpen = value
+            PTCoreUserDefultsWrapper.shared.PTMockLocationOpen = value
             if value {
                 CLLocationManager.swizzleMethods()
             }

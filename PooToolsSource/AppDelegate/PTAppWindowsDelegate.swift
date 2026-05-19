@@ -32,8 +32,8 @@ open class PTAppWindowsDelegate: PTAppDelegate {
                 window = UIWindow(frame: UIScreen.main.bounds)
             default:
                 window = TouchInspectorWindow(frame: UIScreen.main.bounds)
-                (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.AppTouchInspectShow
-                (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.AppTouchInspectShowHits
+                (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow
+                (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits
                 window?.tintColor = tint
             }
         }
@@ -60,7 +60,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
                 break
             default:
                 let lcm = LocalConsole.shared
-                lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
+                lcm.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
             }
         }
     }

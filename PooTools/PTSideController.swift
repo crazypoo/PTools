@@ -72,9 +72,9 @@ class PTSideController: PTBaseSideController {
         let view = UIButton(type:.custom)
         view.backgroundColor = .random
         view.addActionHandlers { sender in
-            PTCoreUserDefultsWrapper.AppDebugMode.toggle()
+            PTCoreUserDefultsWrapper.shared.AppDebugMode.toggle()
             let lc = LocalConsole.shared
-            lc.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
+            lc.isVisiable = PTCoreUserDefultsWrapper.shared.AppDebugMode
         }
         return view
     }()

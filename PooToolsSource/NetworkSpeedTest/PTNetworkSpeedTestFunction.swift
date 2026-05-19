@@ -101,13 +101,13 @@ public class PTNetworkSpeedTestFunction: NSObject {
     }
     
     public func saveHistory(jsonString:String) {
-        let userHistoryModelString = PTCoreUserDefultsWrapper.NetworkSpeedTestFunctionHistoria
+        let userHistoryModelString = PTCoreUserDefultsWrapper.shared.NetworkSpeedTestFunctionHistoria
         if !userHistoryModelString.stringIsEmpty() {
             var userModelsStringArr = userHistoryModelString.components(separatedBy: "[,]")
             userModelsStringArr.append(jsonString)
-            PTCoreUserDefultsWrapper.NetworkSpeedTestFunctionHistoria = userModelsStringArr.joined(separator: "[,]")
+            PTCoreUserDefultsWrapper.shared.NetworkSpeedTestFunctionHistoria = userModelsStringArr.joined(separator: "[,]")
         } else {
-            PTCoreUserDefultsWrapper.NetworkSpeedTestFunctionHistoria = jsonString
+            PTCoreUserDefultsWrapper.shared.NetworkSpeedTestFunctionHistoria = jsonString
         }
     }
 }

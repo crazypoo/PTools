@@ -8,8 +8,9 @@
 
 import UIKit
 
-//MARK: 此方法用于设定范围,且不会小于和多于相关数值
-@propertyWrapper public struct PTClampedPropertyWrapper<T: Comparable> {
+// MARK: 此方法用于设定范围,且不会小于和多于相关数值
+// 🛠️ Swift 6 升级：约束 T 必须是 Sendable，并让结构体遵循 Sendable
+@propertyWrapper public struct PTClampedPropertyWrapper<T: Comparable & Sendable>: Sendable {
     private var value: T
     private let range: ClosedRange<T>
     
@@ -24,8 +25,9 @@ import UIKit
     }
 }
 
-//MARK: 此方法用于强制英文字符串首字母大写
-@propertyWrapper public struct PTCapitalized {
+// MARK: 此方法用于强制英文字符串首字母大写
+// 🛠️ Swift 6 升级：结构体直接遵循 Sendable（因为内部只有 String，天然安全）
+@propertyWrapper public struct PTCapitalized: Sendable {
     public var wrappedValue: String {
         didSet { wrappedValue = wrappedValue.capitalized }
     }
@@ -35,8 +37,12 @@ import UIKit
     }
 }
 
-//MARK: 此方法用于属性锁
-@propertyWrapper public class PTLockAtomic<T> {
+// MARK: 此方法用于属性锁
+// 🛠️ Swift 6 升级：
+// 1. Class 必须声明为 final，防止子类化破坏安全性
+// 2. 约束 T 为 Sendable
+// 3. 使用 @unchecked Sendable 告诉编译器：“我已经用 NSLock 手动加锁了，请相信它是安全的，不要再报警告”
+@propertyWrapper public final class PTLockAtomic<T: Sendable>: @unchecked Sendable {
     private var value: T
     private let lock = NSLock()
  
@@ -66,8 +72,9 @@ import UIKit
     }
 }
 
-//MARK: 此方法用于属性包装统一管理
-@propertyWrapper public struct PTUserDefault<T> {
+// MARK: 此方法用于属性包装统一管理
+// 🛠️ Swift 6 升级：约束 T: Sendable，并让结构体遵循 Sendable
+@propertyWrapper public struct PTUserDefault<T: Sendable>: Sendable {
     ///这里的属性key 和 defaultValue 还有init方法都是实际业务中的业务代码
     let key: String
     let defaultValue: T
@@ -76,6 +83,7 @@ import UIKit
         self.key = key
         self.defaultValue = defaultValue
     }
+    
     ///  wrappedValue是@propertyWrapper必须要实现的属性
     /// 当操作我们要包裹的属性时  其具体set get方法实际上走的都是wrappedValue 的set get 方法。
     public var wrappedValue: T {
@@ -84,6 +92,8 @@ import UIKit
         }
         set {
             UserDefaults.standard.set(newValue, forKey: key)
+            // 💡 编码助手小贴士：UserDefaults.standard.synchronize() 在 iOS 12 之后已经废弃且不再需要，
+            // 系统会自动高效地进行异步写入，你可以考虑安全地删除下面这行代码来提升性能。
             UserDefaults.standard.synchronize()
         }
     }

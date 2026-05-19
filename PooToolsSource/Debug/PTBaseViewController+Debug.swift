@@ -23,7 +23,7 @@ public extension PTBaseViewController {
 #if POOTOOLS_DEBUG
         Task {
             let environment = UIApplication.shared.inferredEnvironment_PT
-            if environment != .appStore,PTCoreUserDefultsWrapper.AppDebugMode {
+            if environment != .appStore,PTCoreUserDefultsWrapper.shared.AppDebugMode {
                 let console = LocalConsole.shared
                 console.isVisiable = !console.isVisiable
             }

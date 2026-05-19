@@ -17,7 +17,7 @@ public class PTDevMaskConfig:NSObject {
     @MainActor open var maskString:String = "PT Debug mode".localized()
     open var maskFont:UIFont = .appfont(size: 100,bold: true)
     open var motionColor:UIColor = .randomColor
-    open var showTouch:Bool = PTCoreUserDefultsWrapper.AppDebbugTouchBubble
+    open var showTouch:Bool = PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
 }
 
 @objcMembers

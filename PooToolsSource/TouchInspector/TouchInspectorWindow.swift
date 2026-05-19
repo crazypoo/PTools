@@ -15,16 +15,16 @@ import UIKit
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
 
-    public var showTouches: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShow {
+    public var showTouches: Bool = PTCoreUserDefultsWrapper.shared.AppTouchInspectShow {
         didSet {
-            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = showTouches
+            PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits = showTouches
             hideOrUpdateOverlays()
         }
     }
     
-    public var showHitTesting: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShowHits {
+    public var showHitTesting: Bool = PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits {
         didSet {
-            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = showHitTesting
+            PTCoreUserDefultsWrapper.shared.AppTouchInspectShowHits = showHitTesting
             hideOrUpdateOverlays()
         }
     }

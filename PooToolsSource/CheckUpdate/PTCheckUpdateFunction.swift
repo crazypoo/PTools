@@ -395,7 +395,7 @@ public class PTCheckUpdateFunction: NSObject {
             if test {
                 if isShowError {
                     Task { @MainActor in
-                        PTCoreUserDefultsWrapper.AppNoMoreShowUpdate = true
+                        PTCoreUserDefultsWrapper.shared.AppNoMoreShowUpdate = true
                     }
                 }
             }

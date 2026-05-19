@@ -92,7 +92,7 @@ public func prettyJSONString(from object: Any) -> String? {
 
 // MARK: - 快捷控制台打印
 public func PTNSLogConsole(_ any: Any...,
-                           isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
+                           isWriteLog: Bool = PTCoreUserDefultsWrapper.shared.PTLogWrite,
                            file: NSString = #file,
                            line: Int = #line,
                            column: Int = #column,
@@ -106,7 +106,7 @@ public func PTNSLogConsole(_ any: Any...,
 // MARK: - 自定义打印 (主入口)
 // 🚀 优化点 3：这是一个全局无隔离（nonisolated）函数，你可以在任何 Actor 或线程中直接调用，再也不需要包在主线程里！
 public func PTNSLog(_ msg: Any...,
-                    isWriteLog: Bool = PTCoreUserDefultsWrapper.PTLogWrite,
+                    isWriteLog: Bool = PTCoreUserDefultsWrapper.shared.PTLogWrite,
                     file: NSString = #file,
                     line: Int = #line,
                     column: Int = #column,

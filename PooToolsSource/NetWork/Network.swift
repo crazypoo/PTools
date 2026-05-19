@@ -134,7 +134,7 @@ public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<URL?>) -> (
 public typealias FileDownloadFail = (_ error:Error?) -> ()
 
 public var PTBaseURLMode:NetWorkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.AppServiceIdentifier else { return .Distribution }
+    guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppServiceIdentifier else { return .Distribution }
     if sliderValue == "1" { return .Distribution }
     else if sliderValue == "2" { return .Test }
     else if sliderValue == "3" { return .Development }
@@ -142,7 +142,7 @@ public var PTBaseURLMode:NetWorkEnvironment {
 }
 
 public var PTSocketURLMode:NetWorkEnvironment {
-    guard let sliderValue = PTCoreUserDefultsWrapper.AppSocketServiceIdentifier else { return .Distribution }
+    guard let sliderValue = PTCoreUserDefultsWrapper.shared.AppSocketServiceIdentifier else { return .Distribution }
     if sliderValue == "1" { return .Distribution }
     else if sliderValue == "2" { return .Test }
     else if sliderValue == "3" { return .Development }
@@ -697,7 +697,7 @@ public final class Network: @unchecked Sendable {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTBaseURLMode {
             case .Development:
-                let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
+                let url_debug:String = PTCoreUserDefultsWrapper.shared.AppRequestUrl
                 return url_debug.isEmpty ? Network.share.config.serverAddress_dev : url_debug
             case .Test:         return Network.share.config.serverAddress_dev
             case .Distribution: return Network.share.config.serverAddress
@@ -713,7 +713,7 @@ public final class Network: @unchecked Sendable {
             PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)",levelType: PTLogMode,loggerType: .network)
             switch PTSocketURLMode {
             case .Development:
-                let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
+                let url_debug:String = PTCoreUserDefultsWrapper.shared.AppSocketUrl
                 return url_debug.isEmpty ? Network.share.config.socketAddress_dev : url_debug
             case .Test:         return Network.share.config.socketAddress_dev
             case .Distribution: return Network.share.config.socketAddress

@@ -21,7 +21,7 @@ public struct PTEmptyParams<VC: UIViewController>: PTRoutableParams {
 class PTTestLoginViewController: PTBaseViewController,@MainActor PTRoutableStaticController {
     typealias Params = PTEmptyParams<PTTestLoginViewController>
     
-    required init(routerParams: [String : Any]) {
+    required init(routerParams: [String : Sendable]) {
         super.init(nibName: nil, bundle: nil)
     }
     

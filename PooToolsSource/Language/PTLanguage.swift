@@ -148,12 +148,12 @@ public class PTLanguage: NSObject,@unchecked Sendable {
     /// 当前App语言，修改此属性会自动触发全App的UI刷新
     public var language: String {
         get {
-            PTCoreUserDefultsWrapper.AppLanguage
+            PTCoreUserDefultsWrapper.shared.AppLanguage
         } set {
             let selectedLanguage = PTLanguage.availableLanguages().contains(newValue) ? newValue : PTLanguage.defaultLanguage()
             guard selectedLanguage != language else { return } // 如果语言没变，不发通知
             
-            PTCoreUserDefultsWrapper.AppLanguage = selectedLanguage
+            PTCoreUserDefultsWrapper.shared.AppLanguage = selectedLanguage
             NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
         }
     }

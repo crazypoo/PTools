@@ -9,10 +9,11 @@
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
 
+@MainActor 
 public struct PTSheetOptions {
     
     /// 默认的配置实例
-    @MainActor public static var `default` = PTSheetOptions()
+    public static var `default` = PTSheetOptions()
     
     public enum TransitionOverflowType {
         case color(color: UIColor)

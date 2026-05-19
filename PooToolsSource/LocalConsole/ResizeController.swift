@@ -477,11 +477,11 @@ class PlatterView: UIView {
                 LocalConsole.shared.consoleSize = CGSize(width: systemLog_base_width, height: systemLog_base_height)
                 terminal.center = ResizeController.shared.consoleCenterPoint
                 
-                PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = 7.5
-                terminal.fontSize = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
+                PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize = 7.5
+                terminal.fontSize = PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize
                 
-                PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = "#FFFFFF"
-                terminal.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor) ?? .white
+                PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor = "#FFFFFF"
+                terminal.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor) ?? .white
                 LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
         }
@@ -518,10 +518,10 @@ class PlatterView: UIView {
             ResizeController.shared.isActive = false
             let colorPicker = PTColorPickerContainerViewController()
             colorPicker.backButton.setImage(image, for: .normal)
-            colorPicker.picker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor) ?? .white
+            colorPicker.picker.selectedColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor) ?? .white
             
             colorPicker.selectedColorCallback = { [weak self] color in
-                PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = color.hexString
+                PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor = color.hexString
                 self?.FontSColorBlock?(color)
                 PTGCDManager.shared.delayOnMain(time: 0.1) {
                     ResizeController.shared.isActive.toggle()

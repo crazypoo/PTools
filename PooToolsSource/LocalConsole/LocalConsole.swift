@@ -315,10 +315,10 @@ public class LocalConsole: NSObject {
         }
     }
 
-    @MainActor public var isVisiable:Bool = PTCoreUserDefultsWrapper.AppDebugMode {
+    @MainActor public var isVisiable:Bool = PTCoreUserDefultsWrapper.shared.AppDebugMode {
         didSet {
             guard oldValue != isVisiable else { return }
-            PTCoreUserDefultsWrapper.AppDebugMode = isVisiable
+            PTCoreUserDefultsWrapper.shared.AppDebugMode = isVisiable
             if isVisiable {
                 createSystemLogView()
                 terminal!.transform = .init(scaleX: 0.9, y: 0.9)
@@ -335,7 +335,7 @@ public class LocalConsole: NSObject {
                 animation.duration = 0.6
                 terminal!.layer.add(animation, forKey: animation.keyPath)
                 terminal!.layer.shadowOpacity = 0.5
-                if PTCoreUserDefultsWrapper.AppDebbugMark {
+                if PTCoreUserDefultsWrapper.shared.AppDebbugMark {
                     maskOpenFunction()
                 }
                 
@@ -359,7 +359,7 @@ public class LocalConsole: NSObject {
     }
     
     public func setAttFontSize(@PTClampedPropertyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
-        PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = fontSizes
+        PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize = fontSizes
         terminal!.fontSize = fontSizes
     }
     
@@ -429,7 +429,7 @@ public class LocalConsole: NSObject {
         
         if isVisiable {
             createSystemLogView()
-            if PTCoreUserDefultsWrapper.AppDebbugMark {
+            if PTCoreUserDefultsWrapper.shared.AppDebbugMark {
                 maskOpenFunction()
             }
             
@@ -446,7 +446,7 @@ public class LocalConsole: NSObject {
         UIWindow.db_swizzleMethods()
         URLSessionConfiguration.swizzleMethods()
         UIViewController.lvcdSwizzleLifecycleMethods()
-        if PTCoreUserDefultsWrapper.PTMockLocationOpen {
+        if PTCoreUserDefultsWrapper.shared.PTMockLocationOpen {
             CLLocationManager.swizzleMethods()
         }
         StdoutCapture.startCapturing()
@@ -582,14 +582,14 @@ public class LocalConsole: NSObject {
         didSet {
             terminal!.frame.size = consoleSize
                                     
-            PTCoreUserDefultsWrapper.PTLocalConsoleWidth = consoleSize.width
-            PTCoreUserDefultsWrapper.PTLocalConsoleHeight = consoleSize.height
+            PTCoreUserDefultsWrapper.shared.PTLocalConsoleWidth = consoleSize.width
+            PTCoreUserDefultsWrapper.shared.PTLocalConsoleHeight = consoleSize.height
         }
     }
 
     func snapToCachedEndpoint() {
         Task { @MainActor in
-            let cachedConsolePosition = CGPoint(x: PTCoreUserDefultsWrapper.PTLocalConsoleX ?? possibleEndpoints.first!.x, y: PTCoreUserDefultsWrapper.PTLocalConsoleY ?? possibleEndpoints.first!.y)
+            let cachedConsolePosition = CGPoint(x: PTCoreUserDefultsWrapper.shared.PTLocalConsoleX ?? possibleEndpoints.first!.x, y: PTCoreUserDefultsWrapper.shared.PTLocalConsoleY ?? possibleEndpoints.first!.y)
             
             terminal!.center = cachedConsolePosition // Update console center so possibleEndpoints are calculated correctly.
             terminal!.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
@@ -618,8 +618,8 @@ public class LocalConsole: NSObject {
         let terminal = PTTerminal(inView: consoleWindow.view ,
                                   frame: CGRect(x: 0,
                                                 y: CGFloat.kNavBarHeight_Total,
-                                                width: PTCoreUserDefultsWrapper.PTLocalConsoleWidth ?? consoleSize.width,
-                                                height: PTCoreUserDefultsWrapper.PTLocalConsoleHeight ?? consoleSize.height)
+                                                width: PTCoreUserDefultsWrapper.shared.PTLocalConsoleWidth ?? consoleSize.width,
+                                                height: PTCoreUserDefultsWrapper.shared.PTLocalConsoleHeight ?? consoleSize.height)
         )
         terminal.tag = SystemLogViewTag
 
@@ -656,8 +656,8 @@ public class LocalConsole: NSObject {
                     self!.terminal!.center = nearestTargetPosition
                 }
                 positionAnimator.startAnimation()
-                PTCoreUserDefultsWrapper.PTLocalConsoleX = nearestTargetPosition.x
-                PTCoreUserDefultsWrapper.PTLocalConsoleY = nearestTargetPosition.y
+                PTCoreUserDefultsWrapper.shared.PTLocalConsoleX = nearestTargetPosition.x
+                PTCoreUserDefultsWrapper.shared.PTLocalConsoleY = nearestTargetPosition.y
             }
         }
 
@@ -870,7 +870,7 @@ extension LocalConsole {
             actions.append(maskOpen)
 
             if self.maskView != nil {
-                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { _ in
+                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { _ in
                     self.maskOpenBubbleFunction()
                 }
                 actions.append(maskTouchBubble)
@@ -1037,12 +1037,12 @@ extension LocalConsole {
     
     func maskOpenFunction() {
         if maskView != nil {
-            PTCoreUserDefultsWrapper.AppDebbugMark = false
+            PTCoreUserDefultsWrapper.shared.AppDebbugMark = false
             maskView?.removeFromSuperview()
             maskView = nil
         } else {
             Task { @MainActor in
-                PTCoreUserDefultsWrapper.AppDebbugMark = true
+                PTCoreUserDefultsWrapper.shared.AppDebbugMark = true
                 
                 let maskConfig = PTDevMaskConfig()
                 maskView = PTDevMaskView(config: maskConfig)
@@ -1053,9 +1053,9 @@ extension LocalConsole {
     }
     
     func maskOpenBubbleFunction() {
-        PTCoreUserDefultsWrapper.AppDebbugTouchBubble = !PTCoreUserDefultsWrapper.AppDebbugTouchBubble
+        PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble = !PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
         if maskView != nil {
-            maskView!.showTouch = PTCoreUserDefultsWrapper.AppDebbugTouchBubble
+            maskView!.showTouch = PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble
         }
     }
 
@@ -1068,7 +1068,7 @@ extension LocalConsole {
         PTDebugPerformanceToolKit.shared.floatingShow = false
         PTDebugPerformanceToolKit.shared.performanceClose()
         ResizeController.shared.isActive = false
-        PTCoreUserDefultsWrapper.AppDebbugMark = false
+        PTCoreUserDefultsWrapper.shared.AppDebbugMark = false
         maskView?.removeFromSuperview()
         maskView = nil
 //        PTAlertDebugWindow.shared.dismiss()
@@ -1189,7 +1189,7 @@ extension LocalConsole {
         let combined = "\n--- System Monitor ---\n" + dynamicLogs.values.joined(separator: "\n") + "\n"
         
         let attr = NSAttributedString(string: combined, attributes: [
-            .font: UIFont.systemFont(ofSize: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize, weight: .bold, design: .monospaced),
+            .font: UIFont.systemFont(ofSize: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize, weight: .bold, design: .monospaced),
             .foregroundColor: UIColor.systemGreen // 动态数据给个绿色方便区分
         ])
         
@@ -1379,8 +1379,8 @@ public class PTTerminal:PFloatingButton {
         }
     }
     
-    var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
-    var fontSize: CGFloat = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
+    var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontColor)!
+    var fontSize: CGFloat = PTCoreUserDefultsWrapper.shared.LocalConsoleCurrentFontSize
 
     public func setAttributedText(_ string: String) {
         let att:ASAttributedString =  ASAttributedString("\(string)",.paragraph(.lineSpacing(5),.headIndent(7)),.font(.systemFont(ofSize: fontSize, weight: .semibold, design: .monospaced)),.foreground(fontColor))
