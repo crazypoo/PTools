@@ -10,6 +10,26 @@ import UIKit
 @preconcurrency import EventKit
 @preconcurrency import SwiftDate
 
+private struct PTSendableEventStoreBox: @unchecked Sendable {
+    let store: EKEventStore
+}
+
+public struct PTSendableEventArrayBox: @unchecked Sendable {
+    public let events: [EKEvent]
+    
+    public init(_ events: [EKEvent]) {
+        self.events = events
+    }
+}
+
+public struct PTSendableReminderArrayBox: @unchecked Sendable {
+    public let reminder: [EKReminder]
+    
+    public init(_ reminder: [EKReminder]) {
+        self.reminder = reminder
+    }
+}
+
 @objcMembers
 public class PTEventOnCalendar: NSObject {
     static let PTEventError = NSError(domain: "Not suppor", code: 0)
@@ -91,21 +111,22 @@ public class PTEventOnCalendar: NSObject {
                                   notes:String,
                                   eventType:EKEntityType,
                                   remindTime:TimeInterval,
-                                  handle:(@Sendable (_ finish:Bool,_ error:Error?) -> Void)? = nil) {
+                                  handle:(@Sendable (_ finish: Bool, _ error: Error?) -> Void)? = nil) {
         let eventStore = EKEventStore()
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
         if #available(iOS 17.0, *) {
             switch eventType {
             case .event:
                 switch PTPermission.calendar(access: .full).status {
                 case .authorized:
                     eventStore.requestFullAccessToEvents { granted, error in
-                        PTEventOnCalendar.eventCreateFunction(eventStore: eventStore, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
+                        PTEventOnCalendar.eventCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
                     }
                 case .denied:
                     switch PTPermission.calendar(access: .write).status {
                     case .authorized:
                         eventStore.requestWriteOnlyAccessToEvents { granted, error in
-                            PTEventOnCalendar.eventCreateFunction(eventStore: eventStore, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
+                            PTEventOnCalendar.eventCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
                         }
                     default:
                         handle?(false,PTEventOnCalendar.PTEventError)
@@ -115,7 +136,7 @@ public class PTEventOnCalendar: NSObject {
                 }
             case .reminder:
                 eventStore.requestFullAccessToReminders { granted, error in
-                    PTEventOnCalendar.remindCreateFunction(eventStore: eventStore, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime, handle: handle)
+                    PTEventOnCalendar.remindCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime, handle: handle)
                 }
             @unknown default:
                 break
@@ -125,9 +146,9 @@ public class PTEventOnCalendar: NSObject {
                 if granted && error == nil {
                     switch eventType {
                     case .event:
-                        PTEventOnCalendar.eventCreateFunction(eventStore: eventStore, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
+                        PTEventOnCalendar.eventCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime,handle: handle)
                     case .reminder:
-                        PTEventOnCalendar.remindCreateFunction(eventStore: eventStore, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime, handle: handle)
+                        PTEventOnCalendar.remindCreateFunction(eventStore: storeBox.store, startDate: startDate, endDate: endDate, eventTitle: eventTitle, location: location, notes: notes, remindTime: remindTime, handle: handle)
                     default:
                         break
                     }
@@ -144,22 +165,25 @@ public class PTEventOnCalendar: NSObject {
     ///   - startDate: 开始时间
     ///   - endDate: 结束时间
     ///   - eventsClosure: 事件闭包
-    static func selectCalendarsEvents(startDate: Date, endDate: Date, eventsClosure: @escaping @Sendable ([EKEvent]) -> Void) {
+    static func selectCalendarsEvents(startDate: Date, endDate: Date, eventsClosure: @escaping @Sendable (PTSendableEventArrayBox) -> Void) {
         let eventStore = EKEventStore()
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 请求日历事件
         eventStore.requestAccess(to: .event, completion: {
             granted, error in
             if (granted) && (error == nil) {
                 // 获取本地日历（剔除节假日，生日等其他系统日历）
-                let calendars = eventStore.calendars(for: .event).filter({
+                let calendars = storeBox.store.calendars(for: .event).filter({
                     (calender) -> Bool in
                     return calender.type == .local || calender.type == .calDAV
                 })
-                let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
-                let eV = eventStore.events(matching: predicate)
-                resultMain(parameter: eV, eventsClosure: eventsClosure)
+                let predicate = storeBox.store.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
+                let eV = storeBox.store.events(matching: predicate)
+                let safeBox = PTSendableEventArrayBox(eV)
+                resultMain(parameter: safeBox, eventsClosure: eventsClosure)
             } else {
-                resultMain(parameter: [], eventsClosure: eventsClosure)
+                let safeBox = PTSendableEventArrayBox([])
+                resultMain(parameter: safeBox, eventsClosure: eventsClosure)
             }
         })
     }
@@ -175,17 +199,18 @@ public class PTEventOnCalendar: NSObject {
     ///   - eventsClosure: 事件闭包
     static func updateCalendarsEvents(eventIdentifier: String, title: String, startDate: Date, endDate: Date, notes: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 请求日历事件
         eventStore.requestAccess(to: .event, completion: {
             granted, error in
             if (granted) && (error == nil) {
                 // 获取本地日历（剔除节假日，生日等其他系统日历）
-                let calendars = eventStore.calendars(for: .event).filter({
+                let calendars = storeBox.store.calendars(for: .event).filter({
                     (calender) -> Bool in
                     return calender.type == .local || calender.type == .calDAV
                 })
-                let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
-                let events = eventStore.events(matching: predicate)
+                let predicate = storeBox.store.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
+                let events = storeBox.store.events(matching: predicate)
                 let eventArray = events.filter { $0.calendarItemIdentifier == eventIdentifier }
                 guard eventArray.count > 0 else {
                     resultMain(parameter: false, eventsClosure: eventsClosure)
@@ -196,9 +221,9 @@ public class PTEventOnCalendar: NSObject {
                 event.startDate = startDate
                 event.endDate = endDate
                 event.notes = notes
-                event.calendar = eventStore.defaultCalendarForNewEvents
+                event.calendar = storeBox.store.defaultCalendarForNewEvents
                 do {
-                    try eventStore.save(event, span: .thisEvent)
+                    try storeBox.store.save(event, span: .thisEvent)
                     resultMain(parameter: true, eventsClosure: eventsClosure)
                 } catch {
                     resultMain(parameter: false, eventsClosure: eventsClosure)
@@ -216,12 +241,13 @@ public class PTEventOnCalendar: NSObject {
     ///   - eventsClosure: 事件闭包
     static func removeCalendarsEvent(eventIdentifier: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 请求日历事件
         eventStore.requestAccess(to: .event, completion: {
             granted, error in
             if (granted) && (error == nil) {
                 // 获取本地日历（剔除节假日，生日等其他系统日历）
-                let calendars = eventStore.calendars(for: .event).filter({
+                let calendars = storeBox.store.calendars(for: .event).filter({
                     (calender) -> Bool in
                     return calender.type == .local || calender.type == .calDAV
                 })
@@ -233,9 +259,9 @@ public class PTEventOnCalendar: NSObject {
                 for i in -20...20 {
                     let startDate = startOfMonth(year: currentYear + i, month:1)
                     let endDate = endOfMonth(year: currentYear + i, month: 12, returnEndTime: true)
-                    let predicate = eventStore.predicateForEvents(
+                    let predicate = storeBox.store.predicateForEvents(
                         withStart: startDate, end: endDate, calendars: calendars)
-                    let eV = eventStore.events(matching: predicate)
+                    let eV = storeBox.store.events(matching: predicate)
                     eV.enumerated().forEach { index,value in
                         events.append(value)
                     }
@@ -246,7 +272,7 @@ public class PTEventOnCalendar: NSObject {
                     return
                 }
                 do {
-                    try eventStore.remove(event[0], span: .thisEvent, commit: true)
+                    try storeBox.store.remove(event[0], span: .thisEvent, commit: true)
                     resultMain(parameter: true, eventsClosure: eventsClosure)
                 } catch {
                     resultMain(parameter: false, eventsClosure: eventsClosure)
@@ -301,20 +327,23 @@ extension PTEventOnCalendar {
     }
     
     // MARK: 查询出所有提醒事件
-    static func selectReminder(remindersClosure: @escaping @Sendable ([EKReminder]?) -> Void) {
+    static func selectReminder(remindersClosure: @escaping @Sendable (PTSendableReminderArrayBox) -> Void) {
         // 在取得提醒之前，需要先获取授权
         let eventStore = EKEventStore()
-        eventStore.requestAccess(to: .reminder) {
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
+        storeBox.store.requestAccess(to: .reminder) {
             (granted: Bool, error: Error?) in
             if (granted) && (error == nil) {
                 // 获取授权后，我们可以得到所有的提醒事项
-                let predicate = eventStore.predicateForReminders(in: nil)
-                eventStore.fetchReminders(matching: predicate, completion: {
+                let predicate = storeBox.store.predicateForReminders(in: nil)
+                storeBox.store.fetchReminders(matching: predicate, completion: {
                     (reminders: [EKReminder]?) -> Void in
-                    resultMain(parameter: reminders, eventsClosure: remindersClosure)
+                    let safeBox = PTSendableReminderArrayBox(reminders ?? [])
+                    resultMain(parameter: safeBox, eventsClosure: remindersClosure)
                 })
             } else {
-                resultMain(parameter: nil, eventsClosure: remindersClosure)
+                let safeBox = PTSendableReminderArrayBox([])
+                resultMain(parameter: safeBox, eventsClosure: remindersClosure)
             }
         }
     }
@@ -330,12 +359,13 @@ extension PTEventOnCalendar {
     ///   - eventsClosure: 事件闭包
     static func updateEvent(eventIdentifier: String, title: String, startDate: Date, endDate: Date, notes: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 获取"提醒"的访问授权
-        eventStore.requestAccess(to: .reminder) {(granted, error) in
+        storeBox.store.requestAccess(to: .reminder) {(granted, error) in
             if (granted) && (error == nil) {
                 // 获取授权后，我们可以得到所有的提醒事项
-                let predicate = eventStore.predicateForReminders(in: nil)
-                eventStore.fetchReminders(matching: predicate, completion: {
+                let predicate = storeBox.store.predicateForReminders(in: nil)
+                storeBox.store.fetchReminders(matching: predicate, completion: {
                     (reminders: [EKReminder]?) -> Void in
                     guard let weakReminders = reminders else {
                         resultMain(parameter: false, eventsClosure: eventsClosure)
@@ -351,10 +381,10 @@ extension PTEventOnCalendar {
                     reminder.notes = notes
                     reminder.startDateComponents = dateComponentFrom(date: startDate)
                     reminder.dueDateComponents = dateComponentFrom(date: endDate)
-                    reminder.calendar = eventStore.defaultCalendarForNewReminders()
+                    reminder.calendar = storeBox.store.defaultCalendarForNewReminders()
                     // 修改提醒事项
                     do {
-                        try eventStore.save(reminder, commit: true)
+                        try storeBox.store.save(reminder, commit: true)
                         resultMain(parameter: true, eventsClosure: eventsClosure)
                     } catch {
                         resultMain(parameter: false, eventsClosure: eventsClosure)
@@ -375,12 +405,13 @@ extension PTEventOnCalendar {
     ///   - eventsClosure: 事件闭包
     static func removeEvent(eventIdentifier: String, eventsClosure: @escaping PTBoolTask) {
         let eventStore = EKEventStore()
+        let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 获取"提醒"的访问授权
         eventStore.requestAccess(to: .reminder) {(granted, error) in
             if (granted) && (error == nil) {
                 // 获取授权后，我们可以得到所有的提醒事项
-                let predicate = eventStore.predicateForReminders(in: nil)
-                eventStore.fetchReminders(matching: predicate, completion: {
+                let predicate = storeBox.store.predicateForReminders(in: nil)
+                storeBox.store.fetchReminders(matching: predicate, completion: {
                     (reminders: [EKReminder]?) -> Void in
                     guard let weakReminders = reminders else {
                         resultMain(parameter: false, eventsClosure: eventsClosure)
@@ -393,7 +424,7 @@ extension PTEventOnCalendar {
                     }
                     // 移除提醒事项
                     do {
-                        try eventStore.remove(reminderArray[0], commit: true)
+                        try storeBox.store.remove(reminderArray[0], commit: true)
                         resultMain(parameter: true, eventsClosure: eventsClosure)
                     } catch {
                         resultMain(parameter: false, eventsClosure: eventsClosure)

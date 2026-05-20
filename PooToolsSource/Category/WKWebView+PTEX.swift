@@ -56,8 +56,8 @@ public extension PTPOP where Base: WKWebView {
     /// - Parameters:
     ///  - jsCode: 注入的js代码
     ///  - completionHandler:
-    func evaluateJsCode(_ jsCode: String, 
-                        completionHandler: ((Any?, Error?) -> Void)? = nil) {
+    @MainActor func evaluateJsCode(_ jsCode: String, 
+                        completionHandler: (@MainActor @Sendable (Any?, (any Error)?) -> Void)? = nil) {
         base.evaluateJavaScript(jsCode, completionHandler: completionHandler)
     }
     
@@ -67,8 +67,10 @@ public extension PTPOP where Base: WKWebView {
     ///  - ratio: 比例
     /// - Returns: 返回结果
     func javaScriptFromTextSizeRatio(_ ratio: CGFloat) {
-        let jscode = "document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(ratio)%'"
-        evaluateJsCode(jscode)
+        PTGCDManager.shared.runOnMain {
+            let jscode = "document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(ratio)%'"
+            self.evaluateJsCode(jscode)
+        }
     }
     
     //MARK: 加载网页
