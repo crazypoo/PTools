@@ -188,7 +188,9 @@ public class PTPermissionViewController: PTBaseViewController {
         }
         closeButton.addActionHandlers(handler: { sender in
             self.returnFrontVC {
-                self.viewDismissBlock?()
+                PTGCDManager.shared.runOnMain {
+                    self.viewDismissBlock?()
+                }
             }
         })
         

@@ -113,7 +113,7 @@ public class PTNFCToolKit: NSObject {
 
 // MARK: - Delegate (使用 nonisolated 避免主线程死锁和并发警告)
 @available(iOS 13.0, *)
-extension PTNFCToolKit: @preconcurrency NFCTagReaderSessionDelegate {
+extension PTNFCToolKit: NFCTagReaderSessionDelegate {
     
     nonisolated public func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
         // Session 激活时的回调，保持为空即可

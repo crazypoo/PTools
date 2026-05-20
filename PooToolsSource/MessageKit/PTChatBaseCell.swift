@@ -227,7 +227,9 @@ open class PTChatBaseCell: PTBaseNormalCell {
     private func startCountDown(from date: Date) {
         updateCountDown(to: date)
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            self?.updateCountDown(to: date)
+            PTGCDManager.shared.runOnMain {
+                self?.updateCountDown(to: date)
+            }
         }
     }
     

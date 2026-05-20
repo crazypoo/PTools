@@ -353,7 +353,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     }
                     self.livePhoto.livePhoto = livePhotoTarget
                     self.adjustFrame(normal: false) {
-                        self.livePhoto.startPlayback(with: .hint)
+                        PTGCDManager.shared.runOnMain {
+                            self.livePhoto.startPlayback(with: .hint)
+                        }
                     }
                     self.livePhoto.isHidden = false
                 }

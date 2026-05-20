@@ -49,7 +49,7 @@ open class PTFilledPageControl: PTBasePageControl {
     // MARK: - Deinit
     
     deinit {
-        stopDisplayLink()
+//        stopDisplayLink()
     }
     
     // MARK: - 重写基类的模板方法
@@ -228,7 +228,9 @@ open class PTFilledPageControl: PTBasePageControl {
     private class DisplayLinkProxy {
         weak var target: PTFilledPageControl?
         init(target: PTFilledPageControl) { self.target = target }
-        @objc func update() { target?.updateDisplayLink() }
+        @objc func update() {
+            self.target?.updateDisplayLink()
+        }
     }
 }
 

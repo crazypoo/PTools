@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 public class PTCollectionLayout: NSObject {
     
-    class public func createLayout(itemSize:CGSize,
+    @MainActor class public func createLayout(itemSize:CGSize,
                                    paddingY:CGFloat,
                                    paddingX:CGFloat,
                                    sd:UICollectionView.ScrollDirection)->UICollectionViewFlowLayout {
@@ -19,7 +19,7 @@ public class PTCollectionLayout: NSObject {
         return PTCollectionLayout.createLayoutBase(itemSize: itemSize, inset: inset, minimumLineSpaceing: paddingY, minimumInteritemSpacing: 0, sd: sd)
     }
     
-    class public func createLayoutBase(itemSize:CGSize,
+    @MainActor class public func createLayoutBase(itemSize:CGSize,
                                        inset:UIEdgeInsets,
                                        minimumLineSpaceing:CGFloat,
                                        minimumInteritemSpacing:CGFloat,
@@ -33,7 +33,7 @@ public class PTCollectionLayout: NSObject {
         return layout
     }
     
-    class public func createLayoutNormal(sd:UICollectionView.ScrollDirection)->UICollectionViewFlowLayout {
+    @MainActor class public func createLayoutNormal(sd:UICollectionView.ScrollDirection)->UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = sd
         return layout

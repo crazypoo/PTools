@@ -44,7 +44,7 @@ open class PTSnakePageControl: PTBasePageControl {
     // MARK: - Deinit
     
     deinit {
-        stopDisplayLink()
+//        stopDisplayLink()
     }
     
     // MARK: - 重写基类模板方法

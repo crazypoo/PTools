@@ -137,7 +137,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         UIScreen.pt.detectScreenShot { type in
             switch type {
             case .Normal:
-                self.loadAlbumList()
+                PTGCDManager.shared.runOnMain {
+                    self.loadAlbumList()
+                }
             case .Video:
                 break
             }

@@ -82,7 +82,7 @@ open class PTScrollingPageControl: PTBasePageControl {
     private var isAnimating: Bool { return displayLink != nil }
 
     deinit {
-        stopDisplayLink()
+//        stopDisplayLink()
     }
     
     // MARK: - 重写基类模板方法

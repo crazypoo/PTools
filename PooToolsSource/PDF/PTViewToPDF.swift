@@ -14,7 +14,7 @@ public class PTViewToPDF: NSObject {
     /// 将 UIView 数组转换为 PDF 文件
     /// - Parameter pages: 要转换为 PDF 的 UIView 数组（每个 View 代表一页）
     /// - Returns: 生成的 PDF 文件的本地路径
-    public static func generatePDF(with pages: [UIView]) -> String? {
+    @MainActor public static func generatePDF(with pages: [UIView]) -> String? {
         // 确保数组不为空
         guard !pages.isEmpty else { return nil }
         
