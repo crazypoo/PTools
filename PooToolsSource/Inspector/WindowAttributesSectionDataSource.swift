@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class WindowAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class WindowAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Window"
@@ -31,7 +31,7 @@ extension DefaultElementAttributesLibrary {
             case screenScale = "Screen Scale"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let window = window else { return [] }
 
             return Property.allCases.compactMap { property in

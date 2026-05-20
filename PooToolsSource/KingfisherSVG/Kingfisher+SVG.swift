@@ -11,7 +11,7 @@ import Kingfisher
 import PocketSVG
 
 // Convert SVG images from Server to UIImage
-public struct SVGProcessor: ImageProcessor {
+public struct SVGProcessor: @preconcurrency ImageProcessor {
     
     // `identifier` should be the same for processors with the same properties/functionality
     // It will be used when storing and retrieving the image to/from cache.
@@ -22,7 +22,7 @@ public struct SVGProcessor: ImageProcessor {
     }
     
     // Convert input data/image to target image and return it.
-    public func process(item: ImageProcessItem, 
+    @MainActor public func process(item: ImageProcessItem, 
                         options: KingfisherParsedOptionsInfo) -> UIImage? {
         switch item {
         case .image(let image):
@@ -44,7 +44,7 @@ public struct SVGProcessor: ImageProcessor {
     }
     
     // Get actual image
-    func snapshotImage(for view: CALayer) -> UIImage? {
+    @MainActor func snapshotImage(for view: CALayer) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
         guard let context = UIGraphicsGetCurrentContext() else { return nil }
         view.render(in: context)

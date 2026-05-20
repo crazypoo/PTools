@@ -235,7 +235,9 @@ public class PTActiveLabel: UILabel {
     
     open override func awakeFromNib() {
         super.awakeFromNib()
-        updateTextStorage()
+        PTGCDManager.shared.runOnMain {
+            self.updateTextStorage()
+        }
     }
     
     open override func drawText(in rect: CGRect) {

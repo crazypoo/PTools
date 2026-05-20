@@ -28,7 +28,7 @@ extension UIMenuElement {
 }
 
 extension Array where Element: UIMenuElement {
-    func insideDivider() -> [UIMenuElement] {
+    @MainActor func insideDivider() -> [UIMenuElement] {
         [UIMenu(
             title: String(),
             options: .displayInline,

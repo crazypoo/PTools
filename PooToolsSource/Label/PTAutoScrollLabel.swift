@@ -180,7 +180,9 @@ public class PTAutoScrollLabel: UIView {
         } else {
             // 垂直方向 Timer (iOS 10+ 推荐使用 block API 避免 Selector 循环引用)
             timer = Timer.scheduledTimer(withTimeInterval: scrollInterval, repeats: true) { [weak self] _ in
-                self?.scrollVerticalNext()
+                PTGCDManager.shared.runOnMain {
+                    self?.scrollVerticalNext()
+                }
             }
         }
     }
@@ -271,7 +273,7 @@ public class PTAutoScrollLabel: UIView {
     }
 
     deinit {
-        stopScrolling()
+//        stopScrolling()
     }
 }
 
@@ -284,6 +286,6 @@ fileprivate class WeakTargetProxy {
     }
 
     @objc func onUpdate() {
-        target?.updateMarquee()
+        self.target?.updateMarquee()
     }
 }

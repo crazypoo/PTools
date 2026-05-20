@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ViewFrameSizeSectionDataSource: InspectorElementSectionDataSource {
+    final class ViewFrameSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "View"
@@ -26,7 +26,7 @@ extension DefaultElementSizeLibrary {
             case directionalLayoutsMargins = "Layout Margins"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let view = view else { return [] }
 
             return Properties.allCases.compactMap { property in

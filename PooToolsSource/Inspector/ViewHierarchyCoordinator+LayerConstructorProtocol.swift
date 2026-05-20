@@ -138,7 +138,9 @@ extension ViewHierarchyCoordinator: @preconcurrency ViewHierarchyLayerConstructo
 
             if let highlightView = layerView as? InspectorHighlightView {
                 highlightView.perform(.dismiss) { _ in
-                    highlightView.removeFromSuperview()
+                    PTGCDManager.shared.runOnMain {
+                        highlightView.removeFromSuperview()
+                    }
                 }
             }
             else {

@@ -31,7 +31,7 @@ enum ViewHierarchyIssue: CustomStringConvertible, Hashable {
         }
     }
 
-    static func issues(for view: UIView) -> [ViewHierarchyIssue] {
+    @MainActor static func issues(for view: UIView) -> [ViewHierarchyIssue] {
         var array = [ViewHierarchyIssue]()
 
         if view.frame.isEmpty == true {
