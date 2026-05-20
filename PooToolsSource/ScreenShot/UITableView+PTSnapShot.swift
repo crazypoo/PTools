@@ -172,7 +172,7 @@ extension UITableView {
                 }
                 
                 // 步骤 3：切回主线程回调
-                DispatchQueue.main.async {
+                PTGCDManager.shared.runOnMain {
                     completion(finalImage)
                 }
             }

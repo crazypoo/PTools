@@ -259,7 +259,9 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         view.cornerRadius = 10
         view.addActionHandlers { sender in
             self.returnFrontVC {
-                self.iKnowTapHandler?()
+                PTGCDManager.shared.runOnMain {
+                    self.iKnowTapHandler?()
+                }
             }
         }
         return view

@@ -578,7 +578,9 @@ extension PTMediaLibView {
             case .Normal:
                 // 检测到普通截屏，执行静默刷新
                 // 这里的 loadMedia 不需要传回调，直接刷新 UI 即可
-                self.loadMedia(addImage: false)
+                PTGCDManager.shared.runOnMain {
+                    self.loadMedia(addImage: false)
+                }
             case .Video:
                 // 如果是录屏事件，通常不需要刷新媒体库
                 break

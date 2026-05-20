@@ -63,7 +63,7 @@ class YDSBaseModel: YDSBaseModelEX,@unchecked Sendable{
 }
 
 @SmartSubclass
-class YDSHomeBannerMainModel:YDSBaseModel {
+class YDSHomeBannerMainModel:YDSBaseModel, @unchecked Sendable {
     @SmartAny var result:YDSHomeBannerResultModel?
 }
 

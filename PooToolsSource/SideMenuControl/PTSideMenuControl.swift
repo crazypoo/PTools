@@ -524,17 +524,19 @@ open class PTSideMenuControl: PTBaseViewController {
             transitionContext.isAnimated = true
             transitionContext.isInteractive = false
             transitionContext.completion = { finish in
-                self.unload(self.contentViewController)
+                PTGCDManager.shared.runOnMain {
+                    self.unload(self.contentViewController)
 
-                self.shouldCallSwitchingDelegate = false
-                self.contentViewController = viewController
-                self.shouldCallSwitchingDelegate = true
+                    self.shouldCallSwitchingDelegate = false
+                    self.contentViewController = viewController
+                    self.shouldCallSwitchingDelegate = true
 
-                self.sideMenuControlDidShow?(self,viewController,animated)
+                    self.sideMenuControlDidShow?(self,viewController,animated)
 
-                viewController.didMove(toParent: self)
+                    viewController.didMove(toParent: self)
 
-                completion?()
+                    completion?()
+                }
             }
             animator.animateTransition(using: transitionContext)
 
@@ -636,14 +638,16 @@ open class PTSideMenuControl: PTBaseViewController {
             keepSideMenuOpenOnRotation()
         } else {
             hideMenu(animated: false, completion: { _ in
-                // Temporally hide the menu container view for smooth animation
-                self.menuContainerView.isHidden = true
-                coordinator.animate(alongsideTransition: { _ in
-                    self.contentContainerView.frame = self.contentFrame(visibility: self.isMenuRevealed, targetSize: size)
-                }, completion: { (_) in
-                    self.menuContainerView.isHidden = false
-                    self.menuContainerView.frame = self.sideMenuFrame(visibility: self.isMenuRevealed, targetSize: size)
-                })
+                PTGCDManager.shared.runOnMain {
+                    // Temporally hide the menu container view for smooth animation
+                    self.menuContainerView.isHidden = true
+                    coordinator.animate(alongsideTransition: { _ in
+                        self.contentContainerView.frame = self.contentFrame(visibility: self.isMenuRevealed, targetSize: size)
+                    }, completion: { (_) in
+                        self.menuContainerView.isHidden = false
+                        self.menuContainerView.frame = self.sideMenuFrame(visibility: self.isMenuRevealed, targetSize: size)
+                    })
+                }
             })
         }
         super.viewWillTransition(to: size, with: coordinator)

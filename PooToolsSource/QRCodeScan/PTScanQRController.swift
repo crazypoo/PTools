@@ -147,7 +147,9 @@ public class PTScanQRController: PTBaseViewController {
     lazy var backBtn : PTLayoutButton = {
         let view = createButton(normalImage: self.viewConfig.backImage) { sender in
             self.sessionQueue.async {
-                self.removeTimer()
+                PTGCDManager.shared.runOnMain {
+                    self.removeTimer()
+                }
             }
             self.returnFrontVC()
         }
@@ -213,7 +215,9 @@ public class PTScanQRController: PTBaseViewController {
         super.viewWillDisappear(animated)
         configureNavigationBar(hidden: false)
         sessionQueue.async {
-            self.removeTimer()
+            PTGCDManager.shared.runOnMain {
+                self.removeTimer()
+            }
         }
     }
     
@@ -501,7 +505,9 @@ public class PTScanQRController: PTBaseViewController {
     func findQR(inImage image:UIImage) {
         PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: viewConfig.loadingTitle, icon: .Heart,style:.SupportVisionOS)
         self.sessionQueue.async {
-            self.removeTimer()
+            PTGCDManager.shared.runOnMain {
+                self.removeTimer()
+            }
         }
         Task { @MainActor in
             let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])

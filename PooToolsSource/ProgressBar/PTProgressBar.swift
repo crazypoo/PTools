@@ -78,7 +78,7 @@ public class PTProgressBar: UIView {
     
     // 清理 DisplayLink 防止内存泄漏
     deinit {
-        stopDisplayLink()
+//        stopDisplayLink()
     }
 
     private func setupUI() {

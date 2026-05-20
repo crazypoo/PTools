@@ -50,7 +50,9 @@ public final class PTBannerScheduler {
 
     private func tick() {
         for banner in banners.allObjects {
-            banner.autoScrollTick()
+            PTGCDManager.shared.runOnMain {
+                banner.autoScrollTick()
+            }
         }
     }
 }

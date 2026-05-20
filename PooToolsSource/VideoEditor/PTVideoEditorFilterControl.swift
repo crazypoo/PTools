@@ -82,7 +82,9 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         
         doneButton.addActionHandlers { sender in
             self.returnFrontVC {
-                self.filterHandler(self.currentFilter)
+                PTGCDManager.shared.runOnMain {
+                    self.filterHandler(self.currentFilter)
+                }
             }
         }
     }

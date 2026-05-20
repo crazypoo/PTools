@@ -182,8 +182,9 @@ class CropView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        self.initVars()
+        PTGCDManager.shared.runOnMain {
+            self.initVars()
+        }
     }
     
     init() {

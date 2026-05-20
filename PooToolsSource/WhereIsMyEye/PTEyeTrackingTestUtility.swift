@@ -68,15 +68,15 @@ class PTEyeTrackingTestUtility {
     /**
      隐藏UILabel显示当前EyeTracking状态。
      */
-    internal func hideStatusView() {
-        statusLabel?.isHidden = true
+    @MainActor internal func hideStatusView() {
+        self.statusLabel?.isHidden = true
     }
     
     /**
      隐藏当前EyeTracking状态的CursorView。
      */
-    internal func hideCursorView() {
-        cursorView?.isHidden = true
+    @MainActor internal func hideCursorView() {
+        self.cursorView?.isHidden = true
     }
     
     @MainActor internal func updateTestViews(with lookAtPoint: CGPoint) {
