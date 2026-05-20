@@ -12,19 +12,19 @@ import SwiftJWT
 import Alamofire
 import SmartCodable
 
-class IpadScreenshotUrls :PTModelProtocol {
+class IpadScreenshotUrls :PTModelProtocol,@unchecked Sendable {
     required init() {}
 }
 
-class AppletvScreenshotUrls :PTModelProtocol {
+class AppletvScreenshotUrls :PTModelProtocol,@unchecked Sendable {
     required init() {}
 }
 
-class Features :PTModelProtocol {
+class Features :PTModelProtocol,@unchecked Sendable {
     required init() {}
 }
 
-class Results :PTModelProtocol {
+class Results :PTModelProtocol,@unchecked Sendable {
     var primaryGenreName: String = ""
     var artworkUrl100: String = ""
     var currency: String = ""
@@ -72,7 +72,7 @@ class Results :PTModelProtocol {
     required init() {}
 }
 
-class PTCheckUpdateModel:PTModelProtocol {
+class PTCheckUpdateModel:PTModelProtocol,@unchecked Sendable {
     @SmartAny var results: [Results] = []
     var resultCount: Int = 0
     required init() {}
@@ -81,23 +81,23 @@ class PTCheckUpdateModel:PTModelProtocol {
 /*
  TF Mode
  */
-public class PTTFPaging :PTModelProtocol {
+public class PTTFPaging :PTModelProtocol,@unchecked Sendable {
     public var total: Int = 0
     public var limit: Int = 0
     required public init() {}
 }
 
-public class PTTFMeta :PTModelProtocol {
+public class PTTFMeta :PTModelProtocol,@unchecked Sendable {
     @SmartAny public var paging: PTTFPaging?
     required public init() {}
 }
 
-public class PTTLinkMainModel:PTModelProtocol {
+public class PTTLinkMainModel:PTModelProtocol,@unchecked Sendable {
     @SmartAny public var links: PTTFLinks?
     required public init() {}
 }
 
-public class PTTFRelationships :PTModelProtocol {
+public class PTTFRelationships :PTModelProtocol,@unchecked Sendable {
     @SmartAny public var app: PTTLinkMainModel?
     @SmartAny public var builds: PTTLinkMainModel?
     @SmartAny public var betaAppReviewSubmission:PTTLinkMainModel?
@@ -114,7 +114,7 @@ public class PTTFRelationships :PTModelProtocol {
     required public init() {}
 }
 
-public class PTTFLinks :PTModelProtocol {
+public class PTTFLinks :PTModelProtocol,@unchecked Sendable {
     public var currentLink: String = ""
     public var related: String = ""
     public var next:String = ""
@@ -126,7 +126,7 @@ public class PTTFLinks :PTModelProtocol {
     }
 }
 
-public class PTTFIconAssetTokenModle:PTModelProtocol {
+public class PTTFIconAssetTokenModle:PTModelProtocol,@unchecked Sendable {
     public var width:CGFloat = 0
     public var templateUrl:String = ""
     public var height:CGFloat = 0
@@ -134,7 +134,7 @@ public class PTTFIconAssetTokenModle:PTModelProtocol {
     required public init() {}
 }
 
-public class PTTFAttributes :PTModelProtocol {
+public class PTTFAttributes :PTModelProtocol,@unchecked Sendable {
     public var version: String = ""
     public var platform: String = ""
     public var minOsVersion:String = ""
@@ -165,7 +165,7 @@ public class PTTFAttributes :PTModelProtocol {
     }
 }
 
-public class PTTFVersionData :PTModelProtocol {
+public class PTTFVersionData :PTModelProtocol,@unchecked Sendable {
     public var id: String = ""
     @SmartAny public var relationships: PTTFRelationships?
     @SmartAny public var links: PTTFLinks?
@@ -175,7 +175,7 @@ public class PTTFVersionData :PTModelProtocol {
     required public init() {}
 }
 
-public class PTTFModelCollection :PTModelProtocol {
+public class PTTFModelCollection :PTModelProtocol,@unchecked Sendable {
     @SmartAny public var meta: PTTFMeta?
     @SmartAny public var links: PTTFLinks?
     @SmartAny public var data: [PTTFVersionData]?
@@ -183,21 +183,21 @@ public class PTTFModelCollection :PTModelProtocol {
     required public init() {}
 }
 
-public class PTTFNewerBuildVersionModel:PTModelProtocol {
+public class PTTFNewerBuildVersionModel:PTModelProtocol,@unchecked Sendable {
     @SmartAny public var links:PTTFLinks?
     @SmartAny public var data:PTTFVersionData?
     
     required public init() {}
 }
 
-public struct PTAppleClaims: Claims {
+public struct PTAppleClaims: Claims,@unchecked Sendable {
     let iss: String
     let iat: Date
     let exp: Date
     let aud: String
 }
 
-public class PTTFUpdateCustomModel:PTModelProtocol {
+public class PTTFUpdateCustomModel:PTModelProtocol,@unchecked Sendable {
     var version:String = ""
     var desc:String = ""
     var downloadURL:String = ""
@@ -474,7 +474,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
     
-    public static func appConnectApiRequest<T:SmartCodableX>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping ((Any?,String) -> Void),fail:@escaping ((NSError) -> Void)) {
+    public static func appConnectApiRequest<T:SmartCodableX & Sendable>(token:String,apiUrl:String,parameters:[String:any Any & Sendable]? = nil,modelType: T.Type,showHud:Bool = true,success:@escaping @Sendable (Any?,String) -> Void,fail:@escaping @Sendable (NSError) -> Void) {
         if showHud {
             toggleHud(show: true)
         }

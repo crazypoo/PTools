@@ -77,7 +77,7 @@ public class PTActionCell:UIView {
 }
 
 @objcMembers
-public class PTActionSheetItem:NSObject {
+public class PTActionSheetItem:NSObject,@unchecked Sendable {
     public var title:String = ""
     public var titleColor:UIColor = .systemBlue
     public var titleFont:UIFont = .systemFont(ofSize: 20)
@@ -116,7 +116,7 @@ public class PTActionSheetItem:NSObject {
 }
 
 @objcMembers
-public class PTActionSheetTitleItem:PTActionSheetItem {
+public class PTActionSheetTitleItem:PTActionSheetItem, @unchecked Sendable {
     public var subTitle:String = ""
 
     public init(title: String = "",
@@ -270,9 +270,13 @@ public class PTActionSheetController: PTAlertController {
         
         for (index, destructiveItem) in destructiveItems.enumerated() {
             let destructiveView = createActionCell(for: destructiveItem,withCorner: true) { [weak self] in
-                self?.dismissAnimation {
-                    guard let SELF = self else { return }
-                    self?.actionSheetDestructiveSelectBlock?(SELF, index, destructiveItem.title)
+                PTGCDManager.shared.runOnMain {
+                    self?.dismissAnimation {
+                        PTGCDManager.shared.runOnMain {
+                            guard let SELF = self else { return }
+                            SELF.actionSheetDestructiveSelectBlock?(SELF, index, destructiveItem.title)
+                        }
+                    }
                 }
             }
             
@@ -399,6 +403,14 @@ public class PTActionSheetController: PTAlertController {
         }
     }
 
+    func dismissAndCallback(index:Int,title:String) {
+        self.dismissAnimation {
+            PTGCDManager.shared.runOnMain {
+                self.actionSheetSelectBlock?(self, index, title)
+            }
+        }
+    }
+    
     func contentSubsSet() {
         var previousView: UIView?
         let lastIndex = contentItems.count - 1
@@ -426,9 +438,8 @@ public class PTActionSheetController: PTAlertController {
             
             // --- 按钮部分 ---
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
-                self?.dismissAnimation {
-                    guard let self else { return }
-                    self.actionSheetSelectBlock?(self, index, item.title)
+                PTGCDManager.shared.runOnMain {
+                    self?.dismissAndCallback(index: index, title: item.title)
                 }
             }
             contentScrollerView.addSubview(button)

@@ -9,7 +9,7 @@
 import UIKit
 import SmartCodable
 
-public class PTIPInfoModel: PTModelProtocol {
+public class PTIPInfoModel: PTModelProtocol,@unchecked Sendable {
     public var lon: CGFloat = 0.0
     public var zip: String = ""
     public var query: String = ""

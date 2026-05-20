@@ -1118,7 +1118,7 @@ public final class Network: @unchecked Sendable {
     
     // MARK: - ================= 6. 🌟 强类型解析层：SmartCodable 暴露接口 =================
 
-    private static func parseCodableResponse<T: SmartCodableX>(url: String, response: HTTPURLResponse?, data: Data?, modelType: T.Type?) throws -> PTBaseStructModel<T> {
+    private static func parseCodableResponse<T: SmartCodableX & Sendable>(url: String, response: HTTPURLResponse?, data: Data?, modelType: T.Type?) throws -> PTBaseStructModel<T> {
         var (result, jsonString) = try validateAndPreprocessResponse(url: url, response: response, data: data) as (PTBaseStructModel<T>, String)
         if !jsonString.isEmpty, let modelType = modelType {
             if let model = modelType.deserialize(from: jsonString) {
@@ -1134,14 +1134,14 @@ public final class Network: @unchecked Sendable {
     }
 
     /// 核心项目调用总接口
-    class public func requestCodableApi<T: SmartCodableX>(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil, cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<T> {
+    class public func requestCodableApi<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: URLConvertible, method: HTTPMethod = .post, header: HTTPHeaders? = nil, parameters: Parameters? = nil, cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil, encoder: ParameterEncoding = URLEncoding.default, jsonRequest: Bool = false) async throws -> PTBaseStructModel<T> {
         let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestApi(needGobal: needGobal, urlStr: urlStr, method: method, header: header, parameters: parameters, cachePolicy: cachePolicy, encoder: encoder, jsonRequest: jsonRequest) { url, response, data in
             try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)
         }
     }
     
-    public class func requestCodableBodyAPI<T: SmartCodableX>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,
+    public class func requestCodableBodyAPI<T: SmartCodableX & Sendable>(needGobal: Bool = true, urlStr: String, body: Data, header: HTTPHeaders? = nil, method: HTTPMethod = .post,
         cachePolicy: PTNetworkCachePolicy? = nil, modelType: T.Type? = nil) async throws -> PTBaseStructModel<T> {
         let typeBox = PTSendableTypeBox(modelType)
         return try await _internalRequestBodyAPI(needGobal: needGobal, urlStr: urlStr, body: body, header: header, method: method, cachePolicy: cachePolicy) { url, response, data in
@@ -1149,7 +1149,7 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    class public func fileCodableUpload<T: SmartCodableX>(needGobal: Bool = true, media: Any, path: URLConvertible, method: HTTPMethod = .post, fileKey: String = "",
+    class public func fileCodableUpload<T: SmartCodableX & Sendable>(needGobal: Bool = true, media: Any, path: URLConvertible, method: HTTPMethod = .post, fileKey: String = "",
         params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
         let typeBox = PTSendableTypeBox(modelType)
         return _internalFileUpload(needGobal: needGobal, media: media, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest) { url, response, data in
@@ -1157,7 +1157,7 @@ public final class Network: @unchecked Sendable {
         }
     }
     
-    class public func imageCodableUpload<T: SmartCodableX>(needGobal: Bool = true, images: [UIImage]?, path: URLConvertible, method: HTTPMethod = .post, fileKey: [String] = ["images"], params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false, pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
+    class public func imageCodableUpload<T: SmartCodableX & Sendable>(needGobal: Bool = true, images: [UIImage]?, path: URLConvertible, method: HTTPMethod = .post, fileKey: [String] = ["images"], params: [String: String]? = nil, header: HTTPHeaders? = nil, modelType: T.Type? = nil, jsonRequest: Bool = false, pngData: Bool = true) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
         let typeBox = PTSendableTypeBox(modelType)
         return _internalImageUpload(needGobal: needGobal, images: images, path: path, method: method, fileKey: fileKey, params: params, header: header, jsonRequest: jsonRequest, pngData: pngData) { url, response, data in
             return try parseCodableResponse(url: url, response: response, data: data, modelType: typeBox.type)

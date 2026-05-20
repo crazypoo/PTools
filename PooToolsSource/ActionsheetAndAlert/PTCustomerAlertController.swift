@@ -21,7 +21,7 @@ public typealias PTCustomerCustomerBlock = (_ alertCustomerView:UIView) -> Void
 }
 
 @objcMembers
-public class PTCustomBottomButtonModel:NSObject {
+public class PTCustomBottomButtonModel:NSObject,@unchecked Sendable {
     public var titleName:String? = ""
     public var titleColor:UIColor? = UIColor.systemBlue
 }
@@ -193,8 +193,10 @@ public class PTCustomerAlertController: PTAlertController {
             buttonsSet.tag = 100 + index
             buttonsSet.addActionHandlers { sender in
                 self.dismissAnimation {
-                    self.bottomButtonTapCallback?(value.titleName ?? "",index)
-                    self.bottomButtonTapCallback = nil
+                    PTGCDManager.shared.runOnMain {
+                        self.bottomButtonTapCallback?(value.titleName ?? "",index)
+                        self.bottomButtonTapCallback = nil
+                    }
                 }
             }
             self.contentView.addSubview(buttonsSet)

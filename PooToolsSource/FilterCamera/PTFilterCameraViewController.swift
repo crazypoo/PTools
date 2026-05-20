@@ -80,7 +80,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
                         vc.editFinishBlock = { ei ,_ in
                             PHPhotoLibrary.pt.saveImageToAlbum(image: ei) { finish, _ in
                                 if !finish {
-                                    PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
+                                    PTGCDManager.shared.runOnMain {
+                                        PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
+                                    }
                                 }
                             }
                         }
@@ -106,7 +108,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     }
                     PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] finish, _ in
                         if !finish {
-                            PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
+                            PTGCDManager.shared.runOnMain {
+                                PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
+                            }
                         }
                     }
                     

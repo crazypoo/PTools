@@ -318,7 +318,7 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
     fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
         PTAlertTipsViewController.tipsAlertShow(title: "",subtitle: PTMediaLibUIConfig.share.alertDoingTitle, icon: .Heart)
 
-        let completion: (Bool, PHAsset?) -> Void = { [weak self] success, asset in
+        let completion: @Sendable (Bool, PHAsset?) -> Void = { [weak self] success, asset in
             guard success, let asset = asset else {
                 let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
                 PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)

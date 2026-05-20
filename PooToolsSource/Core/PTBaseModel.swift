@@ -36,7 +36,7 @@ extension PTBaseModel: PTDiffableModel {
 }
 
 // 🌟 专门定义一个轻量级的空模型，用来给不需要解析 JSON 的接口占位
-public struct PTDummyModel: PTModelProtocol {
+public struct PTDummyModel: PTModelProtocol,@unchecked Sendable {
     public init() {}
 }
 
