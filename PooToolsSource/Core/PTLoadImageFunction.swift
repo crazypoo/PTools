@@ -387,30 +387,24 @@ public class PTLoadImageFunction: NSObject {
     public static func downloadLivePhoto(photoURL: URL,
                                          videoURL: URL,
                                          contentMode: PHImageContentMode = .aspectFit,
-                                         completion: @escaping (PHLivePhoto?) -> Void) {
+                                         completion: @escaping @Sendable (PHLivePhoto?) -> Void) {
 
-        let dispatchGroup = DispatchGroup()
-        var downloadedPhotoURL: URL?
-        var downloadedVideoURL: URL?
-
-        dispatchGroup.enter()
-        downloadFile(from: photoURL) { localURL in
-            downloadedPhotoURL = localURL
-            dispatchGroup.leave()
-        }
-
-        dispatchGroup.enter()
-        downloadFile(from: videoURL) { localURL in
-            downloadedVideoURL = localURL
-            dispatchGroup.leave()
-        }
-
-        dispatchGroup.notify(queue: .main) {
+        Task {
+            // 1. 使用 async let 同时发起两个下载任务，它们将在后台并发执行
+            async let photoTask = downloadFileAsync(from: photoURL)
+            async let videoTask = downloadFileAsync(from: videoURL)
+            
+            // 2. 等待两个任务都完成，并安全地获取结果（无需使用外部的 var 变量）
+            let downloadedPhotoURL = await photoTask
+            let downloadedVideoURL = await videoTask
+            
+            // 3. 校验下载结果是否都成功
             guard let photo = downloadedPhotoURL, let video = downloadedVideoURL else {
                 completion(nil)
                 return
             }
-
+            
+            // 4. 获取占位图并请求 Live Photo
             let placeholderImage = UIImage(contentsOfFile: photo.path)
             PHLivePhoto.request(withResourceFileURLs: [photo, video],
                                 placeholderImage: placeholderImage,
@@ -421,8 +415,18 @@ public class PTLoadImageFunction: NSObject {
         }
     }
 
+    private static func downloadFileAsync(from url: URL) async -> URL? {
+        // withCheckedContinuation 充当了回调和 async/await 之间的桥梁
+        return await withCheckedContinuation { continuation in
+            downloadFile(from: url) { localURL in
+                // 当下载完成时，恢复挂起的任务并返回结果
+                continuation.resume(returning: localURL)
+            }
+        }
+    }
+    
     // 下载文件：保持静态方法
-    fileprivate static func downloadFile(from url: URL, completion: @escaping (URL?) -> Void) {
+    fileprivate static func downloadFile(from url: URL, completion: @escaping @Sendable (URL?) -> Void) {
         let task = URLSession.shared.downloadTask(with: url) { localURL, _, _ in
             guard let localURL = localURL else {
                 completion(nil)

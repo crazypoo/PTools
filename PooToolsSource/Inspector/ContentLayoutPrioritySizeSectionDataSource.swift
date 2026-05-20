@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ContentLayoutPrioritySizeSectionDataSource: InspectorElementSectionDataSource {
+    final class ContentLayoutPrioritySizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Content Layout Priority"
@@ -32,7 +32,7 @@ extension DefaultElementSizeLibrary {
             case instrinsicContentSize = "Intrinsic Size"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let view = view else { return [] }
 
             return Properties.allCases.map { property in

@@ -25,7 +25,7 @@ public class PTCodeView: UIView {
     private var dismiss : Bool? = false
     
     deinit {
-        removeFromSuperview()
+//        removeFromSuperview()
     }
 
     public init(numberOfCodes:Int = 4,

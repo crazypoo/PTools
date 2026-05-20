@@ -82,7 +82,7 @@ public class PTImageEditorConfig: NSObject {
     
     //MARK: Edit
     
-    @objc public enum EditTool: Int, CaseIterable {
+    @objc public enum EditTool: Int, CaseIterable,Sendable {
         case draw
         case clip
         case textSticker

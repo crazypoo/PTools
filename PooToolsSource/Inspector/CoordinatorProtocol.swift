@@ -45,6 +45,7 @@ public extension Startable where Self: CoordinatorProtocol, StartResult: UIViewC
     func start<T: CoordinatorStartable>(presenting coordinator: T,
                                         animated: Bool) where T.StartResult: RootViewControllerProtocol
     {
+        
         addChild(coordinator)
 
         let startViewController = coordinator.start()

@@ -100,19 +100,21 @@ public class PTEditImageViewController: PTBaseViewController {
                 self.toolsModel[i].isSelected = i == indexPath.row
             }
             self.toolCollectionView.reloadSections(at: [0]) {
-                switch cellTools.currentType {
-                case .draw:
-                    self.showHandDrawAction()
-                case .clip:
-                    self.showClipAction()
-                case .textSticker:
-                    self.showTextAction()
-                case .mosaic:
-                    self.mosaicAction()
-                case .filter:
-                    self.filterAction()
-                case .adjust:
-                    self.adjustActions()
+                PTGCDManager.shared.runOnMain {
+                    switch cellTools.currentType {
+                    case .draw:
+                        self.showHandDrawAction()
+                    case .clip:
+                        self.showClipAction()
+                    case .textSticker:
+                        self.showTextAction()
+                    case .mosaic:
+                        self.mosaicAction()
+                    case .filter:
+                        self.filterAction()
+                    case .adjust:
+                        self.adjustActions()
+                    }
                 }
             }
         }

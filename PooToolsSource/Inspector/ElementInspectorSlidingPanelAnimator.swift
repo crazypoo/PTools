@@ -52,13 +52,15 @@ final class ElementInspectorSlidingPanelAnimator: NSObject, @preconcurrency Elem
         change: [NSKeyValueChangeKey: Any]?,
         context: UnsafeMutableRawPointer?
     ) {
-        guard let containerView = shadowView.superview else { return }
+        PTGCDManager.shared.runOnMain {
+            guard let containerView = self.shadowView.superview else { return }
 
-        shadowView.frame = topLeftMargins(of: containerView)
+            self.shadowView.frame = self.topLeftMargins(of: containerView)
+        }
     }
 
     deinit {
-        backgroundGestureView.removeObserver(self, forKeyPath: .bounds, context: nil)
+//        backgroundGestureView.removeObserver(self, forKeyPath: .bounds, context: nil)
     }
 
     private lazy var shadowView = DropShadowView()

@@ -14,10 +14,10 @@ struct PTCrashModel: Codable, Equatable {
     let context: Context
     let traces: [Trace]
 
-    init(type: PTCrashType, details: Details, context: Context = .builder(), traces: [Trace]) {
+    @MainActor init(type: PTCrashType, details: Details, context: Context? = nil, traces: [Trace]) {
         self.type = type
         self.details = details
-        self.context = context
+        self.context = context ?? .builder()
         self.traces = traces
     }
 
@@ -60,7 +60,7 @@ extension PTCrashModel {
             return UIImage(data: image)
         }
 
-        static func builder() -> Self {
+        @MainActor static func builder() -> Self {
             .init(image: UIWindow.keyWindow?._snapshotWithTouch?.pngData(), consoleOutput: "", errorOutput: "")
         }
     }

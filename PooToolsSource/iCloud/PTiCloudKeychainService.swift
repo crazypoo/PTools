@@ -8,7 +8,7 @@
 
 import Security
 import Foundation
-import AuthenticationServices
+@preconcurrency import AuthenticationServices
 
 /// 自定义 Keychain 错误类型，方便外部捕获和处理
 public enum PTKeychainError: Error {

@@ -1057,16 +1057,16 @@ public class PTClipEngine: NSObject {
         let point = pan.location(in: view)
         
         if pan.state == .began {
-            onInteractStateChanged?(true)
-            beginPanPoint = point
-            clipOriginFrame = clipBoxFrame
-            panEdge = calculatePanEdge(at: point)
+            self.onInteractStateChanged?(true)
+            self.beginPanPoint = point
+            self.clipOriginFrame = self.clipBoxFrame
+            self.panEdge = self.calculatePanEdge(at: point)
         } else if pan.state == .changed {
-            guard panEdge != .none else { return }
-            updateClipBoxFrame(point: point)
+            guard self.panEdge != .none else { return }
+            self.updateClipBoxFrame(point: point)
         } else if pan.state == .cancelled || pan.state == .ended {
-            panEdge = .none
-            onInteractStateChanged?(false)
+            self.panEdge = .none
+            self.onInteractStateChanged?(false)
         }
     }
     

@@ -233,6 +233,8 @@ import UIKit
     
     /// 支持在 Storyboard 或 XIB 中实时预览时，确保占位符可见
     open override func prepareForInterfaceBuilder() {
-        placeholderLabel.alpha = 1
+        PTGCDManager.shared.runOnMain {
+            self.placeholderLabel.alpha = 1
+        }
     }
 }

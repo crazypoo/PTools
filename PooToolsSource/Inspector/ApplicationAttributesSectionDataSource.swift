@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ApplicationAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class ApplicationAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Application"
@@ -33,7 +33,7 @@ extension DefaultElementAttributesLibrary {
             case userInterfaceLayoutDirection
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             Property.allCases.compactMap { property in
                 switch property {
                 case .isIdleTimerEnabled:

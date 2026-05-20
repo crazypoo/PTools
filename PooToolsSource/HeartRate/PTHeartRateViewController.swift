@@ -209,15 +209,19 @@ public class PTHeartRateViewController: PTBaseViewController {
     
     private func initCaptureSession() {
         sessionQueue.async {
-            self.heartRateManager.startCapture()
+            PTGCDManager.shared.runOnMain {
+                self.heartRateManager.startCapture()
+            }
         }
     }
 
     private func deinitCaptureSession() {
         sessionQueue.async {
-            self.heartRateManager.stopCapture()
-            self.toggleTorch(status: false)
-            self.player.stop()
+            PTGCDManager.shared.runOnMain {
+                self.heartRateManager.stopCapture()
+                self.toggleTorch(status: false)
+                self.player.stop()
+            }
         }
     }
 
@@ -229,21 +233,23 @@ public class PTHeartRateViewController: PTBaseViewController {
     private func startMeasurement() {
         self.toggleTorch(status: true)
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] (timer) in
-            guard let self = self else { return }
-            let average = self.pulseDetector.getAverage()
-            let pulse = 60.0/average
-            if pulse == -60 {
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.pulseRate.alpha = 0
-                }) { (finished) in
-                    self.pulseRate.isHidden = finished
-                }
-            } else {
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.pulseRate.alpha = 1.0
-                }) { (_) in
-                    self.pulseRate.isHidden = false
-                    self.pulseRate.text = "\(lroundf(pulse)) BPM"
+            PTGCDManager.shared.runOnMain {
+                guard let self = self else { return }
+                let average = self.pulseDetector.getAverage()
+                let pulse = 60.0/average
+                if pulse == -60 {
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.pulseRate.alpha = 0
+                    }) { (finished) in
+                        self.pulseRate.isHidden = finished
+                    }
+                } else {
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.pulseRate.alpha = 1.0
+                    }) { (_) in
+                        self.pulseRate.isHidden = false
+                        self.pulseRate.text = "\(lroundf(pulse)) BPM"
+                    }
                 }
             }
         })

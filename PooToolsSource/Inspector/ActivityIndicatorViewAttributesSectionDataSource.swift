@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ActivityIndicatorViewAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class ActivityIndicatorViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Activity Indicator"
@@ -28,7 +28,7 @@ extension DefaultElementAttributesLibrary {
             case hidesWhenStopped = "Hides When Stopped"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let activityIndicatorView = activityIndicatorView else { return [] }
 
             return Property.allCases.compactMap { property in

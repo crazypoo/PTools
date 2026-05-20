@@ -576,7 +576,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     if self.takePhotoView != nil {
                         self.takePhotoView?.dismissAlert()
                         self.takePhotoView?.dismissTask = {
-                            self.takePhotoView = nil
+                            PTGCDManager.shared.runOnMain {
+                                self.takePhotoView = nil
+                            }
                         }
                     }
                 }

@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class DatePickerAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class DatePickerAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Date Picker"
@@ -31,7 +31,7 @@ extension DefaultElementAttributesLibrary {
             case minuteInterval = "Interval"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let datePicker = datePicker else { return [] }
 
             return Property.allCases.compactMap { property in

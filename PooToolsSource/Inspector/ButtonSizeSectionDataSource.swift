@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ButtonSizeSectionDataSource: InspectorElementSectionDataSource {
+    final class ButtonSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Button"
@@ -25,7 +25,7 @@ extension DefaultElementSizeLibrary {
             case imageEdgeInsets = "Image Insets"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let button = button else { return [] }
 
             return Properties.allCases.map { property in

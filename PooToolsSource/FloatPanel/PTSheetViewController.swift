@@ -256,8 +256,10 @@ public class PTSheetViewController: PTBaseViewController {
         super.viewDidDisappear(animated)
         if let presenter = self.transition.presenter, self.options.shrinkPresentingViewController {
             self.transition.restorePresenter(presenter, completion: { [weak self] _ in
-                guard let self = self else { return }
-                self.didDismiss?(self)
+                PTGCDManager.shared.runOnMain {
+                    guard let self = self else { return }
+                    self.didDismiss?(self)
+                }
             })
         } else if !self.options.useInlineMode {
             self.didDismiss?(self)
@@ -561,8 +563,10 @@ public class PTSheetViewController: PTBaseViewController {
         
         self.contentViewController.adjustForKeyboard(height: self.keyboardHeight)
         self.resize(to: self.currentSize, duration: duration, options: animationCurve, animated: true, complete: { [weak self] in
-            guard let self = self else { return }
-            self.resize(to: self.currentSize)
+            PTGCDManager.shared.runOnMain {
+                guard let self = self else { return }
+                self.resize(to: self.currentSize)
+            }
         })
     }
     
@@ -646,8 +650,10 @@ public class PTSheetViewController: PTBaseViewController {
             if self.options.useInlineMode {
                 if animated {
                     self.animateOut { [weak self] in
-                        guard let self = self else { return }
-                        self.didDismiss?(self)
+                        PTGCDManager.shared.runOnMain {
+                            guard let self = self else { return }
+                            self.didDismiss?(self)
+                        }
                     }
                 } else {
                     self.view.removeFromSuperview()

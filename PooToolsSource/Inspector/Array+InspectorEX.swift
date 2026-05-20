@@ -31,7 +31,7 @@ extension Array where Element == InspectorElementLibraryProtocol {
 }
 
 extension Array where Element == UIKeyCommand {
-    func sortedByInputKey() -> Self {
+    @MainActor func sortedByInputKey() -> Self {
         var copy = self
         copy.sort { lhs, rhs -> Bool in
             guard

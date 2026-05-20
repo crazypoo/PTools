@@ -228,7 +228,7 @@ class PTCutViewController: PTBaseViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
     
     deinit {
-        cleanTimer()
+//        cleanTimer()
     }
     
     public override func preferredNavigationBarStyle() -> PTNavigationBarStyle {

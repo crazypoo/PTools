@@ -385,7 +385,9 @@ public class PTProgressHUD: UIView {
         
         // 创建新的定时器
         hideTimer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
-            self?.hide(animated: animated)
+            PTGCDManager.shared.runOnMain {
+                self?.hide(animated: animated)
+            }
         }
     }
 

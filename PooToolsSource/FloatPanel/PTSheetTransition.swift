@@ -110,10 +110,14 @@ public class PTSheetTransition: NSObject, UIViewControllerAnimatedTransitioning 
             self.restorePresenter(
                 presenter,
                 animations: {
-                    contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
-                    sheet.overlayView.alpha = 0
+                    PTGCDManager.shared.runOnMain {
+                        contentView.transform = CGAffineTransform(translationX: 0, y: contentView.bounds.height)
+                        sheet.overlayView.alpha = 0
+                    }
                 }, completion: { _ in
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                    PTGCDManager.shared.runOnMain {
+                        transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+                    }
                 }
             )
         }

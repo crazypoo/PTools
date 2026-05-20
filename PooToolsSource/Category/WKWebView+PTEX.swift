@@ -45,8 +45,10 @@ public extension PTPOP where Base: WKWebView {
     /// - Parameters:
     ///  - jsCode: 注入的js代码
     func addUserScript(_ source: String) {
-        let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-        base.configuration.userContentController.addUserScript(userScript)
+        PTGCDManager.shared.runOnMain {
+            let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+            base.configuration.userContentController.addUserScript(userScript)
+        }
     }
     
     //MARK: js交互
@@ -76,30 +78,32 @@ public extension PTPOP where Base: WKWebView {
     ///   - additionalHttpHeaders: additionalHttpHeaders description
     func loadUrl(_ urlString: String?, 
                  additionalHttpHeaders: [String: String]? = nil) {
-        guard let urlString = urlString,
-              let urlStr = urlString.removingPercentEncoding as String?,
-              let url = URL(string: urlStr) as URL?
-        else {
-            PTNSLogConsole("链接错误",levelType: .error,loggerType: .web)
-            return
-        }
-        let cookieSource: String = "document.cookie = 'user=\("userValue")';"
-        let cookieScript = WKUserScript(source: cookieSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
-        let userContentController = WKUserContentController()
-        userContentController.addUserScript(cookieScript)
-        base.configuration.userContentController = userContentController
-        
-        var request = URLRequest(url: url)
-        if let headFields: [AnyHashable : Any] = request.allHTTPHeaderFields {
-            if headFields["user"] != nil {
-            } else {
-                request.addValue("user=\("userValue")", forHTTPHeaderField: "Cookie")
+        PTGCDManager.shared.runOnMain {
+            guard let urlString = urlString,
+                  let urlStr = urlString.removingPercentEncoding as String?,
+                  let url = URL(string: urlStr) as URL?
+            else {
+                PTNSLogConsole("链接错误",levelType: .error,loggerType: .web)
+                return
             }
+            let cookieSource: String = "document.cookie = 'user=\("userValue")';"
+            let cookieScript = WKUserScript(source: cookieSource, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+            let userContentController = WKUserContentController()
+            userContentController.addUserScript(cookieScript)
+            base.configuration.userContentController = userContentController
+            
+            var request = URLRequest(url: url)
+            if let headFields: [AnyHashable : Any] = request.allHTTPHeaderFields {
+                if headFields["user"] != nil {
+                } else {
+                    request.addValue("user=\("userValue")", forHTTPHeaderField: "Cookie")
+                }
+            }
+            additionalHttpHeaders?.forEach { (key, value) in
+                request.addValue(value, forHTTPHeaderField: key)
+            }
+            base.load(request as URLRequest)
         }
-        additionalHttpHeaders?.forEach { (key, value) in
-            request.addValue(value, forHTTPHeaderField: key)
-        }
-        base.load(request as URLRequest)
     }
     
     //MARK: 获取WKWebView视图

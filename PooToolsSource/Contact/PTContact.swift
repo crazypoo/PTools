@@ -51,7 +51,7 @@ public class PTContact: NSObject {
     /// 获取通讯录的信息
     /// - Parameter keys: 获取Fetch,并且指定之后要获取联系人中的什么属性
     ///   - completion: 结果闭包
-    static func selectContactsData(keys: [String] = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactOrganizationNameKey, CNContactPhoneNumbersKey, CNContactNicknameKey], completion: @escaping (([CNContact], Error?) -> Void)) {
+    static func selectContactsData(keys: [String] = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactOrganizationNameKey, CNContactPhoneNumbersKey, CNContactNicknameKey], completion: @escaping @Sendable ([CNContact], Error?) -> Void) {
         // 创建通讯录对象
         let store = CNContactStore()
         store.requestAccess(for: .contacts) {(granted, error) in
@@ -74,7 +74,7 @@ public class PTContact: NSObject {
         }
     }
 
-    public func getContactData(handle: @escaping @MainActor @Sendable (_ model:PTContactIndexModel?) -> Void) {
+    public func getContactData(handle: @escaping @Sendable (_ model:PTContactIndexModel?) -> Void) {
         PTGCDManager.shared.runOnBackground(priority: .background, block: {
             PTGCDManager.shared.runOnMain {
                 PTContact.selectContactsData { contacts, error in
@@ -139,7 +139,7 @@ public class PTContact: NSObject {
     /// - Parameters:
     ///   - contact: 联系人的信息
     ///   - completion: 结果闭包
-    static func addContactItem(contact: CNMutableContact, completion: @escaping ((Bool, Error?) -> Void)) {
+    static func addContactItem(contact: CNMutableContact, completion: @escaping @Sendable (Bool, Error?) -> Void) {
         // 创建通讯录对象
         let store = CNContactStore()
         store.requestAccess(for: .contacts) {(granted, error) in
@@ -169,7 +169,7 @@ public class PTContact: NSObject {
     ///   - phoneNumbers: 手机号码数组
     ///   - keys: key
     ///   - completion: 结果闭包
-    static func updateContactItem(identifier: String, familyName: String, givenName: String, phoneNumbers: [CNLabeledValue<CNPhoneNumber>], keys: [String] = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactOrganizationNameKey, CNContactPhoneNumbersKey, CNContactNicknameKey], completion: @escaping ((Bool, Error?) -> Void)) {
+    static func updateContactItem(identifier: String, familyName: String, givenName: String, phoneNumbers: [CNLabeledValue<CNPhoneNumber>], keys: [String] = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactOrganizationNameKey, CNContactPhoneNumbersKey, CNContactNicknameKey], completion: @escaping @Sendable (Bool, Error?) -> Void) {
         // 创建通讯录对象
         let store = CNContactStore()
         store.requestAccess(for: .contacts) {(granted, error) in
@@ -203,7 +203,7 @@ public class PTContact: NSObject {
     ///   - identifier: 唯一标识符
     ///   - keys: key
     ///   - completion: 结果闭包
-    static func deleteContactItem(identifier: String, keys: [String] = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactOrganizationNameKey, CNContactPhoneNumbersKey, CNContactNicknameKey], completion: @escaping ((Bool, Error?) -> Void)) {
+    static func deleteContactItem(identifier: String, keys: [String] = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactOrganizationNameKey, CNContactPhoneNumbersKey, CNContactNicknameKey], completion: @escaping @Sendable (Bool, Error?) -> Void) {
         // 创建通讯录对象
         let store = CNContactStore()
         store.requestAccess(for: .contacts) {(granted, error) in

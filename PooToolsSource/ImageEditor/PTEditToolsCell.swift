@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PTEditImageToolModel:NSObject {
+class PTEditImageToolModel:NSObject,@unchecked Sendable {
     var normalImage:UIImage = UIImage()
     var selectedImage:UIImage?
     var currentType:PTImageEditorConfig.EditTool = .draw

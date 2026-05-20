@@ -117,6 +117,8 @@ open class TextFieldEffects: UITextField {
     
     /// 让自定义视图可以在 Xcode 的 Storyboard / XIB 中实时预览渲染结果
     override open func prepareForInterfaceBuilder() {
-        drawViewsForRect(frame)
+        PTGCDManager.shared.runOnMain {
+            self.drawViewsForRect(self.frame)
+        }
     }
 }

@@ -63,7 +63,7 @@ enum PTDebugUserInfo {
         return Info(title: "Bundle id", detail: "\(bundleID)")
     }
 
-    static func getScreenResolution() -> Info {
+    @MainActor static func getScreenResolution() -> Info {
         let screen = UIScreen.main
         let bounds = screen.bounds
         let scale = screen.scale
@@ -79,7 +79,7 @@ enum PTDebugUserInfo {
         return Info(title: "Device model", detail: deviceModel)
     }
 
-    static func getIOSVersionInfo() -> Info {
+    @MainActor static func getIOSVersionInfo() -> Info {
         let iOSVersion = UIDevice.current.systemVersion
         return Info(title: "ios version", detail: iOSVersion)
     }

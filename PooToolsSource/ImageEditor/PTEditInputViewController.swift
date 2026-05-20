@@ -232,7 +232,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }()
 
     deinit {
-        cleanTimer()
+//        cleanTimer()
     }
     
     class func initWithState(_ state: PTBaseStickertState) -> PTBaseStickerView? {
