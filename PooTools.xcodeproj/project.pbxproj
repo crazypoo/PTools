@@ -47,6 +47,7 @@
 		231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */; };
 		231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */; };
 		231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */; };
+		550026882FBD44B400E3B347 /* PTRangeSeekSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550026872FBD44B400E3B347 /* PTRangeSeekSlider.swift */; };
 		55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DDC29F2831500244E44 /* PTFaceEye.swift */; };
 		55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DDF29F2855300244E44 /* PTEyeTrackingSessionManager.swift */; };
 		55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE029F2855300244E44 /* PTEyeTrackingDataManager.swift */; };
@@ -956,7 +957,7 @@
 
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
@@ -1000,6 +1001,7 @@
 		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
 		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
+		550026872FBD44B400E3B347 /* PTRangeSeekSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRangeSeekSlider.swift; sourceTree = "<group>"; };
 		55024DDC29F2831500244E44 /* PTFaceEye.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFaceEye.swift; sourceTree = "<group>"; };
 		55024DDF29F2855300244E44 /* PTEyeTrackingSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingSessionManager.swift; sourceTree = "<group>"; };
 		55024DE029F2855300244E44 /* PTEyeTrackingDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingDataManager.swift; sourceTree = "<group>"; };
@@ -2300,6 +2302,7 @@
 			isa = PBXGroup;
 			children = (
 				55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */,
+				550026872FBD44B400E3B347 /* PTRangeSeekSlider.swift */,
 			);
 			path = Slider;
 			sourceTree = "<group>";
@@ -4548,6 +4551,7 @@
 				55BA90502D29A7D70065FBD0 /* InspectorElementKeyCommandSectionView.swift in Sources */,
 				55BA90512D29A7D70065FBD0 /* UIBarStyle+InspectorEX.swift in Sources */,
 				55BA90522D29A7D70065FBD0 /* FontReference.swift in Sources */,
+				550026882FBD44B400E3B347 /* PTRangeSeekSlider.swift in Sources */,
 				55BA90532D29A7D70065FBD0 /* StepperControl.swift in Sources */,
 				55BA90542D29A7D70065FBD0 /* ElementNameView.swift in Sources */,
 				55BA90552D29A7D70065FBD0 /* LoaderView.swift in Sources */,
