@@ -152,7 +152,6 @@ extension PTEditMenuKit {
 }
 
 // MARK: - Legacy Responder
-@MainActor
 @objcMembers
 final class PTLegacyMenuResponder: NSObject {
 
