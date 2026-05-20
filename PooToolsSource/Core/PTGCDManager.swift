@@ -85,37 +85,44 @@ public actor PTGCDManager {
     // MARK: - 结构化并发组 (替代 DispatchGroup & DispatchSemaphore)
     public func taskGroupUtility(semaphoreCount: Int = 3,
                                  threadCount: Int,
-                                 doSomeThing: @escaping @Sendable (_ currentIndex: Int) async -> Void,
+                                 doSomeThing: @escaping @Sendable (_ currentIndex: Int, _ finishTask: @escaping @Sendable () -> Void) -> Void,
                                  allRequestsFinished: @escaping @MainActor @Sendable () -> Void) async {
         
         await withTaskGroup(of: Void.self) { group in
             var activeTasks = 0
             
             for i in 0..<threadCount {
-                if self.cancelFlag { break } // 检查全局取消标志
+                if self.cancelFlag { break }
                 
-                // 并发数控制机制：如果达到上限，先等待其中一个任务完成
+                // 并发数控制机制
                 if activeTasks >= semaphoreCount {
                     _ = await group.next()
                     activeTasks -= 1
                 }
                 
                 group.addTask {
-                    await doSomeThing(i)
+                    // 技能培训：withCheckedContinuation 是连接旧时代回调和新时代 async 的桥梁
+                    // 它会挂起当前 Task，直到 continuation.resume() 被调用
+                    await withCheckedContinuation { continuation in
+                        
+                        // 派发任务给外部，并提供一个 finishTask 闭包给外部调用
+                        doSomeThing(i) {
+                            // 当外部调用 finishTask() 时，我们恢复协程，系统此时才知道任务真正完成
+                            continuation.resume()
+                        }
+                    }
                 }
                 activeTasks += 1
             }
             
-            // 等待所有已添加的剩余任务完成
             await group.waitForAll()
         }
         
-        // 全部完成后，安全切回主线程
         await MainActor.run {
             allRequestsFinished()
         }
     }
-    
+
     // MARK: - 现代化的快捷调度 (nonisolated)
     // nonisolated 关键字允许在 actor 外部不使用 await 直接调用这些无需访问 actor 内部状态的方法
     

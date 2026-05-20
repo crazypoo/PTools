@@ -128,15 +128,19 @@ extension PTNetworkSpeedTestFunction : @preconcurrency URLSessionDataDelegate, @
             
             if testDone != nil {
                 Task { @MainActor in
-                    await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 2, threadCount: 2) { currentIndex in
+                    await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 2, threadCount: 2) { currentIndex,finishTask in
                         if currentIndex == 0 {
                             PTGCDManager.shared.delayOnMain(time: 0.35) {
                                 self.valueUpdateTask?(PTNetworkSpeedTestType.Download,self.downloadValue)
+                                finishTask()
                             }
                         } else if currentIndex == 1 {
                             PTGCDManager.shared.delayOnMain(time: 0.35) {
                                 self.valueUpdateTask?(PTNetworkSpeedTestType.Upload,self.uploadValue)
+                                finishTask()
                             }
+                        } else {
+                            finishTask()
                         }
                     } allRequestsFinished: {
                         Task { @MainActor in

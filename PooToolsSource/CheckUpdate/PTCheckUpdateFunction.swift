@@ -533,7 +533,7 @@ public class PTCheckUpdateFunction: NSObject {
                 // 💡 修复点 2：将 appID 提前在主线程读取出来，避免在后台闭包里发生数据竞争
                 let appID = PTAppBaseConfig.share.appID
                 
-                await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 3, threadCount: 3) { currentIndex in
+                await PTGCDManager.shared.taskGroupUtility(semaphoreCount: 3, threadCount: 3) { currentIndex,finishTask in
                     switch currentIndex {
                     case 0:
                         PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: "https://api.appstoreconnect.apple.com/v1/buildBetaDetails/\(buildId)/build", modelType: PTTFNewerBuildVersionModel.self, showHud: false) { newerResult, _ in
@@ -545,8 +545,10 @@ public class PTCheckUpdateFunction: NSObject {
                                     updateState.build = versionStr
                                 }
                             }
-                        } fail: { _ in }
-                        
+                            finishTask()
+                        } fail: { _ in
+                            finishTask()
+                        }
                     case 1:
                         PTCheckUpdateFunction.appConnectApiRequest(token: token, apiUrl: apiUrlString, modelType: PTTFModelCollection.self, showHud: false) { infoResult, _ in
                             
@@ -556,8 +558,10 @@ public class PTCheckUpdateFunction: NSObject {
                                     updateState.note = whatsNewStr
                                 }
                             }
-                        } fail: { _ in }
-                        
+                            finishTask()
+                        } fail: { _ in
+                            finishTask()
+                        }
                     case 2:
                         // 使用刚刚提前提取出来的 appID
                         let para = ["filter[app]": appID, "fields[betaGroups]": "name,publicLink"]
@@ -569,9 +573,12 @@ public class PTCheckUpdateFunction: NSObject {
                                     updateState.downLoadLink = linkStr
                                 }
                             }
-                        } fail: { _ in }
-                        
-                    default: break
+                            finishTask()
+                        } fail: { _ in
+                            finishTask()
+                        }
+                    default:
+                        finishTask()
                     }
                     
                 } allRequestsFinished: {
