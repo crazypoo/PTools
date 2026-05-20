@@ -20,7 +20,7 @@ public extension PTPOP where Base == CLLocation {
     ///   - completionHandler: 回调函数
     static func reverseGeocode(latitude: CLLocationDegrees,
                                longitude: CLLocationDegrees,
-                               completionHandler: @escaping CLGeocodeCompletionHandler) {
+                               completionHandler: @escaping @Sendable ([CLPlacemark]?, Error?) -> Void) {
         let geocoder = CLGeocoder()
         let currentLocation = CLLocation(latitude: latitude, longitude: longitude)
         geocoder.reverseGeocodeLocation(currentLocation, completionHandler: completionHandler)
@@ -32,7 +32,7 @@ public extension PTPOP where Base == CLLocation {
     ///   - address: 地址信息
     ///   - completionHandler: 回调函数
     static func locationEncode(address: String,
-                               completionHandler: @escaping CLGeocodeCompletionHandler) {
+                               completionHandler: @escaping @Sendable ([CLPlacemark]?, Error?) -> Void) {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address, completionHandler: completionHandler)
     }

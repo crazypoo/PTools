@@ -35,7 +35,7 @@ public extension UIDeviceApplePencilSupportType {
 public extension PTPOP where Base: UIDevice {
     
     //MARK: 判断是否Mac
-    var isMac: Bool {
+    @MainActor var isMac: Bool {
         if UIDevice.current.userInterfaceIdiom == .mac {
             return true
         }
@@ -74,7 +74,7 @@ public extension PTPOP where Base: UIDevice {
 
     //MARK: 獲取當前設備的名稱
     ///獲取當前設備的名稱
-    static var currentDeviceName : String {
+    @MainActor static var currentDeviceName : String {
         get {
             UIDevice.current.name
         }
@@ -179,13 +179,13 @@ public extension PTPOP where Base: UIDevice {
 
     //MARK: 获取总内存大小
     ///获取总内存大小GB
-    static var memoryTotal: Double {
+    @MainActor static var memoryTotal: Double {
         round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100
     }
     
     //MARK: 获取屏幕亮度
     ///获取屏幕亮度比例
-    static var brightness: CGFloat {
+    @MainActor static var brightness: CGFloat {
         UIScreen.main.brightness
     }
     
@@ -225,7 +225,7 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: 获取最高刷新率
     ///获取最高刷新率
-    static var maximumFramesPerSecond: Int {
+    @MainActor static var maximumFramesPerSecond: Int {
         UIScreen.main.maximumFramesPerSecond
     }
     
@@ -251,7 +251,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 當前設備能否打電話
     ///當前設備能否打電話
     /// - Returns: 結果
-    static func isCanCallTel() -> Bool {
+    @MainActor static func isCanCallTel() -> Bool {
         if let url = URL(string: "tel://") {
             return UIApplication.shared.canOpenURL(url)
         }
@@ -263,7 +263,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 檢測當前系統是否小於某個版本系統
     ///檢測當前系統是否小於某個版本系統
     /// - Returns: Bool
-    static func lessThanSysVersion(version:NSString,
+    @MainActor static func lessThanSysVersion(version:NSString,
                                    equal:Bool) -> Bool {
         UIDevice.current.systemVersion.compare("\(version)", options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
     }
@@ -458,14 +458,14 @@ public extension PTPOP where Base: UIDevice {
     
     //MARK: UINotificationFeedbackGenerator 来设置的手机振动
     ///UINotificationFeedbackGenerator 来设置的手机振动
-    static func notificationFeedbackGeneratorSuccess(_ notificationType: UINotificationFeedbackGenerator.FeedbackType) {
+    @MainActor static func notificationFeedbackGeneratorSuccess(_ notificationType: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(notificationType)
     }
     
     //MARK: UIImpactFeedbackGenerator 来设置的手机振动
     ///UIImpactFeedbackGenerator 来设置的手机振动
-    static func impactFeedbackGenerator(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+    @MainActor static func impactFeedbackGenerator(style: UIImpactFeedbackGenerator.FeedbackStyle) {
         let generator = UIImpactFeedbackGenerator(style: style)
         generator.impactOccurred()
     }
@@ -473,7 +473,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 模拟选择滚轮一类控件时的震动
     ///模拟选择滚轮一类控件时的震动
     ///UISelectionFeedbackGenerator中只有一个类型，是用来模拟选择滚轮一类控件时的震动，比如计时器中的picker滚动时就有这个效果。
-    static func selectionFeedbackGeneratorChanged() {
+    @MainActor static func selectionFeedbackGeneratorChanged() {
         UISelectionFeedbackGenerator().selectionChanged()
     }
 }

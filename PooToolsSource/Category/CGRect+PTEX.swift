@@ -69,8 +69,20 @@ public extension CGRect {
 extension CGRect: PTNumberValueAdapterable {
     public typealias PTNumberValueAdapterType = CGRect
     public var adapter: CGRect {
+        let isScreenBounds: Bool = {
+            if Thread.isMainThread {
+                // 如果已经在主线程，使用 assumeIsolated 向编译器担保这是安全的
+                return MainActor.assumeIsolated { self == UIScreen.main.bounds }
+            } else {
+                // 如果在子线程，则同步派发到主线程获取，并同样进行担保
+                return DispatchQueue.main.sync {
+                    MainActor.assumeIsolated { self == UIScreen.main.bounds }
+                }
+            }
+        }()
+
         /// 不参与屏幕rect
-        if self == UIScreen.main.bounds {
+        if isScreenBounds {
             return self
         }
 
