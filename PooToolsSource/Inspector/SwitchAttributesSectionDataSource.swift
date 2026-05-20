@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class SwitchAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class SwitchAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Switch"
@@ -28,7 +28,7 @@ extension DefaultElementAttributesLibrary {
             case thumbTintColor = "Thumb Tint"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let switchControl = switchControl else { return [] }
 
             return Property.allCases.compactMap { property in

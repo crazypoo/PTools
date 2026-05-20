@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class StackViewAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class StackViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Stack View"
@@ -29,7 +29,7 @@ extension DefaultElementAttributesLibrary {
             case isBaselineRelativeArrangement = "Baseline Relative"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let stackView = stackView else { return [] }
 
             return Property.allCases.compactMap { property in

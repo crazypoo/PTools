@@ -254,7 +254,9 @@ final class InspectorHighlightView: LayerView {
 //        }
 
         perform(pendingTransition) { _ in
-            self.pendingTransition = .none
+            PTGCDManager.shared.runOnMain {
+                self.pendingTransition = .none
+            }
         }
     }
 

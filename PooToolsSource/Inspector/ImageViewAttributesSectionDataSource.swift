@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ImageViewAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class ImageViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Image"
@@ -41,7 +41,7 @@ extension DefaultElementAttributesLibrary {
             }
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let imageView = imageView else { return [] }
 
             return Property.allCases

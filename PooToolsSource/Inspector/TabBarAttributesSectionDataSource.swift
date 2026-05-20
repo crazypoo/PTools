@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class TabBarAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class TabBarAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Tab Bar"
@@ -29,7 +29,7 @@ extension DefaultElementAttributesLibrary {
             case barTintColor = "Bar Tint"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let tabBar = tabBar else { return [] }
 
             return Property.allCases.compactMap { property in

@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class SegmentedControlSizeSectionDataSource: InspectorElementSectionDataSource {
+    final class SegmentedControlSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Segmented Control"
@@ -33,7 +33,7 @@ extension DefaultElementSizeLibrary {
             case apportionsSegmentWidthsByContent = "Size Mode"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let segmentedControl = segmentedControl else { return [] }
 
             return Properties.allCases.map { property in

@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class NavigationItemAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class NavigationItemAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Navigation Item"
@@ -30,7 +30,7 @@ extension DefaultElementAttributesLibrary {
             case LargeTitle = "Large Title"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let navigationItem = navigationItem else { return [] }
 
             return Property.allCases.compactMap { property in

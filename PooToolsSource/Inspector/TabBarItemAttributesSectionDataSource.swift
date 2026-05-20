@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class TabBarItemAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class TabBarItemAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Tab Bar Item"
@@ -34,7 +34,7 @@ extension DefaultElementAttributesLibrary {
             case isSpringLoaded = "Spring Loaded"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let tabBarItem = tabBarItem else { return [] }
 
             return Property.allCases.compactMap { property in

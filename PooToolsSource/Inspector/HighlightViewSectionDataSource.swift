@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementIdentityLibrary {
-    final class HighlightViewSectionDataSource: InspectorElementSectionDataSource {
+    final class HighlightViewSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = Texts.highlight("View")
@@ -17,8 +17,7 @@ extension DefaultElementIdentityLibrary {
         init?(with view: UIView) {
             if let highlightView = view._highlightView {
                 self.highlightView = highlightView
-            }
-            else {
+            } else {
                 return nil
             }
         }
@@ -28,7 +27,7 @@ extension DefaultElementIdentityLibrary {
             case highlightView = "Show Highlight"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let highlightView = highlightView else {
                 return []
             }
@@ -40,7 +39,9 @@ extension DefaultElementIdentityLibrary {
                         title: property.rawValue,
                         isOn: { !highlightView.isHidden },
                         handler: { isOn in
-                            highlightView.isHidden = !isOn
+                            PTGCDManager.shared.runOnMain {
+                                highlightView.isHidden = !isOn
+                            }
                         }
                     )
                 case .nameDisplayMode:

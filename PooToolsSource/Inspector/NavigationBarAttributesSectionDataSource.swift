@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class NavigationBarAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class NavigationBarAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Navigation Bar"
@@ -40,7 +40,7 @@ extension DefaultElementAttributesLibrary {
             case largeTitleColor = "Large Title Color"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let navigationBar = navigationBar else { return [] }
 
             return Property.allCases.compactMap { property in

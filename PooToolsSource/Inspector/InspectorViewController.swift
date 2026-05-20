@@ -80,10 +80,18 @@ final class InspectorViewController: UIViewController, InternalViewProtocol, Key
             guard let self = self else { return true }
             switch key?.keyCode {
             case .keyboardUpArrow:
-                defer { self.setFirstResponderAndSelectPreviousRow() }
+                defer {
+                    PTGCDManager.shared.runOnMain {
+                        self.setFirstResponderAndSelectPreviousRow()
+                    }
+                }
                 return false
             case .keyboardTab, .keyboardDownArrow:
-                defer { self.setFirstResponderAndSelectFirstRow() }
+                defer {
+                    PTGCDManager.shared.runOnMain {
+                        self.setFirstResponderAndSelectFirstRow()
+                    }
+                }
                 return false
             default:
                 return true
@@ -191,7 +199,9 @@ final class InspectorViewController: UIViewController, InternalViewProtocol, Key
         else {
             return
         }
-        viewCode.tableViewContentSize = contentSize
+        PTGCDManager.shared.runOnMain {
+            self.viewCode.tableViewContentSize = contentSize
+        }
     }
 
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {

@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ScrollViewAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class ScrollViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Scroll View"
@@ -44,7 +44,7 @@ extension DefaultElementAttributesLibrary {
             case keyboardDismissMode = "Keyboard"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let scrollView = scrollView else { return [] }
 
             return Property.allCases.compactMap { property in

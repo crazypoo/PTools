@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class LabelSizeSectionDataSource: InspectorElementSectionDataSource {
+    final class LabelSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Label"
@@ -23,7 +23,7 @@ extension DefaultElementSizeLibrary {
             case preferredMaxLayoutWidth = "Desired Width"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let label = label else { return [] }
 
             return Properties.allCases.map { property in

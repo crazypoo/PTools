@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class LayoutConstraintSizeSectionDataSource: NSObject, InspectorElementSectionDataSource {
+    final class LayoutConstraintSizeSectionDataSource: NSObject, @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         typealias Axis = LayoutConstraintElement.Axis
@@ -49,7 +49,7 @@ extension DefaultElementSizeLibrary {
             case identifier = "Identifier"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let underlyingConstraint = constraint.underlyingConstraint else { return [] }
 
             return Property.allCases.compactMap { property in

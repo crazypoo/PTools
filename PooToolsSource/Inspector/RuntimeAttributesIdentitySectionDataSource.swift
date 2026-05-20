@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementIdentityLibrary {
-    final class RuntimeAttributesIdentitySectionDataSource: InspectorElementSectionDataSource {
+    final class RuntimeAttributesIdentitySectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Runtime Attributes"
@@ -25,7 +25,7 @@ extension DefaultElementIdentityLibrary {
                 .sorted(by: <)
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard
                 let object = object,
                 !propertyNames.isEmpty

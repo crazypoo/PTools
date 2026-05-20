@@ -19,7 +19,7 @@ final class LiveViewHierarchyElementThumbnailView: ViewHierarchyElementThumbnail
     }
 
     deinit {
-        stopLiveUpdatingSnapshot()
+//        stopLiveUpdatingSnapshot()
     }
 
     private var displayLink: CADisplayLink? {

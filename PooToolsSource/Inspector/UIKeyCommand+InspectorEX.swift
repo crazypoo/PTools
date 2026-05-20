@@ -148,7 +148,7 @@ public extension UIKeyCommand {
 public extension UIKeyCommand.Options {
         
     /// The string of characters corresponding to the keys that must be pressed to match this key command.
-    var input: String {
+    @MainActor var input: String {
         switch self {
         case let .key(input):
             return input

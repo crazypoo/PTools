@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class KeyCommandsSectionDataSource: InspectorElementSectionDataSource {
+    final class KeyCommandsSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .expanded
 
         let title: String
@@ -46,7 +46,7 @@ extension DefaultElementAttributesLibrary {
             case selector = "Selector"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let keyCommand = keyCommand else { return [] }
 
             return Property.allCases.compactMap { property in

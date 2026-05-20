@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class TableViewSizeSectionDataSource: InspectorElementSectionDataSource {
+    final class TableViewSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         let title: String = "Table View"
 
         var state: InspectorElementSectionState = .collapsed
@@ -33,7 +33,7 @@ extension DefaultElementSizeLibrary {
             case insetsContentViewsToSafeArea = "Insets Content Views"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let tableView = tableView else { return [] }
 
             return Properties.allCases.map { property in

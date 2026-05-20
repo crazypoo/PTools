@@ -8,7 +8,7 @@ import SwiftUI
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class NavigationBarAppearanceAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class NavigationBarAppearanceAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let kind: Kind
@@ -58,9 +58,9 @@ extension DefaultElementAttributesLibrary {
             case largeTitleShadowOffset = "Large Title Shadow Offset"
         }
 
-        private(set) lazy var properties = makeProperties(for: appearance)
+        @MainActor private(set) lazy var properties = makeProperties(for: appearance)
 
-        private func makeProperties(for appearance: UINavigationBarAppearance?) -> [InspectorElementProperty] {
+        @MainActor private func makeProperties(for appearance: UINavigationBarAppearance?) -> [InspectorElementProperty] {
             guard let appearance = appearance else { return [] }
 
             return Property.allCases.compactMap { property in

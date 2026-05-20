@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ScrollViewSizeSectionDataSource: InspectorElementSectionDataSource {
+    final class ScrollViewSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Scroll View"
@@ -28,7 +28,7 @@ extension DefaultElementSizeLibrary {
             case adjustedContentInset = "Adjusted Content Inset"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let scrollView = scrollView else { return [] }
 
             return Properties.allCases.map { property in

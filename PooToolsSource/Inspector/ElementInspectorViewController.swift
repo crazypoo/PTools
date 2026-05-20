@@ -140,20 +140,21 @@ final class ElementInspectorViewController: ElementInspectorPanelViewController,
                 self.addChild(panelViewController)
 
                 self.viewCode.setContentAnimated(content) { [weak self] in
-                    self?.configureNavigationItem()
+                    PTGCDManager.shared.runOnMain {
+                        self?.configureNavigationItem()
 
-                    if let formPanel = self?.currentFormPanelViewController {
-                        self?.toggleCollapseButton.alpha = 1
-                        self?.toggleCollapseButton.isHidden = false
-                        self?.toggleCollapseButton.collapseState = formPanel.listState
+                        if let formPanel = self?.currentFormPanelViewController {
+                            self?.toggleCollapseButton.alpha = 1
+                            self?.toggleCollapseButton.isHidden = false
+                            self?.toggleCollapseButton.collapseState = formPanel.listState
+                        }
+                        else {
+                            self?.toggleCollapseButton.alpha = 0
+                            self?.toggleCollapseButton.isHidden = true
+                        }
+
+                        self?.updatePreferredContentSize()
                     }
-                    else {
-                        self?.toggleCollapseButton.alpha = 0
-                        self?.toggleCollapseButton.isHidden = true
-                    }
-
-                    self?.updatePreferredContentSize()
-
                 } completion: { [weak self] _ in
                     Task { @MainActor [weak self] in
                         oldValue?.didMove(toParent: nil)

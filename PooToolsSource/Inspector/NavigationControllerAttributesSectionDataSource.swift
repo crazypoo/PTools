@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class NavigationControllerAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class NavigationControllerAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Navigation Controller"
@@ -33,7 +33,7 @@ extension DefaultElementAttributesLibrary {
             case hidesBarsWhenVerticallyCompact = "When Vertically Compact"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let navigationController = navigationController else { return [] }
 
             return Property.allCases.compactMap { property in

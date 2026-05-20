@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class SliderAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class SliderAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Slider"
@@ -35,7 +35,7 @@ extension DefaultElementAttributesLibrary {
             case isContinuous = "Continuous updates"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let slider = slider else { return [] }
             let stepValueProvider = { max(0.01, (slider.maximumValue - slider.minimumValue) / 100) }
 

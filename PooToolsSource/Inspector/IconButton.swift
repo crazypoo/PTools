@@ -13,7 +13,7 @@ final class IconButton: BaseControl {
         case rounded
         case plain
 
-        fileprivate func cornerRadius(for view: UIView) -> CGFloat {
+        @MainActor fileprivate func cornerRadius(for view: UIView) -> CGFloat {
             switch self {
             case .rounded:
                 return view.frame.height / 2

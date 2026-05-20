@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class TableViewAttributesSectionDataSource: InspectorElementSectionDataSource {
+    final class TableViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
         let title: String = "Table View"
 
         var state: InspectorElementSectionState = .collapsed
@@ -30,7 +30,7 @@ extension DefaultElementAttributesLibrary {
             case isSpringLoaded = "Spring loaded drag n' drop"
         }
 
-        var properties: [InspectorElementProperty] {
+        @MainActor var properties: [InspectorElementProperty] {
             guard let tableView = tableView else { return [] }
 
             return Properties.allCases.map { property in
