@@ -9,6 +9,23 @@
 import UIKit
 import Photos
 
+private final class AssetIdentifierStorage: @unchecked Sendable {
+    private var identifier: String?
+    private let lock = NSLock()
+    
+    func setIdentifier(_ id: String?) {
+        lock.lock()
+        identifier = id
+        lock.unlock()
+    }
+    
+    func getIdentifier() -> String? {
+        lock.lock()
+        defer { lock.unlock() }
+        return identifier
+    }
+}
+
 extension PHPhotoLibrary: PTProtocolCompatible { }
 public extension PTPOP where Base: PHPhotoLibrary {
 
@@ -37,17 +54,22 @@ public extension PTPOP where Base: PHPhotoLibrary {
     }
     
     /// Save image to album.
-    static func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
+    static func saveImageToAlbum(image: UIImage, completion: (@Sendable (Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         if status == .denied || status == .restricted {
             completion?(false, nil)
             return
         }
-        var placeholderAsset: PHObjectPlaceholder?
-        let completionHandler: (Bool, Error?) -> Void = { suc, _ in
+        
+        // 2. 实例化线程安全的包装类
+        let assetStorage = AssetIdentifierStorage()
+        
+        // 3. 这里的 completionHandler 明确声明为 @Sendable
+        let completionHandler: @Sendable (Bool, Error?) -> Void = { suc, _ in
             if suc {
-                let asset = getAsset(from: placeholderAsset?.localIdentifier)
+                // 安全地读取 Identifier 并获取 Asset
+                let asset = getAsset(from: assetStorage.getIdentifier())
                 completion?(suc, asset)
             } else {
                 completion?(false, nil)
@@ -58,12 +80,14 @@ public extension PTPOP where Base: PHPhotoLibrary {
             PHPhotoLibrary.shared().performChanges({
                 let newAssetRequest = PHAssetCreationRequest.forAsset()
                 newAssetRequest.addResource(with: .photo, data: data, options: nil)
-                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+                // 4. 安全地存入 Identifier
+                assetStorage.setIdentifier(newAssetRequest.placeholderForCreatedAsset?.localIdentifier)
             }, completionHandler: completionHandler)
         } else {
             PHPhotoLibrary.shared().performChanges({
                 let newAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-                placeholderAsset = newAssetRequest.placeholderForCreatedAsset
+                // 4. 安全地存入 Identifier
+                assetStorage.setIdentifier(newAssetRequest.placeholderForCreatedAsset?.localIdentifier)
             }, completionHandler: completionHandler)
         }
     }
