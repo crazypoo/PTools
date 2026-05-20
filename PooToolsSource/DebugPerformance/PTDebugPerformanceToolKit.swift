@@ -98,8 +98,8 @@ final class PTDebugPerformanceToolKit {
         Task { @MainActor in
             fpsCounter.open()
             measurementsTimer = Timer( timeInterval: 1.0, target: self, selector: #selector(updateMeasurements), userInfo: nil, repeats: true)
+            RunLoop.main.add(measurementsTimer!, forMode: .common)
         }
-        RunLoop.main.add(measurementsTimer!, forMode: .common)
     }
     
     @MainActor func setupPerformanceMeasurement() {
