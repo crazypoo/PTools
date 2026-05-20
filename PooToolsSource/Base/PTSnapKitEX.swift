@@ -37,6 +37,7 @@ public enum ConstraintCrossAxisAlignment {
 }
 
 /// 对一组视图进行统一布局控制的封装
+@MainActor
 public struct ConstraintGroup {
     internal let array: [ConstraintView]
     
@@ -297,7 +298,7 @@ extension ConstraintView {
 
 /// 快捷存取视图数组的 ConstraintGroup
 public extension Array where Element: ConstraintView {
-    var constraintGroup: ConstraintGroup {
+    @MainActor var constraintGroup: ConstraintGroup {
         return ConstraintGroup(array: self)
     }
 }

@@ -140,7 +140,9 @@ public class PTCustomerAlertController: PTAlertController {
         if canTapBackground {
             let tap = UITapGestureRecognizer { _ in
                 self.dismissAnimation {
-                    self.backgroundTapCallback?(self)
+                    PTGCDManager.shared.runOnMain {
+                        self.backgroundTapCallback?(self)
+                    }
                 }
             }
             view.addGestureRecognizer(tap)

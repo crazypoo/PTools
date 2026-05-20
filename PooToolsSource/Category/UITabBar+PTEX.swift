@@ -30,7 +30,7 @@ public extension UITabBar {
         case transparentStandardOnly
         case opaqueAlways
         
-        public var standardAppearance: UITabBarAppearance {
+        @MainActor public var standardAppearance: UITabBarAppearance {
             let appearance = UITabBarAppearance()
             switch self {
             case .transparentAlways:
@@ -45,7 +45,7 @@ public extension UITabBar {
             }
         }
         
-        public var scrollEdgeAppearance: UITabBarAppearance {
+        @MainActor public var scrollEdgeAppearance: UITabBarAppearance {
             let appearance = UITabBarAppearance()
             switch self {
             case .transparentAlways:

@@ -12,7 +12,7 @@ import UIKit
 public extension AVPlayerItem {
     func generateThumbnail(startTime:Double = 0,
                            maximumSize: CGSize = CGSize(width: 1000, height: 1000),
-                           completion: @escaping (UIImage?) -> Void) {
+                           completion: @escaping @Sendable (UIImage?) -> Void) {
         let assetImageGenerator = AVAssetImageGenerator(asset: asset)
         assetImageGenerator.appliesPreferredTrackTransform = true
         assetImageGenerator.maximumSize = maximumSize

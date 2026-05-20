@@ -265,7 +265,7 @@ public extension PTPOP where Base: UILabel {
     ///   - textSpace: 字间距，默认为0.0
     ///   - paraSpace: 段间距，默认为0.0
     /// - Returns: label 的文本行数 & 每一行内容
-    func linesCountAndLinesContent(lineSpace: CGFloat, 
+    @MainActor func linesCountAndLinesContent(lineSpace: CGFloat, 
                                    textSpace: CGFloat = 0.0,
                                    paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
         accordWidthLinesCountAndLinesContent(accordWidth: base.frame.size.width, lineSpace: lineSpace, textSpace: textSpace, paraSpace: paraSpace)
@@ -279,7 +279,7 @@ public extension PTPOP where Base: UILabel {
     ///   - textSpace: 字间距，默认为0.0
     ///   - paraSpace: 段间距，默认为0.0
     /// - Returns: description
-    func accordWidthLinesCountAndLinesContent(accordWidth: CGFloat, 
+    @MainActor func accordWidthLinesCountAndLinesContent(accordWidth: CGFloat, 
                                               lineSpace: CGFloat,
                                               textSpace: CGFloat = 0.0,
                                               paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
@@ -314,7 +314,7 @@ public extension PTPOP where Base: UILabel {
     
     //MARK: 获取第一行内容
     ///获取第一行内容
-    var firstLineString: String? {
+    @MainActor var firstLineString: String? {
         self.linesCountAndLinesContent(lineSpace: 0.0).1?.first
     }
     
@@ -322,7 +322,7 @@ public extension PTPOP where Base: UILabel {
     ///改变行间距
     /// - Parameters:
     ///  - space: 行间距大小
-    func changeLineSpace(space: CGFloat) {
+    @MainActor func changeLineSpace(space: CGFloat) {
         guard let text = base.text,!text.stringIsEmpty() else {
             return
         }
@@ -338,7 +338,7 @@ public extension PTPOP where Base: UILabel {
     ///改变字间距
     /// - Parameters:
     ///  -  space: 字间距大小
-    func changeWordSpace(space: CGFloat) {
+    @MainActor func changeWordSpace(space: CGFloat) {
         guard let text = base.text,!text.stringIsEmpty() else {
             return
         }
@@ -355,7 +355,7 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///   - lineSpace: 行间距
     ///   - wordSpace: 字间距
-    func changeSpace(lineSpace: CGFloat, 
+    @MainActor func changeSpace(lineSpace: CGFloat, 
                      wordSpace: CGFloat) {
         guard let text = base.text,!text.stringIsEmpty() else {
             return
@@ -374,7 +374,7 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///   - lineValue: value 越大,划线越粗
     ///   - underlineColor: 中划线的颜色
-    func centerLineText(lineValue: Int = 1, 
+    @MainActor func centerLineText(lineValue: Int = 1, 
                         underlineColor: UIColor = .black) {
         guard let content = base.text else {
             return
@@ -491,7 +491,7 @@ public extension PTPOP where Base: UILabel {
     //MARK: 获取字体的大小
     ///获取字体的大小
     /// - Returns: 字体大小
-    func getFontSizeForLabel() -> CGFloat {
+    @MainActor func getFontSizeForLabel() -> CGFloat {
         let text: NSMutableAttributedString = NSMutableAttributedString(attributedString: base.attributedText!)
         text.setAttributes([NSAttributedString.Key.font: base.font as Any], range: NSMakeRange(0, text.length))
         let context: NSStringDrawingContext = NSStringDrawingContext()

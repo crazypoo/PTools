@@ -19,7 +19,7 @@ public extension Timer {
     @discardableResult
     static func scheduledTimer(timeInterval: TimeInterval,
                                repeats: Bool,
-                               block: @escaping (Timer) -> Void) -> Timer {
+                               block: @Sendable @escaping (Timer) -> Void) -> Timer {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: repeats, block: block)
     }
 }

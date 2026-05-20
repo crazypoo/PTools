@@ -170,8 +170,7 @@ final class PTLegacyMenuResponder: NSObject {
     }
 }
 
-@MainActor
-final class PTLegacyMenuActionProxy: NSObject {
+final class PTLegacyMenuActionProxy: NSObject,@unchecked Sendable {
     let handler: PTActionTask
     init(handler: @escaping PTActionTask) {
         self.handler = handler

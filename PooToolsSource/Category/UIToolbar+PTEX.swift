@@ -30,7 +30,7 @@ public extension UIToolbar {
         case transparentStandardOnly
         case opaqueAlways
         
-        public var standardAppearance: UIToolbarAppearance {
+        @MainActor public var standardAppearance: UIToolbarAppearance {
             let appearance = UIToolbarAppearance()
             switch self {
             case .transparentAlways:
@@ -45,7 +45,7 @@ public extension UIToolbar {
             }
         }
         
-        public var scrollEdgeAppearance: UIToolbarAppearance {
+        @MainActor public var scrollEdgeAppearance: UIToolbarAppearance {
             let appearance = UIToolbarAppearance()
             switch self {
             case .transparentAlways:

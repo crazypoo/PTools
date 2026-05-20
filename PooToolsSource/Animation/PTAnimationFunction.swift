@@ -12,7 +12,7 @@ import pop
 public let PTAnimationDuration = 0.35
 
 public class PTAnimationFunction: NSObject {
-    public class func animationIn(animationView:UIView,
+    @MainActor public class func animationIn(animationView:UIView,
                                   animationType:PTAlertAnimationType,
                                   transformValue:CGFloat,
                                   completion:((_ anim:POPAnimation?,_ finish:Bool) -> Void)? = nil) {

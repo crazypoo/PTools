@@ -1238,7 +1238,9 @@ extension PTBaseViewController {
     public func registerScreenShotService() {
         UIScreen.pt.detectScreenShot { type in
             guard type == .Normal else {
-                self.screenShotHandle?(nil)
+                PTGCDManager.shared.runOnMain {
+                    self.screenShotHandle?(nil)
+                }
                 return
             }
 
@@ -1254,17 +1256,21 @@ extension PTBaseViewController {
 
                 self.getImage(for: lastAsset) { image in
                     guard let image else {
-                        self.screenShotHandle?(nil)
+                        PTGCDManager.shared.runOnMain {
+                            self.screenShotHandle?(nil)
+                        }
                         return
                     }
 
-                    if let handler = self.screenShotHandle {
-                        handler(image)
-                    } else {
-                        Task { @MainActor in
+                    PTGCDManager.shared.runOnMain {
+                        if let handler = self.screenShotHandle {
+                            handler(image)
+                        } else {
                             if self.screenFunc == nil {
                                 self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image) {
-                                    self.screenFunc = nil
+                                    PTGCDManager.shared.runOnMain {
+                                        self.screenFunc = nil
+                                    }
                                 }
                                 if let actionHandle = self.screenShotActionHandle {
                                     self.screenFunc?.actionHandle = actionHandle
@@ -1358,7 +1364,7 @@ extension PTBaseViewController {
         }
     }
         
-    func getImage(for asset: PHAsset,finish:@escaping (UIImage?) -> Void) {
+    func getImage(for asset: PHAsset,finish:@escaping @Sendable (UIImage?) -> Void) {
         asset.convertLivePhotoToImage { result in
             finish(result)
         }

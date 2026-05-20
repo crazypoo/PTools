@@ -182,7 +182,7 @@ public extension UIImage {
     
     //MARK: 圖片高斯模糊
     ///圖片高斯模糊
-    @objc func blurImage() -> UIImage {
+    @MainActor @objc func blurImage() -> UIImage {
         img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
     }
     
@@ -193,14 +193,14 @@ public extension UIImage {
      色彩饱和度(浓度)因子:  0是黑白灰, 9是浓彩色, 1是原色  默认1.8
      “彩度”，英文是称Saturation，即饱和度。将无彩色的黑白灰定为0，最鲜艳定为9s，这样大致分成十阶段，让数值和人的感官直觉一致。
      */
-    func img(alpha:Float,
+    @MainActor func img(alpha:Float,
              radius:Float,
              colorSaturationFactor:Float) -> UIImage {
         let tintColor = UIColor(white: 1, alpha: CGFloat(alpha))
         return imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
     
-    func imgBluredWithRadius(blurRadius:Float,
+    @MainActor func imgBluredWithRadius(blurRadius:Float,
                              tintColor:UIColor?,
                              saturationDeltaFactor:Float,
                              maskImage:UIImage?) -> UIImage {
@@ -583,7 +583,7 @@ public extension PTPOP where Base: UIImage {
     ///   - corners: 切圆角的方式
     ///   - imageSize: 图片的大小
     /// - Returns: 剪切后的图片
-    func isRoundCorner(radius: CGFloat = 3,
+    @MainActor func isRoundCorner(radius: CGFloat = 3,
                        byRoundingCorners corners: UIRectCorner = .allCorners,
                        imageSize: CGSize?) -> UIImage? {
         let weakSize = imageSize ?? base.size
@@ -694,7 +694,7 @@ public extension PTPOP where Base: UIImage {
     
     //MARK: 保存图片到相册
     ///保存图片到相册
-    func savePhotosImageToAlbum(completion: @escaping (Bool, Error?) -> Void) {
+    func savePhotosImageToAlbum(completion: @escaping @Sendable (Bool, Error?) -> Void) {
         PHPhotoLibrary.shared().performChanges {
             PHAssetChangeRequest.creationRequestForAsset(from: base)
         } completionHandler: { (isSuccess: Bool, error: Error?) in
@@ -778,7 +778,7 @@ public extension PTPOP where Base: UIImage {
 
     
     /// 加马赛克
-    func mosaicImage() -> UIImage? {
+    @MainActor func mosaicImage() -> UIImage? {
         guard let cgImage = base.cgImage else {
             return nil
         }

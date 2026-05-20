@@ -172,9 +172,13 @@ public class PTActionSheetController: PTAlertController {
 
     private lazy var cancelBtn : PTActionCell = {
         let cell = createActionCell(for: cancelSheetItem, withCorner: true) { [weak self] in
-            self?.dismissAnimation {
-                guard let SELF = self else { return }
-                self?.actionSheetCancelSelectBlock?(SELF)
+            PTGCDManager.shared.runOnMain {
+                self?.dismissAnimation {
+                    PTGCDManager.shared.runOnMain {
+                        guard let SELF = self else { return }
+                        self?.actionSheetCancelSelectBlock?(SELF)
+                    }
+                }
             }
         }
         cell.superGradient(radius:sheetConfig.cornerRadii, corner: .allCorners)
@@ -206,7 +210,9 @@ public class PTActionSheetController: PTAlertController {
         if canTapBackground {
             let tap = UITapGestureRecognizer { _ in
                 self.dismissAnimation {
-                    self.tapBackgroundBlock?(self)
+                    PTGCDManager.shared.runOnMain {
+                        self.tapBackgroundBlock?(self)
+                    }
                 }
             }
             view.addGestureRecognizer(tap)

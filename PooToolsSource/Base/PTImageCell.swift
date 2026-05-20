@@ -61,7 +61,7 @@ open class PTImageCell: PTBaseNormalCell {
     }
     
     deinit {
-        removeAnimator()
+//        removeAnimator()
     }
     
     public func removeAnimator() {

@@ -22,7 +22,9 @@ public extension Array where Element: UIWindow {
     /// - Parameter userInterfaceStyle: The user interface style adopted by all elements.
     func override(_ userInterfaceStyle: UIUserInterfaceStyle) {
         for window in self {
-            window.override(userInterfaceStyle)
+            PTGCDManager.shared.runOnMain {
+                window.override(userInterfaceStyle)
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ import Harbeth
 public class C7Collector: NSObject, Cacheable {
     
     public var filters: [C7FilterProtocol] = []
-    public var videoSettings: [String : Any] = [
+    public var videoSettings: [String : Sendable] = [
         kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA
     ]
     /// Whether to enable automatic direction correction of pictures? The default is true.

@@ -105,7 +105,7 @@ public extension UINavigationBar {
         case transparentStandardOnly
         case opaqueAlways
         
-        var standardAppearance: UINavigationBarAppearance {
+        @MainActor var standardAppearance: UINavigationBarAppearance {
             let appearance = UINavigationBarAppearance()
             switch self {
             case .transparentAlways:
@@ -120,7 +120,7 @@ public extension UINavigationBar {
             }
         }
         
-        var scrollEdgeAppearance: UINavigationBarAppearance {
+        @MainActor var scrollEdgeAppearance: UINavigationBarAppearance {
             let appearance = UINavigationBarAppearance()
             switch self {
             case .transparentAlways:

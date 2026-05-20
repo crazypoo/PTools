@@ -14,7 +14,7 @@ public enum PTAlertTipsHaptic {
     case error
     case none
     
-    func impact() {
+    @MainActor func impact() {
         #if os(iOS)
         let generator = UINotificationFeedbackGenerator()
         switch self {

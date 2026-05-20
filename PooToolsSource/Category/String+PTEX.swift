@@ -773,7 +773,7 @@ public extension String {
     ///   - labelShowWidth: 展示的Width
     ///   - lineSpacing: 每行间隔
     /// - Returns: 行数
-    func numberOfLines(font:UIFont,
+    @MainActor func numberOfLines(font:UIFont,
                        labelShowWidth:CGFloat,
                        lineSpacing:CGFloat = 2.5) -> Int {
         let lineHeight = UIView.sizeFor(string: "A", font: font,lineSpacing: lineSpacing, width: labelShowWidth).height
@@ -782,7 +782,7 @@ public extension String {
         return Int(totalHeight / lineHeight)
     }
     
-    func truncatedText(maxLineNumber:Int,
+    @MainActor func truncatedText(maxLineNumber:Int,
                        font:UIFont,
                        labelShowWidth:CGFloat,
                        lineSpacing:CGFloat = 2.5) -> String {

@@ -20,14 +20,14 @@ public enum PTPurchaseCarAnimationTool {
     ///   - finishPoint: 动画结束的坐标点 (购物车图标的中心点)
     ///   - duration: 动画持续时间
     ///   - completion: 动画结束后的回调闭包
-    public static func startAnimation(from view: UIView,
+    @MainActor public static func startAnimation(from view: UIView,
                                       startRect: CGRect,
                                       finishPoint: CGPoint,
                                       duration: CFTimeInterval = 1.2,
                                       completion: @escaping AnimationFinishBlock) {
         
         // 1. 安全获取当前活跃的 KeyWindow (适配 iOS 13+ 多 Scene 机制)
-        guard let keyWindow = getKeyWindow() else {
+        guard let keyWindow = AppWindows else {
             completion(false)
             return
         }
@@ -84,7 +84,7 @@ public enum PTPurchaseCarAnimationTool {
     }
     
     /// 上下震动的反馈动画 (常用于购物车接收到商品时的跳动)
-    public static func shakeAnimation(for view: UIView) {
+    @MainActor  public static func shakeAnimation(for view: UIView) {
         let animation = CABasicAnimation(keyPath: "transform.translation.y")
         animation.duration = 0.25
         animation.fromValue = -5
@@ -94,21 +94,8 @@ public enum PTPurchaseCarAnimationTool {
     }
     
     // MARK: - Private Helper Methods
-    
-    /// 兼容 iOS 13 及以上版本的安全获取 KeyWindow 的方法
-    private static func getKeyWindow() -> UIWindow? {
-        if #available(iOS 13.0, *) {
-            return UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first { $0.isKeyWindow }
-        } else {
-            return UIApplication.shared.keyWindow
-        }
-    }
-    
     /// 使用现代 UIGraphicsImageRenderer API 高效截取 View 内容
-    private static func renderSnapshot(from view: UIView) -> UIImage? {
+    @MainActor private static func renderSnapshot(from view: UIView) -> UIImage? {
         let renderer = UIGraphicsImageRenderer(size: view.bounds.size)
         return renderer.image { context in
             view.layer.render(in: context.cgContext)

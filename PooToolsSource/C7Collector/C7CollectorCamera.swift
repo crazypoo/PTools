@@ -598,7 +598,9 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
                         if error != nil {
                             PTNSLogConsole("\(error!)")
                         } else {
-                            self.savedVideo?()
+                            PTGCDManager.shared.runOnMain {
+                                self.savedVideo?()
+                            }
                         }
                     }
                 case .failure(let error):
@@ -623,7 +625,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
         startRunning()
     }
     
-    func rotateVideo(inputURL: URL, completion: @escaping (Error?) -> Void) {
+    func rotateVideo(inputURL: URL, completion: @escaping @Sendable (Error?) -> Void) {
         let asset = AVAsset(url: inputURL)
         _ = AVMutableComposition()
         

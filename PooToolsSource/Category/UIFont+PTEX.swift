@@ -33,7 +33,7 @@ public extension UIFont {
         if customFont.stringIsEmpty() {
             fatalError("自定義需要有字體名字")
         } else {
-            if var setFont = UIFont(name: customFont, size: size) {
+            if let setFont = UIFont(name: customFont, size: size) {
                 if scale {
                     return setFont.adapter
                 }

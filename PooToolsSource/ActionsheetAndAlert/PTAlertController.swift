@@ -29,7 +29,7 @@ open class PTAlertController: PTBaseViewController {
 
     deinit {
         // 调试建议打开
-         PTNSLogConsole("PTAlertController deinit: \(key)")
+//         PTNSLogConsole("PTAlertController deinit: \(key)")
     }
 }
 

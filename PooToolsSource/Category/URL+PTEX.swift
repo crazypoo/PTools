@@ -47,7 +47,7 @@ public extension URL {
         }
     }   
     
-    func getFileSizeOnline(completion: @escaping (UInt64) -> Void) {
+    func getFileSizeOnline(completion: @escaping @Sendable (UInt64) -> Void) {
         var request = URLRequest(url: self)
         request.httpMethod = "HEAD"
         request.timeoutInterval = 15  // 设置请求超时

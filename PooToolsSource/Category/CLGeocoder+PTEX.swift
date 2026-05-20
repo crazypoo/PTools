@@ -9,9 +9,9 @@
 import UIKit
 import CoreLocation
 
-public typealias InChinaMainlandCallback = (_ errMsg: String?, _ inChinaMainland: Bool) -> Void
-public typealias InHMTCallback = (_ errMsg: String?, _ inHMT: Bool) -> Void
-public typealias CLPlacemarkCallback = (_ errMsg: String?, _ placemark: CLPlacemark?) -> Void
+public typealias InChinaMainlandCallback = @Sendable (_ errMsg: String?, _ inChinaMainland: Bool) -> Void
+public typealias InHMTCallback = @Sendable (_ errMsg: String?, _ inHMT: Bool) -> Void
+public typealias CLPlacemarkCallback = @Sendable (_ errMsg: String?, _ placemark: CLPlacemark?) -> Void
 
 public enum IsoCountryCode: String {
     case CN

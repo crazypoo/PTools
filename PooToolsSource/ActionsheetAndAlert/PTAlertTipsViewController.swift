@@ -77,7 +77,9 @@ public class PTAlertTipsViewController: PTAlertController {
         if dismissByTap {
             let tapGesterRecognizer = UITapGestureRecognizer { sender in
                 self.dismissAnimation(completion: {
-                    self.dismissCallback?()
+                    PTGCDManager.shared.runOnMain {
+                        self.dismissCallback?()
+                    }
                 })
             }
             view.addGestureRecognizer(tapGesterRecognizer)
@@ -140,7 +142,9 @@ public class PTAlertTipsViewController: PTAlertController {
                         guard let self = self else { return }
                         if self.tipsViewLow?.alpha != 0 {
                             self.dismissAnimation(completion: {
-                                self.dismissCallback?()
+                                PTGCDManager.shared.runOnMain {
+                                    self.dismissCallback?()
+                                }
                             })
                         }
                     }
@@ -158,7 +162,9 @@ public class PTAlertTipsViewController: PTAlertController {
                         guard let self = self else { return }
                         if self.tipsViewHight?.alpha != 0 {
                             self.dismissAnimation(completion: {
-                                self.dismissCallback?()
+                                PTGCDManager.shared.runOnMain {
+                                    self.dismissCallback?()
+                                }
                             })
                         }
                     }

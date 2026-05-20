@@ -12,18 +12,10 @@ public let effectTag = 19999
 
 @objcMembers
 public class PSecurityStrategy: NSObject {
-    
-    // 动态获取当前活跃的 KeyWindow (适配 iOS 13+ 且更安全)
-    private class var keyWindow: UIWindow? {
-        return UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow }
-    }
-    
+        
     class public func addBlurEffect() {
-        DispatchQueue.main.async { // 替换为你自己封装的 PTGCDManager.gcdMain
-            guard let window = self.keyWindow else { return }
+        PTGCDManager.shared.runOnMain {
+            guard let window = AppWindows else { return }
             
             // 如果已经存在，避免重复添加
             if window.viewWithTag(effectTag) != nil { return }
@@ -48,8 +40,8 @@ public class PSecurityStrategy: NSObject {
     }
     
     class public func removeBlurEffect() {
-        DispatchQueue.main.async {
-            guard let window = self.keyWindow,
+        PTGCDManager.shared.runOnMain {
+            guard let window = AppWindows,
                   let effectView = window.viewWithTag(effectTag) else {
                 return
             }
@@ -62,8 +54,8 @@ public class PSecurityStrategy: NSObject {
         }
     }
     
-    class public func screenShot() -> UIImage? {
-        guard let window = self.keyWindow else { return nil }
+    @MainActor class public func screenShot() -> UIImage? {
+        guard let window = AppWindows else { return nil }
         
         // 使用现代的 UIGraphicsImageRenderer，性能更好，自动处理 Scale 和广色域
         let renderer = UIGraphicsImageRenderer(bounds: window.bounds)
