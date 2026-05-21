@@ -285,7 +285,7 @@ fileprivate class WeakTargetProxy {
         self.target = target
     }
 
-    @objc func onUpdate() {
+    @MainActor @objc func onUpdate() {
         self.target?.updateMarquee()
     }
 }

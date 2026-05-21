@@ -257,17 +257,17 @@ public extension UITableView.Option {
     }
     
     /// Sets automatic height for section headers in the table view.
-    static var automaticSectionFooterHeight: Self {
+    @MainActor static var automaticSectionFooterHeight: Self {
         .sectionFooterHeight(UITableView.automaticDimension)
     }
     
     /// Sets automatic height (in points) for each row in the table view.
-    static var automaticRowHeight: Self {
+    @MainActor static var automaticRowHeight: Self {
         .rowHeight(UITableView.automaticDimension)
     }
     
     /// Sets automatic height for section headers in the table view.
-    static var automaticSectionHeaderHeight: Self {
+    @MainActor static var automaticSectionHeaderHeight: Self {
         .sectionHeaderHeight(UITableView.automaticDimension)
     }
     

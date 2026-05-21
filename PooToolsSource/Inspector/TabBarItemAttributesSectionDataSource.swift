@@ -14,7 +14,7 @@ extension DefaultElementAttributesLibrary {
 
         private weak var tabBarItem: UITabBarItem?
 
-        init?(with object: NSObject) {
+        @MainActor init?(with object: NSObject) {
             guard
                 let viewController = object as? UIViewController,
                 let tabBarItem = viewController.tabBarItem
