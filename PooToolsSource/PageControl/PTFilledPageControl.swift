@@ -228,7 +228,7 @@ open class PTFilledPageControl: PTBasePageControl {
     private class DisplayLinkProxy {
         weak var target: PTFilledPageControl?
         init(target: PTFilledPageControl) { self.target = target }
-        @objc func update() {
+        @MainActor @objc func update() {
             self.target?.updateDisplayLink()
         }
     }

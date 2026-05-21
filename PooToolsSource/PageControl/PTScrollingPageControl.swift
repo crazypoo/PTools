@@ -292,7 +292,7 @@ open class PTScrollingPageControl: PTBasePageControl {
     private class DisplayLinkProxy {
         weak var target: PTScrollingPageControl?
         init(target: PTScrollingPageControl) { self.target = target }
-        @objc func update() { target?.updateDisplayLink() }
+        @MainActor @objc func update() { target?.updateDisplayLink() }
     }
 }
 

@@ -220,7 +220,7 @@ open class PTPillPageControl: PTBasePageControl {
         init(target: PTPillPageControl) {
             self.target = target
         }
-        @objc func update() {
+        @MainActor @objc func update() {
             target?.updateDisplayLink()
         }
     }

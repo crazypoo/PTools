@@ -217,7 +217,7 @@ open class PTSnakePageControl: PTBasePageControl {
         init(target: PTSnakePageControl) {
             self.target = target
         }
-        @objc func update() {
+        @MainActor @objc func update() {
             target?.updateDisplayLink()
         }
     }
