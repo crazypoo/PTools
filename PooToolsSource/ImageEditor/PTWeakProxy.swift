@@ -8,24 +8,36 @@
 
 import UIKit
 
-class PTWeakProxy: NSObject {
+public final class PTWeakProxy: NSObject, @unchecked Sendable {
+    
+    /// 真正的目标对象，使用 weak 弱引用避免内存泄漏
     private weak var target: NSObjectProtocol?
     
-    init(target: NSObjectProtocol) {
+    /// 初始化方法
+    /// - Parameter target: 需要代理的真实目标对象
+    public init(target: NSObjectProtocol) {
         self.target = target
         super.init()
     }
     
-    class func proxy(withTarget target: NSObjectProtocol) -> PTWeakProxy {
-        PTWeakProxy(target: target)
+    /// 快速创建代理对象的类方法 (工厂方法)
+    /// - Parameter target: 需要代理的真实目标对象
+    /// - Returns: 弱引用代理实例
+    public class func proxy(withTarget target: NSObjectProtocol) -> PTWeakProxy {
+        return PTWeakProxy(target: target)
     }
     
-    override func forwardingTarget(for aSelector: Selector!) -> Any? {
-        target
+    // MARK: - 消息转发机制 (Message Forwarding)
+    
+    /// 消息转发的第一步：重定向接收者
+    /// 如果当前代理无法响应方法，将其转发给真正的 target
+    public override func forwardingTarget(for aSelector: Selector!) -> Any? {
+        return target
     }
     
-    override func responds(to aSelector: Selector!) -> Bool {
-        target?.responds(to: aSelector) ?? false
+    /// 辅助方法：协助系统判断当前对象是否能响应特定的 Selector
+    public override func responds(to aSelector: Selector!) -> Bool {
+        // 如果 target 存在，询问 target 能否响应；如果 target 已释放，返回 false
+        return target?.responds(to: aSelector) ?? false
     }
 }
-

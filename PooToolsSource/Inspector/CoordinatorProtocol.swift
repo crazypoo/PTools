@@ -42,7 +42,7 @@ public extension Startable where Self: CoordinatorProtocol, StartResult: UIViewC
     /// - Parameters:
     ///   - coordinator: A Coordinator to be added as child.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    func start<T: CoordinatorStartable>(presenting coordinator: T,
+    @MainActor func start<T: CoordinatorStartable>(presenting coordinator: T,
                                         animated: Bool) where T.StartResult: RootViewControllerProtocol
     {
         
@@ -62,7 +62,7 @@ public extension Startable where Self: CoordinatorProtocol, StartResult: RootVie
     ///   - coordinator: A Coordinator to be added as child.
     ///   - navigationController: The navigation controller where the presentation will happen.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    func start<T: CoordinatorStartable>(pushing coordinator: T,
+    @MainActor func start<T: CoordinatorStartable>(pushing coordinator: T,
                                         in navigationController: UINavigationController,
                                         animated: Bool) where T.StartResult: UIViewController
     {
@@ -81,7 +81,7 @@ public extension Startable where Self: CoordinatorProtocol, StartResult: UINavig
     /// - Parameters:
     ///   - coordinator: A Coordinator to be added as child.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    func start<T: CoordinatorStartable>(pushing coordinator: T,
+    @MainActor func start<T: CoordinatorStartable>(pushing coordinator: T,
                                         animated: Bool) where T.StartResult: UIViewController
     {
         addChild(coordinator)
@@ -97,7 +97,7 @@ public extension Startable where Self: CoordinatorProtocol, StartResult: UINavig
 public extension Startable where Self: CoordinatorProtocol, StartResult: UIWindow {
     /// Replaces existing children with the child coordinator and installs the starting view controller’s view as the content view of the window.
     /// - Parameter coordinator: A Coordinator to be added as child.
-    func start<T: CoordinatorStartable>(root coordinator: T) where T.StartResult: RootViewControllerProtocol {
+    @MainActor func start<T: CoordinatorStartable>(root coordinator: T) where T.StartResult: RootViewControllerProtocol {
         removeAllChildren()
 
         addChild(coordinator)
@@ -112,7 +112,7 @@ public extension Startable where Self: CoordinatorProtocol, StartResult: UIWindo
     /// - Parameters:
     ///   - coordinator: A Coordinator to be added as child.
     ///   - animated: Pass true to animate the presentation; otherwise, pass false.
-    func start<T: CoordinatorStartable>(presenting coordinator: T,
+    @MainActor func start<T: CoordinatorStartable>(presenting coordinator: T,
                                         animated: Bool) where T.StartResult: RootViewControllerProtocol
     {
         addChild(coordinator)

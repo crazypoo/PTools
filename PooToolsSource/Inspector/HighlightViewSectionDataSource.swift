@@ -14,7 +14,7 @@ extension DefaultElementIdentityLibrary {
 
         weak var highlightView: InspectorHighlightView?
 
-        init?(with view: UIView) {
+        @MainActor init?(with view: UIView) {
             if let highlightView = view._highlightView {
                 self.highlightView = highlightView
             } else {

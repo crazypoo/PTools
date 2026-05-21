@@ -1489,28 +1489,32 @@ public extension String {
      如果使用 UIImage(systemName:) 方法转换Emoji表情为图片返回的 UIImage 对象为空，则可能是由于表情不受支持或无效。这是因为 UIImage(systemName:) 方法是根据系统中内置的 SF Symbol 字体来渲染图像的，SF Symbol 字体包含有限的表情符号，因此并不是所有的 Emoji 表情都能被成功转换。
      所以如何系统 UIImage(systemName:) 的方法返回为空则调用 Core Text来绘制图片
     */
-    func emojiToImage(emojiFont:UIFont = .appfont(size: 24)) -> UIImage {
+    func emojiToImage(emojiFont: UIFont = .appfont(size: 24)) -> UIImage {
         guard isSingleEmoji else { return UIImage() }
         
-        // Check if it's a system image first
+        // 1. 获取系统图标（这部分系统原生支持多线程访问）
         if let image = UIImage(systemName: self) {
             return image
         }
         
-        // Draw the emoji as an image
+        // 2. 准备绘制文本和属性
         let nsText = nsString
-        let font = emojiFont
-        let fontAttributes: [NSAttributedString.Key: Any] = [.font: font]
+        let fontAttributes: [NSAttributedString.Key: Any] = [.font: emojiFont]
         let imageSize = nsText.size(withAttributes: fontAttributes)
         
-        UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
-        defer { UIGraphicsEndImageContext() }
+        // 3. 配置现代绘图格式
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = false // 背景透明
         
-        nsText.draw(at: .zero, withAttributes: fontAttributes)
+        // 4. 使用线程安全的 Renderer 进行后台绘制
+        let renderer = UIGraphicsImageRenderer(size: imageSize, format: format)
+        let image = renderer.image { context in
+            nsText.draw(at: .zero, withAttributes: fontAttributes)
+        }
         
-        return UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        return image
     }
-    
+
     //MARK: 获取视频的一个图片
     ///获取视频的一个图片
     func thumbnailImage() -> UIImage {

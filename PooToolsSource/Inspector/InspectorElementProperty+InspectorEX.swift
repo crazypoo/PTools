@@ -85,7 +85,7 @@ extension InspectorElementProperty: Hashable {
 }
 
 public extension InspectorElementProperty {
-    static func segmentPicker(for segmentedControl: UISegmentedControl, handler: SelectionHandler?) -> InspectorElementProperty {
+    @MainActor static func segmentPicker(for segmentedControl: UISegmentedControl, handler: SelectionHandler?) -> InspectorElementProperty {
         .optionsList(
             title: "Segment",
             emptyTitle: "No Segments",
@@ -172,10 +172,8 @@ public extension InspectorElementProperty {
 }
 
 public extension InspectorElementProperty {
-    static func dataDetectorType(
-        textView: UITextView,
-        dataDetectorType: UIDataDetectorTypes
-    ) -> InspectorElementProperty {
+    @MainActor static func dataDetectorType(textView: UITextView,
+                                            dataDetectorType: UIDataDetectorTypes) -> InspectorElementProperty {
         .switch(
             title: dataDetectorType.description,
             isOn: { textView.dataDetectorTypes.contains(dataDetectorType) }

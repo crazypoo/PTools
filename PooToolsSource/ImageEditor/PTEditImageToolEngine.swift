@@ -1053,7 +1053,7 @@ public class PTClipEngine: NSObject {
     
     // MARK: - 核心拖拽手势处理
     
-    public func handlePanGesture(_ pan: UIPanGestureRecognizer, in view: UIView) {
+    @MainActor public func handlePanGesture(_ pan: UIPanGestureRecognizer, in view: UIView) {
         let point = pan.location(in: view)
         
         if pan.state == .began {

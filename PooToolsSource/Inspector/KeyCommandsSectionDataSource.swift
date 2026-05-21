@@ -20,7 +20,7 @@ extension DefaultElementAttributesLibrary {
             InspectorElementKeyCommandSectionView.self
         }
 
-        init?(with object: NSObject) {
+        @MainActor init?(with object: NSObject) {
             guard let keyCommand = object as? UIKeyCommand else {
                 return nil
             }

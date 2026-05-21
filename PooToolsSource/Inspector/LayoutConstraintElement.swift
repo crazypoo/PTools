@@ -19,7 +19,7 @@ final class LayoutConstraintElement {
 
     let axis: Axis
 
-    init?(with constraint: NSLayoutConstraint, in view: UIView) {
+    @MainActor init?(with constraint: NSLayoutConstraint, in view: UIView) {
         guard
             let firstItem = Item(with: constraint.firstItem),
             let firstAxis = Axis(constraint.firstAttribute.axis)
@@ -100,7 +100,7 @@ final class LayoutConstraintElement {
         }
     }
 
-    private static func find(_ ownership: Ownership, bindings: Binding?..., inRelationTo view: UIView?) -> [Binding] {
+    @MainActor private static func find(_ ownership: Ownership, bindings: Binding?..., inRelationTo view: UIView?) -> [Binding] {
         bindings.compactMap { binding in
             guard
                 let view = view,
@@ -130,7 +130,7 @@ extension LayoutConstraintElement: Hashable {
 // MARK: - Computed Properties
 
 extension LayoutConstraintElement {
-    var mine: Binding? {
+    @MainActor var mine: Binding? {
         guard let rootView = view else { return nil }
 
         if case .mine = first.ownership(to: rootView) {
@@ -145,7 +145,7 @@ extension LayoutConstraintElement {
         }
     }
 
-    var theirs: Binding? {
+    @MainActor var theirs: Binding? {
         guard let rootView = view else { return nil }
 
         if case .theirs = first.ownership(to: rootView) {
@@ -159,7 +159,7 @@ extension LayoutConstraintElement {
         }
     }
 
-    var displayName: String? {
+    @MainActor var displayName: String? {
         let priority = underlyingConstraint?.priority != .required ? underlyingConstraint?.priority : nil
 
         return [
@@ -183,14 +183,14 @@ extension LayoutConstraintElement {
         var attribute: NSLayoutConstraint.Attribute
         var anchor: NSLayoutAnchor<AnyObject>
 
-        var displayName: String {
+        @MainActor var displayName: String {
             guard let attributeName = attribute.displayName else {
                 return item.displayName
             }
             return "\(item.displayName).\(attributeName)"
         }
 
-        func ownership(to view: UIView) -> Ownership? {
+        @MainActor func ownership(to view: UIView) -> Ownership? {
             guard let target = item.target else { return .none }
             return ObjectIdentifier(target) == ObjectIdentifier(view) ? .mine : .theirs
         }
@@ -225,7 +225,7 @@ extension LayoutConstraintElement {
         case layoutGuide(Weak<UILayoutGuide>)
         case other(Weak<NSObject>)
 
-        var targetView: UIView? {
+        @MainActor var targetView: UIView? {
             switch self {
             case let .layoutGuide(layoutGuide):
                 return layoutGuide.weakReference?.owningView
@@ -238,7 +238,7 @@ extension LayoutConstraintElement {
             }
         }
 
-        var target: NSObject? {
+        @MainActor var target: NSObject? {
             switch self {
             case let .layoutGuide(layoutGuide):
                 return layoutGuide.weakReference?.owningView ?? layoutGuide.weakReference
@@ -267,11 +267,11 @@ extension LayoutConstraintElement {
             }
         }
 
-        var displayName: String {
+        @MainActor var displayName: String {
             _displayName ?? "Constraint"
         }
 
-        private var _displayName: String? {
+        @MainActor private var _displayName: String? {
             switch self {
             case let .view(view):
                 return view.weakReference?.elementName
