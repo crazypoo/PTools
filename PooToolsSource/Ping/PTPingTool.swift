@@ -213,6 +213,7 @@ private extension PTPingTool {
     func displayAddressForAddress(address: NSData) -> String {
         var hostStr = [Int8](repeating: 0, count: Int(NI_MAXHOST))
 
+        // 调用底层 C API 解析地址
         let success = getnameinfo(
             address.bytes.assumingMemoryBound(to: sockaddr.self),
             socklen_t(address.length),
@@ -222,12 +223,16 @@ private extension PTPingTool {
             0,
             NI_NUMERICHOST
         ) == 0
+        
         let result: String
         if success {
-            result = String(cString: hostStr)
+            // 👉 修改点：手动截断空终止符，安全映射并解码为 UTF-8 字符串
+            let validBytes = hostStr.prefix(while: { $0 != 0 }).map { UInt8(bitPattern: $0) }
+            result = String(decoding: validBytes, as: UTF8.self)
         } else {
             result = "?"
         }
+        
         return result
     }
 

@@ -14,6 +14,31 @@ private struct PTSafeMediaBox<T>: @unchecked Sendable {
     let mediaItem: T
 }
 
+private final class AssetIdentifierStorage: @unchecked Sendable {
+    private var identifier: String?
+    private let lock = NSLock()
+    
+    func setIdentifier(_ id: String?) {
+        lock.lock()
+        identifier = id
+        lock.unlock()
+    }
+    
+    func getIdentifier() -> String? {
+        lock.lock()
+        defer { lock.unlock() }
+        return identifier
+    }
+}
+
+public struct PTSendableDictionaryBox: @unchecked Sendable {
+    public let info: [AnyHashable: Any]?
+    
+    public init(_ info: [AnyHashable: Any]?) {
+        self.info = info
+    }
+}
+
 func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) {
     guard !selected.isEmpty else {
         return
@@ -167,7 +192,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
 
 public class PTMediaLibManager: NSObject {
     /// Save video to album.
-    public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
+    public class func saveVideoToAlbum(url: URL, completion: (@Sendable (Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
         
         // 💡 提示：这里天然兼容了 iOS 14 的 .limited 权限状态，因为有限权限不是 .denied 也不是 .restricted
@@ -176,13 +201,13 @@ public class PTMediaLibManager: NSObject {
             return
         }
         
-        var placeholderAsset: PHObjectPlaceholder?
+        let assetStorage = AssetIdentifierStorage()
         PHPhotoLibrary.shared().performChanges({
             let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-            placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
+            assetStorage.setIdentifier(newAssetRequest?.placeholderForCreatedAsset?.localIdentifier)
         }) { suc, _ in
             if suc {
-                let asset = PHPhotoLibrary.pt.getAsset(from: placeholderAsset?.localIdentifier)
+                let asset = PHPhotoLibrary.pt.getAsset(from: assetStorage.getIdentifier())
                 completion?(suc, asset)
             } else {
                 completion?(false, nil)
@@ -408,7 +433,10 @@ public class PTMediaLibManager: NSObject {
         }
     }
     
-    public class func fetchVideo(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+    public class func fetchVideo(for asset: PHAsset,
+                                 progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+                                 completion: @escaping @Sendable (AVPlayerItem?, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
+        
         let option = PHVideoRequestOptions()
         option.isNetworkAccessAllowed = true
         option.progressHandler = { pro, error, stop, info in
@@ -417,25 +445,41 @@ public class PTMediaLibManager: NSObject {
         
         if asset.pt.isInCloud {
             return PHImageManager.default().requestExportSession(forVideo: asset, options: option, exportPreset: AVAssetExportPresetHighestQuality, resultHandler: { session, info in
-                // iOS11 and earlier, callback is not on the main thread.
+                
                 let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
+                // 2. 将非 Sendable 的字典装入安全的盒子中
+                let infoBox = PTSendableDictionaryBox(info)
+                
                 if let avAsset = session?.asset {
                     let safeAssetBox = PTSafeMediaBox(mediaItem: avAsset)
-                    let item = AVPlayerItem(asset: safeAssetBox.mediaItem)
-                    completion(item, info, isDegraded)
+                    
+                    // 3. 派发到主线程上下文，完美消除 MainActor 报错
+                    Task { @MainActor in
+                        // 现在环境是主线程，可以安全地初始化 AVPlayerItem
+                        let item = AVPlayerItem(asset: safeAssetBox.mediaItem)
+                        // 拆箱 infoBox 并回调
+                        completion(item, infoBox.info, isDegraded)
+                    }
                 } else {
-                    completion(nil, nil, true)
+                    Task { @MainActor in
+                        completion(nil, infoBox.info, true)
+                    }
                 }
             })
         } else {
             return PHImageManager.default().requestPlayerItem(forVideo: asset, options: option) { item, info in
-                // iOS11 and earlier, callback is not on the main thread.
                 let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
-                completion(item, info, isDegraded)
+                // 同理，将 info 装箱
+                let infoBox = PTSendableDictionaryBox(info)
+                
+                // 派发到主线程进行回调，保持 API 行为的一致性
+                Task { @MainActor in
+                    completion(item, infoBox.info, isDegraded)
+                }
             }
         }
     }
-    
+
     private class func getCollectionTitle(_ collection: PHAssetCollection) -> String {
         if collection.assetCollectionType == .album {
             // Albums created by user.
