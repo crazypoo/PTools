@@ -320,11 +320,15 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
 
         let completion: @Sendable (Bool, PHAsset?) -> Void = { [weak self] success, asset in
             guard success, let asset = asset else {
-                let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
-                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
+                PTGCDManager.shared.runOnMain {
+                    let errorMsg = image != nil ? PTMediaLibUIConfig.share.saveImageError : PTMediaLibUIConfig.share.saveVideoError
+                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: errorMsg, icon: .Error)
+                }
                 return
             }
-            self?.handleNewAsset(asset)
+            PTGCDManager.shared.runOnMain {
+                self?.handleNewAsset(asset)
+            }
         }
 
         if let img = image {
@@ -608,12 +612,16 @@ extension PTMediaLibView {
             // 3. 将缓存文件写入系统相册
             PTMediaLibManager.saveVideoToAlbum(url: finalURL) { isFinish, asset in
                 guard isFinish, let asset = asset else {
-                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to album failed", icon: .Error)
+                    PTGCDManager.shared.runOnMain {
+                        PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to album failed", icon: .Error)
+                    }
                     return
                 }
                 
                 // 4. 更新已选模型数组
-                self.updateSelectedModelWithNewAsset(asset)
+                PTGCDManager.shared.runOnMain {
+                    self.updateSelectedModelWithNewAsset(asset)
+                }
             }
         }
     }
