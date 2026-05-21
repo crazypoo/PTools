@@ -64,29 +64,43 @@ public class SystemReport {
     
     public var kernel: String {
         var size = 0
+        // 第一次调用：获取所需的内存空间大小
         sysctlbyname("ker" + "n.os" + "type", nil, &size, nil, 0)
         
-        var string = [CChar](repeating: 0,  count: Int(size))
+        var string = [CChar](repeating: 0, count: Int(size))
+        // 第二次调用：将数据写入预先分配的 string 数组中
         sysctlbyname("ker" + "n.os" + "type", &string, &size, nil, 0)
-        return String(cString: string)
+        
+        // 👉 步骤 1：截断空终止符 (\0)
+        // 遍历数组，只要遇到不为 0 的字符就保留，这样可以完美剔除末尾的 C 字符串终止符
+        let validCharacters = string.prefix(while: { $0 != 0 })
+        
+        // 👉 步骤 2：将 CChar (Int8) 映射为 Swift 标准的 UInt8 字节数组
+        let utf8Bytes = validCharacters.map { UInt8(bitPattern: $0) }
+        
+        // 👉 步骤 3：使用 Xcode 官方推荐的 API 进行 UTF8 解码
+        return String(decoding: utf8Bytes, as: UTF8.self)
     }
     
     public var kernelVersion: String {
         var size = 0
         sysctlbyname("ker" + "n.os" + "release", nil, &size, nil, 0)
-        
-        var string = [CChar](repeating: 0,  count: Int(size))
+        var string = [CChar](repeating: 0, count: Int(size))
         sysctlbyname("ker" + "n.os" + "release", &string, &size, nil, 0)
-        return String(cString: string)
+        let validCharacters = string.prefix(while: { $0 != 0 })
+        let utf8Bytes = validCharacters.map { UInt8(bitPattern: $0) }
+        return String(decoding: utf8Bytes, as: UTF8.self)
     }
     
-    public var compileDate: String {
+    public var compileDate: String {        
         var size = 0
         sysctlbyname("ker" + "n.ve" + "rsion", nil, &size, nil, 0)
-        
-        var string = [CChar](repeating: 0,  count: Int(size))
+        var string = [CChar](repeating: 0, count: Int(size))
         sysctlbyname("ker" + "n.ve" + "rsion", &string, &size, nil, 0)
-        let fullString = String(cString: string) /// Ex: Darwin Kernel Version 20.6.0: Mon May 10 03:15:29 PDT 2021; root:xnu-7195.140.13.0.1~20/RELEASE_ARM64_T8101
+        let validCharacters = string.prefix(while: { $0 != 0 })
+        let utf8Bytes = validCharacters.map { UInt8(bitPattern: $0) }
+        let fullString = String(decoding: utf8Bytes, as: UTF8.self)
+
         
         let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.date.rawValue)
         if let matches = detector?.matches(in: fullString, options: [], range: NSRange(location: 0, length: fullString.utf16.count)) {

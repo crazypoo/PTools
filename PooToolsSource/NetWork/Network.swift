@@ -1275,7 +1275,11 @@ public final class Network: @unchecked Sendable {
                     self.lock.lock()
                     let handlers = self.progressHandlers
                     self.lock.unlock()
-                    for cb in handlers { cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted) }
+                    for cb in handlers {
+                        PTGCDManager.shared.runOnMain {
+                            cb(p.completedUnitCount, p.totalUnitCount, p.fractionCompleted)
+                        }
+                    }
                 }
             }
             

@@ -9,6 +9,20 @@
 import Foundation
 @preconcurrency import CoreNFC
 
+private struct PTNFCSessionAndTagSendableBox: @unchecked Sendable {
+    let session: NFCTagReaderSession
+    let tag:NFCTag
+}
+
+private struct PTNFCSessionSendableBox: @unchecked Sendable {
+    let session: NFCTagReaderSession
+}
+
+private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {
+    let session: NFCTagReaderSession
+    let tag:NFCNDEFTag
+}
+
 @MainActor
 @available(iOS 13.0, *)
 public class PTNFCToolKit: NSObject {
@@ -129,10 +143,12 @@ extension PTNFCToolKit: NFCTagReaderSessionDelegate {
     nonisolated public func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         guard let tag = tags.first else { return }
 
-        session.connect(to: tag) { error in
+        let safeBox = PTNFCSessionAndTagSendableBox(session: session,tag:tag)
+        
+        safeBox.session.connect(to: tag) { error in
             if let error = error {
                 // 在后台线程直接操作 session，不跨界
-                session.invalidate(errorMessage: "連線失敗: \(error.localizedDescription)")
+                safeBox.session.invalidate(errorMessage: "連線失敗: \(error.localizedDescription)")
                 Task { @MainActor in
                     self.onError?(error)
                     self.clear()
@@ -142,7 +158,7 @@ extension PTNFCToolKit: NFCTagReaderSessionDelegate {
             
             // 连线成功后，切回主线程进行状态处理
             Task { @MainActor in
-                self.processDetectedTag(tag, session: session)
+                self.processDetectedTag(safeBox.tag, session: safeBox.session)
             }
         }
     }
@@ -163,6 +179,7 @@ extension PTNFCToolKit {
             self.clear()
 
         case .iso7816(let iso7816Tag):
+            let safeBox = PTNFCSessionSendableBox(session: session)
             if let command = self.apduCommand {
                 // 将可能变化的主线程状态设为本地常量，以便在后台闭包中使用
                 let localApduErrorMsg = self.apduErrorMsg
@@ -170,14 +187,14 @@ extension PTNFCToolKit {
                 
                 iso7816Tag.sendCommand(apdu: command) { data, sw1, sw2, error in
                     if let error = error {
-                        session.invalidate(errorMessage: "\(localApduErrorMsg)：\(error.localizedDescription)")
+                        safeBox.session.invalidate(errorMessage: "\(localApduErrorMsg)：\(error.localizedDescription)")
                         Task { @MainActor in
                             self.onError?(error)
                             self.clear()
                         }
                     } else {
-                        session.alertMessage = String(format: localApduSuccessMsg, String(sw1), String(sw2))
-                        session.invalidate()
+                        safeBox.session.alertMessage = String(format: localApduSuccessMsg, String(sw1), String(sw2))
+                        safeBox.session.invalidate()
                         Task { @MainActor in
                             self.apduCompletion?(data)
                             self.clear()
@@ -185,7 +202,7 @@ extension PTNFCToolKit {
                     }
                 }
             } else {
-                self.queryNDEF(tag: iso7816Tag, session: session)
+                self.queryNDEF(tag: iso7816Tag, session: safeBox.session)
             }
 
         case .iso15693(let iso15693Tag):
@@ -216,10 +233,12 @@ extension PTNFCToolKit {
         let localNotSupportMsg = self.notSupportNDEFMsg
         let localUnknowStateMsg = self.unknowStateMsg
         
+        let safeBox = PTNFCSessionAndNDEFSendableBox(session: session, tag: ndefTag)
+        
         // 2. 使用 [weak self] 弱引用传入闭包，避免循环引用，且 Actor 的弱引用是 Sendable 的
-        ndefTag.queryNDEFStatus { [weak self] status, _, error in
+        safeBox.tag.queryNDEFStatus { [weak self] status, _, error in
             if let error = error {
-                session.invalidate(errorMessage: "\(localFindErrorMsg)\(error.localizedDescription)")
+                safeBox.session.invalidate(errorMessage: "\(localFindErrorMsg)\(error.localizedDescription)")
                 Task { @MainActor in
                     self?.onError?(error)
                     self?.clear()
@@ -235,16 +254,16 @@ extension PTNFCToolKit {
                     // 3. 核心修复：直接在已经受到 @MainActor 保护的作用域内，读取 self.writeMessage
                     // 因为此时已经在主线程，所以根本不存在跨越边界的问题，不会触发 Data Race
                     if let safeWriteMessage = self.writeMessage {
-                        self.writeNDEF(to: ndefTag, message: safeWriteMessage, session: session)
+                        self.writeNDEF(to: safeBox.tag, message: safeWriteMessage, session: safeBox.session)
                     } else {
-                        self.readNDEF(from: ndefTag, session: session)
+                        self.readNDEF(from: safeBox.tag, session: safeBox.session)
                     }
                 }
             case .notSupported:
-                session.invalidate(errorMessage: localNotSupportMsg)
+                safeBox.session.invalidate(errorMessage: localNotSupportMsg)
                 Task { @MainActor in self?.clear() }
             @unknown default:
-                session.invalidate(errorMessage: localUnknowStateMsg)
+                safeBox.session.invalidate(errorMessage: localUnknowStateMsg)
                 Task { @MainActor in self?.clear() }
             }
         }
@@ -255,11 +274,12 @@ extension PTNFCToolKit {
         let localReadErrorMsg = self.readErrorMsg
         let localReadSuccessMsg = self.readSuccessMsg
         let localUnFindMsg = self.unFindMsg
-        
+        let safeBox = PTNFCSessionSendableBox(session: session)
+
         // 增加 [weak self] 防止循环引用
         tag.readNDEF { [weak self] message, error in
             if let error = error {
-                session.invalidate(errorMessage: "\(localReadErrorMsg)\(error.localizedDescription)")
+                safeBox.session.invalidate(errorMessage: "\(localReadErrorMsg)\(error.localizedDescription)")
                 Task { @MainActor in
                     self?.onError?(error)
                     self?.clear()
@@ -268,8 +288,8 @@ extension PTNFCToolKit {
             }
 
             if let records = message?.records {
-                session.alertMessage = localReadSuccessMsg
-                session.invalidate()
+                safeBox.session.alertMessage = localReadSuccessMsg
+                safeBox.session.invalidate()
                 
                 // 【核心修复】使用 nonisolated(unsafe) 包装非 Sendable 的 records
                 // 这明确告诉 Swift 6 编译器：我们将安全地把这个对象转移给主线程，后台不再触碰它
@@ -281,7 +301,7 @@ extension PTNFCToolKit {
                     self?.clear()
                 }
             } else {
-                session.invalidate(errorMessage: localUnFindMsg)
+                safeBox.session.invalidate(errorMessage: localUnFindMsg)
                 Task { @MainActor in self?.clear() }
             }
         }
@@ -293,9 +313,11 @@ extension PTNFCToolKit {
         let localWritingSuccessMsg = self.writingSuccessMsg
         let localShouldLock = self.shouldLockAfterWrite // 捕获锁状态
         
-        tag.writeNDEF(message) { error in
+        let safeBox = PTNFCSessionAndNDEFSendableBox(session: session, tag: tag)
+
+        safeBox.tag.writeNDEF(message) { error in
             if let error = error {
-                session.invalidate(errorMessage: "\(localWritingErrorMsg)\(error.localizedDescription)")
+                safeBox.session.invalidate(errorMessage: "\(localWritingErrorMsg)\(error.localizedDescription)")
                 Task { @MainActor in
                     self.onError?(error)
                     self.clear()
@@ -305,11 +327,11 @@ extension PTNFCToolKit {
 
             if localShouldLock {
                 Task { @MainActor in
-                    self.lockTag(tag: tag, session: session)
+                    self.lockTag(tag: safeBox.tag, session: safeBox.session)
                 }
             } else {
-                session.alertMessage = localWritingSuccessMsg
-                session.invalidate()
+                safeBox.session.alertMessage = localWritingSuccessMsg
+                safeBox.session.invalidate()
                 Task { @MainActor in
                     self.onWriteSuccess?()
                     self.clear()
@@ -322,17 +344,18 @@ extension PTNFCToolKit {
     private func lockTag(tag: NFCNDEFTag, session: NFCTagReaderSession) {
         let localLockErrorMsg = self.lockErrorMsg
         let localOnlyReadMsg = self.onlyReadMsg
-        
+        let safeBox = PTNFCSessionSendableBox(session: session)
+
         tag.writeLock { error in
             if let error = error {
-                session.invalidate(errorMessage: "\(localLockErrorMsg)\(error.localizedDescription)")
+                safeBox.session.invalidate(errorMessage: "\(localLockErrorMsg)\(error.localizedDescription)")
                 Task { @MainActor in
                     self.onError?(error)
                     self.clear()
                 }
             } else {
-                session.alertMessage = localOnlyReadMsg
-                session.invalidate()
+                safeBox.session.alertMessage = localOnlyReadMsg
+                safeBox.session.invalidate()
                 Task { @MainActor in
                     self.onWriteSuccess?()
                     self.clear()

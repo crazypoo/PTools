@@ -280,7 +280,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
 
 // MARK: - Convenience Methods for Layout Constraints
 extension ConstraintMaker {
-    func rightOrLeftEqualToSuperView(belongToMe: Bool,equalView:UIView? = nil, inset: CGFloat) {
+    @MainActor func rightOrLeftEqualToSuperView(belongToMe: Bool,equalView:UIView? = nil, inset: CGFloat) {
         if belongToMe {
             if let equalView = equalView {
                 self.right.equalTo(equalView.snp.left).offset(-inset)
@@ -296,7 +296,7 @@ extension ConstraintMaker {
         }
     }
 
-    func rightOrLeftEqualToDataContent(belongToMe: Bool,equalView:UIView, inset: CGFloat) {
+    @MainActor func rightOrLeftEqualToDataContent(belongToMe: Bool,equalView:UIView, inset: CGFloat) {
         if belongToMe {
             self.right.equalTo(equalView.snp.left).offset(-inset)
         } else {
