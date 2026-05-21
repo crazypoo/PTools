@@ -28,22 +28,24 @@ class PTSideController: PTBaseSideController {
         view.addActionHandlers { sender in
             self.sideMenuController?.hideMenu(animated: true, completion: { finish in
                 if finish {
-                    let vc = PTBaseViewController()
-                    vc.view.backgroundColor = .systemBlue
-                    let button = UIButton(type: .custom)
-                    button.backgroundColor = .systemGray
-                    vc.view.addSubviews([button])
-                    button.snp.makeConstraints { make in
-                        make.size.equalTo(150)
-                        make.centerX.centerY.equalToSuperview()
+                    PTGCDManager.shared.runOnMain {
+                        let vc = PTBaseViewController()
+                        vc.view.backgroundColor = .systemBlue
+                        let button = UIButton(type: .custom)
+                        button.backgroundColor = .systemGray
+                        vc.view.addSubviews([button])
+                        button.snp.makeConstraints { make in
+                            make.size.equalTo(150)
+                            make.centerX.centerY.equalToSuperview()
+                        }
+                        button.addActionHandlers { sender in
+                            let vcs = PTBaseViewController()
+                            vc.navigationController?.pushViewController(vcs)
+                        }
+                        
+                        let nav = PTBaseNavControl(rootViewController: vc)
+                        self.currentPresentToSheet(vc: nav,sizes: [.percent(0.5),.fullscreen])
                     }
-                    button.addActionHandlers { sender in
-                        let vcs = PTBaseViewController()
-                        vc.navigationController?.pushViewController(vcs)
-                    }
-                    
-                    let nav = PTBaseNavControl(rootViewController: vc)
-                    self.currentPresentToSheet(vc: nav,sizes: [.percent(0.5),.fullscreen])
                 }
             })
         }

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// 截图配置选项，用于未来扩展（例如控制分辨率、背景透明度等）
-public struct SnapshotConfiguration {
+@MainActor public struct SnapshotConfiguration {
     /// 屏幕缩放比例，0 表示设备主屏幕的缩放比例 (UIScreen.main.scale)
     public var scale: CGFloat
     /// 截图是否不透明（设置为 true 有助于提高性能，但如果 view 有透明区域会变成黑色）
@@ -22,7 +22,7 @@ public struct SnapshotConfiguration {
     }
     
     /// 提供一个默认的配置
-    @MainActor public static let `default` = SnapshotConfiguration()
+    public static let `default` = SnapshotConfiguration()
 }
 
 public protocol SnapshotKitProtocol {

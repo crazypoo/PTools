@@ -16,6 +16,11 @@ import SafeSFSymbols
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
 
+private struct PTSendablePairBox<T, U>: @unchecked Sendable {
+    let first: T
+    let second: U
+}
+
 /// 基于 Swift Actor 的现代化防抖器，保证高并发下的线程安全
 public actor PTDebouncer {
     private var currentTask: Task<Void, Never>?
@@ -1113,7 +1118,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             }
         },completion: completion)
     }
-    
+        
     fileprivate func setVideoAsset() async {
         let options = ConverterOption(
             trimRange: trimPositions,
@@ -1127,16 +1132,17 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         self.videoConverter = VideoConverter(asset:safeConvertAsset)
         
         // 挂起等待外部处理完毕
-        let (ac, avc) = await withCheckedContinuation { continuation in
+        let safeBox = await withCheckedContinuation { continuation in
             self.videoConverter?.convert(options) { resultAc, resultAvc in
-                continuation.resume(returning: (resultAc, resultAvc))
+                let box = PTSendablePairBox(first: resultAc, second: resultAvc)
+                continuation.resume(returning: box)
             }
         }
         
-        self.avPlayerItem = AVPlayerItem(asset: ac)
-        self.avPlayerItem.videoComposition = avc
+        self.avPlayerItem = AVPlayerItem(asset: safeBox.first)
+        self.avPlayerItem.videoComposition = safeBox.second
         
-        let generator = AVAssetImageGenerator(asset: ac)
+        let generator = AVAssetImageGenerator(asset: safeBox.first)
         generator.appliesPreferredTrackTransform = true
         generator.requestedTimeToleranceBefore = .zero
         generator.requestedTimeToleranceAfter = .zero
@@ -1153,7 +1159,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         
         // 此处的闭包可以保留（如果你封装了 getVideoFirstImage），但整个流程已经是干净的了。
         self.avPlayerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: Double.infinity, height: Double.infinity)) { image in
-            self.originImageView.image = image
+            PTGCDManager.shared.runOnMain {
+                self.originImageView.image = image
+            }
         }
     }
 

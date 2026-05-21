@@ -137,20 +137,18 @@ extension UITableView {
 
     public func tableAsyncTakeSnapshotOfFullContent(with configuration: SnapshotConfiguration, completion: @escaping @Sendable (UIImage?) -> Void) {
         // 真正的异步：主线程采集，后台拼接
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let originalOffset = self.contentOffset
-            
-            // 步骤 1：在主线程采集团素图片
-            let images = self.internalCollectImages(with: configuration)
-            self.setContentOffset(originalOffset, animated: false)
-            
-            guard !images.isEmpty else {
-                completion(nil)
-                return
-            }
-            
-            // 步骤 2：在后台线程进行大图片拼接渲染，防止卡住主线程
-            DispatchQueue.global(qos: .userInitiated).async {
+        PTGCDManager.shared.delayOnMain(time: 0.1) {
+            PTGCDManager.shared.runOnMain {
+                let originalOffset = self.contentOffset
+                
+                // 步骤 1：在主线程采集团素图片
+                let images = self.internalCollectImages(with: configuration)
+                self.setContentOffset(originalOffset, animated: false)
+                
+                guard !images.isEmpty else {
+                    completion(nil)
+                    return
+                }
                 let totalHeight = images.reduce(0) { $0 + $1.size.height }
                 let totalSize = CGSize(width: self.bounds.width, height: totalHeight)
                 
@@ -170,11 +168,7 @@ extension UITableView {
                         offset += img.size.height
                     }
                 }
-                
-                // 步骤 3：切回主线程回调
-                PTGCDManager.shared.runOnMain {
-                    completion(finalImage)
-                }
+                completion(finalImage)
             }
         }
     }

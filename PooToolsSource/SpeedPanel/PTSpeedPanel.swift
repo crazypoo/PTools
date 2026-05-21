@@ -10,6 +10,10 @@ import UIKit
 
 public typealias PTPanelDetailTask = (_ speed:CGFloat)->Void
 
+private struct PTTimerBox: @unchecked Sendable {
+    let timer: Timer
+}
+
 public class PTSpeedPanelConfig:NSObject {
     // 最大速度
     open var maxValue:CGFloat = 100
@@ -150,23 +154,29 @@ public class PTSpeedPanel: UIView {
 
     fileprivate func animationStart() {
         let timer = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { timer in
-            self.currentSpeed += 1
-            self.updateSpeed(speed: self.currentSpeed)
-            if self.currentSpeed >= self.viewConfig.maxValue {
-                timer.invalidate()
-                self.animationEnd()
-            }
+            let safeTimer = PTTimerBox(timer: timer)
+            PTGCDManager.shared.runOnMain(block: {
+                self.currentSpeed += 1
+                self.updateSpeed(speed: self.currentSpeed)
+                if self.currentSpeed >= self.viewConfig.maxValue {
+                    safeTimer.timer.invalidate()
+                    self.animationEnd()
+                }
+            })
         }
         timer.fire()
     }
     
     fileprivate func animationEnd() {
         let time = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { timer in
-            self.currentSpeed -= 1
-            self.updateSpeed(speed: self.currentSpeed)
-            if self.currentSpeed <= 0 {
-                timer.invalidate()
-            }
+            let safeTimer = PTTimerBox(timer: timer)
+            PTGCDManager.shared.runOnMain(block: {
+                self.currentSpeed -= 1
+                self.updateSpeed(speed: self.currentSpeed)
+                if self.currentSpeed <= 0 {
+                    safeTimer.timer.invalidate()
+                }
+            })
         }
         time.fire()
     }

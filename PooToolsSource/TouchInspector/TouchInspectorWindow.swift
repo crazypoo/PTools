@@ -12,6 +12,10 @@
 import Foundation
 import UIKit
 
+private struct PTTouchValueBox: @unchecked Sendable {
+    let value: NSValue
+}
+
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
 
@@ -83,13 +87,15 @@ public class TouchInspectorWindow: UIWindow {
         overlay.frame.origin = location
         bringSubviewToFront(overlay)
     }
-    
+        
     private func removeTouchOverlay(for touchValue: NSValue) {
         guard let overlay = touchOverlays[touchValue] else { return }
-        
+        let safeBox = PTTouchValueBox(value: touchValue)
         overlay.hide {
-            overlay.removeFromSuperview()
-            self.touchOverlays.removeValue(forKey: touchValue)
+            PTGCDManager.shared.runOnMain {
+                overlay.removeFromSuperview()
+                self.touchOverlays.removeValue(forKey: safeBox.value)
+            }
         }
     }
     

@@ -20,7 +20,7 @@ public enum PTSegmentControlModelType {
     }
 }
 
-public class PTMainSegmentModel: JXSegmentedTitleItemModel {
+public class PTMainSegmentModel: JXSegmentedTitleItemModel,@unchecked Sendable {
     open var subTitle: String? = ""
     open var subTitleNormalColor: UIColor = .black
     open var subTitleCurrentColor: UIColor = .black

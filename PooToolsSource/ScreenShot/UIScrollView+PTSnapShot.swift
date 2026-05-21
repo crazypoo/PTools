@@ -66,36 +66,29 @@ extension UIScrollView {
         self.drawScreenshotOfPageContent(0, maxIndex: pageNum, configuration: configuration, collectedImages: []) { [weak self] images in
             PTGCDManager.shared.runOnMain {
                 guard let self = self else { return }
-                
                 // 恢复原始偏移量
                 self.contentOffset = originalOffset
-
                 // 将耗时的图片拼接操作放到后台线程执行
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let totalSize = self.contentSize
-                    let format = UIGraphicsImageRendererFormat()
-                    format.scale = configuration.scale
-                    format.opaque = configuration.isOpaque || (self.isOpaque && self.layer.cornerRadius == 0)
+                let totalSize = self.contentSize
+                let format = UIGraphicsImageRendererFormat()
+                format.scale = configuration.scale
+                format.opaque = configuration.isOpaque || (self.isOpaque && self.layer.cornerRadius == 0)
 
-                    let renderer = UIGraphicsImageRenderer(size: totalSize, format: format)
-                    let backgroundColor = self.backgroundColor ?? UIColor.white
+                let renderer = UIGraphicsImageRenderer(size: totalSize, format: format)
+                let backgroundColor = self.backgroundColor ?? UIColor.white
 
-                    let finalImage = renderer.image { context in
-                        backgroundColor.setFill()
-                        context.fill(CGRect(origin: .zero, size: totalSize))
+                let finalImage = renderer.image { context in
+                    backgroundColor.setFill()
+                    context.fill(CGRect(origin: .zero, size: totalSize))
 
-                        var currentY: CGFloat = 0
-                        for img in images {
-                            img.draw(at: CGPoint(x: 0, y: currentY))
-                            currentY += img.size.height
-                        }
-                    }
-
-                    // 切回主线程通过闭包返回最终生成的长图
-                    PTGCDManager.shared.runOnMain {
-                        completion(finalImage)
+                    var currentY: CGFloat = 0
+                    for img in images {
+                        img.draw(at: CGPoint(x: 0, y: currentY))
+                        currentY += img.size.height
                     }
                 }
+                // 切回主线程通过闭包返回最终生成的长图
+                completion(finalImage)
             }
         }
     }

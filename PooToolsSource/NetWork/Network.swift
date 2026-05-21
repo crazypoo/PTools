@@ -79,7 +79,7 @@ public enum PTNetworkError: Error, @preconcurrency LocalizedError, CustomNSError
 @MainActor public let AppCustomMode = "PT App network environment custom".localized()
 @MainActor public let AppDisMode = "PT App network environment distribution".localized()
 
-public enum NetworkCellularType : String {
+public enum NetworkCellularType : String,Sendable {
     case ALL = "Cellular"
     case Cellular2G = "2G"
     case Cellular3G = "3G"
@@ -87,7 +87,7 @@ public enum NetworkCellularType : String {
     case Cellular5G = "5G"
 }
 
-public enum NetWorkStatus {
+public enum NetWorkStatus:Sendable {
     case unknown
     case notReachable
     case wwan(type:NetworkCellularType)

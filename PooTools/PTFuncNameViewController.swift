@@ -1367,7 +1367,7 @@ class PTFuncNameViewController: PTBaseViewController {
 // MARK: - ImagePickerControllerDelegate
 extension PTFuncNameViewController {
     
-    func saveVideoToAlbum(result:((_ finish:Bool)->Void)? = nil) {
+    func saveVideoToAlbum(result:(@Sendable (_ finish:Bool)->Void)? = nil) {
         PHPhotoLibrary.shared().performChanges({
             PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: self.outputURL)
         }) { success, error in

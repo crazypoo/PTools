@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @objc
-public protocol PTRouterServiceProtocol: NSObjectProtocol {
+public protocol PTRouterServiceProtocol: NSObjectProtocol{
     init()
     
     static var seriverName:String { get }

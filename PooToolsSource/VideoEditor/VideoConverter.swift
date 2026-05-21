@@ -9,6 +9,10 @@
 import UIKit
 import AVKit
 
+private struct PTVideoExportBox: @unchecked Sendable {
+    let isCancelledState: Bool
+}
+
 // 新增：引入 @MainActor 保证外部调用的安全，解决绝大部分 Sendable 捕获警告
 @MainActor
 open class VideoConverter {
@@ -356,7 +360,7 @@ open class VideoConverter {
             }
         }
     }
-    
+        
     // MARK: - 引擎 B (自定义格式 wav/caf/aiff 等导出)
     private func exportUsingAssetWriter(ac: AVMutableComposition, outputTypeType: AVFileType, url: URL, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         
@@ -368,6 +372,8 @@ open class VideoConverter {
         }
         
         do {
+            let safeBoxExport = PTVideoExportBox(isCancelledState: self.isCancelledState)
+            
             let assetReader = try AVAssetReader(asset: ac)
             let readerOutputSettings: [String: Any] = [
                 AVFormatIDKey: kAudioFormatLinearPCM
@@ -410,7 +416,7 @@ open class VideoConverter {
                 
                 while safeBox.writerInput.isReadyForMoreMediaData {
                     
-                    if self?.isCancelledState == true {
+                    if safeBoxExport.isCancelledState == true {
                         safeBox.writerInput.markAsFinished()
                         safeBox.writer.cancelWriting()
                         safeBox.reader.cancelReading()

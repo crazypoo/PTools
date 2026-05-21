@@ -95,7 +95,7 @@ enum ButtonLineType {
         }
     }
     
-    func view(_ color: UIColor?) -> UIView? {
+    @MainActor func view(_ color: UIColor?) -> UIView? {
         var view: UIView?
         if self == .leftTop || self == .rightTop || self == .leftBottom || self == .rightBottom {
             view = ButtonLineType.EdgeView(self, color: color)
