@@ -22,13 +22,13 @@ extension DefaultElementSizeLibrary {
 
         var title: String { constraint.type.description }
 
-        var subtitle: String? { constraint.underlyingConstraint?.safeIdentifier }
+        @MainActor var subtitle: String? { constraint.underlyingConstraint?.safeIdentifier }
 
         var customClass: InspectorElementSectionView.Type? {
             InspectorElementLayoutConstraintSectionView.self
         }
 
-        var titleAccessoryProperty: InspectorElementProperty? {
+        @MainActor var titleAccessoryProperty: InspectorElementProperty? {
             guard let underlyingConstraint = constraint.underlyingConstraint else { return nil }
             return .switch(
                 title: "Installed",

@@ -16,7 +16,7 @@ extension DefaultElementSizeLibrary {
 
         private weak var segmentedControl: UISegmentedControl?
 
-        init?(with object: NSObject) {
+        @MainActor init?(with object: NSObject) {
             guard let segmentedControl = object as? UISegmentedControl else {
                 return nil
             }

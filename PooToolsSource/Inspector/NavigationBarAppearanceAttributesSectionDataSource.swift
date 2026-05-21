@@ -15,7 +15,7 @@ extension DefaultElementAttributesLibrary {
 
         weak var appearance: UINavigationBarAppearance?
 
-        init?(with object: NSObject, _ kind: Kind) {
+        @MainActor init?(with object: NSObject, _ kind: Kind) {
             guard
                 let navigationBar = object as? UINavigationBar,
                 let appearance = kind.appearance(from: navigationBar)
@@ -234,7 +234,7 @@ extension DefaultElementAttributesLibrary.NavigationBarAppearanceAttributesSecti
     enum Kind: CustomStringConvertible {
         case standard, compact, scrollEdge, compactScrollEdge
 
-        func appearance(from navigationBar: UINavigationBar) -> UINavigationBarAppearance? {
+        @MainActor func appearance(from navigationBar: UINavigationBar) -> UINavigationBarAppearance? {
             switch self {
             case .standard:
                 return navigationBar.standardAppearance

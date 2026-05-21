@@ -14,7 +14,7 @@ extension DefaultElementAttributesLibrary {
 
         private weak var navigationItem: UINavigationItem?
 
-        init?(with object: NSObject) {
+        @MainActor init?(with object: NSObject) {
             guard let navigationItem = (object as? UIViewController)?.navigationItem else {
                 return nil
             }
