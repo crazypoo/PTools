@@ -34,6 +34,12 @@ private final class AVContext: @unchecked Sendable {
     }
 }
 
+private struct PTAVSendableBox: @unchecked Sendable {
+    let videoInput: AVAssetWriterInput
+    let audioInput: AVAssetWriterInput?
+    let audioReader: AVAssetReader?
+}
+
 // 2. 用于安全记录进度的容器
 private final class ProgressState: @unchecked Sendable {
     var currentFrame: Int = 0
@@ -368,14 +374,18 @@ public final class PTLivePhoto: Sendable {
                     }
                 }
                 
+                let ioBox = PTAVSendableBox(videoInput: videoWriterInput,
+                                            audioInput: audioWriterInput,
+                                            audioReader: audioReader)
+                
                 // 视频写入
                 if avContext.videoReader.startReading() {
                     videoWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "pt.livephoto.video")) {
-                        while videoWriterInput.isReadyForMoreMediaData {
+                        while ioBox.videoInput.isReadyForMoreMediaData {
                             autoreleasepool {
                                 // 👉 修改点：使用 avContext.videoReaderOutput
                                 guard let sample = avContext.videoReaderOutput.copyNextSampleBuffer() else {
-                                    videoWriterInput.markAsFinished()
+                                    ioBox.videoInput.markAsFinished()
                                     Task {
                                         await state.finishVideo()
                                         await finishIfPossible()
@@ -392,7 +402,7 @@ public final class PTLivePhoto: Sendable {
                                     Task { @MainActor in progress(progressValue) }
                                 }
                                 
-                                if !videoWriterInput.append(sample) {
+                                if !ioBox.videoInput.append(sample) {
                                     avContext.videoReader.cancelReading()
                                     Task {
                                         await state.finishVideo()
@@ -411,19 +421,19 @@ public final class PTLivePhoto: Sendable {
                 // 音频写入
                 if let aReader = avContext.audioReader, aReader.startReading(), let aWriterInput = audioWriterInput {
                     aWriterInput.requestMediaDataWhenReady(on: DispatchQueue(label: "pt.livephoto.audio")) {
-                        while aWriterInput.isReadyForMoreMediaData {
+                        while ioBox.audioInput?.isReadyForMoreMediaData == true {
                             autoreleasepool {
                                 // 👉 修复点：通过 avContext 调用 audioReaderOutput
                                 guard let sample = avContext.audioReaderOutput?.copyNextSampleBuffer() else {
-                                    aWriterInput.markAsFinished()
+                                    ioBox.audioInput?.markAsFinished()
                                     Task {
                                         await state.finishAudio()
                                         await finishIfPossible()
                                     }
                                     return
                                 }
-                                if !aWriterInput.append(sample) {
-                                    aReader.cancelReading()
+                                if ioBox.audioInput?.append(sample) == false {
+                                    ioBox.audioReader?.cancelReading()
                                     Task {
                                         await state.finishAudio()
                                         await finishIfPossible()
