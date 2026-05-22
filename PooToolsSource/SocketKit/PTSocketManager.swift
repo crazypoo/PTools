@@ -69,6 +69,7 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
             socketQueue.async { [weak self] in
                 guard let self = self else { return }
                 self._networkStatus = newValue
+                // 此时调用的 networkIsNotReachable 内部使用的是 _networkStatus，安全！
                 if self.networkIsNotReachable() {
                     self.disConnect(clearQueue: false)
                 } else {
@@ -183,39 +184,60 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
 
     public func reConnect() {
         socketQueue.async { [weak self] in
+            // 1. 确保 self 存在
             guard let self = self else { return }
-            guard !self.networkIsNotReachable() else { return }
+            
+            // 2. 修复点：直接通过底层的 _networkStatus 判断网络状态
+            // 避免在 async 闭包中调用额外的实例方法，消除编译器的并发检查报错
+            let isReachable: Bool
+            switch self._networkStatus {
+            case .notReachable:
+                isReachable = false
+            default:
+                isReachable = true
+            }
+            
+            // 3. 如果网络不可用，直接拦截并退出重连
+            guard isReachable else {
+                PTNSLogConsole("PTSocketManager: 当前网络不可用，取消重连")
+                return
+            }
+            
+            // 4. 确保当前确实是处于关闭状态才进行重连
             guard self.isClosed else { return }
 
+            // 5. 判断是否达到最大重连次数
             if self.reOpenCount >= self._maxReConnectCount {
                 self.reOpenCount = 0
-                print("PTSocketManager: 重连次数达到上限")
+                PTNSLogConsole("PTSocketManager: 重连次数达到上限")
                 return
             }
 
+            // 6. 更新状态并增加重连计数
             self._socketState = .reconnecting
             self.reOpenCount += 1
 
+            // 7. 计算退避延迟时间（指数退避算法：2, 4, 8, 16... 最大 60秒）
             let delay = min(pow(2.0, Double(self.reOpenCount)), 60.0)
+            
+            // 8. 断开之前的残余连接（清理底层 socket，但不清理未发送的消息队列）
             self.disConnect(clearQueue: false)
 
-            // 6. 拥抱现代并发，使用 Task.sleep 替代 DispatchQueue.asyncAfter
+            // 9. 使用现代并发 Task 发起延迟重连
             Task {
+                // 等待指定的秒数
                 try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+                // 重新调用连接方法
                 self.connect()
             }
         }
     }
 
     // MARK: - Network
-    @objc private func onNetworkStatusChange(_ notifi: Notification) {
-        socketQueue.async { [weak self] in
-            guard let self = self else { return }
-            if self.networkIsNotReachable() {
-                self.disConnect(clearQueue: false)
-            } else {
-                self.reConnect()
-            }
+    @objc private func onNetworkStatusChange(_ notifi: Notification) -> Bool {
+        switch _networkStatus {
+        case .notReachable: return true
+        default: return false
         }
     }
 
