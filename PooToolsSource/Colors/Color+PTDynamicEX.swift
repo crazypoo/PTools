@@ -393,12 +393,12 @@ public extension DynamicColor {
      *
      */
     
-    func RAD(degree:CGFloat)->CGFloat {
+    func RAD(degree:CGFloat) -> CGFloat {
         degree * .pi / 180
     }
     
     func colorDistance(color:UIColor,
-                       type:ColorDistanceType)->CGFloat {
+                       type:ColorDistanceType) -> CGFloat {
         let lab1 = cielabColorArray()
         let lab2 = color.cielabColorArray()
         

@@ -421,7 +421,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
     
-    func hudShow() {
+    @MainActor func hudShow() {
         self.hudConfig()
         if self.hud == nil {
             self.hud = PTHudView()
@@ -429,7 +429,7 @@ public class PTCheckUpdateFunction: NSObject {
         }
     }
     
-    func hudHide(completion:PTActionTask? = nil) {
+    @MainActor func hudHide(completion:PTActionTask? = nil) {
         if self.hud != nil {
             self.hud!.hide {
                 self.hud = nil

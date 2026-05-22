@@ -25,22 +25,41 @@ public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @uncheck
     }
 
     // MARK: - MetricKit 代理方法
-    
-    public func didReceive(_ payloads: [MXMetricPayload]) async {
-        // 使用 Task 将处理逻辑放入后台，不阻塞 MetricKit 的系统回调
+    public func didReceive(_ payloads: [MXMetricPayload]) {
+        // 1. 同步提纯：在跨越并发边界前，将非 Sendable 的 Payload 提取并转换为天生 Sendable 的 Data
+        var safeDataArray: [Data] = []
+        
         for payload in payloads {
             let dictionary = payload.dictionaryRepresentation()
+            // 这一步是 CPU 内存计算，速度极快，在当前回调线程执行完全没问题
             if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary, options: []) {
-                await saveToDisk(jsonData)
+                safeDataArray.append(jsonData)
+            }
+        }
+        
+        // 2. 异步 IO：只把绝对线程安全的 safeDataArray 传给 Task
+        Task {
+            for data in safeDataArray {
+                // 最耗时的磁盘写入 (IO 操作) 交给后台处理，不会卡主流程
+                await saveToDisk(data)
             }
         }
     }
 
-    public func didReceive(_ payloads: [MXDiagnosticPayload]) async {
+    public func didReceive(_ payloads: [MXDiagnosticPayload]) {
+        // 同理，处理诊断数据
+        var safeDataArray: [Data] = []
+        
         for payload in payloads {
             let dictionary = payload.dictionaryRepresentation()
             if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary, options: []) {
-                await saveToDisk(jsonData)
+                safeDataArray.append(jsonData)
+            }
+        }
+        
+        Task {
+            for data in safeDataArray {
+                await saveToDisk(data)
             }
         }
     }

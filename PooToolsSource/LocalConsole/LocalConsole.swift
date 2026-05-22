@@ -740,195 +740,25 @@ extension LocalConsole:UITextFieldDelegate {}
 extension LocalConsole {
     @MainActor
     func makeMenu() -> UIMenu {
-        // 1. 优化状态读取：直接使用 pt_isEmpty，避免将巨大的 fullText 读入内存
-        let isTerminalEmpty = terminal?.systemText?.pt_isEmpty ?? true
-        
-        // 2. 优化横竖屏检测：弃用耗时的 getCurrentVC 遍历，直接读取屏幕物理尺寸 (O(1) 复杂度)
-        let screenSize = UIScreen.main.bounds.size
-        let isLandscapePhone = UIDevice.current.userInterfaceIdiom == .phone && screenSize.width > screenSize.height
-        
-        // 3. 内存优化：所有 UIAction 必须使用 [weak self]，防止每次生成菜单导致严重的内存泄漏与卡顿
-        let share: UIAction
-        if #available(iOS 16, *) {
-            share = UIAction(title: .shareText, image: UIImage.shareImage) { [weak self] _ in self?.shareAction() }
-        } else {
-            share = UIAction(title: .copyText, image: UIImage.copyImage) { [weak self] _ in self?.copyTextAction() }
-        }
-
-        let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { [weak self] _ in self?.resizeAction() }
-        if isLandscapePhone {
-            resize.attributes = .disabled
-            resize.subtitle = "Portrait Orientation Only"
-        }
-
-        let clear = UIAction(title: .clearConsole, image: UIImage.clearImage(), attributes: .destructive) { [weak self] _ in self?.clear() }
-
-        var debugActions: [UIMenuElement] = []
-
-        let deferredUserDefaultsList = UIDeferredMenuElement.uncached { [weak self] completion in
-            guard let self = self else {
-                completion([])
-                return
-            }
-            
-            var actions: [UIAction] = []
-            let keyValues = self.userdefaultShares.keyAndValues()
-            
-            if keyValues.isEmpty { // 替换原来的 .count == 0，效率更高
-                actions.append(UIAction(title: "No Entries", attributes: .disabled, handler: { _ in }))
-            } else {
-                keyValues.forEach { dict in
-                    // 安全解包，避免 Crash
-                    guard let firstKey = dict.keys.first, let firstVal = dict.values.first else { return }
-                    
-                    let action = UIAction(title: firstKey, image: nil) { [weak self] _ in
-                        guard let self = self else { return }
-                        
-                        UIAlertController.base_alertVC(
-                            title: "Key\n" + firstKey,
-                            msg: "\nValue\n" + "\(firstVal)",
-                            okBtns: ["Copy Value", "Clear Value", "Edit value"],
-                            cancelBtn: "Cancel",
-                            moreBtn: { index, title in
-                                if title == "Copy Value" {
-                                    "\(firstVal)".copyToPasteboard()
-                                } else if title == "Clear Value" {
-                                    UserDefaults.standard.removeObject(forKey: firstKey)
-                                } else if title == "Edit value" {
-                                    UIAlertController.base_textfield_alertVC(
-                                        title: "Edit\n" + firstKey,
-                                        okBtn: "⭕️",
-                                        cancelBtn: "Cancel",
-                                        placeHolders: [firstKey],
-                                        textFieldTexts: ["\(firstVal)"],
-                                        keyboardType: [.default],
-                                        textFieldDelegate: self
-                                    ) { result in
-                                        if let newValue = result.values.first {
-                                            UserDefaults.standard.setValue(newValue, forKey: firstKey)
-                                        }
-                                    }
-                                }
-                            }
-                        )
-                    }
-                    action.subtitle = "\(firstVal)"
-                    actions.append(action)
-                }
-
-                actions.append(
-                    UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive) { _ in
-                        keyValues.forEach { dict in
-                            if let key = dict.keys.first {
-                                UserDefaults.standard.removeObject(forKey: key)
-                            }
-                        }
-                    }
-                )
-            }
-            completion(actions)
-        }
-
-        let userDefaults = UIMenu(title: .userDefaults, image: UIImage.userDefaultsImage(), children: [deferredUserDefaultsList])
-        debugActions.append(userDefaults)
-
-        let inspect = UIAction(title: "Inspectors", image: UIImage.InspectorImage) { _ in
-            Task { Inspector.sharedInstance.present(animated: true) }
-        }
-        
-        let logFile = UIAction(title: .log, image: UIImage.logFile) { [weak self] _ in self?.logFileOpen() }
-        let mockLocation = UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { [weak self] _ in self?.mockLocationOpen() }
-        let network = UIAction(title: .network, image: UIImage.networkImage) { [weak self] _ in self?.networkWatcherOpen() }
-        let crashLog = UIAction(title: .crashLog, image: UIImage.crashLogImage) { [weak self] _ in self?.crashLogControlOpen() }
-        let performance = UIAction(title: .Performance, image: UIImage.performanceImage) { [weak self] _ in self?.performanceControlOpen() }
-        
-        let colorCheck = UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { [weak self] _ in self?.colorAction() }
-        let ruler = UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck, image: UIImage.rulerImage()) { [weak self] _ in self?.rulerAction() }
-        let document = UIAction(title: .appDocument, image: UIImage.docImage) { [weak self] _ in self?.documentAction() }
-
-        let Flex = UIAction(title: .flex, image: UIImage.dev3thPartyImage) { [weak self] _ in
-            Task { @MainActor in self?.flexAction() }
-        }
-
-        let InApp = UIAction(title: .inApp, image: UIImage.dev3thPartyImage) { [weak self] _ in
-            Task { @MainActor in self?.watchViewsAction() }
-        }
-
-        let deferredMaskList = UIDeferredMenuElement.uncached { [weak self] completion in
-            guard let self = self else {
-                completion([])
-                return
-            }
-            var actions: [UIAction] = []
-            let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { [weak self] _ in
-                self?.maskOpenFunction()
-            }
-            actions.append(maskOpen)
-
-            if self.maskView != nil {
-                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { [weak self] _ in
-                    self?.maskOpenBubbleFunction()
-                }
-                actions.append(maskTouchBubble)
-            }
-            completion(actions)
-        }
-
-        let masks = UIMenu(title: "Dev Mask", image: UIImage.maskImage(), children: [deferredMaskList])
-        debugActions.append(masks)
-
-        let viewFrames = UIAction(title: debugBordersEnabled ? .showViewFrames : .hideViewFrames, image: UIImage.viewFrameImage()) { [weak self] _ in
-            guard let self = self else { return }
-            self.viewFramesAction()
-            self.terminal?.menuButton.menu = self.makeMenu()
-        }
-
-        let systemReport = UIAction(title: .systemReport, image: UIImage.cpuImage()) { [weak self] _ in self?.systemReport() }
-        let displayReport = UIAction(title: .displayReport, image: UIImage.displayImage()) { [weak self] _ in self?.displayReport() }
-        let terminateApplication = UIAction(title: .terminateApp, image: UIImage.terminateAppImage, attributes: .destructive) { [weak self] _ in self?.terminateApplicationAction() }
-        let respring = UIAction(title: .respring, image: UIImage.respringImage(), attributes: .destructive) { [weak self] _ in self?.respringAction() }
-        let debugController = UIAction(title: .debugController, image: UIImage.debugControllerImage, attributes: .destructive) { [weak self] _ in self?.debugControllerAction() }
-        let loadedLibs = UIAction(title: "Loaded libs", image: UIImage.LoadedLibImage()) { [weak self] _ in self?.loadedLibs() }
-
-        var actions = [inspect, logFile, mockLocation, network, crashLog, performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, loadedLibs]
-        
-    #if canImport(FLEX)
-        actions.append(Flex)
-    #endif
-        
-    #if canImport(InAppViewDebugger)
-        actions.append(InApp)
-    #endif
-        
-        // 4. 优化排序：弃用极其低效的字符串拆解对比，使用系统原生的本地化字符串对比 (底层 C++ 极速实现)
-        let sortActions = actions.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
-        
-        debugActions.append(contentsOf: sortActions)
-        let destructActions = [debugController, terminateApplication, respring]
-
-        let debugMenu = UIMenu(
-            title: .debug, image: UIImage.debugImage,
-            children: [
-                UIMenu(title: "", options: .displayInline, children: debugActions),
-                UIMenu(title: "", options: .displayInline, children: destructActions)
-            ]
-        )
-
         var menuContent: [UIMenuElement] = []
+        
+        // 性能优化：直接读取 isEmpty 属性，避免全量文本加载到内存
+        let isTerminalEmpty = terminal?.systemText?.pt_isEmpty ?? true
 
-        if !isTerminalEmpty {
-            menuContent.append(UIMenu(title: "", options: .displayInline, children: [share, resize]))
-        } else {
-            menuContent.append(UIMenu(title: "", options: .displayInline, children: [resize]))
-        }
+        // 1. 构建顶部基础操作区 (分享、调整大小)
+        menuContent.append(contentsOf: buildTopMenuElements(isTerminalEmpty: isTerminalEmpty))
 
-        menuContent.append(debugMenu)
+        // 2. 构建核心的 Debug 开发者菜单
+        menuContent.append(buildDebugMenu())
+
+        // 3. 注入外部可能传入的自定义菜单
         if let customMenu = menu {
             menuContent.append(customMenu)
         }
 
+        // 4. 构建底部的清理操作 (仅在控制台有文本时显示)
         if !isTerminalEmpty {
-            menuContent.append(UIMenu(title: "", options: .displayInline, children: [clear]))
+            menuContent.append(UIMenu(title: "", options: .displayInline, children: [buildClearAction()]))
         }
 
         return UIMenu(title: "", children: menuContent)
@@ -1115,6 +945,198 @@ extension LocalConsole {
         let vc = PTFileBrowserViewController()
         consoleSheetPresent(vc: vc)
     }    
+}
+
+///Menu Subs
+extension LocalConsole {
+    
+    /// 1. 构建顶部的基础操作区
+    @MainActor
+    private func buildTopMenuElements(isTerminalEmpty: Bool) -> [UIMenuElement] {
+        var elements: [UIMenuElement] = []
+        
+        // 性能优化：弃用遍历视图树找方向，直接根据物理屏幕比例判断
+        let screenSize = UIScreen.main.bounds.size
+        let isLandscapePhone = UIDevice.current.userInterfaceIdiom == .phone && screenSize.width > screenSize.height
+        
+        let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { [weak self] _ in self?.resizeAction() }
+        if isLandscapePhone {
+            resize.attributes = .disabled
+            resize.subtitle = "Portrait Orientation Only"
+        }
+        
+        if !isTerminalEmpty {
+            let share: UIAction
+            if #available(iOS 16, *) {
+                share = UIAction(title: .shareText, image: UIImage.shareImage) { [weak self] _ in self?.shareAction() }
+            } else {
+                share = UIAction(title: .copyText, image: UIImage.copyImage) { [weak self] _ in self?.copyTextAction() }
+            }
+            // 合并显示分享和调整大小
+            elements.append(UIMenu(title: "", options: .displayInline, children: [share, resize]))
+        } else {
+            // 为空时只显示调整大小
+            elements.append(UIMenu(title: "", options: .displayInline, children: [resize]))
+        }
+        
+        return elements
+    }
+    
+    /// 2. 构建核心的开发者调试菜单 (包含所有子模块)
+    @MainActor
+    private func buildDebugMenu() -> UIMenu {
+        var debugActions: [UIMenuElement] = []
+        
+        // 2.1 动态加载的特殊菜单
+        debugActions.append(buildUserDefaultsMenu())
+        debugActions.append(buildMaskMenu())
+        
+        // 2.2 常规工具操作集合
+        var normalActions: [UIAction] = [
+            UIAction(title: "Inspectors", image: UIImage.InspectorImage) { _ in Task { Inspector.sharedInstance.present(animated: true) } },
+            UIAction(title: .log, image: UIImage.logFile) { [weak self] _ in self?.logFileOpen() },
+            UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { [weak self] _ in self?.mockLocationOpen() },
+            UIAction(title: .network, image: UIImage.networkImage) { [weak self] _ in self?.networkWatcherOpen() },
+            UIAction(title: .crashLog, image: UIImage.crashLogImage) { [weak self] _ in self?.crashLogControlOpen() },
+            UIAction(title: .Performance, image: UIImage.performanceImage) { [weak self] _ in self?.performanceControlOpen() },
+            UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { [weak self] _ in self?.colorAction() },
+            UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck, image: UIImage.rulerImage()) { [weak self] _ in self?.rulerAction() },
+            UIAction(title: .appDocument, image: UIImage.docImage) { [weak self] _ in self?.documentAction() },
+            UIAction(title: debugBordersEnabled ? .showViewFrames : .hideViewFrames, image: UIImage.viewFrameImage()) { [weak self] _ in
+                guard let self = self else { return }
+                self.viewFramesAction()
+                self.terminal?.menuButton.menu = self.makeMenu() // 刷新菜单状态
+            },
+            UIAction(title: .systemReport, image: UIImage.cpuImage()) { [weak self] _ in self?.systemReport() },
+            UIAction(title: .displayReport, image: UIImage.displayImage()) { [weak self] _ in self?.displayReport() },
+            UIAction(title: "Loaded libs", image: UIImage.LoadedLibImage()) { [weak self] _ in self?.loadedLibs() }
+        ]
+        
+        #if canImport(FLEX)
+        normalActions.append(UIAction(title: .flex, image: UIImage.dev3thPartyImage) { [weak self] _ in Task { @MainActor in self?.flexAction() } })
+        #endif
+        
+        #if canImport(InAppViewDebugger)
+        normalActions.append(UIAction(title: .inApp, image: UIImage.dev3thPartyImage) { [weak self] _ in Task { @MainActor in self?.watchViewsAction() } })
+        #endif
+        
+        // 性能优化：使用系统底层的本地化对比，极速排序
+        let sortedActions = normalActions.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        debugActions.append(contentsOf: sortedActions)
+        
+        // 2.3 破坏性操作 (红色警告样式)
+        let destructActions = [
+            UIAction(title: .debugController, image: UIImage.debugControllerImage, attributes: .destructive) { [weak self] _ in self?.debugControllerAction() },
+            UIAction(title: .terminateApp, image: UIImage.terminateAppImage, attributes: .destructive) { [weak self] _ in self?.terminateApplicationAction() },
+            UIAction(title: .respring, image: UIImage.respringImage(), attributes: .destructive) { [weak self] _ in self?.respringAction() }
+        ]
+        
+        return UIMenu(title: .debug, image: UIImage.debugImage, children: [
+            UIMenu(title: "", options: .displayInline, children: debugActions),
+            UIMenu(title: "", options: .displayInline, children: destructActions)
+        ])
+    }
+    
+    /// 3. 构建 UserDefaults 专属动态菜单
+    @MainActor
+    private func buildUserDefaultsMenu() -> UIMenu {
+        let deferredList = UIDeferredMenuElement.uncached { [weak self] completion in
+            guard let self = self else {
+                completion([])
+                return
+            }
+            
+            var actions: [UIAction] = []
+            let keyValues = self.userdefaultShares.keyAndValues()
+            
+            if keyValues.isEmpty {
+                actions.append(UIAction(title: "No Entries", attributes: .disabled) { _ in })
+            } else {
+                keyValues.forEach { dict in
+                    // 安全解包，避免应用崩溃
+                    guard let firstKey = dict.keys.first, let firstVal = dict.values.first else { return }
+                    
+                    let action = UIAction(title: firstKey, image: nil) { [weak self] _ in
+                        guard let self = self else { return }
+                        UIAlertController.base_alertVC(
+                            title: "Key\n" + firstKey,
+                            msg: "\nValue\n" + "\(firstVal)",
+                            okBtns: ["Copy Value", "Clear Value", "Edit value"],
+                            cancelBtn: "Cancel",
+                            moreBtn: { index, title in
+                                if title == "Copy Value" {
+                                    "\(firstVal)".copyToPasteboard()
+                                } else if title == "Clear Value" {
+                                    UserDefaults.standard.removeObject(forKey: firstKey)
+                                } else if title == "Edit value" {
+                                    UIAlertController.base_textfield_alertVC(
+                                        title: "Edit\n" + firstKey,
+                                        okBtn: "⭕️",
+                                        cancelBtn: "Cancel",
+                                        placeHolders: [firstKey],
+                                        textFieldTexts: ["\(firstVal)"],
+                                        keyboardType: [.default],
+                                        textFieldDelegate: self
+                                    ) { result in
+                                        if let newValue = result.values.first {
+                                            UserDefaults.standard.setValue(newValue, forKey: firstKey)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    action.subtitle = "\(firstVal)"
+                    actions.append(action)
+                }
+                
+                actions.append(
+                    UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive) { _ in
+                        keyValues.forEach { dict in
+                            if let key = dict.keys.first { UserDefaults.standard.removeObject(forKey: key) }
+                        }
+                    }
+                )
+            }
+            completion(actions)
+        }
+        
+        return UIMenu(title: .userDefaults, image: UIImage.userDefaultsImage(), children: [deferredList])
+    }
+    
+    /// 4. 构建 Mask 遮罩专属动态菜单
+    @MainActor
+    private func buildMaskMenu() -> UIMenu {
+        let deferredMaskList = UIDeferredMenuElement.uncached { [weak self] completion in
+            guard let self = self else {
+                completion([])
+                return
+            }
+            
+            var actions: [UIAction] = []
+            
+            let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { [weak self] _ in
+                self?.maskOpenFunction()
+            }
+            actions.append(maskOpen)
+
+            if self.maskView != nil {
+                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { [weak self] _ in
+                    self?.maskOpenBubbleFunction()
+                }
+                actions.append(maskTouchBubble)
+            }
+            completion(actions)
+        }
+        
+        return UIMenu(title: "Dev Mask", image: UIImage.maskImage(), children: [deferredMaskList])
+    }
+    
+    /// 5. 构建底部清理操作
+    @MainActor
+    private func buildClearAction() -> UIAction {
+        return UIAction(title: .clearConsole, image: UIImage.clearImage(), attributes: .destructive) { [weak self] _ in self?.clear() }
+    }
 }
 
 //MARK: System report

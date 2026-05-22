@@ -30,7 +30,7 @@ private enum SocketMessage: Sendable {
 
 // 3. Delegate 强制绑定 MainActor，确保业务层的 UI 更新绝对安全
 @MainActor
-public protocol PTSocketManagerDelegate: AnyObject {
+public protocol PTSocketManagerDelegate: AnyObject,Sendable {
     func socketDidConnect()
     func socketDidDisconnect()
     // 限制抛出的 message 必须是 Sendable 的 (通常是 String 或 Data)
@@ -284,13 +284,15 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
                     guard !Task.isCancelled else { break }
                     
                     self?.socketQueue.async {
-                        guard let self = self else { return }
-                        try? self.webSocket?.sendPing(nil)
-                        
-                        let currentTime = Date().timeIntervalSince1970
-                        if currentTime - self.lastReceiveMessageTime > self.timeoutThreshold {
-                            print("PTSocketManager: 心跳超时，判定为假死，准备重连")
-                            self.reConnect()
+                        PTGCDManager.shared.runOnMain {
+                            guard let self = self else { return }
+                            try? self.webSocket?.sendPing(nil)
+                            
+                            let currentTime = Date().timeIntervalSince1970
+                            if currentTime - self.lastReceiveMessageTime > self.timeoutThreshold {
+                                PTNSLogConsole("PTSocketManager: 心跳超时，判定为假死，准备重连")
+                                self.reConnect()
+                            }
                         }
                     }
                 } catch {
