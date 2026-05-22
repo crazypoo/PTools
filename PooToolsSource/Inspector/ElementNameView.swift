@@ -108,8 +108,14 @@ final class ElementNameView: LayerViewComponent {
         contentFrameObserver = superview?
             .layer
             .observe(\.bounds) { [weak self] layer, _ in
-                guard let self = self else { return }
-                self.contentFrame = layer.frame
+                // 1. 先在闭包当前的线程里，把需要的值取出来
+                let newFrame = layer.frame
+                
+                // 2. 开启一个绑定在主线程的 Task，去更新 UI 属性
+                Task { @MainActor in
+                    guard let self = self else { return }
+                    self.contentFrame = newFrame
+                }
             }
     }
 

@@ -10,10 +10,6 @@ import UIKit
 
 public typealias PTPanelDetailTask = (_ speed:CGFloat)->Void
 
-private struct PTTimerBox: @unchecked Sendable {
-    let timer: Timer
-}
-
 public class PTSpeedPanelConfig:NSObject {
     // 最大速度
     open var maxValue:CGFloat = 100

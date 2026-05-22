@@ -626,8 +626,6 @@ private enum PreparedUploadMedia {
     case fileURL(URL, mimeType: String, fileName: String)
 }
 
-// MARK: - ================= 4. 核心 Network 调度枢纽 =================
-
 public final class Network: @unchecked Sendable {
     static public let share = Network()
     public var plugins: [NetworkPlugin] = [PTNetworkCachePlugin()]
@@ -636,6 +634,27 @@ public final class Network: @unchecked Sendable {
     private let configLock = NSLock()
     private var _config = PTNetworkConfig()
     
+    // 1. 内部消化：利用编译宏判断是否是 Debug 环境，速度最快且绝对线程安全
+    private static let isDebugEnvironment: Bool = {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }()
+
+    // 2. 内部消化：利用 Bundle 底层特征判断是否是 App Store 环境
+    private static let isAppStoreEnvironment: Bool = {
+        #if DEBUG
+        return false
+        #else
+        // 业界标准方案：App Store 正式包在苹果后台处理后，会剥离 embedded.mobileprovision 文件。
+        // 而 TestFlight、AdHoc 或企业包都会保留这个文件。我们通过判断这个文件是否存在来区分。
+        let hasProvision = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") != nil
+        return !hasProvision
+        #endif
+    }()
+
     public var config: PTNetworkConfig {
         get {
             configLock.lock()
@@ -781,7 +800,7 @@ public final class Network: @unchecked Sendable {
             return String(data: data, encoding: .utf8) ?? ""
         }
     }
-    
+        
     /// 🌟 内部通用预处理：脱离外壳保护、Pretty 输出与截断盾
     private static func validateAndPreprocessResponse<T>(url: String, response: HTTPURLResponse?, data: Data?) throws -> (PTBaseStructModel<T>, String) {
         var result = PTBaseStructModel<T>()
@@ -801,7 +820,9 @@ public final class Network: @unchecked Sendable {
                 throw error
             }
             var originalText = ""
-            if UIApplication.shared.inferredEnvironment_PT == .debug { originalText = String(decoding: data, as: UTF8.self) }
+            if isDebugEnvironment {
+                originalText = String(decoding: data, as: UTF8.self)
+            }
             logRequestSuccess(url: url, jsonStr: originalText)
             result.originalString = originalText
             return (result, "")
@@ -819,7 +840,7 @@ public final class Network: @unchecked Sendable {
             }
         }
         
-        if UIApplication.shared.inferredEnvironment_PT != .appStore {
+        if !isAppStoreEnvironment {
             let prettyStr = prettyPrintedJSONString(from: data)
             let maxLen = Int(Network.share.config.logMaxCount)
             let printStr = prettyStr.count > maxLen ? String(prettyStr.prefix(maxLen)) + "\n\n...[JSON过大，为保护控制台已截断]..." : prettyStr
@@ -1284,23 +1305,25 @@ public final class Network: @unchecked Sendable {
             }
             
             request?.response { [weak self] resp in
-                guard let self = self else { return }
-                self.lock.lock()
-                self.isDownloading = false
-                self.resumeData = nil
-                let currentFails = self.failHandlers
-                let currentSuccesses = self.successHandlers
-                self.clearHandlers()
-                self.lock.unlock()
-                
-                if let error = resp.error {
-                    if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
-                        self.resumeData = resp.resumeData
-                    } else { Task { await Network.share.store.remove(self.url) } }
-                    currentFails.forEach { $0(error) }
-                } else {
-                    Task { await Network.share.store.remove(self.url) }
-                    currentSuccesses.forEach { $0(resp) }
+                PTGCDManager.shared.runOnMain {
+                    guard let self = self else { return }
+                    self.lock.lock()
+                    self.isDownloading = false
+                    self.resumeData = nil
+                    let currentFails = self.failHandlers
+                    let currentSuccesses = self.successHandlers
+                    self.clearHandlers()
+                    self.lock.unlock()
+                    
+                    if let error = resp.error {
+                        if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
+                            self.resumeData = resp.resumeData
+                        } else { Task { await Network.share.store.remove(self.url) } }
+                        currentFails.forEach { $0(error) }
+                    } else {
+                        Task { await Network.share.store.remove(self.url) }
+                        currentSuccesses.forEach { $0(resp) }
+                    }
                 }
             }
         }

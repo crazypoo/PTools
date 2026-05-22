@@ -15,6 +15,7 @@ import Photos
 import MobileCoreServices
 import ImageIO
 import SwifterSwift
+import CoreImage
 
 extension UIImage : PTProtocolCompatible {}
 extension CIImage : PTProtocolCompatible {}
@@ -182,8 +183,8 @@ public extension UIImage {
     
     //MARK: 圖片高斯模糊
     ///圖片高斯模糊
-    @MainActor @objc func blurImage() -> UIImage {
-        img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
+    @MainActor @objc func blurImage() -> UIImage? {
+        return img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
     }
     
     /*
@@ -193,112 +194,95 @@ public extension UIImage {
      色彩饱和度(浓度)因子:  0是黑白灰, 9是浓彩色, 1是原色  默认1.8
      “彩度”，英文是称Saturation，即饱和度。将无彩色的黑白灰定为0，最鲜艳定为9s，这样大致分成十阶段，让数值和人的感官直觉一致。
      */
-    @MainActor func img(alpha:Float,
-             radius:Float,
-             colorSaturationFactor:Float) -> UIImage {
-        let tintColor = UIColor(white: 1, alpha: CGFloat(alpha))
+    @MainActor func img(alpha:CGFloat,
+                        radius:CGFloat,
+                        colorSaturationFactor:CGFloat) -> UIImage? {
+        let tintColor = UIColor(white: 1, alpha: alpha)
         return imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
     
-    @MainActor func imgBluredWithRadius(blurRadius:Float,
-                             tintColor:UIColor?,
-                             saturationDeltaFactor:Float,
-                             maskImage:UIImage?) -> UIImage {
+    private static let sharedCIContext = CIContext(options: nil)
+    
+    @MainActor func imgBluredWithRadius(blurRadius:CGFloat,
+                                        tintColor:UIColor?,
+                                        saturationDeltaFactor:CGFloat,
+                                        maskImage:UIImage?) -> UIImage? {
+        // 1. 安全校验：确保图片尺寸有效且包含 CGImage
+        guard size.width > 0 && size.height > 0, let cgImage = self.cgImage else {
+            return nil
+        }
+        
         let imageRect = CGRect(origin: .zero, size: size)
-        var effectImage = self
-        let hadBlur = blurRadius > Float.ulpOfOne
-        let hasSaturationChange = abs(saturationDeltaFactor - 1) > Float.ulpOfOne
-        if hadBlur || hasSaturationChange {
-            UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-            let effectContext = UIGraphicsGetCurrentContext()
-            effectContext!.scaleBy(x: 1,y: -1)
-            effectContext!.translateBy(x: 0, y: -size.height)
-            effectContext!.draw(cgImage!, in: imageRect)
+        let hasBlur = blurRadius > .ulpOfOne
+        let hasSaturationChange = abs(saturationDeltaFactor - 1.0) > .ulpOfOne
+        
+        var effectCGImage: CGImage? = nil
+        
+        // 2. 核心优化：使用 CoreImage 的经典 KVC 方式处理滤镜 (向下兼容性极佳)
+        if hasBlur || hasSaturationChange {
+            var ciImage = CIImage(cgImage: cgImage)
             
-            var effectInBuffer = vImage_Buffer()
-            effectInBuffer.data = effectContext!.data
-            effectInBuffer.width = vImagePixelCount(effectContext!.width)
-            effectInBuffer.height = vImagePixelCount(effectContext!.height)
-            effectInBuffer.rowBytes = effectContext!.bytesPerRow
-            
-            UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-            let effectOutContext = UIGraphicsGetCurrentContext()
-            var effectOutBuffer = vImage_Buffer()
-            effectOutBuffer.data = effectOutContext!.data
-            effectOutBuffer.width = vImagePixelCount(effectOutContext!.width)
-            effectOutBuffer.height = vImagePixelCount(effectOutContext!.height)
-            effectOutBuffer.rowBytes = effectOutContext!.bytesPerRow
-            
-            //            var redPointer = [0xFF,0x00,0x00]
-            if hadBlur {
-                let inputRadius = blurRadius * Float(UIScreen.main.scale)
-                let sqartReslut = sqrt(2 * Double.pi)
-                var radius:NSInteger = NSInteger(floor(Double(inputRadius) * 3.0 * sqartReslut / 4.0 + 0.5))
-                if radius % 2 != 1 {
-                    radius += 1
+            // 模糊处理
+            if hasBlur {
+                // clampedToExtent 防止图片边缘在模糊时出现透明黑边
+                ciImage = ciImage.clampedToExtent()
+                
+                // 使用字符串名称初始化滤镜，兼容所有 iOS 版本
+                if let blurFilter = CIFilter(name: "CIGaussianBlur") {
+                    blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
+                    blurFilter.setValue(blurRadius, forKey: kCIInputRadiusKey)
+                    ciImage = blurFilter.outputImage ?? ciImage
                 }
-                vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, nil, 0, 0, UInt32(radius), UInt32(radius), nil, vImage_Flags(kvImageEdgeExtend))
-                vImageBoxConvolve_ARGB8888(&effectOutBuffer, &effectInBuffer, nil, 0, 0, UInt32(radius), UInt32(radius), nil, vImage_Flags(kvImageEdgeExtend))
-                vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, nil, 0, 0, UInt32(radius), UInt32(radius), nil, vImage_Flags(kvImageEdgeExtend))
             }
             
-            var effectImageBuffersAreSwapped = false
+            // 饱和度处理
             if hasSaturationChange {
-                let s = saturationDeltaFactor
-                let floatingPointSaturationMatrix = [0.0722 + 0.9278 * s,  0.0722 - 0.0722 * s,  0.0722 - 0.0722 * s,  0,
-                                                     0.7152 - 0.7152 * s,  0.7152 + 0.2848 * s,  0.7152 - 0.7152 * s,  0,
-                                                     0.2126 - 0.2126 * s,  0.2126 - 0.2126 * s,  0.2126 + 0.7873 * s,  0,
-                                                     0,                    0,                    0,  1]
-                let divesor : Int32 = 256
-                let matrixSize = MemoryLayout.size(ofValue: floatingPointSaturationMatrix) / MemoryLayout.size(ofValue: floatingPointSaturationMatrix[0])
-                var saturationMatrix = [Int16]()
-                
-                for i in 0...(matrixSize - 1) {
-                    saturationMatrix[i] = Int16(roundf(floatingPointSaturationMatrix[i] * Float(divesor)))
-                }
-                
-                if hadBlur {
-                    vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, &saturationMatrix, divesor, nil,nil, vImage_Flags(kvImageNoFlags))
-                    effectImageBuffersAreSwapped = true
-                } else {
-                    vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, &saturationMatrix, divesor, nil,nil, vImage_Flags(kvImageNoFlags))
-                }
-                
-                if !effectImageBuffersAreSwapped {
-                    effectImage = UIGraphicsGetImageFromCurrentImageContext()!
-                    UIGraphicsEndImageContext()
-                } else {
-                    effectImage = UIGraphicsGetImageFromCurrentImageContext()!
-                    UIGraphicsEndImageContext()
+                if let colorFilter = CIFilter(name: "CIColorControls") {
+                    colorFilter.setValue(ciImage, forKey: kCIInputImageKey)
+                    colorFilter.setValue(saturationDeltaFactor, forKey: kCIInputSaturationKey)
+                    ciImage = colorFilter.outputImage ?? ciImage
                 }
             }
+            
+            // 将处理后的图像裁剪回原始尺寸，并渲染成 CGImage
+            ciImage = ciImage.cropped(to: CGRect(origin: .zero, size: size))
+            effectCGImage = Self.sharedCIContext.createCGImage(ciImage, from: ciImage.extent)
         }
         
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-        let outputContext = UIGraphicsGetCurrentContext()
-        outputContext?.scaleBy(x: 1, y: -1)
-        outputContext?.translateBy(x: 0, y: -size.height)
-        outputContext?.draw(cgImage!, in: imageRect)
+        // 3. 现代绘制 API：使用 UIGraphicsImageRenderer 进行最终的图层合成
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = self.scale
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
         
-        if hadBlur {
-            outputContext?.saveGState()
-            if maskImage != nil {
-                outputContext?.clip(to: imageRect, mask: (maskImage?.cgImage)!)
+        return renderer.image { context in
+            let cgContext = context.cgContext
+            
+            // 翻转 CoreGraphics 坐标系（因为 CG 和 UIKit 坐标系的 Y 轴是相反的）
+            cgContext.scaleBy(x: 1.0, y: -1.0)
+            cgContext.translateBy(x: 0, y: -size.height)
+            
+            // 底层：绘制原始图片
+            cgContext.draw(cgImage, in: imageRect)
+            
+            // 中层：如果应用了效果，根据 mask 绘制特效图片
+            if let effectCGImage = effectCGImage {
+                cgContext.saveGState()
+                if let maskCGImage = maskImage?.cgImage {
+                    // 应用遮罩裁剪
+                    cgContext.clip(to: imageRect, mask: maskCGImage)
+                }
+                cgContext.draw(effectCGImage, in: imageRect)
+                cgContext.restoreGState()
             }
-            outputContext?.draw(cgImage!, in: imageRect)
-            outputContext?.restoreGState()
+            
+            // 顶层：覆盖颜色 (TintColor)
+            if let tintColor = tintColor {
+                cgContext.saveGState()
+                cgContext.setFillColor(tintColor.cgColor)
+                cgContext.fill(imageRect)
+                cgContext.restoreGState()
+            }
         }
-        
-        if tintColor != nil {
-            outputContext?.saveGState()
-            outputContext?.setFillColor(tintColor!.cgColor)
-            outputContext?.fill(imageRect)
-            outputContext?.restoreGState()
-        }
-        
-        effectImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return effectImage
     }
     
     //MARK: 加水印

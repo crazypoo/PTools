@@ -29,6 +29,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         if #available(iOS 26.0, *) {
             view.configuration = UIButton.Configuration.clearGlass()
         }
+        view.bounds = CGRectMake(0, 0, 34, 34)
         return view
     }()
     
@@ -108,7 +109,19 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                         
-        view.addSubviews([fakeNav,collectionView])
+        view.addSubviews([collectionView,fakeNav])
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        let collectionInset_Bottom:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        
+        collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
+        
+        collectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+        }
+
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
@@ -117,18 +130,6 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         
         fakeNavSet()
         
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
-        let collectionInset_Bottom:CGFloat = CGFloat.kTabbarSaveAreaHeight
-        
-        collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.contentCollectionView.contentInset.top = collectionInset_Top
-        collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
-        
-        view.insertSubview(collectionView, at: 0)
-        collectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.fakeNav)
-        }
 
         if selectedAlbum.models.isEmpty {
             selectedAlbum.refetchPhotos()

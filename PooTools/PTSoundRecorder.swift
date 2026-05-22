@@ -9,73 +9,87 @@
 import UIKit
 import AVFoundation
 
-final class PTSoundRecorder: NSObject,AVAudioRecorderDelegate {
+@MainActor
+final class PTSoundRecorder: NSObject, AVAudioRecorderDelegate {
     
+    // 假设 OSSSpeech 是你的其他业务逻辑
     let speechKit = OSSSpeech.shared
     
     var audioRecorder: AVAudioRecorder?
     var onUpdate: (([Float]) -> Void)?
     var soundSamples = [Float]()
-    var levelTimer:Timer?
+    
+    // 2. 使用 modern Swift 的 Task 来替代 Timer，性能更好且不受 UI 滚动影响
+    private var meteringTask: Task<Void, Never>?
     
     func start() {
-        PTGCDManager.shared.runOnMain {
-            let audioSession = AVAudioSession.sharedInstance()
+        // 由于类已经是 @MainActor，这里不需要再包一层 runOnMain
+        let audioSession = AVAudioSession.sharedInstance()
+        
+        do {
+            try audioSession.setCategory(.playAndRecord, mode: .default)
+            try audioSession.setActive(true)
             
-            do {
-                try audioSession.setCategory(.playAndRecord, mode: .default)
-                try audioSession.setActive(true)
-                
-                let settings = [
-                    AVFormatIDKey: Int(kAudioFormatLinearPCM),
-                    AVSampleRateKey: 44100,
-                    AVNumberOfChannelsKey: 1,
-                    AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-                ]
-                
-                self.audioRecorder = try AVAudioRecorder(url: URL(fileURLWithPath: "/dev/null"), settings: settings)
-                self.audioRecorder?.isMeteringEnabled = true
-                self.audioRecorder?.prepareToRecord()
-                self.audioRecorder?.record()
-                
-                self.soundSamples.removeAll()
-                self.startTimer()
-                
-            } catch {
-                PTNSLogConsole("Error starting recording: \(error.localizedDescription)")
-            }
+            let settings: [String: Any] = [
+                AVFormatIDKey: Int(kAudioFormatLinearPCM),
+                AVSampleRateKey: 44100,
+                AVNumberOfChannelsKey: 1,
+                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            ]
+            
+            audioRecorder = try AVAudioRecorder(url: URL(fileURLWithPath: "/dev/null"), settings: settings)
+            audioRecorder?.isMeteringEnabled = true
+            audioRecorder?.prepareToRecord()
+            
+            // 3. 性能优化：只需在这里调用一次 record() 即可！
+            audioRecorder?.record()
+            
+            soundSamples.removeAll()
+            startTimer()
+            
+        } catch {
+            print("Error starting recording: \(error.localizedDescription)")
         }
     }
 
     func stop() {
-        if audioRecorder != nil {
-            audioRecorder!.stop()
-        }
+        audioRecorder?.stop()
         stopTimer()
     }
     
-    func startTimer() {
-        let interval:Double = 0.05
-//        let bufferLength = AVAudioFrameCount(interval * (audioRecorder.settings[AVSampleRateKey] as! Double))
+    private func startTimer() {
+        // 取消旧的任务，防止重复启动
+        meteringTask?.cancel()
         
-        audioRecorder?.record(forDuration: interval)
-        
-        levelTimer = Timer(timeInterval: interval, repeats: true, block: { [weak self] _ in
-            self?.audioRecorder?.updateMeters()
-            let decibels = self?.audioRecorder?.averagePower(forChannel: 0) ?? -160
-            let normalizedValue = pow(10, decibels / 20)
-            self?.soundSamples.append(normalizedValue)
-            self?.onUpdate?(self?.soundSamples ?? [])
-            self?.audioRecorder?.record(forDuration: interval)
-        })
-        
-        RunLoop.current.add(levelTimer!, forMode: .default)
+        // 开启一个依附于 MainActor 的异步任务
+        meteringTask = Task {
+            // 只要任务没有被取消，就一直循环读取音量
+            while !Task.isCancelled {
+                audioRecorder?.updateMeters()
+                
+                // 获取分贝值 (范围通常是 -160 到 0)
+                let decibels = audioRecorder?.averagePower(forChannel: 0) ?? -160.0
+                
+                // 性能优化：明确类型为 Double 进行运算，最后转为 Float
+                let normalizedValue = Float(pow(10.0, Double(decibels) / 20.0))
+                
+                soundSamples.append(normalizedValue)
+                onUpdate?(soundSamples)
+                
+                // 暂停 0.05 秒 (50,000,000 纳秒)
+                // 使用 Task.sleep 不会阻塞主线程，非常高效
+                try? await Task.sleep(nanoseconds: 50_000_000)
+            }
+        }
     }
     
-    func stopTimer() {
+    private func stopTimer() {
+        // 传递最终数据并清空状态
         onUpdate?(soundSamples)
         soundSamples.removeAll()
-        levelTimer?.invalidate()
+        
+        // 取消音量监听任务
+        meteringTask?.cancel()
+        meteringTask = nil
     }
-
 }

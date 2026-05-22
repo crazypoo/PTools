@@ -34,7 +34,13 @@ class PTVideoEditorHandleLayer: CALayer {
 
     override func layoutSublayers() {
         super.layoutSublayers()
-        self.addSublayer(self.imageLayer)
+        self.addLayers()
+    }
+    
+    func addLayers() {
+        if self.imageLayer.superlayer == nil {
+            self.addSublayer(self.imageLayer)
+        }
     }
 
     required init?(coder: NSCoder) {

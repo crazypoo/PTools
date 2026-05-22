@@ -1342,6 +1342,10 @@ fileprivate extension PTVideoEditorToolsViewController {
     }
 }
 
+private struct PTC7SafeBox:@unchecked Sendable {
+    let filters: [C7FilterProtocol]
+}
+
 // MARK: - Modern Async Wrappers (现代化异步包装器)
 fileprivate extension PTVideoEditorToolsViewController {
     
@@ -1362,10 +1366,11 @@ fileprivate extension PTVideoEditorToolsViewController {
     
     /// 包装 Harbeth 的 Exporter 滤镜渲染为 async
     func harbethExportAsync(sourceURL: URL, outputURL: URL) async throws -> URL {
+        let safeBox = PTC7SafeBox(filters: self.c7Player.filters)
         return try await withCheckedThrowingContinuation { continuation in
             let exporter = Exporter(provider: Exporter.Provider(with: sourceURL, to: URL(fileURLWithPath: outputURL.path)))
             exporter.export(options: [.OptimizeForNetworkUse: true], filtering: { buffer in
-                let dest = HarbethIO(element: buffer, filters: self.c7Player.filters)
+                let dest = HarbethIO(element: buffer, filters: safeBox.filters)
                 return try? dest.output()
             }, complete: { res in
                 switch res {

@@ -180,7 +180,14 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 获取总内存大小
     ///获取总内存大小GB
     @MainActor static var memoryTotal: Double {
-        round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100
+        // 1. 获取物理内存的字节数
+        let bytes = Double(ProcessInfo.processInfo.physicalMemory)
+        
+        // 2. 将字节转换为 GB (除以 10 的 9 次方，替代耗时的 pow 函数)
+        let gigabytes = bytes / 1_000_000_000.0
+        
+        // 3. 四舍五入保留两位小数并返回
+        return round(gigabytes * 100) / 100
     }
     
     //MARK: 获取屏幕亮度

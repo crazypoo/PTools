@@ -48,6 +48,10 @@ import DeviceKit
  pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
  */
 
+public struct PTTimerBox: @unchecked Sendable {
+    let timer: Timer
+}
+
 let GlobalVideoExts: Set<String> = ["mp4","mov","m4v","avi","mkv","3gp","webm"]
 
 @objc public enum PTUrlStringVideoType:Int {

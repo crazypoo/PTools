@@ -76,7 +76,7 @@ public class PTMediaLibView: UIView {
     }()
 
     // MARK: - Init
-    init(currentModels: PTMediaLibListModel) {
+    init(currentModels: PTMediaLibListModel?) {
         super.init(frame: .zero)
         setupUI()
         self.currentAlbum = currentModels
@@ -683,7 +683,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
 
     // MARK: - Data
-    var currentAlbum: PTMediaLibListModel! // 🌟 优化：将隐式解包(!)改为可选值(?)，防止生命周期异步加载时意外崩溃
+    var currentAlbum: PTMediaLibListModel?// 🌟 优化：将隐式解包(!)改为可选值(?)，防止生命周期异步加载时意外崩溃
     var totalModels: [PTMediaModel] = []
     var selectedModel: [PTMediaModel] = []
 
@@ -711,6 +711,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         if #available(iOS 26.0, *) {
             view.configuration = .clearGlass()
         }
+        view.bounds = CGRectMake(0, 0, 34, 34)
         return view
     }()
 
@@ -723,6 +724,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         if #available(iOS 26.0, *) {
             view.configuration = .clearGlass()
         }
+        view.bounds = CGRectMake(0, 0, 34, 34)
         return view
     }()
 
@@ -794,7 +796,21 @@ public class PTMediaLibViewController: PTBaseViewController {
     // MARK: - UI
 
     private func setupUI() {
-        view.addSubview(fakeNav)
+        view.addSubviews([mediaListView,fakeNav])
+        let topInset = CGFloat.kNavBarHeight
+        let bottomInset = CGFloat.kTabbarSaveAreaHeight
+
+        let cv = mediaListView.collectionView.contentCollectionView
+        cv.contentInsetAdjustmentBehavior = .never
+        cv.contentInset.top = topInset
+        cv.contentInset.bottom = bottomInset
+        cv.verticalScrollIndicatorInsets.bottom = bottomInset
+
+        mediaListView.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            $0.bottom.equalToSuperview()
+        }
 
         fakeNav.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -806,29 +822,8 @@ public class PTMediaLibViewController: PTBaseViewController {
         fakeNav.setLeftButtons([dismissButton])
         fakeNav.setRightButtons([submitButton])
 
+
         resetTitleSelectBounds()
-    }
-
-    private func createList() {
-        guard mediaListView.superview == nil else { return }
-
-        let topInset = CGFloat.kNavBarHeight
-        let bottomInset = CGFloat.kTabbarSaveAreaHeight
-
-        let cv = mediaListView.collectionView.contentCollectionView
-        cv.contentInsetAdjustmentBehavior = .never
-        cv.contentInset.top = topInset
-        cv.contentInset.bottom = bottomInset
-        cv.verticalScrollIndicatorInsets.bottom = bottomInset
-
-        view.addSubview(mediaListView)
-        view.sendSubviewToBack(mediaListView)
-
-        mediaListView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
-            $0.bottom.equalToSuperview()
-        }
     }
 
     // MARK: - Album
@@ -865,11 +860,9 @@ public class PTMediaLibViewController: PTBaseViewController {
         if let current = mediaListView.currentAlbum {
             pushAlbum(current)
         } else {
-            PTMediaLibManager.getCameraRollAlbum(
-                allowSelectImage: config.allowSelectImage,
-                allowSelectVideo: config.allowSelectVideo,
-                allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto
-            ) { model in
+            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage,
+                                                 allowSelectVideo: config.allowSelectVideo,
+                                                 allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto) { model in
                 pushAlbum(model)
             }
         }
@@ -953,17 +946,14 @@ public class PTMediaLibViewController: PTBaseViewController {
     func loadImageData() {
         let config = PTMediaLibConfig.share
 
-        PTMediaLibManager.getCameraRollAlbum(
-            allowSelectImage: config.allowSelectImage,
-            allowSelectVideo: config.allowSelectVideo,
-            allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto
-        ) { [weak self] model in
+        PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage,
+                                             allowSelectVideo: config.allowSelectVideo,
+                                             allowSelectLivePhotoOnly: config.allowOnlySelectLivePhoto) { [weak self] model in
             guard let self else { return }
 
             self.currentAlbum = model
 
             let setup = {
-                self.createList()
                 self.mediaListView.currentAlbum = model
             }
 

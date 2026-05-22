@@ -740,206 +740,184 @@ extension LocalConsole:UITextFieldDelegate {}
 extension LocalConsole {
     @MainActor
     func makeMenu() -> UIMenu {
-        let result: UIAction
-        // Something here causes a crash < iOS 15. Fall back to copy text for iOS 15 and below.
+        // 1. 优化状态读取：直接使用 pt_isEmpty，避免将巨大的 fullText 读入内存
+        let isTerminalEmpty = terminal?.systemText?.pt_isEmpty ?? true
+        
+        // 2. 优化横竖屏检测：弃用耗时的 getCurrentVC 遍历，直接读取屏幕物理尺寸 (O(1) 复杂度)
+        let screenSize = UIScreen.main.bounds.size
+        let isLandscapePhone = UIDevice.current.userInterfaceIdiom == .phone && screenSize.width > screenSize.height
+        
+        // 3. 内存优化：所有 UIAction 必须使用 [weak self]，防止每次生成菜单导致严重的内存泄漏与卡顿
+        let share: UIAction
         if #available(iOS 16, *) {
-            result = UIAction(title: .shareText, image: UIImage.shareImage) { _ in
-                self.shareAction()
-            }
+            share = UIAction(title: .shareText, image: UIImage.shareImage) { [weak self] _ in self?.shareAction() }
         } else {
-            result = UIAction(title: .copyText, image: UIImage.copyImage) { _ in
-                self.copyTextAction()
-            }
-        }
-        let share: UIAction = result
-
-        let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { _ in
-            self.resizeAction()
+            share = UIAction(title: .copyText, image: UIImage.copyImage) { [weak self] _ in self?.copyTextAction() }
         }
 
-        // If device is phone in landscape, disable resize controller.
-        let currentVCFrame = PTUtils.getCurrentVC()?.view.frame ?? .zero
-        if UIDevice.current.userInterfaceIdiom == .phone && currentVCFrame.width > currentVCFrame.height {
+        let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { [weak self] _ in self?.resizeAction() }
+        if isLandscapePhone {
             resize.attributes = .disabled
             resize.subtitle = "Portrait Orientation Only"
         }
 
-        let clear = UIAction(title: .clearConsole, image: UIImage.clearImage(), attributes: .destructive) { _ in
-            self.clear()
-        }
+        let clear = UIAction(title: .clearConsole, image: UIImage.clearImage(), attributes: .destructive) { [weak self] _ in self?.clear() }
 
         var debugActions: [UIMenuElement] = []
 
-        let deferredUserDefaultsList = UIDeferredMenuElement.uncached { completion in
+        let deferredUserDefaultsList = UIDeferredMenuElement.uncached { [weak self] completion in
+            guard let self = self else {
+                completion([])
+                return
+            }
+            
             var actions: [UIAction] = []
-
-            if self.userdefaultShares.keyAndValues().count == 0 {
+            let keyValues = self.userdefaultShares.keyAndValues()
+            
+            if keyValues.isEmpty { // 替换原来的 .count == 0，效率更高
                 actions.append(UIAction(title: "No Entries", attributes: .disabled, handler: { _ in }))
             } else {
-                self.userdefaultShares.keyAndValues().enumerated().forEach { index, value in
-                    let action = UIAction(title: value.keys.first!, image: nil) { _ in
-
-                        UIAlertController.base_alertVC(title: "Key\n" + value.keys.first!, msg: "\nValue\n" + "\(value.values.first!)", okBtns: ["Copy Value", "Clear Value", "Edit value"], cancelBtn: "Cancel", moreBtn: { index, title in
-                            if title == "Copy Value" {
-                                "\(value.values.first!)".copyToPasteboard()
-                            } else if title == "Clear Value" {
-                                UserDefaults.standard.removeObject(forKey: value.keys.first!)
-                            } else if title == "Edit value" {
-                                UIAlertController.base_textfield_alertVC(title: "Edit\n" + value.keys.first!, okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [value.keys.first!], textFieldTexts: ["\(value.values.first!)"], keyboardType: [.default], textFieldDelegate: self) { result in
-                                    let newValue = result.values.first
-                                    UserDefaults.standard.setValue(newValue, forKey: value.keys.first!)
+                keyValues.forEach { dict in
+                    // 安全解包，避免 Crash
+                    guard let firstKey = dict.keys.first, let firstVal = dict.values.first else { return }
+                    
+                    let action = UIAction(title: firstKey, image: nil) { [weak self] _ in
+                        guard let self = self else { return }
+                        
+                        UIAlertController.base_alertVC(
+                            title: "Key\n" + firstKey,
+                            msg: "\nValue\n" + "\(firstVal)",
+                            okBtns: ["Copy Value", "Clear Value", "Edit value"],
+                            cancelBtn: "Cancel",
+                            moreBtn: { index, title in
+                                if title == "Copy Value" {
+                                    "\(firstVal)".copyToPasteboard()
+                                } else if title == "Clear Value" {
+                                    UserDefaults.standard.removeObject(forKey: firstKey)
+                                } else if title == "Edit value" {
+                                    UIAlertController.base_textfield_alertVC(
+                                        title: "Edit\n" + firstKey,
+                                        okBtn: "⭕️",
+                                        cancelBtn: "Cancel",
+                                        placeHolders: [firstKey],
+                                        textFieldTexts: ["\(firstVal)"],
+                                        keyboardType: [.default],
+                                        textFieldDelegate: self
+                                    ) { result in
+                                        if let newValue = result.values.first {
+                                            UserDefaults.standard.setValue(newValue, forKey: firstKey)
+                                        }
+                                    }
                                 }
                             }
-                        })
+                        )
                     }
-                    action.subtitle = "\(value.values.first!)"
+                    action.subtitle = "\(firstVal)"
                     actions.append(action)
                 }
 
                 actions.append(
-                        UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive, handler: { _ in
-                            self.userdefaultShares.keyAndValues().enumerated().forEach { index, value in
-                                UserDefaults.standard.removeObject(forKey: value.keys.first!)
+                    UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive) { _ in
+                        keyValues.forEach { dict in
+                            if let key = dict.keys.first {
+                                UserDefaults.standard.removeObject(forKey: key)
                             }
-                        })
+                        }
+                    }
                 )
             }
             completion(actions)
         }
 
         let userDefaults = UIMenu(title: .userDefaults, image: UIImage.userDefaultsImage(), children: [deferredUserDefaultsList])
-
         debugActions.append(userDefaults)
 
-        let inspect = UIAction(title: "Inspectors",image: UIImage.InspectorImage) { _ in
-            Task {
-                Inspector.sharedInstance.present(animated: true)
+        let inspect = UIAction(title: "Inspectors", image: UIImage.InspectorImage) { _ in
+            Task { Inspector.sharedInstance.present(animated: true) }
+        }
+        
+        let logFile = UIAction(title: .log, image: UIImage.logFile) { [weak self] _ in self?.logFileOpen() }
+        let mockLocation = UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { [weak self] _ in self?.mockLocationOpen() }
+        let network = UIAction(title: .network, image: UIImage.networkImage) { [weak self] _ in self?.networkWatcherOpen() }
+        let crashLog = UIAction(title: .crashLog, image: UIImage.crashLogImage) { [weak self] _ in self?.crashLogControlOpen() }
+        let performance = UIAction(title: .Performance, image: UIImage.performanceImage) { [weak self] _ in self?.performanceControlOpen() }
+        
+        let colorCheck = UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { [weak self] _ in self?.colorAction() }
+        let ruler = UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck, image: UIImage.rulerImage()) { [weak self] _ in self?.rulerAction() }
+        let document = UIAction(title: .appDocument, image: UIImage.docImage) { [weak self] _ in self?.documentAction() }
+
+        let Flex = UIAction(title: .flex, image: UIImage.dev3thPartyImage) { [weak self] _ in
+            Task { @MainActor in self?.flexAction() }
+        }
+
+        let InApp = UIAction(title: .inApp, image: UIImage.dev3thPartyImage) { [weak self] _ in
+            Task { @MainActor in self?.watchViewsAction() }
+        }
+
+        let deferredMaskList = UIDeferredMenuElement.uncached { [weak self] completion in
+            guard let self = self else {
+                completion([])
+                return
             }
-        }
-        
-        let logFile = UIAction(title: .log, image: UIImage.logFile) { _ in
-            self.logFileOpen()
-        }
-
-        let mockLocation = UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { _ in
-            self.mockLocationOpen()
-        }
-        
-        let network = UIAction(title: .network, image: UIImage.networkImage) { _ in
-            self.networkWatcherOpen()
-        }
-        
-        let crashLog = UIAction(title: .crashLog, image: UIImage.crashLogImage) { _ in
-            self.crashLogControlOpen()
-        }
-        
-        let performance = UIAction(title: .Performance, image: UIImage.performanceImage) { _ in
-            self.performanceControlOpen()
-        }
-        
-        let colorCheck = UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck, image: UIImage.colorImage()) { _ in
-            self.colorAction()
-        }
-
-        let ruler = UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck, image: UIImage.rulerImage()) { _ in
-            self.rulerAction()
-        }
-
-        let document = UIAction(title: .appDocument, image: UIImage.docImage) { _ in
-            self.documentAction()
-        }
-
-        let Flex = UIAction(title: .flex, image: UIImage.dev3thPartyImage) { _ in
-            Task { @MainActor in
-                self.flexAction()
-            }
-        }
-
-        let InApp = UIAction(title: .inApp, image: UIImage.dev3thPartyImage) { _ in
-            Task { @MainActor in
-                self.watchViewsAction()
-            }
-        }
-
-        let deferredMaskList = UIDeferredMenuElement.uncached { completion in
             var actions: [UIAction] = []
-
-            let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { _ in
-                self.maskOpenFunction()
+            let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen, image: UIImage.maskImage()) { [weak self] _ in
+                self?.maskOpenFunction()
             }
             actions.append(maskOpen)
 
             if self.maskView != nil {
-                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { _ in
-                    self.maskOpenBubbleFunction()
+                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.shared.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen, image: UIImage.maskBubbleImage) { [weak self] _ in
+                    self?.maskOpenBubbleFunction()
                 }
                 actions.append(maskTouchBubble)
             }
-
             completion(actions)
         }
-
 
         let masks = UIMenu(title: "Dev Mask", image: UIImage.maskImage(), children: [deferredMaskList])
         debugActions.append(masks)
 
-
-        let viewFrames = UIAction(title: debugBordersEnabled ? .showViewFrames : .hideViewFrames, image: UIImage.viewFrameImage()) { _ in
+        let viewFrames = UIAction(title: debugBordersEnabled ? .showViewFrames : .hideViewFrames, image: UIImage.viewFrameImage()) { [weak self] _ in
+            guard let self = self else { return }
             self.viewFramesAction()
-            self.terminal!.menuButton.menu = self.makeMenu()
+            self.terminal?.menuButton.menu = self.makeMenu()
         }
 
-        let systemReport = UIAction(title: .systemReport, image: UIImage.cpuImage()) { _ in
-            self.systemReport()
-        }
+        let systemReport = UIAction(title: .systemReport, image: UIImage.cpuImage()) { [weak self] _ in self?.systemReport() }
+        let displayReport = UIAction(title: .displayReport, image: UIImage.displayImage()) { [weak self] _ in self?.displayReport() }
+        let terminateApplication = UIAction(title: .terminateApp, image: UIImage.terminateAppImage, attributes: .destructive) { [weak self] _ in self?.terminateApplicationAction() }
+        let respring = UIAction(title: .respring, image: UIImage.respringImage(), attributes: .destructive) { [weak self] _ in self?.respringAction() }
+        let debugController = UIAction(title: .debugController, image: UIImage.debugControllerImage, attributes: .destructive) { [weak self] _ in self?.debugControllerAction() }
+        let loadedLibs = UIAction(title: "Loaded libs", image: UIImage.LoadedLibImage()) { [weak self] _ in self?.loadedLibs() }
 
-        // Show the right glyph for the current device being used.
-        let displayReport = UIAction(title: .displayReport, image: UIImage.displayImage()) { _ in
-            self.displayReport()
-        }
-
-        let terminateApplication = UIAction(title: .terminateApp, image: UIImage.terminateAppImage, attributes: .destructive) { _ in
-            self.terminateApplicationAction()
-        }
-
-        let respring = UIAction(title: .respring, image: UIImage.respringImage(), attributes: .destructive) { _ in
-            self.respringAction()
-        }
-
-        let debugController = UIAction(title: .debugController, image: UIImage.debugControllerImage, attributes: .destructive) { _ in
-            self.debugControllerAction()
-        }
-
-        let loadedLibs = UIAction(title: "Loaded libs", image: UIImage.LoadedLibImage()) { _ in
-            self.loadedLibs()
-        }
-
-        var actions = [inspect,logFile,mockLocation,network,crashLog,performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport,loadedLibs]
+        var actions = [inspect, logFile, mockLocation, network, crashLog, performance, colorCheck, ruler, document, viewFrames, systemReport, displayReport, loadedLibs]
         
-#if canImport(FLEX)
+    #if canImport(FLEX)
         actions.append(Flex)
-#endif
+    #endif
         
-#if canImport(InAppViewDebugger)
+    #if canImport(InAppViewDebugger)
         actions.append(InApp)
-#endif
-        let sortActions = actions.sorted { $0.title.lowercased().first ?? Character("") < $1.title.lowercased().first ?? Character("") }
+    #endif
+        
+        // 4. 优化排序：弃用极其低效的字符串拆解对比，使用系统原生的本地化字符串对比 (底层 C++ 极速实现)
+        let sortActions = actions.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
         
         debugActions.append(contentsOf: sortActions)
         let destructActions = [debugController, terminateApplication, respring]
 
         let debugMenu = UIMenu(
-                title: .debug, image: UIImage.debugImage,
-                children: [
-                    UIMenu(title: "", options: .displayInline, children: debugActions),
-                    UIMenu(title: "", options: .displayInline, children: destructActions),
-                ]
+            title: .debug, image: UIImage.debugImage,
+            children: [
+                UIMenu(title: "", options: .displayInline, children: debugActions),
+                UIMenu(title: "", options: .displayInline, children: destructActions)
+            ]
         )
 
         var menuContent: [UIMenuElement] = []
 
-        if !terminal!.systemText!.pt_fullText.stringIsEmpty() {
-            menuContent.append(contentsOf: [UIMenu(title: "", options: .displayInline, children: [share, resize])])
+        if !isTerminalEmpty {
+            menuContent.append(UIMenu(title: "", options: .displayInline, children: [share, resize]))
         } else {
             menuContent.append(UIMenu(title: "", options: .displayInline, children: [resize]))
         }
@@ -949,7 +927,7 @@ extension LocalConsole {
             menuContent.append(customMenu)
         }
 
-        if !terminal!.systemText!.pt_isEmpty {
+        if !isTerminalEmpty {
             menuContent.append(UIMenu(title: "", options: .displayInline, children: [clear]))
         }
 
@@ -1153,18 +1131,20 @@ extension LocalConsole {
             self.printStaticSystemInfo()
 
             self.dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-                guard let self,let terminal = terminal?.systemText,!terminal.pt_fullText.stringIsEmpty() else {
-                    timer.invalidate()
-                    return
-                }
+                let safeTimer = PTTimerBox(timer: timer)
+                PTGCDManager.shared.runOnMain {
+                    guard let self,let terminal = self.terminal?.systemText,!terminal.pt_fullText.stringIsEmpty() else {
+                        safeTimer.timer.invalidate()
+                        return
+                    }
 
-                Task {
-                    await self.updateDynamicSystemInfo()
+                    Task {
+                        self.updateDynamicSystemInfo()
+                    }
                 }
             }
         }
     }
-
     
     @MainActor private func updateDynamicSystemInfo() {
         dynamicLogs["ThermalState"] = "ThermalState: \(SystemReport.shared.thermalState)"

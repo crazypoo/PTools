@@ -24,72 +24,38 @@ public extension NSString {
     ///銀行卡Luhm算法
     /// - Returns: Bool
     func bankCardLuhmCheck() -> Bool {
-        if String(format: "%@", self).stringIsEmpty() {
+        // 1. 基本的合法性校验：去除空格，判断是否为空，长度是否符合基本要求
+        let trimmedString = self.trimmingCharacters(in: .whitespaces)
+        if trimmedString.isEmpty || trimmedString.count < 3 {
             return false
         }
         
-        if length < 3 {
-            return false
-        }
+        var sum = 0
+        var isAlternate = false // 用于标记是否是需要乘以 2 的位
         
-        let lastNum:NSString = self.substring(from: (length - 1)) as NSString
-        let forwardNum:NSString = self.substring(to: (length - 1)) as NSString
-        
-        let forwardArr = NSMutableArray(capacity: 0)
-        for i in 0..<forwardNum.length {
-            let subStr:NSString = forwardNum.substring(with: NSMakeRange(i, 1)) as NSString
-            forwardArr.add(subStr)
-        }
-        
-        let forwardDescArr = NSMutableArray(capacity: 0)
-        var i = Int(forwardArr.count - 1)
-        while i > -1 {
-            //前15位或者前18位倒序存进数组
-            forwardDescArr.add(forwardArr[i])
-            i -= 1
-        }
-        
-        let arrOddNum = NSMutableArray(capacity: 0)
-        let arrOddNum2 = NSMutableArray(capacity: 0)
-        let arrEvenNum = NSMutableArray(capacity: 0)
-        
-        for i in 0..<forwardDescArr.count {
-            let num = (forwardDescArr[i] as! NSString).intValue
-            if i % 2 != 0 {
-                //偶数位
-                arrEvenNum.add(NSNumber(value: num))
-            } else {
-                //奇数位
-                if num * 2 < 9 {
-                    arrOddNum.add(NSNumber(value: num * 2))
-                } else {
-                    let decadeNum = (num * 2) / 10
-                    let unitNum = (num * 2) % 10
-                    arrOddNum2.add(NSNumber(value: unitNum))
-                    arrOddNum2.add(NSNumber(value: decadeNum))
-                }
+        // 2. 从右向左（倒序）直接遍历字符串的每一个字符
+        for char in trimmedString.reversed() {
+            // 3. 将字符安全地转换为整数 (如果含有非数字字符，则直接返回 false)
+            guard let digit = char.wholeNumberValue else {
+                return false
             }
+            
+            // 4. 根据位次应用 Luhn 算法规则
+            if isAlternate {
+                let doubled = digit * 2
+                // 如果乘 2 后大于 9，减去 9 (等同于十位加个位)
+                sum += (doubled > 9) ? (doubled - 9) : doubled
+            } else {
+                // 如果不是交替位，直接把数字加到总和中
+                sum += digit
+            }
+            
+            // 5. 切换奇偶位状态
+            isAlternate.toggle()
         }
-
-        var sumOddNumTotal = 0
-        for (_, obj) in arrOddNum.enumerated() {
-            sumOddNumTotal += (obj as AnyObject).intValue
-        }
-
-        var sumOddNum2Total = 0
-        for (_, obj) in arrOddNum2.enumerated() {
-            sumOddNum2Total += (obj as AnyObject).intValue
-        }
-
-        var sumEvenNumTotal = 0
-        for (_, obj) in arrEvenNum.enumerated() {
-            sumEvenNumTotal += (obj as AnyObject).intValue
-        }
-
-        let lastNumber = lastNum.intValue
-
-        let luhmTotal = Int(lastNumber) + sumEvenNumTotal + sumOddNum2Total + sumOddNumTotal
-        return (luhmTotal % 10 == 0) ? true : false
+        
+        // 6. 最终判断总和是否能被 10 整除
+        return sum % 10 == 0
     }
     
     /*
