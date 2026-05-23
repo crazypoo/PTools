@@ -326,7 +326,7 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
                 }
                 return
             }
-            PTGCDManager.shared.runOnMain {
+            PTGCDManager.shared.runOnMain { [weak self] in
                 self?.handleNewAsset(asset)
             }
         }
@@ -372,15 +372,17 @@ extension PTMediaLibView {
     #if POOTOOLS_IMAGEEDITOR
     func handleImageEdit(model: PTMediaModel) {
         PTMediaLibManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] image, isDegraded in
-            guard !isDegraded, let image = image else { return }
-            
-            let vc = PTEditImageViewController(readyEditImage: image)
-            vc.editFinishBlock = { [weak self] editedImage, editModel in
-                self?.updateSelectedModelAfterEdit(original: model, newImage: editedImage, newEditModel: editModel)
+            PTGCDManager.shared.runOnMain { [weak self] in
+                guard !isDegraded, let image = image else { return }
+                
+                let vc = PTEditImageViewController(readyEditImage: image)
+                vc.editFinishBlock = { [weak self] editedImage, editModel in
+                    self?.updateSelectedModelAfterEdit(original: model, newImage: editedImage, newEditModel: editModel)
+                }
+                
+                let nav = PTBaseNavControl(rootViewController: vc)
+                UIViewController.currentPresentToSheet(vc: nav, sizes: [.fullscreen], dismissPanGes: false)
             }
-            
-            let nav = PTBaseNavControl(rootViewController: vc)
-            UIViewController.currentPresentToSheet(vc: nav, sizes: [.fullscreen], dismissPanGes: false)
         }
     }
     #endif
@@ -395,16 +397,20 @@ extension PTMediaLibView {
         }
 
         model.asset.convertPHAssetToAVAsset(progress: { progress in
-            sender.layerProgress(value: CGFloat(progress),
-                               borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,
-                               borderColor: PTMediaLibUIConfig.share.themeColor)
-        }, completion: { [weak self] avAsset in
-            guard let avAsset = avAsset else {
-                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Video error", icon: .Error)
-                return
+            PTGCDManager.shared.runOnMain {
+                sender.layerProgress(value: CGFloat(progress),
+                                   borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,
+                                   borderColor: PTMediaLibUIConfig.share.themeColor)
             }
-            
-            self?.presentVideoEditor(asset: model.asset, avAsset: avAsset.asset)
+        }, completion: { [weak self] avAsset in
+            PTGCDManager.shared.runOnMain { [weak self] in
+                guard let avAsset = avAsset else {
+                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Video error", icon: .Error)
+                    return
+                }
+                
+                self?.presentVideoEditor(asset: model.asset, avAsset: avAsset.asset)
+            }
         })
     }
     
@@ -434,7 +440,7 @@ extension PTMediaLibView {
 }
 
 // MARK: - Photo Library Observer
-extension PTMediaLibView: @preconcurrency PHPhotoLibraryChangeObserver {
+extension PTMediaLibView: @MainActor PHPhotoLibraryChangeObserver {
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         // 注销观察者防止重复触发
         PHPhotoLibrary.shared().unregisterChangeObserver(self)

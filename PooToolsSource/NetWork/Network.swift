@@ -1305,24 +1305,33 @@ public final class Network: @unchecked Sendable {
             }
             
             request?.response { [weak self] resp in
-                PTGCDManager.shared.runOnMain {
-                    guard let self = self else { return }
-                    self.lock.lock()
-                    self.isDownloading = false
-                    self.resumeData = nil
-                    let currentFails = self.failHandlers
-                    let currentSuccesses = self.successHandlers
-                    self.clearHandlers()
-                    self.lock.unlock()
+                PTGCDManager.shared.runOnMain { [weak self] in
+                    self?.lock.lock()
+                    self?.isDownloading = false
+                    self?.resumeData = nil
+                    let currentFails = self?.failHandlers
+                    let currentSuccesses = self?.successHandlers
+                    self?.clearHandlers()
+                    self?.lock.unlock()
                     
                     if let error = resp.error {
                         if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
-                            self.resumeData = resp.resumeData
-                        } else { Task { await Network.share.store.remove(self.url) } }
-                        currentFails.forEach { $0(error) }
+                            self?.resumeData = resp.resumeData
+                        } else {
+                            Task {
+                                if let urls = self?.url {
+                                    await Network.share.store.remove(urls)
+                                }
+                            }
+                        }
+                        currentFails?.forEach { $0(error) }
                     } else {
-                        Task { await Network.share.store.remove(self.url) }
-                        currentSuccesses.forEach { $0(resp) }
+                        Task {
+                            if let urls = self?.url {
+                                await Network.share.store.remove(urls)
+                            }
+                        }
+                        currentSuccesses?.forEach { $0(resp) }
                     }
                 }
             }

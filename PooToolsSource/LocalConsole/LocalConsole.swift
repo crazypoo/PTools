@@ -1154,7 +1154,7 @@ extension LocalConsole {
 
             self.dynamicReportTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
                 let safeTimer = PTTimerBox(timer: timer)
-                PTGCDManager.shared.runOnMain {
+                PTGCDManager.shared.runOnMain { [weak self] in
                     guard let self,let terminal = self.terminal?.systemText,!terminal.pt_fullText.stringIsEmpty() else {
                         safeTimer.timer.invalidate()
                         return

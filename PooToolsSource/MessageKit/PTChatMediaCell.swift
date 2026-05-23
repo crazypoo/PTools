@@ -214,9 +214,8 @@ public class PTChatMediaCell: PTChatBaseCell {
         self.mediaPlayImageView.isHidden = false
         self.mediaPlayImageView.isUserInteractionEnabled = true
         avItem.generateThumbnail { [weak self] image in
-            PTGCDManager.shared.runOnMain {
-                guard let self = self else { return }
-                self.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
+            PTGCDManager.shared.runOnMain { [weak self] in
+                self?.contentImageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
             }
         }
     }

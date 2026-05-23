@@ -140,7 +140,7 @@ final class ElementInspectorViewController: ElementInspectorPanelViewController,
                 self.addChild(panelViewController)
 
                 self.viewCode.setContentAnimated(content) { [weak self] in
-                    PTGCDManager.shared.runOnMain {
+                    PTGCDManager.shared.runOnMain { [weak self] in
                         self?.configureNavigationItem()
 
                         if let formPanel = self?.currentFormPanelViewController {

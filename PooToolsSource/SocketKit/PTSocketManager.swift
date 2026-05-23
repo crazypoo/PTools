@@ -306,7 +306,7 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
                     guard !Task.isCancelled else { break }
                     
                     self?.socketQueue.async {
-                        PTGCDManager.shared.runOnMain {
+                        PTGCDManager.shared.runOnMain { [weak self] in
                             guard let self = self else { return }
                             try? self.webSocket?.sendPing(nil)
                             

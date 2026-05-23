@@ -440,7 +440,7 @@ open class VideoConverter {
                         
                         safeBox.writer.finishWriting {
                             // 💡 修复点 4：导出彻底完成后，切回主线程执行完成回调
-                            Task { @MainActor in
+                            Task { @MainActor  in
                                 guard let self = self else { return }
                                 if safeBox.writer.status == .completed {
                                     self.progressCallback?(1.0)

@@ -286,7 +286,7 @@ open class PFloatingButton: UIButton {
         
         autoAddTraceButtonTimer?.invalidate()
         autoAddTraceButtonTimer = Timer.scheduledTimer(withTimeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, repeats: false) { [weak self, weak traceView] _ in
-            PTGCDManager.shared.runOnMain {
+            PTGCDManager.shared.runOnMain { [weak self] in
                 guard let self = self, let viewToRemove = traceView else { return }
                 UIView.animate(withDuration: 0.2, animations: {
                     viewToRemove.alpha = 0

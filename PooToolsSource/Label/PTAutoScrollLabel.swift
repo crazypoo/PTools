@@ -180,7 +180,7 @@ public class PTAutoScrollLabel: UIView {
         } else {
             // 垂直方向 Timer (iOS 10+ 推荐使用 block API 避免 Selector 循环引用)
             timer = Timer.scheduledTimer(withTimeInterval: scrollInterval, repeats: true) { [weak self] _ in
-                PTGCDManager.shared.runOnMain {
+                PTGCDManager.shared.runOnMain { [weak self] in
                     self?.scrollVerticalNext()
                 }
             }

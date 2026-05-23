@@ -145,14 +145,14 @@ public extension UITextView {
         
         // 监听 text 属性的直接赋值 (代码赋值)
         let textObserver = observe(\.text, options: [.new]) { [weak self] _, _ in
-            PTGCDManager.shared.runOnMain {
+            PTGCDManager.shared.runOnMain { [weak self] in
                 self?.pt_textDidChange()
             }
         }
         
         // 监听 bounds 变化刷新 Placeholder 宽度
         let boundsObserver = observe(\.bounds, options: [.new]) { [weak self] _, _ in
-            PTGCDManager.shared.runOnMain {
+            PTGCDManager.shared.runOnMain { [weak self] in
                 self?.pt_updatePlaceholderPreferredWidth()
             }
         }

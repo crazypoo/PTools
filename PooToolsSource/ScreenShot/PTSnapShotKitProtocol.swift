@@ -72,9 +72,9 @@ public extension SnapshotKitProtocol {
     // 提供 async/await 版本的默认实现，如果实现类没有写这个方法，系统会自动用闭包版本封装一个
     @MainActor 
     @available(iOS 13.0, *)
-    func takeSnapshotOfFullContent(with configuration: SnapshotConfiguration = .default) async -> UIImage? {
+    func takeSnapshotOfFullContent(with configuration: SnapshotConfiguration? = nil) async -> UIImage? {
         return await withCheckedContinuation { continuation in
-            self.asyncTakeSnapshotOfFullContent(with: configuration) { image in
+            self.asyncTakeSnapshotOfFullContent(with: configuration ?? .default) { image in
                 continuation.resume(returning: image)
             }
         }

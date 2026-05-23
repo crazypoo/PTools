@@ -431,8 +431,8 @@ public class PTCheckUpdateFunction: NSObject {
     
     @MainActor func hudHide(completion:PTActionTask? = nil) {
         if self.hud != nil {
-            self.hud!.hide {
-                self.hud = nil
+            self.hud!.hide { [weak self] in
+                self?.hud = nil
                 completion?()
             }
         }

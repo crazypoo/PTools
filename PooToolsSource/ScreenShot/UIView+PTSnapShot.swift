@@ -36,7 +36,7 @@ extension UIView:@MainActor SnapshotKitProtocol {
     ///   - croppingRect: 需要截取的区域 (相对于视图自身的坐标系)
     ///   - configuration: 截图配置
     /// - Returns: UIImage?
-    public func takeSnapshotOfFullContent(for croppingRect: CGRect, with configuration: SnapshotConfiguration = .default) -> UIImage? {
+    public func takeSnapshotOfFullContent(for croppingRect: CGRect, with configuration: SnapshotConfiguration? = nil) -> UIImage? {
         
         // 使用 floor 防止 Double 精度问题导致的 1px 黑线或白边
         let contentSize = CGSize(width: floor(croppingRect.size.width), height: floor(croppingRect.size.height))
@@ -52,11 +52,12 @@ extension UIView:@MainActor SnapshotKitProtocol {
             backgroundColor = UIColor.white
         }
 
+        let newConfig = configuration ?? .default
         // 配置现代的渲染格式
         let format = UIGraphicsImageRendererFormat()
-        format.scale = configuration.scale
+        format.scale = newConfig.scale
         // 优先使用内部判断的 opaqueCanvas，如果用户配置强制要求，也可以结合使用
-        format.opaque = opaqueCanvas || configuration.isOpaque
+        format.opaque = opaqueCanvas || newConfig.isOpaque
 
         let renderer = UIGraphicsImageRenderer(size: contentSize, format: format)
 

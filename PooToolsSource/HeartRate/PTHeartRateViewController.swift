@@ -233,7 +233,7 @@ public class PTHeartRateViewController: PTBaseViewController {
     private func startMeasurement() {
         self.toggleTorch(status: true)
         self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] (timer) in
-            PTGCDManager.shared.runOnMain {
+            PTGCDManager.shared.runOnMain { [weak self] in
                 guard let self = self else { return }
                 let average = self.pulseDetector.getAverage()
                 let pulse = 60.0/average

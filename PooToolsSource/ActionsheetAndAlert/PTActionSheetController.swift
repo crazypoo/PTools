@@ -172,9 +172,9 @@ public class PTActionSheetController: PTAlertController {
 
     private lazy var cancelBtn : PTActionCell = {
         let cell = createActionCell(for: cancelSheetItem, withCorner: true) { [weak self] in
-            PTGCDManager.shared.runOnMain {
+            PTGCDManager.shared.runOnMain { [weak self] in
                 self?.dismissAnimation {
-                    PTGCDManager.shared.runOnMain {
+                    PTGCDManager.shared.runOnMain { 
                         guard let SELF = self else { return }
                         self?.actionSheetCancelSelectBlock?(SELF)
                     }
@@ -270,7 +270,7 @@ public class PTActionSheetController: PTAlertController {
         
         for (index, destructiveItem) in destructiveItems.enumerated() {
             let destructiveView = createActionCell(for: destructiveItem,withCorner: true) { [weak self] in
-                PTGCDManager.shared.runOnMain {
+                PTGCDManager.shared.runOnMain { [weak self] in
                     self?.dismissAnimation {
                         PTGCDManager.shared.runOnMain {
                             guard let SELF = self else { return }
@@ -438,7 +438,7 @@ public class PTActionSheetController: PTAlertController {
             
             // --- 按钮部分 ---
             let button = createActionCell(for: item, withCorner: false) { [weak self] in
-                PTGCDManager.shared.runOnMain {
+                PTGCDManager.shared.runOnMain { [weak self] in
                     self?.dismissAndCallback(index: index, title: item.title)
                 }
             }
