@@ -302,12 +302,13 @@ public final class PTNavigationBarManager:NSObject {
         let navBar = nav.navigationBar
         resetSystemNavBarAppearance(nav)
         
-        // ✅ 获取 statusBar 高度（正确方式）
-        let statusBarHeight = nav.view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        // 🌟 核心修复 1：Present 瞬间 view 还没上树，window 为 nil
+        // 绝对不能用 nav.view.window，直接使用你已有的全局方法来获取状态栏高度！
+        let statusBarHeight = CGFloat.statusBarHeight()
         
         let totalHeight = navBar.bounds.height + statusBarHeight
         
-        // ✅ 关键：往上扩展
+        // 往上扩展，打好地基
         let container = PTNavigationBarContainer(
             frame: CGRect(x: 0,
                           y: -statusBarHeight,
@@ -463,53 +464,73 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         container.prepareTransition(from: fromStyle, to: toStyle)
         let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
 
-        if let coordinator = navigationController.transitionCoordinator {
-            self.transitionCoordinatorRef = coordinator
-            
-            // 🌟 2. 核心修复：分离手势滑动与正常 Push 的动画驱动方式
-            if coordinator.isInteractive {
-                // 【手势滑动返回】：启动定时器，跟随手指进度
-                startDisplayLink()
-                coordinator.animate(alongsideTransition: { _ in
-                    // ⛔️ 保持为空！绝对不要在这里修改进度，完全交由 CADisplayLink 控制，防止闪烁
-                }, completion: { context in
-                    self.stopDisplayLink()
-                    self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
-                })
-            } else {
-                // 【点击 Push/Pop】：使用系统原生动画，平滑且不掉帧
-                coordinator.animate(alongsideTransition: { context in
-                    // 让 UIView 的补间动画接管颜色过渡
-                    container.updateTransition(progress: 1)
-                    
-                    // 让标题和按钮也伴随系统时间，进行平滑的交叉溶解
-                    UIView.transition(with: container.topBarContainer,
-                                      duration: context.transitionDuration,
-                                      options: .transitionCrossDissolve,
-                                      animations: {
-                        self.apply(item: item)
-                    }, completion: nil)
-                    
-                }, completion: { context in
-                    self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
-                })
-            }
-            
-            // 兜底：处理手势取消时的状态恢复
-            coordinator.notifyWhenInteractionChanges { context in
-                if context.isCancelled {
-                    StatusBarManager.shared.update(with: fromStyle)
-                    fromVC?.setNeedsStatusBarAppearanceUpdate()
-                    container.apply(style: fromStyle)
-                }
-            }
-        } else {
-            // 无动画时的直接切换
+        // 🌟 核心修复 2：判断这是否是导航栈的“根视图”（代表是新 Present 出来的）
+        let isRoot = navigationController.viewControllers.first == viewController
+
+        if isRoot {
+            // 💡 这是 Present 出来的根视图！
+            // 整个 NavController 正在被系统整体推上来（Slide Up）。
             container.apply(style: toStyle)
+            self.apply(item: item)
             if let vc = viewController as? PTBaseViewController {
                 vc.setNeedsStatusBarAppearanceUpdate()
             }
-            self.apply(item: item)
+        } else {
+            // 💡 这是 Push / Pop 动作，正常执行我们完美的过渡动画
+            let activeCoordinator = navigationController.transitionCoordinator ?? viewController.transitionCoordinator
+            
+            if let coordinator = activeCoordinator {
+                self.transitionCoordinatorRef = coordinator
+                
+                if coordinator.isInteractive {
+                    startDisplayLink()
+                    coordinator.animate(alongsideTransition: { _ in
+                    }, completion: { context in
+                        self.stopDisplayLink()
+                        self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
+                    })
+                } else {
+                    coordinator.animate(alongsideTransition: { context in
+                        container.updateTransition(progress: 1)
+                        UIView.transition(with: container.topBarContainer,
+                                          duration: context.transitionDuration,
+                                          options: .transitionCrossDissolve,
+                                          animations: {
+                            self.apply(item: item)
+                        }, completion: nil)
+                    }, completion: { context in
+                        self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
+                    })
+                }
+                
+                coordinator.notifyWhenInteractionChanges { context in
+                    if context.isCancelled {
+                        StatusBarManager.shared.update(with: fromStyle)
+                        fromVC?.setNeedsStatusBarAppearanceUpdate()
+                        container.apply(style: fromStyle)
+                    }
+                }
+            } else {
+                // 兜底无动画情况
+                if animated {
+                    UIView.animate(withDuration: 0.25) {
+                        container.apply(style: toStyle)
+                    }
+                    UIView.transition(with: container.topBarContainer, duration: 0.25, options: .transitionCrossDissolve, animations: {
+                        self.apply(item: item)
+                    }, completion: { _ in
+                        if let vc = viewController as? PTBaseViewController {
+                            vc.setNeedsStatusBarAppearanceUpdate()
+                        }
+                    })
+                } else {
+                    container.apply(style: toStyle)
+                    self.apply(item: item)
+                    if let vc = viewController as? PTBaseViewController {
+                        vc.setNeedsStatusBarAppearanceUpdate()
+                    }
+                }
+            }
         }
 
         tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
