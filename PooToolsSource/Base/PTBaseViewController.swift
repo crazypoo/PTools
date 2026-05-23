@@ -429,6 +429,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             return
         }
         
+        installIfNeeded(in: navigationController)
         currentNav = navigationController
         currentVC = viewController
         resetSystemNavBarAppearance(navigationController)
@@ -887,7 +888,8 @@ open class PTBaseViewController: UIViewController {
             }
         }
 
-        PTRotationManager.shared.orientationMaskDidChange = { orientationMask in
+        PTRotationManager.shared.orientationMaskDidChange = { [weak self] orientationMask in
+            guard let self = self else { return }
             self.viewControllerOrientation(orientationMask)
         }
     }
@@ -912,29 +914,23 @@ open class PTBaseViewController: UIViewController {
         
         // 此时 Navigation Stack 已经稳定，可以安全判断是否为第一层
         let isNotRoot = self.navigationController?.viewControllers.first != self
-        let isPresented = self.presentingViewController != nil
+        let isModal = self.isBeingPresented ||
+                          self.navigationController?.isBeingPresented == true ||
+                          self.presentingViewController != nil ||
+                          self.navigationController?.presentingViewController != nil ||
+                          self.sheetViewController != nil
         
-        if isNotRoot || isPresented {
+        if isNotRoot || isModal {
             pt_prefersTabBarHidden = true
-            
             // 关键防护：仅当目前没有任何左侧按钮时，才加上默认的返回按钮，避免重复添加
             if item.leftView.isEmpty {
                 let backBtn = baseBackButton()
+                            
                 backBtn.addActionHandlers { [weak self] _ in
                     self?.returnFrontVC()
                 }
                 
-                // 组装视图，但不去触发 Manager 的 update(item:) 方法，防止打断动画
-                let container = UIView()
-                container.isUserInteractionEnabled = true
-                container.clipsToBounds = true
-                container.bounds = CGRect(origin: .zero, size: CGSize(width: 34, height: 34))
-                container.addSubview(backBtn)
-                backBtn.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
-                item.leftView = [container]
-                item.isConfigured = true
+                self.setCustomBackButtonView(backBtn)
             }
         }
     }

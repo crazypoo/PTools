@@ -42,7 +42,7 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
                     // 触发登录页（自带 NavigationController 且 Modal 出来）
                     // 享受底层 LoginInterceptor 的全套保护机制
                     let _ = try? await PTTypedBuilder<PTTestLoginViewController>(path: "ptools://login")
-                        .jumpType(.modal, wrapInNav: true)
+                        .jumpType(.modal, wrapInNav: true, presentationStyle: .fullScreen, transitionStyle: .coverVertical)
                         .navigation()
                 }
                 return false

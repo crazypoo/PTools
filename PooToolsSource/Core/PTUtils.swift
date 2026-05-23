@@ -408,7 +408,7 @@ public extension PTUtils {
                      presentationStyle: UIModalPresentationStyle = .fullScreen,
                      transitionStyle: UIModalTransitionStyle = .coverVertical) {
         
-        guard let current = getActivityViewController() else { return }
+        guard let current = PTUtils.getCurrentVC() else { return }
         guard vc.presentedViewController == nil else { return }
 
         // 优先使用传递进来的样式

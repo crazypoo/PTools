@@ -844,7 +844,6 @@ extension PTRouter {
                         
                         // 实例化你自定义的 Nav
                         let customNav = navClass.init(rootViewController: vc)
-                        
                         // 完美弹出
                         PTUtils.modal(customNav, presentationStyle: pStyle, transitionStyle: tStyle)
                     } else {
