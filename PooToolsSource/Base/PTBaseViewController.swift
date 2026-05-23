@@ -422,8 +422,8 @@ extension PTNavigationBarManager {
 
 extension PTNavigationBarManager: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController,
-                              willShow viewController: UIViewController,
-                              animated: Bool) {
+                                         willShow viewController: UIViewController,
+                                         animated: Bool) {
         if let baseVC = viewController as? PTBaseViewController,
            !baseVC.allowControlNavBar() {
             return
@@ -433,13 +433,16 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         currentVC = viewController
         resetSystemNavBarAppearance(navigationController)
         
-        // ❗如果这个 VC 不是 nav 栈里的（理论上不会，但防御）
+        // 1. 安全准备默认返回按钮数据（来自我们上一步的优化）
+        if let baseVC = viewController as? PTBaseViewController {
+            baseVC.prepareDefaultNavigationBarItem()
+        }
+        
         guard let container = containerMap.object(forKey: navigationController) else { return }
-        // 2. 关键修改：直接从 VC 获取样式，不要只依赖 itemCache
+        
         let toStyle: PTNavigationBarStyle
         if let baseVC = viewController as? PTBaseViewController {
             toStyle = baseVC.preferredNavigationBarStyle()
-            // 同步更新一下 item 里的样式，防止后续逻辑冲突
             let item = self.item(for: viewController)
             item.barColorStyle = toStyle
         } else {
@@ -455,31 +458,43 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         self.toStyle = toStyle
         self.transitionContainer = container
 
-        // 3. 立即准备过渡：这会消除颜色闪烁
+        // 预设起点，准备动画
         container.prepareTransition(from: fromStyle, to: toStyle)
-        
+        let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
+
         if let coordinator = navigationController.transitionCoordinator {
             self.transitionCoordinatorRef = coordinator
-            startDisplayLink()
-            coordinator.animate(alongsideTransition: { _ in
-                // 动画过程中，系统会自动处理 alpha 或 这里的 progress
-                container.updateTransition(progress: 1)
-            }, completion: { context in
-                self.stopDisplayLink()
-                if context.isCancelled {
-                    StatusBarManager.shared.update(with: fromStyle)
-                    fromVC?.setNeedsStatusBarAppearanceUpdate()
-                    container.apply(style: fromStyle)
-                } else {
-                    container.apply(style: toStyle)
-                    StatusBarManager.shared.update(with: toStyle)
-                    if let vc = viewController as? PTBaseViewController {
-                        vc.setNeedsStatusBarAppearanceUpdate()
-                        navigationController.setNeedsStatusBarAppearanceUpdate() // 触发 Nav 重新询问 child
-                    }
-                }
-            })
             
+            // 🌟 2. 核心修复：分离手势滑动与正常 Push 的动画驱动方式
+            if coordinator.isInteractive {
+                // 【手势滑动返回】：启动定时器，跟随手指进度
+                startDisplayLink()
+                coordinator.animate(alongsideTransition: { _ in
+                    // ⛔️ 保持为空！绝对不要在这里修改进度，完全交由 CADisplayLink 控制，防止闪烁
+                }, completion: { context in
+                    self.stopDisplayLink()
+                    self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
+                })
+            } else {
+                // 【点击 Push/Pop】：使用系统原生动画，平滑且不掉帧
+                coordinator.animate(alongsideTransition: { context in
+                    // 让 UIView 的补间动画接管颜色过渡
+                    container.updateTransition(progress: 1)
+                    
+                    // 让标题和按钮也伴随系统时间，进行平滑的交叉溶解
+                    UIView.transition(with: container.topBarContainer,
+                                      duration: context.transitionDuration,
+                                      options: .transitionCrossDissolve,
+                                      animations: {
+                        self.apply(item: item)
+                    }, completion: nil)
+                    
+                }, completion: { context in
+                    self.finishTransition(context: context, container: container, fromStyle: fromStyle, toStyle: toStyle, fromVC: fromVC, toVC: viewController)
+                })
+            }
+            
+            // 兜底：处理手势取消时的状态恢复
             coordinator.notifyWhenInteractionChanges { context in
                 if context.isCancelled {
                     StatusBarManager.shared.update(with: fromStyle)
@@ -488,26 +503,42 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                 }
             }
         } else {
-            // 非动画转场，直接应用目标样式
+            // 无动画时的直接切换
             container.apply(style: toStyle)
             if let vc = viewController as? PTBaseViewController {
                 vc.setNeedsStatusBarAppearanceUpdate()
             }
+            self.apply(item: item)
         }
 
-        // 🔥🔥🔥 关键：驱动 TabBar（这里替代 delegate）
         tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
 
         viewController.navigationItem.hidesBackButton = true
         viewController.title = nil
         viewController.navigationItem.titleView = nil
-
-        // 处理 Item 内容（左/右/标题按钮）
-        if let item = itemCache.object(forKey: viewController) {
-            apply(item: item)
-        }
     }
     
+    // 🌟 3. 新增的辅助方法：提取转场完成后的状态重置逻辑，保持代码清晰
+    private func finishTransition(context: UIViewControllerTransitionCoordinatorContext,
+                                  container: PTNavigationBarContainer,
+                                  fromStyle: PTNavigationBarStyle,
+                                  toStyle: PTNavigationBarStyle,
+                                  fromVC: UIViewController?,
+                                  toVC: UIViewController) {
+        if context.isCancelled {
+            StatusBarManager.shared.update(with: fromStyle)
+            fromVC?.setNeedsStatusBarAppearanceUpdate()
+            container.apply(style: fromStyle)
+        } else {
+            container.apply(style: toStyle)
+            StatusBarManager.shared.update(with: toStyle)
+            if let vc = toVC as? PTBaseViewController {
+                vc.setNeedsStatusBarAppearanceUpdate()
+                vc.navigationController?.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
+
     @MainActor private func apply(item: PTNavBarItem) {
         setLeftView(item.leftView,spacing: item.leftItemSpacing)
         setRightViews(item.rightViews,spacing: item.rightItemSpacing)
@@ -785,9 +816,6 @@ open class PTBaseViewController: UIViewController {
 
     deinit {
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .viewCycle)
-//        Task { @MainActor in
-//            removeFromSuperStatusBar()
-//        }
     }
     
     // MARK: - 子类 override 以决定样式
@@ -798,7 +826,6 @@ open class PTBaseViewController: UIViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
-        applyNavigationBar()
         
         if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController,let findCurrent = PTUtils.getCurrentVC(),let findNavFirst = nav.viewControllers.first,findCurrent == findNavFirst {
             PTNavigationBarManager.shared.restoreIfNeeded(for: findCurrent)
@@ -807,11 +834,13 @@ open class PTBaseViewController: UIViewController {
         }
 
         // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
-        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
-            PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
-        } else {
-            if let nav = navigationController {
+        if transitionCoordinator == nil {
+            if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
                 PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+            } else {
+                if let nav = navigationController {
+                    PTNavigationBarManager.shared.apply(style: preferredNavigationBarStyle(), in: nav)
+                }
             }
         }
     }
@@ -820,14 +849,16 @@ open class PTBaseViewController: UIViewController {
         super.viewDidAppear(animated)
         PTNSLogConsole("加载完==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .viewCycle)
         // 🔥 防止 tab 切换 / 返回导致系统 navbar 恢复
-        if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
-            PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
-        } else {
-            if let nav = self.navigationController {
+        if transitionCoordinator == nil {
+            if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
                 PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
+            } else {
+                if let nav = self.navigationController {
+                    PTNavigationBarManager.shared.apply(style: self.preferredNavigationBarStyle(), in: nav)
+                }
             }
         }
-        
+
         PTGCDManager.shared.delayOnMain(time: 0.1, block: {
             self.updateStatusBar(self.preferredNavigationBarStyle())
         })
@@ -875,23 +906,39 @@ open class PTBaseViewController: UIViewController {
         }
     }
     
-    private func applyNavigationBar() {
-        guard let _ = navigationController else { return }
-        
-        let style = preferredNavigationBarStyle()
+    @MainActor open func prepareDefaultNavigationBarItem() {
         let item = PTNavigationBarManager.shared.item(for: self)
-        item.barColorStyle = style
-        PTNavigationBarManager.shared.update(item: item, for: self)
-        if self.navigationController?.viewControllers.first != self {
-            self.setBaseBackButton()
+        item.barColorStyle = preferredNavigationBarStyle()
+        
+        // 此时 Navigation Stack 已经稳定，可以安全判断是否为第一层
+        let isNotRoot = self.navigationController?.viewControllers.first != self
+        let isPresented = self.presentingViewController != nil
+        
+        if isNotRoot || isPresented {
             pt_prefersTabBarHidden = true
-        }
-        if let _ = self.presentingViewController {
-            pt_prefersTabBarHidden = true
-            self.setBaseBackButton()
+            
+            // 关键防护：仅当目前没有任何左侧按钮时，才加上默认的返回按钮，避免重复添加
+            if item.leftView.isEmpty {
+                let backBtn = baseBackButton()
+                backBtn.addActionHandlers { [weak self] _ in
+                    self?.returnFrontVC()
+                }
+                
+                // 组装视图，但不去触发 Manager 的 update(item:) 方法，防止打断动画
+                let container = UIView()
+                container.isUserInteractionEnabled = true
+                container.clipsToBounds = true
+                container.bounds = CGRect(origin: .zero, size: CGSize(width: 34, height: 34))
+                container.addSubview(backBtn)
+                backBtn.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+                item.leftView = [container]
+                item.isConfigured = true
+            }
         }
     }
-    
+        
     private func setBaseBackButton() {
         let backBtn = baseBackButton()
         backBtn.addActionHandlers { seder in

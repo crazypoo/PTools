@@ -112,6 +112,7 @@ class AppDelegate: PTAppWindowsDelegate {
         PTAppBaseConfig.share.tabSelectedMetailColor = .random
         PTAppBaseConfig.share.navTitleFont = .appfont(size: 18)
         PTAppBaseConfig.share.navTitleTextColor = .random
+        PTAppBaseConfig.share.viewControllerBackItemImage = UIImage(named: "DemoImage")!
 //        PTAppBaseConfig.share.viewControllerBaseBackgroundColor = .random
         registerRotation()
 
