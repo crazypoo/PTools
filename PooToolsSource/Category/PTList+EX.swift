@@ -8,10 +8,11 @@
 
 import UIKit
 
-public class PTSection: NSObject {
+@MainActor
+public final class PTSection: NSObject {
     
-    public var identifier: String = UUID().uuidString
-    public var layoutVersion: Int = 0   // 👈 新增
+    nonisolated public let identifier: String
+    public var layoutVersion: Int = 0
 
     public var headerTitle: String?
     public var headerID: String?
@@ -22,19 +23,19 @@ public class PTSection: NSObject {
     public var headerDataModel: AnyObject?
     public var footerDataModel: AnyObject?
 
-    public var footerClass:UICollectionReusableView.Type?
-    public var headerClass:UICollectionReusableView.Type?
+    public var footerClass: UICollectionReusableView.Type?
+    public var headerClass: UICollectionReusableView.Type?
     
-    public init(headerTitle: String? = "",
+    public init(identifier: String = UUID().uuidString,
+                headerTitle: String? = "",
                 headerID: String? = "",
-                footerID:String? = "",
-                footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
-                headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
-                rows:[PTRows]? = nil,
-                headerDataModel:AnyObject? = nil,
-                footerDataModel:AnyObject? = nil) {
-        super.init()
-        
+                footerID: String? = "",
+                footerHeight: CGFloat? = CGFloat.leastNormalMagnitude,
+                headerHeight: CGFloat? = CGFloat.leastNormalMagnitude,
+                rows: [PTRows]? = nil,
+                headerDataModel: AnyObject? = nil,
+                footerDataModel: AnyObject? = nil) {
+        self.identifier = identifier
         self.headerTitle = headerTitle
         self.headerID = headerID
         self.footerID = footerID
@@ -43,10 +44,19 @@ public class PTSection: NSObject {
         self.rows = rows
         self.headerDataModel = headerDataModel
         self.footerDataModel = footerDataModel
+        super.init()
     }
     
-    public override var hash: Int {
-        return identifier.hashValue
+    // 🌟 修复：Identity 仅仅依赖 identifier
+    nonisolated public override var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(identifier)
+        return hasher.finalize()
+    }
+    
+    nonisolated public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTSection else { return false }
+        return self.identifier == other.identifier
     }
 
     public func isSameIdentity(as other: PTSection) -> Bool {
@@ -56,25 +66,20 @@ public class PTSection: NSObject {
     public var headerReuseID: String? {
         if let headerid = headerID, !headerid.stringIsEmpty() {
             return headerid
-        } else {
-            return (headerClass as? PTSupplementaryRegisterable.Type)?.reuseID
         }
+        return (headerClass as? PTSupplementaryRegisterable.Type)?.reuseID
     }
 
     public var footerReuseID: String? {
         if let footerid = footerID, !footerid.stringIsEmpty() {
             return footerid
-        } else {
-            return (footerClass as? PTSupplementaryRegisterable.Type)?.reuseID
         }
+        return (footerClass as? PTSupplementaryRegisterable.Type)?.reuseID
     }
-}
-
-extension PTSection {
     
-    func isContentEqual(to other: PTSection) -> Bool {
-        
-        // 基础属性比较
+    // 🌟 优化：业务层手动判断内容是否改变的辅助方法，不干扰底层 Diff 机制
+    public func isContentEqual(to other: PTSection) -> Bool {
+        if layoutVersion != other.layoutVersion { return false }
         if headerTitle != other.headerTitle { return false }
         if headerID != other.headerID { return false }
         if footerID != other.footerID { return false }
@@ -90,39 +95,33 @@ extension PTSection {
             if !l.isSameIdentity(as: r) { return false }
             if !l.isContentEqual(to: r) { return false }
         }
-
-        // 👉 这里只做“浅比较”（高性能）
         return true
-    }
-    
-    public override func isEqual(_ object: Any?) -> Bool {
-        guard let other = object as? PTSection else { return false }
-        return self.identifier == other.identifier
     }
 }
 
-public class PTRows: NSObject {
-    /// 🔥 identity（唯一标识）
-    public var diffId: String = ""
-    /// 🔥 内容版本（核心）
+// 🌟 同上：加入 @MainActor 和 final
+@MainActor
+public final class PTRows: NSObject {
+    /// 身份（唯一标识）
+    nonisolated public let diffId: String
+    /// 内容版本（用于业务层判断内容是否改变）
     public var diffHash: Int = 0
 
     public var title = ""
     public var ID: String = ""
     public var dataModel: AnyObject?
     public var nibName = ""
-    public var badge:Int = 0
+    public var badge: Int = 0
     
-    public var cellClass:UICollectionViewCell.Type?
+    public var cellClass: UICollectionViewCell.Type?
 
     public init(title: String = "",
-                nibName:String = "",
+                nibName: String = "",
                 ID: String = "",
                 diffId: String = UUID().uuidString,
-                diffHash:Int = 0,
-                dataModel:AnyObject? = nil,
-                badge:Int = 0) {
-        super.init()
+                diffHash: Int = 0,
+                dataModel: AnyObject? = nil,
+                badge: Int = 0) {
         self.title = title
         self.ID = ID
         self.dataModel = dataModel
@@ -130,62 +129,63 @@ public class PTRows: NSObject {
         self.badge = badge
         self.diffId = diffId
         self.diffHash = diffHash
+        super.init()
     }
     
-    /// 🔥 reuseID（自动生成）
     public var reuseID: String {
         if let cls = cellClass as? PTCellRegisterable.Type {
             return cls.reuseID
         }
         return ID
     }
-}
-
-extension PTRows {
-
-    public override var hash: Int {
+    
+    // 🌟🌟🌟 核心修复：移除 diffHash！绝对不能让 Diffable DataSource 的哈希随状态突变！
+    nonisolated public override var hash: Int {
         var hasher = Hasher()
         hasher.combine(diffId)
-        hasher.combine(diffHash) // 👈 关键点：把 diffHash 加入哈希
         return hasher.finalize()
     }
-
-    /// identity（是不是同一个 cell）
-    func isSameIdentity(as other: PTRows) -> Bool {
+    
+    // 🌟🌟🌟 核心修复：isEqual 也只判断 Identity。保证 reloadItems 时平滑更新！
+    nonisolated public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? PTRows else { return false }
         return self.diffId == other.diffId
     }
     
-    func isContentEqual(to other: PTRows) -> Bool {
-        return diffHash == other.diffHash
+    /// 判断是不是同一个 cell（身份一致）
+    public func isSameIdentity(as other: PTRows) -> Bool {
+        return self.diffId == other.diffId
     }
     
-    public override func isEqual(_ object: Any?) -> Bool {
-        guard let other = object as? PTRows else { return false }
-        // 👈 关键点：ID 相同且 Hash 相同，才认为是完全一样的数据。
-        // 如果外部修改了 model 的数据并更新了 diffHash，DiffableDataSource 会自动帮你刷新这个 Cell！
-        return self.diffId == other.diffId && self.diffHash == other.diffHash
+    /// 判断内容是否有变动（提供给你的业务侧做按需刷新判断）
+    public func isContentEqual(to other: PTRows) -> Bool {
+        return self.diffHash == other.diffHash
     }
 }
 
 extension PTRows {
-    
-    convenience init(model: AnyObject,
-                     reuseID: String = "",
-                     title: String = "",
-                     nibName: String = "",
-                     badge:Int = 0) {
-        
+    public convenience init(model: AnyObject,
+                            reuseID: String = "",
+                            title: String = "",
+                            nibName: String = "",
+                            badge: Int = 0) {
         if let diffModel = model as? PTDiffableModel {
-            self.init(title: title,nibName: nibName,ID: reuseID,diffId: diffModel.diffId,diffHash: diffModel.diffHash,dataModel: model,badge: badge)
+            self.init(title: title,
+                      nibName: nibName,
+                      ID: reuseID,
+                      diffId: diffModel.diffId,
+                      diffHash: diffModel.diffHash,
+                      dataModel: model,
+                      badge: badge)
         } else {
-            self.init(title: title,nibName: nibName,ID: reuseID,dataModel: model,badge: badge)
+            self.init(title: title,
+                      nibName: nibName,
+                      ID: reuseID,
+                      dataModel: model,
+                      badge: badge)
         }
     }
 }
-
-// 告诉编译器：跳过并发安全检查，我保证它们是安全的
-extension PTSection: @unchecked Sendable {}
-extension PTRows: @unchecked Sendable {}
 
 public protocol PTCellRegisterable {
     static var reuseID: String { get }

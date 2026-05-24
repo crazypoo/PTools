@@ -58,7 +58,9 @@ class AppDelegate: PTAppWindowsDelegate {
     var permissionStatic = PTPermissionStatic.share
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        
+        PTFullscreenPopGesture.configure()
+        
         let locationAlways = PTPermissionModel()
         locationAlways.type = .location(access: .always)
         locationAlways.desc = "我们有需要长时间使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"

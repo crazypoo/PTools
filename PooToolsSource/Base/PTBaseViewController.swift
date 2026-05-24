@@ -1134,6 +1134,15 @@ open class PTBaseViewController: UIViewController {
     @objc func backButtonTapped() {
         self.returnFrontVC()
     }
+    
+    public func safePushViewController(_ vc: UIViewController, animated: Bool = true) {
+        guard let nav = self.navigationController else { return }
+        if nav.transitionCoordinator != nil {
+            PTNSLogConsole("拦截到重复跳转，已抛弃", levelType: PTLogMode, loggerType: .viewCycle)
+            return
+        }
+        nav.pushViewController(vc, animated: animated)
+    }
 }
 
 extension PTBaseViewController: UIScrollViewDelegate {

@@ -269,7 +269,8 @@ public enum CornerPosition {
 }
 
 // 1. 定义一个基于 NSCache 的强类型缓存
-public class PTLRUCache<Key: Hashable, Value: AnyObject> {
+@MainActor
+public class PTLRUCache<Key: Hashable & Sendable, Value: AnyObject> {
     private let cache = NSCache<WrappedKey, Value>()
     
     public init(countLimit: Int = 1000) {
@@ -310,10 +311,11 @@ public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
 
 //MARK: 界面展示
 @objcMembers
+@MainActor
 public class PTCollectionView: UIView {
     
     // 声明一个节流任务
-    private var scrollDebounceWorkItem: DispatchWorkItem?
+    private var scrollDebounceTask: Task<Void, Never>?
     /// 原生 Diffable 数据源
     private var diffableDataSource: PTDataSource!
     ///Photos
@@ -1117,13 +1119,21 @@ extension PTCollectionView {
     
     private func throttleScrollUpdate() {
         guard isTouched == false else { return }
-        scrollDebounceWorkItem?.cancel()
         
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.handleScrollUpdate()
+        // 取消之前的任务
+        scrollDebounceTask?.cancel()
+        
+        // 创建新的 Task
+        scrollDebounceTask = Task { @MainActor [weak self] in
+            do {
+                // 延迟 0.05 秒 (50 毫秒 = 50,000,000 纳秒)
+                try await Task.sleep(nanoseconds: 50_000_000)
+                guard !Task.isCancelled else { return }
+                self?.handleScrollUpdate()
+            } catch {
+                // 任务被取消会抛出 CancellationError，直接忽略
+            }
         }
-        scrollDebounceWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
     }
 }
 
@@ -1245,177 +1255,167 @@ extension PTCollectionView {
     }
 
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-            guard section >= 0, section < snapshot.sectionIdentifiers.count else {
-                completion?()
-                return
-            }
-            
-            let sectionModel = snapshot.sectionIdentifiers[section]
-            if sectionModel.rows == nil { sectionModel.rows = [] }
-            sectionModel.rows?.append(contentsOf: rows)
-            
-            self.layoutCache.removeAll()
-            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                self.clearWaterfallCache(section: section)
-            }
-            sectionModel.layoutVersion += 1
-            
-            snapshot.appendItems(rows, toSection: sectionModel)
-            
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                self.setiOS17EmptyDataView()
-                completion?()
-            }
+        var snapshot = self.diffableDataSource.snapshot()
+        guard section >= 0, section < snapshot.sectionIdentifiers.count else {
+            completion?()
+            return
+        }
+        
+        let sectionModel = snapshot.sectionIdentifiers[section]
+        if sectionModel.rows == nil { sectionModel.rows = [] }
+        sectionModel.rows?.append(contentsOf: rows)
+        
+        self.layoutCache.removeAll()
+        if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+            self.clearWaterfallCache(section: section)
+        }
+        sectionModel.layoutVersion += 1
+        
+        snapshot.appendItems(rows, toSection: sectionModel)
+        
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            self.setiOS17EmptyDataView()
+            completion?()
         }
     }
     
     public func insertSection(_ sections:[PTSection], afterIndex:Int? = nil,completion:PTActionTask? = nil) {
-        Task { @MainActor in
-            guard !sections.isEmpty else {
-                completion?()
-                return
-            }
-            
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            
-            var snapshot = self.diffableDataSource.snapshot()
-            var insertIndex = snapshot.sectionIdentifiers.count
+        guard !sections.isEmpty else {
+            completion?()
+            return
+        }
+        
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        
+        var snapshot = self.diffableDataSource.snapshot()
+        var insertIndex = snapshot.sectionIdentifiers.count
 
-            if let index = afterIndex, index < snapshot.sectionIdentifiers.count {
-                insertIndex = index + 1
-                let anchorSection = snapshot.sectionIdentifiers[index]
-                snapshot.insertSections(sections, afterSection: anchorSection)
-            } else {
-                snapshot.appendSections(sections)
-            }
+        if let index = afterIndex, index < snapshot.sectionIdentifiers.count {
+            insertIndex = index + 1
+            let anchorSection = snapshot.sectionIdentifiers[index]
+            snapshot.insertSections(sections, afterSection: anchorSection)
+        } else {
+            snapshot.appendSections(sections)
+        }
 
-            for i in 0..<sections.count {
-                let targetIndex = insertIndex + i
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: targetIndex)
-                }
-                sections[i].layoutVersion += 1
-                if let rows = sections[i].rows, !rows.isEmpty {
-                    snapshot.appendItems(rows, toSection: sections[i])
-                }
+        for i in 0..<sections.count {
+            let targetIndex = insertIndex + i
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: targetIndex)
             }
+            sections[i].layoutVersion += 1
+            if let rows = sections[i].rows, !rows.isEmpty {
+                snapshot.appendItems(rows, toSection: sections[i])
+            }
+        }
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                self.setiOS17EmptyDataView()
-                completion?()
-            }
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            self.setiOS17EmptyDataView()
+            completion?()
         }
     }
 
     public func deleteRows(_ rows: [PTRows], from section: Int, completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-            guard section >= 0, section < snapshot.sectionIdentifiers.count else {
-                completion?()
-                return
-            }
+        var snapshot = self.diffableDataSource.snapshot()
+        guard section >= 0, section < snapshot.sectionIdentifiers.count else {
+            completion?()
+            return
+        }
 
-            self.layoutCache.removeAll()
-            
-            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                self.clearWaterfallCache(section: section)
-            }
+        self.layoutCache.removeAll()
+        
+        if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+            self.clearWaterfallCache(section: section)
+        }
 
-            let sectionModel = snapshot.sectionIdentifiers[section]
-            sectionModel.layoutVersion += 1
-            sectionModel.rows?.removeAll(where: { rows.contains($0) })
+        let sectionModel = snapshot.sectionIdentifiers[section]
+        sectionModel.layoutVersion += 1
+        sectionModel.rows?.removeAll(where: { rows.contains($0) })
 
-            snapshot.deleteItems(rows)
+        snapshot.deleteItems(rows)
 
-            if sectionModel.rows?.isEmpty ?? true {
-                snapshot.deleteSections([sectionModel])
-            }
-            
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                self.setiOS17EmptyDataView()
-                completion?()
-            }
+        if sectionModel.rows?.isEmpty ?? true {
+            snapshot.deleteSections([sectionModel])
+        }
+        
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            self.setiOS17EmptyDataView()
+            completion?()
         }
     }
     
     public func deleteSectionsRows(_ rowsMap: [Int: [PTRows]], completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        
+        var allRowsToDelete: [PTRows] = []
+        var sectionsToDelete: [PTSection] = []
+        var snapshot = self.diffableDataSource.snapshot()
+        
+        for (sectionIndex, rows) in rowsMap {
+            guard sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count else { continue }
             
-            var allRowsToDelete: [PTRows] = []
-            var sectionsToDelete: [PTSection] = []
-            var snapshot = self.diffableDataSource.snapshot()
+            let sectionModel = snapshot.sectionIdentifiers[sectionIndex]
             
-            for (sectionIndex, rows) in rowsMap {
-                guard sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count else { continue }
-                
-                let sectionModel = snapshot.sectionIdentifiers[sectionIndex]
-                
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.clearWaterfallCache(section: sectionIndex)
-                }
-                sectionModel.layoutVersion += 1
-                
-                sectionModel.rows?.removeAll(where: { rows.contains($0) })
-                allRowsToDelete.append(contentsOf: rows)
-                
-                if sectionModel.rows?.isEmpty ?? true {
-                    sectionsToDelete.append(sectionModel)
-                }
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: sectionIndex)
             }
-
-            guard !allRowsToDelete.isEmpty else {
-                completion?()
-                return
-            }
-
-            snapshot.deleteItems(allRowsToDelete)
+            sectionModel.layoutVersion += 1
             
-            if !sectionsToDelete.isEmpty {
-                snapshot.deleteSections(sectionsToDelete)
+            sectionModel.rows?.removeAll(where: { rows.contains($0) })
+            allRowsToDelete.append(contentsOf: rows)
+            
+            if sectionModel.rows?.isEmpty ?? true {
+                sectionsToDelete.append(sectionModel)
             }
+        }
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-                self.setiOS17EmptyDataView()
-                completion?()
+        guard !allRowsToDelete.isEmpty else {
+            completion?()
+            return
+        }
+
+        snapshot.deleteItems(allRowsToDelete)
+        
+        if !sectionsToDelete.isEmpty {
+            snapshot.deleteSections(sectionsToDelete)
+        }
+
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.collectionView.collectionViewLayout.invalidateLayout()
             }
+            self.setiOS17EmptyDataView()
+            completion?()
         }
     }
     
     public func deleteSections(_ sections: [PTSection], completion: PTActionTask? = nil) {
-        Task { @MainActor in
-            var snapshot = self.diffableDataSource.snapshot()
-                        
-            for sectionModel in sections {
-                if let index = snapshot.indexOfSection(sectionModel) {
-                    if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
-                        self.clearWaterfallCache(section: index)
-                    }
-                    sectionModel.layoutVersion += 1
+        var snapshot = self.diffableDataSource.snapshot()
+                    
+        for sectionModel in sections {
+            if let index = snapshot.indexOfSection(sectionModel) {
+                if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                    self.clearWaterfallCache(section: index)
                 }
+                sectionModel.layoutVersion += 1
             }
+        }
 
-            self.layoutCache.removeAll()
-            self.heightCache.removeAll()
-            
-            snapshot.deleteSections(sections)
-            
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
-                self.setiOS17EmptyDataView()
-                completion?()
-            }
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        
+        snapshot.deleteSections(sections)
+        
+        let animated = !self.viewConfig.refreshWithoutAnimation
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+            self.setiOS17EmptyDataView()
+            completion?()
         }
     }
 }
@@ -1728,10 +1728,7 @@ extension PTCollectionView {
     
     private func clearWaterfallCache(section: Int) {
         // 🌟 修复提升：原地过滤移除优化
-        let keysToRemove = waterfallCache.keys.filter { $0.section == section }
-        for key in keysToRemove {
-            waterfallCache.removeValue(forKey: key)
-        }
+        waterfallCache = waterfallCache.filter { $0.key.section != section }
     }
 }
 
