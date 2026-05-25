@@ -866,18 +866,25 @@ extension PTRouter {
     
     @MainActor private class func showTabBar(queries: [String: Any]) {
         let selectIndex: Int = processParameter(queries[PTRouterTabBarSelecIndex] ?? 0) ?? 0
-        let tabVC = UIApplication.shared.delegate?.window??.rootViewController
-        if let tabVC = tabVC as? UITabBarController {
+        let tabVC = AppWindows?.rootViewController
+        switch tabVC {
+        case let tab as UITabBarController:
             let navVC: UINavigationController? = PTUtils.getTopViewController(nil)?.navigationController
             if let navigationController = navVC {
                 navigationController.popToRootViewController(animated: false)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    tabVC.selectedIndex = selectIndex
+                PTGCDManager.shared.delayOnMain(time: 0.05) {
+                    switch tab {
+                    case let tabCustom as PTBaseTabBarViewController:
+                        tabCustom.ptCustomBar.select(selectIndex)
+                    default:
+                        tab.selectedIndex = selectIndex
+                    }
                     if let topViewController = PTUtils.getTopViewController(nil), let navController = topViewController.navigationController {
                         navController.popToRootViewController(animated: false)
                     }
                 }
             }
+        default:break
         }
     }
     
