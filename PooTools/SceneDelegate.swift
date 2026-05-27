@@ -17,7 +17,12 @@ class SceneDelegate: PTWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
-        makeKeyAndVisible(in: scene, viewController: PTTestTabbarViewController(), tint: .white)
+        PTSideMenuControl.preferences.basic.shouldUseContentSupportedOrientations = true
+        PTSideMenuControl.preferences.basic.supportedOrientations = .all
+        let sideContent = PTSideController()
+        let tabVC = PTSideMenuControl(contentViewController: PTTestTabbarViewController(), menuViewController: sideContent)
+
+        makeKeyAndVisible(in: scene, viewController: tabVC, tint: .white)
 //        let _ = LocalConsole.shared
         
 //        PTGCDManager.gcdGroupUtility(label: "com.1.1.1", semaphoreCount: 4, threadCount: 4) { dispatchSemaphore, dispatchGroup, currentIndex in

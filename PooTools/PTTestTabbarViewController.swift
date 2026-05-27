@@ -33,13 +33,8 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         
         let vc = PTFuncNameViewController()
         let mainNav = PTBaseNavControl(rootViewController: vc)
-        
-        PTSideMenuControl.preferences.basic.shouldUseContentSupportedOrientations = true
-        PTSideMenuControl.preferences.basic.supportedOrientations = .all
-        let sideContent = PTSideController()
-        let homeVC = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
-        
-        let home = PTTabBarItemConfig(title: "", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: UIImage(named: "DemoImage")!),viewController: homeVC)
+                
+        let home = PTTabBarItemConfig(title: "", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: UIImage(named: "DemoImage")!),viewController: mainNav)
         
         let yoVC = PTTabBarTestOneViewController()
         let yoNav = PTBaseNavControl(rootViewController: yoVC)

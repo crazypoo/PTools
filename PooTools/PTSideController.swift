@@ -87,8 +87,8 @@ class PTSideController: PTBaseSideController {
         view.addSubviews([sideInfoLabel,sideButton,checkBox,inspectorButton,lcButton])
         sideInfoLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }     
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+        }
         
         sideButton.snp.makeConstraints { make in
             make.size.equalTo(100)
