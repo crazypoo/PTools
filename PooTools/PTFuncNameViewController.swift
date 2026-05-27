@@ -508,6 +508,10 @@ class PTFuncNameViewController: PTBaseViewController {
         }
     }
     
+//    override func loadView() {
+//        self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//    }
+    
     lazy var collectionView : PTCollectionView = {
         aaaaaaa = PTCollectionView(viewConfig: self.collectionViewConfig())
         aaaaaaa.registerSupplementaryView(classs: ["1111111":PTFusionHeader.self], kind: UICollectionView.elementKindSectionHeader)
@@ -1081,12 +1085,18 @@ class PTFuncNameViewController: PTBaseViewController {
     }()
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        .all
+        let mask = PTRotationManager.shared.orientationMask
+        PTNSLogConsole("【DEBUG】业务VC 报告权限: \(mask)")
+        return mask
     }
     
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        .portrait
+    override var shouldAutorotate: Bool {
+        return true
     }
+    
+//    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+//        PTRotationManager.shared.orientationMask
+//    }
     
     lazy var searchBar:PTSearchBar = {
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
@@ -1235,17 +1245,7 @@ class PTFuncNameViewController: PTBaseViewController {
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
-        
-        PTRotationManager.shared.orientationMaskDidChange = { orientationMask in
-            PTNSLogConsole("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\(orientationMask)")
-            self.collectionView.snp.remakeConstraints { make in
-                make.top.equalToSuperview()
-                make.right.bottom.equalToSuperview()
-                make.left.right.equalToSuperview()
-            }
-            self.showCollectionViewData()
-        }
-        
+                
         if #unavailable(iOS 17.0) {
             PTGCDManager.shared.delayOnMain(time: 10) {
                 self.showCollectionViewData()
@@ -1365,6 +1365,43 @@ class PTFuncNameViewController: PTBaseViewController {
         })
     }
     
+    override func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {
+        PTNSLogConsole(">>>>>>>>>>>>>??>>>>>>>>>>>>>>>>>>>\(orientationMask)")
+        PTGCDManager.shared.delayOnMain(time: 0.3) {
+            self.aaaaaaa.reloadAllData()
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        // 1. 旋转开始前：可以隐蔽索引条或清理部分旧高度缓存
+        collectionView.hideIndicator()
+        collectionView.clearLayoutCaches()
+        self.view.setNeedsLayout()
+        // 2. 伴随系统的物理旋转动画一起过渡
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            // 这里可以放置需要与旋转动画同步变宽的自定义 UI 代码
+            guard let self = self else { return }
+            self.view.frame = CGRect(origin: .zero, size: size)
+            self.view.layoutIfNeeded()
+            self.collectionView.contentCollectionView.collectionViewLayout.invalidateLayout()
+            
+            self.view.backgroundColor = .blue
+            self.collectionView.backgroundColor = .green
+        }, completion: { [weak self] _ in
+            // 🌟 3. 核心修复：当屏幕已经完全成功切换、动画彻底结束、宽度绝对稳定后，在这里触发重绘！
+            // 此时 myCollectionView 内部的 layoutCache、heightCache 会在最新的横/竖屏宽度下进行按需精准重新计算，UI 绝不会再发生任何错位或挤压
+            PTNSLogConsole("【旋转闭环】屏幕尺寸已稳定，最新宽度: \(size.width)")
+            self?.collectionView.reloadAllData(animated: false)
+            self?.collectionView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                make.right.bottom.equalToSuperview()
+                make.left.right.equalToSuperview()
+            }
+        })
+    }
+
     func flashAd(notifi:Notification) {
         let obj = notifi.object as! [String:Any]
         obj.allKeys().enumerated().forEach { index,value in

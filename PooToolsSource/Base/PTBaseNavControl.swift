@@ -11,6 +11,15 @@ import UIKit
 @objcMembers
 open class PTBaseNavControl: UINavigationController {
     
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        let mask = visibleViewController?.supportedInterfaceOrientations ?? .portrait
+        return mask
+    }
+    
+    open override var shouldAutorotate: Bool {
+        return true
+    }
+    
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTBaseNavControl.GobalNavControl(nav: self)
@@ -89,6 +98,15 @@ open class PTBaseNavControl: UINavigationController {
     
     open override var childForStatusBarHidden: UIViewController? {
         topViewController
+    }
+    
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.view.frame = CGRect(origin: .zero, size: size)
+            self.view.layoutIfNeeded()
+        }, completion: { (_) in
+        })
     }
 }
 

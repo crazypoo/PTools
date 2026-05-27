@@ -313,6 +313,7 @@ public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
 @objcMembers
 @MainActor
 public class PTCollectionView: UIView {
+    private var boundsChangeTask: Task<Void, Never>?
     
     // 声明一个节流任务
     private var scrollDebounceTask: Task<Void, Never>?
@@ -477,7 +478,7 @@ public class PTCollectionView: UIView {
     //MARK: Cell datasource handler
     open var headerInCollection: PTReusableViewHandler?
     open var footerInCollection: PTReusableViewHandler?
-    @MainActor open var cellInCollection: PTCellInCollectionHandler?
+    open var cellInCollection: PTCellInCollectionHandler?
     
     //MARK: Cell delegate handler
     open var collectionDidSelect: PTCellDidSelectedHandler?
@@ -496,9 +497,9 @@ public class PTCollectionView: UIView {
     
     //MARK: Orthogonal Scroll handler (正交滚动专用)
     /// 正交滚动 (横向滑动) 的实时偏移量回调: (SectionIndex, CGPoint)
-    @MainActor open var orthogonalDidScroll:  ((Int, CGPoint) -> Void)?
+    open var orthogonalDidScroll:  ((Int, CGPoint) -> Void)?
     /// 正交滚动 (横向滑动) 翻页改变时的回调: (SectionIndex, 当前页码 CurrentPage)
-    @MainActor open var orthogonalPageDidChange: ((Int, Int) -> Void)?
+    open var orthogonalPageDidChange: ((Int, Int) -> Void)?
     
     // 🌟 新增：无感知触底预加载回调
     /// 无感知触底预加载事件触发回调
@@ -1070,10 +1071,17 @@ private extension PTCollectionView {
         setIndicatorCenter(t: 0, config: config,alpha: 0)
     }
     
-    func hideIndicator() {
+    public func hideIndicator() {
         UIView.animate(withDuration: 0.2) {
             self.indicator.alpha = 0
         }
+    }
+    
+    public func clearLayoutCaches() {
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        self.waterfallCache.removeAll()
+        self.fallbackLayouts.removeAll()
     }
 }
 

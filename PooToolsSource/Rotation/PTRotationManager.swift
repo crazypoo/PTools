@@ -127,22 +127,23 @@ private extension PTRotationManager {
         if #available(iOS 16.0, *) {
             let geometryPreferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientationMask)
             
-            // 优化：使用 compactMap 安全解包并过滤
             let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
             
             for windowScene in windowScenes {
                 for window in windowScene.windows {
                     window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
                 }
-                // 请求更新
-                windowScene.requestGeometryUpdate(geometryPreferences)
+
+                windowScene.requestGeometryUpdate(geometryPreferences) { error in
+                    PTNSLogConsole("❌ 屏幕旋转请求被系统拒绝: \(error.localizedDescription)")
+                }
             }
         } else {
-            UIViewController.attemptRotationToDeviceOrientation()
-            
+            // iOS 15 及以下的经典旋转方案
             let currentDevice = UIDevice.current
             let deviceOrientation = Self.convertInterfaceOrientationMaskToDeviceOrientation(orientationMask)
             currentDevice.setValue(NSNumber(value: deviceOrientation.rawValue), forKeyPath: "orientation")
+            UIViewController.attemptRotationToDeviceOrientation()
         }
     }
 }

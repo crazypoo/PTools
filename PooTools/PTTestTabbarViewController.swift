@@ -10,13 +10,32 @@ import UIKit
 import SafeSFSymbols
 
 class PTTestTabbarViewController: PTBaseTabBarViewController {
-
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        // 🌟 深度 Debug：打印具体类型
+        if let selected = self.selectedViewController {
+            PTNSLogConsole("【DEBUG】TabBarController 发现选中的 VC 类型是: \(type(of: selected))")
+            let mask = selected.supportedInterfaceOrientations
+            PTNSLogConsole("【DEBUG】TabBarController 成功读取到的子VC权限: \(mask.rawValue)")
+            return mask
+        } else {
+            PTNSLogConsole("【DEBUG】TabBarController 报错：selectedViewController 是 nil！")
+            return .portrait
+        }
+    }
+    
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let vc = PTFuncNameViewController()
         let mainNav = PTBaseNavControl(rootViewController: vc)
         
+        PTSideMenuControl.preferences.basic.shouldUseContentSupportedOrientations = true
+        PTSideMenuControl.preferences.basic.supportedOrientations = .all
         let sideContent = PTSideController()
         let homeVC = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
         
@@ -30,7 +49,8 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         let yoNav1 = PTBaseNavControl(rootViewController: yoVC1)
         let yo1 = PTTabBarItemConfig(title: "2222", content: PTTabBarImageContent(normal: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json", selected: "https://assets8.lottiefiles.com/packages/lf20_hp09atmh.json"), viewController: yoNav1)
 
-        configure(items: [home,yo,yo1])
+        let itemsss = [home,yo,yo1]
+        configure(items: itemsss)
 
         ptCustomBar.willSelectIndex = { index in
             PTNSLogConsole("\(index)")
@@ -55,6 +75,7 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         }
         ptCustomBar.didSelectIndex = { [weak self] index in
             self?.selectedIndex = index
+            self?.selectedViewController = itemsss[index].viewController
         }
 
         

@@ -634,6 +634,7 @@ open class PTSideMenuControl: PTBaseViewController {
     }
 
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         if preferences.basic.keepsMenuOpenAfterRotation {
             keepSideMenuOpenOnRotation()
         } else {
@@ -642,6 +643,8 @@ open class PTSideMenuControl: PTBaseViewController {
                     // Temporally hide the menu container view for smooth animation
                     self.menuContainerView.isHidden = true
                     coordinator.animate(alongsideTransition: { _ in
+                        self.view.frame = CGRect(origin: .zero, size: size)
+                        self.view.layoutIfNeeded()
                         self.contentContainerView.frame = self.contentFrame(visibility: self.isMenuRevealed, targetSize: size)
                     }, completion: { (_) in
                         self.menuContainerView.isHidden = false
@@ -650,7 +653,6 @@ open class PTSideMenuControl: PTBaseViewController {
                 }
             })
         }
-        super.viewWillTransition(to: size, with: coordinator)
     }
 }
 
