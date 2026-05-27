@@ -138,6 +138,22 @@ open class PTSideMenuControl: PTBaseViewController {
 
     deinit {}
 
+    open override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        // 如果不在手势拖拽的动画期间，强行同步真实尺寸
+        if menuAnimator == nil {
+            contentContainerView.frame = contentFrame(visibility: isMenuRevealed)
+            menuContainerView.frame = sideMenuFrame(visibility: isMenuRevealed)
+            
+            // 🌟 致命 Bug 修复：必须强迫装在里面的业务 ViewController 也跟着撑满！
+            contentViewController?.view.frame = contentContainerView.bounds
+            menuViewController?.view.frame = menuContainerView.bounds
+            
+            contentContainerOverlay?.frame = contentContainerView.bounds
+        }
+    }
+
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -239,8 +255,7 @@ open class PTSideMenuControl: PTBaseViewController {
         self.view.isUserInteractionEnabled = false
         
         // 1. 创建动画器
-        let animator = UIViewPropertyAnimator(duration: reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration,
-                                              dampingRatio: preferences.animation.dampingRatio)
+        let animator = UIViewPropertyAnimator(duration: reveal ? preferences.animation.revealDuration : preferences.animation.hideDuration, dampingRatio: preferences.animation.dampingRatio)
         
         // 2. 配置动画状态
         animator.addAnimations {
@@ -567,7 +582,8 @@ open class PTSideMenuControl: PTBaseViewController {
         let position = preferences.basic.position
         switch position {
         case .above, .sideBySide:
-            var baseFrame = CGRect(origin: view.frame.origin, size: targetSize ?? view.frame.size)
+            // 🌟 修复：子视图的 frame 必须相对于父视图的 bounds (origin: .zero)
+            var baseFrame = CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
             if visibility {
                 baseFrame.origin.x = menuWidth - baseFrame.width
             } else {
@@ -577,7 +593,7 @@ open class PTSideMenuControl: PTBaseViewController {
             baseFrame.origin.x *= factor
             return CGRect(origin: baseFrame.origin, size: targetSize ?? baseFrame.size)
         case .under:
-            return CGRect(origin: view.frame.origin, size: targetSize ?? view.frame.size)
+            return CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
         }
     }
 
@@ -585,9 +601,10 @@ open class PTSideMenuControl: PTBaseViewController {
         let position = preferences.basic.position
         switch position {
         case .above:
-            return CGRect(origin: view.frame.origin, size: targetSize ?? view.frame.size)
+            // 🌟 修复
+            return CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
         case .under, .sideBySide:
-            var baseFrame = CGRect(origin: view.frame.origin, size: targetSize ?? view.frame.size)
+            var baseFrame = CGRect(origin: .zero, size: targetSize ?? view.bounds.size)
             if visibility {
                 let factor: CGFloat = adjustedDirection == .left ? 1 : -1
                 baseFrame.origin.x = menuWidth * factor
@@ -595,26 +612,6 @@ open class PTSideMenuControl: PTBaseViewController {
                 baseFrame.origin.x = 0
             }
             return CGRect(origin: baseFrame.origin, size: targetSize ?? baseFrame.size)
-        }
-    }
-
-    private func keepSideMenuOpenOnRotation() {
-        guard menuViewController != nil else {
-            return
-        }
-        
-        if isMenuRevealed {
-            hideMenu(animated: false, completion: nil)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-                self.revealMenu(animated: false, completion: nil)
-            })
-        } else {
-            revealMenu(animated: false) { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-                    self.hideMenu(animated: false, completion: nil)
-                })
-            }
         }
     }
 
@@ -635,24 +632,45 @@ open class PTSideMenuControl: PTBaseViewController {
 
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        if preferences.basic.keepsMenuOpenAfterRotation {
-            keepSideMenuOpenOnRotation()
-        } else {
-            hideMenu(animated: false, completion: { _ in
-                PTGCDManager.shared.runOnMain {
-                    // Temporally hide the menu container view for smooth animation
-                    self.menuContainerView.isHidden = true
-                    coordinator.animate(alongsideTransition: { _ in
-                        self.view.frame = CGRect(origin: .zero, size: size)
-                        self.view.layoutIfNeeded()
-                        self.contentContainerView.frame = self.contentFrame(visibility: self.isMenuRevealed, targetSize: size)
-                    }, completion: { (_) in
-                        self.menuContainerView.isHidden = false
-                        self.menuContainerView.frame = self.sideMenuFrame(visibility: self.isMenuRevealed, targetSize: size)
-                    })
-                }
-            })
+        let shouldCloseMenu = !preferences.basic.keepsMenuOpenAfterRotation && isMenuRevealed
+        if shouldCloseMenu {
+            isMenuRevealed = false
+            sideMenuControlWillHideReveal?(self)
         }
+
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self = self else { return }
+
+            // 1. 让外层容器平滑过渡到横屏的 Size
+            self.contentContainerView.frame = self.contentFrame(visibility: self.isMenuRevealed, targetSize: size)
+            self.menuContainerView.frame = self.sideMenuFrame(visibility: self.isMenuRevealed, targetSize: size)
+            
+            // 🌟 2. 致命 Bug 修复：跟着动画一起，强行把里面的业务 View 拉开！绝对不让高度变 0！
+            self.contentViewController?.view.frame = self.contentContainerView.bounds
+            self.menuViewController?.view.frame = self.menuContainerView.bounds
+
+            // 3. 同步遮罩层
+            if let overlay = self.contentContainerOverlay {
+                overlay.frame = self.contentContainerView.bounds
+                overlay.alpha = self.isMenuRevealed ? self.preferences.animation.shadowAlpha : 0
+            }
+            
+            // 强迫视图立刻执行动画帧刷新
+            self.view.layoutIfNeeded()
+
+        }, completion: { [weak self] _ in
+            guard let self = self else { return }
+            
+            if !self.isMenuRevealed {
+                self.contentContainerOverlay?.removeFromSuperview()
+                self.contentContainerOverlay = nil
+                self.contentViewController?.view.accessibilityElementsHidden = false
+                
+                if shouldCloseMenu {
+                    self.sideMenuControlDidHideMenu?(self)
+                }
+            }
+        })
     }
 }
 
