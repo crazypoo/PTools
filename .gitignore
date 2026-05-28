@@ -54,3 +54,4 @@ fastlane/screenshots
 
 iOSInjectionProject/
 Pods/
+.build/
