@@ -9,17 +9,137 @@ let package = Package(
         .iOS(.v15)
     ],
     products: [
+        // ==========================================
+        // 核心基座
+        // ==========================================
         .library(name: "ptools", targets: ["ptools"]),
+
+        // ==========================================
+        // 基础 UI 与细分组件模块
+        // ==========================================
+        .library(name: "PooToolsCustomerLabel", targets: ["PooToolsCustomerLabel"]),
+        .library(name: "PooToolsProgressBar", targets: ["PooToolsProgressBar"]),
+        .library(name: "PooToolsPageControl", targets: ["PooToolsPageControl"]),
+        .library(name: "PooToolsLoading", targets: ["PooToolsLoading"]),
+        .library(name: "PooToolsHud", targets: ["PooToolsHud"]),
+        .library(name: "PooToolsLivePhoto", targets: ["PooToolsLivePhoto"]),
+        .library(name: "PooToolsShare", targets: ["PooToolsShare"]),
+        .library(name: "PooToolsPDF", targets: ["PooToolsPDF"]),
+
+        // ==========================================
+        // 权限模块 (Permissions)
+        // ==========================================
+        .library(name: "PTCameraPermission", targets: ["PTCameraPermission"]),
+        .library(name: "PTLocationPermission", targets: ["PTLocationPermission"]),
+        .library(name: "PTCalendarPermission", targets: ["PTCalendarPermission"]),
+        .library(name: "PTMotionPermission", targets: ["PTMotionPermission"]),
+        .library(name: "PTTrackingPermission", targets: ["PTTrackingPermission"]),
+        .library(name: "PTRemindersPermission", targets: ["PTRemindersPermission"]),
+        .library(name: "PTSpeechPermission", targets: ["PTSpeechPermission"]),
+        .library(name: "PTHealthPermission", targets: ["PTHealthPermission"]),
+        .library(name: "PTFaceIDPermission", targets: ["PTFaceIDPermission"]),
+        .library(name: "PTContactsPermission", targets: ["PTContactsPermission"]),
+        .library(name: "PTMicPermission", targets: ["PTMicPermission"]),
+        .library(name: "PTMediaPermission", targets: ["PTMediaPermission"]),
+        .library(name: "PTBluetoothPermission", targets: ["PTBluetoothPermission"]),
+        .library(name: "PTSiriPermission", targets: ["PTSiriPermission"]),
+        .library(name: "PTNotificationPermission", targets: ["PTNotificationPermission"]),
+
+        // ==========================================
+        // 核心中上层依赖模块
+        // ==========================================
         .library(name: "PooToolsNetWork", targets: ["PooToolsNetWork"]),
         .library(name: "PooToolsScrollRefresh", targets: ["PooToolsScrollRefresh"]),
         .library(name: "PooToolsDataEncrypt", targets: ["PooToolsDataEncrypt"]),
+        .library(name: "PooToolsSearchBar", targets: ["PooToolsSearchBar"]),
         .library(name: "PooToolsMediaViewer", targets: ["PooToolsMediaViewer"]),
+
+        // ==========================================
+        // 高级业务模块
+        // ==========================================
         .library(name: "PooToolsPhotoPicker", targets: ["PooToolsPhotoPicker"]),
+        .library(name: "PooToolsHarbethKit", targets: ["PooToolsHarbethKit"]),
+        .library(name: "PooToolsFilterCamera", targets: ["PooToolsFilterCamera"]),
+        .library(name: "PooToolsImageEditor", targets: ["PooToolsImageEditor"]),
         .library(name: "PooToolsVideoEditor", targets: ["PooToolsVideoEditor"]),
+        .library(name: "PooToolsCheckDirtyWord", targets: ["PooToolsCheckDirtyWord"]),
+
+        // ==========================================
+        // 其他基础功能 Target 映射
+        // ==========================================
+        .library(name: "PooToolsStepper", targets: ["PooToolsStepper"]),
+        .library(name: "PooToolsBankCard", targets: ["PooToolsBankCard"]),
+        .library(name: "PooToolsBioID", targets: ["PooToolsBioID"]),
+        .library(name: "PooToolsCalendar", targets: ["PooToolsCalendar"]),
+        .library(name: "PooToolsTelephony", targets: ["PooToolsTelephony"]),
+        .library(name: "PooToolsCheckBox", targets: ["PooToolsCheckBox"]),
+        .library(name: "PooToolsCodeView", targets: ["PooToolsCodeView"]),
+        .library(name: "PooToolsCountry", targets: ["PooToolsCountry"]),
+        .library(name: "PooToolsGuide", targets: ["PooToolsGuide"]),
+        .library(name: "PooToolsInput", targets: ["PooToolsInput"]),
+        .library(name: "PooToolsKeyboard", targets: ["PooToolsKeyboard"]),
+        .library(name: "PooToolsKeyChain", targets: ["PooToolsKeyChain"]),
+        .library(name: "PooToolsMotion", targets: ["PooToolsMotion"]),
+        .library(name: "PooToolsPhoneInfo", targets: ["PooToolsPhoneInfo"]),
+        .library(name: "PooToolsRateView", targets: ["PooToolsRateView"]),
+        .library(name: "PooToolsScrollBanner", targets: ["PooToolsScrollBanner"]),
+        .library(name: "PooToolsSegmented", targets: ["PooToolsSegmented"]),
+        .library(name: "PooToolsHandSign", targets: ["PooToolsHandSign"]),
+        .library(name: "PooToolsSlider", targets: ["PooToolsSlider"]),
+        .library(name: "PooToolsCheckUpdate", targets: ["PooToolsCheckUpdate"]),
+        .library(name: "PooToolsLayout", targets: ["PooToolsLayout"]),
+        .library(name: "PooToolsLocation", targets: ["PooToolsLocation"]),
+        .library(name: "PooToolsSmartScreenshot", targets: ["PooToolsSmartScreenshot"]),
+        .library(name: "PooToolsPagingControl", targets: ["PooToolsPagingControl"]),
+        .library(name: "PooToolsScanQRCode", targets: ["PooToolsScanQRCode"]),
+        .library(name: "PooToolsStepCount", targets: ["PooToolsStepCount"]),
+        .library(name: "PooToolsContact", targets: ["PooToolsContact"]),
+        .library(name: "PooToolsVision", targets: ["PooToolsVision"]),
+        .library(name: "PooToolsRouter", targets: ["PooToolsRouter"]),
+        .library(name: "PooToolsPing", targets: ["PooToolsPing"]),
+        .library(name: "PooToolsSpeedPanel", targets: ["PooToolsSpeedPanel"]),
+        .library(name: "PooToolsNetworkSpeedTest", targets: ["PooToolsNetworkSpeedTest"]),
+        .library(name: "PooToolsOSSKitSpeech", targets: ["PooToolsOSSKitSpeech"]),
+        .library(name: "PooToolsiOS17Tips", targets: ["PooToolsiOS17Tips"]),
+        .library(name: "PooToolsWhatsNewsKit", targets: ["PooToolsWhatsNewsKit"]),
+        .library(name: "PooToolsHeartRate", targets: ["PooToolsHeartRate"]),
+        .library(name: "PooToolsChinesePinyin", targets: ["PooToolsChinesePinyin"]),
+        .library(name: "PooToolsCircle", targets: ["PooToolsCircle"]),
+        .library(name: "PooToolsMessageKit", targets: ["PooToolsMessageKit"]),
+        .library(name: "PooToolsSocketKit", targets: ["PooToolsSocketKit"]),
+        .library(name: "PooToolsIAP", targets: ["PooToolsIAP"]),
+        .library(name: "PooToolsTipsView", targets: ["PooToolsTipsView"]),
+
+        // ==========================================
+        // 调试工具模块 (DEBUG)
+        // ==========================================
+        .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
+        .library(name: "PooToolsDEBUGTrackingEyes", targets: ["PooToolsDEBUGTrackingEyes"]),
+
+        // ==========================================
+        // 整合全家桶 (供需要一次性引入全部功能的开发者使用)
+        // ==========================================
         .library(name: "PooToolsAll", targets: [
-            "ptools", "PooToolsNetWork", "PooToolsScrollRefresh", "PooToolsDataEncrypt",
-            "PooToolsMediaViewer", "PooToolsPhotoPicker", "PooToolsVideoEditor",
-            "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl"
+            "ptools",
+            "PooToolsCustomerLabel", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLoading",
+            "PooToolsHud", "PooToolsLivePhoto", "PooToolsShare", "PooToolsPDF",
+            "PTCameraPermission", "PTLocationPermission", "PTCalendarPermission", "PTMotionPermission",
+            "PTTrackingPermission", "PTRemindersPermission", "PTSpeechPermission", "PTHealthPermission",
+            "PTFaceIDPermission", "PTContactsPermission", "PTMicPermission", "PTMediaPermission",
+            "PTBluetoothPermission", "PTSiriPermission", "PTNotificationPermission",
+            "PooToolsNetWork", "PooToolsScrollRefresh", "PooToolsDataEncrypt", "PooToolsSearchBar",
+            "PooToolsMediaViewer", "PooToolsPhotoPicker", "PooToolsHarbethKit", "PooToolsFilterCamera",
+            "PooToolsImageEditor", "PooToolsVideoEditor", "PooToolsCheckDirtyWord", "PooToolsStepper",
+            "PooToolsBankCard", "PooToolsBioID", "PooToolsCalendar", "PooToolsTelephony", "PooToolsCheckBox",
+            "PooToolsCodeView", "PooToolsCountry", "PooToolsGuide", "PooToolsInput", "PooToolsKeyboard",
+            "PooToolsKeyChain", "PooToolsMotion", "PooToolsPhoneInfo", "PooToolsRateView", "PooToolsScrollBanner",
+            "PooToolsSegmented", "PooToolsHandSign", "PooToolsSlider", "PooToolsCheckUpdate", "PooToolsLayout",
+            "PooToolsLocation", "PooToolsSmartScreenshot", "PooToolsPagingControl", "PooToolsScanQRCode",
+            "PooToolsStepCount", "PooToolsContact", "PooToolsVision", "PooToolsRouter", "PooToolsPing",
+            "PooToolsSpeedPanel", "PooToolsNetworkSpeedTest", "PooToolsOSSKitSpeech", "PooToolsiOS17Tips",
+            "PooToolsWhatsNewsKit", "PooToolsHeartRate", "PooToolsChinesePinyin", "PooToolsCircle",
+            "PooToolsMessageKit", "PooToolsSocketKit", "PooToolsIAP", "PooToolsTipsView",
+            "PooToolsDEBUG", "PooToolsDEBUGTrackingEyes"
         ])
     ],
     dependencies: [
