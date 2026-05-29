@@ -175,7 +175,6 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
         .package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.6.0"),
-        .package(url: "https://github.com/gentique/VisionFaceAware.git", from: "1.0.0"),
         .package(url: "https://github.com/pujiaxin33/JXPagingView.git", from: "2.1.0"),
         .package(url: "https://github.com/pujiaxin33/JXSegmentedView.git", from: "1.3.0"),
         .package(url: "https://github.com/borenfocus/BRPickerView.git", from: "2.7.0"),
@@ -218,7 +217,6 @@ let package = Package(
                 "BRPickerView",
                 "IOSSecuritySuite",
                 "Popovers",
-//                .product(name: "FaceAware", package: "VisionFaceAware")
                 
             ],
             path: "PooToolsSource",
@@ -246,8 +244,7 @@ let package = Package(
                 .define("POOTOOLS_SECURITYSUITE"),
                 .define("POOTOOLS_VIDEOCACHE"),
                 .define("POOTOOLS_POPOVERKIT"),
-                .define("POOTOOLS_CGDWEBSERVER"),
-                .define("POOTOOLS_FOCUSFACE")
+                .define("POOTOOLS_CGDWEBSERVER")
             ]
         ),
 

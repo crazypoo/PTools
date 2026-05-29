@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '4.1.2'
+    s.version     = '4.1.3'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -361,15 +361,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
         }
     end
-        
-    s.subspec 'FocusFaceImageView' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'FaceAware'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FOCUSFACE POOTOOLS_COCOAPODS"
-        }
-    end
-        
+                
     s.subspec 'PagingControl' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'JXPagingView/Paging'
@@ -931,7 +923,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/SmartScreenshot'
         subspec.dependency 'PooTools/ZipArchive'
         subspec.dependency 'PooTools/GCDWebServer'
-        subspec.dependency 'PooTools/FocusFaceImageView'
         subspec.dependency 'PooTools/PagingControl'
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'

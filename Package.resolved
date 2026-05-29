@@ -1,5 +1,5 @@
 {
-  "originHash" : "f78cd21894930970c9694a5addda285b4c3b66e75f7f7ecb449e8db2b86d988a",
+  "originHash" : "61aa312c2ad250ae29eb61e9c270a3c1e24b4e8388e777c22fe11785fe6ebf52",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -404,15 +404,6 @@
       "state" : {
         "revision" : "5d948a15446bddb6c367bc7e7100cfcbaa0e9b57",
         "version" : "8.0.0"
-      }
-    },
-    {
-      "identity" : "visionfaceaware",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gentique/VisionFaceAware.git",
-      "state" : {
-        "revision" : "7c7026e89d553b519f2b0fd8bd2b3ba9fcd5120a",
-        "version" : "1.0.0"
       }
     },
     {

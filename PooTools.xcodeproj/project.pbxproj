@@ -157,6 +157,7 @@
 		553BFE722EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */; };
 		553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */; };
 		553ED6732FC8358C002DD70A /* PTLaunchProfiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553ED6722FC8358C002DD70A /* PTLaunchProfiler.swift */; };
+		553ED6752FC92D5B002DD70A /* UIImage+PTFaceAware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */; };
 		553FF08F2C670A5600E9EE10 /* PTIAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */; };
 		5540F6CA2F972F8C001A7196 /* PTAlertTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5540F6C92F972F8C001A7196 /* PTAlertTipsViewController.swift */; };
 		55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55442C852E8C264F000B38DD /* PTNavBar.swift */; };
@@ -1124,6 +1125,7 @@
 		553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+PTEX.swift"; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		553ED6722FC8358C002DD70A /* PTLaunchProfiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLaunchProfiler.swift; sourceTree = "<group>"; };
+		553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+PTFaceAware.swift"; sourceTree = "<group>"; };
 		553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTIAPManager.swift; sourceTree = "<group>"; };
 		5540F6C92F972F8C001A7196 /* PTAlertTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertTipsViewController.swift; sourceTree = "<group>"; };
 		55442C852E8C264F000B38DD /* PTNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavBar.swift; sourceTree = "<group>"; };
@@ -2000,7 +2002,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				553ED6712FC8355C002DD70A /* LaunchTimeProfiler */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2066,6 +2067,7 @@
 				5516CCBF29E8557200614980 /* KingfisherSVG */,
 				231D1579272CDEE9003D6F62 /* Label */,
 				55D59C6228F3E8A000B4FF76 /* Language */,
+				553ED6712FC8355C002DD70A /* LaunchTimeProfiler */,
 				55D59C6528F3E91800B4FF76 /* Layout */,
 				55D59C6728F3E96D00B4FF76 /* Line */,
 				5512F43C2CACD624006B3A69 /* LivePhoto */,
@@ -2237,6 +2239,7 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -4511,6 +4514,7 @@
 				55F7C2B62E118C8900EF2945 /* PTAutoScrollLabel.swift in Sources */,
 				55BA90282D29A7D70065FBD0 /* OptionListControl.swift in Sources */,
 				5531D2632F1095A70094CFFE /* PTEditMenuKit.swift in Sources */,
+				553ED6752FC92D5B002DD70A /* UIImage+PTFaceAware.swift in Sources */,
 				55BA90292D29A7D70065FBD0 /* ApplicationAttributesSectionDataSource.swift in Sources */,
 				55BA902A2D29A7D70065FBD0 /* ViewHierarchyActionableProtocol.swift in Sources */,
 				55BA902B2D29A7D70065FBD0 /* InternalViewProtocol.swift in Sources */,
