@@ -115,6 +115,7 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         .library(name: "PooToolsDEBUGTrackingEyes", targets: ["PooToolsDEBUGTrackingEyes"]),
+        .library(name: "PooToolsLaunchTimeProfiler", targets: ["PooToolsLaunchTimeProfiler"]),
 
         // ==========================================
         // 整合全家桶 (供需要一次性引入全部功能的开发者使用)
@@ -139,7 +140,7 @@ let package = Package(
             "PooToolsSpeedPanel", "PooToolsNetworkSpeedTest", "PooToolsOSSKitSpeech", "PooToolsiOS17Tips",
             "PooToolsWhatsNewsKit", "PooToolsHeartRate", "PooToolsChinesePinyin", "PooToolsCircle",
             "PooToolsMessageKit", "PooToolsSocketKit", "PooToolsIAP", "PooToolsTipsView",
-            "PooToolsDEBUG", "PooToolsDEBUGTrackingEyes"
+            "PooToolsDEBUG", "PooToolsDEBUGTrackingEyes","PooToolsLaunchTimeProfiler"
         ])
     ],
     dependencies: [
@@ -365,6 +366,12 @@ let package = Package(
             dependencies: ["ptools", "PooToolsDEBUG", "PTCameraPermission"],
             path: "PooToolsSource/WhereIsMyEye",
             swiftSettings: [.define("POOTOOLS_DEBUGTRACKINGEYES"), .define("POOTOOLS_COCOAPODS")]
+        ),
+        .target(
+            name: "PooToolsLaunchTimeProfiler",
+            dependencies: ["ptools"],
+            path: "PooToolsSource/LaunchTimeProfiler",
+            swiftSettings: [.define("POOTOOLS_LAUNCHTIMEPROFILER"), .define("POOTOOLS_COCOAPODS")]
         )
     ]
 )

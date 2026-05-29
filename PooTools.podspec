@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '4.1.1'
+    s.version     = '4.1.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -411,14 +411,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'Appz'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
-        }
-    end
-
-    s.subspec 'LaunchTimeProfiler' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'AMKLaunchTimeProfiler'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LAUNCHTIMEPROFILER POOTOOLS_COCOAPODS"
         }
     end
     
@@ -895,6 +887,14 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/Hud/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HUD POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'LaunchTimeProfiler' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/LaunchTimeProfiler/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LAUNCHTIMEPROFILER POOTOOLS_COCOAPODS"
         }
     end
     

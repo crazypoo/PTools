@@ -156,6 +156,7 @@
 		553BFE702EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE6F2EC705B000D6DCB6 /* PTWebViewPrintPageRenderer.swift */; };
 		553BFE722EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */; };
 		553C4DB92DAB819400D3AA8C /* Decimal+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */; };
+		553ED6732FC8358C002DD70A /* PTLaunchProfiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553ED6722FC8358C002DD70A /* PTLaunchProfiler.swift */; };
 		553FF08F2C670A5600E9EE10 /* PTIAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */; };
 		5540F6CA2F972F8C001A7196 /* PTAlertTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5540F6C92F972F8C001A7196 /* PTAlertTipsViewController.swift */; };
 		55442C862E8C264F000B38DD /* PTNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55442C852E8C264F000B38DD /* PTNavBar.swift */; };
@@ -1122,6 +1123,7 @@
 		553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+PTSnapShot.swift"; sourceTree = "<group>"; };
 		553C4DB82DAB819400D3AA8C /* Decimal+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+PTEX.swift"; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
+		553ED6722FC8358C002DD70A /* PTLaunchProfiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLaunchProfiler.swift; sourceTree = "<group>"; };
 		553FF08E2C670A5600E9EE10 /* PTIAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTIAPManager.swift; sourceTree = "<group>"; };
 		5540F6C92F972F8C001A7196 /* PTAlertTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAlertTipsViewController.swift; sourceTree = "<group>"; };
 		55442C852E8C264F000B38DD /* PTNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavBar.swift; sourceTree = "<group>"; };
@@ -1998,6 +2000,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				553ED6712FC8355C002DD70A /* LaunchTimeProfiler */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2601,6 +2604,14 @@
 				553BFE712EC7060E00D6DCB6 /* WKWebView+PTSnapShot.swift */,
 			);
 			path = ScreenShot;
+			sourceTree = "<group>";
+		};
+		553ED6712FC8355C002DD70A /* LaunchTimeProfiler */ = {
+			isa = PBXGroup;
+			children = (
+				553ED6722FC8358C002DD70A /* PTLaunchProfiler.swift */,
+			);
+			path = LaunchTimeProfiler;
 			sourceTree = "<group>";
 		};
 		553FF08D2C670A4000E9EE10 /* IAP */ = {
@@ -5092,6 +5103,7 @@
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */,
+				553ED6732FC8358C002DD70A /* PTLaunchProfiler.swift in Sources */,
 				559C3D462B27571900EE46BC /* PTVideoEditorBaseFloatingViewController.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */,

@@ -1217,6 +1217,13 @@ class PTFuncNameViewController: PTBaseViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PTLaunchProfiler.shared.markFirstScreenRender()
+        
+        LaunchVisualizer.shared.showEntry()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

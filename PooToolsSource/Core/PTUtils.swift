@@ -226,9 +226,11 @@ public extension PTUtils {
     class func getCurrentVC(from rootVC:UIViewController) -> UIViewController {
         switch rootVC {
         case let tabBar as UITabBarController:
-            return getCurrentVC(from: tabBar.selectedViewController ?? tabBar)
-        case let tabbar as PTBaseTabBarViewController:
-            return getCurrentVC(from: tabbar.viewControllers?[tabbar.selectedIndex] ?? tabbar)
+            if let customTab = tabBar as? PTBaseTabBarViewController {
+                return getCurrentVC(from: customTab.viewControllers?[customTab.selectedIndex] ?? customTab)
+            } else {
+                return getCurrentVC(from: tabBar.selectedViewController ?? tabBar)
+            }
         case let nav as UINavigationController:
             return getCurrentVC(from: nav.visibleViewController ?? nav)
         case let nav as PTBaseNavControl:
@@ -266,8 +268,22 @@ public extension PTUtils {
     
     @MainActor class func getCurrentVC() -> UIViewController? {
         guard let root = AppWindows?.rootViewController else {
-               return nil
-           }
+            // 1. 获取所有 Scene 下的窗口
+            let windows = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+            
+            // 🌟 关键修复：避开悬浮窗！
+            // 寻找层级为 normal，并且确确实实挂载了 rootViewController 的主业务窗口
+            let mainWindow = windows.first { $0.isKeyWindow && $0.windowLevel == .normal && $0.rootViewController != nil }
+                ?? windows.first { $0.windowLevel == .normal && $0.rootViewController != nil }
+            
+            if let findMain = mainWindow?.rootViewController {
+                return findMain
+            } else {
+                return nil
+            }
+        }
         return getCurrentVC(from: root)
     }
     

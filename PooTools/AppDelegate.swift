@@ -55,6 +55,11 @@ enum RequestManager {
 @main
 class AppDelegate: PTAppWindowsDelegate {
     
+    override init() {
+        super.init()
+        PTLaunchProfiler.shared.markMainStart()
+    }
+    
     var permissionStatic = PTPermissionStatic.share
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -289,6 +294,8 @@ class AppDelegate: PTAppWindowsDelegate {
         valuePaths.removeDuplicates()
         loginInterceptor.addWhiteListPaths(valuePaths)
         PTRouter.addAsyncInterceptor(loginInterceptor)
+        
+        PTLaunchProfiler.shared.markDidFinishLaunching()
         return true
     }
     
