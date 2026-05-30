@@ -3,7 +3,7 @@
 <p align="center">
 <!--<a href=""><img src="https://img.shields.io/cocoapods/v/PooTools.svg"></a>-->
 <a href=""><img src="https://img.shields.io/cocoapods/p/PooTools.svg"></a>
-<a href=""><img src="https://img.shields.io/badge/platform-iOS%2013.0%2B-ff69b5152950834.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/platform-iOS%2015.0%2B-ff69b5152950834.svg"></a>
 </p>
 <p align="center">
 <a href="https://twitter.com/crazypeepoo"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
