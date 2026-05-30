@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import AttributedString
-#if POOTOOLS_SCROLLREFRESH
-import MJRefresh
-#endif
 import Photos
 import SwifterSwift
 
@@ -99,7 +96,6 @@ public class PTCollectionViewConfig: NSObject {
     open var tagCellContentSpace: CGFloat = 20
     ///是否开启头部刷新
     open var topRefresh: Bool = false
-#if POOTOOLS_SCROLLREFRESH
     ///是否开启底部刷新
     open var footerRefresh: Bool = false
     open var footerRefreshTextColor: UIColor = .white
@@ -112,7 +108,6 @@ public class PTCollectionViewConfig: NSObject {
     open var triggerAutomaticallyRefreshPercent: CGFloat = 0.5
     open var isAutomaticallyRefresh: Bool = true
     open var ignoredScrollViewContentInsetBottom:CGFloat = 0
-#endif
     ///section偏移
     open var sectionEdges: NSDirectionalEdgeInsets = .zero
     ///头部长度偏移
@@ -395,7 +390,7 @@ public class PTCollectionView: UIView {
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
     
     fileprivate lazy var collectionView : PTBaseCollectionView = {
-        let view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
+        var view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
         view.delegate = self
         view.isUserInteractionEnabled = true
@@ -418,29 +413,31 @@ public class PTCollectionView: UIView {
         }
         view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
         view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
+        
         if self.viewConfig.topRefresh {
-            view.refreshControl = self.refreshControl
+            view.pt.header = PTRefreshHeader { [weak self] in
+                self?.headerRefreshTask?()
+            }
         }
+
         view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionHeader)
         view.registerSupplementaryView(classs: [NSStringFromClass(PTBaseCollectionReusableView.self):PTBaseCollectionReusableView.self], kind: UICollectionView.elementKindSectionFooter)
-#if POOTOOLS_SCROLLREFRESH
         if self.viewConfig.footerRefresh {
-            let footerRefresh = PTRefreshAutoStateFooter(refreshingBlock: { [weak self] in
+            let footerRefresh = PTRefreshAutoFooter{ [weak self] in
                 self?.footRefreshTask?()
-            })
+            }
             footerRefresh.setTitle(self.viewConfig.footerRefreshIdle, for: .idle)
             footerRefresh.setTitle(self.viewConfig.footerRefreshPulling, for: .pulling)
             footerRefresh.setTitle(self.viewConfig.footerRefreshRefreshing, for: .refreshing)
             footerRefresh.setTitle(self.viewConfig.footerRefreshWillRefresh, for: .willRefresh)
             footerRefresh.setTitle(self.viewConfig.footerRefreshNoMoreData, for: .noMoreData)
-            footerRefresh.stateLabel?.font = self.viewConfig.footerRefreshTextFont
-            footerRefresh.stateLabel?.textColor = self.viewConfig.footerRefreshTextColor
+            footerRefresh.setFont(self.viewConfig.footerRefreshTextFont)
+            footerRefresh.setTextColor(self.viewConfig.footerRefreshTextColor)
             footerRefresh.triggerAutomaticallyRefreshPercent = self.viewConfig.triggerAutomaticallyRefreshPercent
-            footerRefresh.isAutomaticallyRefresh = self.viewConfig.isAutomaticallyRefresh
-            footerRefresh.ignoredScrollViewContentInsetBottom = self.viewConfig.ignoredScrollViewContentInsetBottom
-            view.mj_footer = footerRefresh
+            footerRefresh.setAutomaticallyHidden(self.viewConfig.isAutomaticallyRefresh)
+            footerRefresh.ignoredContentInsetBottom = self.viewConfig.ignoredScrollViewContentInsetBottom
+            view.pt.autoFooter = footerRefresh
         }
-#endif
         if self.viewConfig.viewForPhoto {
             view.prefetchDataSource = self
         }
@@ -463,16 +460,6 @@ public class PTCollectionView: UIView {
         stack.distribution = .equalSpacing
         stack.spacing = viewConfig.indexConfig?.itemSpacing ?? 0
         return stack
-    }()
-    
-    private(set) lazy var refreshControl:UIRefreshControl = {
-        let control = UIRefreshControl()
-        control.addRefreshHandlers { [weak self] sender in
-            Task { @MainActor in
-                self?.headerRefreshTask?(sender)
-            }
-        }
-        return control
     }()
     
     //MARK: Cell datasource handler
@@ -507,7 +494,7 @@ public class PTCollectionView: UIView {
     open var collectionWillReachBottomTask: PTActionTask?
     
     ///头部刷新事件
-    open var headerRefreshTask: ((UIRefreshControl) -> Void)?
+    open var headerRefreshTask: PTActionTask?
     ///底部刷新事件
     open var footRefreshTask: PTActionTask?
     
@@ -723,6 +710,19 @@ extension PTCollectionView {
         if row == 0 { return .top }
         if row == count - 1 { return .bottom }
         return .middle
+    }
+    
+    public func hideIndicator() {
+        UIView.animate(withDuration: 0.2) {
+            self.indicator.alpha = 0
+        }
+    }
+    
+    public func clearLayoutCaches() {
+        self.layoutCache.removeAll()
+        self.heightCache.removeAll()
+        self.waterfallCache.removeAll()
+        self.fallbackLayouts.removeAll()
     }
 }
 
@@ -1069,19 +1069,6 @@ private extension PTCollectionView {
         stackView.addArrangedSubview(bottomSpacer)
 
         setIndicatorCenter(t: 0, config: config,alpha: 0)
-    }
-    
-    public func hideIndicator() {
-        UIView.animate(withDuration: 0.2) {
-            self.indicator.alpha = 0
-        }
-    }
-    
-    public func clearLayoutCaches() {
-        self.layoutCache.removeAll()
-        self.heightCache.removeAll()
-        self.waterfallCache.removeAll()
-        self.fallbackLayouts.removeAll()
     }
 }
 
@@ -1849,30 +1836,18 @@ extension PTCollectionView {
 //MARK: Refresh
 extension PTCollectionView {
     public func endRefresh() {
-#if POOTOOLS_SCROLLREFRESH
-        if viewConfig.footerRefresh {
-            Task { @MainActor in
-                self.collectionView.pt_endMJRefresh()
-            }
-        }
-#endif
-        
-        if viewConfig.topRefresh {
-            Task { @MainActor in
-                self.refreshControl.endRefreshing()
-            }
-        }
+        self.collectionView.pt_endMJRefresh()
     }
     
-#if POOTOOLS_SCROLLREFRESH
     public func footerRefreshNoMore () {
-        collectionView.mj_footer?.endRefreshingWithNoMoreData()
+        collectionView.pt.footer?.endRefreshingWithNoMoreData()
+        collectionView.pt.autoFooter?.endRefreshingWithNoMoreData()
     }
     
     public func footerRefreshReset() {
-        collectionView.mj_footer?.resetNoMoreData()
+        collectionView.pt.footer?.resetNoMoreData()
+        collectionView.pt.autoFooter?.resetNoMoreData()
     }
-#endif
 }
 
 //MARK: Register

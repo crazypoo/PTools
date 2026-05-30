@@ -40,6 +40,8 @@ public struct PTRefreshTextConfig: Sendable {
     public var springDamping: CGFloat
     
     public var isHapticFeedbackEnabled: Bool
+    
+    public var showText: Bool
 }
 
 @MainActor
@@ -64,7 +66,8 @@ public final class PTRefreshConfig {
                                             automaticallyHidden: false,
                                             animationDuration: 0.4,
                                             springDamping: 0.7,
-                                            isHapticFeedbackEnabled: true // Header 默认开启震动体验最佳！
+                                            isHapticFeedbackEnabled: true,
+                                            showText:false
     )
     
     // 底部上拉加载默认配置 (默认关闭时间显示，如需可在此改为 true)
@@ -81,7 +84,8 @@ public final class PTRefreshConfig {
                                             automaticallyHidden: true,
                                             animationDuration: 0.3,
                                             springDamping: 1.0,
-                                            isHapticFeedbackEnabled: false // Header 默认开启震动体验最佳！
+                                            isHapticFeedbackEnabled: false,
+                                            showText:true
     )
     
     // 左/右侧加载通常因空间太小不显示时间，默认给 false
@@ -98,7 +102,8 @@ public final class PTRefreshConfig {
                                                 automaticallyHidden: false,
                                                 animationDuration: 0.3,
                                                 springDamping: 1.0 ,
-                                                isHapticFeedbackEnabled: false // Header 默认开启震动体验最佳！
+                                                isHapticFeedbackEnabled: false,
+                                                showText:true
     )
     
     public var trailer = PTRefreshTextConfig(idleText: "滑动\n加载",
@@ -114,7 +119,8 @@ public final class PTRefreshConfig {
                                              automaticallyHidden: false,
                                              animationDuration: 0.3,
                                              springDamping: 1.0,
-                                             isHapticFeedbackEnabled: false // Header 默认开启震动体验最佳！
+                                             isHapticFeedbackEnabled: false,
+                                             showText:true
     )
 }
 
@@ -132,7 +138,8 @@ open class PTRefreshComponent: UIView {
     public weak var scrollView: UIScrollView?
     private var offsetObservation: NSKeyValueObservation?
     private var sizeObservation: NSKeyValueObservation?
-    private var panObservation: NSKeyValueObservation?
+    
+    private var insetObservation: NSKeyValueObservation?
     
     // 异步任务
     public let action: @MainActor () async -> Void
@@ -205,6 +212,8 @@ open class PTRefreshComponent: UIView {
     public var customSpringDamping: CGFloat?
         
     public var customHapticFeedback: Bool?
+    
+    public var customShowText: Bool?
     
     // MARK: - 初始化
     public init(action: @escaping @MainActor () async -> Void) {
@@ -341,6 +350,13 @@ open class PTRefreshComponent: UIView {
         return self
     }
     
+    @discardableResult
+    public func setShowText(_ show: Bool) -> Self {
+        self.customShowText = show
+        self.setNeedsLayout()
+        return self
+    }
+
     /// 供子类重写的属性：当前是否开启震动
     open var isHapticEnabled: Bool {
         return customHapticFeedback ?? false
@@ -411,25 +427,26 @@ open class PTRefreshComponent: UIView {
         
         offsetObservation?.invalidate()
         sizeObservation?.invalidate()
-        panObservation?.invalidate()
-        
+        insetObservation?.invalidate() // 🌟 销毁旧监听
         guard let scrollView = newSuperview as? UIScrollView else { return }
         self.scrollView = scrollView
         
         // 统一注册 KVO
         sizeObservation = scrollView.observe(\.contentSize, options: [.new]) { [weak self] _, _ in
-            PTGCDManager.shared.runOnMain { self?.scrollViewContentSizeDidChange() }
+            PTGCDManager.shared.runOnMain { [weak self] in
+                self?.scrollViewContentSizeDidChange()
+            }
         }
         
         offsetObservation = scrollView.observe(\.contentOffset, options: [.new]) { [weak self] _, _ in
-            PTGCDManager.shared.runOnMain { self?.scrollViewContentOffsetDidChange() }
+            PTGCDManager.shared.runOnMain {  [weak self] in
+                self?.scrollViewContentOffsetDidChange()
+            }
         }
         
-        panObservation = scrollView.panGestureRecognizer.observe(\.state, options: [.new]) { [weak self] gesture, _ in
-            PTGCDManager.shared.runOnMain {
-                if gesture.state == .ended || gesture.state == .cancelled {
-                    self?.scrollViewPanStateDidChange()
-                }
+        insetObservation = scrollView.observe(\.contentInset, options: [.new]) { [weak self] _, _ in
+            PTGCDManager.shared.runOnMain {  [weak self] in
+                self?.scrollViewContentInsetDidChange()
             }
         }
     }
@@ -437,6 +454,7 @@ open class PTRefreshComponent: UIView {
     // MARK: - 子类重写入口点
     open func scrollViewContentSizeDidChange() {}
     open func scrollViewContentOffsetDidChange() {}
+    open func scrollViewContentInsetDidChange() {}
     open func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {}
     
     open func pullingPercentDidChange(percent: CGFloat) {}
@@ -509,39 +527,52 @@ open class PTRefreshHeader: PTRefreshComponent {
     public override var isHapticEnabled: Bool {
         return customHapticFeedback ?? PTRefreshConfig.shared.header.isHapticFeedbackEnabled
     }
-
-    private var originalContentInsetTop: CGFloat = 0
     
-    // 获取当前最终使用的高度尺寸
+    private var originalContentInsetTop: CGFloat = 0
     private var componentHeight: CGFloat { customDimension ?? PTRefreshConfig.shared.header.dimension }
     
     public override func setupUI() {
         super.setupUI()
         self.autoresizingMask = .flexibleWidth
         
-        // 1. 初始化时应用字体和颜色 (局部优先 -> 全局后补)
         textLabel.font = self.customFont ?? PTRefreshConfig.shared.header.font
         textLabel.textColor = self.customTextColor ?? PTRefreshConfig.shared.header.textColor
         timeLabel.font = self.customTimeFont ?? PTRefreshConfig.shared.header.timeFont
         timeLabel.textColor = self.customTimeColor ?? PTRefreshConfig.shared.header.timeColor
+        
+        // 🌟 覆盖基类行为：让菊花不自动隐藏，而是通过 Alpha 渐变控制
+        activityIndicator.hidesWhenStopped = false
+        activityIndicator.alpha = 0.0
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        // 动态判断是否需要显示时间
-        let showTime = customShowLastTime ?? PTRefreshConfig.shared.header.showLastTime
-        timeLabel.isHidden = !showTime
         
-        if showTime {
-            // 如果显示时间，文字和时间平分上下高度
-            let halfHeight = bounds.height / 2.0
-            textLabel.frame = CGRect(x: 0, y: 0, width: bounds.width, height: halfHeight)
-            timeLabel.frame = CGRect(x: 0, y: halfHeight, width: bounds.width, height: halfHeight)
+        let showText = customShowText ?? PTRefreshConfig.shared.header.showText
+        let showTime = customShowLastTime ?? PTRefreshConfig.shared.header.showLastTime
+        
+        // 文本显示控制
+        textLabel.isHidden = !showText
+        timeLabel.isHidden = (!showText || !showTime) // 如果主文案都不显示，时间也强制隐藏
+        
+        if showText {
+            // 文字模式排版
+            if showTime {
+                let halfHeight = bounds.height / 2.0
+                textLabel.frame = CGRect(x: 0, y: 0, width: bounds.width, height: halfHeight)
+                timeLabel.frame = CGRect(x: 0, y: halfHeight, width: bounds.width, height: halfHeight)
+            } else {
+                textLabel.frame = bounds
+            }
+            activityIndicator.center = CGPoint(x: bounds.midX - 50, y: bounds.midY)
+            activityIndicator.alpha = 1.0 // 文字模式下，直接显示
+            activityIndicator.transform = .identity
+            activityIndicator.hidesWhenStopped = true // 回归原始 MJ 行为
         } else {
-            // 否则文字占满全部
-            textLabel.frame = bounds
+            // 🌟 极简原生模式排版：菊花独占中心
+            activityIndicator.center = CGPoint(x: bounds.midX, y: bounds.midY)
+            activityIndicator.hidesWhenStopped = false // 依靠 pullingPercent 处理渐变
         }
-        activityIndicator.center = CGPoint(x: bounds.midX - 50, y: bounds.midY)
     }
     
     public override func willMove(toSuperview newSuperview: UIView?) {
@@ -553,28 +584,25 @@ open class PTRefreshHeader: PTRefreshComponent {
         updateTimeLabel()
     }
     
+    public override func scrollViewContentInsetDidChange() {
+        guard let scrollView = scrollView else { return }
+        // 🌟 核心：只有在空闲状态下，才认为是业务方手动修改了 inset，我们将其作为新的还原点
+        if state == .idle {
+            self.originalContentInsetTop = scrollView.contentInset.top
+        }
+    }
+
     public override func scrollViewContentOffsetDidChange() {
         guard let scrollView = scrollView else { return }
-        
-        if state == .refreshing || state == .willRefresh {
-            var insetT = max(-scrollView.contentOffset.y, originalContentInsetTop)
-            insetT = min(insetT, componentHeight + originalContentInsetTop)
-            scrollView.contentInset.top = insetT
-            return
-        }
+        if state == .refreshing || state == .willRefresh { return }
         
         let offsetY = scrollView.contentOffset.y
-        // 修正触发临界线
         let happenOffsetY = -originalContentInsetTop + ignoredContentInsetTop
-
-        // 计算拖拽进度并回调
         if offsetY >= happenOffsetY {
             self.pullingPercent = 0.0
             return
         }
         self.pullingPercent = (happenOffsetY - offsetY) / componentHeight
-        
-        // 结合 triggerAutomaticallyRefreshPercent 进行触发阈值判断
         let pullingOffsetY = happenOffsetY - (componentHeight * triggerAutomaticallyRefreshPercent)
         
         if scrollView.isDragging {
@@ -583,45 +611,54 @@ open class PTRefreshHeader: PTRefreshComponent {
             } else if state == .pulling && offsetY >= pullingOffsetY {
                 state = .idle
             }
+        } else {
+            // 🌟 终极修复：手指松开了！此时如果正好是 pulling 状态，瞬间锁定并触发刷新！
+            if state == .pulling {
+                self.beginRefreshing()
+            }
+        }
+    }
+
+    // MARK: - 🌟 新增：下拉时的菊花浮现与缩放动画
+    public override func pullingPercentDidChange(percent: CGFloat) {
+        super.pullingPercentDidChange(percent: percent)
+        
+        let showText = customShowText ?? PTRefreshConfig.shared.header.showText
+        if !showText && state != .refreshing {
+            // 在极简模式下，菊花随着手指下拉慢慢浮现、放大
+            activityIndicator.alpha = percent
+            let scale = max(0.5, min(1.0, percent)) // 从 0.5 放大到 1.0
+            activityIndicator.transform = CGAffineTransform(scaleX: scale, y: scale)
         }
     }
     
     public override func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {
         guard let scrollView = scrollView else { return }
         
-        // 动态获取文案
         textLabel.text = resolvedTitle(for: newState, globalConfig: PTRefreshConfig.shared.header)
         
-        // 获取当前的动画配置 (局部优先 > 全局兜底)
         let duration = customAnimationDuration ?? PTRefreshConfig.shared.header.animationDuration
         let damping = customSpringDamping ?? PTRefreshConfig.shared.header.springDamping
+        let showText = customShowText ?? PTRefreshConfig.shared.header.showText
         
         switch newState {
         case .idle, .noMoreData:
             activityIndicator.stopAnimating()
             if oldState == .refreshing || oldState == .willRefresh {
-                // 恢复原位的弹簧动画
                 UIView.animate(
-                    withDuration: duration,
-                    delay: 0,
-                    usingSpringWithDamping: damping,
-                    initialSpringVelocity: 0.5,
-                    options: [.allowUserInteraction, .curveEaseInOut]
+                    withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut]
                 ) {
                     scrollView.contentInset.top = self.originalContentInsetTop
+                    // 如果是极简模式，缩回时菊花淡出
+                    if !showText { self.activityIndicator.alpha = 0.0 }
                 }
             }
             
         case .pulling:
             break
         case .willRefresh:
-            // 用户松手，准备吸附的弹簧动画
             UIView.animate(
-                withDuration: duration - 0.1, // 吸附动画稍微快一点
-                delay: 0,
-                usingSpringWithDamping: damping,
-                initialSpringVelocity: 1.0,
-                options: [.allowUserInteraction, .curveEaseInOut]
+                withDuration: duration - 0.1, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 1.0, options: [.allowUserInteraction, .curveEaseInOut]
             ) {
                 let top = self.originalContentInsetTop + self.componentHeight
                 scrollView.contentInset.top = top
@@ -631,6 +668,10 @@ open class PTRefreshHeader: PTRefreshComponent {
             }
             
         case .refreshing:
+            if !showText {
+                activityIndicator.alpha = 1.0
+                activityIndicator.transform = .identity
+            }
             activityIndicator.startAnimating()
             self.executeAction()
         }
@@ -686,6 +727,13 @@ public final class PTRefreshFooter: PTRefreshComponent {
         }
     }
     
+    public override func scrollViewContentInsetDidChange() {
+        guard let scrollView = scrollView else { return }
+        if state == .idle {
+            self.originalContentInsetBottom = scrollView.contentInset.bottom
+        }
+    }
+
     public override func scrollViewContentSizeDidChange() {
         guard let scrollView = scrollView else { return }
         let footerY = scrollView.contentSize.height
@@ -695,18 +743,12 @@ public final class PTRefreshFooter: PTRefreshComponent {
     
     public override func scrollViewContentOffsetDidChange() {
         guard let scrollView = scrollView else { return }
-        
-        // 拦截机制补充：如果是隐藏状态，直接忽略手势，不进行任何刷新状态的计算！
         if self.isHidden { return }
-        
         if state == .noMoreData || state == .refreshing || state == .willRefresh { return }
-        
-        // 如果内容不到一屏，且没有开启自动隐藏（即强制显示），也不触发基础的上拉刷新逻辑
         guard scrollView.contentSize.height > scrollView.bounds.height else { return }
         
         let offsetY = scrollView.contentOffset.y
         let judgeOffsetY = scrollView.contentSize.height - scrollView.bounds.height + originalContentInsetBottom - ignoredContentInsetBottom
-        
         if offsetY <= judgeOffsetY {
             self.pullingPercent = 0.0
             return
@@ -720,9 +762,14 @@ public final class PTRefreshFooter: PTRefreshComponent {
             } else if state == .pulling && offsetY <= pullingOffsetY {
                 state = .idle
             }
+        } else {
+            // 🌟 终极修复：手指松开了！
+            if state == .pulling {
+                self.beginRefreshing()
+            }
         }
     }
-    
+
     public override func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {
         guard let scrollView = scrollView else { return }
         textLabel.text = resolvedTitle(for: newState, globalConfig: PTRefreshConfig.shared.footer)
@@ -835,6 +882,13 @@ public final class PTRefreshTrailer: PTRefreshComponent {
         }
     }
     
+    public override func scrollViewContentInsetDidChange() {
+        guard let scrollView = scrollView else { return }
+        if state == .idle {
+            self.originalContentInsetRight = scrollView.contentInset.right
+        }
+    }
+
     public override func scrollViewContentSizeDidChange() {
         guard let scrollView = scrollView else { return }
         let trailerX = scrollView.contentSize.width
@@ -846,25 +900,17 @@ public final class PTRefreshTrailer: PTRefreshComponent {
     
     public override func scrollViewContentOffsetDidChange() {
         guard let scrollView = scrollView else { return }
-        
-        // 核心拦截 1：如果是隐藏状态，直接忽略手势，不计算任何刷新逻辑！
         if self.isHidden { return }
-        
-        // 核心拦截 2：处于刷新过渡状态或没数据时，拒绝状态切换和进度计算
         if state == .noMoreData || state == .refreshing || state == .willRefresh { return }
-        
-        // 核心拦截 3：内容不足一屏时不触发拉动 (以防万一开发者关闭了自动隐藏)
         guard scrollView.contentSize.width > scrollView.bounds.width else { return }
         
         let offsetX = scrollView.contentOffset.x
         let judgeOffsetX = scrollView.contentSize.width - scrollView.bounds.width + originalContentInsetRight - ignoredContentInsetRight
-        
         if offsetX <= judgeOffsetX {
             self.pullingPercent = 0.0
             return
         }
         self.pullingPercent = (offsetX - judgeOffsetX) / componentWidth
-        
         let pullingOffsetX = judgeOffsetX + (componentWidth * triggerAutomaticallyRefreshPercent)
         
         if scrollView.isDragging {
@@ -873,9 +919,14 @@ public final class PTRefreshTrailer: PTRefreshComponent {
             } else if state == .pulling && offsetX <= pullingOffsetX {
                 state = .idle
             }
+        } else {
+            // 🌟 终极修复：手指松开了！
+            if state == .pulling {
+                self.beginRefreshing()
+            }
         }
     }
-    
+
     public override func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {
         guard let scrollView = scrollView else { return }
         textLabel.text = resolvedTitle(for: newState, globalConfig: PTRefreshConfig.shared.trailer)
@@ -958,27 +1009,24 @@ public final class PTRefreshLeftHeader: PTRefreshComponent {
                 )
     }
     
+    public override func scrollViewContentInsetDidChange() {
+        guard let scrollView = scrollView else { return }
+        if state == .idle {
+            self.originalContentInsetLeft = scrollView.contentInset.left
+        }
+    }
+
     public override func scrollViewContentOffsetDidChange() {
         guard let scrollView = scrollView else { return }
-        
-        if state == .refreshing || state == .willRefresh {
-            var insetL = max(-scrollView.contentOffset.x, originalContentInsetLeft)
-            insetL = min(insetL, componentWidth + originalContentInsetLeft)
-            scrollView.contentInset.left = insetL
-            return
-        }
+        if state == .refreshing || state == .willRefresh { return }
         
         let offsetX = scrollView.contentOffset.x
         let happenOffsetX = -originalContentInsetLeft + ignoredContentInsetLeft
-        
-        // 计算向右拖拽的进度并回调
         if offsetX >= happenOffsetX {
             self.pullingPercent = 0.0
             return
         }
         self.pullingPercent = (happenOffsetX - offsetX) / componentWidth
-        
-        // 结合 triggerAutomaticallyRefreshPercent 进行触发阈值判断
         let pullingOffsetX = happenOffsetX - (componentWidth * triggerAutomaticallyRefreshPercent)
         
         if scrollView.isDragging {
@@ -987,9 +1035,14 @@ public final class PTRefreshLeftHeader: PTRefreshComponent {
             } else if state == .pulling && offsetX >= pullingOffsetX {
                 state = .idle
             }
+        } else {
+            // 🌟 终极修复：手指松开了！
+            if state == .pulling {
+                self.beginRefreshing()
+            }
         }
     }
-    
+
     public override func stateDidChanged(from oldState: PTRefreshState, to newState: PTRefreshState) {
         guard let scrollView = scrollView else { return }
         textLabel.text = resolvedTitle(for: newState, globalConfig: PTRefreshConfig.shared.leftHeader)
@@ -1132,7 +1185,7 @@ public final class PTRefreshGifHeader: PTRefreshHeader {
         super.layoutSubviews()
         
         // 排版逻辑：如果你想保留文字，gifView 就放在菊花原来的位置；如果文字全隐藏了，gifView 就居中
-        let showTime = customShowLastTime ?? PTRefreshConfig.shared.header.showLastTime
+//        let _ = customShowLastTime ?? PTRefreshConfig.shared.header.showLastTime
         let hasText = !textLabel.isHidden
         
         if hasText {
@@ -1222,7 +1275,7 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
     public override var isHapticEnabled: Bool {
         return customHapticFeedback ?? PTRefreshConfig.shared.footer.isHapticFeedbackEnabled
     }
-
+    
     private var originalContentInsetBottom: CGFloat = 0
     private var componentHeight: CGFloat { customDimension ?? PTRefreshConfig.shared.footer.dimension }
     
@@ -1256,6 +1309,13 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
             self.isHidden = scrollView.contentSize.height <= scrollView.bounds.height
         } else {
             self.isHidden = false
+        }
+    }
+    
+    public override func scrollViewContentInsetDidChange() {
+        guard let scrollView = scrollView else { return }
+        if state == .idle {
+            self.originalContentInsetBottom = scrollView.contentInset.bottom
         }
     }
     
@@ -1299,8 +1359,13 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
                     scrollView.contentInset.bottom = self.originalContentInsetBottom
                 }
             }
-        case .pulling, .willRefresh:
+            
+        case .pulling:
             break
+            
+        case .willRefresh:
+            // 🌟 修复关键：无缝加载不需要松手过渡等待，直接进入正在刷新状态！
+            self.state = .refreshing
             
         case .refreshing:
             // 自动加载时，固定底部留白并启动请求
@@ -1308,6 +1373,7 @@ public final class PTRefreshAutoFooter: PTRefreshComponent {
             UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: damping, initialSpringVelocity: 1.0, options: [.allowUserInteraction, .curveEaseInOut], animations: {
                 scrollView.contentInset.bottom = self.originalContentInsetBottom + self.componentHeight
             }) { _ in
+                // 确保动画定型后再执行回调
                 self.executeAction()
             }
             
@@ -1349,6 +1415,12 @@ public extension UIScrollView {
        if let leftHeader = self.pt.leftHeader {
            if leftHeader.state == .refreshing {
                leftHeader.endRefreshing()
+           }
+       }
+       
+       if let autoFooter = self.pt.autoFooter {
+           if autoFooter.state == .refreshing {
+               autoFooter.endRefreshing()
            }
        }
        

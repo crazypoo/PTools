@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '4.1.3'
+    s.version     = '4.2.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -61,16 +61,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NOTIFICATIONBANNER POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'ScrollRefresh' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'MJRefresh'
-        subspec.source_files = 'PooToolsSource/ScrollRefresh/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SCROLLREFRESH POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'DataEncrypt' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'CryptoSwift'
@@ -933,7 +924,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ScanQRCode'
         subspec.dependency 'PooTools/Stepper'
         subspec.dependency 'PooTools/Location'
-        subspec.dependency 'PooTools/ScrollRefresh'
         subspec.dependency 'PooTools/SVG'
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/DEBUG'

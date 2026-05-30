@@ -431,6 +431,7 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.viewType = .Normal
         cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
         cConfig.topRefresh = true
+        cConfig.footerRefresh = true
         cConfig.showEmptyAlert = !vcEmpty
         var strings = [String]()
         cSections().enumerated().forEach { index,value in
@@ -1052,14 +1053,22 @@ class PTFuncNameViewController: PTBaseViewController {
             }
 
         }
-        aaaaaaa.headerRefreshTask = { sender in
-            if #available(iOS 17, *) {
-                self.collectionView.clearAllData { collectionview in
-                    self.collectionView.endRefresh()
+        aaaaaaa.headerRefreshTask = { [weak self] in
+            PTGCDManager.shared.runOnMain {
+                if #available(iOS 17, *) {
+                    self?.collectionView.clearAllData { collectionview in
+                        self?.collectionView.endRefresh()
+                    }
+                } else {
+                    self?.collectionView.endRefresh()
                 }
-            } else {
-                self.collectionView.endRefresh()
             }
+        }
+        aaaaaaa.footRefreshTask = {
+            PTGCDManager.shared.delayOnMain(time: 5, block: {
+                PTNSLogConsole("12312312312312312312312312312312312313")
+                self.collectionView.endRefresh()
+            })
         }
         aaaaaaa.emptyTap = { sender in
             if #available(iOS 17, *) {

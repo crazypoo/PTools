@@ -39,6 +39,7 @@ public extension PTProtocolCompatible {
     var pt: PTPOP<Self> {
         // 同理，移除空 set，保持其为一个纯粹的只读包装器。
         get { PTPOP(self) }
+        set {}
     }
 }
 

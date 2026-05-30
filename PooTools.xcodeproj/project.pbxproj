@@ -794,7 +794,6 @@
 		55C6AE802C21BEF8005CCBF7 /* PTTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C6AE7F2C21BEF8005CCBF7 /* PTTestVC.swift */; };
 		55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
-		55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */; };
 		55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */; };
 		55C905182A31B40200B7E83D /* PTUserDefultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */; };
 		55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */; };
@@ -1767,7 +1766,6 @@
 		55C6AE7F2C21BEF8005CCBF7 /* PTTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestVC.swift; sourceTree = "<group>"; };
 		55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeedPanel.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
-		55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTRefreshAutoStateFooter.swift; sourceTree = "<group>"; };
 		55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTViewRulerPlugin.swift; sourceTree = "<group>"; };
 		55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefultsViewController.swift; sourceTree = "<group>"; };
 		55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseNavControl.swift; sourceTree = "<group>"; };
@@ -2106,7 +2104,6 @@
 				558D5EDF2AAF4D8300C02042 /* Router */,
 				553BFE642EC703FF00D6DCB6 /* ScreenShot */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
-				55F7A73729D5949900CF6272 /* ScrollRefresh */,
 				55D59C6028F3E84900B4FF76 /* SearchBar */,
 				5507025F28F6A09100C48239 /* SegmentControl */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
@@ -2240,6 +2237,7 @@
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
 				553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */,
+				55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -3928,15 +3926,6 @@
 			path = DebugNetwork;
 			sourceTree = "<group>";
 		};
-		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
-			isa = PBXGroup;
-			children = (
-				55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */,
-				55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */,
-			);
-			path = ScrollRefresh;
-			sourceTree = "<group>";
-		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -4206,7 +4195,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4216,9 +4206,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4233,9 +4227,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -5124,7 +5122,6 @@
 				55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */,
 				55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */,
 				55E780242E71438D00DC4DB8 /* PTFullScreenPopGesture.swift in Sources */,
-				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
 				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,

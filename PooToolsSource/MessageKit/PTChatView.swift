@@ -287,8 +287,10 @@ public class PTChatView: UIView {
             }
             return nil
         }
-        view.headerRefreshTask = { control in
-            self.headerLoadReadyHandler?()
+        view.headerRefreshTask = {
+            PTGCDManager.shared.runOnMain {
+                self.headerLoadReadyHandler?()
+            }
         }
         return view
     }()

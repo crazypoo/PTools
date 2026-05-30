@@ -44,13 +44,15 @@ class PTTestVC: PTBaseViewController {
             }
             return nil
         }
-        aaaaaaa.headerRefreshTask = { sender in
-            if #available(iOS 17, *) {
-                self.collectionView.clearAllData { collectionview in
+        aaaaaaa.headerRefreshTask = {
+            PTGCDManager.shared.runOnMain {
+                if #available(iOS 17, *) {
+                    self.collectionView.clearAllData { collectionview in
+                        self.collectionView.endRefresh()
+                    }
+                } else {
                     self.collectionView.endRefresh()
                 }
-            } else {
-                self.collectionView.endRefresh()
             }
         }
         aaaaaaa.collectionViewDidScroll = { cView in
