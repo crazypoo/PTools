@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MJRefresh
 import ObjectiveC
 import SwifterSwift
 
@@ -1421,24 +1420,6 @@ public extension UIScrollView {
        if let autoFooter = self.pt.autoFooter {
            if autoFooter.state == .refreshing {
                autoFooter.endRefreshing()
-           }
-       }
-       
-       if mj_header != nil {
-           if mj_header!.isRefreshing {
-               mj_header!.endRefreshing()
-           }
-       }
-       
-       if mj_footer != nil {
-           if mj_footer!.isRefreshing {
-               mj_footer!.endRefreshing()
-           }
-       }
-       
-       if mj_trailer != nil {
-           if mj_trailer!.isRefreshing {
-               mj_trailer!.endRefreshing()
            }
        }
     }
