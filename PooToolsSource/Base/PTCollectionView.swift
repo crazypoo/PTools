@@ -1249,6 +1249,64 @@ extension PTCollectionView {
         }
     }
 
+    /// 在指定的 IndexPath 插入新行
+    /// - Parameters:
+    ///   - rows: 需要插入的新数据数组
+    ///   - indexPath: 目标位置 (会自动容错处理越界问题)
+    ///   - completion: 动画完成后的回调
+    public func insertRows(_ rows: [PTRows], at indexPath: IndexPath, completion: PTActionTask? = nil) {
+        Task { @MainActor in
+            var snapshot = self.diffableDataSource.snapshot()
+            
+            // 1. 安全校验 Section 是否存在
+            guard indexPath.section >= 0, indexPath.section < snapshot.sectionIdentifiers.count else {
+                completion?()
+                return
+            }
+            
+            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
+            if sectionModel.rows == nil { sectionModel.rows = [] }
+            
+            let currentRowsCount = sectionModel.rows?.count ?? 0
+            
+            // 2. 确定是要插入 (Insert) 还是追加 (Append)
+            let isAppend = indexPath.item >= currentRowsCount
+            
+            // 找到即将被顶到后面的那个“锚点” Item
+            var anchorItem: PTRows? = nil
+            if !isAppend {
+                anchorItem = sectionModel.rows?[indexPath.item]
+            }
+            
+            // 🌟 3. 同步更新底层真实数据源模型 (极度重要，自定义 Layout 全靠它)
+            let insertIndex = min(max(0, indexPath.item), currentRowsCount)
+            sectionModel.rows?.insert(contentsOf: rows, at: insertIndex)
+            
+            // 4. 炸掉缓存，强制重新计算后续所有布局和高度
+            self.layoutCache.removeAll()
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: indexPath.section)
+            }
+            sectionModel.layoutVersion += 1
+            
+            // 🌟 5. 更新 Diffable 引擎快照
+            if let anchor = anchorItem {
+                // 如果锚点存在，直接插入在锚点前面
+                snapshot.insertItems(rows, beforeItem: anchor)
+            } else {
+                // 如果是空 Section 或者给定的 item 索引超过了现有数量，直接追加到末尾
+                snapshot.appendItems(rows, toSection: sectionModel)
+            }
+            
+            // 6. 提交动画
+            let animated = !self.viewConfig.refreshWithoutAnimation
+            self.diffableDataSource.apply(snapshot, animatingDifferences: animated) {
+                self.setiOS17EmptyDataView() // 刷新可能存在的空视图状态
+                completion?()
+            }
+        }
+    }
+
     public func insertRows(_ rows:[PTRows],section:Int,completion:PTActionTask? = nil) {
         var snapshot = self.diffableDataSource.snapshot()
         guard section >= 0, section < snapshot.sectionIdentifiers.count else {

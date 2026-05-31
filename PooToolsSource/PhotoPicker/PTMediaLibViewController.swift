@@ -272,7 +272,7 @@ extension PTMediaLibView {
 }
 
 // MARK: - Camera & Saving Logic
-extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension PTMediaLibView {
     
     /// 调用系统相机
     func openCamera() {
@@ -286,31 +286,11 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
             return
         }
 
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = .camera
-        picker.videoQuality = .typeHigh
-        picker.mediaTypes = calculateMediaTypes()
-        picker.videoMaximumDuration = TimeInterval(PTMediaLibConfig.share.maxRecordDuration)
-        
+        let picker = PTMediaLibCameraContainerViewController()
         // 弹出相机界面
         UIViewController.currentPresentToSheet(vc: picker, sizes: [.fullscreen], dismissPanGes: false)
-    }
-
-    private func calculateMediaTypes() -> [String] {
-        var types: [String] = []
-        if PTMediaLibConfig.share.cameraConfiguration.allowTakePhoto { types.append("public.image") }
-        if PTMediaLibConfig.share.cameraConfiguration.allowRecordVideo { types.append("public.movie") }
-        return types
-    }
-
-    // MARK: - ImagePicker Delegate
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        let image = info[.originalImage] as? UIImage
-        let url = info[.mediaURL] as? URL
-        
-        picker.dismiss(animated: true) { [weak self] in
-            self?.saveMediaToAlbum(image: image, videoUrl: url)
+        picker.handleNewAssetCallback = { asset in
+            self.handleNewAsset(asset)
         }
     }
 
@@ -359,9 +339,18 @@ extension PTMediaLibView: UIImagePickerControllerDelegate, UINavigationControlle
             config.didSelectAsset?(asset)
         }
 
+        let insertRow = PTRows(ID: PTMediaLibCell.ID, dataModel: newModel)
+        
         // 延迟刷新 UI 确保相册数据库已同步
-        PTGCDManager.shared.delayOnMain(time: 0.2) {
-            self.loadMedia(addImage: true)
+        PTGCDManager.shared.delayOnMain(time: 0.55) {
+            let totalCount = self.totalModels.count
+            var insertIndex = 0
+            if self.showCameraCell {
+                insertIndex = PTMediaLibUIConfig.share.shortIsTop ? 1 : (totalCount - 1)
+            } else {
+                insertIndex = PTMediaLibUIConfig.share.shortIsTop ? 0 : totalCount
+            }
+            self.collectionView.insertRows([insertRow], at: IndexPath(row: insertIndex, section: 0), completion: nil)
         }
     }
 }

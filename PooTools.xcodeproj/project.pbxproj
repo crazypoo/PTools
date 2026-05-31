@@ -147,6 +147,7 @@
 		553177392FA068D900E53214 /* PTCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553177382FA068D900E53214 /* PTCircularProgressView.swift */; };
 		5531D2632F1095A70094CFFE /* PTEditMenuKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */; };
 		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
+		55337C122FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55337C112FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		553BFE662EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */; };
 		553BFE682EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */; };
@@ -947,7 +948,6 @@
 		9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */; };
 		9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */; };
 		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
-		CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
@@ -1113,6 +1113,7 @@
 		553177382FA068D900E53214 /* PTCircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCircularProgressView.swift; sourceTree = "<group>"; };
 		5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuKit.swift; sourceTree = "<group>"; };
 		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		55337C112FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaLibCameraContainerViewController.swift; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSnapShotKitProtocol.swift; sourceTree = "<group>"; };
 		553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTSnapShot.swift"; sourceTree = "<group>"; };
@@ -1972,7 +1973,6 @@
 				CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */,
 				CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */,
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
-				CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */,
 				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
 				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
@@ -2209,6 +2209,7 @@
 				550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */,
 				552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
+				553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */,
 				554A67352C8559F800FE1B10 /* UIImageAsset+PTEX.swift */,
 				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
 				55D3D9E12976E67800F2E57C /* UILabel+PTEX.swift */,
@@ -2218,6 +2219,7 @@
 				5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */,
 				55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */,
 				9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */,
+				55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */,
 				555818C92AFA7CBA0051C0AA /* UISegmentedControl+PTEX.swift */,
 				55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */,
 				9AE446A62859ACBB007DC2B5 /* UISwitch+PTEX.swift */,
@@ -2236,8 +2238,6 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				553ED6742FC92D5B002DD70A /* UIImage+PTFaceAware.swift */,
-				55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2589,6 +2589,7 @@
 				55BCB96D2B1732030016A4C2 /* PTMediaLibListModel.swift */,
 				55BCB9722B1732030016A4C2 /* PTMediaLibManager.swift */,
 				55BCB9822B1733620016A4C2 /* PTMediaLibViewController.swift */,
+				55337C112FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift */,
 			);
 			path = PhotoPicker;
 			sourceTree = "<group>";
@@ -5068,6 +5069,7 @@
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				557E3AA02C046E8E002466A0 /* PTNetworkHelper.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
+				55337C122FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift in Sources */,
 				556CA4BC2B29500600A5B189 /* Error.swift in Sources */,
 				555818B82AFA4E750051C0AA /* PTProgressBar.swift in Sources */,
 				5599C43B2C4F642100394835 /* AkiraTextField.swift in Sources */,
