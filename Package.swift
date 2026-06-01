@@ -108,6 +108,7 @@ let package = Package(
         .library(name: "PooToolsSocketKit", targets: ["PooToolsSocketKit"]),
         .library(name: "PooToolsIAP", targets: ["PooToolsIAP"]),
         .library(name: "PooToolsTipsView", targets: ["PooToolsTipsView"]),
+        .library(name: "PooToolsPicker", targets: ["PooToolsPicker"]),
 
         // ==========================================
         // 调试工具模块 (DEBUG)
@@ -139,7 +140,7 @@ let package = Package(
             "PooToolsSpeedPanel", "PooToolsNetworkSpeedTest", "PooToolsOSSKitSpeech", "PooToolsiOS17Tips",
             "PooToolsWhatsNewsKit", "PooToolsHeartRate", "PooToolsChinesePinyin", "PooToolsCircle",
             "PooToolsMessageKit", "PooToolsSocketKit", "PooToolsIAP", "PooToolsTipsView",
-            "PooToolsDEBUG", "PooToolsDEBUGTrackingEyes","PooToolsLaunchTimeProfiler"
+            "PooToolsDEBUG", "PooToolsDEBUGTrackingEyes","PooToolsLaunchTimeProfiler","PooToolsPicker"
         ])
     ],
     dependencies: [
@@ -170,13 +171,11 @@ let package = Package(
         .package(url: "https://github.com/Kitura/LoggerAPI.git", from: "2.0.0"),
         .package(url: "https://github.com/Kitura/KituraContracts.git", from: "2.0.1"),
         
-        .package(url: "https://github.com/CoderMJLee/MJRefresh.git", from: "3.7.0"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
         .package(url: "https://github.com/ZipArchive/ZipArchive.git", from: "2.6.0"),
         .package(url: "https://github.com/pujiaxin33/JXPagingView.git", from: "2.1.0"),
         .package(url: "https://github.com/pujiaxin33/JXSegmentedView.git", from: "1.3.0"),
-        .package(url: "https://github.com/borenfocus/BRPickerView.git", from: "2.7.0"),
         .package(url: "https://github.com/ephread/Instructions.git", from: "2.2.0"),
         .package(url: "https://github.com/PhoneNumberKit/PhoneNumberKit.git", from: "5.0.0"),
         .package(url: "https://github.com/securing/IOSSecuritySuite.git", from: "1.9.0"),
@@ -213,7 +212,6 @@ let package = Package(
                 "FlagKit",
                 .product(name: "NotificationBannerSwift", package: "NotificationBanner"),
                 "Instructions",
-                "BRPickerView",
                 "IOSSecuritySuite",
                 "Popovers",
                 
@@ -341,6 +339,7 @@ let package = Package(
         .target(name: "PooToolsSocketKit", dependencies: ["ptools", "SocketRocket"], path: "PooToolsSource/SocketKit", swiftSettings: [.define("POOTOOLS_SOCKETKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsIAP", dependencies: ["ptools"], path: "PooToolsSource/IAP", swiftSettings: [.define("POOTOOLS_IAP"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsTipsView", dependencies: ["ptools"], path: "PooToolsSource/TipsView", swiftSettings: [.define("POOTOOLS_TIPSVIEW"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPicker", dependencies: ["ptools"], path: "PooToolsSource/Picker", swiftSettings: [.define("POOTOOLS_PICKER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
         // 调试工具模块 (DEBUG)

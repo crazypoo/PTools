@@ -15,6 +15,26 @@ import Combine
 import SafeSFSymbols
 import AttributedString
 
+struct UserModel: PTPickerStringModel {
+    let userId: String
+    let userName: String
+    
+    // 告訴 Picker，滾輪上顯示 userName
+    var pickerDisplayText: String { return userName }
+}
+
+struct RegionModel: PTTreePickerModel {
+    let id: String
+    let name: String
+    let children: [RegionModel]
+    
+    // 實現協議：告訴選擇器顯示的文字
+    var pickerDisplayText: String { return name }
+    
+    // 實現協議：告訴選擇器子節點是誰 (轉型返回即可)
+    var pickerChildren: [PTTreePickerModel] { return children }
+}
+
 public extension String {
     static let localNetWork = "局域网传送"
     
@@ -1340,6 +1360,56 @@ class PTFuncNameViewController: PTBaseViewController {
             }
             vvvvv.showNotification()
             vvvvv.hideHandler = {
+            }
+            
+////            let items = ["苹果", "香蕉", "橘子", "葡萄", "西瓜"]
+//                    
+//            let pickerView = PTDatePickerView(style: PTPickerStyle.shared)
+//            // 现代化的闭包回调，比 Delegate 更加方便
+//            pickerView.show(title: "请选择水果", mode:.yw) { selectedDate, dateString in
+//                PTNSLogConsole("回调的日期对象：\(selectedDate)")
+//                PTNSLogConsole("格式化后的字符串：\(dateString)")
+//            }
+            
+//            let users = [
+//                UserModel(userId: "1001", userName: "張三"),
+//                UserModel(userId: "1002", userName: "李四")
+//            ]
+//            
+//            let pickerView = PTStringPickerView()
+//            
+//            // 传入一个二维数组
+//            pickerView.show(title: "請選擇負責人", data: users) { result in
+//                if let selectedUser = result.originalModel as? UserModel {
+//                    PTNSLogConsole("選中的用戶 ID 是：\(selectedUser.userId)")
+//                    PTNSLogConsole("選中的用戶 名字 是：\(selectedUser.userName)")
+//                }
+//            }
+            let treeData: [RegionModel] = [
+                RegionModel(id: "1", name: "廣東省", children: [
+                    RegionModel(id: "1-1", name: "廣州市", children: [
+                        RegionModel(id: "1-1-1", name: "天河區", children: []),
+                        RegionModel(id: "1-1-2", name: "番禺區", children: [])
+                    ]),
+                    RegionModel(id: "1-2", name: "深圳市", children: []) // 注意：深圳這裡故意不給區
+                ]),
+                RegionModel(id: "2", name: "北京市", children: [
+                    RegionModel(id: "2-1", name: "朝陽區", children: [])
+                ])
+            ]
+
+            // 3. 調用極其簡單！
+            let treePicker = PTTreePickerView()
+            treePicker.show(title: "選擇地區", treeData: treeData) { results in
+                
+                PTNSLogConsole("你一共選了 \(results.count) 級地區")
+                
+                // 解析出最終選中的 ID
+                let names = results.map { $0.value }.joined(separator: "-")
+                let ids = results.compactMap { ($0.originalModel as? RegionModel)?.id }.joined(separator: "-")
+                
+                PTNSLogConsole("選中名稱: \(names)") // 輸出: 廣東省-廣州市-天河區
+                PTNSLogConsole("選中 ID : \(ids)")   // 輸出: 1-1-1-1-1
             }
         }
         

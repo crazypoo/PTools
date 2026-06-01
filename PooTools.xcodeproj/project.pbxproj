@@ -148,6 +148,7 @@
 		5531D2632F1095A70094CFFE /* PTEditMenuKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */; };
 		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
 		55337C122FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55337C112FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift */; };
+		55337C152FCD4267000DB065 /* PTBasePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55337C142FCD4267000DB065 /* PTBasePickerView.swift */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		553BFE662EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */; };
 		553BFE682EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */; };
@@ -1114,6 +1115,7 @@
 		5531D2622F1095A70094CFFE /* PTEditMenuKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuKit.swift; sourceTree = "<group>"; };
 		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		55337C112FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaLibCameraContainerViewController.swift; sourceTree = "<group>"; };
+		55337C142FCD4267000DB065 /* PTBasePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBasePickerView.swift; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553BFE652EC7046B00D6DCB6 /* PTSnapShotKitProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSnapShotKitProtocol.swift; sourceTree = "<group>"; };
 		553BFE672EC704CE00D6DCB6 /* UIScrollView+PTSnapShot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTSnapShot.swift"; sourceTree = "<group>"; };
@@ -2092,6 +2094,7 @@
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */,
 				552F078A2B15C26B00CB47CD /* PhotoPicker */,
+				55337C132FCD422E000DB065 /* Picker */,
 				55E3BBB52ABDFF0C00858348 /* Ping */,
 				55B3F49F2B6AD3D400A7CC66 /* Pinyin */,
 				555818B62AFA48E70051C0AA /* ProgressBar */,
@@ -2592,6 +2595,14 @@
 				55337C112FCBFB4A000DB065 /* PTMediaLibCameraContainerViewController.swift */,
 			);
 			path = PhotoPicker;
+			sourceTree = "<group>";
+		};
+		55337C132FCD422E000DB065 /* Picker */ = {
+			isa = PBXGroup;
+			children = (
+				55337C142FCD4267000DB065 /* PTBasePickerView.swift */,
+			);
+			path = Picker;
 			sourceTree = "<group>";
 		};
 		553BFE642EC703FF00D6DCB6 /* ScreenShot */ = {
@@ -4196,7 +4207,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4206,9 +4218,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4223,9 +4239,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4842,6 +4862,7 @@
 				557E3AB42C047556002466A0 /* FileHandle+PTDebugEx.swift in Sources */,
 				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
+				55337C152FCD4267000DB065 /* PTBasePickerView.swift in Sources */,
 				557E3AA42C046F10002466A0 /* PTHttpModel.swift in Sources */,
 				557E3A602C032328002466A0 /* Color+PTMixingEX.swift in Sources */,
 				5571F60E2AFD228800DB4420 /* PTAppWindowsDelegate.swift in Sources */,

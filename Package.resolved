@@ -1,5 +1,5 @@
 {
-  "originHash" : "61aa312c2ad250ae29eb61e9c270a3c1e24b4e8388e777c22fe11785fe6ebf52",
+  "originHash" : "30c8e9bf2b669dc7e74d992592c04ac8ebdb7c2115cf55808bb0568a10c8c053",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -44,15 +44,6 @@
       "state" : {
         "revision" : "f40325520344a966523b214394aa350132a6af68",
         "version" : "1.0.203"
-      }
-    },
-    {
-      "identity" : "brpickerview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/borenfocus/BRPickerView.git",
-      "state" : {
-        "revision" : "c9e0e9813c1885467f353911cf58d92f5c989d1a",
-        "version" : "2.9.9"
       }
     },
     {
@@ -278,15 +269,6 @@
       "state" : {
         "revision" : "c6b4da400c00dfd5db7a4f6e4915ca531d95fc49",
         "version" : "4.5.3"
-      }
-    },
-    {
-      "identity" : "mjrefresh",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CoderMJLee/MJRefresh.git",
-      "state" : {
-        "revision" : "535d39c86e592d73f8b8e75f9bf1eda62ca4a4ce",
-        "version" : "3.7.9"
       }
     },
     {
