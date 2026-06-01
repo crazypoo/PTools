@@ -123,7 +123,7 @@ class PTUserDefultsViewController: PTBaseViewController {
 extension PTUserDefultsViewController:UITextFieldDelegate {}
 
 #if POOTOOLS_ROUTER
-extension PTUserDefultsViewController:PTRouterable {
+extension PTUserDefultsViewController:@MainActor PTRouterable {
     public static var priority: UInt {
         PTRouterDefaultPriority
     }

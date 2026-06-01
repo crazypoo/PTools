@@ -951,7 +951,7 @@ open class PTBaseViewController: UIViewController {
                     self?.returnFrontVC()
                 }
                 
-                self.setCustomBackButtonView(backBtn)
+                self.setCustomBackButtonView(backBtn,size: backBtn.bounds.size)
             }
         }
     }

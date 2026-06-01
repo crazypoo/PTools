@@ -93,20 +93,22 @@ public final class C7CollectorCamera: C7Collector {
     public override func setupInit() {
         super.setupInit()
                 
-        if PTCameraFilterConfig.share.allowRecordVideo {
-            do {
-                try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .duckOthers)
-                try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
-            } catch {
-                let err = error as NSError
-                if err.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue ||
-                    err.code == AVAudioSession.ErrorCode.isBusy.rawValue {
-                    microPhontIsAvailable = false
+        Task { @MainActor in
+            if PTCameraFilterConfig.share.allowRecordVideo {
+                do {
+                    try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoRecording, options: .duckOthers)
+                    try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+                } catch {
+                    let err = error as NSError
+                    if err.code == AVAudioSession.ErrorCode.insufficientPriority.rawValue ||
+                        err.code == AVAudioSession.ErrorCode.isBusy.rawValue {
+                        microPhontIsAvailable = false
+                    }
                 }
             }
+            
+            setupCaptureSession()
         }
-        
-        setupCaptureSession()
     }
     
     private func setupCaptureSession() {
@@ -407,28 +409,38 @@ public final class C7CollectorCamera: C7Collector {
 extension C7CollectorCamera {
     
     public func startRunning() {
+        let session = self.captureSession
         sessionQueue.async {
-            Task { @MainActor in
-                self.captureSession.startRunning()
+            if !session.isRunning {
+                session.startRunning()
             }
         }
     }
     
     public func stopRunning() {
-        if captureSession.isRunning {
-            captureSession.stopRunning()
+        let session = self.captureSession
+        sessionQueue.async {
+            if session.isRunning {
+                session.stopRunning()
+            }
         }
     }
 }
 
-extension C7CollectorCamera: @preconcurrency AVCaptureVideoDataOutputSampleBufferDelegate {
-    @MainActor public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        processing(with: pixelBuffer)
+extension C7CollectorCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
+    nonisolated public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        nonisolated(unsafe) let safePixelBuffer = pixelBuffer
+        // 3. 因为你的 C7CollectorCamera 是 @MainActor，所以调用 processing 需要切回主线程
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            self.processing(with: safePixelBuffer)
+        }
     }
 }
 
-extension C7CollectorCamera:@preconcurrency AVCapturePhotoCaptureDelegate {
+extension C7CollectorCamera:@MainActor AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
     }
     
@@ -447,7 +459,7 @@ extension C7CollectorCamera:@preconcurrency AVCapturePhotoCaptureDelegate {
     }
 }
 
-extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegate {
+extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(_ output: AVCaptureFileOutput, didStartRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
         guard recordLongGes?.state != .possible else {
             finishRecordAndMergeVideo()
@@ -567,7 +579,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
         }
     }
     
-    @MainActor private func playRecordVideo(fileUrl: URL) {
+    private func playRecordVideo(fileUrl: URL) {
         haveRecordVideo?()
         stopRunning()
         let asset = AVURLAsset(url: fileUrl)
@@ -579,7 +591,7 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
         avPlayer?.play()
     }
     
-    @MainActor public func saveVideoToAlbum() {
+    public func saveVideoToAlbum() {
         if let fileUrl = self.videoUrl {
             C7CameraConfig.share.hudShow()
             let provider = VideoX.Provider(with: fileUrl)
@@ -598,8 +610,8 @@ extension C7CollectorCamera: @preconcurrency AVCaptureFileOutputRecordingDelegat
                         if error != nil {
                             PTNSLogConsole("\(error!)")
                         } else {
-                            PTGCDManager.shared.runOnMain {
-                                self.savedVideo?()
+                            PTGCDManager.shared.runOnMain { [weak self] in
+                                self?.savedVideo?()
                             }
                         }
                     }

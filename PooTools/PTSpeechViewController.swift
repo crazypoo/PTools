@@ -28,6 +28,29 @@ class PTSpeechViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        switch PTPermission.speech.status {
+        case .notDetermined:
+            PTPermission.speech.request {
+                switch PTPermission.speech.status {
+                case .authorized:
+                    Task { @MainActor in
+                        self.uiSet()
+                    }
+                default:
+                    Task { @MainActor in
+                        PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
+                    }
+                }
+            }
+        case .authorized:
+            uiSet()
+            break
+        default:
+            break
+        }
+    }
+    
+    func uiSet() {
         AppWindows?.addSubview(soundVisualizerMaskView)
         soundVisualizerMaskView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -40,10 +63,6 @@ class PTSpeechViewController: PTBaseViewController {
             self.soundVisualizerMaskView.visualizerView.updateSamples(soundSamples)
         }
         speechKit.delegate = self
-        speechKit.srp.requestAuthorization { authStatus in
-            let status = OSSSpeechKitAuthorizationStatus(rawValue: authStatus.rawValue) ?? .notDetermined
-            PTNSLogConsole(status)
-        }
         
         let voiceButton = UIButton(type: .custom)
         voiceButton.backgroundColor = .random
@@ -190,7 +209,6 @@ class PTSpeechViewController: PTBaseViewController {
         voiceButton.viewCorner(radius: 5, borderWidth: 1, borderColor: .black)
         voiceButton.setTitle("长按录制语音", for: .normal)
         voiceButton.setTitleColor(.black, for: .normal)
-
     }
 }
 

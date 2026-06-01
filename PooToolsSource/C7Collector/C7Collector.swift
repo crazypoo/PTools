@@ -77,7 +77,7 @@ extension C7Collector {
         return texture.c7.toImage()
     }
     
-    @MainActor func processing(with pixelBuffer: CVPixelBuffer?) {
+    func processing(with pixelBuffer: CVPixelBuffer?) {
         guard let pixelBuffer = pixelBuffer else {
             return
         }
@@ -87,18 +87,21 @@ extension C7Collector {
         }
         var dest = HarbethIO(element: texture, filters: filters)
         dest.transmitOutputRealTimeCommit = true
+        
         dest.transmitOutput(success: { [weak self] desTexture in
-            guard let `self` = self else {
-                return
-            }
-            self.delegate?.captureOutput?(self, texture: desTexture)
-            guard var image = desTexture.c7.toImage() else {
-                return
-            }
-            if self.autoCorrectDirection {
-                image = image.c7.fixOrientation()
-            }
+            // 💡 修复点：一进入闭包，立刻切回主线程！
             Task { @MainActor in
+                guard let self = self else { return }
+                
+                // 现在下面的所有 self 调用都是绝对安全的了
+                self.delegate?.captureOutput?(self, texture: desTexture)
+                
+                guard var image = desTexture.c7.toImage() else { return }
+                
+                if self.autoCorrectDirection {
+                    image = image.c7.fixOrientation()
+                }
+                
                 self.delegate?.preview(self, fliter: image)
             }
         })

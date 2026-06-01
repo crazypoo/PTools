@@ -241,7 +241,7 @@ extension PTDarkModeControl: @MainActor PTThemeable {
 }
 
 #if POOTOOLS_ROUTER
-extension PTDarkModeControl:PTRouterable {
+extension PTDarkModeControl:@MainActor PTRouterable {
     public static var priority: UInt {
         PTRouterDefaultPriority
     }

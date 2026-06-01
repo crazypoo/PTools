@@ -318,7 +318,7 @@ extension PTFileBrowserViewController: QLPreviewControllerDelegate, QLPreviewCon
 
 // MARK: - Router
 #if POOTOOLS_ROUTER
-extension PTFileBrowserViewController: PTRouterable {
+extension PTFileBrowserViewController: @MainActor PTRouterable {
     public static var priority: UInt {
         PTRouterDefaultPriority
     }

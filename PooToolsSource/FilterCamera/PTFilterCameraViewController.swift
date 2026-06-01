@@ -291,11 +291,23 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 self.camera.filters = []
                 self.currentFilter = PTHarBethFilter.none
             } else {
-                PTHarBethFilter.share.texureSize = self.originImageView.image!.size
-                let filter = PTCameraFilterConfig.share.filters[indexPath.row].type.getFilterResult(texture: PTHarBethFilter.overTexture()).filter!
-                self.camera.filters = [filter]
-                self.currentFilter = PTCameraFilterConfig.share.filters[indexPath.row]
-                self.resetToolBarView()
+                guard let originImage = self.originImageView.image else {
+                    PTNSLogConsole("❌ 错误：originImageView 的图片为空")
+                    return
+                }
+
+                PTHarBethFilter.share.texureSize = originImage.size
+                guard let filter = PTCameraFilterConfig.share.filters[indexPath.row].type.getFilterResult(texture: PTHarBethFilter.overTexture()).filter else {
+                    PTNSLogConsole("❌ 错误：无法生成对应的滤镜")
+                    return
+                }
+                
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
+                    self.camera.filters = [filter]
+                    self.currentFilter = PTCameraFilterConfig.share.filters[indexPath.row]
+                    self.resetToolBarView()
+                }
             }
             collection.reloadData()
         }
