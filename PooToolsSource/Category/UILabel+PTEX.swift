@@ -110,17 +110,14 @@ public extension UILabel {
     @objc func sizeFor(lineSpacing:CGFloat = 2.5,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,
                        width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        var dic = [NSAttributedString.Key.font: font] as! [NSAttributedString.Key:Any]
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.lineSpacing = lineSpacing
-        dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        guard let text = self.text, let font = self.font else { return .zero }
         
-        if let currentText = text,!currentText.stringIsEmpty() {
-            let size = currentText.boundingRect(with: CGSize(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
-            return size
-        } else {
-            return .zero
-        }
+        // 直接呼叫 String 的共用方法
+        return text.boundingSize(font: font,
+                                 lineSpacing: lineSpacing,
+                                 lineBreakMode: self.lineBreakMode,
+                                 width: width,
+                                 height: height)
     }
     
     func layoutDynamicHeight(x: CGFloat, y: CGFloat, width: CGFloat) {

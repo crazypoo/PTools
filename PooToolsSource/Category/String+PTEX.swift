@@ -1021,6 +1021,36 @@ public extension String {
             return ""
         }
     }
+    
+    /// 計算字串在特定限制下的尺寸
+    func boundingSize(font: UIFont,
+                      lineSpacing: CGFloat = 2.5,
+                      lineBreakMode: NSLineBreakMode = .byWordWrapping,
+                      width: CGFloat = CGFloat.greatestFiniteMagnitude,
+                      height: CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
+        
+        // 確保字串不為空（替換掉你原本自訂的 stringIsEmpty，改用 Swift 原生的 isEmpty）
+        guard !self.isEmpty else { return .zero }
+        
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineSpacing = lineSpacing
+        paraStyle.lineBreakMode = lineBreakMode
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .paragraphStyle: paraStyle
+        ]
+        
+        let stringSize = (self as NSString).boundingRect(
+            with: CGSize(width: width, height: height),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: attributes,
+            context: nil
+        ).size
+        
+        // 向上取整，避免小數點導致渲染被裁切
+        return CGSize(width: ceil(stringSize.width), height: ceil(stringSize.height))
+    }
 }
 
 fileprivate extension PTUtils {

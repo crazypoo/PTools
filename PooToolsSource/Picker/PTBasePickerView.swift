@@ -82,7 +82,7 @@ public struct PTPickerStyle: Sendable {
     /// 工具栏背景色
     public var toolbarBackgroundColor: UIColor = .secondarySystemBackground
     /// 容器(底部背景)颜色
-    public var containerBackgroundColor: UIColor = .systemBackground
+    public var containerBackgroundColor: UIColor = .clear
     
     // MARK: - Cancel Button (取消按钮)
     public var cancelText: String = "取消"
@@ -102,6 +102,10 @@ public struct PTPickerStyle: Sendable {
     public var pickerTextColor: UIColor = .label
     public var pickerTextFont: UIFont = .systemFont(ofSize: 16, weight: .medium)
     public var pickerRowHeight: CGFloat = 44.0
+    
+    public var pickerBackgroundColor:UIColor = .white
+    
+    public var toolBarTopBottomSpacing:CGFloat = 2.5
     // MARK: - Global Default Instance
     /// 全局默认配置，你可以在 AppDelegate 或初始化时修改它，从而统一整个 App 的选择器风格
     public static var shared = PTPickerStyle()
@@ -119,7 +123,7 @@ open class PTBasePickerView: UIView {
     /// 顶部工具栏容器
     public let toolbarView = UIView()
     
-    public let titleLabel = UILabel()
+    public let titleLabel = UIButton(type: .custom)
     public let cancelButton = UIButton(type: .custom)
     public let confirmButton = UIButton(type: .custom)
     
@@ -149,7 +153,11 @@ open class PTBasePickerView: UIView {
     private func setupUI() {
         // 设置半透明背景
         containerView.backgroundColor = pickerStyle.containerBackgroundColor
-        toolbarView.backgroundColor = pickerStyle.toolbarBackgroundColor
+        if #available(iOS 26.0, *) {
+            toolbarView.backgroundColor = .clear
+        } else {
+            toolbarView.backgroundColor = pickerStyle.toolbarBackgroundColor
+        }
 
         backgroundView.alpha = 0
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismiss))
@@ -177,41 +185,72 @@ open class PTBasePickerView: UIView {
             make.height.equalTo(self.toolbarHeight)
         }
         
+        var buttonClearGlassOffset:CGFloat = 5
+        if #available(iOS 26.0, *) {
+            cancelButton.configuration = UIButton.Configuration.clearGlass()
+            confirmButton.configuration = UIButton.Configuration.clearGlass()
+            titleLabel.configuration = UIButton.Configuration.clearGlass()
+            buttonClearGlassOffset += 25
+        }
+
         // 配置按钮和标题
+        cancelButton.titleLabel?.font = pickerStyle.cancelTextFont
+        cancelButton.titleLabel?.numberOfLines = 1
         cancelButton.setTitle(pickerStyle.cancelText, for: .normal)
         cancelButton.setTitleColor(pickerStyle.cancelTextColor, for: .normal)
-        cancelButton.titleLabel?.font = pickerStyle.cancelTextFont
         cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        let cancelW = self.cancelButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
         
+        confirmButton.titleLabel?.font = pickerStyle.confirmTextFont
+        confirmButton.titleLabel?.numberOfLines = 1
         confirmButton.setTitle(pickerStyle.confirmText, for: .normal)
         confirmButton.setTitleColor(pickerStyle.confirmTextColor, for: .normal)
-        confirmButton.titleLabel?.font = pickerStyle.confirmTextFont
         confirmButton.addTarget(self, action: #selector(confirmAction), for: .touchUpInside)
-        toolbarView.addSubview(confirmButton)
+        let confirmW = self.confirmButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
         
-        titleLabel.textColor = pickerStyle.titleTextColor
-        titleLabel.font = pickerStyle.titleTextFont
-        titleLabel.textAlignment = .center
+        titleLabel.isUserInteractionEnabled = false
+        titleLabel.isHidden = true
+        titleLabel.setTitleColor(pickerStyle.titleTextColor, for: .normal)
+        titleLabel.titleLabel?.font = pickerStyle.titleTextFont
+        titleLabel.titleLabel?.textAlignment = .center
         toolbarView.addSubviews([cancelButton,confirmButton,titleLabel])
         cancelButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(self.cancelButton.sizeFor().width + 5)
-            make.height.equalTo(self.toolbarHeight)
-            make.centerY.equalToSuperview()
+            make.width.equalTo(cancelW)
+            make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
         }
         
         confirmButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(self.confirmButton.sizeFor().width + 5)
-            make.height.equalTo(self.toolbarHeight)
-            make.centerY.equalToSuperview()
+            make.width.equalTo(confirmW)
+            make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
         }
         
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.height.equalTo(self.toolbarHeight)
-            make.centerY.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
+            make.width.equalTo(0)
         }
+    }
+    
+    public func resetTitleLabelwidth() {
+        var buttonClearGlassOffset:CGFloat = 5
+        if #available(iOS 26.0, *) {
+            buttonClearGlassOffset += 25
+        }
+        let cancelW = self.cancelButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
+        let confirmW = self.confirmButton.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
+
+        let titleMax = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - cancelW - confirmW
+        var titleW = self.titleLabel.sizeFor(height: self.toolbarHeight - self.pickerStyle.toolBarTopBottomSpacing * 2).width + buttonClearGlassOffset
+        if titleW > titleMax {
+            titleW = titleMax
+        }
+        titleLabel.snp.updateConstraints { make in
+            make.width.equalTo(titleW)
+        }
+        
+        titleLabel.isHidden = (titleLabel.currentTitle ?? "").stringIsEmpty()
     }
     
     // MARK: - Actions
@@ -273,6 +312,34 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
     // 底层数据源统一升级为二维数组
     private var dataSource: [[PTPickerStringModel]] = []
     
+    // MARK: - Current Selection Properties
+    /// 获取当前选中的索引（单列场景使用）
+    public var selectedIndex: Int {
+        return pickerView.selectedRow(inComponent: 0)
+    }
+    
+    /// 获取当前选中的索引数组（多列场景使用）
+    public var selectedIndices: [Int] {
+        var indices: [Int] = []
+        for component in 0..<dataSource.count {
+            indices.append(pickerView.selectedRow(inComponent: component))
+        }
+        return indices
+    }
+    
+    /// 直接获取当前选中的完整结果数组（附带 Model）
+    public var currentResults: [PTPickerResult] {
+        var results: [PTPickerResult] = []
+        for component in 0..<dataSource.count {
+            let row = pickerView.selectedRow(inComponent: component)
+            if row >= 0 && row < dataSource[component].count {
+                let model = dataSource[component][row]
+                results.append(PTPickerResult(index: row, value: model.pickerDisplayText, originalModel: model))
+            }
+        }
+        return results
+    }
+
     // 区分单列和多列的回调
     public var singleResultBlock: ((_ result: PTPickerResult) -> Void)?
     public var multiResultBlock: ((_ results: [PTPickerResult]) -> Void)?
@@ -290,6 +357,7 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
         pickerView.delegate = self
         pickerView.dataSource = self
         
+        pickerView.backgroundColor = pickerStyle.pickerBackgroundColor
         containerView.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -299,10 +367,10 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
     }
     
     // MARK: - Public Methods (方法重载)
-    
     /// 配置并显示【单列】数据
     public func show(title: String, data: [PTPickerStringModel], defaultIndex: Int = 0, completion: @escaping (PTPickerResult) -> Void) {
-        self.titleLabel.text = title
+        self.titleLabel.setTitle(title, for: .normal)
+        resetTitleLabelwidth()
         self.dataSource = [data]
         self.singleResultBlock = completion
         self.multiResultBlock = nil
@@ -318,7 +386,8 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
 
     /// 配置并显示【多列】数据
     public func show(title: String, multiData: [[PTPickerStringModel]], defaultIndices: [Int]? = nil, completion: @escaping ([PTPickerResult]) -> Void) {
-        self.titleLabel.text = title
+        self.titleLabel.setTitle(title, for: .normal)
+        resetTitleLabelwidth()
         self.dataSource = multiData
         self.multiResultBlock = completion
         self.singleResultBlock = nil
@@ -418,6 +487,48 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     private var selectedQuarter: Int = 1
     private var selectedWeek: Int = 1
     
+    // MARK: - Current Selection Properties
+    /// 实时获取当前选中的日期对象
+    public var currentSelectedDate: Date? {
+        var components = DateComponents()
+        // 设置默认兜底值
+        components.year = Calendar.current.component(.year, from: Date())
+        components.month = 1; components.day = 1; components.hour = 0; components.minute = 0; components.second = 0
+        
+        switch pickerMode {
+        case .ymd:
+            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay
+        case .ymdhm:
+            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute
+        case .hm:
+            components.hour = selectedHour; components.minute = selectedMinute
+        case .ymdhms:
+            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute; components.second = selectedSecond
+        case .ymdh:
+            components.year = selectedYear; components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour
+        case .mdhm:
+            components.month = selectedMonth; components.day = selectedDay; components.hour = selectedHour; components.minute = selectedMinute
+        case .ym:
+            components.year = selectedYear; components.month = selectedMonth
+        case .y:
+            components.year = selectedYear
+        case .md:
+            components.month = selectedMonth; components.day = selectedDay
+        case .hms:
+            components.hour = selectedHour; components.minute = selectedMinute; components.second = selectedSecond
+        case .ms:
+            components.minute = selectedMinute; components.second = selectedSecond
+        case .yq:
+            components.year = selectedYear; components.quarter = selectedQuarter
+        case .ymw:
+            components.year = selectedYear; components.month = selectedMonth; components.weekOfMonth = selectedWeek
+        case .yw:
+            components.year = selectedYear; components.weekOfYear = selectedWeek
+        }
+        
+        return Calendar.current.date(from: components)
+    }
+
     public var resultBlock: ((_ date: Date, _ dateString: String) -> Void)?
     
     // MARK: - Initialization
@@ -439,6 +550,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         pickerView.delegate = self
         pickerView.dataSource = self
         
+        pickerView.backgroundColor = pickerStyle.pickerBackgroundColor
         containerView.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -476,7 +588,8 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
                      maxDate: Date? = nil,
                      completion: @escaping (Date, String) -> Void) {
         
-        self.titleLabel.text = title
+        self.titleLabel.setTitle(title, for: .normal)
+        resetTitleLabelwidth()
         self.pickerMode = mode
         self.minDate = minDate
         self.maxDate = maxDate
@@ -754,6 +867,30 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     /// 動態維護的列數據：二維數組，每一項代表目前 UI 上顯示的一列數據
     private var currentColumns: [[PTTreePickerModel]] = []
     
+    // MARK: - Current Selection Properties
+    /// 获取当前各层级选中的索引数组
+    public var selectedIndices: [Int] {
+        var indices: [Int] = []
+        for component in 0..<currentColumns.count {
+            indices.append(pickerView.selectedRow(inComponent: component))
+        }
+        return indices
+    }
+    
+    /// 直接获取当前选中的层级结果数组
+    public var currentResults: [PTPickerResult] {
+        var results: [PTPickerResult] = []
+        for col in 0..<currentColumns.count {
+            let row = pickerView.selectedRow(inComponent: col)
+            let levelData = currentColumns[col]
+            let safeRow = max(0, min(row, levelData.count - 1))
+            
+            let model = levelData[safeRow]
+            results.append(PTPickerResult(index: safeRow, value: model.pickerDisplayText, originalModel: model))
+        }
+        return results
+    }
+
     /// 選擇完成後的回調：返回所有選中的層級結果
     public var resultBlock: ((_ results: [PTPickerResult]) -> Void)?
     
@@ -771,6 +908,7 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         pickerView.delegate = self
         pickerView.dataSource = self
         
+        pickerView.backgroundColor = pickerStyle.pickerBackgroundColor
         containerView.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -788,7 +926,8 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
     ///   - defaultIndices: 各層級的默認選中索引，例如 [0, 1, 0]
     ///   - completion: 完成回調
     public func show(title: String, treeData: [PTTreePickerModel], defaultIndices: [Int]? = nil, completion: @escaping ([PTPickerResult]) -> Void) {
-        self.titleLabel.text = title
+        self.titleLabel.setTitle(title, for: .normal)
+        resetTitleLabelwidth()
         self.resultBlock = completion
         
         // 1. 根據傳入的數據和默認索引，計算出初始需要展示的所有列

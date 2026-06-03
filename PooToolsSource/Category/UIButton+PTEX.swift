@@ -73,19 +73,16 @@ public extension UIButton {
     @objc func sizeFor(lineSpacing:CGFloat = 2.5,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,
                        width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
-        // 优化：安全解包 font，避免 titleLabel 或 font 为 nil 时引发强制解包崩溃
-        guard let titleLabel = titleLabel, let font = titleLabel.font else { return .zero }
-        guard let text = titleLabel.text, !text.stringIsEmpty() else { return .zero }
+        guard let text = self.currentTitle else { return .zero }
+        let font = self.titleLabel?.font ?? UIFont.systemFont(ofSize: 15)
+        let lineBreakMode = self.titleLabel?.lineBreakMode ?? .byWordWrapping
         
-        var dic: [NSAttributedString.Key: Any] = [.font: font]
-        let paraStyle = NSMutableParagraphStyle()
-        paraStyle.lineSpacing = lineSpacing
-        dic[.paragraphStyle] = paraStyle
-        let size = text.boundingRect(with: CGSize(width: width, height: height),
-                                     options: [.usesLineFragmentOrigin, .usesFontLeading],
-                                     attributes: dic,
-                                     context: nil).size
-        return size
+        // 同樣直接呼叫 String 的共用方法
+        return text.boundingSize(font: font,
+                                 lineSpacing: lineSpacing,
+                                 lineBreakMode: lineBreakMode,
+                                 width: width,
+                                 height: height)
     }
 
     //MARK: 按鈕倒計時基礎方法
