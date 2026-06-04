@@ -106,6 +106,9 @@ public struct PTPickerStyle: Sendable {
     public var pickerBackgroundColor:UIColor = .white
     
     public var toolBarTopBottomSpacing:CGFloat = 2.5
+    
+    public var containerCornerRaidus:CGFloat = 16
+    public var pickerContainerCornerRaidus:CGFloat = 16
     // MARK: - Global Default Instance
     /// 全局默认配置，你可以在 AppDelegate 或初始化时修改它，从而统一整个 App 的选择器风格
     public static var shared = PTPickerStyle()
@@ -122,7 +125,10 @@ open class PTBasePickerView: UIView {
     public let containerView = UIView()
     /// 顶部工具栏容器
     public let toolbarView = UIView()
-    
+
+    public let pickerContainer = UIView()
+    private let pickerMaskGlassView = UIVisualEffectView()
+
     public let titleLabel = UIButton(type: .custom)
     public let cancelButton = UIButton(type: .custom)
     public let confirmButton = UIButton(type: .custom)
@@ -169,24 +175,40 @@ open class PTBasePickerView: UIView {
         
         // 设置容器视图 (初始位置在屏幕下方，为了做动画)
         // 切圆角
-        containerView.layer.cornerRadius = 16
-        containerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().offset(self.containerHeight)
             make.height.equalTo(self.containerHeight)
         }
         
+        containerView.viewCornerRectCorner(topLeft: pickerStyle.containerCornerRaidus,topRight: pickerStyle.containerCornerRaidus,corner: [.topLeft,.topRight])
+        
         // 设置工具栏
-        containerView.addSubview(toolbarView)
+        containerView.addSubviews([toolbarView,pickerContainer])
         toolbarView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalTo(self.toolbarHeight)
         }
         
+        pickerContainer.snp.makeConstraints { make in
+            make.top.equalTo(self.toolbarView.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        pickerContainer.viewCornerRectCorner(topLeft: pickerStyle.pickerContainerCornerRaidus,topRight: pickerStyle.pickerContainerCornerRaidus,corner: [.topLeft,.topRight])
+        
         var buttonClearGlassOffset:CGFloat = 5
         if #available(iOS 26.0, *) {
+            
+            pickerMaskGlassView.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+            pickerMaskGlassView.backgroundColor = pickerStyle.pickerBackgroundColor
+            pickerContainer.addSubview(pickerMaskGlassView)
+            pickerMaskGlassView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+
             cancelButton.configuration = UIButton.Configuration.clearGlass()
             confirmButton.configuration = UIButton.Configuration.clearGlass()
             titleLabel.configuration = UIButton.Configuration.clearGlass()
@@ -357,12 +379,9 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        pickerView.backgroundColor = pickerStyle.pickerBackgroundColor
-        containerView.addSubview(pickerView)
+        pickerContainer.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.toolbarView.snp.bottom)
-            make.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     
@@ -550,12 +569,9 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        pickerView.backgroundColor = pickerStyle.pickerBackgroundColor
-        containerView.addSubview(pickerView)
+        pickerContainer.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.toolbarView.snp.bottom)
-            make.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     
@@ -908,12 +924,9 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         pickerView.delegate = self
         pickerView.dataSource = self
         
-        pickerView.backgroundColor = pickerStyle.pickerBackgroundColor
-        containerView.addSubview(pickerView)
+        pickerContainer.addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.toolbarView.snp.bottom)
-            make.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     
