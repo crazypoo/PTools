@@ -213,6 +213,8 @@ open class PTBasePickerView: UIView {
             confirmButton.configuration = UIButton.Configuration.clearGlass()
             titleLabel.configuration = UIButton.Configuration.clearGlass()
             buttonClearGlassOffset += 25
+        } else {
+            pickerContainer.backgroundColor = pickerStyle.pickerBackgroundColor
         }
 
         // 配置按钮和标题
