@@ -653,15 +653,11 @@ public extension UIView {
     @objc class func sizeFor(string:String,
                              font:UIFont,
                              lineSpacing:CGFloat = 2.5,
+                             lineBreakMode: NSLineBreakMode = .byWordWrapping,
                              height:CGFloat = CGFloat.greatestFiniteMagnitude,
                              width:CGFloat = CGFloat.greatestFiniteMagnitude) -> CGSize {
         guard !string.isEmpty else { return .zero }
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.lineSpacing = lineSpacing
-        let attributes: [NSAttributedString.Key: Any] = [.font: font, .paragraphStyle: paragraph]
-        let constraintSize = CGSize(width: width, height: height)
-        let rect = string.boundingRect(with: constraintSize, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: attributes, context: nil)
-        return CGSize(width: ceil(rect.width), height: ceil(rect.height))
+        return string.boundingSize(font: font,lineSpacing: lineSpacing,lineBreakMode: lineBreakMode,width: width,height: height)
     }
     
     var viewController: UIViewController? {
