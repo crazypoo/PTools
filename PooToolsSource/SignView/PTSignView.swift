@@ -33,6 +33,7 @@ public class PTSignView: UIView {
     
     lazy var viewNavView:PTNavBar = {
         let view = PTNavBar()
+        view.isFakeNav = true
         if #available(iOS 26.0, *) {
             view.backgroundColor = .clear
         } else {

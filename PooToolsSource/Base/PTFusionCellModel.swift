@@ -263,6 +263,7 @@ open class PTTagLayoutModel:NSObject {
     public var contentSpace:CGFloat = 4
     public var contentFont:UIFont = .appfont(size: 14)
     public var contentTextColor:UIColor = .black
+    public var cachedWidth: CGFloat?
 }
 
 extension PTTagLayoutModel: PTDiffableModel {

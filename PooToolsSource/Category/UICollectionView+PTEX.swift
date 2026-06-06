@@ -279,58 +279,86 @@ public extension UICollectionView {
     
     class func tagShowLayoutHeight(data: [PTTagLayoutModel]?,
                                    screenWidth: CGFloat? = nil,
-                                   itemOriginalX: CGFloat? = nil,
+                                   itemOriginalX: CGFloat? = nil, // 左右边距 (假设对称)
                                    itemHeight: CGFloat = 32,
                                    topContentSpace: CGFloat = 10,
                                    bottomContentSpace: CGFloat = 10,
                                    itemLeadingSpace: CGFloat = 10,
                                    itemTrailingSpace: CGFloat = 10,
-                                   itemContentSpace: CGFloat = 20) -> (groupHeight: CGFloat, groupItems: [NSCollectionLayoutGroupCustomItem], columnCount: Int) {
+                                   itemContentSpace: CGFloat = 20,
+                                   maxRows: Int = 0                // 新增：最大行数限制 (0 表示不限制，全部展示)
+    ) -> (groupHeight: CGFloat, groupItems: [NSCollectionLayoutGroupCustomItem], rowCount: Int) {
+        
+        // 1. 数据校验与短路返回
         guard let datas = data, !datas.isEmpty else {
             return (topContentSpace + bottomContentSpace, [], 0)
         }
+        
+        // 2. 环境参数初始化
         let viewW = screenWidth ?? CGFloat.kSCREEN_WIDTH
         let itemX = itemOriginalX ?? PTAppBaseConfig.share.defaultViewSpace
-
+        
+        // 提前分配内存，提升性能
         var customItems: [NSCollectionLayoutGroupCustomItem] = []
         customItems.reserveCapacity(datas.count)
         
+        // 3. 布局游标初始化
         var x = itemX
         var y: CGFloat = topContentSpace
-        var columnCount = 1
-
+        var rowCount = 1 // 优化：原 columnCount 改为 rowCount
+        
+        // 4. 安全边界计算
         let maxRowWidth = max(0.1, viewW - itemX * 2)
         let safeItemHeight = max(0.1, itemHeight)
-
+        
+        // 闭包：计算或获取 Cell 宽度
         func calculateCellWidth(for model: PTTagLayoutModel) -> CGFloat {
-            // ⚠️ 性能提示：如果是庞大数据集，建议将此处的 sizeFor(string:) 计算前置到网络请求回调中，避免阻塞主线程布局
+            // 💡 进阶优化：如果 model 中已经缓存了 width，直接读取，避免重复调用 sizeFor
+            if let cachedWidth = model.cachedWidth, cachedWidth > 0 {
+                return cachedWidth
+            }
+            
             var width = UIView.sizeFor(string: model.name, font: model.contentFont, height: safeItemHeight).width + itemContentSpace
             if model.haveImage {
                 width += model.imageWidth + model.contentSpace
             }
-            return min(width, maxRowWidth) // 防止单个标签太长撑爆屏幕
+            
+            let finalWidth = min(width, maxRowWidth)
+            model.cachedWidth = finalWidth // 将计算结果存入模型中，下次直接使用
+            return finalWidth
         }
-
+        
+        // 5. 核心布局遍历
         for (index, model) in datas.enumerated() {
             let currentWidth = calculateCellWidth(for: model)
-
-            if x + currentWidth > (viewW - itemX) { // 换行逻辑优化：基于屏幕右侧边缘计算
+            
+            // 判断当前行剩余空间是否足以放下新 Item
+            if x + currentWidth > (viewW - itemX) {
+                // 需要换行时，检查是否已经达到最大行数限制
+                if maxRows > 0 && rowCount >= maxRows {
+                    break // 停止布局剩余的标签
+                }
+                
+                // 执行换行逻辑
                 x = itemX
                 y += safeItemHeight + itemTrailingSpace
-                columnCount += 1
+                rowCount += 1
             }
-
+            
+            // 创建 Item 的 Frame 和对象
             let frame = CGRect(x: x, y: y, width: currentWidth, height: safeItemHeight)
             let item = NSCollectionLayoutGroupCustomItem(frame: frame, zIndex: 1000 + index)
             customItems.append(item)
-
+            
+            // 移动 X 游标，加上水平间距，为下一个 Item 做准备
             x += currentWidth + itemLeadingSpace
         }
-
+        
+        // 6. 最终高度计算
         let totalHeight = y + safeItemHeight + bottomContentSpace
-        return (totalHeight, customItems, columnCount)
+        return (totalHeight, customItems, rowCount)
     }
-    
+
     // MARK: - 横向布局 (Horizontal)
     class func horizontalLayout(data: [AnyObject]?,
                                       itemOriginalX: CGFloat? = nil,

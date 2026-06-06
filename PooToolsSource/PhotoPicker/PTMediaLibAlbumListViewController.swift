@@ -79,6 +79,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     fileprivate lazy var fakeNav:PTNavBar = {
         let view = PTNavBar()
+        view.isFakeNav = true
         return view
     }()
     

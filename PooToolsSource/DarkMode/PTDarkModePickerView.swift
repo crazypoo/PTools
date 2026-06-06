@@ -112,6 +112,7 @@ class PTDarkModePickerView: UIView {
     
     lazy var topToolBar:PTNavBar = {
         let view = PTNavBar()
+        view.isFakeNav = true
         return view
     }()
 

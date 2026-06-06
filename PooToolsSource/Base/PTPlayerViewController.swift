@@ -40,6 +40,7 @@ open class PTPlayerViewController: PTBaseViewController {
     
     public lazy var videoNavBar:PTNavBar = {
         let view = PTNavBar()
+        view.isFakeNav = true
         view.setLeftButtons([closeButton])
         return view
     }()
@@ -71,9 +72,6 @@ open class PTPlayerViewController: PTBaseViewController {
     }
     
     deinit {
-//        if let token = timeObserverToken {
-//            videoPlayer?.removeTimeObserver(token)
-//        }
         videoPlayer?.pause()
         videoPlayer = nil
     }

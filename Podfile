@@ -37,9 +37,9 @@ end
 
 target 'PooTools_Example' do
   
-  pod 'FLEX', :configurations => ['Debug']
-  pod 'InAppViewDebugger', :configurations => ['Debug']
-  pod 'LookinServer', :configurations => ['Debug']
+  pod 'FLEX'
+  pod 'InAppViewDebugger'
+  pod 'LookinServer'
 #  pod 'LifetimeTracker', :configurations => ['Debug']
 #  pod "HyperioniOS/Core", :configurations => ['Debug']
 #  pod 'HyperioniOS/AttributesInspector', :configurations => ['Debug'] # Optional plugin

@@ -67,7 +67,8 @@ open class PTNavTitleContainer: UIView {
     }
 }
 
-public final class PTNavigationBarContainer: UIView {
+@MainActor
+open class PTNavigationBarContainer: UIView {
     
     private var fromStyle: PTNavigationBarStyle?
     private var toStyle: PTNavigationBarStyle?
@@ -79,14 +80,14 @@ public final class PTNavigationBarContainer: UIView {
     public var rightContainerWidth: CGFloat = 0
     
     // ✅ 新增三块区域
-    fileprivate lazy var leftContainer:UIStackView = {
+    public lazy var leftContainer:UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .center
         view.distribution = .fillProportionally
         return view
     }()
-    fileprivate let rightContainer:UIStackView = {
+    public let rightContainer:UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.alignment = .center
@@ -94,7 +95,7 @@ public final class PTNavigationBarContainer: UIView {
         return view
     }()
     
-    fileprivate let titleContainer = UIView()
+    public let titleContainer = UIView()
     
     let topBarContainer = UIView()   // ← 放 left/right/title
     let largeTitleContainer = UIView() // ← 单独一层
@@ -296,7 +297,7 @@ public final class PTNavigationBarManager:NSObject {
     
     public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?
     
-    @MainActor public func installIfNeeded(in nav: UINavigationController) {
+    public func installIfNeeded(in nav: UINavigationController) {
         if containerMap.object(forKey: nav) != nil { return }
 
         let navBar = nav.navigationBar
@@ -323,7 +324,7 @@ public final class PTNavigationBarManager:NSObject {
         containerMap.setObject(container, forKey: nav)
     }
     
-    @MainActor public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
+    public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
         installIfNeeded(in: nav)
         currentNav = nav
         lastStyle = style
@@ -333,7 +334,7 @@ public final class PTNavigationBarManager:NSObject {
         resetSystemNavBarAppearance(nav)
     }
     
-    @MainActor private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
+    private func resetSystemNavBarAppearance(_ nav: UINavigationController) {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = nil   // ❗关键（去 blur）
@@ -367,13 +368,13 @@ public final class PTNavigationBarManager:NSObject {
         }
     }
     
-    @MainActor public func setAlpha(_ alpha: CGFloat) {
+    public func setAlpha(_ alpha: CGFloat) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.backgroundView.alpha = alpha
     }
     
-    @MainActor public func bind(to nav: UINavigationController) {
+    public func bind(to nav: UINavigationController) {
         nav.delegate = self
     }
     
@@ -386,7 +387,7 @@ public final class PTNavigationBarManager:NSObject {
         return newItem
     }
 
-    @MainActor public func update(item: PTNavBarItem, for vc: UIViewController) {
+    public func update(item: PTNavBarItem, for vc: UIViewController) {
         item.isConfigured = true
         itemCache.setObject(item, forKey: vc)
         
@@ -398,20 +399,20 @@ public final class PTNavigationBarManager:NSObject {
 }
 
 extension PTNavigationBarManager {
-    @MainActor func updateScrollProgress(_ progress: CGFloat) {
+    func updateScrollProgress(_ progress: CGFloat) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.updateLargeTitle(progress: progress)
     }
     
-    @MainActor public func currentNavLargeTitleBarHeight() -> CGFloat {
+    public func currentNavLargeTitleBarHeight() -> CGFloat {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return 0 }
         container.layoutIfNeeded()
         return container.largeTitleContainer.frame.height
     }
     
-    @MainActor public func currentNavBarHeight() -> CGFloat {
+    public func currentNavBarHeight() -> CGFloat {
         guard let _ = currentNav else { return 0 }
         
         let status = CGFloat.statusBarHeight()
@@ -561,7 +562,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
     }
 
-    @MainActor private func apply(item: PTNavBarItem) {
+    private func apply(item: PTNavBarItem) {
         setLeftView(item.leftView,spacing: item.leftItemSpacing)
         setRightViews(item.rightViews,spacing: item.rightItemSpacing)
         if let findTitleView = item.titleView {
@@ -623,13 +624,13 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
     }
 
-    @MainActor private func clear() {
+    private func clear() {
         setLeftView([])
         setRightViews([])
         setTitleView(nil)
     }
     
-    @MainActor public func restoreIfNeeded(for vc: UIViewController) {
+    public func restoreIfNeeded(for vc: UIViewController) {
         // ❗关键：只处理有 navigationController 的 VC
         let realVC = PTUtils.getCurrentVC(from: vc)
         guard let nav = realVC.navigationController else { return }
@@ -647,7 +648,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         nav.setNeedsStatusBarAppearanceUpdate()
     }
     
-    @MainActor public func refreshCurrentNavBar() {
+    public func refreshCurrentNavBar() {
         guard let vc = currentVC,
               let nav = currentNav else { return }
         
@@ -683,12 +684,12 @@ extension PTNavigationBarManager {
 
 extension PTNavigationBarManager {
     
-    @MainActor fileprivate func navOffset() -> CGFloat {
+    fileprivate func navOffset() -> CGFloat {
         let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
         return offsetHeight
     }
     
-    @MainActor public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
+    public func setLeftView(_ views: [UIView],spacing:CGFloat = 8) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.leftContainer.spacing = spacing
@@ -727,7 +728,7 @@ extension PTNavigationBarManager {
         }
     }
     
-    @MainActor public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
+    public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.rightContainer.spacing = spacing
@@ -766,7 +767,7 @@ extension PTNavigationBarManager {
         }
     }
     
-    @MainActor public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {
+    public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.titleContainer.subviews.forEach { $0.removeFromSuperview() }

@@ -695,7 +695,12 @@ public class PTMediaLibViewController: PTBaseViewController {
     fileprivate var selectedMediaCount: Int = 0
 
     // MARK: - UI
-    private lazy var fakeNav: PTNavBar = PTNavBar()
+    private lazy var fakeNav: PTNavBar = {
+        let view = PTNavBar()
+        view.isFakeNav = true
+        view.apply(style: .solid(.clear)) // 或者你想要的颜色
+        return view
+    }()
 
     private lazy var dismissButton: UIButton = {
         let view = UIButton(type: .custom)
@@ -816,7 +821,6 @@ public class PTMediaLibViewController: PTBaseViewController {
         fakeNav.titleViewMode = .auto
         fakeNav.setLeftButtons([dismissButton])
         fakeNav.setRightButtons([submitButton])
-
 
         resetTitleSelectBounds()
     }

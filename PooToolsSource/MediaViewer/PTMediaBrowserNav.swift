@@ -30,6 +30,7 @@ class PTMediaBrowserNav: UIView {
     
     lazy var navBar:PTNavBar = {
         let view = PTNavBar()
+        view.isFakeNav = true
         view.setLeftButtons([closeButton])
         view.titleView = titleLabel
         view.titleViewMode = .fill
