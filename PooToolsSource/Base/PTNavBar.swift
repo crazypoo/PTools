@@ -70,15 +70,20 @@ open class PTNavBar: PTNavigationBarContainer {
     public var titleView: UIView? {
         didSet {
             oldValue?.removeFromSuperview()
-            if let newView = titleView {
-                if let labelTitle = newView as? UILabel {
-                    labelTitle.setContentHuggingPriority(.required, for: .horizontal)
-                    labelTitle.setContentCompressionResistancePriority(.required, for: .horizontal)
-                }
-                titleContainer.addSubview(newView)
-                applyTitleViewConstraints(newView)
-                titleContainer.isHidden = false
+                        
+            guard let newView = titleView else {
+                titleContainer.isHidden = true // 👈 判空处理
+                return
             }
+            
+            titleContainer.isHidden = false // 👈 关键修复
+            
+            if let labelTitle = newView as? UILabel {
+                labelTitle.setContentHuggingPriority(.required, for: .horizontal)
+                labelTitle.setContentCompressionResistancePriority(.required, for: .horizontal)
+            }
+            titleContainer.addSubview(newView)
+            applyTitleViewConstraints(newView)
         }
     }
     
@@ -194,9 +199,14 @@ open class PTNavBar: PTNavigationBarContainer {
     
     public func setLeftButtons(_ buttons: [UIView]) {
         leftContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        if !buttons.isEmpty {
-            leftContainer.isHidden = false
+        guard !buttons.isEmpty else {
+            leftContainer.isHidden = true
+            self.leftContainerWidth = 0
+            updateContainerConstraints(leftContainer, isLeft: true)
+            calculateMaxWidth()
+            return
         }
+        leftContainer.isHidden = false
         buttons.forEach { value in
             leftContainer.addArrangedSubview(value)
             if let switchV = value as? UISwitch {
@@ -218,9 +228,16 @@ open class PTNavBar: PTNavigationBarContainer {
     
     public func setRightButtons(_ buttons: [UIView]) {
         rightContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        if !buttons.isEmpty {
-            rightContainer.isHidden = false
+        guard !buttons.isEmpty else {
+            leftContainer.isHidden = true
+            self.leftContainerWidth = 0
+            updateContainerConstraints(leftContainer, isLeft: true)
+            calculateMaxWidth()
+            return
         }
+        
+        leftContainer.isHidden = false
+
         buttons.forEach { value in
             rightContainer.addArrangedSubview(value)
             if let switchV = value as? UISwitch {

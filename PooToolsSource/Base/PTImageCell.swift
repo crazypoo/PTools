@@ -60,9 +60,7 @@ open class PTImageCell: PTBaseNormalCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-//        removeAnimator()
-    }
+    deinit {}
     
     public func removeAnimator() {
         guard let animator else { return }
