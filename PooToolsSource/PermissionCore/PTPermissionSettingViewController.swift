@@ -75,8 +75,6 @@ public class PTPermissionSettingViewController: PTBaseViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let nav = navigationController else { return }
-        PTBaseNavControl.GobalNavControl(nav: nav)
         dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         setCustomBackButtonView(dismissButton)
     }
@@ -86,6 +84,14 @@ public class PTPermissionSettingViewController: PTBaseViewController {
 
         self.pt_Title = "PT Permission Authorize title".localized()
         
+        let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
+        
+        newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
+        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
+        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()

@@ -770,7 +770,26 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
-        decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
+        switch viewConfig.decorationItemsType {
+        case .Custom:
+            decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
+        case .Normal,.Corner:
+            if let decorationView = view as? PTBaseDecorationView {
+                decorationView.bgView.backgroundColor = itemSec.decorationBackgroundColor
+                if viewConfig.decorationItemsType == .Normal {
+                    decorationView.bgView.layer.cornerRadius = 0
+                } else {
+                    decorationView.bgView.layer.cornerRadius = itemSec.decorationCornerRadius
+                }
+                decorationView.layer.shadowOpacity = itemSec.decorationShadowOpacity
+                
+                if let bgImage = itemSec.decorationBackgroundImage {
+                    decorationView.bgImageView.isHidden = false
+                    decorationView.bgImageView.image = bgImage
+                }
+            }
+        default:break
+        }
     }
         
     // MARK: 移动cell结束
@@ -1484,9 +1503,7 @@ extension PTCollectionView {
             viewConfig.decorationModel?.forEach { value in
                 layout.register(value.decorationClass, forDecorationViewOfKind: value.decorationID)
             }
-        case .Corner:
-            layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: PTBaseDecorationView_Corner.ID)
-        case .Normal:
+        case .Normal,.Corner:
             layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: PTBaseDecorationView.ID)
         default:break
         }
@@ -1712,12 +1729,8 @@ extension PTCollectionView {
             } else {
                 return []
             }
-        case .Normal:
+        case .Normal,.Corner:
             let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView.ID)
-            backItem.contentInsets = viewConfig.decorationItemsEdges
-            return [backItem]
-        case .Corner:
-            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView_Corner.ID)
             backItem.contentInsets = viewConfig.decorationItemsEdges
             return [backItem]
         default:

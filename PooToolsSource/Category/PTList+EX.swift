@@ -26,6 +26,11 @@ public final class PTSection: NSObject {
     public var footerClass: UICollectionReusableView.Type?
     public var headerClass: UICollectionReusableView.Type?
     
+    public var decorationBackgroundColor: UIColor? = PTAppBaseConfig.share.decorationBackgroundColor
+    public var decorationCornerRadius: CGFloat = PTAppBaseConfig.share.decorationBackgroundCornerRadius
+    public var decorationBackgroundImage: UIImage?
+    public var decorationShadowOpacity: Float = 0.08
+
     public init(identifier: String = UUID().uuidString,
                 headerTitle: String? = "",
                 headerID: String? = "",

@@ -49,11 +49,7 @@ public class PTPermissionViewController: PTBaseViewController {
         let view = PTCollectionView(viewConfig: cConfig)
         view.decorationViewReset = { collection,view,kind,indexPath,sectionModel in
             if Gobal_device_info.isPad {
-                if kind == PTBaseDecorationView_Corner.ID {
-                    view.frame = CGRectMake(cConfig.decorationItemsEdges.leading, 0, self.view.frame.size.width - cConfig.decorationItemsEdges.leading - cConfig.decorationItemsEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
-                } else if kind == UICollectionView.elementKindSectionHeader {
-                    view.frame = CGRectMake(cConfig.decorationItemsEdges.leading, 0, self.view.frame.size.width - cConfig.decorationItemsEdges.leading - cConfig.decorationItemsEdges.trailing, PTPermissionHeader.cellHeight())
-                }
+                view.frame = CGRectMake(cConfig.decorationItemsEdges.leading, 0, self.view.frame.size.width - cConfig.decorationItemsEdges.leading - cConfig.decorationItemsEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
             }
         }
         
@@ -184,7 +180,7 @@ public class PTPermissionViewController: PTBaseViewController {
         closeButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.width.height.equalTo(34)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
+            make.top.equalToSuperview().inset(5)
         }
         closeButton.addActionHandlers(handler: { sender in
             self.returnFrontVC {
