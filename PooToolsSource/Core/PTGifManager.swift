@@ -92,9 +92,7 @@ open class PTGifManager {
         haveCache = true
     }
     
-    deinit {
-//        stopTimer()
-    }
+    deinit { }
     
     public func startTimerIfNeeded() {
         guard timer == nil else {

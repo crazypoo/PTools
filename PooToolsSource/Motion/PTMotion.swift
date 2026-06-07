@@ -9,10 +9,34 @@
 import UIKit
 @preconcurrency import CoreMotion
 
-public typealias PTMotionBlock = (_ step: Int, _ confidence: String, _ status: String) -> Void
+// MARK: - 数据模型
+public struct PTMotionData: Sendable {
+    // 基础计步
+    public var stepCount: Int = 0
+    public var distance: Double = 0.0          // 距离 (米)
+    
+    // 进阶运动数据
+    public var currentPace: Double = 0.0       // 配速 (秒/米)
+    public var currentCadence: Double = 0.0    // 步频 (步/秒)
+    
+    // 爬楼与海拔 (利用气压计和协处理器)
+    public var floorsAscended: Int = 0         // 上楼层数
+    public var floorsDescended: Int = 0        // 下楼层数
+    public var relativeAltitude: Double = 0.0  // 相对高度变化 (米)
+    public var pressure: Double = 0.0          // 环境气压 (千帕 kPa)
+    
+    // 状态与置信度
+    public var confidence: String = "Unknown"
+    public var status: String = "Unknown"
+    
+    // 自动启停侦测
+    public var isWalkingPaused: Bool = false   // 侦测用户是否临时停下脚步
+}
+
+public typealias PTMotionBlock = (_ data: PTMotionData) -> Void
 
 @objcMembers
-public class PTMotion: NSObject,@unchecked Sendable {
+public class PTMotion: NSObject, @unchecked Sendable {
 
     public static let shared = PTMotion()
     
@@ -21,7 +45,10 @@ public class PTMotion: NSObject,@unchecked Sendable {
     private let operationQueue = OperationQueue()
     private let pedometer = CMPedometer()
     private let activityManager = CMMotionActivityManager()
-    private var stepCount: Int = 0
+    private let altimeter = CMAltimeter() // 新增：气压高度计
+    
+    // 实例化一个内部数据模型，作为唯一的数据源头
+    private var currentData = PTMotionData()
     
     private override init() {
         super.init()
@@ -31,18 +58,27 @@ public class PTMotion: NSObject,@unchecked Sendable {
     @MainActor public func startMotion(from startDate: Date = Date()) {
         guard CMPedometer.isStepCountingAvailable(), CMMotionActivityManager.isActivityAvailable() else {
             let msg = "哎喲，不能運行哦，僅支持 M7 以上處理器，暫時只能在 iPhone5s 以上使用。"
-            UIAlertController.base_alertVC(msg: msg, showIn: PTUtils.getCurrentVC(), moreBtn: nil)
+            // 假设这是你的弹窗工具：
+            // UIAlertController.base_alertVC(msg: msg, showIn: PTUtils.getCurrentVC(), moreBtn: nil)
+            PTNSLogConsole(msg)
             return
         }
 
+        // 启动所有传感器
         startPedometer(from: startDate)
         startActivityUpdates()
+        startAltimeterUpdates()
+        startPedometerEventUpdates()
     }
 
     // MARK: - Stop Motion Tracking
     public func stopMotion() {
         pedometer.stopUpdates()
+        pedometer.stopEventUpdates() // 停止事件侦测
         activityManager.stopActivityUpdates()
+        if CMAltimeter.isRelativeAltitudeAvailable() {
+            altimeter.stopRelativeAltitudeUpdates() // 停止气压计
+        }
     }
 
     // MARK: - Authorization Check (iOS 11+)
@@ -59,44 +95,85 @@ public class PTMotion: NSObject,@unchecked Sendable {
         }
     }
 
-    // MARK: - Private Methods
+    // MARK: - Private Methods: Sensors
+    
     private func startPedometer(from date: Date) {
         pedometer.startUpdates(from: date) { [weak self] pedometerData, error in
             guard let self = self, let data = pedometerData, error == nil else { return }
-            self.stepCount = data.numberOfSteps.intValue
+            
+            self.currentData.stepCount = data.numberOfSteps.intValue
+            self.currentData.distance = data.distance?.doubleValue ?? 0.0
+            self.currentData.currentPace = data.currentPace?.doubleValue ?? 0.0
+            self.currentData.currentCadence = data.currentCadence?.doubleValue ?? 0.0 // 新增步频
+            self.currentData.floorsAscended = data.floorsAscended?.intValue ?? 0
+            self.currentData.floorsDescended = data.floorsDescended?.intValue ?? 0
+            
+            self.triggerCallback()
         }
     }
 
     private func startActivityUpdates() {
         activityManager.startActivityUpdates(to: operationQueue) { [weak self] activity in
             guard let self = self, let activity = activity else { return }
-            PTGCDManager.shared.runOnMain {
-                let confidence = self.confidenceString(from: activity.confidence)
-                let status = self.statusDescription(from: activity)
-                self.motionBlock?(self.stepCount, confidence, status)
+            
+            self.currentData.confidence = self.confidenceString(from: activity.confidence)
+            self.currentData.status = self.statusDescription(from: activity)
+            
+            self.triggerCallback()
+        }
+    }
+    
+    // 新增：启动气压和海拔侦测
+    private func startAltimeterUpdates() {
+        guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
+        
+        altimeter.startRelativeAltitudeUpdates(to: operationQueue) { [weak self] altitudeData, error in
+            guard let self = self, let data = altitudeData, error == nil else { return }
+            
+            self.currentData.relativeAltitude = data.relativeAltitude.doubleValue
+            self.currentData.pressure = data.pressure.doubleValue
+            
+            self.triggerCallback()
+        }
+    }
+    
+    // 新增：侦测运动是否暂停或恢复
+    private func startPedometerEventUpdates() {
+        guard CMPedometer.isPedometerEventTrackingAvailable() else { return }
+        
+        pedometer.startEventUpdates { [weak self] event, error in
+            guard let self = self, let event = event, error == nil else { return }
+            
+            // 当用户停下脚步休息时，会收到 .pause；重新走动时会收到 .resume
+            DispatchQueue.main.async {
+                self.currentData.isWalkingPaused = (event.type == .pause)
+                self.triggerCallback()
             }
         }
     }
+    
+    // MARK: - Data Dispatch
+    
+    private func triggerCallback() {
+        // 确保回调一定在主线程触发，方便外部直接更新 UI
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.motionBlock?(self.currentData)
+        }
+    }
 
+    // MARK: - Helpers
+    
     private func statusDescription(from activity: CMMotionActivity) -> String {
         var states: [String] = []
 
-        if activity.stationary {
-            states.append("Not Moving")
-        }
-        if activity.walking {
-            states.append("Walking")
-        }
-        if activity.running {
-            states.append("Running")
-        }
-        if activity.automotive {
-            states.append("In a Vehicle")
-        }
+        if activity.stationary { states.append("Not Moving") }
+        if activity.walking { states.append("Walking") }
+        if activity.running { states.append("Running") }
+        if activity.automotive { states.append("In a Vehicle") }
+        if activity.cycling { states.append("Cycling") }
 
-        if activity.unknown || states.isEmpty {
-            states.append("Unknown")
-        }
+        if activity.unknown || states.isEmpty { states.append("Unknown") }
 
         return states.joined(separator: ", ")
     }

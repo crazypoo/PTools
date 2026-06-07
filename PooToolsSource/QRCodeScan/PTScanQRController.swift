@@ -21,8 +21,8 @@ public class PTScanBarInfo: NSObject {
     public var codeString: String = ""
     
     // 如果需要的话，我们可以添加一个便利的初始化方法
-    public init(codeView: UIView = UIView(), codeString: String = "") {
-        self.codeView = codeView
+    public init(codeView: UIView? = nil, codeString: String = "") {
+        self.codeView = codeView ?? UIView()
         self.codeString = codeString
         super.init()
     }

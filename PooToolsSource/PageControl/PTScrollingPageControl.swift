@@ -81,9 +81,7 @@ open class PTScrollingPageControl: PTBasePageControl {
     private let animDuration: CFTimeInterval = 0.35 // 滚动的耗时，可以微调
     private var isAnimating: Bool { return displayLink != nil }
 
-    deinit {
-//        stopDisplayLink()
-    }
+    deinit { }
     
     // MARK: - 重写基类模板方法
     
