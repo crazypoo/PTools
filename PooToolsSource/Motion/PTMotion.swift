@@ -33,6 +33,7 @@ public struct PTMotionData: Sendable {
     public var isWalkingPaused: Bool = false   // 侦测用户是否临时停下脚步
     
     // 🌟 新增：G 值与姿态数据
+    public var gForceZ: Double = 0.0 // 上下颠簸 G 值 (非铺装路面震动)
     public var gForceX: Double = 0.0 // 左右 G 值 (转弯)
     public var gForceY: Double = 0.0 // 前后 G 值 (加减速)
     public var pitch: Double = 0.0   // 俯仰角 (坡度度数)
@@ -214,7 +215,8 @@ public class PTMotion: NSObject, @unchecked Sendable {
             
             self.currentData.gForceX = motion.userAcceleration.x
             self.currentData.gForceY = motion.userAcceleration.y
-
+            self.currentData.gForceZ = motion.userAcceleration.z
+            
             self.currentData.pitch = motion.attitude.pitch * 180 / .pi
             // 1. 计算当前倾角 (将弧度转换为角度)
             // 默认手机竖直固定在车把上时，roll 代表左右倾斜
