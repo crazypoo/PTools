@@ -31,6 +31,12 @@ public struct PTMotionData: Sendable {
     
     // 自动启停侦测
     public var isWalkingPaused: Bool = false   // 侦测用户是否临时停下脚步
+    
+    // 🌟 新增：G 值与姿态数据
+    public var gForceX: Double = 0.0 // 左右 G 值 (转弯)
+    public var gForceY: Double = 0.0 // 前后 G 值 (加减速)
+    public var pitch: Double = 0.0   // 俯仰角 (坡度度数)
+    public var roll: Double = 0.0    // 侧倾角 (左右倾斜度数)
 }
 
 public typealias PTMotionBlock = (_ data: PTMotionData) -> Void
@@ -46,6 +52,8 @@ public class PTMotion: NSObject, @unchecked Sendable {
     private let pedometer = CMPedometer()
     private let activityManager = CMMotionActivityManager()
     private let altimeter = CMAltimeter() // 新增：气压高度计
+    
+    private let motionManager = CMMotionManager() // 新增核心传感器
     
     // 实例化一个内部数据模型，作为唯一的数据源头
     private var currentData = PTMotionData()
@@ -69,6 +77,7 @@ public class PTMotion: NSObject, @unchecked Sendable {
         startActivityUpdates()
         startAltimeterUpdates()
         startPedometerEventUpdates()
+        startDeviceMotionUpdates() // 启动车身感应
     }
 
     // MARK: - Stop Motion Tracking
@@ -79,6 +88,7 @@ public class PTMotion: NSObject, @unchecked Sendable {
         if CMAltimeter.isRelativeAltitudeAvailable() {
             altimeter.stopRelativeAltitudeUpdates() // 停止气压计
         }
+        motionManager.stopDeviceMotionUpdates()
     }
 
     // MARK: - Authorization Check (iOS 11+)
@@ -184,6 +194,29 @@ public class PTMotion: NSObject, @unchecked Sendable {
         case .medium: return "Medium"
         case .high: return "High"
         @unknown default: return "Unknown"
+        }
+    }
+    
+    // 🌟 核心：获取 G 值与车身姿态
+    private func startDeviceMotionUpdates() {
+        guard motionManager.isDeviceMotionAvailable else { return }
+        
+        // 极客建议：UI 动画 30Hz 足矣，60Hz 会导致设备发热严重
+        motionManager.deviceMotionUpdateInterval = 1.0 / 30.0
+        
+        motionManager.startDeviceMotionUpdates(to: operationQueue) { [weak self] motion, error in
+            guard let self = self, let motion = motion, error == nil else { return }
+            
+            // 1. 获取纯净的 G 值 (userAcceleration 已经剔除了地球重力的 1G 干扰)
+            self.currentData.gForceX = motion.userAcceleration.x
+            self.currentData.gForceY = motion.userAcceleration.y
+            
+            // 2. 获取车身倾角 (系统给的是弧度 Radian，我们需要转成度数 Degree 方便显示)
+            self.currentData.pitch = motion.attitude.pitch * 180 / .pi
+            self.currentData.roll = motion.attitude.roll * 180 / .pi
+            
+            // 回调更新 UI (因为是 30Hz 高频，确保外部 UI 使用轻量级动画)
+            self.triggerCallback()
         }
     }
 }
