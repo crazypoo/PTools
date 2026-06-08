@@ -37,6 +37,12 @@ public struct PTMotionData: Sendable {
     public var gForceY: Double = 0.0 // 前后 G 值 (加减速)
     public var pitch: Double = 0.0   // 俯仰角 (坡度度数)
     public var roll: Double = 0.0    // 侧倾角 (左右倾斜度数)
+    
+    public var maxLeftLean: Double = 0.0       // 历史最大左压弯角度 (正数)
+    public var maxRightLean: Double = 0.0      // 历史最大右压弯角度 (正数)
+    
+    public var isTipOverDetected: Bool = false  // 是否侦测到倒车/摔车事故
+    public var altitudeAlertMessage: String? = nil // 海拔突变预警提示语 (为 nil 表示正常)
 }
 
 public typealias PTMotionBlock = (_ data: PTMotionData) -> Void
@@ -55,6 +61,11 @@ public class PTMotion: NSObject, @unchecked Sendable {
     
     private let motionManager = CMMotionManager() // 新增核心传感器
     
+    public var currentSpeedKmh: Double = 0.0
+    
+    // 🌟 用于计算海拔变动率的历史队列 (缓存最近 30 秒的数据)
+    private var altitudeHistory: [(time: Date, altitude: Double)] = []
+
     // 实例化一个内部数据模型，作为唯一的数据源头
     private var currentData = PTMotionData()
     
@@ -77,7 +88,8 @@ public class PTMotion: NSObject, @unchecked Sendable {
         startActivityUpdates()
         startAltimeterUpdates()
         startPedometerEventUpdates()
-        startDeviceMotionUpdates() // 启动车身感应
+        // 🌟 启动机车姿态感应
+        startBikeOrientationUpdates()
     }
 
     // MARK: - Stop Motion Tracking
@@ -133,20 +145,6 @@ public class PTMotion: NSObject, @unchecked Sendable {
         }
     }
     
-    // 新增：启动气压和海拔侦测
-    private func startAltimeterUpdates() {
-        guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
-        
-        altimeter.startRelativeAltitudeUpdates(to: operationQueue) { [weak self] altitudeData, error in
-            guard let self = self, let data = altitudeData, error == nil else { return }
-            
-            self.currentData.relativeAltitude = data.relativeAltitude.doubleValue
-            self.currentData.pressure = data.pressure.doubleValue
-            
-            self.triggerCallback()
-        }
-    }
-    
     // 新增：侦测运动是否暂停或恢复
     private func startPedometerEventUpdates() {
         guard CMPedometer.isPedometerEventTrackingAvailable() else { return }
@@ -196,26 +194,97 @@ public class PTMotion: NSObject, @unchecked Sendable {
         @unknown default: return "Unknown"
         }
     }
-    
-    // 🌟 核心：获取 G 值与车身姿态
-    private func startDeviceMotionUpdates() {
+        
+    // 🌟 新增：手动重置压弯极限数据
+    public func resetLeanAngles() {
+        currentData.maxLeftLean = 0.0
+        currentData.maxRightLean = 0.0
+        currentData.isTipOverDetected = false
+        triggerCallback()
+    }
+
+    // MARK: - 核心功能 1 & 2：压弯与摔车侦测
+    private func startBikeOrientationUpdates() {
         guard motionManager.isDeviceMotionAvailable else { return }
         
-        // 极客建议：UI 动画 30Hz 足矣，60Hz 会导致设备发热严重
+        // 机车动态瞬息万变，采用 30Hz 高频采样
         motionManager.deviceMotionUpdateInterval = 1.0 / 30.0
-        
         motionManager.startDeviceMotionUpdates(to: operationQueue) { [weak self] motion, error in
             guard let self = self, let motion = motion, error == nil else { return }
             
-            // 1. 获取纯净的 G 值 (userAcceleration 已经剔除了地球重力的 1G 干扰)
             self.currentData.gForceX = motion.userAcceleration.x
             self.currentData.gForceY = motion.userAcceleration.y
-            
-            // 2. 获取车身倾角 (系统给的是弧度 Radian，我们需要转成度数 Degree 方便显示)
+
             self.currentData.pitch = motion.attitude.pitch * 180 / .pi
-            self.currentData.roll = motion.attitude.roll * 180 / .pi
+            // 1. 计算当前倾角 (将弧度转换为角度)
+            // 默认手机竖直固定在车把上时，roll 代表左右倾斜
+            let rollDegrees = motion.attitude.roll * 180.0 / .pi
+            self.currentData.roll = rollDegrees
             
-            // 回调更新 UI (因为是 30Hz 高频，确保外部 UI 使用轻量级动画)
+            // 2. 统计左右极限压弯角度 (剔除超过60度的异常摔车角度)
+            if rollDegrees < 0 {
+                // 左压弯 (roll 为负数)
+                let leftAngle = abs(rollDegrees)
+                if leftAngle > self.currentData.maxLeftLean && leftAngle < 60.0 {
+                    self.currentData.maxLeftLean = leftAngle
+                }
+            } else {
+                // 右压弯 (roll 为正数)
+                let rightAngle = rollDegrees
+                if rightAngle > self.currentData.maxRightLean && rightAngle < 60.0 {
+                    self.currentData.maxRightLean = rightAngle
+                }
+            }
+            
+            // 3. 核心功能 2：摔车/倒车侦测
+            // 逻辑：如果车速极低或静止(<5km/h)，且车身倾角绝度值超过 55 度，判定为非正常骑行姿态（倒地）
+            if self.currentSpeedKmh < 5.0 && abs(rollDegrees) > 55.0 {
+                self.currentData.isTipOverDetected = true
+            } else {
+                // 如果车速起来了或者重新扶起，解除报警
+                if abs(rollDegrees) < 30.0 {
+                    self.currentData.isTipOverDetected = false
+                }
+            }
+            
+            self.triggerCallback()
+        }
+    }
+
+    // MARK: - 核心功能 3：气压与海拔突变预警
+    private func startAltimeterUpdates() {
+        guard CMAltimeter.isRelativeAltitudeAvailable() else { return }
+        
+        altimeter.startRelativeAltitudeUpdates(to: operationQueue) { [weak self] altitudeData, error in
+            guard let self = self, let data = altitudeData, error == nil else { return }
+            
+            let relativeAlt = data.relativeAltitude.doubleValue
+            self.currentData.relativeAltitude = relativeAlt
+            self.currentData.pressure = data.pressure.doubleValue
+            
+            // 🌟 爬升率计算算法：
+            let now = Date()
+            self.altitudeHistory.append((time: now, altitude: relativeAlt))
+            
+            // 清理掉超过 30 秒前的历史数据，保持队列轻量
+            self.altitudeHistory = self.altitudeHistory.filter { now.timeIntervalSince($0.time) <= 30.0 }
+            
+            if let firstRecord = self.altitudeHistory.first {
+                let heightDifference = relativeAlt - firstRecord.altitude
+                let timeDifference = now.timeIntervalSince(firstRecord.time)
+                
+                if timeDifference > 5.0 { // 至少积累了 5 秒的数据才开始评估
+                    // 如果 30 秒内爬升超过 15 米（换算算成车速相当于在极陡的盘山公路上狂飙爬升）
+                    if heightDifference > 15.0 {
+                        self.currentData.altitudeAlertMessage = "⛰️ 海拔急速爬升中，注意防风降温与胎压变化"
+                    } else if heightDifference < -15.0 {
+                        self.currentData.altitudeAlertMessage = "📉 正在急速下山，注意控制刹车热衰减"
+                    } else {
+                        self.currentData.altitudeAlertMessage = nil // 恢复正常
+                    }
+                }
+            }
+            
             self.triggerCallback()
         }
     }
