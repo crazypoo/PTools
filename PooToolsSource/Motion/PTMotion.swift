@@ -67,6 +67,12 @@ public class PTMotion: NSObject, @unchecked Sendable {
     // 🌟 用于计算海拔变动率的历史队列 (缓存最近 30 秒的数据)
     private var altitudeHistory: [(time: Date, altitude: Double)] = []
 
+    // 用于记录最后一次检测到剧烈物理撞击的时间
+    private var lastImpactTime: Date?
+    
+    // 设定触发疑似撞击的物理 G 值门槛 (3.0G 以上通常代表非正常落地或硬物砸击)
+    private let crashGForceThreshold: Double = 3.0
+    
     // 实例化一个内部数据模型，作为唯一的数据源头
     private var currentData = PTMotionData()
     
@@ -213,9 +219,38 @@ public class PTMotion: NSObject, @unchecked Sendable {
         motionManager.startDeviceMotionUpdates(to: operationQueue) { [weak self] motion, error in
             guard let self = self, let motion = motion, error == nil else { return }
             
-            self.currentData.gForceX = motion.userAcceleration.x
-            self.currentData.gForceY = motion.userAcceleration.y
-            self.currentData.gForceZ = motion.userAcceleration.z
+            let gx = motion.userAcceleration.x
+            let gy = motion.userAcceleration.y
+            let gz = motion.userAcceleration.z
+            
+            self.currentData.gForceX = gx
+            self.currentData.gForceY = gy
+            self.currentData.gForceZ = gz
+
+            let totalGForce = sqrt(gx * gx + gy * gy + gz * gz)
+            if totalGForce > self.crashGForceThreshold {
+                // 瞬间冲击力爆表！立刻在后台打下时间戳
+                self.lastImpactTime = Date()
+            }
+            let now = Date()
+            if let impactTime = self.lastImpactTime, now.timeIntervalSince(impactTime) < 10.0 {
+                // 状态：在过去 10 秒内刚刚发生过剧烈撞击！
+                
+                if self.currentSpeedKmh < 2.0 {
+                    // 致命条件达成：遭受了 > 3.0G 的撞击，并且现在车停了 (人爬不起来了)
+                    self.currentData.isTipOverDetected = true
+                } else if self.currentSpeedKmh > 10.0 {
+                    // 误报排除：撞击后车速依然很快 (> 10km/h)，说明只是飞了个大坡落地，或者是烂路颠簸
+                    self.currentData.isTipOverDetected = false
+                    // 既然确认没摔，提前清空撞击记录，结束观察期
+                    self.lastImpactTime = nil
+                }
+                
+            } else {
+                // 状态：超过 10 秒都没有速度归零，或者压根没发生过剧烈撞击，警报解除
+                self.currentData.isTipOverDetected = false
+                self.lastImpactTime = nil
+            }
             
             self.currentData.pitch = motion.attitude.pitch * 180 / .pi
             // 1. 计算当前倾角 (将弧度转换为角度)
@@ -235,17 +270,6 @@ public class PTMotion: NSObject, @unchecked Sendable {
                 let rightAngle = rollDegrees
                 if rightAngle > self.currentData.maxRightLean && rightAngle < 60.0 {
                     self.currentData.maxRightLean = rightAngle
-                }
-            }
-            
-            // 3. 核心功能 2：摔车/倒车侦测
-            // 逻辑：如果车速极低或静止(<5km/h)，且车身倾角绝度值超过 55 度，判定为非正常骑行姿态（倒地）
-            if self.currentSpeedKmh < 5.0 && abs(rollDegrees) > 55.0 {
-                self.currentData.isTipOverDetected = true
-            } else {
-                // 如果车速起来了或者重新扶起，解除报警
-                if abs(rollDegrees) < 30.0 {
-                    self.currentData.isTipOverDetected = false
                 }
             }
             
