@@ -234,113 +234,134 @@ public class PTCameraFilterConfig: NSObject {
     }
     
     /// 没有针对不同分辨率视频做处理，仅用于处理相机拍照的视频
-    @objc public class func mergeVideos(fileUrls: [URL], completion: @escaping (URL?, Error?) -> Void) {
-        let composition = AVMutableComposition()
-        let assets = fileUrls.map { AVURLAsset(url: $0) }
-        
-        var insertTime: CMTime = .zero
-        var assetVideoTracks: [AVAssetTrack] = []
-        
-        let compositionVideoTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: CMPersistentTrackID())!
-        let compositionAudioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: CMPersistentTrackID())!
-        
-        for asset in assets {
-            do {
-                let timeRange = CMTimeRangeMake(start: .zero, duration: asset.duration)
-                if let videoTrack = asset.tracks(withMediaType: .video).first {
-                    try compositionVideoTrack.insertTimeRange(
-                        timeRange,
-                        of: videoTrack,
-                        at: insertTime
-                    )
-                    
-                    assetVideoTracks.append(videoTrack)
-                }
-                
-                if let audioTrack = asset.tracks(withMediaType: .audio).first {
-                    try compositionAudioTrack.insertTimeRange(
-                        timeRange,
-                        of: audioTrack,
-                        at: insertTime
-                    )
-                }
-                
-                insertTime = CMTimeAdd(insertTime, asset.duration)
-            } catch {
-                completion(nil, NSError.videoMergeError)
-                return
-            }
-        }
-        
-        guard assetVideoTracks.count == assets.count else {
-            completion(nil, NSError.videoMergeError)
-            return
-        }
-        
-        let renderSize = getNaturalSize(videoTrack: assetVideoTracks[0])
-        
-        let videoComposition = AVMutableVideoComposition()
-        videoComposition.instructions = getInstructions(compositionTrack: compositionVideoTrack, assetVideoTracks: assetVideoTracks, assets: assets)
-        videoComposition.frameDuration = assetVideoTracks[0].minFrameDuration
-        videoComposition.renderSize = renderSize
-        videoComposition.renderScale = 1
-        
-        guard let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPreset1280x720) else {
-            completion(nil, NSError.videoMergeError)
-            return
-        }
-        
-        let outputUrl = URL(fileURLWithPath: PTCameraFilterConfig.getVideoExportFilePath())
-        exportSession.outputURL = outputUrl
-        exportSession.shouldOptimizeForNetworkUse = true
-        exportSession.outputFileType = PTCameraFilterConfig.share.videoExportType.avFileType
-        exportSession.videoComposition = videoComposition
+    @objc public class func mergeVideos(fileUrls: [URL], completion: @escaping @Sendable (URL?, Error?) -> Void) {
+        // 🌟 1. 开启异步任务，把所有耗时操作放进后台执行
         Task {
             do {
+                let composition = AVMutableComposition()
+                let assets = fileUrls.map { AVURLAsset(url: $0) }
+                
+                var insertTime: CMTime = .zero
+                var assetVideoTracks: [AVAssetTrack] = []
+                
+                // 使用 kCMPersistentTrackID_Invalid 是苹果推荐的做法，让系统自动分配 TrackID
+                guard let compositionVideoTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid),
+                      let compositionAudioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+                    // 如果无法创建轨道，直接返回错误
+                    completion(nil, NSError.videoMergeError) // 假设 NSError.videoMergeError 已在你的代码中定义
+                    return
+                }
+                
+                for asset in assets {
+                    // 🌟 2. 异步获取视频时长和轨道
+                    let duration = try await asset.load(.duration)
+                    let timeRange = CMTimeRangeMake(start: .zero, duration: duration)
+                    
+                    let videoTracks = try await asset.loadTracks(withMediaType: .video)
+                    if let videoTrack = videoTracks.first {
+                        try compositionVideoTrack.insertTimeRange(
+                            timeRange,
+                            of: videoTrack,
+                            at: insertTime
+                        )
+                        assetVideoTracks.append(videoTrack)
+                    }
+                    
+                    let audioTracks = try await asset.loadTracks(withMediaType: .audio)
+                    if let audioTrack = audioTracks.first {
+                        try compositionAudioTrack.insertTimeRange(
+                            timeRange,
+                            of: audioTrack,
+                            at: insertTime
+                        )
+                    }
+                    
+                    insertTime = CMTimeAdd(insertTime, duration)
+                }
+                
+                guard assetVideoTracks.count == assets.count, let firstVideoTrack = assetVideoTracks.first else {
+                    completion(nil, NSError.videoMergeError)
+                    return
+                }
+                
+                // 🌟 3. 异步获取首个视频轨道的尺寸、帧率和矩阵
+                let firstNaturalSize = try await firstVideoTrack.load(.naturalSize)
+                let firstTransform = try await firstVideoTrack.load(.preferredTransform)
+                let minFrameDuration = try await firstVideoTrack.load(.minFrameDuration)
+                
+                let renderSize = getNaturalSize(naturalSize: firstNaturalSize, transform: firstTransform)
+                
+                let videoComposition = AVMutableVideoComposition()
+                // 异步获取 Instructions
+                videoComposition.instructions = try await getInstructions(compositionTrack: compositionVideoTrack, assetVideoTracks: assetVideoTracks, assets: assets)
+                videoComposition.frameDuration = minFrameDuration
+                videoComposition.renderSize = renderSize
+                videoComposition.renderScale = 1
+                
+                guard let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPreset1280x720) else {
+                    completion(nil, NSError.videoMergeError)
+                    return
+                }
+                
+                let outputUrl = URL(fileURLWithPath: PTCameraFilterConfig.getVideoExportFilePath())
+                exportSession.outputURL = outputUrl
+                exportSession.shouldOptimizeForNetworkUse = true
+                exportSession.outputFileType = PTCameraFilterConfig.share.videoExportType.avFileType
+                exportSession.videoComposition = videoComposition
+                
+                // 🌟 4. 异步导出
                 await exportSession.export()
+                
                 let suc = exportSession.status == .completed
                 if exportSession.status == .failed {
-                    PTNSLogConsole("PTPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")",levelType: .error,loggerType: .filter)
+                    PTNSLogConsole("PTPhotoBrowser: video merge failed:  \(exportSession.error?.localizedDescription ?? "")", levelType: .error, loggerType: .filter)
                 }
                 completion(suc ? outputUrl : nil, exportSession.error)
+                
+            } catch {
+                // 捕获任何 load 或 insert 抛出的错误
+                completion(nil, error)
             }
         }
     }
-    
-    private static func getNaturalSize(videoTrack: AVAssetTrack) -> CGSize {
-        var size = videoTrack.naturalSize
-        if isPortraitVideoTrack(videoTrack) {
+
+    // 🌟 辅助方法改造：直接接收已经异步解析好的值，不做重复的耗时加载
+    private static func getNaturalSize(naturalSize: CGSize, transform: CGAffineTransform) -> CGSize {
+        var size = naturalSize
+        if isPortraitVideoTrack(transform) {
             swap(&size.width, &size.height)
         }
         return size
     }
-    
-    private static func getInstructions(
-        compositionTrack: AVMutableCompositionTrack,
-        assetVideoTracks: [AVAssetTrack],
-        assets: [AVURLAsset]
-    ) -> [AVMutableVideoCompositionInstruction] {
+
+    // 🌟 将内部的遍历改成 async 方式
+    private static func getInstructions(compositionTrack: AVMutableCompositionTrack, assetVideoTracks: [AVAssetTrack], assets: [AVURLAsset]) async throws -> [AVMutableVideoCompositionInstruction] {
         var instructions: [AVMutableVideoCompositionInstruction] = []
         
         var start: CMTime = .zero
         for (index, videoTrack) in assetVideoTracks.enumerated() {
             let asset = assets[index]
+            
+            // 异步获取每次遍历所需的属性
+            let duration = try await asset.load(.duration)
+            let transform = try await videoTrack.load(.preferredTransform)
+            
             let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: compositionTrack)
-            layerInstruction.setTransform(videoTrack.preferredTransform, at: .zero)
+            layerInstruction.setTransform(transform, at: .zero)
             
             let instruction = AVMutableVideoCompositionInstruction()
-            instruction.timeRange = CMTimeRangeMake(start: start, duration: asset.duration)
+            instruction.timeRange = CMTimeRangeMake(start: start, duration: duration)
             instruction.layerInstructions = [layerInstruction]
             instructions.append(instruction)
             
-            start = CMTimeAdd(start, asset.duration)
+            start = CMTimeAdd(start, duration)
         }
         
         return instructions
     }
-    
-    private static func isPortraitVideoTrack(_ track: AVAssetTrack) -> Bool {
-        let transform = track.preferredTransform
+
+    // 🌟 直接接收 transform 矩阵，而不是传入整个 track 再去解析
+    private static func isPortraitVideoTrack(_ transform: CGAffineTransform) -> Bool {
         let tfA = transform.a
         let tfB = transform.b
         let tfC = transform.c
@@ -362,5 +383,4 @@ public class PTCameraFilterConfig: NSObject {
         
         return false
     }
-
 }

@@ -104,7 +104,7 @@ open class PTImagePageControl: PTBasePageControl {
             
             // 使用 UIView 原生过渡动画来实现图片的柔和交叉溶解（Cross Dissolve）
             UIView.transition(with: dot, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(), loadFinish: { [weak self] value in
+                dot.loadImage(contentData: imgData, emptyImage: UIColor.clear.createImageWithColor(), loadFinish: { [weak self = self] value in
                     guard let self = self else { return }
                     if let imageSize = value.firstImage?.size {
                         self.dotSizes[index] = imageSize

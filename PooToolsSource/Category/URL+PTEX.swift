@@ -79,9 +79,18 @@ public extension URL {
         task.resume()
     }
     
-    func audioLinkGetDurationTime() -> Float {
-        let audionAsset = AVURLAsset(url: self)
-        return Float(CMTimeGetSeconds(audionAsset.duration))
+    func audioLinkGetDurationTime() async -> Float {
+        let audioAsset = AVURLAsset(url: self)
+        
+        do {
+            // 🌟 核心适配改动：异步安全地加载时长
+            let duration = try await audioAsset.load(.duration)
+            return Float(CMTimeGetSeconds(duration))
+        } catch {
+            // 捕获可能出现的文件损坏或解析错误
+            PTNSLogConsole("获取链接时长失败: \(error.localizedDescription)")
+            return 0.0 // 失败时提供一个默认值（也可以根据业务需求改为返回可选型 Float?）
+        }
     }
     
     //MARK: URL获取数据字符串

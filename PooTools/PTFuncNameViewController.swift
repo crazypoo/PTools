@@ -259,7 +259,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let jailBroken = PTFusionCellModel()
         jailBroken.name = .phoneSimpleInfo
         jailBroken.cellDescFont = .appfont(size: 12)
-        jailBroken.desc = "是否X类型:\(UIDevice.pt.oneOfXDevice() ? "是" : "否"),是否越狱了:\(UIDevice.pt.isJailBroken ? "是" : "否"),机型:\(DeviceIdentifier()),运营商:\(String(describing: UIDevice.pt.carrierNames()?.first))"
+        jailBroken.desc = "是否X类型:\(UIDevice.pt.oneOfXDevice() ? "是" : "否"),是否越狱了:\(UIDevice.pt.isJailBroken ? "是" : "否"),机型:\(DeviceIdentifier()),运营商: Can not get"
         jailBroken.accessoryType = .NoneAccessoryView
         
         let callPhone = self.rowBaseModel(name: .phoneCall)

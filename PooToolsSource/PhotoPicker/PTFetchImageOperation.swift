@@ -72,7 +72,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
         Task { @MainActor in
             if let editImage = model.editImage {
                 if PTMediaLibConfig.share.saveNewImageAfterEdit {
-                    PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self] _, asset in
+                    PHPhotoLibrary.pt.saveImageToAlbum(image: editImage) { [weak self = self] _, asset in
                         self?.completion(editImage, asset)
                         self?.fetchFinish()
                     }
@@ -85,7 +85,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
 
             // 3. 处理 GIF
             if PTMediaLibConfig.share.allowSelectGif, model.type == .gif {
-                let id = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self] data, _, isDegraded in
+                let id = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self = self] data, _, isDegraded in
                     if !isDegraded {
                         let image = UIImage.pt.animateGifImage(data: data)
                         self?.completion(image, nil)
@@ -100,7 +100,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             let size = model.previewSize
             let asset = model.asset
             
-            let resultHandler: @Sendable (UIImage?, Bool) -> Void = { [weak self] image, isDegraded in
+            let resultHandler: @Sendable (UIImage?, Bool) -> Void = { [weak self = self] image, isDegraded in
                 guard let self = self, !isDegraded else { return }
                 
                 let fixedImage = image?.pt.fixOrientation()

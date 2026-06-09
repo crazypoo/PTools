@@ -136,7 +136,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         }
 
         smallImageTask = Task {
-            PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self] image, isDegraded in
+            PTMediaLibManager.fetchImage(for: asset, size: size) { [weak self = self] image, isDegraded in
                 Task { @MainActor in
                     guard let self = self, self.imageIdentifier == ident else { return }
                     self.imageView.image = image
@@ -150,13 +150,13 @@ class PTMediaLibCell: PTBaseNormalCell {
         let asset = cellModel.asset
         
         bigImageTask = Task {
-            PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self] progress, _, _, _ in
+            PTMediaLibManager.fetchOriginalImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
                 Task { @MainActor in
                     guard let self = self, self.cellModel.isSelected else { return }
                     self.imageView.alpha = 0.5
                     if progress >= 1 { self.resetProgressViewStatus() }
                 }
-            }, completion: { [weak self] _, _, _ in
+            }, completion: { [weak self = self] _, _, _ in
                 Task { @MainActor in self?.resetProgressViewStatus() }
             })
         }
@@ -302,7 +302,7 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
             let side = bounds.height * UIScreen.main.scale
             
             fetchTask = Task {
-                PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: side, height: side)) { [weak self] image, _ in
+                PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: side, height: side)) { [weak self = self] image, _ in
                     Task { @MainActor in
                         guard let self = self, self.imageIdentifier == ident else { return }
                         self.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage

@@ -6,10 +6,10 @@ Pod::Spec.new do |s|
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
-    s.platform = :ios, '15.0'
+    s.platform = :ios, '17.0'
 #    s.requires_arc = true
 #    s.static_framework = true
-    s.ios.deployment_target = '15.0'
+    s.ios.deployment_target = '17.0'
     s.swift_versions = '5.0'
     s.xcconfig = {"ENABLE_BITCODE" => "NO"}
     s.pod_target_xcconfig = {

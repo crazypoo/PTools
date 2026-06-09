@@ -19,8 +19,9 @@ public extension View {
                 createAlert: @escaping () -> PTAlertController,
                 completion: PTActionTask? = nil) -> some View {
         // 使用 onChange 监听状态变化，这是 SwiftUI 中触发外部 UI 副作用的标准做法
-        self.onChange(of: isPresent.wrappedValue) { show in
-            if show {
+        self.onChange(of: isPresent.wrappedValue) { oldValue, newValue in
+            // newValue 代表了状态改变后的最新布尔值（等同于以前的 show）
+            if newValue {
                 // 1. 创建弹窗控制器 (比如 PTAlertTipsViewController)
                 let alertVC = createAlert()
                 
@@ -31,12 +32,9 @@ public extension View {
                 }
                 
                 // 3. 通过你的中枢管理器展示它
-                // 注意：这里假设你的 PTAlertManager 有一个 show 方法。
-                // 并且建议你的 Manager 能接收一个 dismiss 的回调，或者你能把 wrapperCompletion 传给 alertVC。
                 PTAlertManager.show(alertVC, completion: wrapperCompletion)
             } else {
                 // 4. 如果开发者在外部通过代码把 isPresent 设为 false，主动关闭它
-                // （这里可以根据实际需求决定是 dismissAll 还是通过 alertVC.key 来 dismiss）
                 PTAlertManager.dismissAll()
             }
         }

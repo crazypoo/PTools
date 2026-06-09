@@ -302,7 +302,7 @@ extension PTPingTool: SimplePingDelegate {
                 self.checkTimer = nil
                 
                 // 确保在主线程上下文安全解包 self 和处理超时逻辑
-                self.checkTimer = Timer(timeInterval: self.timeout.second, repeats: false, block: { [weak self] (_) in
+                self.checkTimer = Timer(timeInterval: self.timeout.second, repeats: false, block: { [weak self = self] (_) in
                     Task { @MainActor [weak self] in
                         guard let self = self else { return }
                         if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {

@@ -113,7 +113,7 @@ final class ColorPreviewControl: BaseFormControl {
                         image: .copySymbol,
                         identifier: nil,
                         discoverabilityTitle: "Copy",
-                        handler: { [weak self] _ in
+                        handler: { [weak self = self] _ in
                             guard let self = self else { return }
                             UIPasteboard.general.string = self.colorDisplayLabel.text
                         }

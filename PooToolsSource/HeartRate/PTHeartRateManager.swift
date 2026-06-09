@@ -119,8 +119,9 @@ public class PTHeartRateManager: NSObject {
 extension PTHeartRateManager: AVCaptureVideoDataOutputSampleBufferDelegate {
     // MARK: - Export buffer from video frame
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        if connection.videoOrientation != .portrait {
-            connection.videoOrientation = .portrait
+        if connection.isVideoRotationAngleSupported(90.0), connection.videoRotationAngle != 90.0 {
+            connection.videoRotationAngle = 90.0
+            // 角度不对时，纠正角度并主动丢弃这一帧（直接 return）
             return
         }
         if let imageBufferHandler = imageBufferHandler {

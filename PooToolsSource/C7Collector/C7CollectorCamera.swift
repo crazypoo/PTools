@@ -42,8 +42,8 @@ public final class C7CollectorCamera: C7Collector {
     
     var animateLayer: CAShapeLayer!
     
-    private var orientation: AVCaptureVideoOrientation = .portrait
-    private var cacheVideoOrientation: AVCaptureVideoOrientation = .portrait
+    private var videoRotationAngle: CGFloat = 90
+    private var cacheVideoRotationAngle: CGFloat = 90
     
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
     private let bufferQueue  = DispatchQueue(label: "camera.collector.buffer.metal")
@@ -74,8 +74,8 @@ public final class C7CollectorCamera: C7Collector {
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
         }
-        if let xx = output.connection(with: .video), xx.isVideoOrientationSupported {
-            xx.videoOrientation = .portrait
+        if let xx = output.connection(with: .video), xx.isVideoRotationAngleSupported(90) {
+            xx.videoRotationAngle = 90
         }
         return output
     }()
@@ -85,10 +85,7 @@ public final class C7CollectorCamera: C7Collector {
     public var avPlayer:C7CollectorVideo?
     public var savedVideo:PTActionTask? = nil
 
-    deinit {
-//        stopRunning()
-//        videoOutput.setSampleBufferDelegate(nil, queue: nil)
-    }
+    deinit { }
     
     public override func setupInit() {
         super.setupInit()
@@ -146,13 +143,13 @@ public final class C7CollectorCamera: C7Collector {
     }
     
     private func getMicrophone() -> AVCaptureDevice? {
-        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInMicrophone], mediaType: .audio, position: .unspecified).devices.first
+        return AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.microphone], mediaType: .audio, position: .unspecified).devices.first
     }
     
     private func removeAudioInput() {
         var audioInput: AVCaptureInput?
         for input in captureSession.inputs {
-            if (input as? AVCaptureDeviceInput)?.device.deviceType == .builtInMicrophone {
+            if (input as? AVCaptureDeviceInput)?.device.deviceType == AVCaptureDevice.DeviceType.microphone {
                 audioInput = input
             }
         }
@@ -206,7 +203,9 @@ public final class C7CollectorCamera: C7Collector {
         isTakingPicture = true
         
         let connection = imageOutput.connection(with: .video)
-        connection?.videoOrientation = orientation
+        if connection?.isVideoRotationAngleSupported(videoRotationAngle) == true {
+            connection?.videoRotationAngle = videoRotationAngle
+        }
         if deviceInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
             connection?.isVideoMirrored = true
         }
@@ -327,11 +326,13 @@ public final class C7CollectorCamera: C7Collector {
         
         let connection = movieFileOutput.connection(with: .video)
         connection?.videoScaleAndCropFactor = 1
+        let targetAngle = restartRecordAfterSwitchCamera ? cacheVideoRotationAngle : videoRotationAngle
+        if connection?.isVideoRotationAngleSupported(targetAngle) == true {
+            connection?.videoRotationAngle = targetAngle
+        }
+
         if !restartRecordAfterSwitchCamera {
-            connection?.videoOrientation = orientation
-            cacheVideoOrientation = orientation
-        } else {
-            connection?.videoOrientation = cacheVideoOrientation
+            cacheVideoRotationAngle = videoRotationAngle
         }
         
         // 解决不同系统版本,因为录制视频编码导致安卓端无法播放的问题
@@ -468,7 +469,7 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
         
         if restartRecordAfterSwitchCamera {
             restartRecordAfterSwitchCamera = false
-                
+            
             Task { @MainActor in
                 let pauseTime = self.animateLayer.timeOffset
                 self.animateLayer.speed = 1
@@ -503,7 +504,7 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
             self.stopRecordAnimation()
             
             defer {
-//                self.resetSubViewStatus()
+                //                self.resetSubViewStatus()
             }
             
             guard !self.recordUrls.isEmpty else {
@@ -525,18 +526,20 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
             
             // 拼接视频
             if self.recordUrls.count > 1 {
-                PTCameraFilterConfig.mergeVideos(fileUrls: self.recordUrls) { [weak self] url, error in
-                    if let url = url, error == nil {
-                        self?.videoUrl = url
-                        self?.playRecordVideo(fileUrl: url)
-                    } else if let error = error {
-                        self?.videoUrl = nil
-                        PTNSLogConsole("\(error)")
+                PTCameraFilterConfig.mergeVideos(fileUrls: self.recordUrls) { [weak self = self] url, error in
+                    PTGCDManager.shared.runOnMain { [weak self = self] in
+                        if let url = url, error == nil {
+                            self?.videoUrl = url
+                            self?.playRecordVideo(fileUrl: url)
+                        } else if let error = error {
+                            self?.videoUrl = nil
+                            PTNSLogConsole("\(error)")
+                        }
+                        
+                        self?.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
+                        self?.recordUrls.removeAll()
+                        self?.recordDurations.removeAll()
                     }
-
-                    self?.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
-                    self?.recordUrls.removeAll()
-                    self?.recordDurations.removeAll()
                 }
             } else {
                 let url = self.recordUrls[0]
@@ -587,7 +590,7 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
         let player = AVPlayer(playerItem: playerItem)
         avPlayer = C7CollectorVideo(player: player, delegate: self)
         avPlayer?.filters = self.filters
-
+        
         avPlayer?.play()
     }
     
@@ -599,7 +602,7 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
                 let dest = HarbethIO(element: buffer, filters: self.filters)
                 dest.transmitOutput(success: block)
             }
-
+            
             var finish:Bool = false
             
             let exporter = VideoX(provider: provider)
@@ -610,7 +613,7 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
                         if error != nil {
                             PTNSLogConsole("\(error!)")
                         } else {
-                            PTGCDManager.shared.runOnMain { [weak self] in
+                            PTGCDManager.shared.runOnMain { [weak self = self] in
                                 self?.savedVideo?()
                             }
                         }
@@ -638,46 +641,58 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
     }
     
     func rotateVideo(inputURL: URL, completion: @escaping @Sendable (Error?) -> Void) {
-        let asset = AVAsset(url: inputURL)
-        _ = AVMutableComposition()
-        
-        guard let videoTrack = asset.tracks(withMediaType: .video).first else {
-            completion(NSError(domain: "RotateVideo", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to get video track"]))
-            return
-        }
-        
-        let videoComposition = AVMutableVideoComposition()
-        videoComposition.renderSize = CGSize(width: videoTrack.naturalSize.height, height: videoTrack.naturalSize.width)
-        videoComposition.frameDuration = videoTrack.minFrameDuration
-        
-        let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRange(start: .zero, duration: asset.duration)
-        
-        let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
-        let t1 = CGAffineTransform(translationX: videoTrack.naturalSize.height, y: 0)
-        let t2 = t1.rotated(by: .pi / 2)
-        transformer.setTransform(t2, at: .zero)
-        
-        instruction.layerInstructions = [transformer]
-        videoComposition.instructions = [instruction]
-        
-        guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality) else {
-            completion(NSError(domain: "RotateVideo", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to create export session"]))
-            return
-        }
-        
-        // 创建临时文件路径
-        let outputURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
-        
-        exportSession.videoComposition = videoComposition
-        exportSession.outputFileType = .mp4
-        exportSession.outputURL = outputURL
+        // 开启异步任务
         Task {
             do {
+                let asset = AVURLAsset(url: inputURL)
+                let _ = AVMutableComposition()
+                
+                // 🌟 iOS 16+ 适配：异步获取视频轨道
+                let tracks = try await asset.loadTracks(withMediaType: .video)
+                guard let videoTrack = tracks.first else {
+                    completion(NSError(domain: "RotateVideo", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to get video track"]))
+                    return
+                }
+                
+                // 🌟 iOS 16+ 适配：异步获取视频轨道的尺寸、帧率和总体时长
+                let naturalSize = try await videoTrack.load(.naturalSize)
+                let minFrameDuration = try await videoTrack.load(.minFrameDuration)
+                let duration = try await asset.load(.duration)
+                
+                let videoComposition = AVMutableVideoComposition()
+                // 注意宽高调换，因为是旋转 90 度
+                videoComposition.renderSize = CGSize(width: naturalSize.height, height: naturalSize.width)
+                videoComposition.frameDuration = minFrameDuration
+                
+                let instruction = AVMutableVideoCompositionInstruction()
+                instruction.timeRange = CMTimeRange(start: .zero, duration: duration)
+                
+                let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
+                let t1 = CGAffineTransform(translationX: naturalSize.height, y: 0)
+                let t2 = t1.rotated(by: .pi / 2)
+                transformer.setTransform(t2, at: .zero)
+                
+                instruction.layerInstructions = [transformer]
+                videoComposition.instructions = [instruction]
+                
+                guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality) else {
+                    completion(NSError(domain: "RotateVideo", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to create export session"]))
+                    return
+                }
+                
+                let outputURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
+                
+                exportSession.videoComposition = videoComposition
+                exportSession.outputFileType = .mp4
+                exportSession.outputURL = outputURL
+                
+                // 异步等待导出完成
                 await exportSession.export()
+                
                 if let error = exportSession.error {
                     completion(error)
                 } else {
+                    // 回到原始逻辑，保存到相册
                     PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
                         if finish {
                             try? FileManager.default.removeItem(at: outputURL)
@@ -688,6 +703,9 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
                         }
                     }
                 }
+            } catch {
+                // 捕获任何 load 抛出的异步错误
+                completion(error)
             }
         }
     }

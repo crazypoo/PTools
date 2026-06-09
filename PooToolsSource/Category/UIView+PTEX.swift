@@ -214,7 +214,7 @@ public extension UIView {
         Task { @MainActor in
             let tracker = self.getOrCreateTracker() // 记得用你抽出来的统一获取 tracker 的方法
             
-            tracker.layoutActions["PTCornerRectCorner"] = { [weak self] currentBounds in
+            tracker.layoutActions["PTCornerRectCorner"] = { [weak self = self] currentBounds in
                 guard let self = self else { return }
                 
                 if #available(iOS 26.0, *) {
@@ -373,7 +373,7 @@ public extension UIView {
         Task { @MainActor in
             let tracker = self.getOrCreateTracker()
             
-            tracker.layoutActions["Gradient"] = { [weak self] currentBounds in
+            tracker.layoutActions["Gradient"] = { [weak self = self] currentBounds in
                 guard let self = self, currentBounds.width > 0, currentBounds.height > 0 else { return }
                 let bgPath = self.pt_customCornerPath(bounds: currentBounds, radius: radius, topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight, corner: corner, capsule: capsule)
                 
@@ -511,7 +511,7 @@ public extension UIView {
             }
             
             // 2. 🌟 注册响应式任务：处理路径收缩
-            tracker.layoutActions["Progress"] = { [weak self] currentBounds in
+            tracker.layoutActions["Progress"] = { [weak self = self] currentBounds in
                 guard let self = self, let shape = self.viewShapeLayer, currentBounds.width > 0, currentBounds.height > 0 else { return }
                 
                 // 💡 修复核心：计算向内收缩的 Bounds

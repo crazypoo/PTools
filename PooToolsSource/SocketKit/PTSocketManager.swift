@@ -142,7 +142,7 @@ public final class PTSocketManager: NSObject, @unchecked Sendable {
                 timeoutInterval: 10
             )
             
-            self.socketQueue.async { [weak self] in
+            self.socketQueue.async { [weak self = self] in
                 self?.request = req
                 Task { @MainActor in completion(true) }
             }

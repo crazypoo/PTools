@@ -257,13 +257,34 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     fileprivate var avPlayer : AVPlayer!
     fileprivate var avPlayerItem : AVPlayerItem!
     var assetAspectRatio: CGFloat {
-        guard let track = avPlayerItem.asset.tracks(withMediaType: AVMediaType.video).first else {
-            return .zero
+        get async {
+            do {
+                // 1. 异步获取视频轨道 (iOS 16+)
+                let tracks = try await avPlayerItem.asset.loadTracks(withMediaType: .video)
+                guard let track = tracks.first else {
+                    return .zero
+                }
+                
+                // 🚀 2. Swift 6 结构化并发：让这两个耗时操作同时在后台发起，极大提升解析速度
+                async let naturalSize = track.load(.naturalSize)
+                async let preferredTransform = track.load(.preferredTransform)
+                
+                // 等待两个并发任务一起完成，然后计算实际渲染尺寸
+                let assetSize = try await naturalSize.applying(preferredTransform)
+                
+                // 3. 防御性编程：严格避免除以 0 导致 App 崩溃 (产生 NaN)
+                guard assetSize.height != 0 else {
+                    return .zero
+                }
+                
+                return abs(assetSize.width) / abs(assetSize.height)
+                
+            } catch {
+                // Swift 6 强校验下，必须处理 try 抛出的异常
+                PTNSLogConsole("⚠️ 获取视频宽高比失败: \(error.localizedDescription)")
+                return .zero
+            }
         }
-
-        let assetSize = track.naturalSize.applying(track.preferredTransform)
-
-        return abs(assetSize.width) / abs(assetSize.height)
     }
     
     //MARK: 播放按鈕
@@ -617,7 +638,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     guard let image = self.originImageView.image!.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
                     
                     let vc = PTVideoEditorToolsCropControl(image: image)
-                    vc.cropImageHandler = { [weak self] returnedImageSize,cropFrame in
+                    vc.cropImageHandler = { [weak self = self] returnedImageSize,cropFrame in
                         guard let self = self else { return }
                         PTGCDManager.shared.delayOnMain(time: 0.1) {
                             // 1. 获取 imageView 的容器尺寸和底层原始图片尺寸
@@ -697,11 +718,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         self.isMute.toggle()
                     }
                 case .presets:
-                    let presets = AVAssetExportSession.exportPresets(compatibleWith: self.avPlayer.currentItem!.asset)
-                    
-                    UIAlertController.baseActionSheet(title: PTVideoEditorConfig.share.alertTitleExportType,subTitle: String(format: PTVideoEditorConfig.share.alertTitleOutputTypeOption, self.presets), titles: presets) { sheet, index, title in
-                        self.presets = title
-                    }
+                    self.presentAction()
                 case .filter:
                     let vc = PTVideoEditorFilterControl(currentImage: self.originFilterImageView, currentFilter: self.currentFilter, viewControl: cellModel)
                     vc.filterHandler = { filter in
@@ -718,6 +735,49 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         return view
     }()
+    
+    func presentAction() {
+        Task { @MainActor in
+            guard let asset = self.avPlayer.currentItem?.asset else { return }
+            
+            // 1. 获取系统底层支持的所有预设 (同步方法，瞬间返回)
+            let allPresets = AVAssetExportSession.allExportPresets()
+            
+            // 🚀 2. 使用 Swift 6 的 TaskGroup 发起并发校验任务
+            // 几十个预设同时去后台校验，而不是排队一个一个校验
+            let compatiblePresets: [String] = await withTaskGroup(of: (String, Bool).self) { group in
+                for preset in allPresets {
+                    group.addTask {
+                        // 异步检查该预设与当前 asset 的兼容性，outputFileType 传 nil 代表不限定特定输出格式
+                        let isCompatible = await AVAssetExportSession.compatibility(
+                            ofExportPreset: preset,
+                            with: asset,
+                            outputFileType: nil
+                        )
+                        return (preset, isCompatible)
+                    }
+                }
+                
+                // 收集所有校验结果通过 (isCompatible == true) 的预设
+                var validPresets: Set<String> = []
+                for await (preset, isCompatible) in group {
+                    if isCompatible {
+                        validPresets.insert(preset)
+                    }
+                }
+                
+                // 因为并发任务返回的顺序是随机的，我们使用 originally 的顺序进行一次 filter，保证菜单展示顺序不变
+                return allPresets.filter { validPresets.contains($0) }
+            }
+            
+            // 3. 所有预设并发校验瞬间完成后，展示 ActionSheet
+            UIAlertController.baseActionSheet(title: PTVideoEditorConfig.share.alertTitleExportType,
+                                              subTitle: String(format: PTVideoEditorConfig.share.alertTitleOutputTypeOption, self.presets),
+                                              titles: compatiblePresets) { sheet, index, title in
+                self.presets = title
+            }
+        }
+    }
     
     //MARK: 速度
     fileprivate var speed:Double = 1 {
@@ -919,7 +979,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         
         timeLineContentSet()
 
-        Task {
+        Task { @MainActor in
             do {
                 self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
                 self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
@@ -933,7 +993,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 self.videoTimeLabel.text = formattedDuration
 
                 let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
-                let frameCount = self.numberOfFrames(within: timeLineViewRect)
+                let frameCount = await self.numberOfFrames(within: timeLineViewRect)
                 
                 let safeAsset = self.videoAVAsset!
                 // 【核心修改点】：统一调用封装好的 Service，默认限制了 maximumSize 保护内存
@@ -942,27 +1002,24 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     numberOfFrames: frameCount
                 )
                 
-                // 确保所有 UI 更新都在主线程安全进行
-                await MainActor.run {
-                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
-                    self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
-                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
-                    self.currentTimeLabel.text = "0:00"
+                let ratio = await self.assetAspectRatio
+                self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                self.timeLineView.configure(with: cgImages, assetAspectRatio: ratio)
+                self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                self.currentTimeLabel.text = "0:00"
 
-                    if let firstImage = cgImages.first {
-                        self.originFilterImageView.image = UIImage(cgImage: firstImage)
-                        self.originImageView.image = UIImage(cgImage: firstImage)
-                    }
-
-                    let width: CGFloat = 2.0
-                    let height: CGFloat = 160.0
-                    let x = self.timeLineContent.bounds.midX - width / 2
-                    let y = (self.timeLineContent.bounds.height - height) / 2
-                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
-                    
-                    self.reloadAsset()
+                if let firstImage = cgImages.first {
+                    self.originFilterImageView.image = UIImage(cgImage: firstImage)
+                    self.originImageView.image = UIImage(cgImage: firstImage)
                 }
 
+                let width: CGFloat = 2.0
+                let height: CGFloat = 160.0
+                let x = self.timeLineContent.bounds.midX - width / 2
+                let y = (self.timeLineContent.bounds.height - height) / 2
+                self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+                
+                self.reloadAsset()
             } catch {
                 await MainActor.run {
                     PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: error.localizedDescription, icon: .Error)
@@ -1178,7 +1235,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             Task { @MainActor in
                 do {
                     let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
-                    let frameCount = self.numberOfFrames(within: timeLineViewRect)
+                    let frameCount = await self.numberOfFrames(within: timeLineViewRect)
                     
                     // 【核心修改点】：再次统一调用 Service，注意这里的 asset 是 avPlayer 的 currentItem
                     let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
@@ -1186,18 +1243,16 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         numberOfFrames: frameCount
                     )
                     
-                    await MainActor.run {
-                        self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
-                        self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
-                        self.updateScrollViewContentOffset(fractionCompleted: .zero)
-                        
-                        let width: CGFloat = 2.0
-                        let height: CGFloat = 160.0
-                        let x = self.timeLineContent.bounds.midX - width / 2
-                        let y = (self.timeLineContent.bounds.height - height) / 2
-                        self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
-                    }
-
+                    let ratio = await self.assetAspectRatio
+                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                    self.timeLineView.configure(with: cgImages, assetAspectRatio: ratio)
+                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                    
+                    let width: CGFloat = 2.0
+                    let height: CGFloat = 160.0
+                    let x = self.timeLineContent.bounds.midX - width / 2
+                    let y = (self.timeLineContent.bounds.height - height) / 2
+                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
                 } catch {
                     await MainActor.run {
                         PTAlertTipsViewController.tipsAlertShow(title: "", subtitle: error.localizedDescription, icon: .Error)
@@ -1245,8 +1300,9 @@ extension PTVideoEditorToolsViewController:@MainActor C7CollectorImageDelegate {
 
 //MARK: 分拆視頻幀
 fileprivate extension PTVideoEditorToolsViewController {
-    func numberOfFrames(within bounds: CGRect) -> Int {
-        let frameWidth = bounds.height * assetAspectRatio
+    func numberOfFrames(within bounds: CGRect) async -> Int {
+        let ratio = await self.assetAspectRatio
+        let frameWidth = bounds.height * ratio
         return Int(bounds.width / frameWidth) + 1
     }
 }
@@ -1330,7 +1386,7 @@ fileprivate extension PTVideoEditorToolsViewController {
     // 统一管理所有的视频重建请求
     private func requestVideoAssetReload() {
         Task {
-            await reloadDebouncer.debounce { [weak self] in
+            await reloadDebouncer.debounce { [weak self = self] in
                 guard let self = self else { return }
                 // 🌟 优化点 6：由于方法已经是 async，直接 await 等待即可，清爽无比！
                 await self.setVideoAsset()

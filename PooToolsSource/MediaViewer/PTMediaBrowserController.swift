@@ -387,7 +387,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             let initialIndex = min(self.defaultIndex, max(0, self.mediaData.count - 1))
             self.navControl.titleLabel.text = "\(initialIndex + 1)/\(self.mediaData.count)"
             
-            self.newCollectionView.showCollectionDetail(collectionData: sections) { [weak self] collectionView in
+            self.newCollectionView.showCollectionDetail(collectionData: sections) { [weak self = self] collectionView in
                 guard let self = self else { return }
                 if !self.firstLoad {
                     self.firstLoad = true

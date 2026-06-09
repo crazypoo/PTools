@@ -764,7 +764,7 @@ open class PTTipsView: UIView {
             
             // 优化点：使用 Block 方法防止因为 Target-Action 强引用导致 Timer 内存泄漏
             if let duration = duration {
-                self.dismissTimer = Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { [weak self] _ in
+                self.dismissTimer = Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { [weak self = self] _ in
                     PTGCDManager.shared.runOnMain {
                         self?.hide()
                     }

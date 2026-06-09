@@ -206,7 +206,7 @@ public class PTTFUpdateCustomModel:PTModelProtocol,@unchecked Sendable {
 }
 
 @objcMembers
-public class PTCheckUpdateFunction: NSObject {
+public class PTCheckUpdateFunction: NSObject,@unchecked Sendable {
     @MainActor public static let share = PTCheckUpdateFunction()
     
     //MARK: LoadingHud

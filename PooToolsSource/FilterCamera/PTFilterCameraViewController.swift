@@ -106,7 +106,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                             self.takePhotoView = nil
                         }
                     }
-                    PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self] finish, _ in
+                    PHPhotoLibrary.pt.saveImageToAlbum(image: image) { [weak self = self] finish, _ in
                         if !finish {
                             PTGCDManager.shared.runOnMain {
                                 PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon: .Error)
@@ -302,7 +302,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     return
                 }
                 
-                Task { @MainActor [weak self] in
+                Task { @MainActor [weak self = self] in
                     guard let self = self else { return }
                     self.camera.filters = [filter]
                     self.currentFilter = PTCameraFilterConfig.share.filters[indexPath.row]

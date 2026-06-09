@@ -29,7 +29,7 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
-            self.cropView.crop { [weak self] (crop) in
+            self.cropView.crop { [weak self = self] (crop) in
                 guard let self = self else { return }
                 if let error = crop.error {
                     Task { @MainActor in

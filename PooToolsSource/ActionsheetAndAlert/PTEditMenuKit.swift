@@ -63,38 +63,18 @@ public final class PTEditMenuKit: NSObject {
         configure()
     }
 
-    deinit {
-//        // deinit 默认是非隔离的 (nonisolated)，若要访问 MainActor 属性需特殊处理或捕获
-//        if #available(iOS 16.0, *) {
-//            let interactionObj = editMenuInteraction
-//            let viewObj = targetView
-//            Task { @MainActor [interactionObj, viewObj] in
-//                if let interaction = interactionObj as? UIEditMenuInteraction {
-//                    viewObj?.removeInteraction(interaction)
-//                }
-//            }
-//        }
-    }
+    deinit { }
 
     private func configure() {
         targetView?.isUserInteractionEnabled = true
-        if #available(iOS 16.0, *) {
-            configureEditMenuInteraction()
-        } else {
-            configureLegacyMenu()
-        }
+        configureEditMenuInteraction()
     }
 
     public func present(from rect: CGRect) {
         guard let view = targetView, view.window != nil else { return }
 
-        if #available(iOS 16.0, *) {
-            let config = UIEditMenuConfiguration(identifier: nil, sourcePoint: CGPoint(x: rect.midX, y: rect.midY))
-            (editMenuInteraction as? UIEditMenuInteraction)?.presentEditMenu(with: config)
-        } else {
-            view.becomeFirstResponder()
-            UIMenuController.shared.showMenu(from: view, rect: rect)
-        }
+        let config = UIEditMenuConfiguration(identifier: nil, sourcePoint: CGPoint(x: rect.midX, y: rect.midY))
+        (editMenuInteraction as? UIEditMenuInteraction)?.presentEditMenu(with: config)
     }
 }
 
@@ -130,24 +110,6 @@ extension PTEditMenuKit: UIEditMenuInteractionDelegate {
             }
             return UIMenu(title: "", children: children)
         }
-    }
-}
-
-// MARK: - iOS 15 Legacy (SAFE)
-extension PTEditMenuKit {
-
-    private func configureLegacyMenu() {
-        legacyResponder.handlers.removeAll()
-
-        actions.forEach { action in
-            legacyResponder.handlers[action.identifier] = action.handler
-        }
-
-        let items = actions.map {
-            UIMenuItem(title: $0.title, action: Selector($0.identifier))
-        }
-
-        UIMenuController.shared.menuItems = items
     }
 }
 

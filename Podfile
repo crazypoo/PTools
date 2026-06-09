@@ -1,4 +1,4 @@
-platform :ios, '15.0'
+platform :ios, '17.0'
 use_frameworks!
 
 post_install do |installer|

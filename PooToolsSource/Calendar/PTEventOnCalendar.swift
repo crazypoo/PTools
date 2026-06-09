@@ -169,8 +169,7 @@ public class PTEventOnCalendar: NSObject {
         let eventStore = EKEventStore()
         let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 请求日历事件
-        eventStore.requestAccess(to: .event, completion: {
-            granted, error in
+        eventStore.requestWriteOnlyAccessToEvents { granted, error in
             if (granted) && (error == nil) {
                 // 获取本地日历（剔除节假日，生日等其他系统日历）
                 let calendars = storeBox.store.calendars(for: .event).filter({
@@ -185,7 +184,7 @@ public class PTEventOnCalendar: NSObject {
                 let safeBox = PTSendableEventArrayBox([])
                 resultMain(parameter: safeBox, eventsClosure: eventsClosure)
             }
-        })
+        }
     }
     
     // MARK: 修改日历事件
@@ -201,8 +200,7 @@ public class PTEventOnCalendar: NSObject {
         let eventStore = EKEventStore()
         let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 请求日历事件
-        eventStore.requestAccess(to: .event, completion: {
-            granted, error in
+        eventStore.requestWriteOnlyAccessToEvents { granted, error in
             if (granted) && (error == nil) {
                 // 获取本地日历（剔除节假日，生日等其他系统日历）
                 let calendars = storeBox.store.calendars(for: .event).filter({
@@ -231,7 +229,7 @@ public class PTEventOnCalendar: NSObject {
             } else {
                 resultMain(parameter: false, eventsClosure: eventsClosure)
             }
-        })
+        }
     }
 
     // MARK: 删除日历事件
@@ -243,8 +241,7 @@ public class PTEventOnCalendar: NSObject {
         let eventStore = EKEventStore()
         let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 请求日历事件
-        eventStore.requestAccess(to: .event, completion: {
-            granted, error in
+        eventStore.requestWriteOnlyAccessToEvents { granted, error in
             if (granted) && (error == nil) {
                 // 获取本地日历（剔除节假日，生日等其他系统日历）
                 let calendars = storeBox.store.calendars(for: .event).filter({
@@ -280,7 +277,7 @@ public class PTEventOnCalendar: NSObject {
             } else {
                 resultMain(parameter: false, eventsClosure: eventsClosure)
             }
-        })
+        }
     }
 }
 
@@ -331,8 +328,7 @@ extension PTEventOnCalendar {
         // 在取得提醒之前，需要先获取授权
         let eventStore = EKEventStore()
         let storeBox = PTSendableEventStoreBox(store: eventStore)
-        storeBox.store.requestAccess(to: .reminder) {
-            (granted: Bool, error: Error?) in
+        storeBox.store.requestFullAccessToReminders { granted, error in
             if (granted) && (error == nil) {
                 // 获取授权后，我们可以得到所有的提醒事项
                 let predicate = storeBox.store.predicateForReminders(in: nil)
@@ -361,7 +357,7 @@ extension PTEventOnCalendar {
         let eventStore = EKEventStore()
         let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 获取"提醒"的访问授权
-        storeBox.store.requestAccess(to: .reminder) {(granted, error) in
+        storeBox.store.requestFullAccessToReminders { granted, error in
             if (granted) && (error == nil) {
                 // 获取授权后，我们可以得到所有的提醒事项
                 let predicate = storeBox.store.predicateForReminders(in: nil)
@@ -407,7 +403,7 @@ extension PTEventOnCalendar {
         let eventStore = EKEventStore()
         let storeBox = PTSendableEventStoreBox(store: eventStore)
         // 获取"提醒"的访问授权
-        eventStore.requestAccess(to: .reminder) {(granted, error) in
+        eventStore.requestFullAccessToReminders { granted, error in
             if (granted) && (error == nil) {
                 // 获取授权后，我们可以得到所有的提醒事项
                 let predicate = storeBox.store.predicateForReminders(in: nil)

@@ -436,7 +436,7 @@ extension UIViewController {
             let startTime = Date()
             let delay = PTPerformanceLeakDetector.delay
             
-            PTGCDManager.shared.delayOnMain(time: delay) { [weak self] in
+            PTGCDManager.shared.delayOnMain(time: delay) { [weak self = self] in
                 guard let self = self else { return }
                 
                 if UIApplication.shared.applicationState != .active || PTPerformanceLeakDetector.lastBackgroundedDate > startTime {
@@ -551,7 +551,7 @@ extension UIViewController {
                 vc.addCheckForMemoryLeakObserver()
 
                 // 3. 将局部变量 currentSplitVC 和 vc 弱引用传入延时任务
-                PTGCDManager.shared.delayOnMain(time: PTPerformanceLeakDetector.delay) { [weak currentSplitVC, weak vc] in
+                PTGCDManager.shared.delayOnMain(time: PTPerformanceLeakDetector.delay) { [weak currentSplitVC = currentSplitVC, weak vc = vc] in
                     
                     if currentSplitVC == nil {
                         // 4. 这里的闭包已经被我们升级为 @MainActor 了，所以不需要再嵌套 Task

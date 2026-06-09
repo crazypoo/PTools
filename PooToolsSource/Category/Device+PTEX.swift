@@ -190,10 +190,14 @@ public extension PTPOP where Base: UIDevice {
         return round(gigabytes * 100) / 100
     }
     
+    @MainActor private static var activeScreen: UIScreen? {
+        return (UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene)?.screen
+    }
     //MARK: 获取屏幕亮度
     ///获取屏幕亮度比例
     @MainActor static var brightness: CGFloat {
-        UIScreen.main.brightness
+        return activeScreen?.brightness ?? 0.5
     }
     
     //MARK: 获取设备是否省电模式
@@ -233,7 +237,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 获取最高刷新率
     ///获取最高刷新率
     @MainActor static var maximumFramesPerSecond: Int {
-        UIScreen.main.maximumFramesPerSecond
+        return activeScreen?.maximumFramesPerSecond ?? 60
     }
     
     //MARK: 获取手机的第一个语言
@@ -278,37 +282,6 @@ public extension PTPOP where Base: UIDevice {
 
 public extension PTPOP where Base: UIDevice {
     
-    //MARK: 获取手机当前运营商其他信息
-    ///获取手机当前运营商其他信息
-    @available(iOS, introduced: 4.0, deprecated: 16.0,message: "可能在16之後就無法使用該API了")
-    static func getSiminfo() -> NSMutableDictionary {
-        let dic = NSMutableDictionary()
-        
-        let carrier = CTCarrier()
-        let carrierName = carrier.carrierName
-        let mobileCountryCode = carrier.mobileCountryCode
-        let mobileNetworkCode = carrier.mobileNetworkCode
-        dic.setValue(mobileCountryCode, forKey: "mobileCountryCode")
-        dic.setValue(mobileNetworkCode, forKey: "mobileNetworkCode")
-        dic.setValue(carrierName, forKey: "carrierName")
-
-        return dic
-    }
-    
-    //MARK: 获取并输出运营商信息
-    /// - Returns: 运营商信息
-    private static func getCarriers() -> [CTCarrier]? {
-        guard !Device.current.isSimulator else {
-            return nil
-        }
-        // 获取并输出运营商信息
-        let info = CTTelephonyNetworkInfo()
-        guard let providers = info.serviceSubscriberCellularProviders else {
-            return []
-        }
-        return providers.filter { $0.value.carrierName != nil }.values.shuffled()
-    }
-
     //MARK: 根据数据业务信息获取对应的网络类型
     /// - Parameters:
     ///  -  currentRadioTech: 当前的无线电接入技术信息
@@ -348,63 +321,7 @@ public extension PTPOP where Base: UIDevice {
         }
         return networkType
     }
-    
-    //MARK: 是否允许VoIP
-    ///是否允许VoIP
-    /// - Returns: 是否允许VoIP
-    static func isAllowsVOIPs() -> [Bool]? {
-        // 获取并输出运营商信息
-        guard let carriers = getCarriers(), carriers.count > 0 else {
-            return nil
-        }
-        return carriers.map{ $0.allowsVOIP}
-    }
-    
-    //MARK: ISO国家代码
-    ///ISO国家代码
-    /// - Returns: ISO国家代码
-    static func isoCountryCodes() -> [String]? {
-        // 获取并输出运营商信息
-        guard  let carriers = getCarriers(), carriers.count > 0 else {
-            return nil
-        }
-        return carriers.map{ $0.isoCountryCode!}
-    }
-    
-    //MARK: 移动网络码(MNC)
-    ///移动网络码(MNC)
-    /// - Returns: 移动网络码(MNC)
-    static func mobileNetworkCodes() -> [String]? {
-        // 获取并输出运营商信息
-        guard  let carriers = getCarriers(), carriers.count > 0 else {
-            return nil
-        }
-        return carriers.map{ $0.mobileNetworkCode!}
-    }
-    
-    //MARK: 移动国家码(MCC)
-    ///移动国家码(MCC)
-    /// - Returns: 移动国家码(MCC)
-    static func mobileCountryCodes() -> [String]? {
-        // 获取并输出运营商信息
-        guard  let carriers = getCarriers(), carriers.count > 0 else {
-            return nil
-        }
-        return carriers.map{ $0.mobileCountryCode!}
-    }
-    
-    //MARK: 运营商名字
-    ///运营商名字
-    /// - Returns: 运营商名字
-    static func carrierNames() -> [String]? {
-        // 获取并输出运营商信息
-        guard  let carriers = getCarriers(), carriers.count > 0 else {
-            return nil
-        }
-        return carriers.map{ $0.carrierName!}
-    }
-    
-    
+        
     //MARK: 数据业务对应的通信技术
     ///数据业务对应的通信技术
     /// - Returns: 通信技术
@@ -430,13 +347,7 @@ public extension PTPOP where Base: UIDevice {
         }
         return currentRadioTechs.compactMap { getNetworkType(currentRadioTech: $0) }
     }
-    
-    //MARK: sim卡信息
-    ///sim卡信息
-    static func simCardInfos() -> [CTCarrier]? {
-        getCarriers()
-    }
-    
+        
     //MARK: 检测时候热启动
     static func activePrewarm() -> Bool {
         let boolValue = ProcessInfo.processInfo.environment["ActivePrewarm"] == "1" ? true : false

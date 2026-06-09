@@ -67,29 +67,37 @@ public extension PTPOP where Base: AVAssetExportSession {
         FileManager.pt.removefile(filePath: outputPath)
         // 3、获取视频资源
         let avAsset: AVURLAsset = AVURLAsset(url: URL(fileURLWithPath: inputPath), options: nil)
-        // 资源的时间
-        let assetTime = avAsset.duration
-        // 视频时长
-        let duration = CMTimeGetSeconds(assetTime)
-        // 4、配置视频压缩参数
-        guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: exportPresetMediumQuality) else {
-            return
-        }
-        // 输出URL
-        exportSession.outputURL = URL(fileURLWithPath: outputPath)
-        // 转换后的格式
-        exportSession.outputFileType = outputFileType
-        // 优化网络
-        exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
-        // 异步导出
+        // 开启异步上下文处理后续耗时操作
         Task {
             do {
+                // 🌟 iOS 16+ 核心适配：异步加载视频时长，彻底避免由于同步读取导致的主线程卡顿
+                let assetTime = try await avAsset.load(.duration)
+                let duration = CMTimeGetSeconds(assetTime)
+                
+                // 4、配置视频压缩参数
+                guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: exportPresetMediumQuality) else {
+                    return
+                }
+                
+                // 输出URL
+                exportSession.outputURL = URL(fileURLWithPath: outputPath)
+                // 转换后的格式
+                exportSession.outputFileType = outputFileType
+                // 优化网络
+                exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
+                
+                // 5、异步导出
                 await exportSession.export()
+                
+                // 导出完成后的回调处理
                 if exportSession.status == .completed {
                     handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
                 } else {
                     handler(exportSession, duration, "", "")
                 }
+            } catch {
+                // 如果文件已损坏导致读取时长失败，在这里拦截并处理
+                PTNSLogConsole("获取视频时长或处理失败: \(error.localizedDescription)")
             }
         }
     }

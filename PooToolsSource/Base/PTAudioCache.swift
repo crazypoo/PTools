@@ -109,14 +109,24 @@ public final class PTAudioService {
             }
 
             let asset = AVURLAsset(url: localURL)
-            let seconds = Float(CMTimeGetSeconds(asset.duration))
-
-            self.durationCache.setObject(
-                NSNumber(value: seconds),
-                forKey: key
-            )
-
-            completion(seconds, localURL)
+            Task {
+                do {
+                    // 使用 iOS 16+ 推荐的异步加载方式获取 duration
+                    let duration = try await asset.load(.duration)
+                    let seconds = Float(CMTimeGetSeconds(duration))
+                    
+                    // 将结果存入缓存
+                    self.durationCache.setObject(NSNumber(value: seconds), forKey: key)
+                    
+                    // 返回计算好的秒数和本地 URL
+                    completion(seconds, localURL)
+                    
+                } catch {
+                    // 如果解析时长失败（比如文件损坏），可以在这里进行错误处理
+                    PTNSLogConsole("获取音频时长失败: \(error.localizedDescription)")
+                    completion(0, localURL) // 失败时默认返回 0
+                }
+            }
         }
     }
 
@@ -148,7 +158,15 @@ public enum PTAudioTranscoder {
     public static func transcodeToM4A(from sourceURL: URL, to targetURL: URL) async -> URL? {
         let asset = AVURLAsset(url: sourceURL)
 
-        guard AVAssetExportSession.exportPresets(compatibleWith: asset).contains(AVAssetExportPresetAppleM4A),
+        // 🌟 核心适配改动：使用 iOS 16+ 的原生异步方法判断兼容性
+        let isCompatible = await AVAssetExportSession.compatibility(
+            ofExportPreset: AVAssetExportPresetAppleM4A,
+            with: asset,
+            outputFileType: .m4a
+        )
+
+        // 如果不兼容，或者无法创建 Exporter，则直接返回 nil
+        guard isCompatible,
               let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A) else {
             return nil
         }
@@ -157,7 +175,7 @@ public enum PTAudioTranscoder {
         exporter.outputFileType = .m4a
         exporter.shouldOptimizeForNetworkUse = true
 
-        // 🚀 核心改动：使用原生的 async export() 方法。
+        // 🚀 核心逻辑：使用原生的 async export() 方法。
         // 代码会在这里挂起等待，直到导出完成或失败，完全消除了闭包和多线程抢占的风险
         await exporter.export()
 
@@ -165,6 +183,10 @@ public enum PTAudioTranscoder {
         if exporter.status == .completed {
             return targetURL
         } else {
+            // 可选调试：如果出错，可以在这里打印 exporter.error 了解具体原因
+            if let error = exporter.error {
+                print("导出失败: \(error.localizedDescription)")
+            }
             return nil
         }
     }

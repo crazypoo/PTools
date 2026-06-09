@@ -1825,7 +1825,7 @@ extension PTCollectionView {
             if isEmpty {
                 PTUnavailableManager.hideUnavailableView(in: self) {
                     if let config = self.viewConfig.emptyViewConfig {
-                        PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self] in
+                        PTUnavailableManager.showEmptyView(in: self, config: config) { [weak self = self] in
                             self?.showEmptyLoading()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 self?.emptyTap?(nil)
