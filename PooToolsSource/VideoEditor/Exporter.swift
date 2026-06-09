@@ -29,9 +29,9 @@ public struct Exporter {
     ///   - options: Setup other parameters about export video.
     ///   - filtering: Filters work to filter pixel buffer.
     ///   - complete: The conversion is complete, including success or failure.
-    public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) {
+    public func export(options: [Exporter.Option: Any] = [:], filtering: @escaping PixelBufferCallback, complete: @escaping ExportComplete) async {
         do {
-            let (composition, videoComposition) = try setupComposition(options: options, filtering: filtering)
+            let (composition, videoComposition) = try await setupComposition(options: options, filtering: filtering)
             
             // 🚀 修复核心 1：使用 nonisolated(unsafe) 关键字。
             // 这明确告诉 Swift 6 编译器：我知道这个 export 对象不是 Sendable，
@@ -84,40 +84,50 @@ extension Exporter {
         export.shouldOptimizeForNetworkUse = setupOptimizeForNetworkUse(options: options)
         return export
     }
-    
-    private func setupComposition(options: [Exporter.Option: Any], filtering: @escaping PixelBufferCallback) throws -> (AVComposition, AVVideoComposition) {
+
+    private func setupComposition(options: [Exporter.Option: Any], filtering: @escaping PixelBufferCallback) async throws -> (AVComposition, AVVideoComposition) {
+        
         var videoFrameDuration = CMTimeMake(value: 1, timescale: 30)
-        for (key, value) in options {
-            switch (key, value) {
-            case (.VideoCompositionFrameDuration, let value as CMTime):
-                videoFrameDuration = value
-            default:
-                break
-            }
+        
+        // 🌟 2. 字典取值极简优化：告别啰嗦的 for 循环 switch
+        if let value = options[.VideoCompositionFrameDuration] as? CMTime {
+            videoFrameDuration = value
         }
         
         let asset = self.provider.asset
-        let videoTracks = asset.tracks(withMediaType: .video)
+        
+        // 🌟 3. 异步获取视频轨道
+        let videoTracks = try await asset.loadTracks(withMediaType: .video)
         guard let track = videoTracks.first else {
             throw(Exporter.Error.videoTrackEmpty)
         }
-        let naturalSize = setupVideoRenderSize(videoTracks, asset: asset, options: options)
+        
+        // 🌟 4. 无缝衔接刚才重构的异步方法
+        let naturalSize = try await setupVideoRenderSize(videoTracks, asset: asset, options: options)
+        
+        // 🌟 5. 异步获取资产总时长
+        let duration = try await asset.load(.duration)
+        
         let composition = AVMutableComposition()
         composition.naturalSize = naturalSize
         guard let videoTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
             throw(Exporter.Error.addVideoTrack)
         }
-        try videoTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: asset.duration), of: track, at: .zero)
         
-        if let audio = asset.tracks(withMediaType: .audio).first,
+        try videoTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: duration), of: track, at: .zero)
+        
+        // 🌟 6. 异步获取音频轨道
+        let audioTracks = try await asset.loadTracks(withMediaType: .audio)
+        if let audio = audioTracks.first,
            let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) {
-            try audioCompositionTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: asset.duration), of: audio, at: .zero)
+            try audioCompositionTrack.insertTimeRange(CMTimeRangeMake(start: .zero, duration: duration), of: audio, at: .zero)
         }
         
         let instruction = CompositionInstruction(videoTrack: videoTrack, bufferCallback: filtering, options: options)
-        instruction.timeRange = CMTimeRangeMake(start: .zero, duration: asset.duration)
+        instruction.timeRange = CMTimeRangeMake(start: .zero, duration: duration)
         
-        let videoComposition = AVMutableVideoComposition(propertiesOf: asset)
+        // 🌟 7. iOS 16+ 专属适配：使用异步工厂方法初始化 VideoComposition，防止阻塞底层
+        let videoComposition = try await AVMutableVideoComposition.videoComposition(withPropertiesOf: asset)
         videoComposition.customVideoCompositorClass = Compositor.self
         videoComposition.frameDuration = videoFrameDuration
         videoComposition.renderSize = naturalSize

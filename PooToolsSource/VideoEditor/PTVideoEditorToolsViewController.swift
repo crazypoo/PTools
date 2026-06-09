@@ -1424,18 +1424,20 @@ fileprivate extension PTVideoEditorToolsViewController {
     func harbethExportAsync(sourceURL: URL, outputURL: URL) async throws -> URL {
         let safeBox = PTC7SafeBox(filters: self.c7Player.filters)
         return try await withCheckedThrowingContinuation { continuation in
-            let exporter = Exporter(provider: Exporter.Provider(with: sourceURL, to: URL(fileURLWithPath: outputURL.path)))
-            exporter.export(options: [.OptimizeForNetworkUse: true], filtering: { buffer in
-                let dest = HarbethIO(element: buffer, filters: safeBox.filters)
-                return try? dest.output()
-            }, complete: { res in
-                switch res {
-                case .success(let finalURL):
-                    continuation.resume(returning: finalURL)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            })
+            Task {
+                let exporter = Exporter(provider: Exporter.Provider(with: sourceURL, to: URL(fileURLWithPath: outputURL.path)))
+                await exporter.export(options: [.OptimizeForNetworkUse: true], filtering: { buffer in
+                    let dest = HarbethIO(element: buffer, filters: safeBox.filters)
+                    return try? dest.output()
+                }, complete: { res in
+                    switch res {
+                    case .success(let finalURL):
+                        continuation.resume(returning: finalURL)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                })
+            }
         }
     }
     

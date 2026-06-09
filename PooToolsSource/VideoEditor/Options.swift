@@ -64,24 +64,32 @@ extension Exporter {
         return presetName
     }
     
-    func setupVideoRenderSize(_ videoTracks: [AVAssetTrack], asset: AVAsset, options: [Exporter.Option: Any]) -> CGSize {
-        guard options.keys.contains(where: { $0 == .VideoCompositionRenderSize }),
-              let size = options[.VideoCompositionRenderSize] as? CGSize else {
-            /// AVMutableVideoComposition's renderSize property is buggy with some assets.
-            /// Calculate the renderSize here based on the documentation of `AVMutableVideoComposition(propertiesOf:)`
-            if let composition = asset as? AVComposition {
-                return composition.naturalSize
-            } else {
-                var renderSize: CGSize = .zero
-                for videoTrack in videoTracks {
-                    let size = videoTrack.naturalSize.applying(videoTrack.preferredTransform)
-                    renderSize.width  = max(renderSize.width, abs(size.width))
-                    renderSize.height = max(renderSize.height, abs(size.height))
-                }
-                return renderSize
-            }
+    func setupVideoRenderSize(_ videoTracks: [AVAssetTrack], asset: AVAsset, options: [Exporter.Option: Any]) async throws -> CGSize {
+        
+        // 🌟 优化点 1：字典直接通过 Key 取值并强转，如果不存在自然是 nil，不需要先 contains 判断
+        if let size = options[.VideoCompositionRenderSize] as? CGSize {
+            return size
         }
-        return size
+        
+        /// AVMutableVideoComposition's renderSize property is buggy with some assets.
+        /// Calculate the renderSize here based on the documentation of `AVMutableVideoComposition(propertiesOf:)`
+        if let composition = asset as? AVComposition {
+            return composition.naturalSize
+            
+        } else {
+            var renderSize: CGSize = .zero
+            
+            for videoTrack in videoTracks {
+                let naturalSize = try await videoTrack.load(.naturalSize)
+                let preferredTransform = try await videoTrack.load(.preferredTransform)
+                
+                let size = naturalSize.applying(preferredTransform)
+                renderSize.width  = max(renderSize.width, abs(size.width))
+                renderSize.height = max(renderSize.height, abs(size.height))
+            }
+            
+            return renderSize
+        }
     }
     
     func setupOptimizeForNetworkUse(options: [Exporter.Option: Any]) -> Bool {
