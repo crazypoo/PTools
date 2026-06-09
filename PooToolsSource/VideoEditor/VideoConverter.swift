@@ -12,7 +12,6 @@ import AVKit
 private struct PTVideoExportBox: @unchecked Sendable {
     let isCancelledState: Bool
 }
-
 // 新增：引入 @MainActor 保证外部调用的安全，解决绝大部分 Sendable 捕获警告
 @MainActor
 open class VideoConverter {
@@ -20,14 +19,13 @@ open class VideoConverter {
     private var currentExportURL: URL?
 
     public let asset: AVAsset
-    public let presets: [String]
+    public var presets: [String] = []
 
     public var option: ConverterOption?
 
     private var assetExportsSession: AVAssetExportSession?
-    private struct PTSafeExportSessionBox: @unchecked Sendable {
-        let session: AVAssetExportSession?
-    }
+    
+    // 💡 优化点：完全删除了 PTSafeExportSessionBox！因为 iOS 16+ 有原生异步方法了
     
     private struct PTSafeAudioExportBox: @unchecked Sendable {
         let reader: AVAssetReader
@@ -39,7 +37,7 @@ open class VideoConverter {
     // 进度回调，标记为 @Sendable 以允许跨线程安全传递
     private var progressCallback: (@Sendable (Double?) -> Void)?
     
-    // 【核心新增】：使用内部锁管理后台取消状态，供非主线程的音视频底层 API 安全读取
+    // 内部锁管理后台取消状态，供非主线程的音视频底层 API 安全读取
     private let cancelLock = NSLock()
     private var _isCancelledState: Bool = false
     private var isCancelledState: Bool {
@@ -55,65 +53,147 @@ open class VideoConverter {
         }
     }
 
+    // MARK: - 🌟 异步属性链 (Async Contagion) 完美适配
+    
     private var videoTrack: AVAssetTrack? {
-        return self.asset.tracks(withMediaType: .video).first
+        get async {
+            let tracks = try? await self.asset.loadTracks(withMediaType: .video)
+            return tracks?.first
+        }
     }
 
     private var radian: CGFloat? {
-        guard let videoTrank = self.videoTrack else { return nil }
-        return atan2(videoTrank.preferredTransform.b, videoTrank.preferredTransform.a) + (self.option?.rotate ?? 0)
+        get async {
+            guard let videoTrack = await self.videoTrack else { return nil }
+            // 🌟 物理矩阵也是废弃的同步属性，必须异步 load
+            guard let transform = try? await videoTrack.load(.preferredTransform) else { return nil }
+            return atan2(transform.b, transform.a) + (self.option?.rotate ?? 0)
+        }
     }
 
     private var converterDegree: ConverterDegree? {
-        guard let radian = self.radian else { return nil }
-        let degree = radian * 180 / .pi
-        return ConverterDegree.convert(degree: degree)
+        get async {
+            guard let radian = await self.radian else { return nil }
+            let degree = radian * 180 / .pi
+            return ConverterDegree.convert(degree: degree)
+        }
     }
 
     private var naturalSize: CGSize? {
-        guard let videoTrack = self.videoTrack,
-              let converterDegree = self.converterDegree else { return nil }
-        if converterDegree == .degree90 || converterDegree == .degree270 {
-            return CGSize(width: videoTrack.naturalSize.height, height: videoTrack.naturalSize.width)
-        } else {
-            return CGSize(width: videoTrack.naturalSize.width, height: videoTrack.naturalSize.height)
+        get async {
+            guard let videoTrack = await self.videoTrack,
+                  let converterDegree = await self.converterDegree else {
+                return nil
+            }
+            
+            guard let size = try? await videoTrack.load(.naturalSize) else { return nil }
+            
+            if converterDegree == .degree90 || converterDegree == .degree270 {
+                return CGSize(width: size.height, height: size.width)
+            } else {
+                return size
+            }
         }
     }
 
     private var cropFrame: CGRect? {
-        guard let crop = self.option?.convertCrop else { return nil }
-        guard let naturalSize = self.naturalSize else { return nil }
-        let contrastSize = crop.contrastSize
-        let frame = crop.frame
-        let cropX = frame.origin.x * naturalSize.width / contrastSize.width
-        let cropY = frame.origin.y * naturalSize.height / contrastSize.height
-        let cropWidth = frame.size.width * naturalSize.width / contrastSize.width
-        let cropHeight = frame.size.height * naturalSize.height / contrastSize.height
-        return CGRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
+        get async {
+            guard let crop = self.option?.convertCrop else { return nil }
+            guard let naturalSize = await self.naturalSize else { return nil }
+            let contrastSize = crop.contrastSize
+            let frame = crop.frame
+            let cropX = frame.origin.x * naturalSize.width / contrastSize.width
+            let cropY = frame.origin.y * naturalSize.height / contrastSize.height
+            let cropWidth = frame.size.width * naturalSize.width / contrastSize.width
+            let cropHeight = frame.size.height * naturalSize.height / contrastSize.height
+            return CGRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
+        }
+    }
+    
+    private var renderSize: CGSize? {
+        get async {
+            guard let naturalSize = await self.naturalSize else { return nil }
+            var renderSize = naturalSize
+            if let cropFrame = await self.cropFrame {
+                let width = floor(cropFrame.size.width / 16) * 16
+                let height = floor(cropFrame.size.height / 16) * 16
+                renderSize = CGSize(width: width, height: height)
+            }
+            return renderSize
+        }
     }
 
-    public init(asset: AVAsset) {
+    private var transform: CGAffineTransform? {
+        get async {
+            guard let naturalSize = await self.naturalSize,
+                  let radian = await self.radian,
+                  let converterDegree = await self.converterDegree else { return nil }
+
+            var transform = CGAffineTransform.identity
+            transform = transform.rotated(by: radian)
+            
+            if converterDegree == .degree90 {
+                transform = transform.translatedBy(x: 0, y: -naturalSize.width)
+            } else if converterDegree == .degree180 {
+                transform = transform.translatedBy(x: -naturalSize.width, y: -naturalSize.height)
+            } else if converterDegree == .degree270 {
+                transform = transform.translatedBy(x: -naturalSize.height, y: 0)
+            }
+
+            if let cropFrame = await self.cropFrame {
+                if converterDegree == .degree0 {
+                    transform = transform.translatedBy(x: -cropFrame.origin.x, y: -cropFrame.origin.y)
+                } else if converterDegree == .degree90 {
+                    transform = transform.translatedBy(x: -cropFrame.origin.y, y: cropFrame.origin.x)
+                } else if converterDegree == .degree180 {
+                    transform = transform.translatedBy(x: cropFrame.origin.x, y: cropFrame.origin.y)
+                } else if converterDegree == .degree270 {
+                    transform = transform.translatedBy(x: cropFrame.origin.y, y: -cropFrame.origin.x)
+                }
+            }
+            return transform
+        }
+    }
+
+    // MARK: - 初始化与清理
+    
+    public init(asset: AVAsset) async {
         self.asset = asset
-        self.presets = AVAssetExportSession.exportPresets(compatibleWith: asset)
+        let allPresets = AVAssetExportSession.allExportPresets()
+        
+        struct UnsafeAssetBox: @unchecked Sendable {
+            let safeAsset: AVAsset
+        }
+        let box = UnsafeAssetBox(safeAsset: asset)
+        
+        let compatiblePresets = await withTaskGroup(of: (String, Bool).self) { group in
+            for preset in allPresets {
+                group.addTask {
+                    let isCompatible = await AVAssetExportSession.compatibility(
+                        ofExportPreset: preset, with: box.safeAsset, outputFileType: nil)
+                    return (preset, isCompatible)
+                }
+            }
+            var validPresets: Set<String> = []
+            for await (preset, isCompatible) in group {
+                if isCompatible { validPresets.insert(preset) }
+            }
+            return allPresets.filter { validPresets.contains($0) }
+        }
+        self.presets = compatiblePresets
     }
 
-    // Restore & Clean up
     open func restore(cleanupDisk: Bool = false) {
-        // 通知后台队列（如果有）立刻停止
         self.isCancelledState = true
-        
         self.option = nil
         
-        // 取消正在进行的导出任务
         if let session = self.assetExportsSession, session.status == .exporting || session.status == .waiting {
             session.cancelExport()
         }
         self.assetExportsSession = nil
         self.progressCallback = nil
         
-        // 如果指定需要清理，使用分离的 Task 在后台删除残缺文件
         if cleanupDisk, let fileURL = self.currentExportURL {
-            // Swift 6 推荐使用 Task.detached 代替 DispatchQueue.global 进行独立的后台任务
             Task.detached(priority: .background) {
                 let filePath = fileURL.path
                 if FileManager.default.fileExists(atPath: filePath) {
@@ -121,28 +201,33 @@ open class VideoConverter {
                 }
             }
         }
-        
-        // 彻底忘掉这个路径
         self.currentExportURL = nil
     }
 
-    // 【优化】：移除无用的 withUnsafeContinuation，因为内部组装全是同步逻辑
+    // MARK: - 组装合成逻辑
+    
     open func convert(_ option: ConverterOption? = nil) async throws -> (AVMutableComposition, AVMutableVideoComposition) {
         self.restore()
-        // 开启新的任务，复位取消标志
         self.isCancelledState = false
+        self.option = option
         
-        guard let videoTrack = self.videoTrack else {
+        guard let videoTrack = await self.videoTrack else {
             throw NSError(domain: "Can't find video", code: 404, userInfo: nil)
         }
-        self.option = option
-        if self.renderSize?.width == 0 || self.renderSize?.height == 0 {
+        
+        // 🌟 并发获取需要的尺寸，避免单线程阻塞
+        async let currentRenderSizeTask = self.renderSize
+        async let currentTransformTask = self.transform
+        
+        let currentRenderSize = await currentRenderSizeTask
+        let currentTransform = await currentTransformTask
+        
+        if currentRenderSize?.width == 0 || currentRenderSize?.height == 0 {
             self.restore()
             throw NSError(domain: "The crop size is too small", code: 503, userInfo: nil)
         }
 
         let composition = AVMutableComposition()
-
         guard let videoCompositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
             self.restore()
             throw NSError(domain: "Can't find video", code: 404, userInfo: nil)
@@ -150,27 +235,33 @@ open class VideoConverter {
 
         let range: CMTimeRange
         let duration: CMTime
+        
+        // 🌟 时长也是底层的，必须 await
+        let assetDuration = try await asset.load(.duration)
+        
         if let trimPositions = option?.trimRange {
             let value = trimPositions.1 - trimPositions.0
-            duration = CMTime(seconds: value * asset.duration.seconds, preferredTimescale: asset.duration.timescale)
-            range = CMTimeRange(start: CMTimeMakeWithSeconds(asset.duration.seconds * trimPositions.0, preferredTimescale: Int32(NSEC_PER_MSEC)), duration: duration)
+            duration = CMTime(seconds: value * assetDuration.seconds, preferredTimescale: assetDuration.timescale)
+            range = CMTimeRange(start: CMTimeMakeWithSeconds(assetDuration.seconds * trimPositions.0, preferredTimescale: Int32(NSEC_PER_MSEC)), duration: duration)
         } else {
-            duration = asset.duration
+            duration = assetDuration
             range = CMTimeRange(start: .zero, duration: duration)
         }
         
-        // trim
         try? videoCompositionTrack.insertTimeRange(range, of: videoTrack, at: .zero)
 
         let newDuration = Double(duration.seconds) / (self.option?.speed ?? 1)
         let time = CMTime(seconds: newDuration, preferredTimescale: duration.timescale)
         let newRange = CMTimeRange(start: .zero, duration: duration)
         videoCompositionTrack.scaleTimeRange(newRange, toDuration: time)
-        videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
+        
+        // 🌟 PreferredTransform 也变成了 await
+        let preferredTransform = try await videoTrack.load(.preferredTransform)
+        videoCompositionTrack.preferredTransform = preferredTransform
 
-        // mute
         if !(option?.isMute ?? false) {
-            if let audioTrack = self.asset.tracks(withMediaType: AVMediaType.audio).first {
+            let audioTracks = try await self.asset.loadTracks(withMediaType: .audio)
+            if let audioTrack = audioTracks.first {
                 let audioCompositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
                 try? audioCompositionTrack?.insertTimeRange(range, of: audioTrack, at: .zero)
                 audioCompositionTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: duration), toDuration: time)
@@ -183,14 +274,15 @@ open class VideoConverter {
 
         let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
         layerInstructions.setOpacity(1.0, at: .zero)
-        if let transform = self.transform {
+        
+        if let transform = currentTransform {
             layerInstructions.setTransform(transform, at: .zero)
         }
         compositionInstructions.layerInstructions = [layerInstructions]
 
         let videoComposition = AVMutableVideoComposition()
         videoComposition.instructions = [compositionInstructions]
-        if let renderSize = self.renderSize {
+        if let renderSize = currentRenderSize {
             videoComposition.renderSize = renderSize
         }
         videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
@@ -199,7 +291,7 @@ open class VideoConverter {
     }
 
     open func convert(_ option: ConverterOption? = nil, handler: @escaping @Sendable (AVMutableComposition, AVMutableVideoComposition) -> Void) {
-        Task {
+        Task { @MainActor in
             do {
                 let conver = try await convert(option)
                 handler(conver.0, conver.1)
@@ -209,9 +301,8 @@ open class VideoConverter {
         }
     }
 
-    // Convert
     open func convert(_ option: ConverterOption? = nil, temporaryFileName: String? = nil, progress: (@Sendable (Double?) -> Void)? = nil, completion: @escaping @Sendable (URL?, Error?) -> Void) {
-        Task {
+        Task { @MainActor in
             do {
                 let convert = try await self.convert(option)
                 self.convert(ac: convert.0, avc: convert.1, temporaryFileName: temporaryFileName, progress: progress, completion: completion)
@@ -240,6 +331,7 @@ open class VideoConverter {
         default:
             let random = Int(arc4random_uniform(89999) + 10000)
             let fileName = "condy_export_audio_\(random).\(outputType)"
+            // 这里假设 OutputFilePath 是你全局定义的路径
             filePath = OutputFilePath.appendingPathComponent(fileName)
         }
 
@@ -248,13 +340,11 @@ open class VideoConverter {
         
         let result = FileManager.pt.removefile(filePath: filePath)
         guard result.isSuccess else {
-            // 已在 @MainActor 保护下，可直接调用 UI 层组件
             PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(), subtitle: result.error, icon: .Error)
             return
         }
         
         self.progressCallback = progress
-        
         let nativeSupportedFormats: [AVFileType] = [.mov, .mp4, .m4v, .mobile3GPP, .mobile3GPP2, .m4a]
         
         if nativeSupportedFormats.contains(outputTypeType) {
@@ -262,101 +352,55 @@ open class VideoConverter {
         } else if outputTypeType == .mp3 {
             self.exportMP3UsingLame(ac: ac, url: url, completion: completion)
         } else {
-            self.exportUsingAssetWriter(ac: ac, outputTypeType: outputTypeType, url: url, completion: completion)
-        }
-    }
-
-    // Video Size
-    private var renderSize: CGSize? {
-        guard let naturalSize = self.naturalSize else { return nil }
-        var renderSize = naturalSize
-        if let cropFrame = self.cropFrame {
-            let width = floor(cropFrame.size.width / 16) * 16
-            let height = floor(cropFrame.size.height / 16) * 16
-            renderSize = CGSize(width: width, height: height)
-        }
-        return renderSize
-    }
-
-    // Video Rotate & Rrigin
-    private var transform: CGAffineTransform? {
-        guard let naturalSize = self.naturalSize,
-              let radian = self.radian,
-              let converterDegree = self.converterDegree else { return nil }
-
-        var transform = CGAffineTransform.identity
-        transform = transform.rotated(by: radian)
-        if converterDegree == .degree90 {
-            transform = transform.translatedBy(x: 0, y: -naturalSize.width)
-        } else if converterDegree == .degree180 {
-            transform = transform.translatedBy(x: -naturalSize.width, y: -naturalSize.height)
-        } else if converterDegree == .degree270 {
-            transform = transform.translatedBy(x: -naturalSize.height, y: 0)
-        }
-
-        if let cropFrame = self.cropFrame {
-            if converterDegree == .degree0 {
-                transform = transform.translatedBy(x: -cropFrame.origin.x, y: -cropFrame.origin.y)
-            } else if converterDegree == .degree90 {
-                transform = transform.translatedBy(x: -cropFrame.origin.y, y: cropFrame.origin.x)
-            } else if converterDegree == .degree180 {
-                transform = transform.translatedBy(x: cropFrame.origin.x, y: cropFrame.origin.y)
-            } else if converterDegree == .degree270 {
-                transform = transform.translatedBy(x: cropFrame.origin.y, y: -cropFrame.origin.x)
+            Task {
+                self.exportUsingAssetWriter(ac: ac, outputTypeType: outputTypeType, url: url, completion: completion)
             }
         }
-        return transform
     }
 
     // MARK: - 引擎 A (原生视频/m4a导出)
     private func exportUsingExportSession(ac: AVMutableComposition, avc: AVMutableVideoComposition, outputTypeType: AVFileType, url: URL, completion: @escaping @Sendable (URL?, Error?) -> Void) {
         
         var presetName = option?.quality ?? AVAssetExportPresetHighestQuality
-        if outputTypeType == .m4a {
-            presetName = AVAssetExportPresetAppleM4A
+        if outputTypeType == .m4a { presetName = AVAssetExportPresetAppleM4A }
+        
+        guard let exportSession = AVAssetExportSession(asset: ac, presetName: presetName) else {
+            completion(nil, NSError(domain: "ExportError", code: 500, userInfo: nil))
+            return
         }
         
-        let exportSession = AVAssetExportSession(asset: ac, presetName: presetName)
         self.assetExportsSession = exportSession
-        exportSession?.outputFileType = outputTypeType
-        exportSession?.outputURL = url
+        exportSession.outputFileType = outputTypeType
+        exportSession.outputURL = url
         
         if [.mov, .mp4, .m4v].contains(outputTypeType) {
-            exportSession?.shouldOptimizeForNetworkUse = true
-            exportSession?.videoComposition = avc
+            exportSession.shouldOptimizeForNetworkUse = true
+            exportSession.videoComposition = avc
         }
 
-        let safeBox = PTSafeExportSessionBox(session: exportSession)
-
-        // 【优化】：使用 Swift 并发的死循环监听，彻底抛弃 Timer
-        Task { [weak self] in // 💡 优化点：添加 [weak self] 防止内存泄漏
-            // 💡 修复点 2：通过 safeBox 安全地访问 session，消除数据竞争警告
-            while safeBox.session?.status == .exporting || safeBox.session?.status == .waiting {
-                if let progress = safeBox.session?.progress {
-                    // 如果 progressCallback 会更新 UI，强烈建议在这里也切回主线程执行
-                    Task { @MainActor in
-                        self?.progressCallback?(Double(progress))
-                    }
+        // 🚀 终极改动：废弃丑陋的回调盒子，使用纯净的 Async/Await + 并发轮询
+        Task { @MainActor in
+            // 开启一个轮询子任务，专门向外播报进度
+            let progressTask = Task { @MainActor in
+                while exportSession.status == .exporting || exportSession.status == .waiting {
+                    self.progressCallback?(Double(exportSession.progress))
+                    try? await Task.sleep(nanoseconds: 100_000_000)
                 }
-                // 每 0.1 秒检查一次
-                try? await Task.sleep(nanoseconds: 100_000_000)
             }
-        }
-
-        exportSession?.exportAsynchronously { [weak self] in
-            // AVAssetExportSession 的回调可能在任意后台队列，安全切回主线程
-            Task { @MainActor in
-                guard let self = self else { return }
-                
-                // 💡 修复点 3：在这里也使用 safeBox 来读取状态，保证全局的安全与统一
-                if safeBox.session?.status == .completed {
-                    self.progressCallback?(1)
-                    completion(url, nil)
-                    self.restore(cleanupDisk: false)
-                } else {
-                    completion(nil, safeBox.session?.error)
-                    self.restore(cleanupDisk: true)
-                }
+            
+            // 核心原生异步导出方法
+            await exportSession.export()
+            
+            // 导出结束，取消轮询
+            progressTask.cancel()
+            
+            if exportSession.status == .completed {
+                self.progressCallback?(1.0)
+                completion(url, nil)
+                self.restore(cleanupDisk: false)
+            } else {
+                completion(nil, exportSession.error)
+                self.restore(cleanupDisk: true)
             }
         }
     }

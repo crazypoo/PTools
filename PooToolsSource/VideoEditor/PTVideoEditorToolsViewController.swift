@@ -1153,27 +1153,30 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             speed: speed,
             outputModel: currentOutputType)
 
-        let safeOutputAsset = self.videoAVAsset!
-        self.videoConverter = VideoConverter(asset:safeOutputAsset)
-        videoConverter?.convert(options,progress: { progress in
-            Task { @MainActor in
-                if progress ?? 0 >= 1 {
-                    if self.hudToHide == nil {
-                        let hudConfig = PTHudConfig.share
-                        hudConfig.hudColors = [.gray, .gray]
-                        hudConfig.lineWidth = 4
-                        self.hudToHide = PTHudView()
-                        self.hudToHide?.hudShow()
+        Task {
+            let safeOutputAsset = self.videoAVAsset!
+            await self.videoConverter = VideoConverter(asset:safeOutputAsset)
+            videoConverter?.convert(options,progress: { progress in
+                Task { @MainActor in
+                    if progress ?? 0 >= 1 {
+                        if self.hudToHide == nil {
+                            let hudConfig = PTHudConfig.share
+                            hudConfig.hudColors = [.gray, .gray]
+                            hudConfig.lineWidth = 4
+                            self.hudToHide = PTHudView()
+                            self.hudToHide?.hudShow()
+                        }
+                    }
+                    
+                    if self.originFilterImageView.isHidden {
+                        self.originImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
+                    } else {
+                        self.originFilterImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
                     }
                 }
-                
-                if self.originFilterImageView.isHidden {
-                    self.originImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
-                } else {
-                    self.originFilterImageView.layerProgress(value: progress ?? 0,borderWidth: PTVideoEditorConfig.share.outPutBorderWidth,borderColor: PTVideoEditorConfig.share.outPutBorderCorlor,showValueLabel: PTVideoEditorConfig.share.outPutProgressShowValueLabel,valueLabelFont: PTVideoEditorConfig.share.outPutProgressShowValueFont,valueLabelColor: PTVideoEditorConfig.share.outPutProgressShowValueColor)
-                }
-            }
-        },completion: completion)
+            },completion: completion)
+
+        }
     }
         
     fileprivate func setVideoAsset() async {
@@ -1186,7 +1189,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             speed: speed)
 
         let safeConvertAsset = self.videoAVAsset!
-        self.videoConverter = VideoConverter(asset:safeConvertAsset)
+        await self.videoConverter = VideoConverter(asset:safeConvertAsset)
         
         // 挂起等待外部处理完毕
         let safeBox = await withCheckedContinuation { continuation in

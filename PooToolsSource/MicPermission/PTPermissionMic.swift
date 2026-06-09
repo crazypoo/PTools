@@ -22,7 +22,8 @@ public class PTPermissionMic: PTPermission {
     open var usageDescriptionKey: String? { "NSMicrophoneUsageDescription" }
     
     public override var status: PTPermission.Status {
-        switch  AVAudioSession.sharedInstance().recordPermission {
+        
+        switch AVAudioSession.sharedInstance().recordPermission {
         case .granted: return .authorized
         case .denied: return .denied
         case .undetermined: return .notDetermined

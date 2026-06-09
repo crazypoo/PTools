@@ -291,7 +291,7 @@ public class OSSSpeech: NSObject, @unchecked Sendable {
     // MARK: - 语音识别录音机制
     public func recordVoice(requestMicPermission requested: Bool = true) {
 #if !os(macOS)
-        if requested, audioSession.recordPermission != .granted {
+        if requested, AVAudioApplication.shared.recordPermission != .granted {
             requestMicPermission()
             return
         }
@@ -310,7 +310,7 @@ public class OSSSpeech: NSObject, @unchecked Sendable {
     private func requestMicPermission() {
 #if !os(macOS)
         // 确保闭包标注为 @Sendable
-        audioSession.requestRecordPermission { @Sendable [weak self] allowed in
+        AVAudioApplication.requestRecordPermission { @Sendable [weak self] allowed in
             guard let self = self else { return }
             if !allowed {
                 self.notifyDelegateOnMain { self.delegate?.authorizationToMicrophone(withAuthentication: .denied) }

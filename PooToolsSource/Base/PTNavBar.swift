@@ -236,7 +236,7 @@ open class PTNavBar: PTNavigationBarContainer {
             return
         }
         
-        leftContainer.isHidden = false
+        rightContainer.isHidden = false
 
         buttons.forEach { value in
             rightContainer.addArrangedSubview(value)
