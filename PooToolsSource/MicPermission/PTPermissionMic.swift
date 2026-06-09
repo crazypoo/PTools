@@ -23,7 +23,7 @@ public class PTPermissionMic: PTPermission {
     
     public override var status: PTPermission.Status {
         
-        switch AVAudioSession.sharedInstance().recordPermission {
+        switch AVAudioApplication.shared.recordPermission {
         case .granted: return .authorized
         case .denied: return .denied
         case .undetermined: return .notDetermined
@@ -32,8 +32,7 @@ public class PTPermissionMic: PTPermission {
     }
     
     public override func request(completion: @escaping PTActionTask) {
-        AVAudioSession.sharedInstance().requestRecordPermission {
-            granted in
+        AVAudioApplication.requestRecordPermission { granted in
             PTGCDManager.shared.runOnMain {
                 completion()
             }

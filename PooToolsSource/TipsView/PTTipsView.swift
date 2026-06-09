@@ -253,15 +253,23 @@ open class PTTipsView: UIView {
     
     private var shouldBounce = false
 
-    // MARK: - 生命周期补充: 暗黑模式适配
-    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        // 当系统主题颜色改变时，强制重绘以更新颜色
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            setNeedsDisplay()
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupTraitObservation()
+    }
+    
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupTraitObservation()
+    }
+    
+    private func setupTraitObservation() {
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: UIView, previousTraitCollection: UITraitCollection) in
+            // 只有当深浅色真正发生切换时，才会触发这个闭包
+            view.setNeedsDisplay()
         }
     }
-
+    
     // MARK: - 布局与计算 (Layout & Math)
     
     /// 设置垂直方向（上下）的位置
@@ -879,7 +887,6 @@ open class PTTipsView: UIView {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-//        dismissTimer?.invalidate()
     }
 }
 

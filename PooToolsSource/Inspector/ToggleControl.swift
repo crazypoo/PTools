@@ -101,6 +101,7 @@ extension ToggleControl {
         override init(frame: CGRect) {
             super.init(frame: frame)
             setup()
+            setupTraitObservation()
         }
 
         @available(*, unavailable)
@@ -108,6 +109,13 @@ extension ToggleControl {
             fatalError("init(coder:) has not been implemented")
         }
 
+        private func setupTraitObservation() {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: StyledSwitch, previousTraitCollection: UITraitCollection) in
+                view.updateThumbColor()
+            }
+        }
+
+        
         private func setup() {
             tintColor = colorStyle.accessoryControlBackgroundColor
             onTintColor = colorStyle.tintColor
@@ -120,14 +128,6 @@ extension ToggleControl {
             }
 
             addTarget(self, action: #selector(updateThumbColor), for: .valueChanged)
-
-            updateThumbColor()
-        }
-
-        override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-            super.traitCollectionDidChange(previousTraitCollection)
-
-            traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)
 
             updateThumbColor()
         }

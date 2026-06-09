@@ -104,11 +104,20 @@ public class PTFloatingPlaseholderTextField: UIView {
         self.viewConfig = config
         super.init(frame: .zero)
         setupUI()
+        setupTraitObservation()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
+        setupTraitObservation()
+    }
+
+    private func setupTraitObservation() {
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: PTFloatingPlaseholderTextField, previousTraitCollection: UITraitCollection) in
+            // 只有当深浅色真正发生切换时，才会触发这个闭包
+            view.updateBorderPath() // 因为 CGColor 不会自动随系统模式刷新，需要手动重绘
+        }
     }
 
     private func setupUI() {
@@ -162,14 +171,6 @@ public class PTFloatingPlaseholderTextField: UIView {
         }
     }
     
-    // 【优化】支持系统的暗黑/浅色模式切换
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            updateBorderPath() // 因为 CGColor 不会自动随系统模式刷新，需要手动重绘
-        }
-    }
-
     private func getPlaceholderAtt(mainString: String, isNormal: Bool) -> ASAttributedString {
         let plaseHolderFont = isNormal ? viewConfig.normalPlaceholderFont : viewConfig.floatingPlaceholderFont
         let plaseHolderColor = isNormal ? viewConfig.normalPlaceholderColor : viewConfig.floatingPlaceholderColor

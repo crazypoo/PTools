@@ -27,11 +27,19 @@ final class Icon: BaseView {
         self.size = size
 
         tintColor = color ?? Inspector.sharedInstance.configuration.colorStyle.textColor
+        setupTraitObservation()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupTraitObservation() {
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: UIView, previousTraitCollection: UITraitCollection) in
+            // 只有当深浅色真正发生切换时，才会触发这个闭包
+            view.setNeedsDisplay()
+        }
     }
 
     override var description: String {
@@ -54,12 +62,6 @@ final class Icon: BaseView {
 
     override func draw(_ rect: CGRect) {
         glpyh.draw(color: tintColor, frame: bounds, resizing: .aspectFit)
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        setNeedsDisplay()
     }
 
     override func tintColorDidChange() {

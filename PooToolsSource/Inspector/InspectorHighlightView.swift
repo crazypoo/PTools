@@ -141,6 +141,8 @@ final class InspectorHighlightView: LayerView {
 
         draggableView.addGestureRecognizer(tapGestureRecognizer)
         draggableView.addGestureRecognizer(panGestureRecognizer)
+        
+        setupTraitObservation()
     }
 
     @objc
@@ -186,6 +188,14 @@ final class InspectorHighlightView: LayerView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func setupTraitObservation() {
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: InspectorHighlightView, previousTraitCollection: UITraitCollection) in
+            // 只有当深浅色真正发生切换时，才会触发这个闭包
+            view.updateBorderColor()
+
+        }
+    }
+    
     // MARK: - View Lifecycle
 
     override func didMoveToSuperview() {
@@ -238,13 +248,6 @@ final class InspectorHighlightView: LayerView {
         scaleX: 1.7 - cgFloatDepth / 50,
         y: 1.7 - cgFloatDepth / 50
     )
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
-
-        updateBorderColor()
-    }
 
     override func layoutSubviews() {
         super.layoutSubviews()

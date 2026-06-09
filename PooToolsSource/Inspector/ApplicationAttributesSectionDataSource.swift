@@ -48,7 +48,7 @@ extension DefaultElementAttributesLibrary {
                         value: { self.application.applicationIconBadgeNumber },
                         range: { 0...1000 },
                         stepValue: { 1 },
-                        handler: { self.application.applicationIconBadgeNumber = $0 }
+                        handler: { UNUserNotificationCenter.current().setBadgeCount($0) }
                     )
                 case .applicationSupportsShakeToEdit:
                     return .switch(

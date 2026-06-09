@@ -48,8 +48,17 @@ public class SystemReport {
     
     // Fallback in case gestaltArchitecture doesn't return a value.
     public var deviceArchitecture: String {
-        let info = NXGetLocalArchInfo()
-        return String(utf8String: (info?.pointee.description)!) ?? "Unknown"
+    #if arch(arm64)
+    return "arm64"
+    #elseif arch(x86_64)
+    return "x86_64"
+    #elseif arch(arm)
+    return "arm"
+    #elseif arch(i386)
+    return "i386"
+    #else
+    return "Unknown"
+    #endif
     }
     
     public lazy var gestaltModelIdentifier: Any = gestaltCacheExtra?.value(forKey: "h9jDsbgj7xI" + "VeIQ8S3/X3Q") ?? modelIdentifier
