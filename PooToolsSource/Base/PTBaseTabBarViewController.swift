@@ -187,15 +187,13 @@ open class PTBaseTabBarViewController: UITabBarController {
         tabBar.isTranslucent = true
         tabBar.alpha = 0
         
-        if #available(iOS 15.0, *) {
-            let appearance = UITabBarAppearance()
-            appearance.configureWithTransparentBackground()
-            appearance.backgroundColor = .clear
-            
-            tabBar.standardAppearance = appearance
-            tabBar.scrollEdgeAppearance = appearance
-        }
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
         
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+
         view.addSubview(ptCustomBar)
         ptCustomBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()

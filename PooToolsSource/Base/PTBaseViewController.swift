@@ -348,10 +348,7 @@ public final class PTNavigationBarManager:NSObject {
             .foregroundColor: PTAppBaseConfig.share.navTitleTextColor
         ]
         
-        if #available(iOS 15.0, *) {
-            nav.navigationBar.compactScrollEdgeAppearance = appearance
-        }
-
+        nav.navigationBar.compactScrollEdgeAppearance = appearance
         nav.navigationBar.standardAppearance = appearance
         nav.navigationBar.scrollEdgeAppearance = appearance
         nav.navigationBar.compactAppearance = appearance
@@ -1245,18 +1242,12 @@ extension PTBaseViewController {
         
         PTAppWindowsDelegate.appDelegate()?.isFullScreen = isFullScreen
                 
-        if #available(iOS 16.0, *) {
-            setNeedsUpdateOfPrefersPointerLocked()
-            guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-            let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
-            let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
-            scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
-                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)",levelType: PTLogMode,loggerType: .viewCycle)
-            }
-        } else {
-            let oriention:UIDeviceOrientation = isFullScreen ? .landscapeRight : .portrait
-            UIDevice.current.setValue(oriention.rawValue, forKey: "orientation")
-            UIViewController.attemptRotationToDeviceOrientation()
+        setNeedsUpdateOfPrefersPointerLocked()
+        guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
+        let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
+        scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
+            PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)",levelType: PTLogMode,loggerType: .viewCycle)
         }
     }
     

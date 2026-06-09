@@ -49,43 +49,44 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
         PTGCDManager.shared.delayOnMain(time: 0.1) {
             Task { @MainActor in
                 do {
-                    var track: AVAssetTrack!
-                    if #available(iOS 16.0, *) {
-                        track = try await self.asset.loadTracks(withMediaType: AVMediaType.video).first
-                    } else {
-                        track = self.asset.tracks(withMediaType: AVMediaType.video).first
-                    }
+                    let tracks = try await self.asset.loadTracks(withMediaType: .video)
+                    guard let validTrack = tracks.first else { return }
                     
-                    guard let validTrack = track else { return }
+                    // 🌟 核心修正：放弃 async let，避免非 Sendable 对象的跨线程传递
+                    // 因为 track 已经加载完毕，这两个顺序 await 也是瞬间完成的
+                    let naturalSize = try await validTrack.load(.naturalSize)
+                    let preferredTransform = try await validTrack.load(.preferredTransform)
                     
-                    let assetSize = validTrack.naturalSize.applying(validTrack.preferredTransform)
+                    let assetSize = naturalSize.applying(preferredTransform)
+                    
+                    // 增加防御性校验，避免极端情况除以 0
+                    guard assetSize.height != 0 else { return }
                     let ratio = abs(assetSize.width) / abs(assetSize.height)
+                    
                     let bounds = self.trimmingControlView.bounds
                     let frameWidth = bounds.height * ratio
                     let count = Int(bounds.width / frameWidth) + 1
                     
-                    // 【修改点】：直接调用我们封装好的 Service！
-                    // 根据 bounds 动态计算最大分辨率，保护内存
-                    let scale = UIScreen.main.scale
+                    let scale: CGFloat = (UIApplication.shared.connectedScenes
+                        .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene)?.screen.scale ?? 2.0
                     let maxSize = CGSize(width: bounds.width * scale, height: bounds.height * scale)
-                    
                     let newAsset = PTSafeMediaBox(mediaItem: self.asset)
                     
+                    // 后台去疯狂截帧，主线程在这里暂停等待
                     let cgImages = try await PTVideoTimelineService.generateVideoTimeline(
                         for: newAsset.mediaItem!,
                         numberOfFrames: count,
                         maximumSize: maxSize
                     )
                     
-                    // 切换回主线程更新 UI
-                    await MainActor.run {
-                        self.updateVideoTimeline(with: cgImages, assetAspectRatio: ratio)
-                    }
+                    // 拿到 cgImages 后，自动恢复在主线程更新 UI
+                    self.updateVideoTimeline(with: cgImages, assetAspectRatio: ratio)
                     
                 } catch {
-                    await MainActor.run {
-                        PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(), subtitle: error.localizedDescription, icon: .Error)
-                    }
+                    // 出错时也同样自动处于主线程，直接弹窗
+                    PTAlertTipsViewController.tipsAlertShow(title: "PT Alert Opps".localized(),
+                                                            subtitle: error.localizedDescription,
+                                                            icon: .Error)
                 }
             }
         }

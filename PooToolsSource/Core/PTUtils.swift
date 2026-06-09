@@ -192,11 +192,7 @@ public class PTUtils: NSObject {
         let documentsDirectory = FileManager.pt.CachesDirectory()
         let fileName = "\(Date().getTimeStamp()).mp4"
         let outputURL = documentsDirectory.appendingPathComponent(fileName)
-        if #available(iOS 16.0, *) {
-            return URL(filePath: outputURL)
-        } else {
-            return URL(fileURLWithPath: outputURL)
-        }
+        return URL(filePath: outputURL)
     }
     
     /// 字符串转类

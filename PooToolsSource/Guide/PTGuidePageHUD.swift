@@ -211,10 +211,7 @@ fileprivate extension PTGuidePageHUD {
         skipButton.setTitle(viewModel.skipName, for: .normal)
         skipButton.titleLabel?.font = viewModel.skipFont
         
-        var skipButtonWidthOffset: CGFloat = 5
-        if #available(iOS 15.0, *) {
-            skipButtonWidthOffset = 15
-        }
+        let skipButtonWidthOffset: CGFloat = 15
         
         let skipButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 10 + skipButtonWidthOffset
         

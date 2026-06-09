@@ -124,26 +124,18 @@ private extension PTRotationManager {
         self.orientationMask = orientationMask
         
         // 控制横竖屏
-        if #available(iOS 16.0, *) {
-            let geometryPreferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientationMask)
-            
-            let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-            
-            for windowScene in windowScenes {
-                for window in windowScene.windows {
-                    window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
-                }
-
-                windowScene.requestGeometryUpdate(geometryPreferences) { error in
-                    PTNSLogConsole("❌ 屏幕旋转请求被系统拒绝: \(error.localizedDescription)")
-                }
+        let geometryPreferences = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientationMask)
+        
+        let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        
+        for windowScene in windowScenes {
+            for window in windowScene.windows {
+                window.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
             }
-        } else {
-            // iOS 15 及以下的经典旋转方案
-            let currentDevice = UIDevice.current
-            let deviceOrientation = Self.convertInterfaceOrientationMaskToDeviceOrientation(orientationMask)
-            currentDevice.setValue(NSNumber(value: deviceOrientation.rawValue), forKeyPath: "orientation")
-            UIViewController.attemptRotationToDeviceOrientation()
+
+            windowScene.requestGeometryUpdate(geometryPreferences) { error in
+                PTNSLogConsole("❌ 屏幕旋转请求被系统拒绝: \(error.localizedDescription)")
+            }
         }
     }
 }

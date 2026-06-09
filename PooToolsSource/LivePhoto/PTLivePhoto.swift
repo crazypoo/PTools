@@ -568,13 +568,7 @@ fileprivate extension AVAsset {
         
         // 拥抱现代 Async 的图片生成 API (iOS 16+)
         // 若需兼容更低版本，可替换回 copyCGImage 配合 withCheckedThrowingContinuation
-        if #available(iOS 16.0, *) {
-            let (imageRef, _) = try await imageGenerator.image(at: time)
-            return UIImage(cgImage: imageRef)
-        } else {
-            var actualTime = CMTime.zero
-            let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: &actualTime)
-            return UIImage(cgImage: imageRef)
-        }
+        let (imageRef, _) = try await imageGenerator.image(at: time)
+        return UIImage(cgImage: imageRef)
     }
 }

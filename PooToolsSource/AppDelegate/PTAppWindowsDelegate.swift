@@ -125,11 +125,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     public func faceOrientationMask(app:UIApplication,
                                     windos:UIWindow) -> UIInterfaceOrientationMask {
         if isFullScreen {
-            if #available(iOS 16.0, *) {
-                return .landscape
-            } else {
-                return .landscapeRight
-            }
+            return .landscape
         }
         return .portrait
     }

@@ -1497,21 +1497,8 @@ fileprivate extension PTVideoEditorToolsViewController {
             throw NSError(domain: "PTVideoEditor", code: 404, userInfo: [NSLocalizedDescriptionKey: "抽帧器未就绪"])
         }
         
-        if #available(iOS 16.0, *) {
-            let (cgImage, _) = try await generator.image(at: time)
-            return cgImage
-        } else {
-            return try await withCheckedThrowingContinuation { continuation in
-                let times = [NSValue(time: time)]
-                generator.generateCGImagesAsynchronously(forTimes: times) { _, image, _, result, error in
-                    if let image = image, result == .succeeded {
-                        continuation.resume(returning: image)
-                    } else {
-                        continuation.resume(throwing: error ?? NSError(domain: "PTVideoEditor", code: 404, userInfo: nil))
-                    }
-                }
-            }
-        }
+        let (cgImage, _) = try await generator.image(at: time)
+        return cgImage
     }
 }
 

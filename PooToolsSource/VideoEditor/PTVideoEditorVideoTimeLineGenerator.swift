@@ -49,57 +49,52 @@ private final class PTTimelineGeneratorState: @unchecked Sendable {
 }
 
 protocol PTVideoEditorVideoTimeLineGeneratorProtocol {
-    func videoTimeline(for asset: AVAsset, 
+    func videoTimeline(for asset: AVAsset,
                        in bounds: CGRect,
-                       numberOfFrames: Int) -> AnyPublisher<[CGImage], Error>
+                       numberOfFrames: Int) async throws -> [CGImage]
 }
 
 final class PTVideoEditorVideoTimeLineGenerator: PTVideoEditorVideoTimeLineGeneratorProtocol {
 
     func videoTimeline(for asset: AVAsset,
                        in bounds: CGRect,
-                       numberOfFrames: Int) -> AnyPublisher<[CGImage], Error> {
-        Future { promise in
+                       numberOfFrames: Int) async throws -> [CGImage] {
+        return try await PTVideoTimelineService.generateVideoTimeline(for: asset, numberOfFrames: numberOfFrames, maximumSize: .zero)
+    }
+}
+
+public class PTVideoFrameTimeLineFunction {
+    public static func frameTimes(for asset: AVAsset,
+                                  numberOfFrames: Int) async -> [CMTime] {
+        // 增加一个小小的安全防御，防止除以 0
+        guard numberOfFrames > 0 else { return [] }
+        
+        do {
+            // 🌟 1. Swift 6 适配：异步读取时长，彻底告别主线程卡顿
+            let duration = try await asset.load(.duration)
             
-            let generator = AVAssetImageGenerator(asset: asset)
-            let times = self.frameTimes(for: asset, numberOfFrames: numberOfFrames)
-            
-            generator.appliesPreferredTrackTransform = true
-            generator.maximumSize = .zero // TODO: 你可以在这里配置尺寸
-            
-            // 👉 步骤 1：实例化状态机，将 promise 和目标数量托付给它
-            let state = PTTimelineGeneratorState(targetCount: numberOfFrames, promise: promise)
-            
-            generator.generateCGImagesAsynchronously(forTimes: times) { _, cgImage, _, result, error in
-                // 👉 步骤 2：现在闭包只需捕获线程安全的 'state' 对象
-                if let error = error {
-                    // 安全抛出错误
-                    state.fail(with: error)
-                } else if let cgImage = cgImage {
-                    // 安全追加图片并自动检查是否完成
-                    state.appendImage(cgImage)
-                } else {
-                    // 处理极端情况下的异常
-                    state.fail(with: NSError(domain: "PTVideoTimelineError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error while generating CGImages"]))
-                }
+            let timeIncrement = (duration.seconds * 1000) / Double(numberOfFrames)
+            var timesForThumbnails = [CMTime]()
+
+            for index in 0..<numberOfFrames {
+                let cmTime = CMTime(value: Int64(timeIncrement * Float64(index)), timescale: 1000)
+                timesForThumbnails.append(cmTime)
             }
+
+            // 🌟 2. 现代 Swift 写法：使用闭包明确指定构造器
+            return timesForThumbnails
+            
+        } catch {
+            PTNSLogConsole("⚠️ 获取视频时长失败: \(error.localizedDescription)")
+            return []
         }
-        .eraseToAnyPublisher()
     }
 }
 
 fileprivate extension PTVideoEditorVideoTimeLineGenerator {
     func frameTimes(for asset: AVAsset,
-                    numberOfFrames: Int) -> [NSValue] {
-        let timeIncrement = (asset.duration.seconds * 1000) / Double(numberOfFrames)
-        var timesForThumbnails = [CMTime]()
-
-        for index in 0..<numberOfFrames {
-            let cmTime = CMTime(value: Int64(timeIncrement * Float64(index)), timescale: 1000)
-            timesForThumbnails.append(cmTime)
-        }
-
-        return timesForThumbnails.map(NSValue.init)
+                    numberOfFrames: Int) async -> [CMTime] {
+        return await PTVideoFrameTimeLineFunction.frameTimes(for: asset, numberOfFrames: numberOfFrames)
     }
 }
 
@@ -159,64 +154,32 @@ public final class PTVideoTimelineService:Sendable {
     public static func generateVideoTimeline(for asset: AVAsset,
                                              numberOfFrames: Int,
                                              maximumSize: CGSize = CGSize(width: 300, height: 300)) async throws -> [CGImage] {
+        
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
         // 限制尺寸，避免 OOM 内存溢出
         generator.maximumSize = maximumSize
         
-        // 获取 [CMTime] 数组 (let 常量，天生并发安全)
-        let cmTimes = frameTimes(for: asset, numberOfFrames: numberOfFrames)
+        // 🌟 唯一修正点：因为 frameTimes 是异步函数，这里必须加上 await
+        // (注意：因为当前方法是 static，请确保你的 frameTimes 方法也是 static 的)
+        let cmTimes = await frameTimes(for: asset, numberOfFrames: numberOfFrames)
         
-        if #available(iOS 16.0, *) {
-            var images: [CGImage] = []
-            // iOS 16+ 原生 API：直接接收 [CMTime]
-            for await result in generator.images(for: cmTimes) {
-                if let image = try? result.image {
-                    images.append(image)
-                }
-            }
-            return images
-        } else {
-            return try await withCheckedThrowingContinuation { continuation in
-                
-                // 👉 步骤 1：实例化我们的线程安全状态机
-                let state = PTVideoTimelineState(totalCount: cmTimes.count, continuation: continuation)
-                
-                // 将 [CMTime] 包装为 [NSValue]
-                let timeValues = cmTimes.map { NSValue(time: $0) }
-                
-                generator.generateCGImagesAsynchronously(forTimes: timeValues) { requestedTime, image, actualTime, result, error in
-                    
-                    if let error = error {
-                        // 👉 步骤 2：发生错误时，调用状态机的 fail 方法
-                        state.fail(with: error)
-                        return
-                    }
-                    
-                    // 使用纯净的 requestedTime (CMTime) 来查找对应索引，保证帧顺序正确
-                    // cmTimes 是外部的 let 常量，跨线程读取是绝对安全的
-                    if let index = cmTimes.firstIndex(of: requestedTime) {
-                        // 👉 步骤 3：成功时，调用状态机的 append 方法
-                        state.append(image: image, at: index)
-                    } else {
-                        // 防御性编程：如果没有找到对应索引，当作获取到空图片处理进度
-                        state.append(image: nil, at: 0) // 此处的 0 只是占位，实际逻辑中极少发生
-                    }
-                }
+        var images: [CGImage] = []
+        
+        // 🚀 iOS 16+ 原生 API：直接接收 [CMTime]
+        // 这里的 for await 写法极其标准，无需 try await，因为迭代本身不抛出错误
+        for await result in generator.images(for: cmTimes) {
+            // 这一步堪称点睛之笔：使用 try? 容错，如果某一帧坏了直接忽略，不影响整个时间轴的生成
+            if let image = try? result.image {
+                images.append(image)
             }
         }
+        
+        return images
     }
 
     // 私有辅助方法：计算每个抽帧的时间点
-    private static func frameTimes(for asset: AVAsset, numberOfFrames: Int) -> [CMTime] {
-        let timeIncrement = (asset.duration.seconds * 1000) / Double(numberOfFrames)
-        var timesForThumbnails = [CMTime]()
-        
-        for index in 0..<numberOfFrames {
-            let cmTime = CMTime(value: Int64(timeIncrement * Float64(index)), timescale: 1000)
-            timesForThumbnails.append(cmTime)
-        }
-        
-        return timesForThumbnails
+    private static func frameTimes(for asset: AVAsset, numberOfFrames: Int) async -> [CMTime] {
+        return await PTVideoFrameTimeLineFunction.frameTimes(for: asset, numberOfFrames: numberOfFrames)
     }
 }

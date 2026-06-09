@@ -420,19 +420,15 @@ public extension UIViewController {
                 sheet.detents = [.medium()]
                 sheet.prefersGrabberVisible = true
             case .custom:
-                if #available(iOS 16.0, *) {
-                    let small = UISheetPresentationController.Detent.Identifier("small")
-                    sheet.detents = [
-                        .custom(identifier: small) { context in
-                            scale * context.maximumDetentValue
-                        }
-                    ]
-                    sheet.largestUndimmedDetentIdentifier = small
-                    sheet.prefersGrabberVisible = true
-                } else {
-                    sheet.detents = [.large()]
-                    sheet.prefersGrabberVisible = true
-                }
+                let small = UISheetPresentationController.Detent.Identifier("small")
+                sheet.detents = [
+                    .custom(identifier: small) { context in
+                        scale * context.maximumDetentValue
+                    }
+                ]
+                sheet.largestUndimmedDetentIdentifier = small
+                sheet.prefersGrabberVisible = true
+
             }
         }
         present(modalViewController, animated: true,completion: completion)

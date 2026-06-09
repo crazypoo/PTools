@@ -334,13 +334,8 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var eraser:UIButton = {
         let view = UIButton(type: .custom)
-        if #available(iOS 16.0, *) {
-            view.setImage(UIImage(.eraser), for: .normal)
-            view.setImage(UIImage(.eraser.fill), for: .selected)
-        } else {
-            view.setImage(UIImage(.clear), for: .normal)
-            view.setImage(UIImage(.clear.fill), for: .selected)
-        }
+        view.setImage(UIImage(.eraser), for: .normal)
+        view.setImage(UIImage(.eraser.fill), for: .selected)
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
         }
@@ -368,11 +363,7 @@ public class PTEditImageViewController: PTBaseViewController {
     
     public lazy var eraserCircleView: UIImageView = {
         var eraserImage = UIImage()
-        if #available(iOS 16.0, *) {
-            eraserImage = UIImage(.eraser)
-        } else {
-            eraserImage = UIImage(.clear)
-        }
+        eraserImage = UIImage(.eraser)
         let imageView = UIImageView(image: eraserImage)
         imageView.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         imageView.isHidden = true

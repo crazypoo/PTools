@@ -261,10 +261,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                     vc.selectImageBlock = { result, isOriginal in
                         let vision = PTVision.share
                         
-                        var visionVersion:Int = VNRecognizeTextRequestRevision2
-                        if #available(iOS 16.0, *) {
-                            visionVersion = VNRecognizeTextRequestRevision3
-                        }
+                        let visionVersion:Int = VNRecognizeTextRequestRevision3
                         
                         vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
                             Task { @MainActor in
