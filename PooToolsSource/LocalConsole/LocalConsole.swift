@@ -962,7 +962,9 @@ extension LocalConsole {
         let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { [weak self] _ in self?.resizeAction() }
         if isLandscapePhone {
             resize.attributes = .disabled
-            resize.subtitle = "Portrait Orientation Only"
+            if #available(iOS 16, *) {
+                resize.subtitle = "Portrait Orientation Only"
+            }
         }
         
         if !isTerminalEmpty {
@@ -1086,7 +1088,9 @@ extension LocalConsole {
                             }
                         )
                     }
-                    action.subtitle = "\(firstVal)"
+                    if #available(iOS 16, *) {
+                        action.subtitle = "\(firstVal)"
+                    }
                     actions.append(action)
                 }
                 

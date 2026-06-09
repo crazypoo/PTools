@@ -520,7 +520,6 @@ class PTFuncNameViewController: PTBaseViewController {
                     .navigation()
                 
                 PTNSLogConsole("成功拿到目标控制器：\(detailVC.id)")
-                
             } catch PTRouterError.interceptorBlocked {
                 PTNSLogConsole("跳转被拦截（如未登录）")
             } catch {

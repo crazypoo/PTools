@@ -102,6 +102,7 @@ extension PTRouterBuilder {
     }
 }
 
+@MainActor
 public struct PTTypedBuilder<T: PTRoutableStaticController> {
     private let path: String
     private var params: T.Params?
